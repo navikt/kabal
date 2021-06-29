@@ -8,33 +8,41 @@ import { useIsSaved } from "../utils/hooks";
 
 interface EksterneLenkerProps {
   fnr: string | null;
-  id: string;
 }
 
-export default function EksterneLenker({ id, fnr }: EksterneLenkerProps) {
-  if (fnr === null) {
-    return null;
-  }
+export const EksterneLenker = React.memo(
+  ({ fnr }: EksterneLenkerProps) => {
+    if (fnr === null) {
+      return null;
+    }
+
+    return (
+      <Knapper>
+        <Knapperad>
+          <Lenke
+            target="_blank"
+            aria-label={"Ekstern lenke til Gosys for denne personen"}
+            href={`${gosysEnvironment(window.location.hostname)}/personoversikt/fnr=${fnr}`}
+          >
+            Gosys&nbsp;
+            <Ikon alt="Ekstern lenke" src={ExtLink} />
+          </Lenke>
+        </Knapperad>
+        <LagretStatus />
+      </Knapper>
+    );
+  },
+  (previous, next) => previous.fnr === next.fnr
+);
+
+const LagretStatus = () => {
   const isSaved = useIsSaved();
-
   return (
-    <Knapper>
-      <Knapperad>
-        <Lenke
-          target="_blank"
-          aria-label={"Ekstern lenke til Gosys for denne personen"}
-          href={`${gosysEnvironment(window.location.hostname)}/personoversikt/fnr=${fnr}`}
-        >
-          Gosys&nbsp;
-          <Ikon alt="Ekstern lenke" src={ExtLink} />
-        </Lenke>
-      </Knapperad>
-      <Knapperad>
-        <LagringsIndikator autosaveStatus={!isSaved} />
-      </Knapperad>
-    </Knapper>
+    <Knapperad>
+      <LagringsIndikator autosaveStatus={!isSaved} />
+    </Knapperad>
   );
-}
+};
 
 const Knapper = styled.div`
   display: flex;

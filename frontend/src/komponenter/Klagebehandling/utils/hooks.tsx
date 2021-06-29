@@ -12,6 +12,7 @@ import {
 } from "../../../tilstand/moduler/klagebehandling/stateTypes";
 import { IKlagebehandlingOppdatering } from "../../../tilstand/moduler/klagebehandling/types";
 import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
+import { dokumentMatcher } from "../Dokumenter/helpers";
 import { arrayEquals } from "./helpers";
 
 export const useKlagebehandlingUpdater = ({
@@ -24,13 +25,14 @@ export const useKlagebehandlingUpdater = ({
   const dispatch = useAppDispatch();
   const opptatt = useAppSelector(velgKlagebehandlingOpptatt);
 
-  const oppdatering = useGetUpdate();
+  const update = useGetUpdate();
 
   useEffect(() => {
-    if (opptatt || oppdatering === null) {
+    if (opptatt || update === null) {
       return;
     }
-    const timeout = setTimeout(() => dispatch(lagreKlagebehandling(oppdatering)), 200);
+
+    const timeout = setTimeout(() => dispatch(lagreKlagebehandling(update)), 200);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [opptatt, klagebehandlingVersjon, id, internVurdering, vedtak, tilknyttedeDokumenter]);
 };
@@ -55,7 +57,7 @@ export const useGetUpdate = () => {
   const klagebehandling = useAppSelector(velgKlagebehandling);
   const lagretVersjon = useAppSelector(velgLagretKlagebehandlingVersjon);
 
-  return useMemo<IKlagebehandlingOppdatering | null>(() => {
+  const update = useMemo<IKlagebehandlingOppdatering | null>(() => {
     if (!kanEndre) {
       return null;
     }
@@ -65,11 +67,13 @@ export const useGetUpdate = () => {
         : createOppdatering({ ...klagebehandling, klagebehandlingId: klagebehandling.id });
     return isEqual(oppdatering, lagretVersjon) ? null : oppdatering;
   }, [klagebehandling, lagretVersjon, kanEndre]);
+
+  return update;
 };
 
 export const useIsSaved = () => useGetUpdate() === null;
 
-const isEqual = (
+export const isEqual = (
   a: IKlagebehandlingOppdatering | null,
   b: IKlagebehandlingOppdatering | null
 ): boolean => {
@@ -91,10 +95,7 @@ const isEqual = (
 };
 
 const compareTilknyttedeDokumenter = (a: TilknyttetDokument[], b: TilknyttetDokument[]) =>
-  a.length === b.length && a.every((t1) => b.some((t2) => compareTilknyttetDokument(t1, t2)));
-
-const compareTilknyttetDokument = (a: TilknyttetDokument, b: TilknyttetDokument) =>
-  a.dokumentInfoId === b.dokumentInfoId && a.journalpostId === b.journalpostId;
+  a.length === b.length && a.every((t1) => b.some((t2) => dokumentMatcher(t1, t2)));
 
 const createOppdatering = ({
   internVurdering,
@@ -102,7 +103,7 @@ const createOppdatering = ({
   klagebehandlingVersjon,
   tilknyttedeDokumenter,
   vedtak,
-}: IKlagebehandlingOppdatering) => ({
+}: IKlagebehandlingOppdatering): IKlagebehandlingOppdatering => ({
   internVurdering,
   klagebehandlingId,
   klagebehandlingVersjon,

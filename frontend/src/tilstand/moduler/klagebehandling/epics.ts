@@ -5,6 +5,7 @@ import { catchError, map, mergeMap, retryWhen, switchMap, timeout } from "rxjs/o
 import { provIgjenStrategi } from "../../../utility/rxUtils";
 import { Dependencies } from "../../konfigurerTilstand";
 import { RootState } from "../../root";
+import { hentTilknyttedeDokumenter } from "../dokumenter/actions";
 import { toasterSett, toasterSkjul } from "../toaster";
 import { hentKlagebehandling, lagreKlagebehandling, unloadKlagebehandling } from "./actions";
 import {
@@ -63,12 +64,12 @@ export const lagreKlagebehandlingEpic = (
           }
         )
         .pipe(
-          map(({ response }) => {
-            console.debug("EDITABLE FIELDS RESPONSE", response);
-            return response;
-          }),
-          map((response: IKlagebehandlingOppdateringResponse) =>
-            KLAGEBEHANDLING_LAGRET({ ...payload, ...response })
+          map(({ response }) => response),
+          mergeMap((response: IKlagebehandlingOppdateringResponse) =>
+            of(
+              KLAGEBEHANDLING_LAGRET({ ...payload, ...response }),
+              hentTilknyttedeDokumenter(payload.klagebehandlingId)
+            )
           )
         )
         .pipe(
@@ -86,7 +87,7 @@ export const lagreKlagebehandlingEpic = (
           })
         )
     ),
-    mergeMap((res) => of(LEDIG(), res))
+    mergeMap((res) => of(res, LEDIG()))
   );
 
 const createPayload = ({

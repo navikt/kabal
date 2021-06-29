@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Header } from "./Header/Header";
 import Alertstripe from "nav-frontend-alertstriper";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import Cookies from "js-cookie";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import * as R from "ramda";
 import { velgMeg } from "../tilstand/moduler/meg.velgere";
 import { velgFeatureToggles } from "../tilstand/moduler/unleash.velgere";
 import { velgToaster, velgToasterMelding } from "../tilstand/moduler/toaster.velgere";
@@ -19,8 +19,6 @@ import isDevLocation from "../utility/isDevLocation";
 import useInterval from "../utility/useInterval";
 import { hentToken, sjekkAuth } from "../tilstand/moduler/auth";
 import { velgAuth } from "../tilstand/moduler/auth.velgere";
-
-const R = require("ramda");
 
 interface LayoutType {
   visMeny: boolean;
