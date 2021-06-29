@@ -1,10 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import {
-  velgAlleDokumenter,
-  velgTilknyttedeDokumenter,
-} from "../../../tilstand/moduler/dokumenter/selectors";
-import { IDokument } from "../../../tilstand/moduler/dokumenter/stateTypes";
+import { velgAlleDokumenter } from "../../../tilstand/moduler/dokumenter/selectors";
 import { ShowDokument } from "./ShowDokument";
 import { DokumenterBeholder } from "./styled-components/container";
 import { TilknyttedeDokumenter } from "./TilknyttedeDokumenter";
@@ -16,6 +12,7 @@ import {
 import { NULLSTILL_DOKUMENTER } from "../../../tilstand/moduler/dokumenter/state";
 import { Header } from "./Header";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
+import { IShownDokument } from "./typer";
 
 export interface DokumenterProps {
   skjult: boolean;
@@ -32,8 +29,9 @@ export const Dokumenter = ({
 }: DokumenterProps) => {
   const dispatch = useAppDispatch();
   const alleDokumenter = useAppSelector(velgAlleDokumenter);
-  const tilknyttedeDokumenter = useAppSelector(velgTilknyttedeDokumenter);
-  const [dokument, settDokument] = useState<IDokument | null>(null);
+  const [dokument, settDokument] = useState<IShownDokument | null>(null);
+
+  const antallTilknyttede = klagebehandling.tilknyttedeDokumenter.length;
 
   useEffect(() => {
     dispatch(hentDokumenter({ klagebehandlingId: klagebehandling.id, pageReference: null }));
@@ -43,15 +41,6 @@ export const Dokumenter = ({
     };
   }, [klagebehandling.id, dispatch]);
 
-  const visDokument = useCallback(
-    (dokument: IDokument) => {
-      if (dokument.harTilgangTilArkivvariant) {
-        settDokument(dokument);
-      }
-    },
-    [settDokument]
-  );
-
   if (skjult) {
     return null;
   }
@@ -59,17 +48,20 @@ export const Dokumenter = ({
   return (
     <>
       <DokumenterBeholder fullvisning={fullvisning}>
-        <Header settFullvisning={settFullvisning} fullvisning={fullvisning} />
+        <Header
+          settFullvisning={settFullvisning}
+          fullvisning={fullvisning}
+          antall={antallTilknyttede}
+        />
         <TilknyttedeDokumenter
           skjult={fullvisning}
-          dokumenter={tilknyttedeDokumenter}
-          visDokument={visDokument}
-          klagebehandling={klagebehandling}
+          visDokument={settDokument}
+          tilknyttedeDokumenter={klagebehandling.tilknyttedeDokumenter}
         />
         <AlleDokumenter
           skjult={!fullvisning}
           dokumenter={alleDokumenter}
-          visDokument={visDokument}
+          visDokument={settDokument}
           klagebehandling={klagebehandling}
         />
       </DokumenterBeholder>

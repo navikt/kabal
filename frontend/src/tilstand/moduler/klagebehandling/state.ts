@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initialState } from "./initialState";
-import { hentKlagebehandlingEpic, lagreKlagebehandlingEpic, settOpptattEpic } from "./epics";
 import { IKlagebehandling, TilknyttetDokument } from "./stateTypes";
 import {
   IKlagebehandlingOppdatering,
@@ -9,6 +8,7 @@ import {
   IVedleggResponse,
   IVedtakFullfoertResponse,
 } from "./types";
+import { dokumentMatcher } from "../../../komponenter/Klagebehandling/Dokumenter/helpers";
 
 export const klagebehandlingSlice = createSlice({
   name: "klagebehandling",
@@ -34,24 +34,27 @@ export const klagebehandlingSlice = createSlice({
     },
     KLAGEBEHANDLING_LAGRET: (
       state,
-      action: PayloadAction<IKlagebehandlingOppdateringResponse & IKlagebehandlingOppdatering>
+      { payload }: PayloadAction<IKlagebehandlingOppdateringResponse & IKlagebehandlingOppdatering>
     ) => {
       if (state.klagebehandling === null) {
         return state;
       }
       return {
         ...state,
-        lagretVersjon: createLagretVersjon(action.payload),
-        klagebehandling: { ...state.klagebehandling, ...action.payload },
+        lagretVersjon: createLagretVersjon(payload),
+        klagebehandling: {
+          ...state.klagebehandling,
+          klagebehandlingVersjon: payload.klagebehandlingVersjon,
+          modified: payload.modified,
+        },
       };
     },
     TILKNYTT_DOKUMENT: (state, { payload }: PayloadAction<TilknyttetDokument>) => {
       if (state.klagebehandling === null) {
         return state;
       }
-      const exists = state.klagebehandling.tilknyttedeDokumenter.some(
-        ({ dokumentInfoId, journalpostId }) =>
-          dokumentInfoId === payload.dokumentInfoId && journalpostId === payload.journalpostId
+      const exists = state.klagebehandling.tilknyttedeDokumenter.some((tilknyttet) =>
+        dokumentMatcher(tilknyttet, payload)
       );
       if (exists) {
         return state;
@@ -63,10 +66,10 @@ export const klagebehandlingSlice = createSlice({
       if (state.klagebehandling === null) {
         return;
       }
+
       state.klagebehandling.tilknyttedeDokumenter =
         state.klagebehandling.tilknyttedeDokumenter.filter(
-          ({ dokumentInfoId, journalpostId }) =>
-            !(dokumentInfoId === payload.dokumentInfoId && journalpostId === payload.journalpostId)
+          (tilknyttet) => !dokumentMatcher(tilknyttet, payload)
         );
       return state;
     },

@@ -26,29 +26,32 @@ const AutosaveContent = styled.div`
   align-items: center;
 `;
 
-const LagringsIndikator = (props: Props) => {
-  const [anker, setAnker] = useState<(EventTarget & HTMLDivElement) | undefined>(undefined);
-  const togglePopover = (ankerEl: EventTarget & HTMLDivElement): void =>
-    setAnker(anker ? undefined : ankerEl);
+const LagringsIndikator = React.memo<Props>(
+  ({ autosaveStatus }) => {
+    const [anker, setAnker] = useState<(EventTarget & HTMLDivElement) | undefined>(undefined);
+    const togglePopover = (ankerEl: EventTarget & HTMLDivElement): void =>
+      setAnker(anker ? undefined : ankerEl);
 
-  return (
-    <>
-      <Popover
-        ankerEl={anker}
-        onRequestClose={() => setAnker(undefined)}
-        orientering={PopoverOrientering.UnderHoyre}
-      >
-        <p style={{ padding: "16px" }}>Endringene lagres automatisk.</p>
-      </Popover>
+    return (
+      <>
+        <Popover
+          ankerEl={anker}
+          onRequestClose={() => setAnker(undefined)}
+          orientering={PopoverOrientering.UnderHoyre}
+        >
+          <p style={{ padding: "16px" }}>Endringene lagres automatisk.</p>
+        </Popover>
 
-      <AutoLagreBeholder>
-        <AutosaveContent onClick={(e) => togglePopover(e.currentTarget)}>
-          {visStatus(props.autosaveStatus)}
-        </AutosaveContent>
-      </AutoLagreBeholder>
-    </>
-  );
-};
+        <AutoLagreBeholder>
+          <AutosaveContent onClick={(e) => togglePopover(e.currentTarget)}>
+            {visStatus(autosaveStatus)}
+          </AutosaveContent>
+        </AutoLagreBeholder>
+      </>
+    );
+  },
+  (previous, next) => previous.autosaveStatus === next.autosaveStatus
+);
 
 const visStatus = (status: boolean) => {
   if (status) {

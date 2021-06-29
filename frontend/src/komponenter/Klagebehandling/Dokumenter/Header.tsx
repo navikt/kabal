@@ -4,15 +4,19 @@ import styled from "styled-components";
 interface HeaderProps {
   settFullvisning: (fullvisning: boolean) => void;
   fullvisning: boolean;
+  antall: number;
 }
 
-export const Header = ({ fullvisning, settFullvisning }: HeaderProps) => (
-  <DokumenterNav>
-    <DokumenterTittel>Dokumenter</DokumenterTittel>
-    <VisTilknyttedeKnapp onClick={() => settFullvisning(!fullvisning)}>
-      {getText(fullvisning)}
-    </VisTilknyttedeKnapp>
-  </DokumenterNav>
+export const Header = React.memo<HeaderProps>(
+  ({ fullvisning, settFullvisning, antall }) => (
+    <DokumenterNav>
+      <DokumenterTittel>Dokumenter</DokumenterTittel>
+      <VisTilknyttedeKnapp onClick={() => settFullvisning(!fullvisning)}>
+        {getText(fullvisning)} ({antall})
+      </VisTilknyttedeKnapp>
+    </DokumenterNav>
+  ),
+  (previous, next) => previous.fullvisning === next.fullvisning && previous.antall === next.antall
 );
 
 const getText = (fullvisning: boolean) =>

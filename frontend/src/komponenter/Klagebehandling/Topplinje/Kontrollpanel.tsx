@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import styled from "styled-components";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
 import { IFaner } from "../KlageBehandling";
-import EksterneLenker from "./EksterneLenker";
+import { EksterneLenker } from "./EksterneLenker";
 // @ts-ignore
 import IkonMann from "../../mann.svg";
 // @ts-ignore
@@ -75,7 +75,7 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
         />
       </Knapper>
 
-      <EksterneLenker id={klagebehandling.id} fnr={klagebehandling.sakenGjelderFoedselsnummer} />
+      <EksterneLenker fnr={klagebehandling.sakenGjelderFoedselsnummer} />
     </Kontrollpanel>
   );
 };

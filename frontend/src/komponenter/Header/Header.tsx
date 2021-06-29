@@ -2,15 +2,15 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import classNames from "classnames";
+import styled from "styled-components";
 import IkonSystem from "./icons/IkonSystem";
-import "./Header.less";
 import { velgMeg } from "../../tilstand/moduler/meg.velgere";
 import { settEnhetHandling } from "../../tilstand/moduler/meg";
 import { useOnInteractOutside } from "../Tabell/FiltrerbarHeader";
-import styled from "styled-components";
 import { velgFeatureToggles } from "../../tilstand/moduler/unleash.velgere";
 import { useAppDispatch } from "../../tilstand/konfigurerTilstand";
 import isDevLocation from "../../utility/isDevLocation";
+import "./Header.less";
 
 const BrukerBoks = styled.div`
   z-index: 2;
@@ -30,16 +30,14 @@ export interface HeaderProps {
   children?: ReactNode | ReactNode[];
 }
 
-export const Bruker = ({ navn, ident, enhet, rolle }: Brukerinfo) => {
+export const Bruker = ({ navn }: Brukerinfo) => {
   const [aapen, setAapen] = useState(false);
-  const [satte_valgtEnhet, settValgtEnhet] = useState(0);
   const [harAdminTilgang, settHarAdminTilgang] = useState(false);
   const person = useSelector(velgMeg);
   const dispatch = useAppDispatch();
   const { enheter, valgtEnhet } = person;
   const ref = useRef<HTMLDivElement>(null);
   const featureToggles = useSelector(velgFeatureToggles);
-  const history = useHistory();
 
   useEffect(() => {
     const adminEnabled = featureToggles.features.find((f) => f?.navn === "klage.admin");
@@ -55,12 +53,7 @@ export const Bruker = ({ navn, ident, enhet, rolle }: Brukerinfo) => {
     active: aapen,
   });
 
-  const settEnhet = (
-    event: React.MouseEvent<HTMLElement | HTMLButtonElement>,
-    index: number,
-    id: string
-  ) => {
-    settValgtEnhet(index);
+  const settEnhet = (id: string) => {
     dispatch(settEnhetHandling({ enhetId: id, navIdent: person.graphData.id }));
     setAapen(false);
   };
@@ -87,26 +80,22 @@ export const Bruker = ({ navn, ident, enhet, rolle }: Brukerinfo) => {
       </button>
       <div className={classNames(aapen ? "velg-enhet maksimert" : "minimert")} ref={ref}>
         <div className={"enheter"}>
-          {(() => {
-            if (isDevLocation() || !harAdminTilgang) {
-              return enheter.map((enhet, index) => {
-                return (
-                  <div
-                    className={classNames({
-                      enhet: true,
-                      active: person.valgtEnhet.id === enhet.id,
-                    })}
-                    key={enhet.id}
-                  >
-                    <NavLink to={"#"} onClick={(e) => settEnhet(e, index, enhet.id)}>
+          <EnhetListe>
+            {(() => {
+              if (isDevLocation() || !harAdminTilgang) {
+                return enheter.map((enhet) => (
+                  <li key={enhet.id}>
+                    <EnhetKnapp
+                      onClick={() => settEnhet(enhet.id)}
+                      disabled={person.valgtEnhet.id === enhet.id}
+                    >
                       {enhet.id} {enhet.navn}
-                    </NavLink>
-                  </div>
-                );
-              });
-            }
-          })()}
-          <hr />
+                    </EnhetKnapp>
+                  </li>
+                ));
+              }
+            })()}
+          </EnhetListe>
           {harAdminTilgang && (
             <NavLink to={"/admin"} className={classNames({ enhet: true, navlink: true })}>
               Admin
@@ -149,3 +138,29 @@ export const Header = ({ tittel, backLink, children, brukerinfo }: HeaderProps) 
     </header>
   );
 };
+
+const EnhetListe = styled.ul`
+  list-style: none;
+  border-bottom: 1px solid grey;
+  padding: 0;
+  margin: 0;
+`;
+
+const EnhetKnapp = styled.button`
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  padding-left: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  color: black;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  :hover,
+  :active {
+    background-color: #e7e9e9;
+  }
+`;
