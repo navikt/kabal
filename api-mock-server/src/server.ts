@@ -1,78 +1,26 @@
+import path from "path";
+import fs from "fs";
 import { App } from "@tinyhttp/app";
 import { logger } from "@tinyhttp/logger";
 import { cors } from "@tinyhttp/cors";
 import formidable, { File } from "formidable";
-import { filtrerOppgaver, toggleDokument, toggleVedlegg } from "./oppgaver";
+import { filtrerOppgaver } from "./oppgaver";
 import { OppgaveQuery } from "./types";
-import fs from "fs";
-import path from "path";
-import { klagebehandlingDetaljerView } from "./klagebehandlingDetaljerView";
-
-let bodyParser = require("body-parser");
+import { getKlage, saveKlage } from "./klagebehandling/klagebehandling";
+import { json, urlencoded } from "body-parser";
+import { hentDokumenter } from "./dokumenter/dokumenter";
 
 const app = new App()
   .use(cors({ origin: "*" }))
   .use(logger())
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: false }));
+  .use(json())
+  .use(urlencoded({ extended: false }));
 
 const port = 3000; // default port to listen
 
-async function hentDokumenter(offset: number) {
-  const sqlite3 = require("sqlite3");
-  let db = new sqlite3.Database("./oppgaver.db");
-  let sql = `SELECT journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant, valgt FROM Dokumenter LIMIT ${offset},10`;
-
-  const dokumenter: any[] = await new Promise((resolve, reject) => {
-    db.all(sql, (err: any, rad: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(rad);
-    });
-    db.close((err: { message: string }) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Close the database connection.");
-    });
-  });
-
-  let i = 0;
-  for (; i < 10; i++) {
-    dokumenter[i].vedlegg = await hentVedlegg();
-  }
-
-  return dokumenter;
-}
-
-async function hentVedlegg() {
-  const sqlite3 = require("sqlite3");
-  let db = new sqlite3.Database("./oppgaver.db");
-  let limit = Math.floor(Math.random() * 4);
-  let sql = `SELECT dokumentInfoId, tittel,harTilgangTilArkivvariant, valgt FROM Vedlegg ORDER BY RANDOM() LIMIT ${limit}`;
-
-  return new Promise((resolve, reject) => {
-    db.all(sql, (err: any, rad: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(rad);
-    });
-    db.close((err: { message: string }) => {
-      if (err) {
-        console.error(err.message);
-      }
-      console.log("Close the database connection.");
-    });
-  });
-}
-
 app.get("/kodeverk", (req, res) => {
-  let data = require("fs")
-    .readFileSync(path.resolve(__dirname, "../fixtures/kodeverk.json"))
-    .toString("utf8");
-  let kodeverk = JSON.parse(data);
+  let data = fs.readFileSync(path.resolve(__dirname, "../fixtures/kodeverk.json")).toString("utf8");
+  const kodeverk = JSON.parse(data);
   res.send(kodeverk);
 });
 
@@ -81,25 +29,19 @@ function isNum(value: number | string) {
 }
 
 app.post("/ansatte/:navIdent/klagebehandlinger/personsoek", (req, res) => {
-  let { soekString, start, antall } = req.body;
-  let data;
+  const { soekString, start, antall } = req.body;
   if (isNum(soekString)) {
     console.log(`${soekString} er tall`);
-    data = require("fs")
-      .readFileSync(path.resolve(__dirname, "../fixtures/fnrsok.json"))
-      .toString("utf8");
-  } else {
-    console.log(`${soekString} er tekst`);
-    data = require("fs")
-      .readFileSync(path.resolve(__dirname, "../fixtures/personsok.json"))
-      .toString("utf8");
   }
-
+  const fileName = isNum(soekString) ? "fnrsok" : "personsok";
+  const data = fs
+    .readFileSync(path.resolve(__dirname, `../fixtures/${fileName}.json`))
+    .toString("utf8");
   res.send(data);
 });
 
 app.get("/klagebehandlinger/:id/detaljer", async (req, res) =>
-  res.send(klagebehandlingDetaljerView)
+  res.send(getKlage(req.params?.id ?? ""))
 );
 
 app.get("/internal/innstillinger/:navident/:enhet", async (req, res) =>
@@ -113,54 +55,48 @@ app.get("/internal/innstillinger/:navident/:enhet", async (req, res) =>
 
 app.get("/klagebehandlinger/:id/alledokumenter", async (req, res) => {
   const query = req.query;
-  const forrigeSide =
-    typeof query.forrigeSide === "string" ? query.forrigeSide : "";
-  let pageReference: string | null;
-  let start: number;
+  const forrigeSide = typeof query.forrigeSide === "string" ? query.forrigeSide : "";
+  const parsedOffset = Number.parseInt(forrigeSide, 10);
+  const offset = Number.isNaN(parsedOffset) ? 0 : parsedOffset;
 
-  switch (forrigeSide) {
-    case "":
-      pageReference = "side1";
-      start = 0;
-      break;
-    case "side1":
-      pageReference = "side2";
-      start = 10;
-      break;
-    case "side2":
-      pageReference = "side3";
-      start = 20;
-      break;
-    case "side3":
-      pageReference = "side4";
-      start = 30;
-      break;
-    default:
-      start = 40;
-      pageReference = null;
-      break;
+  try {
+    const alleDokumenter = await hentDokumenter();
+    const dokumenter = alleDokumenter.slice(offset, offset + 10);
+    res.json({
+      dokumenter,
+      pageReference: offset + dokumenter.length,
+      antall: dokumenter.length,
+      totaltAntall: alleDokumenter.length,
+    });
+  } catch (e) {
+    res.status(500).json(e);
   }
-
-  const dokumenter = await hentDokumenter(start);
-  res.json({
-    dokumenter,
-    pageReference,
-    antall: dokumenter.length,
-    totaltAntall: 50,
-  });
 });
 
 app.get("/klagebehandlinger/:id/dokumenter", async (req, res) => {
-  const data = fs.readFileSync(
-    path.resolve(__dirname, "../fixtures/dokumenter.json"),
-    { encoding: "utf-8" }
+  if (req.params?.id === undefined) {
+    res.sendStatus(404);
+    return;
+  }
+  const klage = getKlage(req.params.id);
+
+  const alleDokumenter = await hentDokumenter();
+
+  const dokumenter = alleDokumenter.filter(({ journalpostId, dokumentInfoId, vedlegg }) =>
+    klage.tilknyttedeDokumenter.some((t) => {
+      return (
+        (t.journalpostId === journalpostId && t.dokumentInfoId === dokumentInfoId) ||
+        (t.journalpostId === journalpostId &&
+          vedlegg.some((v) => v.dokumentInfoId === t.dokumentInfoId))
+      );
+    })
   );
-  const dokumenter = JSON.parse(data);
+
   res.json({
-    dokumenter: dokumenter.dokumenter.slice(0, 5),
+    dokumenter,
     pageReference: null,
-    antall: 5,
-    totaltAntall: 5,
+    antall: dokumenter.length,
+    totaltAntall: dokumenter.length,
   });
 });
 
@@ -172,11 +108,8 @@ app.get("/ansatte/:id/oppgaver", async (req, res) => {
   res.send(result);
 });
 
-app.get(
-  "/klagebehandlinger/:id/journalposter/:journalPostId/dokumenter/:dokumentId",
-  (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../fixtures/testdocument.pdf"));
-  }
+app.get("/klagebehandlinger/:id/journalposter/:journalPostId/dokumenter/:dokumentId", (req, res) =>
+  res.sendFile(path.resolve(__dirname, "../fixtures/testdocument.pdf"))
 );
 
 app.get("/ansatte/:id/klagebehandlinger", async (req, res) => {
@@ -193,36 +126,9 @@ app.post("/internal/elasticadmin/rebuild", async (req, res) => {
   else return res.status(200).send("");
 });
 
-app.post(
-  "/klagebehandlinger/:behandlingsid/toggledokument",
-  async (req, res) => {
-    let id = req.params?.behandlingsid;
-    let { dokumentInfoId, journalpostId, erVedlegg } = req.body;
-    if (!id || !dokumentInfoId || !journalpostId || erVedlegg === undefined) {
-      return res
-        .status(400)
-        .send(
-          `mangler data (${id}, ${dokumentInfoId}, ${journalpostId}, ${erVedlegg})`
-        );
-    }
-    let result;
-    if (id) {
-      result = (await erVedlegg)
-        ? toggleVedlegg({ id, dokumentInfoId, journalpostId })
-        : toggleDokument({ id, dokumentInfoId, journalpostId });
-      return res.status(200).send(result);
-    } else return res.status(403).send("");
-  }
-);
+app.get("/ansatte/:id/antallklagebehandlingermedutgaattefrister", async (req, res) => res.send([]));
 
-app.get(
-  "/ansatte/:id/antallklagebehandlingermedutgaattefrister",
-  async (req, res) => {
-    res.send([]);
-  }
-);
-
-app.get("/ansatte/:id/enheter", async (req, res) => {
+app.get("/ansatte/:id/enheter", async (req, res) =>
   res.send([
     {
       id: "4291",
@@ -232,53 +138,44 @@ app.get("/ansatte/:id/enheter", async (req, res) => {
     { id: "4293", navn: "NAV Klageinstans øst", lovligeTemaer: ["27", "43"] },
     { id: "4295", navn: "NAV Klageinstans nord", lovligeTemaer: ["27", "43"] },
     { id: "0118", navn: "NAV Aremark", lovligeTemaer: [] },
-  ]);
-});
+  ])
+);
 
-app.get("/ansatte/:id/valgtenhet", async (req, res) => {
+app.get("/ansatte/:id/valgtenhet", async (req, res) =>
   res.send({
     id: "4291",
     navn: "NAV Klageinstans Oslo og Akershus",
     lovligeTemaer: ["43", "27"],
-  });
-});
+  })
+);
 
 app.get("/featuretoggle/:feature", (req, res) => {
-  if (req.params?.feature === "klage.generellTilgang")
-    res.status(200).send("true");
+  if (req.params?.feature === "klage.generellTilgang") res.status(200).send("true");
   else if (req.params?.feature === "klage.admin") res.status(200).send("true");
   else res.status(200).send("false");
 });
 
 app.get("/aapenfeaturetoggle/:feature", (req, res) => {
   console.log(req.params?.feature);
-  if (req.params?.feature === "klage.generellTilgang")
-    res.status(200).send("true");
+  if (req.params?.feature === "klage.generellTilgang") res.status(200).send("true");
   else res.status(200).send("false");
 });
 
 // Slette vedtak.
-app.delete(
-  "/klagebehandlinger/:klagebehandlingId/vedtak/:vedtakId/vedlegg",
-  async (req, res) => {
-    await sleep(1000);
-    res.sendStatus(200);
-  }
-);
+app.delete("/klagebehandlinger/:klagebehandlingId/vedtak/:vedtakId/vedlegg", async (req, res) => {
+  await sleep(1000);
+  res.sendStatus(200);
+});
 
 //tildeling saksbehandler oppgave
 app.post(
   "/ansatte/:navIdent/klagebehandlinger/:oppgaveId/saksbehandlertildeling",
-  async (req, res) => {
-    res.send("OK");
-  }
+  async (req, res) => res.send("OK")
 );
 //tildeling saksbehandler oppgave
 app.post(
   "/ansatte/:navIdent/klagebehandlinger/:oppgaveId/saksbehandlerfradeling",
-  async (req, res) => {
-    res.send("OK");
-  }
+  async (req, res) => res.send("OK")
 );
 
 // Opplasting av vedtak.
@@ -305,9 +202,7 @@ app.post(
 
       if (Array.isArray(files.vedlegg)) {
         if (files.vedlegg.length !== 1) {
-          res
-            .status(400)
-            .send(`Too many files uploaded. ${files.vedlegg.length}`);
+          res.status(400).send(`Too many files uploaded. ${files.vedlegg.length}`);
           return;
         }
         vedlegg = files.vedlegg[0];
@@ -322,18 +217,12 @@ app.post(
 
       const { journalfoerendeEnhet, klagebehandlingVersjon } = fields;
 
-      if (
-        typeof journalfoerendeEnhet === "undefined" ||
-        journalfoerendeEnhet.length === 0
-      ) {
+      if (typeof journalfoerendeEnhet === "undefined" || journalfoerendeEnhet.length === 0) {
         res.status(400).send("Missing journalfoerendeEnhet.");
         return;
       }
 
-      if (
-        typeof klagebehandlingVersjon === "undefined" ||
-        klagebehandlingVersjon.length === 0
-      ) {
+      if (typeof klagebehandlingVersjon === "undefined" || klagebehandlingVersjon.length === 0) {
         res.status(400).send("Missing klagebehandlingVersjon.");
         return;
       }
@@ -354,48 +243,40 @@ app.post(
   }
 );
 
-app.put(
-  "/klagebehandlinger/:klagebehandlingid/detaljer/editerbare",
-  async (req, res) => {
-    res.status(200).json({
-      ...klagebehandlingDetaljerView,
-      klagebehandlingVersjon: req.body.klagebehandlingVersjon,
-      internVurdering: req.body.internVurdering,
-      tilknyttedeDokumenter: req.body.tilknyttedeDokumenter,
-      vedtak: [
-        {
-          ...klagebehandlingDetaljerView.vedtak[0],
-          utfall: req.body.utfall,
-          grunn: req.body.grunn,
-          hjemler: req.body.hjemler,
-        },
-      ],
+app.put("/klagebehandlinger/:klagebehandlingid/detaljer/editerbare", async (req, res) => {
+  try {
+    res.status(200).json(saveKlage(req.body));
+  } catch (e) {
+    res.status(409).json({
+      message: e.message,
     });
   }
-);
+});
 
-app.post(
-  "/klagebehandlinger/:klagebehandlingid/vedtak/:vedtakid/fullfoer",
-  async (req, res) => {
-    await sleep(500);
-    const { journalfoerendeEnhet, klagebehandlingVersjon } = req.body;
-    if (
-      typeof journalfoerendeEnhet !== "string" ||
-      journalfoerendeEnhet.length === 0
-    ) {
-      res.sendStatus(400);
-      return;
-    }
-    if (typeof klagebehandlingVersjon !== "number") {
-      res.sendStatus(400);
-      return;
-    }
-    res.json({
-      ...klagebehandlingDetaljerView,
-      avsluttetAvSaksbehandler: "2021-05-17T15:00:59",
-    });
+app.post("/klagebehandlinger/:klagebehandlingid/vedtak/:vedtakid/fullfoer", async (req, res) => {
+  await sleep(500);
+  const { journalfoerendeEnhet, klagebehandlingVersjon } = req.body;
+  if (typeof journalfoerendeEnhet !== "string" || journalfoerendeEnhet.length === 0) {
+    res.sendStatus(400);
+    return;
   }
-);
+  if (typeof klagebehandlingVersjon !== "number") {
+    res.sendStatus(400);
+    return;
+  }
+  if (
+    typeof req.params?.klagebehandlingid !== "string" ||
+    req.params.klagebehandlingid.length === 0
+  ) {
+    res.status(404).send(`Klagebehandling med id "${req.params?.klagebehandlingid}" ikke funnet.`);
+    return;
+  }
+  const klage = getKlage(req.params.klagebehandlingid);
+  res.json({
+    ...klage,
+    avsluttetAvSaksbehandler: "2021-05-17T15:00:59",
+  });
+});
 
 app.get("/ansatte/:id/medunderskrivere/:tema", (req, res) =>
   delay(
@@ -434,10 +315,6 @@ app.put("/klagebehandlinger/:id/detaljer/medunderskriverident", (req, res) =>
     500
   )
 );
-
-interface OppgaveModell {
-  ident: String;
-}
 
 // define a route handler for the default home page
 app.get("/token", (req, res) => {
