@@ -1,4 +1,6 @@
-export const klagebehandlingDetaljerView = {
+import { IKlagebehandling } from "./types";
+
+export const klagebehandlingDetaljerView: IKlagebehandling = {
   id: "a6257f0d-c79c-4844-bfc6-a45ae6d6976f",
   klageInnsendtdato: "2020-08-11",
   fraNAVEnhet: "0104",
@@ -20,18 +22,17 @@ export const klagebehandlingDetaljerView = {
     mellomnavn: "Camilla",
     etternavn: "Petersen",
   },
-  foedselsnummer: "17457337760",
-  virksomhetsnummer: null,
   tema: "43",
   type: "1",
   mottatt: "2021-04-26",
-  startet: "2021-04-27",
-  avsluttet: null,
   avsluttetAvSaksbehandler: null,
   frist: null,
   tildeltSaksbehandlerident: "Z994488",
   medunderskriverident: "",
-  erMedunderskriver: null,
+  datoSendtMedunderskriver: null,
+  klagerKjoenn: null,
+  mottattKlageinstans: null,
+  sakenGjelderVirksomhetsnavn: null,
   hjemler: ["1000.008.004"],
   modified: "2021-04-27T08:56:30.679251",
   created: "2021-04-26T18:25:08.859951",
@@ -50,9 +51,11 @@ export const klagebehandlingDetaljerView = {
       hjemler: [],
       brevMottakere: [],
       ferdigstilt: null,
+      opplastet: null,
       file: null,
     },
   ],
   kommentarFraFoersteinstans: null,
   tilknyttedeDokumenter: [],
+  tildelt: null,
 };

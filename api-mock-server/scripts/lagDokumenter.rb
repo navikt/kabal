@@ -1,5 +1,3 @@
-# generer 51 tilfeldige oppgaver
-
 require 'json'
 require 'faker'
 require 'sqlite3'
@@ -8,25 +6,16 @@ def init()
     begin
         db = SQLite3::Database.open ARGV[0]
         db.execute "DROP TABLE IF EXISTS Dokumenter"
-        db.execute "DROP TABLE IF EXISTS Vedlegg"
 
         db.execute "CREATE TABLE Dokumenter
             (
-            	journalpostId TEXT PRIMARY KEY,
-            	dokumentInfoId TEXT,
+            	journalpostId TEXT NOT NULL,
+            	dokumentInfoId TEXT NOT NULL,
             	tittel TEXT,
             	tema TEXT,
             	registrert TEXT,
             	harTilgangTilArkivvariant INTEGER,
-            	valgt INTEGER
-            )
-            "
-        db.execute "CREATE TABLE Vedlegg
-            (
-            	dokumentInfoId TEXT PRIMARY KEY,
-            	tittel TEXT,
-            	harTilgangTilArkivvariant INTEGER,
-            	valgt INTEGER
+              PRIMARY KEY (journalpostId, dokumentInfoId)
             )
             "
   rescue SQLite3::Exception => e
@@ -39,26 +28,11 @@ def init()
   end
 end
 
-def insert_dokument(journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant, valgt)
+def insert_dokument(journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant)
   begin
 	  db = SQLite3::Database.open ARGV[0]
-      db.execute("INSERT INTO Dokumenter (journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant, valgt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                                        [journalpostId, dokumentInfoId, tittel, tema, registrert.to_s, harTilgangTilArkivvariant, valgt])
-
-  rescue SQLite3::Exception => e
-    puts "Exception occurred"
-    puts e
-    exit
-  ensure
-    db.close if db
-  end
-end
-
-def insert_vedlegg(dokumentInfoId, tittel, harTilgangTilArkivvariant, valgt)
-  begin
-	  db = SQLite3::Database.open ARGV[0]
-      db.execute("INSERT INTO Vedlegg (dokumentInfoId, tittel, harTilgangTilArkivvariant, valgt) VALUES (?, ?, ?, ?)",
-                                        [dokumentInfoId, tittel, harTilgangTilArkivvariant, valgt])
+      db.execute("INSERT INTO Dokumenter (journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant) VALUES (?, ?, ?, ?, ?, ?)",
+                                        [journalpostId, dokumentInfoId, tittel, tema, registrert.to_s, harTilgangTilArkivvariant])
 
   rescue SQLite3::Exception => e
     puts "Exception occurred"
@@ -83,30 +57,14 @@ def tilfeldigTema()
   return "SYK"
 end
 
-def tilfeldigTrueFalse()
-  return rand(2) == 1 ? 1 : 0
-end
-
 def lagDokument()
-  journalpostId = Faker::Number.number(digits: 9)
+  journalpostId = Faker::Number.number(digits: 2)
   dokumentInfoId = Faker::Number.number(digits: 9)
   tittel = Faker::Book.title()
   tema = tilfeldigTema()
   registrert = Faker::Date.backward(days: 365)
-  harTilgangTilArkivvariant = tilfeldigTrueFalse()
-  valgt = tilfeldigTrueFalse()
-  insert_dokument(journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant, valgt)
-end
-
-def lagVedlegg()
-  journalpostId = Faker::Number.number(digits: 9)
-  dokumentInfoId = Faker::Number.number(digits: 9)
-  tittel = Faker::Marketing.buzzwords()
-  tema = tilfeldigTema()
-  registrert = Faker::Date.backward(days: 365)
-  harTilgangTilArkivvariant = tilfeldigTrueFalse()
-  valgt = tilfeldigTrueFalse()
-  insert_vedlegg(dokumentInfoId, tittel,harTilgangTilArkivvariant, valgt)
+  harTilgangTilArkivvariant = Faker::Boolean.boolean(true_ratio: 0.8) ? 1 : 0
+  insert_dokument(journalpostId, dokumentInfoId, tittel, tema, registrert, harTilgangTilArkivvariant)
 end
 
 init()
@@ -114,16 +72,12 @@ init()
 i=0
 
 # trenger disse for test
-insert_dokument("test_journalpostId", "test_dokumentInfoId", "test_tittel", "test_tema", "2020-12-31", 1,1)
-insert_vedlegg("test_dokumentInfoId_2", "test_vedlegg_tittel", 1, 1)
+insert_dokument("test_journalpostId", "test_dokumentInfoId", "test_tittel", "test_tema", "2020-12-31", 1)
 
 loop do
   lagDokument()
-  lagVedlegg()
   i += 1;
   if i == 500
     break
   end
 end
-
-

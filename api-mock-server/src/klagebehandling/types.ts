@@ -1,13 +1,3 @@
-import { IKodeverkVerdi } from "../kodeverk";
-import { IKlagebehandlingOppdatering } from "./types";
-
-export interface IKlagebehandlingState {
-  opptatt: boolean;
-  lagretVersjon: IKlagebehandlingOppdatering | null;
-  error: string | null;
-  klagebehandling: IKlagebehandling | null;
-}
-
 export interface IKlagebehandling {
   avsluttetAvSaksbehandler: string | null;
   created: string; // LocalDateTime
@@ -91,31 +81,12 @@ export interface IVedlegg {
   opplastet: string | null; // LocalDateTime
 }
 
-export interface GrunnerPerUtfall {
-  utfallId: string;
-  grunner: IKodeverkVerdi[];
-}
-
-export interface IKlagePayload {
-  id: string;
-}
-
-export interface IDokumenter {
-  saksbehandlerHarTilgang: boolean;
-}
-
-export interface IDokumentPayload {
-  id: string;
-  journalpostId: string;
-  dokumentInfoId: string;
-  erVedlegg: boolean;
-}
-
-export interface IDokumentParams {
-  id: string;
-  idx: number;
-  handling: string;
-  antall: number;
-  ref: string | null;
-  historyNavigate: boolean;
+export interface Editerbare {
+  klagebehandlingId: string;
+  klagebehandlingVersjon: number;
+  internVurdering: string;
+  grunn: string | null;
+  utfall: string | null;
+  hjemler: string[];
+  tilknyttedeDokumenter: TilknyttetDokument[];
 }
