@@ -30,14 +30,22 @@ const setup = (authClient) => {
     passport.authenticate("azureOidc", { failureRedirect: "/login" })
   );
 
-  const done = (result) => {
-    console.log(result);
-    return result;
-  };
+  function onRefreshDone(err, accessToken, refreshToken) {
+    console.log({ err, accessToken, refreshToken });
+    // You have a new access token, store it in the user object,
+    // or use it to make a new request.
+    // `refreshToken` may or may not exist, depending on the strategy you are using.
+    // You probably don't need it anyway, as according to the OAuth 2.0 spec,
+    // it should be the same as the initial refresh token.
+  }
   // Routes for passport to handle the authentication flow
   router.get(
     "/refresh",
-    refresh.requestNewAccessToken("azureOidc", session.refreshToken, done)
+    refresh.requestNewAccessToken(
+      "azureOidc",
+      session.refreshToken,
+      onRefreshDone
+    )
   );
 
   router.get("/error", (req, res) => {
