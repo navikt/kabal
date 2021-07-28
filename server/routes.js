@@ -96,7 +96,10 @@ const setup = (authClient) => {
       const token = await new Promise((resolve, reject) =>
         authUtils
           .getOnBehalfOfAccessToken(authClient, req, params)
-          .then((userinfo) => resolve(userinfo))
+          .then((userinfo) => {
+            console.log({ getOnBehalfOfAccessToken: userinfo });
+            resolve(userinfo);
+          })
           .catch((err) => reject(err))
       );
       req.headers["Authorization"] = `Bearer ${token}`;

@@ -120,7 +120,7 @@ const loadReverseProxyConfig = () => {
     try {
       config = JSON.parse(fs.readFileSync(path.resolve(configPath), "utf-8"));
     } catch (err) {
-      console.log(`Could not read config: '${err}'`);
+      console.error(`Could not read config: '${err}'`);
     }
   }
   if (!config) {

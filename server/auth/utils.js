@@ -1,7 +1,6 @@
 let OpenIDClient = require("openid-client");
 let { TokenSet } = OpenIDClient;
 let axios = require("axios");
-let util = require("util");
 
 const tokenSetSelfId = "self";
 
