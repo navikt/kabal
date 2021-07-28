@@ -18,8 +18,15 @@ const ensureAuthenticated = async (req, res, next) => {
     console.log("isAuthenticated()", req.isAuthenticated());
     console.log("user", req.user);
     console.log("session", req.session);
+
+    const azureAuthClient = await azure.client();
+    await auth.refreshAccessToken(azureAuthClient, req.session);
+
     next();
-  } else if (!req.isAuthenticated() && req.user) {
+  } else if (
+    !req.isAuthenticated() &&
+    req.session["oidc:login.microsoftonline.com"]
+  ) {
     console.log("AUTH try refresh");
     const azureAuthClient = await azure.client();
     await auth.refreshAccessToken(azureAuthClient, req.session);
