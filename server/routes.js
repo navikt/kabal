@@ -22,6 +22,8 @@ const ensureAuthenticated = async (req, res, next) => {
     next();
   } else {
     console.log("AUTH denied");
+    console.log("user", req.user);
+    console.log("session", req.session);
     session.redirectTo = req.url;
     res.redirect("/login");
   }
@@ -105,7 +107,6 @@ const setup = (authClient) => {
         authUtils
           .getOnBehalfOfAccessToken(authClient, req, params)
           .then((userinfo) => {
-            console.log({ getOnBehalfOfAccessToken: userinfo });
             resolve(userinfo);
           })
           .catch((err) => reject(err))
