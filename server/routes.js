@@ -9,6 +9,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 let { api_client_id, downstream_api } = require("./config");
 const { lagreIRedis, hentFraRedis } = require("./cache");
 let bodyParser = require("body-parser");
+const auth = require("./auth/utils");
 
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
