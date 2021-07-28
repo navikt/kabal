@@ -88,10 +88,34 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
   return new TokenSet(tokenSet).expired() === false;
 };
 
+const refreshAccessToken = async (azureClient, session) => {
+  if (!session.refreshToken) return false;
+  return await azureClient
+    .refresh(session.refreshToken)
+    .then((tokenSet) =>
+      retrieveTokens(tokenSet, "access_token", "refresh_token")
+    )
+    .then(([accessToken, refreshToken]) => {
+      cosole.log(`Refresher access token for ${JSON.stringify(session)}`);
+      session.kabalToken = accessToken;
+      session.refreshToken = refreshToken;
+      return true;
+    })
+    .catch((errorMessage) => {
+      console.error(
+        `Feilet refresh av access token for ${JSON.stringify(
+          session
+        )}: ${errorMessage}`
+      );
+      return false;
+    });
+};
+
 module.exports = {
   getOnBehalfOfAccessToken,
   getUserInfoFromGraphApi,
   appendDefaultScope,
   hasValidAccessToken,
   tokenSetSelfId,
+  refreshAccessToken,
 };

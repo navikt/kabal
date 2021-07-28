@@ -9,14 +9,16 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 let { api_client_id, downstream_api } = require("./config");
 const { lagreIRedis, hentFraRedis } = require("./cache");
 let bodyParser = require("body-parser");
-const refresh = require("passport-oauth2-refresh");
 
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     next();
   } else {
-    session.redirectTo = req.url;
-    res.redirect("/login");
+    await auth.refreshAccessToken(azureClient, req.session);
+    next();
+
+    //session.redirectTo = req.url;
+    //res.redirect("/login");
   }
 };
 
@@ -28,24 +30,6 @@ const setup = (authClient) => {
   router.get(
     "/login",
     passport.authenticate("azureOidc", { failureRedirect: "/login" })
-  );
-
-  function onRefreshDone(err, accessToken, refreshToken) {
-    console.log({ err, accessToken, refreshToken });
-    // You have a new access token, store it in the user object,
-    // or use it to make a new request.
-    // `refreshToken` may or may not exist, depending on the strategy you are using.
-    // You probably don't need it anyway, as according to the OAuth 2.0 spec,
-    // it should be the same as the initial refresh token.
-  }
-  // Routes for passport to handle the authentication flow
-  router.get(
-    "/internal/refresh",
-    refresh.requestNewAccessToken(
-      "azureOidc",
-      session.refreshToken,
-      onRefreshDone
-    )
   );
 
   router.get("/error", (req, res) => {

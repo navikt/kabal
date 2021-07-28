@@ -9,7 +9,6 @@ let session = require("./session");
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
 let morganJson = require("morgan-json");
-const refresh = require("passport-oauth2-refresh");
 
 const morganJsonFormat = morganJson({
   short: ":method :url :status",
@@ -50,9 +49,6 @@ async function startApp() {
       const azureAuthClient = await azure.client();
       const azureOidcStrategy = azure.strategy(azureAuthClient);
       passport.use("azureOidc", azureOidcStrategy);
-      console.log(JSON.stringify(azureOidcStrategy));
-      //refresh.use("azureOidc", azureOidcStrategy);
-
       passport.serializeUser((user, done) => done(null, user));
       passport.deserializeUser((user, done) => done(null, user));
       server.use("/", require("./routes").setup(azureAuthClient));
