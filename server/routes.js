@@ -15,15 +15,15 @@ const azure = require("./auth/azure");
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     next();
+  } else if (!req.isAuthenticated()) {
+    console.log("AUTH try refresh");
+    const azureAuthClient = await azure.client();
+    await auth.refreshAccessToken(azureAuthClient, req.session);
+    next();
   } else {
-    if (authUtils.hasValidAccessToken(req)) {
-      const azureAuthClient = await azure.client();
-      await auth.refreshAccessToken(azureAuthClient, req.session);
-      next();
-    } else {
-      session.redirectTo = req.url;
-      res.redirect("/login");
-    }
+    console.log("AUTH denied");
+    session.redirectTo = req.url;
+    res.redirect("/login");
   }
 };
 
