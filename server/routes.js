@@ -15,7 +15,7 @@ const azure = require("./auth/azure");
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     next();
-  } else if (!req.isAuthenticated()) {
+  } else if (!req.isAuthenticated() && req.session) {
     console.log("AUTH try refresh");
     const azureAuthClient = await azure.client();
     await auth.refreshAccessToken(azureAuthClient, req.session);
