@@ -22,9 +22,10 @@ const ensureAuthenticated = async (req, res, next) => {
     next();
   } else {
     console.log("AUTH denied");
+    console.log("isAuthenticated()", req.isAuthenticated());
     console.log("user", req.user);
     console.log("session", req.session);
-    session.redirectTo = req.url;
+    //session.redirectTo = req.url;
     res.redirect("/login");
   }
 };
