@@ -10,12 +10,14 @@ let { api_client_id, downstream_api } = require("./config");
 const { lagreIRedis, hentFraRedis } = require("./cache");
 let bodyParser = require("body-parser");
 const auth = require("./auth/utils");
+const azure = require("./auth/azure");
 
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     next();
   } else {
-    await auth.refreshAccessToken(azureClient, req.session);
+    const azureAuthClient = await azure.client();
+    await auth.refreshAccessToken(azureAuthClient, req.session);
     next();
 
     //session.redirectTo = req.url;
