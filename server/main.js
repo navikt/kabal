@@ -51,13 +51,15 @@ async function startApp() {
       const azureOidcStrategy = azure.strategy(azureAuthClient);
       passport.use("azureOidc", azureOidcStrategy);
       refresh.use(azureOidcStrategy, {
-        setRefreshOAuth2({ strategyOAuth2, refreshOAuth2 }) {
+        setRefreshOAuth2(azureOidcStrategy) {
           // These named parameters are set for most strategies.
           // The `refreshOAuth2` instance is a clone of the one supplied by the strategy, inheriting most of its config.
           // Customise it here and return if necessary.
           // For example, to set a proxy:
-          refreshOAuth2.setAgent(new HttpsProxyAgent(azureAuthClient));
-          return refreshOAuth2;
+          console.log(azureOidcStrategy);
+          return azureOidcStrategy;
+          //refreshOAuth2.setAgent(new HttpsProxyAgent(azureAuthClient));
+          //return refreshOAuth2;
         },
       });
       passport.serializeUser((user, done) => done(null, user));
