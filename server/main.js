@@ -50,7 +50,8 @@ async function startApp() {
       const azureAuthClient = await azure.client();
       const azureOidcStrategy = azure.strategy(azureAuthClient);
       passport.use("azureOidc", azureOidcStrategy);
-      refresh.use("azureOidc", azureAuthClient);
+      console.log(JSON.stringify(azureOidcStrategy));
+      //refresh.use("azureOidc", azureOidcStrategy);
 
       passport.serializeUser((user, done) => done(null, user));
       passport.deserializeUser((user, done) => done(null, user));
