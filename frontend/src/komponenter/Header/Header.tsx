@@ -118,6 +118,9 @@ export const Bruker = ({ navn, ident, enhet, rolle }: Brukerinfo) => {
           <a href={"/internal/logout"} className={classNames({ enhet: true, navlink: true })}>
             Logg ut
           </a>
+          <a href={"/internal/refresh"} className={classNames({ enhet: true, navlink: true })}>
+            Refresh token
+          </a>
         </div>
       </div>
     </BrukerBoks>

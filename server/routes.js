@@ -40,7 +40,7 @@ const setup = (authClient) => {
   }
   // Routes for passport to handle the authentication flow
   router.get(
-    "/refresh",
+    "/internal/refresh",
     refresh.requestNewAccessToken(
       "azureOidc",
       session.refreshToken,
