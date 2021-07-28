@@ -27,6 +27,7 @@ const strategy = (client) => {
       },
       claims: tokenSet.claims(),
     };
+    console.log({ tokenset: user });
     return done(null, user);
   };
   const options = {
@@ -34,7 +35,9 @@ const strategy = (client) => {
     params: {
       response_types: config.azureAd.responseTypes,
       response_mode: config.azureAd.responseMode,
-      scope: `openid ${authUtils.appendDefaultScope(config.azureAd.clientId)}`,
+      scope: `offline_access openid ${authUtils.appendDefaultScope(
+        config.azureAd.clientId
+      )}`,
     },
     passReqToCallback: false,
     usePKCE: "S256",
