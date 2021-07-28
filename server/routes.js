@@ -9,6 +9,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 let { api_client_id, downstream_api } = require("./config");
 const { lagreIRedis, hentFraRedis } = require("./cache");
 let bodyParser = require("body-parser");
+const refresh = require("passport-oauth2-refresh");
 
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
@@ -27,6 +28,16 @@ const setup = (authClient) => {
   router.get(
     "/login",
     passport.authenticate("azureOidc", { failureRedirect: "/login" })
+  );
+
+  const done = (result) => {
+    console.log(result);
+    return result;
+  };
+  // Routes for passport to handle the authentication flow
+  router.get(
+    "/refresh",
+    refresh.requestNewAccessToken("azureOidc", session.refreshToken, done)
   );
 
   router.get("/error", (req, res) => {

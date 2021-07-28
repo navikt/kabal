@@ -27,7 +27,6 @@ const strategy = (client) => {
       },
       claims: tokenSet.claims(),
     };
-    console.log({ tokenset: JSON.stringify(user.tokenSets) });
     return done(null, user);
   };
   const options = {
