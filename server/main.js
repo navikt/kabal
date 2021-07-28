@@ -50,7 +50,7 @@ async function startApp() {
       const azureAuthClient = await azure.client();
       const azureOidcStrategy = azure.strategy(azureAuthClient);
       passport.use("azureOidc", azureOidcStrategy);
-      refresh.use(azureOidcStrategy, {
+      refresh.use(azure, {
         setRefreshOAuth2(azureOidcStrategy) {
           // These named parameters are set for most strategies.
           // The `refreshOAuth2` instance is a clone of the one supplied by the strategy, inheriting most of its config.
