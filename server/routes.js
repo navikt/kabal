@@ -16,12 +16,14 @@ const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     next();
   } else {
-    const azureAuthClient = await azure.client();
-    await auth.refreshAccessToken(azureAuthClient, req.session);
-    next();
-
-    //session.redirectTo = req.url;
-    //res.redirect("/login");
+    if (authUtils.hasValidAccessToken(req)) {
+      const azureAuthClient = await azure.client();
+      await auth.refreshAccessToken(azureAuthClient, req.session);
+      next();
+    } else {
+      session.redirectTo = req.url;
+      res.redirect("/login");
+    }
   }
 };
 
