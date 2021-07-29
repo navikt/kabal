@@ -91,7 +91,8 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
 const refreshAccessToken = async (azureClient, session) => {
   //console.log("session.session.passport.user: ", session.session.passport.user);
   //console.log("session.user.tokenSets.self: ", session.user.tokenSets.self);
-  const refreshToken = session.user.tokenSets.self.refreshToken;
+  const user = session.user || session.session.passport.user;
+  const refreshToken = user.tokenSets.self.refreshToken;
 
   console.log("refreshToken", refreshToken);
   if (!refreshToken) return false;
