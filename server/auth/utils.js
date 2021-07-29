@@ -103,15 +103,10 @@ const refreshAccessToken = async (azureClient, session) => {
   return await azureClient
     .refresh(refreshToken)
     .then((tokenSet) => {
-      console.log("refreshToken: nytt tokenSet", JSON.stringify(tokenSet));
-      //retrieveTokens(tokenSet, "access_token", "refresh_token")
-    })
-    .then(([accessToken, refreshToken]) => {
-      cosole.log(
-        `Refresher access token for ${JSON.stringify(session.session.user)}`
-      );
-      session.kabalToken = accessToken;
-      session.refreshToken = refreshToken;
+      //console.log("refreshToken: nytt tokenSet", JSON.stringify(tokenSet));
+      session.kabalToken = tokenSet.access_token;
+      session.refreshToken = tokenSet.refresh_token;
+      session.idToken = tokenSet.id_token;
       return true;
     })
     .catch((errorMessage) => {
