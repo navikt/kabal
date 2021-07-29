@@ -15,9 +15,9 @@ const azure = require("./auth/azure");
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     console.log("AUTH OK");
-    console.log("isAuthenticated()", req.isAuthenticated());
-    console.log("user", req.user);
-    console.log("session", req.session);
+    //console.log("isAuthenticated()", req.isAuthenticated());
+    //console.log("user", req.user);
+    //console.log("session", req.session);
 
     const azureAuthClient = await azure.client();
     await auth.refreshAccessToken(azureAuthClient, req);
@@ -33,9 +33,9 @@ const ensureAuthenticated = async (req, res, next) => {
     next();
   } else {
     console.log("AUTH denied");
-    console.log("isAuthenticated()", req.isAuthenticated());
-    console.log("user", req.user);
-    console.log("session", req.session);
+    //console.log("isAuthenticated()", req.isAuthenticated());
+    //console.log("user", req.user);
+    //console.log("session", req.session);
     //session.redirectTo = req.url;
     res.redirect("/login");
   }
