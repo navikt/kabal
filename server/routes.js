@@ -20,7 +20,7 @@ const ensureAuthenticated = async (req, res, next) => {
     console.log("session", req.session);
 
     const azureAuthClient = await azure.client();
-    await auth.refreshAccessToken(azureAuthClient, req.session);
+    await auth.refreshAccessToken(azureAuthClient, req);
 
     next();
   } else if (
