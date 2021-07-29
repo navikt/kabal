@@ -89,12 +89,14 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
 };
 
 const refreshAccessToken = async (azureClient, session) => {
+  console.log("refreshAccessToken", session.refreshToken);
   if (!session.refreshToken) return false;
   return await azureClient
     .refresh(session.refreshToken)
-    .then((tokenSet) =>
-      retrieveTokens(tokenSet, "access_token", "refresh_token")
-    )
+    .then((tokenSet) => {
+      console.log("refresh nytt tokenSet", JSON.stringify(tokenSet));
+      //retrieveTokens(tokenSet, "access_token", "refresh_token")
+    })
     .then(([accessToken, refreshToken]) => {
       cosole.log(`Refresher access token for ${JSON.stringify(session)}`);
       session.kabalToken = accessToken;
