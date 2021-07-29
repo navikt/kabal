@@ -92,10 +92,15 @@ const refreshAccessToken = async (azureClient, session) => {
   //console.log("session.session.passport.user: ", session.session.passport.user);
   //console.log("session.user.tokenSets.self: ", session.user.tokenSets.self);
   console.log("inside refreshAccessToken");
-  const user = session.session.passport.user || session.session.user;
+  const user = session.session.passport.user || session.user;
   const refreshToken = user.tokenSets.self.refreshToken;
 
   console.log("refreshToken", refreshToken);
+  if (!refreshToken) {
+    console.log("session.session", session.session);
+    console.log("session.user", session.user);
+    console.log(JSON.stringify(user));
+  }
   if (!refreshToken) return false;
   return await azureClient
     .refresh(refreshToken)
