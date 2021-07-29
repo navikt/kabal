@@ -97,8 +97,7 @@ const setup = (authClient) => {
     "/oauth2/callback",
     passport.authenticate("azureOidc", { failureRedirect: "/error" }),
     async (req, res) => {
-      console.log("callback req", JSON.stringify(req));
-      console.log("callback res", JSON.stringify(res));
+      console.log("callback req", JSON.stringify(req.session.passport));
 
       if (session.redirectTo) {
         res.redirect(session.redirectTo);
