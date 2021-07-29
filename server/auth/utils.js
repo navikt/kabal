@@ -91,15 +91,18 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
 const refreshAccessToken = async (azureClient, session) => {
   console.log("session.session.passport.user: ", session.session.passport.user);
   console.log("session.user.tokenSets.self: ", session.user.tokenSets.self);
-  if (!session.refreshToken) return false;
+  const refreshToken = session.user.tokenSets.self.refreshToken;
+  if (!refreshToken) return false;
   return await azureClient
-    .refresh(session.refreshToken)
+    .refresh(refreshToken)
     .then((tokenSet) => {
       console.log("refresh nytt tokenSet", JSON.stringify(tokenSet));
       //retrieveTokens(tokenSet, "access_token", "refresh_token")
     })
     .then(([accessToken, refreshToken]) => {
-      cosole.log(`Refresher access token for ${JSON.stringify(session)}`);
+      cosole.log(
+        `Refresher access token for ${JSON.stringify(session.session.user)}`
+      );
       session.kabalToken = accessToken;
       session.refreshToken = refreshToken;
       return true;
@@ -107,7 +110,7 @@ const refreshAccessToken = async (azureClient, session) => {
     .catch((errorMessage) => {
       console.error(
         `Feilet refresh av access token for ${JSON.stringify(
-          session
+          session.session.user
         )}: ${errorMessage}`
       );
       return false;
