@@ -1,12 +1,16 @@
 let OpenIDClient = require("openid-client");
 let { TokenSet } = OpenIDClient;
 let axios = require("axios");
+const { lagreIRedis } = require("../cache");
 
 const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = (authClient, req, api) => {
   console.log("inside getOnBehalfOfAccessToken");
-  console.log(req.session.kabalToken);
+  console.log(req.session);
+
+  const token = hentFraRedis("access_token");
+  console.log(token);
 
   return new Promise((resolve, reject) => {
     if (hasValidAccessToken(req, api.clientId)) {
@@ -19,7 +23,7 @@ const getOnBehalfOfAccessToken = (authClient, req, api) => {
           "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
         requested_token_use: "on_behalf_of",
         scope: createOnBehalfOfScope(api),
-        assertion: req.user.tokenSets[tokenSetSelfId].access_token,
+        assertion: token || req.user.tokenSets[tokenSetSelfId].access_token,
       };
 
       authClient
@@ -110,7 +114,8 @@ const refreshAccessToken = async (azureClient, session) => {
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;
       session.idToken = tokenSet.id_token;
-      console.log("tokenSet", tokenSet);
+      lagreIRedis("access_token", tokenSet.access_token);
+
       console.log("expire", tokenSet.expires_at);
       return tokenSet;
     })
