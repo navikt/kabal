@@ -41,6 +41,18 @@ async function startApp() {
     );
     server.use(cors);
 
+    server.use;
+    server.use(function (req, res, next) {
+      const uuid = require("uuid/v4");
+      var kabalId = req.cookies.kabalId;
+      if (kabalId === undefined) {
+        res.cookie("kabalId", uuid(), { maxAge: 900000, httpOnly: true });
+      } else {
+        console.log("kabalId", kabalId);
+      }
+      next();
+    });
+
     morganBody(server);
 
     if (process.env.NODE_ENV === "production") {

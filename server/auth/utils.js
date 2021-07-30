@@ -7,9 +7,10 @@ const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   console.log("inside getOnBehalfOfAccessToken");
-  console.log(req.session);
-
-  const token = await hentFraRedis("access_token");
+  //console.log(req.session);
+  const kabalId = req.cookies.kabalId;
+  console.log({ kabalId });
+  const token = await hentFraRedis(kabalId);
   console.log(token);
 
   return new Promise((resolve, reject) => {
@@ -100,8 +101,8 @@ const refreshAccessToken = async (azureClient, session) => {
   const user = session.session.passport.user || session.user;
   const refreshToken = user.tokenSets.self.refresh_token;
 
-  console.log("refreshToken", refreshToken);
-  console.log("user", JSON.stringify(user));
+  //console.log("refreshToken", refreshToken);
+  //console.log("user", JSON.stringify(user));
   if (!refreshToken) {
     console.log("session.session", session.session);
     console.log("session.user", session.user);
@@ -111,12 +112,12 @@ const refreshAccessToken = async (azureClient, session) => {
   return await azureClient
     .refresh(refreshToken)
     .then(async (tokenSet) => {
-      //console.log("refreshToken: nytt tokenSet", JSON.stringify(tokenSet));
+      const kabalId = req.cookies.kabalId;
+      console.log({ kabalId });
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;
       session.idToken = tokenSet.id_token;
-      await lagreIRedis("access_token", tokenSet.access_token);
-
+      await lagreIRedis(kabalId, tokenSet.access_token);
       console.log("expire", tokenSet.expires_at);
       return tokenSet;
     })
