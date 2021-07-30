@@ -53,6 +53,7 @@ const ensureAuthenticated = async (req, res, next) => {
     }
   } else {
     console.log("AUTH denied");
+    console.log({ token });
     res.redirect("/login");
   }
 };
@@ -113,6 +114,19 @@ const setup = (authClient) => {
     "/oauth2/callback",
     passport.authenticate("azureOidc", { failureRedirect: "/error" }),
     async (req, res) => {
+      const access_token =
+        req.session.passport.user.tokenSets.self.access_token;
+      const refresh_token =
+        req.session.passport.user.tokenSets.self.refresh_token;
+      let expires = addMinutes(new Date(), 30);
+      res.cookie("accessToken", access_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", refresh_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
       if (session.redirectTo) {
         res.redirect(session.redirectTo);
       } else {
