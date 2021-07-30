@@ -29,21 +29,29 @@ const isValidIn = ({ seconds, token }) => {
 
 const ensureAuthenticated = async (req, res, next) => {
   const token = res.cookies.accessToken;
-  if (isValidIn({ seconds: 60, token })) {
-    const kabalId = req.cookies.kabalId;
-    const azureAuthClient = await azure.client();
-    let tokenSet = await auth.refreshAccessToken(azureAuthClient, req, kabalId);
-    let expires = addMinutes(new Date(), 30);
-    res.cookie("accessToken", tokenSet.access_token, {
-      expires: new Date(expires),
-      httpOnly: true,
-    });
-    res.cookie("refreshToken", tokenSet.refresh_token, {
-      expires: new Date(expires),
-      httpOnly: true,
-    });
-
-    next();
+  if (token) {
+    if (isValidIn({ seconds: 60, token })) {
+      const kabalId = req.cookies.kabalId;
+      const azureAuthClient = await azure.client();
+      let tokenSet = await auth.refreshAccessToken(
+        azureAuthClient,
+        req,
+        kabalId
+      );
+      let expires = addMinutes(new Date(), 30);
+      res.cookie("accessToken", tokenSet.access_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", tokenSet.refresh_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
+      next();
+    } else {
+      console.log("AUTH denied");
+      res.redirect("/login");
+    }
   } else {
     console.log("AUTH denied");
     res.redirect("/login");
