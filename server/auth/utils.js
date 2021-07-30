@@ -110,7 +110,8 @@ const refreshAccessToken = async (azureClient, session) => {
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;
       session.idToken = tokenSet.id_token;
-      return true;
+      console.log("expire", tokenSet.expire_at);
+      return tokenSet;
     })
     .catch((errorMessage) => {
       console.error(
