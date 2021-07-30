@@ -50,7 +50,7 @@ async function startApp() {
           httpOnly: true,
         });
       } else {
-        console.log("kabalId", kabalId);
+        //console.log("kabalId", kabalId);
       }
       next();
     });

@@ -6,12 +6,12 @@ const { hentFraRedis, lagreIRedis } = require("../cache");
 const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
-  console.log("inside getOnBehalfOfAccessToken");
+  //console.log("inside getOnBehalfOfAccessToken");
   const kabalId = req.cookies.kabalId;
-  console.log({ kabalId });
+  //console.log({ kabalId });
   const token = await hentFraRedis(kabalId);
   const cookieToken = req.cookies.accessToken;
-  console.log({ cookieToken, token });
+  //console.log({ cookieToken, token });
 
   return new Promise((resolve, reject) => {
     const params = {

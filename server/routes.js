@@ -30,7 +30,9 @@ const isValidIn = ({ seconds, token }) => {
 const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies && req.cookies.accessToken;
   if (token) {
-    if (isValidIn({ seconds: 60, token })) {
+    if (isValidIn({ seconds: 30, token })) {
+      next();
+    } else {
       const kabalId = req.cookies.kabalId;
       const azureAuthClient = await azure.client();
       let tokenSet = await auth.refreshAccessToken(
@@ -48,9 +50,6 @@ const ensureAuthenticated = async (req, res, next) => {
         httpOnly: true,
       });
       next();
-    } else {
-      console.log("AUTH denied");
-      res.redirect("/login");
     }
   } else {
     console.log("AUTH denied");
