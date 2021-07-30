@@ -9,7 +9,9 @@ const envVar = ({ name, required = true }) => {
   return process.env[name];
 };
 
-const REDIS_URL = "redis://klage-redis-fe";
+const REDIS_URL =
+  envVar({ name: "REDIS_SERVICE", required: false }) ||
+  "redis://klage-redis-fe";
 
 function lagreIRedis(key, value) {
   const client = redis.createClient(REDIS_URL);

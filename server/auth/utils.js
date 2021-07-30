@@ -1,7 +1,7 @@
 let OpenIDClient = require("openid-client");
 let { TokenSet } = OpenIDClient;
 let axios = require("axios");
-const { lagreIRedis } = require("../cache");
+const { hentFraRedis, lagreIRedis } = require("../cache");
 
 const tokenSetSelfId = "self";
 
