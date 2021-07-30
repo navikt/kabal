@@ -28,7 +28,7 @@ const isValidIn = ({ seconds, token }) => {
 };
 
 const ensureAuthenticated = async (req, res, next) => {
-  const token = res.cookies.accessToken;
+  const token = req.cookies && req.cookies.accessToken;
   if (token) {
     if (isValidIn({ seconds: 60, token })) {
       const kabalId = req.cookies.kabalId;

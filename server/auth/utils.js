@@ -10,7 +10,7 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   const kabalId = req.cookies.kabalId;
   console.log({ kabalId });
   const token = await hentFraRedis(kabalId);
-  const cookieToken = res.cookies.accessToken;
+  const cookieToken = req.cookies.accessToken;
   console.log({ cookieToken, token });
 
   return new Promise((resolve, reject) => {
