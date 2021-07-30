@@ -44,7 +44,7 @@ async function startApp() {
     server.use;
     server.use(function (req, res, next) {
       const uuid = require("uuid/v4");
-      var kabalId = req.cookies.kabalId;
+      let kabalId = req.cookie.kabalId;
       if (kabalId === undefined) {
         res.cookie("kabalId", uuid(), { maxAge: 900000, httpOnly: true });
       } else {

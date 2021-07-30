@@ -8,7 +8,7 @@ const tokenSetSelfId = "self";
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   console.log("inside getOnBehalfOfAccessToken");
   //console.log(req.session);
-  const kabalId = req.cookies.kabalId;
+  const kabalId = req.cookie.kabalId;
   console.log({ kabalId });
   const token = await hentFraRedis(kabalId);
   console.log(token);
@@ -112,7 +112,7 @@ const refreshAccessToken = async (azureClient, session) => {
   return await azureClient
     .refresh(refreshToken)
     .then(async (tokenSet) => {
-      const kabalId = req.cookies.kabalId;
+      const kabalId = req.cookie.kabalId;
       console.log({ kabalId });
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;
