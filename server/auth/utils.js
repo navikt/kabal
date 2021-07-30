@@ -10,34 +10,31 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   const kabalId = req.cookies.kabalId;
   console.log({ kabalId });
   const token = await hentFraRedis(kabalId);
-  console.log(token);
+  const cookieToken = res.cookies.accessToken;
+  console.log({ cookieToken, token });
 
   return new Promise((resolve, reject) => {
-    if (hasValidAccessToken(req, api.clientId)) {
-      const tokenSets = getTokenSetsFromSession(req);
-      resolve(tokenSets[api.clientId].access_token);
-    } else {
-      const params = {
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        client_assertion_type:
-          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-        requested_token_use: "on_behalf_of",
-        scope: createOnBehalfOfScope(api),
-        assertion: token || req.user.tokenSets[tokenSetSelfId].access_token,
-      };
-      console.log({ token, params });
+    const params = {
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      client_assertion_type:
+        "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+      requested_token_use: "on_behalf_of",
+      scope: createOnBehalfOfScope(api),
+      assertion:
+        cookieToken || token || req.user.tokenSets[tokenSetSelfId].access_token,
+    };
+    console.log({ token, params });
 
-      authClient
-        .grant(params)
-        .then((tokenSet) => {
-          req.user.tokenSets[api.clientId] = tokenSet;
-          resolve(tokenSet.access_token);
-        })
-        .catch((err) => {
-          console.error(err);
-          reject(err);
-        });
-    }
+    authClient
+      .grant(params)
+      .then((tokenSet) => {
+        req.user.tokenSets[api.clientId] = tokenSet;
+        resolve(tokenSet.access_token);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
   });
 };
 
