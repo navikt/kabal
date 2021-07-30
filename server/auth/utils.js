@@ -101,6 +101,7 @@ const refreshAccessToken = async (azureClient, session) => {
   const refreshToken = user.tokenSets.self.refresh_token;
 
   console.log("refreshToken", refreshToken);
+  console.log("user", JSON.stringify(user));
   if (!refreshToken) {
     console.log("session.session", session.session);
     console.log("session.user", session.user);
@@ -109,12 +110,12 @@ const refreshAccessToken = async (azureClient, session) => {
   if (!refreshToken) return false;
   return await azureClient
     .refresh(refreshToken)
-    .then((tokenSet) => {
+    .then(async (tokenSet) => {
       //console.log("refreshToken: nytt tokenSet", JSON.stringify(tokenSet));
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;
       session.idToken = tokenSet.id_token;
-      lagreIRedis("access_token", tokenSet.access_token);
+      await lagreIRedis("access_token", tokenSet.access_token);
 
       console.log("expire", tokenSet.expires_at);
       return tokenSet;
