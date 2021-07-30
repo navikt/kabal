@@ -6,6 +6,8 @@ let helmet = require("helmet");
 let passport = require("passport");
 let session = require("./session");
 
+const cookieParser = require("cookie-parser");
+
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
 let morganJson = require("morgan-json");
@@ -41,11 +43,16 @@ async function startApp() {
     );
     server.use(cors);
 
+    server.use(cookieParser());
+
     server.use(function (req, res, next) {
-      const uuid = require("uuid/v4");
-      let kabalId = req.cookie && req.cookie.kabalId;
+      let kabalId = req.cookies && req.cookies.kabalId;
       if (kabalId === undefined) {
-        res.cookie("kabalId", uuid(), { maxAge: 900000, httpOnly: true });
+        const uuid = require("uuid/v4");
+        res.cookie("kabalId", uuid(), {
+          expires: new Date(Date.now() + 900000),
+          httpOnly: true,
+        });
       } else {
         console.log("kabalId", kabalId);
       }
