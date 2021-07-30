@@ -8,10 +8,8 @@ const tokenSetSelfId = "self";
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   //console.log("inside getOnBehalfOfAccessToken");
   const kabalId = req.cookies.kabalId;
-  //console.log({ kabalId });
   const token = await hentFraRedis(kabalId);
   const cookieToken = req.cookies.accessToken;
-  //console.log({ cookieToken, token });
 
   return new Promise((resolve, reject) => {
     const params = {
@@ -23,7 +21,6 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
       assertion:
         cookieToken || token || req.user.tokenSets[tokenSetSelfId].access_token,
     };
-    //console.log({ token, params });
     authClient
       .grant(params)
       .then((tokenSet) => {
@@ -105,9 +102,7 @@ const refreshAccessToken = async (azureClient, session, kabalId) => {
   return await azureClient
     .refresh(refreshToken)
     .then(async (tokenSet) => {
-      //console.log({ kabalId });
       await lagreIRedis(kabalId, tokenSet.access_token);
-      //console.log("expire", tokenSet.expires_at);
       return tokenSet;
     })
     .catch((errorMessage) => {
