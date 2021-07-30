@@ -11,14 +11,7 @@ const {
 const router = express.Router();
 const { createProxyMiddleware } = require("http-proxy-middleware");
 let bodyParser = require("body-parser");
-
-const envVar = ({ name, required = true }) => {
-  if (!process.env[name] && required) {
-    console.error(`Missing required environment variable '${name}'`);
-    process.exit(1);
-  }
-  return process.env[name];
-};
+const uuid = require("uuid/v4");
 
 const setup = (authClient) => {
   router.post(

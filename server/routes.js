@@ -9,12 +9,50 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 let { api_client_id, downstream_api } = require("./config");
 const { lagreIRedis, hentFraRedis } = require("./cache");
 let bodyParser = require("body-parser");
+const auth = require("./auth/utils");
+const azure = require("./auth/azure");
+
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
+const claimsFrom = (token) => {
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+};
+
+const isValidIn = ({ seconds, token }) => {
+  if (!token) return false;
+  const timeToCheck = Math.floor(Date.now() / 1000) + seconds;
+  const expirationTime = parseInt(claimsFrom(token)["exp"]);
+  return timeToCheck < expirationTime;
+};
 
 const ensureAuthenticated = async (req, res, next) => {
-  if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
-    next();
+  const token = req.cookies && req.cookies.accessToken;
+  if (token) {
+    if (isValidIn({ seconds: 30, token })) {
+      next();
+    } else {
+      const kabalId = req.cookies.kabalId;
+      const azureAuthClient = await azure.client();
+      let tokenSet = await auth.refreshAccessToken(
+        azureAuthClient,
+        req,
+        kabalId
+      );
+      let expires = addMinutes(new Date(), 30);
+      res.cookie("accessToken", tokenSet.access_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", tokenSet.refresh_token, {
+        expires: new Date(expires),
+        httpOnly: true,
+      });
+      next();
+    }
   } else {
-    session.redirectTo = req.url;
+    console.log("AUTH denied");
     res.redirect("/login");
   }
 };
@@ -97,7 +135,6 @@ const setup = (authClient) => {
         authUtils
           .getOnBehalfOfAccessToken(authClient, req, params)
           .then((userinfo) => {
-            console.log({ getOnBehalfOfAccessToken: userinfo });
             resolve(userinfo);
           })
           .catch((err) => reject(err))

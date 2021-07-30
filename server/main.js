@@ -1,10 +1,11 @@
 let azure = require("./auth/azure");
 let config = require("./config");
-let cors = require("./cors");
 let express = require("express");
-let helmet = require("helmet");
+let cors = require("cors");
 let passport = require("passport");
 let session = require("./session");
+
+const cookieParser = require("cookie-parser");
 
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
@@ -34,12 +35,25 @@ async function startApp() {
     );
     session.setup(server);
 
-    server.use(
-      helmet({
-        contentSecurityPolicy: false,
-      })
-    );
-    server.use(cors);
+    server.use(cors());
+
+    server.use(cookieParser());
+
+    server.use(function (req, res, next) {
+      let kabalId = req.cookies && req.cookies.kabalId;
+      if (kabalId === undefined) {
+        const uuid = require("uuid/v4");
+        var expireDate = new Date();
+        expireDate.setUTCDate(expireDate.getUTCDate() + 1);
+        res.cookie("kabalId", uuid(), {
+          expires: expireDate,
+          httpOnly: true,
+        });
+      } else {
+        //console.log("kabalId", kabalId);
+      }
+      next();
+    });
 
     morganBody(server);
 

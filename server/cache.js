@@ -9,7 +9,9 @@ const envVar = ({ name, required = true }) => {
   return process.env[name];
 };
 
-const REDIS_URL = envVar({ name: "REDIS_SERVICE", required: true });
+const REDIS_URL =
+  envVar({ name: "REDIS_SERVICE", required: false }) ||
+  "redis://klage-redis-fe";
 
 function lagreIRedis(key, value) {
   const client = redis.createClient(REDIS_URL);
@@ -46,7 +48,6 @@ async function hentFraRedis(key) {
 }
 
 function cacheMiddleWare(req, res, next) {
-  console.log(req.method);
   if (req.path !== "/oppgaver") next();
   else {
     return hentFraRedis("oppgaver")
