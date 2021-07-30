@@ -29,8 +29,9 @@ const isValidIn = ({ seconds, token }) => {
 
 const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies && req.cookies.accessToken;
+  const refreshToken = req.cookies && req.cookies.refreshToken;
   if (token) {
-    if (isValidIn({ seconds: 30, token })) {
+    if (isValidIn({ seconds: 60, token })) {
       next();
     } else {
       const kabalId = req.cookies.kabalId;
@@ -38,22 +39,21 @@ const ensureAuthenticated = async (req, res, next) => {
       let tokenSet = await auth.refreshAccessToken(
         azureAuthClient,
         req,
+        refreshToken,
         kabalId
       );
-      let expires = addMinutes(new Date(), 30);
       res.cookie("accessToken", tokenSet.access_token, {
-        expires: new Date(expires),
+        expires: new Date(addMinutes(new Date(), 60)),
         httpOnly: true,
       });
       res.cookie("refreshToken", tokenSet.refresh_token, {
-        expires: new Date(expires),
+        expires: new Date(addMinutes(new Date(), 60 * 24)),
         httpOnly: true,
       });
       next();
     }
   } else {
-    console.log("AUTH denied");
-    console.log({ token });
+    console.log("AUTH denied because no token found");
     res.redirect("/login");
   }
 };
@@ -118,13 +118,12 @@ const setup = (authClient) => {
         req.session.passport.user.tokenSets.self.access_token;
       const refresh_token =
         req.session.passport.user.tokenSets.self.refresh_token;
-      let expires = addMinutes(new Date(), 30);
       res.cookie("accessToken", access_token, {
-        expires: new Date(expires),
+        expires: new Date(addMinutes(new Date(), 60)),
         httpOnly: true,
       });
       res.cookie("refreshToken", refresh_token, {
-        expires: new Date(expires),
+        expires: new Date(addMinutes(new Date(), 60 * 24)),
         httpOnly: true,
       });
       if (session.redirectTo) {
