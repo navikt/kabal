@@ -1,8 +1,6 @@
 let azure = require("./auth/azure");
 let config = require("./config");
-let cors = require("./cors");
 let express = require("express");
-let helmet = require("helmet");
 let passport = require("passport");
 let session = require("./session");
 
@@ -36,12 +34,7 @@ async function startApp() {
     );
     session.setup(server);
 
-    server.use(
-      helmet({
-        contentSecurityPolicy: false,
-      })
-    );
-    server.use(cors);
+    server.use(cors());
 
     server.use(cookieParser());
 
