@@ -96,7 +96,7 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
   return new TokenSet(tokenSet).expired() === false;
 };
 
-const refreshAccessToken = async (azureClient, session) => {
+const refreshAccessToken = async (azureClient, session, kabalId) => {
   console.log("inside refreshAccessToken");
   const user = session.session.passport.user || session.user;
   const refreshToken = user.tokenSets.self.refresh_token;
@@ -112,7 +112,6 @@ const refreshAccessToken = async (azureClient, session) => {
   return await azureClient
     .refresh(refreshToken)
     .then(async (tokenSet) => {
-      const kabalId = req.cookies.kabalId;
       console.log({ kabalId });
       session.kabalToken = tokenSet.access_token;
       session.refreshToken = tokenSet.refresh_token;

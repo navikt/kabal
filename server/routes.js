@@ -16,8 +16,9 @@ const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     console.log("AUTH OK");
     console.log(req.session.kabalToken);
+    const kabalId = req.cookies.kabalId;
     const azureAuthClient = await azure.client();
-    await auth.refreshAccessToken(azureAuthClient, req);
+    await auth.refreshAccessToken(azureAuthClient, req, kabalId);
 
     next();
   } else if (
@@ -26,7 +27,8 @@ const ensureAuthenticated = async (req, res, next) => {
   ) {
     console.log("AUTH try refresh");
     const azureAuthClient = await azure.client();
-    await auth.refreshAccessToken(azureAuthClient, req.session);
+    const kabalId = req.cookies.kabalId;
+    await auth.refreshAccessToken(azureAuthClient, req.session, kabalId);
     next();
   } else {
     console.log("AUTH denied");
