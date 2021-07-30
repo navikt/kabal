@@ -5,11 +5,11 @@ const { hentFraRedis, lagreIRedis } = require("../cache");
 
 const tokenSetSelfId = "self";
 
-const getOnBehalfOfAccessToken = (authClient, req, api) => {
+const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   console.log("inside getOnBehalfOfAccessToken");
   console.log(req.session);
 
-  const token = hentFraRedis("access_token");
+  const token = await hentFraRedis("access_token");
   console.log(token);
 
   return new Promise((resolve, reject) => {
