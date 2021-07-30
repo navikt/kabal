@@ -16,8 +16,20 @@ function addMinutes(date, minutes) {
   return new Date(date.getTime() + minutes * 60000);
 }
 
+const claimsFrom = (token) => {
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+};
+
+const isValidIn = ({ seconds, token }) => {
+  if (!token) return false;
+  const timeToCheck = Math.floor(Date.now() / 1000) + seconds;
+  const expirationTime = parseInt(claimsFrom(token)["exp"]);
+  return timeToCheck < expirationTime;
+};
+
 const ensureAuthenticated = async (req, res, next) => {
-  if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
+  const token = res.cookies.accessToken;
+  if (isValidIn({ seconds: 60, token })) {
     const kabalId = req.cookies.kabalId;
     const azureAuthClient = await azure.client();
     let tokenSet = await auth.refreshAccessToken(azureAuthClient, req, kabalId);
