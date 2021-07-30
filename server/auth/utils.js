@@ -6,7 +6,8 @@ const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = (authClient, req, api) => {
   console.log("inside getOnBehalfOfAccessToken");
-  console.log(JSON.stringify(req.session));
+  console.log(req.session.kabalToken);
+
   return new Promise((resolve, reject) => {
     if (hasValidAccessToken(req, api.clientId)) {
       const tokenSets = getTokenSetsFromSession(req);
