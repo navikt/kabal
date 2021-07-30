@@ -14,8 +14,8 @@ const setup = (app) => {
     },
     secret: config.server.sessionKey,
     name: config.server.cookieName,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     unset: "destroy",
   };
   if (process.env.NODE_ENV !== "development") {
