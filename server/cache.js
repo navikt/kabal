@@ -48,7 +48,6 @@ async function hentFraRedis(key) {
 }
 
 function cacheMiddleWare(req, res, next) {
-  console.log(req.method);
   if (req.path !== "/oppgaver") next();
   else {
     return hentFraRedis("oppgaver")

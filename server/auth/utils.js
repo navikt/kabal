@@ -23,8 +23,7 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
       assertion:
         cookieToken || token || req.user.tokenSets[tokenSetSelfId].access_token,
     };
-    console.log({ token, params });
-
+    //console.log({ token, params });
     authClient
       .grant(params)
       .then((tokenSet) => {
@@ -94,7 +93,7 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
 };
 
 const refreshAccessToken = async (azureClient, session, kabalId) => {
-  console.log("inside refreshAccessToken");
+  //console.log("inside refreshAccessToken");
   const user = session.session.passport.user || session.user;
   const refreshToken = user.tokenSets.self.refresh_token;
   if (!refreshToken) {
@@ -106,9 +105,9 @@ const refreshAccessToken = async (azureClient, session, kabalId) => {
   return await azureClient
     .refresh(refreshToken)
     .then(async (tokenSet) => {
-      console.log({ kabalId });
+      //console.log({ kabalId });
       await lagreIRedis(kabalId, tokenSet.access_token);
-      console.log("expire", tokenSet.expires_at);
+      //console.log("expire", tokenSet.expires_at);
       return tokenSet;
     })
     .catch((errorMessage) => {
