@@ -1,6 +1,7 @@
 let azure = require("./auth/azure");
 let config = require("./config");
 let express = require("express");
+let cors = require("cors");
 let passport = require("passport");
 let session = require("./session");
 
