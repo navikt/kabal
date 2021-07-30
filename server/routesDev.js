@@ -14,22 +14,6 @@ let bodyParser = require("body-parser");
 const uuid = require("uuid/v4");
 
 const setup = (authClient) => {
-  router.get("/", async (req, res) => {
-    // Cookies that have not been signed
-    console.log("Cookies: ", req.cookies);
-
-    // Cookies that have been signed
-    console.log("Signed Cookies: ", req.signedCookies);
-
-    if (req.cookies && req.cookies.kabalId) {
-      return res.end(`Welcome back, ${req.cookies.kabalId}!`);
-    }
-    const kabalId = uuid();
-    console.dir(req.cookies.cookieName);
-    res.cookie("kabalId", kabalId, { httpOnly: true });
-    res.end(`Welcome, ${kabalId}!`);
-  });
-
   router.post(
     "/internal/innstillinger",
     bodyParser.json(),

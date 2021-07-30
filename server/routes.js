@@ -12,11 +12,25 @@ let bodyParser = require("body-parser");
 const auth = require("./auth/utils");
 const azure = require("./auth/azure");
 
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
 const ensureAuthenticated = async (req, res, next) => {
   if (req.isAuthenticated() && authUtils.hasValidAccessToken(req)) {
     const kabalId = req.cookies.kabalId;
     const azureAuthClient = await azure.client();
-    await auth.refreshAccessToken(azureAuthClient, req, kabalId);
+    let tokenSet = await auth.refreshAccessToken(azureAuthClient, req, kabalId);
+    let expires = addMinutes(new Date(), 30);
+    res.cookie("accessToken", tokenSet.access_token, {
+      expires: expires.getTime(),
+      httpOnly: true,
+    });
+    res.cookie("refreshToken", tokenSet.refresh_token, {
+      expires: expires.getTime(),
+      httpOnly: true,
+    });
+
     next();
   } else {
     console.log("AUTH denied");
