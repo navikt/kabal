@@ -41,10 +41,9 @@ async function startApp() {
     );
     server.use(cors);
 
-    server.use;
     server.use(function (req, res, next) {
       const uuid = require("uuid/v4");
-      let kabalId = req.cookie.kabalId;
+      let kabalId = req.cookie && req.cookie.kabalId;
       if (kabalId === undefined) {
         res.cookie("kabalId", uuid(), { maxAge: 900000, httpOnly: true });
       } else {
