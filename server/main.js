@@ -43,8 +43,10 @@ async function startApp() {
       let kabalId = req.cookies && req.cookies.kabalId;
       if (kabalId === undefined) {
         const uuid = require("uuid/v4");
+        var expireDate = new Date();
+        expireDate.setUTCDate(expireDate.getUTCDate() + 1);
         res.cookie("kabalId", uuid(), {
-          expires: new Date(Date.now() + 900000),
+          expires: expireDate,
           httpOnly: true,
         });
       } else {
