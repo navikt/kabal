@@ -34,7 +34,7 @@ const ensureAuthenticated = async (req, res, next) => {
     next();
   } else {
     console.log("AUTH denied");
-    res.redirect("/error");
+    res.redirect("/login");
   }
 };
 
