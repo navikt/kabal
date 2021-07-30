@@ -23,11 +23,11 @@ const ensureAuthenticated = async (req, res, next) => {
     let tokenSet = await auth.refreshAccessToken(azureAuthClient, req, kabalId);
     let expires = addMinutes(new Date(), 30);
     res.cookie("accessToken", tokenSet.access_token, {
-      expires: expires.getTime(),
+      expires: new Date(expires),
       httpOnly: true,
     });
     res.cookie("refreshToken", tokenSet.refresh_token, {
-      expires: expires.getTime(),
+      expires: new Date(expires),
       httpOnly: true,
     });
 
