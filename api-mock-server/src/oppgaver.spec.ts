@@ -1,4 +1,4 @@
-import { filtrerOppgaver, toggleDokument, toggleVedlegg } from "./oppgaver";
+import { filtrerOppgaver } from "./oppgaver";
 
 type Oppgaver = {
   antallTreffTotalt: number;
@@ -104,8 +104,7 @@ describe("tester oppgavehenting", () => {
     let i = 0;
     while (++i < resultat.klagebehandlinger.length)
       expect(
-        resultat.klagebehandlinger[i].tema == "30" ||
-          resultat.klagebehandlinger[i].tema == "43"
+        resultat.klagebehandlinger[i].tema == "30" || resultat.klagebehandlinger[i].tema == "43"
       ).toBe(true);
   });
 
@@ -151,44 +150,5 @@ describe("tester oppgavehenting", () => {
     };
     let result = await filtrerOppgaver(query);
     expect(result.klagebehandlinger.length).toBeGreaterThan(1);
-  });
-  it("toggle dokument", async () => {
-    let behandlingId = "123";
-    let journalpostId = "test_journalpostId";
-    let dokumentInfoId = "test_dokumentInfoId";
-
-    let result = await toggleDokument({
-      id: behandlingId,
-      journalpostId,
-      dokumentInfoId,
-    });
-    expect(result).toBe("1 endret til 0");
-
-    result = await toggleDokument({
-      id: behandlingId,
-      journalpostId,
-      dokumentInfoId,
-    });
-    expect(result).toBe("0 endret til 1");
-  });
-
-  it("toggle vedlegg", async () => {
-    let behandlingId = "123";
-    let journalpostId = "test_journalpostId";
-    let dokumentInfoId = "test_dokumentInfoId_2";
-
-    let result = await toggleVedlegg({
-      id: behandlingId,
-      journalpostId,
-      dokumentInfoId,
-    });
-    expect(result).toBe("1 endret til 0");
-
-    result = await toggleVedlegg({
-      id: behandlingId,
-      journalpostId,
-      dokumentInfoId,
-    });
-    expect(result).toBe("0 endret til 1");
   });
 });

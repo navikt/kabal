@@ -1,7 +1,6 @@
 import { OppgaveQuery } from "./types";
-
-const sqlite3 = require("sqlite3");
-const path = require("path");
+import sqlite3 from "sqlite3";
+import path from "path";
 
 interface Oppgave {
   frist: string;
@@ -15,28 +14,17 @@ interface Oppgaver {
   klagebehandlinger: [Oppgave];
 }
 
-function generiskFilterSpoerring(
-  where: boolean,
-  filter: Array<string> | undefined,
-  felt: string
-) {
+function generiskFilterSpoerring(where: boolean, filter: Array<string> | undefined, felt: string) {
   if (filter && !where) {
-    return `${filter?.map(
-      (_, it) => `${it === 0 ? "WHERE" : " OR"} ${felt} LIKE ?`
-    )}`;
+    return `${filter?.map((_, it) => `${it === 0 ? "WHERE" : " OR"} ${felt} LIKE ?`)}`;
   }
   if (filter) {
-    return `${filter?.map(
-      (_, it) => `${it === 0 ? "AND" : " OR"} ${felt} LIKE ?`
-    )}`;
+    return `${filter?.map((_, it) => `${it === 0 ? "AND" : " OR"} ${felt} LIKE ?`)}`;
   }
   return "";
 }
 
-function saksbehandlerFiltrering(
-  where: boolean,
-  saksbehandler: string | undefined
-) {
+function saksbehandlerFiltrering(where: boolean, saksbehandler: string | undefined) {
   if (!saksbehandler) {
     return `${!where ? "WHERE" : " AND"} saksbehandler != ?`;
   }
@@ -45,17 +33,13 @@ function saksbehandlerFiltrering(
 
 function fullfortFiltrering(hasWhere: boolean, ferdigstiltFom: string) {
   if (ferdigstiltFom)
-    return `${
-      !hasWhere ? "WHERE" : " AND"
-    } ferdigstiltFom >= date(${ferdigstiltFom})`;
+    return `${!hasWhere ? "WHERE" : " AND"} ferdigstiltFom >= date(${ferdigstiltFom})`;
   else return "";
 }
 
 function typeQuery(filter: Array<string> | undefined) {
   if (filter) {
-    return `${filter?.map(
-      (_, it) => `${it === 0 ? "WHERE" : " OR"} type LIKE ?`
-    )}`;
+    return `${filter?.map((_, it) => `${it === 0 ? "WHERE" : " OR"} type LIKE ?`)}`;
   }
   return "";
 }
@@ -68,8 +52,7 @@ export interface ISaksbehandler {
 
 export async function tildelSaksbehandler(params: ISaksbehandler) {
   let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
-  let sql =
-    "UPDATE Oppgaver SET saksbehandler = ? WHERE Id = ? AND klagebehandlingVersjon = ?";
+  let sql = "UPDATE Oppgaver SET saksbehandler = ? WHERE Id = ? AND klagebehandlingVersjon = ?";
   return await new Promise((resolve, reject) => {
     db.all(
       sql,
@@ -98,19 +81,14 @@ export async function tildelSaksbehandler(params: ISaksbehandler) {
 
 export async function fradelSaksbehandler(params: ISaksbehandler) {
   let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
-  let sql =
-    "UPDATE Oppgaver SET saksbehandler = '' WHERE Id = ? AND klagebehandlingVersjon = ?";
+  let sql = "UPDATE Oppgaver SET saksbehandler = '' WHERE Id = ? AND klagebehandlingVersjon = ?";
   return await new Promise((resolve, reject) => {
-    db.all(
-      sql,
-      [params.oppgaveId, params.klagebehandlingVersjon],
-      (err: any, rader: any) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(rader);
+    db.all(sql, [params.oppgaveId, params.klagebehandlingVersjon], (err: any, rader: any) => {
+      if (err) {
+        reject(err);
       }
-    );
+      resolve(rader);
+    });
   })
     .then((result) => ({
       status: 200,
@@ -124,84 +102,6 @@ export async function fradelSaksbehandler(params: ISaksbehandler) {
         err,
       },
     }));
-}
-
-export async function toggleDokument({
-  id,
-  dokumentInfoId,
-  journalpostId,
-}: {
-  id: string;
-  dokumentInfoId: string;
-  journalpostId: string;
-}) {
-  let fetch_sql = `SELECT valgt from Dokumenter WHERE dokumentInfoId LIKE ?`;
-  let params = [dokumentInfoId];
-  let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
-  let erValgt = await new Promise((resolve, reject) =>
-    db.all(fetch_sql, params, (err: any, rad: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(rad[0].valgt);
-    })
-  );
-  let endret_sql = `UPDATE Dokumenter set valgt = ? WHERE dokumentInfoId LIKE ?`;
-  let nyValgt = erValgt === 1 ? 0 : 1;
-  let params2 = [nyValgt, dokumentInfoId];
-  await new Promise((resolve, reject) =>
-    db.run(endret_sql, params2, (err: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve("");
-    })
-  );
-  db.close((err: { message: string }) => {
-    if (err) {
-      throw err.message;
-    }
-  });
-  return `${erValgt} endret til ${nyValgt}`;
-}
-
-export async function toggleVedlegg({
-  id,
-  dokumentInfoId,
-  journalpostId,
-}: {
-  id: string;
-  dokumentInfoId: string;
-  journalpostId: string;
-}) {
-  let fetch_sql = `SELECT valgt from Vedlegg WHERE dokumentInfoId LIKE ?`;
-  let params = [dokumentInfoId];
-  let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
-  let erValgt = await new Promise((resolve, reject) =>
-    db.all(fetch_sql, params, (err: any, rad: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(rad[0].valgt);
-    })
-  );
-  let endret_sql = `UPDATE Vedlegg set valgt = ? WHERE dokumentInfoId LIKE ?`;
-  let nyValgt = erValgt === 1 ? 0 : 1;
-  let params2 = [nyValgt, dokumentInfoId];
-  await new Promise((resolve, reject) =>
-    db.run(endret_sql, params2, (err: any) => {
-      if (err) {
-        reject(err);
-      }
-      resolve("");
-    })
-  );
-  db.close((err: { message: string }) => {
-    if (err) {
-      throw err.message;
-    }
-  });
-  return `${erValgt} endret til ${nyValgt}`;
 }
 
 export async function filtrerOppgaver(query: OppgaveQuery) {
@@ -230,11 +130,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
                  hjemmel, tema, frist, mottatt, saksbehandler, fnr, navn, klagebehandlingVersjon, avsluttetAvSaksbehandler, utfall, erMedunderskriver, tildeltSaksbehandlerNavn
                  FROM Oppgaver 
                  ${typeQuery(filterTyper).replace(/,/g, "")}
-                 ${generiskFilterSpoerring(
-                   harTyper,
-                   filterTemaer,
-                   "tema"
-                 ).replace(/,/g, "")}
+                 ${generiskFilterSpoerring(harTyper, filterTemaer, "tema").replace(/,/g, "")}
                   ${generiskFilterSpoerring(
                     harTyper || harTemaer,
                     filterHjemler,
@@ -247,10 +143,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
                   ${
                     ferdigstiltFom
                       ? fullfortFiltrering(
-                          harTyper ||
-                            harTemaer ||
-                            harHjemler ||
-                            tildeltSaksbehandler !== "",
+                          harTyper || harTemaer || harHjemler || tildeltSaksbehandler !== "",
                           ferdigstiltFom
                         )
                       : ""
@@ -329,7 +222,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
           }))
         );
     });
-    db.close((err: { message: string }) => {
+    db.close((err: Error) => {
       if (err) {
         throw err.message;
       }
