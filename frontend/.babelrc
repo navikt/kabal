@@ -6,7 +6,6 @@
         "modules": false
       }
     ],
-    "@babel/react",
-    "@babel/preset-react"
+    "@babel/react"
   ]
 }

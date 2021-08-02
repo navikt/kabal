@@ -31,7 +31,7 @@ const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies && req.cookies.accessToken;
   const refreshToken = req.cookies && req.cookies.refreshToken;
   if (token) {
-    if (isValidIn({ seconds: 60, token })) {
+    if (isValidIn({ seconds: 600, token })) {
       next();
     } else {
       const kabalId = req.cookies.kabalId;
@@ -50,6 +50,7 @@ const ensureAuthenticated = async (req, res, next) => {
         expires: new Date(addMinutes(new Date(), 60 * 24)),
         httpOnly: true,
       });
+      console.log("refresh: genererte nye tokens");
       next();
     }
   } else {
@@ -70,6 +71,10 @@ const setup = (authClient) => {
 
   router.get("/error", (req, res) => {
     res.send("error");
+  });
+
+  router.get("/internal/refresh", ensureAuthenticated, async (req, res) => {
+    res.send("OK");
   });
 
   router.post(

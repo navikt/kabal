@@ -15,6 +15,7 @@ import { hentKodeverk } from "../tilstand/moduler/kodeverk";
 import { velgKodeverk } from "../tilstand/moduler/kodeverk.velgere";
 import { hentMegHandling, hentMegUtenEnheterHandling } from "../tilstand/moduler/meg";
 import isDevLocation from "../utility/isDevLocation";
+import useInterval from "../utility/useInterval";
 
 const R = require("ramda");
 
@@ -40,6 +41,14 @@ export default function Oppsett({
   const kodeverk = useSelector(velgKodeverk);
   const dispatch = useAppDispatch();
   const [generellTilgang, settTilgang] = useState<boolean | undefined>(undefined);
+
+  useInterval(() => {
+    fetch("/internal/refresh")
+      .then((res) => res.text())
+      .then((status) => {
+        console.debug({ refresh: status });
+      });
+  }, 50000);
 
   useEffect(() => {
     dispatch(hentFeatureToggleHandling("klage.generellTilgang"));
