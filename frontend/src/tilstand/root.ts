@@ -16,6 +16,7 @@ import { medunderskrivere } from "./moduler/medunderskrivere/state";
 import kodeverk, { KODEVERK_EPICS } from "./moduler/kodeverk";
 import { klagebehandling as klagebehandlingState } from "./moduler/klagebehandling/state";
 import { KLAGEBEHANDLING_EPICS } from "./moduler/klagebehandling/epics";
+import { REFRESH_EPICS } from "./moduler/refreshtoken";
 
 import { dokumenter, DOKUMENTER_EPICS } from "./moduler/dokumenter/state";
 
@@ -35,6 +36,7 @@ const epics = [
   ...KLAGEBEHANDLING_EPICS,
   ...DOKUMENTER_EPICS,
   ...SOK_EPICS,
+  ...REFRESH_EPICS,
 ];
 export const rootEpic = combineEpics.apply(combineEpics, epics);
 

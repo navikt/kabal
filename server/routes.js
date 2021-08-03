@@ -74,7 +74,7 @@ const setup = (authClient) => {
   });
 
   router.get("/internal/refresh", ensureAuthenticated, async (req, res) => {
-    res.send("OK");
+    res.send({ status: "OK" });
   });
 
   router.post(

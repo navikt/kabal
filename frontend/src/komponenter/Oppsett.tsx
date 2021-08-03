@@ -16,6 +16,7 @@ import { velgKodeverk } from "../tilstand/moduler/kodeverk.velgere";
 import { hentMegHandling, hentMegUtenEnheterHandling } from "../tilstand/moduler/meg";
 import isDevLocation from "../utility/isDevLocation";
 import useInterval from "../utility/useInterval";
+import { hentToken } from "../tilstand/moduler/refreshtoken";
 
 const R = require("ramda");
 
@@ -43,11 +44,7 @@ export default function Oppsett({
   const [generellTilgang, settTilgang] = useState<boolean | undefined>(undefined);
 
   useInterval(() => {
-    fetch("/internal/refresh")
-      .then((res) => res.text())
-      .then((status) => {
-        console.debug({ refresh: status });
-      });
+    dispatch(hentToken());
   }, 50000);
 
   useEffect(() => {

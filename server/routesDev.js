@@ -47,6 +47,10 @@ const setup = (authClient) => {
     }
   );
 
+  router.get("/internal/refresh", async (req, res) => {
+    res.status(200).json({ status: "OK" });
+  });
+
   router.use(
     "/api",
     cacheMiddleWare,
