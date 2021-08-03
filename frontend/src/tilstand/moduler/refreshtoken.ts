@@ -14,13 +14,13 @@ import { Dependencies } from "../konfigurerTilstand";
 // Reducer
 //==========
 export const initialState = {};
-export const toasterSlice = createSlice({
+export const slice = createSlice({
   name: "refreshtoken",
   initialState: initialState,
   reducers: {},
 });
 
-export default toasterSlice.reducer;
+export default slice.reducer;
 
 //==========
 // Actions
@@ -41,21 +41,16 @@ export function hentNyttToken(
     ofType(hentToken.type),
     mergeMap((action) => {
       return ajax
-        .getJSON<string>("/internal/refresh")
+        .getJSON<{ status: string }>("/internal/refresh")
         .pipe(
           timeout(5000),
-          map((response) => response)
+          map((response) => response.status)
         )
-        .pipe(
-          map((data) => {
-            console.debug({ refresh: data });
-            return hentetHandling(data);
-          })
-        )
+        .pipe(map((data) => hentetHandling(data)))
         .pipe(
           retryWhen(provIgjenStrategi({ maksForsok: 3 })),
           catchError((error) => {
-            return of(feiletHandling(error));
+            return of(feiletHandling(error.message));
           })
         );
     })
