@@ -41,10 +41,10 @@ export function hentNyttToken(
     ofType(hentToken.type),
     mergeMap((action) => {
       return ajax
-        .getJSON<string>("/internal/refresh")
+        .getJSON<{ status: string }>("/internal/refresh")
         .pipe(
           timeout(5000),
-          map((response) => response)
+          map((response) => response.status)
         )
         .pipe(
           map((data) => {
@@ -55,7 +55,7 @@ export function hentNyttToken(
         .pipe(
           retryWhen(provIgjenStrategi({ maksForsok: 3 })),
           catchError((error) => {
-            return of(feiletHandling(error));
+            return of(feiletHandling(error.message));
           })
         );
     })
