@@ -366,6 +366,7 @@ const Sok = (): JSX.Element => {
   const tildelerMeg = useSelector(velgSaksbehandlerHandling);
   const history = useHistory();
   let [soekString, setSoekString] = useState("");
+  let [harSokt, settHarSokt] = useState(false);
   const [debouncedState, setDebouncedState] = useDebounce(soekString);
 
   const handleChange = (event: any) => {
@@ -377,6 +378,7 @@ const Sok = (): JSX.Element => {
     let searchQuery = new URLSearchParams(window.location.search).get("s");
     if (searchQuery) {
       dispatch(settSokLaster(true));
+      settHarSokt(true);
       setSoekString(searchQuery);
     }
     const timeout = setTimeout(() => {
@@ -413,7 +415,7 @@ const Sok = (): JSX.Element => {
     <Oppsett visMeny={true}>
       <ErrorMessageWithErrorBoundary>
         <SokInput>
-          <SokeForklaring>Søk med fullt personnummer:</SokeForklaring>
+          <SokeForklaring>Søk med personnummer eller navn:</SokeForklaring>
           <SokBeholder>
             <SokIkon src={SokSvg} />
             <SokeTekst
@@ -430,7 +432,7 @@ const Sok = (): JSX.Element => {
 
         <Result>
           {(() => {
-            if (!soekString) {
+            if (!soekString && !harSokt) {
               return <></>;
             }
             if (sokResult.laster) {
