@@ -118,6 +118,7 @@ const performSearch = (
   const url = `/api/ansatte/${payload.navIdent}/klagebehandlinger/personsoek`;
   let body = {
     soekString: payload.soekString,
+    fnr: payload.soekString,
     start: payload.start,
     antall: payload.antall,
   };
