@@ -152,6 +152,14 @@ export function sokEpos(
     ofType(startSok.type),
     debounceTime(1000),
     switchMap((action) => {
+      if (!action.payload.navIdent) {
+        /*
+         * Når du tar refresh på søkesiden
+         * rekker du ikke alltid å få med
+         * NAVident.
+         * */
+        return of(SOK_LASTER(true));
+      }
       return concat(
         of(SOK_LASTER(true)),
         performSearch(action.payload, ajax.post),
