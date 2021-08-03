@@ -312,7 +312,7 @@ function FullforteKlagebehandlinger(data: any): JSX.Element {
 }
 
 const SokeResultat = (data: any): JSX.Element => {
-  if (data.antallTreffTotalt === 0 || !data?.personer) return <></>;
+  if (data.antallTreffTotalt === 0 || !data?.personer) return <Result>Ingen treff</Result>;
 
   if (data?.personer.length === 1) {
     return (
@@ -417,6 +417,8 @@ const Sok = (): JSX.Element => {
           <SokBeholder>
             <SokIkon src={SokSvg} />
             <SokeTekst
+              autoComplete={"off"}
+              data-lpignore="true"
               style={{ position: "absolute", left: 0, top: 0 }}
               type={"text"}
               value={soekString}
@@ -427,6 +429,9 @@ const Sok = (): JSX.Element => {
 
         <Result>
           {(() => {
+            if (!soekString) {
+              return <></>;
+            }
             if (sokResult.laster) {
               return <NavFrontendSpinner />;
             } else return <SokeResultat {...sokResult?.response} />;
