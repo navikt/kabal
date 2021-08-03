@@ -28,7 +28,7 @@ enum Projeksjon {
 
 interface IPersonSokPayload {
   navIdent: string;
-  fnr: string;
+  soekString: string;
   rekkefoelge?: Rekkefolge;
   sortering?: Sortering;
   start: number;
@@ -117,7 +117,7 @@ const performSearch = (
 ) => {
   const url = `/api/ansatte/${payload.navIdent}/klagebehandlinger/personsoek`;
   let body = {
-    fnr: payload.fnr,
+    soekString: payload.soekString,
     start: payload.start,
     antall: payload.antall,
   };

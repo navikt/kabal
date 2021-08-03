@@ -75,13 +75,26 @@ app.get("/kodeverk", (req, res) => {
   let kodeverk = JSON.parse(data);
   res.send(kodeverk);
 });
+
+function isNum(value: number | string) {
+  return typeof !isNaN(Number(value)) && isFinite(Number(value));
+}
+
 app.post("/ansatte/:navIdent/klagebehandlinger/personsoek", (req, res) => {
-  let navIdent = req.params?.navIdent;
-  let { fnr, start, antall } = req.body;
-  let data = require("fs")
-    .readFileSync(path.resolve(__dirname, "../fixtures/personsok.json"))
-    .toString("utf8");
-  console.log({ fnr, start, antall, navIdent });
+  let { soekString, start, antall } = req.body;
+  let data;
+  if (isNum(soekString)) {
+    console.log(`${soekString} er tall`);
+    data = require("fs")
+      .readFileSync(path.resolve(__dirname, "../fixtures/fnrsok.json"))
+      .toString("utf8");
+  } else {
+    console.log(`${soekString} er tekst`);
+    data = require("fs")
+      .readFileSync(path.resolve(__dirname, "../fixtures/personsok.json"))
+      .toString("utf8");
+  }
+
   res.send(data);
 });
 

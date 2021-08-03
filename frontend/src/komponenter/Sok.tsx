@@ -25,6 +25,7 @@ import { useDebounce } from "../utility/usedebounce";
 // @ts-ignore
 import SokSvg from "./sok.svg";
 import { velgSaksbehandlerHandling } from "../tilstand/moduler/sakbehandler.velgere";
+import { NavLink } from "react-router-dom";
 
 const R = require("ramda");
 
@@ -53,7 +54,18 @@ let SokeTabellAvsluttede = styled.table`
 let Tr = styled.tr`
   background: #e5f3ff;
 `;
-let TrBunnramme = styled.tr``;
+
+let PersonRow = styled.tr`
+  &:hover {
+    background: #e5f3ff;
+  }
+  &:last-child {
+    border-bottom: 1px solid #c6c2bf;
+  }
+`;
+let PersonCell = styled.td`
+  border-top: 1px solid #c6c2bf;
+`;
 
 let Td = styled.td`
   text-align: left;
@@ -142,6 +154,24 @@ function dispatchOppgave(
   );
 }
 
+function PersonTreff(data: any): JSX.Element {
+  return (
+    <>
+      <tbody>
+        <PersonRow>
+          <PersonCell>{data.navn}</PersonCell>
+          <PersonCell>{data.fnr}</PersonCell>
+          <PersonCell>
+            <NavLink className="personlink" to={`/sok?s=${data.fnr}`}>
+              Se saker
+            </NavLink>
+          </PersonCell>
+        </PersonRow>
+      </tbody>
+    </>
+  );
+}
+
 function AapneKlagebehandlinger(data: any): JSX.Element {
   if (!data) return <></>;
   let kodeverk = useSelector(velgKodeverk);
@@ -181,7 +211,7 @@ function AapneKlagebehandlinger(data: any): JSX.Element {
               </thead>
               <tbody>
                 {Object.values(data.aapneKlagebehandlinger).map((rad: any) => (
-                  <TrBunnramme key={rad.id}>
+                  <tr key={rad.id}>
                     <TdSenter>
                       {rad.type && (
                         <EtikettBase type="info" className={`etikett-type`}>
@@ -211,7 +241,7 @@ function AapneKlagebehandlinger(data: any): JSX.Element {
                         ? curriedVelgOppgave(rad.id, rad.klagebehandlingVersjon)
                         : "Ikke tildelt"}
                     </TdResultat>
-                  </TrBunnramme>
+                  </tr>
                 ))}
               </tbody>
             </SokeTabell>
@@ -246,7 +276,7 @@ function FullforteKlagebehandlinger(data: any): JSX.Element {
               </thead>
               <tbody>
                 {Object.values(data.avsluttedeKlagebehandlinger).map((rad: any) => (
-                  <TrBunnramme key={rad.id}>
+                  <tr key={rad.id}>
                     <TdSenter>
                       {rad.type && (
                         <EtikettBase type="info" className={`etikett-type`}>
@@ -270,7 +300,7 @@ function FullforteKlagebehandlinger(data: any): JSX.Element {
                     </TdSenter>
                     <TdResultat>{rad.avsluttetAvSaksbehandler}</TdResultat>
                     <TdResultat>{KodeverkUtfall(rad.utfall)}</TdResultat>
-                  </TrBunnramme>
+                  </tr>
                 ))}
               </tbody>
             </SokeTabell>
@@ -283,29 +313,48 @@ function FullforteKlagebehandlinger(data: any): JSX.Element {
 
 const SokeResultat = (data: any): JSX.Element => {
   if (data.antallTreffTotalt === 0 || !data?.personer) return <></>;
-  return (
-    <>
+
+  if (data?.personer.length === 1) {
+    return (
+      <>
+        <SokeTabell cellSpacing={0} cellPadding={10}>
+          {data.personer?.map((rad: any, idx: number) => (
+            <AapneKlagebehandlinger key={`rad${idx}`} {...rad} />
+          ))}
+        </SokeTabell>
+        <SokeTabellAvsluttede cellSpacing={0} cellPadding={10}>
+          {data.personer?.map((rad: any, idx: number) => (
+            <FullforteKlagebehandlinger key={`rad${idx}`} {...rad} />
+          ))}
+        </SokeTabellAvsluttede>
+      </>
+    );
+  } else {
+    return (
       <SokeTabell cellSpacing={0} cellPadding={10}>
         {data.personer?.map((rad: any, idx: number) => (
-          <AapneKlagebehandlinger key={`rad${idx}`} {...rad} />
+          <PersonTreff key={`rad${idx}`} {...rad} />
         ))}
       </SokeTabell>
-      <SokeTabellAvsluttede cellSpacing={0} cellPadding={10}>
-        {data.personer?.map((rad: any, idx: number) => (
-          <FullforteKlagebehandlinger key={`rad${idx}`} {...rad} />
-        ))}
-      </SokeTabellAvsluttede>
-    </>
-  );
+    );
+  }
 };
 
-function sok({ dispatch, navIdent, fnr }: { dispatch: Function; navIdent: string; fnr: string }) {
+function sok({
+  dispatch,
+  navIdent,
+  soekString,
+}: {
+  dispatch: Function;
+  navIdent: string;
+  soekString: string;
+}) {
   return dispatch(
     startSok({
       antall: 200,
       navIdent,
       start: 0,
-      fnr,
+      soekString,
     })
   );
 }
@@ -316,11 +365,11 @@ const Sok = (): JSX.Element => {
   const sokResult = useSelector(velgSok);
   const tildelerMeg = useSelector(velgSaksbehandlerHandling);
   const history = useHistory();
-  let [fnr, setFnr] = useState("");
-  const [debouncedState, setDebouncedState] = useDebounce(fnr);
+  let [soekString, setSoekString] = useState("");
+  const [debouncedState, setDebouncedState] = useDebounce(soekString);
 
   const handleChange = (event: any) => {
-    setFnr(event.target.value.trim());
+    setSoekString(event.target.value.trim());
     setDebouncedState(event.target.value);
   };
 
@@ -328,18 +377,19 @@ const Sok = (): JSX.Element => {
     let searchQuery = new URLSearchParams(window.location.search).get("s");
     if (searchQuery) {
       dispatch(settSokLaster(true));
-      setFnr(searchQuery);
+      setSoekString(searchQuery);
     }
     const timeout = setTimeout(() => {
       if (searchQuery) {
-        sok({ dispatch, navIdent: person.graphData.id, fnr: searchQuery });
+        sok({ dispatch, navIdent: person.graphData.id, soekString: searchQuery });
       }
     }, 500);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [window.location.search, dispatch, person.graphData.id]);
 
   useEffect(() => {
-    if (fnr && !tildelerMeg) sok({ dispatch, navIdent: person.graphData.id, fnr });
+    if (soekString && !tildelerMeg)
+      sok({ dispatch, navIdent: person.graphData.id, soekString: soekString });
   }, [sok, dispatch, person.graphData.id, tildelerMeg]);
 
   useEffect(() => {
@@ -350,14 +400,14 @@ const Sok = (): JSX.Element => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (fnr) {
+      if (soekString) {
         const params = new URLSearchParams();
-        params.append("s", fnr);
+        params.append("s", soekString);
         history.push({ search: params.toString() });
       }
     }, 500);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
-  }, [fnr]);
+  }, [soekString]);
 
   return (
     <Oppsett visMeny={true}>
@@ -369,7 +419,7 @@ const Sok = (): JSX.Element => {
             <SokeTekst
               style={{ position: "absolute", left: 0, top: 0 }}
               type={"text"}
-              value={fnr}
+              value={soekString}
               onChange={handleChange}
             />
           </SokBeholder>
