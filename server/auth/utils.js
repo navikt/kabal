@@ -24,7 +24,7 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
     authClient
       .grant(params)
       .then((tokenSet) => {
-        if (req.user && req.user.tokenSets[api.clientId])
+        if (req.user && req.user.tokenSets)
           req.user.tokenSets[api.clientId] = tokenSet;
         resolve(tokenSet.access_token);
       })
