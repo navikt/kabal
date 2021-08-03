@@ -419,6 +419,7 @@ const Sok = (): JSX.Element => {
             <SokeTekst
               autoComplete={"off"}
               data-lpignore="true"
+              data-form-type="text"
               style={{ position: "absolute", left: 0, top: 0 }}
               type={"text"}
               value={soekString}
