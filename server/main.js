@@ -39,22 +39,6 @@ async function startApp() {
 
     server.use(cookieParser());
 
-    server.use(function (req, res, next) {
-      let kabalId = req.cookies && req.cookies.kabalId;
-      if (kabalId === undefined) {
-        const uuid = require("uuid/v4");
-        var expireDate = new Date();
-        expireDate.setUTCDate(expireDate.getUTCDate() + 1);
-        res.cookie("kabalId", uuid(), {
-          expires: expireDate,
-          httpOnly: true,
-        });
-      } else {
-        //console.log("kabalId", kabalId);
-      }
-      next();
-    });
-
     morganBody(server);
 
     if (process.env.NODE_ENV === "production") {

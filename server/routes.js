@@ -34,23 +34,28 @@ const ensureAuthenticated = async (req, res, next) => {
     if (isValidIn({ seconds: 600, token })) {
       next();
     } else {
-      const kabalId = req.cookies.kabalId;
       const azureAuthClient = await azure.client();
-      let tokenSet = await auth.refreshAccessToken(
-        azureAuthClient,
-        req,
-        refreshToken,
-        kabalId
-      );
-      res.cookie("accessToken", tokenSet.access_token, {
-        expires: new Date(addMinutes(new Date(), 60)),
-        httpOnly: true,
-      });
-      res.cookie("refreshToken", tokenSet.refresh_token, {
-        expires: new Date(addMinutes(new Date(), 60 * 24)),
-        httpOnly: true,
-      });
-      console.log("refresh: genererte nye tokens");
+      let tokenSet;
+      try {
+        tokenSet = await auth.refreshAccessToken(
+          azureAuthClient,
+          req,
+          refreshToken
+        );
+      } catch (e) {
+        console.log("fetching refreshAccessToken failed", e);
+      }
+      if (tokenSet) {
+        res.cookie("accessToken", tokenSet.access_token, {
+          expires: new Date(addMinutes(new Date(), 60)),
+          httpOnly: true,
+        });
+        res.cookie("refreshToken", tokenSet.refresh_token, {
+          expires: new Date(addMinutes(new Date(), 60 * 24)),
+          httpOnly: true,
+        });
+        console.log("refresh: genererte nye tokens");
+      }
       next();
     }
   } else {
@@ -73,7 +78,7 @@ const setup = (authClient) => {
     res.send("error");
   });
 
-  router.get("/internal/refresh", ensureAuthenticated, async (req, res) => {
+  router.get("/internal/refresh", ensureAuthenticated, (req, res) => {
     res.send({ status: "OK" });
   });
 
@@ -138,8 +143,6 @@ const setup = (authClient) => {
       }
     }
   );
-
-  router.use(ensureAuthenticated);
 
   router.use(async (req, res, next) => {
     if (req.path.startsWith("/api")) {

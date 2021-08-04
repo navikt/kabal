@@ -1,38 +1,45 @@
 let OpenIDClient = require("openid-client");
 let { TokenSet } = OpenIDClient;
 let axios = require("axios");
-const { hentFraRedis, lagreIRedis } = require("../cache");
 
 const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
-  //console.log("inside getOnBehalfOfAccessToken");
-  const kabalId = req.cookies.kabalId;
-  const token = await hentFraRedis(kabalId);
+  console.log("inside getOnBehalfOfAccessToken");
   const cookieToken = req.cookies.accessToken;
+  let passportAccessToken;
 
-  return new Promise((resolve, reject) => {
-    const params = {
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      client_assertion_type:
-        "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-      requested_token_use: "on_behalf_of",
-      scope: createOnBehalfOfScope(api),
-      assertion:
-        cookieToken || token || req.user.tokenSets[tokenSetSelfId].access_token,
-    };
-    authClient
-      .grant(params)
-      .then((tokenSet) => {
-        if (req.user && req.user.tokenSets)
-          req.user.tokenSets[api.clientId] = tokenSet;
-        resolve(tokenSet.access_token);
-      })
-      .catch((err) => {
-        console.error(err);
-        reject(err);
-      });
-  });
+  if (req.user && req.user.tokenSets) {
+    passportAccessToken = req.user.tokenSets[tokenSetSelfId].access_token;
+  }
+
+  let assertion = cookieToken || passportAccessToken;
+
+  if (assertion) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        client_assertion_type:
+          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+        requested_token_use: "on_behalf_of",
+        scope: createOnBehalfOfScope(api),
+        assertion,
+      };
+      authClient
+        .grant(params)
+        .then((tokenSet) => {
+          if (req.user && req.user.tokenSets)
+            req.user.tokenSets[api.clientId] = tokenSet;
+          resolve(tokenSet.access_token);
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
+        });
+    });
+  } else {
+    return "";
+  }
 };
 
 const getUserInfoFromGraphApi = (authClient, req) => {
@@ -90,7 +97,7 @@ const hasValidAccessToken = (req, key = tokenSetSelfId) => {
   return new TokenSet(tokenSet).expired() === false;
 };
 
-const refreshAccessToken = async (azureClient, req, refreshToken, kabalId) => {
+const refreshAccessToken = async (azureClient, req, refreshToken) => {
   console.log("inside refreshAccessToken");
   if (!refreshToken) {
     console.log("session.session", req.session);
@@ -99,10 +106,7 @@ const refreshAccessToken = async (azureClient, req, refreshToken, kabalId) => {
   if (!refreshToken) return false;
   return await azureClient
     .refresh(refreshToken)
-    .then(async (tokenSet) => {
-      await lagreIRedis(kabalId, tokenSet.access_token);
-      return tokenSet;
-    })
+    .then((tokenSet) => tokenSet)
     .catch((errorMessage) => {
       console.error(
         `Feilet refresh av access token for ${JSON.stringify(
