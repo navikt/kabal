@@ -92,6 +92,8 @@ app.get("/klagebehandlinger/:id/dokumenter", async (req, res) => {
     })
   );
 
+  await sleep(2000);
+
   res.json({
     dokumenter,
     pageReference: null,
