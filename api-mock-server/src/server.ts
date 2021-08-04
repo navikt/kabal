@@ -102,6 +102,15 @@ app.get("/klagebehandlinger/:id/detaljer", async (req, res) =>
   res.send(klagebehandlingDetaljerView)
 );
 
+app.get("/internal/innstillinger/:navident/:enhet", async (req, res) =>
+  res.send({
+    aktiveHjemler: [{ label: "Folketrygdloven", value: "1000" }],
+    aktiveTyper: [],
+    aktiveTemaer: [],
+    aktiveFaner: {},
+  })
+);
+
 app.get("/klagebehandlinger/:id/alledokumenter", async (req, res) => {
   const query = req.query;
   const forrigeSide =

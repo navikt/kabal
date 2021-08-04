@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Header } from "./Header/Header";
 import Alertstripe from "nav-frontend-alertstriper";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
+import { NavLink, Redirect } from "react-router-dom";
 import { velgMeg } from "../tilstand/moduler/meg.velgere";
 import { velgFeatureToggles } from "../tilstand/moduler/unleash.velgere";
 import { velgToaster, velgToasterMelding } from "../tilstand/moduler/toaster.velgere";
@@ -59,6 +60,16 @@ export default function Oppsett({
 
   const adminEnabled = featureToggles.features.find((f) => f?.navn === "klage.admin");
   const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.generellTilgang");
+
+  useEffect(() => {
+    fetch("/internal/isauthenticated")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === false) {
+          window.location.href = "/login";
+        }
+      });
+  }, []);
 
   useEffect(() => {
     if (adminEnabled !== undefined) {

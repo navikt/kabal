@@ -16,16 +16,16 @@ function addMinutes(date, minutes) {
   return new Date(date.getTime() + minutes * 60000);
 }
 
-const claimsFrom = (token) => {
+function claimsFrom(token) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-};
+}
 
-const isValidIn = ({ seconds, token }) => {
+function isValidIn({ seconds, token }) {
   if (!token) return false;
   const timeToCheck = Math.floor(Date.now() / 1000) + seconds;
   const expirationTime = parseInt(claimsFrom(token)["exp"]);
   return timeToCheck < expirationTime;
-};
+}
 
 const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies && req.cookies.accessToken;
@@ -80,6 +80,19 @@ const setup = (authClient) => {
 
   router.get("/internal/refresh", ensureAuthenticated, (req, res) => {
     res.send({ status: "OK" });
+  });
+
+  router.get("/internal/isauthenticated", (req, res) => {
+    const token = req.cookies && req.cookies.accessToken;
+    if (token) {
+      if (isValidIn({ seconds: 30, token })) {
+        res.send({ status: true });
+      } else {
+        res.send({ status: false, token });
+      }
+    } else {
+      res.send({ status: false, token });
+    }
   });
 
   router.post(
@@ -233,4 +246,4 @@ const setup = (authClient) => {
   return router;
 };
 
-module.exports = { setup };
+module.exports = { setup, isValidIn, addMinutes };

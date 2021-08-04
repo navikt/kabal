@@ -1,5 +1,6 @@
 let express = require("express");
 let path = require("path");
+let jwt = require("jsonwebtoken");
 let session = require("express-session");
 const axios = require("axios");
 const {
@@ -12,8 +13,9 @@ const router = express.Router();
 const { createProxyMiddleware } = require("http-proxy-middleware");
 let bodyParser = require("body-parser");
 const uuid = require("uuid/v4");
+const { isValidIn, addMinutes } = require("./routes");
 
-const setup = (authClient) => {
+const setup = () => {
   router.post(
     "/internal/innstillinger",
     bodyParser.json(),
@@ -32,6 +34,20 @@ const setup = (authClient) => {
       }
     }
   );
+
+  router.get("/internal/isauthenticated", (req, res) => {
+    const token = req.cookies && req.cookies.accessToken;
+    if (token) {
+      if (isValidIn({ seconds: 30, token })) {
+        res.send({ status: true });
+      } else {
+        res.send({ status: false, token });
+      }
+    } else {
+      res.send({ status: false, token });
+    }
+  });
+
   router.get(
     "/internal/innstillinger/:navIdent/:enhetId",
     bodyParser.json(),
@@ -47,7 +63,37 @@ const setup = (authClient) => {
     }
   );
 
-  router.get("/internal/refresh", async (req, res) => {
+  const ensureAuthenticated = async (req, res, next) => {
+    const token = req.cookies && req.cookies.accessToken;
+
+    function setToken() {
+      var token = jwt.sign({ exp: new Date().getTime() + 60000 }, "shhhh");
+      res.cookie("accessToken", token, {
+        expires: new Date(addMinutes(new Date(), 60)),
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", "devRefreshToken", {
+        expires: new Date(addMinutes(new Date(), 60 * 24)),
+        httpOnly: true,
+      });
+    }
+
+    if (token) {
+      if (isValidIn({ seconds: 600, token })) {
+        next();
+      } else {
+        setToken();
+        console.log("ensureAuthenticated: genererte nye tokens");
+      }
+      next();
+    } else {
+      console.log("ensureAuthenticated: satte init tokens");
+      setToken();
+      next();
+    }
+  };
+
+  router.get("/internal/refresh", ensureAuthenticated, async (req, res) => {
     res.status(200).json({ status: "OK" });
   });
 
@@ -56,7 +102,6 @@ const setup = (authClient) => {
     cacheMiddleWare,
     createProxyMiddleware({
       target: "http://apimock:3000",
-      //target: "https://kabal-api.dev.nav.no/",
       pathRewrite: {
         "^/api": "",
       },
