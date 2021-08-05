@@ -367,6 +367,7 @@ const Sok = (): JSX.Element => {
   const history = useHistory();
   let [soekString, setSoekString] = useState("");
   let [harSokt, settHarSokt] = useState(false);
+  let [soker, settSoker] = useState(false);
   const [debouncedState, setDebouncedState] = useDebounce(soekString);
 
   const handleChange = (event: any) => {
@@ -385,8 +386,8 @@ const Sok = (): JSX.Element => {
       if (searchQuery) {
         sok({ dispatch, navIdent: person.graphData.id, soekString: searchQuery.trim() });
       }
-    }, 500);
-    return () => clearTimeout(timeout); // Clear existing timer every time it runs.
+    }, 700);
+    return () => clearTimeout(timeout);
   }, [window.location.search, dispatch, person.graphData.id]);
 
   useEffect(() => {
@@ -401,14 +402,19 @@ const Sok = (): JSX.Element => {
   }, [dispatch]);
 
   useEffect(() => {
+    if (soker && !sokResult.laster) settSoker(false);
+  }, [sokResult]);
+
+  useEffect(() => {
     const timeout = setTimeout(() => {
+      if (!soker) settSoker(true);
       if (soekString) {
         const params = new URLSearchParams();
         params.append("s", soekString);
         history.push({ search: params.toString() });
       }
-    }, 500);
-    return () => clearTimeout(timeout); // Clear existing timer every time it runs.
+    }, 700);
+    return () => clearTimeout(timeout);
   }, [soekString]);
 
   return (
@@ -435,7 +441,7 @@ const Sok = (): JSX.Element => {
             if (!soekString && !harSokt) {
               return <></>;
             }
-            if (sokResult.laster) {
+            if (soker || sokResult.laster) {
               return <NavFrontendSpinner />;
             } else return <SokeResultat {...sokResult?.response} />;
           })()}
