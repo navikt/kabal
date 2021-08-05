@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Header } from "./Header/Header";
 import Alertstripe from "nav-frontend-alertstriper";
 import { useSelector } from "react-redux";
@@ -17,7 +17,8 @@ import { velgKodeverk } from "../tilstand/moduler/kodeverk.velgere";
 import { hentMegHandling, hentMegUtenEnheterHandling } from "../tilstand/moduler/meg";
 import isDevLocation from "../utility/isDevLocation";
 import useInterval from "../utility/useInterval";
-import { hentToken } from "../tilstand/moduler/refreshtoken";
+import { hentToken, sjekkAuth } from "../tilstand/moduler/auth";
+import { velgAuth } from "../tilstand/moduler/auth.velgere";
 
 const R = require("ramda");
 
@@ -40,9 +41,11 @@ export default function Oppsett({
   const visToaster = useSelector(velgToaster);
   const toastBeskjed = useSelector(velgToasterMelding);
   const featureToggles = useSelector(velgFeatureToggles);
+  const isAuth = useSelector(velgAuth);
   const kodeverk = useSelector(velgKodeverk);
   const dispatch = useAppDispatch();
   const [generellTilgang, settTilgang] = useState<boolean | undefined>(undefined);
+  const isFirstRun = useRef(true);
 
   useInterval(() => {
     dispatch(hentToken());
@@ -62,14 +65,17 @@ export default function Oppsett({
   const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.generellTilgang");
 
   useEffect(() => {
-    fetch("/internal/isauthenticated")
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.status === false) {
-          window.location.href = "/login";
-        }
-      });
-  }, []);
+    if (isFirstRun.current) {
+      console.debug({ isFirstRun: isFirstRun.current, isAuth });
+      isFirstRun.current = false;
+      dispatch(sjekkAuth());
+      return;
+    }
+    console.debug({ isAuth });
+    if (isAuth === false) {
+      window.location.href = "/internal/login";
+    }
+  }, [isAuth]);
 
   useEffect(() => {
     if (adminEnabled !== undefined) {

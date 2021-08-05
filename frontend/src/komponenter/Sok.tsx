@@ -370,7 +370,7 @@ const Sok = (): JSX.Element => {
   const [debouncedState, setDebouncedState] = useDebounce(soekString);
 
   const handleChange = (event: any) => {
-    setSoekString(event.target.value.trim());
+    setSoekString(event.target.value);
     setDebouncedState(event.target.value);
   };
 
@@ -383,7 +383,7 @@ const Sok = (): JSX.Element => {
     }
     const timeout = setTimeout(() => {
       if (searchQuery) {
-        sok({ dispatch, navIdent: person.graphData.id, soekString: searchQuery });
+        sok({ dispatch, navIdent: person.graphData.id, soekString: searchQuery.trim() });
       }
     }, 500);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.

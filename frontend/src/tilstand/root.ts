@@ -16,7 +16,7 @@ import { medunderskrivere } from "./moduler/medunderskrivere/state";
 import kodeverk, { KODEVERK_EPICS } from "./moduler/kodeverk";
 import { klagebehandling as klagebehandlingState } from "./moduler/klagebehandling/state";
 import { KLAGEBEHANDLING_EPICS } from "./moduler/klagebehandling/epics";
-import { REFRESH_EPICS } from "./moduler/refreshtoken";
+import auth, { REFRESH_EPICS } from "./moduler/auth";
 
 import { dokumenter, DOKUMENTER_EPICS } from "./moduler/dokumenter/state";
 
@@ -56,6 +56,7 @@ const rootReducer = combineReducers({
   kodeverk,
   dokumenter,
   sok,
+  auth,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -15,6 +15,38 @@ let bodyParser = require("body-parser");
 const uuid = require("uuid/v4");
 const { isValidIn, addMinutes } = require("./routes");
 
+function setToken(res) {
+  var token = jwt.sign(
+    { exp: new Date(addMinutes(new Date(), 60)).getTime() },
+    "shhhh"
+  );
+  res.cookie("accessToken", token, {
+    expires: new Date(addMinutes(new Date(), 60)),
+    httpOnly: true,
+  });
+  res.cookie("refreshToken", "devRefreshToken", {
+    expires: new Date(addMinutes(new Date(), 60 * 24)),
+    httpOnly: true,
+  });
+}
+
+const ensureAuthenticated = async (req, res, next) => {
+  const token = req.cookies && req.cookies.accessToken;
+  if (token) {
+    if (isValidIn({ seconds: 600, token })) {
+      next();
+    } else {
+      setToken(res);
+      console.log("ensureAuthenticated: genererte nye tokens");
+    }
+    next();
+  } else {
+    console.log("ensureAuthenticated: satte init tokens");
+    setToken(res);
+    next();
+  }
+};
+
 const setup = () => {
   router.post(
     "/internal/innstillinger",
@@ -35,6 +67,12 @@ const setup = () => {
     }
   );
 
+  router.get("/internal/login", (req, res) => {
+    setToken(res);
+    res.end("satte tokens");
+    //res.redirect("/");
+  });
+
   router.get("/internal/isauthenticated", (req, res) => {
     const token = req.cookies && req.cookies.accessToken;
     if (token) {
@@ -45,6 +83,8 @@ const setup = () => {
       }
     } else {
       res.send({ status: false, token });
+      //setToken(res);
+      //res.send({ status: true });
     }
   });
 
@@ -62,36 +102,6 @@ const setup = () => {
       }
     }
   );
-
-  const ensureAuthenticated = async (req, res, next) => {
-    const token = req.cookies && req.cookies.accessToken;
-
-    function setToken() {
-      var token = jwt.sign({ exp: new Date().getTime() + 60000 }, "shhhh");
-      res.cookie("accessToken", token, {
-        expires: new Date(addMinutes(new Date(), 60)),
-        httpOnly: true,
-      });
-      res.cookie("refreshToken", "devRefreshToken", {
-        expires: new Date(addMinutes(new Date(), 60 * 24)),
-        httpOnly: true,
-      });
-    }
-
-    if (token) {
-      if (isValidIn({ seconds: 600, token })) {
-        next();
-      } else {
-        setToken();
-        console.log("ensureAuthenticated: genererte nye tokens");
-      }
-      next();
-    } else {
-      console.log("ensureAuthenticated: satte init tokens");
-      setToken();
-      next();
-    }
-  };
 
   router.get("/internal/refresh", ensureAuthenticated, async (req, res) => {
     res.status(200).json({ status: "OK" });

@@ -74,6 +74,10 @@ const setup = (authClient) => {
     passport.authenticate("azureOidc", { failureRedirect: "/login" })
   );
 
+  router.get("/internal/login", (req, res) => {
+    res.redirect("/login");
+  });
+
   router.get("/error", (req, res) => {
     res.send("error");
   });
@@ -231,9 +235,21 @@ const setup = (authClient) => {
     req.logOut();
     res.redirect(
       authClient.endSessionUrl({
-        post_logout_redirect_uri: config.azureAd.logoutRedirectUri,
+        post_logout_redirect_uri: config.azureAd.host + "/internal/utlogget",
       })
     );
+  });
+  // log the user out
+  router.get("/internal/utlogget", (req, res) => {
+    res.cookie("accessToken", "", {
+      expires: new Date(addMinutes(new Date(), 0)),
+      httpOnly: true,
+    });
+    res.cookie("refreshToken", "", {
+      expires: new Date(addMinutes(new Date(), 0)),
+      httpOnly: true,
+    });
+    res.end('Utlogget. <a href="/login">Logg inn</a>');
   });
 
   // serve static files

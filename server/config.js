@@ -70,6 +70,7 @@ if (process.env.NODE_ENV === "production") {
     redirectUri:
       host + envVar({ name: "AZURE_APP_REDIRECT_URL", required: true }),
 
+    host,
     // where your application should redirect after logout
     logoutRedirectUri:
       host +
