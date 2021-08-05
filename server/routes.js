@@ -249,7 +249,10 @@ const setup = (authClient) => {
       expires: new Date(addMinutes(new Date(), 0)),
       httpOnly: true,
     });
-    res.end('Utlogget. <a href="/login">Logg inn</a>');
+    res.header("Content-type", "text/html");
+    res.end(
+      'Din sesjon er nå utlogget. <a href="/login">Klikk her</a> for å logge inn på ny'
+    );
   });
 
   // serve static files

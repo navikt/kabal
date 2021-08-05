@@ -69,8 +69,28 @@ const setup = () => {
 
   router.get("/internal/login", (req, res) => {
     setToken(res);
-    res.end("satte tokens");
-    //res.redirect("/");
+    //res.end("satte tokens");
+    res.redirect("/oppgaver");
+  });
+
+  // log the user out
+  router.get("/internal/logout", (req, res) => {
+    res.redirect("/internal/utlogget");
+  });
+  // log the user out
+  router.get("/internal/utlogget", (req, res) => {
+    res.cookie("accessToken", "", {
+      expires: new Date(addMinutes(new Date(), 0)),
+      httpOnly: true,
+    });
+    res.cookie("refreshToken", "", {
+      expires: new Date(addMinutes(new Date(), 0)),
+      httpOnly: true,
+    });
+    res.header("Content-type", "text/html");
+    res.end(
+      'Din sesjon er nå utlogget. <a href="/login">Klikk her</a> for å logge inn på ny'
+    );
   });
 
   router.get("/internal/isauthenticated", (req, res) => {
