@@ -88,6 +88,7 @@ export const Bruker = ({ navn }: Brukerinfo) => {
                     <EnhetKnapp
                       onClick={() => settEnhet(enhet.id)}
                       disabled={person.valgtEnhet.id === enhet.id}
+                      active={person.valgtEnhet.id === enhet.id}
                     >
                       {enhet.id} {enhet.navn}
                     </EnhetKnapp>
@@ -146,7 +147,7 @@ const EnhetListe = styled.ul`
   margin: 0;
 `;
 
-const EnhetKnapp = styled.button`
+const EnhetKnapp = styled.button<{ active: boolean }>`
   display: block;
   width: 100%;
   background-color: transparent;
@@ -158,9 +159,13 @@ const EnhetKnapp = styled.button`
   border: none;
   cursor: pointer;
   text-align: left;
+  font-weight: ${({ active }) => (active ? "bold" : "normal")};
 
   :hover,
   :active {
     background-color: #e7e9e9;
+  }
+  :disabled {
+    cursor: default;
   }
 `;
