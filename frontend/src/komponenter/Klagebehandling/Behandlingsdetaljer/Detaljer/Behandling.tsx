@@ -11,10 +11,10 @@ import { faaFulltNavnMedFnr } from "./navn";
 import { InfofeltStatisk } from "../InfofeltStatisk";
 import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
 
-export const Detaljer = () => (
+export const Behandling = () => (
   <>
     <HeaderRow>
-      <h1>Behandlingsdetaljer</h1>
+      <h1>Behandling</h1>
     </HeaderRow>
     <div>
       <Row>

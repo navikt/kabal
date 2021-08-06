@@ -129,18 +129,6 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
           onChange={settUiValgteHjemler}
         />
       </Row>
-      {visOmgjoeringsgrunner && (
-        <Row>
-          <Omgjoeringsgrunn
-            gyldigeOmgjoeringsgrunner={gyldigeOmgjoeringsgrunner}
-            defaultValue={omgjoeringsgrunnObjekt}
-            onChange={settUiOmgjoeringsgrunn}
-          />
-        </Row>
-      )}
-      <Row>
-        <InternVurdering defaultValue={internVurdering} onChange={settUiInternVurdering} />
-      </Row>
     </div>
   );
 };

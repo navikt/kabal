@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { HeaderRow } from "../../../styled-components/Row";
 import { Kvalitetsskjema } from "./Kvalitetsskjema/Kvalitetsskjema";
-import { Detaljer } from "./Detaljer/Detaljer";
+import { Behandling } from "./Detaljer/Behandling";
 import { useKanEndre } from "../utils/hooks";
 import { ReadOnlyKvalitetsskjema } from "./ReadOnlyKvalitetsskjema/ReadOnlyKvalitetsskjema";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
@@ -22,7 +22,7 @@ export const Behandlingsdetaljer = ({ skjult, klagebehandling }: Behandlingsdeta
   return (
     <Beholder>
       <KlageBoks>
-        <Detaljer />
+        <Behandling />
       </KlageBoks>
       <KlageBoks>
         <HeaderRow />

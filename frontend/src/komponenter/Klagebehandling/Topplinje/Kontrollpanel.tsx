@@ -63,7 +63,7 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
         />
         <ToggleKnapp
           id={"detaljer"}
-          label={"Detaljer"}
+          label={"Behandling"}
           clickFn={() => toggleFane("detaljer")}
           faner={faner}
         />
