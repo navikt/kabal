@@ -5,8 +5,6 @@ import { of } from "rxjs";
 import { RootStateOrAny } from "react-redux";
 import { provIgjenStrategi } from "../../utility/rxUtils";
 import { Dependencies } from "../konfigurerTilstand";
-import { useEffect } from "react";
-import { MottatteRader, RaderMedMetadataUtvidet } from "./oppgave";
 
 //==========
 // Type defs
@@ -26,6 +24,10 @@ export const slice = createSlice({
   reducers: {
     AUTH_RESULTAT: (state, action: PayloadAction<boolean>) => {
       state.isAuth = action.payload;
+      return state;
+    },
+    FEILET: (state, action: PayloadAction<boolean>) => {
+      state.isAuth = false;
       return state;
     },
   },
