@@ -170,11 +170,7 @@ export function fradelEpos(
         )
         .pipe(
           catchError((error) =>
-            concat([
-              displayToast(JSON.stringify(error)),
-              settOppgaverFerdigLastet(),
-              skjulToaster(),
-            ])
+            concat([displayToast(error), settOppgaverFerdigLastet(), skjulToaster()])
           )
         );
     })

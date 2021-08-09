@@ -95,7 +95,10 @@ export interface IHentInnstilingerPayload {
   navIdent: string;
   enhetId: string;
 }
-
+export interface IError {
+  message?: string;
+  status?: string;
+}
 //==========
 // Reducer
 //==========
@@ -184,8 +187,9 @@ export const feiletHandling = createAction<string>("meg/FEILET");
 //==========
 // Vis feilmeldinger ved feil
 //==========
-export function displayToast(error: string | unknown, type: AlertStripeType = "feil") {
-  const message = error || "Kunne ikke lagre innstillinger";
+
+export function displayToast(error: IError, type: AlertStripeType = "feil") {
+  const message = error?.message || error;
   return toasterSett({
     display: true,
     type,
@@ -346,7 +350,7 @@ export function hentInnstillingerEpos(
 
             return concat([
               feiletHandling(err),
-              displayToast("Kunne ikke hente innstillinger"),
+              displayToast({ message: "Kunne ikke hente innstillinger" }),
               skjulToaster(),
             ]);
           })

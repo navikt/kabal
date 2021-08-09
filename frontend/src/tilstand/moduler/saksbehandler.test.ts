@@ -216,7 +216,7 @@ describe("TILDEL 'Meg' epos", () => {
             payload: {
               display: true,
               type: "feil",
-              feilmelding: { message: "fradeling feilet", status: 503 },
+              feilmelding: "fradeling feilet",
             },
             type: "toaster/SETT",
           },
@@ -268,7 +268,7 @@ describe("TILDEL 'Meg' epos", () => {
             payload: {
               display: true,
               type: "feil",
-              feilmelding: { message: "tildeling feilet", status: 503 },
+              feilmelding: "tildeling feilet",
             },
             type: "toaster/SETT",
           },
@@ -321,7 +321,7 @@ describe("TILDEL 'Meg' epos", () => {
             payload: {
               display: true,
               type: "feil",
-              feilmelding: { message: "tildeling feilet", status: 503 },
+              feilmelding: "tildeling feilet",
             },
             type: "toaster/SETT",
           },
@@ -377,7 +377,7 @@ describe("TILDEL 'Meg' epos", () => {
             payload: {
               display: true,
               type: "feil",
-              feilmelding: { message: "tildeling feilet", status: 503 },
+              feilmelding: "tildeling feilet",
             },
             type: "toaster/SETT",
           },
@@ -433,9 +433,7 @@ describe("TILDEL 'Meg' epos", () => {
             payload: {
               display: true,
               type: "feil",
-              feilmelding: {
-                status: 503,
-              },
+              feilmelding: "lasting feilet",
             },
             type: "toaster/SETT",
           },
@@ -452,6 +450,7 @@ describe("TILDEL 'Meg' epos", () => {
         const state$ = new StateObservable(hot("a", observableValues), {});
         spyOn(dependencies.ajax, "post").and.returnValue(
           throwError({
+            message: "lasting feilet",
             status: 503,
           })
         );
