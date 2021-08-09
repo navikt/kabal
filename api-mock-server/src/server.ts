@@ -4,7 +4,7 @@ import { App } from "@tinyhttp/app";
 import { logger } from "@tinyhttp/logger";
 import { cors } from "@tinyhttp/cors";
 import formidable, { File } from "formidable";
-import { filtrerOppgaver } from "./oppgaver";
+import { filtrerOppgaver, fradelOppgave, tildelOppgave } from "./oppgaver";
 import { OppgaveQuery } from "./types";
 import { getKlage, saveKlage } from "./klagebehandling/klagebehandling";
 import { json, urlencoded } from "body-parser";
@@ -172,12 +172,20 @@ app.delete("/klagebehandlinger/:klagebehandlingId/vedtak/:vedtakId/vedlegg", asy
 //tildeling saksbehandler oppgave
 app.post(
   "/ansatte/:navIdent/klagebehandlinger/:oppgaveId/saksbehandlertildeling",
-  async (req, res) => res.send("OK")
+  async (req, res) => {
+    const err = await tildelOppgave(req.params!.oppgaveId, req.params!.navIdent);
+    if (err) res.status(500).send(JSON.stringify(err));
+    else res.send("OK");
+  }
 );
 //tildeling saksbehandler oppgave
 app.post(
   "/ansatte/:navIdent/klagebehandlinger/:oppgaveId/saksbehandlerfradeling",
-  async (req, res) => res.send("OK")
+  async (req, res) => {
+    const err = await fradelOppgave(req.params!.oppgaveId);
+    if (err) res.status(500).send(JSON.stringify(err));
+    else res.send("OK");
+  }
 );
 
 // Opplasting av vedtak.

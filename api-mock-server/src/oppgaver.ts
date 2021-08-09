@@ -1,6 +1,7 @@
 import { OppgaveQuery } from "./types";
 import sqlite3 from "sqlite3";
 import path from "path";
+import { IDokument } from "./dokumenter/types";
 
 interface Oppgave {
   frist: string;
@@ -102,6 +103,32 @@ export async function fradelSaksbehandler(params: ISaksbehandler) {
         err,
       },
     }));
+}
+
+export async function fradelOppgave(id: string) {
+  let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
+  const sql = `Update Oppgaver SET tildeltSaksbehandlerNavn = "", saksbehandler = "" WHERE Id = ? `;
+  return new Promise((resolve, reject) => {
+    db.run(sql, [id], (err: any, rader: any) => {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+export async function tildelOppgave(id: string, navIdent: string) {
+  let db = new sqlite3.Database(path.join(__dirname, "../oppgaver.db"));
+  const sql = `Update Oppgaver SET tildeltSaksbehandlerNavn = "DITT NAVN", saksbehandler = ? WHERE Id = ? `;
+  return new Promise((resolve, reject) => {
+    db.run(sql, [navIdent, id], (err: any, rader: any) => {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
 }
 
 export async function filtrerOppgaver(query: OppgaveQuery) {

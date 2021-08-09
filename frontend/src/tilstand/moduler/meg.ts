@@ -184,12 +184,12 @@ export const feiletHandling = createAction<string>("meg/FEILET");
 //==========
 // Vis feilmeldinger ved feil
 //==========
-export function displayToast(error: string, type: AlertStripeType = "feil") {
+export function displayToast(error: string | unknown, type: AlertStripeType = "feil") {
   const message = error || "Kunne ikke lagre innstillinger";
   return toasterSett({
     display: true,
     type,
-    feilmelding: message,
+    feilmelding: typeof message === "string" ? message : JSON.stringify(message),
   });
 }
 

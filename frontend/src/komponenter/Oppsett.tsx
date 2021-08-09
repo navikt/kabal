@@ -144,7 +144,9 @@ export default function Oppsett({
               }}
             >
               <Alertstripe type={visToaster.type}>
-                <span>{toastBeskjed}</span>
+                <span>
+                  {typeof toastBeskjed === "string" ? toastBeskjed : JSON.stringify(toastBeskjed)}
+                </span>
               </Alertstripe>
             </div>
           );
