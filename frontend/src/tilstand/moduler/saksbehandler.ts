@@ -101,14 +101,20 @@ export function tildelEpos(
               return concat([
                 tildeltHandling(response),
                 oppgaveRequest(params),
-                displayToast("Oppgaven er tildelt og er flyttet til Mine Oppgaver", "suksess"),
+                displayToast(
+                  { message: "Oppgaven er tildelt og er flyttet til Mine Oppgaver" },
+                  "suksess"
+                ),
                 skjulToaster(),
               ]);
             } else
               return concat([
                 tildeltHandling(response),
                 settOppgaverFerdigLastet(),
-                displayToast("Oppgaven er tildelt og er flyttet til Mine Oppgaver", "suksess"),
+                displayToast(
+                  { message: "Oppgaven er tildelt og er flyttet til Mine Oppgaver" },
+                  "suksess"
+                ),
                 skjulToaster(),
               ]);
           })
