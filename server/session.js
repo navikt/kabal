@@ -20,7 +20,7 @@ const setup = (app) => {
   };
   if (process.env.NODE_ENV !== "development") {
     options.cookie.secure = true;
-    //options.store = setupRedis();
+    options.store = setupRedis();
   }
   app.use(session(options));
 };
