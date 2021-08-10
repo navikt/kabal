@@ -158,8 +158,8 @@ export function fradelEpos(
           { "Content-Type": "application/json" }
         )
         .pipe(
-          timeout(500),
           mergeMap((response) => {
+            console.debug("fradeling", { response });
             let params = {
               start: state$.value.klagebehandlinger.meta.start,
               antall: state$.value.klagebehandlinger.meta.antall,
