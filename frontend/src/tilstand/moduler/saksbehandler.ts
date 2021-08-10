@@ -159,7 +159,6 @@ export function fradelEpos(
         )
         .pipe(
           mergeMap((response) => {
-            console.debug("fradeling", { response });
             let params = {
               start: state$.value.klagebehandlinger.meta.start,
               antall: state$.value.klagebehandlinger.meta.antall,
