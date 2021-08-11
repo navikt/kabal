@@ -39,7 +39,7 @@ function filterReducer(antall: number, start: number) {
         temaer: [],
       },
       sortering: {
-        type: "mottatt",
+        type: "frist",
         frist: "stigende",
         mottatt: "stigende",
       },
