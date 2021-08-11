@@ -1,10 +1,10 @@
 export const formattedDate = (frist: any) => {
   const utime = new Date(frist).getTime();
   if (!isNaN(utime)) {
-    const ye = new Intl.DateTimeFormat("nb", { year: "numeric" }).format(utime);
-    const mo = new Intl.DateTimeFormat("nb", { month: "2-digit" }).format(utime);
-    const da = new Intl.DateTimeFormat("nb", { day: "2-digit" }).format(utime);
-    let res = `${da}${mo}${ye}`;
+    const ye = new Intl.DateTimeFormat("nb", { year: "numeric" }).format(utime).replace(".", "");
+    const mo = new Intl.DateTimeFormat("nb", { month: "2-digit" }).format(utime).replace(".", "");
+    const da = new Intl.DateTimeFormat("nb", { day: "2-digit" }).format(utime).replace(".", "");
+    let res = `${da}.${mo}.${ye}`;
     if (res === "01.01.1970") return "mangler";
     else return res;
   }
