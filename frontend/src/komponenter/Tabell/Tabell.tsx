@@ -53,8 +53,9 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
   let tolketStart = parseInt(side as string, 10) || 1;
 
   const [hjemmelFilter, settHjemmelFilter] = useState<string[] | undefined>(undefined);
-  const [forrigeHjemmelFilter, settForrigeHjemmelFilter] =
-    useState<string[] | undefined>(undefined);
+  const [forrigeHjemmelFilter, settForrigeHjemmelFilter] = useState<string[] | undefined>(
+    undefined
+  );
 
   const [temaFilter, settTemaFilter] = useState<string[] | undefined>(undefined);
   const [forrigeTemaFilter, settForrigeTemaFilter] = useState<string[] | undefined>(undefined);
@@ -470,7 +471,12 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
 
   return (
     <>
-      <table className={`Tabell tabell oppgaver tabell--stripet`} cellSpacing={0} cellPadding={10}>
+      <table
+        className={`Tabell tabell oppgaver tabell--stripet`}
+        data-testid="oppgaveliste"
+        cellSpacing={0}
+        cellPadding={10}
+      >
         <thead>
           <tr>
             {visFilter && (
