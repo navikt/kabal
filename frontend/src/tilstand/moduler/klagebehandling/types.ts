@@ -1,5 +1,5 @@
 import { ISettMedunderskriverResponse } from "../medunderskrivere/types";
-import { IVedlegg, Vedtak } from "./stateTypes";
+import { IKlagebehandling, IVedlegg, Vedtak } from "./stateTypes";
 
 export interface IKlagebehandlingOppdatering {
   klagebehandlingId: string;
@@ -34,4 +34,9 @@ export interface IVedtakFullfoertResponse {
 
 export interface IMedunderskriverSatt extends ISettMedunderskriverResponse {
   medunderskriverident: string;
+}
+
+export interface FullforVedtakProps {
+  skjult: boolean;
+  klagebehandling: IKlagebehandling;
 }

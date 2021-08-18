@@ -31,7 +31,7 @@ export const useKlagebehandlingUpdater = ({
     if (opptatt || update === null) {
       return;
     }
-
+    console.debug({ update });
     const timeout = setTimeout(() => dispatch(lagreKlagebehandling(update)), 200);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [opptatt, klagebehandlingVersjon, id, internVurdering, vedtak, tilknyttedeDokumenter]);
@@ -57,7 +57,7 @@ export const useGetUpdate = () => {
   const klagebehandling = useAppSelector(velgKlagebehandling);
   const lagretVersjon = useAppSelector(velgLagretKlagebehandlingVersjon);
 
-  const update = useMemo<IKlagebehandlingOppdatering | null>(() => {
+  return useMemo<IKlagebehandlingOppdatering | null>(() => {
     if (!kanEndre) {
       return null;
     }
@@ -67,8 +67,6 @@ export const useGetUpdate = () => {
         : createOppdatering({ ...klagebehandling, klagebehandlingId: klagebehandling.id });
     return isEqual(oppdatering, lagretVersjon) ? null : oppdatering;
   }, [klagebehandling, lagretVersjon, kanEndre]);
-
-  return update;
 };
 
 export const useIsSaved = () => useGetUpdate() === null;

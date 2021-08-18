@@ -8,7 +8,6 @@ import Sok from "./komponenter/Sok";
 import AlleSaker from "./komponenter/AlleSaker";
 import Innstillinger from "./komponenter/Innstillinger";
 import Admin from "./komponenter/Admin";
-import Kvalitetsskjema from "./komponenter/Kvalitetsskjema";
 import { KlagebehandlingLaster } from "./komponenter/Klagebehandling/KlagebehandlingLaster";
 
 ReactDOM.render(
@@ -23,7 +22,6 @@ ReactDOM.render(
           <Route exact path="/mineoppgaver/:side" render={() => <MineSaker />} />
           <Route exact path="/sok" render={() => <Sok />} />
           <Route exact path="/innstillinger" render={() => <Innstillinger />} />
-          <Route exact path="/kvalitetsskjema" render={() => <Kvalitetsskjema />} />
           <Route exact path="/admin" render={() => <Admin />} />
           <Redirect to="/oppgaver" />
         </Switch>

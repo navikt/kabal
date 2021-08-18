@@ -66,6 +66,9 @@ export interface Faner {
   detaljer?: {
     checked?: boolean;
   };
+  kvalitetsvurdering?: {
+    checked?: boolean;
+  };
   vedtak?: {
     checked?: boolean;
   };

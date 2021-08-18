@@ -31,6 +31,9 @@ export interface IKodeverk {
   hjemlerPerTema: IKodeverkVerdiMedHjemler[];
   hjemler: IKodeverkVerdi[];
   tema: IKodeverkVerdi[];
+  kvalitetsavvikUtredning: IKodeverkVerdi[];
+  kvalitetsavvikOversendelsesbrev: IKodeverkVerdi[];
+  kvalitetsavvikVedtak: IKodeverkVerdi[];
 }
 
 export type IKodeverkState = {
@@ -53,6 +56,9 @@ const initialState: IKodeverkState = {
     tema: [],
     grunn: [],
     grunnerPerUtfall: [],
+    kvalitetsavvikUtredning: [],
+    kvalitetsavvikOversendelsesbrev: [],
+    kvalitetsavvikVedtak: [],
   },
 };
 

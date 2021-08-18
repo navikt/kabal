@@ -17,6 +17,7 @@ import kodeverk, { KODEVERK_EPICS } from "./moduler/kodeverk";
 import { klagebehandling as klagebehandlingState } from "./moduler/klagebehandling/state";
 import { KLAGEBEHANDLING_EPICS } from "./moduler/klagebehandling/epics";
 import auth, { REFRESH_EPICS } from "./moduler/auth";
+import kvalitetsvurdering, { KVALITETSVURDERING_EPICS } from "./moduler/kvalitetsvurdering";
 
 import { dokumenter, DOKUMENTER_EPICS } from "./moduler/dokumenter/state";
 
@@ -37,6 +38,7 @@ const epics = [
   ...DOKUMENTER_EPICS,
   ...SOK_EPICS,
   ...REFRESH_EPICS,
+  ...KVALITETSVURDERING_EPICS,
 ];
 export const rootEpic = combineEpics.apply(combineEpics, epics);
 
@@ -57,6 +59,7 @@ const rootReducer = combineReducers({
   dokumenter,
   sok,
   auth,
+  kvalitetsvurdering,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

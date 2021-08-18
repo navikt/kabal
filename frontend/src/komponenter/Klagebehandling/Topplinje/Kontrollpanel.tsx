@@ -68,6 +68,12 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
           faner={faner}
         />
         <ToggleKnapp
+          id={"kvalitetsvurdering"}
+          label={"Kvalitetsvurdering"}
+          clickFn={() => toggleFane("kvalitetsvurdering")}
+          faner={faner}
+        />
+        <ToggleKnapp
           id={"vedtak"}
           label={"Fullfør vedtak"}
           clickFn={() => toggleFane("vedtak")}
@@ -139,18 +145,11 @@ const IkonLukk = styled.img`
 const Kontrollpanel = styled.div`
   display: grid;
   background: #f8f8f8;
-  grid-template-columns: 23em repeat(3, 1fr);
+  grid-template-columns: auto repeat(3, 1fr);
   grid-template-areas: "Person Toggles Toggles Knapper";
   height: 3em;
 
-  @media screen and (max-width: 1400px) {
-    height: 6.25em;
-    grid-template-areas:
-      "Person Person Knapper Knapper"
-      "Toggles Toggles Toggles Toggles";
-  }
-
-  @media screen and (max-width: 950px) {
+  @media screen and (max-width: 1460px) {
     height: 6.25em;
     grid-template-areas:
       "Person Knapper Knapper Knapper"
@@ -164,7 +163,7 @@ const Knapper = styled.div`
   user-select: none;
   cursor: pointer;
   justify-content: space-between;
-  max-width: 35em;
+  max-width: 47 em;
   justify-self: left;
   @media screen and (max-width: 1400px) {
     justify-content: flex-start;

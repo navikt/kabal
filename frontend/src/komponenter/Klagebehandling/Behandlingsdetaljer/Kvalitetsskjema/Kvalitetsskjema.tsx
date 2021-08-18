@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Row } from "../../../../styled-components/Row";
-import { Omgjoeringsgrunn } from "./Omgjoeringsgrunn";
 import { Utfall } from "./Utfall";
 import { BasertPaaHjemmel } from "./BasertPaaLovhjemmel";
-import { InternVurdering } from "./InternVurdering";
 import { velgKodeverk } from "../../../../tilstand/moduler/kodeverk.velgere";
 import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
 import { useAppDispatch, useAppSelector } from "../../../../tilstand/konfigurerTilstand";

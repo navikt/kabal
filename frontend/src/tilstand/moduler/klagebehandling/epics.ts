@@ -35,16 +35,11 @@ export interface IKlagebehandlingPayload {
   tilknyttedeDokumenter: TilknyttetDokument[];
 }
 
-export const unloadKlagebehandlingEpic = (
-  action$: ActionsObservable<PayloadAction<never>>,
-  _: StateObservable<RootState> | null,
-  __: Dependencies
-) => action$.pipe(ofType(unloadKlagebehandling.type), map(UNLOAD_KLAGEBEHANDLING));
+export const unloadKlagebehandlingEpic = (action$: ActionsObservable<PayloadAction<never>>) =>
+  action$.pipe(ofType(unloadKlagebehandling.type), map(UNLOAD_KLAGEBEHANDLING));
 
 export const settOpptattEpic = (
-  action$: ActionsObservable<PayloadAction<IKlagebehandlingOppdatering>>,
-  _: StateObservable<RootState> | null,
-  __: Dependencies
+  action$: ActionsObservable<PayloadAction<IKlagebehandlingOppdatering>>
 ) => action$.pipe(ofType(lagreKlagebehandling.type), map(OPPTATT));
 
 export const lagreKlagebehandlingEpic = (

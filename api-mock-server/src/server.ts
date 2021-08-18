@@ -188,6 +188,47 @@ app.post(
   }
 );
 
+//kvalitetsvurdering
+app.get("/klagebehandlinger/:id/kvalitetsvurdering", async (req, res) => {
+  res.send({
+    klagebehandlingId: "7be9be9b-6f9b-437b-b674-7dcb9ee229e0",
+    klagebehandlingVersjon: 3,
+    inkluderteDatoForKlage: null,
+    inkluderteDatoForVedtak: null,
+    kvalitetOversendelsesbrevBra: false,
+    kvalitetsavvikOversendelsesbrev: ["2", "1"],
+    kommentarOversendelsesbrev: null,
+    kvalitetUtredningBra: null,
+    kvalitetsavvikUtredning: [],
+    kommentarUtredning: null,
+    kvalitetVedtaketBra: null,
+    kvalitetsavvikVedtak: ["4", "2"],
+    kommentarVedtak: null,
+    avvikStorKonsekvens: null,
+  });
+});
+
+app.put("/klagebehandlinger/:id/kvalitetsvurdering/editerbare", async (req, res) => {
+  res.send(req.body);
+});
+
+/*
+vals(
+    val klagebehandlingVersjon: Long,
+    val inkluderteDatoForKlage: Boolean?,
+    val inkluderteDatoForVedtak: Boolean?,
+    val kvalitetOversendelsesbrevBra: Boolean?,
+    val kvalitetsavvikOversendelsesbrev: Set<String> = emptySet(),
+    val kommentarOversendelsesbrev: String?,
+    val kvalitetUtredningBra: Boolean?,
+    val kvalitetsavvikUtredning: Set<String> = emptySet(),
+    val kommentarUtredning: String?,
+    val kvalitetVedtakBra: Boolean?,
+    val kvalitetsavvikVedtak: Set<String> = emptySet(),
+    val kommentarVedtak: String?,
+    val avvikStorKonsekvens: Boolean?
+ */
+
 // Opplasting av vedtak.
 app.post(
   "/klagebehandlinger/:klagebehandlingId/vedtak/:vedtakId/vedlegg",

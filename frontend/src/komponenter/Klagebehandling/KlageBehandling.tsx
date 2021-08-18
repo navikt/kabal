@@ -22,6 +22,9 @@ export interface IFaner {
   vedtak: {
     checked: boolean;
   };
+  kvalitetsvurdering: {
+    checked: boolean;
+  };
 }
 
 interface KlagebehandlingProps {
@@ -33,26 +36,32 @@ export const Klagebehandling = ({ klagebehandling }: KlagebehandlingProps) => {
 
   const [faner, settAktiveFaner] = useState<IFaner>({
     detaljer: {
-      checked: innstillinger?.aktiveFaner?.detaljer?.checked || true,
+      checked: innstillinger?.aktiveFaner?.detaljer?.checked ?? true,
     },
     dokumenter: {
-      checked: innstillinger?.aktiveFaner?.dokumenter?.checked || true,
+      checked: innstillinger?.aktiveFaner?.dokumenter?.checked ?? true,
+    },
+    kvalitetsvurdering: {
+      checked: innstillinger?.aktiveFaner?.kvalitetsvurdering?.checked ?? true,
     },
     vedtak: {
-      checked: innstillinger?.aktiveFaner?.vedtak?.checked || true,
+      checked: innstillinger?.aktiveFaner?.vedtak?.checked ?? true,
     },
   });
 
   useEffect(() => {
     settAktiveFaner({
       detaljer: {
-        checked: innstillinger?.aktiveFaner?.detaljer?.checked || true,
+        checked: innstillinger?.aktiveFaner?.detaljer?.checked ?? true,
       },
       dokumenter: {
-        checked: innstillinger?.aktiveFaner?.dokumenter?.checked || true,
+        checked: innstillinger?.aktiveFaner?.dokumenter?.checked ?? true,
+      },
+      kvalitetsvurdering: {
+        checked: innstillinger?.aktiveFaner?.kvalitetsvurdering?.checked ?? true,
       },
       vedtak: {
-        checked: innstillinger?.aktiveFaner?.vedtak?.checked || true,
+        checked: innstillinger?.aktiveFaner?.vedtak?.checked ?? true,
       },
     });
   }, [innstillinger?.aktiveFaner]);
