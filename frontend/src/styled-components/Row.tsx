@@ -6,7 +6,7 @@ export const HeaderRow = styled.div`
   }
 `;
 
-export const Row = styled.div`
+export const Section = styled.div`
   margin-bottom: 16px;
 `;
 
@@ -14,6 +14,5 @@ export const FlexRow = styled.div`
   margin-bottom: 16px;
   display: flex;
   flex-flow: row;
-  justify-content: space-between;
-  max-width: 20em;
+  gap: 2em;
 `;

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef } from "react";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import { Beholder } from "../FullfoerVedtak/styled-components/beholder";
 import { Title } from "../FullfoerVedtak/styled-components/title";
-import { Row } from "../../../styled-components/Row";
 import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
 import {
   hentKvalitetsvurdering,
@@ -12,12 +11,7 @@ import {
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { velgKvalitetsvurdering } from "../../../tilstand/moduler/kvalitetsvurdering.velgere";
 import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
-import {
-  DokumentCheckbox,
-  Header,
-  InfoKnapp,
-  SubHeader,
-} from "../../../styled-components/Kvalitetsvurdering";
+import { DokumentCheckbox, SubHeader } from "../../../styled-components/Kvalitetsvurdering";
 import { FullforVedtakProps } from "../../../tilstand/moduler/klagebehandling/types";
 import { Vurderingspunkter } from "./Vurderingspunkter";
 import { toggleKodeverk } from "./toggleKodeverk";

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { temaOversettelse, typeOversettelse } from "../../../../domene/forkortelser";
-import { HeaderRow, Row } from "../../../../styled-components/Row";
+import { HeaderRow, Section } from "../../../../styled-components/Row";
 import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
 import { velgKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/selectors";
 import { FraNavEnhet } from "./FraNavEnhet";
@@ -17,24 +17,24 @@ export const Behandling = () => (
       <h1>Behandling</h1>
     </HeaderRow>
     <div>
-      <Row>
+      <Section>
         <Klager />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <TyperTemaer />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <MottattFoersteinstans />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <FraNavEnhet />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <OversendtKA />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <VurderingFraFoersteinstans />
-      </Row>
+      </Section>
     </div>
   </>
 );

@@ -2,7 +2,7 @@ import EtikettBase from "nav-frontend-etiketter";
 import NavFrontendSpinner from "nav-frontend-spinner";
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { Row } from "../../../../styled-components/Row";
+import { Section } from "../../../../styled-components/Row";
 import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
 import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
 import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
@@ -60,24 +60,24 @@ export const ReadOnlyKvalitetsskjema = ({ klagebehandling }: ReadOnlyKvalitetssk
 
   return (
     <>
-      <Row>
+      <Section>
         <InfofeltStatisk header="Utfall/resultat" info={utfall?.navn ?? "Ingen"} />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <b>Utfallet er basert på lovhjemmel:</b>
         {hjemler.length > 0 ? (
           <Etikettliste elementer={hjemler.map(({ navn }) => navn)} />
         ) : (
           <p>Ingen</p>
         )}
-      </Row>
+      </Section>
       <Omgjoeringsgrunn vis={visOmgjoeringsgrunner} grunn={omgjoeringsgrunn} />
-      <Row>
+      <Section>
         <InfofeltStatisk
           header="Vurdering av kvalitet for intern bruk"
           info={klagebehandling.internVurdering}
         />
-      </Row>
+      </Section>
     </>
   );
 };
@@ -93,9 +93,9 @@ const Omgjoeringsgrunn = ({ grunn, vis }: OmgjoeringsgrunnProps) => {
   }
   const info = grunn === null ? "Ingen" : grunn.navn;
   return (
-    <Row>
+    <Section>
       <InfofeltStatisk header="Omgjøringsgrunn" info={info} />
-    </Row>
+    </Section>
   );
 };
 

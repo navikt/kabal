@@ -8,7 +8,7 @@ import {
   SubHeader,
   VurderingBeholder,
 } from "../../../styled-components/Kvalitetsvurdering";
-import { Row, FlexRow } from "../../../styled-components/Row";
+import { Section, FlexRow } from "../../../styled-components/Row";
 import { Radio, RadioGruppe } from "nav-frontend-skjema";
 import { Tekstfelt } from "./Tekstfelt";
 
@@ -70,7 +70,7 @@ export function Vurderingspunkter({
       <Div>
         <VurderingBeholder theme={{ vises: verdi == false }}>
           <SubHeader>{avviksTittel}</SubHeader>
-          <Row>
+          <Section>
             {(() => {
               return kodeverkFelter.map((kodeverkVerdi) => {
                 let funnet = kvalitetsvurdering[avviksNavn].find(
@@ -94,15 +94,15 @@ export function Vurderingspunkter({
                 );
               });
             })()}
-          </Row>
+          </Section>
 
-          <Row>
+          <Section>
             <Tekstfelt
               label="Kommentar:"
               defaultValue={tekstfeltverdi ?? ""}
               handleChange={handleTekstChange}
             />
-          </Row>
+          </Section>
         </VurderingBeholder>
       </Div>
     </Div>

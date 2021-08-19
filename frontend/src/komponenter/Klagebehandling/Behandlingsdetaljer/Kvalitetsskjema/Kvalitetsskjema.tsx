@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Row } from "../../../../styled-components/Row";
+import { Section } from "../../../../styled-components/Row";
 import { Utfall } from "./Utfall";
 import { BasertPaaHjemmel } from "./BasertPaaLovhjemmel";
 import { velgKodeverk } from "../../../../tilstand/moduler/kodeverk.velgere";
@@ -62,14 +62,10 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
     return kodeverk.hjemlerPerTema.find(({ temaId }) => temaId === tema)?.hjemler || [];
   }, [tema, lasterKodeverk, kodeverk.hjemlerPerTema]);
 
-  const visOmgjoeringsgrunner = useMemo<boolean>(
-    () => gyldigeOmgjoeringsgrunner.length > 0,
-    [gyldigeOmgjoeringsgrunner.length]
-  );
-
   const [uiUtfall, settUiUtfall] = useState<IKodeverkVerdi | null>(utfallObjekt);
-  const [uiOmgjoeringsgrunn, settUiOmgjoeringsgrunn] =
-    useState<IKodeverkVerdi | null>(omgjoeringsgrunnObjekt);
+  const [uiOmgjoeringsgrunn, settUiOmgjoeringsgrunn] = useState<IKodeverkVerdi | null>(
+    omgjoeringsgrunnObjekt
+  );
   const [uiValgteHjemler, settUiValgteHjemler] = useState<IKodeverkVerdi[]>(valgteHjemler);
   const [uiInternVurdering, settUiInternVurdering] = useState<string>(internVurdering);
 
@@ -113,20 +109,20 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
 
   return (
     <div className={"detaljer"}>
-      <Row>
+      <Section>
         <Utfall
           utfallAlternativer={kodeverk.utfall}
           defaultUtfall={utfallObjekt}
           onChange={settUiUtfall}
         />
-      </Row>
-      <Row>
+      </Section>
+      <Section>
         <BasertPaaHjemmel
           gyldigeHjemler={gyldigeHjemler}
           defaultValue={valgteHjemler}
           onChange={settUiValgteHjemler}
         />
-      </Row>
+      </Section>
     </div>
   );
 };
