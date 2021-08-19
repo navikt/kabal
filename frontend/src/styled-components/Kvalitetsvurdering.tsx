@@ -37,4 +37,7 @@ export let Header = styled.h1`
 
 export let SubHeader = styled.h2`
   font-size: 1.1em;
+  display: flex;
+  flex-flow: row;
+  gap: 0.35em;
 `;

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import ReactTooltip from "react-tooltip";
+import Hjelpetekst from "nav-frontend-hjelpetekst";
 import { Beholder } from "../FullfoerVedtak/styled-components/beholder";
 import { Title } from "../FullfoerVedtak/styled-components/title";
 import { Row } from "../../../styled-components/Row";
@@ -57,7 +57,6 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
 
   return (
     <Beholder>
-      <ReactTooltip />
       <Title>Kvalitetsvurdering</Title>
 
       <Vurderingspunkter
@@ -103,7 +102,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
       />
 
       <SubHeader>
-        Avvik <InfoKnapp data-tip="Infotekst avvik">i</InfoKnapp>
+        Avvik <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
       </SubHeader>
       <DokumentCheckbox
         label={"Betydelig avvik med konsekvens for søker"}
@@ -121,7 +120,8 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
           return (
             <>
               <SubHeader>
-                Annet <InfoKnapp data-tip="Infotekst annet">i</InfoKnapp>
+                Annet{" "}
+                <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
               </SubHeader>
               <DokumentCheckbox
                 label={"Bruk gjerne dette som eksempel i opplæring"}
