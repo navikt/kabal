@@ -59,7 +59,6 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
     <Beholder>
       <ReactTooltip />
       <Title>Kvalitetsvurdering</Title>
-      <Header>Oversendelsesbrev</Header>
 
       <Vurderingspunkter
         refHandler={refListe1}

@@ -21,10 +21,9 @@ export const InfoKnapp = styled.button`
 `;
 
 export const VurderingBeholder = styled.div`
-  display: block;
   padding: 0;
   margin: 0;
-  visibility: ${(props) => (!props.theme.vises ? "hidden" : "visible")};
+  display: ${(props) => (!props.theme.vises ? "none" : "block")};
 `;
 export const Div = styled.div`
   display: block;

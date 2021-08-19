@@ -56,10 +56,6 @@ export function Vurderingspunkter({
             defaultChecked={verdi === false}
             onChange={() => {
               lagre(felt, false);
-              refHandler.current.scrollIntoView({
-                behavior: "smooth",
-                top: refHandler.current.offsetTop,
-              });
             }}
           />
           <Radio
