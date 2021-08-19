@@ -8,7 +8,7 @@ import {
   SubHeader,
   VurderingBeholder,
 } from "../../../styled-components/Kvalitetsvurdering";
-import { Row } from "../../../styled-components/Row";
+import { Row, FlexRow } from "../../../styled-components/Row";
 import { Radio, RadioGruppe } from "nav-frontend-skjema";
 import { Tekstfelt } from "./Tekstfelt";
 
@@ -48,16 +48,8 @@ export function Vurderingspunkter({
     <Div ref={refHandler}>
       <Header>{tittel}</Header>
       <SubHeader>{undertittel}</SubHeader>
-      <Row>
+      <FlexRow>
         <RadioGruppe>
-          <Radio
-            label={"Mangelfullt"}
-            name={felt}
-            defaultChecked={verdi === false}
-            onChange={() => {
-              lagre(felt, false);
-            }}
-          />
           <Radio
             label={"Bra / Godt nok"}
             name={felt}
@@ -65,7 +57,15 @@ export function Vurderingspunkter({
             onChange={() => lagre(felt, true)}
           />
         </RadioGruppe>
-      </Row>
+        <Radio
+          label={"Mangelfullt"}
+          name={felt}
+          defaultChecked={verdi === false}
+          onChange={() => {
+            lagre(felt, false);
+          }}
+        />
+      </FlexRow>
 
       <Div>
         <VurderingBeholder theme={{ vises: verdi == false }}>
