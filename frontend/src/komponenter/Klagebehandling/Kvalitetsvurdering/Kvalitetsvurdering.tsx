@@ -60,24 +60,6 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
       <ReactTooltip />
       <Title>Kvalitetsvurdering</Title>
       <Header>Oversendelsesbrev</Header>
-      <Row>
-        <DokumentCheckbox
-          onChange={() => {
-            lagre("inkluderteDatoForKlage", !kvalitetsvurdering.inkluderteDatoForKlage);
-          }}
-          label={"Inkluderte dato for klage"}
-          defaultChecked={kvalitetsvurdering.inkluderteDatoForKlage === true}
-        />
-      </Row>
-      <Row>
-        <DokumentCheckbox
-          onChange={() =>
-            lagre("inkluderteDatoForVedtak", !kvalitetsvurdering.inkluderteDatoForVedtak)
-          }
-          label={"Inkluderte dato for vedtak"}
-          defaultChecked={kvalitetsvurdering.inkluderteDatoForVedtak === true}
-        />
-      </Row>
 
       <Vurderingspunkter
         refHandler={refListe1}

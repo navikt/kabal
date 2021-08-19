@@ -25,8 +25,6 @@ export const VurderingBeholder = styled.div`
   padding: 0;
   margin: 0;
   visibility: ${(props) => (!props.theme.vises ? "hidden" : "visible")};
-  height: ${(props) => (!props.theme.vises ? "0em" : "25em")};
-  overflow: hidden;
 `;
 export const Div = styled.div`
   display: block;

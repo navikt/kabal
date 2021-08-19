@@ -12,8 +12,6 @@ import { Dependencies } from "../konfigurerTilstand";
 export interface IKvalitetsvurdering {
   klagebehandlingId: string;
   klagebehandlingVersjon: number;
-  inkluderteDatoForKlage?: boolean;
-  inkluderteDatoForVedtak?: boolean;
   kvalitetOversendelsesbrevBra?: boolean;
   kommentarOversendelsesbrev?: string;
   kvalitetUtredningBra?: boolean;
