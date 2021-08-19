@@ -1,10 +1,19 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootStateOrAny } from "react-redux";
 import { ActionsObservable, ofType, StateObservable } from "redux-observable";
-import { of } from "rxjs";
-import { catchError, map, mergeMap, retryWhen, timeout, withLatestFrom } from "rxjs/operators";
+import { concat, of } from "rxjs";
+import {
+  catchError,
+  map,
+  mergeMap,
+  retryWhen,
+  switchMap,
+  timeout,
+  withLatestFrom,
+} from "rxjs/operators";
 import { provIgjenStrategi } from "../../utility/rxUtils";
 import { Dependencies } from "../konfigurerTilstand";
+import { settKlageVersjon } from "./klagebehandling/actions";
 
 //==========
 // Interfaces
@@ -48,6 +57,9 @@ export const kvalitetsvurderingSlice = createSlice({
     HENT: (state) => {
       return { ...state, hentet: false, laster: true };
     },
+    SETT_VERSJON: (state, action: PayloadAction<number>) => {
+      return { ...state, klagebehandlingVersjon: action.payload };
+    },
     LAGRE: (state, action: PayloadAction<IKvalitetsvurdering>) => {
       return {
         ...state,
@@ -64,7 +76,7 @@ export const kvalitetsvurderingSlice = createSlice({
       };
     },
     FEILET: (state, action: PayloadAction<string>) => {
-      console.error(action.payload);
+      console.error("kvalitetsvurdering feilet", action.payload);
       return state;
     },
   },
@@ -77,6 +89,7 @@ export default kvalitetsvurderingSlice.reducer;
 //==========
 export const { HENTET, FEILET } = kvalitetsvurderingSlice.actions;
 export const hentKvalitetsvurdering = createAction<string>("kvalitetsvurdering/HENT");
+export const settVersjon = createAction<number>("kvalitetsvurdering/SETT_VERSJON");
 export const lagreKvalitetsvurdering = createAction<Partial<IKvalitetsvurdering>>(
   "kvalitetsvurdering/LAGRE"
 );
@@ -115,6 +128,7 @@ export function kvalitetsvurderingEpos(
     })
   );
 }
+
 export function lagreKvalitetsvurderingEpos(
   action$: ActionsObservable<PayloadAction<Partial<IKvalitetsvurdering>>>,
   state$: StateObservable<RootStateOrAny>,
@@ -124,9 +138,6 @@ export function lagreKvalitetsvurderingEpos(
     ofType(lagreKvalitetsvurdering.type),
     withLatestFrom(state$),
     mergeMap(([action, state]) => {
-      console.debug(action.payload, {
-        url: `${url(action.payload.klagebehandlingId!)}/editerbare`,
-      });
       return ajax
         .put(
           `${url(action.payload.klagebehandlingId!)}/editerbare`,
@@ -140,7 +151,14 @@ export function lagreKvalitetsvurderingEpos(
           timeout(5000),
           map((response) => response)
         )
-        .pipe(map((data) => lagretHandling({ ...action.payload, ...data.response })))
+        .pipe(
+          switchMap((data) =>
+            concat([
+              lagretHandling({ ...action.payload, ...data.response }),
+              settKlageVersjon(data.response.klagebehandlingVersjon),
+            ])
+          )
+        )
         .pipe(
           retryWhen(provIgjenStrategi({ maksForsok: 3 })),
           catchError((error) => {

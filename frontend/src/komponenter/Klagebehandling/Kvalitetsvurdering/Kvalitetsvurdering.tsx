@@ -64,7 +64,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         avviksTittel={"Hva er kvalitetsavviket i oversendelsesbrevet?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikOversendelsesbrev}
         lagre={lagre}
-        toggleKodeverk={toggleKodeverk}
+        klagebehandling={klagebehandling}
       />
 
       <Vurderingspunkter
@@ -78,7 +78,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         avviksTittel={"Hva er kvalitetsavviket i utredningen?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikUtredning}
         lagre={lagre}
-        toggleKodeverk={toggleKodeverk}
+        klagebehandling={klagebehandling}
       />
 
       <Vurderingspunkter
@@ -92,7 +92,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         avviksTittel={"Hva er kvalitetsavviket i vedtaket?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikVedtak}
         lagre={lagre}
-        toggleKodeverk={toggleKodeverk}
+        klagebehandling={klagebehandling}
       />
 
       <SubHeader>

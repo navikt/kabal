@@ -23,6 +23,14 @@ export const klagebehandlingSlice = createSlice({
       lagretVersjon: createLagretVersjon({ ...payload, klagebehandlingId: payload.id }),
       klagebehandling: payload,
     }),
+    SETT_VERSJON: (state, { payload }: PayloadAction<number>) => {
+      if (state.klagebehandling === null) {
+        return;
+      }
+
+      state.klagebehandling.klagebehandlingVersjon = payload;
+      return state;
+    },
     OPPDATER_KLAGEBEHANDLING: (state, action: PayloadAction<Partial<IKlagebehandling>>) => {
       if (state.klagebehandling === null) {
         return state;

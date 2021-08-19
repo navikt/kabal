@@ -1,4 +1,7 @@
-import { IKvalitetsvurdering } from "../../../tilstand/moduler/kvalitetsvurdering";
+import {
+  IKvalitetsvurdering,
+  lagreKvalitetsvurdering,
+} from "../../../tilstand/moduler/kvalitetsvurdering";
 import React, { RefObject, useCallback } from "react";
 import { IKodeverkVerdi } from "../../../tilstand/moduler/kodeverk";
 import {
@@ -11,6 +14,8 @@ import {
 import { Section, FlexRow } from "../../../styled-components/Row";
 import { Radio, RadioGruppe } from "nav-frontend-skjema";
 import { Tekstfelt } from "./Tekstfelt";
+import { useAppDispatch } from "../../../tilstand/konfigurerTilstand";
+const R = require("ramda");
 
 export function Vurderingspunkter({
   tittel,
@@ -23,7 +28,7 @@ export function Vurderingspunkter({
   avviksTittel,
   kodeverkFelter,
   lagre,
-  toggleKodeverk,
+  klagebehandling,
 }: {
   tittel: string;
   undertittel: string;
@@ -35,10 +40,31 @@ export function Vurderingspunkter({
   avviksTittel: string;
   kodeverkFelter: Array<IKodeverkVerdi>;
   lagre: (felt: string, verdi: string | boolean) => void;
-  toggleKodeverk: any;
+  klagebehandling: any;
 }) {
   let verdi = kvalitetsvurdering[felt];
   let tekstfeltverdi = kvalitetsvurdering[tekstfelt] ?? "";
+  const dispatch = useAppDispatch();
+
+  const toggleKodeverk = useCallback(
+    ({ kodeverkFelt, liste, id }: { kodeverkFelt: Array<string>; liste: string; id: string }) => {
+      let funnet = kodeverkFelt.filter((felt_id: string) => felt_id === id);
+      let nyListe: string[] = [];
+      if (!funnet.length) {
+        nyListe = nyListe.concat(kodeverkFelt);
+        nyListe.push(id);
+      } else {
+        nyListe = kodeverkFelt.filter((felt_id: string) => felt_id !== id);
+      }
+      dispatch(
+        lagreKvalitetsvurdering({
+          klagebehandlingId: klagebehandling.id,
+          [liste]: nyListe,
+        })
+      );
+    },
+    []
+  );
 
   const handleTekstChange = useCallback((tekst: string) => {
     lagre(tekstfelt, tekst);
@@ -85,8 +111,6 @@ export function Vurderingspunkter({
                         kodeverkFelt: kvalitetsvurdering[avviksNavn],
                         liste: avviksNavn,
                         id: kodeverkVerdi.id,
-                        navn: kodeverkVerdi.navn,
-                        verdi: kodeverkVerdi.id,
                       })
                     }
                     defaultChecked={funnet}

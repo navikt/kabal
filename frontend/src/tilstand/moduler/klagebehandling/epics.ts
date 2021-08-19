@@ -22,6 +22,7 @@ import {
   IKlagebehandlingOppdateringResponse,
   TilknyttetDokument,
 } from "./types";
+import { settVersjon } from "../kvalitetsvurdering";
 
 export interface IKlagebehandlingPayload {
   // Klagebehandling
@@ -63,7 +64,8 @@ export const lagreKlagebehandlingEpic = (
           mergeMap((response: IKlagebehandlingOppdateringResponse) =>
             of(
               KLAGEBEHANDLING_LAGRET({ ...payload, ...response }),
-              hentTilknyttedeDokumenter(payload.klagebehandlingId)
+              hentTilknyttedeDokumenter(payload.klagebehandlingId),
+              settVersjon(response.klagebehandlingVersjon)
             )
           )
         )

@@ -4,5 +4,6 @@ import { IKlagebehandlingOppdatering } from "./types";
 export const lagreKlagebehandling =
   createAction<IKlagebehandlingOppdatering>("klagebehandling/LAGRE");
 export const hentKlagebehandling = createAction<string>("klagebehandling/HENT");
+export const settKlageVersjon = createAction<number>("klagebehandling/SETT_VERSJON");
 
 export const unloadKlagebehandling = createAction("klagebehandling/UNLOAD");

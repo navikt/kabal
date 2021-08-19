@@ -19,7 +19,13 @@ const epicMiddleware = createEpicMiddleware({
 const defaultMiddleware = getDefaultMiddleware({
   serializableCheck: {
     // Ignore these field paths in all actions.
-    ignoredActionPaths: ["payload.payload.file", "payload.file"],
+    ignoredActionPaths: [
+      "payload.payload.file",
+      "payload.file",
+      "payload.kvalitetsavvikUtredning",
+      "payload.kvalitetsavvikVedtak",
+      "payload.kvalitetsavvikOversendelsesbrev",
+    ],
   },
 });
 
