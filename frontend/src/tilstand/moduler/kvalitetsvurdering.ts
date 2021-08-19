@@ -87,9 +87,10 @@ export default kvalitetsvurderingSlice.reducer;
 //==========
 // Actions
 //==========
-export const { HENTET, FEILET } = kvalitetsvurderingSlice.actions;
+export const { HENTET, FEILET, SETT_VERSJON } = kvalitetsvurderingSlice.actions;
 export const hentKvalitetsvurdering = createAction<string>("kvalitetsvurdering/HENT");
 export const settVersjon = createAction<number>("kvalitetsvurdering/SETT_VERSJON");
+export const hentVersjon = createAction<string>("kvalitetsvurdering/HENT_VERSJON");
 export const lagreKvalitetsvurdering = createAction<Partial<IKvalitetsvurdering>>(
   "kvalitetsvurdering/LAGRE"
 );
@@ -137,6 +138,24 @@ export function settOpptattEpos(
     map(({ payload }) => settOpptatt())
   );
 }
+export function hentVersjonEpos(
+  action$: ActionsObservable<PayloadAction<string>>,
+  state$: StateObservable<RootStateOrAny>,
+  { ajax }: Dependencies
+) {
+  return action$.pipe(
+    ofType(hentVersjon.type),
+    mergeMap((action) => {
+      return ajax
+        .getJSON<IKvalitetsvurdering>(url(action.payload))
+        .pipe(
+          timeout(5000),
+          map((response) => response)
+        )
+        .pipe(map((data: IKvalitetsvurdering) => of(SETT_VERSJON(data.klagebehandlingVersjon))));
+    })
+  );
+}
 
 export function lagreKvalitetsvurderingEpos(
   action$: ActionsObservable<PayloadAction<Partial<IKvalitetsvurdering>>>,
@@ -168,6 +187,11 @@ export function lagreKvalitetsvurderingEpos(
               settLedig(),
             ])
           )
+        )
+        .pipe(
+          catchError((error) => {
+            return of(hentVersjon(action.payload.klagebehandlingId!));
+          })
         )
         .pipe(
           retryWhen(provIgjenStrategi({ maksForsok: 3 })),
