@@ -13,7 +13,7 @@ import {
 } from "rxjs/operators";
 import { provIgjenStrategi } from "../../utility/rxUtils";
 import { Dependencies } from "../konfigurerTilstand";
-import { settKlageVersjon } from "./klagebehandling/actions";
+import { settKlageVersjon, settLedig, settOpptatt } from "./klagebehandling/actions";
 
 //==========
 // Interfaces
@@ -129,6 +129,15 @@ export function kvalitetsvurderingEpos(
   );
 }
 
+export function settOpptattEpos(
+  action$: ActionsObservable<PayloadAction<Partial<IKvalitetsvurdering>>>
+) {
+  return action$.pipe(
+    ofType(lagreKvalitetsvurdering.type),
+    map(({ payload }) => settOpptatt())
+  );
+}
+
 export function lagreKvalitetsvurderingEpos(
   action$: ActionsObservable<PayloadAction<Partial<IKvalitetsvurdering>>>,
   state$: StateObservable<RootStateOrAny>,
@@ -156,6 +165,7 @@ export function lagreKvalitetsvurderingEpos(
             concat([
               lagretHandling({ ...action.payload, ...data.response }),
               settKlageVersjon(data.response.klagebehandlingVersjon),
+              settLedig(),
             ])
           )
         )
@@ -169,4 +179,8 @@ export function lagreKvalitetsvurderingEpos(
   );
 }
 
-export const KVALITETSVURDERING_EPICS = [kvalitetsvurderingEpos, lagreKvalitetsvurderingEpos];
+export const KVALITETSVURDERING_EPICS = [
+  settOpptattEpos,
+  kvalitetsvurderingEpos,
+  lagreKvalitetsvurderingEpos,
+];
