@@ -15,6 +15,7 @@ import { DokumentCheckbox, SubHeader } from "../../../styled-components/Kvalitet
 import { FullforVedtakProps } from "../../../tilstand/moduler/klagebehandling/types";
 import { Vurderingspunkter } from "./Vurderingspunkter";
 import { velgFeatureToggles } from "../../../tilstand/moduler/unleash.velgere";
+import isDevLocation from "../../../utility/isDevLocation";
 
 export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakProps) => {
   if (skjult) {
@@ -37,7 +38,8 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
     const tilgangEnabled = featureToggles.features.find(
       (f) => f?.navn === "klage.kvalitetsvurdering"
     );
-    if (tilgangEnabled?.isEnabled !== undefined) {
+    if (isDevLocation()) settTilgang(true);
+    else if (tilgangEnabled?.isEnabled !== undefined) {
       settTilgang(tilgangEnabled.isEnabled);
     }
   }, [tilgangEnabled]);
