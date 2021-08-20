@@ -33,6 +33,12 @@ interface TopplinjeProps {
 function StrengtFortrolig({ vises }: { vises: boolean }) {
   return vises ? <Klagebehandling className={"etikett"}>Strengt fortrolig</Klagebehandling> : null;
 }
+function Fortrolig({ vises }: { vises: boolean }) {
+  return vises ? <Klagebehandling className={"etikett"}>Fortrolig</Klagebehandling> : null;
+}
+function EgenAnsatt({ vises }: { vises: boolean }) {
+  return vises ? <Klagebehandling className={"etikett"}>Habilitetsak</Klagebehandling> : null;
+}
 
 export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: TopplinjeProps) => {
   const toggleFane = useCallback(
@@ -69,6 +75,8 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
         <span>/</span>
         <Personnummer>{klagebehandling.sakenGjelderFoedselsnummer}</Personnummer>
         <StrengtFortrolig vises={klagebehandling.strengtfortrolig} />
+        <Fortrolig vises={klagebehandling.fortrolig} />
+        <EgenAnsatt vises={klagebehandling.egenansatt} />
       </Person>
 
       <Knapper>
