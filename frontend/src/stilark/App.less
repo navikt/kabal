@@ -123,3 +123,29 @@ a.link:hover {
   color: #0067c5;
   border-bottom: 5px solid #0067c5;
 }
+
+.copy-button:hover {
+  transition: all 0.25s linear;
+  font-weight: bold;
+}
+.copy-button:active {
+  transition: all 0.25s linear;
+  font-size: 0.9em;
+}
+@keyframes copy {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+.copy-tekst {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #3e3832;
+  opacity: 0;
+  animation: copy 0.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}

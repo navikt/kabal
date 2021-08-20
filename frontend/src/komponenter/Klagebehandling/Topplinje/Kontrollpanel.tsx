@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import React, { useCallback, useState } from "react";
+import { Copy } from "@navikt/ds-icons";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
 import { IFaner } from "../KlageBehandling";
 import { EksterneLenker } from "./EksterneLenker";
@@ -12,10 +12,10 @@ import CloseSVG from "../../cancel.svg";
 // @ts-ignore
 import HakeSVG from "../../hake.svg";
 import {
-  Klagebehandling,
   IkonHake,
   IkonLukk,
   Kjonn,
+  Klagebehandling,
   Knapper,
   Kontrollpanel,
   Navn,
@@ -54,6 +54,18 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
 
   const kjonn = klagebehandling.sakenGjelderKjoenn?.substr(0, 1).toLocaleUpperCase();
 
+  const [copied, setCopied] = useState(false);
+  const [timerId, setTimerId] = useState<any>(null);
+  const timer = () => setTimeout(() => setCopied(false), 3000);
+
+  const copy2clip = useCallback((tekst: string) => {
+    clearTimeout(timerId);
+    const timerfnc = timer();
+    setTimerId(timerfnc);
+    navigator.clipboard.writeText(tekst);
+    setCopied(true);
+  }, []);
+
   return (
     <Kontrollpanel>
       <Person
@@ -74,6 +86,14 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
         )}`}</Navn>
         <span>/</span>
         <Personnummer>{klagebehandling.sakenGjelderFoedselsnummer}</Personnummer>
+        <Copy
+          aria-label="Kopier personnummer til clipboard"
+          role="button"
+          focusable="true"
+          className={"copy-button"}
+          onClick={() => copy2clip(klagebehandling.sakenGjelderFoedselsnummer!.toString())}
+        />
+        {copied && <div className={"copy-tekst"}>Kopiert</div>}
         <StrengtFortrolig vises={klagebehandling.strengtfortrolig} />
         <Fortrolig vises={klagebehandling.fortrolig} />
         <EgenAnsatt vises={klagebehandling.egenansatt} />
