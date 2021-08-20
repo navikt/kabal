@@ -53,6 +53,8 @@ export default function Oppsett({
     dispatch(hentFeatureToggleHandling("klage.generellTilgang"));
     dispatch(hentFeatureToggleHandling("klage.admin"));
     dispatch(hentFeatureToggleHandling("klage.listFnr"));
+    dispatch(hentFeatureToggleHandling("klage.kvalitetsvurdering"));
+    dispatch(hentFeatureToggleHandling("klage.smarteditor"));
 
     if (R.empty(kodeverk)) {
       dispatch(hentKodeverk());
@@ -64,12 +66,10 @@ export default function Oppsett({
 
   useEffect(() => {
     if (isFirstRun.current) {
-      console.debug({ isFirstRun: isFirstRun.current, isAuth });
       isFirstRun.current = false;
       dispatch(sjekkAuth());
       return;
     }
-    console.debug({ isAuth });
     if (isAuth === false) {
       window.location.href = "/internal/login";
     }

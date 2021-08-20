@@ -31,7 +31,6 @@ export const useKlagebehandlingUpdater = ({
     if (opptatt || update === null) {
       return;
     }
-    console.debug({ update });
     const timeout = setTimeout(() => dispatch(lagreKlagebehandling(update)), 200);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [opptatt, klagebehandlingVersjon, id, internVurdering, vedtak, tilknyttedeDokumenter]);

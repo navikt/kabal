@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import { Beholder } from "../FullfoerVedtak/styled-components/beholder";
 import { Title } from "../FullfoerVedtak/styled-components/title";
@@ -14,7 +14,7 @@ import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
 import { DokumentCheckbox, SubHeader } from "../../../styled-components/Kvalitetsvurdering";
 import { FullforVedtakProps } from "../../../tilstand/moduler/klagebehandling/types";
 import { Vurderingspunkter } from "./Vurderingspunkter";
-import { toggleKodeverk } from "./toggleKodeverk";
+import { velgFeatureToggles } from "../../../tilstand/moduler/unleash.velgere";
 
 export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakProps) => {
   if (skjult) {
@@ -26,6 +26,21 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
   const refListe2 = useRef(null);
   const refListe3 = useRef(null);
   const kodeverk = useAppSelector(velgKodeverk);
+  const featureToggles = useAppSelector(velgFeatureToggles);
+
+  const [tilgang, settTilgang] = useState<boolean | undefined>(undefined);
+  const tilgangEnabled = featureToggles.features.find(
+    (f) => f?.navn === "klage.kvalitetsvurdering"
+  );
+
+  useEffect(() => {
+    const tilgangEnabled = featureToggles.features.find(
+      (f) => f?.navn === "klage.kvalitetsvurdering"
+    );
+    if (tilgangEnabled?.isEnabled !== undefined) {
+      settTilgang(tilgangEnabled.isEnabled);
+    }
+  }, [tilgangEnabled]);
 
   useEffect(() => {
     dispatch(hentKvalitetsvurdering(klagebehandling.id));
@@ -45,6 +60,23 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
       <Beholder>
         <Title>Kvalitetsvurdering</Title>
         <NavFrontendSpinner />
+      </Beholder>
+    );
+  }
+  if (tilgang === undefined || !tilgang) {
+    return (
+      <Beholder>
+        <Title>Kvalitetsvurdering</Title>
+        Ikke tilgang / Ikke ferdigutviklet
+      </Beholder>
+    );
+  }
+
+  if (klagebehandling.vedtak[0].utfall === "1") {
+    return (
+      <Beholder>
+        <Title>Kvalitetsvurdering</Title>
+        <strong>Saken er trukket og kan derfor ikke vurderes</strong>
       </Beholder>
     );
   }
@@ -108,8 +140,8 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
          * Forutsetning: Vises hvis enten Vedtak eller Utredningen er markert med “Bra/Godt nok”
          * */
         if (
-          kvalitetsvurdering.kvalitetVedtakBra === false ||
-          kvalitetsvurdering.kvalitetUtredningBra === false
+          kvalitetsvurdering.kvalitetVedtakBra === true ||
+          kvalitetsvurdering.kvalitetUtredningBra === true
         ) {
           return (
             <>
