@@ -47,6 +47,9 @@ export interface IKlagebehandling {
   type: string;
   vedtak: Array<Vedtak>;
   tilknyttedeDokumenter: TilknyttetDokument[];
+  egenansatt: boolean;
+  fortrolig: boolean;
+  strengtfortrolig: boolean;
 }
 
 export interface TilknyttetDokument {

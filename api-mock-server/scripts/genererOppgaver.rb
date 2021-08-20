@@ -26,7 +26,10 @@ def init_oppgaver()
                 ferdigstiltFom TEXT,
                 tildeltSaksbehandlerNavn TEXT,
                 avsluttetAvSaksbehandler TEXT,
-                utfall INTEGER
+                utfall INTEGER,
+                egenAnsatt INTEGER,
+                fortrolig INTEGER,
+                strengtfortrolig INTEGER
             )
             "
   rescue SQLite3::Exception => e
@@ -40,11 +43,11 @@ def init_oppgaver()
 end
 
 
-def insert_oppgave(id, type, tema, hjemmel, frist, mottatt, saksbehandler, fnr, navn, versjon, erMedunderskriver, finalized, ferdigstiltFom, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler, utfall)
+def insert_oppgave(id, type, tema, hjemmel, frist, mottatt, saksbehandler, fnr, navn, versjon, erMedunderskriver, finalized, ferdigstiltFom, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler, utfall, egenansatt, fortrolig, strengtfortrolig)
   begin
 	  db = SQLite3::Database.open ARGV[0]
-      db.execute("INSERT INTO Oppgaver  (Id, type, tema, hjemmel,  frist,      mottatt,      saksbehandler, fnr, navn, klagebehandlingVersjon, erMedunderskriver,                        medunderskriverident,           finalized,      ferdigstiltFom, tildeltSaksbehandlerNavn,     avsluttetAvSaksbehandler,      utfall) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                        [id, type, tema, hjemmel,  frist.to_s, mottatt.to_s, saksbehandler, fnr, navn, versjon,                erMedunderskriver && saksbehandler ? 1 : 0 || NULL, erMedunderskriver && saksbehandler || "", finalized.to_s, ferdigstiltFom.to_s, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler.to_s, utfall])
+      db.execute("INSERT INTO Oppgaver  (Id, type, tema, hjemmel,  frist,      mottatt,      saksbehandler, fnr, navn, klagebehandlingVersjon, erMedunderskriver,                        medunderskriverident,           finalized,      ferdigstiltFom, tildeltSaksbehandlerNavn,     avsluttetAvSaksbehandler,      utfall,egenansatt, fortrolig, strengtfortrolig) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                        [id, type, tema, hjemmel,  frist.to_s, mottatt.to_s, saksbehandler, fnr, navn, versjon,                erMedunderskriver && saksbehandler ? 1 : 0 || NULL, erMedunderskriver && saksbehandler || "", finalized.to_s, ferdigstiltFom.to_s, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler.to_s, utfall, egenansatt, fortrolig, strengtfortrolig])
 
   rescue SQLite3::Exception => e
     puts "Exception occurred"
@@ -107,7 +110,10 @@ def lagData(teller)
   erMedunderskriver = [true, false].shuffle
   finalizedRand = [true, false].shuffle
   utfall = rand(1..6)
-  insert_oppgave(id, type, tema, hjemmel, frist, mottatt, saksbehandler(teller), fnr, navn, versjon, erMedunderskriver, finalized,ferdigstiltFom, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler, utfall)
+  egenansatt = rand(0..1)
+  fortrolig = rand(0..1)
+  strengtfortrolig = rand(0..1)
+  insert_oppgave(id, type, tema, hjemmel, frist, mottatt, saksbehandler(teller), fnr, navn, versjon, erMedunderskriver, finalized,ferdigstiltFom, tildeltSaksbehandlerNavn, avsluttetAvSaksbehandler, utfall, egenansatt, fortrolig, strengtfortrolig)
 end
 
 init_oppgaver()

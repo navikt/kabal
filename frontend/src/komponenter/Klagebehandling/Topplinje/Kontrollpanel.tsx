@@ -11,11 +11,27 @@ import IkonKvinne from "../../kvinne.svg";
 import CloseSVG from "../../cancel.svg";
 // @ts-ignore
 import HakeSVG from "../../hake.svg";
+import {
+  Klagebehandling,
+  IkonHake,
+  IkonLukk,
+  Kjonn,
+  Knapper,
+  Kontrollpanel,
+  Navn,
+  Person,
+  Personnummer,
+  SjekkboksLabel,
+} from "../../../styled-components/Klagebehandling";
 
 interface TopplinjeProps {
   klagebehandling: IKlagebehandling;
   faner: IFaner;
   settAktiveFaner: (faner: IFaner) => void;
+}
+
+function StrengtFortrolig({ vises }: { vises: boolean }) {
+  return vises ? <Klagebehandling className={"etikett"}>Strengt fortrolig</Klagebehandling> : null;
 }
 
 export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: TopplinjeProps) => {
@@ -52,6 +68,7 @@ export const Topplinje = ({ klagebehandling, faner, settAktiveFaner }: Topplinje
         )}`}</Navn>
         <span>/</span>
         <Personnummer>{klagebehandling.sakenGjelderFoedselsnummer}</Personnummer>
+        <StrengtFortrolig vises={klagebehandling.strengtfortrolig} />
       </Person>
 
       <Knapper>
@@ -126,91 +143,6 @@ function ToggleKnapp({
     </label>
   );
 }
-
-const IkonHake = styled.img`
-  position: absolute;
-  display: ${(props) => props.theme.display};
-  margin: 0.25em 0 0 -2em;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-`;
-const IkonLukk = styled.img`
-  position: absolute;
-  display: ${(props) => props.theme.display};
-  margin: 0.25em 0 0 0.2em;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-`;
-
-const Kontrollpanel = styled.div`
-  display: grid;
-  background: #f8f8f8;
-  grid-template-columns: auto repeat(3, 1fr);
-  grid-template-areas: "Person Toggles Toggles Knapper";
-  height: 3em;
-
-  @media screen and (max-width: 1460px) {
-    height: 6.25em;
-    grid-template-areas:
-      "Person Knapper Knapper Knapper"
-      "Toggles Toggles Toggles Toggles";
-  }
-`;
-
-const Knapper = styled.div`
-  display: flex;
-  grid-area: Toggles;
-  user-select: none;
-  cursor: pointer;
-  justify-content: space-between;
-  max-width: 47 em;
-  justify-self: left;
-  @media screen and (max-width: 1400px) {
-    justify-content: flex-start;
-    justify-self: flex-start;
-  }
-`;
-const Person = styled.div`
-  border: 1px solid #e7e9e9;
-  border-left: 0;
-  grid-area: Person;
-  border-bottom: 0;
-  border-top: 0;
-  margin: 0.5em 1em;
-  white-space: nowrap;
-  padding: 0.5em 1em;
-  max-width: 23em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  @media screen and (max-width: 1400px) {
-    padding: 0.5em 0 0 0;
-    border: none;
-  }
-`;
-const Navn = styled.span`
-  font-weight: bold;
-  padding-right: 0.1em;
-`;
-const Kjonn = styled.span`
-  font-weight: bold;
-  padding-right: 0.1em;
-  background: ${(props) => props.theme.bgColor};
-  border-radius: 50%;
-  width: 1.3em;
-  height: 1.3em;
-  padding: 2px;
-  color: white;
-  justify-content: center;
-  display: inline-flex;
-  margin: 0 5px 0 0;
-`;
-
-const Personnummer = styled.span`
-  padding-left: 0.1em;
-`;
-const SjekkboksLabel = styled.div`
-  z-index: 5;
-`;
 
 function fornavn(klage: Partial<IKlagebehandling>) {
   if (klage.sakenGjelderNavn?.fornavn) {

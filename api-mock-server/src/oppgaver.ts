@@ -154,7 +154,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
   let harHjemler = "undefined" !== typeof hjemler;
 
   let sql = `SELECT count(*) OVER() AS totaltAntall, Id as id, type, 
-                 hjemmel, tema, frist, mottatt, saksbehandler, fnr, navn, klagebehandlingVersjon, avsluttetAvSaksbehandler, utfall, erMedunderskriver, tildeltSaksbehandlerNavn
+                 hjemmel, tema, frist, mottatt, saksbehandler, fnr, navn, klagebehandlingVersjon, avsluttetAvSaksbehandler, utfall, erMedunderskriver, tildeltSaksbehandlerNavn, egenansatt, fortrolig, strengtfortrolig
                  FROM Oppgaver 
                  ${typeQuery(filterTyper).replace(/,/g, "")}
                  ${generiskFilterSpoerring(harTyper, filterTemaer, "tema").replace(/,/g, "")}
@@ -214,6 +214,9 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
             tildeltSaksbehandlerNavn: rad.tildeltSaksbehandlerNavn,
             avsluttetAvSaksbehandler: rad.avsluttetAvSaksbehandler,
             utfall: rad.utfall,
+            egenansatt: rad.egenansatt,
+            fortrolig: rad.fortrolig,
+            strengtfortrolig: rad.strengtfortrolig,
           }))
         );
       } else if ("undefined" === typeof tildeltSaksbehandler)
@@ -229,6 +232,9 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
             tildeltSaksbehandlerNavn: rad.tildeltSaksbehandlerNavn,
             klagebehandlingVersjon: rad.klagebehandlingVersjon,
             erMedunderskriver: rad.erMedunderskriver,
+            egenansatt: rad.egenansatt,
+            fortrolig: rad.fortrolig,
+            strengtfortrolig: rad.strengtfortrolig,
           }))
         );
       else
@@ -246,6 +252,9 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
             tildeltSaksbehandlerNavn: rad.tildeltSaksbehandlerNavn,
             erMedunderskriver: rad.erMedunderskriver,
             avsluttetAvSaksbehandler: rad.avsluttetAvSaksbehandler,
+            egenansatt: rad.egenansatt,
+            fortrolig: rad.fortrolig,
+            strengtfortrolig: rad.strengtfortrolig,
           }))
         );
     });
