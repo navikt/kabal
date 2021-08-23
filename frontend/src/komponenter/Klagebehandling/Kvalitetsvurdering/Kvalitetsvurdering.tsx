@@ -135,7 +135,9 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         label={
           <FlexRow>
             Betydelig avvik med konsekvens for søker
-            <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
+            <Hjelpetekst>
+              Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for bruker
+            </Hjelpetekst>
           </FlexRow>
         }
         onChange={() => lagre("avvikStorKonsekvens", !kvalitetsvurdering.avvikStorKonsekvens)}
@@ -156,7 +158,9 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
                 label={
                   <FlexRow>
                     Bruk gjerne dette som eksempel i opplæring
-                    <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
+                    <Hjelpetekst>
+                      Benyttes på spesielt gode vedtak, til opplæring i førsteinstans
+                    </Hjelpetekst>
                   </FlexRow>
                 }
                 onChange={() =>
