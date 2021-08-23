@@ -34,5 +34,7 @@ spec:
      - {{url}}
   {{/each}}
   envFrom:
-    - secret: klagesessionkey
-    - secret: slackhookurl
+    - secretRef:
+        name: klagesessionkey
+    - secretRef:
+        name: slackhookurl
