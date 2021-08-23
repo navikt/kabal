@@ -21,12 +21,12 @@ const morganJsonFormat = morganJson({
 const server = express();
 const port = config.server.port;
 
-let SLACKURL = process.env.slackhookurl;
+const SLACKURL = process.env.slackhookurl;
 
 async function startApp() {
   //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
   if (SLACKURL) {
-    axios.post(SLACKURL, {
+    await axios.post(SLACKURL, {
       channel: "#klage-notifications",
       text: "Kjører opp KABAL frontend i dev",
       icon_emoji: ":star-struck:",
@@ -66,7 +66,7 @@ async function startApp() {
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
         if (SLACKURL) {
-          axios.post(SLACKURL, {
+          await axios.post(SLACKURL, {
             channel: "#klage-notifications",
             text: ":scream::scream::scream: frontend crash",
             icon_emoji: ":scream:",
