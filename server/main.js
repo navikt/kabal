@@ -56,7 +56,10 @@ async function startApp() {
         server.use("/", require("./routes").setup(azureAuthClient));
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
-        throw new Error(e);
+        await slackPoster.postMessage(
+          `:scream::scream::scream: frontend crash (${JSON.stringify(e)})`
+        );
+        process.exit(1);
       }
     } else {
       server.use("/", require("./routesDev").setup());
