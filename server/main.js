@@ -6,6 +6,7 @@ let passport = require("passport");
 let session = require("./session");
 
 const cookieParser = require("cookie-parser");
+const slackPoster = require("./slackPoster");
 
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
@@ -21,6 +22,8 @@ const server = express();
 const port = config.server.port;
 
 async function startApp() {
+  await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
+
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
     server.use(
