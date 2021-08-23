@@ -34,7 +34,4 @@ spec:
      - {{url}}
   {{/each}}
   envFrom:
-    - secretRef:
-        name: klagesessionkey
-    - secretRef:
-        name: slackhookurl
+    - secret: kabalfrontend
