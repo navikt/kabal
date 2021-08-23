@@ -21,15 +21,12 @@ const morganJsonFormat = morganJson({
 const server = express();
 const port = config.server.port;
 
-let $WEBHOOK_URL = process.env.slackurl;
-let $WEBHOOK_URL2 = process.env.slackurl && process.env.slackurl.url;
-
-console.log({ $WEBHOOK_URL, $WEBHOOK_URL2 });
+let SLACKURL = process.env.slackhookurl;
 
 async function startApp() {
   //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
-  if ($WEBHOOK_URL || $WEBHOOK_URL2)
-    axios.post($WEBHOOK_URL || $WEBHOOK_URL2, {
+  if (SLACKURL)
+    axios.post(SLACKURL, {
       channel: "#klage-notifications",
       text: "Kjører opp KABAL frontend i dev",
       icon_emoji: ":star-struck:",
@@ -67,9 +64,15 @@ async function startApp() {
         server.use("/", require("./routes").setup(azureAuthClient));
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
-        /*await slackPoster.postMessage(
-					`:scream::scream::scream: frontend crash (${JSON.stringify(e)})`
-				);*/
+        if (SLACKURL)
+          axios.post(SLACKURL, {
+            channel: "#klage-notifications",
+            text: `:scream::scream::scream: frontend crash (${JSON.stringify(
+              e
+            )})`,
+            icon_emoji: ":star-struck:",
+          });
+
         process.exit(1);
       }
     } else {

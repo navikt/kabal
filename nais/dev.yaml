@@ -35,4 +35,4 @@ spec:
   {{/each}}
   envFrom:
     - secret: klagesessionkey
-    - secret: slackurl
+    - secret: slackhookurl
