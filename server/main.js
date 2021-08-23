@@ -25,12 +25,13 @@ let SLACKURL = process.env.slackhookurl;
 
 async function startApp() {
   //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
-  if (SLACKURL)
+  if (SLACKURL) {
     axios.post(SLACKURL, {
       channel: "#klage-notifications",
       text: "Kjører opp KABAL frontend i dev",
       icon_emoji: ":star-struck:",
     });
+  }
 
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
@@ -64,15 +65,13 @@ async function startApp() {
         server.use("/", require("./routes").setup(azureAuthClient));
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
-        if (SLACKURL)
+        if (SLACKURL) {
           axios.post(SLACKURL, {
             channel: "#klage-notifications",
-            text: `:scream::scream::scream: frontend crash (${JSON.stringify(
-              e
-            )})`,
-            icon_emoji: ":star-struck:",
+            text: ":scream::scream::scream: frontend crash",
+            icon_emoji: ":scream:",
           });
-
+        }
         process.exit(1);
       }
     } else {
