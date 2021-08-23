@@ -14,5 +14,5 @@ export const FlexRow = styled.div`
   margin-bottom: 16px;
   display: flex;
   flex-flow: row;
-  gap: 2em;
+  gap: 1em;
 `;

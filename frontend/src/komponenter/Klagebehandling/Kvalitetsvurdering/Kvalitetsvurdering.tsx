@@ -16,6 +16,7 @@ import { FullforVedtakProps } from "../../../tilstand/moduler/klagebehandling/ty
 import { Vurderingspunkter } from "./Vurderingspunkter";
 import { velgFeatureToggles } from "../../../tilstand/moduler/unleash.velgere";
 import isDevLocation from "../../../utility/isDevLocation";
+import { FlexRow } from "../../../styled-components/Row";
 
 export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakProps) => {
   if (skjult) {
@@ -129,11 +130,14 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         klagebehandling={klagebehandling}
       />
 
-      <SubHeader>
-        Avvik <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
-      </SubHeader>
+      <SubHeader>Avvik</SubHeader>
       <DokumentCheckbox
-        label={"Betydelig avvik med konsekvens for søker"}
+        label={
+          <FlexRow>
+            Betydelig avvik med konsekvens for søker
+            <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
+          </FlexRow>
+        }
         onChange={() => lagre("avvikStorKonsekvens", !kvalitetsvurdering.avvikStorKonsekvens)}
         defaultChecked={kvalitetsvurdering.avvikStorKonsekvens === true}
       />
@@ -147,12 +151,14 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         ) {
           return (
             <>
-              <SubHeader>
-                Annet{" "}
-                <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
-              </SubHeader>
+              <SubHeader>Annet </SubHeader>
               <DokumentCheckbox
-                label={"Bruk gjerne dette som eksempel i opplæring"}
+                label={
+                  <FlexRow>
+                    Bruk gjerne dette som eksempel i opplæring
+                    <Hjelpetekst>Innholdet vil vises når brukeren klikker på knappen.</Hjelpetekst>
+                  </FlexRow>
+                }
                 onChange={() =>
                   lagre(
                     "brukSomEksempelIOpplaering",

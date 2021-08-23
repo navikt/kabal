@@ -4,6 +4,7 @@ let express = require("express");
 let cors = require("cors");
 let passport = require("passport");
 let session = require("./session");
+let axios = require("axios");
 
 const cookieParser = require("cookie-parser");
 //const slackPoster = require("./slackPoster");
@@ -21,8 +22,18 @@ const morganJsonFormat = morganJson({
 const server = express();
 const port = config.server.port;
 
+let $WEBHOOK_URL = process.env.slackurl;
+let $WEBHOOK_URL2 = process.env.slackurl && process.env.slackurl.url;
+
+console.log({ $WEBHOOK_URL, $WEBHOOK_URL2 });
+
 async function startApp() {
   //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
+  axios.post($WEBHOOK_URL || $WEBHOOK_URL2, {
+    channel: "#klage-notifications",
+    text: "Kjører opp KABAL frontend i dev",
+    icon_emoji: ":star-struck:",
+  });
 
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
