@@ -42,19 +42,23 @@ async function startApp() {
     morganBody(server);
 
     if (process.env.NODE_ENV === "production") {
-      server.use(passport.initialize());
-      server.use(passport.session());
-      const azureAuthClient = await azure.client();
-      const azureOidcStrategy = azure.strategy(azureAuthClient);
-      passport.use("azureOidc", azureOidcStrategy);
-      passport.serializeUser((user, done) => done(null, user));
-      passport.deserializeUser((user, done) => done(null, user));
-      server.use("/", require("./routes").setup(azureAuthClient));
-      server.listen(8080, () => console.log(`Listening on port ${port}`));
+      try {
+        server.use(passport.initialize());
+        server.use(passport.session());
+        const azureAuthClient = await azure.client();
+        const azureOidcStrategy = azure.strategy(azureAuthClient);
+        passport.use("azureOidc", azureOidcStrategy);
+        passport.serializeUser((user, done) => done(null, user));
+        passport.deserializeUser((user, done) => done(null, user));
+        server.use("/", require("./routes").setup(azureAuthClient));
+        server.listen(8080, () => console.log(`Listening on port ${port}`));
+      } catch (e) {
+        throw new Error(e);
+      }
     } else {
       server.use("/", require("./routesDev").setup());
       server.listen(
-        8090,
+        process.env.PORT || 8090,
         () => console.log(`Listening on port ${port}`),
         "0.0.0.0"
       );
