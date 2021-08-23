@@ -7,7 +7,6 @@ let session = require("./session");
 let axios = require("axios");
 
 const cookieParser = require("cookie-parser");
-//const slackPoster = require("./slackPoster");
 
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
@@ -29,11 +28,12 @@ console.log({ $WEBHOOK_URL, $WEBHOOK_URL2 });
 
 async function startApp() {
   //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
-  axios.post($WEBHOOK_URL || $WEBHOOK_URL2, {
-    channel: "#klage-notifications",
-    text: "Kjører opp KABAL frontend i dev",
-    icon_emoji: ":star-struck:",
-  });
+  if ($WEBHOOK_URL || $WEBHOOK_URL2)
+    axios.post($WEBHOOK_URL || $WEBHOOK_URL2, {
+      channel: "#klage-notifications",
+      text: "Kjører opp KABAL frontend i dev",
+      icon_emoji: ":star-struck:",
+    });
 
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
@@ -68,8 +68,8 @@ async function startApp() {
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
         /*await slackPoster.postMessage(
-          `:scream::scream::scream: frontend crash (${JSON.stringify(e)})`
-        );*/
+					`:scream::scream::scream: frontend crash (${JSON.stringify(e)})`
+				);*/
         process.exit(1);
       }
     } else {
