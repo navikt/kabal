@@ -35,3 +35,7 @@ spec:
   {{/each}}
   envFrom:
     - secret: klagesessionkey
+    - secretRef:
+        name: slack-e2e-secrets
+    - configMapRef:
+        name: slack-e2e-configmap

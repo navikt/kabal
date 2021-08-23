@@ -6,7 +6,7 @@ let passport = require("passport");
 let session = require("./session");
 
 const cookieParser = require("cookie-parser");
-const slackPoster = require("./slackPoster");
+//const slackPoster = require("./slackPoster");
 
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
@@ -22,7 +22,7 @@ const server = express();
 const port = config.server.port;
 
 async function startApp() {
-  await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
+  //await slackPoster.postMessage("Kjører opp KABAL frontend i dev");
 
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
@@ -56,9 +56,9 @@ async function startApp() {
         server.use("/", require("./routes").setup(azureAuthClient));
         server.listen(8080, () => console.log(`Listening on port ${port}`));
       } catch (e) {
-        await slackPoster.postMessage(
+        /*await slackPoster.postMessage(
           `:scream::scream::scream: frontend crash (${JSON.stringify(e)})`
-        );
+        );*/
         process.exit(1);
       }
     } else {
