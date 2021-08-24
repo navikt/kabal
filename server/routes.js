@@ -206,7 +206,7 @@ const setup = (authClient) => {
           error: "Kunne ikke koble til API. Reason: " + JSON.stringify(err),
         });
       },
-      logLevel: "info",
+      logLevel: "error",
       changeOrigin: true,
     })
   );

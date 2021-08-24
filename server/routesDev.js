@@ -150,7 +150,7 @@ const setup = () => {
       async onProxyRes(proxyRes, req, res) {
         await handleProxyRes(proxyRes, req, res);
       },
-      logLevel: "debug",
+      logLevel: "error",
       changeOrigin: true,
     })
   );
@@ -163,7 +163,7 @@ const setup = () => {
         res.status(500);
         res.json({ error: "Kunne ikke koble til API" });
       },
-      logLevel: "debug",
+      logLevel: "error",
       changeOrigin: true,
     })
   );

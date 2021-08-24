@@ -5,7 +5,6 @@ let axios = require("axios");
 const tokenSetSelfId = "self";
 
 const getOnBehalfOfAccessToken = async (authClient, req, api) => {
-  console.log("inside getOnBehalfOfAccessToken");
   const cookieToken = req.cookies.accessToken;
   let passportAccessToken;
 
