@@ -62,9 +62,10 @@ async function startApp() {
 
     morganBody(server, {
       noColors: true,
-      prettify: false,
+      prettify: true,
       includeNewLine: false,
       logReqUserAgent: false,
+      maxBodyLength: 5000,
       logIP: false,
     });
 
