@@ -37,7 +37,7 @@ async function startApp() {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
     server.use(
       morgan(morganJsonFormat, {
-        skip: (req, res) => {
+        skip: (req) => {
           if (req.originalUrl === "/metrics") {
             return true;
           }
@@ -77,7 +77,7 @@ async function startApp() {
     } else {
       server.use("/", require("./routesDev").setup());
       server.listen(
-        process.env.PORT || 8090,
+        8090,
         () => console.log(`Listening on port ${port}`),
         "0.0.0.0"
       );
