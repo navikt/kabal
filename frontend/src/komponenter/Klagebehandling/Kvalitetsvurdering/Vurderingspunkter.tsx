@@ -10,12 +10,11 @@ import {
   Header,
   SubHeader,
   VurderingBeholder,
-} from "../../../styled-components/Kvalitetsvurdering";
-import { Section, FlexRow } from "../../../styled-components/Row";
+} from "../../../styled-components/Kvalitetsvurdering-styled";
+import { FlexRow, Section } from "../../../styled-components/Row-styled";
 import { Radio, RadioGruppe } from "nav-frontend-skjema";
 import { Tekstfelt } from "./Tekstfelt";
 import { useAppDispatch } from "../../../tilstand/konfigurerTilstand";
-const R = require("ramda");
 
 export function Vurderingspunkter({
   tittel,

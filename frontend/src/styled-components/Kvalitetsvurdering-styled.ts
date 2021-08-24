@@ -31,13 +31,15 @@ export const Div = styled.div`
   margin: 0;
 `;
 
-export let Header = styled.h1`
+export let Header = styled.h2`
   font-size: 1.2em;
 `;
 
-export let SubHeader = styled.h2`
+export let SubHeader = styled.div`
   font-size: 1.1em;
   display: flex;
   flex-flow: row;
   gap: 0.35em;
+  font-weight: bold;
+  margin: 1em 0;
 `;

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Section } from "../../../../styled-components/Row";
+import { Section } from "../../../../styled-components/Row-styled";
 import { Utfall } from "./Utfall";
 import { BasertPaaHjemmel } from "./BasertPaaLovhjemmel";
 import { velgKodeverk } from "../../../../tilstand/moduler/kodeverk.velgere";

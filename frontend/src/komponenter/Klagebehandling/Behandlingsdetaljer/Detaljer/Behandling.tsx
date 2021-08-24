@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { temaOversettelse, typeOversettelse } from "../../../../domene/forkortelser";
-import { HeaderRow, Section } from "../../../../styled-components/Row";
+import { HeaderRow, Section } from "../../../../styled-components/Row-styled";
 import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
 import { velgKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/selectors";
 import { FraNavEnhet } from "./FraNavEnhet";

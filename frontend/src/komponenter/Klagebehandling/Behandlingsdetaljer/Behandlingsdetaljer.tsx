@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { HeaderRow } from "../../../styled-components/Row";
+import { HeaderRow } from "../../../styled-components/Row-styled";
 import { Kvalitetsskjema } from "./Kvalitetsskjema/Kvalitetsskjema";
 import { Behandling } from "./Detaljer/Behandling";
 import { useKanEndre } from "../utils/hooks";

@@ -2,7 +2,7 @@ import EtikettBase from "nav-frontend-etiketter";
 import NavFrontendSpinner from "nav-frontend-spinner";
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { Section } from "../../../../styled-components/Row";
+import { Section } from "../../../../styled-components/Row-styled";
 import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
 import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
 import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
