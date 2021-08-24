@@ -4,6 +4,7 @@ let express = require("express");
 let cors = require("cors");
 let passport = require("passport");
 let session = require("./session");
+let axios = require("axios");
 
 const cookieParser = require("cookie-parser");
 
@@ -20,12 +21,22 @@ const morganJsonFormat = morganJson({
 const server = express();
 const port = config.server.port;
 
+const SLACKURL = process.env.slackhookurl;
+
 async function startApp() {
+  if (SLACKURL && process.env.NODE_ENV !== "development") {
+    await axios.post(SLACKURL, {
+      channel: "#klage-notifications",
+      text: "Kjører opp KABAL frontend i " + process.env.NODE_ENV,
+      icon_emoji: ":star-struck:",
+    });
+  }
+
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
     server.use(
       morgan(morganJsonFormat, {
-        skip: (req, res) => {
+        skip: (req) => {
           if (req.originalUrl === "/metrics") {
             return true;
           }
@@ -42,15 +53,26 @@ async function startApp() {
     morganBody(server);
 
     if (process.env.NODE_ENV === "production") {
-      server.use(passport.initialize());
-      server.use(passport.session());
-      const azureAuthClient = await azure.client();
-      const azureOidcStrategy = azure.strategy(azureAuthClient);
-      passport.use("azureOidc", azureOidcStrategy);
-      passport.serializeUser((user, done) => done(null, user));
-      passport.deserializeUser((user, done) => done(null, user));
-      server.use("/", require("./routes").setup(azureAuthClient));
-      server.listen(8080, () => console.log(`Listening on port ${port}`));
+      try {
+        server.use(passport.initialize());
+        server.use(passport.session());
+        const azureAuthClient = await azure.client();
+        const azureOidcStrategy = azure.strategy(azureAuthClient);
+        passport.use("azureOidc", azureOidcStrategy);
+        passport.serializeUser((user, done) => done(null, user));
+        passport.deserializeUser((user, done) => done(null, user));
+        server.use("/", require("./routes").setup(azureAuthClient));
+        server.listen(8080, () => console.log(`Listening on port ${port}`));
+      } catch (e) {
+        if (SLACKURL) {
+          await axios.post(SLACKURL, {
+            channel: "#klage-notifications",
+            text: `frontend crash i produksjon ${JSON.stringify(e)}`,
+            icon_emoji: ":scream:",
+          });
+        }
+        process.exit(1);
+      }
     } else {
       server.use("/", require("./routesDev").setup());
       server.listen(

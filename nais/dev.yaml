@@ -34,4 +34,4 @@ spec:
      - {{url}}
   {{/each}}
   envFrom:
-    - secret: klagesessionkey
+    - secret: kabalfrontend
