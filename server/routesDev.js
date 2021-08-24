@@ -73,6 +73,10 @@ const setup = () => {
     res.redirect("/oppgaver");
   });
 
+  router.get("/internal/crash", (req, res) => {
+    throw new Error("Express crashed!");
+  });
+
   // log the user out
   router.get("/internal/logout", (req, res) => {
     res.redirect("/internal/utlogget");

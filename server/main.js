@@ -10,13 +10,7 @@ const cookieParser = require("cookie-parser");
 
 let morganBody = require("morgan-body");
 let morgan = require("morgan");
-let morganJson = require("morgan-json");
-
-const morganJsonFormat = morganJson({
-  short: ":method :url :status",
-  length: ":res[content-length]",
-  "response-time": ":response-time ms",
-});
+const ecsFormat = require("@elastic/ecs-morgan-format");
 
 const server = express();
 const port = config.server.port;
@@ -27,7 +21,7 @@ async function startApp() {
   if (SLACKURL && process.env.NODE_ENV !== "development") {
     await axios.post(SLACKURL, {
       channel: "#klage-notifications",
-      text: "Kjører opp KABAL frontend i " + process.env.NODE_ENV,
+      text: `Kjører opp  KABAL frontend`,
       icon_emoji: ":star-struck:",
     });
   }
@@ -35,7 +29,7 @@ async function startApp() {
   try {
     //ikke bruk global bodyParser, det gir timeout på spørringer mot API
     server.use(
-      morgan(morganJsonFormat, {
+      morgan(ecsFormat(), {
         skip: (req) => {
           if (req.originalUrl === "/metrics") {
             return true;
@@ -44,13 +38,20 @@ async function startApp() {
         },
       })
     );
+
     session.setup(server);
 
     server.use(cors());
 
     server.use(cookieParser());
 
-    morganBody(server);
+    morganBody(server, {
+      noColors: true,
+      prettify: false,
+      includeNewLine: false,
+      logReqUserAgent: false,
+      logIP: false,
+    });
 
     if (process.env.NODE_ENV === "production") {
       try {
@@ -85,5 +86,31 @@ async function startApp() {
     console.error("Error during start-up", error);
   }
 }
+
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.log(`Process ${process.pid} received a unhandledRejection signal`);
+    process.exit(0);
+  })
+  .on("uncaughtException", (e) => {
+    console.log(`Process ${process.pid} received a uncaughtException signal`);
+    process.exit(0);
+  })
+  .on("SIGTERM", (signal) => {
+    console.log(`Process ${process.pid} received a SIGTERM signal`);
+    process.exit(0);
+  })
+
+  .on("SIGINT", (signal) => {
+    console.log(`Process ${process.pid} has been interrupted`);
+    process.exit(0);
+  })
+  .on("beforeExit", async (code) => {
+    await axios.post(SLACKURL, {
+      channel: "#klage-notifications",
+      text: `frontend crash ${JSON.stringify(code)}`,
+      icon_emoji: ":scream:",
+    });
+  });
 
 startApp().catch((err) => console.log(err));
