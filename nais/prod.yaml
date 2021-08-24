@@ -8,7 +8,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "100M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
-    nais.io/restricted: "true"
+    #nais.io/restricted: "true"
 spec:
   image: {{image}}
   replicas:

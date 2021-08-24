@@ -65,6 +65,7 @@ async function startApp() {
       prettify: false,
       includeNewLine: false,
       logReqUserAgent: false,
+      logRequestBody: false, //så slipper vi å se tokens i loggen
       maxBodyLength: 5000,
       logIP: false,
     });
