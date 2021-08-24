@@ -34,6 +34,21 @@ async function startApp() {
           if (req.originalUrl === "/metrics") {
             return true;
           }
+          if (req.originalUrl.endsWith(".svg")) {
+            return true;
+          }
+          if (req.originalUrl.endsWith(".js")) {
+            return true;
+          }
+          if (req.originalUrl.startsWith("/me")) {
+            return true;
+          }
+          if (req.originalUrl.startsWith("/oauth2")) {
+            return true;
+          }
+          if (req.originalUrl.startsWith("/internal")) {
+            return true;
+          }
           return req.originalUrl === "/login";
         },
       })
