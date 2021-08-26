@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { formattedDate } from "../../../domene/datofunksjoner";
-import { useAppDispatch } from "../../../tilstand/konfigurerTilstand";
+import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
 import {
   IDokument,
   IDokumentListe,
@@ -12,6 +12,9 @@ import { hentDokumenter } from "../../../tilstand/moduler/dokumenter/actions";
 import { useKanEndre } from "../utils/hooks";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
 import { dokumentMatcher } from "./helpers";
+
+const R = require("ramda");
+
 import {
   DokumenterFullvisning,
   DokumentCheckbox,
@@ -34,6 +37,10 @@ import {
   TILKNYTT_DOKUMENT,
 } from "../../../tilstand/moduler/klagebehandling/state";
 import { TilknyttetDokument } from "../../../tilstand/moduler/klagebehandling/types";
+import { useSelector } from "react-redux";
+import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
+import { Kodeverk } from "../../Tabell/tabellfunksjoner";
+import EtikettBase from "nav-frontend-etiketter";
 
 interface AlleDokumenterProps {
   dokumenter: IDokumentListe;
@@ -104,6 +111,8 @@ interface DokumentProps extends ITilknyttetDokument {
 const Dokument = React.memo<DokumentProps>(
   ({ dokument, tilknyttet, kanEndre, visDokument, klagebehandling }) => {
     const dispatch = useAppDispatch();
+    const { kodeverk } = useAppSelector(velgKodeverk);
+    const KodeverkTema = R.curry(Kodeverk)(kodeverk.tema);
 
     const onShowDokument = ({
       journalpostId,
@@ -130,7 +139,7 @@ const Dokument = React.memo<DokumentProps>(
             .tema!.split(" ")[0]
             .toLowerCase()}`}
         >
-          <TemaText>{dokument.tema}</TemaText>
+          <TemaText> {KodeverkTema(dokument.tema)}</TemaText>
         </DokumentTema>
         <DokumentDato onClick={() => onShowDokument(dokument)} className={"liten"}>
           {formattedDate(dokument.registrert)}
@@ -206,6 +215,7 @@ const VedleggListe = React.memo(
     dokumentMatcher(previous.dokument, next.dokument) &&
     previous.klagebehandling.tilknyttedeDokumenter === next.klagebehandling.tilknyttedeDokumenter
 );
+
 interface VedleggKomponentProps {
   dokument: IDokument;
   vedlegg: IDokumentVedlegg;

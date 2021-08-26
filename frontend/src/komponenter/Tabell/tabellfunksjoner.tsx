@@ -89,7 +89,7 @@ const leggTilbakeOppgave = R.curry(
     )
 );
 
-function Kodeverk(kodeverk: any, data: string) {
+export function Kodeverk(kodeverk: any, data: string) {
   if (!data) return "mangler";
   return kodeverk
     ? kodeverk.filter((h: IKodeverkVerdi) => h.id == data)[0]?.beskrivelse ?? `ukjent (${data})`
