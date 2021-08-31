@@ -10,11 +10,6 @@ metadata:
     nais.io/restricted: "true"
 spec:
   image: docker.pkg.github.com/navikt/kabal-redis/kabal-redis:a3431b0b2ae0f5902686086f1df7a1b6735b86ed
-  env:
-    - name: ALLOW_EMPTY_PASSWORD
-      value: "yes"
-    - name: REDIS_AOF_ENABLED
-      value: "no"
   port: 6379
   replicas: # A single Redis-app doesn't scale
     min: 1
