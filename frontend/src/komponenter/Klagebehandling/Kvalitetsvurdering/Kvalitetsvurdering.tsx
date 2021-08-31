@@ -28,22 +28,6 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
   const refListe2 = useRef(null);
   const refListe3 = useRef(null);
   const kodeverk = useAppSelector(velgKodeverk);
-  const featureToggles = useAppSelector(velgFeatureToggles);
-
-  const [tilgang, settTilgang] = useState<boolean | undefined>(undefined);
-  const tilgangEnabled = featureToggles.features.find(
-    (f) => f?.navn === "klage.kvalitetsvurdering"
-  );
-
-  useEffect(() => {
-    const tilgangEnabled = featureToggles.features.find(
-      (f) => f?.navn === "klage.kvalitetsvurdering"
-    );
-    if (isDevLocation()) settTilgang(true);
-    else if (tilgangEnabled?.isEnabled !== undefined) {
-      settTilgang(tilgangEnabled.isEnabled);
-    }
-  }, [tilgangEnabled]);
 
   useEffect(() => {
     dispatch(hentKvalitetsvurdering(klagebehandling.id));
@@ -63,14 +47,6 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
       <Beholder>
         <Title>Kvalitetsvurdering</Title>
         <NavFrontendSpinner />
-      </Beholder>
-    );
-  }
-  if (tilgang === undefined || !tilgang) {
-    return (
-      <Beholder>
-        <Title>Kvalitetsvurdering</Title>
-        Ikke tilgang / Ikke ferdigutviklet
       </Beholder>
     );
   }
@@ -96,7 +72,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         kvalitetsvurdering={kvalitetsvurdering}
         tekstfelt={"kommentarOversendelsesbrev"}
         avviksNavn={"kvalitetsavvikOversendelsesbrev"}
-        avviksTittel={"Hva er kvalitetsavviket i oversendelsesbrevet?"}
+        avviksTittel={"Hva er kvalitetsavviket?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikOversendelsesbrev}
         lagre={lagre}
         klagebehandling={klagebehandling}
@@ -110,7 +86,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         kvalitetsvurdering={kvalitetsvurdering}
         tekstfelt={"kommentarUtredning"}
         avviksNavn={"kvalitetsavvikUtredning"}
-        avviksTittel={"Hva er kvalitetsavviket i utredningen?"}
+        avviksTittel={"Hva er kvalitetsavviket?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikUtredning}
         lagre={lagre}
         klagebehandling={klagebehandling}
@@ -124,25 +100,44 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         kvalitetsvurdering={kvalitetsvurdering}
         tekstfelt={"kommentarVedtak"}
         avviksNavn={"kvalitetsavvikVedtak"}
-        avviksTittel={"Hva er kvalitetsavviket i vedtaket?"}
+        avviksTittel={"Hva er kvalitetsavviket?"}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikVedtak}
         lagre={lagre}
         klagebehandling={klagebehandling}
       />
 
-      <SubHeader>Avvik</SubHeader>
-      <DokumentCheckbox
-        label={
-          <FlexRow>
-            Betydelig avvik med konsekvens for søker
-            <Hjelpetekst>
-              Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for bruker
-            </Hjelpetekst>
-          </FlexRow>
+      {(() => {
+        /**
+         * Forutsetning: Vises hvis enten Vedtak eller Utredningen er markert med “Bra/Godt nok”
+         * */
+        if (
+          kvalitetsvurdering.kvalitetVedtakBra === false ||
+          kvalitetsvurdering.kvalitetUtredningBra === false
+        ) {
+          return (
+            <>
+              <SubHeader>Avvik</SubHeader>
+              <DokumentCheckbox
+                label={
+                  <FlexRow>
+                    Betydelig avvik med konsekvens for søker
+                    <Hjelpetekst>
+                      Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for
+                      bruker
+                    </Hjelpetekst>
+                  </FlexRow>
+                }
+                onChange={() =>
+                  lagre("avvikStorKonsekvens", !kvalitetsvurdering.avvikStorKonsekvens)
+                }
+                defaultChecked={kvalitetsvurdering.avvikStorKonsekvens === true}
+              />
+            </>
+          );
         }
-        onChange={() => lagre("avvikStorKonsekvens", !kvalitetsvurdering.avvikStorKonsekvens)}
-        defaultChecked={kvalitetsvurdering.avvikStorKonsekvens === true}
-      />
+        return null;
+      })()}
+
       {(() => {
         /**
          * Forutsetning: Vises hvis enten Vedtak eller Utredningen er markert med “Bra/Godt nok”

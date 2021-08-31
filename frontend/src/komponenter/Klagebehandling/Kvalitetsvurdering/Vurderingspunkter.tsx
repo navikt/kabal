@@ -72,7 +72,6 @@ export function Vurderingspunkter({
   return (
     <Div ref={refHandler}>
       <Header>{tittel}</Header>
-      <SubHeader>{undertittel}</SubHeader>
       <FlexRow>
         <RadioGruppe>
           <Radio
@@ -122,6 +121,7 @@ export function Vurderingspunkter({
           <Section>
             <Tekstfelt
               label="Kommentar:"
+              placeholder={"NB: Ingen personopplysninger"}
               defaultValue={tekstfeltverdi ?? ""}
               handleChange={handleTekstChange}
             />
