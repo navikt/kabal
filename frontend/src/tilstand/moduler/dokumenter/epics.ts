@@ -6,7 +6,7 @@ import { provIgjenStrategi } from "../../../utility/rxUtils";
 import { Dependencies } from "../../konfigurerTilstand";
 import { RootState } from "../../root";
 import { toasterSett, toasterSkjul } from "../toaster";
-import { hentDokumenter, hentTilknyttedeDokumenter } from "./actions";
+import { hentDokumenter, hentTilknyttedeDokumenter, nullstillOgHentDokumenter } from "./actions";
 import {
   ERROR,
   DOKUMENTER_LOADING,
@@ -29,13 +29,17 @@ export const hentDokumenterEpic = (
   { ajax }: Dependencies
 ) =>
   action$.pipe(
-    ofType(hentDokumenter.type),
-    mergeMap(({ payload: { klagebehandlingId, pageReference } }) =>
-      ajax
+    ofType(hentDokumenter.type, nullstillOgHentDokumenter.type),
+    mergeMap(({ payload: { klagebehandlingId, pageReference, temaFilter } }) => {
+      let temaer = "";
+      temaFilter?.forEach((tema) => {
+        temaer += `&tema=${tema}`;
+      });
+      return ajax
         .getJSON<IDokumenterRespons>(
           `/api/klagebehandlinger/${klagebehandlingId}/alledokumenter?antall=10&forrigeSide=${
             pageReference ?? ""
-          }`
+          }${temaer}`
         )
         .pipe(timeout(5000), map(LEGG_TIL_DOKUMENTER))
         .pipe(
@@ -51,8 +55,8 @@ export const hentDokumenterEpic = (
               toasterSkjul(15)
             )
           )
-        )
-    )
+        );
+    })
   );
 
 export const hentTilknyttedeDokumenterEpic = (

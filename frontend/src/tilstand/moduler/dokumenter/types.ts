@@ -19,4 +19,5 @@ export interface IDokumenterRespons {
 export interface IDokumenterParams {
   klagebehandlingId: string;
   pageReference: string | null;
+  temaFilter: string[] | undefined;
 }

@@ -14,9 +14,24 @@ export const List = styled.ul`
   margin: 0;
   padding: 6px;
 `;
+export const StickyList = styled.ul`
+  display: block;
+  list-style: none;
+  font-size: 16px;
+  margin: 0;
+  padding: 6px;
+  position: sticky;
+  z-index: 1;
+  background: white;
+  top: 0;
+`;
 
 export const ListItem = styled.li`
   border-top: 1px solid #c6c2bf;
+  padding: 12px;
+`;
+
+export const ListItemBorderless = styled.li`
   padding: 12px;
 `;
 
@@ -106,4 +121,10 @@ export const StyledLastFlereKnapp = styled(Knapp)`
   margin-top: 1em;
   margin-left: auto;
   margin-right: auto;
+`;
+
+export const FilterRad = styled.table`
+  width: calc(100% - 2em);
+  margin: 0;
+  padding: 0.25em;
 `;

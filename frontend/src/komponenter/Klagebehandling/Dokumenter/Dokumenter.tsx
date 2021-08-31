@@ -34,7 +34,13 @@ export const Dokumenter = ({
   const antallTilknyttede = klagebehandling.tilknyttedeDokumenter.length;
 
   useEffect(() => {
-    dispatch(hentDokumenter({ klagebehandlingId: klagebehandling.id, pageReference: null }));
+    dispatch(
+      hentDokumenter({
+        klagebehandlingId: klagebehandling.id,
+        pageReference: null,
+        temaFilter: undefined,
+      })
+    );
     dispatch(hentTilknyttedeDokumenter(klagebehandling.id));
     return () => {
       dispatch(NULLSTILL_DOKUMENTER());

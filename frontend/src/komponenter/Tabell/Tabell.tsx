@@ -37,7 +37,19 @@ import { useAppDispatch } from "../../tilstand/konfigurerTilstand";
 
 const R = require("ramda");
 
-function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
+export const enum TabellVisning {
+  NORMAL,
+  MINEOPPGAVER,
+  ENHETENSOPPGAVER,
+}
+
+function OppgaveTabell({
+  visFilter,
+  tabellVisning,
+}: {
+  visFilter: boolean;
+  tabellVisning: TabellVisning;
+}) {
   const dispatch = useAppDispatch();
   const meg = useSelector(velgMeg);
   const { enheter, valgtEnhet } = meg;
@@ -89,9 +101,13 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
   const sorteringFrist: "synkende" | "stigende" =
     filter_state?.transformasjoner?.sortering?.frist || "synkende";
 
+  const visFnrInit =
+    location.pathname.startsWith("/mineoppgaver") ||
+    location.pathname.startsWith("/enhetensoppgaver");
+
   const sorteringMottatt: "synkende" | "stigende" =
     filter_state?.transformasjoner?.sortering?.mottatt || "synkende";
-  const [visFnr, settVisFnr] = useState<boolean>(location.pathname.startsWith("/mineoppgaver"));
+  const [visFnr, settVisFnr] = useState<boolean>(visFnrInit);
 
   useEffect(() => {
     filter_dispatch({ type: "sett_navident", payload: meg });
@@ -104,7 +120,7 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
   useEffect(() => {
     const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.listFnr");
     if (tilgangEnabled?.isEnabled !== undefined) {
-      if (!location.pathname.startsWith("/mineoppgaver")) {
+      if (!visFnrInit) {
         settVisFnr(tilgangEnabled.isEnabled);
         filter_dispatch({ type: "sett_projeksjon", payload: tilgangEnabled.isEnabled });
       }
@@ -272,7 +288,7 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
 
       let ferdigstiltFom = new Date();
       ferdigstiltFom.setDate(ferdigstiltFom.getDate() - 7);
-      location.pathname.startsWith("/mineoppgaver") &&
+      visFnrInit &&
         dispatch(
           ferdigstilteRequest({
             ident: ident,
@@ -305,13 +321,13 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
 
   useEffect(() => {
     if (meg.graphData.id) {
-      if (location.pathname.startsWith("/mineoppgaver")) {
+      if (visFnrInit) {
         settVisFnr(true);
         filter_dispatch({ type: "sett_projeksjon", payload: true });
       } else {
         const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.listFnr");
         if (tilgangEnabled?.isEnabled !== undefined) {
-          if (!location.pathname.startsWith("/mineoppgaver")) {
+          if (!visFnrInit) {
             settVisFnr(tilgangEnabled.isEnabled);
             filter_dispatch({ type: "sett_projeksjon", payload: tilgangEnabled.isEnabled });
           }
@@ -320,9 +336,9 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
           filter_dispatch({ type: "sett_projeksjon", payload: false });
         }
       }
-      if (location.pathname.startsWith("/mineoppgaver") && !filter_state.tildeltSaksbehandler) {
+      if (visFnrInit && !filter_state.tildeltSaksbehandler) {
         filter_dispatch({ type: "sett_tildelt_saksbehandler", payload: meg.graphData.id });
-      } else if (!location.pathname.startsWith("/mineoppgaver")) {
+      } else if (!visFnrInit) {
         filter_dispatch({ type: "sett_tildelt_saksbehandler", payload: undefined });
       }
     }
@@ -564,6 +580,7 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
             genererTabellRader(
               settValgtOppgave,
               klagebehandlinger,
+              tabellVisning,
               filter_state?.projeksjon || visFnr
             )
           ) : (
@@ -609,6 +626,7 @@ function OppgaveTabell({ visFilter }: { visFilter: boolean }) {
                 genererTabellRader(
                   settValgtOppgave,
                   ferdigstilteKlager,
+                  tabellVisning,
                   filter_state?.projeksjon || visFnr
                 )
               ) : (

@@ -103,6 +103,7 @@
   ],
   "type": [{ "id": "1", "navn": "Klage", "beskrivelse": "Klage" }],
   "tema": [
+    { "id": "12", "navn": "FOR", "beskrivelse": "Foreldrepenger" },
     { "id": "27", "navn": "OMS", "beskrivelse": "Omsorgspenger, pleiepenger og opplæringspenger" },
     { "id": "43", "navn": "SYK", "beskrivelse": "Sykepenger" }
   ],

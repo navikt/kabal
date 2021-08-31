@@ -44,6 +44,14 @@ export const dokumenterSlice = createSlice({
       state.tilknyttedeDokumenter.loading = false;
       return state;
     },
+    HENT_FILTRERTE_DOKUMENTER: (state) => ({
+      ...state,
+      ...initialState,
+      dokumenter: {
+        ...initialState.dokumenter,
+        loading: true,
+      },
+    }),
     DOKUMENTER_LOADING: (state) => {
       state.dokumenter.loading = true;
       return state;

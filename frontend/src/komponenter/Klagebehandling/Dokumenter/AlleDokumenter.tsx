@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { formattedDate } from "../../../domene/datofunksjoner";
 import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
@@ -8,17 +8,17 @@ import {
   IDokumentVedlegg,
 } from "../../../tilstand/moduler/dokumenter/stateTypes";
 import { IShownDokument, ITilknyttetDokument, ITilknyttetVedlegg } from "./typer";
-import { hentDokumenter } from "../../../tilstand/moduler/dokumenter/actions";
+import {
+  hentDokumenter,
+  nullstillOgHentDokumenter,
+} from "../../../tilstand/moduler/dokumenter/actions";
 import { useKanEndre } from "../utils/hooks";
 import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
 import { dokumentMatcher } from "./helpers";
-
-const R = require("ramda");
-
 import {
-  DokumenterFullvisning,
   DokumentCheckbox,
   DokumentDato,
+  DokumenterFullvisning,
   DokumentRad,
   DokumentSjekkboks,
   DokumentTema,
@@ -26,11 +26,11 @@ import {
   List,
   ListItem,
   RightAlign,
+  StyledLastFlereKnapp,
   TemaText,
   VedleggBeholder,
   VedleggRad,
   VedleggTittel,
-  StyledLastFlereKnapp,
 } from "./styled-components/fullvisning";
 import {
   FRAKOBLE_DOKUMENT,
@@ -40,7 +40,12 @@ import { TilknyttetDokument } from "../../../tilstand/moduler/klagebehandling/ty
 import { useSelector } from "react-redux";
 import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
 import { Kodeverk } from "../../Tabell/tabellfunksjoner";
-import EtikettBase from "nav-frontend-etiketter";
+import FiltrerbarHeader, { settFilter } from "../../Tabell/FiltrerbarHeader";
+import { Filter } from "../../../tilstand/moduler/oppgave";
+import { IKodeverkVerdi } from "../../../tilstand/moduler/kodeverk";
+import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
+
+const R = require("ramda");
 
 interface AlleDokumenterProps {
   dokumenter: IDokumentListe;
@@ -51,6 +56,52 @@ interface AlleDokumenterProps {
 
 export const AlleDokumenter = React.memo(
   ({ dokumenter, klagebehandling, skjult, visDokument }: AlleDokumenterProps) => {
+    const meg = useSelector(velgMeg);
+    const { enheter, valgtEnhet } = meg;
+
+    const [temaFilter, settTemaFilter] = useState<string[] | undefined>(undefined);
+    const [lovligeTemaer, settLovligeTemaer] = useState<Filter[]>([]);
+    const [aktiveTemaer, settAktiveTemaer] = useState<Filter[]>([]);
+
+    const dispatch = useAppDispatch();
+
+    const kodeverk = useSelector(velgKodeverk);
+
+    useEffect(() => {
+      let lovligeTemaer: Filter[] = [];
+      if (enheter.length > 0) {
+        valgtEnhet.lovligeTemaer?.forEach((tema: string | any) => {
+          if (kodeverk?.kodeverk.tema) {
+            let kodeverkTema = kodeverk.kodeverk.tema.filter(
+              (t: IKodeverkVerdi) => t.id.toString() === tema.toString()
+            )[0];
+            if (kodeverkTema?.id)
+              lovligeTemaer.push({
+                label: kodeverkTema?.beskrivelse,
+                value: kodeverkTema?.id.toString(),
+              });
+          }
+        });
+      }
+      settLovligeTemaer(lovligeTemaer);
+    }, [kodeverk]);
+    const filtrerTema = (filtre: Filter[]) => {
+      if (!filtre.length) {
+        settTemaFilter([]);
+      } else {
+        settTemaFilter(filtre.map((f) => f.value as string));
+      }
+    };
+    useEffect(() => {
+      if (temaFilter)
+        dispatch(
+          nullstillOgHentDokumenter({
+            klagebehandlingId: klagebehandling.id,
+            pageReference: dokumenter.pageReference,
+            temaFilter,
+          })
+        );
+    }, [temaFilter]);
     const kanEndre = useKanEndre();
     const alleDokumenter = useMemo<ITilknyttetDokument[]>(
       () =>
@@ -73,6 +124,23 @@ export const AlleDokumenter = React.memo(
 
     return (
       <DokumenterFullvisning>
+        <table>
+          <thead>
+            <tr>
+              <FiltrerbarHeader
+                data-testid={"typefilter"}
+                onFilter={(filter, velgAlleEllerIngen) =>
+                  settFilter(settAktiveTemaer, filter, aktiveTemaer, velgAlleEllerIngen)
+                }
+                filtre={lovligeTemaer}
+                dispatchFunc={filtrerTema}
+                aktiveFiltere={aktiveTemaer}
+              >
+                Tema
+              </FiltrerbarHeader>
+            </tr>
+          </thead>
+        </table>
         <List data-testid={"dokumenter"}>
           {alleDokumenter.map(({ dokument, tilknyttet }) => (
             <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
@@ -90,6 +158,7 @@ export const AlleDokumenter = React.memo(
           dokumenter={dokumenter}
           klagebehandlingId={klagebehandling.id}
           loading={dokumenter.loading}
+          temaFilter={temaFilter}
         />
       </DokumenterFullvisning>
     );
@@ -270,13 +339,17 @@ const VedleggKomponent = React.memo<VedleggKomponentProps>(
 interface LoadMoreProps {
   dokumenter: IDokumentListe;
   klagebehandlingId: string;
+  temaFilter: string[] | undefined;
   loading: boolean;
 }
 
-const LastFlere = ({ dokumenter, klagebehandlingId, loading }: LoadMoreProps) => {
+const LastFlere = ({ dokumenter, klagebehandlingId, temaFilter, loading }: LoadMoreProps) => {
   const dispatch = useAppDispatch();
   const onClick = useCallback(
-    () => dispatch(hentDokumenter({ klagebehandlingId, pageReference: dokumenter.pageReference })),
+    () =>
+      dispatch(
+        hentDokumenter({ klagebehandlingId, pageReference: dokumenter.pageReference, temaFilter })
+      ),
     [dokumenter.pageReference, klagebehandlingId]
   );
 

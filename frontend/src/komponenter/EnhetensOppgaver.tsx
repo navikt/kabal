@@ -13,7 +13,7 @@ const App = (): JSX.Element => {
   return (
     <Oppsett visMeny={true}>
       <ErrorMessageWithErrorBoundary>
-        <OppgaveTabell visFilter={true} tabellVisning={TabellVisning.NORMAL} />
+        <OppgaveTabell visFilter={false} tabellVisning={TabellVisning.ENHETENSOPPGAVER} />
       </ErrorMessageWithErrorBoundary>
     </Oppsett>
   );

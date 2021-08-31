@@ -155,6 +155,7 @@ app.get("/featuretoggle/:feature", (req, res) => {
   if (req.params?.feature === "klage.generellTilgang") res.status(200).send("true");
   else if (req.params?.feature === "klage.admin") res.status(200).send("true");
   else if (req.params?.feature === "klage.kvalitetsvurdering") res.status(200).send("true");
+  else if (req.params?.feature === "klage.enhetensoppgaver") res.status(200).send("true");
   else if (req.params?.feature === "klage.smarteditor") res.status(200).send("true");
   else res.status(200).send("false");
 });

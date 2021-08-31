@@ -46,15 +46,15 @@ end
 def tilfeldigTema()
   r = rand(3)
   if r == 0
-    return "SYK"
+    return "12"
   end
   if r == 1
-    return "DAG"
+    return "27"
   end
   if r == 2
-    return "FOR"
+    return "43"
   end
-  return "SYK"
+  return "12"
 end
 
 def lagDokument()

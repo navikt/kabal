@@ -55,6 +55,7 @@ export default function Oppsett({
     dispatch(hentFeatureToggleHandling("klage.listFnr"));
     dispatch(hentFeatureToggleHandling("klage.kvalitetsvurdering"));
     dispatch(hentFeatureToggleHandling("klage.smarteditor"));
+    dispatch(hentFeatureToggleHandling("klage.enhetensoppgaver"));
 
     if (R.empty(kodeverk)) {
       dispatch(hentKodeverk());
@@ -63,6 +64,9 @@ export default function Oppsett({
 
   const adminEnabled = featureToggles.features.find((f) => f?.navn === "klage.admin");
   const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.generellTilgang");
+  const enhetensOppgaverEnabled = featureToggles.features.find(
+    (f) => f?.navn === "klage.enhetensoppgaver"
+  );
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -109,9 +113,7 @@ export default function Oppsett({
           backLink={backLink ?? "/"}
           tittel="KABAL"
           brukerinfo={{ navn: person.graphData.navn, ident: person.graphData.id }}
-        >
-          {/* <Sok onSok={() => Promise.resolve("test")} /> */}
-        </Header>
+        ></Header>
         <nav className={`main-nav ${!visMeny ? "skjult" : ""}`} role="navigation" aria-label="Meny">
           <ul>
             <li>
@@ -129,6 +131,13 @@ export default function Oppsett({
                 Søk&nbsp;på&nbsp;person
               </NavLink>
             </li>
+            {enhetensOppgaverEnabled && (
+              <li>
+                <NavLink className="link" to="/enhetensoppgaver">
+                  Enhetens&nbsp;Oppgaver
+                </NavLink>
+              </li>
+            )}
           </ul>
         </nav>
         {(() => {

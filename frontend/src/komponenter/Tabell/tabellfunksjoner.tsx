@@ -15,6 +15,7 @@ import styled from "styled-components";
 import MedunderskriverStatus from "./Medunderskriver";
 import { useAppSelector } from "../../tilstand/konfigurerTilstand";
 import { velgKodeverk } from "../../tilstand/moduler/kodeverk.velgere";
+import { TabellVisning } from "./Tabell";
 
 const R = require("ramda");
 
@@ -125,54 +126,47 @@ const OppgaveTabellRad = ({
 
   const location = useLocation();
   const history = useHistory();
+  const visFnrInit =
+    location.pathname.startsWith("/mineoppgaver") ||
+    location.pathname.startsWith("/enhetensoppgaver");
 
   const rerouteToKlage = (location: any) => {
-    if (location.pathname.startsWith("/mineoppgaver")) history.push(`/klagebehandling/${id}`);
+    if (visFnrInit) history.push(`/klagebehandling/${id}`);
   };
 
   return (
-    <TableRow
-      className={`${
-        location.pathname.startsWith("/mineoppgaver") ? "tablerow__on_hover" : ""
-      } table-filter`}
-    >
+    <TableRow className={`${visFnrInit ? "tablerow__on_hover" : ""} table-filter`}>
       <td
-        className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+        className={`${visFnrInit ? "cursor__pointer" : ""} `}
         data-testid={`linkbehandling${it}`}
         onClick={() => rerouteToKlage(location)}
       >
         <EtikettBase
           type="info"
-          className={`etikett-${type}  ${
-            location.pathname.startsWith("/mineoppgaver") ? "etikett__mine-oppgaver" : ""
-          } `}
+          className={`etikett-${type}  ${visFnrInit ? "etikett__mine-oppgaver" : ""} `}
         >
           {KodeverkType(type)}
         </EtikettBase>
       </td>
       <td
-        className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+        className={`${visFnrInit ? "cursor__pointer" : ""} `}
         onClick={() => rerouteToKlage(location)}
       >
         <EtikettBase
           type="info"
-          className={`etikett-${tema} ${
-            location.pathname.startsWith("/mineoppgaver") ? "etikett__mine-oppgaver" : ""
-          }`}
+          className={`etikett-${tema} ${visFnrInit ? "etikett__mine-oppgaver" : ""}`}
         >
           {KodeverkTema(tema)}
         </EtikettBase>
       </td>
 
       <td
-        className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+        className={`${visFnrInit ? "cursor__pointer" : ""} `}
         onClick={() => rerouteToKlage(location)}
       >
         <EtikettBase
           type="info"
-          className={`etikett-${hjemmel} ${
-            location.pathname.startsWith("/mineoppgaver") ? "etikett__mine-oppgaver" : ""
-          }`}
+          className={`etikett-${hjemmel} ${visFnrInit ? "etikett__mine-oppgaver" : ""}`}
         >
           {KodeverkHjemmel(hjemmel)}
         </EtikettBase>
@@ -180,16 +174,14 @@ const OppgaveTabellRad = ({
 
       {utvidetProjeksjon && (
         <td
-          className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+          className={`${visFnrInit ? "cursor__pointer" : ""} `}
           onClick={() => rerouteToKlage(location)}
         >
           {person?.navn || "mangler"}
         </td>
       )}
       {utvidetProjeksjon && (
-        <td
-          className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
-        >
+        <td className={`${visFnrInit ? "cursor__pointer" : ""} `}>
           <NavLink className={"fnr"} to={`/klagebehandling/${id}`}>
             {" "}
             {person?.fnr || "mangler"}
@@ -199,7 +191,7 @@ const OppgaveTabellRad = ({
 
       {avsluttetAvSaksbehandler && (
         <td
-          className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+          className={`${visFnrInit ? "cursor__pointer" : ""} `}
           onClick={() => rerouteToKlage(location)}
         >
           {formattedDate(avsluttetAvSaksbehandler)}
@@ -207,7 +199,7 @@ const OppgaveTabellRad = ({
       )}
       {!avsluttetAvSaksbehandler && (
         <td
-          className={`${location.pathname.startsWith("/mineoppgaver") ? "cursor__pointer" : ""} `}
+          className={`${visFnrInit ? "cursor__pointer" : ""} `}
           onClick={() => rerouteToKlage(location)}
         >
           {formattedDate(frist)}
@@ -218,9 +210,7 @@ const OppgaveTabellRad = ({
       {!utfall &&
         location.pathname.startsWith("/oppgaver") &&
         curriedVelgOppgave(klagebehandlingVersjon)(it)}
-      {!utfall &&
-        location.pathname.startsWith("/mineoppgaver") &&
-        curriedVisHandlinger(klagebehandlingVersjon)}
+      {!utfall && visFnrInit && curriedVisHandlinger(klagebehandlingVersjon)}
     </TableRow>
   );
 };
@@ -247,6 +237,7 @@ function tildelOppgave(
 export const genererTabellRader = (
   settValgOppgaveId: Function,
   klagebehandlinger: OppgaveRader,
+  visning: TabellVisning,
   utvidetProjeksjon: "UTVIDET" | boolean | undefined
 ): JSX.Element[] =>
   klagebehandlinger.rader.map((rad: OppgaveRad, it) => (
