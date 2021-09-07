@@ -1,4 +1,4 @@
-name: Automatisk main til dev
+name: Deploy main to dev (on push)
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Branch til dev
+name: Deploy branch to dev (manual)
 
 on:
   workflow_dispatch:
