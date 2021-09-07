@@ -2,10 +2,6 @@ name: Deploy branch to dev (manual)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - '**'
-      - '!main'
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend:${{ github.sha }}
