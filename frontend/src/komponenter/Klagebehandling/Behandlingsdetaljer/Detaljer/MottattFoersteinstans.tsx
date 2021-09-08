@@ -1,8 +1,8 @@
-import React from "react";
-import { isoDateToPretty } from "../../../../domene/datofunksjoner";
-import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
-import { velgKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/selectors";
-import { InfofeltStatisk } from "../InfofeltStatisk";
+import React from 'react';
+import { isoDateToPretty } from '../../../../domene/datofunksjoner';
+import { useAppSelector } from '../../../../tilstand/konfigurerTilstand';
+import { velgKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/selectors';
+import { InfofeltStatisk } from '../InfofeltStatisk';
 
 export function MottattFoersteinstans() {
   const klagebehandling = useAppSelector(velgKlagebehandling);
@@ -10,7 +10,7 @@ export function MottattFoersteinstans() {
   return (
     <InfofeltStatisk
       header="Mottatt førsteinstans"
-      info={isoDateToPretty(klagebehandling?.mottattFoersteinstans ?? null) ?? "-"}
+      info={isoDateToPretty(klagebehandling?.mottattFoersteinstans ?? null) ?? '-'}
     />
   );
 }

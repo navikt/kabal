@@ -1,18 +1,12 @@
-import NavFrontendSpinner from "nav-frontend-spinner";
-import React, { useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../tilstand/konfigurerTilstand";
-import {
-  hentKlagebehandling,
-  unloadKlagebehandling,
-} from "../../tilstand/moduler/klagebehandling/actions";
-import {
-  velgKlagebehandling,
-  velgKlagebehandlingError,
-} from "../../tilstand/moduler/klagebehandling/selectors";
-import Oppsett from "../Oppsett";
-import { Klagebehandling } from "./KlageBehandling";
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import React, { useEffect } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../../tilstand/konfigurerTilstand';
+import { hentKlagebehandling, unloadKlagebehandling } from '../../tilstand/moduler/klagebehandling/actions';
+import { velgKlagebehandling, velgKlagebehandlingError } from '../../tilstand/moduler/klagebehandling/selectors';
+import Oppsett from '../Oppsett';
+import { Klagebehandling } from './KlageBehandling';
 
 export const KlagebehandlingLaster = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,7 +26,7 @@ export const KlagebehandlingLaster = () => {
 
   if (id.length === 0 || klagebehandling === null) {
     return (
-      <div style={{ margin: "40vh auto 0 auto" }}>
+      <div style={{ margin: '40vh auto 0 auto' }}>
         <NavFrontendSpinner />
       </div>
     );
@@ -40,11 +34,11 @@ export const KlagebehandlingLaster = () => {
 
   if (klagebehandlingError !== null) {
     return (
-      <Oppsett backLink={"/mineoppgaver"} visMeny={false}>
-        <FeilmeldingInformasjon className="klagebehandling__informasjon" style={{ padding: "5em" }}>
+      <Oppsett backLink={'/mineoppgaver'} visMeny={false}>
+        <FeilmeldingInformasjon className="klagebehandling__informasjon" style={{ padding: '5em' }}>
           <div>Klage kunne ikke hentes...</div>
           <div>
-            <NavLink to={"/mineoppgaver"}>Tilbake til Mine Oppgaver</NavLink>
+            <NavLink to={'/mineoppgaver'}>Tilbake til Mine Oppgaver</NavLink>
           </div>
         </FeilmeldingInformasjon>
       </Oppsett>

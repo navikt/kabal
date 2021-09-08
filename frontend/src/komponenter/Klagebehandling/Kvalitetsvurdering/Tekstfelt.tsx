@@ -1,5 +1,5 @@
-import React from "react";
-import { TextareaControlled } from "nav-frontend-skjema";
+import React from 'react';
+import { TextareaControlled } from 'nav-frontend-skjema';
 
 interface ITekstfelt {
   defaultValue: string;
@@ -18,7 +18,7 @@ export function Tekstfelt({ defaultValue, handleChange, label, placeholder }: IT
       onBlur={(e) => handleChange(e.target.value)}
       maxLength={0}
       style={{
-        minHeight: "80px",
+        minHeight: '80px',
       }}
     />
   );

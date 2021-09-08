@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from "react";
-import { Select } from "nav-frontend-skjema";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { lastMedunderskrivere } from "../../../tilstand/moduler/medunderskrivere/actions";
-import { velgMedunderskrivere } from "../../../tilstand/moduler/medunderskrivere/selectors";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
+import React, { useEffect, useMemo } from 'react';
+import { Select } from 'nav-frontend-skjema';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { lastMedunderskrivere } from '../../../tilstand/moduler/medunderskrivere/actions';
+import { velgMedunderskrivere } from '../../../tilstand/moduler/medunderskrivere/selectors';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
 
 interface VelgMedunderskriverProps {
   value?: string;
@@ -23,10 +23,7 @@ export const VelgMedunderskriver = ({ value, onSelect, tema }: VelgMedunderskriv
   }, [id, tema]);
 
   const ingenMedunderskrivere = useMemo(() => medunderskrivere.length === 0, [medunderskrivere]);
-  const disabled = useMemo(
-    () => loading || ingenMedunderskrivere,
-    [loading, ingenMedunderskrivere]
-  );
+  const disabled = useMemo(() => loading || ingenMedunderskrivere, [loading, ingenMedunderskrivere]);
   const defaultValgTekst = useMemo(
     () => getDefaultText(loading, ingenMedunderskrivere),
     [loading, ingenMedunderskrivere]
@@ -35,7 +32,7 @@ export const VelgMedunderskriver = ({ value, onSelect, tema }: VelgMedunderskriv
   return (
     <Select
       style={{
-        width: "100%",
+        width: '100%',
       }}
       label="Medunderskriver"
       value={value}
@@ -56,10 +53,10 @@ export const VelgMedunderskriver = ({ value, onSelect, tema }: VelgMedunderskriv
 
 const getDefaultText = (loading: boolean, ingenMedunderskrivere: boolean): string => {
   if (loading && ingenMedunderskrivere) {
-    return "Laster medunderskrivere...";
+    return 'Laster medunderskrivere...';
   }
   if (ingenMedunderskrivere) {
-    return "Kunne ikke laste medunderskrivere.";
+    return 'Kunne ikke laste medunderskrivere.';
   }
-  return "Velg medunderskriver";
+  return 'Velg medunderskriver';
 };

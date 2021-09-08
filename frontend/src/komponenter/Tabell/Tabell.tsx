@@ -61,22 +61,32 @@ function OppgaveTabell({
   const utvidetProjeksjon = useSelector(velgProjeksjon);
   const location = useLocation();
 
-  let { side } = useParams<ParamTypes>();
-  let tolketStart = parseInt(side as string, 10) || 1;
+  const { side } = useParams<ParamTypes>();
+  const tolketStart = parseInt(side as string, 10) || 1;
 
-  const [hjemmelFilter, settHjemmelFilter] = useState<string[] | undefined>(undefined);
-  const [forrigeHjemmelFilter, settForrigeHjemmelFilter] = useState<string[] | undefined>(
+  const [hjemmelFilter, settHjemmelFilter] = useState<string[] | undefined>(
     undefined
   );
+  const [forrigeHjemmelFilter, settForrigeHjemmelFilter] = useState<
+    string[] | undefined
+  >(undefined);
 
-  const [temaFilter, settTemaFilter] = useState<string[] | undefined>(undefined);
-  const [forrigeTemaFilter, settForrigeTemaFilter] = useState<string[] | undefined>(undefined);
+  const [temaFilter, settTemaFilter] = useState<string[] | undefined>(
+    undefined
+  );
+  const [forrigeTemaFilter, settForrigeTemaFilter] = useState<
+    string[] | undefined
+  >(undefined);
   const [lovligeTemaer, settLovligeTemaer] = useState<Filter[]>([]);
   const [gyldigeHjemler, settGyldigeHjemler] = useState<Filter[]>([]);
   const [gyldigeTyper, settGyldigeTyper] = useState<Filter[]>([]);
 
-  const [typeFilter, settTypeFilter] = useState<string[] | undefined>(undefined);
-  const [forrigeTypeFilter, settForrigeTypeFilter] = useState<string[] | undefined>(undefined);
+  const [typeFilter, settTypeFilter] = useState<string[] | undefined>(
+    undefined
+  );
+  const [forrigeTypeFilter, settForrigeTypeFilter] = useState<
+    string[] | undefined
+  >(undefined);
 
   const [valgtOppgave, settValgtOppgave] = useState<valgtOppgaveType>({
     id: "",
@@ -94,10 +104,12 @@ function OppgaveTabell({
   const settFiltrering = (type: string, payload: Filter[]) => {
     filter_dispatch({ type, payload });
   };
-  const settTemaer = (payload: Filter[]) => R.curry(settFiltrering)("sett_aktive_temaer")(payload);
+  const settTemaer = (payload: Filter[]) =>
+    R.curry(settFiltrering)("sett_aktive_temaer")(payload);
   const settHjemler = (payload: Filter[]) =>
     R.curry(settFiltrering)("sett_aktive_hjemler")(payload);
-  const settTyper = (payload: Filter[]) => R.curry(settFiltrering)("sett_aktive_typer")(payload);
+  const settTyper = (payload: Filter[]) =>
+    R.curry(settFiltrering)("sett_aktive_typer")(payload);
   const sorteringFrist: "synkende" | "stigende" =
     filter_state?.transformasjoner?.sortering?.frist || "synkende";
 
@@ -118,24 +130,34 @@ function OppgaveTabell({
   }, [utvidetProjeksjon, filter_dispatch]);
 
   useEffect(() => {
-    const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.listFnr");
+    const tilgangEnabled = featureToggles.features.find(
+      (f) => f?.navn === "klage.listFnr"
+    );
     if (tilgangEnabled?.isEnabled !== undefined) {
       if (!visFnrInit) {
         settVisFnr(tilgangEnabled.isEnabled);
-        filter_dispatch({ type: "sett_projeksjon", payload: tilgangEnabled.isEnabled });
+        filter_dispatch({
+          type: "sett_projeksjon",
+          payload: tilgangEnabled.isEnabled,
+        });
       }
     }
   }, [featureToggles, settVisFnr, filter_dispatch, location]);
 
   useEffect(() => {
-    dispatch(hentInnstillingerHandling({ navIdent: meg.graphData.id, enhetId: valgtEnhet.id }));
+    dispatch(
+      hentInnstillingerHandling({
+        navIdent: meg.graphData.id,
+        enhetId: valgtEnhet.id,
+      })
+    );
   }, [meg, valgtEnhet]);
 
   useEffect(() => {
-    let lovligeTemaer: Filter[] = [];
+    const lovligeTemaer: Filter[] = [];
     valgtEnhet.lovligeTemaer?.forEach((tema: string | any) => {
       if (kodeverk.kodeverk.tema) {
-        let kodeverkTema = kodeverk.kodeverk.tema.filter(
+        const kodeverkTema = kodeverk.kodeverk.tema.filter(
           (t: IKodeverkVerdi) => t.id.toString() === tema.toString()
         )[0];
         if (kodeverkTema?.id)
@@ -145,7 +167,8 @@ function OppgaveTabell({
           });
       }
     });
-    if (innstillinger?.aktiveTemaer) settLovligeTemaer(innstillinger.aktiveTemaer);
+    if (innstillinger?.aktiveTemaer)
+      settLovligeTemaer(innstillinger.aktiveTemaer);
     else settLovligeTemaer(lovligeTemaer);
 
     let hjemler: Filter[] = [];
@@ -153,55 +176,66 @@ function OppgaveTabell({
       let temahjemler: IKodeverkVerdi[] = [];
       innstillinger.aktiveTemaer.map((tema: Filter) => {
         temahjemler = temahjemler.concat(
-          kodeverk.kodeverk.hjemlerPerTema.filter((_hjemler) => _hjemler.temaId === tema.value!)[0]
-            ?.hjemler || []
+          kodeverk.kodeverk.hjemlerPerTema.filter(
+            (_hjemler) => _hjemler.temaId === tema.value!
+          )[0]?.hjemler || []
         );
       });
       hjemler = [];
       temahjemler.forEach((hjemmel: IKodeverkVerdi) => {
-        hjemler.push({ label: hjemmel.beskrivelse, value: hjemmel.id.toString() });
+        hjemler.push({
+          label: hjemmel.beskrivelse,
+          value: hjemmel.id.toString(),
+        });
       });
       settGyldigeHjemler(hjemler);
     } else if (innstillinger?.aktiveHjemler) {
       settGyldigeHjemler(innstillinger.aktiveHjemler);
     } else if (kodeverk.kodeverk.hjemmel) {
       kodeverk.kodeverk.hjemmel.map((hjemmel: IKodeverkVerdi) => {
-        hjemler.push({ label: hjemmel.beskrivelse, value: hjemmel.id.toString() });
+        hjemler.push({
+          label: hjemmel.beskrivelse,
+          value: hjemmel.id.toString(),
+        });
       });
       settGyldigeHjemler(hjemler);
     }
 
-    let typer: Filter[] = [];
+    const typer: Filter[] = [];
     if (kodeverk.kodeverk.type) {
       kodeverk.kodeverk.type.map((verdi: IKodeverkVerdi) => {
         typer.push({ label: verdi.beskrivelse, value: verdi.id.toString() });
       });
-      if (innstillinger?.aktiveTyper) settGyldigeTyper(innstillinger.aktiveTyper);
+      if (innstillinger?.aktiveTyper)
+        settGyldigeTyper(innstillinger.aktiveTyper);
       else settGyldigeTyper(typer);
     }
   }, [valgtEnhet, kodeverk]);
 
-  function skiftSortering(type: string, event: React.MouseEvent<HTMLElement | HTMLButtonElement>) {
+  function skiftSortering(
+    type: string,
+    event: React.MouseEvent<HTMLElement | HTMLButtonElement>
+  ) {
     event.preventDefault();
     let sortOrder;
     let sortType;
     if (type === "frist") {
-      sortType = "frist" as "frist";
+      sortType = "frist" as const;
       if (sorteringFrist === "synkende") {
         filter_dispatch({ type: "sett_frist", payload: "stigende" });
-        sortOrder = "stigende" as "stigende";
+        sortOrder = "stigende" as const;
       } else {
-        filter_dispatch({ type: "sett_frist", payload: "synkende" as "synkende" });
-        sortOrder = "synkende" as "synkende";
+        filter_dispatch({ type: "sett_frist", payload: "synkende" as const });
+        sortOrder = "synkende" as const;
       }
     } else {
-      sortType = "mottatt" as "mottatt";
+      sortType = "mottatt" as const;
       if (sorteringMottatt === "synkende") {
-        filter_dispatch({ type: "sett_mottatt", payload: "stigende" as "stigende" });
-        sortOrder = "stigende" as "stigende";
+        filter_dispatch({ type: "sett_mottatt", payload: "stigende" as const });
+        sortOrder = "stigende" as const;
       } else {
-        filter_dispatch({ type: "sett_mottatt", payload: "synkende" as "synkende" });
-        sortOrder = "synkende" as "synkende";
+        filter_dispatch({ type: "sett_mottatt", payload: "synkende" as const });
+        sortOrder = "synkende" as const;
       }
     }
     dispatchTransformering({ sortType, sortOrder });
@@ -209,8 +243,9 @@ function OppgaveTabell({
     history.push(location.pathname.replace(/\d+$/, "1"));
   }
 
-  const skiftSorteringFrist = (event: React.MouseEvent<HTMLElement | HTMLButtonElement>) =>
-    R.curry(skiftSortering)("frist")(event);
+  const skiftSorteringFrist = (
+    event: React.MouseEvent<HTMLElement | HTMLButtonElement>
+  ) => R.curry(skiftSortering)("frist")(event);
 
   function toValue<T>(filters: Array<string | string | Filter>) {
     return filters.map((filter: any) => filter.value);
@@ -224,7 +259,7 @@ function OppgaveTabell({
     sortOrder: "synkende" | "stigende";
   }) => {
     let ident = filter_state.ident;
-    let enhetId = filter_state.enhetId;
+    const enhetId = filter_state.enhetId;
 
     if (!filter_state.ident) {
       //todo dette er ikke riktig, ident skal ikke mangle
@@ -241,14 +276,18 @@ function OppgaveTabell({
           tildeltSaksbehandler: filter_state.tildeltSaksbehandler,
           transformasjoner: {
             filtrering: {
-              hjemler: toValue(filter_state.transformasjoner.filtrering.hjemler),
+              hjemler: toValue(
+                filter_state.transformasjoner.filtrering.hjemler
+              ),
               typer: toValue(filter_state.transformasjoner.filtrering.typer),
               temaer: toValue(filter_state.transformasjoner.filtrering.temaer),
             },
             sortering: {
               type: sortType,
               frist:
-                sortType === "frist" ? sortOrder : filter_state.transformasjoner.sortering.frist,
+                sortType === "frist"
+                  ? sortOrder
+                  : filter_state.transformasjoner.sortering.frist,
               mottatt:
                 sortType === "mottatt"
                   ? sortOrder
@@ -269,14 +308,18 @@ function OppgaveTabell({
           tildeltSaksbehandler: filter_state.tildeltSaksbehandler,
           transformasjoner: {
             filtrering: {
-              hjemler: toValue(filter_state.transformasjoner.filtrering.hjemler),
+              hjemler: toValue(
+                filter_state.transformasjoner.filtrering.hjemler
+              ),
               typer: toValue(filter_state.transformasjoner.filtrering.typer),
               temaer: toValue(filter_state.transformasjoner.filtrering.temaer),
             },
             sortering: {
               type: sortType,
               frist:
-                sortType === "frist" ? sortOrder : filter_state.transformasjoner.sortering.frist,
+                sortType === "frist"
+                  ? sortOrder
+                  : filter_state.transformasjoner.sortering.frist,
               mottatt:
                 sortType === "mottatt"
                   ? sortOrder
@@ -286,7 +329,7 @@ function OppgaveTabell({
         })
       );
 
-      let ferdigstiltFom = new Date();
+      const ferdigstiltFom = new Date();
       ferdigstiltFom.setDate(ferdigstiltFom.getDate() - 7);
       visFnrInit &&
         dispatch(
@@ -300,14 +343,20 @@ function OppgaveTabell({
             tildeltSaksbehandler: filter_state.tildeltSaksbehandler,
             transformasjoner: {
               filtrering: {
-                hjemler: toValue(filter_state.transformasjoner.filtrering.hjemler),
+                hjemler: toValue(
+                  filter_state.transformasjoner.filtrering.hjemler
+                ),
                 typer: toValue(filter_state.transformasjoner.filtrering.typer),
-                temaer: toValue(filter_state.transformasjoner.filtrering.temaer),
+                temaer: toValue(
+                  filter_state.transformasjoner.filtrering.temaer
+                ),
               },
               sortering: {
                 type: sortType,
                 frist:
-                  sortType === "frist" ? sortOrder : filter_state.transformasjoner.sortering.frist,
+                  sortType === "frist"
+                    ? sortOrder
+                    : filter_state.transformasjoner.sortering.frist,
                 mottatt:
                   sortType === "mottatt"
                     ? sortOrder
@@ -325,11 +374,16 @@ function OppgaveTabell({
         settVisFnr(true);
         filter_dispatch({ type: "sett_projeksjon", payload: true });
       } else {
-        const tilgangEnabled = featureToggles.features.find((f) => f?.navn === "klage.listFnr");
+        const tilgangEnabled = featureToggles.features.find(
+          (f) => f?.navn === "klage.listFnr"
+        );
         if (tilgangEnabled?.isEnabled !== undefined) {
           if (!visFnrInit) {
             settVisFnr(tilgangEnabled.isEnabled);
-            filter_dispatch({ type: "sett_projeksjon", payload: tilgangEnabled.isEnabled });
+            filter_dispatch({
+              type: "sett_projeksjon",
+              payload: tilgangEnabled.isEnabled,
+            });
           }
         } else {
           settVisFnr(false);
@@ -337,22 +391,30 @@ function OppgaveTabell({
         }
       }
       if (visFnrInit && !filter_state.tildeltSaksbehandler) {
-        filter_dispatch({ type: "sett_tildelt_saksbehandler", payload: meg.graphData.id });
+        filter_dispatch({
+          type: "sett_tildelt_saksbehandler",
+          payload: meg.graphData.id,
+        });
       } else if (!visFnrInit) {
-        filter_dispatch({ type: "sett_tildelt_saksbehandler", payload: undefined });
+        filter_dispatch({
+          type: "sett_tildelt_saksbehandler",
+          payload: undefined,
+        });
       }
     }
   }, [location, meg.graphData.id]);
 
   useEffect(() => {
-    let filtre = {
+    const filtre = {
       typer: {},
       temaer: {},
       hjemler: {},
     };
     const hjemler =
       (innstillinger?.aktiveHjemler &&
-        innstillinger?.aktiveHjemler.map((hjemmel) => hjemmel.value as string)) ||
+        innstillinger?.aktiveHjemler.map(
+          (hjemmel) => hjemmel.value as string
+        )) ||
       [];
     if (hjemler.length) {
       filtre.hjemler = innstillinger?.aktiveHjemler || [];
@@ -507,7 +569,9 @@ function OppgaveTabell({
                 }
                 filtre={gyldigeTyper}
                 dispatchFunc={filtrerType}
-                aktiveFiltere={filter_state?.transformasjoner?.filtrering?.typer}
+                aktiveFiltere={
+                  filter_state?.transformasjoner?.filtrering?.typer
+                }
               >
                 Type
               </FiltrerbarHeader>
@@ -526,7 +590,9 @@ function OppgaveTabell({
                 }
                 filtre={lovligeTemaer}
                 dispatchFunc={filtrerTema}
-                aktiveFiltere={filter_state?.transformasjoner.filtrering?.temaer}
+                aktiveFiltere={
+                  filter_state?.transformasjoner.filtrering?.temaer
+                }
               >
                 Tema
               </FiltrerbarHeader>
@@ -545,24 +611,36 @@ function OppgaveTabell({
                 }
                 filtre={gyldigeHjemler}
                 dispatchFunc={filtrerHjemmel}
-                aktiveFiltere={filter_state?.transformasjoner.filtrering?.hjemler}
+                aktiveFiltere={
+                  filter_state?.transformasjoner.filtrering?.hjemler
+                }
               >
                 Hjemmel
               </FiltrerbarHeader>
             )}
             {!visFilter && <IkkeFiltrerbarHeader>Hjemmel</IkkeFiltrerbarHeader>}
 
-            {(filter_state?.projeksjon === "UTVIDET" || visFnr) && <th>&nbsp;</th>}
-            {(filter_state?.projeksjon === "UTVIDET" || visFnr) && <th>&nbsp;</th>}
+            {(filter_state?.projeksjon === "UTVIDET" || visFnr) && (
+              <th>&nbsp;</th>
+            )}
+            {(filter_state?.projeksjon === "UTVIDET" || visFnr) && (
+              <th>&nbsp;</th>
+            )}
 
             <th
               role="columnheader"
-              aria-sort={sorteringFrist === "stigende" ? "ascending" : "descending"}
+              aria-sort={
+                sorteringFrist === "stigende" ? "ascending" : "descending"
+              }
             >
               {visFilter && (
                 <div
                   className={`sortHeader 
-                ${filter_state.transformasjoner.sortering.type == "frist" ? "" : "inaktiv"}
+                ${
+                  filter_state.transformasjoner.sortering.type == "frist"
+                    ? ""
+                    : "inaktiv"
+                }
                 ${sorteringFrist === "stigende" ? "ascending" : "descending"}`}
                   onClick={skiftSorteringFrist}
                 >
@@ -593,7 +671,9 @@ function OppgaveTabell({
             <tr>
               <td colSpan={visFnr ? 7 : 5}>
                 <div className="table-lbl">
-                  <div className="antall-saker">{visAntallTreff(klagebehandlinger)}</div>
+                  <div className="antall-saker">
+                    {visAntallTreff(klagebehandlinger)}
+                  </div>
                   <div className={"paginering"}>
                     <Paginering
                       startSide={tolketStart}
@@ -607,41 +687,43 @@ function OppgaveTabell({
           )}
         </tbody>
       </table>
-      {location.pathname.startsWith("/mineoppgaver") && ferdigstilteKlager?.rader && (
-        <FullforteOppgaver>
-          <table
-            className={`Tabell tabell oppgaver tabell--stripet`}
-            cellSpacing={0}
-            cellPadding={10}
-          >
-            <thead>
-              <tr>
-                <th colSpan={5}>Fullførte oppgaver siste 7 dager</th>
-                <th>Fullført</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {ferdigstilteKlager.rader.length > 0 ? (
-                genererTabellRader(
-                  settValgtOppgave,
-                  ferdigstilteKlager,
-                  tabellVisning,
-                  filter_state?.projeksjon || visFnr
-                )
-              ) : (
+      {location.pathname.startsWith("/mineoppgaver") &&
+        ferdigstilteKlager?.rader && (
+          <FullforteOppgaver>
+            <table
+              className={`Tabell tabell oppgaver tabell--stripet`}
+              cellSpacing={0}
+              cellPadding={10}
+            >
+              <thead>
                 <tr>
-                  <td colSpan={7}>Ingen fullførte oppgaver</td>
+                  <th colSpan={5}>Fullførte oppgaver siste 7 dager</th>
+                  <th>Fullført</th>
+                  <th />
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </FullforteOppgaver>
-      )}
+              </thead>
+              <tbody>
+                {ferdigstilteKlager.rader.length > 0 ? (
+                  genererTabellRader(
+                    settValgtOppgave,
+                    ferdigstilteKlager,
+                    tabellVisning,
+                    filter_state?.projeksjon || visFnr
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan={7}>Ingen fullførte oppgaver</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </FullforteOppgaver>
+        )}
 
       {location.pathname.startsWith("/oppgaver") ? (
         <div style={{ margin: "1em 2em" }}>
-          Antall oppgaver med utgåtte frister: {klagebehandlinger.meta.utgaatteFrister}
+          Antall oppgaver med utgåtte frister:{" "}
+          {klagebehandlinger.meta.utgaatteFrister}
         </div>
       ) : null}
     </>

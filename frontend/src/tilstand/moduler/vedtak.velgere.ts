@@ -1,3 +1,3 @@
-import { RootState } from "../root";
+import { RootState } from '../root';
 
 export const velgVedtak = (state: RootState) => state.vedtak;

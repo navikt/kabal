@@ -12,7 +12,8 @@
     "local": "env-cmd -f .env.development webpack-dev-server --config ./webpack.config.local.js --mode development",
     "test": "jest",
     "testcov": "jest --coverage --no-cache",
-    "lint": "npx eslint src --ext .ts,.tsx,.js,.jsx --color"
+    "lint": "npx eslint src --ext .ts,.tsx,.js,.jsx --color",
+    "lint-fix": "npx eslint src --ext .ts,.tsx,.js,.jsx --color --fix"
   },
   "jest": {
     "collectCoverage": true,
@@ -20,9 +21,6 @@
       "json",
       "html"
     ]
-  },
-  "prettier": {
-    "printWidth": 100
   },
   "author": "SA <sven.anders.robbestad@nav.no>",
   "license": "MIT",
@@ -54,8 +52,11 @@
     "copyfiles": "^2.4.0",
     "css-loader": "^5.2.4",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
@@ -64,9 +65,9 @@
     "jest-transform-stub": "^2.0.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.1",
+    "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^1.2.1",
     "prettier": "^2.3.2",
-    "pretty-quick": "^3.1.1",
     "prop-types": "^15.7.2",
     "react-hot-loader": "^4.13.0",
     "rxjs-marbles": "^6.0.1",

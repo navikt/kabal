@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
-import { debounce } from "lodash";
+import { useCallback, useState } from 'react';
+import { debounce } from 'lodash';
 
-export const useDebounce = (obj: any = null, wait: number = 1000) => {
+export const useDebounce = (obj: any = null, wait = 1000) => {
   const [state, setState] = useState(obj);
 
   const setDebouncedState = (_val: any) => {

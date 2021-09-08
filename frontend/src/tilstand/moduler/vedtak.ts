@@ -1,13 +1,13 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { concat, of } from "rxjs";
-import { catchError, map, mergeMap, switchMap, timeout } from "rxjs/operators";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { RootState } from "../root";
-import { Dependencies } from "../konfigurerTilstand";
-import { fromPromise } from "rxjs/internal-compatibility";
-import { CustomError } from "./error-types";
-import { VEDLEGG_OPPDATERT, VEDTAK_FULLFOERT } from "./klagebehandling/state";
-import { IVedleggResponse, IVedtakFullfoertResponse } from "./klagebehandling/types";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { concat, of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, timeout } from 'rxjs/operators';
+import { toasterSett, toasterSkjul } from './toaster';
+import { RootState } from '../root';
+import { Dependencies } from '../konfigurerTilstand';
+import { fromPromise } from 'rxjs/internal-compatibility';
+import { CustomError } from './error-types';
+import { VEDLEGG_OPPDATERT, VEDTAK_FULLFOERT } from './klagebehandling/state';
+import { IVedleggResponse, IVedtakFullfoertResponse } from './klagebehandling/types';
 
 //==========
 // Type defs
@@ -45,7 +45,7 @@ export const initialState: IVedtakState = {
 };
 
 export const slice = createSlice({
-  name: "vedtak",
+  name: 'vedtak',
   initialState,
   reducers: {
     DONE: (state) => {
@@ -70,38 +70,38 @@ export default slice.reducer;
 // Actions
 //==========
 export const { DONE, LOADING, ERROR } = slice.actions;
-export const lastOppVedlegg = createAction<IVedleggInput>("vedtak/LAST_OPP_VEDLEGG");
-export const slettVedlegg = createAction<IVedleggDeleteInput>("vedtak/SLETT_VEDLEGG");
-export const fullfoerVedtak = createAction<IFullfoerVedtakParams>("vedtak/FULLFOER");
+export const lastOppVedlegg = createAction<IVedleggInput>('vedtak/LAST_OPP_VEDLEGG');
+export const slettVedlegg = createAction<IVedleggDeleteInput>('vedtak/SLETT_VEDLEGG');
+export const fullfoerVedtak = createAction<IFullfoerVedtakParams>('vedtak/FULLFOER');
 
 const getVedtakURL = (klagebehandlingId: string, vedtakId: string) =>
   `/api/klagebehandlinger/${klagebehandlingId}/vedtak/${vedtakId}`;
 
 interface Properties {
-  [key: string]: "string" | "number" | "object" | Properties;
+  [key: string]: 'string' | 'number' | 'object' | Properties;
 }
 
 const VEDTAK_FULLFOERT_TYPE: Properties = {
-  klagebehandlingVersjon: "number",
-  modified: "string", // LocalDateTime;
-  ferdigstilt: "string", // LocalDateTime;
-  avsluttetAvSaksbehandler: "string", // LocalDate;
+  klagebehandlingVersjon: 'number',
+  modified: 'string', // LocalDateTime;
+  ferdigstilt: 'string', // LocalDateTime;
+  avsluttetAvSaksbehandler: 'string', // LocalDate;
 };
 
 const VEDLEGG_KEYS: Properties = {
-  name: "string",
-  size: "number",
-  opplastet: "string",
+  name: 'string',
+  size: 'number',
+  opplastet: 'string',
 };
 
 const VEDLEGG_RESPONSE_KEYS: Properties = {
-  klagebehandlingVersjon: "number",
-  modified: "string",
+  klagebehandlingVersjon: 'number',
+  modified: 'string',
   file: VEDLEGG_KEYS,
 };
 
 const isOfType = <T>(payload: any, type: Properties): payload is T => {
-  if (typeof payload === "object" && payload !== null) {
+  if (typeof payload === 'object' && payload !== null) {
     const keys = Object.keys(payload);
     const expectedKeys = Object.keys(type);
     return (
@@ -112,7 +112,7 @@ const isOfType = <T>(payload: any, type: Properties): payload is T => {
         }
         const t = type[key];
         const d = payload[key];
-        if (typeof t === "string") {
+        if (typeof t === 'string') {
           return typeof d === t;
         }
         if (d === null) {
@@ -128,6 +128,6 @@ const isOfType = <T>(payload: any, type: Properties): payload is T => {
 const displayToast = (feilmelding: string) =>
   toasterSett({
     display: true,
-    type: "feil",
+    type: 'feil',
     feilmelding,
   });

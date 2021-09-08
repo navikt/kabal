@@ -1,28 +1,28 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { catchError, debounceTime, map, retryWhen, switchMap } from "rxjs/operators";
-import { AjaxCreationMethod, AjaxResponse } from "rxjs/internal-compatibility";
-import { concat, Observable, of } from "rxjs";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { RootState } from "../root";
-import { Dependencies } from "../konfigurerTilstand";
-import { OppgaveRad } from "./oppgave";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { catchError, debounceTime, map, retryWhen, switchMap } from 'rxjs/operators';
+import { AjaxCreationMethod, AjaxResponse } from 'rxjs/internal-compatibility';
+import { concat, Observable, of } from 'rxjs';
+import { toasterSett, toasterSkjul } from './toaster';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { RootState } from '../root';
+import { Dependencies } from '../konfigurerTilstand';
+import { OppgaveRad } from './oppgave';
 
 //==========
 // Interfaces
 //==========
 
 enum Rekkefolge {
-  stigende = "STIGENDE",
-  synkende = "SYNKENDE",
+  stigende = 'STIGENDE',
+  synkende = 'SYNKENDE',
 }
 
 enum Sortering {
-  frist = "FRIST",
+  frist = 'FRIST',
 }
 
 enum Projeksjon {
-  utvidet = "UTVIDET",
+  utvidet = 'UTVIDET',
 }
 
 interface IPersonSokPayload {
@@ -61,7 +61,7 @@ interface IPersonResult {
 // Reducer
 //==========
 export const sokSlice = createSlice({
-  name: "sok",
+  name: 'sok',
   initialState: {
     laster: false,
     response: {
@@ -74,9 +74,7 @@ export const sokSlice = createSlice({
       state.laster = true;
       return state;
     },
-    SOK_FAIL: (state, action: PayloadAction) => {
-      return state;
-    },
+    SOK_FAIL: (state, action: PayloadAction) => state,
     SOK_LASTER: (state, action: PayloadAction<boolean>) => {
       state.laster = action.payload;
       return state;
@@ -106,36 +104,36 @@ export default sokSlice.reducer;
 // Actions
 //==========
 const { SOK_FAIL, SOK_LASTER, SOK_RESPONSE } = sokSlice.actions;
-export const startSok = createAction<IPersonSokPayload>("sok/SOK");
-export const settSokLaster = createAction<boolean>("sok/SOK_LASTER");
-export const tomSok = createAction("sok/SOK_TOM");
+export const startSok = createAction<IPersonSokPayload>('sok/SOK');
+export const settSokLaster = createAction<boolean>('sok/SOK_LASTER');
+export const tomSok = createAction('sok/SOK_TOM');
 
 const performSearch = (
   payload: IPersonSokPayload,
   post: { (url: string, body?: any, headers?: Object | undefined): Observable<AjaxResponse> }
 ) => {
   const url = `/api/ansatte/${payload.navIdent}/klagebehandlinger/personsoek`;
-  let body = {
+  const body = {
     soekString: payload.soekString,
     fnr: payload.soekString,
     start: payload.start,
     antall: payload.antall,
   };
 
-  return post(url, body, { "Content-Type": "application/json" })
+  return post(url, body, { 'Content-Type': 'application/json' })
     .pipe(map((payload) => SOK_RESPONSE(payload.response)))
     .pipe(
       retryWhen(provIgjenStrategi({ maksForsok: 1 })),
-      catchError((error) => {
-        return concat([
+      catchError((error) =>
+        concat([
           SOK_FAIL(),
           toasterSett({
             display: true,
-            type: "feil",
+            type: 'feil',
             feilmelding: `Søk feilet ${error}`,
           }),
           toasterSkjul(15),
-        ]);
-      })
+        ])
+      )
     );
 };

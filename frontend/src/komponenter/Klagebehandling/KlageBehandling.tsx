@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Oppsett from "../Oppsett";
-import { KlagebehandlingPaneler } from "./KlagebehandlingPaneler";
-import { IKlagebehandling } from "../../tilstand/moduler/klagebehandling/stateTypes";
-import { Topplinje } from "./Topplinje/Kontrollpanel";
-import "../../stilark/klagebehandling.less";
-import { useAppSelector } from "../../tilstand/konfigurerTilstand";
-import { velgInnstillinger } from "../../tilstand/moduler/meg.velgere";
+import React, { useEffect, useState } from 'react';
+import Oppsett from '../Oppsett';
+import { KlagebehandlingPaneler } from './KlagebehandlingPaneler';
+import { IKlagebehandling } from '../../tilstand/moduler/klagebehandling/stateTypes';
+import { Topplinje } from './Topplinje/Kontrollpanel';
+import '../../stilark/klagebehandling.less';
+import { useAppSelector } from '../../tilstand/konfigurerTilstand';
+import { velgInnstillinger } from '../../tilstand/moduler/meg.velgere';
 
-import { withErrorBoundary } from "../../utility/ErrorBoundary";
-import { ErrorMessage } from "../ErrorMessage";
+import { withErrorBoundary } from '../../utility/ErrorBoundary';
+import { ErrorMessage } from '../ErrorMessage';
 
 const ErrorMessageWithErrorBoundary = withErrorBoundary(ErrorMessage);
 
@@ -67,17 +67,8 @@ export const Klagebehandling = ({ klagebehandling }: KlagebehandlingProps) => {
   }, [innstillinger?.aktiveFaner]);
 
   return (
-    <Oppsett
-      backLink={"/mineoppgaver"}
-      visMeny={false}
-      customClass={"bg_lysgraa"}
-      contentClass={"uten-nav"}
-    >
-      <Topplinje
-        klagebehandling={klagebehandling}
-        faner={faner}
-        settAktiveFaner={settAktiveFaner}
-      />
+    <Oppsett backLink={'/mineoppgaver'} visMeny={false} customClass={'bg_lysgraa'} contentClass={'uten-nav'}>
+      <Topplinje klagebehandling={klagebehandling} faner={faner} settAktiveFaner={settAktiveFaner} />
       <ErrorMessageWithErrorBoundary>
         <KlagebehandlingPaneler faner={faner} klagebehandling={klagebehandling} />
       </ErrorMessageWithErrorBoundary>

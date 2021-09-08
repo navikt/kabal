@@ -1,27 +1,26 @@
-import { OppgaveRad, OppgaveRader, OppgaveRadMedFunksjoner } from "../../tilstand/moduler/oppgave";
-import { IKodeverkVerdi } from "../../tilstand/moduler/kodeverk";
-import React, { useRef, useState } from "react";
-import EtikettBase from "nav-frontend-etiketter";
-import { Knapp } from "nav-frontend-knapper";
-import classNames from "classnames";
-import { useOnInteractOutside } from "./FiltrerbarHeader";
-import { useDispatch, useSelector } from "react-redux";
-import { fradelMegHandling } from "../../tilstand/moduler/saksbehandler";
-import { velgMeg } from "../../tilstand/moduler/meg.velgere";
+import { OppgaveRad, OppgaveRader, OppgaveRadMedFunksjoner } from '../../tilstand/moduler/oppgave';
+import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
+import React, { useRef, useState } from 'react';
+import EtikettBase from 'nav-frontend-etiketter';
+import { Knapp } from 'nav-frontend-knapper';
+import classNames from 'classnames';
+import { useOnInteractOutside } from './FiltrerbarHeader';
+import { useDispatch, useSelector } from 'react-redux';
+import { fradelMegHandling } from '../../tilstand/moduler/saksbehandler';
+import { velgMeg } from '../../tilstand/moduler/meg.velgere';
 // @ts-ignore
-import { NavLink, useHistory, useLocation } from "react-router-dom";
-import { formattedDate } from "../../domene/datofunksjoner";
-import styled from "styled-components";
-import MedunderskriverStatus from "./Medunderskriver";
-import { useAppSelector } from "../../tilstand/konfigurerTilstand";
-import { velgKodeverk } from "../../tilstand/moduler/kodeverk.velgere";
-import { TabellVisning } from "./Tabell";
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { formattedDate } from '../../domene/datofunksjoner';
+import styled from 'styled-components';
+import MedunderskriverStatus from './Medunderskriver';
+import { useAppSelector } from '../../tilstand/konfigurerTilstand';
+import { velgKodeverk } from '../../tilstand/moduler/kodeverk.velgere';
+import { TabellVisning } from './Tabell';
 
-const R = require("ramda");
+const R = require('ramda');
 
-const velgOppgave = R.curry(
-  (settValgtOppgave: Function, id: string, klagebehandlingVersjon: number, it: number) =>
-    tildelOppgave(settValgtOppgave, id, klagebehandlingVersjon, it)
+const velgOppgave = R.curry((settValgtOppgave: Function, id: string, klagebehandlingVersjon: number, it: number) =>
+  tildelOppgave(settValgtOppgave, id, klagebehandlingVersjon, it)
 );
 
 const TableRow = styled.tr``;
@@ -32,53 +31,45 @@ const EndreKnapp = styled.button`
   cursor: pointer !important;
 `;
 
-const visHandlinger = R.curry(
-  (fradelOppgave: Function, id: string, klagebehandlingVersjon: number) => {
-    const [viserHandlinger, settVisHandlinger] = useState(false);
-    let [it] = useState(0);
-    const ref = useRef<HTMLDivElement>(null);
-    const meg = useSelector(velgMeg);
-    useOnInteractOutside({
-      ref,
-      onInteractOutside: () => settVisHandlinger(false),
-      active: viserHandlinger,
-    });
+const visHandlinger = R.curry((fradelOppgave: Function, id: string, klagebehandlingVersjon: number) => {
+  const [viserHandlinger, settVisHandlinger] = useState(false);
+  let [it] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const meg = useSelector(velgMeg);
+  useOnInteractOutside({
+    ref,
+    onInteractOutside: () => settVisHandlinger(false),
+    active: viserHandlinger,
+  });
 
-    return (
-      <MedunderskriverStatus id={id}>
-        <td className="knapp-med-handlingsoverlegg">
-          <EndreKnapp
-            data-testid={`endreknapp${it++}`}
-            onClick={() => settVisHandlinger(!viserHandlinger)}
-            className={classNames({ skjult: viserHandlinger })}
-          >
-            Endre
-          </EndreKnapp>
-          <div className={classNames({ handlinger: true, skjult: !viserHandlinger })} ref={ref}>
-            <div>
-              <Knapp
-                data-testid="leggtilbake"
-                className={"knapp"}
-                onClick={(e) => fradelOppgave(id, klagebehandlingVersjon)}
-              >
-                Legg tilbake
-              </Knapp>
-            </div>
+  return (
+    <MedunderskriverStatus id={id}>
+      <td className="knapp-med-handlingsoverlegg">
+        <EndreKnapp
+          data-testid={`endreknapp${it++}`}
+          onClick={() => settVisHandlinger(!viserHandlinger)}
+          className={classNames({ skjult: viserHandlinger })}
+        >
+          Endre
+        </EndreKnapp>
+        <div className={classNames({ handlinger: true, skjult: !viserHandlinger })} ref={ref}>
+          <div>
+            <Knapp
+              data-testid="leggtilbake"
+              className={'knapp'}
+              onClick={(e) => fradelOppgave(id, klagebehandlingVersjon)}
+            >
+              Legg tilbake
+            </Knapp>
           </div>
-        </td>
-      </MedunderskriverStatus>
-    );
-  }
-);
+        </div>
+      </td>
+    </MedunderskriverStatus>
+  );
+});
 
 const leggTilbakeOppgave = R.curry(
-  (
-    dispatch: Function,
-    ident: string,
-    enhetId: string,
-    oppgaveId: string,
-    klagebehandlingVersjon: number
-  ) =>
+  (dispatch: Function, ident: string, enhetId: string, oppgaveId: string, klagebehandlingVersjon: number) =>
     dispatch(
       fradelMegHandling({
         oppgaveId: oppgaveId,
@@ -91,10 +82,10 @@ const leggTilbakeOppgave = R.curry(
 );
 
 export function Kodeverk(kodeverk: any, data: string) {
-  if (!data) return "mangler";
+  if (!data) return 'mangler';
   return kodeverk
     ? kodeverk.filter((h: IKodeverkVerdi) => h.id == data)[0]?.beskrivelse ?? `ukjent (${data})`
-    : "mangler";
+    : 'mangler';
 }
 
 const OppgaveTabellRad = ({
@@ -126,106 +117,73 @@ const OppgaveTabellRad = ({
 
   const location = useLocation();
   const history = useHistory();
-  const visFnrInit =
-    location.pathname.startsWith("/mineoppgaver") ||
-    location.pathname.startsWith("/enhetensoppgaver");
+  const visFnrInit = location.pathname.startsWith('/mineoppgaver') || location.pathname.startsWith('/enhetensoppgaver');
 
   const rerouteToKlage = (location: any) => {
     if (visFnrInit) history.push(`/klagebehandling/${id}`);
   };
 
   return (
-    <TableRow className={`${visFnrInit ? "tablerow__on_hover" : ""} table-filter`}>
+    <TableRow className={`${visFnrInit ? 'tablerow__on_hover' : ''} table-filter`}>
       <td
-        className={`${visFnrInit ? "cursor__pointer" : ""} `}
+        className={`${visFnrInit ? 'cursor__pointer' : ''} `}
         data-testid={`linkbehandling${it}`}
         onClick={() => rerouteToKlage(location)}
       >
-        <EtikettBase
-          type="info"
-          className={`etikett-${type}  ${visFnrInit ? "etikett__mine-oppgaver" : ""} `}
-        >
+        <EtikettBase type="info" className={`etikett-${type}  ${visFnrInit ? 'etikett__mine-oppgaver' : ''} `}>
           {KodeverkType(type)}
         </EtikettBase>
       </td>
-      <td
-        className={`${visFnrInit ? "cursor__pointer" : ""} `}
-        onClick={() => rerouteToKlage(location)}
-      >
-        <EtikettBase
-          type="info"
-          className={`etikett-${tema} ${visFnrInit ? "etikett__mine-oppgaver" : ""}`}
-        >
+      <td className={`${visFnrInit ? 'cursor__pointer' : ''} `} onClick={() => rerouteToKlage(location)}>
+        <EtikettBase type="info" className={`etikett-${tema} ${visFnrInit ? 'etikett__mine-oppgaver' : ''}`}>
           {KodeverkTema(tema)}
         </EtikettBase>
       </td>
 
-      <td
-        className={`${visFnrInit ? "cursor__pointer" : ""} `}
-        onClick={() => rerouteToKlage(location)}
-      >
-        <EtikettBase
-          type="info"
-          className={`etikett-${hjemmel} ${visFnrInit ? "etikett__mine-oppgaver" : ""}`}
-        >
+      <td className={`${visFnrInit ? 'cursor__pointer' : ''} `} onClick={() => rerouteToKlage(location)}>
+        <EtikettBase type="info" className={`etikett-${hjemmel} ${visFnrInit ? 'etikett__mine-oppgaver' : ''}`}>
           {KodeverkHjemmel(hjemmel)}
         </EtikettBase>
       </td>
 
       {utvidetProjeksjon && (
-        <td
-          className={`${visFnrInit ? "cursor__pointer" : ""} `}
-          onClick={() => rerouteToKlage(location)}
-        >
-          {person?.navn || "mangler"}
+        <td className={`${visFnrInit ? 'cursor__pointer' : ''} `} onClick={() => rerouteToKlage(location)}>
+          {person?.navn || 'mangler'}
         </td>
       )}
       {utvidetProjeksjon && (
-        <td className={`${visFnrInit ? "cursor__pointer" : ""} `}>
-          <NavLink className={"fnr"} to={`/klagebehandling/${id}`}>
-            {" "}
-            {person?.fnr || "mangler"}
+        <td className={`${visFnrInit ? 'cursor__pointer' : ''} `}>
+          <NavLink className={'fnr'} to={`/klagebehandling/${id}`}>
+            {' '}
+            {person?.fnr || 'mangler'}
           </NavLink>
         </td>
       )}
 
       {avsluttetAvSaksbehandler && (
-        <td
-          className={`${visFnrInit ? "cursor__pointer" : ""} `}
-          onClick={() => rerouteToKlage(location)}
-        >
+        <td className={`${visFnrInit ? 'cursor__pointer' : ''} `} onClick={() => rerouteToKlage(location)}>
           {formattedDate(avsluttetAvSaksbehandler)}
         </td>
       )}
       {!avsluttetAvSaksbehandler && (
-        <td
-          className={`${visFnrInit ? "cursor__pointer" : ""} `}
-          onClick={() => rerouteToKlage(location)}
-        >
+        <td className={`${visFnrInit ? 'cursor__pointer' : ''} `} onClick={() => rerouteToKlage(location)}>
           {formattedDate(frist)}
         </td>
       )}
 
       {utfall && <TableCell>{KodeverkUtfall(utfall)}</TableCell>}
-      {!utfall &&
-        location.pathname.startsWith("/oppgaver") &&
-        curriedVelgOppgave(klagebehandlingVersjon)(it)}
+      {!utfall && location.pathname.startsWith('/oppgaver') && curriedVelgOppgave(klagebehandlingVersjon)(it)}
       {!utfall && visFnrInit && curriedVisHandlinger(klagebehandlingVersjon)}
     </TableRow>
   );
 };
 
-function tildelOppgave(
-  settValgtOppgave: Function,
-  id: string,
-  klagebehandlingVersjon: number,
-  it: number
-) {
+function tildelOppgave(settValgtOppgave: Function, id: string, klagebehandlingVersjon: number, it: number) {
   return (
     <TableCell>
       <Knapp
         data-testid={`tildelknapp${it}`}
-        className={"knapp"}
+        className={'knapp'}
         onClick={(e) => settValgtOppgave({ id, klagebehandlingVersjon })}
       >
         Tildel meg
@@ -238,7 +196,7 @@ export const genererTabellRader = (
   settValgOppgaveId: Function,
   klagebehandlinger: OppgaveRader,
   visning: TabellVisning,
-  utvidetProjeksjon: "UTVIDET" | boolean | undefined
+  utvidetProjeksjon: 'UTVIDET' | boolean | undefined
 ): JSX.Element[] =>
   klagebehandlinger.rader.map((rad: OppgaveRad, it) => (
     <OppgaveTabellRad

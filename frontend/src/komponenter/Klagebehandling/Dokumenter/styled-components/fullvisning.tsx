@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { Checkbox } from "nav-frontend-skjema";
-import { Knapp } from "nav-frontend-knapper";
+import styled from 'styled-components';
+import { Checkbox } from 'nav-frontend-skjema';
+import { Knapp } from 'nav-frontend-knapper';
 
 export const DokumenterFullvisning = styled.div`
   display: flex;
@@ -48,8 +48,8 @@ export const DokumentRad = styled.ul`
   padding: 0.25em;
   display: grid;
   grid-template-areas:
-    "tittel tema dato sjekkboks"
-    "vedlegg vedlegg vedlegg vedlegg";
+    'tittel tema dato sjekkboks'
+    'vedlegg vedlegg vedlegg vedlegg';
   grid-template-rows: 1fr;
 `;
 

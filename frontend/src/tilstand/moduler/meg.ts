@@ -1,6 +1,6 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { concat } from "rxjs";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { concat } from 'rxjs';
 import {
   catchError,
   concatAll,
@@ -12,13 +12,13 @@ import {
   throttleTime,
   timeout,
   withLatestFrom,
-} from "rxjs/operators";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { Filter, oppgaveHentingFeilet as oppgaveFeiletHandling } from "./oppgave";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { Dependencies } from "../konfigurerTilstand";
-import { RootState } from "../root";
-import { AlertStripeType } from "nav-frontend-alertstriper";
+} from 'rxjs/operators';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { Filter, oppgaveHentingFeilet as oppgaveFeiletHandling } from './oppgave';
+import { toasterSett, toasterSkjul } from './toaster';
+import { Dependencies } from '../konfigurerTilstand';
+import { RootState } from '../root';
+import { AlertStripeType } from 'nav-frontend-alertstriper';
 
 //==========
 // Interfaces
@@ -105,18 +105,18 @@ export interface IError {
 // Reducer
 //==========
 export const megSlice = createSlice({
-  name: "meg",
+  name: 'meg',
   initialState: <MegType>{
     graphData: {
-      id: "",
-      navn: "",
-      fornavn: "",
-      mail: "",
-      etternavn: "",
+      id: '',
+      navn: '',
+      fornavn: '',
+      mail: '',
+      etternavn: '',
     },
     valgtEnhet: {
-      id: "",
-      navn: "",
+      id: '',
+      navn: '',
       lovligeTemaer: undefined,
     },
     lovligeTemaer: undefined,
@@ -125,7 +125,7 @@ export const megSlice = createSlice({
   },
   reducers: {
     MEG_HENTET: (state, action: PayloadAction<MegType>) => {
-      let person = action.payload.graphData;
+      const person = action.payload.graphData;
       state.graphData.fornavn = person.fornavn;
       state.graphData.etternavn = person.etternavn;
       state.graphData.navn = person.navn;
@@ -136,7 +136,7 @@ export const megSlice = createSlice({
       return state;
     },
     MEG_HENTET_UTEN_ENHETER: (state, action: PayloadAction<MegType>) => {
-      let person = action.payload.graphData;
+      const person = action.payload.graphData;
       state.graphData.fornavn = person.fornavn;
       state.graphData.etternavn = person.etternavn;
       state.graphData.navn = person.navn;
@@ -171,31 +171,27 @@ export default megSlice.reducer;
 // Actions
 //==========
 export const { MEG_HENTET, FEILET, ENHET_LAGRET } = megSlice.actions;
-export const hentMegHandling = createAction("meg/HENT_MEG");
-export const hentMegUtenEnheterHandling = createAction("meg/HENT_MEG_UTEN_ENHETER");
-export const hentetMegHandling = createAction<Partial<MegType>>("meg/MEG_HENTET");
-export const hentetUtenEnheterHandling = createAction<Partial<MegType>>(
-  "meg/MEG_HENTET_UTEN_ENHETER"
-);
-export const settEnhetHandling = createAction<ISettEnhet>("meg/SETT_ENHET");
-export const sattInnstillinger = createAction<IInnstillinger>("meg/INNSTILLINGER_SATT");
-export const hentInnstillingerHandling =
-  createAction<IHentInnstilingerPayload>("meg/HENT_INNSTILLINGER");
-export const hentetInnstillingerHandling = createAction<IInnstillinger>("meg/INNSTILLINGER_HENTET");
-export const settInnstillingerHandling =
-  createAction<IInnstillingerPayload>("meg/INNSTILLINGER_SETT");
-export const feiletHandling = createAction<string>("meg/FEILET");
+export const hentMegHandling = createAction('meg/HENT_MEG');
+export const hentMegUtenEnheterHandling = createAction('meg/HENT_MEG_UTEN_ENHETER');
+export const hentetMegHandling = createAction<Partial<MegType>>('meg/MEG_HENTET');
+export const hentetUtenEnheterHandling = createAction<Partial<MegType>>('meg/MEG_HENTET_UTEN_ENHETER');
+export const settEnhetHandling = createAction<ISettEnhet>('meg/SETT_ENHET');
+export const sattInnstillinger = createAction<IInnstillinger>('meg/INNSTILLINGER_SATT');
+export const hentInnstillingerHandling = createAction<IHentInnstilingerPayload>('meg/HENT_INNSTILLINGER');
+export const hentetInnstillingerHandling = createAction<IInnstillinger>('meg/INNSTILLINGER_HENTET');
+export const settInnstillingerHandling = createAction<IInnstillingerPayload>('meg/INNSTILLINGER_SETT');
+export const feiletHandling = createAction<string>('meg/FEILET');
 
 //==========
 // Vis feilmeldinger ved feil
 //==========
 
-export function displayToast(error: IError, type: AlertStripeType = "feil") {
+export function displayToast(error: IError, type: AlertStripeType = 'feil') {
   const message = error?.message || error;
   return toasterSett({
     display: true,
     type,
-    feilmelding: typeof message === "string" ? message : JSON.stringify(message),
+    feilmelding: typeof message === 'string' ? message : JSON.stringify(message),
   });
 }
 

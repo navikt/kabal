@@ -1,14 +1,10 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { of } from "rxjs";
-import { catchError, map, retryWhen, switchMap, timeout } from "rxjs/operators";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { GrunnerPerUtfall } from "./klagebehandling";
-import { Dependencies } from "../konfigurerTilstand";
-import { RootState } from "../root";
-
-//==========
-// Type defs
-//==========
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { of } from 'rxjs';
+import { catchError, map, retryWhen, switchMap, timeout } from 'rxjs/operators';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { GrunnerPerUtfall } from './klagebehandling';
+import { AppDispatch, Dependencies } from '../konfigurerTilstand';
+import { RootState } from '../root';
 
 export interface IKodeverkVerdi {
   id: string;
@@ -62,19 +58,23 @@ const initialState: IKodeverkState = {
 };
 
 export const kodeverkSlice = createSlice({
-  name: "kodeverk",
+  name: 'kodeverk',
   initialState,
   reducers: {
-    HENT: (state) => {
+    showLoading: (state) => {
       state.lasterKodeverk = true;
       return state;
     },
-    HENTET_KODEVERK: (state, action: PayloadAction<IKodeverk>) => {
+    hideLoading: (state) => {
+      state.lasterKodeverk = false;
+      return state;
+    },
+    setKodeverk: (state, action: PayloadAction<IKodeverk>) => {
       state.kodeverk = action.payload;
       state.lasterKodeverk = false;
       return state;
     },
-    FEILET: (state, action: PayloadAction<string>) => {
+    failed: (state, action: PayloadAction<string>) => {
       state.lasterKodeverk = false;
       return state;
     },
@@ -86,6 +86,12 @@ export default kodeverkSlice.reducer;
 //==========
 // Actions
 //==========
-export const { HENT, HENTET_KODEVERK, FEILET } = kodeverkSlice.actions;
+export const { showLoading, hideLoading, setKodeverk } = kodeverkSlice.actions;
 
-export const hentKodeverk = createAction("klagebehandlinger/HENT_KODEVERK");
+export const loadKodeverk = () => async (dispatch: AppDispatch) => {
+  dispatch(showLoading());
+  const res = await fetch('/api/kodeverk');
+  const kodeverk: IKodeverk = await res.json();
+  dispatch(setKodeverk(kodeverk));
+  dispatch(hideLoading());
+};

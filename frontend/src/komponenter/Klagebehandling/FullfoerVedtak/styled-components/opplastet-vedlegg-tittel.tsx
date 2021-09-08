@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const OpplastetVedleggTittel = styled.h2`
   font-size: 1em;

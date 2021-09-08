@@ -1,6 +1,6 @@
-import { RootStateOrAny } from "react-redux";
-import { RootState } from "../root";
-import { IInnstillinger } from "./meg";
+import { RootStateOrAny } from 'react-redux';
+import { RootState } from '../root';
+import { IInnstillinger } from './meg';
 
 export function velgMeg(state: RootState) {
   return state.meg;

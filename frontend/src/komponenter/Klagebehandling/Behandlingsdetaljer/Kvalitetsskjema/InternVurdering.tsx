@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Textarea } from "nav-frontend-skjema";
-import { useKanEndre } from "../../utils/hooks";
+import React, { useState } from 'react';
+import { Textarea } from 'nav-frontend-skjema';
+import { useKanEndre } from '../../utils/hooks';
 
 interface InterfaceInternVurderingProps {
   defaultValue: string;
@@ -23,7 +23,7 @@ export function InternVurdering({ defaultValue, onChange }: InterfaceInternVurde
         onChange(e.target.value);
       }}
       style={{
-        minHeight: "80px",
+        minHeight: '80px',
       }}
       readOnly={!kanEndre}
     />

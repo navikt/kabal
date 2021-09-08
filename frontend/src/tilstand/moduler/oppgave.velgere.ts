@@ -1,5 +1,5 @@
-import { OppgaveRader } from "./oppgave";
-import { RootState } from "../root";
+import { OppgaveRader } from './oppgave';
+import { RootState } from '../root';
 
 export function velgOppgaver(state: RootState) {
   return state.klagebehandlinger as OppgaveRader;

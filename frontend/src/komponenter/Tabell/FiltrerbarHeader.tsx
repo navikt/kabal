@@ -1,33 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
-import {
-  FilterMenuItemProps,
-  FiltrerbarHeaderProps,
-  UseOnInteractOutsideParameters,
-} from "../types";
-import { Filter } from "../../tilstand/moduler/oppgave";
+import React, { useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
+import { FilterMenuItemProps, FiltrerbarHeaderProps, UseOnInteractOutsideParameters } from '../types';
+import { Filter } from '../../tilstand/moduler/oppgave';
 
-export const useOnInteractOutside = ({
-  ref,
-  onInteractOutside,
-  active,
-}: UseOnInteractOutsideParameters) => {
+export const useOnInteractOutside = ({ ref, onInteractOutside, active }: UseOnInteractOutsideParameters) => {
   useEffect(() => {
     const onInteractWrapper = (event: FocusEvent | MouseEvent) => {
       if (active && !ref.current?.contains(event.target as HTMLElement)) onInteractOutside();
     };
-    document.addEventListener("focusin", onInteractWrapper);
-    document.addEventListener("click", onInteractWrapper);
+    document.addEventListener('focusin', onInteractWrapper);
+    document.addEventListener('click', onInteractWrapper);
     return () => {
-      document.removeEventListener("focusin", onInteractWrapper);
-      document.removeEventListener("click", onInteractWrapper);
+      document.removeEventListener('focusin', onInteractWrapper);
+      document.removeEventListener('click', onInteractWrapper);
     };
   }, [ref.current, active]);
 };
 
 export const FilterRad = ({ children, onFilter, aktiv }: FilterMenuItemProps) => (
   <li>
-    <label className={"filterLabel"}>
+    <label className={'filterLabel'}>
       <input type="checkbox" checked={aktiv} onChange={onFilter} />
       {children}
     </label>
@@ -91,26 +83,20 @@ export const FiltrerbarHeader = ({
 
   return (
     <th scope="col" ref={ref} colSpan={kolonner}>
-      <button className={classNames("filterHeader", open && "open")} onClick={onClick} tabIndex={0}>
+      <button className={classNames('filterHeader', open && 'open')} onClick={onClick} tabIndex={0}>
         {children}
       </button>
       {open && (
-        <ul className={"filterList"}>
-          <FilterRad
-            onFilter={() => onFilter(filtre, !alleFiltreErAktive)}
-            aktiv={alleFiltreErAktive}
-          >
-            {alleFiltreErAktive ? "Opphev alle" : "Velg alle"}
+        <ul className={'filterList'}>
+          <FilterRad onFilter={() => onFilter(filtre, !alleFiltreErAktive)} aktiv={alleFiltreErAktive}>
+            {alleFiltreErAktive ? 'Opphev alle' : 'Velg alle'}
           </FilterRad>
           <hr />
           {filtre.map((filter, i) => (
             <FilterRad
               key={filter.label as string}
               onFilter={() => onFilter([filter])}
-              aktiv={
-                aktiveFiltere.find((aktivtFilter) => aktivtFilter.label === filter.label) !==
-                undefined
-              }
+              aktiv={aktiveFiltere.find((aktivtFilter) => aktivtFilter.label === filter.label) !== undefined}
             >
               {filter.label}
             </FilterRad>

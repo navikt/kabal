@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 interface HeaderProps {
   settFullvisning: (fullvisning: boolean) => void;
@@ -19,8 +19,7 @@ export const Header = React.memo<HeaderProps>(
   (previous, next) => previous.fullvisning === next.fullvisning && previous.antall === next.antall
 );
 
-const getText = (fullvisning: boolean) =>
-  fullvisning ? "Vis kun tilknyttede" : "Se alle dokumenter";
+const getText = (fullvisning: boolean) => (fullvisning ? 'Vis kun tilknyttede' : 'Se alle dokumenter');
 
 const DokumenterNav = styled.div`
   position: sticky;

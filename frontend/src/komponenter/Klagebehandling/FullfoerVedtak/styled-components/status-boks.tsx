@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { AlertStripeSuksess } from "nav-frontend-alertstriper";
+import React from 'react';
+import styled from 'styled-components';
+import { AlertStripeSuksess } from 'nav-frontend-alertstriper';
 
 export const StatusBoks = styled(AlertStripeSuksess)`
   margin-top: 1em;

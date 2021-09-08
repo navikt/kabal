@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo } from "react";
-import { Knapp } from "nav-frontend-knapper";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { fullfoerVedtak } from "../../../tilstand/moduler/vedtak";
-import { velgVedtak } from "../../../tilstand/moduler/vedtak.velgere";
-import { StatusBoksMedTittel } from "./styled-components/status-boks";
-import { TilbakeTilOppgaverLenke } from "./styled-components/tilbake-link";
-import { INavn } from "../../../tilstand/moduler/klagebehandling";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { useIsSaved } from "../utils/hooks";
+import React, { useCallback, useMemo } from 'react';
+import { Knapp } from 'nav-frontend-knapper';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { fullfoerVedtak } from '../../../tilstand/moduler/vedtak';
+import { velgVedtak } from '../../../tilstand/moduler/vedtak.velgere';
+import { StatusBoksMedTittel } from './styled-components/status-boks';
+import { TilbakeTilOppgaverLenke } from './styled-components/tilbake-link';
+import { INavn } from '../../../tilstand/moduler/klagebehandling';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { useIsSaved } from '../utils/hooks';
 
 interface GodkjennOgSendUtVedtakProps {
   klagebehandling: IKlagebehandling;
@@ -56,23 +56,19 @@ export const GodkjennOgSendUtVedtak = ({ klagebehandling }: GodkjennOgSendUtVedt
   }
 
   // Hvis vedtaket er ferdigstilt.
-  if (typeof ferdigstilt === "string" && ferdigstilt.length !== 0) {
+  if (typeof ferdigstilt === 'string' && ferdigstilt.length !== 0) {
     return (
       <>
-        <StatusBoksMedTittel tittel={"Sendes til klager"}>
+        <StatusBoksMedTittel tittel={'Sendes til klager'}>
           Vedtaket sendes nå til {formaterNavn(sakenGjelderNavn)}
         </StatusBoksMedTittel>
-        <TilbakeTilOppgaverLenke to={"/mineoppgaver"}>Tilbake til oppgaver</TilbakeTilOppgaverLenke>
+        <TilbakeTilOppgaverLenke to={'/mineoppgaver'}>Tilbake til oppgaver</TilbakeTilOppgaverLenke>
       </>
     );
   }
 
   return (
-    <Knapp
-      onClick={godkjennOgSendUt}
-      style={{ marginTop: "1em" }}
-      disabled={loading || !harVedlegg || !isSaved}
-    >
+    <Knapp onClick={godkjennOgSendUt} style={{ marginTop: '1em' }} disabled={loading || !harVedlegg || !isSaved}>
       Godkjenn og send ut vedtak
     </Knapp>
   );
@@ -80,10 +76,8 @@ export const GodkjennOgSendUtVedtak = ({ klagebehandling }: GodkjennOgSendUtVedt
 
 const formaterNavn = (navn: INavn | null): string => {
   if (navn === null) {
-    return "-";
+    return '-';
   }
   const { fornavn, mellomnavn, etternavn } = navn;
-  return [fornavn, mellomnavn, etternavn]
-    .filter((n) => typeof n === "string" && n.length !== 0)
-    .join(" ");
+  return [fornavn, mellomnavn, etternavn].filter((n) => typeof n === 'string' && n.length !== 0).join(' ');
 };

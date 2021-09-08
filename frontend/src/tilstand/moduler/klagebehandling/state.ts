@@ -1,17 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initialState } from "./initialState";
-import { IKlagebehandling, TilknyttetDokument } from "./stateTypes";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { initialState } from './initialState';
+import { IKlagebehandling, TilknyttetDokument } from './stateTypes';
 import {
   IKlagebehandlingOppdatering,
   IKlagebehandlingOppdateringResponse,
   IMedunderskriverSatt,
   IVedleggResponse,
   IVedtakFullfoertResponse,
-} from "./types";
-import { dokumentMatcher } from "../../../komponenter/Klagebehandling/Dokumenter/helpers";
+} from './types';
+import { dokumentMatcher } from '../../../komponenter/Klagebehandling/Dokumenter/helpers';
 
 export const klagebehandlingSlice = createSlice({
-  name: "klagebehandling",
+  name: 'klagebehandling',
   initialState,
   reducers: {
     UNLOAD_KLAGEBEHANDLING: (state) => ({
@@ -75,10 +75,9 @@ export const klagebehandlingSlice = createSlice({
         return;
       }
 
-      state.klagebehandling.tilknyttedeDokumenter =
-        state.klagebehandling.tilknyttedeDokumenter.filter(
-          (tilknyttet) => !dokumentMatcher(tilknyttet, payload)
-        );
+      state.klagebehandling.tilknyttedeDokumenter = state.klagebehandling.tilknyttedeDokumenter.filter(
+        (tilknyttet) => !dokumentMatcher(tilknyttet, payload)
+      );
       return state;
     },
     MEDUNDERSKRIVER_SATT: (state, { payload }: PayloadAction<IMedunderskriverSatt>) => {
@@ -96,7 +95,7 @@ export const klagebehandlingSlice = createSlice({
         return state;
       }
       const [vedtak] = state.klagebehandling.vedtak;
-      if (typeof vedtak !== "undefined") {
+      if (typeof vedtak !== 'undefined') {
         const { klagebehandlingVersjon, modified, file } = action.payload;
         state.klagebehandling.klagebehandlingVersjon = klagebehandlingVersjon;
         state.klagebehandling.modified = modified;
@@ -112,7 +111,7 @@ export const klagebehandlingSlice = createSlice({
       state.klagebehandling.klagebehandlingVersjon = payload.klagebehandlingVersjon;
       state.klagebehandling.modified = payload.modified;
       const [vedtak] = state.klagebehandling.vedtak;
-      if (typeof vedtak !== "undefined") {
+      if (typeof vedtak !== 'undefined') {
         vedtak.ferdigstilt = payload.ferdigstilt;
       }
       return state;

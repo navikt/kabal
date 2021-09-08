@@ -1,6 +1,6 @@
-import { Filter, oppgaveRequest, Transformasjoner } from "../../tilstand/moduler/oppgave";
-import { useReducer } from "react";
-import { MegType } from "../../tilstand/moduler/meg";
+import { Filter, oppgaveRequest, Transformasjoner } from '../../tilstand/moduler/oppgave';
+import { useReducer } from 'react';
+import { MegType } from '../../tilstand/moduler/meg';
 
 interface FilterState {
   meta: {
@@ -13,7 +13,7 @@ interface FilterState {
   antall: number;
   start: number;
   enhetId: string;
-  projeksjon: "UTVIDET" | undefined;
+  projeksjon: 'UTVIDET' | undefined;
   tildeltSaksbehandler?: string;
   transformasjoner: Transformasjoner;
 }
@@ -26,10 +26,10 @@ function filterReducer(antall: number, start: number) {
       kan_hente_oppgaver: true,
     },
     meg: undefined,
-    ident: "",
+    ident: '',
     antall: antall || 10,
     start: start || 0,
-    enhetId: "",
+    enhetId: '',
     projeksjon: undefined,
     tildeltSaksbehandler: undefined,
     transformasjoner: {
@@ -39,16 +39,16 @@ function filterReducer(antall: number, start: number) {
         temaer: [],
       },
       sortering: {
-        type: "frist",
-        frist: "stigende",
-        mottatt: "stigende",
+        type: 'frist',
+        frist: 'stigende',
+        mottatt: 'stigende',
       },
     },
   };
 
   function reducer(state: any, action: any) {
     switch (action.type) {
-      case "sett_start": {
+      case 'sett_start': {
         if (undefined !== typeof action.payload)
           return {
             ...state,
@@ -62,7 +62,7 @@ function filterReducer(antall: number, start: number) {
           };
       }
 
-      case "sett_tildelt_saksbehandler": {
+      case 'sett_tildelt_saksbehandler': {
         return {
           ...state,
           meta: { ...state.meta, saksbehandler_satt: true },
@@ -70,14 +70,14 @@ function filterReducer(antall: number, start: number) {
         };
       }
 
-      case "sett_kan_hente_oppgaver": {
+      case 'sett_kan_hente_oppgaver': {
         return {
           ...state,
           meta: { ...state.meta, kan_hente_oppgaver: true },
         };
       }
 
-      case "sett_transformasjoner": {
+      case 'sett_transformasjoner': {
         return {
           ...state,
           meta: {
@@ -95,7 +95,7 @@ function filterReducer(antall: number, start: number) {
           },
         };
       }
-      case "sett_aktive_temaer": {
+      case 'sett_aktive_temaer': {
         return {
           ...state,
           transformasjoner: {
@@ -104,7 +104,7 @@ function filterReducer(antall: number, start: number) {
           },
         };
       }
-      case "sett_aktive_hjemler": {
+      case 'sett_aktive_hjemler': {
         return {
           ...state,
           transformasjoner: {
@@ -113,7 +113,7 @@ function filterReducer(antall: number, start: number) {
           },
         };
       }
-      case "sett_aktive_typer": {
+      case 'sett_aktive_typer': {
         return {
           ...state,
           transformasjoner: {
@@ -122,35 +122,35 @@ function filterReducer(antall: number, start: number) {
           },
         };
       }
-      case "sett_frist": {
+      case 'sett_frist': {
         return {
           ...state,
           meta: { ...state.meta, kan_hente_oppgaver: true },
           transformasjoner: {
             ...state.transformasjoner,
             sortering: {
-              type: "frist",
+              type: 'frist',
               frist: action.payload,
               mottatt: state.transformasjoner.sortering.mottatt,
             },
           },
         };
       }
-      case "sett_mottatt": {
+      case 'sett_mottatt': {
         return {
           ...state,
           meta: { ...state.meta, kan_hente_oppgaver: true },
           transformasjoner: {
             ...state.transformasjoner,
             sortering: {
-              type: "mottatt",
+              type: 'mottatt',
               frist: state.transformasjoner.sortering.frist,
               mottatt: action.payload,
             },
           },
         };
       }
-      case "sett_navident": {
+      case 'sett_navident': {
         return {
           ...state,
           meta: { ...state.meta, kan_hente_oppgaver: true },
@@ -159,7 +159,7 @@ function filterReducer(antall: number, start: number) {
           meg: { ...action.payload },
         };
       }
-      case "sett_projeksjon": {
+      case 'sett_projeksjon': {
         return {
           ...state,
           projeksjon: action.payload,

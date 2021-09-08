@@ -1,10 +1,8 @@
-import React from "react";
+import React from 'react';
 
-const MISSING_ERROR = "Error was swallowed during propagation.";
+const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-export const withErrorBoundary = <BaseProps extends {}>(
-  BaseComponent: React.ComponentType<BaseProps>
-) => {
+export const withErrorBoundary = <BaseProps extends {}>(BaseComponent: React.ComponentType<BaseProps>) => {
   type HocProps = {
     // here you can extend hoc with new props
   };

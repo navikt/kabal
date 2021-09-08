@@ -1,20 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { formattedDate } from "../../../domene/datofunksjoner";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import {
-  IDokument,
-  IDokumentListe,
-  IDokumentVedlegg,
-} from "../../../tilstand/moduler/dokumenter/stateTypes";
-import { IShownDokument, ITilknyttetDokument, ITilknyttetVedlegg } from "./typer";
-import {
-  hentDokumenter,
-  nullstillOgHentDokumenter,
-} from "../../../tilstand/moduler/dokumenter/actions";
-import { useKanEndre } from "../utils/hooks";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { dokumentMatcher } from "./helpers";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { formattedDate } from '../../../domene/datofunksjoner';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { IDokument, IDokumentListe, IDokumentVedlegg } from '../../../tilstand/moduler/dokumenter/stateTypes';
+import { IShownDokument, ITilknyttetDokument, ITilknyttetVedlegg } from './typer';
+import { hentDokumenter, nullstillOgHentDokumenter } from '../../../tilstand/moduler/dokumenter/actions';
+import { useKanEndre } from '../utils/hooks';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { dokumentMatcher } from './helpers';
 import {
   DokumentCheckbox,
   DokumentDato,
@@ -31,21 +24,18 @@ import {
   VedleggBeholder,
   VedleggRad,
   VedleggTittel,
-} from "./styled-components/fullvisning";
-import {
-  FRAKOBLE_DOKUMENT,
-  TILKNYTT_DOKUMENT,
-} from "../../../tilstand/moduler/klagebehandling/state";
-import { TilknyttetDokument } from "../../../tilstand/moduler/klagebehandling/types";
-import { useSelector } from "react-redux";
-import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
-import { Kodeverk } from "../../Tabell/tabellfunksjoner";
-import FiltrerbarHeader, { settFilter } from "../../Tabell/FiltrerbarHeader";
-import { Filter } from "../../../tilstand/moduler/oppgave";
-import { IKodeverkVerdi } from "../../../tilstand/moduler/kodeverk";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
+} from './styled-components/fullvisning';
+import { FRAKOBLE_DOKUMENT, TILKNYTT_DOKUMENT } from '../../../tilstand/moduler/klagebehandling/state';
+import { TilknyttetDokument } from '../../../tilstand/moduler/klagebehandling/types';
+import { useSelector } from 'react-redux';
+import { velgKodeverk } from '../../../tilstand/moduler/kodeverk.velgere';
+import { Kodeverk } from '../../Tabell/tabellfunksjoner';
+import FiltrerbarHeader, { settFilter } from '../../Tabell/FiltrerbarHeader';
+import { Filter } from '../../../tilstand/moduler/oppgave';
+import { IKodeverkVerdi } from '../../../tilstand/moduler/kodeverk';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
 
-const R = require("ramda");
+const R = require('ramda');
 
 interface AlleDokumenterProps {
   dokumenter: IDokumentListe;
@@ -68,11 +58,11 @@ export const AlleDokumenter = React.memo(
     const kodeverk = useSelector(velgKodeverk);
 
     useEffect(() => {
-      let lovligeTemaer: Filter[] = [];
+      const lovligeTemaer: Filter[] = [];
       if (enheter.length > 0) {
         valgtEnhet.lovligeTemaer?.forEach((tema: string | any) => {
           if (kodeverk?.kodeverk.tema) {
-            let kodeverkTema = kodeverk.kodeverk.tema.filter(
+            const kodeverkTema = kodeverk.kodeverk.tema.filter(
               (t: IKodeverkVerdi) => t.id.toString() === tema.toString()
             )[0];
             if (kodeverkTema?.id)
@@ -107,9 +97,7 @@ export const AlleDokumenter = React.memo(
       () =>
         dokumenter.dokumenter.map((dokument) => ({
           dokument,
-          tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) =>
-            dokumentMatcher(t, dokument)
-          ),
+          tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, dokument)),
         })),
       [dokumenter.dokumenter, klagebehandling.tilknyttedeDokumenter]
     );
@@ -128,7 +116,7 @@ export const AlleDokumenter = React.memo(
           <thead>
             <tr>
               <FiltrerbarHeader
-                data-testid={"typefilter"}
+                data-testid={'typefilter'}
                 onFilter={(filter, velgAlleEllerIngen) =>
                   settFilter(settAktiveTemaer, filter, aktiveTemaer, velgAlleEllerIngen)
                 }
@@ -141,7 +129,7 @@ export const AlleDokumenter = React.memo(
             </tr>
           </thead>
         </table>
-        <List data-testid={"dokumenter"}>
+        <List data-testid={'dokumenter'}>
           {alleDokumenter.map(({ dokument, tilknyttet }) => (
             <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
               <Dokument
@@ -183,12 +171,7 @@ const Dokument = React.memo<DokumentProps>(
     const { kodeverk } = useAppSelector(velgKodeverk);
     const KodeverkTema = R.curry(Kodeverk)(kodeverk.tema);
 
-    const onShowDokument = ({
-      journalpostId,
-      dokumentInfoId,
-      tittel,
-      harTilgangTilArkivvariant,
-    }: IDokument) =>
+    const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
       visDokument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
 
     const onCheck = (checked: boolean) => {
@@ -204,20 +187,18 @@ const Dokument = React.memo<DokumentProps>(
         <DokumentTittel onClick={() => onShowDokument(dokument)}>{dokument.tittel}</DokumentTittel>
         <DokumentTema
           onClick={() => onShowDokument(dokument)}
-          className={`etikett etikett--mw etikett--info etikett--${dokument
-            .tema!.split(" ")[0]
-            .toLowerCase()}`}
+          className={`etikett etikett--mw etikett--info etikett--${dokument.tema!.split(' ')[0].toLowerCase()}`}
         >
           <TemaText> {KodeverkTema(dokument.tema)}</TemaText>
         </DokumentTema>
-        <DokumentDato onClick={() => onShowDokument(dokument)} className={"liten"}>
+        <DokumentDato onClick={() => onShowDokument(dokument)} className={'liten'}>
           {formattedDate(dokument.registrert)}
         </DokumentDato>
 
         <DokumentSjekkboks>
           <RightAlign>
             <DokumentCheckbox
-              label={""}
+              label={''}
               disabled={!dokument.harTilgangTilArkivvariant || !kanEndre}
               defaultChecked={tilknyttet}
               onChange={(e) => onCheck(e.currentTarget.checked)}
@@ -265,7 +246,7 @@ const VedleggListe = React.memo(
     }
 
     return (
-      <VedleggBeholder data-testid={"vedlegg"}>
+      <VedleggBeholder data-testid={'vedlegg'}>
         {vedleggListe.map(({ vedlegg, tilknyttet }) => (
           <VedleggKomponent
             key={`vedlegg_${dokument.journalpostId}_${vedlegg.dokumentInfoId}`}
@@ -316,10 +297,10 @@ const VedleggKomponent = React.memo<VedleggKomponentProps>(
     return (
       <VedleggRad key={dokument.journalpostId + vedlegg.dokumentInfoId}>
         <VedleggTittel onClick={onVisDokument}>{vedlegg.tittel}</VedleggTittel>
-        <DokumentSjekkboks className={"dokument-sjekkboks"}>
+        <DokumentSjekkboks className={'dokument-sjekkboks'}>
           <RightAlign>
             <DokumentCheckbox
-              label={""}
+              label={''}
               disabled={!vedlegg.harTilgangTilArkivvariant || !kanEndre}
               defaultChecked={tilknyttet}
               onChange={(e) => onCheck(e.currentTarget.checked)}
@@ -346,10 +327,7 @@ interface LoadMoreProps {
 const LastFlere = ({ dokumenter, klagebehandlingId, temaFilter, loading }: LoadMoreProps) => {
   const dispatch = useAppDispatch();
   const onClick = useCallback(
-    () =>
-      dispatch(
-        hentDokumenter({ klagebehandlingId, pageReference: dokumenter.pageReference, temaFilter })
-      ),
+    () => dispatch(hentDokumenter({ klagebehandlingId, pageReference: dokumenter.pageReference, temaFilter })),
     [dokumenter.pageReference, klagebehandlingId]
   );
 

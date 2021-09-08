@@ -1,12 +1,12 @@
-import React, { useMemo, useState } from "react";
-import styled from "styled-components";
-import { Behandlingsdetaljer } from "./Behandlingsdetaljer/Behandlingsdetaljer";
-import { IFaner } from "./KlageBehandling";
-import { Dokumenter } from "./Dokumenter/Dokumenter";
-import { IKlagebehandling } from "../../tilstand/moduler/klagebehandling/stateTypes";
-import { useKlagebehandlingUpdater } from "./utils/hooks";
-import { FullforVedtak } from "./FullfoerVedtak/FullforVedtak";
-import { Kvalitetsvurdering } from "./Kvalitetsvurdering/Kvalitetsvurdering";
+import React, { useMemo, useState } from 'react';
+import styled from 'styled-components';
+import { Behandlingsdetaljer } from './Behandlingsdetaljer/Behandlingsdetaljer';
+import { IFaner } from './KlageBehandling';
+import { Dokumenter } from './Dokumenter/Dokumenter';
+import { IKlagebehandling } from '../../tilstand/moduler/klagebehandling/stateTypes';
+import { useKlagebehandlingUpdater } from './utils/hooks';
+import { FullforVedtak } from './FullfoerVedtak/FullforVedtak';
+import { Kvalitetsvurdering } from './Kvalitetsvurdering/Kvalitetsvurdering';
 
 interface KlagebehandlingPanelerProps {
   faner: IFaner;
@@ -19,7 +19,7 @@ export const KlagebehandlingPaneler = ({ faner, klagebehandling }: Klagebehandli
   useKlagebehandlingUpdater(klagebehandling);
 
   return (
-    <SideBeholder data-testid={"behandlingsdetaljer"}>
+    <SideBeholder data-testid={'behandlingsdetaljer'}>
       <Dokumenter
         skjult={!faner.dokumenter.checked}
         settFullvisning={settFullvisning}
@@ -27,10 +27,7 @@ export const KlagebehandlingPaneler = ({ faner, klagebehandling }: Klagebehandli
         klagebehandling={klagebehandling}
       />
       <Behandlingsdetaljer skjult={!faner.detaljer.checked} klagebehandling={klagebehandling} />
-      <Kvalitetsvurdering
-        skjult={!faner.kvalitetsvurdering.checked}
-        klagebehandling={klagebehandling}
-      />
+      <Kvalitetsvurdering skjult={!faner.kvalitetsvurdering.checked} klagebehandling={klagebehandling} />
       <FullforVedtak skjult={!faner.vedtak.checked} klagebehandling={klagebehandling} />
     </SideBeholder>
   );

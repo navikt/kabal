@@ -1,5 +1,5 @@
-import { Observable, throwError, timer } from "rxjs";
-import { mergeMap, finalize } from "rxjs/operators";
+import { Observable, throwError, timer } from 'rxjs';
+import { mergeMap, finalize } from 'rxjs/operators';
 
 export const provIgjenStrategi =
   ({
@@ -11,8 +11,8 @@ export const provIgjenStrategi =
     ventetidMillisekunder?: number;
     ekskluderteStatuskoder?: number[];
   } = {}) =>
-  (antallForsok: Observable<any>) => {
-    return antallForsok.pipe(
+  (antallForsok: Observable<any>) =>
+    antallForsok.pipe(
       mergeMap((error, i) => {
         const forsok = i + 1;
 
@@ -25,4 +25,3 @@ export const provIgjenStrategi =
         // console.log("Ferdig")
       })
     );
-  };

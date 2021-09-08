@@ -1,13 +1,10 @@
-import React from "react";
-import { render as rtlRender } from "@testing-library/react";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import reducer from "../tilstand/root";
+import React from 'react';
+import { render as rtlRender } from '@testing-library/react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import reducer from '../tilstand/root';
 
-function render(
-  ui,
-  { initialState, store = createStore(reducer, initialState), container, ...renderOptions } = {}
-) {
+function render(ui, { initialState, store = createStore(reducer, initialState), container, ...renderOptions } = {}) {
   function Wrapper({ children }) {
     return <Provider store={store}>{children}</Provider>;
   }
@@ -15,6 +12,6 @@ function render(
 }
 
 // re-export everything
-export * from "@testing-library/react";
+export * from '@testing-library/react';
 // override render method
 export { render };

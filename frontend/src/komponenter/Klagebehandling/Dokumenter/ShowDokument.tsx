@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import { IShownDokument } from "./typer";
+import React, { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import { IShownDokument } from './typer';
 // @ts-ignore
-import CloseSVG from "./ikoner/cancelblack.svg";
+import CloseSVG from './ikoner/cancelblack.svg';
 // @ts-ignore
-import ExtLink from "./ikoner/extlink.svg";
+import ExtLink from './ikoner/extlink.svg';
 // @ts-ignore
-import ZoomIn from "./ikoner/ZoomIn.svg";
+import ZoomIn from './ikoner/ZoomIn.svg';
 // @ts-ignore
-import ZoomOut from "./ikoner/ZoomOut.svg";
+import ZoomOut from './ikoner/ZoomOut.svg';
 
 const MIN_PDF_WIDTH = 760;
 const MAX_PDF_WIDTH = 1960;
@@ -31,10 +31,7 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
 
-  useEffect(
-    () => localStorage.setItem("valgtBreddeForhandsvisning", pdfWidth.toString()),
-    [pdfWidth]
-  );
+  useEffect(() => localStorage.setItem('valgtBreddeForhandsvisning', pdfWidth.toString()), [pdfWidth]);
 
   if (dokument === null) {
     return null;
@@ -47,7 +44,7 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
         <div>
           <HeaderButton onClick={decrease} text="Zoom ut på PDF" icon={ZoomOut} />
           <HeaderButton onClick={increase} text="Zoom inn på PDF" icon={ZoomIn} />
-          <a href={url} target={"_blank"} title="Åpne i ny fane">
+          <a href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
             <EksternalSVGIkon alt="Ekstern lenke" src={ExtLink} />
           </a>
           <HeaderButton onClick={close} text="Lukk forhåndsvisning" icon={CloseSVG} />
@@ -64,7 +61,7 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
 };
 
 const getSavedPdfWidth = () => {
-  const localStorageVerdi = localStorage.getItem("valgtBreddeForhandsvisning");
+  const localStorageVerdi = localStorage.getItem('valgtBreddeForhandsvisning');
   if (localStorageVerdi === null) {
     return MIN_PDF_WIDTH;
   }

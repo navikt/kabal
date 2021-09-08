@@ -1,21 +1,19 @@
-import React, { useState, useMemo } from "react";
-import { useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { velgMedunderskrivere } from "../../../tilstand/moduler/medunderskrivere/selectors";
-import { SendTilMedunderskriver } from "./SendTilMedunderskriver";
-import { TilbakeTilOppgaverLenke } from "./styled-components/tilbake-link";
-import { VisSattMedunderskriver } from "./VisSattMedunderskriver";
-import { VelgMedunderskriver } from "./VelgMedunderskriver";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { useIsSaved } from "../utils/hooks";
+import React, { useState, useMemo } from 'react';
+import { useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { velgMedunderskrivere } from '../../../tilstand/moduler/medunderskrivere/selectors';
+import { SendTilMedunderskriver } from './SendTilMedunderskriver';
+import { TilbakeTilOppgaverLenke } from './styled-components/tilbake-link';
+import { VisSattMedunderskriver } from './VisSattMedunderskriver';
+import { VelgMedunderskriver } from './VelgMedunderskriver';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { useIsSaved } from '../utils/hooks';
 
 interface VelgOgSendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
 }
 
-export const VelgOgSendTilMedunderskriver = ({
-  klagebehandling,
-}: VelgOgSendTilMedunderskriverProps) => {
+export const VelgOgSendTilMedunderskriver = ({ klagebehandling }: VelgOgSendTilMedunderskriverProps) => {
   const {
     graphData: { id },
   } = useAppSelector(velgMeg);
@@ -41,11 +39,11 @@ export const VelgOgSendTilMedunderskriver = ({
   }
 
   // Hvis vedtaket er sent til medunderskriver.
-  if (typeof medunderskriverident === "string" && medunderskriverident.length !== 0) {
+  if (typeof medunderskriverident === 'string' && medunderskriverident.length !== 0) {
     return (
       <>
         <VisSattMedunderskriver klagebehandling={klagebehandling} />
-        <TilbakeTilOppgaverLenke to={"/mineoppgaver"}>Tilbake til oppgaver</TilbakeTilOppgaverLenke>
+        <TilbakeTilOppgaverLenke to={'/mineoppgaver'}>Tilbake til oppgaver</TilbakeTilOppgaverLenke>
       </>
     );
   }
@@ -58,11 +56,7 @@ export const VelgOgSendTilMedunderskriver = ({
 
   return (
     <>
-      <VelgMedunderskriver
-        tema={tema}
-        value={valgtMedunderskriver}
-        onSelect={settValgtMedunderskriver}
-      />
+      <VelgMedunderskriver tema={tema} value={valgtMedunderskriver} onSelect={settValgtMedunderskriver} />
       <SendTilMedunderskriver
         klagebehandling={klagebehandling}
         disabled={loading || !isValidSelection || !isSaved}

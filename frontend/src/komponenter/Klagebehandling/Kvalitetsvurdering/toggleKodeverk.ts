@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { lagreKvalitetsvurdering } from "../../../tilstand/moduler/kvalitetsvurdering";
+import { useCallback } from 'react';
+import { lagreKvalitetsvurdering } from '../../../tilstand/moduler/kvalitetsvurdering';
 
 export const toggleKodeverk = (dispatch: any, klagebehandling: any) =>
   useCallback(
@@ -14,7 +14,7 @@ export const toggleKodeverk = (dispatch: any, klagebehandling: any) =>
       navn: string;
       verdi: string;
     }) => {
-      let funnet = kodeverkFelt.filter((felt_id: string) => felt_id === id);
+      const funnet = kodeverkFelt.filter((felt_id: string) => felt_id === id);
       let nyListe: string[] = [];
       if (!funnet.length) {
         nyListe = nyListe.concat(kodeverkFelt);

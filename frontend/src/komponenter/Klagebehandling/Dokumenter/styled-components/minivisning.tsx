@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const DokumenterMinivisning = styled.ul`
   display: block;
@@ -24,6 +24,6 @@ export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
   background-color: transparent;
   color: #0067c5;
   font-size: 16px;
-  text-decoration: ${(props) => (props.tilknyttet ? "none" : "line-through")};
+  text-decoration: ${(props) => (props.tilknyttet ? 'none' : 'line-through')};
   text-align: left;
 `;

@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { gosysEnvironment } from "../../../domene/eksterne_systemer";
+import React from 'react';
+import styled from 'styled-components';
+import { gosysEnvironment } from '../../../domene/eksterne_systemer';
 //@ts-ignore
-import ExtLink from "../../extlinkblue.svg";
-import LagringsIndikator from "./AutolagreElement";
-import { useIsSaved } from "../utils/hooks";
+import ExtLink from '../../extlinkblue.svg';
+import LagringsIndikator from './AutolagreElement';
+import { useIsSaved } from '../utils/hooks';
 
 interface EksterneLenkerProps {
   fnr: string | null;
@@ -21,7 +21,7 @@ export const EksterneLenker = React.memo(
         <Knapperad>
           <Lenke
             target="_blank"
-            aria-label={"Ekstern lenke til Gosys for denne personen"}
+            aria-label={'Ekstern lenke til Gosys for denne personen'}
             href={`${gosysEnvironment(window.location.hostname)}/personoversikt/fnr=${fnr}`}
           >
             Gosys&nbsp;

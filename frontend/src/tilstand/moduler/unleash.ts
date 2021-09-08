@@ -1,9 +1,9 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { of } from "rxjs";
-import { catchError, map, mergeMap, retryWhen, timeout, withLatestFrom } from "rxjs/operators";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { Dependencies } from "../konfigurerTilstand";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { of } from 'rxjs';
+import { catchError, map, mergeMap, retryWhen, timeout, withLatestFrom } from 'rxjs/operators';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { Dependencies } from '../konfigurerTilstand';
 
 //==========
 // Interfaces
@@ -21,7 +21,7 @@ export interface IFeatureToggles {
 // Reducer
 //==========
 export const unleashSlice = createSlice({
-  name: "unleash",
+  name: 'unleash',
   initialState: {
     features: [],
   } as IFeatureToggles,
@@ -49,9 +49,9 @@ export default unleashSlice.reducer;
 // Actions
 //==========
 export const { HENTET, FEILET } = unleashSlice.actions;
-export const hentFeatureToggleHandling = createAction<string>("unleash/HENT_FEATURE");
-export const hentetHandling = createAction<IFeatureToggle>("unleash/HENTET");
-export const feiletHandling = createAction<string>("unleash/FEILET");
+export const hentFeatureToggleHandling = createAction<string>('unleash/HENT_FEATURE');
+export const hentetHandling = createAction<IFeatureToggle>('unleash/HENTET');
+export const feiletHandling = createAction<string>('unleash/FEILET');
 
 //==========
 // Epos

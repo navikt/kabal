@@ -1,4 +1,4 @@
-import { IDokumenterState } from "./stateTypes";
+import { IDokumenterState } from './stateTypes';
 
 export const initialState: IDokumenterState = {
   dokumenter: {

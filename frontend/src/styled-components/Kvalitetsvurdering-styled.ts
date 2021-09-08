@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Checkbox } from "nav-frontend-skjema";
+import styled from 'styled-components';
+import { Checkbox } from 'nav-frontend-skjema';
 
 export const DokumentCheckbox = styled(Checkbox)`
   margin-top: 1em;
@@ -23,7 +23,7 @@ export const InfoKnapp = styled.button`
 export const VurderingBeholder = styled.div`
   padding: 0;
   margin: 0;
-  display: ${(props) => (!props.theme.vises ? "none" : "block")};
+  display: ${(props) => (!props.theme.vises ? 'none' : 'block')};
 `;
 export const Div = styled.div`
   display: block;
@@ -31,11 +31,11 @@ export const Div = styled.div`
   margin: 0;
 `;
 
-export let Header = styled.h2`
+export const Header = styled.h2`
   font-size: 1.2em;
 `;
 
-export let SubHeader = styled.div`
+export const SubHeader = styled.div`
   font-size: 1.1em;
   display: flex;
   flex-flow: row;

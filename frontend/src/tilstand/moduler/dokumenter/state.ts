@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initialState } from "./initialState";
-import { IDokument } from "./stateTypes";
-import { IDokumenterRespons } from "./types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { initialState } from './initialState';
+import { IDokument } from './stateTypes';
+import { IDokumenterRespons } from './types';
 
 const sorterSynkendePaaRegistrert = (dokumenter: IDokument[]) => {
   if (dokumenter.length === 0) {
@@ -19,7 +19,7 @@ const sorterSynkendePaaRegistrert = (dokumenter: IDokument[]) => {
 };
 
 export const dokumenterSlice = createSlice({
-  name: "dokumenter",
+  name: 'dokumenter',
   initialState,
   reducers: {
     NULLSTILL_DOKUMENTER: (state) => ({

@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { lastMedunderskrivere } from "../../../tilstand/moduler/medunderskrivere/actions";
-import { velgMedunderskrivere } from "../../../tilstand/moduler/medunderskrivere/selectors";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { StatusBoksMedTittel } from "./styled-components/status-boks";
+import React, { useEffect, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { lastMedunderskrivere } from '../../../tilstand/moduler/medunderskrivere/actions';
+import { velgMedunderskrivere } from '../../../tilstand/moduler/medunderskrivere/selectors';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { StatusBoksMedTittel } from './styled-components/status-boks';
 
 interface VisSattMedunderskriverProps {
   klagebehandling: IKlagebehandling;
@@ -28,13 +28,9 @@ export const VisSattMedunderskriver = ({ klagebehandling }: VisSattMedunderskriv
   );
 
   if (currentMedunderskriver === undefined) {
-    return <StatusBoksMedTittel tittel={"Sendt til medunderskriver"} />;
+    return <StatusBoksMedTittel tittel={'Sendt til medunderskriver'} />;
   }
 
   const { navn } = currentMedunderskriver;
-  return (
-    <StatusBoksMedTittel tittel={"Sendt til medunderskriver"}>
-      Klagen er nå sendt til {navn}.
-    </StatusBoksMedTittel>
-  );
+  return <StatusBoksMedTittel tittel={'Sendt til medunderskriver'}>Klagen er nå sendt til {navn}.</StatusBoksMedTittel>;
 };

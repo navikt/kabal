@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Section } from "../../../../styled-components/Row-styled";
-import { Utfall } from "./Utfall";
-import { BasertPaaHjemmel } from "./BasertPaaLovhjemmel";
-import { velgKodeverk } from "../../../../tilstand/moduler/kodeverk.velgere";
-import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
-import { useAppDispatch, useAppSelector } from "../../../../tilstand/konfigurerTilstand";
-import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
-import { OPPDATER_KLAGEBEHANDLING } from "../../../../tilstand/moduler/klagebehandling/state";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { arrayEquals, isNotUndefined } from "../../utils/helpers";
+import React, { useEffect, useMemo, useState } from 'react';
+import { Section } from '../../../../styled-components/Row-styled';
+import { Utfall } from './Utfall';
+import { BasertPaaHjemmel } from './BasertPaaLovhjemmel';
+import { velgKodeverk } from '../../../../tilstand/moduler/kodeverk.velgere';
+import { IKodeverkVerdi } from '../../../../tilstand/moduler/kodeverk';
+import { useAppDispatch, useAppSelector } from '../../../../tilstand/konfigurerTilstand';
+import { IKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/stateTypes';
+import { OPPDATER_KLAGEBEHANDLING } from '../../../../tilstand/moduler/klagebehandling/state';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { arrayEquals, isNotUndefined } from '../../utils/helpers';
 
 interface KvalitetsskjemaProps {
   klagebehandling: IKlagebehandling;
@@ -34,9 +34,7 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
     if (lasterKodeverk || !utfallObjekt) {
       return [];
     }
-    return (
-      kodeverk.grunnerPerUtfall.find(({ utfallId }) => utfallId == utfallObjekt.id)?.grunner ?? []
-    );
+    return kodeverk.grunnerPerUtfall.find(({ utfallId }) => utfallId == utfallObjekt.id)?.grunner ?? [];
   }, [utfallObjekt, lasterKodeverk, kodeverk.grunnerPerUtfall]);
 
   const omgjoeringsgrunnObjekt = useMemo<IKodeverkVerdi | null>(() => {
@@ -50,9 +48,7 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
     if (lasterKodeverk) {
       return [];
     }
-    return vedtak.hjemler
-      .map((kode) => kodeverk.hjemmel.find(({ id }) => id === kode))
-      .filter(isNotUndefined);
+    return vedtak.hjemler.map((kode) => kodeverk.hjemmel.find(({ id }) => id === kode)).filter(isNotUndefined);
   }, [vedtak.hjemler, lasterKodeverk, kodeverk.hjemmel]);
 
   const gyldigeHjemler = useMemo(() => {
@@ -63,9 +59,7 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
   }, [tema, lasterKodeverk, kodeverk.hjemlerPerTema]);
 
   const [uiUtfall, settUiUtfall] = useState<IKodeverkVerdi | null>(utfallObjekt);
-  const [uiOmgjoeringsgrunn, settUiOmgjoeringsgrunn] = useState<IKodeverkVerdi | null>(
-    omgjoeringsgrunnObjekt
-  );
+  const [uiOmgjoeringsgrunn, settUiOmgjoeringsgrunn] = useState<IKodeverkVerdi | null>(omgjoeringsgrunnObjekt);
   const [uiValgteHjemler, settUiValgteHjemler] = useState<IKodeverkVerdi[]>(valgteHjemler);
   const [uiInternVurdering, settUiInternVurdering] = useState<string>(internVurdering);
 
@@ -101,27 +95,19 @@ export const Kvalitetsskjema = ({ klagebehandling }: KvalitetsskjemaProps) => {
 
   if (lasterKodeverk) {
     return (
-      <div className={"detaljer"}>
+      <div className={'detaljer'}>
         <NavFrontendSpinner />
       </div>
     );
   }
 
   return (
-    <div className={"detaljer"}>
+    <div className={'detaljer'}>
       <Section>
-        <Utfall
-          utfallAlternativer={kodeverk.utfall}
-          defaultUtfall={utfallObjekt}
-          onChange={settUiUtfall}
-        />
+        <Utfall utfallAlternativer={kodeverk.utfall} defaultUtfall={utfallObjekt} onChange={settUiUtfall} />
       </Section>
       <Section>
-        <BasertPaaHjemmel
-          gyldigeHjemler={gyldigeHjemler}
-          defaultValue={valgteHjemler}
-          onChange={settUiValgteHjemler}
-        />
+        <BasertPaaHjemmel gyldigeHjemler={gyldigeHjemler} defaultValue={valgteHjemler} onChange={settUiValgteHjemler} />
       </Section>
     </div>
   );

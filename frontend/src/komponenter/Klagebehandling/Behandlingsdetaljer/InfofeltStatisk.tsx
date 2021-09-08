@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 interface InfofeltProps {
   header: string;
@@ -25,7 +25,7 @@ const Infofelt = styled.div`
 `;
 
 const Info = ({ info }: InfoProps) => {
-  if (info === "") {
+  if (info === '') {
     return <p>'-'</p>;
   }
   return <p>{info}</p>;

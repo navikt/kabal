@@ -1,14 +1,14 @@
-import EtikettBase from "nav-frontend-etiketter";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import React, { useMemo } from "react";
-import styled from "styled-components";
-import { Section } from "../../../../styled-components/Row-styled";
-import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
-import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
-import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
-import { velgKodeverk } from "../../../../tilstand/moduler/kodeverk.velgere";
-import { isNotUndefined } from "../../utils/helpers";
-import { InfofeltStatisk } from "../InfofeltStatisk";
+import EtikettBase from 'nav-frontend-etiketter';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
+import styled from 'styled-components';
+import { Section } from '../../../../styled-components/Row-styled';
+import { useAppSelector } from '../../../../tilstand/konfigurerTilstand';
+import { IKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/stateTypes';
+import { IKodeverkVerdi } from '../../../../tilstand/moduler/kodeverk';
+import { velgKodeverk } from '../../../../tilstand/moduler/kodeverk.velgere';
+import { isNotUndefined } from '../../utils/helpers';
+import { InfofeltStatisk } from '../InfofeltStatisk';
 
 interface ReadOnlyKvalitetsskjemaProps {
   klagebehandling: IKlagebehandling;
@@ -21,18 +21,13 @@ export const ReadOnlyKvalitetsskjema = ({ klagebehandling }: ReadOnlyKvalitetssk
     vedtak: [vedtak],
   } = klagebehandling;
 
-  const utfall = useMemo(
-    () => kodeverk.utfall.find(({ id }) => id === vedtak.utfall),
-    [kodeverk.utfall, vedtak]
-  );
+  const utfall = useMemo(() => kodeverk.utfall.find(({ id }) => id === vedtak.utfall), [kodeverk.utfall, vedtak]);
 
   const hjemler = useMemo<IKodeverkVerdi[]>(() => {
     if (lasterKodeverk) {
       return [];
     }
-    return vedtak.hjemler
-      .map((kode) => kodeverk.hjemmel.find(({ id }) => id === kode))
-      .filter(isNotUndefined);
+    return vedtak.hjemler.map((kode) => kodeverk.hjemmel.find(({ id }) => id === kode)).filter(isNotUndefined);
   }, [vedtak.hjemler, lasterKodeverk, kodeverk.hjemmel]);
 
   const gyldigeOmgjoeringsgrunner = useMemo<IKodeverkVerdi[]>(() => {
@@ -61,22 +56,15 @@ export const ReadOnlyKvalitetsskjema = ({ klagebehandling }: ReadOnlyKvalitetssk
   return (
     <>
       <Section>
-        <InfofeltStatisk header="Utfall/resultat" info={utfall?.navn ?? "Ingen"} />
+        <InfofeltStatisk header="Utfall/resultat" info={utfall?.navn ?? 'Ingen'} />
       </Section>
       <Section>
         <b>Utfallet er basert på lovhjemmel:</b>
-        {hjemler.length > 0 ? (
-          <Etikettliste elementer={hjemler.map(({ navn }) => navn)} />
-        ) : (
-          <p>Ingen</p>
-        )}
+        {hjemler.length > 0 ? <Etikettliste elementer={hjemler.map(({ navn }) => navn)} /> : <p>Ingen</p>}
       </Section>
       <Omgjoeringsgrunn vis={visOmgjoeringsgrunner} grunn={omgjoeringsgrunn} />
       <Section>
-        <InfofeltStatisk
-          header="Vurdering av kvalitet for intern bruk"
-          info={klagebehandling.internVurdering}
-        />
+        <InfofeltStatisk header="Vurdering av kvalitet for intern bruk" info={klagebehandling.internVurdering} />
       </Section>
     </>
   );
@@ -91,7 +79,7 @@ const Omgjoeringsgrunn = ({ grunn, vis }: OmgjoeringsgrunnProps) => {
   if (!vis) {
     return null;
   }
-  const info = grunn === null ? "Ingen" : grunn.navn;
+  const info = grunn === null ? 'Ingen' : grunn.navn;
   return (
     <Section>
       <InfofeltStatisk header="Omgjøringsgrunn" info={info} />
@@ -107,10 +95,10 @@ const StyledEtikettliste = styled.ul`
 
 interface EtikettlisteProps {
   elementer: string[];
-  type?: "info" | "suksess" | "advarsel" | "fokus";
+  type?: 'info' | 'suksess' | 'advarsel' | 'fokus';
 }
 
-const Etikettliste = ({ elementer, type = "info" }: EtikettlisteProps) => (
+const Etikettliste = ({ elementer, type = 'info' }: EtikettlisteProps) => (
   <StyledEtikettliste>
     {elementer.sort().map((e) => (
       <EtikettBase key={e} type={type}>

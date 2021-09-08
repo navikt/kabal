@@ -1,11 +1,11 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { concat, of } from "rxjs";
-import { catchError, mergeMap, switchMap, timeout, withLatestFrom } from "rxjs/operators";
-import { OppgaveParams, oppgaveRequest } from "./oppgave";
-import { settOppgaverFerdigLastet, settOppgaverLaster } from "./oppgavelaster";
-import { displayToast, skjulToaster } from "./meg";
-import { Dependencies } from "../konfigurerTilstand";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { concat, of } from 'rxjs';
+import { catchError, mergeMap, switchMap, timeout, withLatestFrom } from 'rxjs/operators';
+import { OppgaveParams, oppgaveRequest } from './oppgave';
+import { settOppgaverFerdigLastet, settOppgaverLaster } from './oppgavelaster';
+import { displayToast, skjulToaster } from './meg';
+import { Dependencies } from '../konfigurerTilstand';
 
 //==========
 // Type defs
@@ -29,5 +29,5 @@ export type ITildelOppgave = {
 //==========
 // Actions
 //==========
-export const tildelMegHandling = createAction<ITildelOppgave>("saksbehandler/TILDEL_MEG");
-export const fradelMegHandling = createAction<ITildelOppgave>("saksbehandler/FRADEL_MEG");
+export const tildelMegHandling = createAction<ITildelOppgave>('saksbehandler/TILDEL_MEG');
+export const fradelMegHandling = createAction<ITildelOppgave>('saksbehandler/FRADEL_MEG');

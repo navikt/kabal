@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { HeaderRow } from "../../../styled-components/Row-styled";
-import { Kvalitetsskjema } from "./Kvalitetsskjema/Kvalitetsskjema";
-import { Behandling } from "./Detaljer/Behandling";
-import { useKanEndre } from "../utils/hooks";
-import { ReadOnlyKvalitetsskjema } from "./ReadOnlyKvalitetsskjema/ReadOnlyKvalitetsskjema";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
+import React from 'react';
+import styled from 'styled-components';
+import { HeaderRow } from '../../../styled-components/Row-styled';
+import { Kvalitetsskjema } from './Kvalitetsskjema/Kvalitetsskjema';
+import { Behandling } from './Detaljer/Behandling';
+import { useKanEndre } from '../utils/hooks';
+import { ReadOnlyKvalitetsskjema } from './ReadOnlyKvalitetsskjema/ReadOnlyKvalitetsskjema';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
 
 interface BehandlingsdetaljerProps {
   skjult: boolean;

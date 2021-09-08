@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Oppsett from "./Oppsett";
-import FiltrerbarHeader, { settFilter } from "./Tabell/FiltrerbarHeader";
-import { IKodeverkVerdi } from "../tilstand/moduler/kodeverk";
-import { Filter } from "../tilstand/moduler/oppgave";
-import { useSelector } from "react-redux";
-import { velgFiltrering } from "../tilstand/moduler/oppgave.velgere";
-import EtikettBase from "nav-frontend-etiketter";
-import { Knapp } from "nav-frontend-knapper";
-import { velgInnstillinger, velgMeg } from "../tilstand/moduler/meg.velgere";
-import {
-  Faner,
-  hentInnstillingerHandling,
-  settInnstillingerHandling,
-} from "../tilstand/moduler/meg";
-import styled from "styled-components";
-import { useAppDispatch } from "../tilstand/konfigurerTilstand";
-import { velgKodeverk } from "../tilstand/moduler/kodeverk.velgere";
+import React, { useEffect, useState } from 'react';
+import Oppsett from './Oppsett';
+import FiltrerbarHeader, { settFilter } from './Tabell/FiltrerbarHeader';
+import { IKodeverkVerdi } from '../tilstand/moduler/kodeverk';
+import { Filter } from '../tilstand/moduler/oppgave';
+import { useSelector } from 'react-redux';
+import { velgFiltrering } from '../tilstand/moduler/oppgave.velgere';
+import { Knapp } from 'nav-frontend-knapper';
+import { velgInnstillinger, velgMeg } from '../tilstand/moduler/meg.velgere';
+import { Faner, hentInnstillingerHandling, settInnstillingerHandling } from '../tilstand/moduler/meg';
+import styled from 'styled-components';
+import { useAppDispatch } from '../tilstand/konfigurerTilstand';
+import { velgKodeverk } from '../tilstand/moduler/kodeverk.velgere';
+import { EtikettType, EtikettHjemmel } from '../styled-components/Etiketter';
 
 function initState(filter: Array<string> | undefined): Filter[] {
-  if ("undefined" === typeof filter) {
+  if ('undefined' === typeof filter) {
     return [];
   }
   return filter.map(function (f: string) {
@@ -60,11 +56,11 @@ const Innstillinger = (): JSX.Element => {
   }, [meg.graphData.id, valgtEnhet, reload]);
 
   useEffect(() => {
-    let lovligeTemaer: Filter[] = [];
+    const lovligeTemaer: Filter[] = [];
     if (enheter.length > 0) {
       valgtEnhet.lovligeTemaer?.forEach((tema: string | any) => {
         if (kodeverk?.kodeverk.tema) {
-          let kodeverkTema = kodeverk.kodeverk.tema.filter(
+          const kodeverkTema = kodeverk.kodeverk.tema.filter(
             (t: IKodeverkVerdi) => t.id.toString() === tema.toString()
           )[0];
           if (kodeverkTema?.id)
@@ -77,7 +73,7 @@ const Innstillinger = (): JSX.Element => {
     }
     settLovligeTemaer(lovligeTemaer);
 
-    let hjemler: Filter[] = [];
+    const hjemler: Filter[] = [];
     if (kodeverk.kodeverk.hjemmel) {
       kodeverk.kodeverk.hjemmel.map((hjemmel: IKodeverkVerdi) => {
         hjemler.push({ label: hjemmel.beskrivelse, value: hjemmel.id.toString() });
@@ -85,7 +81,7 @@ const Innstillinger = (): JSX.Element => {
       settGyldigeHjemler(hjemler);
     }
 
-    let typer: Filter[] = [];
+    const typer: Filter[] = [];
     if (kodeverk.kodeverk.type) {
       kodeverk.kodeverk.type.map((verdi: IKodeverkVerdi) => {
         typer.push({ label: verdi.beskrivelse, value: verdi.id.toString() });
@@ -146,14 +142,14 @@ const Innstillinger = (): JSX.Element => {
   };
   return (
     <Oppsett visMeny={false}>
-      <div className={"innstillinger"}>
+      <div className={'innstillinger'}>
         <h1>Innstillinger</h1>
         <h3>Velg hvilke temaer og hjemler du har kompetanse til å behandle</h3>
-        <table className={"innstillinger"}>
+        <table className={'innstillinger'}>
           <thead>
             <tr>
               <FiltrerbarHeader
-                data-testid={"typefilter"}
+                data-testid={'typefilter'}
                 onFilter={(filter, velgAlleEllerIngen) =>
                   settFilter(settAktiveTyper, filter, aktiveTyper, velgAlleEllerIngen)
                 }
@@ -193,9 +189,7 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveTyper.length && <div>Ingen typer valgt</div>}
                 {aktiveTyper.map((a, idx) => (
                   <div key={`type${idx}`}>
-                    <EtikettBase type="info" className={`etikett-type`}>
-                      {a.label}
-                    </EtikettBase>
+                    <EtikettType>{a.label}</EtikettType>
                   </div>
                 ))}
               </TableRow>
@@ -204,9 +198,7 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveTemaer.length && <div>Ingen temaer valgt</div>}
                 {aktiveTemaer.map((a, idx) => (
                   <div key={`tema${idx}`}>
-                    <EtikettBase type="info" className={`etikett--hjemmel`}>
-                      {a.label}
-                    </EtikettBase>
+                    <EtikettHjemmel>{a.label}</EtikettHjemmel>
                   </div>
                 ))}
               </TableRow>
@@ -214,16 +206,14 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveHjemler.length && <div>Ingen hjemler valgt</div>}
                 {aktiveHjemler.map((a, idx) => (
                   <div key={`hjemmel${idx}`}>
-                    <EtikettBase type="info" className={`etikett--hjemmel`}>
-                      {a.label}
-                    </EtikettBase>
+                    <EtikettHjemmel>{a.label}</EtikettHjemmel>
                   </div>
                 ))}
               </TableRow>
             </tr>
-            <tr className={"skjult"}>
-              <td colSpan={2} className={"lagre"}>
-                <Knapp data-testid={`lagre`} className={"knapp"} onClick={lagreInnstillinger}>
+            <tr className={'skjult'}>
+              <td colSpan={2} className={'lagre'}>
+                <Knapp data-testid={`lagre`} className={'knapp'} onClick={lagreInnstillinger}>
                   Lagre
                 </Knapp>
               </td>

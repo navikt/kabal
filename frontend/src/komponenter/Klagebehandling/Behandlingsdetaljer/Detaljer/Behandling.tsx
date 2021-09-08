@@ -1,15 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import { temaOversettelse, typeOversettelse } from "../../../../domene/forkortelser";
-import { HeaderRow, Section } from "../../../../styled-components/Row-styled";
-import { useAppSelector } from "../../../../tilstand/konfigurerTilstand";
-import { velgKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/selectors";
-import { FraNavEnhet } from "./FraNavEnhet";
-import { MottattFoersteinstans } from "./MottattFoersteinstans";
-import { OversendtKA } from "./OversendtKA";
-import { faaFulltNavnMedFnr } from "./navn";
-import { InfofeltStatisk } from "../InfofeltStatisk";
-import { IKlagebehandling } from "../../../../tilstand/moduler/klagebehandling/stateTypes";
+import React from 'react';
+import styled from 'styled-components';
+import { getTemakodeById, getTypekodeById } from '../../../../domene/forkortelser';
+import { HeaderRow, Section } from '../../../../styled-components/Row-styled';
+import { useAppSelector } from '../../../../tilstand/konfigurerTilstand';
+import { velgKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/selectors';
+import { FraNavEnhet } from './FraNavEnhet';
+import { MottattFoersteinstans } from './MottattFoersteinstans';
+import { OversendtKA } from './OversendtKA';
+import { faaFulltNavnMedFnr } from './navn';
+import { InfofeltStatisk } from '../InfofeltStatisk';
+import { IKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/stateTypes';
+import { EtikettType, EtikettTema } from '../../../../styled-components/Etiketter';
 
 export const Behandling = () => (
   <>
@@ -47,17 +48,16 @@ const Klager = () => {
 
 const getKlager = (klagebehandling: IKlagebehandling | null): string => {
   if (klagebehandling === null) {
-    return "-";
+    return '-';
   }
-  const { klagerNavn, klagerFoedselsnummer, klagerVirksomhetsnavn, klagerVirksomhetsnummer } =
-    klagebehandling;
+  const { klagerNavn, klagerFoedselsnummer, klagerVirksomhetsnavn, klagerVirksomhetsnummer } = klagebehandling;
   if (klagerNavn !== null && klagerFoedselsnummer !== null) {
     return faaFulltNavnMedFnr(klagerNavn, klagerFoedselsnummer);
   }
   if (klagerVirksomhetsnavn !== null && klagerVirksomhetsnummer !== null) {
     return `${klagerVirksomhetsnavn} (${klagerVirksomhetsnummer})`;
   }
-  return "-";
+  return '-';
 };
 
 const VurderingFraFoersteinstans = () => {
@@ -65,7 +65,7 @@ const VurderingFraFoersteinstans = () => {
   return (
     <InfofeltStatisk
       header="Melding fra førsteinstans for intern bruk"
-      info={klagebehandling?.kommentarFraFoersteinstans || "-"}
+      info={klagebehandling?.kommentarFraFoersteinstans || '-'}
     />
   );
 };
@@ -77,22 +77,18 @@ const TyperTemaer = () => {
     <Behandlingsinformasjon>
       <div>
         <b>Type:</b>
-        <ul className={"detaljliste"}>
+        <ul className={'detaljliste'}>
           <li>
-            <div className={"etikett etikett--type"}>
-              {typeOversettelse(klagebehandling?.type) ?? "-"}
-            </div>
+            <EtikettType>{getTypekodeById(klagebehandling?.type) ?? '-'}</EtikettType>
           </li>
         </ul>
       </div>
 
       <div>
         <b>Tema:</b>
-        <ul className={"detaljliste"}>
+        <ul className={'detaljliste'}>
           <li>
-            <div className={"etikett etikett--sykepenger"}>
-              {temaOversettelse(klagebehandling?.tema) ?? "-"}
-            </div>
+            <EtikettTema tema={klagebehandling?.tema}>{getTemakodeById(klagebehandling?.tema) ?? '-'}</EtikettTema>
           </li>
         </ul>
       </div>

@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Oppsett from "../komponenter/Oppsett";
-import "../stilark/App.less";
-import "../stilark/Lists.less";
-import "nav-frontend-tabell-style";
-import styled from "styled-components";
-import { gjenbyggElasticHandling } from "../tilstand/moduler/admin";
-import { useSelector } from "react-redux";
-import { velgAdmin } from "../tilstand/moduler/admin.velgere";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { velgFeatureToggles } from "../tilstand/moduler/unleash.velgere";
-import { hentFeatureToggleHandling } from "../tilstand/moduler/unleash";
-import { useAppDispatch } from "../tilstand/konfigurerTilstand";
-import isDevLocation from "../utility/isDevLocation";
+import React, { useEffect, useState } from 'react';
+import Oppsett from '../komponenter/Oppsett';
+import '../stilark/App.less';
+import '../stilark/Lists.less';
+import 'nav-frontend-tabell-style';
+import styled from 'styled-components';
+import { gjenbyggElasticHandling } from '../tilstand/moduler/admin';
+import { useSelector } from 'react-redux';
+import { velgAdmin } from '../tilstand/moduler/admin.velgere';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { velgFeatureToggles } from '../tilstand/moduler/unleash.velgere';
+import { hentFeatureToggleHandling } from '../tilstand/moduler/unleash';
+import { useAppDispatch } from '../tilstand/konfigurerTilstand';
+import isDevLocation from '../utility/isDevLocation';
 
-let Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-flow: column;
   margin: 1em;
 `;
 
-let Overskrift = styled.h1`
+const Overskrift = styled.h1`
   text-decoration: underline;
   padding: 0;
 `;
 
-let Lenker = styled.div``;
+const Lenker = styled.div``;
 
-let Knapp = styled.button`
+const Knapp = styled.button`
   padding: 0.5em;
   border: 1px solid blue;
   width: 10em;
@@ -48,11 +48,11 @@ const Admin = (): JSX.Element => {
   const [tilgang, settTilgang] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    dispatch(hentFeatureToggleHandling("klage.admin"));
+    dispatch(hentFeatureToggleHandling('klage.admin'));
   }, []);
 
   useEffect(() => {
-    const adminEnabled = featureToggles.features.find((f) => f?.navn === "klage.admin");
+    const adminEnabled = featureToggles.features.find((f) => f?.navn === 'klage.admin');
     if (adminEnabled?.isEnabled !== undefined) {
       if (isDevLocation()) settTilgang(true);
       else settTilgang(adminEnabled.isEnabled);

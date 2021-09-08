@@ -1,4 +1,4 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 //==========
 // Type defs
@@ -8,9 +8,9 @@ import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 // Reducer
 //==========
 export const routerSlice = createSlice({
-  name: "oppgaver",
+  name: 'oppgaver',
   initialState: {
-    prevRoute: "",
+    prevRoute: '',
   },
   reducers: {
     SETT: (state, action) => {
@@ -25,4 +25,4 @@ export default routerSlice.reducer;
 // Actions
 //==========
 export const { SETT } = routerSlice.actions;
-export const routingRequest = createAction<string>("routing/SETT");
+export const routingRequest = createAction<string>('routing/SETT');

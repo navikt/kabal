@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const DokumenterBeholder = styled.section<{ fullvisning: boolean }>`
   margin: 0.25em 0.25em 0.25em 0.25em;
@@ -8,6 +8,6 @@ export const DokumenterBeholder = styled.section<{ fullvisning: boolean }>`
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  min-width: ${({ fullvisning }) => (fullvisning ? "40em" : "16em")};
+  min-width: ${({ fullvisning }) => (fullvisning ? '40em' : '16em')};
   height: 100%;
 `;

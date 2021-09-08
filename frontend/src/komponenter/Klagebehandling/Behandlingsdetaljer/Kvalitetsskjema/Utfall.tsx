@@ -1,7 +1,7 @@
-import { Select } from "nav-frontend-skjema";
-import React, { useState } from "react";
-import { IKodeverkVerdi } from "../../../../tilstand/moduler/kodeverk";
-import { useKanEndre } from "../../utils/hooks";
+import { Select } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { IKodeverkVerdi } from '../../../../tilstand/moduler/kodeverk';
+import { useKanEndre } from '../../utils/hooks';
 
 interface UtfallProps {
   utfallAlternativer: IKodeverkVerdi[];
@@ -30,13 +30,11 @@ export const Utfall = ({ utfallAlternativer, defaultUtfall, onChange }: UtfallPr
       }}
     >
       <option value={undefined}>Velg utfall</option>
-      {utfallAlternativer.map(({ navn, id }) => {
-        return (
-          <option key={id} value={id}>
-            {navn}
-          </option>
-        );
-      })}
+      {utfallAlternativer.map(({ navn, id }) => (
+        <option key={id} value={id}>
+          {navn}
+        </option>
+      ))}
     </Select>
   );
 };

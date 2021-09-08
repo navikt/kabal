@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { Filter } from "../tilstand/moduler/oppgave";
+import React, { ReactNode } from 'react';
+import { Filter } from '../tilstand/moduler/oppgave';
 
 export interface FiltrerbarHeaderProps {
   children: ReactNode | ReactNode[];

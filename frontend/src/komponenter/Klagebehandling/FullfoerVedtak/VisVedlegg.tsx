@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from "react";
-import { Page } from "react-pdf";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { FilInfoBeholder } from "./styled-components/filinfo-beholder";
-import { OpplastetFilNavnTittel } from "./styled-components/opplastet-filnavn-tittel";
-import { OpplastetVedleggTittel } from "./styled-components/opplastet-vedlegg-tittel";
-import { velgVedtak } from "../../../tilstand/moduler/vedtak.velgere";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { PDF } from "./styled-components/pdf";
-import { isoDateTimeToPretty } from "../../../domene/datofunksjoner";
+import React, { useMemo, useState } from 'react';
+import { Page } from 'react-pdf';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { FilInfoBeholder } from './styled-components/filinfo-beholder';
+import { OpplastetFilNavnTittel } from './styled-components/opplastet-filnavn-tittel';
+import { OpplastetVedleggTittel } from './styled-components/opplastet-vedlegg-tittel';
+import { velgVedtak } from '../../../tilstand/moduler/vedtak.velgere';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { PDF } from './styled-components/pdf';
+import { isoDateTimeToPretty } from '../../../domene/datofunksjoner';
 
 interface VisVedleggProps {
   klagebehandling: IKlagebehandling;
@@ -42,10 +42,7 @@ export const VisVedlegg = ({ klagebehandling }: VisVedleggProps) => {
 
   const [sider, settSider] = useState(0);
 
-  const opplastetFormatert = useMemo(
-    () => isoDateTimeToPretty(file?.opplastet ?? null),
-    [file?.opplastet]
-  );
+  const opplastetFormatert = useMemo(() => isoDateTimeToPretty(file?.opplastet ?? null), [file?.opplastet]);
 
   const sizeFormatert = useMemo(() => formatSize(file?.size ?? 0), [file?.size]);
 
@@ -62,7 +59,7 @@ export const VisVedlegg = ({ klagebehandling }: VisVedleggProps) => {
         error={<span>Kunne ikke hente PDF</span>}
         loading={<NavFrontendSpinner />}
       >
-        <a href={vedleggLink} title="Åpne PDF i ny fane." target="_blank">
+        <a href={vedleggLink} title="Åpne PDF i ny fane." target="_blank" rel="noreferrer">
           <Page pageNumber={1} width={263} />
         </a>
       </PDF>
@@ -80,7 +77,7 @@ export const VisVedlegg = ({ klagebehandling }: VisVedleggProps) => {
 };
 
 const options = {
-  cMapUrl: "cmaps/",
+  cMapUrl: 'cmaps/',
   cMapPacked: true,
 };
 

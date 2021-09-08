@@ -1,5 +1,5 @@
-import { ISettMedunderskriverResponse } from "../medunderskrivere/types";
-import { IKlagebehandling, IVedlegg, Vedtak } from "./stateTypes";
+import { ISettMedunderskriverResponse } from '../medunderskrivere/types';
+import { IKlagebehandling, IVedlegg, Vedtak } from './stateTypes';
 
 export interface IKlagebehandlingOppdatering {
   klagebehandlingId: string;

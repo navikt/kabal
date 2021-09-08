@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
-import { Knapp } from "nav-frontend-knapper";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { slettVedlegg } from "../../../tilstand/moduler/vedtak";
-import { velgVedtak } from "../../../tilstand/moduler/vedtak.velgere";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
+import React, { useCallback } from 'react';
+import { Knapp } from 'nav-frontend-knapper';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { slettVedlegg } from '../../../tilstand/moduler/vedtak';
+import { velgVedtak } from '../../../tilstand/moduler/vedtak.velgere';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
 
 interface SlettVedleggProps {
   klagebehandling: IKlagebehandling;
@@ -44,7 +44,7 @@ export const SlettVedlegg = ({ klagebehandling }: SlettVedleggProps) => {
   }
 
   return (
-    <Knapp onClick={deleteVedlegg} disabled={loading} style={{ marginTop: "1em" }}>
+    <Knapp onClick={deleteVedlegg} disabled={loading} style={{ marginTop: '1em' }}>
       Slett vedlegg
     </Knapp>
   );

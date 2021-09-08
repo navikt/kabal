@@ -1,10 +1,10 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { catchError, delay, retryWhen, switchMap, withLatestFrom } from "rxjs/operators";
-import { concat, of } from "rxjs";
-import { RootStateOrAny } from "react-redux";
-import { AlertStripeType } from "nav-frontend-alertstriper";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { feiletHandling } from "./klagebehandling";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { catchError, delay, retryWhen, switchMap, withLatestFrom } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
+import { RootStateOrAny } from 'react-redux';
+import { AlertStripeType } from 'nav-frontend-alertstriper';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { feiletHandling } from './klagebehandling';
 
 //==========
 // Type defs
@@ -20,11 +20,11 @@ interface IToaster {
 //==========
 export const toasterInitialState = {
   display: false,
-  type: "feil" as AlertStripeType,
-  feilmelding: "Generisk feilmelding",
+  type: 'feil' as AlertStripeType,
+  feilmelding: 'Generisk feilmelding',
 };
 export const toasterSlice = createSlice({
-  name: "toaster",
+  name: 'toaster',
   initialState: toasterInitialState,
   reducers: {
     SETT: (state, action: PayloadAction<IToaster>) => ({
@@ -45,6 +45,6 @@ export default toasterSlice.reducer;
 //==========
 // Actions
 //==========
-export const toasterSett = createAction<IToaster>("toaster/SETT");
-export const toasterSatt = createAction<IToaster>("toaster/SATT");
-export const toasterSkjul = createAction<number>("toaster/SKJUL");
+export const toasterSett = createAction<IToaster>('toaster/SETT');
+export const toasterSatt = createAction<IToaster>('toaster/SATT');
+export const toasterSkjul = createAction<number>('toaster/SKJUL');

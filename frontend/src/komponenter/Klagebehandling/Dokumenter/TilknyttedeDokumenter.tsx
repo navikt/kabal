@@ -1,19 +1,14 @@
-import NavFrontendSpinner from "nav-frontend-spinner";
-import React, { useMemo } from "react";
-import styled from "styled-components";
-import { formattedDate } from "../../../domene/datofunksjoner";
-import { useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { velgTilknyttedeDokumenter } from "../../../tilstand/moduler/dokumenter/selectors";
-import { IDokumentVedlegg } from "../../../tilstand/moduler/dokumenter/stateTypes";
-import { TilknyttetDokument } from "../../../tilstand/moduler/klagebehandling/types";
-import { dokumentMatcher } from "./helpers";
-import {
-  DokumenterMinivisning,
-  Tilknyttet,
-  TilknyttetDato,
-  TilknyttetKnapp,
-} from "./styled-components/minivisning";
-import { IShownDokument, ITilknyttetDokument } from "./typer";
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
+import styled from 'styled-components';
+import { formattedDate } from '../../../domene/datofunksjoner';
+import { useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { velgTilknyttedeDokumenter } from '../../../tilstand/moduler/dokumenter/selectors';
+import { IDokumentVedlegg } from '../../../tilstand/moduler/dokumenter/stateTypes';
+import { TilknyttetDokument } from '../../../tilstand/moduler/klagebehandling/types';
+import { dokumentMatcher } from './helpers';
+import { DokumenterMinivisning, Tilknyttet, TilknyttetDato, TilknyttetKnapp } from './styled-components/minivisning';
+import { IShownDokument, ITilknyttetDokument } from './typer';
 
 interface TilknyttedeDokumenterProps {
   skjult: boolean;
@@ -46,9 +41,7 @@ export const TilknyttedeDokumenter = React.memo(
         <DokumenterMinivisning>
           {dokumenter.map(({ dokument, tilknyttet }) => (
             <Tilknyttet key={dokument.journalpostId + dokument.dokumentInfoId}>
-              <TilknyttetDato dateTime={dokument.registrert}>
-                {formattedDate(dokument.registrert)}
-              </TilknyttetDato>
+              <TilknyttetDato dateTime={dokument.registrert}>{formattedDate(dokument.registrert)}</TilknyttetDato>
               <TilknyttetKnapp
                 tilknyttet={tilknyttet}
                 onClick={() =>
@@ -74,8 +67,7 @@ export const TilknyttedeDokumenter = React.memo(
       </Container>
     );
   },
-  (previous, next) =>
-    previous.skjult === next.skjult && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
+  (previous, next) => previous.skjult === next.skjult && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
 );
 
 const Container = styled.div`
@@ -89,18 +81,11 @@ interface VedleggListeProps {
   visDokument: (dokument: IShownDokument) => void;
 }
 
-const VedleggListe = ({
-  vedleggListe,
-  tilknyttedeDokumenter,
-  journalpostId,
-  visDokument,
-}: VedleggListeProps) => {
+const VedleggListe = ({ vedleggListe, tilknyttedeDokumenter, journalpostId, visDokument }: VedleggListeProps) => {
   const tilknyttedeVedlegg = useMemo<IDokumentVedlegg[]>(
     () =>
       vedleggListe.filter((vedlegg) =>
-        tilknyttedeDokumenter.some(
-          ({ dokumentInfoId }) => dokumentInfoId === vedlegg.dokumentInfoId
-        )
+        tilknyttedeDokumenter.some(({ dokumentInfoId }) => dokumentInfoId === vedlegg.dokumentInfoId)
       ),
     [tilknyttedeDokumenter, vedleggListe]
   );

@@ -1,10 +1,10 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { catchError, map, retryWhen, switchMap } from "rxjs/operators";
-import { concat } from "rxjs";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { Dependencies } from "../konfigurerTilstand";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { catchError, map, retryWhen, switchMap } from 'rxjs/operators';
+import { concat } from 'rxjs';
+import { toasterSett, toasterSkjul } from './toaster';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { Dependencies } from '../konfigurerTilstand';
 
 //==========
 // Interfaces
@@ -14,10 +14,10 @@ import { Dependencies } from "../konfigurerTilstand";
 // Reducer
 //==========
 export const adminSlice = createSlice({
-  name: "admin",
+  name: 'admin',
   initialState: {
     laster: false,
-    response: "",
+    response: '',
   },
   reducers: {
     GJENBYGG_ELASTIC: (state, action: PayloadAction) => {
@@ -30,7 +30,7 @@ export const adminSlice = createSlice({
     },
     ELASTIC_RESPONSE: (state, action: PayloadAction<any>) => {
       state.laster = false;
-      state.response = action.payload.status === 200 ? "suksess" : "feil";
+      state.response = action.payload.status === 200 ? 'suksess' : 'feil';
       return state;
     },
   },
@@ -41,6 +41,6 @@ export default adminSlice.reducer;
 //==========
 // Actions
 //==========
-export const gjenbyggElasticHandling = createAction("admin/GJENBYGG_ELASTIC");
-export const stoppLasting = createAction("admin/ELASTIC_FAIL");
-export const elasticResponse = createAction<any>("admin/ELASTIC_RESPONSE");
+export const gjenbyggElasticHandling = createAction('admin/GJENBYGG_ELASTIC');
+export const stoppLasting = createAction('admin/ELASTIC_FAIL');
+export const elasticResponse = createAction<any>('admin/ELASTIC_RESPONSE');

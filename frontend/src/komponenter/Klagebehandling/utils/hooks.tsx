@@ -1,19 +1,16 @@
-import { useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { lagreKlagebehandling } from "../../../tilstand/moduler/klagebehandling/actions";
+import { useEffect, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { lagreKlagebehandling } from '../../../tilstand/moduler/klagebehandling/actions';
 import {
   velgKlagebehandling,
   velgKlagebehandlingOpptatt,
   velgLagretKlagebehandlingVersjon,
-} from "../../../tilstand/moduler/klagebehandling/selectors";
-import {
-  IKlagebehandling,
-  TilknyttetDokument,
-} from "../../../tilstand/moduler/klagebehandling/stateTypes";
-import { IKlagebehandlingOppdatering } from "../../../tilstand/moduler/klagebehandling/types";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { dokumentMatcher } from "../Dokumenter/helpers";
-import { arrayEquals } from "./helpers";
+} from '../../../tilstand/moduler/klagebehandling/selectors';
+import { IKlagebehandling, TilknyttetDokument } from '../../../tilstand/moduler/klagebehandling/stateTypes';
+import { IKlagebehandlingOppdatering } from '../../../tilstand/moduler/klagebehandling/types';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { dokumentMatcher } from '../Dokumenter/helpers';
+import { arrayEquals } from './helpers';
 
 export const useKlagebehandlingUpdater = ({
   id,
@@ -43,11 +40,7 @@ export const useKanEndre = () => {
     () =>
       klagebehandling?.tildeltSaksbehandlerident === meg.graphData.id &&
       klagebehandling?.avsluttetAvSaksbehandler === null,
-    [
-      klagebehandling?.tildeltSaksbehandlerident,
-      klagebehandling?.avsluttetAvSaksbehandler,
-      meg.graphData.id,
-    ]
+    [klagebehandling?.tildeltSaksbehandlerident, klagebehandling?.avsluttetAvSaksbehandler, meg.graphData.id]
   );
 };
 
@@ -70,10 +63,7 @@ export const useGetUpdate = () => {
 
 export const useIsSaved = () => useGetUpdate() === null;
 
-export const isEqual = (
-  a: IKlagebehandlingOppdatering | null,
-  b: IKlagebehandlingOppdatering | null
-): boolean => {
+export const isEqual = (a: IKlagebehandlingOppdatering | null, b: IKlagebehandlingOppdatering | null): boolean => {
   if (a === b) {
     return true;
   }

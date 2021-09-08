@@ -1,6 +1,6 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { concat, of } from "rxjs";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { concat, of } from 'rxjs';
 
 import {
   catchError,
@@ -11,17 +11,17 @@ import {
   retryWhen,
   switchMap,
   withLatestFrom,
-} from "rxjs/operators";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { ReactNode } from "react";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { feiletHandling, GrunnerPerUtfall } from "./klagebehandling";
-import { settOppgaverFerdigLastet, settOppgaverLaster } from "./oppgavelaster";
-import { Dependencies } from "../konfigurerTilstand";
-import { IKodeverkVerdi, IKodeverkVerdiMedHjemler } from "./kodeverk";
+} from 'rxjs/operators';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { ReactNode } from 'react';
+import { toasterSett, toasterSkjul } from './toaster';
+import { feiletHandling, GrunnerPerUtfall } from './klagebehandling';
+import { settOppgaverFerdigLastet, settOppgaverLaster } from './oppgavelaster';
+import { Dependencies } from '../konfigurerTilstand';
+import { IKodeverkVerdi, IKodeverkVerdiMedHjemler } from './kodeverk';
 
-const R = require("ramda");
-let throttleWait = 1500;
+const R = require('ramda');
+const throttleWait = 1500;
 
 //==========
 // Type defs
@@ -48,7 +48,7 @@ export interface OppgaveRad {
 
 export interface OppgaveRadMedFunksjoner extends OppgaveRad {
   settValgtOppgave: Function;
-  utvidetProjeksjon: "UTVIDET" | boolean | undefined;
+  utvidetProjeksjon: 'UTVIDET' | boolean | undefined;
   it: number;
 }
 
@@ -96,9 +96,9 @@ export interface Transformasjoner {
     hjemler: string[] | undefined;
   };
   sortering: {
-    type: "frist" | "mottatt";
-    frist: "synkende" | "stigende";
-    mottatt: "synkende" | "stigende";
+    type: 'frist' | 'mottatt';
+    frist: 'synkende' | 'stigende';
+    mottatt: 'synkende' | 'stigende';
   };
 }
 
@@ -138,8 +138,7 @@ export interface RaderMedMetadataUtvidet extends RaderMedMetadata {
 // Reducer
 //==========
 export function MottatteRader(payload: RaderMedMetadataUtvidet, state: OppgaveState) {
-  const { antallTreffTotalt, start, antall, projeksjon, tildeltSaksbehandler, transformasjoner } =
-    payload;
+  const { antallTreffTotalt, start, antall, projeksjon, tildeltSaksbehandler, transformasjoner } = payload;
   state.transformasjoner = transformasjoner;
 
   // for API-sortering
@@ -162,15 +161,14 @@ export function MottatteRader(payload: RaderMedMetadataUtvidet, state: OppgaveSt
   } else {
     state.meta.side = start / antall + 1;
   }
-  state.meta.sider =
-    Math.floor(antallTreffTotalt / antall) + (antallTreffTotalt % antall !== 0 ? 1 : 0);
+  state.meta.sider = Math.floor(antallTreffTotalt / antall) + (antallTreffTotalt % antall !== 0 ? 1 : 0);
   state.lasterData = false;
   state.meta.feilmelding = undefined;
   return state;
 }
 
 export const oppgaveSlice = createSlice({
-  name: "klagebehandlinger",
+  name: 'klagebehandlinger',
   initialState: {
     rader: [],
     ferdigstilteKlager: {
@@ -178,13 +176,13 @@ export const oppgaveSlice = createSlice({
     },
     lasterData: true,
     kodeverk: {
-      utfall: [{ id: "", navn: "", beskrivelse: "" }],
-      hjemler: [{ id: "", navn: "", beskrivelse: "" }],
-      hjemlerPerTema: [{ temaId: "", hjemler: [{ id: "", navn: "", beskrivelse: "" }] }],
-      hjemmel: [{ id: "", navn: "", beskrivelse: "" }],
-      type: [{ id: "", navn: "", beskrivelse: "" }],
-      tema: [{ id: "", navn: "", beskrivelse: "" }],
-      grunnerPerUtfall: [{ utfallId: "", grunner: [{ id: "", navn: "", beskrivelse: "" }] }],
+      utfall: [{ id: '', navn: '', beskrivelse: '' }],
+      hjemler: [{ id: '', navn: '', beskrivelse: '' }],
+      hjemlerPerTema: [{ temaId: '', hjemler: [{ id: '', navn: '', beskrivelse: '' }] }],
+      hjemmel: [{ id: '', navn: '', beskrivelse: '' }],
+      type: [{ id: '', navn: '', beskrivelse: '' }],
+      tema: [{ id: '', navn: '', beskrivelse: '' }],
+      grunnerPerUtfall: [{ utfallId: '', grunner: [{ id: '', navn: '', beskrivelse: '' }] }],
     },
     meta: {
       antall: 0,
@@ -200,9 +198,9 @@ export const oppgaveSlice = createSlice({
         hjemler: [],
       },
       sortering: {
-        type: "mottatt",
-        frist: "stigende",
-        mottatt: "stigende",
+        type: 'mottatt',
+        frist: 'stigende',
+        mottatt: 'stigende',
       },
     },
   } as OppgaveState,
@@ -238,7 +236,7 @@ export const oppgaveSlice = createSlice({
       return state;
     },
     FEILET: (state, action: PayloadAction<string>) => {
-      state.meta.feilmelding = "Oppgave-henting feilet";
+      state.meta.feilmelding = 'Oppgave-henting feilet';
       state.lasterData = false;
       return state;
     },
@@ -256,7 +254,7 @@ export interface OppgaveParams {
   antall: number;
   tildeltSaksbehandler?: string;
   enhetId: string;
-  projeksjon?: "UTVIDET";
+  projeksjon?: 'UTVIDET';
   ferdigstiltFom?: string | undefined;
   transformasjoner: Transformasjoner;
 }
@@ -268,35 +266,34 @@ export default oppgaveSlice.reducer;
 //==========
 // Actions
 //==========
-export const { HENTET_KODEVERK, MOTTATT_FERDIGSTILTE, MOTTATT, FEILET, HENTET_UGATTE } =
-  oppgaveSlice.actions;
-export const enkeltOppgave = createAction<OppgaveParams>("klagebehandlinger/HENT_ENKELTOPPGAVE");
-export const oppgaveRequest = createAction<OppgaveParams>("klagebehandlinger/HENT");
-export const ferdigstilteRequest = createAction<OppgaveParams>("klagebehandlinger/HENT_FULLFORTE");
-export const oppgaverUtsnitt = createAction<[OppgaveRad]>("klagebehandlinger/UTSNITT");
-export const oppgaveHentingFeilet = createAction("klagebehandlinger/FEILET");
-export const hentUtgatte = createAction<OppgaveParams>("klagebehandlinger/HENT_UTGAATTE");
+export const { HENTET_KODEVERK, MOTTATT_FERDIGSTILTE, MOTTATT, FEILET, HENTET_UGATTE } = oppgaveSlice.actions;
+export const enkeltOppgave = createAction<OppgaveParams>('klagebehandlinger/HENT_ENKELTOPPGAVE');
+export const oppgaveRequest = createAction<OppgaveParams>('klagebehandlinger/HENT');
+export const ferdigstilteRequest = createAction<OppgaveParams>('klagebehandlinger/HENT_FULLFORTE');
+export const oppgaverUtsnitt = createAction<[OppgaveRad]>('klagebehandlinger/UTSNITT');
+export const oppgaveHentingFeilet = createAction('klagebehandlinger/FEILET');
+export const hentUtgatte = createAction<OppgaveParams>('klagebehandlinger/HENT_UTGAATTE');
 
 //==========
 // Sortering og filtrering
 //==========
 
 export function buildQuery(url: string, data: OppgaveParams) {
-  let filters = R.compose(
-    R.join("&"),
-    R.map(R.join("=")),
+  const filters = R.compose(
+    R.join('&'),
+    R.map(R.join('=')),
     R.map(R.map(encodeURIComponent)),
     R.toPairs,
-    R.map(R.map(R.replace(/og/g, ","))),
-    R.map(R.map(R.replace(/ /g, ""))),
+    R.map(R.map(R.replace(/og/g, ','))),
+    R.map(R.map(R.replace(/ /g, ''))),
     R.reject(R.equals([])),
     R.filter(R.identity)
   )(data.transformasjoner.filtrering || []);
-  let query = [];
+  const query = [];
   query.push(`antall=${data.antall}`);
   query.push(`start=${data.start}`);
   query.push(`sortering=${data.transformasjoner.sortering.type.toLocaleUpperCase()}`);
-  if (data.transformasjoner.sortering.type === "frist")
+  if (data.transformasjoner.sortering.type === 'frist')
     query.push(`rekkefoelge=${data.transformasjoner.sortering.frist.toLocaleUpperCase()}`);
   else query.push(`rekkefoelge=${data.transformasjoner.sortering.mottatt.toLocaleUpperCase()}`);
   if (data.projeksjon) query.push(`projeksjon=${data.projeksjon}`);
@@ -306,5 +303,5 @@ export function buildQuery(url: string, data: OppgaveParams) {
     query.push(`erTildeltSaksbehandler=true`);
   } else query.push(`erTildeltSaksbehandler=false`);
   query.push(`enhetId=${data.enhetId}`);
-  return `${url}?${filters}&${R.compose(R.join("&"))(query)}`;
+  return `${url}?${filters}&${R.compose(R.join('&'))(query)}`;
 }

@@ -1,4 +1,4 @@
-import { IKlagebehandlingState } from "./stateTypes";
+import { IKlagebehandlingState } from './stateTypes';
 
 export const initialState: IKlagebehandlingState = {
   opptatt: false,

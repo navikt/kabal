@@ -1,4 +1,4 @@
-import { IDokument } from "./stateTypes";
+import { IDokument } from './stateTypes';
 
 export interface IDokumentParams {
   id: string;

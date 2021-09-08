@@ -1,1 +1,1 @@
-import { RootState } from "../root";
+import { RootState } from '../root';

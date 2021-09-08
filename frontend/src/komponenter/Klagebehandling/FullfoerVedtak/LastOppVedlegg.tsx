@@ -1,10 +1,10 @@
-import React, { useRef, useCallback, useMemo } from "react";
-import { Knapp } from "nav-frontend-knapper";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
-import { velgMeg } from "../../../tilstand/moduler/meg.velgere";
-import { lastOppVedlegg } from "../../../tilstand/moduler/vedtak";
-import { velgVedtak } from "../../../tilstand/moduler/vedtak.velgere";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
+import React, { useRef, useCallback, useMemo } from 'react';
+import { Knapp } from 'nav-frontend-knapper';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
+import { velgMeg } from '../../../tilstand/moduler/meg.velgere';
+import { lastOppVedlegg } from '../../../tilstand/moduler/vedtak';
+import { velgVedtak } from '../../../tilstand/moduler/vedtak.velgere';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
 
 interface LastOppVedleggProps {
   klagebehandling: IKlagebehandling;
@@ -57,7 +57,7 @@ export const LastOppVedlegg = ({ klagebehandling }: LastOppVedleggProps) => {
           klagebehandlingVersjon,
         })
       );
-      event.currentTarget.value = "";
+      event.currentTarget.value = '';
     },
     [klagebehandlingId, klagebehandlingVersjon, vedtakId, journalfoerendeEnhet]
   );
@@ -69,7 +69,7 @@ export const LastOppVedlegg = ({ klagebehandling }: LastOppVedleggProps) => {
 
   return (
     <>
-      <Knapp onClick={handleClick} disabled={loading} style={{ marginTop: "1em" }}>
+      <Knapp onClick={handleClick} disabled={loading} style={{ marginTop: '1em' }}>
         Last opp vedlegg
       </Knapp>
       <input
@@ -77,7 +77,7 @@ export const LastOppVedlegg = ({ klagebehandling }: LastOppVedleggProps) => {
         accept=".pdf"
         ref={fileInput}
         onChange={uploadVedlegg}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         disabled={loading}
       />
     </>

@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IMedunderskrivereState } from "./stateTypes";
-import { IMedunderskriverePayload } from "./types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IMedunderskrivereState } from './stateTypes';
+import { IMedunderskriverePayload } from './types';
 
 const initialState: IMedunderskrivereState = {
   medunderskrivere: [],
@@ -8,7 +8,7 @@ const initialState: IMedunderskrivereState = {
 };
 
 const medunderskrivereSlice = createSlice({
-  name: "medunderskrivere",
+  name: 'medunderskrivere',
   initialState: initialState,
   reducers: {
     LASTET: (state, action: PayloadAction<IMedunderskriverePayload>) => ({

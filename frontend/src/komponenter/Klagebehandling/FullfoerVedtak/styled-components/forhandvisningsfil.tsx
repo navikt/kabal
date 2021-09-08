@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Forhandsvisningsfil from "forhandsvisningsfil";
+import styled from 'styled-components';
+import Forhandsvisningsfil from 'forhandsvisningsfil';
 
 export const StyledForhandsvisningsfil = styled(Forhandsvisningsfil)`
   margin: 0 auto;

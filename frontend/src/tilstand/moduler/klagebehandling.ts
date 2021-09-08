@@ -1,21 +1,13 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootStateOrAny } from "react-redux";
-import { concat } from "rxjs";
-import {
-  catchError,
-  map,
-  mergeMap,
-  retryWhen,
-  switchMap,
-  timeout,
-  withLatestFrom,
-} from "rxjs/operators";
-import { provIgjenStrategi } from "../../utility/rxUtils";
-import { toasterSett, toasterSkjul } from "./toaster";
-import { IInnstillinger } from "./meg";
-import { IKodeverkVerdi } from "./kodeverk";
-import { RootState } from "../root";
-import { Dependencies } from "../konfigurerTilstand";
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootStateOrAny } from 'react-redux';
+import { concat } from 'rxjs';
+import { catchError, map, mergeMap, retryWhen, switchMap, timeout, withLatestFrom } from 'rxjs/operators';
+import { provIgjenStrategi } from '../../utility/rxUtils';
+import { toasterSett, toasterSkjul } from './toaster';
+import { IInnstillinger } from './meg';
+import { IKodeverkVerdi } from './kodeverk';
+import { RootState } from '../root';
+import { Dependencies } from '../konfigurerTilstand';
 
 //==========
 // Interfaces
@@ -128,46 +120,46 @@ interface IDokumentParams {
 // Reducer
 //==========
 export const klageSlice = createSlice({
-  name: "klagebehandling",
+  name: 'klagebehandling',
   initialState: {
-    id: "",
+    id: '',
     klagebehandlingVersjon: 0,
     klageLastet: false,
-    sakenGjelderKjoenn: "",
-    sakenGjelderNavn: "",
-    sakenGjelderFoedselsnummer: "",
+    sakenGjelderKjoenn: '',
+    sakenGjelderNavn: '',
+    sakenGjelderFoedselsnummer: '',
     lasterDokumenter: false,
     klageLastingFeilet: false,
     dokumenterAlleHentet: false,
     dokumenterTilordnedeHentet: false,
     klageInnsendtdato: undefined,
-    fraNAVEnhet: "",
-    fraNAVEnhetNavn: "",
-    mottattFoersteinstans: "",
-    foedselsnummer: "",
-    tema: "",
-    type: "",
-    mottatt: "",
+    fraNAVEnhet: '',
+    fraNAVEnhetNavn: '',
+    mottattFoersteinstans: '',
+    foedselsnummer: '',
+    tema: '',
+    type: '',
+    mottatt: '',
     startet: undefined,
     avsluttet: null,
     avsluttetAvSaksbehandler: null,
-    frist: "",
+    frist: '',
     tildeltSaksbehandlerident: undefined,
-    pageReference: "",
+    pageReference: '',
     historyNavigate: false,
     pageRefs: [null],
     hasMore: false,
     pageIdx: 0,
-    dokumenterOppdatert: "",
+    dokumenterOppdatert: '',
     hjemler: [],
-    currentPDF: "",
-    internVurdering: "",
-    kommentarFraFoersteinstans: "",
+    currentPDF: '',
+    internVurdering: '',
+    kommentarFraFoersteinstans: '',
     vedtak: [
       {
         brevMottakere: [],
         hjemler: [],
-        id: "214d1485-5a26-4aec-86e4-19395fa54f87",
+        id: '214d1485-5a26-4aec-86e4-19395fa54f87',
         utfall: null,
         grunn: null,
         ferdigstilt: null,
@@ -246,7 +238,7 @@ export const klageSlice = createSlice({
     },
     VEDLEGG_OPPLASTET: (state, action: PayloadAction<IVedleggOpplastet>) => {
       const vedtak = state.vedtak.find(({ id }) => id === action.payload.vedtakId);
-      if (typeof vedtak !== "undefined") {
+      if (typeof vedtak !== 'undefined') {
         vedtak.file = action.payload.vedlegg;
       }
       return state;
@@ -277,51 +269,35 @@ export default klageSlice.reducer;
 //==========
 // Actions
 //==========
-export const {
-  HENTET,
-  FEILET,
-  MEDUNDERSKRIVER_SATT,
-  VEDLEGG_OPPLASTET,
-  VEDLEGG_FULLFOERT,
-  VEDLEGG_SLETTET,
-} = klageSlice.actions;
-export const hentKlageHandling = createAction<string>("klagebehandling/HENT_KLAGE");
-export const hentetKlageHandling = createAction<IKlage>("klagebehandling/HENTET");
-export const feiletHandling = createAction<string>("klagebehandling/FEILET");
+export const { HENTET, FEILET, MEDUNDERSKRIVER_SATT, VEDLEGG_OPPLASTET, VEDLEGG_FULLFOERT, VEDLEGG_SLETTET } =
+  klageSlice.actions;
+export const hentKlageHandling = createAction<string>('klagebehandling/HENT_KLAGE');
+export const hentetKlageHandling = createAction<IKlage>('klagebehandling/HENTET');
+export const feiletHandling = createAction<string>('klagebehandling/FEILET');
 
-export const hentPreviewHandling = createAction<IDokumentPayload>(
-  "klagebehandling/HENT_DOKUMENT_FORHANDSVISNING"
-);
-export const hentetPreviewHandling = createAction<string>(
-  "klagebehandling/HENTET_DOKUMENT_FORHANDSVISNING"
-);
+export const hentPreviewHandling = createAction<IDokumentPayload>('klagebehandling/HENT_DOKUMENT_FORHANDSVISNING');
+export const hentetPreviewHandling = createAction<string>('klagebehandling/HENTET_DOKUMENT_FORHANDSVISNING');
 
-export const hentetKlageDokumenterAlleHandling = createAction<IKlage>(
-  "klagebehandling/DOKUMENTER_ALLE_HENTET"
-);
+export const hentetKlageDokumenterAlleHandling = createAction<IKlage>('klagebehandling/DOKUMENTER_ALLE_HENTET');
 
 export const hentetKlageDokumenterTilordnedeHandling = createAction<IKlage>(
-  "klagebehandling/DOKUMENTER_TILORDNEDE_HENTET"
+  'klagebehandling/DOKUMENTER_TILORDNEDE_HENTET'
 );
 
-export const hentDokumentAlleHandling = createAction<Partial<IDokumentParams>>(
-  "klagebehandling/HENT_KLAGE_DOKUMENTER"
-);
+export const hentDokumentAlleHandling = createAction<Partial<IDokumentParams>>('klagebehandling/HENT_KLAGE_DOKUMENTER');
 export const hentDokumentTilordnedeHandling = createAction<Partial<IDokumentParams>>(
-  "klagebehandling/HENT_TILORDNEDE_DOKUMENTER"
+  'klagebehandling/HENT_TILORDNEDE_DOKUMENTER'
 );
 
 export const toggleDokumenterHandling = createAction<Partial<Partial<IDokumentPayload>>>(
-  "klagebehandling/TILORDNE_DOKUMENT"
+  'klagebehandling/TILORDNE_DOKUMENT'
 );
 export const fradeltDokumentHandling = createAction<{
   journalpostId: string;
   dokumentInfoId: string;
   payload: any;
-}>("klagebehandling/DOKUMENT_FRADELT");
-export const tilordnetDokumentHandling = createAction<Partial<any>>(
-  "klagebehandling/DOKUMENT_TILORDNET"
-);
+}>('klagebehandling/DOKUMENT_FRADELT');
+export const tilordnetDokumentHandling = createAction<Partial<any>>('klagebehandling/DOKUMENT_TILORDNET');
 
-export const lasterDokumenter = createAction<boolean>("klagebehandling/LASTER_DOKUMENTER");
-export const nullstillDokumenter = createAction("klagebehandling/NULLSTILL_DOKUMENTER");
+export const lasterDokumenter = createAction<boolean>('klagebehandling/LASTER_DOKUMENTER');
+export const nullstillDokumenter = createAction('klagebehandling/NULLSTILL_DOKUMENTER');

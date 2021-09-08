@@ -1,5 +1,5 @@
-import { IKodeverkVerdi } from "../kodeverk";
-import { IKlagebehandlingOppdatering } from "./types";
+import { IKodeverkVerdi } from '../kodeverk';
+import { IKlagebehandlingOppdatering } from './types';
 
 export interface IKlagebehandlingState {
   opptatt: boolean;

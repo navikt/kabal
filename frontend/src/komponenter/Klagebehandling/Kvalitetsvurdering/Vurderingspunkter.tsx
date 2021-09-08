@@ -1,20 +1,17 @@
-import {
-  IKvalitetsvurdering,
-  lagreKvalitetsvurdering,
-} from "../../../tilstand/moduler/kvalitetsvurdering";
-import React, { RefObject, useCallback } from "react";
-import { IKodeverkVerdi } from "../../../tilstand/moduler/kodeverk";
+import { IKvalitetsvurdering, lagreKvalitetsvurdering } from '../../../tilstand/moduler/kvalitetsvurdering';
+import React, { RefObject, useCallback } from 'react';
+import { IKodeverkVerdi } from '../../../tilstand/moduler/kodeverk';
 import {
   Div,
   DokumentCheckbox,
   Header,
   SubHeader,
   VurderingBeholder,
-} from "../../../styled-components/Kvalitetsvurdering-styled";
-import { FlexRow, Section } from "../../../styled-components/Row-styled";
-import { Radio, RadioGruppe } from "nav-frontend-skjema";
-import { Tekstfelt } from "./Tekstfelt";
-import { useAppDispatch } from "../../../tilstand/konfigurerTilstand";
+} from '../../../styled-components/Kvalitetsvurdering-styled';
+import { FlexRow, Section } from '../../../styled-components/Row-styled';
+import { Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Tekstfelt } from './Tekstfelt';
+import { useAppDispatch } from '../../../tilstand/konfigurerTilstand';
 
 export function Vurderingspunkter({
   tittel,
@@ -41,13 +38,13 @@ export function Vurderingspunkter({
   lagre: (felt: string, verdi: string | boolean) => void;
   klagebehandling: any;
 }) {
-  let verdi = kvalitetsvurdering[felt];
-  let tekstfeltverdi = kvalitetsvurdering[tekstfelt] ?? "";
+  const verdi = kvalitetsvurdering[felt];
+  const tekstfeltverdi = kvalitetsvurdering[tekstfelt] ?? '';
   const dispatch = useAppDispatch();
 
   const toggleKodeverk = useCallback(
     ({ kodeverkFelt, liste, id }: { kodeverkFelt: Array<string>; liste: string; id: string }) => {
-      let funnet = kodeverkFelt.filter((felt_id: string) => felt_id === id);
+      const funnet = kodeverkFelt.filter((felt_id: string) => felt_id === id);
       let nyListe: string[] = [];
       if (!funnet.length) {
         nyListe = nyListe.concat(kodeverkFelt);
@@ -75,14 +72,14 @@ export function Vurderingspunkter({
       <FlexRow>
         <RadioGruppe>
           <Radio
-            label={"Bra / Godt nok"}
+            label={'Bra / Godt nok'}
             name={felt}
             defaultChecked={verdi === true}
             onChange={() => lagre(felt, true)}
           />
         </RadioGruppe>
         <Radio
-          label={"Mangelfullt"}
+          label={'Mangelfullt'}
           name={felt}
           defaultChecked={verdi === false}
           onChange={() => {
@@ -95,11 +92,9 @@ export function Vurderingspunkter({
         <VurderingBeholder theme={{ vises: verdi == false }}>
           <SubHeader>{avviksTittel}</SubHeader>
           <Section>
-            {(() => {
-              return kodeverkFelter.map((kodeverkVerdi) => {
-                let funnet = kvalitetsvurdering[avviksNavn].find(
-                  (element: string) => element === kodeverkVerdi.id
-                );
+            {(() =>
+              kodeverkFelter.map((kodeverkVerdi) => {
+                const funnet = kvalitetsvurdering[avviksNavn].find((element: string) => element === kodeverkVerdi.id);
                 return (
                   <DokumentCheckbox
                     key={`${kodeverkVerdi.id}${kodeverkVerdi.navn}`}
@@ -114,15 +109,14 @@ export function Vurderingspunkter({
                     defaultChecked={funnet}
                   />
                 );
-              });
-            })()}
+              }))()}
           </Section>
 
           <Section>
             <Tekstfelt
               label="Kommentar:"
-              placeholder={"NB: Ingen personopplysninger"}
-              defaultValue={tekstfeltverdi ?? ""}
+              placeholder={'NB: Ingen personopplysninger'}
+              defaultValue={tekstfeltverdi ?? ''}
               handleChange={handleTekstChange}
             />
           </Section>

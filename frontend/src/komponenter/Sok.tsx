@@ -1,60 +1,60 @@
-import React, { useEffect, useState } from "react";
-import Oppsett from "../komponenter/Oppsett";
-import "../stilark/App.less";
-import "../stilark/Lists.less";
-import "nav-frontend-tabell-style";
-import { useDispatch, useSelector } from "react-redux";
-import { settSokLaster, startSok, tomSok } from "../tilstand/moduler/sok";
-import { velgMeg } from "../tilstand/moduler/meg.velgere";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { velgSok } from "../tilstand/moduler/sok.velgere";
-import styled from "styled-components";
-import { IKodeverkVerdi } from "../tilstand/moduler/kodeverk";
-import EtikettBase from "nav-frontend-etiketter";
-import { velgKodeverk } from "../tilstand/moduler/kodeverk.velgere";
-import { Knapp } from "nav-frontend-knapper";
-import { tildelMegHandling } from "../tilstand/moduler/saksbehandler";
-import { useAppDispatch } from "../tilstand/konfigurerTilstand";
-import { withErrorBoundary } from "../utility/ErrorBoundary";
-import { ErrorMessage } from "./ErrorMessage";
+import React, { useEffect, useState } from 'react';
+import Oppsett from '../komponenter/Oppsett';
+import '../stilark/App.less';
+import '../stilark/Lists.less';
+import 'nav-frontend-tabell-style';
+import { useDispatch, useSelector } from 'react-redux';
+import { settSokLaster, startSok, tomSok } from '../tilstand/moduler/sok';
+import { velgMeg } from '../tilstand/moduler/meg.velgere';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { velgSok } from '../tilstand/moduler/sok.velgere';
+import styled from 'styled-components';
+import { IKodeverkVerdi } from '../tilstand/moduler/kodeverk';
+import EtikettBase from 'nav-frontend-etiketter';
+import { velgKodeverk } from '../tilstand/moduler/kodeverk.velgere';
+import { Knapp } from 'nav-frontend-knapper';
+import { tildelMegHandling } from '../tilstand/moduler/saksbehandler';
+import { useAppDispatch } from '../tilstand/konfigurerTilstand';
+import { withErrorBoundary } from '../utility/ErrorBoundary';
+import { ErrorMessage } from './ErrorMessage';
 
 const ErrorMessageWithErrorBoundary = withErrorBoundary(ErrorMessage);
 
-import { useHistory } from "react-router";
-import { useDebounce } from "../utility/usedebounce";
+import { useHistory } from 'react-router';
+import { useDebounce } from '../utility/usedebounce';
 // @ts-ignore
-import SokSvg from "./sok.svg";
-import { NavLink } from "react-router-dom";
+import SokSvg from './sok.svg';
+import { NavLink } from 'react-router-dom';
 
-const R = require("ramda");
+const R = require('ramda');
 
-let SokInput = styled.div`
+const SokInput = styled.div`
   display: block;
   margin: 1em;
   max-width: 60em;
 `;
 
-let Result = styled.div`
+const Result = styled.div`
   display: block;
   margin: 4.5em 1em 0 1em;
 `;
 
-let SokeTabell = styled.table`
+const SokeTabell = styled.table`
   max-width: 60em;
   width: 60em;
 `;
 
-let SokeTabellAvsluttede = styled.table`
+const SokeTabellAvsluttede = styled.table`
   max-width: 60em;
   width: 60em;
   margin: 2em 0 0 0;
   padding: 0 0 8em 0;
 `;
-let Tr = styled.tr`
+const Tr = styled.tr`
   background: #e5f3ff;
 `;
 
-let PersonRow = styled.tr`
+const PersonRow = styled.tr`
   &:hover {
     background: #e5f3ff;
   }
@@ -62,47 +62,47 @@ let PersonRow = styled.tr`
     border-bottom: 1px solid #c6c2bf;
   }
 `;
-let PersonCell = styled.td`
+const PersonCell = styled.td`
   border-top: 1px solid #c6c2bf;
 `;
 
-let Td = styled.td`
+const Td = styled.td`
   text-align: left;
   padding: 0;
   margin: 0;
   width: 16em;
 `;
-let TdSenter = styled.td`
+const TdSenter = styled.td`
   text-align: center;
   border-bottom: 1px solid #c6c2bf;
   width: 16em;
 `;
-let TdResultat = styled.td`
+const TdResultat = styled.td`
   width: 16em;
   text-align: left;
   border-bottom: 1px solid #c6c2bf;
 `;
 
-let Th = styled.th`
+const Th = styled.th`
   text-align: left;
   border-bottom: 1px solid #c6c2bf;
 `;
 
-let SokeForklaring = styled.div`
+const SokeForklaring = styled.div`
   margin: 0 0 0.5em 0;
 `;
-let SokBeholder = styled.div`
+const SokBeholder = styled.div`
   position: relative;
   width: 40em;
 `;
-let SokIkon = styled.img`
+const SokIkon = styled.img`
   position: absolute;
   right: 0;
   top: 0;
   z-index: 1;
   height: 2.5em;
 `;
-let SokeTekst = styled.input`
+const SokeTekst = styled.input`
     width: 40em;
     position; absolute;
     font-family: "Source Sans Pro", Arial, sans-serif;
@@ -121,15 +121,15 @@ let SokeTekst = styled.input`
 `;
 
 function Kodeverk(kodeverk: any, data: string) {
-  if (!data) return "";
+  if (!data) return '';
   return kodeverk
     ? kodeverk.filter((h: IKodeverkVerdi) => h.id == data)[0]?.beskrivelse ?? `ukjent (${data})`
-    : "mangler";
+    : 'mangler';
 }
 
 function tildelOppgave(curriedDispatch: Function, id: string, klagebehandlingVersjon: number) {
   return (
-    <Knapp className={"knapp"} onClick={(e) => curriedDispatch(id, klagebehandlingVersjon)}>
+    <Knapp className={'knapp'} onClick={(e) => curriedDispatch(id, klagebehandlingVersjon)}>
       Tildel meg
     </Knapp>
   );
@@ -173,18 +173,14 @@ function PersonTreff(data: any): JSX.Element {
 
 function AapneKlagebehandlinger(data: any): JSX.Element {
   if (!data) return <></>;
-  let kodeverk = useSelector(velgKodeverk);
-  let meg = useSelector(velgMeg);
-  let dispatch = useAppDispatch();
+  const kodeverk = useSelector(velgKodeverk);
+  const meg = useSelector(velgMeg);
+  const dispatch = useAppDispatch();
   const KodeverkHjemmel = R.curry(Kodeverk)(kodeverk.kodeverk.hjemmel);
   const KodeverkType = R.curry(Kodeverk)(kodeverk.kodeverk.type);
   const KodeverkTema = R.curry(Kodeverk)(kodeverk.kodeverk.tema);
 
-  const curriedDispatchOppgave = R.curry(dispatchOppgave)(
-    dispatch,
-    meg.graphData.id,
-    meg.valgtEnhet.id
-  );
+  const curriedDispatchOppgave = R.curry(dispatchOppgave)(dispatch, meg.graphData.id, meg.valgtEnhet.id);
   const curriedVelgOppgave = R.curry(tildelOppgave)(curriedDispatchOppgave);
 
   return (
@@ -238,7 +234,7 @@ function AapneKlagebehandlinger(data: any): JSX.Element {
                         ? rad.tildeltSaksbehandlerNavn
                         : rad.saksbehandlerHarTilgang
                         ? curriedVelgOppgave(rad.id, rad.klagebehandlingVersjon)
-                        : "Ikke tildelt"}
+                        : 'Ikke tildelt'}
                     </TdResultat>
                   </tr>
                 ))}
@@ -253,7 +249,7 @@ function AapneKlagebehandlinger(data: any): JSX.Element {
 
 function FullforteKlagebehandlinger(data: any): JSX.Element {
   if (!data) return <></>;
-  let kodeverk = useSelector(velgKodeverk);
+  const kodeverk = useSelector(velgKodeverk);
   const KodeverkUtfall = R.curry(Kodeverk)(kodeverk.kodeverk.utfall);
   const KodeverkHjemmel = R.curry(Kodeverk)(kodeverk.kodeverk.hjemmel);
   const KodeverkType = R.curry(Kodeverk)(kodeverk.kodeverk.type);
@@ -339,15 +335,7 @@ const SokeResultat = (data: any): JSX.Element => {
   }
 };
 
-function sok({
-  dispatch,
-  navIdent,
-  soekString,
-}: {
-  dispatch: Function;
-  navIdent: string;
-  soekString: string;
-}) {
+function sok({ dispatch, navIdent, soekString }: { dispatch: Function; navIdent: string; soekString: string }) {
   return dispatch(
     startSok({
       antall: 200,
@@ -359,13 +347,13 @@ function sok({
 }
 
 const Sok = (): JSX.Element => {
-  let dispatch = useDispatch();
+  const dispatch = useDispatch();
   const person = useSelector(velgMeg);
   const sokResult = useSelector(velgSok);
   const history = useHistory();
-  let [soekString, setSoekString] = useState("");
-  let [harSokt, settHarSokt] = useState(false);
-  let [soker, settSoker] = useState(false);
+  const [soekString, setSoekString] = useState('');
+  const [harSokt, settHarSokt] = useState(false);
+  const [soker, settSoker] = useState(false);
   const [debouncedState, setDebouncedState] = useDebounce(soekString);
 
   const handleChange = (event: any) => {
@@ -374,7 +362,7 @@ const Sok = (): JSX.Element => {
   };
 
   useEffect(() => {
-    let searchQuery = new URLSearchParams(window.location.search).get("s");
+    const searchQuery = new URLSearchParams(window.location.search).get('s');
     if (searchQuery) {
       dispatch(settSokLaster(true));
       settHarSokt(true);
@@ -388,11 +376,12 @@ const Sok = (): JSX.Element => {
     return () => clearTimeout(timeout);
   }, [window.location.search, dispatch, person.graphData.id]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       dispatch(tomSok());
-    };
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (soker && !sokResult.laster) settSoker(false);
@@ -403,7 +392,7 @@ const Sok = (): JSX.Element => {
       if (!soker) settSoker(true);
       if (soekString) {
         const params = new URLSearchParams();
-        params.append("s", soekString);
+        params.append('s', soekString);
         history.push({ search: params.toString() });
       }
     }, 700);
@@ -418,11 +407,11 @@ const Sok = (): JSX.Element => {
           <SokBeholder>
             <SokIkon src={SokSvg} />
             <SokeTekst
-              autoComplete={"off"}
+              autoComplete={'off'}
               data-lpignore="true"
               data-form-type="text"
-              style={{ position: "absolute", left: 0, top: 0 }}
-              type={"text"}
+              style={{ position: 'absolute', left: 0, top: 0 }}
+              type={'text'}
               value={soekString}
               onChange={handleChange}
             />

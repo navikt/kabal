@@ -1,4 +1,4 @@
-import { IMedunderskriver } from "./stateTypes";
+import { IMedunderskriver } from './stateTypes';
 
 export interface IMedunderskriverePayload {
   tema: string;

@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
-import { Knapp } from "nav-frontend-knapper";
-import { useAppDispatch } from "../../../tilstand/konfigurerTilstand";
-import { settMedunderskriver } from "../../../tilstand/moduler/medunderskrivere/actions";
-import { IKlagebehandling } from "../../../tilstand/moduler/klagebehandling/stateTypes";
+import React, { useCallback } from 'react';
+import { Knapp } from 'nav-frontend-knapper';
+import { useAppDispatch } from '../../../tilstand/konfigurerTilstand';
+import { settMedunderskriver } from '../../../tilstand/moduler/medunderskrivere/actions';
+import { IKlagebehandling } from '../../../tilstand/moduler/klagebehandling/stateTypes';
 
 interface SendTilMedunderskriverProps {
   disabled: boolean;
@@ -32,7 +32,7 @@ export const SendTilMedunderskriver = ({
   }, [klagebehandlingId, klagebehandlingVersjon, medunderskriverident]);
 
   return (
-    <Knapp onClick={sendTilMedunderskriver} style={{ marginTop: "1em" }} disabled={disabled}>
+    <Knapp onClick={sendTilMedunderskriver} style={{ marginTop: '1em' }} disabled={disabled}>
       Fullfør og send til medunderskriver
     </Knapp>
   );

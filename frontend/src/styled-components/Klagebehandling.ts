@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Klagebehandling = styled.div`
   display: flex;
@@ -29,14 +29,14 @@ export const Kontrollpanel = styled.div`
   display: grid;
   background: #f8f8f8;
   grid-template-columns: auto repeat(3, 1fr);
-  grid-template-areas: "Person Toggles Toggles Knapper";
+  grid-template-areas: 'Person Toggles Toggles Knapper';
   height: 3em;
 
   @media screen and (max-width: 1640px) {
     height: 6.25em;
     grid-template-areas:
-      "Person Knapper Knapper Knapper"
-      "Toggles Toggles Toggles Toggles";
+      'Person Knapper Knapper Knapper'
+      'Toggles Toggles Toggles Toggles';
   }
 `;
 

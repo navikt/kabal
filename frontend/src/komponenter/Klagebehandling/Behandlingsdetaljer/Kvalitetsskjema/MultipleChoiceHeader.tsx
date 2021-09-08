@@ -1,23 +1,19 @@
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import classNames from "classnames";
-import { UseOnInteractOutsideParameters } from "../../../types";
-import { Filter } from "../../../../tilstand/moduler/oppgave";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import classNames from 'classnames';
+import { UseOnInteractOutsideParameters } from '../../../types';
+import { Filter } from '../../../../tilstand/moduler/oppgave';
 
-export const useOnInteractOutside = ({
-  ref,
-  onInteractOutside,
-  active,
-}: UseOnInteractOutsideParameters) => {
+export const useOnInteractOutside = ({ ref, onInteractOutside, active }: UseOnInteractOutsideParameters) => {
   useEffect(() => {
     const onInteractWrapper = (event: FocusEvent | MouseEvent) => {
       if (active && !ref.current?.contains(event.target as HTMLElement)) onInteractOutside();
     };
-    document.addEventListener("focusin", onInteractWrapper);
-    document.addEventListener("click", onInteractWrapper);
+    document.addEventListener('focusin', onInteractWrapper);
+    document.addEventListener('click', onInteractWrapper);
     return () => {
-      document.removeEventListener("focusin", onInteractWrapper);
-      document.removeEventListener("click", onInteractWrapper);
+      document.removeEventListener('focusin', onInteractWrapper);
+      document.removeEventListener('click', onInteractWrapper);
     };
   }, [ref.current, active]);
 };
@@ -48,9 +44,7 @@ export const MultipleChoiceHeader = ({
 
   const onFilter = useCallback(
     (checked: boolean, valg: Filter) => {
-      const newSelected = checked
-        ? [...selected, valg]
-        : selected.filter(({ value }) => value !== valg.value);
+      const newSelected = checked ? [...selected, valg] : selected.filter(({ value }) => value !== valg.value);
       setSelected(newSelected);
       onSelect(newSelected);
     },
@@ -60,12 +54,7 @@ export const MultipleChoiceHeader = ({
   return (
     <MultipleChoice ref={ref}>
       <div className={`skjemaelement__label`}>{label}</div>
-      <button
-        className={classNames("filterHeader", open && "open")}
-        onClick={onClick}
-        tabIndex={0}
-        disabled={disabled}
-      >
+      <button className={classNames('filterHeader', open && 'open')} onClick={onClick} tabIndex={0} disabled={disabled}>
         {children}
       </button>
       {open && (
@@ -93,7 +82,7 @@ interface MultipleChoiceRadProps {
 
 export const MultipleChoiceRad = ({ children, onFilter, checked }: MultipleChoiceRadProps) => (
   <li>
-    <label className={"filterLabel"}>
+    <label className={'filterLabel'}>
       <input type="checkbox" checked={checked} onChange={(e) => onFilter(e.target.checked)} />
       {children}
     </label>
@@ -102,7 +91,7 @@ export const MultipleChoiceRad = ({ children, onFilter, checked }: MultipleChoic
 
 const MultipleChoice = styled.div`
   button {
-    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
     font-size: 1rem;
     font-weight: 400;
     appearance: none;

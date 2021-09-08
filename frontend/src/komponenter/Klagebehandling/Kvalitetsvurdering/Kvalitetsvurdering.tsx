@@ -1,22 +1,22 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import Hjelpetekst from "nav-frontend-hjelpetekst";
-import { Beholder } from "../FullfoerVedtak/styled-components/beholder";
-import { Title } from "../FullfoerVedtak/styled-components/title";
-import { useAppDispatch, useAppSelector } from "../../../tilstand/konfigurerTilstand";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { Beholder } from '../FullfoerVedtak/styled-components/beholder';
+import { Title } from '../FullfoerVedtak/styled-components/title';
+import { useAppDispatch, useAppSelector } from '../../../tilstand/konfigurerTilstand';
 import {
   hentKvalitetsvurdering,
   IKvalitetsvurdering,
   lagreKvalitetsvurdering,
-} from "../../../tilstand/moduler/kvalitetsvurdering";
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { velgKvalitetsvurdering } from "../../../tilstand/moduler/kvalitetsvurdering.velgere";
-import { velgKodeverk } from "../../../tilstand/moduler/kodeverk.velgere";
-import { DokumentCheckbox, SubHeader } from "../../../styled-components/Kvalitetsvurdering-styled";
-import { FullforVedtakProps } from "../../../tilstand/moduler/klagebehandling/types";
-import { Vurderingspunkter } from "./Vurderingspunkter";
-import { velgFeatureToggles } from "../../../tilstand/moduler/unleash.velgere";
-import isDevLocation from "../../../utility/isDevLocation";
-import { FlexRow } from "../../../styled-components/Row-styled";
+} from '../../../tilstand/moduler/kvalitetsvurdering';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { velgKvalitetsvurdering } from '../../../tilstand/moduler/kvalitetsvurdering.velgere';
+import { velgKodeverk } from '../../../tilstand/moduler/kodeverk.velgere';
+import { DokumentCheckbox, SubHeader } from '../../../styled-components/Kvalitetsvurdering-styled';
+import { FullforVedtakProps } from '../../../tilstand/moduler/klagebehandling/types';
+import { Vurderingspunkter } from './Vurderingspunkter';
+import { velgFeatureToggles } from '../../../tilstand/moduler/unleash.velgere';
+import isDevLocation from '../../../utility/isDevLocation';
+import { FlexRow } from '../../../styled-components/Row-styled';
 
 export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakProps) => {
   if (skjult) {
@@ -51,7 +51,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
     );
   }
 
-  if (klagebehandling.vedtak[0].utfall === "1") {
+  if (klagebehandling.vedtak[0].utfall === '1') {
     return (
       <Beholder>
         <Title>Kvalitetsvurdering</Title>
@@ -66,13 +66,13 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
 
       <Vurderingspunkter
         refHandler={refListe1}
-        tittel={"Oversendelsesbrev"}
-        undertittel={"Kvalitet på oversendelsesbrev"}
-        felt={"kvalitetOversendelsesbrevBra"}
+        tittel={'Oversendelsesbrev'}
+        undertittel={'Kvalitet på oversendelsesbrev'}
+        felt={'kvalitetOversendelsesbrevBra'}
         kvalitetsvurdering={kvalitetsvurdering}
-        tekstfelt={"kommentarOversendelsesbrev"}
-        avviksNavn={"kvalitetsavvikOversendelsesbrev"}
-        avviksTittel={"Hva er kvalitetsavviket?"}
+        tekstfelt={'kommentarOversendelsesbrev'}
+        avviksNavn={'kvalitetsavvikOversendelsesbrev'}
+        avviksTittel={'Hva er kvalitetsavviket?'}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikOversendelsesbrev}
         lagre={lagre}
         klagebehandling={klagebehandling}
@@ -80,13 +80,13 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
 
       <Vurderingspunkter
         refHandler={refListe2}
-        tittel={"Utredning"}
-        undertittel={"Kvalitet på utredningen"}
-        felt={"kvalitetUtredningBra"}
+        tittel={'Utredning'}
+        undertittel={'Kvalitet på utredningen'}
+        felt={'kvalitetUtredningBra'}
         kvalitetsvurdering={kvalitetsvurdering}
-        tekstfelt={"kommentarUtredning"}
-        avviksNavn={"kvalitetsavvikUtredning"}
-        avviksTittel={"Hva er kvalitetsavviket?"}
+        tekstfelt={'kommentarUtredning'}
+        avviksNavn={'kvalitetsavvikUtredning'}
+        avviksTittel={'Hva er kvalitetsavviket?'}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikUtredning}
         lagre={lagre}
         klagebehandling={klagebehandling}
@@ -94,13 +94,13 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
 
       <Vurderingspunkter
         refHandler={refListe3}
-        tittel={"Vedtak"}
-        undertittel={"Kvalitet på vedtak"}
-        felt={"kvalitetVedtakBra"}
+        tittel={'Vedtak'}
+        undertittel={'Kvalitet på vedtak'}
+        felt={'kvalitetVedtakBra'}
         kvalitetsvurdering={kvalitetsvurdering}
-        tekstfelt={"kommentarVedtak"}
-        avviksNavn={"kvalitetsavvikVedtak"}
-        avviksTittel={"Hva er kvalitetsavviket?"}
+        tekstfelt={'kommentarVedtak'}
+        avviksNavn={'kvalitetsavvikVedtak'}
+        avviksTittel={'Hva er kvalitetsavviket?'}
         kodeverkFelter={kodeverk.kodeverk.kvalitetsavvikVedtak}
         lagre={lagre}
         klagebehandling={klagebehandling}
@@ -110,10 +110,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         /**
          * Forutsetning: Vises hvis enten Vedtak eller Utredningen er markert med “Bra/Godt nok”
          * */
-        if (
-          kvalitetsvurdering.kvalitetVedtakBra === false ||
-          kvalitetsvurdering.kvalitetUtredningBra === false
-        ) {
+        if (kvalitetsvurdering.kvalitetVedtakBra === false || kvalitetsvurdering.kvalitetUtredningBra === false) {
           return (
             <>
               <SubHeader>Avvik</SubHeader>
@@ -122,14 +119,11 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
                   <FlexRow>
                     Betydelig avvik med konsekvens for søker
                     <Hjelpetekst>
-                      Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for
-                      bruker
+                      Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for bruker
                     </Hjelpetekst>
                   </FlexRow>
                 }
-                onChange={() =>
-                  lagre("avvikStorKonsekvens", !kvalitetsvurdering.avvikStorKonsekvens)
-                }
+                onChange={() => lagre('avvikStorKonsekvens', !kvalitetsvurdering.avvikStorKonsekvens)}
                 defaultChecked={kvalitetsvurdering.avvikStorKonsekvens === true}
               />
             </>
@@ -142,10 +136,7 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
         /**
          * Forutsetning: Vises hvis enten Vedtak eller Utredningen er markert med “Bra/Godt nok”
          * */
-        if (
-          kvalitetsvurdering.kvalitetVedtakBra === true ||
-          kvalitetsvurdering.kvalitetUtredningBra === true
-        ) {
+        if (kvalitetsvurdering.kvalitetVedtakBra === true || kvalitetsvurdering.kvalitetUtredningBra === true) {
           return (
             <>
               <SubHeader>Annet </SubHeader>
@@ -153,17 +144,10 @@ export const Kvalitetsvurdering = ({ skjult, klagebehandling }: FullforVedtakPro
                 label={
                   <FlexRow>
                     Bruk gjerne dette som eksempel i opplæring
-                    <Hjelpetekst>
-                      Benyttes på spesielt gode vedtak, til opplæring i førsteinstans
-                    </Hjelpetekst>
+                    <Hjelpetekst>Benyttes på spesielt gode vedtak, til opplæring i førsteinstans</Hjelpetekst>
                   </FlexRow>
                 }
-                onChange={() =>
-                  lagre(
-                    "brukSomEksempelIOpplaering",
-                    !kvalitetsvurdering.brukSomEksempelIOpplaering
-                  )
-                }
+                onChange={() => lagre('brukSomEksempelIOpplaering', !kvalitetsvurdering.brukSomEksempelIOpplaering)}
                 defaultChecked={kvalitetsvurdering.brukSomEksempelIOpplaering === true}
               />
             </>
