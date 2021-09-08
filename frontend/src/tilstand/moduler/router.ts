@@ -1,6 +1,4 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionsObservable, ofType } from "redux-observable";
-import { map } from "rxjs/operators";
 
 //==========
 // Type defs
@@ -28,15 +26,3 @@ export default routerSlice.reducer;
 //==========
 export const { SETT } = routerSlice.actions;
 export const routingRequest = createAction<string>("routing/SETT");
-
-//==========
-// Epos
-//==========
-export function routingEpos(action$: ActionsObservable<PayloadAction<string>>) {
-  return action$.pipe(
-    ofType(routingRequest.type),
-    map(({ payload }) => SETT(payload))
-  );
-}
-
-export const ROUTING_EPICS = [routingEpos];

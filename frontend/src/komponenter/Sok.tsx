@@ -24,7 +24,6 @@ import { useHistory } from "react-router";
 import { useDebounce } from "../utility/usedebounce";
 // @ts-ignore
 import SokSvg from "./sok.svg";
-import { velgSaksbehandlerHandling } from "../tilstand/moduler/sakbehandler.velgere";
 import { NavLink } from "react-router-dom";
 
 const R = require("ramda");
@@ -363,7 +362,6 @@ const Sok = (): JSX.Element => {
   let dispatch = useDispatch();
   const person = useSelector(velgMeg);
   const sokResult = useSelector(velgSok);
-  const tildelerMeg = useSelector(velgSaksbehandlerHandling);
   const history = useHistory();
   let [soekString, setSoekString] = useState("");
   let [harSokt, settHarSokt] = useState(false);
@@ -389,11 +387,6 @@ const Sok = (): JSX.Element => {
     }, 700);
     return () => clearTimeout(timeout);
   }, [window.location.search, dispatch, person.graphData.id]);
-
-  useEffect(() => {
-    if (soekString && !tildelerMeg)
-      sok({ dispatch, navIdent: person.graphData.id, soekString: soekString });
-  }, [sok, dispatch, person.graphData.id, tildelerMeg]);
 
   useEffect(() => {
     return () => {

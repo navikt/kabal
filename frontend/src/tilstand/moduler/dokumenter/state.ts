@@ -1,10 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  hentDokumenterEpic,
-  hentTilknyttedeDokumenterEpic,
-  loadingDokumenterEpic,
-  loadingTilknyttedeDokumenterEpic,
-} from "./epics";
 import { initialState } from "./initialState";
 import { IDokument } from "./stateTypes";
 import { IDokumenterRespons } from "./types";
@@ -76,12 +70,5 @@ export const {
   NULLSTILL_DOKUMENTER,
   SETT_TILKNYTTEDE_DOKUMENTER,
 } = dokumenterSlice.actions;
-
-export const DOKUMENTER_EPICS = [
-  hentDokumenterEpic,
-  hentTilknyttedeDokumenterEpic,
-  loadingDokumenterEpic,
-  loadingTilknyttedeDokumenterEpic,
-];
 
 export const dokumenter = dokumenterSlice.reducer;

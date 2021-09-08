@@ -1,6 +1,5 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootStateOrAny } from "react-redux";
-import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { catchError, map, retryWhen, switchMap } from "rxjs/operators";
 import { concat } from "rxjs";
 import { toasterSett, toasterSkjul } from "./toaster";
@@ -45,55 +44,3 @@ export default adminSlice.reducer;
 export const gjenbyggElasticHandling = createAction("admin/GJENBYGG_ELASTIC");
 export const stoppLasting = createAction("admin/ELASTIC_FAIL");
 export const elasticResponse = createAction<any>("admin/ELASTIC_RESPONSE");
-
-//==========
-// Epos
-//==========
-export function adminEpos(
-  action$: ActionsObservable<PayloadAction>,
-  state$: StateObservable<RootStateOrAny>,
-  { ajax }: Dependencies
-) {
-  return action$.pipe(
-    ofType(gjenbyggElasticHandling.type),
-    switchMap((action) => {
-      const url = `/api/internal/elasticadmin/rebuild`;
-      return ajax
-        .post(url, {}, { "Content-Type": "application/json" })
-        .pipe(map((payload) => elasticResponse(payload)))
-        .pipe(
-          retryWhen(provIgjenStrategi({ maksForsok: 1 })),
-          catchError((error) => {
-            return concat([
-              stoppLasting(),
-              toasterSett({
-                display: true,
-                type: "feil",
-                feilmelding: `Elastic feilet ${error}`,
-              }),
-              toasterSkjul(15),
-            ]);
-          })
-        );
-    })
-  );
-}
-
-function toasterSuccessEpos(action$: ActionsObservable<PayloadAction>) {
-  return action$.pipe(
-    ofType(elasticResponse.type),
-    switchMap((action) => {
-      let beskjed = "Elastic-kommando mottatt og gjennomført!";
-      return concat([
-        toasterSett({
-          display: true,
-          type: "suksess",
-          feilmelding: beskjed,
-        }),
-        toasterSkjul(15),
-      ]);
-    })
-  );
-}
-
-export const ADMIN_EPICS = [adminEpos, toasterSuccessEpos];

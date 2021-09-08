@@ -2,7 +2,3 @@
 // from the state. These are kept in a separate file from the rest of the
 // Redux module to avoid circular dependencies.
 import { RootState } from "../root";
-
-export function velgSaksbehandlerHandling(state: RootState) {
-  return state.saksbehandler.tildeler;
-}

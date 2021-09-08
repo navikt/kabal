@@ -1,6 +1,5 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootStateOrAny } from "react-redux";
-import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { of } from "rxjs";
 import { catchError, map, mergeMap, retryWhen, timeout, withLatestFrom } from "rxjs/operators";
 import { provIgjenStrategi } from "../../utility/rxUtils";
@@ -58,41 +57,3 @@ export const feiletHandling = createAction<string>("unleash/FEILET");
 // Epos
 //==========
 const featureUrl = (toggleName: string) => `/api/featuretoggle/${toggleName}`;
-var resultData: IFeatureToggle;
-
-export function unleashEpos(
-  action$: ActionsObservable<PayloadAction<string>>,
-  state$: StateObservable<RootStateOrAny>,
-  { ajax }: Dependencies
-) {
-  return action$.pipe(
-    ofType(hentFeatureToggleHandling.type),
-    withLatestFrom(state$),
-    mergeMap(([action, state]) => {
-      return ajax
-        .getJSON<boolean>(featureUrl(action.payload))
-        .pipe(
-          timeout(5000),
-          map((response: boolean) => {
-            return {
-              navn: action.payload,
-              isEnabled: response,
-            };
-          })
-        )
-        .pipe(
-          map((data) => {
-            return hentetHandling(data);
-          })
-        )
-        .pipe(
-          retryWhen(provIgjenStrategi({ maksForsok: 3 })),
-          catchError((error) => {
-            return of(feiletHandling(error.response.detail));
-          })
-        );
-    })
-  );
-}
-
-export const UNLEASH_EPICS = [unleashEpos];

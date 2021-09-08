@@ -1,5 +1,4 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { of } from "rxjs";
 import { catchError, map, retryWhen, switchMap, timeout } from "rxjs/operators";
 import { provIgjenStrategi } from "../../utility/rxUtils";
@@ -90,29 +89,3 @@ export default kodeverkSlice.reducer;
 export const { HENT, HENTET_KODEVERK, FEILET } = kodeverkSlice.actions;
 
 export const hentKodeverk = createAction("klagebehandlinger/HENT_KODEVERK");
-
-//==========
-// Epos
-//==========
-
-export function hentKodeverkEpos(
-  action$: ActionsObservable<PayloadAction<never>>,
-  state$: StateObservable<RootState>,
-  { ajax }: Dependencies
-) {
-  return action$.pipe(
-    ofType(hentKodeverk.type),
-    switchMap(() => {
-      const hent = ajax.getJSON<IKodeverk>("/api/kodeverk").pipe(
-        timeout(5000),
-        map((kodeverk) => HENTET_KODEVERK(kodeverk))
-      );
-      return hent.pipe(
-        retryWhen(provIgjenStrategi()),
-        catchError((error) => of(FEILET(error)))
-      );
-    })
-  );
-}
-
-export const KODEVERK_EPICS = [hentKodeverkEpos];

@@ -18,7 +18,6 @@ import { hentMegHandling, hentMegUtenEnheterHandling } from "../tilstand/moduler
 import isDevLocation from "../utility/isDevLocation";
 import useInterval from "../utility/useInterval";
 import { hentToken, sjekkAuth } from "../tilstand/moduler/auth";
-import { velgAuth } from "../tilstand/moduler/auth.velgere";
 
 interface LayoutType {
   visMeny: boolean;
@@ -39,7 +38,6 @@ export default function Oppsett({
   const visToaster = useSelector(velgToaster);
   const toastBeskjed = useSelector(velgToasterMelding);
   const featureToggles = useSelector(velgFeatureToggles);
-  const isAuth = useSelector(velgAuth);
   const kodeverk = useSelector(velgKodeverk);
   const dispatch = useAppDispatch();
   const [generellTilgang, settTilgang] = useState<boolean | undefined>(undefined);
@@ -67,17 +65,6 @@ export default function Oppsett({
   const enhetensOppgaverEnabled = featureToggles.features.find(
     (f) => f?.navn === "klage.enhetensoppgaver"
   );
-
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      dispatch(sjekkAuth());
-      return;
-    }
-    if (isAuth === false) {
-      window.location.href = "/internal/login";
-    }
-  }, [isAuth]);
 
   useEffect(() => {
     if (adminEnabled !== undefined) {

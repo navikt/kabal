@@ -1,6 +1,5 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { createEpicMiddleware } from "redux-observable";
-import reducer, { rootEpic, RootState } from "./root";
+import reducer, { RootState } from "./root";
 import { ajax } from "rxjs/ajax";
 import { fromFetch } from "rxjs/fetch";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
@@ -11,10 +10,6 @@ const dependencies = {
 };
 
 export type Dependencies = typeof dependencies;
-
-const epicMiddleware = createEpicMiddleware({
-  dependencies,
-});
 
 const defaultMiddleware = getDefaultMiddleware({
   serializableCheck: {
@@ -29,15 +24,13 @@ const defaultMiddleware = getDefaultMiddleware({
   },
 });
 
-const middleware = [...defaultMiddleware, epicMiddleware];
+const middleware = [...defaultMiddleware];
 
 const reduxStore = configureStore({
   reducer,
   devTools: true,
   middleware,
 });
-
-epicMiddleware.run(rootEpic);
 
 export type AppDispatch = typeof reduxStore.dispatch;
 

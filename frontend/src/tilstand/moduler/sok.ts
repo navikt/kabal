@@ -1,5 +1,4 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { catchError, debounceTime, map, retryWhen, switchMap } from "rxjs/operators";
 import { AjaxCreationMethod, AjaxResponse } from "rxjs/internal-compatibility";
 import { concat, Observable, of } from "rxjs";
@@ -140,34 +139,3 @@ const performSearch = (
       })
     );
 };
-
-//==========
-// Epos
-//==========
-export function sokEpos(
-  action$: ActionsObservable<PayloadAction<IPersonSokPayload>>,
-  state$: StateObservable<RootState>,
-  { ajax }: Dependencies
-) {
-  return action$.pipe(
-    ofType(startSok.type),
-    debounceTime(1000),
-    switchMap((action) => {
-      if (!action.payload.navIdent) {
-        /*
-         * Når du tar refresh på søkesiden
-         * rekker du ikke alltid å få med
-         * NAVident.
-         * */
-        return of(SOK_LASTER(true));
-      }
-      return concat(
-        of(SOK_LASTER(true)),
-        performSearch(action.payload, ajax.post),
-        of(SOK_LASTER(false))
-      );
-    })
-  );
-}
-
-export const SOK_EPICS = [sokEpos];

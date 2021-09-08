@@ -1,46 +1,20 @@
-import { combineEpics } from "redux-observable";
 import { combineReducers } from "redux";
-import klagebehandlinger, { OPPGAVER_EPICS } from "./moduler/oppgave";
-import meg, { MEG_EPICS } from "./moduler/meg";
-import saksbehandler, { TILDEL_EPICS } from "./moduler/saksbehandler";
-import routing, { ROUTING_EPICS } from "./moduler/router";
-import toaster, { TOASTER_EPICS } from "./moduler/toaster";
-import oppgavelaster, { OPPGAVELASTER_EPOS } from "./moduler/oppgavelaster";
-import featureToggles, { UNLEASH_EPICS } from "./moduler/unleash";
-import klagebehandling, { KLAGEBEHANDLING_EPOS } from "./moduler/klagebehandling";
-import admin, { ADMIN_EPICS } from "./moduler/admin";
-import sok, { SOK_EPICS } from "./moduler/sok";
-import vedtak, { VEDTAK_EPOS } from "./moduler/vedtak";
-import { MEDUNDERSKRIVERE_EPOS } from "./moduler/medunderskrivere/epics";
+import klagebehandlinger from "./moduler/oppgave";
+import meg from "./moduler/meg";
+import routing from "./moduler/router";
+import toaster from "./moduler/toaster";
+import oppgavelaster from "./moduler/oppgavelaster";
+import featureToggles from "./moduler/unleash";
+import klagebehandling from "./moduler/klagebehandling";
+import admin from "./moduler/admin";
+import sok from "./moduler/sok";
+import vedtak from "./moduler/vedtak";
 import { medunderskrivere } from "./moduler/medunderskrivere/state";
-import kodeverk, { KODEVERK_EPICS } from "./moduler/kodeverk";
+import kodeverk from "./moduler/kodeverk";
 import { klagebehandling as klagebehandlingState } from "./moduler/klagebehandling/state";
-import { KLAGEBEHANDLING_EPICS } from "./moduler/klagebehandling/epics";
-import auth, { REFRESH_EPICS } from "./moduler/auth";
-import kvalitetsvurdering, { KVALITETSVURDERING_EPICS } from "./moduler/kvalitetsvurdering";
+import kvalitetsvurdering from "./moduler/kvalitetsvurdering";
 
-import { dokumenter, DOKUMENTER_EPICS } from "./moduler/dokumenter/state";
-
-const epics = [
-  ...OPPGAVER_EPICS,
-  ...MEG_EPICS,
-  ...OPPGAVELASTER_EPOS,
-  ...TILDEL_EPICS,
-  ...UNLEASH_EPICS,
-  ...TOASTER_EPICS,
-  ...ROUTING_EPICS,
-  ...ADMIN_EPICS,
-  ...VEDTAK_EPOS,
-  ...MEDUNDERSKRIVERE_EPOS,
-  ...KODEVERK_EPICS,
-  ...KLAGEBEHANDLING_EPOS,
-  ...KLAGEBEHANDLING_EPICS,
-  ...DOKUMENTER_EPICS,
-  ...SOK_EPICS,
-  ...REFRESH_EPICS,
-  ...KVALITETSVURDERING_EPICS,
-];
-export const rootEpic = combineEpics.apply(combineEpics, epics);
+import { dokumenter } from "./moduler/dokumenter/state";
 
 const rootReducer = combineReducers({
   klagebehandlinger,
@@ -51,14 +25,12 @@ const rootReducer = combineReducers({
   klagebehandlingState,
   klagebehandling,
   featureToggles,
-  saksbehandler,
   admin,
   vedtak,
   medunderskrivere,
   kodeverk,
   dokumenter,
   sok,
-  auth,
   kvalitetsvurdering,
 });
 

@@ -1,5 +1,4 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { catchError, delay, retryWhen, switchMap, withLatestFrom } from "rxjs/operators";
 import { concat, of } from "rxjs";
 import { RootStateOrAny } from "react-redux";
@@ -49,36 +48,3 @@ export default toasterSlice.reducer;
 export const toasterSett = createAction<IToaster>("toaster/SETT");
 export const toasterSatt = createAction<IToaster>("toaster/SATT");
 export const toasterSkjul = createAction<number>("toaster/SKJUL");
-
-//==========
-// Epos
-//==========
-export function visToasterEpos(
-  action$: ActionsObservable<PayloadAction<IToaster>>,
-  state$: StateObservable<RootStateOrAny>
-) {
-  return action$.pipe(
-    ofType(toasterSett.type),
-    withLatestFrom(state$),
-    switchMap(([action]) =>
-      of(
-        toasterSatt({
-          display: true,
-          type: action.payload.type,
-          feilmelding: action.payload.feilmelding,
-        })
-      )
-    )
-  );
-}
-
-export function skjulToasterEpos(action$: ActionsObservable<PayloadAction<number>>) {
-  return action$.pipe(
-    ofType(toasterSkjul.type),
-    switchMap((action) => {
-      return of(toasterSatt(toasterInitialState)).pipe(delay(action.payload * 1000));
-    })
-  );
-}
-
-export const TOASTER_EPICS = [visToasterEpos, skjulToasterEpos];
