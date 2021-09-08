@@ -134,7 +134,6 @@
     "react-router-dom": "^5.2.0",
     "react-tooltip": "^4.2.21",
     "redux": "^4.1.1",
-    "redux-observable": "^1.2.0",
     "rxjs": "^6.6.3",
     "rxjs-hooks": "^0.6.2",
     "styled-components": "^5.3.0",
