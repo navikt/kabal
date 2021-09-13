@@ -39,11 +39,19 @@ export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage 
   // );
 };
 
-export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
-  const totalPages = Math.floor(total / pageSize);
+const PAGES = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  4: [1, 2, 3, 4],
+  5: [1, 2, 3, 4, 5],
+};
 
-  if (totalPages === 1) {
-    return [1];
+export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
+  const totalPages = Math.ceil(total / pageSize);
+
+  if (totalPages <= 5) {
+    return PAGES[totalPages];
   }
 
   const items: (number | string)[] = [1];

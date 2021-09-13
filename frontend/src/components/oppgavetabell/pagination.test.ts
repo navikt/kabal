@@ -16,6 +16,18 @@ import { usePagination } from './pagination';
 */
 
 describe('Pagination', () => {
+  test('1 page, 5 items, current 1', () => {
+    const expected = [1];
+    const actual = usePagination(5, 10, 1);
+    expect(actual).toStrictEqual(expected);
+  });
+
+  test('2 pages, 15 items, current 2', () => {
+    const expected = [1, 2];
+    const actual = usePagination(15, 10, 1);
+    expect(actual).toStrictEqual(expected);
+  });
+
   test('1 page, current 1', () => {
     const expected = [1];
     const actual = usePagination(10, 10, 1);
