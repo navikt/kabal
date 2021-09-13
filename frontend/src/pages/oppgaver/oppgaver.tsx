@@ -1,4 +1,12 @@
 import React from 'react';
-import { Table } from './table';
+import { IBruker, IEnhet } from '../../redux-api/bruker';
+import { OppgaveTable } from '../../components/oppgavetabell/oppgavetabell';
 
-export const OppgaverPage: React.FC = () => <Table />;
+interface Props {
+  bruker: IBruker;
+  valgtEnhet: IEnhet;
+}
+
+export const OppgaverPage: React.FC<Props> = ({ bruker, valgtEnhet }) => (
+  <OppgaveTable bruker={bruker} valgtEnhet={valgtEnhet} />
+);

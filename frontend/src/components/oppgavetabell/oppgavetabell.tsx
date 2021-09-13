@@ -6,15 +6,20 @@ import {
   useGetKlagebehandlingerQuery,
   useTildelSaksbehandlerMutation,
 } from '../../redux-api/oppgaver';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { IBruker, IEnhet } from '../../redux-api/bruker';
 import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
 import { TableHeaderFilters } from './filter-header';
 import { Filters } from './types';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
 
+interface Props {
+  bruker: IBruker;
+  valgtEnhet: IEnhet;
+}
+
 const PAGE_SIZE = 10;
 
-export const OppgaveTable: React.FC = () => {
+export const OppgaveTable: React.FC<Props> = ({ bruker, valgtEnhet }) => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     tema: [],
@@ -22,7 +27,6 @@ export const OppgaveTable: React.FC = () => {
     sortDescending: false,
   });
   const [from] = useState<number>(0);
-  // const { data: valgtEnhet, isLoading: enhetIsLoading } = useGetValgtEnhetQuery(bruker?.id);
   const { data } = useGetKlagebehandlingerQuery({
     from,
     count: from + PAGE_SIZE,
@@ -32,7 +36,7 @@ export const OppgaveTable: React.FC = () => {
     tema: filters.tema,
     types: filters.types,
     hjemler: filters.hjemler,
-    unitId: 'valgtEnhet',
+    unitId: valgtEnhet.id,
   });
 
   return (
@@ -40,18 +44,24 @@ export const OppgaveTable: React.FC = () => {
       <TableHeaderFilters filters={filters} onChange={setFilters} />
       <tbody>
         {data?.klagebehandlinger.map((k) => (
-          <Row {...k} key={k.id} />
+          <Row klagebehandling={k} bruker={bruker} key={k.id} />
         ))}
       </tbody>
     </table>
   );
 };
 
-const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, klagebehandlingVersjon }) => {
+interface RowProps {
+  bruker: IBruker;
+  klagebehandling: IKlagebehandling;
+}
+
+const Row: React.FC<RowProps> = ({ klagebehandling, bruker }) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
-  const isLoading = loader.isLoading || brukerIsLoading;
-  const disabled = isLoading || typeof bruker === 'undefined';
+  const { id, type, tema, hjemmel, frist, klagebehandlingVersjon } = klagebehandling;
+  // const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  // const isLoading = loader.isLoading || brukerIsLoading;
+  // const disabled = isLoading || typeof bruker === 'undefined';
 
   return (
     <tr>
@@ -68,10 +78,10 @@ const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, klage
       <td>
         <Knapp
           onClick={() =>
-            tildelSaksbehandler({ oppgaveId: id, klagebehandlingVersjon, navIdent: bruker?.id, enhetId: 'valgtEnhet' })
+            tildelSaksbehandler({ oppgaveId: id, klagebehandlingVersjon, navIdent: bruker.id, enhetId: 'valgtEnhet' })
           }
-          spinner={isLoading}
-          disabled={disabled}
+          spinner={loader.isLoading}
+          disabled={loader.isLoading}
         >
           {getTildelText(loader.isLoading)}
         </Knapp>

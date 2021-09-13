@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
 
-interface IBruker {
+export interface IBruker {
   id: string;
   '@odata.context': string;
   '@odata.id': string;
@@ -15,7 +15,7 @@ interface IBruker {
   jobTitle: string;
 }
 
-interface IEnhet {
+export interface IEnhet {
   id: string;
   navn: string;
   lovligeTemaer: string[];
@@ -37,4 +37,10 @@ export const brukerApi = createApi({
   }),
 });
 
-export const { useGetBrukerQuery, useGetEnheterQuery, useGetValgtEnhetQuery } = brukerApi;
+export const {
+  useGetBrukerQuery,
+  useGetEnheterQuery,
+  useGetValgtEnhetQuery,
+  useLazyGetValgtEnhetQuery,
+  useLazyGetEnheterQuery,
+} = brukerApi;
