@@ -94,17 +94,17 @@ const SCPagination = styled.div`
     text-decoration: none;
   }
 
-  &:not(.inactive):hover {
-    color: blue;
-    cursor: pointer;
-    transform: scale(1.05);
-    transition: transform 0.2s ease;
-  }
+  // &:not(.inactive):hover {
+  //   color: blue;
+  //   cursor: pointer;
+  //   transform: scale(1.05);
+  //   transition: transform 0.2s ease;
+  // }
 
-  &:not(a).active:hover {
-    transform: scale(1);
-    color: white;
-  }
+  // &:not(a).active:hover {
+  //   transform: scale(1);
+  //   color: white;
+  // }
 `;
 
 const Dots = styled.span`

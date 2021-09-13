@@ -31,8 +31,9 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   const { data: bruker } = useGetBrukerQuery();
   const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.id ?? skipToken);
 
-  const currentPageNumber = parsePage(page);
-  const from = currentPageNumber === 0 ? 0 : (currentPageNumber - 1) * PAGE_SIZE;
+  const noArgs: boolean = typeof page === 'undefined' ? true : false;
+  const currentPageNumber = noArgs ? 1 : parsePage(page);
+  const from = noArgs ? 0 : (parsePage(page) - 1) * PAGE_SIZE;
 
   const { data } = useGetKlagebehandlingerQuery(
     typeof valgtEnhet === 'undefined'
@@ -55,11 +56,14 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   }
 
   if (typeof data === 'undefined') {
-    return <Loader text={'Laster klagebehandlinger...'} />;
+    return <Loader text={`Laster side ${from} `} />;
   }
 
   return (
     <>
+      <pre>noArgs: {JSON.stringify(noArgs, null, 2)}</pre>
+      <pre>currentPageNumber: {currentPageNumber}</pre>
+      <pre>from: {from}</pre>
       <table className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <tbody>

@@ -7,7 +7,7 @@ import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
 export const Routes: React.FC = () => (
   <Switch>
     <Route exact path="/oppgaver">
-      <OppgaverPage />
+      <Redirect to="/oppgaver/1" />
     </Route>
     <Route exact path="/oppgaver/:page">
       <OppgaverPage />
