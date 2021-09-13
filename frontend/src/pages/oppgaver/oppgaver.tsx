@@ -1,12 +1,13 @@
 import React from 'react';
-import { IBruker, IEnhet } from '../../redux-api/bruker';
+import { useParams } from 'react-router-dom';
 import { OppgaveTable } from '../../components/oppgavetabell/oppgavetabell';
 
-interface Props {
-  bruker: IBruker;
-  valgtEnhet: IEnhet;
+interface OppgaverPageProps {
+  page: string;
 }
 
-export const OppgaverPage: React.FC<Props> = ({ bruker, valgtEnhet }) => (
-  <OppgaveTable bruker={bruker} valgtEnhet={valgtEnhet} />
-);
+export const OppgaverPage: React.FC = () => {
+  const { page } = useParams<OppgaverPageProps>();
+
+  return <OppgaveTable page={page} />;
+};

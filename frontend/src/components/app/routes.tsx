@@ -1,6 +1,5 @@
 import React from 'react';
 import { OppgaverPage } from '../../pages/oppgaver/oppgaver';
-import { WithStaticData } from '../with-static-data/with-static-data';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
 import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
@@ -8,10 +7,10 @@ import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
 export const Routes: React.FC = () => (
   <Switch>
     <Route exact path="/oppgaver">
-      <WithStaticData PageComponent={OppgaverPage} />
+      <OppgaverPage />
     </Route>
-    <Route exact path="/oppgaver/:side">
-      <WithStaticData PageComponent={OppgaverPage} />
+    <Route exact path="/oppgaver/:page">
+      <OppgaverPage />
     </Route>
     <Route exact path="/enhetensoppgaver">
       <EnhetensOppgaverPage />

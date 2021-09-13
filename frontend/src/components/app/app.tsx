@@ -6,7 +6,6 @@ import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { GlobalStyles } from './global-styles';
 import { Routes } from './routes';
-import { WithStaticData } from '../with-static-data/with-static-data';
 
 export const App = () => (
   <React.StrictMode>
@@ -14,7 +13,7 @@ export const App = () => (
       <BrowserRouter>
         <GlobalStyles />
 
-        <WithStaticData PageComponent={Header} />
+        <Header />
 
         <Routes />
 
