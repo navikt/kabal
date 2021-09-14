@@ -21,9 +21,15 @@ export interface IEnhet {
   lovligeTemaer: string[];
 }
 
+interface ISetEnhet {
+  enhetId: string;
+  navIdent: string;
+}
+
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
   baseQuery: staggeredBaseQuery,
+  tagTypes: ['valgtEnhet'],
   endpoints: (builder) => ({
     getBruker: builder.query<IBruker, void>({
       query: () => '/me',
@@ -33,6 +39,15 @@ export const brukerApi = createApi({
     }),
     getValgtEnhet: builder.query<IEnhet, string>({
       query: (navIdent) => `/api/ansatte/${navIdent}/valgtenhet`,
+      providesTags: ['valgtEnhet'],
+    }),
+    setValgtEnhet: builder.mutation<void, ISetEnhet>({
+      query: ({ navIdent, enhetId }) => ({
+        url: `/api/ansatte/${navIdent}/valgtenhet`,
+        method: 'PUT',
+        body: { enhetId },
+      }),
+      invalidatesTags: ['valgtEnhet'],
     }),
   }),
 });
@@ -43,4 +58,5 @@ export const {
   useGetValgtEnhetQuery,
   useLazyGetValgtEnhetQuery,
   useLazyGetEnheterQuery,
+  useSetValgtEnhetMutation,
 } = brukerApi;
