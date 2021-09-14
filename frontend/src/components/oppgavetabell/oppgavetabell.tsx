@@ -2,6 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useState } from 'react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import styled from 'styled-components';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
 import {
   IKlagebehandling,
@@ -13,8 +14,8 @@ import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
 import { TableHeaderFilters } from './filter-header';
 import { Filters } from './types';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { Pagination } from './pagination';
+import 'nav-frontend-tabell-style';
 
 interface OppgaveTableParams {
   page: string;
@@ -32,9 +33,8 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   const { data: bruker } = useGetBrukerQuery();
   const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.id ?? skipToken);
 
-  const noArgs: boolean = typeof page === 'undefined' ? true : false;
-  const currentPageNumber = noArgs ? 1 : parsePage(page);
-  const from = noArgs ? 0 : (parsePage(page) - 1) * PAGE_SIZE;
+  const currentPage = parsePage(page);
+  const from = (currentPage - 1) * PAGE_SIZE;
 
   const { data } = useGetKlagebehandlingerQuery(
     typeof valgtEnhet === 'undefined'
@@ -60,46 +60,49 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     return <Loader text={`Laster side ${from} `} />;
   }
 
-  const Table = styled.table`
-    padding: 20px;
-    border: none;
-    -webkit-border-horizontal-spacing: 0px;
-    -webkit-border-vertical-spacing: 0px;
-    tr:nth-child(odd) {
-      background-color: #ccc;
-    }
+  const fromNumber = from + 1;
+  const toNumber = Math.min(data.antallTreffTotalt, from + PAGE_SIZE);
 
-    th {
-      background-color: white;
-      text-align: left;
-    }
-  `;
   return (
-    <>
-      <Table>
+    <SCTableContainer>
+      <table className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <tbody>
           {data.klagebehandlinger.map((k) => (
             <Row {...k} key={k.id} />
           ))}
         </tbody>
-      </Table>
+        <SCTableFooter>
+          <tr>
+            <td colSpan={5}>
+              <FooterContainer>
+                <span>{`Viser ${fromNumber} til ${toNumber} av ${data.antallTreffTotalt} klagebehandlinger`}</span>
+                <Pagination total={data.antallTreffTotalt} pageSize={PAGE_SIZE} currentPage={currentPage} />
+              </FooterContainer>
+            </td>
+          </tr>
+        </SCTableFooter>
+      </table>
 
-      <CSTableFooter>
-        <SCLeftSpan>{`Viser ${currentPageNumber * 10 - 9} til ${currentPageNumber * 10} av ${
-          data.antallTreffTotalt
-        } klagebehandlinger`}</SCLeftSpan>
-        <SCRightSpan>
-          <Pagination total={data.antallTreffTotalt} pageSize={PAGE_SIZE} currentPage={currentPageNumber} />
-        </SCRightSpan>
-      </CSTableFooter>
-
-      <CSTableStats>Antall oppgaver med utgåtte frister: TODO</CSTableStats>
-    </>
+      <SCTableStats>Antall oppgaver med utgåtte frister: TODO</SCTableStats>
+    </SCTableContainer>
   );
 };
 
-const CSTableFooter = styled.div`
+const SCTableContainer = styled.div`
+  margin: 20px;
+  border: 1px solid #c7c7c7;
+  max-width: 1200px;
+  overflow: auto;
+`;
+
+const FooterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+`;
+
+const SCTableFooter = styled.tfoot`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -116,22 +119,17 @@ const CSTableFooter = styled.div`
   border-bottom-color: rgba(0, 0, 0, 0.15);
 `;
 
-const SCRightSpan = styled.div`
-  flex-grow: 1;
-  text-align: right;
-`;
-
-const SCLeftSpan = styled.div`
-  flex-grow: 1;
-`;
-
-const CSTableStats = styled.div`
+const SCTableStats = styled.div`
   padding: 10px;
 `;
 
 const parsePage = (page: string): number => {
   try {
-    return Number.parseInt(page, 10);
+    const parsed = Number.parseInt(page, 10);
+    if (Number.isNaN(parsed)) {
+      return 1;
+    }
+    return parsed;
   } catch {
     return 1;
   }

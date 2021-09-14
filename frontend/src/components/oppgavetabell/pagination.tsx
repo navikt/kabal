@@ -11,11 +11,36 @@ interface Props {
 export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage = 1 }) => {
   const pages = usePagination(total, pageSize, currentPage);
   return (
-    <SCPagination>
-      {pages.map((p) => (typeof p === 'string' ? '...' : <NavLink to={p.toString()}>{p}</NavLink>))}
-    </SCPagination>
+    <div>
+      {pages.map((p) =>
+        typeof p === 'string' ? (
+          '...'
+        ) : (
+          <PageLink key={p.toString()} to={p.toString()}>
+            {p}
+          </PageLink>
+        )
+      )}
+    </div>
   );
 };
+
+const PageLink = styled(NavLink)`
+  padding: 0.5em;
+  color: black;
+  text-decoration: none;
+  border-radius: 0.2em;
+
+  :hover {
+    background: rgba(0, 103, 197, 0.5);
+  }
+
+  &.active {
+    background: #0067c5;
+    color: white;
+    cursor: unset;
+  }
+`;
 
 const PAGES = {
   1: [1],
@@ -55,55 +80,3 @@ export const usePagination = (total: number, pageSize = 10, currentPage = 1): (n
 
   return items;
 };
-
-const SCPagination = styled.div`
-  display: block;
-
-  &:not(a) {
-    padding: 0.2em;
-    border-radius: 0.2em;
-    cursor: default !important;
-    margin: 0.25em 0 0 0.25em;
-  }
-
-  &:not(a).active {
-    color: white;
-    background-color: #0067c5;
-    border: 1px solid #0067c5;
-    cursor: default !important;
-  }
-
-  a {
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: 0.2em;
-    color: black;
-    margin: 0.25em 0 0 0.25em;
-    text-decoration: none;
-  }
-
-  // &:not(.inactive):hover {
-  //   color: blue;
-  //   cursor: pointer;
-  //   transform: scale(1.05);
-  //   transition: transform 0.2s ease;
-  // }
-
-  // &:not(a).active:hover {
-  //   transform: scale(1);
-  //   color: white;
-  // }
-`;
-
-const Dots = styled.span`
-  background-color: transparent;
-  border: 1px solid transparent;
-  color: black;
-  margin: 0;
-  cursor: default !important;
-
-  &:hover {
-    transform: scale(1);
-    color: black;
-  }
-`;
