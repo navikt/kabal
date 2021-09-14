@@ -42,7 +42,7 @@ export interface IKlagebehandling {
   strengtFortrolig: boolean;
 }
 
-interface LoadKlagebehandlingerParams {
+export interface LoadKlagebehandlingerParams {
   from: number;
   count: number;
   sorting: 'FRIST';
@@ -102,7 +102,7 @@ export const klagebehandlingerApi = createApi({
             ]
           : [{ type: 'oppgaver', id: 'LIST' }],
     }),
-    getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiReponse, LoadKlagebehandlingerParams>({
+    getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadKlagebehandlingerParams>({
       query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId, navIdent }) => {
         const query = qs.stringify(
           {
@@ -123,15 +123,8 @@ export const klagebehandlingerApi = createApi({
         );
         return `/api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
-      providesTags: (result) =>
-        typeof result !== 'undefined'
-          ? [
-              ...result.klagebehandlinger.map(({ id }) => ({ type: 'medutgaattefrister', id } as const)),
-              { type: 'oppgavermedutgaattefrister', id: 'LIST' },
-            ]
-          : [{ type: 'oppgavermedutgaattefrister', id: 'LIST' }],
+      providesTags: ['medutgaattefrister'],
     }),
-
     tildelSaksbehandler: builder.mutation<string, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, ...params }) => ({
         url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
@@ -146,4 +139,8 @@ export const klagebehandlingerApi = createApi({
   }),
 });
 
-export const { useGetKlagebehandlingerQuery, useTildelSaksbehandlerMutation } = klagebehandlingerApi;
+export const {
+  useGetKlagebehandlingerQuery,
+  useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
+  useTildelSaksbehandlerMutation,
+} = klagebehandlingerApi;

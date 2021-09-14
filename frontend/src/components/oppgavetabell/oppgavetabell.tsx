@@ -3,7 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import { useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
+import {
+  LoadKlagebehandlingerParams,
+  useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
+  useGetKlagebehandlingerQuery,
+} from '../../redux-api/oppgaver';
 import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
 import { TableHeaderFilters } from './filter-header';
 import { Filters } from './types';
@@ -30,7 +34,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
 
-  const { data } = useGetKlagebehandlingerQuery(
+  const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
     typeof valgtEnhet === 'undefined' || typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -44,9 +48,14 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           hjemler: filters.hjemler,
           unitId: valgtEnhet.id,
           navIdent: bruker.onPremisesSamAccountName,
-        } /* ,
-    { pollingInterval: 1000 } */
-  );
+        };
+
+  const { data } = useGetKlagebehandlingerQuery(queryParams, {
+    pollingInterval: 3 * 1000,
+  });
+  const { data: utgaatte } = useGetAntallKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
+    pollingInterval: 300 * 1000,
+  });
 
   if (typeof valgtEnhet === 'undefined') {
     return <Loader text={'Laster valgt enhet...'} />;
@@ -98,7 +107,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
         </SCTableFooter>
       </StyledTable>
 
-      <SCTableStats>Antall oppgaver med utgåtte frister: TODO</SCTableStats>
+      <SCTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</SCTableStats>
     </SCTableContainer>
   );
 };
