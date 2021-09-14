@@ -60,16 +60,30 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     return <Loader text={`Laster side ${from} `} />;
   }
 
+  const Table = styled.table`
+    padding: 20px;
+    border: none;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    tr:nth-child(odd) {
+      background-color: #ccc;
+    }
+
+    th {
+      background-color: white;
+      text-align: left;
+    }
+  `;
   return (
     <>
-      <table className="tabell tabell--stripet">
+      <Table>
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <tbody>
           {data.klagebehandlinger.map((k) => (
             <Row {...k} key={k.id} />
           ))}
         </tbody>
-      </table>
+      </Table>
 
       <CSTableFooter>
         <SCLeftSpan>{`Viser ${currentPageNumber * 10 - 9} til ${currentPageNumber * 10} av ${
