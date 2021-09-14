@@ -29,7 +29,8 @@ const SCNav = styled.nav`
 const SCNavLinkList = styled.ul`
   display: flex;
   list-style: none;
-  padding: 5px 0 0 0;
+  padding: 0;
+  padding-top: 5px;
   margin: 0 1em;
   border-bottom: 1px solid #3e3832;
 `;
