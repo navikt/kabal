@@ -29,10 +29,10 @@ export const brukerApi = createApi({
       query: () => '/me',
     }),
     getEnheter: builder.query<IEnhet[], string>({
-      query: (navIdent) => `/ansatte/${navIdent}/enheter`,
+      query: (navIdent) => `/api/ansatte/${navIdent}/enheter`,
     }),
     getValgtEnhet: builder.query<IEnhet, string>({
-      query: (navIdent) => `ansatte/${navIdent}/valgtenhet`,
+      query: (navIdent) => `/api/ansatte/${navIdent}/valgtenhet`,
     }),
   }),
 });

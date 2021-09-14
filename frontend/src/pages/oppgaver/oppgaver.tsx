@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { OppgaveTable } from '../../components/oppgavetabell/oppgavetabell';
+import { OppgaverPageWrapper } from '../page-wrapper';
 
 interface OppgaverPageProps {
   page: string;
@@ -9,5 +10,9 @@ interface OppgaverPageProps {
 export const OppgaverPage: React.FC = () => {
   const { page } = useParams<OppgaverPageProps>();
 
-  return <OppgaveTable page={page} />;
+  return (
+    <OppgaverPageWrapper>
+      <OppgaveTable page={page} />
+    </OppgaverPageWrapper>
+  );
 };

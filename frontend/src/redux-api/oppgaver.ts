@@ -9,6 +9,10 @@ export interface ApiResponse {
   klagebehandlinger: IKlagebehandling[];
 }
 
+interface UtgaatteApiResponse {
+  antall: number;
+}
+
 export interface Person {
   navn: string;
   fnr: string;
@@ -48,6 +52,7 @@ interface LoadKlagebehandlingerParams {
   tema: string[];
   types: string[];
   hjemler: string[];
+  navIdent: string;
 }
 
 export interface TildelSaksbehandlerParams {
@@ -57,12 +62,19 @@ export interface TildelSaksbehandlerParams {
   oppgaveId: string;
 }
 
+export interface TildelSaksbehandlerResponse {
+  klagebehandlingVersjon: number;
+  modified: Date;
+  tildelt: string;
+}
+
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
   baseQuery: staggeredBaseQuery,
+  tagTypes: ['oppgaver', 'medutgaattefrister'],
   endpoints: (builder) => ({
     getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
-      query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId }) => {
+      query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId, navIdent }) => {
         const query = qs.stringify(
           {
             antall: count,
@@ -80,15 +92,56 @@ export const klagebehandlingerApi = createApi({
             skipNulls: true,
           }
         );
-        return `/ansatte/Z994488/klagebehandlinger?${query}`;
+        return `/api/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
+      providesTags: (result) =>
+        typeof result !== 'undefined'
+          ? [
+              ...result.klagebehandlinger.map(({ id }) => ({ type: 'oppgaver', id } as const)),
+              { type: 'oppgaver', id: 'LIST' },
+            ]
+          : [{ type: 'oppgaver', id: 'LIST' }],
     }),
-    tildelSaksbehandler: builder.mutation<TildelSaksbehandlerParams, Partial<TildelSaksbehandlerParams>>({
-      query: ({ oppgaveId, ...params }) => ({
-        url: `/ansatte/Z994488/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
+    getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiReponse, LoadKlagebehandlingerParams>({
+      query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId, navIdent }) => {
+        const query = qs.stringify(
+          {
+            antall: count,
+            start: from,
+            sortering: sorting,
+            rekkefoelge: order,
+            erTildeltSaksbehandler: assigned,
+            enhetId: unitId,
+            temaer: tema,
+            typer: types,
+            hjemler,
+          },
+          {
+            arrayFormat: 'comma',
+            skipNulls: true,
+          }
+        );
+        return `/api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+      },
+      providesTags: (result) =>
+        typeof result !== 'undefined'
+          ? [
+              ...result.klagebehandlinger.map(({ id }) => ({ type: 'medutgaattefrister', id } as const)),
+              { type: 'oppgavermedutgaattefrister', id: 'LIST' },
+            ]
+          : [{ type: 'oppgavermedutgaattefrister', id: 'LIST' }],
+    }),
+
+    tildelSaksbehandler: builder.mutation<string, TildelSaksbehandlerParams>({
+      query: ({ oppgaveId, navIdent, ...params }) => ({
+        url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
         method: 'POST',
-        body: params,
+        body: { navIdent, ...params },
+        validateStatus: ({ ok }) => ok,
+        responseHandler: async (): Promise<string> => oppgaveId,
       }),
+      invalidatesTags: (oppgaveId) =>
+        typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
     }),
   }),
 });

@@ -43,6 +43,7 @@ const PageLink = styled(NavLink)`
 `;
 
 const PAGES = {
+  0: [1],
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
@@ -51,6 +52,10 @@ const PAGES = {
 };
 
 export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
+  if (total === 0) {
+    return PAGES[0];
+  }
+
   const totalPages = Math.ceil(total / pageSize);
 
   if (totalPages <= 5) {

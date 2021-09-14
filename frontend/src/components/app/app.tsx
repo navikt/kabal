@@ -6,6 +6,7 @@ import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { GlobalStyles } from './global-styles';
 import { Routes } from './routes';
+import '../../stilark/App.less';
 
 export const App = () => (
   <React.StrictMode>

@@ -6,62 +6,11 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Source Sans Pro, serif;
-}
-
-.app {
+  font-family: "Source Sans Pro", Arial, sans-serif;
   .typo-normal-mixin();
   color: @navMorkGra;
   font-family: @font-family;
   line-height: @line-height-base;
-}
-
-.kontainer {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "header"
-    "toaster"
-    "nav"
-    "content"
-    "footer";
-}
-
-.main-head {
-  grid-area: header;
-}
-
-.content {
-  grid-area: content;
-  height: calc(100vh - 11.25em - 2em);
-  &.uten-nav {
-    height: calc(100vh - 6.25em) !important;
-  }
-}
-
-.main {
-  width: 100%;
-  display: block;
-}
-
-.main-nav {
-  grid-area: nav;
-  margin: 1em 0;
-  height: 5em;
-}
-
-.main-footer {
-  grid-area: footer;
-  color: black;
-  padding: 1em;
-  height: 3em;
-  background: whitesmoke;
-  text-align: center;
-  font-variant: all-small-caps;
-  font-size: 0.9em;
-  > div {
-    padding: 1.5em 1em;
-  }
 }
 
 .toaster {
@@ -79,74 +28,124 @@ body {
   }
 }
 
-.bg_lysgraa {
-  background: #e7e9e9;
-}
+// .kontainer {
+//   display: grid;
+//   grid-template-columns: 1fr;
+//   grid-template-areas:
+//     "header"
+//     "toaster"
+//     "nav"
+//     "content"
+//     "footer";
+// }
 
-@media (min-width: 500px) {
-  .kontainer {
-    grid-template-columns: 3fr auto;
-    grid-template-rows: min-content min-content min-content 1fr min-content;
-    grid-template-areas:
-      "header  header"
-      "nav     nav"
-      "toaster toaster"
-      "content content"
-      "footer  footer";
-  }
-}
-@media (min-width: 700px) {
-  .kontainer {
-    grid-template-columns: 1fr 4fr;
-  }
-}
+// .main-head {
+//   grid-area: header;
+// }
 
-.main-nav ul {
-  padding: 5px 0 0 0;
-  margin: 0 1em;
-  border-bottom: 1px solid #3e3832;
-}
-.main-nav ul li {
-  width: 10em;
-  min-width: 10em;
-}
-a.link {
-  width: 100%;
-  display: block;
-  text-decoration: none;
-  border-bottom: 5px solid transparent;
-  margin: 0;
-  padding: 0.25em 0 0.25em 0;
-}
-a.link.active,
-a.link:hover {
-  text-decoration: none;
-  color: #0067c5;
-  border-bottom: 5px solid #0067c5;
-}
+// .content {
+//   grid-area: content;
+//   height: calc(100vh - 11.25em - 2em);
+//   &.uten-nav {
+//     height: calc(100vh - 6.25em) !important;
+//   }
+// }
 
-.copy-button:hover {
-  transition: all 0.25s linear;
-  font-weight: bold;
-}
-.copy-button:active {
-  transition: all 0.25s linear;
-  font-size: 0.9em;
-}
-@keyframes copy {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0.9;
-  }
-}
-.copy-tekst {
-  font-size: 0.8em;
-  font-weight: bold;
-  color: #3e3832;
-  opacity: 0;
-  animation: copy 0.25s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-}
+// .main {
+//   width: 100%;
+//   display: block;
+// }
+
+// .main-nav {
+//   grid-area: nav;
+//   margin: 1em 0;
+//   height: 5em;
+// }
+
+// .main-footer {
+//   grid-area: footer;
+//   color: black;
+//   padding: 1em;
+//   height: 3em;
+//   background: whitesmoke;
+//   text-align: center;
+//   font-variant: all-small-caps;
+//   font-size: 0.9em;
+//   > div {
+//     padding: 1.5em 1em;
+//   }
+// }
+
+
+
+// .bg_lysgraa {
+//   background: #e7e9e9;
+// }
+
+// @media (min-width: 500px) {
+//   .kontainer {
+//     grid-template-columns: 3fr auto;
+//     grid-template-rows: min-content min-content min-content 1fr min-content;
+//     grid-template-areas:
+//       "header  header"
+//       "nav     nav"
+//       "toaster toaster"
+//       "content content"
+//       "footer  footer";
+//   }
+// }
+// @media (min-width: 700px) {
+//   .kontainer {
+//     grid-template-columns: 1fr 4fr;
+//   }
+// }
+
+// .main-nav ul {
+//   padding: 5px 0 0 0;
+//   margin: 0 1em;
+//   border-bottom: 1px solid #3e3832;
+// }
+// .main-nav ul li {
+//   width: 10em;
+//   min-width: 10em;
+// }
+// a.link {
+//   width: 100%;
+//   display: block;
+//   text-decoration: none;
+//   border-bottom: 5px solid transparent;
+//   margin: 0;
+//   padding: 0.25em 0 0.25em 0;
+// }
+// a.link.active,
+// a.link:hover {
+//   text-decoration: none;
+//   color: #0067c5;
+//   border-bottom: 5px solid #0067c5;
+// }
+
+// .copy-button:hover {
+//   transition: all 0.25s linear;
+//   font-weight: bold;
+// }
+// .copy-button:active {
+//   transition: all 0.25s linear;
+//   font-size: 0.9em;
+// }
+// @keyframes copy {
+//   0% {
+//     opacity: 0;
+//   }
+//   100% {
+//     opacity: 0.9;
+//   }
+// }
+// .copy-tekst {
+//   font-size: 0.8em;
+//   font-weight: bold;
+//   color: #3e3832;
+//   opacity: 0;
+//   animation: copy 0.25s;
+//   animation-fill-mode: forwards;
+//   animation-iteration-count: 1;
+// }
