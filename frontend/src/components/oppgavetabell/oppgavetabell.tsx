@@ -1,6 +1,7 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useState } from 'react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import styled from 'styled-components';
 import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
 import {
   IKlagebehandling,
@@ -61,9 +62,6 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
 
   return (
     <>
-      <pre>noArgs: {JSON.stringify(noArgs, null, 2)}</pre>
-      <pre>currentPageNumber: {currentPageNumber}</pre>
-      <pre>from: {from}</pre>
       <table className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <tbody>
@@ -72,10 +70,50 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           ))}
         </tbody>
       </table>
-      <Pagination total={data.antallTreffTotalt} pageSize={PAGE_SIZE} currentPage={currentPageNumber} />
+
+      <CSTableFooter>
+        <SCLeftSpan>{`Viser ${currentPageNumber * 10 - 9} til ${currentPageNumber * 10} av ${
+          data.antallTreffTotalt
+        } klagebehandlinger`}</SCLeftSpan>
+        <SCRightSpan>
+          <Pagination total={data.antallTreffTotalt} pageSize={PAGE_SIZE} currentPage={currentPageNumber} />
+        </SCRightSpan>
+      </CSTableFooter>
+
+      <CSTableStats>Antall oppgaver med utgåtte frister: TODO</CSTableStats>
     </>
   );
 };
+
+const CSTableFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  height: 30px;
+  padding: 10px;
+
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgba(0, 0, 0, 0.15);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(0, 0, 0, 0.15);
+`;
+
+const SCRightSpan = styled.div`
+  flex-grow: 1;
+  text-align: right;
+`;
+
+const SCLeftSpan = styled.div`
+  flex-grow: 1;
+`;
+
+const CSTableStats = styled.div`
+  padding: 10px;
+`;
 
 const parsePage = (page: string): number => {
   try {

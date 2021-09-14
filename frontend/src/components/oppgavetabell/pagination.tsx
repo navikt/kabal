@@ -15,28 +15,6 @@ export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage 
       {pages.map((p) => (typeof p === 'string' ? '...' : <NavLink to={p.toString()}>{p}</NavLink>))}
     </SCPagination>
   );
-  // const totalPages = Math.floor(total / pageSize);
-
-  // const buttons: JSX.Element[] = [];
-
-  // const max = totalPages - 1;
-  // const min = 2;
-  // const start = Math.max(currentPage - 3, min);
-  // const end = Math.min(currentPage + 3, max);
-
-  // for (let i = start; i < end; i++) {
-  //   buttons.push(<NavLink to={i.toString()}>{i}</NavLink>);
-  // }
-
-  // return (
-  //   <SCPagination>
-  //     <NavLink to={'1'}>1</NavLink>
-  //     {start === min ? '' : '...'}
-  //     {buttons}
-  //     {end === max ? '' : '...'}
-  //     <NavLink to={totalPages.toString()}>{totalPages}</NavLink>
-  //   </SCPagination>
-  // );
 };
 
 const PAGES = {
@@ -79,6 +57,8 @@ export const usePagination = (total: number, pageSize = 10, currentPage = 1): (n
 };
 
 const SCPagination = styled.div`
+  display: block;
+
   &:not(a) {
     padding: 0.2em;
     border-radius: 0.2em;
