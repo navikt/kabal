@@ -25,7 +25,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     sortDescending: false,
   });
   const { data: bruker } = useGetBrukerQuery();
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.id ?? skipToken);
+  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;

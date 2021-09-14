@@ -16,8 +16,8 @@ interface Props {
 
 export const WithStaticData: React.FC<Props> = ({ PageComponent }): JSX.Element => {
   const { data: bruker } = useGetBrukerQuery();
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.id ?? skipToken);
-  const { data: enheter } = useGetEnheterQuery(bruker?.id ?? skipToken);
+  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
+  const { data: enheter } = useGetEnheterQuery(bruker?.onPremisesSamAccountName ?? skipToken);
   kodeverkApi.usePrefetch('getKodeverk');
 
   if (typeof bruker === 'undefined') {
