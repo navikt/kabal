@@ -1,6 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import {
   useGetBrukerQuery,
   useGetEnheterQuery,
@@ -10,15 +11,16 @@ import {
 
 export const User = () => {
   const { data: bruker } = useGetBrukerQuery();
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(() => setIsOpen(false), ref);
 
   if (typeof bruker === 'undefined') {
     return <StyledContainer>Laster...</StyledContainer>;
   }
 
   return (
-    <StyledContainer>
+    <StyledContainer ref={ref}>
       <StyledButton onClick={() => setIsOpen(!isOpen)}>
         {bruker?.displayName}
         <DisplayEnhet brukerId={bruker.onPremisesSamAccountName} />
