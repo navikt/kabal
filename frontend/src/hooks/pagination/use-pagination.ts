@@ -6,7 +6,7 @@ const PAGES: { [key: number]: number[] } = {
   4: [1, 2, 3, 4],
 };
 
-const predefined = Object.keys(PAGES).length - 1;
+const PREDEFINED = Object.keys(PAGES).length - 1;
 
 export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
   if (total === 0) {
@@ -15,47 +15,56 @@ export const usePagination = (total: number, pageSize = 10, currentPage = 1): (n
 
   const totalPages = Math.ceil(total / pageSize);
 
-  if (totalPages <= predefined) {
+  // No point in calculating the array for low numbers of pages.
+  if (totalPages <= PREDEFINED) {
     return PAGES[totalPages];
   }
 
   const startPage = 1;
 
-  const items: (number | string)[] = [startPage];
+  const pages: (number | string)[] = [startPage];
 
   const endPage = totalPages;
 
+  // Calculate current page distance from start (always 1).
   const startDiff = currentPage - startPage;
 
   if (startDiff === 2) {
+    // If current page is one away from start.
     const previous = currentPage - 1;
-    items.push(previous);
+    pages.push(previous); // Add the previous page.
   } else if (startDiff === 3) {
+    // If current page is two away from start.
     const previous = currentPage - 1;
-    items.push(previous - 1, previous);
+    pages.push(previous - 1, previous); // Add the two previous pages.
   } else if (startDiff >= 4) {
+    // If current page is 4 or more away from start.
     const previous = currentPage - 1;
-    items.push('...', previous);
+    pages.push('...', previous); // Add ellipsis and the previous page.
   }
 
   if (currentPage !== startPage && currentPage !== endPage) {
-    items.push(currentPage);
+    // Do not add the current page if it is equal to start or end.
+    pages.push(currentPage);
   }
 
   const endDiff = endPage - currentPage;
 
   if (endDiff === 2) {
+    // If current page is one away from end.
     const next = currentPage + 1;
-    items.push(next);
+    pages.push(next); // Add the next page.
   } else if (endDiff === 3) {
+    // If current page is two away from end.
     const next = currentPage + 1;
-    items.push(next, next + 1);
+    pages.push(next, next + 1); // Add the two next pages.
   } else if (endDiff >= 4) {
+    // If current page is 4 or more away from end.
     const next = currentPage + 1;
-    items.push(next, '...');
+    pages.push(next, '...'); // Add ellipsis and the next page.
   }
 
-  items.push(endPage);
+  pages.push(endPage);
 
-  return items;
+  return pages;
 };
