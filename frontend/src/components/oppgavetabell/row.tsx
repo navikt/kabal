@@ -7,7 +7,7 @@ import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
 import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 
-export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, klagebehandlingVersjon }) => {
+export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
   const { data: bruker, isLoading: isUserLoading } = useGetBrukerQuery();
   const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
@@ -37,6 +37,7 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
       <td>
         <EtikettMain>{useHjemmelFromId(hjemmel)}</EtikettMain>
       </td>
+      <td>{ageKA} dager</td>
       <td>{isoDateToPretty(frist)}</td>
       <td>
         <Knapp onClick={onTildel} spinner={isLoading} disabled={isLoading}>
