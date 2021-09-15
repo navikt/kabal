@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { Knapp } from 'nav-frontend-knapper';
+import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
+import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
-import { Knapp } from 'nav-frontend-knapper';
-import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
-import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 
 export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();

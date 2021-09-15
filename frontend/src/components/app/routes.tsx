@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
 import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
 import { SearchPage } from '../../pages/search/search';
+import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
 
 export const Routes: React.FC = () => (
   <Switch>
@@ -28,7 +29,9 @@ export const Routes: React.FC = () => (
     <Route exact path="/sok">
       <SearchPage />
     </Route>
-    {/* <Route exact path="/klagebehandling/:id" render={() => <KlagebehandlingLaster />} /> */}
+    <Route exact path="/klagebehandling/:id">
+      <KlagebehandlingPage />
+    </Route>
     {/* <Route exact path="/mineoppgaver" render={() => <MineSaker />} /> */}
     {/* <Route exact path="/sok" render={() => <Sok />} /> */}
     {/* <Route exact path="/innstillinger" render={() => <Innstillinger />} /> */}

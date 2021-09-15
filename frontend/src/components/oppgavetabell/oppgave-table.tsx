@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
 import {
-  IKlagebehandling,
   LoadKlagebehandlingerParams,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
   useGetKlagebehandlingerQuery,
@@ -13,8 +11,14 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { TableHeaderFilters } from './filter-header';
 import { Filters } from './types';
 import { Pagination } from './pagination';
-import { Row } from './row';
-import { SCFooter, SCTableContainer, SCTableFooter, SCTableStats, StyledTable } from './styled-components';
+import {
+  StyledFooter,
+  StyledTableContainer,
+  StyledTableFooter,
+  StyledTableStats,
+  StyledTable,
+} from './styled-components';
+import { OppgaveRader } from './rows';
 
 interface OppgaveTableParams {
   page: string;
@@ -67,82 +71,28 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   const toNumber = Math.min(total, from + PAGE_SIZE);
 
   return (
-    <SCTableContainer>
+    <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <OppgaveRader oppgaver={data?.klagebehandlinger} columnCount={7} />
-        <SCTableFooter>
+        <StyledTableFooter>
           <tr>
             <td colSpan={7}>
-              <SCFooter>
+              <StyledFooter>
                 <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>
                 <Pagination total={total} pageSize={PAGE_SIZE} currentPage={currentPage} />
-              </SCFooter>
+              </StyledFooter>
             </td>
           </tr>
-        </SCTableFooter>
+        </StyledTableFooter>
       </StyledTable>
 
-      <SCTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</SCTableStats>
-    </SCTableContainer>
-  );
-};
-
-interface OppgaveRaderProps {
-  oppgaver?: IKlagebehandling[];
-  columnCount: number;
-}
-
-const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCount }) => {
-  if (typeof oppgaver === 'undefined') {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>
-            <Loader text={'Laster oppgaver...'} />
-          </td>
-        </tr>
-      </tbody>
-    );
-  }
-
-  if (oppgaver.length === 0) {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
-    );
-  }
-  return (
-    <tbody>
-      {oppgaver.map((k) => (
-        <Row {...k} key={k.id} />
-      ))}
-    </tbody>
+      <StyledTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledTableStats>
+    </StyledTableContainer>
   );
 };
 
 const parsePage = (page: string): number => {
-  try {
-    const parsed = Number.parseInt(page, 10);
-    if (Number.isNaN(parsed)) {
-      return 1;
-    }
-    return parsed;
-  } catch {
-    return 1;
-  }
+  const parsed = Number.parseInt(page, 10);
+  return Number.isNaN(parsed) ? 1 : parsed;
 };
-
-interface LoaderProps {
-  text: string;
-}
-
-const Loader: React.FC<LoaderProps> = ({ text }) => (
-  <div>
-    <NavFrontendSpinner />
-    <span>{text}</span>
-  </div>
-);

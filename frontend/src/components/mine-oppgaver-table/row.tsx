@@ -1,15 +1,23 @@
 import React, { useCallback } from 'react';
 import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
-import { Knapp, Hovedknapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
 import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import styled from 'styled-components';
-import { Redirect } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
-export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, klagebehandlingVersjon, person }) => {
+export const Row: React.FC<IKlagebehandling> = ({
+  id,
+  type,
+  tema,
+  hjemmel,
+  frist,
+  klagebehandlingVersjon,
+  person,
+  ageKA,
+}) => {
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
   const { data: bruker, isLoading: isUserLoading } = useGetBrukerQuery();
   const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
@@ -41,9 +49,12 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
       </td>
       <td>{person?.navn}</td>
       <td>{person?.fnr}</td>
+      <td>{ageKA} dager</td>
       <td>{isoDateToPretty(frist)}</td>
       <td>
-        <Hovedknapp onClick={() => openOppgave(id)}>Åpne</Hovedknapp>
+        <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
+          Åpne
+        </NavLink>
       </td>
       <td>
         <Knapp onClick={onFradel} spinner={isLoading} disabled={isLoading}>
@@ -53,12 +64,5 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
     </tr>
   );
 };
-
-// const StyledKnapp = styled(Knapp)`
-//   color: red;
-//   border-color: red;
-// `;
-
-const openOppgave = (oppgaveId: string) => <Redirect to={`/klagebehandling/${oppgaveId}`} />;
 
 const getFradelText = (loading: boolean) => (loading ? 'Legger tilbake...' : 'Legg tilbake');

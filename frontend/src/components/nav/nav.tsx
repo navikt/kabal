@@ -3,30 +3,30 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav: React.FC = () => (
-  <SCNav role="navigation" aria-label="Meny">
-    <SCNavLinkList>
-      <SCNavListItem>
-        <SCNavLink to="/oppgaver/1">Oppgaver</SCNavLink>
-      </SCNavListItem>
-      <SCNavListItem>
-        <SCNavLink to="/mineoppgaver">Mine Oppgaver</SCNavLink>
-      </SCNavListItem>
-      <SCNavListItem>
-        <SCNavLink to="/sok">Søk på person</SCNavLink>
-      </SCNavListItem>
-      <SCNavListItem>
-        <SCNavLink to="/enhetensoppgaver">Enhetens oppgaver</SCNavLink>
-      </SCNavListItem>
-    </SCNavLinkList>
-  </SCNav>
+  <StyledNav role="navigation" aria-label="Meny">
+    <StyledNavLinkList>
+      <StyledNavListItem>
+        <StyledNavLink to="/oppgaver/1">Oppgaver</StyledNavLink>
+      </StyledNavListItem>
+      <StyledNavListItem>
+        <StyledNavLink to="/mineoppgaver">Mine Oppgaver</StyledNavLink>
+      </StyledNavListItem>
+      <StyledNavListItem>
+        <StyledNavLink to="/sok">Søk på person</StyledNavLink>
+      </StyledNavListItem>
+      <StyledNavListItem>
+        <StyledNavLink to="/enhetensoppgaver">Enhetens oppgaver</StyledNavLink>
+      </StyledNavListItem>
+    </StyledNavLinkList>
+  </StyledNav>
 );
 
-const SCNav = styled.nav`
+const StyledNav = styled.nav`
   padding-top: 1em;
   padding-bottom: 1em;
 `;
 
-const SCNavLinkList = styled.ul`
+const StyledNavLinkList = styled.ul`
   display: flex;
   list-style: none;
   padding: 0;
@@ -35,13 +35,13 @@ const SCNavLinkList = styled.ul`
   border-bottom: 1px solid #3e3832;
 `;
 
-const SCNavListItem = styled.li`
+const StyledNavListItem = styled.li`
   min-width: 10em;
   text-align: center;
   padding-right: 1em;
 `;
 
-const SCNavLink = styled(NavLink)`
+const StyledNavLink = styled(NavLink)`
   display: block;
   width: 100%;
   font-size: 1.2em;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const SCTableContainer = styled.div`
+export const StyledTableContainer = styled.div`
   padding-left: 1em;
   padding-right: 1em;
   flex-grow: 1;
@@ -10,13 +10,13 @@ export const StyledTable = styled.table`
   max-width: 1200px;
 `;
 
-export const SCFooter = styled.div`
+export const StyledFooter = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
 `;
 
-export const SCTableFooter = styled.tfoot`
+export const StyledTableFooter = styled.tfoot`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -33,6 +33,6 @@ export const SCTableFooter = styled.tfoot`
   border-bottom-color: rgba(0, 0, 0, 0.15);
 `;
 
-export const SCTableStats = styled.div`
+export const StyledTableStats = styled.div`
   padding: 10px;
 `;

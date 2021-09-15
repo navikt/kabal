@@ -6,7 +6,7 @@ import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQ
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { TableHeader } from './header';
 import { Row } from './row';
-import { SCTableContainer, StyledTable } from './styled-components';
+import { StyledTableContainer, StyledTable } from './styled-components';
 
 const MAX_OPPGAVER = 100;
 
@@ -37,12 +37,12 @@ export const EnhetensOppgaverTable: React.FC = () => {
   const oppgaverHeaderTitles: string[] = ['Type', 'Tema', 'Hjemmel', 'Navn', 'Fnr.', 'Frist', ''];
 
   return (
-    <SCTableContainer>
+    <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet">
         <TableHeader headers={oppgaverHeaderTitles} />
         <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} />
       </StyledTable>
-    </SCTableContainer>
+    </StyledTableContainer>
   );
 };
 
