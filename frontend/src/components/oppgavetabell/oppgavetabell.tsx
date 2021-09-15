@@ -4,11 +4,12 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
 import {
+  IKlagebehandling,
   LoadKlagebehandlingerParams,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
   useGetKlagebehandlingerQuery,
 } from '../../redux-api/oppgaver';
-import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { TableHeaderFilters } from './filter-header';
 import { Filters } from './types';
 import { Pagination } from './pagination';
@@ -29,24 +30,22 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     sortDescending: false,
   });
   const { data: bruker } = useGetBrukerQuery();
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
-    typeof valgtEnhet === 'undefined' || typeof bruker === 'undefined'
+    typeof bruker === 'undefined'
       ? skipToken
       : {
-          from,
-          count: PAGE_SIZE,
-          sorting: 'FRIST',
-          order: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
-          assigned: false,
-          tema: filters.tema,
-          types: filters.types,
+          start: from,
+          antall: PAGE_SIZE,
+          sortering: 'FRIST',
+          rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
+          erTildeltSaksbehandler: false,
+          temaer: filters.tema,
+          typer: filters.types,
           hjemler: filters.hjemler,
-          unitId: valgtEnhet.id,
           navIdent: bruker.onPremisesSamAccountName,
         };
 
@@ -57,50 +56,27 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     pollingInterval: 300 * 1000,
   });
 
-  if (typeof valgtEnhet === 'undefined') {
-    return <Loader text={'Laster valgt enhet...'} />;
-  }
+  const total = data?.antallTreffTotalt ?? 0;
 
-  if (typeof data === 'undefined') {
-    return <Loader text={`Laster side ${from} `} />;
-  }
-
-  if (data.antallTreffTotalt < from) {
-    const lastPage = Math.ceil(data.antallTreffTotalt / PAGE_SIZE);
+  if (total < from) {
+    const lastPage = Math.ceil(total / PAGE_SIZE);
     return <Redirect to={lastPage.toString()} />;
   }
 
   const fromNumber = from + 1;
-  const toNumber = Math.min(data.antallTreffTotalt, from + PAGE_SIZE);
-
-  const OppgaveRader = () => {
-    if (data.klagebehandlinger.length === 0) {
-      return (
-        <tr>
-          <td colSpan={5}>Ingen oppgaver i liste</td>
-        </tr>
-      );
-    }
-    return (
-      <tbody>
-        {data.klagebehandlinger.map((k) => (
-          <Row {...k} key={k.id} />
-        ))}
-      </tbody>
-    );
-  };
+  const toNumber = Math.min(total, from + PAGE_SIZE);
 
   return (
     <SCTableContainer>
       <StyledTable className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader />
+        <OppgaveRader oppgaver={data?.klagebehandlinger} columnCount={7} />
         <SCTableFooter>
           <tr>
-            <td colSpan={5}>
+            <td colSpan={7}>
               <SCFooter>
-                <span>{`Viser ${fromNumber} til ${toNumber} av ${data.antallTreffTotalt} klagebehandlinger`}</span>
-                <Pagination total={data.antallTreffTotalt} pageSize={PAGE_SIZE} currentPage={currentPage} />
+                <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>
+                <Pagination total={total} pageSize={PAGE_SIZE} currentPage={currentPage} />
               </SCFooter>
             </td>
           </tr>
@@ -109,6 +85,42 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
 
       <SCTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</SCTableStats>
     </SCTableContainer>
+  );
+};
+
+interface OppgaveRaderProps {
+  oppgaver?: IKlagebehandling[];
+  columnCount: number;
+}
+
+const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCount }) => {
+  if (typeof oppgaver === 'undefined') {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={columnCount}>
+            <Loader text={'Laster oppgaver...'} />
+          </td>
+        </tr>
+      </tbody>
+    );
+  }
+
+  if (oppgaver.length === 0) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
+        </tr>
+      </tbody>
+    );
+  }
+  return (
+    <tbody>
+      {oppgaver.map((k) => (
+        <Row {...k} key={k.id} />
+      ))}
+    </tbody>
   );
 };
 

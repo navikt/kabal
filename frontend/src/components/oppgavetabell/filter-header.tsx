@@ -42,6 +42,7 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
             Hjemmel
           </FilterDropdown>
         </th>
+        <th>Alder</th>
         <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
           Frist
         </SortBy>

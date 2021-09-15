@@ -40,19 +40,22 @@ export interface IKlagebehandling {
   egenAnsatt: boolean;
   fortrolig: boolean;
   strengtFortrolig: boolean;
+  ageKA: number; // Age in days.
 }
 
 export interface LoadKlagebehandlingerParams {
-  from: number;
-  count: number;
-  sorting: 'FRIST';
-  order: 'STIGENDE' | 'SYNKENDE';
-  assigned: boolean;
-  unitId: string;
-  tema: string[];
-  types: string[];
+  start: number;
+  antall: number;
+  sortering: 'FRIST';
+  rekkefoelge: 'STIGENDE' | 'SYNKENDE';
+  erTildeltSaksbehandler: boolean;
+  temaer: string[];
+  typer: string[];
   hjemler: string[];
   navIdent: string;
+  ferdigstiltFom?: Date;
+  tildeltSaksbehandler?: string;
+  projeksjon?: 'UTVIDET';
 }
 
 export interface TildelSaksbehandlerParams {
@@ -62,7 +65,14 @@ export interface TildelSaksbehandlerParams {
   oppgaveId: string;
 }
 
-export interface TildelSaksbehandlerResponse {
+export interface FradelSaksbehandlerParams {
+  navIdent: string;
+  enhetId: string;
+  klagebehandlingVersjon: number;
+  oppgaveId: string;
+}
+
+interface TildelSaksbehandlerResponse {
   klagebehandlingVersjon: number;
   modified: Date;
   tildelt: string;
@@ -74,24 +84,11 @@ export const klagebehandlingerApi = createApi({
   tagTypes: ['oppgaver', 'medutgaattefrister'],
   endpoints: (builder) => ({
     getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
-      query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId, navIdent }) => {
-        const query = qs.stringify(
-          {
-            antall: count,
-            start: from,
-            sortering: sorting,
-            rekkefoelge: order,
-            erTildeltSaksbehandler: assigned,
-            enhetId: unitId,
-            temaer: tema,
-            typer: types,
-            hjemler,
-          },
-          {
-            arrayFormat: 'comma',
-            skipNulls: true,
-          }
-        );
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
         return `/api/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
       providesTags: (result) =>
@@ -103,24 +100,11 @@ export const klagebehandlingerApi = createApi({
           : [{ type: 'oppgaver', id: 'LIST' }],
     }),
     getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadKlagebehandlingerParams>({
-      query: ({ from, count, sorting, order, assigned, tema, types, hjemler, unitId, navIdent }) => {
-        const query = qs.stringify(
-          {
-            antall: count,
-            start: from,
-            sortering: sorting,
-            rekkefoelge: order,
-            erTildeltSaksbehandler: assigned,
-            enhetId: unitId,
-            temaer: tema,
-            typer: types,
-            hjemler,
-          },
-          {
-            arrayFormat: 'comma',
-            skipNulls: true,
-          }
-        );
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
         return `/api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
@@ -136,6 +120,17 @@ export const klagebehandlingerApi = createApi({
       invalidatesTags: (oppgaveId) =>
         typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
     }),
+    fradelSaksbehandler: builder.mutation<string, FradelSaksbehandlerParams>({
+      query: ({ oppgaveId, navIdent, ...params }) => ({
+        url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
+        method: 'POST',
+        body: { navIdent, ...params },
+        validateStatus: ({ ok }) => ok,
+        responseHandler: async (): Promise<string> => oppgaveId,
+      }),
+      invalidatesTags: (oppgaveId) =>
+        typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -143,4 +138,5 @@ export const {
   useGetKlagebehandlingerQuery,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
   useTildelSaksbehandlerMutation,
+  useFradelSaksbehandlerMutation,
 } = klagebehandlingerApi;
