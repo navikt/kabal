@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { usePagination } from '../../hooks/pagination/use-pagination';
 
 interface Props {
   total: number;
@@ -41,47 +42,3 @@ const PageLink = styled(NavLink)`
     cursor: unset;
   }
 `;
-
-const PAGES = {
-  0: [1],
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  4: [1, 2, 3, 4],
-  5: [1, 2, 3, 4, 5],
-};
-
-export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
-  if (total === 0) {
-    return PAGES[0];
-  }
-
-  const totalPages = Math.ceil(total / pageSize);
-
-  if (totalPages <= 5) {
-    return PAGES[totalPages];
-  }
-
-  const items: (number | string)[] = [1];
-
-  const max = totalPages - 1;
-  const min = 2;
-  const start = Math.max(currentPage - 3, min);
-  const end = Math.min(currentPage + 3, max);
-
-  if (start !== min) {
-    items.push('...');
-  }
-
-  for (let i = start; i <= end; i++) {
-    items.push(i);
-  }
-
-  if (end !== max) {
-    items.push('...');
-  }
-
-  items.push(totalPages);
-
-  return items;
-};
