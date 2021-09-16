@@ -13,6 +13,17 @@ interface UtgaatteApiResponse {
   antall: number;
 }
 
+export interface PersonSoekApiResponse {
+  antallTreffTotalt: number;
+  personer: IPersonResultat[];
+}
+
+interface TildelSaksbehandlerResponse {
+  klagebehandlingVersjon: number;
+  modified: Date;
+  tildelt: string;
+}
+
 export interface Person {
   navn: string;
   fnr: string;
@@ -41,6 +52,14 @@ export interface IKlagebehandling {
   fortrolig: boolean;
   strengtFortrolig: boolean;
   ageKA: number; // Age in days.
+}
+
+export interface IPersonResultat {
+  aapneKlagebehandlinger: IKlagebehandling[];
+  avsluttedeKlagebehandlinger: IKlagebehandling[];
+  fnr: string;
+  foedselsdato: string;
+  klagebehandlinger: IKlagebehandling[];
 }
 
 export interface LoadKlagebehandlingerParams {
@@ -72,16 +91,18 @@ export interface FradelSaksbehandlerParams {
   oppgaveId: string;
 }
 
-interface TildelSaksbehandlerResponse {
-  klagebehandlingVersjon: number;
-  modified: Date;
-  tildelt: string;
+export interface LoadPersonSoekParams {
+  navIdent: string;
+  antall: number;
+  start: number;
+  fnr: string;
+  soekString: string;
 }
 
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
   baseQuery: staggeredBaseQuery,
-  tagTypes: ['oppgaver', 'medutgaattefrister'],
+  tagTypes: ['oppgaver', 'medutgaattefrister', 'personsoek'],
   endpoints: (builder) => ({
     getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -108,6 +129,16 @@ export const klagebehandlingerApi = createApi({
         return `/api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
+    }),
+    personsoek: builder.query<PersonSoekApiResponse, LoadPersonSoekParams>({
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/api/ansatte/${navIdent}/klagebehandlinger/personsoek?${query}`;
+      },
+      providesTags: ['personsoek'],
     }),
     tildelSaksbehandler: builder.mutation<string, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, ...params }) => ({
@@ -137,6 +168,7 @@ export const klagebehandlingerApi = createApi({
 export const {
   useGetKlagebehandlingerQuery,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
+  usePersonsoekQuery,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
 } = klagebehandlingerApi;

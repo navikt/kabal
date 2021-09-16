@@ -1,6 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+
+const PORT = 8061;
+
 module.exports = {
   entry: {
     main: './src/index.tsx',
@@ -71,23 +74,26 @@ module.exports = {
     contentBase: path.resolve(__dirname, 'public'),
     hot: true,
     host: '0.0.0.0',
-    port: 8061,
+    port: PORT,
     historyApiFallback: true,
     proxy: {
       '/api': {
         target: 'https://kabal.dev.nav.no',
         secure: false,
         changeOrigin: true,
+        cookieDomainRewrite: `localhost:${PORT}`,
       },
       '/internal': {
         target: 'https://kabal.dev.nav.no',
         secure: false,
         changeOrigin: true,
+        cookieDomainRewrite: `localhost:${PORT}`,
       },
       '/me': {
         target: 'https://kabal.dev.nav.no',
         secure: false,
         changeOrigin: true,
+        cookieDomainRewrite: `localhost:${PORT}`,
       },
     },
   },
