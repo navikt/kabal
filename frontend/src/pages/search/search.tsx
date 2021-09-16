@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useMemo, useState } from 'react';
 import { SearchBox } from '../../components/searchbox/searchbox';
-import { SearchResults } from '../../components/searchresults/searchresults';
+import { SearchResults } from '../../components/searchbox/searchresults';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { LoadPersonSoekParams, usePersonsoekQuery } from '../../redux-api/oppgaver';
 import { OppgaverPageWrapper } from '../page-wrapper';
