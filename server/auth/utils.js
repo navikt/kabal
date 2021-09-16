@@ -15,34 +15,32 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
   let assertion = cookieToken || passportAccessToken;
 
   if (assertion) {
-    return new Promise((resolve, reject) => {
-      const params = {
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        client_assertion_type:
-          "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-        requested_token_use: "on_behalf_of",
-        scope: createOnBehalfOfScope(api),
-        assertion,
-      };
-      return authClient
-        .grant(params)
-        .then((tokenSet) => {
-          if (req.user && req.user.tokenSets)
-            req.user.tokenSets[api.clientId] = tokenSet;
-          resolve(tokenSet.access_token);
-        })
-        .catch((err) => {
-          console.error(err);
-          reject(err);
-        });
-    });
+    const params = {
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      client_assertion_type:
+        "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+      requested_token_use: "on_behalf_of",
+      scope: createOnBehalfOfScope(api),
+      assertion,
+    };
+    return authClient
+      .grant(params)
+      .then((tokenSet) => {
+        if (req.user && req.user.tokenSets) {
+          req.user.tokenSets[api.clientId] = tokenSet;
+        }
+        return tokenSet.access_token;
+      })
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
   } else {
-    return "";
+    throw new Error('No token');
   }
 };
 
-const getUserInfoFromGraphApi = (authClient, req) => {
-  return new Promise((resolve, reject) => {
+const getUserInfoFromGraphApi = async (authClient, req) => {
     const api = {
       scopes: ["https://graph.microsoft.com/.default"],
       clientId: "https://graph.microsoft.com",
@@ -56,12 +54,14 @@ const getUserInfoFromGraphApi = (authClient, req) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
       )
-      .then((response) => resolve(response.data))
+      .then((response) => response.data)
       .catch((err) => {
-        if (err.response.data) reject(err.response.data);
-        else reject(err);
+        if (err.response.data) {
+          throw new Error(err.response.data);
+        } else {
+          throw err;
+        }
       });
-  });
 };
 
 const appendDefaultScope = (scope) => `${scope}/.default`;
@@ -102,10 +102,11 @@ const refreshAccessToken = async (azureClient, req, refreshToken) => {
     console.log("session.session", req.session);
     console.log("session.user", req.user);
   }
-  if (!refreshToken) return false;
-  return await azureClient
+  if (!refreshToken) {
+    return false;
+  }
+  return azureClient
     .refresh(refreshToken)
-    .then((tokenSet) => tokenSet)
     .catch((errorMessage) => {
       console.error(
         `Feilet refresh av access token for ${JSON.stringify(
