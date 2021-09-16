@@ -130,15 +130,16 @@ export const klagebehandlingerApi = createApi({
       },
       providesTags: ['medutgaattefrister'],
     }),
-    personsoek: builder.query<PersonSoekApiResponse, LoadPersonSoekParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
-        return `/api/ansatte/${navIdent}/klagebehandlinger/personsoek?${query}`;
-      },
-      providesTags: ['personsoek'],
+    // personsoek er POST for å ikke sende fnr inn i URLen/accesslogger
+    personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
+      query: ({ navIdent, ...queryParams }) => ({
+        url: `/api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
+        method: 'POST',
+        body: queryParams,
+        validateStatus: ({ ok }) => ok,
+        responseHandler: 'json',
+      }),
+      invalidatesTags: ['personsoek'],
     }),
     tildelSaksbehandler: builder.mutation<string, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, ...params }) => ({
@@ -168,7 +169,7 @@ export const klagebehandlingerApi = createApi({
 export const {
   useGetKlagebehandlingerQuery,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
-  usePersonsoekQuery,
+  usePersonsoekMutation,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
 } = klagebehandlingerApi;

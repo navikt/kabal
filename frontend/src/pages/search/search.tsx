@@ -1,53 +1,56 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SearchBox } from '../../components/searchbox/searchbox';
 import { SearchResults } from '../../components/searchbox/searchresults';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { LoadPersonSoekParams, usePersonsoekQuery } from '../../redux-api/oppgaver';
+import { PersonSoekApiResponse, usePersonsoekMutation } from '../../redux-api/oppgaver';
+import { toasterSett } from '../../tilstand/moduler/toaster';
 import { OppgaverPageWrapper } from '../page-wrapper';
+
+const INITIAL_STATE = { antallTreffTotalt: 0, personer: [] };
 
 export const SearchPage: React.FC = () => {
   const { data: bruker } = useGetBrukerQuery();
+  const [personsoek, loader] = usePersonsoekMutation();
   const [query, setQuery] = useState<string>('');
+  const [personsoekResultat, setPersonsoekResultat] = useState<PersonSoekApiResponse>(INITIAL_STATE);
 
-  // const queryParams: typeof skipToken | LoadPersonSoekParams =
-  //   typeof bruker === 'undefined'
-  //     ? skipToken
-  //     : {
-  //         navIdent: bruker.onPremisesSamAccountName,
-  //         antall: 200,
-  //         start: 0,
-  //         fnr: query,
-  //         soekString: query,
-  //       };
+  const getPersonsoekUpdate = useCallback(() => {
+    if (bruker === undefined) {
+      return;
+    }
+    personsoek({
+      navIdent: bruker.onPremisesSamAccountName,
+      antall: 200,
+      start: 0,
+      fnr: query,
+      soekString: query,
+    })
+      .unwrap()
+      .then(setPersonsoekResultat)
+      .catch(() => {
+        displayToast('Klarte ikke å søke');
+        setPersonsoekResultat(INITIAL_STATE);
+      });
+  }, [bruker, personsoek, query]);
 
-  const setChangesWithDebounce = (query: string) => {
-    const timeout = setTimeout(() => {
-      setQuery(query);
-    }, 1000);
+  useEffect(() => {
+    const timeout = setTimeout(getPersonsoekUpdate, 1000);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
-  };
+  }, [getPersonsoekUpdate, personsoek, setPersonsoekResultat]);
 
-  const queryParams: typeof skipToken | LoadPersonSoekParams = useMemo(
-    () =>
-      typeof bruker === 'undefined'
-        ? skipToken
-        : {
-            navIdent: bruker.onPremisesSamAccountName,
-            antall: 200,
-            start: 0,
-            fnr: query,
-            soekString: query,
-          },
-    [bruker, query]
-  );
+  const isLoading = loader.isLoading;
 
-  const { data: personsoek } = usePersonsoekQuery(queryParams);
+  const displayToast = (feilmelding: string) =>
+    toasterSett({
+      display: true,
+      type: 'feil',
+      feilmelding,
+    });
 
   return (
     <OppgaverPageWrapper>
-      <SearchBox onChange={(query: string) => setChangesWithDebounce(query)} />
-      <SearchResults personsoek={personsoek}/>
+      <SearchBox onChange={setQuery} />
+      <SearchResults isLoading={isLoading} personsoekResultat={personsoekResultat} />
     </OppgaverPageWrapper>
   );
 };
