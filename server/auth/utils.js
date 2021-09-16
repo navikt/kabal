@@ -24,7 +24,7 @@ const getOnBehalfOfAccessToken = async (authClient, req, api) => {
         scope: createOnBehalfOfScope(api),
         assertion,
       };
-      authClient
+      return authClient
         .grant(params)
         .then((tokenSet) => {
           if (req.user && req.user.tokenSets)
@@ -50,7 +50,7 @@ const getUserInfoFromGraphApi = (authClient, req) => {
     const query =
       "onPremisesSamAccountName,displayName,givenName,mail,officeLocation,surname,userPrincipalName,id,jobTitle";
     const graphUrl = `https://graph.microsoft.com/v1.0/me?$select=${query}`;
-    getOnBehalfOfAccessToken(authClient, req, api)
+    return getOnBehalfOfAccessToken(authClient, req, api)
       .then((accessToken) =>
         axios.get(graphUrl, {
           headers: { Authorization: `Bearer ${accessToken}` },
