@@ -32,7 +32,7 @@ export const brukerApi = createApi({
   tagTypes: ['valgtEnhet'],
   endpoints: (builder) => ({
     getBruker: builder.query<IBruker, void>({
-      query: () => '/me',
+      query: () => '/api/me/brukerdata',
     }),
     getEnheter: builder.query<IEnhet[], string>({
       query: (navIdent) => `/api/ansatte/${navIdent}/enheter`,

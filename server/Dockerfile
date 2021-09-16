@@ -5,7 +5,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 COPY .env.development .env
-RUN npm install
+RUN npm ci
+RUN npm run build
 
 CMD ["npm", "run", "docker"]
 EXPOSE 8090

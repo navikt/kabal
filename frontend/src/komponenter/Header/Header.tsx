@@ -103,7 +103,7 @@ export const Bruker = ({ navn }: Brukerinfo) => {
           <NavLink to={'/innstillinger'} className={classNames({ enhet: true, navlink: true })}>
             Innstillinger
           </NavLink>
-          <a href={'/internal/logout'} className={classNames({ enhet: true, navlink: true })}>
+          <a href={'/logout'} className={classNames({ enhet: true, navlink: true })}>
             Logg ut
           </a>
         </div>

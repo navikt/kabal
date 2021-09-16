@@ -83,18 +83,6 @@ module.exports = {
         changeOrigin: true,
         cookieDomainRewrite: `localhost:${PORT}`,
       },
-      '/internal': {
-        target: 'https://kabal.dev.nav.no',
-        secure: false,
-        changeOrigin: true,
-        cookieDomainRewrite: `localhost:${PORT}`,
-      },
-      '/me': {
-        target: 'https://kabal.dev.nav.no',
-        secure: false,
-        changeOrigin: true,
-        cookieDomainRewrite: `localhost:${PORT}`,
-      },
     },
   },
 };
