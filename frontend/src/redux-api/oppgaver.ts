@@ -60,6 +60,7 @@ export interface IPersonResultat {
   fnr: string;
   foedselsdato: string;
   klagebehandlinger: IKlagebehandling[];
+  navn: string;
 }
 
 export interface LoadKlagebehandlingerParams {

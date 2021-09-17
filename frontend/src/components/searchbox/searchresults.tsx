@@ -1,6 +1,7 @@
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
+import styled from 'styled-components';
 import { IPersonResultat, PersonSoekApiResponse } from '../../redux-api/oppgaver';
 
 interface SearchResultsProps {
@@ -13,10 +14,10 @@ export const SearchResults = ({ personsoekResultat, isLoading }: SearchResultsPr
     return <Loader text={'Laster personer...'} />;
   }
   return (
-    <>
+    <SCResultList>
       <ResultList personer={personsoekResultat.personer} />
       <p>Antall treff totalt: {personsoekResultat.antallTreffTotalt}</p>
-    </>
+    </SCResultList>
   );
 };
 
@@ -57,8 +58,9 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
   }
   return (
     <tbody>
-      {personer.map(({ fnr }) => (
+      {personer.map(({ navn, fnr }) => (
         <tr key={fnr}>
+          <td>{formatName(navn)}</td>
           <td>{fnr}</td>
           <td>
             <Knapp>Se saker</Knapp>
@@ -67,6 +69,24 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
       ))}
     </tbody>
   );
+};
+
+const SCResultList = styled.div`
+  margin-top: 20px;
+`;
+
+const formatName = (rawString: string): string => {
+  if (rawString === '') {
+    return '';
+  }
+  const nameArray = rawString
+    .replace(/[\[\]']+/g, '')
+    .toLowerCase()
+    .split(' ');
+
+  return nameArray
+    .map((name: string) => name.charAt(0).toUpperCase() + name.slice(1))
+    .reduce((firstName: string, lastName: string) => firstName + ' ' + lastName);
 };
 
 interface LoaderProps {
