@@ -5,7 +5,7 @@ import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-opp
 import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
 import { SearchPage } from '../../pages/search/search';
 import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
-import { InnstillingerPage } from '../../pages/innstillinger/innstillinger';
+import { SettingsPage } from '../../pages/settings/settings';
 
 export const Routes: React.FC = () => (
   <Switch>
@@ -35,7 +35,7 @@ export const Routes: React.FC = () => (
     </Route>
     {/* <Route exact path="/mineoppgaver" render={() => <MineSaker />} /> */}
     {/* <Route exact path="/sok" render={() => <Sok />} /> */}
-    <Route exact path="/innstillinger" render={() => <InnstillingerPage />} />
+    <Route exact path="/innstillinger" render={() => <SettingsPage />} />
     {/* <Route exact path="/admin" render={() => <Admin />} /> */}
     <Redirect to="/oppgaver/1" />
   </Switch>

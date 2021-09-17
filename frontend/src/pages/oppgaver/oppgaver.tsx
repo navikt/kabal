@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { OppgaveTable } from '../../components/oppgavetabell/oppgave-table';
+import { OppgaveTable } from '../../components/oppgave-table/oppgave-table';
 import { OppgaverPageWrapper } from '../page-wrapper';
 
 interface OppgaverPageProps {

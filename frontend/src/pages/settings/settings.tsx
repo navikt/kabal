@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const InnstillingerPage: React.FC = () => (
+export const SettingsPage: React.FC = () => (
   <main>
     <span>Innstillingerpage</span>
   </main>
