@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { User } from './user';
+import { User } from './user-menu/user';
 
 export const Header = () => (
   <StyledHeader>
