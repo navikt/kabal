@@ -2,8 +2,6 @@ name: E2E-tester
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/30 6-14 * * MON-FRI'
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend:${{ github.sha }}
