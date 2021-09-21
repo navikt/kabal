@@ -20,14 +20,23 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Build
+      - name: Build frontend
         run: |
           cd frontend
-          npm i
+          npm ci
           npm run build
-      - name: Test Frontend
+      - name: Test frontend
         run: |
           cd frontend
+          npm test
+      - name: Build server
+        run: |
+          cd server
+          npm ci
+          npm run build
+      - name: Test server
+        run: |
+          cd server
           npm test
       - name: Build and publish Docker image
         env:
