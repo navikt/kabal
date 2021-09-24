@@ -13,8 +13,6 @@ export const useSettingsTemaer = (): IKodeverkVerdi[] => {
 
   const settingsTemaer = userData.innstillinger.temaer;
 
-  console.debug(availableTemaer, settingsTemaer);
-
   if (settingsTemaer.length === 0) {
     return availableTemaer;
   }
