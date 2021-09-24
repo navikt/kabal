@@ -16,14 +16,13 @@ const EMPTY_SETTINGS: ISettings = {
 export const Settings = () => {
   const { data: kodeverk } = useGetKodeverkQuery();
   const { data: userData } = useGetBrukerQuery();
-  const [updateSettings, loader] = useUpdateSettingsMutation();
-
-  const navIdent = userData?.info.navIdent;
+  const [updateSettings] = useUpdateSettingsMutation();
 
   const onChange = (settings: ISettings) => {
-    if (typeof navIdent === 'undefined') {
+    if (typeof userData === 'undefined') {
       return;
     }
+    const navIdent = userData.info.navIdent;
     updateSettings({ navIdent, ...settings });
     setCurrentSettings(settings);
   };
@@ -33,7 +32,7 @@ export const Settings = () => {
   return (
     <>
       <p>Velg hvilke ytelser og hjemmeler du har kompetanse til å behandle:</p>
-      <SCFilters>
+      <StyledFilters>
         <FilterDropdown
           selected={currentSettings.typer}
           onChange={(typer) => onChange({ ...currentSettings, typer })}
@@ -55,10 +54,10 @@ export const Settings = () => {
         >
           Hjemmel
         </FilterDropdown>
-      </SCFilters>
-      <SCFilters>
+      </StyledFilters>
+      <StyledFilters>
         <ChosenFilters settings={currentSettings} />
-      </SCFilters>
+      </StyledFilters>
     </>
   );
 };
@@ -69,21 +68,21 @@ interface ChosenTemaerProps {
 
 const ChosenFilters = ({ settings }: ChosenTemaerProps) => (
   <>
-    <SCFiltersDisplay>
+    <StyledFiltersDisplay>
       {settings.typer.map((typeId) => (
         <TypeEtikett key={typeId} id={typeId} />
       ))}
-    </SCFiltersDisplay>
-    <SCFiltersDisplay>
+    </StyledFiltersDisplay>
+    <StyledFiltersDisplay>
       {settings.temaer.map((temaId) => (
         <TemaEtikett key={temaId} id={temaId} />
       ))}
-    </SCFiltersDisplay>
-    <SCFiltersDisplay>
+    </StyledFiltersDisplay>
+    <StyledFiltersDisplay>
       {settings.hjemler.map((hjemmelId) => (
         <HjemmelEtikett key={hjemmelId} id={hjemmelId} />
       ))}
-    </SCFiltersDisplay>
+    </StyledFiltersDisplay>
   </>
 );
 
@@ -97,14 +96,7 @@ const TemaEtikett = ({ id }: EtikettProps) => <EtikettTema tema={id}>{useFullTem
 
 const HjemmelEtikett = ({ id }: EtikettProps) => <EtikettMain>{useHjemmelFromId(id)}</EtikettMain>;
 
-// const Loader = (isLoading: boolean) => {
-//   if (isLoading) {
-//     return <NavFrontendSpinner />;
-//   }
-//   return null;
-// };
-
-const SCFilters = styled.div`
+const StyledFilters = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -118,7 +110,7 @@ const SCFilters = styled.div`
   }
 `;
 
-const SCFiltersDisplay = styled.div`
+const StyledFiltersDisplay = styled.div`
   display: flex;
   flex-direction: column;
   > * {
