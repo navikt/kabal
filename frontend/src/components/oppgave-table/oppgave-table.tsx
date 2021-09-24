@@ -19,6 +19,9 @@ import {
   StyledTable,
 } from './styled-components';
 import { OppgaveRader } from './rows';
+import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
+import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 
 interface OppgaveTableParams {
   page: string;
@@ -38,6 +41,14 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
 
+  const settingsTemaer = useSettingsTemaer();
+  const settingsTypes = useSettingsTypes();
+  const settingsHjemler = useSettingsHjemler();
+
+  const temaer = filters.tema.length === 0 ? settingsTemaer.map(({ id }) => id) : filters.tema;
+  const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
+  const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
+
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
     typeof userData === 'undefined'
       ? skipToken
@@ -47,9 +58,9 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           sortering: 'FRIST',
           rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
           erTildeltSaksbehandler: false,
-          temaer: filters.tema,
-          typer: filters.types,
-          hjemler: filters.hjemler,
+          temaer,
+          typer,
+          hjemler,
           navIdent: userData.info.navIdent,
         };
 
