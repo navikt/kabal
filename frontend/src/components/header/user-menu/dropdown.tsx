@@ -46,7 +46,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ open, close }) => {
           <StyledNavLink to="/innstillinger">Innstillinger</StyledNavLink>
         </li>
         <li>
-          <StyledLink to="/logout">Logg ut</StyledLink>
+          <StyledLink href="/logout">Logg ut</StyledLink>
         </li>
       </LinkList>
     </StyledDropdown>

@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 export const StyledContainer = styled.div`
@@ -72,6 +72,6 @@ export const StyledNavLink = styled(NavLink)`
   ${itemCSS}
 `;
 
-export const StyledLink = styled(Link)`
+export const StyledLink = styled.a`
   ${itemCSS}
 `;
