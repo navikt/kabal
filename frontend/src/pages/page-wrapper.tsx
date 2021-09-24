@@ -11,7 +11,7 @@ export const OppgaverPageWrapper: React.FC = ({ children }) => (
   </>
 );
 
-const StyledArticle = styled.article`
+export const StyledArticle = styled.article`
   padding-left: 1em;
   padding-right: 1em;
 `;
