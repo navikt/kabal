@@ -24,8 +24,8 @@ export const MineOppgaverTable: React.FC = () => {
           temaer: [],
           typer: [],
           hjemler: [],
-          navIdent: bruker.onPremisesSamAccountName,
-          tildeltSaksbehandler: bruker.onPremisesSamAccountName,
+          navIdent: bruker.info.navIdent,
+          tildeltSaksbehandler: bruker.info.navIdent,
           projeksjon: 'UTVIDET',
         };
 

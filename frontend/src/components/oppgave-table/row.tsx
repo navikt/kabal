@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { Knapp } from 'nav-frontend-knapper';
-import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
@@ -9,20 +8,19 @@ import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
 
 export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
-  const { data: bruker, isLoading: isUserLoading } = useGetBrukerQuery();
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
+  const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 
   const onTildel = useCallback(() => {
-    if (typeof bruker?.onPremisesSamAccountName === 'undefined' || typeof valgtEnhet?.id === 'undefined') {
+    if (typeof userData === 'undefined') {
       return;
     }
     tildelSaksbehandler({
       oppgaveId: id,
       klagebehandlingVersjon,
-      navIdent: bruker.onPremisesSamAccountName,
-      enhetId: valgtEnhet.id,
+      navIdent: userData.info.navIdent,
+      enhetId: userData.valgtEnhetView.id,
     });
-  }, [id, klagebehandlingVersjon, bruker?.onPremisesSamAccountName, valgtEnhet?.id, tildelSaksbehandler]);
+  }, [id, klagebehandlingVersjon, userData, tildelSaksbehandler]);
 
   const isLoading = loader.isLoading || isUserLoading;
 

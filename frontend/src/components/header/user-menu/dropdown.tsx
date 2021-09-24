@@ -1,25 +1,24 @@
 import React from 'react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useGetEnheterQuery, useGetValgtEnhetQuery, useSetValgtEnhetMutation } from '../../../redux-api/bruker';
+import { useGetBrukerQuery, useSetValgtEnhetMutation } from '../../../redux-api/bruker';
 import { EnhetButton, EnhetList, Enhet, Link, LinkList, StyledDropdown } from './styled-components';
 
 interface DropdownProps {
   open: boolean;
-  brukerId: string;
   close: () => void;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ open, brukerId, close }) => {
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(brukerId);
-  const { data: enheter } = useGetEnheterQuery(brukerId ?? skipToken);
-
+export const Dropdown: React.FC<DropdownProps> = ({ open, close }) => {
+  const { data: userData } = useGetBrukerQuery();
   const [setValgtEnhet] = useSetValgtEnhetMutation();
-  if (!open || typeof enheter === 'undefined' || typeof valgtEnhet === 'undefined') {
+
+  if (!open || typeof userData === 'undefined') {
     return null;
   }
 
+  const { enheter, valgtEnhetView } = userData;
+
   const onClickVelgEnhet = (enhetId: string) => {
-    setValgtEnhet({ enhetId, navIdent: brukerId });
+    setValgtEnhet({ enhetId, navIdent: userData?.info.navIdent });
     close();
   };
 
@@ -28,7 +27,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ open, brukerId, close }) => 
       <EnhetList>
         {enheter.map(({ id, navn }) => (
           <Enhet key={id}>
-            <EnhetButton onClick={() => onClickVelgEnhet(id)} disabled={id === valgtEnhet.id}>
+            <EnhetButton onClick={() => onClickVelgEnhet(id)} disabled={id === valgtEnhetView.id}>
               {id} {navn}
             </EnhetButton>
           </Enhet>

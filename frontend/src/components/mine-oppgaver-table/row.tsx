@@ -4,8 +4,7 @@ import { isoDateToPretty } from '../../domene/datofunksjoner';
 import { Knapp } from 'nav-frontend-knapper';
 import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
-import { useGetBrukerQuery, useGetValgtEnhetQuery } from '../../redux-api/bruker';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { NavLink } from 'react-router-dom';
 
 export const Row: React.FC<IKlagebehandling> = ({
@@ -19,20 +18,19 @@ export const Row: React.FC<IKlagebehandling> = ({
   ageKA,
 }) => {
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
-  const { data: bruker, isLoading: isUserLoading } = useGetBrukerQuery();
-  const { data: valgtEnhet } = useGetValgtEnhetQuery(bruker?.onPremisesSamAccountName ?? skipToken);
+  const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 
   const onFradel = useCallback(() => {
-    if (typeof bruker?.onPremisesSamAccountName === 'undefined' || typeof valgtEnhet?.id === 'undefined') {
+    if (typeof userData === 'undefined') {
       return;
     }
     fradelSaksbehandler({
       oppgaveId: id,
       klagebehandlingVersjon,
-      navIdent: bruker.onPremisesSamAccountName,
-      enhetId: valgtEnhet.id,
+      navIdent: userData.info.navIdent,
+      enhetId: userData.valgtEnhetView.id,
     });
-  }, [id, klagebehandlingVersjon, bruker?.onPremisesSamAccountName, valgtEnhet?.id, fradelSaksbehandler]);
+  }, [id, klagebehandlingVersjon, userData, fradelSaksbehandler]);
 
   const isLoading = loader.isLoading || isUserLoading;
 

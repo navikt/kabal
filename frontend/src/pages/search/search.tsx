@@ -19,7 +19,7 @@ export const SearchPage: React.FC = () => {
       return;
     }
     personsoek({
-      navIdent: bruker.onPremisesSamAccountName,
+      navIdent: bruker.info.navIdent,
       antall: 200,
       start: 0,
       fnr: query,

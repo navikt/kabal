@@ -21,7 +21,7 @@ export const Settings = () => {
 
   let navIdent = '';
   if (typeof bruker !== undefined) {
-    navIdent = bruker ? bruker.onPremisesSamAccountName : '';
+    navIdent = bruker ? bruker.info.navIdent : '';
   }
 
   const { data: settings } = useGetSettingsQuery(navIdent, { skip: navIdent === '' });

@@ -50,7 +50,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           temaer: filters.tema,
           typer: filters.types,
           hjemler: filters.hjemler,
-          navIdent: bruker.onPremisesSamAccountName,
+          navIdent: bruker.info.navIdent,
         };
 
   const { data } = useGetKlagebehandlingerQuery(queryParams, {
