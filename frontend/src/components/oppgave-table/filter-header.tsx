@@ -1,8 +1,10 @@
 import React from 'react';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { Filters } from './types';
+import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
+import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 
 interface TableHeaderFiltersProps {
   onChange: (filters: Filters) => void;
@@ -10,7 +12,9 @@ interface TableHeaderFiltersProps {
 }
 
 export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange, filters }) => {
-  const { data } = useGetKodeverkQuery();
+  const typeOptions = useSettingsTypes();
+  const temaOptions = useSettingsTemaer();
+  const hjemlerOptions = useSettingsHjemler();
 
   return (
     <thead>
@@ -19,7 +23,7 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           <FilterDropdown
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
-            options={data?.type ?? []}
+            options={typeOptions}
           >
             Type
           </FilterDropdown>
@@ -28,7 +32,7 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           <FilterDropdown
             selected={filters.tema}
             onChange={(tema) => onChange({ ...filters, tema })}
-            options={data?.tema ?? []}
+            options={temaOptions}
           >
             Tema
           </FilterDropdown>
@@ -37,7 +41,7 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
-            options={data?.hjemmel ?? []}
+            options={hjemlerOptions}
           >
             Hjemmel
           </FilterDropdown>

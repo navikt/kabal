@@ -6,6 +6,7 @@ import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/useKodeverkIds';
 import { ISettings, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useAvailableTemaer } from '../../hooks/use-available-temaer';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
@@ -29,6 +30,8 @@ export const Settings = () => {
 
   const [currentSettings, setCurrentSettings] = useState<ISettings>(userData?.innstillinger ?? EMPTY_SETTINGS);
 
+  const availableTemaer = useAvailableTemaer();
+
   return (
     <>
       <p>Velg hvilke ytelser og hjemmeler du har kompetanse til å behandle:</p>
@@ -43,7 +46,7 @@ export const Settings = () => {
         <FilterDropdown
           selected={currentSettings.temaer}
           onChange={(temaer) => onChange({ ...currentSettings, temaer })}
-          options={kodeverk?.tema ?? []}
+          options={availableTemaer}
         >
           Tema
         </FilterDropdown>

@@ -33,13 +33,13 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     hjemler: [],
     sortDescending: false,
   });
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: userData } = useGetBrukerQuery();
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
-    typeof bruker === 'undefined'
+    typeof userData === 'undefined'
       ? skipToken
       : {
           start: from,
@@ -50,17 +50,17 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           temaer: filters.tema,
           typer: filters.types,
           hjemler: filters.hjemler,
-          navIdent: bruker.info.navIdent,
+          navIdent: userData.info.navIdent,
         };
 
-  const { data } = useGetKlagebehandlingerQuery(queryParams, {
+  const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {
     pollingInterval: 3 * 1000,
   });
   const { data: utgaatte } = useGetAntallKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
     pollingInterval: 300 * 1000,
   });
 
-  const total = data?.antallTreffTotalt ?? 0;
+  const total = klagebehandlinger?.antallTreffTotalt ?? 0;
 
   if (total < from) {
     const lastPage = Math.ceil(total / PAGE_SIZE);
@@ -74,7 +74,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
     <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={data?.klagebehandlinger} columnCount={7} />
+        <OppgaveRader oppgaver={klagebehandlinger?.klagebehandlinger} columnCount={7} />
         <StyledTableFooter>
           <tr>
             <td colSpan={7}>
