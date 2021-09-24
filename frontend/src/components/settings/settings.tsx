@@ -3,64 +3,55 @@ import styled from 'styled-components';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { EtikettTema, EtikettMain } from '../../styled-components/Etiketter';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { ISettings } from './types';
 import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/useKodeverkIds';
-import { useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/settings';
+import { ISettings, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 
+const EMPTY_SETTINGS: ISettings = {
+  typer: [],
+  temaer: [],
+  hjemler: [],
+};
+
 export const Settings = () => {
-  const { data } = useGetKodeverkQuery();
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: kodeverk } = useGetKodeverkQuery();
+  const { data: userData } = useGetBrukerQuery();
   const [updateSettings, loader] = useUpdateSettingsMutation();
 
-  const emptySettings: ISettings = {
-    types: [],
-    tema: [],
-    hjemler: [],
-  };
-
-  let navIdent = '';
-  if (typeof bruker !== undefined) {
-    navIdent = bruker ? bruker.info.navIdent : '';
-  }
-
-  const { data: settings } = useGetSettingsQuery(navIdent, { skip: navIdent === '' });
+  const navIdent = userData?.info.navIdent;
 
   const onChange = (settings: ISettings) => {
+    if (typeof navIdent === 'undefined') {
+      return;
+    }
     updateSettings({ navIdent, ...settings });
     setCurrentSettings(settings);
   };
 
-  const getSettings = (): ISettings => {
-    if (typeof settings !== 'undefined') {
-      return settings;
-    }
-    return emptySettings;
-  };
-  const [currentSettings, setCurrentSettings] = useState<ISettings>(getSettings());
+  const [currentSettings, setCurrentSettings] = useState<ISettings>(userData?.innstillinger ?? EMPTY_SETTINGS);
 
   return (
     <>
       <p>Velg hvilke ytelser og hjemmeler du har kompetanse til å behandle:</p>
       <SCFilters>
         <FilterDropdown
-          selected={currentSettings.types}
-          onChange={(types) => onChange({ ...currentSettings, types })}
-          options={data?.type ?? []}
+          selected={currentSettings.typer}
+          onChange={(typer) => onChange({ ...currentSettings, typer })}
+          options={kodeverk?.type ?? []}
         >
           Type
         </FilterDropdown>
         <FilterDropdown
-          selected={currentSettings.tema}
-          onChange={(tema) => onChange({ ...currentSettings, tema })}
-          options={data?.tema ?? []}
+          selected={currentSettings.temaer}
+          onChange={(temaer) => onChange({ ...currentSettings, temaer })}
+          options={kodeverk?.tema ?? []}
         >
           Tema
         </FilterDropdown>
         <FilterDropdown
           selected={currentSettings.hjemler}
           onChange={(hjemler) => onChange({ ...currentSettings, hjemler })}
-          options={data?.hjemmel ?? []}
+          options={kodeverk?.hjemmel ?? []}
         >
           Hjemmel
         </FilterDropdown>
@@ -79,12 +70,12 @@ interface ChosenTemaerProps {
 const ChosenFilters = ({ settings }: ChosenTemaerProps) => (
   <>
     <SCFiltersDisplay>
-      {settings.types.map((typeId) => (
+      {settings.typer.map((typeId) => (
         <TypeEtikett key={typeId} id={typeId} />
       ))}
     </SCFiltersDisplay>
     <SCFiltersDisplay>
-      {settings.tema.map((temaId) => (
+      {settings.temaer.map((temaId) => (
         <TemaEtikett key={temaId} id={temaId} />
       ))}
     </SCFiltersDisplay>

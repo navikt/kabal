@@ -35,13 +35,18 @@ export interface ISetEnhet {
   navIdent: string;
 }
 
+export interface IPostSettingsParams extends ISettings {
+  navIdent: string;
+}
+
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
   baseQuery: staggeredBaseQuery,
-  tagTypes: ['valgtEnhet'],
+  tagTypes: ['user'],
   endpoints: (builder) => ({
     getBruker: builder.query<IUserData, void>({
       query: () => '/api/me/brukerdata',
+      providesTags: ['user'],
     }),
     setValgtEnhet: builder.mutation<void, ISetEnhet>({
       query: ({ navIdent, enhetId }) => ({
@@ -49,9 +54,19 @@ export const brukerApi = createApi({
         method: 'PUT',
         body: { enhetId },
       }),
-      invalidatesTags: ['valgtEnhet'],
+      invalidatesTags: ['user'],
+    }),
+    updateSettings: builder.mutation<ISettings, IPostSettingsParams>({
+      query: ({ navIdent, ...params }) => ({
+        url: `/api/ansatte/${navIdent}/brukerdata/innstillinger`,
+        method: 'PUT',
+        body: { navIdent, ...params },
+        validateStatus: ({ ok }) => ok,
+        responseHandler: async (): Promise<ISettings> => params,
+      }),
+      invalidatesTags: ['user'],
     }),
   }),
 });
 
-export const { useGetBrukerQuery, useSetValgtEnhetMutation } = brukerApi;
+export const { useGetBrukerQuery, useSetValgtEnhetMutation, useUpdateSettingsMutation } = brukerApi;
