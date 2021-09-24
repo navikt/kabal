@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 export const StyledContainer = styled.div`
@@ -64,10 +64,14 @@ const itemCSS = css`
   }
 `;
 
-export const EnhetButton = styled.button`
+export const StyledEnhetButton = styled.button`
   ${itemCSS}
 `;
 
-export const Link = styled(NavLink)`
+export const StyledNavLink = styled(NavLink)`
+  ${itemCSS}
+`;
+
+export const StyledLink = styled(Link)`
   ${itemCSS}
 `;

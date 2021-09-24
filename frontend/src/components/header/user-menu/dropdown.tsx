@@ -1,6 +1,14 @@
 import React from 'react';
 import { useGetBrukerQuery, useSetValgtEnhetMutation } from '../../../redux-api/bruker';
-import { EnhetButton, EnhetList, Enhet, Link, LinkList, StyledDropdown } from './styled-components';
+import {
+  StyledEnhetButton,
+  EnhetList,
+  Enhet,
+  StyledNavLink,
+  LinkList,
+  StyledDropdown,
+  StyledLink,
+} from './styled-components';
 
 interface DropdownProps {
   open: boolean;
@@ -27,18 +35,18 @@ export const Dropdown: React.FC<DropdownProps> = ({ open, close }) => {
       <EnhetList>
         {enheter.map(({ id, navn }) => (
           <Enhet key={id}>
-            <EnhetButton onClick={() => onClickVelgEnhet(id)} disabled={id === valgtEnhetView.id}>
+            <StyledEnhetButton onClick={() => onClickVelgEnhet(id)} disabled={id === valgtEnhetView.id}>
               {id} {navn}
-            </EnhetButton>
+            </StyledEnhetButton>
           </Enhet>
         ))}
       </EnhetList>
       <LinkList>
         <li>
-          <Link to="/innstillinger">Innstillinger</Link>
+          <StyledNavLink to="/innstillinger">Innstillinger</StyledNavLink>
         </li>
         <li>
-          <Link to="/logout">Logg ut</Link>
+          <StyledLink to="/logout">Logg ut</StyledLink>
         </li>
       </LinkList>
     </StyledDropdown>
