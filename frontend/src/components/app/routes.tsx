@@ -33,8 +33,6 @@ export const Routes: React.FC = () => (
     <Route exact path="/klagebehandling/:id">
       <KlagebehandlingPage />
     </Route>
-    {/* <Route exact path="/mineoppgaver" render={() => <MineSaker />} /> */}
-    {/* <Route exact path="/sok" render={() => <Sok />} /> */}
     <Route exact path="/innstillinger" render={() => <SettingsPage />} />
     {/* <Route exact path="/admin" render={() => <Admin />} /> */}
     <Redirect to="/oppgaver/1" />
