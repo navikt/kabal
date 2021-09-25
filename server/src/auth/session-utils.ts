@@ -56,7 +56,7 @@ export const setSessionCookie = (res: Response, sessionId: string, signature: st
     path: '/',
     httpOnly: true,
     sameSite: isDeployedToProd ? 'strict' : 'none',
-    secure: isDeployed,
+    secure: isDeployedToProd,
   });
   return [sessionId, signature];
 };
