@@ -66,7 +66,6 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
 
   const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {
     pollingInterval: 3 * 1000,
-    refetchOnMountOrArgChange: true,
   });
   const { data: utgaatte } = useGetAntallKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
     pollingInterval: 300 * 1000,
