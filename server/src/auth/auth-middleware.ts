@@ -12,7 +12,7 @@ export const authMiddleware =
       console.debug(`Auth middleware - session is null. Redirecting to login. - ${req.originalUrl}`);
       const [sessionId, signature] = generateSessionIdAndSignature();
       setSessionCookie(res, sessionId, signature);
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
 
@@ -35,7 +35,7 @@ export const authMiddleware =
       if (error instanceof Error || typeof error === 'string') {
         console.warn(error);
       }
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
   };

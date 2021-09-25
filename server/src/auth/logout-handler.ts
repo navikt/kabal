@@ -18,5 +18,5 @@ export const logoutHandler =
     setSessionCookie(res, sessionId, signature);
 
     const redirect = req.headers.referer ?? '/';
-    loginRedirect(authClient, sessionId, req, res, redirect);
+    loginRedirect(authClient, sessionId, res, redirect);
   };

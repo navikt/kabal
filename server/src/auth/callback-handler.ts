@@ -13,12 +13,12 @@ export const callbackHandler =
 
     if (typeof error === 'string' || typeof error_description === 'string') {
       console.warn(error, error_description);
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
 
     if (typeof code !== 'string') {
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
 
@@ -48,27 +48,14 @@ export const callbackHandler =
 
       await saveSessionData(sessionId, { access_token, refresh_token });
 
-      if (typeof before_login === 'string') {
-        res.redirect(before_login);
-        return;
-      }
-      res.redirect('/');
+      res.redirect(before_login ?? '/');
     } catch (error) {
-      res.status(500);
-      if (error instanceof Error) {
-        console.error(error);
-        res.send(error.message);
-        return;
-      }
-      if (typeof error === 'string') {
-        const errorMessage = `Error while exchanging code for tokens: ${error}`;
-        console.error(errorMessage);
-        res.send(errorMessage);
-        return;
+      if (error instanceof Error || typeof error === 'string') {
+        console.error(`Error while exchanging code for tokens.`, error);
+      } else {
+        console.error('Unknown error while exchanging code for tokens.');
       }
 
-      const errorMessage = 'Unknown error while exchanging code for tokens.';
-      console.error(errorMessage);
-      res.send(errorMessage);
+      loginRedirect(authClient, sessionId, res, before_login ?? '/');
     }
   };

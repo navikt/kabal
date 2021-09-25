@@ -13,7 +13,7 @@ export const setupProxy = (authClient: Client) => {
     if (session === null) {
       const [sessionId, signature] = generateSessionIdAndSignature();
       setSessionCookie(res, sessionId, signature);
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
 
@@ -21,7 +21,7 @@ export const setupProxy = (authClient: Client) => {
     const access_token = req.headers['Authorization'];
 
     if (typeof access_token !== 'string') {
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
     try {
@@ -31,7 +31,7 @@ export const setupProxy = (authClient: Client) => {
       return;
     } catch (error) {
       console.warn(`Failed to prepare request with on-behalf-of token. ${error}`);
-      loginRedirect(authClient, sessionId, req, res);
+      loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
   });
