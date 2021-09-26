@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { EtikettTema, EtikettMain } from '../../styled-components/Etiketter';
@@ -25,42 +25,41 @@ export const Settings = () => {
     }
     const navIdent = userData.info.navIdent;
     updateSettings({ navIdent, ...settings });
-    setCurrentSettings(settings);
   };
 
-  const [currentSettings, setCurrentSettings] = useState<ISettings>(userData?.innstillinger ?? EMPTY_SETTINGS);
+  const settings = userData?.innstillinger ?? EMPTY_SETTINGS;
 
   const availableTemaer = useAvailableTemaer();
 
   return (
     <>
       <p>Velg hvilke ytelser og hjemmeler du har kompetanse til å behandle:</p>
-      <StyledFilters>
+      <StyledSettingsRow>
         <FilterDropdown
-          selected={currentSettings.typer}
-          onChange={(typer) => onChange({ ...currentSettings, typer })}
+          selected={settings.typer}
+          onChange={(typer) => onChange({ ...settings, typer })}
           options={kodeverk?.type ?? []}
         >
           Type
         </FilterDropdown>
         <FilterDropdown
-          selected={currentSettings.temaer}
-          onChange={(temaer) => onChange({ ...currentSettings, temaer })}
+          selected={settings.temaer}
+          onChange={(temaer) => onChange({ ...settings, temaer })}
           options={availableTemaer}
         >
           Tema
         </FilterDropdown>
         <FilterDropdown
-          selected={currentSettings.hjemler}
-          onChange={(hjemler) => onChange({ ...currentSettings, hjemler })}
+          selected={settings.hjemler}
+          onChange={(hjemler) => onChange({ ...settings, hjemler })}
           options={kodeverk?.hjemmel ?? []}
         >
           Hjemmel
         </FilterDropdown>
-      </StyledFilters>
-      <StyledFilters>
-        <ChosenFilters settings={currentSettings} />
-      </StyledFilters>
+      </StyledSettingsRow>
+      <StyledSettingsRow>
+        <ChosenFilters settings={settings} />
+      </StyledSettingsRow>
     </>
   );
 };
@@ -71,21 +70,27 @@ interface ChosenTemaerProps {
 
 const ChosenFilters = ({ settings }: ChosenTemaerProps) => (
   <>
-    <StyledFiltersDisplay>
+    <StyledFiltersList>
       {settings.typer.map((typeId) => (
-        <TypeEtikett key={typeId} id={typeId} />
+        <StyledFiltersListItem key={typeId}>
+          <TypeEtikett id={typeId} />
+        </StyledFiltersListItem>
       ))}
-    </StyledFiltersDisplay>
-    <StyledFiltersDisplay>
+    </StyledFiltersList>
+    <StyledFiltersList>
       {settings.temaer.map((temaId) => (
-        <TemaEtikett key={temaId} id={temaId} />
+        <StyledFiltersListItem key={temaId}>
+          <TemaEtikett id={temaId} />
+        </StyledFiltersListItem>
       ))}
-    </StyledFiltersDisplay>
-    <StyledFiltersDisplay>
+    </StyledFiltersList>
+    <StyledFiltersList>
       {settings.hjemler.map((hjemmelId) => (
-        <HjemmelEtikett key={hjemmelId} id={hjemmelId} />
+        <StyledFiltersListItem key={hjemmelId}>
+          <HjemmelEtikett id={hjemmelId} />
+        </StyledFiltersListItem>
       ))}
-    </StyledFiltersDisplay>
+    </StyledFiltersList>
   </>
 );
 
@@ -99,27 +104,18 @@ const TemaEtikett = ({ id }: EtikettProps) => <EtikettTema tema={id}>{useFullTem
 
 const HjemmelEtikett = ({ id }: EtikettProps) => <EtikettMain>{useHjemmelFromId(id)}</EtikettMain>;
 
-const StyledFilters = styled.div`
+const StyledSettingsRow = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  > * {
-    width: 150px;
-    margin-right: 20px;
-    button {
-      width: 100%;
-    }
-  }
 `;
 
-const StyledFiltersDisplay = styled.div`
+const StyledFiltersList = styled.ul`
   display: flex;
   flex-direction: column;
-  > * {
-    margin-bottom: 20px;
-    button {
-      width: 100%;
-    }
-  }
+`;
+
+const StyledFiltersListItem = styled.li`
+  margin-bottom: 20px;
 `;

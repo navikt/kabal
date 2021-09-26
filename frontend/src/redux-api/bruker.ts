@@ -65,6 +65,23 @@ export const brukerApi = createApi({
         responseHandler: async (): Promise<ISettings> => params,
       }),
       invalidatesTags: ['user'],
+      onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
+        const settings: ISettings = {
+          hjemler: params.hjemler,
+          typer: params.typer,
+          temaer: params.temaer,
+        };
+        const patchResult = dispatch(
+          brukerApi.util.updateQueryData('getBruker', undefined, (draft) => {
+            draft.innstillinger = settings;
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });
