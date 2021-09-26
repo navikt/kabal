@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { cors } from './cors';
-import { isDeployed } from './config/env';
+import cors from 'cors';
+import { applicationDomain, isDeployed, isDeployedToProd } from './config/env';
 import { EmojiIcons, sendToSlack } from './slack';
 import { init } from './init';
 import { processErrors } from './process-errors';
@@ -18,7 +18,12 @@ server.disable('x-powered-by');
 
 server.use(cookieParser());
 
-server.use(cors());
+server.use(
+  cors({
+    credentials: true,
+    origin: isDeployedToProd ? applicationDomain : [applicationDomain, /https?:\/\/localhost:\d{4,}/],
+  })
+);
 
 server.get('/isAlive', (req, res) => res.status(200).send('Alive'));
 server.get('/isReady', (req, res) => res.status(200).send('Ready'));
