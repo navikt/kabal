@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import { cors } from './cors';
 import { isDeployed } from './config/env';
 import { EmojiIcons, sendToSlack } from './slack';
 import { init } from './init';

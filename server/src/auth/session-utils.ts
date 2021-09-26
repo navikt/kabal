@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Request, Response } from 'express';
-import { isDeployed, isDeployedToProd } from '../config/env';
+import { isDeployedToProd } from '../config/env';
 import { serverConfig } from '../config/server-config';
 
 export const ensureSession = (req: Request, res: Response): [string, string] => {
