@@ -11,7 +11,8 @@ export const StyledButton = styled.button`
   border: none;
   padding: 0.5em;
   color: white;
-  text-align: left;
+  text-align: right;
+  min-width: 20em;
 `;
 
 export const StyledDropdown = styled.div`
