@@ -45,12 +45,12 @@ export const setupProxy = (authClient: Client) => {
       },
       onProxyRes: (proxyRes) => {
         if (proxyRes.statusCode === 403) {
-          console.debug(`Proxy response was 403`, proxyRes);
+          console.debug(`Proxy response was 403`);
         }
       },
-      onProxyReq: (proxyReq) => {
-        console.debug('PROXY REQUEST', proxyReq);
-      },
+      // onProxyReq: (proxyReq) => {
+      //   console.debug('PROXY REQUEST', proxyReq);
+      // },
       onError: (err, req, res) => {
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
