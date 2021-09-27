@@ -1,6 +1,7 @@
 import express from 'express';
 import { Client } from 'openid-client';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { applicationDomain } from '../config/env';
 import { getOnBehalfOfAccessToken } from '../auth/azure/on-behalf-of';
 import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from '../auth/session-utils';
 import { loginRedirect } from '../auth/login-redirect';
@@ -42,6 +43,9 @@ export const setupProxy = (authClient: Client) => {
       target: 'http://kabal-api',
       pathRewrite: {
         '^/api': '',
+      },
+      headers: {
+        origin: applicationDomain,
       },
       onProxyRes: (proxyRes, req) => {
         if (proxyRes.statusCode === 403) {
