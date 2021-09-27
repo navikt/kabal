@@ -43,13 +43,23 @@ export const setupProxy = (authClient: Client) => {
       pathRewrite: {
         '^/api': '',
       },
-      onProxyRes: (proxyRes) => {
+      onProxyRes: (proxyRes, req) => {
         if (proxyRes.statusCode === 403) {
-          console.debug(`Proxy response was 403`);
+          const body: Uint8Array[] = [];
+          proxyRes.on('data', (chunk) => body.push(chunk));
+          proxyRes.on('end', () => {
+            console.debug(
+              `Proxy response was 403`,
+              'Response body',
+              Buffer.concat(body).toString('utf-8'),
+              '\nRequest headers',
+              req.headers
+            );
+          });
         }
       },
       // onProxyReq: (proxyReq) => {
-      //   console.debug('PROXY REQUEST', proxyReq);
+      //   console.debug('PROXY REQUEST HEADERS', proxyReq.getHeaders());
       // },
       onError: (err, req, res) => {
         res.statusCode = 500;
