@@ -47,20 +47,6 @@ export const setupProxy = (authClient: Client) => {
       headers: {
         origin: applicationDomain,
       },
-      onProxyRes: (proxyRes, req) => {
-        if (proxyRes.statusCode === 403) {
-          const body: Uint8Array[] = [];
-          proxyRes.on('data', (chunk) => body.push(chunk));
-          proxyRes.on('end', () => {
-            console.debug('API response status', proxyRes.statusCode);
-            console.debug('API response body', Buffer.concat(body).toString('utf-8'));
-            console.debug('Proxy request headers', req.headers);
-          });
-        }
-      },
-      onProxyReq: (proxyReq) => {
-        console.debug('PROXY REQUEST HEADERS', proxyReq.getHeaders());
-      },
       onError: (err, req, res) => {
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
