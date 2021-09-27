@@ -14,6 +14,7 @@ if (isDeployed) {
 
 const server = express();
 
+server.set('trust proxy', true);
 server.disable('x-powered-by');
 
 server.use(cookieParser());
