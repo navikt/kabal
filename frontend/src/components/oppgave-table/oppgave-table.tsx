@@ -90,7 +90,7 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
           <tr>
             <td colSpan={7}>
               <StyledFooter>
-                <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>
+                <PageInfo total={total} fromNumber={fromNumber} toNumber={toNumber} />
                 <Pagination total={total} pageSize={PAGE_SIZE} currentPage={currentPage} />
               </StyledFooter>
             </td>
@@ -101,6 +101,19 @@ export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTabl
       <StyledTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledTableStats>
     </StyledTableContainer>
   );
+};
+
+interface PageInfoProps {
+  total: number;
+  fromNumber: number;
+  toNumber: number;
+}
+
+const PageInfo: React.FC<PageInfoProps> = ({ total, fromNumber, toNumber }) => {
+  if (total === 0) {
+    return <span>Ingen klagebehandlinger å vise</span>;
+  }
+  return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;
 };
 
 const parsePage = (page: string): number => {

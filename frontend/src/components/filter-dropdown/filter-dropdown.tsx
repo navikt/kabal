@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
 import { Dropdown } from './dropdown';
 
@@ -45,7 +45,7 @@ const ToggleButton = styled.button`
   border: 1px solid #78706a;
   padding: 0 1.75rem 0 0.5rem;
   height: 2rem;
-  min-width: 10em;
+  width: 13em;
   border-radius: 0.25rem;
   transition: box-shadow 0.1s ease;
   cursor: pointer;

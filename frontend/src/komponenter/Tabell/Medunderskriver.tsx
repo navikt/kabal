@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { velgOppgaver } from '../../tilstand/moduler/oppgave.velgere';
 import { velgMeg } from '../../tilstand/moduler/meg.velgere';
-import { EtikettMedunderskriver } from '../../styled-components/Etiketter';
+import { LabelMedunderskriver } from '../../styled-components/labels';
 
 function MedunderskriverStatus({ id, children }: { id: any; children: any }) {
   const rader = useSelector(velgOppgaver).rader;
@@ -22,13 +22,13 @@ function MedunderskriverStatus({ id, children }: { id: any; children: any }) {
     if (oppgaveMedunderskriver[0][1] === meg.graphData.id) {
       return (
         <td data-testid={`${id}-text`}>
-          <EtikettMedunderskriver>Medunderskriver</EtikettMedunderskriver>
+          <LabelMedunderskriver>Medunderskriver</LabelMedunderskriver>
         </td>
       );
     } else {
       return (
         <td data-testid={`${id}-text`}>
-          <EtikettMedunderskriver>Sendt til medunderskriver</EtikettMedunderskriver>
+          <LabelMedunderskriver>Sendt til medunderskriver</LabelMedunderskriver>
         </td>
       );
     }

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
+import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
 import { Knapp } from 'nav-frontend-knapper';
 import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
-import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
+import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { NavLink } from 'react-router-dom';
 
@@ -37,13 +37,13 @@ export const Row: React.FC<IKlagebehandling> = ({
   return (
     <tr>
       <td>
-        <EtikettMain>{useTypeFromId(type)}</EtikettMain>
+        <LabelMain>{useTypeFromId(type)}</LabelMain>
       </td>
       <td>
-        <EtikettTema tema={tema}>{useTemaFromId(tema)}</EtikettTema>
+        <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
       </td>
       <td>
-        <EtikettMain>{useHjemmelFromId(hjemmel)}</EtikettMain>
+        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
       <td>{person?.fnr}</td>

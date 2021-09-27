@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { Dropdown } from './dropdown';
 import { StyledContainer, StyledButton } from './styled-components';

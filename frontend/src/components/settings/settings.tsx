@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { EtikettTema, EtikettMain } from '../../styled-components/Etiketter';
+import { LabelTema, LabelMain } from '../../styled-components/labels';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/useKodeverkIds';
 import { ISettings, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useAvailableTemaer } from '../../hooks/use-available-temaer';
+import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
@@ -17,10 +17,10 @@ const EMPTY_SETTINGS: ISettings = {
 export const Settings = () => {
   const { data: kodeverk } = useGetKodeverkQuery();
   const { data: userData } = useGetBrukerQuery();
-  const [updateSettings] = useUpdateSettingsMutation();
+  const [updateSettings, updateState] = useUpdateSettingsMutation();
 
   const onChange = (settings: ISettings) => {
-    if (typeof userData === 'undefined') {
+    if (typeof userData === 'undefined' || updateState.isLoading) {
       return;
     }
     const navIdent = userData.info.navIdent;
@@ -92,11 +92,31 @@ interface EtikettProps {
   id: string;
 }
 
-const TypeEtikett = ({ id }: EtikettProps) => <EtikettMain>{useTypeFromId(id)}</EtikettMain>;
+const TypeEtikett = ({ id }: EtikettProps) => (
+  <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
+);
 
-const TemaEtikett = ({ id }: EtikettProps) => <EtikettTema tema={id}>{useFullTemaNameFromId(id)}</EtikettTema>;
+const TemaEtikett = ({ id }: EtikettProps) => (
+  <StyledEtikettTema tema={id} fixedWidth={true}>
+    {useFullTemaNameFromId(id)}
+  </StyledEtikettTema>
+);
 
-const HjemmelEtikett = ({ id }: EtikettProps) => <EtikettMain>{useHjemmelFromId(id)}</EtikettMain>;
+const HjemmelEtikett = ({ id }: EtikettProps) => (
+  <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
+);
+
+const etikettStyles = css`
+  width: 100%;
+`;
+
+const StyledEtikettMain = styled(LabelMain)`
+  ${etikettStyles}
+`;
+
+const StyledEtikettTema = styled(LabelTema)`
+  ${etikettStyles}
+`;
 
 const StyledContent = styled.div`
   display: flex;
@@ -111,8 +131,6 @@ const StyledSettingsSection = styled.section`
 `;
 
 const StyledFiltersList = styled.ul`
-  display: flex;
-  flex-direction: column;
   padding: 0;
   margin: 0;
   margin-top: 20px;
@@ -123,5 +141,4 @@ const StyledFiltersList = styled.ul`
 
 const StyledFiltersListItem = styled.li`
   width: 100%;
-  margin-bottom: 20px;
 `;

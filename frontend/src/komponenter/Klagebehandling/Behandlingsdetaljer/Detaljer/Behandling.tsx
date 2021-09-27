@@ -10,7 +10,7 @@ import { OversendtKA } from './OversendtKA';
 import { faaFulltNavnMedFnr } from './navn';
 import { InfofeltStatisk } from '../InfofeltStatisk';
 import { IKlagebehandling } from '../../../../tilstand/moduler/klagebehandling/stateTypes';
-import { EtikettType, EtikettTema } from '../../../../styled-components/Etiketter';
+import { LabelType, LabelTema } from '../../../../styled-components/labels';
 
 export const Behandling = () => (
   <>
@@ -79,7 +79,7 @@ const TyperTemaer = () => {
         <b>Type:</b>
         <ul className={'detaljliste'}>
           <li>
-            <EtikettType>{getTypekodeById(klagebehandling?.type) ?? '-'}</EtikettType>
+            <LabelType>{getTypekodeById(klagebehandling?.type) ?? '-'}</LabelType>
           </li>
         </ul>
       </div>
@@ -88,7 +88,7 @@ const TyperTemaer = () => {
         <b>Tema:</b>
         <ul className={'detaljliste'}>
           <li>
-            <EtikettTema tema={klagebehandling?.tema}>{getTemakodeById(klagebehandling?.tema) ?? '-'}</EtikettTema>
+            <LabelTema tema={klagebehandling?.tema}>{getTemakodeById(klagebehandling?.tema) ?? '-'}</LabelTema>
           </li>
         </ul>
       </div>

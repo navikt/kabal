@@ -11,7 +11,7 @@ import { Faner, hentInnstillingerHandling, settInnstillingerHandling } from '../
 import styled from 'styled-components';
 import { useAppDispatch } from '../tilstand/konfigurerTilstand';
 import { velgKodeverk } from '../tilstand/moduler/kodeverk.velgere';
-import { EtikettType, EtikettHjemmel } from '../styled-components/Etiketter';
+import { LabelType, LabelHjemmel } from '../styled-components/labels';
 
 function initState(filter: Array<string> | undefined): Filter[] {
   if ('undefined' === typeof filter) {
@@ -189,7 +189,7 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveTyper.length && <div>Ingen typer valgt</div>}
                 {aktiveTyper.map((a, idx) => (
                   <div key={`type${idx}`}>
-                    <EtikettType>{a.label}</EtikettType>
+                    <LabelType>{a.label}</LabelType>
                   </div>
                 ))}
               </TableRow>
@@ -198,7 +198,7 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveTemaer.length && <div>Ingen temaer valgt</div>}
                 {aktiveTemaer.map((a, idx) => (
                   <div key={`tema${idx}`}>
-                    <EtikettHjemmel>{a.label}</EtikettHjemmel>
+                    <LabelHjemmel>{a.label}</LabelHjemmel>
                   </div>
                 ))}
               </TableRow>
@@ -206,7 +206,7 @@ const Innstillinger = (): JSX.Element => {
                 {!aktiveHjemler.length && <div>Ingen hjemler valgt</div>}
                 {aktiveHjemler.map((a, idx) => (
                   <div key={`hjemmel${idx}`}>
-                    <EtikettHjemmel>{a.label}</EtikettHjemmel>
+                    <LabelHjemmel>{a.label}</LabelHjemmel>
                   </div>
                 ))}
               </TableRow>

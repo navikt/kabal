@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { Knapp } from 'nav-frontend-knapper';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
-import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/useKodeverkIds';
+import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { isoDateToPretty } from '../../domene/datofunksjoner';
-import { EtikettMain, EtikettTema } from '../../styled-components/Etiketter';
+import { LabelMain, LabelTema } from '../../styled-components/labels';
 
 export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
@@ -27,13 +27,13 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
   return (
     <tr>
       <td>
-        <EtikettMain>{useTypeFromId(type)}</EtikettMain>
+        <LabelMain>{useTypeFromId(type)}</LabelMain>
       </td>
       <td>
-        <EtikettTema tema={tema}>{useTemaFromId(tema)}</EtikettTema>
+        <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
       </td>
       <td>
-        <EtikettMain>{useHjemmelFromId(hjemmel)}</EtikettMain>
+        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{ageKA} dager</td>
       <td>{isoDateToPretty(frist)}</td>

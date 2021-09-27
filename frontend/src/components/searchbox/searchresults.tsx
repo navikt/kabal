@@ -14,10 +14,10 @@ export const SearchResults = ({ personsoekResultat, isLoading }: SearchResultsPr
     return <Loader text={'Laster personer...'} />;
   }
   return (
-    <SCResultList>
+    <ResultsContainer>
       <ResultList personer={personsoekResultat.personer} />
       <p>Antall treff totalt: {personsoekResultat.antallTreffTotalt}</p>
-    </SCResultList>
+    </ResultsContainer>
   );
 };
 
@@ -71,7 +71,7 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
   );
 };
 
-const SCResultList = styled.div`
+const ResultsContainer = styled.div`
   margin-top: 20px;
 `;
 

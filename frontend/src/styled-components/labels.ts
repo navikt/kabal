@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-const Etikett = styled.div`
+interface LabelProps {
+  fixedWidth?: boolean;
+}
+
+const Label = styled.div<LabelProps>`
   display: inline-block;
   padding: 4px 9px;
   border-radius: 4px;
@@ -8,36 +12,36 @@ const Etikett = styled.div`
   overflow: hidden;
   white-space: nowrap;
   max-width: 13em;
-  border-radius: 4px;
+  width: ${({ fixedWidth }) => (fixedWidth === true ? '13em' : 'auto')};
 `;
 
-export const EtikettMain = styled(Etikett)`
+export const LabelMain = styled(Label)`
   background-color: #e0dae7;
   border: 1px solid #634689;
 `;
 
-export const EtikettHjemmel = styled(Etikett)`
+export const LabelHjemmel = styled(Label)`
   background-color: #f1d8d4;
   border: 1px solid #ba3a26;
 `;
 
-export const EtikettType = styled(Etikett)`
+export const LabelType = styled(Label)`
   background-color: white;
   border: 1px solid #ba3a26;
 `;
 
-interface EtikettTemaProps {
+interface LabelTemaProps {
   tema?: string;
 }
 
-export const EtikettTema = styled(Etikett)<EtikettTemaProps>`
+export const LabelTema = styled(Label)<LabelTemaProps>`
   background-color: #cce1f3;
   border: 1px solid #0067c5;
   background-color: ${({ tema }) => getBackgroundColorFromTema(tema)};
   border: 1px solid ${({ tema }) => getBorderColorFromTema(tema)};
 `;
 
-export const EtikettMedunderskriver = styled(Etikett)`
+export const LabelMedunderskriver = styled(Label)`
   background-color: #ffeccc;
   border: 1px solid #d47b00;
 `;
