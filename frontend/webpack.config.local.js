@@ -81,7 +81,7 @@ module.exports = {
         target: 'https://kabal.dev.nav.no',
         secure: false,
         changeOrigin: true,
-        cookieDomainRewrite: `localhost:${PORT}`,
+        withCredentials: true,
       },
     },
   },

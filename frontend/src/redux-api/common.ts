@@ -1,3 +1,9 @@
 import { fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 
-export const staggeredBaseQuery = retry(fetchBaseQuery({ baseUrl: '/', credentials: 'include' }), { maxRetries: 3 });
+const isLocalhost = window.location.hostname === 'localhost';
+const baseUrl = isLocalhost ? 'https://kabal.dev.nav.no/' : '/';
+const mode: RequestMode | undefined = isLocalhost ? 'cors' : undefined;
+
+export const staggeredBaseQuery = retry(fetchBaseQuery({ baseUrl, mode, credentials: 'include' }), {
+  maxRetries: 3,
+});
