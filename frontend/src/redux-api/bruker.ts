@@ -65,6 +65,7 @@ export const brukerApi = createApi({
         responseHandler: async (): Promise<ISettings> => params,
       }),
       invalidatesTags: ['user'],
+      extraOptions: { maxRetries: 0 },
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
         const settings: ISettings = {
           hjemler: params.hjemler,
