@@ -52,19 +52,15 @@ export const setupProxy = (authClient: Client) => {
           const body: Uint8Array[] = [];
           proxyRes.on('data', (chunk) => body.push(chunk));
           proxyRes.on('end', () => {
-            console.debug(
-              `Proxy response was 403`,
-              'Response body',
-              Buffer.concat(body).toString('utf-8'),
-              '\nRequest headers',
-              req.headers
-            );
+            console.debug('API response status', proxyRes.statusCode);
+            console.debug('API response body', Buffer.concat(body).toString('utf-8'));
+            console.debug('Proxy request headers', req.headers);
           });
         }
       },
-      // onProxyReq: (proxyReq) => {
-      //   console.debug('PROXY REQUEST HEADERS', proxyReq.getHeaders());
-      // },
+      onProxyReq: (proxyReq) => {
+        console.debug('PROXY REQUEST HEADERS', proxyReq.getHeaders());
+      },
       onError: (err, req, res) => {
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
