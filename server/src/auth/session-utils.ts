@@ -15,7 +15,6 @@ export const ensureSession = (req: Request, res: Response): [string, string] => 
 
 export const getSessionIdAndSignature = (req: Request): [string, string] | null => {
   const sessionCookie = req.cookies[serverConfig.cookieName];
-  console.debug(`Session cookie '${sessionCookie}' - ${req.originalUrl}`);
   if (typeof sessionCookie !== 'string' || sessionCookie.length === 0) {
     return null;
   }
@@ -29,7 +28,6 @@ export const getSessionIdAndSignature = (req: Request): [string, string] | null 
   if (validateSessionSignature(session, signature)) {
     return [session, signature];
   }
-  console.debug(`Session cookie signature not valid: '${session}.${signature}'.`);
 
   return null;
 };
