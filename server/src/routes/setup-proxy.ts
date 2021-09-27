@@ -1,7 +1,7 @@
 import express from 'express';
 import { Client } from 'openid-client';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { applicationDomain } from '../config/env';
+import { applicationDomain, isDeployedToProd } from '../config/env';
 import { getOnBehalfOfAccessToken } from '../auth/azure/on-behalf-of';
 import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from '../auth/session-utils';
 import { loginRedirect } from '../auth/login-redirect';
@@ -37,6 +37,12 @@ export const setupProxy = (authClient: Client) => {
     }
   });
 
+  const headers = isDeployedToProd
+    ? undefined
+    : {
+        origin: applicationDomain,
+      };
+
   router.use(
     '/api',
     createProxyMiddleware({
@@ -44,9 +50,7 @@ export const setupProxy = (authClient: Client) => {
       pathRewrite: {
         '^/api': '',
       },
-      headers: {
-        origin: applicationDomain,
-      },
+      headers,
       onError: (err, req, res) => {
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
