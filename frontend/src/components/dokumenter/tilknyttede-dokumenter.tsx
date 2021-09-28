@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { formattedDate } from '../../domene/datofunksjoner';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
-import { IDokumentVedlegg } from '../../redux-api/dokumenter/state-types';
+import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
 import { TilknyttetDokument } from '../../redux-api/oppgave-types';
 import { IShownDokument } from '../show-document/types';
 import { dokumentMatcher } from './helpers';

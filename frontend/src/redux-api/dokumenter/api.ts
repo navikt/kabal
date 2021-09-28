@@ -16,11 +16,17 @@ export const dokumenterApi = createApi({
   endpoints: (builder) => ({
     getDokumenter: builder.query<IDokumenterRespons, IGetDokumenterParams>({
       query: ({ klagebehandlingId, pageReference, temaer }) => {
-        const query = qs.stringify({
-          antall: 10,
-          forrigeSide: pageReference,
-          temaer,
-        });
+        const query = qs.stringify(
+          {
+            antall: 10,
+            forrigeSide: pageReference,
+            temaer,
+          },
+          {
+            skipNulls: true,
+            arrayFormat: 'comma',
+          }
+        );
         return `/api/klagebehandlinger/${klagebehandlingId}/alledokumenter?${query}`;
       },
       providesTags: ['dokumenter'],

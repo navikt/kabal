@@ -30,7 +30,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({ options, selecte
   return (
     <Container ref={ref}>
       <ToggleButton theme={{ open }} onClick={() => setOpen(!open)}>
-        {children}
+        {children} ({selected.length})
       </ToggleButton>
       <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} />
     </Container>

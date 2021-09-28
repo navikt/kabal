@@ -1,8 +1,8 @@
 import React from 'react';
-import { Male } from '../../icons/male';
-import { Female } from '../../icons/female';
+import { MaleGenderIcon } from '../../icons/male-gender';
+import { FemaleGenderIcon } from '../../icons/female-gender';
+import { NeutralGenderIcon } from '../../icons/neutral-gender';
 import { Gender } from '../../redux-api/oppgave-state-types';
-import { FemaleGenderIcon, MaleGenderIcon } from './styled-components';
 
 interface UserGenderProps {
   gender: Gender | null;
@@ -10,21 +10,13 @@ interface UserGenderProps {
 
 export const UserGender = ({ gender }: UserGenderProps) => {
   if (gender === null) {
-    return null;
+    return <NeutralGenderIcon />;
   }
   if (gender === Gender.MALE) {
-    return (
-      <MaleGenderIcon>
-        <Male />
-      </MaleGenderIcon>
-    );
+    return <MaleGenderIcon />;
   }
   if (gender === Gender.FEMALE) {
-    return (
-      <FemaleGenderIcon>
-        <Female />
-      </FemaleGenderIcon>
-    );
+    return <FemaleGenderIcon />;
   }
   return null;
 };

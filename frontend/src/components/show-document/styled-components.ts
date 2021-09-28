@@ -8,7 +8,7 @@ interface BeholderProps {
   width: number;
 }
 
-export const Beholder = styled.section<BeholderProps>`
+export const Container = styled.section<BeholderProps>`
   display: block;
   min-width: ${(props) => props.width}px;
   height: 100%;

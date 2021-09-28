@@ -1,5 +1,3 @@
-import { IDokument } from './state-types';
-
 export interface IDokumentParams {
   id: string;
   idx: number;
@@ -20,4 +18,20 @@ export interface IDokumenterParams {
   klagebehandlingId: string;
   pageReference: string | null;
   temaFilter: string[] | undefined;
+}
+
+export interface IDokument {
+  journalpostId: string;
+  dokumentInfoId: string; // nullable?
+  tittel: string | null;
+  tema: string | null;
+  registrert: string; // LocalDate
+  harTilgangTilArkivvariant: boolean;
+  vedlegg: IDokumentVedlegg[];
+}
+
+export interface IDokumentVedlegg {
+  dokumentInfoId: string;
+  tittel: string | null;
+  harTilgangTilArkivvariant: boolean;
 }

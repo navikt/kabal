@@ -1,18 +1,24 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { Gender } from '../../redux-api/oppgave-state-types';
-import { UserItem } from './styled-components';
+import { ControlPanel, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';
 import { getFullNameWithFnr } from '../../domain/name';
 import { LabelMain } from '../../styled-components/labels';
+import { PanelToggles } from '../klagebehandling/types';
+import { PanelToggleButtons } from './toggle-buttons';
 
 interface Params {
   id: string;
 }
 
-export const KlagebehandlingControls: React.FC = () => {
+interface KlagebehandlingControlsProps {
+  toggles: PanelToggles;
+  setPanel: (panel: keyof PanelToggles, checked: boolean) => void;
+}
+
+export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingControlsProps) => {
   const { id } = useParams<Params>();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(id);
 
@@ -32,15 +38,10 @@ export const KlagebehandlingControls: React.FC = () => {
         fortrolig={fortrolig}
         strengtFortrolig={strengtFortrolig}
       />
+      <PanelToggleButtons togglePanel={setPanel} toggles={toggles} />
     </ControlPanel>
   );
 };
-
-const ControlPanel = styled.header`
-  padding-top: 1em;
-  padding-bottom: 1em;
-  background-color: #e5e5e5;
-`;
 
 interface Name {
   fornavn?: string;
@@ -75,12 +76,12 @@ const UserInfo = ({ name, fnr, gender, fortrolig, strengtFortrolig }: UserInfoPr
   );
 };
 
-interface UserNameProps {
+interface UserNameAndFnrProps {
   name: Name | null;
   fnr: string | null;
 }
 
-const UserNameAndFnr = ({ name, fnr }: UserNameProps) => <span>{getFullNameWithFnr(name, fnr)}</span>;
+const UserNameAndFnr = ({ name, fnr }: UserNameAndFnrProps) => <span>{getFullNameWithFnr(name, fnr)}</span>;
 
 interface StrengtFortroligDisplayProps {
   fortrolig: boolean | null;
@@ -93,8 +94,3 @@ const FortroligDisplay = ({ fortrolig, strengtFortrolig }: StrengtFortroligDispl
     {!strengtFortrolig ? <LabelMain>Strengt fortrolig</LabelMain> : null}
   </>
 );
-
-const User = styled.ul`
-  display: flex;
-  list-style: none;
-`;

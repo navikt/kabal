@@ -1,4 +1,4 @@
-import { IDokument, IDokumentVedlegg } from '../../redux-api/dokumenter/state-types';
+import { IDokument, IDokumentVedlegg } from '../../redux-api/dokumenter/types';
 
 export interface ITilknyttetDokument {
   dokument: IDokument;

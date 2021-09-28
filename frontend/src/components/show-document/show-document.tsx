@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { baseUrl } from '../../redux-api/common';
 import {
-  Beholder,
+  Container,
   Header,
   PDF,
   StyledCancelIcon,
@@ -24,7 +25,7 @@ interface ShowDokumentProps {
 export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumentProps) => {
   const url = useMemo(
     () =>
-      `/api/klagebehandlinger/${klagebehandlingId}/journalposter/${dokument?.journalpostId}/dokumenter/${dokument?.dokumentInfoId}`,
+      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/journalposter/${dokument?.journalpostId}/dokumenter/${dokument?.dokumentInfoId}`,
     [dokument, klagebehandlingId]
   );
 
@@ -39,7 +40,7 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
   }
 
   return (
-    <Beholder width={pdfWidth}>
+    <Container width={pdfWidth}>
       <Header>
         {dokument.tittel}
         <div>
@@ -63,7 +64,7 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
         type="application/pdf"
         name={dokument.tittel ?? undefined}
       />
-    </Beholder>
+    </Container>
   );
 };
 

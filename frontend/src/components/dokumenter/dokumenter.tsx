@@ -1,41 +1,51 @@
 import React, { useState } from 'react';
 import { ShowDokument } from '../show-document/show-document';
-import { DokumenterBeholder } from './styled-components/container';
+import { DocumentsContainer } from './styled-components/container';
 import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
-import { AlleDokumenter } from './alle-dokumenter';
+import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
 import { Header } from './header';
-import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
-import { useGetDokumenterQuery } from '../../redux-api/dokumenter/api';
 import { IShownDokument } from '../show-document/types';
+import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
+import { useParams } from 'react-router-dom';
 
 export interface DokumenterProps {
-  skjult: boolean;
-  settFullvisning: (fullvisning: boolean) => void;
-  fullvisning: boolean;
-  klagebehandling: IKlagebehandling;
+  shown: boolean;
+  // settFullvisning: (fullvisning: boolean) => void;
+  // fullvisning: boolean;
 }
 
-export const Dokumenter = ({ skjult, settFullvisning, fullvisning, klagebehandling }: DokumenterProps) => {
+interface Params {
+  id: string;
+}
+
+export const Dokumenter = ({ shown }: DokumenterProps) => {
+  const { id } = useParams<Params>();
+  const [fullView, setFullView] = useState(true);
   const [dokument, settDokument] = useState<IShownDokument | null>(null);
+  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(id);
 
-  const antallTilknyttede = klagebehandling.tilknyttedeDokumenter.length;
-
-  if (skjult) {
+  if (!shown) {
     return null;
   }
 
+  if (typeof klagebehandling === 'undefined' || isLoading) {
+    return <span>Laster klagebehandling...</span>;
+  }
+
+  const antallTilknyttede = klagebehandling.tilknyttedeDokumenter.length;
+
   return (
     <>
-      <DokumenterBeholder fullvisning={fullvisning}>
-        <Header settFullvisning={settFullvisning} fullvisning={fullvisning} antall={antallTilknyttede} />
+      <DocumentsContainer fullvisning={fullView}>
+        <Header settFullvisning={setFullView} fullvisning={fullView} antall={antallTilknyttede} />
         <TilknyttedeDokumenter
           klagebehandlingId={klagebehandling.id}
-          skjult={fullvisning}
+          skjult={fullView}
           visDokument={settDokument}
           tilknyttedeDokumenter={klagebehandling.tilknyttedeDokumenter}
         />
-        <AlleDokumenter skjult={!fullvisning} visDokument={settDokument} klagebehandling={klagebehandling} />
-      </DokumenterBeholder>
+        <AlleDokumenter skjult={!fullView} visDokument={settDokument} klagebehandling={klagebehandling} />
+      </DocumentsContainer>
       <ShowDokument dokument={dokument} klagebehandlingId={klagebehandling.id} close={() => settDokument(null)} />
     </>
   );
