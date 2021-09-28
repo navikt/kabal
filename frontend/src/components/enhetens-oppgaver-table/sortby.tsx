@@ -49,11 +49,11 @@ const ToggleSortButton = styled.button<ToggleSortButtonProps>`
 
   ::before {
     transform: ${({ desc }) =>
-    desc ? 'translateX(-3px) translateY(-50%) rotate(45deg)' : 'translateX(-3px) translateY(-50%) rotate(-45deg)'};
+      desc ? 'translateX(-3px) translateY(-50%) rotate(45deg)' : 'translateX(-3px) translateY(-50%) rotate(-45deg)'};
   }
 
   ::after {
     transform: ${({ desc }) =>
-    desc ? 'translateX(1.5px) translateY(-50%) rotate(-45deg)' : 'translateX(1.5px) translateY(-50%) rotate(45deg)'};
+      desc ? 'translateX(1.5px) translateY(-50%) rotate(-45deg)' : 'translateX(1.5px) translateY(-50%) rotate(45deg)'};
   }
 `;

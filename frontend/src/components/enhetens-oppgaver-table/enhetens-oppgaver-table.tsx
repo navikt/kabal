@@ -36,17 +36,17 @@ export const EnhetensOppgaverTable: React.FC = () => {
     typeof bruker === 'undefined'
       ? skipToken
       : {
-        start: 0,
-        antall: MAX_OPPGAVER,
-        sortering: 'FRIST',
-        rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
-        erTildeltSaksbehandler: true,
-        temaer: temaer,
-        typer: typer,
-        hjemler: hjemler,
-        navIdent: bruker.info.navIdent,
-        projeksjon: 'UTVIDET',
-      };
+          start: 0,
+          antall: MAX_OPPGAVER,
+          sortering: 'FRIST',
+          rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
+          erTildeltSaksbehandler: true,
+          temaer: temaer,
+          typer: typer,
+          hjemler: hjemler,
+          navIdent: bruker.info.navIdent,
+          projeksjon: 'UTVIDET',
+        };
 
   const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {
     pollingInterval: 30 * 1000,
