@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { StyledTableHeader } from './styled-components';
 
 interface SortByProps {
   desc: boolean;
@@ -7,11 +8,11 @@ interface SortByProps {
 }
 
 export const SortBy: React.FC<SortByProps> = ({ desc, onChange }) => (
-  <th aria-sort={getAriaSort(desc)} role="columnheader">
+  <StyledTableHeader aria-sort={getAriaSort(desc)}>
     <ToggleSortButton desc={desc} aria-label="Sorter Etternavn stigende" onClick={() => onChange(!desc)}>
       Frist
     </ToggleSortButton>
-  </th>
+  </StyledTableHeader>
 );
 
 const getAriaSort = (desc: boolean) => (desc ? 'descending' : 'ascending');

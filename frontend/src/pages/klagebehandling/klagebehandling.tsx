@@ -1,7 +1,11 @@
 import React from 'react';
+import { KlagebehandlingControls } from '../../components/klagebehandling-controls/klagebehandling-controls';
 
 export const KlagebehandlingPage: React.FC = () => (
-  <main>
-    <span>Klagebehandling</span>
-  </main>
+  <>
+    <KlagebehandlingControls />
+    <main>
+      <span>Klagebehandling</span>
+    </main>
+  </>
 );

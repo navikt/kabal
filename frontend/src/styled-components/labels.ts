@@ -9,7 +9,6 @@ const Label = styled.div<LabelProps>`
   padding: 4px 9px;
   border-radius: 4px;
   text-overflow: ellipsis;
-  overflow: hidden;
   white-space: nowrap;
   max-width: 13em;
   width: ${({ fixedWidth }) => (fixedWidth === true ? '13em' : 'auto')};

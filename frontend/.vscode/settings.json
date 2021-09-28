@@ -13,7 +13,4 @@
     "source.fixAll.eslint": true
   },
   "prettier.requireConfig": true,
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  }
 }

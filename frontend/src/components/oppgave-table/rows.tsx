@@ -22,15 +22,6 @@ export const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCoun
     );
   }
 
-  if (oppgaver.length === 0) {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
-    );
-  }
   return (
     <tbody>
       {oppgaver.map((k) => (

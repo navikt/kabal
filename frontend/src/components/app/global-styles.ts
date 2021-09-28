@@ -5,13 +5,16 @@ const styles = css`
     margin: 0;
   }
 
+  main {
+    overflow: auto;
+    padding-bottom: 40px;
+  }
+
   html,
   body,
   main,
   #app {
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
+    min-height: 100vh;
     margin: 0;
   }
 

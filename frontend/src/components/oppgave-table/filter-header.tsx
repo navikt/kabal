@@ -5,6 +5,7 @@ import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
+import { StyledTableHeader } from './styled-components';
 
 interface TableHeaderFiltersProps {
   onChange: (filters: Filters) => void;
@@ -19,7 +20,7 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
   return (
     <thead>
       <tr>
-        <th role="columnheader">
+        <StyledTableHeader width={'225px'}>
           <FilterDropdown
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
@@ -27,8 +28,8 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           >
             Type
           </FilterDropdown>
-        </th>
-        <th role="columnheader">
+        </StyledTableHeader>
+        <StyledTableHeader width={'225px'}>
           <FilterDropdown
             selected={filters.tema}
             onChange={(tema) => onChange({ ...filters, tema })}
@@ -36,8 +37,8 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           >
             Tema
           </FilterDropdown>
-        </th>
-        <th role="columnheader">
+        </StyledTableHeader>
+        <StyledTableHeader width={'225px'}>
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
@@ -45,12 +46,12 @@ export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange
           >
             Hjemmel
           </FilterDropdown>
-        </th>
-        <th>Alder</th>
+        </StyledTableHeader>
+        <StyledTableHeader width={'225px'}>Alder</StyledTableHeader>
         <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
           Frist
         </SortBy>
-        <th role="columnheader"></th>
+        <StyledTableHeader width={'14em'}></StyledTableHeader>
       </tr>
     </thead>
   );

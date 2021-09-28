@@ -7,7 +7,15 @@ export const StyledTableContainer = styled.div`
 `;
 
 export const StyledTable = styled.table`
-  max-width: 1200px;
+  max-width: 1400px;
+`;
+
+interface StyledTableHeaderProps {
+  width?: string;
+}
+
+export const StyledTableHeader = styled.th<StyledTableHeaderProps>`
+  width: ${({ width = 'auto' }) => width};
 `;
 
 export const StyledFooter = styled.div`

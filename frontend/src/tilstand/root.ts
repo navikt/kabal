@@ -15,6 +15,7 @@ import { klagebehandling as klagebehandlingState } from './moduler/klagebehandli
 import kvalitetsvurdering from './moduler/kvalitetsvurdering';
 import { dokumenter } from './moduler/dokumenter/state';
 import { klagebehandlingerApi } from '../redux-api/oppgaver';
+import { klagebehandlingApi } from '../redux-api/oppgave';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { brukerApi } from '../redux-api/bruker';
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   [klagebehandlingerApi.reducerPath]: klagebehandlingerApi.reducer,
   [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [brukerApi.reducerPath]: brukerApi.reducer,
+  [klagebehandlingApi.reducerPath]: klagebehandlingApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -6,6 +6,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { klagebehandlingerApi } from '../redux-api/oppgaver';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { brukerApi } from '../redux-api/bruker';
+import { klagebehandlingApi } from '../redux-api/oppgave';
 
 const dependencies = {
   ajax,
@@ -31,7 +32,12 @@ const reduxStore = configureStore({
           'meta.baseQueryMeta.response',
         ],
       },
-    }).concat([klagebehandlingerApi.middleware, kodeverkApi.middleware, brukerApi.middleware]),
+    }).concat([
+      klagebehandlingerApi.middleware,
+      kodeverkApi.middleware,
+      brukerApi.middleware,
+      klagebehandlingApi.middleware,
+    ]),
 });
 
 export type AppDispatch = typeof reduxStore.dispatch;

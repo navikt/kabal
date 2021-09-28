@@ -11,6 +11,9 @@ interface Props {
 
 export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage = 1 }) => {
   const pages = usePagination(total, pageSize, currentPage);
+  if (total === 0) {
+    return null;
+  }
   return (
     <div>
       {pages.map((p) =>

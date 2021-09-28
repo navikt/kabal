@@ -106,16 +106,12 @@ const HjemmelEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
 );
 
-const etikettStyles = css`
+const StyledEtikettMain = styled(LabelMain)`
   width: 100%;
 `;
 
-const StyledEtikettMain = styled(LabelMain)`
-  ${etikettStyles}
-`;
-
 const StyledEtikettTema = styled(LabelTema)`
-  ${etikettStyles}
+  width: 100%;
 `;
 
 const StyledContent = styled.div`
