@@ -3,10 +3,22 @@ import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/use-
 import { isoDateToPretty } from '../../domene/datofunksjoner';
 import { Knapp } from 'nav-frontend-knapper';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
-import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { LabelMain, LabelTema, LabelMedunderskriver } from '../../styled-components/labels';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { NavLink } from 'react-router-dom';
 
-export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, klagebehandlingVersjon, person }) => {
+export const Row: React.FC<IKlagebehandling> = ({
+  id,
+  type,
+  tema,
+  hjemmel,
+  frist,
+  ageKA,
+  klagebehandlingVersjon,
+  person,
+  tildeltSaksbehandlerNavn,
+  harMedunderskriver,
+}) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 
@@ -35,9 +47,16 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
       <td>
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
-      <td>{person?.navn}</td>
       <td>{person?.fnr}</td>
+      <td>{ageKA} dager</td>
       <td>{isoDateToPretty(frist)}</td>
+      <td>{tildeltSaksbehandlerNavn}</td>
+      <td>{harMedunderskriver ? <LabelMedunderskriver>Sendt til medunderskriver</LabelMedunderskriver> : ''}</td>
+      <td>
+        <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
+          Åpne
+        </NavLink>
+      </td>
       <td>
         <Knapp onClick={onTildel} spinner={isLoading} disabled={isLoading}>
           {getFradelText(loader.isLoading)}
