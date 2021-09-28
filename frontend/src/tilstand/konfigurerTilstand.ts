@@ -7,6 +7,7 @@ import { klagebehandlingerApi } from '../redux-api/oppgaver';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { brukerApi } from '../redux-api/bruker';
 import { klagebehandlingApi } from '../redux-api/oppgave';
+import { dokumenterApi } from '../redux-api/dokumenter/api';
 
 const dependencies = {
   ajax,
@@ -37,6 +38,7 @@ const reduxStore = configureStore({
       kodeverkApi.middleware,
       brukerApi.middleware,
       klagebehandlingApi.middleware,
+      dokumenterApi.middleware,
     ]),
 });
 
