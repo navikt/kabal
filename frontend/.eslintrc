@@ -29,6 +29,10 @@
         "tabWidth": 2
       }
     ],
+    "curly": ["error", "all"],
+    "no-implicit-coercion": "error",
+    "no-nested-ternary": "error",
+    "no-unneeded-ternary": "error",
     "arrow-body-style": ["error", "as-needed"],
     "prefer-arrow/prefer-arrow-functions": [
       "warn",
@@ -39,9 +43,27 @@
       }
     ],
     "comma-dangle": [0, "never"],
-    "@typescript-eslint/no-var-requires": 0,
-    "no-undef": 0,
     "no-unused-vars": "off",
+    "no-duplicate-imports": "error",
+    "no-var": "error",
+    "sort-imports": ["error", {
+      "ignoreCase": false,
+      "ignoreDeclarationSort": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "single", "all", "multiple"],
+      "allowSeparatedGroups": false
+    }],
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "space-before-blocks": ["error", {
+      "functions": "always",
+      "keywords": "always",
+      "classes": "always"
+    }],
+    "keyword-spacing": ["error", {
+      "before": true
+    }],
+    "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/no-unused-vars": ["error"],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "error",
