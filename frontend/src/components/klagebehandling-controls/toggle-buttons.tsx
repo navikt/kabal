@@ -30,9 +30,9 @@ interface TogglePanelButtonProps {
 }
 
 const TogglePanelButton = ({ setPanel, children, checked, panel }: TogglePanelButtonProps): JSX.Element => (
-  <ToggleButton pressed={checked} onCheck={(checked) => setPanel(panel, checked)}>
+  <ToggleSwitch pressed={checked} onCheck={(checked) => setPanel(panel, checked)}>
     {children}
-  </ToggleButton>
+  </ToggleSwitch>
 );
 
 interface ToggleButtonProps {
@@ -41,17 +41,8 @@ interface ToggleButtonProps {
   onCheck: (checked: boolean) => void;
 }
 
-const ToggleButton = ({ pressed, children, onCheck }: ToggleButtonProps) => {
-  if (pressed) {
-    return (
-      <Hovedknapp aria-pressed={pressed} onClick={() => onCheck(!pressed)}>
-        {children}
-      </Hovedknapp>
-    );
-  }
-  return (
-    <Knapp aria-pressed={pressed} onClick={() => onCheck(!pressed)}>
-      {children}
-    </Knapp>
-  );
-};
+const ToggleSwitch = ({ pressed, children, onCheck }: ToggleButtonProps) => (
+  <Hovedknapp aria-pressed={pressed} onClick={() => onCheck(!pressed)}>
+    {children}
+  </Hovedknapp>
+);
