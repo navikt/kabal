@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Dokumenter } from '../dokumenter/dokumenter';
+import { Behandling } from '../behandling/behandling';
 import { PanelToggles } from '../klagebehandling/types';
 import { PanelContainer } from './panel';
 
@@ -14,11 +15,12 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
 
   <PageContainer data-testid={'behandlingsdetaljer'}>
     <Dokumenter shown={toggles.documents} />
-    <PanelContainer>Panel 2</PanelContainer>
-    <PanelContainer>Panel 3</PanelContainer>
-    {/* <Behandlingsdetaljer skjult={!faner.detaljer.checked} klagebehandling={klagebehandling} />
+    <Behandling shown={toggles.behandling} />
+
+    {/*
       <Kvalitetsvurdering skjult={!faner.kvalitetsvurdering.checked} klagebehandling={klagebehandling} />
-      <FullforVedtak skjult={!faner.vedtak.checked} klagebehandling={klagebehandling} /> */}
+      <FullforVedtak skjult={!faner.vedtak.checked} klagebehandling={klagebehandling} />
+    */}
   </PageContainer>
 );
 

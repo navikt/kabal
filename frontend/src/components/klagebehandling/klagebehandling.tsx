@@ -7,7 +7,7 @@ export const Klagebehandling = () => {
   const [toggles, setPanelToggles] = useState<PanelToggles>({
     documents: true,
     brevutforming: true,
-    details: true,
+    behandling: true,
   });
 
   const setPanel = (panel: keyof PanelToggles, checked: boolean) => setPanelToggles({ ...toggles, [panel]: checked });

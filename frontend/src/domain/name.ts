@@ -1,8 +1,4 @@
-interface Name {
-  fornavn?: string;
-  mellomnavn?: string;
-  etternavn?: string;
-}
+import { Name } from './types';
 
 export const getFullName = (name: Name | null): string => {
   if (name === null) {

@@ -71,7 +71,7 @@ export const StyledCancelIcon = styled(CancelIcon)`
 
 export const StyledExtLinkIcon = styled(ExtLinkIcon)`
   cursor: pointer;
-  color: black;
+  color: #0067c5;
   margin: 0.25em 1em 0 0.2em;
   -webkit-transition: all 0.15s ease-in-out;
   transition: all 0.15s ease-in-out;

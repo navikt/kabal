@@ -1,5 +1,6 @@
 import { IKodeverkVerdi } from './kodeverk';
 import { IKlagebehandlingOppdatering } from './oppgave-types';
+import { Name } from '../domain/types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -13,6 +14,21 @@ export interface IKlagebehandlingState {
   klagebehandling: IKlagebehandling | null;
 }
 
+export interface IKlagerPerson {
+  navn: Name;
+  foedselsnummer: string | null;
+  kjoenn: string | null;
+}
+
+export interface IVirksomhet {
+  virksomhetsnummer: string | null;
+  navn: string | null;
+}
+
+export interface IKlager {
+  person: IKlagerPerson;
+  virksomhet: IVirksomhet;
+}
 export interface IKlagebehandling {
   avsluttetAvSaksbehandler: string | null;
   created: string; // LocalDateTime
@@ -27,9 +43,12 @@ export interface IKlagebehandling {
   internVurdering: string;
   klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
+
+  klager: IKlager;
+
   klagerFoedselsnummer: string | null;
   klagerKjoenn: Gender | null;
-  klagerNavn: INavn | null;
+  klagerNavn: Name | null;
   klagerVirksomhetsnavn: string | null;
   klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
@@ -39,9 +58,12 @@ export interface IKlagebehandling {
   mottattFoersteinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
+
+  sakenGjelder: IKlager;
+
   sakenGjelderFoedselsnummer: string | null;
   sakenGjelderKjoenn: Gender | null;
-  sakenGjelderNavn: INavn | null;
+  sakenGjelderNavn: Name | null;
   sakenGjelderVirksomhetsnavn: string | null;
   sakenGjelderVirksomhetsnummer: string | null;
   strengtFortrolig: boolean | null;
@@ -85,12 +107,6 @@ export interface IHjemmel {
   ledd?: number;
   bokstav?: string;
   original?: string;
-}
-
-export interface INavn {
-  fornavn?: string;
-  mellomnavn?: string;
-  etternavn?: string;
 }
 
 export interface IVedlegg {

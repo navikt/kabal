@@ -1,10 +1,19 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
-import { ControlPanel, ControlPanelLeftSide, ControlPanelRightSide } from './styled-components';
+import {
+  ControlPanel,
+  ExternalLink,
+  KlagebehandlingInformation,
+  KlagebehandlingTools,
+  StyledSaveStatus,
+} from './styled-components';
 import { PanelToggles } from '../klagebehandling/types';
 import { PanelToggleButtons } from './toggle-buttons';
 import { UserInfo } from './user-info';
+import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
+import { StyledExtLinkIcon } from '../show-document/styled-components';
+import { SuccessIcon } from '../../icons/success';
 interface Params {
   id: string;
 }
@@ -27,7 +36,7 @@ export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingCo
 
   return (
     <ControlPanel>
-      <ControlPanelLeftSide>
+      <KlagebehandlingTools>
         <UserInfo
           name={sakenGjelderNavn}
           fnr={sakenGjelderFoedselsnummer}
@@ -36,8 +45,26 @@ export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingCo
           strengtFortrolig={strengtFortrolig}
         />
         <PanelToggleButtons togglePanel={setPanel} toggles={toggles} />
-      </ControlPanelLeftSide>
-      <ControlPanelRightSide>hello</ControlPanelRightSide>
+      </KlagebehandlingTools>
+      <KlagebehandlingInformation>
+        <ExternalLink
+          href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelderFoedselsnummer}`}
+          target={'_blank'}
+          aria-label={'Ekstern lenke til Gosys for denne personen'}
+          title="Åpne i ny fane"
+          rel="noreferrer"
+        >
+          <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
+        </ExternalLink>
+        <SaveStatus />
+      </KlagebehandlingInformation>
     </ControlPanel>
   );
 };
+
+// TODO
+const SaveStatus = () => (
+  <StyledSaveStatus>
+    <SuccessIcon alt="Lagret" /> <span>Lagret</span>
+  </StyledSaveStatus>
+);
