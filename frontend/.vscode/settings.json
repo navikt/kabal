@@ -6,11 +6,14 @@
     "typescript",
     "typescriptreact"
   ],
+  "eslint.run": "onType",
+  "eslint.codeActionsOnSave.mode": "all",
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "prettier.requireConfig": true,
+  "tslint.enable": false,
+  "prettier.requireConfig": true
 }

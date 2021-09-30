@@ -8,7 +8,10 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["jsx-a11y", "react", "react-hooks", "prettier", "prefer-arrow"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["jsx-a11y", "react", "react-hooks", "prettier", "import", "prefer-arrow"],
   "settings": {
     "react": {
       "version": "17"
@@ -29,11 +32,16 @@
         "tabWidth": 2
       }
     ],
+    "complexity": ["error", { "max": 5 }],
     "curly": ["error", "all"],
     "no-implicit-coercion": "error",
     "no-nested-ternary": "error",
     "no-unneeded-ternary": "error",
     "arrow-body-style": ["error", "as-needed"],
+    "prefer-const": "error",
+    "prefer-destructuring": "error",
+    "eol-last": ["error", "always"],
+    "padded-blocks": ["error", "never"],
     "prefer-arrow/prefer-arrow-functions": [
       "warn",
       {
@@ -42,19 +50,25 @@
         "classPropertiesAllowed": false
       }
     ],
+    "sort-imports": ["error", {
+      "ignoreDeclarationSort": true
+    }],
     "comma-dangle": [0, "never"],
     "no-unused-vars": "off",
     "no-duplicate-imports": "error",
     "no-var": "error",
-    "sort-imports": ["error", {
-      "ignoreCase": false,
-      "ignoreDeclarationSort": false,
-      "ignoreMemberSort": false,
-      "memberSyntaxSortOrder": ["none", "single", "all", "multiple"],
-      "allowSeparatedGroups": false
-    }],
+    "eqeqeq": "error",
+    "no-else-return": "error",
+    "object-shorthand": ["error", "always"],
     "prefer-rest-params": "error",
     "prefer-spread": "error",
+    "prefer-object-spread": "error",
+    "padding-line-between-statements": ["error",
+      { "blankLine": "always", "prev": "*", "next": "block" },
+      { "blankLine": "always", "prev": "block", "next": "*" },
+      { "blankLine": "always", "prev": "*", "next": "block-like" },
+      { "blankLine": "always", "prev": "block-like", "next": "*" }
+    ],
     "space-before-blocks": ["error", {
       "functions": "always",
       "keywords": "always",
@@ -62,6 +76,17 @@
     }],
     "keyword-spacing": ["error", {
       "before": true
+    }],
+    "import/first": "error",
+    "import/no-default-export": "error",
+    "import/newline-after-import": ["error", { "count": 1 }],
+    "import/no-duplicates": "error",
+    "import/order": ["error", {
+      "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
+      "newlines-between": "never",
+      "alphabetize": {
+        "order": "asc"
+      }
     }],
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/no-unused-vars": ["error"],
