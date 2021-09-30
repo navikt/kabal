@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Checkbox } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
+import { Checkbox } from 'nav-frontend-skjema';
+import styled from 'styled-components';
 
 export const DokumenterFullvisning = styled.div`
   display: flex;

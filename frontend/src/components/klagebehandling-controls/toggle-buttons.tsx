@@ -1,7 +1,7 @@
 import React from 'react';
 import { PanelToggles } from '../klagebehandling/types';
-import { ToggleButtonsContainer } from './styled-components';
 import { Switch } from '../switch/switch';
+import { ToggleButtonsContainer } from './styled-components';
 
 interface PanelToggleButtonsProps {
   toggles: PanelToggles;

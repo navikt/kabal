@@ -1,16 +1,16 @@
-import React, { useMemo, useState } from 'react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { ITilknyttetDokument } from '../types';
+import React, { useMemo, useState } from 'react';
+import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
 import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
+import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
+import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
+import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DokumenterFullvisning, List, ListItem } from '../styled-components/fullvisning';
-import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
-import { IShownDokument } from '../../show-document/types';
-import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
-import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
-import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
-import { LoadMore } from './load-more';
+import { ITilknyttetDokument } from '../types';
 import { Document } from './document';
+import { LoadMore } from './load-more';
 
 interface AlleDokumenterProps {
   klagebehandling: IKlagebehandling;
@@ -37,6 +37,7 @@ export const AlleDokumenter = React.memo(
       if (typeof alleDokumenter === 'undefined') {
         return [];
       }
+
       return alleDokumenter.dokumenter.map((dokument) => ({
         dokument,
         tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, dokument)),

@@ -13,6 +13,7 @@ export const SearchResults = ({ personsoekResultat, isLoading }: SearchResultsPr
   if (isLoading || typeof personsoekResultat === 'undefined') {
     return <Loader text={'Laster personer...'} />;
   }
+
   return (
     <ResultsContainer>
       <ResultList personer={personsoekResultat.personer} />
@@ -47,6 +48,7 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
       </tbody>
     );
   }
+
   if (personer.length === 0) {
     return (
       <tbody>
@@ -56,6 +58,7 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
       </tbody>
     );
   }
+
   return (
     <tbody>
       {personer.map(({ navn, fnr }) => (
@@ -79,8 +82,9 @@ const formatName = (rawString: string): string => {
   if (rawString === '') {
     return '';
   }
+
   const nameArray = rawString
-    .replace(/[\[\]']+/g, '')
+    .replace(/[\\[\]']+/g, '')
     .toLowerCase()
     .split(' ');
 

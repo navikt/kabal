@@ -1,13 +1,13 @@
 import React from 'react';
 import { useGetBrukerQuery, useSetValgtEnhetMutation } from '../../../redux-api/bruker';
 import {
-  StyledEnhetButton,
-  EnhetList,
   Enhet,
-  StyledNavLink,
+  EnhetList,
   LinkList,
   StyledDropdown,
+  StyledEnhetButton,
   StyledLink,
+  StyledNavLink,
 } from './styled-components';
 
 interface DropdownProps {

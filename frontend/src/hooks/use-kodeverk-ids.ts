@@ -7,7 +7,7 @@ export const useTemaFromId = (temaId?: string | null): string => {
     return 'Laster...';
   }
 
-  if (data.tema && typeof temaId === 'string') {
+  if (typeof temaId === 'string') {
     return data.tema.find(({ id }) => id === temaId)?.navn ?? temaId;
   }
 
@@ -21,7 +21,7 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
     return 'Laster...';
   }
 
-  if (data.tema && typeof temaId === 'string') {
+  if (typeof temaId === 'string') {
     return data.tema.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
   }
 
@@ -35,7 +35,7 @@ export const useTypeFromId = (typeId?: string | null): string => {
     return 'Laster...';
   }
 
-  if (data.type && typeof typeId === 'string') {
+  if (typeof typeId === 'string') {
     return data.type.find(({ id }) => id === typeId)?.navn ?? typeId;
   }
 
@@ -49,7 +49,7 @@ export const useHjemmelFromId = (hjemmelId?: string | null): string => {
     return 'Laster...';
   }
 
-  if (data.hjemmel && typeof hjemmelId === 'string') {
+  if (typeof hjemmelId === 'string') {
     return data.hjemmel.find(({ id }) => id === hjemmelId)?.navn ?? hjemmelId;
   }
 

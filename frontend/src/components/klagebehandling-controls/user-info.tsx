@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Gender } from '../../redux-api/oppgave-state-types';
-import { User, UserItem, CopyFnrButton } from './styled-components';
-import { UserGender } from './user-gender';
-import { getFullNameWithFnr } from '../../domain/name';
-import { LabelMain } from '../../styled-components/labels';
-import { CopyIcon } from '../../icons/copy';
-import { Name } from '../../domain/types';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
+import React, { useRef, useState } from 'react';
+import { getFullNameWithFnr } from '../../domain/name';
+import { Name } from '../../domain/types';
+import { CopyIcon } from '../../icons/copy';
+import { Gender } from '../../redux-api/oppgave-state-types';
+import { LabelMain } from '../../styled-components/labels';
+import { CopyFnrButton, User, UserItem } from './styled-components';
+import { UserGender } from './user-gender';
 
 interface UserInfoProps {
   name: Name | null;
@@ -75,13 +75,14 @@ interface StrengtFortroligProps {
 }
 
 const Fortrolig = ({ fortrolig }: FortroligProps) =>
-  fortrolig ? (
+  fortrolig === true ? (
     <UserItem>
       <LabelMain>Fortrolig</LabelMain>
     </UserItem>
   ) : null;
+
 const StrengtFortrolig = ({ strengtFortrolig }: StrengtFortroligProps) =>
-  strengtFortrolig ? (
+  strengtFortrolig === true ? (
     <UserItem>
       <LabelMain>Strengt fortrolig</LabelMain>
     </UserItem>

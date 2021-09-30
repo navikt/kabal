@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { Dropdown } from './dropdown';
-import { StyledContainer, StyledButton } from './styled-components';
+import { StyledButton, StyledContainer } from './styled-components';
 
 export const User = () => {
   const { data: bruker } = useGetBrukerQuery();

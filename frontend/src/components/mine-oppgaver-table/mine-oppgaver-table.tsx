@@ -1,11 +1,11 @@
-import React from 'react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import React from 'react';
 import 'nav-frontend-tabell-style';
-import { LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { TableHeader } from './header';
 import { OppgaveRader } from './rows';
-import { StyledTableContainer, StyledTable, StyledCaption } from './styled-components';
+import { StyledCaption, StyledTable, StyledTableContainer } from './styled-components';
 
 const MAX_OPPGAVER = 100;
 

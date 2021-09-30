@@ -1,12 +1,11 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { LabelTema, LabelMain } from '../../styled-components/labels';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { ISettings, useUpdateSettingsMutation } from '../../redux-api/bruker';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import styled from 'styled-components';
 import { useAvailableTemaer } from '../../hooks/use-available-temaer';
 import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
+import { ISettings, useGetBrukerQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
+import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
+import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
@@ -23,7 +22,8 @@ export const Settings = () => {
     if (typeof userData === 'undefined' || updateState.isLoading) {
       return;
     }
-    const navIdent = userData.info.navIdent;
+
+    const { navIdent } = userData.info;
     updateSettings({ navIdent, ...settings });
   };
 
@@ -95,17 +95,14 @@ interface EtikettProps {
 const TypeEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
 );
-
 const TemaEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettTema tema={id} fixedWidth={true}>
     {useFullTemaNameFromId(id)}
   </StyledEtikettTema>
 );
-
 const HjemmelEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
 );
-
 const StyledEtikettMain = styled(LabelMain)`
   width: 100%;
 `;

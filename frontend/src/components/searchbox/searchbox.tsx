@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Search } from '@navikt/ds-icons';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface SearchBoxProps {

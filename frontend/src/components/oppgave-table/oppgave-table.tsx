@@ -1,27 +1,27 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import 'nav-frontend-tabell-style';
+import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
+import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
+import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import {
   LoadKlagebehandlingerParams,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
   useGetKlagebehandlingerQuery,
 } from '../../redux-api/oppgaver';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { TableHeaderFilters } from './filter-header';
-import { Filters } from './types';
 import { Pagination } from './pagination';
+import { OppgaveRader } from './rows';
 import {
   StyledFooter,
+  StyledTable,
   StyledTableContainer,
   StyledTableFooter,
   StyledTableStats,
-  StyledTable,
 } from './styled-components';
-import { OppgaveRader } from './rows';
-import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
-import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
+import { Filters } from './types';
 
 interface OppgaveTableParams {
   page: string;
@@ -113,6 +113,7 @@ const PageInfo: React.FC<PageInfoProps> = ({ total, fromNumber, toNumber }) => {
   if (total === 0) {
     return <span>Ingen klagebehandlinger å vise</span>;
   }
+
   return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;
 };
 

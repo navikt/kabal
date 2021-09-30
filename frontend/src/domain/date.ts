@@ -13,6 +13,7 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
   if (isoDateTime === null || !isoDateTimeRegex.test(isoDateTime)) {
     return null;
   }
+
   const [isoDate, isoTime] = isoDateTime.split('T');
   const prettyDate = isoDateToPretty(isoDate);
   const prettyTime = isoTimeToPretty(isoTime);
@@ -24,6 +25,7 @@ export const isoTimeToPretty = (isoTime: ISOTime | null): prettyTime | null => {
   if (isoTime === null || !isoTimeRegex.test(isoTime)) {
     return null;
   }
+
   return isoTime.split('.')[0];
 };
 
@@ -31,6 +33,7 @@ export const isoDateToPretty = (isoDate: ISODate | null): prettyDate | null => {
   if (isoDate === null || !isoDateRegex.test(isoDate)) {
     return null;
   }
+
   return isoDate.split('-').reverse().join('.');
 };
 
@@ -40,5 +43,6 @@ export const prettyDateToISO = (prettyDate: prettyDate | null): ISODate | null =
   if (prettyDate === null || !prettyRegex.test(prettyDate)) {
     return null;
   }
+
   return prettyDate.split('.').reverse().join('-');
 };

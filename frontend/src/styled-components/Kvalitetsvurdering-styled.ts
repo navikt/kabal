@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { Checkbox } from 'nav-frontend-skjema';
+import styled from 'styled-components';
 
 export const DokumentCheckbox = styled(Checkbox)`
   margin-top: 1em;

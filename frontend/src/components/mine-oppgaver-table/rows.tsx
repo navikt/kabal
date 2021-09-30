@@ -1,5 +1,5 @@
-import React from 'react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import React from 'react';
 import 'nav-frontend-tabell-style';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { Row } from './row';
@@ -21,6 +21,7 @@ export const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCoun
       </tbody>
     );
   }
+
   if (oppgaver.length === 0) {
     return (
       <tbody>
@@ -30,6 +31,7 @@ export const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCoun
       </tbody>
     );
   }
+
   return (
     <tbody>
       {oppgaver.map((k) => (

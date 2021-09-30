@@ -77,6 +77,7 @@ export const brukerApi = createApi({
             draft.innstillinger = settings;
           })
         );
+
         try {
           await queryFulfilled;
         } catch {

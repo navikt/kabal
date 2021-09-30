@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
-import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { isoDateToPretty } from '../../domene/datofunksjoner';
 import { Knapp } from 'nav-frontend-knapper';
-import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
-import { LabelMain, LabelTema, LabelMedunderskriver } from '../../styled-components/labels';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
+import { isoDateToPretty } from '../../domene/datofunksjoner';
+import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
+import { LabelMain, LabelMedunderskriver, LabelTema } from '../../styled-components/labels';
 
 export const Row: React.FC<IKlagebehandling> = ({
   id,
@@ -26,6 +26,7 @@ export const Row: React.FC<IKlagebehandling> = ({
     if (typeof userData === 'undefined') {
       return;
     }
+
     tildelSaksbehandler({
       oppgaveId: id,
       klagebehandlingVersjon,

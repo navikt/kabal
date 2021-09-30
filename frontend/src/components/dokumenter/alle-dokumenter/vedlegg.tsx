@@ -20,13 +20,13 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ vedlegg, dokument, tilknyttet, kanEndre, visDokument }) => {
-    const onCheck = (checked: boolean) => {
-      // const d: TilknyttetDokument = {
-      //   journalpostId: dokument.journalpostId,
-      //   dokumentInfoId: vedlegg.dokumentInfoId,
-      // };
-      // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
-    };
+    // const onCheck = (checked: boolean) => {
+    // const d: TilknyttetDokument = {
+    //   journalpostId: dokument.journalpostId,
+    //   dokumentInfoId: vedlegg.dokumentInfoId,
+    // };
+    // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
+    // };
 
     const onVisDokument = () =>
       visDokument({
@@ -45,7 +45,7 @@ export const Vedlegg = React.memo<VedleggProps>(
               label={''}
               disabled={!vedlegg.harTilgangTilArkivvariant || !kanEndre}
               defaultChecked={tilknyttet}
-              onChange={(e) => onCheck(e.currentTarget.checked)}
+              // onChange={(e) => onCheck(e.currentTarget.checked)}
             />
           </RightAlign>
         </DokumentSjekkboks>

@@ -70,9 +70,11 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
 
 const getSavedPdfWidth = () => {
   const localStorageVerdi = localStorage.getItem('valgtBreddeForhandsvisning');
+
   if (localStorageVerdi === null) {
     return MIN_PDF_WIDTH;
   }
+
   const parsed = Number.parseInt(localStorageVerdi, 10);
   return Number.isNaN(parsed) ? MIN_PDF_WIDTH : parsed;
 };

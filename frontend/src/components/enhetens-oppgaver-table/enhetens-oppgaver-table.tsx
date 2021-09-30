@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import React, { useState } from 'react';
 import 'nav-frontend-tabell-style';
-import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { TableHeaderFilters } from './filter-header';
-import { Filters } from './types';
-import { Row } from './row';
-import { StyledTableContainer, StyledTable } from './styled-components';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
+import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
+import { TableHeaderFilters } from './filter-header';
+import { Row } from './row';
+import { StyledTable, StyledTableContainer } from './styled-components';
+import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
 
@@ -41,9 +41,9 @@ export const EnhetensOppgaverTable: React.FC = () => {
           sortering: 'FRIST',
           rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
           erTildeltSaksbehandler: true,
-          temaer: temaer,
-          typer: typer,
-          hjemler: hjemler,
+          temaer,
+          typer,
+          hjemler,
           navIdent: bruker.info.navIdent,
           projeksjon: 'UTVIDET',
         };
@@ -78,6 +78,7 @@ const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver }) => {
       </tbody>
     );
   }
+
   if (oppgaver.length === 0) {
     return (
       <tbody>
@@ -87,6 +88,7 @@ const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver }) => {
       </tbody>
     );
   }
+
   return (
     <tbody>
       {oppgaver.map((k) => (

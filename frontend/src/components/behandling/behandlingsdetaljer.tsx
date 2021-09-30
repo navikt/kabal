@@ -55,7 +55,9 @@ const getKlagerNavn = ({ person, virksomhet }: IKlager): string => {
   }
 
   if (virksomhet !== null) {
-    return `${virksomhet.navn ?? ''} ${virksomhet.virksomhetsnummer ? `(${virksomhet.virksomhetsnummer})` : ''}`;
+    return `${virksomhet.navn ?? ''} ${
+      virksomhet.virksomhetsnummer === null ? '' : `(${virksomhet.virksomhetsnummer})`
+    }`;
   }
 
   return '';

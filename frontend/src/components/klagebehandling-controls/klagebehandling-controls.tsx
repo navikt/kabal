@@ -1,6 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
+import { SuccessIcon } from '../../icons/success';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
+import { PanelToggles } from '../klagebehandling/types';
+import { StyledExtLinkIcon } from '../show-document/styled-components';
 import {
   ControlPanel,
   ExternalLink,
@@ -8,12 +12,9 @@ import {
   KlagebehandlingTools,
   StyledSaveStatus,
 } from './styled-components';
-import { PanelToggles } from '../klagebehandling/types';
 import { PanelToggleButtons } from './toggle-buttons';
 import { UserInfo } from './user-info';
-import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
-import { StyledExtLinkIcon } from '../show-document/styled-components';
-import { SuccessIcon } from '../../icons/success';
+
 interface Params {
   id: string;
 }

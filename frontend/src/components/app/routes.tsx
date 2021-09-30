@@ -1,10 +1,10 @@
 import React from 'react';
-import { OppgaverPage } from '../../pages/oppgaver/oppgaver';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
-import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
-import { SearchPage } from '../../pages/search/search';
 import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
+import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
+import { OppgaverPage } from '../../pages/oppgaver/oppgaver';
+import { SearchPage } from '../../pages/search/search';
 import { SettingsPage } from '../../pages/settings/settings';
 
 export const Routes: React.FC = () => (

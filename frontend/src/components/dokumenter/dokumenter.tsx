@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { ShowDokument } from '../show-document/show-document';
-import { DocumentsContainer } from './styled-components/container';
-import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
+import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
 import { Header } from './header';
-import { IShownDokument } from '../show-document/types';
-import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
-import { useParams } from 'react-router-dom';
+import { DocumentsContainer } from './styled-components/container';
+import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
   shown: boolean;

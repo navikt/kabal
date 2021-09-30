@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Dokumenter } from '../dokumenter/dokumenter';
 import { Behandling } from '../behandling/behandling';
+import { Dokumenter } from '../dokumenter/dokumenter';
 import { PanelToggles } from '../klagebehandling/types';
-import { PanelContainer } from './panel';
 
 interface KlagebehandlingPanelsProps {
   toggles: PanelToggles;

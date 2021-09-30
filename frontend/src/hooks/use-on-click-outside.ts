@@ -15,6 +15,7 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
 
       if (event.target instanceof Node) {
         const { target } = event;
+
         if (children && Array.from(ref.current.children).every((e) => !e.contains(target))) {
           callback(event);
         } else if (!ref.current.contains(target)) {

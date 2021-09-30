@@ -18,6 +18,7 @@ export const SearchPage: React.FC = () => {
     if (bruker === undefined) {
       return;
     }
+
     personsoek({
       navIdent: bruker.info.navIdent,
       antall: 200,
@@ -38,7 +39,7 @@ export const SearchPage: React.FC = () => {
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [getPersonsoekUpdate, personsoek, setPersonsoekResultat]);
 
-  const isLoading = loader.isLoading;
+  const { isLoading } = loader;
 
   const displayToast = (feilmelding: string) =>
     toasterSett({

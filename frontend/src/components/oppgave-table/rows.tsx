@@ -1,5 +1,5 @@
-import React from 'react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import React from 'react';
 import 'nav-frontend-tabell-style';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { Row } from './row';

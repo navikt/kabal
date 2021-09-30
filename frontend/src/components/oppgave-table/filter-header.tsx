@@ -1,11 +1,11 @@
 import React from 'react';
-import { SortBy } from './sortby';
-import { Filters } from './types';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
-import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
+import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
+import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { SortBy } from './sortby';
 import { StyledTableHeader } from './styled-components';
+import { Filters } from './types';
 
 interface TableHeaderFiltersProps {
   onChange: (filters: Filters) => void;

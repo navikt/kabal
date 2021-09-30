@@ -1,6 +1,6 @@
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import { formattedDate } from '../../domene/datofunksjoner';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
 import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
@@ -25,6 +25,7 @@ export const TilknyttedeDokumenter = React.memo(
       if (typeof lagredeTilknyttedeDokumenter === 'undefined') {
         return [];
       }
+
       return lagredeTilknyttedeDokumenter.dokumenter
         .map((dokument) => ({
           dokument,
@@ -131,7 +132,6 @@ const Vedlegg = ({ journalpostId, vedlegg, visDokument }: VedleggProps) => (
     </TilknyttetKnapp>
   </Tilknyttet>
 );
-
 interface LoadingProps {
   loading: boolean;
 }

@@ -10,6 +10,7 @@ export const useCanEdit = (klagebehandlingId: string) => {
     if (typeof klagebehandling === 'undefined' || isLoading || typeof userData === 'undefined') {
       return false;
     }
+
     return (
       klagebehandling.tildeltSaksbehandlerident === userData.info.navIdent &&
       klagebehandling.avsluttetAvSaksbehandler === null

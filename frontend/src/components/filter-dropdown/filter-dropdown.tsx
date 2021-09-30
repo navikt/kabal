@@ -41,6 +41,10 @@ const Container = styled.section`
   position: relative;
 `;
 
+interface ToggleButtonTheme {
+  open: boolean;
+}
+
 const ToggleButton = styled.button`
   border: 1px solid #78706a;
   padding: 0 1.75rem 0 0.5rem;
@@ -71,14 +75,14 @@ const ToggleButton = styled.button`
   }
 
   ::before {
-    transform: ${({ theme }) =>
+    transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
       theme.open
         ? 'translateX(-3px) translateY(-50%) rotate(-45deg)'
         : 'translateX(-3px) translateY(-50%) rotate(45deg)'};
   }
 
   ::after {
-    transform: ${({ theme }) =>
+    transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
       theme.open
         ? 'translateX(1.5px) translateY(-50%) rotate(45deg)'
         : 'translateX(1.5px) translateY(-50%) rotate(-45deg)'};

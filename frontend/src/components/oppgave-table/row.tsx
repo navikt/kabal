@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
 import { Knapp } from 'nav-frontend-knapper';
+import React, { useCallback } from 'react';
+import { isoDateToPretty } from '../../domene/datofunksjoner';
+import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
-import { useTemaFromId, useTypeFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { isoDateToPretty } from '../../domene/datofunksjoner';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 
 export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
@@ -14,6 +14,7 @@ export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist
     if (typeof userData === 'undefined') {
       return;
     }
+
     tildelSaksbehandler({
       oppgaveId: id,
       klagebehandlingVersjon,

@@ -69,7 +69,7 @@ export interface IKlagebehandling {
   tildelt: string | null; // LocalDate
   tildeltSaksbehandlerident: string | null;
   type: string;
-  vedtak: Array<Vedtak>;
+  vedtak: Vedtak[];
   tilknyttedeDokumenter: TilknyttetDokument[];
   egenansatt: boolean;
   fortrolig: boolean;

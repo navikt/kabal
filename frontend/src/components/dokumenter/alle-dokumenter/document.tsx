@@ -5,8 +5,14 @@ import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
 import { LabelTema } from '../../../styled-components/labels';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
-import { DokumentDato, DokumentRad, RightAlign } from '../styled-components/fullvisning';
-import { DokumentCheckbox, DokumentSjekkboks, DokumentTittel } from '../styled-components/fullvisning';
+import {
+  DokumentCheckbox,
+  DokumentDato,
+  DokumentRad,
+  DokumentSjekkboks,
+  DokumentTittel,
+  RightAlign,
+} from '../styled-components/fullvisning';
 import { ITilknyttetDokument } from '../types';
 import { VedleggList } from './vedlegg-list';
 
@@ -21,13 +27,13 @@ export const Document = React.memo<DocumentProps>(
     const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
       visDokument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
 
-    const onCheck = (checked: boolean) => {
-      // const d: TilknyttetDokument = {
-      //   journalpostId: dokument.journalpostId,
-      //   dokumentInfoId: dokument.dokumentInfoId,
-      // };
-      // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
-    };
+    // const onCheck = (checked: boolean) => {
+    // const d: TilknyttetDokument = {
+    //   journalpostId: dokument.journalpostId,
+    //   dokumentInfoId: dokument.dokumentInfoId,
+    // };
+    // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
+    // };
 
     return (
       <DokumentRad>
@@ -43,7 +49,7 @@ export const Document = React.memo<DocumentProps>(
               label={''}
               disabled={!dokument.harTilgangTilArkivvariant || !kanEndre}
               defaultChecked={tilknyttet}
-              onChange={(e) => onCheck(e.currentTarget.checked)}
+              // onChange={(e) => onCheck(e.currentTarget.checked)}
             />
           </RightAlign>
         </DokumentSjekkboks>

@@ -18,11 +18,11 @@ export interface PersonSoekApiResponse {
   personer: IPersonResultat[];
 }
 
-interface TildelSaksbehandlerResponse {
-  klagebehandlingVersjon: number;
-  modified: Date;
-  tildelt: string;
-}
+// interface TildelSaksbehandlerResponse {
+//   klagebehandlingVersjon: number;
+//   modified: Date;
+//   tildelt: string;
+// }
 
 export interface Person {
   navn: string;
