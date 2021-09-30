@@ -1,6 +1,6 @@
+import { Name } from '../domain/types';
 import { IKodeverkVerdi } from './kodeverk';
 import { IKlagebehandlingOppdatering } from './oppgave-types';
-import { Name } from '../domain/types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -43,9 +43,7 @@ export interface IKlagebehandling {
   internVurdering: string;
   klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
-
   klager: IKlager;
-
   klagerFoedselsnummer: string | null;
   klagerKjoenn: Gender | null;
   klagerNavn: Name | null;
@@ -58,9 +56,7 @@ export interface IKlagebehandling {
   mottattFoersteinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
-
   sakenGjelder: IKlager;
-
   sakenGjelderFoedselsnummer: string | null;
   sakenGjelderKjoenn: Gender | null;
   sakenGjelderNavn: Name | null;
