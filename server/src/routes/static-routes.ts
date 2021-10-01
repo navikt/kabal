@@ -4,10 +4,6 @@ import { frontendDistDirectoryPath } from '../config/config';
 const router = express.Router();
 
 export const setupStaticRoutes = () => {
-  router.get('/internal/pdf.worker.js', (req, res) =>
-    res.status(200).sendFile('pdf.worker.js', { root: frontendDistDirectoryPath })
-  );
-
   router.get('/', (req, res) => {
     res.status(200).sendFile('index.html', { root: frontendDistDirectoryPath });
   });

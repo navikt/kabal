@@ -8,6 +8,7 @@ import { authMiddleware } from './auth/auth-middleware';
 import { callbackPath } from './config/azure-config';
 import { callbackHandler } from './auth/callback-handler';
 import { logoutHandler } from './auth/logout-handler';
+import { guardMiddleware } from './auth/guard-middleware';
 
 const PORT = serverConfig.port;
 
@@ -16,6 +17,7 @@ export const init = async (server: Express) => {
     const authClient = await getAzureClient();
     server.get(callbackPath, callbackHandler(authClient));
     server.get('/logout', logoutHandler(authClient));
+    server.use(['/api', '/assets', '/bundle.js', '/pdf.worker.js'], guardMiddleware(authClient));
     server.use(authMiddleware(authClient));
     server.use(setupProxy(authClient));
     server.use(setupStaticRoutes());
