@@ -20,7 +20,11 @@ export const authMiddleware =
     setSessionCookie(res, sessionId, signature); // Refresh the current session cookie on every request.
 
     try {
-      const access_token = await getAccessTokenWithRefresh(authClient, sessionId);
+      const internalAccessToken = req.headers['Authorization'];
+      const access_token =
+        typeof internalAccessToken === 'string'
+          ? internalAccessToken
+          : await getAccessTokenWithRefresh(authClient, sessionId);
       req.headers['Authorization'] = access_token;
       next();
     } catch (error) {

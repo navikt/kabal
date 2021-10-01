@@ -1,6 +1,5 @@
 import { Handler } from 'express';
 import { Client } from 'openid-client';
-import { loginRedirect } from './login-redirect';
 import { getSessionIdAndSignature, setSessionCookie } from './session-utils';
 import { getAccessTokenWithRefresh } from './tokens';
 
@@ -25,7 +24,7 @@ export const guardMiddleware =
       if (error instanceof Error || typeof error === 'string') {
         console.warn(error);
       }
-      loginRedirect(authClient, sessionId, res, req.originalUrl);
+      res.status(403).send();
       return;
     }
   };
