@@ -1,55 +1,76 @@
+import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { isoDateToPretty } from '../../domain/date';
 import { getFullName } from '../../domain/name';
 import { IKlagebehandling, IKlager } from '../../redux-api/oppgave-state-types';
+import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { Labels } from './labels';
-import { StyledHeader, StyledInfoDetails, StyledInfoLabel, StyledLeftContainer } from './styled-components';
+import { Lovhjemmel } from './lovhjemmel';
+import {
+  StyledBehandlingsdetaljer,
+  StyledFullfoerKlagebehandling,
+  StyledHeader,
+  StyledInfoChildren,
+  StyledInfoHeader,
+} from './styled-components';
+import { UtfallResultat } from './utfall';
 
 interface VenstreProps {
   klagebehandling: IKlagebehandling;
+  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
 }
 
-export const Behandlingsdetaljer = ({ klagebehandling }: VenstreProps) => {
+export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps) => {
   const {
     klager,
     type,
     tema,
     mottattFoersteinstans,
     fraNAVEnhetNavn,
+    fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraFoersteinstans,
+    vedtaket,
   } = klagebehandling;
 
   return (
-    <StyledLeftContainer>
+    <StyledBehandlingsdetaljer>
       <StyledHeader>Behandling</StyledHeader>
 
-      <Info label="Klager" details={getKlagerNavn(klager)} />
+      <Info label="Klager">{getKlagerName(klager)}</Info>
 
       <Labels typeId={type} temaId={tema} />
 
-      <Info label="Mottatt førsteinstans" details={isoDateToPretty(mottattFoersteinstans)} />
-      <Info label="Fra NAV-enhet" details={fraNAVEnhetNavn} />
-      <Info label="Mottatt klageinstans" details={isoDateToPretty(mottattKlageinstans)} />
+      <Info label="Mottatt førsteinstans">{isoDateToPretty(mottattFoersteinstans)}</Info>
+      <Info label="Fra NAV-enhet">
+        {fraNAVEnhetNavn} - {fraNAVEnhet}
+      </Info>
+      <Info label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</Info>
 
-      <Info label="Melding fra førsteinstans for intern bruk" details={kommentarFraFoersteinstans} />
-    </StyledLeftContainer>
+      <Info label="Melding fra førsteinstans for intern bruk">{kommentarFraFoersteinstans}</Info>
+
+      <UtfallResultat onChange={onChange} utfall={vedtaket.utfall} />
+      <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} />
+
+      <StyledFullfoerKlagebehandling>Fullfør klagebehandling</StyledFullfoerKlagebehandling>
+      <Knapp mini>Fullfør klagebehandling</Knapp>
+    </StyledBehandlingsdetaljer>
   );
 };
 
 interface InfoProps {
   label: string;
-  details: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const Info = ({ label, details = '' }: InfoProps) => (
-  <>
-    <StyledInfoLabel>{label}:</StyledInfoLabel>
-    <StyledInfoDetails>{details}</StyledInfoDetails>
-  </>
+const Info = ({ label, children }: InfoProps) => (
+  <label>
+    <StyledInfoHeader>{label}:</StyledInfoHeader>
+    <StyledInfoChildren>{children}</StyledInfoChildren>
+  </label>
 );
 
-const getKlagerNavn = ({ person, virksomhet }: IKlager): string => {
+const getKlagerName = ({ person, virksomhet }: IKlager): string => {
   if (person !== null) {
     return getFullName(person.navn);
   }

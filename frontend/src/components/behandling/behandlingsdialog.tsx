@@ -1,4 +1,4 @@
 import React from 'react';
-import { StyledHoeyreContainer } from './styled-components';
+import { StyledBehandlingsdialog } from './styled-components';
 
-export const Behandlingsdialog = () => <StyledHoeyreContainer />;
+export const Behandlingsdialog = () => <StyledBehandlingsdialog />;

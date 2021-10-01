@@ -11,8 +11,14 @@ export const StyledContainer = styled.div`
   height: 100%;
 `;
 
-export const StyledInfoLabel = styled.h2`
+export const StyledInfoHeader = styled.h2`
   margin: 1em 0 0;
+  font-size: 1em;
+  font-weight: bold;
+`;
+
+export const StyledInfoLabel = styled.h2`
+  margin: 0;
   font-size: 1em;
   font-weight: bold;
 `;
@@ -29,13 +35,36 @@ export const StyledLabel = styled.div`
   flex: 1;
 `;
 
-export const StyledLeftContainer = styled.div`
+export const StyledBehandlingsdetaljer = styled.div`
   border-right: 1px solid #c9c9c9;
   padding: 1em;
   height: 100%;
 `;
 
-export const StyledHoeyreContainer = styled.div`
+export const StyledBehandlingsdialog = styled.div`
   height: 100%;
   padding: 1em;
+`;
+
+export const StyledLabelLovhjemmel = styled.span`
+  margin-right: 0.5em;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+`;
+
+export const StyledInfoChildren = styled.div`
+  min-height: 2em;
+`;
+
+export const StyledUtfallResultat = styled.div`
+  margin-bottom: 1em;
+`;
+
+export const StyledFullfoerKlagebehandling = styled.h3`
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  font-size: 1.25em;
+  font-weight: bold;
 `;

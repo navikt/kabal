@@ -24,6 +24,12 @@ export const LabelHjemmel = styled(Label)`
   border: 1px solid #ba3a26;
 `;
 
+
+export const LabelLovhjemmel = styled(Label)`
+  background-color: #CCE1FF;
+  border: 1px solid #0067C5;
+`;
+
 export const LabelType = styled(Label)`
   background-color: white;
   border: 1px solid #ba3a26;

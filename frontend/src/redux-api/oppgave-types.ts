@@ -1,12 +1,12 @@
 import { ISettMedunderskriverResponse } from './medunderskrivere';
-import { IKlagebehandling, IVedlegg, Vedtak } from './oppgave-state-types';
+import { IKlagebehandling, IVedlegg } from './oppgave-state-types';
 
-export interface IKlagebehandlingOppdatering {
+export interface IKlagebehandlingUpdate {
   klagebehandlingId: string;
+  hjemler: string[];
   klagebehandlingVersjon: number;
-  internVurdering: string;
-  vedtak: Vedtak[];
   tilknyttedeDokumenter: TilknyttetDokument[];
+  utfall: string | null;
 }
 
 export interface TilknyttetDokument {

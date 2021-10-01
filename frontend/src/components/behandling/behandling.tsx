@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
+import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
+import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { PanelContainer } from '../klagebehandling-panels/panel';
 import { Behandlingsdetaljer } from './behandlingsdetaljer';
 import { Behandlingsdialog } from './behandlingsdialog';
@@ -9,24 +9,24 @@ import { StyledContainer } from './styled-components';
 
 interface BehandlingProps {
   shown: boolean;
+  klagebehandling?: IKlagebehandling;
+  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
+  isLoading: boolean;
 }
 
-export const Behandling = ({ shown }: BehandlingProps) => {
-  const { id } = useParams<{ id: string }>();
-  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(id);
+export const Behandling = ({ isLoading, shown, klagebehandling, onChange }: BehandlingProps) => {
+  if (!shown) {
+    return null;
+  }
 
   if (typeof klagebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
   }
 
-  if (!shown) {
-    return null;
-  }
-
   return (
-    <PanelContainer>
+    <PanelContainer width={40}>
       <StyledContainer>
-        <Behandlingsdetaljer klagebehandling={klagebehandling} />
+        <Behandlingsdetaljer klagebehandling={klagebehandling} onChange={onChange} />
         <Behandlingsdialog />
       </StyledContainer>
     </PanelContainer>

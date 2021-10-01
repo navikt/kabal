@@ -9,5 +9,4 @@ export const DocumentsContainer = styled.section<{ fullvisning: boolean }>`
   overflow-y: auto;
   overflow-x: hidden;
   min-width: ${({ fullvisning }) => (fullvisning ? '40em' : '16em')};
-  height: 100%;
 `;

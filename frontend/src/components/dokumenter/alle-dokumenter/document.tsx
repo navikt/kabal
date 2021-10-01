@@ -18,22 +18,15 @@ import { VedleggList } from './vedlegg-list';
 
 interface DocumentProps extends ITilknyttetDokument {
   klagebehandling: IKlagebehandling;
-  kanEndre: boolean;
+  canEdit: boolean;
   visDokument: (dokument: IShownDokument) => void;
+  onCheck: (document: IDokument, checked: boolean) => void;
 }
 
 export const Document = React.memo<DocumentProps>(
-  ({ dokument, tilknyttet, kanEndre, visDokument, klagebehandling }) => {
+  ({ dokument, tilknyttet, canEdit, visDokument, onCheck, klagebehandling }) => {
     const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
       visDokument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
-
-    // const onCheck = (checked: boolean) => {
-    // const d: TilknyttetDokument = {
-    //   journalpostId: dokument.journalpostId,
-    //   dokumentInfoId: dokument.dokumentInfoId,
-    // };
-    // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
-    // };
 
     return (
       <DokumentRad>
@@ -47,16 +40,16 @@ export const Document = React.memo<DocumentProps>(
           <RightAlign>
             <DokumentCheckbox
               label={''}
-              disabled={!dokument.harTilgangTilArkivvariant || !kanEndre}
+              disabled={!dokument.harTilgangTilArkivvariant || !canEdit}
               defaultChecked={tilknyttet}
-              // onChange={(e) => onCheck(e.currentTarget.checked)}
+              onChange={(e) => onCheck(dokument, e.currentTarget.checked)}
             />
           </RightAlign>
         </DokumentSjekkboks>
         <VedleggList
           dokument={dokument}
           klagebehandling={klagebehandling}
-          kanEndre={kanEndre}
+          kanEndre={canEdit}
           visDokument={visDokument}
         />
       </DokumentRad>
@@ -64,7 +57,7 @@ export const Document = React.memo<DocumentProps>(
   },
   (previous, next) =>
     previous.tilknyttet === next.tilknyttet &&
-    previous.kanEndre === next.kanEndre &&
+    previous.canEdit === next.canEdit &&
     dokumentMatcher(previous.dokument, next.dokument)
 );
 

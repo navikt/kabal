@@ -11,7 +11,6 @@ interface BeholderProps {
 export const Container = styled.section<BeholderProps>`
   display: block;
   min-width: ${(props) => props.width}px;
-  height: 100%;
   margin: 0.25em 0.5em;
   background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
+import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { ShowDokument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
@@ -10,15 +11,14 @@ import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
   shown: boolean;
-  // settFullvisning: (fullvisning: boolean) => void;
-  // fullvisning: boolean;
+  onCheck: (update: Partial<IKlagebehandlingUpdate>) => void;
 }
 
 interface Params {
   id: string;
 }
 
-export const Dokumenter = ({ shown }: DokumenterProps) => {
+export const Dokumenter = ({ shown, onCheck }: DokumenterProps) => {
   const { id } = useParams<Params>();
   const [fullView, setFullView] = useState(true);
   const [dokument, settDokument] = useState<IShownDokument | null>(null);
@@ -44,7 +44,12 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
           visDokument={settDokument}
           tilknyttedeDokumenter={klagebehandling.tilknyttedeDokumenter}
         />
-        <AlleDokumenter skjult={!fullView} visDokument={settDokument} klagebehandling={klagebehandling} />
+        <AlleDokumenter
+          skjult={!fullView}
+          visDokument={settDokument}
+          klagebehandling={klagebehandling}
+          onChange={(tilknyttedeDokumenter) => onCheck({ tilknyttedeDokumenter })}
+        />
       </DocumentsContainer>
       <ShowDokument dokument={dokument} klagebehandlingId={klagebehandling.id} close={() => settDokument(null)} />
     </>

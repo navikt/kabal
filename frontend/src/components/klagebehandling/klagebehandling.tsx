@@ -8,6 +8,7 @@ export const Klagebehandling = () => {
     documents: true,
     brevutforming: true,
     behandling: true,
+    kvalitetsvurdering: true,
   });
 
   const setPanel = (panel: keyof PanelToggles, checked: boolean) => setPanelToggles({ ...toggles, [panel]: checked });

@@ -12,5 +12,8 @@ export const PanelContainer = styled.section<PanelContainerProps>`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: auto;
+  white-space: nowrap;
 `;

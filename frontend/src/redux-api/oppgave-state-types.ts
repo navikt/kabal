@@ -1,6 +1,6 @@
 import { Name } from '../domain/types';
 import { IKodeverkVerdi } from './kodeverk';
-import { IKlagebehandlingOppdatering } from './oppgave-types';
+import { IKlagebehandlingUpdate } from './oppgave-types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -9,7 +9,7 @@ export enum Gender {
 
 export interface IKlagebehandlingState {
   opptatt: boolean;
-  lagretVersjon: IKlagebehandlingOppdatering | null;
+  lagretVersjon: IKlagebehandlingUpdate | null;
   error: string | null;
   klagebehandling: IKlagebehandling | null;
 }
@@ -70,6 +70,7 @@ export interface IKlagebehandling {
   tildeltSaksbehandlerident: string | null;
   type: string;
   vedtak: Vedtak[];
+  vedtaket: Vedtak;
   tilknyttedeDokumenter: TilknyttetDokument[];
   egenansatt: boolean;
   fortrolig: boolean;
