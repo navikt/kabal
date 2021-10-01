@@ -1,7 +1,7 @@
 {
-  "name": "nav-frontend-example-webpack",
+  "name": "kabal",
   "version": "0.0.1",
-  "description": "Webpack setup for frontendprosjekter",
+  "description": "KABAL - Klage og Anke Behandling",
   "main": "index.tsx",
   "scripts": {
     "clean": "rimraf dist",
@@ -14,7 +14,7 @@
     "testcov": "jest --coverage --no-cache",
     "lint": "npx eslint src --color",
     "lint-fix": "npx eslint src --color --fix",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "jest": {
     "collectCoverage": true,
@@ -23,7 +23,6 @@
       "html"
     ]
   },
-  "author": "SA <sven.anders.robbestad@nav.no>",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.15.0",
