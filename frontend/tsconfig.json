@@ -17,6 +17,6 @@
     "jsx": "react"
   },
   "outDir": "./dist",
-  "include": ["src"],
+  "include": ["./src"],
   "exclude": ["./dist/**"]
 }

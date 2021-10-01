@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["komponenter/", "tilstand/", "domene/", "stilark/", "utility/", "styled-components/"],
+  "ignorePatterns": ["/*.*", "komponenter/", "tilstand/", "domene/", "stilark/", "utility/", "styled-components/"],
   "extends": [
     "prettier",
     "eslint:recommended",

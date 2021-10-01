@@ -14,6 +14,7 @@
     "testcov": "jest --coverage --no-cache",
     "lint": "npx eslint src --color",
     "lint-fix": "npx eslint src --color --fix",
+    "lint-staged": "npx lint-staged",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "jest": {
