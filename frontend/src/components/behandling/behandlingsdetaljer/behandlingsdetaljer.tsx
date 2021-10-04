@@ -1,18 +1,18 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
-import { isoDateToPretty } from '../../domain/date';
-import { getFullName } from '../../domain/name';
-import { IKlagebehandling, IKlager } from '../../redux-api/oppgave-state-types';
-import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
-import { Labels } from './labels';
-import { Lovhjemmel } from './lovhjemmel';
+import { isoDateToPretty } from '../../../domain/date';
+import { getFullName } from '../../../domain/name';
+import { IKlagebehandling, IKlager } from '../../../redux-api/oppgave-state-types';
+import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
 import {
   StyledBehandlingsdetaljer,
   StyledFullfoerKlagebehandling,
   StyledHeader,
   StyledInfoChildren,
   StyledInfoHeader,
-} from './styled-components';
+} from '../styled-components';
+import { Labels } from './labels';
+import { Lovhjemmel } from './lovhjemmel';
 import { UtfallResultat } from './utfall';
 
 interface VenstreProps {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
-import { LabelTema, LabelType } from '../../styled-components/labels';
-import { StyledInfoDetails, StyledInfoLabel, StyledLabel, StyledLabels } from './styled-components';
+import { useTemaFromId, useTypeFromId } from '../../../hooks/use-kodeverk-ids';
+import { LabelTema, LabelType } from '../../../styled-components/labels';
+import { StyledInfoDetails, StyledInfoLabel, StyledLabel, StyledLabels } from '../styled-components';
 
 interface LabelsProps {
   typeId: string;

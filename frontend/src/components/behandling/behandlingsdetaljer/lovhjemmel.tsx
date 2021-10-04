@@ -1,11 +1,11 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { MultipleChoiceHeader } from '../../komponenter/Klagebehandling/Behandlingsdetaljer/Kvalitetsskjema/MultipleChoiceHeader';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
-import { LabelLovhjemmel } from '../../styled-components/labels';
-import { Filter } from '../../tilstand/moduler/oppgave';
-import { StyledLabelLovhjemmel } from './styled-components';
+import { MultipleChoiceHeader } from '../../../komponenter/Klagebehandling/Behandlingsdetaljer/Kvalitetsskjema/MultipleChoiceHeader';
+import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
+import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
+import { LabelLovhjemmel } from '../../../styled-components/labels';
+import { Filter } from '../../../tilstand/moduler/oppgave';
+import { StyledLabelLovhjemmel } from '../styled-components';
 
 interface HjemmelProps {
   onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;

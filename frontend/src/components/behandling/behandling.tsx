@@ -3,8 +3,8 @@ import React from 'react';
 import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
 import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { PanelContainer } from '../klagebehandling-panels/panel';
-import { Behandlingsdetaljer } from './behandlingsdetaljer';
-import { Behandlingsdialog } from './behandlingsdialog';
+import { Behandlingsdetaljer } from './behandlingsdetaljer/behandlingsdetaljer';
+import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledContainer } from './styled-components';
 
 interface BehandlingProps {

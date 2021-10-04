@@ -1,9 +1,9 @@
 import { Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
-import { StyledUtfallResultat } from './styled-components';
+import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
+import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
+import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {
   onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
