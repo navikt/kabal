@@ -50,11 +50,6 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
         isLoading={isLoading}
       />
       <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
-
-      {/*
-      <Kvalitetsvurdering skjult={!faner.kvalitetsvurdering.checked} klagebehandling={klagebehandling} />
-      <FullforVedtak skjult={!faner.vedtak.checked} klagebehandling={klagebehandling} />
-    */}
     </PageContainer>
   );
 };
@@ -62,14 +57,14 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
 const PageContainer = styled.main`
   display: flex;
   margin: 0 0.25em 0 0;
-  height: calc(100% - 3em);
+  height: calc(100vh - 9em);
   overflow-x: scroll;
   overflow-y: hidden;
-  padding-bottom: 0.5em;
+  padding-bottom: 1em;
   padding-left: 8px;
   padding-right: 8px;
 
   @media screen and (max-width: 1400px) {
-    height: calc(100% - 6.25em);
+    height: calc(100vh - 6.25em);
   }
 `;

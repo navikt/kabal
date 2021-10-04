@@ -17,6 +17,7 @@ export const Container = styled.section<BeholderProps>`
   border-radius: 4px;
   position: relative;
   overflow: hidden;
+  height: 100%;
 `;
 
 export const StyledHeaderButton = styled.button`
@@ -43,16 +44,18 @@ export const Header = styled.div`
 `;
 
 const iconStyle = css`
-  color: black;
-  cursor: pointer;
-  margin: 0.25em 1em 0 0.2em;
-  -webkit-transition: all 0.15s ease-in-out;
-  transition: all 0.15s ease-in-out;
-  width: 1em;
-  height: 1em;
+  & {
+    color: black;
+    cursor: pointer;
+    margin: 0.25em 1em 0 0.2em;
+    -webkit-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    width: 1em;
+    height: 1em;
 
-  &:hover {
-    transform: scale(1.1);
+    :hover {
+      transform: scale(1.1);
+    }
   }
 `;
 

@@ -15,5 +15,6 @@ export const PanelContainer = styled.section<PanelContainerProps>`
   overflow-x: hidden;
   overflow-y: auto;
   width: auto;
+  height: 100%;
   white-space: nowrap;
 `;
