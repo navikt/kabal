@@ -79,6 +79,7 @@
     "eqeqeq": "error",
     "radix": ["error", "always"],
     "yoda": ["error", "never"],
+    "no-useless-rename": "error",
     "no-useless-return": "error",
     "no-else-return": "error",
     "array-callback-return": "error",
