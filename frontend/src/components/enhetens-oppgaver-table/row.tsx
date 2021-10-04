@@ -7,7 +7,7 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { LabelMain, LabelMedunderskriver, LabelTema } from '../../styled-components/labels';
 
-export const Row: React.FC<IKlagebehandling> = ({
+export const Row = ({
   id,
   type,
   tema,
@@ -18,7 +18,7 @@ export const Row: React.FC<IKlagebehandling> = ({
   person,
   tildeltSaksbehandlerNavn,
   harMedunderskriver,
-}) => {
+}: IKlagebehandling): JSX.Element => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 

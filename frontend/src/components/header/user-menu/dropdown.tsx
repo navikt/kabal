@@ -15,7 +15,7 @@ interface DropdownProps {
   close: () => void;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ open, close }) => {
+export const Dropdown = ({ open, close }: DropdownProps): JSX.Element | null => {
   const { data: userData } = useGetBrukerQuery();
   const [setValgtEnhet] = useSetValgtEnhetMutation();
 

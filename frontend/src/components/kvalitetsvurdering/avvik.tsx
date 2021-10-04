@@ -1,7 +1,7 @@
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKvalitetsvurderingQuery, useUpdateKvalitetsvurderingMutation } from '../../redux-api/kvalitetsvurdering';
 import { CheckboxWithHelpIcon, FormSection, SubHeader } from './styled-components';
 
@@ -10,8 +10,8 @@ interface AvvikProps {
 }
 
 export const Avvik = ({ show }: AvvikProps) => {
-  const { id } = useParams<{ id: string }>();
-  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
 
   if (!show || typeof kvalitetsvurdering === 'undefined') {

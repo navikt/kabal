@@ -7,7 +7,7 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 
-export const Row: React.FC<IKlagebehandling> = ({
+export const Row = ({
   id,
   type,
   tema,
@@ -16,7 +16,7 @@ export const Row: React.FC<IKlagebehandling> = ({
   klagebehandlingVersjon,
   person,
   ageKA,
-}) => {
+}: IKlagebehandling): JSX.Element => {
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 

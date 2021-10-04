@@ -1,9 +1,9 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKvalitetsvurderingQuery } from '../../redux-api/kvalitetsvurdering';
 import { PanelContainer } from '../klagebehandling-panels/panel';
-import { Annet } from './annet';
+import { Annet } from './annet/annet';
 import { Avvik } from './avvik';
 import { Oversendelsesbrev } from './oversendelsesbrev/oversendelsesbrev';
 import { Header, KvalitetsVurderingContainer } from './styled-components';
@@ -15,8 +15,8 @@ interface KvalitetsvurderingProps {
 }
 
 export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Element | null => {
-  const { id } = useParams<{ id: string }>();
-  const { data: kvalitetsvurdering, isLoading } = useGetKvalitetsvurderingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: kvalitetsvurdering, isLoading } = useGetKvalitetsvurderingQuery(klagebehandlingId);
 
   if (!shown) {
     return null;
@@ -33,9 +33,9 @@ export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Elem
     kvalitetsvurdering.kvalitetUtredningBra === true || kvalitetsvurdering.kvalitetVedtakBra === true;
 
   return (
-    <PanelContainer width={47}>
+    <PanelContainer width={50}>
       <KvalitetsVurderingContainer>
-        <Header>Kvalitetsskjema</Header>
+        <Header>Kvalitetsvurdering</Header>
         <Oversendelsesbrev />
         <Utredning />
         <Vedtak />

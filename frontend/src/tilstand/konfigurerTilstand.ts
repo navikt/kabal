@@ -9,6 +9,7 @@ import { brukerApi } from '../redux-api/bruker';
 import { klagebehandlingApi } from '../redux-api/oppgave';
 import { dokumenterApi } from '../redux-api/dokumenter/api';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
+import { medunderskrivereApi } from '../redux-api/medunderskrivere';
 
 const dependencies = {
   ajax,
@@ -40,7 +41,8 @@ const reduxStore = configureStore({
       brukerApi.middleware,
       klagebehandlingApi.middleware,
       dokumenterApi.middleware,
-      kvalitetsvurderingApi.middleware
+      kvalitetsvurderingApi.middleware,
+      medunderskrivereApi.middleware
     ]),
 });
 

@@ -9,7 +9,7 @@ interface Props {
   currentPage: number;
 }
 
-export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage = 1 }) => {
+export const Pagination = ({ total, pageSize = 10, currentPage = 1 }: Props): JSX.Element | null => {
   const pages = usePagination(total, pageSize, currentPage);
 
   if (total === 0) {
@@ -20,7 +20,7 @@ export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage 
     <div>
       {pages.map((p) =>
         typeof p === 'string' ? (
-          '...'
+          p
         ) : (
           <PageLink key={p.toString()} to={p.toString()}>
             {p}
@@ -32,10 +32,13 @@ export const Pagination: React.FC<Props> = ({ total, pageSize = 10, currentPage 
 };
 
 const PageLink = styled(NavLink)`
+  display: inline-block;
   padding: 0.5em;
   color: black;
   text-decoration: none;
-  border-radius: 0.2em;
+  border-radius: 4px;
+  min-width: 3em;
+  text-align: center;
 
   :hover {
     background: rgba(0, 103, 197, 0.5);

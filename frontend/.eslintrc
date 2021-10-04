@@ -79,6 +79,8 @@
     "eqeqeq": "error",
     "radix": ["error", "always"],
     "yoda": ["error", "never"],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
     "no-useless-rename": "error",
     "no-useless-return": "error",
     "no-else-return": "error",

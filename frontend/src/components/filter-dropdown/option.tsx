@@ -5,9 +5,10 @@ interface FilterProps {
   onChange: (id: string | null, active: boolean) => void;
   active: boolean;
   filterId?: string | null;
+  children: React.ReactNode;
 }
 
-export const Filter: React.FC<FilterProps> = ({ active, filterId = null, children, onChange }) => (
+export const Filter = ({ active, filterId = null, children, onChange }: FilterProps): JSX.Element => (
   <StyledLabel>
     <StyledInput type="checkbox" checked={active} onChange={(event) => onChange(filterId, event.target.checked)} />
     {children}

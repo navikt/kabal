@@ -6,7 +6,7 @@ import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledInfoChildren, StyledInfoHeader } from '../styled-components';
 import { FullfoerKlagebehandling } from './fullfoer-klagebehandling';
 import { Labels } from './labels';
-// import { Lovhjemmel } from './lovhjemmel';
+import { Lovhjemmel } from './lovhjemmel';
 import { UtfallResultat } from './utfall-resultat';
 
 interface VenstreProps {
@@ -45,7 +45,7 @@ export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps)
 
       <UtfallResultat onChange={onChange} utfall={vedtaket.utfall} />
 
-      {/* <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} /> */}
+      <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} />
 
       <FullfoerKlagebehandling />
     </StyledBehandlingsdetaljer>

@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Nav } from '../components/nav/nav';
 
-export const OppgaverPageWrapper: React.FC = ({ children }) => (
+interface OppgaverPageWrapperProps {
+  children: React.ReactNode;
+}
+
+export const OppgaverPageWrapper = ({ children }: OppgaverPageWrapperProps): JSX.Element => (
   <>
     <Nav />
     <main>

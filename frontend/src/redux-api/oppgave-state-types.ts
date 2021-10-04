@@ -1,6 +1,6 @@
 import { Name } from '../domain/types';
 import { IKodeverkVerdi } from './kodeverk';
-import { IKlagebehandlingUpdate } from './oppgave-types';
+import { IDocumentReference, IKlagebehandlingUpdate } from './oppgave-types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -71,14 +71,9 @@ export interface IKlagebehandling {
   type: string;
   vedtak: Vedtak[];
   vedtaket: Vedtak;
-  tilknyttedeDokumenter: TilknyttetDokument[];
+  tilknyttedeDokumenter: IDocumentReference[];
   egenansatt: boolean;
   fortrolig: boolean;
-}
-
-export interface TilknyttetDokument {
-  journalpostId: string;
-  dokumentInfoId: string;
 }
 
 export interface Vedtak {

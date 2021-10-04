@@ -21,12 +21,6 @@ export const SubHeader = styled.h2`
   font-weight: bold;
 `;
 
-export const FormLabel = styled.h2`
-  margin: 1em 0 0;
-  font-size: 1em;
-  font-weight: bold;
-`;
-
 export const RadioButtonsRow = styled.div`
   display: flex;
   justify-content: space-between;

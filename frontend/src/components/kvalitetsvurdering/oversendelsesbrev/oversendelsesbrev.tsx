@@ -1,7 +1,7 @@
 import { Radio } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import {
   useGetKvalitetsvurderingQuery,
   useUpdateKvalitetsvurderingMutation,
@@ -11,8 +11,8 @@ import { OversendelsesbrevKvalitetsavvikReasons } from './oversendelsesbrevAvvik
 import { OversendelsesbrevComments } from './oversendelsesbrevComments';
 
 export const Oversendelsesbrev = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: kvalitetsvurdering, isLoading } = useGetKvalitetsvurderingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: kvalitetsvurdering, isLoading } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {

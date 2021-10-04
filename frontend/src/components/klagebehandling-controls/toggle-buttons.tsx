@@ -33,7 +33,7 @@ interface TogglePanelButtonProps {
 }
 
 const TogglePanelButton = ({ setPanel, children, checked, panel }: TogglePanelButtonProps): JSX.Element => (
-  <Switch checked={checked} onChange={(checked) => setPanel(panel, checked)}>
+  <Switch checked={checked} onChange={(isChecked) => setPanel(panel, isChecked)}>
     {children}
   </Switch>
 );

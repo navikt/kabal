@@ -6,7 +6,7 @@ interface SearchBoxProps {
   onChange: (query: string) => void;
 }
 
-export const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => {
+export const SearchBox = ({ onChange }: SearchBoxProps): JSX.Element => {
   const [query, setQuery] = useState<string>('');
 
   return (

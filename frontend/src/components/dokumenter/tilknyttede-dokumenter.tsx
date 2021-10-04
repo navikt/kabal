@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { formattedDate } from '../../domene/datofunksjoner';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
 import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
-import { TilknyttetDokument } from '../../redux-api/oppgave-types';
+import { IDocumentReference } from '../../redux-api/oppgave-types';
 import { IShownDokument } from '../show-document/types';
 import { dokumentMatcher } from './helpers';
 import { DokumenterMinivisning, Tilknyttet, TilknyttetDato, TilknyttetKnapp } from './styled-components/minivisning';
@@ -12,29 +12,29 @@ import { ITilknyttetDokument } from './types';
 
 interface TilknyttedeDokumenterProps {
   klagebehandlingId: string;
-  skjult: boolean;
-  tilknyttedeDokumenter: TilknyttetDokument[];
-  visDokument: (dokument: IShownDokument) => void;
+  show: boolean;
+  tilknyttedeDokumenter: IDocumentReference[];
+  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const TilknyttedeDokumenter = React.memo(
-  ({ klagebehandlingId, visDokument, tilknyttedeDokumenter, skjult }: TilknyttedeDokumenterProps) => {
+  ({ klagebehandlingId, setShownDocument, tilknyttedeDokumenter, show }: TilknyttedeDokumenterProps) => {
     const { data: lagredeTilknyttedeDokumenter, isLoading } = useGetTilknyttedeDokumenterQuery(klagebehandlingId);
 
-    const dokumenter = useMemo<ITilknyttetDokument[]>(() => {
+    const documents = useMemo<ITilknyttetDokument[]>(() => {
       if (typeof lagredeTilknyttedeDokumenter === 'undefined') {
         return [];
       }
 
       return lagredeTilknyttedeDokumenter.dokumenter
-        .map((dokument) => ({
-          dokument,
-          tilknyttet: tilknyttedeDokumenter.some((t) => dokumentMatcher(t, dokument)),
+        .map((document) => ({
+          document,
+          tilknyttet: tilknyttedeDokumenter.some((t) => dokumentMatcher(t, document)),
         }))
-        .filter(({ dokument, tilknyttet }) => tilknyttet || dokument.vedlegg.length !== 0);
+        .filter(({ document, tilknyttet }) => tilknyttet || document.vedlegg.length !== 0);
     }, [tilknyttedeDokumenter, lagredeTilknyttedeDokumenter]);
 
-    if (skjult || dokumenter.length === 0) {
+    if (!show || documents.length === 0) {
       return null;
     }
 
@@ -42,13 +42,13 @@ export const TilknyttedeDokumenter = React.memo(
       <Container>
         <Loading loading={isLoading} />
         <DokumenterMinivisning>
-          {dokumenter.map(({ dokument, tilknyttet }) => (
+          {documents.map(({ document: dokument, tilknyttet }) => (
             <Tilknyttet key={dokument.journalpostId + dokument.dokumentInfoId}>
               <TilknyttetDato dateTime={dokument.registrert}>{formattedDate(dokument.registrert)}</TilknyttetDato>
               <TilknyttetKnapp
                 tilknyttet={tilknyttet}
                 onClick={() =>
-                  visDokument({
+                  setShownDocument({
                     journalpostId: dokument.journalpostId,
                     dokumentInfoId: dokument.dokumentInfoId,
                     tittel: dokument.tittel,
@@ -62,7 +62,7 @@ export const TilknyttedeDokumenter = React.memo(
                 journalpostId={dokument.journalpostId}
                 vedleggListe={dokument.vedlegg}
                 tilknyttedeDokumenter={tilknyttedeDokumenter}
-                visDokument={visDokument}
+                visDokument={setShownDocument}
               />
             </Tilknyttet>
           ))}
@@ -70,7 +70,7 @@ export const TilknyttedeDokumenter = React.memo(
       </Container>
     );
   },
-  (previous, next) => previous.skjult === next.skjult && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
+  (previous, next) => previous.show === next.show && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
 );
 
 TilknyttedeDokumenter.displayName = 'TilknyttedeDokumenter';
@@ -81,7 +81,7 @@ const Container = styled.div`
 
 interface VedleggListeProps {
   vedleggListe: IDokumentVedlegg[];
-  tilknyttedeDokumenter: TilknyttetDokument[];
+  tilknyttedeDokumenter: IDocumentReference[];
   journalpostId: string;
   visDokument: (dokument: IShownDokument) => void;
 }

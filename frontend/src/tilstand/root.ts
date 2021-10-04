@@ -20,6 +20,7 @@ import { kodeverkApi } from '../redux-api/kodeverk';
 import { brukerApi } from '../redux-api/bruker';
 import { dokumenterApi } from '../redux-api/dokumenter/api';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
+import { medunderskrivereApi } from '../redux-api/medunderskrivere';
 
 const rootReducer = combineReducers({
   klagebehandlinger,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   [klagebehandlingApi.reducerPath]: klagebehandlingApi.reducer,
   [dokumenterApi.reducerPath]: dokumenterApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
+  [medunderskrivereApi.reducerPath]: medunderskrivereApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

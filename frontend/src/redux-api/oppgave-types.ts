@@ -5,11 +5,11 @@ export interface IKlagebehandlingUpdate {
   klagebehandlingId: string;
   hjemler: string[];
   klagebehandlingVersjon: number;
-  tilknyttedeDokumenter: TilknyttetDokument[];
+  tilknyttedeDokumenter: IDocumentReference[];
   utfall: string | null;
 }
 
-export interface TilknyttetDokument {
+export interface IDocumentReference {
   journalpostId: string;
   dokumentInfoId: string;
 }

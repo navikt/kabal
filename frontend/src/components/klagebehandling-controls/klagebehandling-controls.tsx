@@ -1,6 +1,6 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { SuccessIcon } from '../../icons/success';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { PanelToggles } from '../klagebehandling/types';
@@ -15,18 +15,14 @@ import {
 import { PanelToggleButtons } from './toggle-buttons';
 import { UserInfo } from './user-info';
 
-interface Params {
-  id: string;
-}
-
 interface KlagebehandlingControlsProps {
   toggles: PanelToggles;
   setPanel: (panel: keyof PanelToggles, checked: boolean) => void;
 }
 
 export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingControlsProps) => {
-  const { id } = useParams<Params>();
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
 
   if (typeof klagebehandling === 'undefined') {
     return <ControlPanel>Laster...</ControlPanel>;

@@ -4,7 +4,8 @@ import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
 import { IDokument } from '../../../redux-api/dokumenter/types';
-import { IKlagebehandling, TilknyttetDokument } from '../../../redux-api/oppgave-state-types';
+import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
+import { IDocumentReference } from '../../../redux-api/oppgave-types';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
@@ -15,13 +16,13 @@ import { LoadMore } from './load-more';
 
 interface AlleDokumenterProps {
   klagebehandling: IKlagebehandling;
-  skjult: boolean;
-  visDokument: (dokument: IShownDokument) => void;
-  onChange: (tilknyttedeDokumenter: TilknyttetDokument[]) => void;
+  show: boolean;
+  setShownDocument: (document: IShownDokument) => void;
+  onChange: (tilknyttedeDokumenter: IDocumentReference[]) => void;
 }
 
 export const AlleDokumenter = React.memo(
-  ({ klagebehandling, skjult, visDokument, onChange }: AlleDokumenterProps) => {
+  ({ klagebehandling, show, setShownDocument, onChange }: AlleDokumenterProps) => {
     const [pageReference, setPageReference] = useState<string | null>(null);
     const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
@@ -40,13 +41,13 @@ export const AlleDokumenter = React.memo(
         return [];
       }
 
-      return alleDokumenter.dokumenter.map((dokument) => ({
-        dokument,
-        tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, dokument)),
+      return alleDokumenter.dokumenter.map((document) => ({
+        document,
+        tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, document)),
       }));
     }, [alleDokumenter, klagebehandling.tilknyttedeDokumenter]);
 
-    if (skjult) {
+    if (!show) {
       return null;
     }
 
@@ -74,13 +75,13 @@ export const AlleDokumenter = React.memo(
         </FilterDropdown>
 
         <List data-testid={'dokumenter'}>
-          {dokumenter.map(({ dokument, tilknyttet }) => (
+          {dokumenter.map(({ document: dokument, tilknyttet }) => (
             <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
               <Document
                 canEdit={canEdit}
-                dokument={dokument}
+                document={dokument}
                 tilknyttet={tilknyttet}
-                visDokument={visDokument}
+                visDokument={setShownDocument}
                 klagebehandling={klagebehandling}
                 onCheck={onCheck}
               />
@@ -92,9 +93,9 @@ export const AlleDokumenter = React.memo(
     );
   },
   (previous, next) =>
-    previous.skjult === next.skjult &&
+    previous.show === next.show &&
     previous.klagebehandling.id === next.klagebehandling.id &&
-    previous.visDokument === next.visDokument
+    previous.setShownDocument === next.setShownDocument
 );
 
 AlleDokumenter.displayName = 'AlleDokumenter';

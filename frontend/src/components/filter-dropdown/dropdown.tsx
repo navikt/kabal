@@ -10,7 +10,7 @@ interface DropdownProps {
   open: boolean;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ selected, options, open, onChange }) => {
+export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): JSX.Element | null => {
   const allSelected = useMemo(() => selected.length === options.length, [selected.length, options.length]);
 
   if (!open) {

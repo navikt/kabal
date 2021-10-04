@@ -1,7 +1,8 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useGetKlagebehandlingQuery, useUpdateKlagebehandlingMutation } from '../../redux-api/oppgave';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
+import { useKlagebehandlingUpdater } from '../../hooks/use-klagebehandling-update';
+import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { Behandling } from '../behandling/behandling';
 import { Dokumenter } from '../dokumenter/dokumenter';
@@ -13,32 +14,34 @@ interface KlagebehandlingPanelsProps {
 }
 
 export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => {
-  //   const [fullvisning, settFullvisning] = useState<boolean>(true);
-  //   useKlagebehandlingUpdater(klagebehandling);
-  const { id } = useParams<{ id: string }>();
-  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(id);
-  const [updateKlagebehandling, updateState] = useUpdateKlagebehandlingMutation();
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const [stateUpdate, setUpdate] = useState<IKlagebehandlingUpdate | null>(null);
 
-  const onChange = (update: Partial<IKlagebehandlingUpdate>) => {
-    if (typeof klagebehandling === 'undefined') {
-      return;
-    }
+  useKlagebehandlingUpdater(klagebehandlingId, stateUpdate);
 
-    const fullUpdate: IKlagebehandlingUpdate = {
-      klagebehandlingId: klagebehandling.id,
-      hjemler: klagebehandling.hjemler,
-      tilknyttedeDokumenter: klagebehandling.tilknyttedeDokumenter,
-      utfall: klagebehandling.vedtaket.utfall,
-      ...update,
-      klagebehandlingVersjon: klagebehandling.klagebehandlingVersjon,
-    };
+  const onChange = useCallback(
+    (update: Partial<IKlagebehandlingUpdate>) => {
+      if (typeof klagebehandling === 'undefined') {
+        return;
+      }
 
-    if (updateState.isLoading) {
-      return;
-    }
+      console.debug('UPDATE', klagebehandling.klagebehandlingVersjon, update);
 
-    updateKlagebehandling(fullUpdate);
-  };
+      const fullUpdate: IKlagebehandlingUpdate = {
+        klagebehandlingId,
+        hjemler: klagebehandling.vedtaket.hjemler,
+        klagebehandlingVersjon: klagebehandling.klagebehandlingVersjon,
+        tilknyttedeDokumenter: klagebehandling.tilknyttedeDokumenter,
+        utfall: klagebehandling.vedtaket.utfall,
+        ...stateUpdate,
+        ...update,
+      };
+
+      setUpdate(fullUpdate);
+    },
+    [klagebehandlingId, klagebehandling, stateUpdate]
+  );
 
   return (
     <PageContainer data-testid={'behandlingsdetaljer'}>

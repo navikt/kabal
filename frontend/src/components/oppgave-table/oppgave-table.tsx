@@ -29,7 +29,7 @@ interface OppgaveTableParams {
 
 const PAGE_SIZE = 10;
 
-export const OppgaveTable: React.FC<OppgaveTableParams> = ({ page }: OppgaveTableParams) => {
+export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     tema: [],
@@ -109,7 +109,7 @@ interface PageInfoProps {
   toNumber: number;
 }
 
-const PageInfo: React.FC<PageInfoProps> = ({ total, fromNumber, toNumber }) => {
+const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element => {
   if (total === 0) {
     return <span>Ingen klagebehandlinger å vise</span>;
   }

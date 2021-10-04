@@ -11,7 +11,7 @@ interface TableHeaderFiltersProps {
   filters: Filters;
 }
 
-export const TableHeaderFilters: React.FC<TableHeaderFiltersProps> = ({ onChange, filters }) => {
+export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps): JSX.Element => {
   const typeOptions = useSettingsTypes();
   const temaOptions = useSettingsTemaer();
   const hjemlerOptions = useSettingsHjemler();

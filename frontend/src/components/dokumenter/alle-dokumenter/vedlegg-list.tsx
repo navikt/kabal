@@ -9,26 +9,27 @@ import { Vedlegg } from './vedlegg';
 
 interface VedleggListProps {
   klagebehandling: IKlagebehandling;
-  dokument: IDokument;
-  kanEndre: boolean;
-  visDokument: (dokument: IShownDokument) => void;
+  document: IDokument;
+  canEdit: boolean;
+  onCheck: (document: IDokument, checked: boolean) => void;
+  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const VedleggList = React.memo(
-  ({ klagebehandling, dokument, kanEndre, visDokument }: VedleggListProps) => {
+  ({ klagebehandling, document, canEdit, onCheck, setShownDocument }: VedleggListProps) => {
     const vedleggListe = useMemo<ITilknyttetVedlegg[]>(
       () =>
-        dokument.vedlegg.map((vedlegg) => ({
+        document.vedlegg.map((vedlegg) => ({
           vedlegg,
           tilknyttet: klagebehandling.tilknyttedeDokumenter.some(
             ({ dokumentInfoId, journalpostId }) =>
-              vedlegg.dokumentInfoId === dokumentInfoId && dokument.journalpostId === journalpostId
+              vedlegg.dokumentInfoId === dokumentInfoId && document.journalpostId === journalpostId
           ),
         })),
-      [dokument.vedlegg, dokument.journalpostId, klagebehandling.tilknyttedeDokumenter]
+      [document.vedlegg, document.journalpostId, klagebehandling.tilknyttedeDokumenter]
     );
 
-    if (dokument.vedlegg.length === 0) {
+    if (document.vedlegg.length === 0) {
       return null;
     }
 
@@ -36,20 +37,21 @@ export const VedleggList = React.memo(
       <VedleggBeholder data-testid={'vedlegg'}>
         {vedleggListe.map(({ vedlegg, tilknyttet }) => (
           <Vedlegg
-            key={`vedlegg_${dokument.journalpostId}_${vedlegg.dokumentInfoId}`}
-            kanEndre={kanEndre}
+            key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
+            canEdit={canEdit}
             vedlegg={vedlegg}
-            dokument={dokument}
+            document={document}
             tilknyttet={tilknyttet}
-            visDokument={visDokument}
+            onCheck={onCheck}
+            setShownDocument={setShownDocument}
           />
         ))}
       </VedleggBeholder>
     );
   },
   (previous, next) =>
-    previous.kanEndre === next.kanEndre &&
-    dokumentMatcher(previous.dokument, next.dokument) &&
+    previous.canEdit === next.canEdit &&
+    dokumentMatcher(previous.document, next.document) &&
     previous.klagebehandling.tilknyttedeDokumenter === next.klagebehandling.tilknyttedeDokumenter
 );
 

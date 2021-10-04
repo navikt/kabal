@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const Nav: React.FC = () => (
+export const Nav = () => (
   <StyledNav role="navigation" aria-label="Meny">
     <StyledNavLinkList>
       <StyledNavListItem>

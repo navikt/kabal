@@ -46,12 +46,18 @@ export const StyledBehandlingsdialog = styled.div`
   padding: 1em;
 `;
 
-export const StyledLabelLovhjemmel = styled.span`
-  margin-right: 0.5em;
+export const StyledLovhjemmelLabel = styled.span`
+  margin: 0.25em;
 
   &:last-of-type {
     margin-right: 0;
   }
+`;
+
+export const StyledLovhjemmelLabels = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.25em;
 `;
 
 export const StyledInfoChildren = styled.div`
@@ -65,8 +71,9 @@ export const StyledUtfallResultat = styled.div`
 export const StyledSubHeader = styled.h3`
   margin-top: 2em;
   margin-bottom: 0.5em;
-  font-size: 1.25em;
-  font-weight: bold;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 600;
 `;
 
 export const StyledFullfoerKlagebehandlingButtons = styled.div`

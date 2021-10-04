@@ -4,12 +4,13 @@ import styled from 'styled-components';
 interface SortByProps {
   desc: boolean;
   onChange: (desc: boolean) => void;
+  children: string;
 }
 
-export const SortBy: React.FC<SortByProps> = ({ desc, onChange }) => (
+export const SortBy = ({ desc, children, onChange }: SortByProps): JSX.Element => (
   <th aria-sort={getAriaSort(desc)} role="columnheader">
     <ToggleSortButton desc={desc} aria-label="Sorter Etternavn stigende" onClick={() => onChange(!desc)}>
-      Frist
+      {children}
     </ToggleSortButton>
   </th>
 );

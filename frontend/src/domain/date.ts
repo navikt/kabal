@@ -15,10 +15,8 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
   }
 
   const [isoDate, isoTime] = isoDateTime.split('T');
-  const prettyDate = isoDateToPretty(isoDate);
-  const prettyTime = isoTimeToPretty(isoTime);
-  console.log(prettyDate, prettyTime);
-  return `${prettyDate} ${prettyTime}`;
+
+  return `${isoDateToPretty(isoDate)} ${isoTimeToPretty(isoTime)}`;
 };
 
 export const isoTimeToPretty = (isoTime: ISOTime | null): prettyTime | null => {

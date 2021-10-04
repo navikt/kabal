@@ -1,7 +1,7 @@
 import { IDokument, IDokumentVedlegg } from '../../redux-api/dokumenter/types';
 
 export interface ITilknyttetDokument {
-  dokument: IDokument;
+  document: IDokument;
   tilknyttet: boolean;
 }
 

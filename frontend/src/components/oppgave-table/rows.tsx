@@ -1,7 +1,7 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import 'nav-frontend-tabell-style';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
+import { Loader } from '../loader/loader';
 import { Row } from './row';
 
 interface OppgaveRaderProps {
@@ -9,13 +9,13 @@ interface OppgaveRaderProps {
   columnCount: number;
 }
 
-export const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCount }) => {
+export const OppgaveRader = ({ oppgaver, columnCount }: OppgaveRaderProps): JSX.Element => {
   if (typeof oppgaver === 'undefined') {
     return (
       <tbody>
         <tr>
           <td colSpan={columnCount}>
-            <Loader text={'Laster oppgaver...'} />
+            <Loader>Laster oppgaver...</Loader>
           </td>
         </tr>
       </tbody>
@@ -30,14 +30,3 @@ export const OppgaveRader: React.FC<OppgaveRaderProps> = ({ oppgaver, columnCoun
     </tbody>
   );
 };
-
-interface LoaderProps {
-  text: string;
-}
-
-const Loader: React.FC<LoaderProps> = ({ text }) => (
-  <div>
-    <NavFrontendSpinner />
-    <span>{text}</span>
-  </div>
-);

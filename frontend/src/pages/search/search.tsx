@@ -8,7 +8,7 @@ import { OppgaverPageWrapper } from '../page-wrapper';
 
 const INITIAL_STATE = { antallTreffTotalt: 0, personer: [] };
 
-export const SearchPage: React.FC = () => {
+export const SearchPage = () => {
   const { data: bruker } = useGetBrukerQuery();
   const [personsoek, loader] = usePersonsoekMutation();
   const [query, setQuery] = useState<string>('');

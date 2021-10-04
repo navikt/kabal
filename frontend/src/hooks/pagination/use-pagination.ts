@@ -7,6 +7,7 @@ const PAGES: { [key: number]: number[] } = {
 };
 
 const PREDEFINED = Object.keys(PAGES).length - 1;
+const ELLIPSIS = '...';
 
 export const usePagination = (total: number, pageSize = 10, currentPage = 1): (number | string)[] => {
   if (total === 0) {
@@ -40,7 +41,7 @@ export const usePagination = (total: number, pageSize = 10, currentPage = 1): (n
   } else if (startDiff >= 4) {
     // If current page is 4 or more away from start.
     const previous = currentPage - 1;
-    pages.push('...', previous); // Add ellipsis and the previous page.
+    pages.push(ELLIPSIS, previous); // Add ellipsis and the previous page.
   }
 
   if (currentPage !== startPage && currentPage !== endPage) {
@@ -61,7 +62,7 @@ export const usePagination = (total: number, pageSize = 10, currentPage = 1): (n
   } else if (endDiff >= 4) {
     // If current page is 4 or more away from end.
     const next = currentPage + 1;
-    pages.push(next, '...'); // Add ellipsis and the next page.
+    pages.push(next, ELLIPSIS); // Add ellipsis and the next page.
   }
 
   pages.push(endPage);

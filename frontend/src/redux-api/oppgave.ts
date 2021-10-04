@@ -24,19 +24,20 @@ export const klagebehandlingApi = createApi({
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
             klagebehandling.klagebehandlingVersjon = update.klagebehandlingVersjon + 1;
             klagebehandling.tilknyttedeDokumenter = update.tilknyttedeDokumenter;
-            klagebehandling.hjemler = update.hjemler;
+            klagebehandling.vedtaket.hjemler = update.hjemler;
             klagebehandling.vedtaket.utfall = update.utfall;
           })
         );
 
         try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-              klagebehandling.klagebehandlingVersjon = data.klagebehandlingVersjon;
-              klagebehandling.modified = data.modified;
-            })
-          );
+          await queryFulfilled;
+          // const { data } = await queryFulfilled;
+          // dispatch(
+          //   klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+          //     klagebehandling.klagebehandlingVersjon = data.klagebehandlingVersjon;
+          //     klagebehandling.modified = data.modified;
+          //   })
+          // );
         } catch {
           patchResult.undo();
         }

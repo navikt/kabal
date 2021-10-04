@@ -11,41 +11,34 @@ import {
 } from '../styled-components/fullvisning';
 
 interface VedleggProps {
-  dokument: IDokument;
+  document: IDokument;
   vedlegg: IDokumentVedlegg;
   tilknyttet: boolean;
-  kanEndre: boolean;
-  visDokument: (dokument: IShownDokument) => void;
+  canEdit: boolean;
+  onCheck: (document: IDokument, checked: boolean) => void;
+  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const Vedlegg = React.memo<VedleggProps>(
-  ({ vedlegg, dokument, tilknyttet, kanEndre, visDokument }) => {
-    // const onCheck = (checked: boolean) => {
-    // const d: TilknyttetDokument = {
-    //   journalpostId: dokument.journalpostId,
-    //   dokumentInfoId: vedlegg.dokumentInfoId,
-    // };
-    // dispatch(checked ? TILKNYTT_DOKUMENT(d) : FRAKOBLE_DOKUMENT(d));
-    // };
-
+  ({ vedlegg, document, tilknyttet, canEdit, onCheck, setShownDocument }) => {
     const onVisDokument = () =>
-      visDokument({
-        journalpostId: dokument.journalpostId,
+      setShownDocument({
+        journalpostId: document.journalpostId,
         dokumentInfoId: vedlegg.dokumentInfoId,
         tittel: vedlegg.tittel,
         harTilgangTilArkivvariant: vedlegg.harTilgangTilArkivvariant,
       });
 
     return (
-      <VedleggRad key={dokument.journalpostId + vedlegg.dokumentInfoId}>
+      <VedleggRad key={document.journalpostId + vedlegg.dokumentInfoId}>
         <VedleggTittel onClick={onVisDokument}>{vedlegg.tittel}</VedleggTittel>
         <DokumentSjekkboks className={'dokument-sjekkboks'}>
           <RightAlign>
             <DokumentCheckbox
               label={''}
-              disabled={!vedlegg.harTilgangTilArkivvariant || !kanEndre}
+              disabled={!vedlegg.harTilgangTilArkivvariant || !canEdit}
               defaultChecked={tilknyttet}
-              // onChange={(e) => onCheck(e.currentTarget.checked)}
+              onChange={(e) => onCheck({ ...document, ...vedlegg }, e.currentTarget.checked)}
             />
           </RightAlign>
         </DokumentSjekkboks>
@@ -54,9 +47,9 @@ export const Vedlegg = React.memo<VedleggProps>(
   },
   (previous, next) =>
     previous.tilknyttet === next.tilknyttet &&
-    previous.kanEndre === next.kanEndre &&
+    previous.canEdit === next.canEdit &&
     previous.vedlegg.dokumentInfoId === next.vedlegg.dokumentInfoId &&
-    dokumentMatcher(previous.dokument, next.dokument)
+    dokumentMatcher(previous.document, next.document)
 );
 
 Vedlegg.displayName = 'Vedlegg';

@@ -5,7 +5,7 @@ interface TableHeaderProps {
   headers: (string | null)[];
 }
 
-export const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => (
+export const TableHeader = ({ headers }: TableHeaderProps): JSX.Element => (
   <thead>
     <tr>
       {headers.map((h, i) =>

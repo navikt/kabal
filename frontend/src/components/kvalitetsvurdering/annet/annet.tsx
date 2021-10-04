@@ -1,18 +1,21 @@
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useGetKvalitetsvurderingQuery, useUpdateKvalitetsvurderingMutation } from '../../redux-api/kvalitetsvurdering';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import {
+  useGetKvalitetsvurderingQuery,
+  useUpdateKvalitetsvurderingMutation,
+} from '../../../redux-api/kvalitetsvurdering';
+import { CheckboxWithHelpIcon, FormSection, SubHeader } from '../styled-components';
 import { AnnetComments } from './annetComments';
-import { CheckboxWithHelpIcon, FormSection, SubHeader } from './styled-components';
 
 interface AnnetProps {
   show: boolean;
 }
 
 export const Annet = ({ show }: AnnetProps) => {
-  const { id } = useParams<{ id: string }>();
-  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
 
   if (!show || typeof kvalitetsvurdering === 'undefined') {
@@ -20,6 +23,8 @@ export const Annet = ({ show }: AnnetProps) => {
   }
 
   const { brukSomEksempelIOpplaering } = kvalitetsvurdering;
+
+  const showComments = brukSomEksempelIOpplaering === true;
 
   return (
     <FormSection>
@@ -39,7 +44,11 @@ export const Annet = ({ show }: AnnetProps) => {
           <Hjelpetekst>Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.</Hjelpetekst>
         </CheckboxWithHelpIcon>
       </CheckboxGruppe>
-      <AnnetComments kvalitetsvurdering={kvalitetsvurdering} updateKvalitetsskjema={updateKvalitetsskjema} />
+      <AnnetComments
+        show={showComments}
+        kvalitetsvurdering={kvalitetsvurdering}
+        updateKvalitetsskjema={updateKvalitetsskjema}
+      />
     </FormSection>
   );
 };

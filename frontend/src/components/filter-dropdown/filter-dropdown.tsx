@@ -11,7 +11,7 @@ interface FilterDropdownProps {
   children: string;
 }
 
-export const FilterDropdown: React.FC<FilterDropdownProps> = ({ options, selected, onChange, children }) => {
+export const FilterDropdown = ({ options, selected, onChange, children }: FilterDropdownProps): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
 

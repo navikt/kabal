@@ -24,7 +24,7 @@ interface DocumentProps extends ITilknyttetDokument {
 }
 
 export const Document = React.memo<DocumentProps>(
-  ({ dokument, tilknyttet, canEdit, visDokument, onCheck, klagebehandling }) => {
+  ({ document: dokument, tilknyttet, canEdit, visDokument, onCheck, klagebehandling }) => {
     const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
       visDokument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
 
@@ -47,10 +47,11 @@ export const Document = React.memo<DocumentProps>(
           </RightAlign>
         </DokumentSjekkboks>
         <VedleggList
-          dokument={dokument}
+          document={dokument}
           klagebehandling={klagebehandling}
-          kanEndre={canEdit}
-          visDokument={visDokument}
+          canEdit={canEdit}
+          onCheck={onCheck}
+          setShownDocument={visDokument}
         />
       </DokumentRad>
     );
@@ -58,7 +59,7 @@ export const Document = React.memo<DocumentProps>(
   (previous, next) =>
     previous.tilknyttet === next.tilknyttet &&
     previous.canEdit === next.canEdit &&
-    dokumentMatcher(previous.dokument, next.dokument)
+    dokumentMatcher(previous.document, next.document)
 );
 
 Document.displayName = 'Document';

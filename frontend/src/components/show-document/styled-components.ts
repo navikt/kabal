@@ -20,11 +20,25 @@ export const Container = styled.section<BeholderProps>`
   height: 100%;
 `;
 
+export const StyledDocumentTitle = styled.h1`
+  font-size: 1em;
+  margin: 0;
+  padding: 0;
+`;
+
+export const StyledButtonContainer = styled.div`
+  display: flex;
+`;
+
 export const StyledHeaderButton = styled.button`
   border: none;
   background-color: transparent;
   padding: 0;
-  margin: 0;
+  margin-right: 15px;
+  cursor: pointer;
+  :hover {
+    background-color: #eee;
+  }
 `;
 
 export const PDF = styled.object`

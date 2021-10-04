@@ -4,7 +4,9 @@ import {
   Container,
   Header,
   PDF,
+  StyledButtonContainer,
   StyledCancelIcon,
+  StyledDocumentTitle,
   StyledExtLinkIcon,
   StyledHeaderButton,
   StyledZoomInIcon,
@@ -18,32 +20,34 @@ const ZOOM_STEP = 150;
 
 interface ShowDokumentProps {
   klagebehandlingId: string;
-  dokument: IShownDokument | null;
+  document: IShownDokument | null;
   close: () => void;
 }
 
-export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumentProps) => {
+const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
+
+export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumentProps) => {
   const url = useMemo(
     () =>
-      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/journalposter/${dokument?.journalpostId}/dokumenter/${dokument?.dokumentInfoId}`,
-    [dokument, klagebehandlingId]
+      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/journalposter/${document?.journalpostId}/dokumenter/${document?.dokumentInfoId}`,
+    [document, klagebehandlingId]
   );
 
   const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
 
-  useEffect(() => localStorage.setItem('valgtBreddeForhandsvisning', pdfWidth.toString()), [pdfWidth]);
+  useEffect(() => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()), [pdfWidth]);
 
-  if (dokument === null) {
+  if (document === null) {
     return null;
   }
 
   return (
     <Container width={pdfWidth}>
       <Header>
-        {dokument.tittel}
-        <div>
+        <StyledDocumentTitle>{document.tittel}</StyledDocumentTitle>
+        <StyledButtonContainer>
           <HeaderButton onClick={decrease} text="Zoom ut på PDF">
             <StyledZoomOutIcon alt="Zoom ut på PDF" />
           </HeaderButton>
@@ -56,35 +60,36 @@ export const ShowDokument = ({ klagebehandlingId, dokument, close }: ShowDokumen
           <HeaderButton onClick={close} text="Lukk forhåndsvisning">
             <StyledCancelIcon alt="Lukk forhåndsvisning" />
           </HeaderButton>
-        </div>
+        </StyledButtonContainer>
       </Header>
       <PDF
         data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
         role="document"
         type="application/pdf"
-        name={dokument.tittel ?? undefined}
+        name={document.tittel ?? undefined}
       />
     </Container>
   );
 };
 
 const getSavedPdfWidth = () => {
-  const localStorageVerdi = localStorage.getItem('valgtBreddeForhandsvisning');
+  const localStorageValue = localStorage.getItem(PDF_WITH_LOCAL_STORAGE_KEY);
 
-  if (localStorageVerdi === null) {
+  if (localStorageValue === null) {
     return MIN_PDF_WIDTH;
   }
 
-  const parsed = Number.parseInt(localStorageVerdi, 10);
+  const parsed = Number.parseInt(localStorageValue, 10);
   return Number.isNaN(parsed) ? MIN_PDF_WIDTH : parsed;
 };
 
 interface HeaderButtonProps {
   text: string;
   onClick: () => void;
+  children: React.ReactNode;
 }
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({ text, onClick, children }) => (
+const HeaderButton = ({ text, onClick, children }: HeaderButtonProps): JSX.Element => (
   <StyledHeaderButton onClick={onClick} title={text}>
     {children}
   </StyledHeaderButton>

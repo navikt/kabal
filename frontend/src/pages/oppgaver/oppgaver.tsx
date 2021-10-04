@@ -7,7 +7,7 @@ interface OppgaverPageProps {
   page: string;
 }
 
-export const OppgaverPage: React.FC = () => {
+export const OppgaverPage = () => {
   const { page } = useParams<OppgaverPageProps>();
 
   return (

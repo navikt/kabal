@@ -9,7 +9,7 @@ import { StyledCaption, StyledTable, StyledTableContainer } from './styled-compo
 
 const MAX_OPPGAVER = 100;
 
-export const MineOppgaverTable: React.FC = () => {
+export const MineOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =

@@ -1,8 +1,8 @@
 import { Knapp } from 'nav-frontend-knapper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
 import { IPersonResultat, PersonSoekApiResponse } from '../../redux-api/oppgaver';
+import { Loader } from '../loader/loader';
 
 interface SearchResultsProps {
   isLoading: boolean;
@@ -11,7 +11,7 @@ interface SearchResultsProps {
 
 export const SearchResults = ({ personsoekResultat, isLoading }: SearchResultsProps) => {
   if (isLoading || typeof personsoekResultat === 'undefined') {
-    return <Loader text={'Laster personer...'} />;
+    return <Loader>Laster personer...</Loader>;
   }
 
   return (
@@ -42,7 +42,7 @@ const Rows = ({ personer, columnCount }: RowsProps) => {
       <tbody>
         <tr>
           <td colSpan={columnCount}>
-            <Loader text={'Laster personer...'} />
+            <Loader>Laster personer...</Loader>
           </td>
         </tr>
       </tbody>
@@ -92,14 +92,3 @@ const formatName = (rawString: string): string => {
     .map((name: string) => name.charAt(0).toUpperCase() + name.slice(1))
     .reduce((firstName: string, lastName: string) => firstName + ' ' + lastName);
 };
-
-interface LoaderProps {
-  text: string;
-}
-
-const Loader: React.FC<LoaderProps> = ({ text }) => (
-  <div>
-    <NavFrontendSpinner />
-    <span>{text}</span>
-  </div>
-);

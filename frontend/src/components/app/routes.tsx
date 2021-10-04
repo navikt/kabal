@@ -7,7 +7,7 @@ import { OppgaverPage } from '../../pages/oppgaver/oppgaver';
 import { SearchPage } from '../../pages/search/search';
 import { SettingsPage } from '../../pages/settings/settings';
 
-export const Routes: React.FC = () => (
+export const Routes = () => (
   <Switch>
     <Route exact path="/oppgaver">
       <Redirect to="/oppgaver/1" />

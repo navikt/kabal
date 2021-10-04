@@ -6,7 +6,15 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 
-export const Row: React.FC<IKlagebehandling> = ({ id, type, tema, hjemmel, frist, ageKA, klagebehandlingVersjon }) => {
+export const Row = ({
+  id,
+  type,
+  tema,
+  hjemmel,
+  frist,
+  ageKA,
+  klagebehandlingVersjon,
+}: IKlagebehandling): JSX.Element => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
 
