@@ -39,8 +39,9 @@ export const OversendelsesbrevComments = ({
   return (
     <CommentsField>
       <Textarea
-        value={oversendelsesbrevKommentar}
         label="Utdypende kommentar til oversendelsesbrev:"
+        value={oversendelsesbrevKommentar}
+        placeholder="NB: Ingen personopplysninger"
         maxLength={0}
         onChange={(e) => setOversendelsesbrevKommentar(e.target.value)}
       />

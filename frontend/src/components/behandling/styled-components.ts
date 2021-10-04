@@ -62,9 +62,22 @@ export const StyledUtfallResultat = styled.div`
   margin-bottom: 1em;
 `;
 
-export const StyledFullfoerKlagebehandling = styled.h3`
+export const StyledSubHeader = styled.h3`
   margin-top: 2em;
   margin-bottom: 0.5em;
   font-size: 1.25em;
   font-weight: bold;
+`;
+
+export const StyledFullfoerKlagebehandlingButtons = styled.div`
+  display: flex;
+`;
+
+export const StyledFullfoerKlagebehandlingText = styled.p`
+  white-space: normal;
+`;
+
+export const StyledFullfoerKlagebehandling = styled.div`
+  border: 1px solid #0067c5;
+  padding: 1em;
 `;

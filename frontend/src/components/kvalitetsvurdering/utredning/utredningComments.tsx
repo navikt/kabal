@@ -10,20 +10,15 @@ interface UtredningCommentsProps {
 }
 
 export const UtredningComments = ({ show, kvalitetsvurdering, updateKvalitetsskjema }: UtredningCommentsProps) => {
-  const [utredningKommentar, setUtredningKommentar] = useState<string>(
-    kvalitetsvurdering?.kommentarOversendelsesbrev ?? ''
-  );
+  const [utredningKommentar, setUtredningKommentar] = useState<string>(kvalitetsvurdering?.kommentarUtredning ?? '');
 
   useEffect(() => {
-    if (
-      kvalitetsvurdering?.kommentarOversendelsesbrev === utredningKommentar ||
-      typeof kvalitetsvurdering === 'undefined'
-    ) {
+    if (kvalitetsvurdering?.kommentarUtredning === utredningKommentar || typeof kvalitetsvurdering === 'undefined') {
       return;
     }
 
     const timeout = setTimeout(() => {
-      updateKvalitetsskjema({ ...kvalitetsvurdering, kommentarOversendelsesbrev: utredningKommentar });
+      updateKvalitetsskjema({ ...kvalitetsvurdering, kommentarUtredning: utredningKommentar });
     }, 1000);
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [utredningKommentar, kvalitetsvurdering, updateKvalitetsskjema]);
@@ -37,6 +32,7 @@ export const UtredningComments = ({ show, kvalitetsvurdering, updateKvalitetsskj
       <Textarea
         label="Utdypende kommentar til utredningen:"
         value={utredningKommentar}
+        placeholder="NB: Ingen personopplysninger"
         maxLength={0}
         onChange={(e) => setUtredningKommentar(e.target.value)}
       />

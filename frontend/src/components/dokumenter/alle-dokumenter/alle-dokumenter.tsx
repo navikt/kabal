@@ -46,6 +46,14 @@ export const AlleDokumenter = React.memo(
       }));
     }, [alleDokumenter, klagebehandling.tilknyttedeDokumenter]);
 
+    if (skjult) {
+      return null;
+    }
+
+    if (isLoading || typeof alleDokumenter === 'undefined') {
+      return <NavFrontendSpinner />;
+    }
+
     const onCheck = ({ dokumentInfoId, journalpostId }: IDokument, checked: boolean) => {
       if (checked) {
         onChange([...klagebehandling.tilknyttedeDokumenter, { dokumentInfoId, journalpostId }]);
@@ -58,14 +66,6 @@ export const AlleDokumenter = React.memo(
         )
       );
     };
-
-    if (skjult) {
-      return null;
-    }
-
-    if (isLoading || typeof alleDokumenter === 'undefined') {
-      return <NavFrontendSpinner />;
-    }
 
     return (
       <DokumenterFullvisning>

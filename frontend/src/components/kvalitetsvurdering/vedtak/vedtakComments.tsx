@@ -32,6 +32,7 @@ export const VedtakComments = ({ show, kvalitetsvurdering, updateKvalitetsskjema
       <Textarea
         label="Utdypende kommentar til vedtaket:"
         value={vedtakKommentar}
+        placeholder="NB: Ingen personopplysninger"
         maxLength={0}
         onChange={(e) => setVedtakKommentar(e.target.value)}
       />

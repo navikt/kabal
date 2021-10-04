@@ -3,13 +3,14 @@ import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetKvalitetsvurderingQuery, useUpdateKvalitetsvurderingMutation } from '../../redux-api/kvalitetsvurdering';
+import { AnnetComments } from './annetComments';
 import { CheckboxWithHelpIcon, FormSection, SubHeader } from './styled-components';
 
-interface AvvikProps {
+interface AnnetProps {
   show: boolean;
 }
 
-export const Avvik = ({ show }: AvvikProps) => {
+export const Annet = ({ show }: AnnetProps) => {
   const { id } = useParams<{ id: string }>();
   const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(id);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
@@ -18,26 +19,27 @@ export const Avvik = ({ show }: AvvikProps) => {
     return null;
   }
 
-  const { avvikStorKonsekvens } = kvalitetsvurdering;
+  const { brukSomEksempelIOpplaering } = kvalitetsvurdering;
 
   return (
     <FormSection>
-      <SubHeader>Avvik</SubHeader>
+      <SubHeader>Annet</SubHeader>
       <CheckboxGruppe>
         <CheckboxWithHelpIcon>
           <Checkbox
-            label={'Betydelig avvik med stor konsekvens for søker'}
-            checked={avvikStorKonsekvens}
+            label={'Bruk gjerne dette som eksempel i opplæring'}
+            checked={brukSomEksempelIOpplaering}
             onChange={(e) => {
               updateKvalitetsskjema({
                 ...kvalitetsvurdering,
-                avvikStorKonsekvens: e.target.checked,
+                brukSomEksempelIOpplaering: e.target.checked,
               });
             }}
           />
-          <Hjelpetekst>Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for bruker.</Hjelpetekst>
+          <Hjelpetekst>Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.</Hjelpetekst>
         </CheckboxWithHelpIcon>
       </CheckboxGruppe>
+      <AnnetComments kvalitetsvurdering={kvalitetsvurdering} updateKvalitetsskjema={updateKvalitetsskjema} />
     </FormSection>
   );
 };

@@ -1,19 +1,13 @@
-import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { getFullName } from '../../../domain/name';
 import { IKlagebehandling, IKlager } from '../../../redux-api/oppgave-state-types';
 import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
-import {
-  StyledBehandlingsdetaljer,
-  StyledFullfoerKlagebehandling,
-  StyledHeader,
-  StyledInfoChildren,
-  StyledInfoHeader,
-} from '../styled-components';
+import { StyledBehandlingsdetaljer, StyledHeader, StyledInfoChildren, StyledInfoHeader } from '../styled-components';
+import { FullfoerKlagebehandling } from './fullfoer-klagebehandling';
 import { Labels } from './labels';
-import { Lovhjemmel } from './lovhjemmel';
-import { UtfallResultat } from './utfall';
+// import { Lovhjemmel } from './lovhjemmel';
+import { UtfallResultat } from './utfall-resultat';
 
 interface VenstreProps {
   klagebehandling: IKlagebehandling;
@@ -50,10 +44,10 @@ export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps)
       <Info label="Melding fra førsteinstans for intern bruk">{kommentarFraFoersteinstans}</Info>
 
       <UtfallResultat onChange={onChange} utfall={vedtaket.utfall} />
-      <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} />
 
-      <StyledFullfoerKlagebehandling>Fullfør klagebehandling</StyledFullfoerKlagebehandling>
-      <Knapp mini>Fullfør klagebehandling</Knapp>
+      {/* <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} /> */}
+
+      <FullfoerKlagebehandling />
     </StyledBehandlingsdetaljer>
   );
 };

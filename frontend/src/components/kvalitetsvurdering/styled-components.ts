@@ -2,11 +2,10 @@ import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
   padding: 1em;
-  min-width: 750px;
 `;
 
 export const FormSection = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 `;
 
 export const Header = styled.h1`
@@ -37,8 +36,15 @@ export const RadioButtonsRow = styled.div`
 
 export const CommentsField = styled.div`
   margin-top: 10px;
+  max-width: 50%;
 `;
 
 export const ReasonsField = styled.div`
   margin-top: 10px;
+`;
+
+export const CheckboxWithHelpIcon = styled.div`
+  width: 55%;
+  display: flex;
+  justify-content: space-between;
 `;

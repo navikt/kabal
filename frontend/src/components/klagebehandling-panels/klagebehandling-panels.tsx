@@ -42,7 +42,7 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
 
   return (
     <PageContainer data-testid={'behandlingsdetaljer'}>
-      <Dokumenter shown={toggles.documents} onCheck={onChange} />
+      <Dokumenter shown={toggles.documents} onChange={onChange} />
       <Behandling
         shown={toggles.behandling}
         klagebehandling={klagebehandling}

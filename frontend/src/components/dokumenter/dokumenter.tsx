@@ -11,14 +11,14 @@ import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
   shown: boolean;
-  onCheck: (update: Partial<IKlagebehandlingUpdate>) => void;
+  onChange: (update: Partial<IKlagebehandlingUpdate>) => void;
 }
 
 interface Params {
   id: string;
 }
 
-export const Dokumenter = ({ shown, onCheck }: DokumenterProps) => {
+export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
   const { id } = useParams<Params>();
   const [fullView, setFullView] = useState(true);
   const [dokument, settDokument] = useState<IShownDokument | null>(null);
@@ -48,7 +48,7 @@ export const Dokumenter = ({ shown, onCheck }: DokumenterProps) => {
           skjult={!fullView}
           visDokument={settDokument}
           klagebehandling={klagebehandling}
-          onChange={(tilknyttedeDokumenter) => onCheck({ tilknyttedeDokumenter })}
+          onChange={(tilknyttedeDokumenter) => onChange({ tilknyttedeDokumenter })}
         />
       </DocumentsContainer>
       <ShowDokument dokument={dokument} klagebehandlingId={klagebehandling.id} close={() => settDokument(null)} />
