@@ -9,7 +9,7 @@
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
     "test": "snyk test",
-    "build: "echo 'No build required. Moving on.'"
+    "build": "echo 'No build required. Moving on.'"
   },
   "keywords": [],
   "author": "",
