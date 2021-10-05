@@ -1,17 +1,18 @@
 import React from 'react';
 import { formattedDate } from '../../../domene/datofunksjoner';
+import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { IDokument } from '../../../redux-api/dokumenter/types';
 import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
-import { LabelTema } from '../../../styled-components/labels';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
+import { DocumentButton } from '../styled-components/document-button';
 import {
+  DocumentCheckbox,
+  DocumentDate,
+  DocumentRow,
+  DocumentTema,
+  DocumentTitle,
   DokumentCheckbox,
-  DokumentDato,
-  DokumentRad,
-  DokumentSjekkboks,
-  DokumentTittel,
-  RightAlign,
 } from '../styled-components/fullvisning';
 import { ITilknyttetDokument } from '../types';
 import { VedleggList } from './vedlegg-list';
@@ -19,41 +20,41 @@ import { VedleggList } from './vedlegg-list';
 interface DocumentProps extends ITilknyttetDokument {
   klagebehandling: IKlagebehandling;
   canEdit: boolean;
-  visDokument: (dokument: IShownDokument) => void;
+  setShownDocument: (document: IShownDokument) => void;
   onCheck: (document: IDokument, checked: boolean) => void;
 }
 
 export const Document = React.memo<DocumentProps>(
-  ({ document: dokument, tilknyttet, canEdit, visDokument, onCheck, klagebehandling }) => {
+  ({ document, tilknyttet, canEdit, setShownDocument, onCheck, klagebehandling }) => {
     const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
-      visDokument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
+      setShownDocument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
 
     return (
-      <DokumentRad>
-        <DokumentTittel onClick={() => onShowDokument(dokument)}>{dokument.tittel}</DokumentTittel>
-        <LabelTema>{dokument.tema}</LabelTema>
-        <DokumentDato onClick={() => onShowDokument(dokument)} className={'liten'}>
-          {formattedDate(dokument.registrert)}
-        </DokumentDato>
+      <DocumentRow>
+        <DocumentTitle>
+          <DocumentButton onClick={() => onShowDokument(document)}>{document.tittel}</DocumentButton>
+        </DocumentTitle>
+        <DocumentTema tema={document.tema}>{useFullTemaNameFromId(document.tema)}</DocumentTema>
+        <DocumentDate dateTime={document.registrert} className={'liten'}>
+          {formattedDate(document.registrert)}
+        </DocumentDate>
 
-        <DokumentSjekkboks>
-          <RightAlign>
-            <DokumentCheckbox
-              label={''}
-              disabled={!dokument.harTilgangTilArkivvariant || !canEdit}
-              defaultChecked={tilknyttet}
-              onChange={(e) => onCheck(dokument, e.currentTarget.checked)}
-            />
-          </RightAlign>
-        </DokumentSjekkboks>
+        <DocumentCheckbox>
+          <DokumentCheckbox
+            label={''}
+            disabled={!document.harTilgangTilArkivvariant || !canEdit}
+            defaultChecked={tilknyttet}
+            onChange={(e) => onCheck(document, e.currentTarget.checked)}
+          />
+        </DocumentCheckbox>
         <VedleggList
-          document={dokument}
+          document={document}
           klagebehandling={klagebehandling}
           canEdit={canEdit}
           onCheck={onCheck}
-          setShownDocument={visDokument}
+          setShownDocument={setShownDocument}
         />
-      </DokumentRad>
+      </DocumentRow>
     );
   },
   (previous, next) =>

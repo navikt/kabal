@@ -10,6 +10,7 @@ import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DokumenterFullvisning, List, ListItem } from '../styled-components/fullvisning';
+import { ListHeader, ListTitle } from '../styled-components/list-header';
 import { ITilknyttetDokument } from '../types';
 import { Document } from './document';
 import { LoadMore } from './load-more';
@@ -70,10 +71,12 @@ export const AlleDokumenter = React.memo(
 
     return (
       <DokumenterFullvisning>
-        <FilterDropdown options={availableTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
-          Tema
-        </FilterDropdown>
-
+        <ListHeader>
+          <ListTitle>Journalførte dokumenter</ListTitle>
+          <FilterDropdown options={availableTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
+            Tema
+          </FilterDropdown>
+        </ListHeader>
         <List data-testid={'dokumenter'}>
           {dokumenter.map(({ document: dokument, tilknyttet }) => (
             <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
@@ -81,7 +84,7 @@ export const AlleDokumenter = React.memo(
                 canEdit={canEdit}
                 document={dokument}
                 tilknyttet={tilknyttet}
-                visDokument={setShownDocument}
+                setShownDocument={setShownDocument}
                 klagebehandling={klagebehandling}
                 onCheck={onCheck}
               />

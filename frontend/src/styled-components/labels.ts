@@ -36,7 +36,7 @@ export const LabelType = styled(Label)`
 `;
 
 interface LabelTemaProps {
-  tema?: string;
+  tema?: string | null;
 }
 
 export const LabelTema = styled(Label)<LabelTemaProps>`
@@ -44,6 +44,8 @@ export const LabelTema = styled(Label)<LabelTemaProps>`
   border: 1px solid #0067c5;
   background-color: ${({ tema }) => getBackgroundColorFromTema(tema)};
   border: 1px solid ${({ tema }) => getBorderColorFromTema(tema)};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const LabelMedunderskriver = styled(Label)`
@@ -61,7 +63,7 @@ const enum TemaBorderColorEnum {
   SYKEPENGER = 'white',
 }
 
-const getBackgroundColorFromTema = (temakode?: string): string => {
+const getBackgroundColorFromTema = (temakode?: string | null): string => {
   switch (temakode) {
     case 'sykepenger':
       return TemaBackgroundColorEnum.SYKEPENGER;
@@ -70,7 +72,7 @@ const getBackgroundColorFromTema = (temakode?: string): string => {
   }
 };
 
-const getBorderColorFromTema = (temakode?: string): string => {
+const getBorderColorFromTema = (temakode?: string | null): string => {
   switch (temakode) {
     case 'sykepenger':
       return TemaBorderColorEnum.SYKEPENGER;

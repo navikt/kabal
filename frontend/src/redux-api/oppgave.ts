@@ -44,6 +44,7 @@ export const klagebehandlingApi = createApi({
       },
       invalidatesTags: ['oppgave'],
     }),
+    // finishKlagebehandling: builder.mutation()
   }),
 });
 

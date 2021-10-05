@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
+import { PanelContainer } from '../klagebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
 import { Header } from './header';
-import { DocumentsContainer } from './styled-components/container';
 import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
@@ -32,7 +32,7 @@ export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
 
   return (
     <>
-      <DocumentsContainer fullvisning={viewAll}>
+      <PanelContainer>
         <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />
         <TilknyttedeDokumenter
           klagebehandlingId={klagebehandling.id}
@@ -46,7 +46,7 @@ export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
           klagebehandling={klagebehandling}
           onChange={(tilknyttedeDokumenter) => onChange({ tilknyttedeDokumenter })}
         />
-      </DocumentsContainer>
+      </PanelContainer>
       <ShowDocument
         document={shownDocument}
         klagebehandlingId={klagebehandling.id}

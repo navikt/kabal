@@ -28,6 +28,7 @@ export const StyledDocumentTitle = styled.h1`
 
 export const StyledButtonContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 export const StyledHeaderButton = styled.button`
@@ -36,9 +37,14 @@ export const StyledHeaderButton = styled.button`
   padding: 0;
   margin-right: 15px;
   cursor: pointer;
-  :hover {
-    background-color: #eee;
-  }
+`;
+
+export const StyledHeaderLink = styled.a`
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin-right: 15px;
+  cursor: pointer;
 `;
 
 export const PDF = styled.object`
@@ -64,8 +70,8 @@ const iconStyle = css`
     margin: 0.25em 1em 0 0.2em;
     -webkit-transition: all 0.15s ease-in-out;
     transition: all 0.15s ease-in-out;
-    width: 1em;
-    height: 1em;
+    width: 1rem;
+    height: 1rem;
 
     :hover {
       transform: scale(1.1);
@@ -86,12 +92,12 @@ export const StyledCancelIcon = styled(CancelIcon)`
 `;
 
 export const StyledExtLinkIcon = styled(ExtLinkIcon)`
-  cursor: pointer;
+  ${iconStyle}/* cursor: pointer;
   color: #0067c5;
   margin: 0.25em 1em 0 0.2em;
   -webkit-transition: all 0.15s ease-in-out;
   transition: all 0.15s ease-in-out;
   &:hover {
     transform: scale(1.1);
-  }
+  } */
 `;

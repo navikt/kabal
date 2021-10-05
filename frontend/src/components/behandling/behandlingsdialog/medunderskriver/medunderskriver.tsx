@@ -1,15 +1,17 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Select } from 'nav-frontend-skjema';
+// import { Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { IUserData } from '../../../../redux-api/bruker';
 import {
-  IMedunderskriver,
+  // IMedunderskriver,
   useGetMedunderskrivereQuery,
+  useSwitchMedunderskriverflytMutation,
   useUpdateChosenMedunderskriverMutation,
 } from '../../../../redux-api/medunderskrivere';
 import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
+import { SelectMedunderskriver } from './select-medunderskriver';
+import { SendTilMedunderskriver } from './send-til-medunderskriver';
 
 interface MedunderskriverProps {
   klagebehandling: IKlagebehandling;
@@ -24,12 +26,15 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
 
   const { data: medunderskrivereData } = useGetMedunderskrivereQuery(medunderskrivereQuery);
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
+  const [switchMedunderskriverflyt] = useSwitchMedunderskriverflytMutation();
 
   if (typeof medunderskrivereData === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
-  if (medunderskrivereData.medunderskrivere.length === 0) {
+  const { medunderskrivere } = medunderskrivereData;
+
+  if (medunderskrivere.length === 0) {
     return <p>Fant ingen medunderskrivere</p>;
   }
 
@@ -44,40 +49,20 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
     updateChosenMedunderskriver(queryObj);
   };
 
+  const onSendToMedunderskriver = () => {
+    const { id } = klagebehandling;
+
+    switchMedunderskriverflyt({ klagebehandlingId: id });
+  };
+
   return (
     <>
       <SelectMedunderskriver
         medunderskrivere={medunderskrivereData.medunderskrivere}
         onChangeChosenMedunderskriver={onChangeChosenMedunderskriver}
+        sentToMedunderskriverNavIdent={klagebehandling.medunderskriverident}
       />
-      <ActionButton />
+      <SendTilMedunderskriver klagebehandling={klagebehandling} onSendToMedunderskriver={onSendToMedunderskriver} />
     </>
   );
 };
-
-interface SelectMedunderskriverProps {
-  medunderskrivere: IMedunderskriver[];
-  onChangeChosenMedunderskriver: (medunderskriverident: string) => void;
-}
-
-const SelectMedunderskriver = ({ medunderskrivere, onChangeChosenMedunderskriver }: SelectMedunderskriverProps) => (
-  <StyledFormSection>
-    <Select label="Medunderskriver:" onChange={(e) => onChangeChosenMedunderskriver(e.target.value)}>
-      {medunderskrivere.map((medunderskriver) => (
-        <option key={medunderskriver.ident} value={medunderskriver.ident}>
-          {medunderskriver.navn}
-        </option>
-      ))}
-    </Select>
-  </StyledFormSection>
-);
-
-const ActionButton = () => (
-  <StyledFormSection>
-    <Hovedknapp>Send til medunderskriver</Hovedknapp>
-  </StyledFormSection>
-);
-
-const StyledFormSection = styled.div`
-  margin-top: 20px;
-`;

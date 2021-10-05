@@ -2,13 +2,16 @@ import styled from 'styled-components';
 
 interface ToggleButtonTheme {
   open: boolean;
+  minHeight: string | undefined;
 }
 
 export const ToggleButton = styled.button`
   border: 1px solid #78706a;
   padding: 0 1.75rem 0 0.5rem;
-  min-height: 2rem;
-  min-width: 13em;
+  min-height: ${({ theme }: { theme: ToggleButtonTheme }) =>
+    typeof theme.minHeight === 'undefined' ? '2rem' : theme.minHeight};
+  width: 100%;
+  white-space: nowrap;
   border-radius: 0.25rem;
   transition: box-shadow 0.1s ease;
   cursor: pointer;
@@ -51,5 +54,11 @@ export const ToggleButton = styled.button`
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px #254b6d;
+  }
+
+  &:disabled {
+    border-color: #6a6a6a;
+    background: #f1f1f1;
+    opacity: 0.7;
   }
 `;

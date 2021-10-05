@@ -24,7 +24,7 @@ export const Behandling = ({ isLoading, shown, klagebehandling, onChange }: Beha
   }
 
   return (
-    <PanelContainer width={50}>
+    <PanelContainer>
       <StyledContainer>
         <Behandlingsdetaljer klagebehandling={klagebehandling} onChange={onChange} />
         <Behandlingsdialog klagebehandling={klagebehandling} />

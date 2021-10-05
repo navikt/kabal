@@ -33,7 +33,7 @@ export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Elem
     kvalitetsvurdering.kvalitetUtredningBra === true || kvalitetsvurdering.kvalitetVedtakBra === true;
 
   return (
-    <PanelContainer width={50}>
+    <PanelContainer>
       <KvalitetsVurderingContainer>
         <Header>Kvalitetsvurdering</Header>
         <Oversendelsesbrev />

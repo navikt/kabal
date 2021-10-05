@@ -38,7 +38,6 @@ export const StyledLabel = styled.div`
 export const StyledBehandlingsdetaljer = styled.div`
   flex-basis: 100%;
   border-right: 1px solid #c9c9c9;
-  padding: 1em;
   height: 100%;
 `;
 
@@ -71,22 +70,36 @@ export const StyledUtfallResultat = styled.div`
 `;
 
 export const StyledSubHeader = styled.h3`
-  margin-top: 2em;
+  margin-top: 0;
   margin-bottom: 0.5em;
   font-size: 20px;
   line-height: 25px;
   font-weight: 600;
 `;
 
-export const StyledFullfoerKlagebehandlingButtons = styled.div`
+export const StyledConfirmKlagebehandlingButtons = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 
-export const StyledFullfoerKlagebehandlingText = styled.p`
+export const StyledConfirmKlagebehandlingText = styled.p`
+  margin: 0 0 1em;
   white-space: normal;
 `;
 
-export const StyledFullfoerKlagebehandling = styled.div`
+export const StyledConfirmKlagebehandlingBox = styled.div`
   border: 1px solid #0067c5;
   padding: 1em;
+`;
+
+export const StyledPaddedContent = styled.div`
+  padding: 1em;
+`;
+
+export const StyledAlertstripe = styled.div`
+  margin-bottom: 1em;
+`;
+
+export const StyledMedunderskriver = styled.div`
+  max-width: 250px;
 `;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const DocumentsContainer = styled.section<{ fullvisning: boolean }>`
+export const DocumentsContainer = styled.section`
   margin: 0.25em 0.25em 0.25em 0.25em;
   background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -8,6 +8,5 @@ export const DocumentsContainer = styled.section<{ fullvisning: boolean }>`
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  min-width: ${({ fullvisning }) => (fullvisning ? '40em' : '16em')};
   height: 100%;
 `;

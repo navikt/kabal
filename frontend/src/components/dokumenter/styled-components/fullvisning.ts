@@ -1,38 +1,28 @@
 import { Knapp } from 'nav-frontend-knapper';
 import { Checkbox } from 'nav-frontend-skjema';
 import styled from 'styled-components';
+import { LabelTema } from '../../../styled-components/labels';
 
-export const DokumenterFullvisning = styled.div`
-  display: flex;
+export const DokumenterFullvisning = styled.section`
   overflow: hidden;
-  flex-flow: column;
 `;
+
 export const List = styled.ul`
   display: block;
   list-style: none;
   font-size: 16px;
   margin: 0;
-  padding: 6px;
-`;
-export const StickyList = styled.ul`
-  display: block;
-  list-style: none;
-  font-size: 16px;
-  margin: 0;
-  padding: 6px;
-  position: sticky;
-  z-index: 1;
-  background: white;
-  top: 0;
+  padding: 0;
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 export const ListItem = styled.li`
   border-top: 1px solid #c6c2bf;
-  padding: 12px;
-`;
-
-export const ListItemBorderless = styled.li`
-  padding: 12px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 export const RightAlign = styled.div`
@@ -42,33 +32,35 @@ export const RightAlign = styled.div`
   position: relative;
 `;
 
-export const DokumentRad = styled.ul`
-  list-style: none;
+export const DocumentRow = styled.article`
   margin: 0;
-  padding: 0.25em;
   display: grid;
   grid-template-areas:
     'tittel tema dato sjekkboks'
     'vedlegg vedlegg vedlegg vedlegg';
-  grid-template-rows: 1fr;
+  grid-template-columns: 350px 140px auto 32px;
+  /* grid-template-columns: 6fr 3fr 3fr 1fr; */
+  grid-column-gap: 1em;
+
 `;
 
-export const DokumentDato = styled.li`
-  max-width: 8em;
+export const DocumentDate = styled.time`
   cursor: pointer;
   text-align: center;
-  font-size: 0.9em;
+  font-size: 14px;
   grid-area: dato;
 `;
 
-export const DokumentTittel = styled.li`
+export const DocumentTitle = styled.h1`
+  font-size: 1em;
+  font-weight: normal;
+  margin: 0;
   cursor: pointer;
   color: #0067c5;
   grid-area: tittel;
-  width: 11em;
 `;
 
-export const DokumentSjekkboks = styled.li`
+export const DocumentCheckbox = styled.div`
   width: 100%;
   text-align: right;
   grid-area: sjekkboks;
@@ -80,11 +72,8 @@ export const DokumentCheckbox = styled(Checkbox)`
   line-height: 0;
 `;
 
-export const DokumentTema = styled.li`
-  width: 8em;
-  cursor: pointer;
+export const DocumentTema = styled(LabelTema)`
   grid-area: tema;
-  max-height: 2em;
 `;
 
 export const TemaText = styled.div`
@@ -98,9 +87,10 @@ export const TemaText = styled.div`
 
 export const VedleggBeholder = styled.div`
   grid-area: vedlegg;
+  margin-left: 2em;
 `;
 
-export const VedleggRad = styled.ul`
+export const VedleggRad = styled.article`
   list-style: none;
   margin: 0;
   padding: 0.65em 0 0 0;
@@ -108,11 +98,11 @@ export const VedleggRad = styled.ul`
   justify-content: space-between;
 `;
 
-export const VedleggTittel = styled.li`
+export const VedleggTittel = styled.h1`
+  margin: 0;
   color: #0067c5;
-  margin: 0 0 0 2em;
   min-width: 15em;
-  cursor: pointer;
+  font-size: 1em;
 `;
 
 export const StyledLastFlereKnapp = styled(Knapp)`
@@ -121,10 +111,4 @@ export const StyledLastFlereKnapp = styled(Knapp)`
   margin-top: 1em;
   margin-left: auto;
   margin-right: auto;
-`;
-
-export const FilterRad = styled.table`
-  width: calc(100% - 2em);
-  margin: 0;
-  padding: 0.25em;
 `;

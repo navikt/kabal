@@ -2,9 +2,10 @@ import React from 'react';
 import { IDokument, IDokumentVedlegg } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
+import { DocumentButton } from '../styled-components/document-button';
 import {
+  DocumentCheckbox,
   DokumentCheckbox,
-  DokumentSjekkboks,
   RightAlign,
   VedleggRad,
   VedleggTittel,
@@ -21,7 +22,7 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ vedlegg, document, tilknyttet, canEdit, onCheck, setShownDocument }) => {
-    const onVisDokument = () =>
+    const onShowDocument = () =>
       setShownDocument({
         journalpostId: document.journalpostId,
         dokumentInfoId: vedlegg.dokumentInfoId,
@@ -31,8 +32,10 @@ export const Vedlegg = React.memo<VedleggProps>(
 
     return (
       <VedleggRad key={document.journalpostId + vedlegg.dokumentInfoId}>
-        <VedleggTittel onClick={onVisDokument}>{vedlegg.tittel}</VedleggTittel>
-        <DokumentSjekkboks className={'dokument-sjekkboks'}>
+        <VedleggTittel>
+          <DocumentButton onClick={onShowDocument}>{vedlegg.tittel}</DocumentButton>
+        </VedleggTittel>
+        <DocumentCheckbox className={'dokument-sjekkboks'}>
           <RightAlign>
             <DokumentCheckbox
               label={''}
@@ -41,7 +44,7 @@ export const Vedlegg = React.memo<VedleggProps>(
               onChange={(e) => onCheck({ ...document, ...vedlegg }, e.currentTarget.checked)}
             />
           </RightAlign>
-        </DokumentSjekkboks>
+        </DocumentCheckbox>
       </VedleggRad>
     );
   },

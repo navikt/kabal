@@ -42,6 +42,7 @@ const StyledList = styled.ul`
   left: 0;
   padding: 0;
   margin: 0;
+  min-width: 100%;
   list-style: none;
   background-color: white;
   border-radius: 0.25rem;
@@ -49,11 +50,15 @@ const StyledList = styled.ul`
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
   max-height: calc(100vh - 20em);
   overflow-y: auto;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  z-index: 1;
 `;
 
 const StyledListItem = styled.li`
   margin: 0;
   padding: 0;
+  width: 100%;
 `;
 
 const StyledTopListItem = styled(StyledListItem)`

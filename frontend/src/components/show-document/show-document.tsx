@@ -9,6 +9,7 @@ import {
   StyledDocumentTitle,
   StyledExtLinkIcon,
   StyledHeaderButton,
+  StyledHeaderLink,
   StyledZoomInIcon,
   StyledZoomOutIcon,
 } from './styled-components';
@@ -54,9 +55,9 @@ export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumen
           <HeaderButton onClick={increase} text="Zoom inn på PDF">
             <StyledZoomInIcon alt="Zoom inn på PDF" />
           </HeaderButton>
-          <a href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
+          <StyledHeaderLink href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
             <StyledExtLinkIcon alt="Ekstern lenke" />
-          </a>
+          </StyledHeaderLink>
           <HeaderButton onClick={close} text="Lukk forhåndsvisning">
             <StyledCancelIcon alt="Lukk forhåndsvisning" />
           </HeaderButton>

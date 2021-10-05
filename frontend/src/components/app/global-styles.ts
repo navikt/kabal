@@ -1,12 +1,23 @@
 import { createGlobalStyle, css } from 'styled-components';
 
 const styles = css`
+  html {
+    box-sizing: border-box;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+
   html,
   body,
   #app {
-    min-height: 100vh;
+    height: 100%;
     margin: 0;
     width: 100%;
+    overflow: hidden;
   }
 
   #app {

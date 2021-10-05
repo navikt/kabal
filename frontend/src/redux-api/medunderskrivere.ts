@@ -1,11 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
+import { MedunderskriverFlyt } from './oppgave-state-types';
 
-enum MedunderskriverFlyt {
-  IKKE_SENDT,
-  OVERSENDT_TIL_MEDUNDERSKRIVER,
-  RETURNERT_TIL_SAKSBEHANDLER,
-}
 export interface IMedunderskrivereState {
   medunderskrivere: IMedunderskriver[];
   loading: boolean;
@@ -39,7 +35,13 @@ export interface ISettMedunderskriverResponse {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
-//klagebehandlinger/{id}/detaljer/medunderskriverident
+export interface ISwitchMedunderskriverflytParams {
+  klagebehandlingId: string;
+}
+export interface ISwitchMedunderskriverflytResponse {
+  medunderskriverFlyt: string;
+  modified: string;
+}
 
 export const medunderskrivereApi = createApi({
   reducerPath: 'medunderskrivereApi',
@@ -58,7 +60,23 @@ export const medunderskrivereApi = createApi({
         validateStatus: ({ ok }) => ok,
       }),
     }),
+    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, ISwitchMedunderskriverflytParams>({
+      query: ({ klagebehandlingId }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/send`,
+        method: 'POST',
+        validateStatus: ({ ok }) => ok,
+      }),
+      // onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
+      //   const patchResultMedunderskriver = dispatch(
+      //     medunderskrivereApi.util.updateQueryData
+      //   );
+      // }
+    }),
   }),
 });
 
-export const { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } = medunderskrivereApi;
+export const {
+  useGetMedunderskrivereQuery,
+  useUpdateChosenMedunderskriverMutation,
+  useSwitchMedunderskriverflytMutation,
+} = medunderskrivereApi;

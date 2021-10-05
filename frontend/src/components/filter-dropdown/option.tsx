@@ -5,13 +5,13 @@ interface FilterProps {
   onChange: (id: string | null, active: boolean) => void;
   active: boolean;
   filterId?: string | null;
-  children: React.ReactNode;
+  children: string;
 }
 
 export const Filter = ({ active, filterId = null, children, onChange }: FilterProps): JSX.Element => (
   <StyledLabel>
     <StyledInput type="checkbox" checked={active} onChange={(event) => onChange(filterId, event.target.checked)} />
-    {children}
+    <StyledText>{children}</StyledText>
   </StyledLabel>
 );
 
@@ -19,12 +19,14 @@ const StyledLabel = styled.label`
   display: flex;
   align-items: center;
   cursor: pointer;
+  width: 100%;
   padding: 0.5em 1em;
   font-size: 1em;
   font-weight: 400;
   user-select: none;
   white-space: nowrap;
   word-break: keep-all;
+  overflow: hidden;
 
   &:hover {
     color: #0067c5;
@@ -41,6 +43,7 @@ const StyledInput = styled.input`
   width: 20px;
   height: 20px;
   margin-right: 1rem;
+  flex-shrink: 0;
 
   &:focus,
   &:active {
@@ -54,4 +57,8 @@ const StyledInput = styled.input`
       no-repeat center center;
     background-size: 75%;
   }
+`;
+
+const StyledText = styled.span`
+  width: 100%;
 `;

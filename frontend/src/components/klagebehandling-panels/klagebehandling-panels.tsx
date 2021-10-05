@@ -58,7 +58,11 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
 };
 
 const PageContainer = styled.main`
+  /* display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content; */
   display: flex;
+  width: 100%;
   margin: 0 0.25em 0 0;
   height: calc(100vh - 9em);
   overflow-x: scroll;

@@ -7,6 +7,23 @@ export enum Gender {
   FEMALE = 'KVINNE',
 }
 
+export enum Utfall {
+  TRUKKET = 'TRUKKET',
+  RETUR = 'RETUR',
+  OPPHEVET = 'OPPHEVET',
+  MEDHOLD = 'MEDHOLD',
+  DELVIS_MEDHOLD = 'DELVIS_MEDHOLD',
+  OPPRETTHOLDT = 'OPPRETTHOLDT',
+  UGUNST = 'UGUNST',
+  AVVIST = 'AVVIST',
+}
+
+export enum MedunderskriverFlyt {
+  IKKE_SENDT = 'IKKE_SENDT',
+  OVERSENDT_TIL_MEDUNDERSKRIVER = 'OVERSENDT_TIL_MEDUNDERSKRIVER',
+  RETURNERT_TIL_SAKSBEHANDLER = 'RETURNERT_TIL_SAKSBEHANDLER',
+}
+
 export interface IKlagebehandlingState {
   opptatt: boolean;
   lagretVersjon: IKlagebehandlingUpdate | null;
@@ -50,6 +67,7 @@ export interface IKlagebehandling {
   klagerVirksomhetsnavn: string | null;
   klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
+  medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
   modified: string; // LocalDateTime
   mottatt: string | null; // LocalDate
@@ -84,7 +102,7 @@ export interface Vedtak {
   hjemler: string[];
   id: string;
   opplastet: string | null; // LocalDateTime
-  utfall: string | null;
+  utfall: Utfall | null;
 }
 
 export interface IBrevMottaker {

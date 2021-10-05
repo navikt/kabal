@@ -10,9 +10,10 @@ interface MultiSelectProps {
   options: IKodeverkVerdi[];
   selected: string[];
   onChange: (selected: string[]) => void;
+  disabled?: boolean;
 }
 
-export const MultiSelect = ({ title, onChange, options, selected }: MultiSelectProps) => {
+export const MultiSelect = ({ title, onChange, options, selected, disabled }: MultiSelectProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,7 +33,7 @@ export const MultiSelect = ({ title, onChange, options, selected }: MultiSelectP
 
   return (
     <StyledMultiSelect ref={ref}>
-      <ToggleButton onClick={toggleOpen}>
+      <ToggleButton onClick={toggleOpen} disabled={disabled} theme={{ open, minHeight: '3rem' }}>
         <StyledTitle>{title}</StyledTitle>
       </ToggleButton>
 
