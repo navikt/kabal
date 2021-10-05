@@ -8,7 +8,7 @@
     "start": "node main.js",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
-    "test": "snyk test",
+    "test": "echo 'No tests... Moving on.'",
     "build": "echo 'No build required. Moving on.'"
   },
   "keywords": [],
