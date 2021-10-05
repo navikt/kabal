@@ -36,12 +36,14 @@ export const StyledLabel = styled.div`
 `;
 
 export const StyledBehandlingsdetaljer = styled.div`
+  flex-basis: 100%;
   border-right: 1px solid #c9c9c9;
   padding: 1em;
   height: 100%;
 `;
 
 export const StyledBehandlingsdialog = styled.div`
+  flex-basis: 100%;
   height: 100%;
   padding: 1em;
 `;

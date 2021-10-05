@@ -23,7 +23,6 @@ export const Lovhjemmel = ({ onChange, hjemler }: HjemmelProps) => {
     return <NavFrontendSpinner />;
   }
 
-  const options = kodeverk.hjemmel.map(({ id, navn }) => ({ value: id, label: navn }));
   const selected = localHjemler.map((hjemmelId) => ({
     label: kodeverk.hjemmel.find(({ id }) => id === hjemmelId)?.navn ?? hjemmelId,
     value: hjemmelId,
@@ -42,7 +41,5 @@ export const Lovhjemmel = ({ onChange, hjemler }: HjemmelProps) => {
     onChange({ hjemler: value });
   };
 
-  return (
-    <MultiSelect options={options} title={title} selected={localHjemler} onChange={onLovhjemmelChange}></MultiSelect>
-  );
+  return <MultiSelect options={kodeverk.hjemmel} title={title} selected={localHjemler} onChange={onLovhjemmelChange} />;
 };
