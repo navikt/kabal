@@ -11,6 +11,8 @@ interface SendTilMedunderskriverProps {
 }
 
 export const SendTilMedunderskriver = ({ klagebehandling, onSendToMedunderskriver }: SendTilMedunderskriverProps) => {
+  const sendToMedunderskriverDisabled = klagebehandling.medunderskriverident === null;
+
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledAlertstripe type="info">
@@ -20,16 +22,22 @@ export const SendTilMedunderskriver = ({ klagebehandling, onSendToMedunderskrive
     );
   }
 
-  return <SendToMedunderskriverButton onSendToMedunderskriver={onSendToMedunderskriver} />;
+  return (
+    <SendToMedunderskriverButton
+      onSendToMedunderskriver={onSendToMedunderskriver}
+      disabled={sendToMedunderskriverDisabled}
+    />
+  );
 };
 
 interface ActionButtonProps {
   onSendToMedunderskriver: () => void;
+  disabled: boolean;
 }
 
-const SendToMedunderskriverButton = ({ onSendToMedunderskriver }: ActionButtonProps) => (
+const SendToMedunderskriverButton = ({ onSendToMedunderskriver, disabled }: ActionButtonProps) => (
   <StyledFormSection>
-    <Hovedknapp mini onClick={() => onSendToMedunderskriver()}>
+    <Hovedknapp mini onClick={() => onSendToMedunderskriver()} disabled={disabled}>
       Send til medunderskriver
     </Hovedknapp>
   </StyledFormSection>

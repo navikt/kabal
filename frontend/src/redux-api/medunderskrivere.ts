@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
+import { klagebehandlingApi } from './oppgave';
 import { MedunderskriverFlyt } from './oppgave-state-types';
 
 export interface IMedunderskrivereState {
@@ -25,7 +26,7 @@ export interface IMedunderskrivereInput {
 export interface ISettMedunderskriverParams {
   klagebehandlingId: string;
   klagebehandlingVersjon: number;
-  medunderskriverident: string;
+  medunderskriverident: string | null;
 }
 
 export interface ISettMedunderskriverResponse {
@@ -54,11 +55,24 @@ export const medunderskrivereApi = createApi({
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISettMedunderskriverParams>({
       query: ({ klagebehandlingId, ...body }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/detaljer/medunderskriverident`,
+        url: `/api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
         method: 'PUT',
         body,
         validateStatus: ({ ok }) => ok,
       }),
+      onQueryStarted: async ({ klagebehandlingId, ...update }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+            klagebehandling.medunderskriverident = update.medunderskriverident;
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, ISwitchMedunderskriverflytParams>({
       query: ({ klagebehandlingId }) => ({

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ControlPanel = styled.header`
   padding: 0 1em;
-  background-color: #e5e5e5;
+  background-color: #f8f8f8;
   display: flex;
   justify-content: space-between;
   overflow: auto;

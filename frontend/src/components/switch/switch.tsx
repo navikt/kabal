@@ -19,8 +19,8 @@ export const Switch = ({ checked, onChange, children }: SwitchProps): JSX.Elemen
 const StyledLabel = styled.label`
   display: flex;
   cursor: pointer;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
   user-select: none;
 `;
 

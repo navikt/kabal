@@ -5,25 +5,24 @@ import { IMedunderskriver } from '../../../../redux-api/medunderskrivere';
 
 interface SelectMedunderskriverProps {
   medunderskrivere: IMedunderskriver[];
-  onChangeChosenMedunderskriver: (medunderskriverident: string) => void;
-  sentToMedunderskriverNavIdent: string | null;
+  onChangeChosenMedunderskriver: (medunderskriverident: string | null) => void;
+  selectedMedunderskriverNavIdent: string | null;
 }
+
+const NONE_SELECTED = 'NONE_SELECTED';
 
 export const SelectMedunderskriver = ({
   medunderskrivere,
   onChangeChosenMedunderskriver,
-  sentToMedunderskriverNavIdent,
+  selectedMedunderskriverNavIdent,
 }: SelectMedunderskriverProps) => (
-  //   const sentToMedunderskriverIndex = medunderskrivere.findIndex(
-  //     (medunderskriver: IMedunderskriver) => medunderskriver.ident === sentToMedunderskriverNavIdent
-  //   );
-
   <StyledFormSection>
     <Select
       label="Medunderskriver:"
-      selected={sentToMedunderskriverNavIdent ?? undefined}
-      onChange={(e) => onChangeChosenMedunderskriver(e.target.value)}
+      onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
+      value={medunderskrivere.find(({ ident }) => ident === selectedMedunderskriverNavIdent)?.ident}
     >
+      <option value={NONE_SELECTED}>Ingen medunderskriver</option>
       {medunderskrivere.map((medunderskriver) => (
         <option key={medunderskriver.ident} value={medunderskriver.ident}>
           {medunderskriver.navn}

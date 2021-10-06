@@ -1,10 +1,7 @@
-// import { Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-// import styled from 'styled-components';
 import { IUserData } from '../../../../redux-api/bruker';
 import {
-  // IMedunderskriver,
   useGetMedunderskrivereQuery,
   useSwitchMedunderskriverflytMutation,
   useUpdateChosenMedunderskriverMutation,
@@ -38,15 +35,14 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
     return <p>Fant ingen medunderskrivere</p>;
   }
 
-  const onChangeChosenMedunderskriver = (medunderskriverident: string) => {
+  const onChangeChosenMedunderskriver = (medunderskriverident: string | null) => {
     const { id, klagebehandlingVersjon } = klagebehandling;
-    const queryObj = {
+
+    updateChosenMedunderskriver({
       klagebehandlingId: id,
       klagebehandlingVersjon,
       medunderskriverident,
-    };
-
-    updateChosenMedunderskriver(queryObj);
+    });
   };
 
   const onSendToMedunderskriver = () => {
@@ -60,7 +56,7 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
       <SelectMedunderskriver
         medunderskrivere={medunderskrivereData.medunderskrivere}
         onChangeChosenMedunderskriver={onChangeChosenMedunderskriver}
-        sentToMedunderskriverNavIdent={klagebehandling.medunderskriverident}
+        selectedMedunderskriverNavIdent={klagebehandling.medunderskriverident}
       />
       <SendTilMedunderskriver klagebehandling={klagebehandling} onSendToMedunderskriver={onSendToMedunderskriver} />
     </>
