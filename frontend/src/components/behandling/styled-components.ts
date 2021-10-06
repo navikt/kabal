@@ -77,17 +77,17 @@ export const StyledSubHeader = styled.h3`
   font-weight: 600;
 `;
 
-export const StyledConfirmKlagebehandlingButtons = styled.div`
+export const StyledFinishKlagebehandlingButtons = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-export const StyledConfirmKlagebehandlingText = styled.p`
+export const StyledFinishKlagebehandlingText = styled.p`
   margin: 0 0 1em;
   white-space: normal;
 `;
 
-export const StyledConfirmKlagebehandlingBox = styled.div`
+export const StyledFinishKlagebehandlingBox = styled.div`
   border: 1px solid #0067c5;
   padding: 1em;
 `;

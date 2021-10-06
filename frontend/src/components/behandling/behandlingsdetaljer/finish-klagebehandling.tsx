@@ -9,45 +9,45 @@ import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
 import { Utfall } from '../../../redux-api/oppgave-state-types';
 import {
   StyledAlertstripe,
-  StyledConfirmKlagebehandlingBox,
-  StyledConfirmKlagebehandlingButtons,
-  StyledConfirmKlagebehandlingText,
+  StyledFinishKlagebehandlingBox,
+  StyledFinishKlagebehandlingButtons,
+  StyledFinishKlagebehandlingText,
   StyledPaddedContent,
   StyledSubHeader,
 } from '../styled-components';
 
-interface ConfirmProps {
+interface FinishProps {
   cancel: () => void;
 }
 
-const Confirm = ({ cancel }: ConfirmProps) => (
-  <StyledConfirmKlagebehandlingBox>
-    <StyledConfirmKlagebehandlingText>
+const ConfirmFinish = ({ cancel }: FinishProps) => (
+  <StyledFinishKlagebehandlingBox>
+    <StyledFinishKlagebehandlingText>
       Du fullfører nå klagebehandlingen, brevet sendes til søker og klagebehandlingen kan ikke redigeres. Bekreft at du
       faktisk ønsker å fullføre behandlingen.
-    </StyledConfirmKlagebehandlingText>
-    <StyledConfirmKlagebehandlingButtons>
+    </StyledFinishKlagebehandlingText>
+    <StyledFinishKlagebehandlingButtons>
       <Hovedknapp>Fullfør</Hovedknapp>
       <Knapp onClick={cancel}>Avbryt</Knapp>
-    </StyledConfirmKlagebehandlingButtons>
-  </StyledConfirmKlagebehandlingBox>
+    </StyledFinishKlagebehandlingButtons>
+  </StyledFinishKlagebehandlingBox>
 );
 
-export const ConfirmKlagebehandling = () => {
+export const FinishKlagebehandling = () => {
   const id = useKlagebehandlingId();
   const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(id);
-  const [showConfirmPopup, setShowConfirm] = useState(false);
+  const [showConfirmFinish, setConfirmFinish] = useState(false);
 
   if (typeof klagebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
   }
 
   const cancel = () => {
-    setShowConfirm(false);
+    setConfirmFinish(false);
   };
 
-  const showConfirm = () => {
-    setShowConfirm(true);
+  const showFinish = () => {
+    setConfirmFinish(true);
   };
 
   if (klagebehandling.avsluttetAvSaksbehandler !== null) {
@@ -58,13 +58,13 @@ export const ConfirmKlagebehandling = () => {
     <>
       <StyledPaddedContent>
         <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>
-        {!showConfirmPopup && (
-          <Knapp mini onClick={showConfirm}>
+        {!showConfirmFinish && (
+          <Knapp mini onClick={showFinish}>
             Fullfør klagebehandling
           </Knapp>
         )}
       </StyledPaddedContent>
-      {showConfirmPopup && <Confirm cancel={cancel} />}
+      {showConfirmFinish && <ConfirmFinish cancel={cancel} />}
     </>
   );
 };

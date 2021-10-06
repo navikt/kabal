@@ -4,7 +4,7 @@ import { getFullName } from '../../../domain/name';
 import { IKlagebehandling, IKlager } from '../../../redux-api/oppgave-state-types';
 import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
-import { ConfirmKlagebehandling } from './confirm-klagebehandling';
+import { FinishKlagebehandling } from './finish-klagebehandling';
 import { Labels } from './labels';
 import { Lovhjemmel } from './lovhjemmel';
 import { SubSection } from './sub-section';
@@ -50,7 +50,7 @@ export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps)
         <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} />
       </StyledPaddedContent>
 
-      <ConfirmKlagebehandling />
+      <FinishKlagebehandling />
     </StyledBehandlingsdetaljer>
   );
 };
