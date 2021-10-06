@@ -8,14 +8,14 @@ export enum Gender {
 }
 
 export enum Utfall {
-  TRUKKET = 'TRUKKET',
-  RETUR = 'RETUR',
-  OPPHEVET = 'OPPHEVET',
-  MEDHOLD = 'MEDHOLD',
-  DELVIS_MEDHOLD = 'DELVIS_MEDHOLD',
-  OPPRETTHOLDT = 'OPPRETTHOLDT',
-  UGUNST = 'UGUNST',
-  AVVIST = 'AVVIST',
+  TRUKKET = '1',
+  RETUR = '2',
+  OPPHEVET = '3',
+  MEDHOLD = '4',
+  DELVIS_MEDHOLD = '5',
+  OPPRETTHOLDT = '6',
+  UGUNST = '7',
+  AVVIST = '8',
 }
 
 export enum MedunderskriverFlyt {
