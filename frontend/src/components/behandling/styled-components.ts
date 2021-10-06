@@ -68,6 +68,7 @@ export const StyledInfoChildren = styled.div`
 
 export const StyledUtfallResultat = styled.div`
   margin-bottom: 1em;
+  margin-top: 1em;
 `;
 
 export const StyledSubHeader = styled.h3`
