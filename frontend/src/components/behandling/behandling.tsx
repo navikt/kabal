@@ -1,7 +1,6 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
-import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { PanelContainer } from '../klagebehandling-panels/panel';
 import { Behandlingsdetaljer } from './behandlingsdetaljer/behandlingsdetaljer';
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
@@ -10,11 +9,10 @@ import { StyledContainer } from './styled-components';
 interface BehandlingProps {
   shown: boolean;
   klagebehandling?: IKlagebehandling;
-  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
   isLoading: boolean;
 }
 
-export const Behandling = ({ isLoading, shown, klagebehandling, onChange }: BehandlingProps) => {
+export const Behandling = ({ isLoading, shown, klagebehandling }: BehandlingProps) => {
   if (!shown) {
     return null;
   }
@@ -26,7 +24,7 @@ export const Behandling = ({ isLoading, shown, klagebehandling, onChange }: Beha
   return (
     <PanelContainer>
       <StyledContainer>
-        <Behandlingsdetaljer klagebehandling={klagebehandling} onChange={onChange} />
+        <Behandlingsdetaljer klagebehandling={klagebehandling} />
         <Behandlingsdialog klagebehandling={klagebehandling} />
       </StyledContainer>
     </PanelContainer>

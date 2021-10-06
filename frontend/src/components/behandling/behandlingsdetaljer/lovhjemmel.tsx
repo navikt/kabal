@@ -3,18 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
-import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
+import { useUpdateHjemlerMutation } from '../../../redux-api/oppgave';
 import { LabelLovhjemmel } from '../../../styled-components/labels';
 import { MultiSelect } from '../../multi-select/multi-select';
 import { StyledLovhjemmelLabel, StyledLovhjemmelLabels } from '../styled-components';
 import { SubSection } from './sub-section';
 
 interface HjemmelProps {
-  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
   hjemler: string[];
 }
 
-export const Lovhjemmel = ({ onChange, hjemler }: HjemmelProps) => {
+export const Lovhjemmel = ({ hjemler }: HjemmelProps) => {
+  const [updateHjemler] = useUpdateHjemlerMutation();
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit(klagebehandlingId);
 
@@ -44,7 +44,7 @@ export const Lovhjemmel = ({ onChange, hjemler }: HjemmelProps) => {
 
   const onLovhjemmelChange = (value: string[]) => {
     setLocalHjemler(value);
-    onChange({ hjemler: value });
+    updateHjemler({ klagebehandlingId, hjemler: value });
   };
 
   return (

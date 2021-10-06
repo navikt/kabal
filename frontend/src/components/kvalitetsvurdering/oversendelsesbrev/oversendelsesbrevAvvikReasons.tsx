@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
+import { IKodeverkVerdi, useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { IKvalitetsvurdering } from '../../../redux-api/kvalitetsvurdering';
 import { ReasonsField } from '../styled-components';
 
@@ -14,10 +15,13 @@ export const OversendelsesbrevKvalitetsavvikReasons = ({
   updateKvalitetsskjema,
   show,
 }: OversendelsesbrevReasonsProps) => {
+  const { data: kodeverk } = useGetKodeverkQuery();
+  const kvalitetsAvvik = typeof kodeverk !== 'undefined' ? kodeverk.kvalitetsavvikOversendelsesbrev : [];
   const checkedReasons = kvalitetsvurdering.kvalitetsavvikOversendelsesbrev;
-  const checkboxes = useOversendelsesbrevCheckboxes(checkedReasons);
 
-  if (!show) {
+  const checkboxes = useOversendelsesbrevCheckboxes(kvalitetsAvvik, checkedReasons);
+
+  if (!show || !kodeverk) {
     return null;
   }
 
@@ -28,18 +32,18 @@ export const OversendelsesbrevKvalitetsavvikReasons = ({
           <Checkbox
             key={checkbox.id}
             label={checkbox.label}
-            value={checkbox.value}
+            value={checkbox.id}
             checked={checkbox.checked}
-            onChange={(e) => {
-              if (checkedReasons.includes(e.target.value)) {
+            onChange={({ target }) => {
+              if (checkedReasons.includes(target.value)) {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikOversendelsesbrev: checkedReasons.filter((reason) => reason !== e.target.value),
+                  kvalitetsavvikOversendelsesbrev: checkedReasons.filter((reason) => reason !== target.value),
                 });
               } else {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikOversendelsesbrev: checkedReasons.concat(e.target.value),
+                  kvalitetsavvikOversendelsesbrev: checkedReasons.concat(target.value),
                 });
               }
             }}
@@ -48,51 +52,16 @@ export const OversendelsesbrevKvalitetsavvikReasons = ({
       </CheckboxGruppe>
     </ReasonsField>
   );
-
-  return null;
 };
 
-enum REASONS {
-  OVERSITTET_FRIST_IKKE_KOMMENTERT = '1',
-  IKKE_GJENGITT = '2',
-  MANGLER_BEGRUNNELSE = '3',
-  ANFORSLER_IKKE_TILSTREKKELIG = '4',
-  MANGLER_KONKLUSJON = '5',
-}
-
-const useOversendelsesbrevCheckboxes = (checked: string[]) =>
+const useOversendelsesbrevCheckboxes = (kvalitetsAvvik: IKodeverkVerdi[], checked: string[]) =>
   useMemo(
-    () => [
-      {
-        id: REASONS.OVERSITTET_FRIST_IKKE_KOMMENTERT,
-        label: 'Oversittet klagefrist er ikke kommentert',
-        value: REASONS.OVERSITTET_FRIST_IKKE_KOMMENTERT,
-        checked: checked.includes(REASONS.OVERSITTET_FRIST_IKKE_KOMMENTERT),
-      },
-      {
-        id: REASONS.IKKE_GJENGITT,
-        label: 'Hovedinnholdet i klagen er ikke gjengitt',
-        value: REASONS.IKKE_GJENGITT,
-        checked: checked.includes(REASONS.IKKE_GJENGITT),
-      },
-      {
-        id: REASONS.MANGLER_BEGRUNNELSE,
-        label: 'Mangler begrunnelse for hvorfor vedtaket opprettholdes/hvorfor klager ikke oppfyller villkår',
-        value: REASONS.MANGLER_BEGRUNNELSE,
-        checked: checked.includes(REASONS.MANGLER_BEGRUNNELSE),
-      },
-      {
-        id: REASONS.ANFORSLER_IKKE_TILSTREKKELIG,
-        label: 'Klagers anførsler er ikke tilstrekkelig kommentert/imøtegått',
-        value: REASONS.ANFORSLER_IKKE_TILSTREKKELIG,
-        checked: checked.includes(REASONS.ANFORSLER_IKKE_TILSTREKKELIG),
-      },
-      {
-        id: REASONS.MANGLER_KONKLUSJON,
-        label: 'Mangler konklusjon',
-        value: REASONS.MANGLER_KONKLUSJON,
-        checked: checked.includes(REASONS.MANGLER_KONKLUSJON),
-      },
-    ],
-    [checked]
+    () =>
+      kvalitetsAvvik.map((avvik) => ({
+        id: avvik.id,
+        label: avvik.beskrivelse,
+        value: avvik.id,
+        checked: checked.includes(avvik.id),
+      })),
+    [kvalitetsAvvik, checked]
   );

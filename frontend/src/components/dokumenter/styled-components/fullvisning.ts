@@ -2,6 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Checkbox } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 import { LabelTema } from '../../../styled-components/labels';
+import { DocumentCheckbox } from '../alle-dokumenter/document-checkbox';
 
 export const DokumenterFullvisning = styled.section`
   overflow: hidden;
@@ -41,7 +42,10 @@ export const DocumentRow = styled.article`
   grid-template-columns: 350px 140px auto 32px;
   /* grid-template-columns: 6fr 3fr 3fr 1fr; */
   grid-column-gap: 1em;
-
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
 `;
 
 export const DocumentDate = styled.time`
@@ -60,11 +64,8 @@ export const DocumentTitle = styled.h1`
   grid-area: tittel;
 `;
 
-export const DocumentCheckbox = styled.div`
-  width: 100%;
-  text-align: right;
+export const StyledDocumentCheckbox = styled(DocumentCheckbox)`
   grid-area: sjekkboks;
-  position: relative;
 `;
 
 export const DokumentCheckbox = styled(Checkbox)`

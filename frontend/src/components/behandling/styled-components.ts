@@ -101,6 +101,6 @@ export const StyledAlertstripe = styled.div`
   margin-bottom: 1em;
 `;
 
-export const StyledMedunderskriver = styled.div`
+export const BehandlingsdialogContent = styled.div`
   max-width: 250px;
 `;

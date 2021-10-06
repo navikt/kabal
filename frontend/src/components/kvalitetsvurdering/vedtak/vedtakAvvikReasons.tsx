@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
+import { IKodeverkVerdi, useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { IKvalitetsvurdering } from '../../../redux-api/kvalitetsvurdering';
 import { ReasonsField } from '../styled-components';
 
@@ -14,10 +15,13 @@ export const VedtakKvalitetsavvikReasons = ({
   updateKvalitetsskjema,
   show,
 }: VedtakReasonsProps) => {
+  const { data: kodeverk } = useGetKodeverkQuery();
+  const kvalitetsAvvik = typeof kodeverk !== 'undefined' ? kodeverk.kvalitetsavvikVedtak : [];
   const checkedReasons = kvalitetsvurdering.kvalitetsavvikVedtak;
-  const checkboxes = useVedtakCheckboxes(checkedReasons);
 
-  if (!show) {
+  const checkboxes = useVedtakCheckboxes(kvalitetsAvvik, checkedReasons);
+
+  if (!show || !kodeverk) {
     return null;
   }
 
@@ -28,18 +32,18 @@ export const VedtakKvalitetsavvikReasons = ({
           <Checkbox
             key={checkbox.id}
             label={checkbox.label}
-            value={checkbox.value}
+            value={checkbox.id}
             checked={checkbox.checked}
-            onChange={(e) => {
-              if (checkedReasons.includes(e.target.value)) {
+            onChange={({ target }) => {
+              if (checkedReasons.includes(target.value)) {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikVedtak: checkedReasons.filter((reason) => reason !== e.target.value),
+                  kvalitetsavvikVedtak: checkedReasons.filter((reason) => reason !== target.value),
                 });
               } else {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikVedtak: checkedReasons.concat(e.target.value),
+                  kvalitetsavvikVedtak: checkedReasons.concat(target.value),
                 });
               }
             }}
@@ -48,51 +52,16 @@ export const VedtakKvalitetsavvikReasons = ({
       </CheckboxGruppe>
     </ReasonsField>
   );
-
-  return null;
 };
 
-enum REASONS {
-  IKKE_BRUKT_RIKTIG_HJEMMEL = '1',
-  INNHOLDET_I_RETTSREGLENE_IKKE_TILSTREKKELIG_BESKREVET = '2',
-  VURDERINGEN_AV_FAKTUM_ER_MANGELFULL = '3',
-  BEGRUNNELSEN_ER_IKKE_TILSTREKKELIG_KONKRET = '4',
-  FORMIDLINGEN_ER_IKKE_TYDELIG = '5',
-}
-
-const useVedtakCheckboxes = (checked: string[]) =>
+const useVedtakCheckboxes = (kvalitetsAvvik: IKodeverkVerdi[], checked: string[]) =>
   useMemo(
-    () => [
-      {
-        id: REASONS.IKKE_BRUKT_RIKTIG_HJEMMEL,
-        label: 'Det er ikke brukt riktig hjemmel/er',
-        value: REASONS.IKKE_BRUKT_RIKTIG_HJEMMEL,
-        checked: checked.includes(REASONS.IKKE_BRUKT_RIKTIG_HJEMMEL),
-      },
-      {
-        id: REASONS.INNHOLDET_I_RETTSREGLENE_IKKE_TILSTREKKELIG_BESKREVET,
-        label: 'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet',
-        value: REASONS.INNHOLDET_I_RETTSREGLENE_IKKE_TILSTREKKELIG_BESKREVET,
-        checked: checked.includes(REASONS.INNHOLDET_I_RETTSREGLENE_IKKE_TILSTREKKELIG_BESKREVET),
-      },
-      {
-        id: REASONS.VURDERINGEN_AV_FAKTUM_ER_MANGELFULL,
-        label: 'Vurderingen av faktum/bevisvurderingen er mangelfull',
-        value: REASONS.VURDERINGEN_AV_FAKTUM_ER_MANGELFULL,
-        checked: checked.includes(REASONS.VURDERINGEN_AV_FAKTUM_ER_MANGELFULL),
-      },
-      {
-        id: REASONS.BEGRUNNELSEN_ER_IKKE_TILSTREKKELIG_KONKRET,
-        label: 'Begrunnelsen er ikke tilstrekkelig konkret og individuell',
-        value: REASONS.BEGRUNNELSEN_ER_IKKE_TILSTREKKELIG_KONKRET,
-        checked: checked.includes(REASONS.BEGRUNNELSEN_ER_IKKE_TILSTREKKELIG_KONKRET),
-      },
-      {
-        id: REASONS.FORMIDLINGEN_ER_IKKE_TYDELIG,
-        label: 'Formidlingen er ikke tydelig',
-        value: REASONS.FORMIDLINGEN_ER_IKKE_TYDELIG,
-        checked: checked.includes(REASONS.FORMIDLINGEN_ER_IKKE_TYDELIG),
-      },
-    ],
-    [checked]
+    () =>
+      kvalitetsAvvik.map((avvik) => ({
+        id: avvik.id,
+        label: avvik.beskrivelse,
+        value: avvik.id,
+        checked: checked.includes(avvik.id),
+      })),
+    [kvalitetsAvvik, checked]
   );

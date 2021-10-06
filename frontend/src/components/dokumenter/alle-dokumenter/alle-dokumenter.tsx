@@ -1,9 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo, useState } from 'react';
 import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
-import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
-import { IDokument } from '../../../redux-api/dokumenter/types';
 import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
 import { IDocumentReference } from '../../../redux-api/oppgave-types';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
@@ -23,7 +21,7 @@ interface AlleDokumenterProps {
 }
 
 export const AlleDokumenter = React.memo(
-  ({ klagebehandling, show, setShownDocument, onChange }: AlleDokumenterProps) => {
+  ({ klagebehandling, show, setShownDocument }: AlleDokumenterProps) => {
     const [pageReference, setPageReference] = useState<string | null>(null);
     const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
@@ -34,8 +32,6 @@ export const AlleDokumenter = React.memo(
     });
 
     const availableTemaer = useAvailableTemaer();
-
-    const canEdit = useCanEdit(klagebehandling.id);
 
     const dokumenter = useMemo<ITilknyttetDokument[]>(() => {
       if (typeof alleDokumenter === 'undefined') {
@@ -56,19 +52,6 @@ export const AlleDokumenter = React.memo(
       return <NavFrontendSpinner />;
     }
 
-    const onCheck = ({ dokumentInfoId, journalpostId }: IDokument, checked: boolean) => {
-      if (checked) {
-        onChange([...klagebehandling.tilknyttedeDokumenter, { dokumentInfoId, journalpostId }]);
-        return;
-      }
-
-      onChange(
-        klagebehandling.tilknyttedeDokumenter.filter(
-          (d) => !(d.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
-        )
-      );
-    };
-
     return (
       <DokumenterFullvisning>
         <ListHeader>
@@ -81,12 +64,10 @@ export const AlleDokumenter = React.memo(
           {dokumenter.map(({ document: dokument, tilknyttet }) => (
             <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
               <Document
-                canEdit={canEdit}
                 document={dokument}
                 tilknyttet={tilknyttet}
                 setShownDocument={setShownDocument}
                 klagebehandling={klagebehandling}
-                onCheck={onCheck}
               />
             </ListItem>
           ))}

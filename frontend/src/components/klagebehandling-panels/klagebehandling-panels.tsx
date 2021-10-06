@@ -30,10 +30,10 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
 
       const fullUpdate: IKlagebehandlingUpdate = {
         klagebehandlingId,
-        hjemler: klagebehandling.vedtaket.hjemler,
+        hjemler: klagebehandling.resultat.hjemler,
         klagebehandlingVersjon: klagebehandling.klagebehandlingVersjon,
         tilknyttedeDokumenter: klagebehandling.tilknyttedeDokumenter,
-        utfall: klagebehandling.vedtaket.utfall,
+        utfall: klagebehandling.resultat.utfall,
         ...stateUpdate,
         ...update,
       };
@@ -46,12 +46,7 @@ export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): 
   return (
     <PageContainer data-testid={'behandlingsdetaljer'}>
       <Dokumenter shown={toggles.documents} onChange={onChange} />
-      <Behandling
-        shown={toggles.behandling}
-        klagebehandling={klagebehandling}
-        onChange={onChange}
-        isLoading={isLoading}
-      />
+      <Behandling shown={toggles.behandling} klagebehandling={klagebehandling} isLoading={isLoading} />
       <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
     </PageContainer>
   );

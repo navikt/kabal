@@ -5,7 +5,7 @@ import { IKlagebehandlingOppdateringResponse } from './oppgave-types';
 
 export interface IKvalitetsvurdering {
   klagebehandlingId: string;
-  klagebehandlingVersjon: number;
+  // klagebehandlingVersjon: number;
   kvalitetOversendelsesbrevBra?: boolean;
   kvalitetsavvikOversendelsesbrev: string[];
   kommentarOversendelsesbrev?: string;
@@ -52,23 +52,23 @@ export const kvalitetsvurderingApi = createApi({
           })
         );
 
-        const patchresultKlagebehandling = dispatch(
-          klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.klagebehandlingVersjon = kvalitetsVurdering.klagebehandlingVersjon + 1;
-          })
-        );
+        // const patchresultKlagebehandling = dispatch(
+        //   klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+        //     klagebehandling.klagebehandlingVersjon = kvalitetsVurdering.klagebehandlingVersjon + 1;
+        //   })
+        // );
 
         try {
           const { data } = await queryFulfilled;
           dispatch(
             klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-              klagebehandling.klagebehandlingVersjon = data.klagebehandlingVersjon;
+              // klagebehandling.klagebehandlingVersjon = data.klagebehandlingVersjon;
               klagebehandling.modified = data.modified;
             })
           );
         } catch {
           patchResultKvalitet.undo();
-          patchresultKlagebehandling.undo();
+          // patchresultKlagebehandling.undo();
         }
       },
       invalidatesTags: ['kvalitetsvurdering'],

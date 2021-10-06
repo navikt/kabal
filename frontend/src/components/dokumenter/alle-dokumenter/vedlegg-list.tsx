@@ -10,13 +10,11 @@ import { Vedlegg } from './vedlegg';
 interface VedleggListProps {
   klagebehandling: IKlagebehandling;
   document: IDokument;
-  canEdit: boolean;
-  onCheck: (document: IDokument, checked: boolean) => void;
   setShownDocument: (document: IShownDokument) => void;
 }
 
 export const VedleggList = React.memo(
-  ({ klagebehandling, document, canEdit, onCheck, setShownDocument }: VedleggListProps) => {
+  ({ klagebehandling, document, setShownDocument }: VedleggListProps) => {
     const vedleggListe = useMemo<ITilknyttetVedlegg[]>(
       () =>
         document.vedlegg.map((vedlegg) => ({
@@ -38,11 +36,10 @@ export const VedleggList = React.memo(
         {vedleggListe.map(({ vedlegg, tilknyttet }) => (
           <Vedlegg
             key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
-            canEdit={canEdit}
+            klagebehandlingId={klagebehandling.id}
             vedlegg={vedlegg}
             document={document}
             tilknyttet={tilknyttet}
-            onCheck={onCheck}
             setShownDocument={setShownDocument}
           />
         ))}
@@ -50,7 +47,6 @@ export const VedleggList = React.memo(
     );
   },
   (previous, next) =>
-    previous.canEdit === next.canEdit &&
     dokumentMatcher(previous.document, next.document) &&
     previous.klagebehandling.tilknyttedeDokumenter === next.klagebehandling.tilknyttedeDokumenter
 );

@@ -4,17 +4,17 @@ import React from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
+import { useUpdateUtfallMutation } from '../../../redux-api/oppgave';
 import { Utfall } from '../../../redux-api/oppgave-state-types';
-import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
 import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {
-  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
   utfall: string | null;
 }
 
-export const UtfallResultat = ({ onChange, utfall }: UtfallResultatProps) => {
+export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const klagebehandlingId = useKlagebehandlingId();
+  const [updateUtfall] = useUpdateUtfallMutation();
   const canEdit = useCanEdit(klagebehandlingId);
 
   const { data: kodeverk, isLoading } = useGetKodeverkQuery();
@@ -23,7 +23,7 @@ export const UtfallResultat = ({ onChange, utfall }: UtfallResultatProps) => {
     const changedUtfall = event.target.value as keyof typeof Utfall;
 
     if (changedUtfall !== undefined) {
-      onChange({ utfall: changedUtfall as Utfall });
+      updateUtfall({ klagebehandlingId, utfall: changedUtfall as Utfall });
     }
   };
 

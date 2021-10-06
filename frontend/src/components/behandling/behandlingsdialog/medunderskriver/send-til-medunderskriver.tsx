@@ -3,6 +3,8 @@ import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../../../domain/date';
+import { useCanEdit } from '../../../../hooks/use-can-edit';
+import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
 
 interface SendTilMedunderskriverProps {
@@ -11,7 +13,10 @@ interface SendTilMedunderskriverProps {
 }
 
 export const SendTilMedunderskriver = ({ klagebehandling, onSendToMedunderskriver }: SendTilMedunderskriverProps) => {
-  const sendToMedunderskriverDisabled = klagebehandling.medunderskriverident === null;
+  const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
+
+  const sendToMedunderskriverDisabled = !canEdit || klagebehandling.medunderskriverident === null;
 
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (

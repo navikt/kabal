@@ -2,7 +2,6 @@ import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { getFullName } from '../../../domain/name';
 import { IKlagebehandling, IKlager } from '../../../redux-api/oppgave-state-types';
-import { IKlagebehandlingUpdate } from '../../../redux-api/oppgave-types';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
 import { FinishKlagebehandling } from './finish-klagebehandling';
 import { Labels } from './labels';
@@ -12,10 +11,9 @@ import { UtfallResultat } from './utfall-resultat';
 
 interface VenstreProps {
   klagebehandling: IKlagebehandling;
-  onChange: (klagebehandlingUpdate: Partial<IKlagebehandlingUpdate>) => void;
 }
 
-export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps) => {
+export const Behandlingsdetaljer = ({ klagebehandling }: VenstreProps) => {
   const {
     klager,
     type,
@@ -25,7 +23,7 @@ export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps)
     fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraFoersteinstans,
-    vedtaket,
+    resultat,
   } = klagebehandling;
 
   return (
@@ -45,9 +43,9 @@ export const Behandlingsdetaljer = ({ klagebehandling, onChange }: VenstreProps)
 
         <SubSection label="Melding fra førsteinstans for intern bruk">{kommentarFraFoersteinstans}</SubSection>
 
-        <UtfallResultat onChange={onChange} utfall={vedtaket.utfall} />
+        <UtfallResultat utfall={resultat.utfall} />
 
-        <Lovhjemmel onChange={onChange} hjemler={vedtaket.hjemler} />
+        <Lovhjemmel hjemler={resultat.hjemler} />
       </StyledPaddedContent>
 
       <FinishKlagebehandling />

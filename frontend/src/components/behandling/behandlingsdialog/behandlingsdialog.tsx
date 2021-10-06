@@ -1,8 +1,9 @@
 import React from 'react';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
-import { StyledBehandlingsdialog, StyledMedunderskriver, StyledSubHeader } from '../styled-components';
+import { BehandlingsdialogContent, StyledBehandlingsdialog, StyledSubHeader } from '../styled-components';
 import { Medunderskriver } from './medunderskriver/medunderskriver';
+import { Messages } from './messages/messages';
 
 interface BehandlingsDialogProps {
   klagebehandling: IKlagebehandling;
@@ -18,10 +19,10 @@ export const Behandlingsdialog = ({ klagebehandling }: BehandlingsDialogProps) =
   return (
     <StyledBehandlingsdialog>
       <StyledSubHeader>Behandlingsdialog</StyledSubHeader>
-
-      <StyledMedunderskriver>
+      <BehandlingsdialogContent>
         <Medunderskriver klagebehandling={klagebehandling} bruker={bruker} />
-      </StyledMedunderskriver>
+        <Messages />
+      </BehandlingsdialogContent>
     </StyledBehandlingsdialog>
   );
 };

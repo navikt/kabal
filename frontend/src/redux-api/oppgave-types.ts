@@ -9,6 +9,25 @@ export interface IKlagebehandlingUpdate {
   utfall: Utfall | null;
 }
 
+export interface IKlagebehandlingUtfallUpdate {
+  klagebehandlingId: string;
+  utfall: Utfall;
+}
+
+export interface IKlagebehandlingHjemlerUpdate {
+  klagebehandlingId: string;
+  hjemler: string[];
+}
+
+export interface ITilknyttDocumentParams extends IDocumentReference {
+  klagebehandlingId: string;
+}
+
+export interface IRemoveTilknyttetDocumentParams {
+  klagebehandlingId: string;
+  dokumentInfoId: string;
+}
+
 export interface IDocumentReference {
   journalpostId: string;
   dokumentInfoId: string;
@@ -34,6 +53,12 @@ export interface IVedtakFullfoertResponse {
 
 export interface IMedunderskriverSatt extends ISettMedunderskriverResponse {
   medunderskriverident: string;
+}
+
+export interface IKlagebehandlingFinishedUpdate {
+  journalfoerendeEnhet: string;
+  klagebehandlingId: string;
+  klagebehandlingVersjon?: number;
 }
 
 export interface FullforVedtakProps {

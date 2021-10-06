@@ -5,7 +5,8 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import 'nav-frontend-knapper-style';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
-import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
+import { useGetBrukerQuery } from '../../../redux-api/bruker';
+import { useFinishKlagebehandlingMutation, useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
 import { Utfall } from '../../../redux-api/oppgave-state-types';
 import {
   StyledAlertstripe,
@@ -20,18 +21,35 @@ interface FinishProps {
   cancel: () => void;
 }
 
-const ConfirmFinish = ({ cancel }: FinishProps) => (
-  <StyledFinishKlagebehandlingBox>
-    <StyledFinishKlagebehandlingText>
-      Du fullfører nå klagebehandlingen, brevet sendes til søker og klagebehandlingen kan ikke redigeres. Bekreft at du
-      faktisk ønsker å fullføre behandlingen.
-    </StyledFinishKlagebehandlingText>
-    <StyledFinishKlagebehandlingButtons>
-      <Hovedknapp>Fullfør</Hovedknapp>
-      <Knapp onClick={cancel}>Avbryt</Knapp>
-    </StyledFinishKlagebehandlingButtons>
-  </StyledFinishKlagebehandlingBox>
-);
+const ConfirmFinish = ({ cancel }: FinishProps) => {
+  const { data: bruker, isLoading } = useGetBrukerQuery();
+  const klagebehandlingId = useKlagebehandlingId();
+  const [finishKlagebehandling] = useFinishKlagebehandlingMutation();
+
+  if (typeof bruker === 'undefined' || isLoading) {
+    return <NavFrontendSpinner />;
+  }
+
+  const finish = () => {
+    finishKlagebehandling({
+      klagebehandlingId,
+      journalfoerendeEnhet: bruker.valgtEnhetView.id,
+    });
+  };
+
+  return (
+    <StyledFinishKlagebehandlingBox>
+      <StyledFinishKlagebehandlingText>
+        Du fullfører nå klagebehandlingen, brevet sendes til søker og klagebehandlingen kan ikke redigeres. Bekreft at
+        du faktisk ønsker å fullføre behandlingen.
+      </StyledFinishKlagebehandlingText>
+      <StyledFinishKlagebehandlingButtons>
+        <Hovedknapp onClick={finish}>Fullfør</Hovedknapp>
+        <Knapp onClick={cancel}>Avbryt</Knapp>
+      </StyledFinishKlagebehandlingButtons>
+    </StyledFinishKlagebehandlingBox>
+  );
+};
 
 export const FinishKlagebehandling = () => {
   const id = useKlagebehandlingId();
@@ -51,7 +69,7 @@ export const FinishKlagebehandling = () => {
   };
 
   if (klagebehandling.avsluttetAvSaksbehandler !== null) {
-    return <KlagebehandlingFinished utfall={klagebehandling.vedtaket.utfall} />;
+    return <KlagebehandlingFinished utfall={klagebehandling.resultat.utfall} />;
   }
 
   return (

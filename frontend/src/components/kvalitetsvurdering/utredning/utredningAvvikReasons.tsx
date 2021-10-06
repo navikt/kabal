@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
+import { IKodeverkVerdi, useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { IKvalitetsvurdering } from '../../../redux-api/kvalitetsvurdering';
 import { ReasonsField } from '../styled-components';
 
@@ -14,10 +15,13 @@ export const UtredningKvalitetsavvikReasons = ({
   updateKvalitetsskjema,
   show,
 }: UtredningReasonsProps) => {
-  const checkedReasons = kvalitetsvurdering.kvalitetsavvikUtredning;
-  const checkboxes = useUtredningCheckboxes(checkedReasons);
+  const { data: kodeverk } = useGetKodeverkQuery();
+  const kvalitetsAvvik = typeof kodeverk !== 'undefined' ? kodeverk.kvalitetsavvikUtredning : [];
 
-  if (!show) {
+  const checkedReasons = kvalitetsvurdering.kvalitetsavvikUtredning;
+  const checkboxes = useUtredningCheckboxes(kvalitetsAvvik, checkedReasons);
+
+  if (!show || !kodeverk) {
     return null;
   }
 
@@ -28,18 +32,18 @@ export const UtredningKvalitetsavvikReasons = ({
           <Checkbox
             key={checkbox.id}
             label={checkbox.label}
-            value={checkbox.value}
+            value={checkbox.id}
             checked={checkbox.checked}
-            onChange={(e) => {
-              if (checkedReasons.includes(e.target.value)) {
+            onChange={({ target }) => {
+              if (checkedReasons.includes(target.value)) {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikUtredning: checkedReasons.filter((reason) => reason !== e.target.value),
+                  kvalitetsavvikUtredning: checkedReasons.filter((reason) => reason !== target.value),
                 });
               } else {
                 updateKvalitetsskjema({
                   ...kvalitetsvurdering,
-                  kvalitetsavvikUtredning: checkedReasons.concat(e.target.value),
+                  kvalitetsavvikUtredning: checkedReasons.concat(target.value),
                 });
               }
             }}
@@ -48,51 +52,16 @@ export const UtredningKvalitetsavvikReasons = ({
       </CheckboxGruppe>
     </ReasonsField>
   );
-
-  return null;
 };
 
-enum REASONS {
-  MANGELFULL_UTREDNING_MEDISINSKE_FORHOLD = '1',
-  MANGELFULL_UTREDNING_ARBEIDS_INNTEKTSFORHOLD = '2',
-  MANGELFULL_UTREDNING_EOS_UTLANDSPROBLEMATIKK = '3',
-  MANGELFULL_BRUK_AV_RAADGIVENDE_LEGE = '4',
-  MANGELFULL_UTREDNING_ANDRE_FORHOLD = '5',
-}
-
-const useUtredningCheckboxes = (checked: string[]) =>
+const useUtredningCheckboxes = (kvalitetsAvvik: IKodeverkVerdi[], checked: string[]) =>
   useMemo(
-    () => [
-      {
-        id: REASONS.MANGELFULL_UTREDNING_MEDISINSKE_FORHOLD,
-        label: 'Mangelfull utredning av medisinske forhold',
-        value: REASONS.MANGELFULL_UTREDNING_MEDISINSKE_FORHOLD,
-        checked: checked.includes(REASONS.MANGELFULL_UTREDNING_MEDISINSKE_FORHOLD),
-      },
-      {
-        id: REASONS.MANGELFULL_UTREDNING_ARBEIDS_INNTEKTSFORHOLD,
-        label: 'Mangelfull utredning av arbeids- og inntektsforhold',
-        value: REASONS.MANGELFULL_UTREDNING_ARBEIDS_INNTEKTSFORHOLD,
-        checked: checked.includes(REASONS.MANGELFULL_UTREDNING_ARBEIDS_INNTEKTSFORHOLD),
-      },
-      {
-        id: REASONS.MANGELFULL_UTREDNING_EOS_UTLANDSPROBLEMATIKK,
-        label: 'Mangelfull utredning av EØS/utlandsproblematikk',
-        value: REASONS.MANGELFULL_UTREDNING_EOS_UTLANDSPROBLEMATIKK,
-        checked: checked.includes(REASONS.MANGELFULL_UTREDNING_EOS_UTLANDSPROBLEMATIKK),
-      },
-      {
-        id: REASONS.MANGELFULL_BRUK_AV_RAADGIVENDE_LEGE,
-        label: 'Mangelfull bruk av rådgivende lege',
-        value: REASONS.MANGELFULL_BRUK_AV_RAADGIVENDE_LEGE,
-        checked: checked.includes(REASONS.MANGELFULL_BRUK_AV_RAADGIVENDE_LEGE),
-      },
-      {
-        id: REASONS.MANGELFULL_UTREDNING_ANDRE_FORHOLD,
-        label: 'Mangelfull utredning av andre aktuelle forhold i saken',
-        value: REASONS.MANGELFULL_UTREDNING_ANDRE_FORHOLD,
-        checked: checked.includes(REASONS.MANGELFULL_UTREDNING_ANDRE_FORHOLD),
-      },
-    ],
-    [checked]
+    () =>
+      kvalitetsAvvik.map((avvik) => ({
+        id: avvik.id,
+        label: avvik.beskrivelse,
+        value: avvik.id,
+        checked: checked.includes(avvik.id),
+      })),
+    [kvalitetsAvvik, checked]
   );

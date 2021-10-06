@@ -87,14 +87,13 @@ export interface IKlagebehandling {
   tildelt: string | null; // LocalDate
   tildeltSaksbehandlerident: string | null;
   type: string;
-  vedtak: Vedtak[];
-  vedtaket: Vedtak;
+  resultat: Resultat;
   tilknyttedeDokumenter: IDocumentReference[];
   egenansatt: boolean;
   fortrolig: boolean;
 }
 
-export interface Vedtak {
+export interface Resultat {
   brevMottakere: IBrevMottaker[];
   ferdigstilt: string | null; // LocalDateTime
   file: IVedlegg | null;
