@@ -42,10 +42,6 @@ export const DocumentRow = styled.article`
   grid-template-columns: 350px 140px auto 32px;
   /* grid-template-columns: 6fr 3fr 3fr 1fr; */
   grid-column-gap: 1em;
-  align-items: center;
-  align-content: center;
-  justify-items: center;
-  justify-content: center;
 `;
 
 export const DocumentDate = styled.time`
