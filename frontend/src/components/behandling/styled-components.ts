@@ -39,6 +39,7 @@ export const StyledBehandlingsdetaljer = styled.div`
   flex-basis: 100%;
   border-right: 1px solid #c9c9c9;
   height: 100%;
+  width: 30em;
 `;
 
 export const StyledBehandlingsdialog = styled.div`
