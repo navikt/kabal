@@ -48,6 +48,9 @@ export const brukerApi = createApi({
       query: () => '/api/me/brukerdata',
       providesTags: ['user'],
     }),
+    getAnsatt: builder.query<IUserData, string>({
+      query: (navIdent) => `/api/${navIdent}/brukerdata`,
+    }),
     setValgtEnhet: builder.mutation<void, ISetEnhet>({
       query: ({ navIdent, enhetId }) => ({
         url: `/api/ansatte/${navIdent}/valgtenhet`,

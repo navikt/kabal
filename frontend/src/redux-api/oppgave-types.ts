@@ -1,5 +1,4 @@
-import { ISettMedunderskriverResponse } from './medunderskrivere';
-import { IKlagebehandling, IVedlegg, Utfall } from './oppgave-state-types';
+import { IKlagebehandling, IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
 
 export interface IKlagebehandlingUpdate {
   klagebehandlingId: string;
@@ -23,17 +22,12 @@ export interface ITilknyttDocumentParams extends IDocumentReference {
   klagebehandlingId: string;
 }
 
-export interface IRemoveTilknyttetDocumentParams {
-  klagebehandlingId: string;
-  dokumentInfoId: string;
-}
-
 export interface IDocumentReference {
   journalpostId: string;
   dokumentInfoId: string;
 }
 
-export interface IKlagebehandlingOppdateringResponse {
+export interface IKlagebehandlingOppdateringPayload {
   klagebehandlingVersjon: number;
   modified: string;
 }
@@ -44,14 +38,14 @@ export interface IVedleggResponse {
   file: IVedlegg | null;
 }
 
-export interface IVedtakFullfoertResponse {
+export interface IVedtakFullfoertPayload {
   klagebehandlingVersjon: number;
   modified: string; // LocalDateTime;
   ferdigstilt: string; // LocalDateTime;
   avsluttetAvSaksbehandler: string; // LocalDate;
 }
 
-export interface IMedunderskriverSatt extends ISettMedunderskriverResponse {
+export interface IMedunderskriverSatt extends ISettMedunderskriverPayload {
   medunderskriverident: string;
 }
 
@@ -64,4 +58,43 @@ export interface IKlagebehandlingFinishedUpdate {
 export interface FullforVedtakProps {
   skjult: boolean;
   klagebehandling: IKlagebehandling;
+}
+
+export interface IMedunderskrivereState {
+  medunderskrivere: IMedunderskriver[];
+  loading: boolean;
+}
+
+export interface IMedunderskriver {
+  navn: string;
+  ident: string;
+}
+
+export interface IMedunderskriverePayload {
+  tema: string;
+  medunderskrivere: IMedunderskriver[];
+}
+
+export interface IMedunderskrivereInput {
+  id: string;
+  tema: string;
+}
+
+export interface ISettMedunderskriverParams {
+  klagebehandlingId: string;
+  medunderskriverident: string | null;
+}
+
+export interface ISettMedunderskriverPayload {
+  modified: string;
+  datoSendtMedunderskriver: string;
+  medunderskriverFlyt: MedunderskriverFlyt;
+}
+
+export interface ISwitchMedunderskriverflytParams {
+  klagebehandlingId: string;
+}
+export interface ISwitchMedunderskriverflytPayload {
+  medunderskriverFlyt: string;
+  modified: string;
 }

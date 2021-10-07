@@ -1,11 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { IUserData } from '../../../../redux-api/bruker';
-import {
-  useGetMedunderskrivereQuery,
-  useSwitchMedunderskriverflytMutation,
-  useUpdateChosenMedunderskriverMutation,
-} from '../../../../redux-api/medunderskrivere';
+import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';
@@ -23,7 +19,6 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
 
   const { data: medunderskrivereData } = useGetMedunderskrivereQuery(medunderskrivereQuery);
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
-  const [switchMedunderskriverflyt] = useSwitchMedunderskriverflytMutation();
 
   if (typeof medunderskrivereData === 'undefined') {
     return <NavFrontendSpinner />;
@@ -36,19 +31,10 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
   }
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) => {
-    const { id, klagebehandlingVersjon } = klagebehandling;
-
     updateChosenMedunderskriver({
-      klagebehandlingId: id,
-      klagebehandlingVersjon,
+      klagebehandlingId: klagebehandling.id,
       medunderskriverident,
     });
-  };
-
-  const onSendToMedunderskriver = () => {
-    const { id } = klagebehandling;
-
-    switchMedunderskriverflyt({ klagebehandlingId: id });
   };
 
   return (
@@ -58,7 +44,7 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
         onChangeChosenMedunderskriver={onChangeChosenMedunderskriver}
         selectedMedunderskriverNavIdent={klagebehandling.medunderskriverident}
       />
-      <SendTilMedunderskriver klagebehandling={klagebehandling} onSendToMedunderskriver={onSendToMedunderskriver} />
+      <SendTilMedunderskriver klagebehandling={klagebehandling} medunderskrivere={medunderskrivere} />
     </>
   );
 };

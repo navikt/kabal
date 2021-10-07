@@ -8,7 +8,7 @@ export const StyledHeader = styled.h1`
 
 export const StyledContainer = styled.div`
   display: flex;
-  height: 100%;
+  min-height: 100%;
 `;
 
 export const StyledInfoHeader = styled.h2`
@@ -38,7 +38,7 @@ export const StyledLabel = styled.div`
 export const StyledBehandlingsdetaljer = styled.div`
   flex-basis: 100%;
   border-right: 1px solid #c9c9c9;
-  height: 100%;
+  min-height: 100%;
   width: 30em;
 `;
 
@@ -46,6 +46,7 @@ export const StyledBehandlingsdialog = styled.div`
   flex-basis: 100%;
   height: 100%;
   padding: 1em;
+  max-width: 30em;
 `;
 
 export const StyledLovhjemmelLabel = styled.span`
@@ -102,6 +103,6 @@ export const StyledAlertstripe = styled.div`
   margin-bottom: 1em;
 `;
 
-export const BehandlingsdialogContent = styled.div`
+export const BehandlingsdialogInputContent = styled.div`
   max-width: 250px;
 `;

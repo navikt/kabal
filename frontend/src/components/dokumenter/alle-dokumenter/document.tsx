@@ -2,27 +2,21 @@ import React from 'react';
 import { formattedDate } from '../../../domene/datofunksjoner';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { IDokument } from '../../../redux-api/dokumenter/types';
-import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
-import {
-  DocumentDate,
-  DocumentRow,
-  DocumentTema,
-  DocumentTitle,
-  StyledDocumentCheckbox,
-} from '../styled-components/fullvisning';
-import { ITilknyttetDokument } from '../types';
+import { DocumentDate, DocumentRow, DocumentTema, DocumentTitle } from '../styled-components/fullvisning';
+import { DocumentCheckbox } from './document-checkbox';
 import { VedleggList } from './vedlegg-list';
 
-interface DocumentProps extends ITilknyttetDokument {
-  klagebehandling: IKlagebehandling;
+interface DocumentProps {
+  klagebehandlingId: string;
+  document: IDokument;
   setShownDocument: (document: IShownDokument) => void;
 }
 
 export const Document = React.memo<DocumentProps>(
-  ({ document, tilknyttet, setShownDocument, klagebehandling }) => {
+  ({ document, setShownDocument, klagebehandlingId }) => {
     const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
       setShownDocument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
 
@@ -36,20 +30,19 @@ export const Document = React.memo<DocumentProps>(
 
         <DocumentDate dateTime={document.registrert}>{formattedDate(document.registrert)}</DocumentDate>
 
-        <StyledDocumentCheckbox
+        <DocumentCheckbox
           dokumentInfoId={document.dokumentInfoId}
           journalpostId={document.journalpostId}
           harTilgangTilArkivvariant={document.harTilgangTilArkivvariant}
           title={document.tittel ?? ''}
-          tilknyttet={tilknyttet}
-          klagebehandlingId={klagebehandling.id}
+          klagebehandlingId={klagebehandlingId}
         />
 
-        <VedleggList document={document} klagebehandling={klagebehandling} setShownDocument={setShownDocument} />
+        <VedleggList document={document} klagebehandlingId={klagebehandlingId} setShownDocument={setShownDocument} />
       </DocumentRow>
     );
   },
-  (previous, next) => previous.tilknyttet === next.tilknyttet && dokumentMatcher(previous.document, next.document)
+  (previous, next) => dokumentMatcher(previous.document, next.document)
 );
 
 Document.displayName = 'Document';

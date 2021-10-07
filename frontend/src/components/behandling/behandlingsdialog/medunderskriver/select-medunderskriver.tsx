@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
-import { IMedunderskriver } from '../../../../redux-api/medunderskrivere';
+import { IMedunderskriver } from '../../../../redux-api/oppgave-types';
 
 interface SelectMedunderskriverProps {
   medunderskrivere: IMedunderskriver[];
@@ -42,4 +42,5 @@ export const SelectMedunderskriver = ({
 
 const StyledFormSection = styled.div`
   margin-top: 20px;
+  width: 250px;
 `;

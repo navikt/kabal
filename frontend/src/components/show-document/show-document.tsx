@@ -30,7 +30,7 @@ const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
 export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumentProps) => {
   const url = useMemo(
     () =>
-      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/journalposter/${document?.journalpostId}/dokumenter/${document?.dokumentInfoId}`,
+      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document?.journalpostId}/${document?.dokumentInfoId}/pdf`,
     [document, klagebehandlingId]
   );
 

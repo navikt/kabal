@@ -38,7 +38,7 @@ export const ReasonsField = styled.div`
 `;
 
 export const CheckboxWithHelpIcon = styled.div`
-  width: 57%;
+  width: 400px;
   display: flex;
   justify-content: space-between;
   button {

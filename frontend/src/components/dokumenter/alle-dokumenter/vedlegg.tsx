@@ -3,18 +3,18 @@ import { IDokument, IDokumentVedlegg } from '../../../redux-api/dokumenter/types
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
-import { StyledDocumentCheckbox, VedleggRad, VedleggTittel } from '../styled-components/fullvisning';
+import { VedleggRad, VedleggTittel } from '../styled-components/fullvisning';
+import { DocumentCheckbox } from './document-checkbox';
 
 interface VedleggProps {
   klagebehandlingId: string;
   document: IDokument;
   vedlegg: IDokumentVedlegg;
-  tilknyttet: boolean;
   setShownDocument: (document: IShownDokument) => void;
 }
 
 export const Vedlegg = React.memo<VedleggProps>(
-  ({ klagebehandlingId, vedlegg, document, tilknyttet, setShownDocument }) => {
+  ({ klagebehandlingId, vedlegg, document, setShownDocument }) => {
     const onShowDocument = () =>
       setShownDocument({
         journalpostId: document.journalpostId,
@@ -28,21 +28,18 @@ export const Vedlegg = React.memo<VedleggProps>(
         <VedleggTittel>
           <DocumentButton onClick={onShowDocument}>{vedlegg.tittel}</DocumentButton>
         </VedleggTittel>
-        <StyledDocumentCheckbox
+        <DocumentCheckbox
           dokumentInfoId={vedlegg.dokumentInfoId}
           journalpostId={document.journalpostId}
           harTilgangTilArkivvariant={vedlegg.harTilgangTilArkivvariant}
           title={vedlegg.tittel ?? ''}
-          tilknyttet={tilknyttet}
           klagebehandlingId={klagebehandlingId}
         />
       </VedleggRad>
     );
   },
   (previous, next) =>
-    previous.tilknyttet === next.tilknyttet &&
-    previous.vedlegg.dokumentInfoId === next.vedlegg.dokumentInfoId &&
-    dokumentMatcher(previous.document, next.document)
+    previous.vedlegg.dokumentInfoId === next.vedlegg.dokumentInfoId && dokumentMatcher(previous.document, next.document)
 );
 
 Vedlegg.displayName = 'Vedlegg';

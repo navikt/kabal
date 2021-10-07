@@ -5,7 +5,7 @@ import { LabelTema } from '../../../styled-components/labels';
 import { DocumentCheckbox } from '../alle-dokumenter/document-checkbox';
 
 export const DokumenterFullvisning = styled.section`
-  overflow: hidden;
+  flex-grow: 1;
 `;
 
 export const List = styled.ul`
@@ -40,7 +40,6 @@ export const DocumentRow = styled.article`
     'tittel tema dato sjekkboks'
     'vedlegg vedlegg vedlegg vedlegg';
   grid-template-columns: 350px 140px auto 32px;
-  /* grid-template-columns: 6fr 3fr 3fr 1fr; */
   grid-column-gap: 1em;
 `;
 
@@ -60,13 +59,10 @@ export const DocumentTitle = styled.h1`
   grid-area: tittel;
 `;
 
-export const StyledDocumentCheckbox = styled(DocumentCheckbox)`
-  grid-area: sjekkboks;
-`;
-
-export const DokumentCheckbox = styled(Checkbox)`
+export const StyledDokumentCheckbox = styled(Checkbox)`
   font-size: 0;
   line-height: 0;
+  grid-area: sjekkboks;
 `;
 
 export const DocumentTema = styled(LabelTema)`
@@ -103,9 +99,9 @@ export const VedleggTittel = styled.h1`
 `;
 
 export const StyledLastFlereKnapp = styled(Knapp)`
-  width: calc(100% - 2em);
+  width: calc(100% - 32px);
   margin-bottom: 1em;
   margin-top: 1em;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 16px;
+  margin-right: 16px;
 `;

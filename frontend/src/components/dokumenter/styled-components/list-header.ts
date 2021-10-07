@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const ListHeader = styled.div`
     display: grid;
     grid-template-columns: 350px 140px;
+    grid-column-gap: 1em;
     align-items: center;
     padding: 16px;
 `;

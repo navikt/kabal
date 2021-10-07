@@ -1,12 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { staggeredBaseQuery } from '../common';
-import { IDokumenterRespons } from './types';
+import { IDocumentsResponse } from './types';
 
 interface IGetDokumenterParams {
   klagebehandlingId: string;
   pageReference: string | null;
   temaer: string[];
+  pageSize: number;
 }
 
 export const dokumenterApi = createApi({
@@ -14,7 +15,7 @@ export const dokumenterApi = createApi({
   baseQuery: staggeredBaseQuery,
   tagTypes: ['dokumenter', 'tilknyttedeDokumenter'],
   endpoints: (builder) => ({
-    getDokumenter: builder.query<IDokumenterRespons, IGetDokumenterParams>({
+    getDokumenter: builder.query<IDocumentsResponse, IGetDokumenterParams>({
       query: ({ klagebehandlingId, pageReference, temaer }) => {
         const query = qs.stringify(
           {
@@ -27,24 +28,15 @@ export const dokumenterApi = createApi({
             arrayFormat: 'comma',
           }
         );
-        return `/api/klagebehandlinger/${klagebehandlingId}/alledokumenter?${query}`;
+        return `/api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter?${query}`;
       },
       providesTags: ['dokumenter'],
     }),
-    getTilknyttedeDokumenter: builder.query<IDokumenterRespons, string>({
-      query: (klagebehandlingId) => `/api/klagebehandlinger/${klagebehandlingId}/dokumenter`,
+    getTilknyttedeDokumenter: builder.query<IDocumentsResponse, string>({
+      query: (klagebehandlingId) => `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
-    // updateKlagebehandling: builder.mutation<string, IKlagebehandling>({
-    //   query: (update) => ({
-    //     url: `/api/klagebehandlinger/${update.id}/detaljer/editerbare`,
-    //     method: 'PUT',
-    //     body: update,
-    //     validateStatus: ({ ok }) => ok,
-    //   }),
-    //   invalidatesTags: ['dokumenter'],
-    // }),
   }),
 });
 
-export const { useGetDokumenterQuery, useGetTilknyttedeDokumenterQuery } = dokumenterApi;
+export const { useGetDokumenterQuery, useGetTilknyttedeDokumenterQuery, useLazyGetDokumenterQuery } = dokumenterApi;

@@ -8,6 +8,7 @@ export const ControlPanel = styled.header`
   overflow: auto;
   padding-top: 8px;
   padding-bottom: 8px;
+  border-bottom: 1px solid #c9c9c9;
 `;
 
 export const KlagebehandlingTools = styled.div`

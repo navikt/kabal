@@ -1,55 +1,40 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
-import { IKlagebehandling } from '../../../redux-api/oppgave-state-types';
 import { IDocumentReference } from '../../../redux-api/oppgave-types';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
-import { dokumentMatcher } from '../helpers';
-import { DokumenterFullvisning, List, ListItem } from '../styled-components/fullvisning';
+import { DokumenterFullvisning, List } from '../styled-components/fullvisning';
 import { ListHeader, ListTitle } from '../styled-components/list-header';
-import { ITilknyttetDokument } from '../types';
-import { Document } from './document';
+import { DocumentsPage } from './documents-page';
 import { LoadMore } from './load-more';
 
 interface AlleDokumenterProps {
-  klagebehandling: IKlagebehandling;
+  klagebehandlingId: string;
   show: boolean;
   setShownDocument: (document: IShownDokument) => void;
   onChange: (tilknyttedeDokumenter: IDocumentReference[]) => void;
 }
 
+const PAGE_SIZE = 10;
+
 export const AlleDokumenter = React.memo(
-  ({ klagebehandling, show, setShownDocument }: AlleDokumenterProps) => {
-    const [pageReference, setPageReference] = useState<string | null>(null);
+  ({ klagebehandlingId, show, setShownDocument }: AlleDokumenterProps) => {
+    const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
     const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
-    const { data: alleDokumenter, isLoading } = useGetDokumenterQuery({
-      klagebehandlingId: klagebehandling.id,
-      pageReference,
+    const { data: lastPage, isLoading } = useGetDokumenterQuery({
+      klagebehandlingId,
+      pageReference: pageReferences[pageReferences.length - 1],
+      pageSize: PAGE_SIZE,
       temaer: selectedTemaer,
     });
 
     const availableTemaer = useAvailableTemaer();
 
-    const dokumenter = useMemo<ITilknyttetDokument[]>(() => {
-      if (typeof alleDokumenter === 'undefined') {
-        return [];
-      }
-
-      return alleDokumenter.dokumenter.map((document) => ({
-        document,
-        tilknyttet: klagebehandling.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, document)),
-      }));
-    }, [alleDokumenter, klagebehandling.tilknyttedeDokumenter]);
-
     if (!show) {
       return null;
-    }
-
-    if (isLoading || typeof alleDokumenter === 'undefined') {
-      return <NavFrontendSpinner />;
     }
 
     return (
@@ -60,26 +45,44 @@ export const AlleDokumenter = React.memo(
             Tema
           </FilterDropdown>
         </ListHeader>
-        <List data-testid={'dokumenter'}>
-          {dokumenter.map(({ document: dokument, tilknyttet }) => (
-            <ListItem key={`dokument_${dokument.journalpostId}_${dokument.dokumentInfoId}`}>
-              <Document
-                document={dokument}
-                tilknyttet={tilknyttet}
-                setShownDocument={setShownDocument}
-                klagebehandling={klagebehandling}
-              />
-            </ListItem>
+        <List data-testid={'all-documents'}>
+          <DocumentsSpinner pageCount={pageReferences.length} hasDocuments={typeof lastPage !== 'undefined'} />
+          {pageReferences.map((pageReference) => (
+            <DocumentsPage
+              key={pageReference}
+              klagebehandlingId={klagebehandlingId}
+              pageReference={pageReference}
+              pageSize={PAGE_SIZE}
+              temaer={selectedTemaer}
+              setShownDocument={setShownDocument}
+            />
           ))}
         </List>
-        <LoadMore dokumenter={alleDokumenter} loading={isLoading} setPage={setPageReference} />
+        <LoadMore
+          documents={lastPage}
+          loading={isLoading}
+          setPage={(pageReference: string) => setPageReferences(pageReferences.concat(pageReference))}
+        />
       </DokumenterFullvisning>
     );
   },
   (previous, next) =>
     previous.show === next.show &&
-    previous.klagebehandling.id === next.klagebehandling.id &&
+    previous.klagebehandlingId === next.klagebehandlingId &&
     previous.setShownDocument === next.setShownDocument
 );
 
 AlleDokumenter.displayName = 'AlleDokumenter';
+
+interface DocumentsSpinnerProps {
+  pageCount: number;
+  hasDocuments: boolean;
+}
+
+const DocumentsSpinner = ({ hasDocuments, pageCount }: DocumentsSpinnerProps): JSX.Element | null => {
+  if (hasDocuments || pageCount > 1) {
+    return null;
+  }
+
+  return <NavFrontendSpinner />;
+};

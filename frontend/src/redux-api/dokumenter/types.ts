@@ -7,7 +7,7 @@ export interface IDokumentParams {
   historyNavigate: boolean;
 }
 
-export interface IDokumenterRespons {
+export interface IDocumentsResponse {
   dokumenter: IDokument[];
   pageReference: string | null;
   antall: number;

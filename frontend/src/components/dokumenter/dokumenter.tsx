@@ -43,7 +43,7 @@ export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
         <AlleDokumenter
           show={viewAll}
           setShownDocument={setShownDocument}
-          klagebehandling={klagebehandling}
+          klagebehandlingId={klagebehandling.id}
           onChange={(tilknyttedeDokumenter) => onChange({ tilknyttedeDokumenter })}
         />
       </PanelContainer>

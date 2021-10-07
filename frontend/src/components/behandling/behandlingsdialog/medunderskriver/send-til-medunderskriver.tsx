@@ -1,52 +1,60 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../../../domain/date';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
+import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
+import { IMedunderskriver } from '../../../../redux-api/oppgave-types';
 
 interface SendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
-  onSendToMedunderskriver: () => void;
+  medunderskrivere: IMedunderskriver[];
 }
 
-export const SendTilMedunderskriver = ({ klagebehandling, onSendToMedunderskriver }: SendTilMedunderskriverProps) => {
-  const klagebehandlingId = useKlagebehandlingId();
+export const SendTilMedunderskriver = ({ klagebehandling, medunderskrivere }: SendTilMedunderskriverProps) => {
+  const { id: klagebehandlingId, medunderskriverident } = klagebehandling;
   const canEdit = useCanEdit(klagebehandlingId);
+
+  const valgtMedunderskriverNavn = useMemo(() => {
+    const found = medunderskrivere.find((medunderskriver) => medunderskriver.ident === medunderskriverident);
+
+    if (found) {
+      return found.navn;
+    }
+
+    return medunderskriverident;
+  }, [medunderskrivere, medunderskriverident]);
+
+  const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
   const sendToMedunderskriverDisabled = !canEdit || klagebehandling.medunderskriverident === null;
 
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
-      <StyledAlertstripe type="info">
-        <p>Sendt til medunderskriver: {klagebehandling.medunderskriverident}</p>
-        <p>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</p>
-      </StyledAlertstripe>
+      <StyledFormSection>
+        <StyledAlertstripe type="info">
+          <p>Sendt til medunderskriver: {valgtMedunderskriverNavn}</p>
+          <p>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</p>
+        </StyledAlertstripe>
+      </StyledFormSection>
     );
   }
 
   return (
-    <SendToMedunderskriverButton
-      onSendToMedunderskriver={onSendToMedunderskriver}
-      disabled={sendToMedunderskriverDisabled}
-    />
+    <StyledFormSection>
+      <Hovedknapp
+        mini
+        onClick={() => switchMedunderskriverflyt({ klagebehandlingId })}
+        disabled={sendToMedunderskriverDisabled}
+        spinner={loader.isLoading}
+      >
+        Send til medunderskriver
+      </Hovedknapp>
+    </StyledFormSection>
   );
 };
-
-interface ActionButtonProps {
-  onSendToMedunderskriver: () => void;
-  disabled: boolean;
-}
-
-const SendToMedunderskriverButton = ({ onSendToMedunderskriver, disabled }: ActionButtonProps) => (
-  <StyledFormSection>
-    <Hovedknapp mini onClick={() => onSendToMedunderskriver()} disabled={disabled}>
-      Send til medunderskriver
-    </Hovedknapp>
-  </StyledFormSection>
-);
 
 const StyledFormSection = styled.div`
   margin-top: 20px;

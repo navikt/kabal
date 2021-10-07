@@ -1,15 +1,20 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
-import { IKlagebehandling } from './oppgave-state-types';
+import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
 import {
   IKlagebehandlingFinishedUpdate,
   IKlagebehandlingHjemlerUpdate,
-  IKlagebehandlingOppdateringResponse,
+  IKlagebehandlingOppdateringPayload,
   IKlagebehandlingUpdate,
   IKlagebehandlingUtfallUpdate,
-  IRemoveTilknyttetDocumentParams,
+  IMedunderskrivereInput,
+  IMedunderskriverePayload,
+  ISettMedunderskriverParams,
+  ISettMedunderskriverPayload,
+  ISwitchMedunderskriverflytParams,
+  ISwitchMedunderskriverflytPayload,
   ITilknyttDocumentParams,
-  IVedtakFullfoertResponse,
+  IVedtakFullfoertPayload,
 } from './oppgave-types';
 
 export const klagebehandlingApi = createApi({
@@ -21,7 +26,7 @@ export const klagebehandlingApi = createApi({
       query: (id) => `/api/klagebehandlinger/${id}/detaljer`,
       providesTags: ['oppgave'],
     }),
-    updateKlagebehandling: builder.mutation<IKlagebehandlingOppdateringResponse, IKlagebehandlingUpdate>({
+    updateKlagebehandling: builder.mutation<IKlagebehandlingOppdateringPayload, IKlagebehandlingUpdate>({
       query: ({ klagebehandlingId, ...body }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/detaljer/editerbare`,
         method: 'PUT',
@@ -91,6 +96,7 @@ export const klagebehandlingApi = createApi({
         url: `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
         method: 'POST',
         body: documentReference,
+        validateStatus: ({ ok }) => ok,
       }),
       onQueryStarted: async ({ klagebehandlingId, ...documentReference }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
@@ -106,16 +112,17 @@ export const klagebehandlingApi = createApi({
         }
       },
     }),
-    removeTilknyttetDocument: builder.mutation<void, IRemoveTilknyttetDocumentParams>({
-      query: ({ klagebehandlingId, dokumentInfoId }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger/${dokumentInfoId}`,
-        method: 'POST',
+    removeTilknyttetDocument: builder.mutation<void, ITilknyttDocumentParams>({
+      query: ({ klagebehandlingId, journalpostId, dokumentInfoId }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+        method: 'DELETE',
+        validateStatus: ({ ok }) => ok,
       }),
-      onQueryStarted: async ({ klagebehandlingId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ klagebehandlingId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
             klagebehandling.tilknyttedeDokumenter = klagebehandling.tilknyttedeDokumenter.filter(
-              (d) => !(d.dokumentInfoId === dokumentInfoId)
+              (d) => !(d.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
             );
           })
         );
@@ -127,7 +134,7 @@ export const klagebehandlingApi = createApi({
         }
       },
     }),
-    finishKlagebehandling: builder.mutation<IVedtakFullfoertResponse, IKlagebehandlingFinishedUpdate>({
+    finishKlagebehandling: builder.mutation<IVedtakFullfoertPayload, IKlagebehandlingFinishedUpdate>({
       query: ({ klagebehandlingId, ...body }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/fullfoer`,
         method: 'POST',
@@ -147,6 +154,40 @@ export const klagebehandlingApi = createApi({
         }
       },
     }),
+    getMedunderskrivere: builder.query<IMedunderskriverePayload, IMedunderskrivereInput>({
+      query: ({ id, tema }) => `/api/ansatte/${id}/medunderskrivere/${tema}`,
+    }),
+    updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverPayload, ISettMedunderskriverParams>({
+      query: ({ klagebehandlingId, ...body }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
+        method: 'PUT',
+        body,
+        validateStatus: ({ ok }) => ok,
+      }),
+      onQueryStarted: async ({ klagebehandlingId, ...update }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+            klagebehandling.medunderskriverident = update.medunderskriverident;
+            klagebehandling.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: ['oppgave'],
+    }),
+    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytPayload, ISwitchMedunderskriverflytParams>({
+      query: ({ klagebehandlingId }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/send`,
+        method: 'POST',
+        validateStatus: ({ ok }) => ok,
+      }),
+      invalidatesTags: ['oppgave'],
+    }),
   }),
 });
 
@@ -158,4 +199,7 @@ export const {
   useTilknyttDocumentMutation,
   useRemoveTilknyttetDocumentMutation,
   useFinishKlagebehandlingMutation,
+  useGetMedunderskrivereQuery,
+  useUpdateChosenMedunderskriverMutation,
+  useSwitchMedunderskriverflytMutation,
 } = klagebehandlingApi;

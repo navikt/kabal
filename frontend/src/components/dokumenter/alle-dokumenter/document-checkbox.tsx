@@ -1,8 +1,10 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../hooks/use-check-document';
-import { DokumentCheckbox } from '../styled-components/fullvisning';
+import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
+import { dokumentMatcher } from '../helpers';
+import { StyledDokumentCheckbox } from '../styled-components/fullvisning';
 
 interface DocumentCheckboxProps {
   klagebehandlingId: string;
@@ -10,7 +12,6 @@ interface DocumentCheckboxProps {
   dokumentInfoId: string;
   journalpostId: string;
   harTilgangTilArkivvariant: boolean;
-  tilknyttet: boolean;
 }
 
 export const DocumentCheckbox = ({
@@ -19,21 +20,28 @@ export const DocumentCheckbox = ({
   journalpostId,
   title,
   harTilgangTilArkivvariant,
-  tilknyttet,
 }: DocumentCheckboxProps): JSX.Element => {
+  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit(klagebehandlingId);
+
+  const tilknyttet = useMemo<boolean>(
+    () =>
+      klagebehandling?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ??
+      false,
+    [klagebehandling, dokumentInfoId, journalpostId]
+  );
 
   if (isUpdating) {
     return <NavFrontendSpinner />;
   }
 
   return (
-    <DokumentCheckbox
-      label={null}
+    <StyledDokumentCheckbox
+      label={''}
       title={title}
       disabled={!harTilgangTilArkivvariant || !canEdit || isUpdating}
-      defaultChecked={tilknyttet}
+      checked={tilknyttet}
       onChange={(e) => setDocument(e.currentTarget.checked)}
     />
   );

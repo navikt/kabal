@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Dropdown } from '../filter-dropdown/dropdown';
@@ -17,10 +17,13 @@ export const MultiSelect = ({ title, onChange, options, selected, disabled }: Mu
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  const allIds = useMemo(() => options.map(({ id }) => id), [options]);
+
   useOnClickOutside(() => setOpen(false), ref, true);
 
   const setSelected = (id: string | null, active: boolean) => {
     if (id === null) {
+      onChange(active ? allIds : []);
       return;
     }
 

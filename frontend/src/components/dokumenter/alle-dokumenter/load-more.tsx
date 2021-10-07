@@ -1,25 +1,33 @@
-import React, { useCallback } from 'react';
-import { IDokumenterRespons } from '../../../redux-api/dokumenter/types';
+import React from 'react';
+import { IDocumentsResponse } from '../../../redux-api/dokumenter/types';
 import { StyledLastFlereKnapp } from '../styled-components/fullvisning';
 
 interface LoadMoreProps {
-  dokumenter: IDokumenterRespons;
+  documents?: IDocumentsResponse;
   loading: boolean;
-  setPage: (pageReference: string | null) => void;
+  setPage: (pageReference: string) => void;
 }
 
-export const LoadMore = ({ dokumenter, loading, setPage }: LoadMoreProps) => {
-  const onClick = useCallback(() => setPage(dokumenter.pageReference), [dokumenter.pageReference, setPage]);
+export const LoadMore = ({ documents, loading, setPage }: LoadMoreProps) => {
+  if (typeof documents === 'undefined') {
+    return null;
+  }
 
-  const remaining = dokumenter.totaltAntall - dokumenter.dokumenter.length;
+  const remaining = documents.totaltAntall - documents.dokumenter.length;
   const hasMore = remaining !== 0;
 
   if (!hasMore) {
     return null;
   }
 
+  const { pageReference } = documents;
+
+  if (pageReference === null) {
+    return null;
+  }
+
   return (
-    <StyledLastFlereKnapp onClick={onClick} spinner={loading} autoDisableVedSpinner={true}>
+    <StyledLastFlereKnapp onClick={() => setPage(pageReference)} spinner={loading} autoDisableVedSpinner={true}>
       Last flere ({remaining})
     </StyledLastFlereKnapp>
   );

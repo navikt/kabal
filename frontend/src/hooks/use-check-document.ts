@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useRemoveTilknyttetDocumentMutation, useTilknyttDocumentMutation } from '../redux-api/oppgave';
+import { ITilknyttDocumentParams } from '../redux-api/oppgave-types';
 
 export const useCheckDocument = (
   klagebehandlingId: string,
@@ -11,17 +12,16 @@ export const useCheckDocument = (
 
   const onCheck = useCallback(
     (checked: boolean) => {
+      const data: ITilknyttDocumentParams = {
+        dokumentInfoId,
+        journalpostId,
+        klagebehandlingId,
+      };
+
       if (checked) {
-        tilknyttDocument({
-          dokumentInfoId,
-          journalpostId,
-          klagebehandlingId,
-        });
+        tilknyttDocument(data);
       } else {
-        removeDocument({
-          dokumentInfoId,
-          klagebehandlingId,
-        });
+        removeDocument(data);
       }
     },
     [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]

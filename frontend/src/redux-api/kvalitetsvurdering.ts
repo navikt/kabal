@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
 import { klagebehandlingApi } from './oppgave';
-import { IKlagebehandlingOppdateringResponse } from './oppgave-types';
+import { IKlagebehandlingOppdateringPayload } from './oppgave-types';
 
 export interface IKvalitetsvurdering {
   klagebehandlingId: string;
@@ -28,7 +28,7 @@ export const kvalitetsvurderingApi = createApi({
       query: (id) => `/api/klagebehandlinger/${id}/kvalitetsvurdering`,
       providesTags: ['kvalitetsvurdering'],
     }),
-    updateKvalitetsvurdering: builder.mutation<IKlagebehandlingOppdateringResponse, IKvalitetsvurdering>({
+    updateKvalitetsvurdering: builder.mutation<IKlagebehandlingOppdateringPayload, IKvalitetsvurdering>({
       query: ({ klagebehandlingId, ...kvalitetsVurdering }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/kvalitetsvurdering/editerbare`,
         method: 'PUT',

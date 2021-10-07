@@ -7,8 +7,6 @@ export const useKlagebehandlingUpdater = (klagebehandlingId: string, update: IKl
   const [updateKlagebehandling] = useUpdateKlagebehandlingMutation();
   const canEdit = useCanEdit(klagebehandlingId);
 
-  console.debug('UPDATE hook', update);
-
   useEffect(() => {
     if (!canEdit || update === null) {
       return;
