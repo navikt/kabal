@@ -2,13 +2,12 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Checkbox } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 import { LabelTema } from '../../../styled-components/labels';
-import { DocumentCheckbox } from '../alle-dokumenter/document-checkbox';
 
 export const DokumenterFullvisning = styled.section`
   flex-grow: 1;
 `;
 
-export const List = styled.ul`
+export const AllDocumentsList = styled.ul`
   display: block;
   list-style: none;
   font-size: 16px;
@@ -26,13 +25,6 @@ export const ListItem = styled.li`
   padding-right: 8px;
 `;
 
-export const RightAlign = styled.div`
-  display: flex;
-  justify-content: right;
-  float: right; //for safari
-  position: relative;
-`;
-
 export const DocumentRow = styled.article`
   margin: 0;
   display: grid;
@@ -41,6 +33,7 @@ export const DocumentRow = styled.article`
     'vedlegg vedlegg vedlegg vedlegg';
   grid-template-columns: 350px 140px auto 32px;
   grid-column-gap: 1em;
+  align-items: center;
 `;
 
 export const DocumentDate = styled.time`
@@ -59,10 +52,16 @@ export const DocumentTitle = styled.h1`
   grid-area: tittel;
 `;
 
-export const StyledDokumentCheckbox = styled(Checkbox)`
-  font-size: 0;
-  line-height: 0;
+export const StyledDocumentCheckbox = styled(Checkbox)`
   grid-area: sjekkboks;
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  align-items: top;
+  align-content: top;
+  justify-items: right;
+  justify-content: right;
 `;
 
 export const DocumentTema = styled(LabelTema)`
@@ -78,12 +77,12 @@ export const TemaText = styled.div`
   margin: 0;
 `;
 
-export const VedleggBeholder = styled.div`
+export const VedleggContainer = styled.div`
   grid-area: vedlegg;
   margin-left: 2em;
 `;
 
-export const VedleggRad = styled.article`
+export const VedleggRow = styled.article`
   list-style: none;
   margin: 0;
   padding: 0.65em 0 0 0;
@@ -91,14 +90,14 @@ export const VedleggRad = styled.article`
   justify-content: space-between;
 `;
 
-export const VedleggTittel = styled.h1`
+export const VedleggTitle = styled.h1`
   margin: 0;
   color: #0067c5;
   min-width: 15em;
   font-size: 1em;
 `;
 
-export const StyledLastFlereKnapp = styled(Knapp)`
+export const StyledLoadMoreButton = styled(Knapp)`
   width: calc(100% - 32px);
   margin-bottom: 1em;
   margin-top: 1em;

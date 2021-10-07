@@ -2,7 +2,7 @@ import React from 'react';
 import { IDokument } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
-import { VedleggBeholder } from '../styled-components/fullvisning';
+import { VedleggContainer } from '../styled-components/fullvisning';
 import { Vedlegg } from './vedlegg';
 
 interface VedleggListProps {
@@ -18,7 +18,7 @@ export const VedleggList = React.memo(
     }
 
     return (
-      <VedleggBeholder data-testid={'vedlegg'}>
+      <VedleggContainer data-testid={'vedlegg'}>
         {document.vedlegg.map((vedlegg) => (
           <Vedlegg
             key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
@@ -28,7 +28,7 @@ export const VedleggList = React.memo(
             setShownDocument={setShownDocument}
           />
         ))}
-      </VedleggBeholder>
+      </VedleggContainer>
     );
   },
   (previous, next) => dokumentMatcher(previous.document, next.document)

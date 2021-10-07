@@ -4,7 +4,7 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../hooks/use-check-document';
 import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
 import { dokumentMatcher } from '../helpers';
-import { StyledDokumentCheckbox } from '../styled-components/fullvisning';
+import { StyledDocumentCheckbox } from '../styled-components/fullvisning';
 
 interface DocumentCheckboxProps {
   klagebehandlingId: string;
@@ -37,7 +37,7 @@ export const DocumentCheckbox = ({
   }
 
   return (
-    <StyledDokumentCheckbox
+    <StyledDocumentCheckbox
       label={''}
       title={title}
       disabled={!harTilgangTilArkivvariant || !canEdit || isUpdating}

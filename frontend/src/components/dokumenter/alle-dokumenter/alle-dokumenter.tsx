@@ -4,7 +4,7 @@ import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
-import { DokumenterFullvisning, List } from '../styled-components/fullvisning';
+import { AllDocumentsList, DokumenterFullvisning } from '../styled-components/fullvisning';
 import { ListHeader, ListTitle } from '../styled-components/list-header';
 import { DocumentsPage } from './documents-page';
 import { LoadMore } from './load-more';
@@ -43,7 +43,7 @@ export const AlleDokumenter = React.memo(
             Tema
           </FilterDropdown>
         </ListHeader>
-        <List data-testid={'all-documents'}>
+        <AllDocumentsList data-testid={'all-documents'}>
           <DocumentsSpinner pageCount={pageReferences.length} hasDocuments={typeof lastPage !== 'undefined'} />
           {pageReferences.map((pageReference) => (
             <DocumentsPage
@@ -55,7 +55,7 @@ export const AlleDokumenter = React.memo(
               setShownDocument={setShownDocument}
             />
           ))}
-        </List>
+        </AllDocumentsList>
         <LoadMore
           documents={lastPage}
           loading={isLoading}

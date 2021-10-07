@@ -1,6 +1,6 @@
 import React from 'react';
 import { IDocumentsResponse } from '../../../redux-api/dokumenter/types';
-import { StyledLastFlereKnapp } from '../styled-components/fullvisning';
+import { StyledLoadMoreButton } from '../styled-components/fullvisning';
 
 interface LoadMoreProps {
   documents?: IDocumentsResponse;
@@ -27,8 +27,8 @@ export const LoadMore = ({ documents, loading, setPage }: LoadMoreProps) => {
   }
 
   return (
-    <StyledLastFlereKnapp onClick={() => setPage(pageReference)} spinner={loading} autoDisableVedSpinner={true}>
+    <StyledLoadMoreButton onClick={() => setPage(pageReference)} spinner={loading} autoDisableVedSpinner={true}>
       Last flere ({remaining})
-    </StyledLastFlereKnapp>
+    </StyledLoadMoreButton>
   );
 };

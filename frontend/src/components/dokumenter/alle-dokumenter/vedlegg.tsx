@@ -3,7 +3,7 @@ import { IDokument, IDokumentVedlegg } from '../../../redux-api/dokumenter/types
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
-import { VedleggRad, VedleggTittel } from '../styled-components/fullvisning';
+import { VedleggRow, VedleggTitle } from '../styled-components/fullvisning';
 import { DocumentCheckbox } from './document-checkbox';
 
 interface VedleggProps {
@@ -24,10 +24,10 @@ export const Vedlegg = React.memo<VedleggProps>(
       });
 
     return (
-      <VedleggRad key={document.journalpostId + vedlegg.dokumentInfoId}>
-        <VedleggTittel>
+      <VedleggRow key={document.journalpostId + vedlegg.dokumentInfoId}>
+        <VedleggTitle>
           <DocumentButton onClick={onShowDocument}>{vedlegg.tittel}</DocumentButton>
-        </VedleggTittel>
+        </VedleggTitle>
         <DocumentCheckbox
           dokumentInfoId={vedlegg.dokumentInfoId}
           journalpostId={document.journalpostId}
@@ -35,7 +35,7 @@ export const Vedlegg = React.memo<VedleggProps>(
           title={vedlegg.tittel ?? ''}
           klagebehandlingId={klagebehandlingId}
         />
-      </VedleggRad>
+      </VedleggRow>
     );
   },
   (previous, next) =>
