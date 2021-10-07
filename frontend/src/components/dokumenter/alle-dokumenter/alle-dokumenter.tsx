@@ -2,7 +2,6 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
-import { IDocumentReference } from '../../../redux-api/oppgave-types';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
 import { DokumenterFullvisning, List } from '../styled-components/fullvisning';
@@ -14,7 +13,6 @@ interface AlleDokumenterProps {
   klagebehandlingId: string;
   show: boolean;
   setShownDocument: (document: IShownDokument) => void;
-  onChange: (tilknyttedeDokumenter: IDocumentReference[]) => void;
 }
 
 const PAGE_SIZE = 10;

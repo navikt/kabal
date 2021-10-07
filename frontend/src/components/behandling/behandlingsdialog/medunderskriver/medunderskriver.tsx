@@ -1,41 +1,49 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { IUserData } from '../../../../redux-api/bruker';
-import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
-import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
+import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
+import { useGetBrukerQuery } from '../../../../redux-api/bruker';
+import {
+  useGetKlagebehandlingQuery,
+  useGetMedunderskrivereQuery,
+  useUpdateChosenMedunderskriverMutation,
+} from '../../../../redux-api/oppgave';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';
 
-interface MedunderskriverProps {
-  klagebehandling: IKlagebehandling;
-  bruker: IUserData;
-}
-
-export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProps): JSX.Element => {
-  const medunderskrivereQuery = {
-    id: bruker.info.navIdent,
-    tema: klagebehandling.tema,
-  };
-
-  const { data: medunderskrivereData } = useGetMedunderskrivereQuery(medunderskrivereQuery);
+export const Medunderskriver = (): JSX.Element => {
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const { data: bruker } = useGetBrukerQuery();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
 
-  if (typeof medunderskrivereData === 'undefined') {
+  const medunderskrivereQuery =
+    typeof bruker === 'undefined' || typeof klagebehandling === 'undefined'
+      ? skipToken
+      : {
+          id: bruker.info.navIdent,
+          tema: klagebehandling.tema,
+        };
+
+  const { data: medunderskrivereData } = useGetMedunderskrivereQuery(medunderskrivereQuery);
+
+  if (
+    typeof medunderskrivereData === 'undefined' ||
+    typeof klagebehandling === 'undefined' ||
+    typeof bruker === 'undefined'
+  ) {
     return <NavFrontendSpinner />;
   }
 
-  const { medunderskrivere } = medunderskrivereData;
-
-  if (medunderskrivere.length === 0) {
+  if (medunderskrivereData.medunderskrivere.length === 0) {
     return <p>Fant ingen medunderskrivere</p>;
   }
 
-  const onChangeChosenMedunderskriver = (medunderskriverident: string | null) => {
+  const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
       klagebehandlingId: klagebehandling.id,
       medunderskriverident,
     });
-  };
 
   return (
     <>
@@ -44,7 +52,10 @@ export const Medunderskriver = ({ klagebehandling, bruker }: MedunderskriverProp
         onChangeChosenMedunderskriver={onChangeChosenMedunderskriver}
         selectedMedunderskriverNavIdent={klagebehandling.medunderskriverident}
       />
-      <SendTilMedunderskriver klagebehandling={klagebehandling} medunderskrivere={medunderskrivere} />
+      <SendTilMedunderskriver
+        klagebehandling={klagebehandling}
+        medunderskrivere={medunderskrivereData.medunderskrivere}
+      />
     </>
   );
 };

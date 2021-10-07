@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
-import { IKlagebehandlingUpdate } from '../../redux-api/oppgave-types';
 import { PanelContainer } from '../klagebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
@@ -11,10 +10,9 @@ import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
   shown: boolean;
-  onChange: (update: Partial<IKlagebehandlingUpdate>) => void;
 }
 
-export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
+export const Dokumenter = ({ shown }: DokumenterProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [viewAll, setViewAll] = useState(true);
   const [shownDocument, setShownDocument] = useState<IShownDokument | null>(null);
@@ -40,12 +38,7 @@ export const Dokumenter = ({ shown, onChange }: DokumenterProps) => {
           setShownDocument={setShownDocument}
           tilknyttedeDokumenter={klagebehandling.tilknyttedeDokumenter}
         />
-        <AlleDokumenter
-          show={viewAll}
-          setShownDocument={setShownDocument}
-          klagebehandlingId={klagebehandling.id}
-          onChange={(tilknyttedeDokumenter) => onChange({ tilknyttedeDokumenter })}
-        />
+        <AlleDokumenter show={viewAll} setShownDocument={setShownDocument} klagebehandlingId={klagebehandling.id} />
       </PanelContainer>
       <ShowDocument
         document={shownDocument}

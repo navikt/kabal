@@ -1,7 +1,10 @@
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { getFullName } from '../../../domain/name';
-import { IKlagebehandling, IKlager } from '../../../redux-api/oppgave-state-types';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
+import { IKlager } from '../../../redux-api/oppgave-state-types';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
 import { FinishKlagebehandling } from './finish-klagebehandling';
 import { Labels } from './labels';
@@ -9,11 +12,14 @@ import { Lovhjemmel } from './lovhjemmel';
 import { SubSection } from './sub-section';
 import { UtfallResultat } from './utfall-resultat';
 
-interface VenstreProps {
-  klagebehandling: IKlagebehandling;
-}
+export const Behandlingsdetaljer = () => {
+  const klagebehandlingId = useKlagebehandlingId();
+  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
 
-export const Behandlingsdetaljer = ({ klagebehandling }: VenstreProps) => {
+  if (typeof klagebehandling === 'undefined') {
+    return <NavFrontendSpinner />;
+  }
+
   const {
     klager,
     type,
