@@ -1,17 +1,10 @@
 import React from 'react';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
-import { SuccessIcon } from '../../icons/success';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
 import { PanelToggles } from '../klagebehandling/types';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
-import {
-  ControlPanel,
-  ExternalLink,
-  KlagebehandlingInformation,
-  KlagebehandlingTools,
-  StyledSaveStatus,
-} from './styled-components';
+import { ControlPanel, ExternalLink, KlagebehandlingInformation, KlagebehandlingTools } from './styled-components';
 import { PanelToggleButtons } from './toggle-buttons';
 import { UserInfo } from './user-info';
 
@@ -53,15 +46,7 @@ export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingCo
         >
           <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
         </ExternalLink>
-        <SaveStatus />
       </KlagebehandlingInformation>
     </ControlPanel>
   );
 };
-
-// TODO
-const SaveStatus = () => (
-  <StyledSaveStatus>
-    <SuccessIcon alt="Lagret" /> <span>Lagret</span>
-  </StyledSaveStatus>
-);

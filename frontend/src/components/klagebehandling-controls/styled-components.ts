@@ -59,11 +59,3 @@ export const ToggleButtonsContainer = styled.div`
   display: flex;
   padding-left: 16px;
 `;
-
-export const StyledSaveStatus = styled.div`
-  color: #6a6a6a;
-  svg,
-  span {
-    vertical-align: middle;
-  }
-`;
