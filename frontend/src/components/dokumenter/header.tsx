@@ -47,10 +47,11 @@ const DokumenterTittel = styled.h1`
 
 const VisTilknyttedeKnapp = styled.button`
   cursor: pointer;
-  width: 2em;
+  width: 32px;
   background-color: transparent;
   border: none;
   border-radius: 0;
+  margin-left: 32px;
 `;
 
 interface StyledChevronIcon {
