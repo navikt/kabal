@@ -46,6 +46,8 @@ const DokumenterTittel = styled.h1`
 `;
 
 const VisTilknyttedeKnapp = styled.button`
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
   width: 32px;
   background-color: transparent;
