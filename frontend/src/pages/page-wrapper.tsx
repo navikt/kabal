@@ -9,13 +9,18 @@ interface OppgaverPageWrapperProps {
 export const OppgaverPageWrapper = ({ children }: OppgaverPageWrapperProps): JSX.Element => (
   <>
     <Nav />
-    <main>
+    <StyledMain>
       <StyledArticle>{children}</StyledArticle>
-    </main>
+    </StyledMain>
   </>
 );
 
 export const StyledArticle = styled.article`
   padding-left: 1em;
   padding-right: 1em;
+`;
+
+const StyledMain = styled.main`
+  overflow: auto;
+  flex: 1;
 `;
