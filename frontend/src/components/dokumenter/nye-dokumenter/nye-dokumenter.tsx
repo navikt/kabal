@@ -68,6 +68,7 @@ export const StyledDeleteButton = styled(DeleteDocumentButton)`
   padding: 0;
   color: #0067c5;
   text-decoration: underline;
+  text-align: left;
 
   &:disabled {
     cursor: not-allowed;
