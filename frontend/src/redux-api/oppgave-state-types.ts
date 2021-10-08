@@ -1,6 +1,6 @@
 import { Name } from '../domain/types';
 import { IKodeverkVerdi } from './kodeverk';
-import { IDocumentReference, IKlagebehandlingUpdate } from './oppgave-types';
+import { IDocumentReference } from './oppgave-types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -22,13 +22,6 @@ export enum MedunderskriverFlyt {
   IKKE_SENDT = 'IKKE_SENDT',
   OVERSENDT_TIL_MEDUNDERSKRIVER = 'OVERSENDT_TIL_MEDUNDERSKRIVER',
   RETURNERT_TIL_SAKSBEHANDLER = 'RETURNERT_TIL_SAKSBEHANDLER',
-}
-
-export interface IKlagebehandlingState {
-  opptatt: boolean;
-  lagretVersjon: IKlagebehandlingUpdate | null;
-  error: string | null;
-  klagebehandling: IKlagebehandling | null;
 }
 
 export interface IKlagerPerson {
