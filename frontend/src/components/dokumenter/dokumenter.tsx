@@ -6,6 +6,7 @@ import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
 import { Header } from './header';
+import { NyeDokumenter } from './nye-dokumenter/nye-dokumenter';
 import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
 export interface DokumenterProps {
@@ -32,6 +33,7 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
     <>
       <PanelContainer>
         <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />
+        <NyeDokumenter setShownDocument={setShownDocument} />
         <TilknyttedeDokumenter
           klagebehandlingId={klagebehandling.id}
           show={!viewAll}
@@ -40,11 +42,7 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
         />
         <AlleDokumenter show={viewAll} setShownDocument={setShownDocument} klagebehandlingId={klagebehandling.id} />
       </PanelContainer>
-      <ShowDocument
-        document={shownDocument}
-        klagebehandlingId={klagebehandling.id}
-        close={() => setShownDocument(null)}
-      />
+      <ShowDocument document={shownDocument} close={() => setShownDocument(null)} />
     </>
   );
 };

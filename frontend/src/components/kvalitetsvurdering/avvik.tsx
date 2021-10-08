@@ -1,6 +1,7 @@
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKvalitetsvurderingQuery, useUpdateKvalitetsvurderingMutation } from '../../redux-api/kvalitetsvurdering';
 import { CheckboxWithHelpIcon, FormSection, SubHeader } from './styled-components';
@@ -11,6 +12,7 @@ interface AvvikProps {
 
 export const Avvik = ({ show }: AvvikProps) => {
   const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
   const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
 
@@ -28,6 +30,7 @@ export const Avvik = ({ show }: AvvikProps) => {
           <Checkbox
             label={'Betydelig avvik med stor konsekvens for søker'}
             checked={avvikStorKonsekvens}
+            disabled={!canEdit}
             onChange={(e) => {
               updateKvalitetsskjema({
                 ...kvalitetsvurdering,

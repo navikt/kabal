@@ -1,6 +1,7 @@
 import React from 'react';
 import { formattedDate } from '../../../domene/datofunksjoner';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
+import { baseUrl } from '../../../redux-api/common';
 import { IDokument } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
@@ -17,24 +18,29 @@ interface DocumentProps {
 
 export const Document = React.memo<DocumentProps>(
   ({ document, setShownDocument, klagebehandlingId }) => {
-    const onShowDokument = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: IDokument) =>
-      setShownDocument({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant });
+    const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
+
+    const onClick = () =>
+      setShownDocument({
+        title: tittel,
+        url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+      });
 
     return (
       <DocumentRow>
         <DocumentTitle>
-          <DocumentButton onClick={() => onShowDokument(document)}>{document.tittel}</DocumentButton>
+          <DocumentButton onClick={onClick}>{tittel}</DocumentButton>
         </DocumentTitle>
 
-        <DocumentTema tema={document.tema}>{useFullTemaNameFromId(document.tema)}</DocumentTema>
+        <DocumentTema tema={tema}>{useFullTemaNameFromId(tema)}</DocumentTema>
 
-        <DocumentDate dateTime={document.registrert}>{formattedDate(document.registrert)}</DocumentDate>
+        <DocumentDate dateTime={registrert}>{formattedDate(registrert)}</DocumentDate>
 
         <DocumentCheckbox
-          dokumentInfoId={document.dokumentInfoId}
-          journalpostId={document.journalpostId}
-          harTilgangTilArkivvariant={document.harTilgangTilArkivvariant}
-          title={document.tittel ?? ''}
+          dokumentInfoId={dokumentInfoId}
+          journalpostId={journalpostId}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          title={tittel ?? ''}
           klagebehandlingId={klagebehandlingId}
         />
 

@@ -19,6 +19,16 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
   return `${isoDateToPretty(isoDate)} ${isoTimeToPretty(isoTime)}`;
 };
 
+export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null): prettyDateTime | null => {
+  if (isoDateTime === null || !isoDateTimeRegex.test(isoDateTime)) {
+    return null;
+  }
+
+  const [isoDate] = isoDateTime.split('T');
+
+  return isoDateToPretty(isoDate);
+};
+
 export const isoTimeToPretty = (isoTime: ISOTime | null): prettyTime | null => {
   if (isoTime === null || !isoTimeRegex.test(isoTime)) {
     return null;

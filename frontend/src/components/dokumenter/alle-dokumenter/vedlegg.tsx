@@ -1,4 +1,5 @@
 import React from 'react';
+import { baseUrl } from '../../../redux-api/common';
 import { IDokument, IDokumentVedlegg } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
@@ -15,18 +16,16 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ klagebehandlingId, vedlegg, document, setShownDocument }) => {
-    const onShowDocument = () =>
+    const onClick = () =>
       setShownDocument({
-        journalpostId: document.journalpostId,
-        dokumentInfoId: vedlegg.dokumentInfoId,
-        tittel: vedlegg.tittel,
-        harTilgangTilArkivvariant: vedlegg.harTilgangTilArkivvariant,
+        title: vedlegg.tittel,
+        url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`,
       });
 
     return (
       <VedleggRow key={document.journalpostId + vedlegg.dokumentInfoId}>
         <VedleggTitle>
-          <DocumentButton onClick={onShowDocument}>{vedlegg.tittel}</DocumentButton>
+          <DocumentButton onClick={onClick}>{vedlegg.tittel}</DocumentButton>
         </VedleggTitle>
         <DocumentCheckbox
           dokumentInfoId={vedlegg.dokumentInfoId}

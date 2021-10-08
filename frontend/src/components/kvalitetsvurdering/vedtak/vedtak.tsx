@@ -1,6 +1,7 @@
 import { Radio } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
+import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import {
   useGetKvalitetsvurderingQuery,
@@ -14,6 +15,7 @@ export const Vedtak = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: kvalitetsvurdering, isLoading } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
+  const canEdit = useCanEdit(klagebehandlingId);
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
@@ -29,12 +31,14 @@ export const Vedtak = () => {
           label={'Bra/godt nok'}
           onChange={() => updateKvalitetsskjema({ ...kvalitetsvurdering, kvalitetVedtakBra: true })}
           checked={kvalitetVedtakBra === true}
+          disabled={!canEdit}
         />
         <Radio
           name={'VedtakMangelfullt'}
           label={'Mangelfullt'}
           onChange={() => updateKvalitetsskjema({ ...kvalitetsvurdering, kvalitetVedtakBra: false })}
           checked={kvalitetVedtakBra === false}
+          disabled={!canEdit}
         />
       </RadioButtonsRow>
       <VedtakKvalitetsavvikReasons

@@ -1,6 +1,7 @@
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import {
   useGetKvalitetsvurderingQuery,
@@ -15,6 +16,7 @@ interface AnnetProps {
 
 export const Annet = ({ show }: AnnetProps) => {
   const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
   const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(klagebehandlingId);
   const [updateKvalitetsskjema] = useUpdateKvalitetsvurderingMutation();
 
@@ -34,6 +36,7 @@ export const Annet = ({ show }: AnnetProps) => {
           <Checkbox
             label={'Bruk gjerne dette som eksempel i opplæring'}
             checked={brukSomEksempelIOpplaering}
+            disabled={!canEdit}
             onChange={(e) => {
               updateKvalitetsskjema({
                 ...kvalitetsvurdering,

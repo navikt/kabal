@@ -1,5 +1,7 @@
 import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
+import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { IKodeverkVerdi, useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { IKvalitetsvurdering } from '../../../redux-api/kvalitetsvurdering';
 import { ReasonsField } from '../styled-components';
@@ -18,6 +20,8 @@ export const OversendelsesbrevKvalitetsavvikReasons = ({
   const { data: kodeverk } = useGetKodeverkQuery();
   const kvalitetsAvvik = typeof kodeverk !== 'undefined' ? kodeverk.kvalitetsavvikOversendelsesbrev : [];
   const checkedReasons = kvalitetsvurdering.kvalitetsavvikOversendelsesbrev;
+  const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
 
   const checkboxes = useOversendelsesbrevCheckboxes(kvalitetsAvvik, checkedReasons);
 
@@ -34,6 +38,7 @@ export const OversendelsesbrevKvalitetsavvikReasons = ({
             label={checkbox.label}
             value={checkbox.id}
             checked={checkbox.checked}
+            disabled={!canEdit}
             onChange={({ target }) => {
               if (checkedReasons.includes(target.value)) {
                 updateKvalitetsskjema({

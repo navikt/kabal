@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { staggeredBaseQuery } from './common';
+import { MedunderskriverFlyt } from './oppgave-state-types';
 
 export type Date = string; // LocalDate
 
@@ -41,6 +42,7 @@ export interface IKlagebehandling {
   klagebehandlingVersjon: number;
   erMedunderskriver: boolean;
   harMedunderskriver: boolean;
+  medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
   utfall: string | null;
   avsluttetAvSaksbehandler: string | null;

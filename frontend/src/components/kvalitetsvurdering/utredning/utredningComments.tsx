@@ -1,5 +1,7 @@
 import { Textarea } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
+import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { IKvalitetsvurdering } from '../../../redux-api/kvalitetsvurdering';
 import { CommentsField } from '../styled-components';
 
@@ -11,6 +13,8 @@ interface UtredningCommentsProps {
 
 export const UtredningComments = ({ show, kvalitetsvurdering, updateKvalitetsskjema }: UtredningCommentsProps) => {
   const [utredningKommentar, setUtredningKommentar] = useState<string>(kvalitetsvurdering?.kommentarUtredning ?? '');
+  const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
 
   useEffect(() => {
     if (kvalitetsvurdering?.kommentarUtredning === utredningKommentar || typeof kvalitetsvurdering === 'undefined') {
@@ -34,6 +38,7 @@ export const UtredningComments = ({ show, kvalitetsvurdering, updateKvalitetsskj
         value={utredningKommentar}
         placeholder="NB: Ingen personopplysninger"
         maxLength={0}
+        disabled={!canEdit}
         onChange={(e) => setUtredningKommentar(e.target.value)}
       />
     </CommentsField>

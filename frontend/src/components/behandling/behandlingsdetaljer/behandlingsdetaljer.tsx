@@ -6,7 +6,7 @@ import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
 import { IKlager } from '../../../redux-api/oppgave-state-types';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
-import { FinishKlagebehandling } from './finish-klagebehandling';
+import { FinishKlagebehandling } from './finish-klagebehandling/finish-klagebehandling';
 import { Labels } from './labels';
 import { Lovhjemmel } from './lovhjemmel';
 import { SubSection } from './sub-section';

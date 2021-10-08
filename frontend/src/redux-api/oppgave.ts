@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
 import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
 import {
+  IDeleteFileParams,
   IKlagebehandlingFinishedUpdate,
   IKlagebehandlingHjemlerUpdate,
   IKlagebehandlingOppdateringPayload,
@@ -14,6 +15,8 @@ import {
   ISwitchMedunderskriverflytParams,
   ISwitchMedunderskriverflytPayload,
   ITilknyttDocumentParams,
+  IUploadFileParams,
+  IUploadFileResponse,
   IVedtakFullfoertPayload,
 } from './oppgave-types';
 
@@ -188,6 +191,57 @@ export const klagebehandlingApi = createApi({
       }),
       invalidatesTags: ['oppgave'],
     }),
+    uploadFile: builder.mutation<IUploadFileResponse, IUploadFileParams>({
+      query: ({ klagebehandlingId, file }) => {
+        const formData = new FormData();
+        formData.append('vedlegg', file);
+
+        return {
+          url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+      onQueryStarted: async ({ klagebehandlingId, file }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+            const opplastet = new Date().toISOString();
+            klagebehandling.resultat.file = {
+              name: file.name,
+              size: file.size,
+              opplastet,
+            };
+            klagebehandling.resultat.opplastet = opplastet;
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    deleteFile: builder.mutation<IUploadFileResponse, IDeleteFileParams>({
+      query: ({ klagebehandlingId }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
+        method: 'DELETE',
+      }),
+      onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
+            klagebehandling.resultat.file = null;
+            klagebehandling.resultat.opplastet = null;
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -202,4 +256,6 @@ export const {
   useGetMedunderskrivereQuery,
   useUpdateChosenMedunderskriverMutation,
   useSwitchMedunderskriverflytMutation,
+  useUploadFileMutation,
+  useDeleteFileMutation,
 } = klagebehandlingApi;

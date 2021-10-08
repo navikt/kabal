@@ -1,4 +1,3 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../hooks/use-check-document';
@@ -32,13 +31,8 @@ export const DocumentCheckbox = ({
     [klagebehandling, dokumentInfoId, journalpostId]
   );
 
-  if (isUpdating) {
-    return <NavFrontendSpinner />;
-  }
-
   return (
     <StyledDocumentCheckbox
-      label={''}
       title={title}
       disabled={!harTilgangTilArkivvariant || !canEdit || isUpdating}
       checked={tilknyttet}

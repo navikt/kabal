@@ -44,3 +44,15 @@ export const StyledTableFooter = styled.tfoot`
 export const StyledTableStats = styled.div`
   padding: 10px;
 `;
+
+interface StyledAgeProps {
+  age: number;
+}
+
+export const StyledAge = styled.span<StyledAgeProps>`
+  color: ${({ age }) => (age >= 120 ? '#C30000' : '#54483F')};
+`;
+
+export const StyledDeadline = styled.time<StyledAgeProps>`
+  color: ${({ age }) => (age >= 120 ? '#C30000' : '#54483F')};
+`;

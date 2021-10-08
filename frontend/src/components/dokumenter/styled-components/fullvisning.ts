@@ -1,6 +1,6 @@
 import { Knapp } from 'nav-frontend-knapper';
-import { Checkbox } from 'nav-frontend-skjema';
 import styled from 'styled-components';
+import { StyledCheckbox } from '../../../styled-components/checkbox';
 import { LabelTema } from '../../../styled-components/labels';
 
 export const DokumenterFullvisning = styled.section`
@@ -31,13 +31,12 @@ export const DocumentRow = styled.article`
   grid-template-areas:
     'tittel tema dato sjekkboks'
     'vedlegg vedlegg vedlegg vedlegg';
-  grid-template-columns: 350px 140px auto 32px;
+  grid-template-columns: 350px 140px auto 24px;
   grid-column-gap: 1em;
   align-items: center;
 `;
 
 export const DocumentDate = styled.time`
-  cursor: pointer;
   text-align: center;
   font-size: 14px;
   grid-area: dato;
@@ -52,16 +51,8 @@ export const DocumentTitle = styled.h1`
   grid-area: tittel;
 `;
 
-export const StyledDocumentCheckbox = styled(Checkbox)`
-  grid-area: sjekkboks;
-  display: flex;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  align-items: top;
-  align-content: top;
-  justify-items: right;
-  justify-content: right;
+export const StyledDocumentCheckbox = styled(StyledCheckbox)`
+  justify-self: right;
 `;
 
 export const DocumentTema = styled(LabelTema)`
@@ -83,18 +74,17 @@ export const VedleggContainer = styled.div`
 `;
 
 export const VedleggRow = styled.article`
-  list-style: none;
-  margin: 0;
-  padding: 0.65em 0 0 0;
   display: flex;
-  justify-content: space-between;
+  margin: 0;
+  margin-top: 8px;
 `;
 
 export const VedleggTitle = styled.h1`
   margin: 0;
   color: #0067c5;
-  min-width: 15em;
   font-size: 1em;
+  flex-grow: 1;
+  padding-right: 1em;
 `;
 
 export const StyledLoadMoreButton = styled(Knapp)`

@@ -53,6 +53,11 @@ export const LabelMedunderskriver = styled(Label)`
   border: 1px solid #d47b00;
 `;
 
+export const LabelReturnertTilSaksbehandler = styled(Label)`
+  background-color: #D8F9FF;
+  border: 1px solid #4CADCD;  
+`;
+
 const enum TemaBackgroundColorEnum {
   DEFAULT = '#cce1f3',
   SYKEPENGER = '#f1d8d4',

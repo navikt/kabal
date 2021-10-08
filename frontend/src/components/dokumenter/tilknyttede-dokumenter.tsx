@@ -2,6 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { formattedDate } from '../../domene/datofunksjoner';
+import { baseUrl } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
 import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
 import { IDocumentReference } from '../../redux-api/oppgave-types';
@@ -49,10 +50,8 @@ export const TilknyttedeDokumenter = React.memo(
                 tilknyttet={tilknyttet}
                 onClick={() =>
                   setShownDocument({
-                    journalpostId: dokument.journalpostId,
-                    dokumentInfoId: dokument.dokumentInfoId,
-                    tittel: dokument.tittel,
-                    harTilgangTilArkivvariant: dokument.harTilgangTilArkivvariant,
+                    title: dokument.tittel,
+                    url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`,
                   })
                 }
               >
@@ -62,7 +61,8 @@ export const TilknyttedeDokumenter = React.memo(
                 journalpostId={dokument.journalpostId}
                 vedleggListe={dokument.vedlegg}
                 tilknyttedeDokumenter={tilknyttedeDokumenter}
-                visDokument={setShownDocument}
+                klagebehandlingId={klagebehandlingId}
+                setShownDocument={setShownDocument}
               />
             </Tilknyttet>
           ))}
@@ -83,10 +83,17 @@ interface VedleggListeProps {
   vedleggListe: IDokumentVedlegg[];
   tilknyttedeDokumenter: IDocumentReference[];
   journalpostId: string;
-  visDokument: (dokument: IShownDokument) => void;
+  klagebehandlingId: string;
+  setShownDocument: (document: IShownDokument) => void;
 }
 
-const VedleggListe = ({ vedleggListe, tilknyttedeDokumenter, journalpostId, visDokument }: VedleggListeProps) => {
+const VedleggListe = ({
+  vedleggListe,
+  tilknyttedeDokumenter,
+  journalpostId,
+  klagebehandlingId,
+  setShownDocument,
+}: VedleggListeProps) => {
   const tilknyttedeVedlegg = useMemo<IDokumentVedlegg[]>(
     () =>
       vedleggListe.filter((vedlegg) =>
@@ -102,7 +109,8 @@ const VedleggListe = ({ vedleggListe, tilknyttedeDokumenter, journalpostId, visD
           key={journalpostId + vedlegg.dokumentInfoId}
           journalpostId={journalpostId}
           vedlegg={vedlegg}
-          visDokument={visDokument}
+          klagebehandlingId={klagebehandlingId}
+          setShownDocument={setShownDocument}
         />
       ))}
     </DokumenterMinivisning>
@@ -112,19 +120,18 @@ const VedleggListe = ({ vedleggListe, tilknyttedeDokumenter, journalpostId, visD
 interface VedleggProps {
   journalpostId: string;
   vedlegg: IDokumentVedlegg;
-  visDokument: (dokument: IShownDokument) => void;
+  klagebehandlingId: string;
+  setShownDocument: (document: IShownDokument) => void;
 }
 
-const Vedlegg = ({ journalpostId, vedlegg, visDokument }: VedleggProps) => (
+const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId, setShownDocument }: VedleggProps) => (
   <Tilknyttet>
     <TilknyttetKnapp
       tilknyttet={true}
       onClick={() =>
-        visDokument({
-          journalpostId,
-          dokumentInfoId: vedlegg.dokumentInfoId,
-          tittel: vedlegg.tittel,
-          harTilgangTilArkivvariant: vedlegg.harTilgangTilArkivvariant,
+        setShownDocument({
+          title: vedlegg.tittel,
+          url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`,
         })
       }
     >

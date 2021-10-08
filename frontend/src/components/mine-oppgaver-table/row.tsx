@@ -6,6 +6,8 @@ import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { MedudunderskriverflytLabel } from './medunderskrivflyt-label';
+import { StyledAge, StyledDeadline } from './styled-components';
 
 export const Row = ({
   id,
@@ -16,6 +18,9 @@ export const Row = ({
   klagebehandlingVersjon,
   person,
   ageKA,
+  medunderskriverFlyt,
+  erMedunderskriver,
+  harMedunderskriver,
 }: IKlagebehandling): JSX.Element => {
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
@@ -48,8 +53,23 @@ export const Row = ({
       </td>
       <td>{person?.navn}</td>
       <td>{person?.fnr}</td>
-      <td>{ageKA} dager</td>
-      <td>{isoDateToPretty(frist)}</td>
+      <td>
+        <StyledAge age={ageKA}>
+          {ageKA} {ageKA === 1 ? 'dag' : 'dager'}
+        </StyledAge>
+      </td>
+      <td>
+        <StyledDeadline age={ageKA} dateTime={frist}>
+          {isoDateToPretty(frist)}
+        </StyledDeadline>
+      </td>
+      <td>
+        <MedudunderskriverflytLabel
+          medunderskriverflyt={medunderskriverFlyt}
+          erMedunderskriver={erMedunderskriver}
+          harMedunderskriver={harMedunderskriver}
+        />
+      </td>
       <td>
         <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
           Åpne

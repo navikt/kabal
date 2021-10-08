@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { baseUrl } from '../../redux-api/common';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Header,
@@ -20,20 +19,13 @@ const MAX_PDF_WIDTH = 1960;
 const ZOOM_STEP = 150;
 
 interface ShowDokumentProps {
-  klagebehandlingId: string;
   document: IShownDokument | null;
   close: () => void;
 }
 
 const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
 
-export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumentProps) => {
-  const url = useMemo(
-    () =>
-      `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document?.journalpostId}/${document?.dokumentInfoId}/pdf`,
-    [document, klagebehandlingId]
-  );
-
+export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
   const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
@@ -44,10 +36,12 @@ export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumen
     return null;
   }
 
+  const { title, url } = document;
+
   return (
     <Container width={pdfWidth}>
       <Header>
-        <StyledDocumentTitle>{document.tittel}</StyledDocumentTitle>
+        <StyledDocumentTitle>{title}</StyledDocumentTitle>
         <StyledButtonContainer>
           <HeaderButton onClick={decrease} text="Zoom ut på PDF">
             <StyledZoomOutIcon alt="Zoom ut på PDF" />
@@ -67,7 +61,7 @@ export const ShowDocument = ({ klagebehandlingId, document, close }: ShowDokumen
         data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
         role="document"
         type="application/pdf"
-        name={document.tittel ?? undefined}
+        name={title ?? undefined}
       />
     </Container>
   );

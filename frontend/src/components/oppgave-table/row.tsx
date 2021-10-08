@@ -5,6 +5,7 @@ import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { StyledAge, StyledDeadline } from './styled-components';
 
 export const Row = ({
   id,
@@ -44,8 +45,16 @@ export const Row = ({
       <td>
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
-      <td>{ageKA} dager</td>
-      <td>{isoDateToPretty(frist)}</td>
+      <td>
+        <StyledAge age={ageKA}>
+          {ageKA} {ageKA === 1 ? 'dag' : 'dager'}
+        </StyledAge>
+      </td>
+      <td>
+        <StyledDeadline age={ageKA} dateTime={frist}>
+          {isoDateToPretty(frist)}
+        </StyledDeadline>
+      </td>
       <td>
         <Knapp onClick={onTildel} spinner={isLoading} disabled={isLoading}>
           {getTildelText(loader.isLoading)}

@@ -57,6 +57,7 @@ export const ToggleButton = styled.button`
   }
 
   &:disabled {
+    cursor: not-allowed;
     border-color: #6a6a6a;
     background: #f1f1f1;
     opacity: 0.7;

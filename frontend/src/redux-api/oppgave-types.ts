@@ -32,12 +32,6 @@ export interface IKlagebehandlingOppdateringPayload {
   modified: string;
 }
 
-export interface IVedleggResponse {
-  modified: string;
-  klagebehandlingVersjon: number;
-  file: IVedlegg | null;
-}
-
 export interface IVedtakFullfoertPayload {
   klagebehandlingVersjon: number;
   modified: string; // LocalDateTime;
@@ -97,4 +91,18 @@ export interface ISwitchMedunderskriverflytParams {
 export interface ISwitchMedunderskriverflytPayload {
   medunderskriverFlyt: string;
   modified: string;
+}
+
+export interface IUploadFileParams {
+  klagebehandlingId: string;
+  file: File;
+}
+
+export interface IUploadFileResponse {
+  file: IVedlegg;
+  modified: string;
+}
+
+export interface IDeleteFileParams {
+  klagebehandlingId: string;
 }
