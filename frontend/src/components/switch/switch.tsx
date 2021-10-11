@@ -22,10 +22,17 @@ const StyledLabel = styled.label`
   padding-left: 8px;
   padding-right: 8px;
   user-select: none;
+  position: relative;
 `;
 
 const StyledInput = styled.input`
-  display: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 8px;
+  width: 48px;
+  height: 100%;
 `;
 
 interface SwitchUiProps {
