@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { isoDateTimeToPrettyDate } from '../domain/date';
 import { staggeredBaseQuery } from './common';
 import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
 import {
@@ -55,6 +56,7 @@ export const klagebehandlingApi = createApi({
       invalidatesTags: ['oppgave'],
     }),
     updateUtfall: builder.mutation<{ modified: string }, IKlagebehandlingUtfallUpdate>({
+      invalidatesTags: ['oppgave'],
       query: ({ klagebehandlingId, utfall }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/utfall`,
         method: 'PUT',
@@ -75,6 +77,7 @@ export const klagebehandlingApi = createApi({
       },
     }),
     updateHjemler: builder.mutation<{ modified: string }, IKlagebehandlingHjemlerUpdate>({
+      invalidatesTags: ['oppgave'],
       query: ({ klagebehandlingId, hjemler }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/hjemler`,
         method: 'PUT',
@@ -138,15 +141,15 @@ export const klagebehandlingApi = createApi({
       },
     }),
     finishKlagebehandling: builder.mutation<IVedtakFullfoertPayload, IKlagebehandlingFinishedUpdate>({
-      query: ({ klagebehandlingId, ...body }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/fullfoer`,
+      invalidatesTags: ['oppgave'],
+      query: ({ klagebehandlingId }) => ({
+        url: `/api/klagebehandlinger/${klagebehandlingId}/fullfoer`,
         method: 'POST',
-        body,
       }),
       onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.avsluttetAvSaksbehandler = new Date().toLocaleDateString();
+            klagebehandling.avsluttetAvSaksbehandler = isoDateTimeToPrettyDate(new Date().toISOString());
           })
         );
 

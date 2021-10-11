@@ -1,9 +1,7 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import React from 'react';
 import 'nav-frontend-knapper-style';
+import React from 'react';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
-import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { useFinishKlagebehandlingMutation } from '../../../../redux-api/oppgave';
 import {
   StyledFinishKlagebehandlingBox,
@@ -16,19 +14,11 @@ interface FinishProps {
 }
 
 export const ConfirmFinish = ({ cancel }: FinishProps) => {
-  const { data: bruker, isLoading } = useGetBrukerQuery();
   const klagebehandlingId = useKlagebehandlingId();
   const [finishKlagebehandling] = useFinishKlagebehandlingMutation();
 
-  if (typeof bruker === 'undefined' || isLoading) {
-    return <NavFrontendSpinner />;
-  }
-
   const finish = () => {
-    finishKlagebehandling({
-      klagebehandlingId,
-      journalfoerendeEnhet: bruker.valgtEnhetView.id,
-    });
+    finishKlagebehandling({ klagebehandlingId });
   };
 
   return (

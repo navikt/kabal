@@ -33,10 +33,8 @@ export interface IKlagebehandlingOppdateringPayload {
 }
 
 export interface IVedtakFullfoertPayload {
-  klagebehandlingVersjon: number;
   modified: string; // LocalDateTime;
-  ferdigstilt: string; // LocalDateTime;
-  avsluttetAvSaksbehandler: string; // LocalDate;
+  ferdigstilt: boolean;
 }
 
 export interface IMedunderskriverSatt extends ISettMedunderskriverPayload {
@@ -44,9 +42,7 @@ export interface IMedunderskriverSatt extends ISettMedunderskriverPayload {
 }
 
 export interface IKlagebehandlingFinishedUpdate {
-  journalfoerendeEnhet: string;
   klagebehandlingId: string;
-  klagebehandlingVersjon?: number;
 }
 
 export interface FullforVedtakProps {
