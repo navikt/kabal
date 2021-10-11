@@ -1,6 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React from 'react';
+import { Checkbox } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
 import 'nav-frontend-tabell-style';
+import styled from 'styled-components';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { TableHeader } from './header';
@@ -11,6 +13,7 @@ const MAX_OPPGAVER = 100;
 
 export const MineOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
+  const [showOnlyMedunderskriver, setShowOnlyMedunderskriver] = useState<boolean>(false);
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
     typeof bruker === 'undefined'
@@ -56,15 +59,33 @@ export const MineOppgaverTable = () => {
 
   return (
     <StyledTableContainer>
+      <StyledSettings>
+        <Checkbox
+          label="Vis kun dine medunderskriversaker"
+          onChange={({ target }) => setShowOnlyMedunderskriver(target.checked)}
+        />
+      </StyledSettings>
       <StyledTable className="tabell tabell--stripet">
         <TableHeader headers={oppgaverHeaderTitles} />
-        <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} columnCount={oppgaverHeaderTitles.length} />
+        <OppgaveRader
+          oppgaver={oppgaver?.klagebehandlinger}
+          columnCount={oppgaverHeaderTitles.length}
+          showOnlyMedunderskriver={showOnlyMedunderskriver}
+        />
       </StyledTable>
       <StyledTable className="tabell tabell--stripet">
         <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
         <TableHeader headers={doneOppgaverHeaderTitles} />
-        <OppgaveRader oppgaver={doneOppgaver?.klagebehandlinger} columnCount={doneOppgaverHeaderTitles.length} />
+        <OppgaveRader
+          oppgaver={doneOppgaver?.klagebehandlinger}
+          columnCount={doneOppgaverHeaderTitles.length}
+          showOnlyMedunderskriver={showOnlyMedunderskriver}
+        />
       </StyledTable>
     </StyledTableContainer>
   );
 };
+
+const StyledSettings = styled.div`
+  margin: 20px;
+`;

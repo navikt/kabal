@@ -12,7 +12,7 @@ interface SendTilMedunderskriverProps {
 }
 
 export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriverProps) => {
-  const { id: klagebehandlingId, medunderskriverident } = klagebehandling;
+  const { id: klagebehandlingId, medunderskriver } = klagebehandling;
   const canEdit = useCanEdit(klagebehandlingId);
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
@@ -21,13 +21,15 @@ export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriv
     return null;
   }
 
-  const sendToMedunderskriverDisabled = !canEdit || medunderskriverident === null;
+  const sendToMedunderskriverDisabled = !canEdit || medunderskriver === null;
 
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
         <AlertStripe type="info">
-          <AlertLine>Sendt til medunderskriver: {medunderskriverident}</AlertLine>
+          <AlertLine>
+            Sendt til medunderskriver: {medunderskriver?.navn ?? medunderskriver?.navIdent ?? 'Ukjent'}
+          </AlertLine>
           <AlertLine>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</AlertLine>
         </AlertStripe>
       </StyledFormSection>

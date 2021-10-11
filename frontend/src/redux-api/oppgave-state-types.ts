@@ -39,11 +39,19 @@ export interface IKlager {
   person: IKlagerPerson;
   virksomhet: IVirksomhet;
 }
+
+export interface ISaksbehandler {
+  navIdent: string;
+  navn: string;
+}
+
 export interface IKlagebehandling {
   avsluttetAvSaksbehandler: string | null;
   created: string; // LocalDateTime
   datoSendtMedunderskriver: string | null; // LocalDate
+  egenansatt: boolean;
   eoes: string | null;
+  fortrolig: boolean;
   fraNAVEnhet: string | null;
   fraNAVEnhetNavn: string | null;
   fraSaksbehandlerident: string | null;
@@ -60,6 +68,7 @@ export interface IKlagebehandling {
   klagerVirksomhetsnavn: string | null;
   klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
+  medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
   modified: string; // LocalDateTime
@@ -67,23 +76,22 @@ export interface IKlagebehandling {
   mottattFoersteinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
+  resultat: Resultat;
   sakenGjelder: IKlager;
   sakenGjelderFoedselsnummer: string | null;
   sakenGjelderKjoenn: Gender | null;
   sakenGjelderNavn: Name | null;
   sakenGjelderVirksomhetsnavn: string | null;
   sakenGjelderVirksomhetsnummer: string | null;
-  strengtFortrolig: boolean | null;
   sendTilbakemelding: boolean | null;
+  strengtFortrolig: boolean | null;
   tema: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
+  tildeltSaksbehandler: ISaksbehandler | null;
   tildeltSaksbehandlerident: string | null;
-  type: string;
-  resultat: Resultat;
   tilknyttedeDokumenter: IDocumentReference[];
-  egenansatt: boolean;
-  fortrolig: boolean;
+  type: string;
 }
 
 export interface Resultat {

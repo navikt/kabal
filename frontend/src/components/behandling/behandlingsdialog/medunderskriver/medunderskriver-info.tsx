@@ -16,10 +16,10 @@ export const MedunderskriverInfo = ({ klagebehandling }: MedunderskriverInfoProp
     return (
       <div>
         <StyledInfoLine>
-          <b>Saksbehandler:</b> {klagebehandling.tildeltSaksbehandlerident}
+          <b>Saksbehandler:</b> {klagebehandling.tildeltSaksbehandler?.navn ?? 'Ikke tildelt'}
         </StyledInfoLine>
         <StyledInfoLine>
-          <b>Medunderskriver:</b> {klagebehandling.medunderskriverident}
+          <b>Medunderskriver:</b> {klagebehandling.medunderskriver?.navn ?? 'Medunderskriver ikke satt'}
         </StyledInfoLine>
       </div>
     );

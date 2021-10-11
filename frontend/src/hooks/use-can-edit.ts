@@ -12,7 +12,7 @@ export const useCanEdit = (klagebehandlingId: string) => {
     }
 
     return (
-      klagebehandling.tildeltSaksbehandlerident === userData.info.navIdent &&
+      klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent &&
       klagebehandling.avsluttetAvSaksbehandler === null
     );
   }, [klagebehandling, userData, isLoading]);

@@ -51,7 +51,7 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
       medunderskriverident,
     });
 
-  const { medunderskriverident } = klagebehandling;
+  const { medunderskriver } = klagebehandling;
 
   return (
     <StyledFormSection>
@@ -59,12 +59,12 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskrivere.find(({ ident }) => ident === medunderskriverident)?.ident}
+        value={medunderskrivere.find(({ ident }) => ident === medunderskriver?.navIdent)?.ident}
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>
-        {medunderskrivere.map((medunderskriver) => (
-          <option key={medunderskriver.ident} value={medunderskriver.ident}>
-            {medunderskriver.navn}
+        {medunderskrivere.map(({ navn, ident }) => (
+          <option key={ident} value={ident}>
+            {navn}
           </option>
         ))}
       </Select>
