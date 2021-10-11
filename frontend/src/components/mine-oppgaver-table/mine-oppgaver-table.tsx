@@ -50,6 +50,7 @@ export const MineOppgaverTable = () => {
     'Frist',
     null,
     null,
+    null,
   ];
   const doneOppgaverHeaderTitles: string[] = ['Type', 'Tema', 'Hjemmel', 'Navn', 'Fnr.', 'Fullført', 'Utfall'];
 

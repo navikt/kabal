@@ -2,11 +2,15 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
+const oppgaverPathRegex = /^\/oppgaver\/\d+/;
+
 export const Nav = () => (
   <StyledNav role="navigation" aria-label="Meny">
     <StyledNavLinkList>
       <StyledNavListItem>
-        <StyledNavLink to="/oppgaver/1">Oppgaver</StyledNavLink>
+        <StyledNavLink to="/oppgaver/1" isActive={(match, location) => oppgaverPathRegex.test(location.pathname)}>
+          Oppgaver
+        </StyledNavLink>
       </StyledNavListItem>
       <StyledNavListItem>
         <StyledNavLink to="/mineoppgaver">Mine Oppgaver</StyledNavLink>

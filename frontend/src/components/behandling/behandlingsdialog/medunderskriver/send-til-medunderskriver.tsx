@@ -1,43 +1,35 @@
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../../../domain/date';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriver } from '../../../../redux-api/oppgave-types';
 
 interface SendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
-  medunderskrivere: IMedunderskriver[];
 }
 
-export const SendTilMedunderskriver = ({ klagebehandling, medunderskrivere }: SendTilMedunderskriverProps) => {
+export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriverProps) => {
   const { id: klagebehandlingId, medunderskriverident } = klagebehandling;
   const canEdit = useCanEdit(klagebehandlingId);
 
-  const valgtMedunderskriverNavn = useMemo(() => {
-    const found = medunderskrivere.find((medunderskriver) => medunderskriver.ident === medunderskriverident);
-
-    if (found) {
-      return found.navn;
-    }
-
-    return medunderskriverident;
-  }, [medunderskrivere, medunderskriverident]);
-
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
-  const sendToMedunderskriverDisabled = !canEdit || klagebehandling.medunderskriverident === null;
+  if (!canEdit) {
+    return null;
+  }
+
+  const sendToMedunderskriverDisabled = !canEdit || medunderskriverident === null;
 
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
-        <StyledAlertstripe type="info">
-          <p>Sendt til medunderskriver: {valgtMedunderskriverNavn}</p>
-          <p>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</p>
-        </StyledAlertstripe>
+        <AlertStripe type="info">
+          <AlertLine>Sendt til medunderskriver: {medunderskriverident}</AlertLine>
+          <AlertLine>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</AlertLine>
+        </AlertStripe>
       </StyledFormSection>
     );
   }
@@ -60,8 +52,6 @@ const StyledFormSection = styled.div`
   margin-top: 20px;
 `;
 
-const StyledAlertstripe = styled(AlertStripe)`
-  p {
-    margin: 0;
-  }
+const AlertLine = styled.p`
+  margin: 0;
 `;
