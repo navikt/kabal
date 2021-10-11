@@ -15,7 +15,6 @@ export const Row = ({
   frist,
   ageKA,
   klagebehandlingVersjon,
-  person,
   tildeltSaksbehandlerNavn,
   harMedunderskriver,
 }: IKlagebehandling): JSX.Element => {
@@ -48,7 +47,6 @@ export const Row = ({
       <td>
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
-      <td>{person?.fnr}</td>
       <td>{ageKA} dager</td>
       <td>{isoDateToPretty(frist)}</td>
       <td>{tildeltSaksbehandlerNavn}</td>

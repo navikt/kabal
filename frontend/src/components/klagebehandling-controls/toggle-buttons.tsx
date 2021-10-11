@@ -13,9 +13,6 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     <TogglePanelButton panel={'documents'} checked={toggles.documents} setPanel={togglePanel}>
       Dokumenter
     </TogglePanelButton>
-    <TogglePanelButton panel={'brevutforming'} checked={toggles.brevutforming} setPanel={togglePanel}>
-      Brevutforming
-    </TogglePanelButton>
     <TogglePanelButton panel={'behandling'} checked={toggles.behandling} setPanel={togglePanel}>
       Behandling
     </TogglePanelButton>

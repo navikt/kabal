@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import Knapp from 'nav-frontend-knapper';
+import React from 'react';
 import styled from 'styled-components';
 import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
 import { Filter } from './option';
@@ -11,18 +12,20 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): JSX.Element | null => {
-  const allSelected = useMemo(() => selected.length === options.length, [selected.length, options.length]);
-
   if (!open) {
     return null;
   }
 
+  const reset = () => {
+    onChange(null, false);
+  };
+
   return (
     <StyledList>
       <StyledTopListItem>
-        <Filter active={allSelected} onChange={onChange}>
-          Alle
-        </Filter>
+        <Knapp mini onClick={reset}>
+          Nullstill
+        </Knapp>
       </StyledTopListItem>
       {options.map(({ id, beskrivelse }) => (
         <StyledListItem key={id}>
@@ -62,9 +65,7 @@ const StyledListItem = styled.li`
 `;
 
 const StyledTopListItem = styled(StyledListItem)`
-  position: sticky;
-  top: 0;
   border-bottom: 1px solid #c6c2bf;
   background-color: white;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
+  padding: 8px;
 `;

@@ -23,6 +23,7 @@ export const StyledValg = styled.h2`
   font-size: 1em;
   margin: 0;
   grid-column: 4;
+  text-align: right;
 `;
 
 export const StyledTitle = styled.h2`
@@ -37,8 +38,8 @@ export const StyledNyeDokumenter = styled.div`
 
 export const StyledNewDocument = styled.li`
   display: grid;
-  grid-template-columns: auto 10em 5em 5em;
-  grid-template-areas: 'tittel brevtype date options';
+  grid-template-columns: 350px 140px 5em 32px;
+  grid-template-areas: 'title type date options';
   grid-column-gap: 1em;
 `;
 
@@ -48,7 +49,7 @@ export const StyledList = styled.ul`
 `;
 
 export const StyledFilename = styled.h1`
-  grid-area: filename;
+  grid-area: title;
   font-size: 1em;
   color: inherit;
   margin: 0;
@@ -57,6 +58,8 @@ export const StyledFilename = styled.h1`
 
 export const StyledDate = styled.time`
   grid-area: date;
+  font-size: 12px;
+  text-align: center;
 `;
 
 export const StyledDeleteButton = styled(DeleteDocumentButton)`
@@ -68,7 +71,7 @@ export const StyledDeleteButton = styled(DeleteDocumentButton)`
   padding: 0;
   color: #0067c5;
   text-decoration: underline;
-  text-align: left;
+  text-align: right;
 
   &:disabled {
     cursor: not-allowed;
@@ -77,11 +80,16 @@ export const StyledDeleteButton = styled(DeleteDocumentButton)`
 
 interface NyeDokumenterProps {
   setShownDocument: (document: IShownDokument) => void;
+  show: boolean;
 }
 
-export const NyeDokumenter = ({ setShownDocument }: NyeDokumenterProps) => {
+export const NyeDokumenter = ({ setShownDocument, show }: NyeDokumenterProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+
+  if (!show) {
+    return null;
+  }
 
   if (typeof klagebehandling === 'undefined') {
     return <NavFrontendSpinner />;

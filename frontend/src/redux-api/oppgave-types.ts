@@ -10,7 +10,7 @@ export interface IKlagebehandlingUpdate {
 
 export interface IKlagebehandlingUtfallUpdate {
   klagebehandlingId: string;
-  utfall: Utfall;
+  utfall: Utfall | null;
 }
 
 export interface IKlagebehandlingHjemlerUpdate {

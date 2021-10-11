@@ -13,7 +13,7 @@ export const Tilknyttet = styled.li`
 
 export const TilknyttetDato = styled.time`
   display: block;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
@@ -26,4 +26,18 @@ export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
   font-size: 16px;
   text-decoration: ${(props) => (props.tilknyttet ? 'none' : 'line-through')};
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 `;
+
+export const StyledSubHeader = styled.h2`
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 2em;
+  margin-bottom: 0; 
+
+  &:first-of-type {
+    margin-top: 8px;
+  }
+`

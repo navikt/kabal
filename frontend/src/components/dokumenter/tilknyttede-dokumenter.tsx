@@ -1,14 +1,21 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { formattedDate } from '../../domene/datofunksjoner';
+import { isoDateToPretty } from '../../domain/date';
 import { baseUrl } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
 import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
 import { IDocumentReference } from '../../redux-api/oppgave-types';
 import { IShownDokument } from '../show-document/types';
 import { dokumentMatcher } from './helpers';
-import { DokumenterMinivisning, Tilknyttet, TilknyttetDato, TilknyttetKnapp } from './styled-components/minivisning';
+import {
+  DokumenterMinivisning,
+  StyledSubHeader,
+  Tilknyttet,
+  TilknyttetDato,
+  TilknyttetKnapp,
+} from './styled-components/minivisning';
+import { TilknyttedeNyeDokumenter } from './tilknyttede-nye-dokumenter';
 import { ITilknyttetDokument } from './types';
 
 interface TilknyttedeDokumenterProps {
@@ -43,9 +50,11 @@ export const TilknyttedeDokumenter = React.memo(
       <Container>
         <Loading loading={isLoading} />
         <DokumenterMinivisning>
+          <TilknyttedeNyeDokumenter setShownDocument={setShownDocument} />
+          <StyledSubHeader>Journalførte dokumenter</StyledSubHeader>
           {documents.map(({ document: dokument, tilknyttet }) => (
             <Tilknyttet key={dokument.journalpostId + dokument.dokumentInfoId}>
-              <TilknyttetDato dateTime={dokument.registrert}>{formattedDate(dokument.registrert)}</TilknyttetDato>
+              <TilknyttetDato dateTime={dokument.registrert}>{isoDateToPretty(dokument.registrert)}</TilknyttetDato>
               <TilknyttetKnapp
                 tilknyttet={tilknyttet}
                 onClick={() =>
@@ -77,6 +86,8 @@ TilknyttedeDokumenter.displayName = 'TilknyttedeDokumenter';
 
 const Container = styled.div`
   position: relative;
+  padding: 16px;
+  width: 300px;
 `;
 
 interface VedleggListeProps {

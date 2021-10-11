@@ -21,14 +21,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
-
-    if (value === '') {
-      return;
-    }
-
-    if (isUtfall(value)) {
-      updateUtfall({ klagebehandlingId, utfall: value });
-    }
+    updateUtfall({ klagebehandlingId, utfall: isUtfall(value) ? value : null });
   };
 
   if (typeof kodeverk === 'undefined' || isLoading) {

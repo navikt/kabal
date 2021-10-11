@@ -29,17 +29,18 @@ export const DocumentRow = styled.article`
   margin: 0;
   display: grid;
   grid-template-areas:
-    'tittel tema dato sjekkboks'
+    'title tema date checkbox'
     'vedlegg vedlegg vedlegg vedlegg';
-  grid-template-columns: 350px 140px auto 24px;
+  grid-template-columns: 350px 140px 5em 32px;
   grid-column-gap: 1em;
   align-items: center;
 `;
 
 export const DocumentDate = styled.time`
   text-align: center;
-  font-size: 14px;
-  grid-area: dato;
+  font-size: 12px;
+  grid-area: date;
+  flex-shrink: 1;
 `;
 
 export const DocumentTitle = styled.h1`
@@ -48,10 +49,11 @@ export const DocumentTitle = styled.h1`
   margin: 0;
   cursor: pointer;
   color: #0067c5;
-  grid-area: tittel;
+  grid-area: title;
 `;
 
 export const StyledDocumentCheckbox = styled(StyledCheckbox)`
+  grid-area: checkbox;
   justify-self: right;
 `;
 

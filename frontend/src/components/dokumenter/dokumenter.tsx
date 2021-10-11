@@ -33,7 +33,7 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
     <>
       <PanelContainer>
         <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />
-        <NyeDokumenter setShownDocument={setShownDocument} />
+        <NyeDokumenter setShownDocument={setShownDocument} show={viewAll} />
         <TilknyttedeDokumenter
           klagebehandlingId={klagebehandling.id}
           show={!viewAll}

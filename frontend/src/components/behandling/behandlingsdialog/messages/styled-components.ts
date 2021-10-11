@@ -14,7 +14,8 @@ export const StyledAuthor = styled.p`
 `;
 export const StyledMessageContent = styled.p`
   margin: 0;
-  white-space: normal;
+  white-space: pre-line;
+  word-wrap: break-word;
 `;
 
 export const StyledMessages = styled.div`
@@ -36,4 +37,5 @@ export const StyledWriteMessage = styled.div`
 
 export const StyleSendMessage = styled.div`
   align-self: flex-end;
+  margin-top: 8px;
 `;

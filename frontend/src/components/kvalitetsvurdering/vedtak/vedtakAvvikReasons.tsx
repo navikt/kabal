@@ -31,7 +31,7 @@ export const VedtakKvalitetsavvikReasons = ({
 
   return (
     <ReasonsField>
-      <CheckboxGruppe legend={'Hva er kvalitetsavviket? Fyll ut minst 1.'}>
+      <CheckboxGruppe legend={'Hva er kvalitetsavviket?'}>
         {checkboxes.map((checkbox) => (
           <Checkbox
             key={checkbox.id}

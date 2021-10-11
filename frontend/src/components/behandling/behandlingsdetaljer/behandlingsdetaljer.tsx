@@ -1,10 +1,8 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
-import { getFullName } from '../../../domain/name';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
-import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
-import { IKlager } from '../../../redux-api/oppgave-state-types';
+import { useKlagebehandling } from '../../../hooks/use-klagebehandling';
+import { useKlagerName } from '../../../hooks/use-klager-name';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
 import { FinishKlagebehandling } from './finish-klagebehandling/finish-klagebehandling';
 import { Labels } from './labels';
@@ -13,15 +11,14 @@ import { SubSection } from './sub-section';
 import { UtfallResultat } from './utfall-resultat';
 
 export const Behandlingsdetaljer = () => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const [klagebehandling, isLoading] = useKlagebehandling();
+  const klagerName = useKlagerName();
 
-  if (typeof klagebehandling === 'undefined') {
+  if (typeof klagebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
   }
 
   const {
-    klager,
     type,
     tema,
     mottattFoersteinstans,
@@ -37,7 +34,7 @@ export const Behandlingsdetaljer = () => {
       <StyledPaddedContent>
         <StyledHeader>Behandling</StyledHeader>
 
-        <SubSection label="Klager">{getKlagerName(klager)}</SubSection>
+        <SubSection label="Klager">{klagerName ?? ''}</SubSection>
 
         <Labels typeId={type} temaId={tema} />
 
@@ -57,18 +54,4 @@ export const Behandlingsdetaljer = () => {
       <FinishKlagebehandling />
     </StyledBehandlingsdetaljer>
   );
-};
-
-const getKlagerName = ({ person, virksomhet }: IKlager): string => {
-  if (person !== null) {
-    return getFullName(person.navn);
-  }
-
-  if (virksomhet !== null) {
-    return `${virksomhet.navn ?? ''} ${
-      virksomhet.virksomhetsnummer === null ? '' : `(${virksomhet.virksomhetsnummer})`
-    }`;
-  }
-
-  return '';
 };

@@ -46,7 +46,6 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
             Hjemmel
           </FilterDropdown>
         </th>
-        <th>Fnr.</th>
         <th>Alder</th>
         <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
           Frist

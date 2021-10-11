@@ -2,7 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useRef } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
-import { useUploadFileMutation } from '../../redux-api/oppgave';
+import { useGetKlagebehandlingQuery, useUploadFileMutation } from '../../redux-api/oppgave';
 
 interface UploadFileButtonProps {
   show: boolean;
@@ -11,6 +11,7 @@ interface UploadFileButtonProps {
 export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
   const [uploadFile, { isLoading }] = useUploadFileMutation();
   const klagebehandlingId = useKlagebehandlingId();
+  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const canEdit = useCanEdit(klagebehandlingId);
 
   const fileInput = useRef<HTMLInputElement>(null);
@@ -45,13 +46,15 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
     [klagebehandlingId, uploadFile]
   );
 
-  if (!show || !canEdit) {
+  if (!show || !canEdit || typeof klagebehandling === 'undefined') {
     return null;
   }
 
+  const hasFile = klagebehandling.resultat.file !== null;
+
   return (
     <>
-      <Knapp onClick={handleClick} disabled={isLoading} mini>
+      <Knapp onClick={handleClick} disabled={isLoading || hasFile} mini>
         Last opp dokument
       </Knapp>
       <input

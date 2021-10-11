@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
@@ -16,11 +16,9 @@ export const FilterDropdown = ({ options, selected, onChange, children }: Filter
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
 
-  const allIds = useMemo(() => options.map(({ id }) => id), [options]);
-
   const onFilterChange = (id: string | null, active: boolean) => {
     if (id === null) {
-      onChange(active ? allIds : []);
+      onChange([]);
     } else {
       onChange(active ? [...selected, id] : selected.filter((s) => s !== id));
     }

@@ -1,8 +1,8 @@
-import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { IPersonResultat, PersonSoekApiResponse } from '../../redux-api/oppgaver';
 import { Loader } from '../loader/loader';
+import { Result } from './result';
 
 interface SearchResultsProps {
   isLoading: boolean;
@@ -25,52 +25,22 @@ export const SearchResults = ({ personsoekResultat, isLoading }: SearchResultsPr
 interface ResultatListProps {
   personer: IPersonResultat[];
 }
-interface RowsProps {
-  personer: IPersonResultat[];
-  columnCount: number;
-}
 
-const ResultList = ({ personer }: ResultatListProps) => (
-  <table className="tabell">
-    <Rows personer={personer} columnCount={3} />
-  </table>
-);
-
-const Rows = ({ personer, columnCount }: RowsProps) => {
+const ResultList = ({ personer }: ResultatListProps) => {
   if (typeof personer === 'undefined') {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>
-            <Loader>Laster personer...</Loader>
-          </td>
-        </tr>
-      </tbody>
-    );
+    return <Loader>Laster personer...</Loader>;
   }
 
   if (personer.length === 0) {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
-    );
+    return <span>Ingen treff</span>;
   }
 
   return (
-    <tbody>
-      {personer.map(({ navn, fnr }) => (
-        <tr key={fnr}>
-          <td>{formatName(navn)}</td>
-          <td>{fnr}</td>
-          <td>
-            <Knapp>Se saker</Knapp>
-          </td>
-        </tr>
+    <StyledResultList>
+      {personer.map((person) => (
+        <Result key={person.fnr} person={person} />
       ))}
-    </tbody>
+    </StyledResultList>
   );
 };
 
@@ -78,17 +48,8 @@ const ResultsContainer = styled.div`
   margin-top: 20px;
 `;
 
-const formatName = (rawString: string): string => {
-  if (rawString === '') {
-    return '';
-  }
-
-  const nameArray = rawString
-    .replace(/[\\[\]']+/g, '')
-    .toLowerCase()
-    .split(' ');
-
-  return nameArray
-    .map((name: string) => name.charAt(0).toUpperCase() + name.slice(1))
-    .reduce((firstName: string, lastName: string) => firstName + ' ' + lastName);
-};
+const StyledResultList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;

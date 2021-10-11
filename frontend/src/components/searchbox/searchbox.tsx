@@ -1,32 +1,23 @@
 import { Search } from '@navikt/ds-icons';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 interface SearchBoxProps {
-  onChange: (query: string) => void;
+  query: string;
+  setQuery: (query: string) => void;
 }
 
-export const SearchBox = ({ onChange }: SearchBoxProps): JSX.Element => {
-  const [query, setQuery] = useState<string>('');
-
-  return (
-    <>
-      <StyledLabelContainer>
-        <StyledLabelText>Søk med personnummer eller navn:</StyledLabelText>
-        <StyledInput
-          type="text"
-          onChange={({ target }) => {
-            setQuery(target.value);
-            onChange(target.value);
-          }}
-        />
-        <StyledSearchButton onClick={() => onChange(query)}>
-          <StyledSearchIcon />
-        </StyledSearchButton>
-      </StyledLabelContainer>
-    </>
-  );
-};
+export const SearchBox = ({ query, setQuery }: SearchBoxProps): JSX.Element => (
+  <>
+    <StyledLabelContainer>
+      <StyledLabelText>Søk med fødselsnummer eller navn:</StyledLabelText>
+      <StyledInput type="text" value={query} onChange={({ target }) => setQuery(target.value)} />
+      <StyledSearchButton onClick={() => setQuery(query)}>
+        <StyledSearchIcon />
+      </StyledSearchButton>
+    </StyledLabelContainer>
+  </>
+);
 
 const StyledLabelContainer = styled.label`
   display: flex;

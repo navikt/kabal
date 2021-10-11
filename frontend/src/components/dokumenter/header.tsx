@@ -34,6 +34,8 @@ const DokumenterNav = styled.div`
   padding: 1em;
   background: white;
   box-shadow: lightgray 0 5px 5px;
+  height: 64px;
+  align-items: center;
 `;
 
 const DokumenterTittel = styled.h1`

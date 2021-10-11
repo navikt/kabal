@@ -3,7 +3,6 @@ import { SearchBox } from '../../components/searchbox/searchbox';
 import { SearchResults } from '../../components/searchbox/searchresults';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { PersonSoekApiResponse, usePersonsoekMutation } from '../../redux-api/oppgaver';
-import { toasterSett } from '../../tilstand/moduler/toaster';
 import { OppgaverPageWrapper } from '../page-wrapper';
 
 const INITIAL_STATE = { antallTreffTotalt: 0, personer: [] };
@@ -11,7 +10,8 @@ const INITIAL_STATE = { antallTreffTotalt: 0, personer: [] };
 export const SearchPage = () => {
   const { data: bruker } = useGetBrukerQuery();
   const [personsoek, loader] = usePersonsoekMutation();
-  const [query, setQuery] = useState<string>('');
+  // Do not put the query in the URL. It will be logged, and it may contain fnr.
+  const [query, setQuery] = useState<string>('tvilsom saks'); // TODO: Set inital state to empty string.
   const [personsoekResultat, setPersonsoekResultat] = useState<PersonSoekApiResponse>(INITIAL_STATE);
 
   const getPersonsoekUpdate = useCallback(() => {
@@ -28,10 +28,7 @@ export const SearchPage = () => {
     })
       .unwrap()
       .then(setPersonsoekResultat)
-      .catch(() => {
-        displayToast('Klarte ikke å søke');
-        setPersonsoekResultat(INITIAL_STATE);
-      });
+      .catch(() => setPersonsoekResultat(INITIAL_STATE));
   }, [bruker, personsoek, query]);
 
   useEffect(() => {
@@ -41,16 +38,9 @@ export const SearchPage = () => {
 
   const { isLoading } = loader;
 
-  const displayToast = (feilmelding: string) =>
-    toasterSett({
-      display: true,
-      type: 'feil',
-      feilmelding,
-    });
-
   return (
     <OppgaverPageWrapper>
-      <SearchBox onChange={setQuery} />
+      <SearchBox query={query} setQuery={setQuery} />
       <SearchResults isLoading={isLoading} personsoekResultat={personsoekResultat} />
     </OppgaverPageWrapper>
   );
