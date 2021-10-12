@@ -3,6 +3,7 @@ import 'nav-frontend-knapper-style';
 import React from 'react';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useKlagerName } from '../../../../hooks/use-klager-name';
+import { ApiError, UNKNOWN_ERROR, isWrappedApiError } from '../../../../redux-api/error-type';
 import { useFinishKlagebehandlingMutation } from '../../../../redux-api/oppgave';
 import {
   StyledFinishKlagebehandlingBox,
@@ -12,15 +13,26 @@ import {
 
 interface FinishProps {
   cancel: () => void;
+  setError: (error: ApiError) => void;
 }
 
-export const ConfirmFinish = ({ cancel }: FinishProps) => {
+export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [finishKlagebehandling] = useFinishKlagebehandlingMutation();
   const klagerName = useKlagerName();
 
   const finish = () => {
-    finishKlagebehandling({ klagebehandlingId });
+    finishKlagebehandling({ klagebehandlingId })
+      .unwrap()
+      .catch((e) => {
+        if (isWrappedApiError(e)) {
+          setError(e.data);
+        } else {
+          setError(UNKNOWN_ERROR);
+        }
+
+        cancel();
+      });
   };
 
   return (

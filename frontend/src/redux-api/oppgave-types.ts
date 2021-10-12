@@ -1,13 +1,5 @@
 import { IKlagebehandling, IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
 
-export interface IKlagebehandlingUpdate {
-  klagebehandlingId: string;
-  hjemler: string[];
-  klagebehandlingVersjon: number;
-  tilknyttedeDokumenter: IDocumentReference[];
-  utfall: Utfall | null;
-}
-
 export interface IKlagebehandlingUtfallUpdate {
   klagebehandlingId: string;
   utfall: Utfall | null;
@@ -22,22 +14,22 @@ export interface ITilknyttDocumentParams extends IDocumentReference {
   klagebehandlingId: string;
 }
 
+export interface ITilknyttDocumentResponse {
+  modified: string;
+  file: IVedlegg;
+}
+
 export interface IDocumentReference {
   journalpostId: string;
   dokumentInfoId: string;
 }
 
-export interface IKlagebehandlingOppdateringPayload {
-  klagebehandlingVersjon: number;
-  modified: string;
-}
-
-export interface IVedtakFullfoertPayload {
+export interface IVedtakFullfoertResponse {
   modified: string; // LocalDateTime;
   ferdigstilt: boolean;
 }
 
-export interface IMedunderskriverSatt extends ISettMedunderskriverPayload {
+export interface IMedunderskriverSatt extends ISettMedunderskriverResponse {
   medunderskriverident: string;
 }
 
@@ -75,18 +67,17 @@ export interface ISettMedunderskriverParams {
   medunderskriverident: string | null;
 }
 
-export interface ISettMedunderskriverPayload {
+export interface ISettMedunderskriverResponse {
   modified: string;
-  datoSendtMedunderskriver: string;
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
 export interface ISwitchMedunderskriverflytParams {
   klagebehandlingId: string;
 }
-export interface ISwitchMedunderskriverflytPayload {
-  medunderskriverFlyt: string;
+export interface ISwitchMedunderskriverflytResponse {
   modified: string;
+  medunderskriverFlyt: MedunderskriverFlyt;
 }
 
 export interface IUploadFileParams {

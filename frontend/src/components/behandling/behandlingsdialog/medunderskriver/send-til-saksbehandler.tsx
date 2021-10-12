@@ -51,4 +51,5 @@ export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriver
 
 const StyledFormSection = styled.div`
   margin-top: 20px;
+  white-space: normal;
 `;

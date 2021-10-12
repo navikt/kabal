@@ -20,10 +20,6 @@ interface IPostMessage {
   author: IAuthor;
 }
 
-interface IPostMessageResponse {
-  created: string;
-}
-
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
   baseQuery: staggeredBaseQuery,
@@ -33,7 +29,7 @@ export const messagesApi = createApi({
       query: (id) => `/api/klagebehandlinger/${id}/meldinger`,
       providesTags: ['messages'],
     }),
-    postMessage: builder.mutation<IPostMessageResponse, IPostMessage>({
+    postMessage: builder.mutation<IMessage, IPostMessage>({
       invalidatesTags: ['messages'],
       query: ({ klagebehandlingId, ...body }) => ({
         method: 'POST',
@@ -41,15 +37,28 @@ export const messagesApi = createApi({
         body,
       }),
       onQueryStarted: async ({ klagebehandlingId, ...newMessage }, { dispatch, queryFulfilled }) => {
+        const now = new Date().toISOString();
+        const newMessageId = `new-message-optimistic-id-${now}`;
+
         const patchResult = dispatch(
           messagesApi.util.updateQueryData('getMessages', klagebehandlingId, (messages) => {
-            const now = new Date().toISOString();
-            messages.push({ ...newMessage, created: now, modified: now, id: '' });
+            messages.push({ ...newMessage, created: now, modified: now, id: newMessageId });
           })
         );
 
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          dispatch(
+            messagesApi.util.updateQueryData('getMessages', klagebehandlingId, (messages) =>
+              messages.map((m) => {
+                if (m.id === newMessageId) {
+                  return data;
+                }
+
+                return m;
+              })
+            )
+          );
         } catch {
           patchResult.undo();
         }

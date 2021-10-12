@@ -4,20 +4,19 @@ import React, { useState } from 'react';
 import 'nav-frontend-knapper-style';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
+import { ApiError } from '../../../../redux-api/error-type';
 import { useGetKlagebehandlingQuery } from '../../../../redux-api/oppgave';
 import { StyledPaddedContent, StyledSubHeader } from '../../styled-components';
 import { ConfirmFinish } from './confirm-finish';
+import { ErrorMessage } from './error-messages';
 import { KlagebehandlingFinished } from './klagebehandling-finished';
 
 export const FinishKlagebehandling = () => {
-  const id = useKlagebehandlingId();
-  const canEdit = useCanEdit(id);
-  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(id);
+  const klagebehandlingId = useKlagebehandlingId();
+  const canEdit = useCanEdit(klagebehandlingId);
+  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
-
-  if (!canEdit) {
-    return null;
-  }
+  const [error, setError] = useState<ApiError | null>(null);
 
   if (typeof klagebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
@@ -35,17 +34,22 @@ export const FinishKlagebehandling = () => {
     return <KlagebehandlingFinished utfall={klagebehandling.resultat.utfall} />;
   }
 
+  if (!canEdit) {
+    return null;
+  }
+
   return (
     <>
       <StyledPaddedContent>
         <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>
+        <ErrorMessage error={error} />
         {!showConfirmFinish && (
           <Knapp mini onClick={showFinish}>
             Fullfør klagebehandling
           </Knapp>
         )}
       </StyledPaddedContent>
-      {showConfirmFinish && <ConfirmFinish cancel={cancel} />}
+      {showConfirmFinish && <ConfirmFinish cancel={cancel} setError={setError} />}
     </>
   );
 };

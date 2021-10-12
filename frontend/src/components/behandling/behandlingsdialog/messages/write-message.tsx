@@ -2,6 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
+import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
@@ -9,6 +10,7 @@ import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const klagebehandlingId = useKlagebehandlingId();
+  const isFullfoert = useIsFullfoert(klagebehandlingId);
   const { data: user, isLoading } = useGetBrukerQuery();
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -22,6 +24,10 @@ export const WriteMessage = () => {
 
   if (typeof user === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
+  }
+
+  if (isFullfoert) {
+    return null;
   }
 
   const post = () => {

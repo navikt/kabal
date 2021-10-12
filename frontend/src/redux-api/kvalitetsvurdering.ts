@@ -1,11 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
 import { klagebehandlingApi } from './oppgave';
-import { IKlagebehandlingOppdateringPayload } from './oppgave-types';
 
 export interface IKvalitetsvurdering {
   klagebehandlingId: string;
-  // klagebehandlingVersjon: number;
   kvalitetOversendelsesbrevBra?: boolean;
   kvalitetsavvikOversendelsesbrev: string[];
   kommentarOversendelsesbrev?: string;
@@ -28,7 +26,7 @@ export const kvalitetsvurderingApi = createApi({
       query: (id) => `/api/klagebehandlinger/${id}/kvalitetsvurdering`,
       providesTags: ['kvalitetsvurdering'],
     }),
-    updateKvalitetsvurdering: builder.mutation<IKlagebehandlingOppdateringPayload, IKvalitetsvurdering>({
+    updateKvalitetsvurdering: builder.mutation<{ modified: string }, IKvalitetsvurdering>({
       query: ({ klagebehandlingId, ...kvalitetsVurdering }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/kvalitetsvurdering/editerbare`,
         method: 'PUT',
@@ -52,26 +50,17 @@ export const kvalitetsvurderingApi = createApi({
           })
         );
 
-        // const patchresultKlagebehandling = dispatch(
-        //   klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-        //     klagebehandling.klagebehandlingVersjon = kvalitetsVurdering.klagebehandlingVersjon + 1;
-        //   })
-        // );
-
         try {
           const { data } = await queryFulfilled;
           dispatch(
             klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-              // klagebehandling.klagebehandlingVersjon = data.klagebehandlingVersjon;
               klagebehandling.modified = data.modified;
             })
           );
         } catch {
           patchResultKvalitet.undo();
-          // patchresultKlagebehandling.undo();
         }
       },
-      invalidatesTags: ['kvalitetsvurdering'],
     }),
   }),
 });

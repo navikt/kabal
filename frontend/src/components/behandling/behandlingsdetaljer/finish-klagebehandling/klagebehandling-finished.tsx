@@ -1,4 +1,3 @@
-import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import 'nav-frontend-knapper-style';
@@ -12,9 +11,7 @@ interface KlagebehandlingFinishedProps {
 export const KlagebehandlingFinished = ({ utfall }: KlagebehandlingFinishedProps) => (
   <StyledPaddedContent>
     <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>{' '}
-    <StyledAlertstripe>
-      <Alertstripe type="suksess">{getSucessMessage(utfall)}</Alertstripe>
-    </StyledAlertstripe>
+    <StyledAlertstripe type="suksess">{getSucessMessage(utfall)}</StyledAlertstripe>
     <NavLink className="knapp knapp--mini" to="/oppgaver/1">
       Tilbake til oppgaver
     </NavLink>

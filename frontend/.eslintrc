@@ -37,7 +37,7 @@
       }
     ],
     "max-lines": ["error", {
-      "max": 256,
+      "max": 512,
       "skipBlankLines": true,
       "skipComments": true
     }],

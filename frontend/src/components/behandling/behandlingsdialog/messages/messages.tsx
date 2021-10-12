@@ -1,6 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateTimeToPretty } from '../../../../domain/date';
+import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { IMessage, useGetMessagesQuery } from '../../../../redux-api/messages';
 import {
@@ -15,7 +16,9 @@ import { WriteMessage } from './write-message';
 
 export const Messages = () => {
   const klagebehandlingId = useKlagebehandlingId();
-  const { data: messages, isLoading } = useGetMessagesQuery(klagebehandlingId, { pollingInterval: 3 * 1000 });
+  const isFullfoert = useIsFullfoert(klagebehandlingId);
+  const options = isFullfoert ? undefined : { pollingInterval: 3 * 1000 };
+  const { data: messages, isLoading } = useGetMessagesQuery(klagebehandlingId, options);
 
   if (typeof messages === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
