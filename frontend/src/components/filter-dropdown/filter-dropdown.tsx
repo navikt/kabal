@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
+import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { ToggleButton } from '../toggle-button/toggle-button';
 import { Dropdown } from './dropdown';
 

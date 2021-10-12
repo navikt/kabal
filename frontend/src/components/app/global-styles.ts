@@ -3,6 +3,7 @@ import { createGlobalStyle, css } from 'styled-components';
 const styles = css`
   html {
     box-sizing: border-box;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
   }
 
   *,

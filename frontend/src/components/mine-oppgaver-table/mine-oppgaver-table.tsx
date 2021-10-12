@@ -1,8 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { Checkbox } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
+import React from 'react';
 import 'nav-frontend-tabell-style';
-import styled from 'styled-components';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { TableHeader } from './header';
@@ -13,7 +11,6 @@ const MAX_OPPGAVER = 100;
 
 export const MineOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
-  const [showOnlyMedunderskriver, setShowOnlyMedunderskriver] = useState<boolean>(false);
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
     typeof bruker === 'undefined'
@@ -51,24 +48,10 @@ export const MineOppgaverTable = () => {
 
   return (
     <StyledTableContainer>
-      <StyledSettings>
-        <Checkbox
-          label="Vis kun dine medunderskriversaker"
-          onChange={({ target }) => setShowOnlyMedunderskriver(target.checked)}
-        />
-      </StyledSettings>
       <StyledTable className="tabell tabell--stripet">
         <TableHeader headers={oppgaverHeaderTitles} />
-        <OppgaveRader
-          oppgaver={oppgaver?.klagebehandlinger}
-          columnCount={oppgaverHeaderTitles.length}
-          showOnlyMedunderskriver={showOnlyMedunderskriver}
-        />
+        <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} columnCount={oppgaverHeaderTitles.length} />
       </StyledTable>
     </StyledTableContainer>
   );
 };
-
-const StyledSettings = styled.div`
-  margin: 20px;
-`;

@@ -1,7 +1,7 @@
 import Knapp from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
-import { IKodeverkVerdi } from '../../tilstand/moduler/kodeverk';
+import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Filter } from './option';
 
 interface DropdownProps {

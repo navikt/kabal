@@ -1,5 +1,5 @@
 import React from 'react';
-import { formattedDate } from '../../../domene/datofunksjoner';
+import { isoDateToPretty } from '../../../domain/date';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { baseUrl } from '../../../redux-api/common';
 import { IDokument } from '../../../redux-api/dokumenter/types';
@@ -34,7 +34,7 @@ export const Document = React.memo<DocumentProps>(
 
         <DocumentTema tema={tema}>{useFullTemaNameFromId(tema)}</DocumentTema>
 
-        <DocumentDate dateTime={registrert}>{formattedDate(registrert)}</DocumentDate>
+        <DocumentDate dateTime={registrert}>{isoDateToPretty(registrert)}</DocumentDate>
 
         <DocumentCheckbox
           dokumentInfoId={dokumentInfoId}

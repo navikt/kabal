@@ -1,6 +1,6 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback } from 'react';
-import { isoDateToPretty } from '../../domene/datofunksjoner';
+import { isoDateToPretty } from '../../domain/date';
 import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { IKlagebehandling, useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';

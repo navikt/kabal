@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { isoDateToPretty } from '../../domene/datofunksjoner';
+import { isoDateToPretty } from '../../domain/date';
 import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
-// import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';

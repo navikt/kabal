@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 
 const PORT = 8061;
 
@@ -10,11 +9,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
@@ -61,14 +55,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'node_modules/pdfjs-dist/build/pdf.worker.js',
-          to: 'pdf.worker.js',
-        },
-      ],
-    }),
   ],
   devtool: 'cheap-module-eval-source-map',
   devServer: {

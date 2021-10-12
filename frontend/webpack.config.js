@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -8,11 +7,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
@@ -63,15 +57,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'node_modules/pdfjs-dist/build/pdf.worker.js',
-          to: 'pdf.worker.js',
-        },
-        { from: 'assets', to: 'assets' },
-      ],
-    }),
   ],
   devtool: 'source-map',
   devServer: {
