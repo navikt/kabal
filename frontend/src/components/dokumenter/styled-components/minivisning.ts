@@ -34,10 +34,5 @@ export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
 export const StyledSubHeader = styled.h2`
   font-size: 1em;
   font-weight: bold;
-  margin-top: 2em;
-  margin-bottom: 0; 
-
-  &:first-of-type {
-    margin-top: 8px;
-  }
+  margin: 0;
 `

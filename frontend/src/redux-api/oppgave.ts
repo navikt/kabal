@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { staggeredBaseQuery } from './common';
+import { dokumenterApi } from './dokumenter/api';
 import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
 import {
   IDeleteFileParams,
@@ -86,6 +87,20 @@ export const klagebehandlingApi = createApi({
             klagebehandling.tilknyttedeDokumenter.push(documentReference);
           })
         );
+        const documentPatchResult = dispatch(
+          dokumenterApi.util.updateQueryData('getTilknyttedeDokumenter', klagebehandlingId, (draft) => {
+            draft.antall = draft.antall + 1;
+            draft.totaltAntall = draft.totaltAntall + 1;
+            draft.dokumenter.push({
+              ...documentReference,
+              harTilgangTilArkivvariant: false,
+              tema: '',
+              tittel: '',
+              registrert: '',
+              vedlegg: [],
+            });
+          })
+        );
 
         try {
           const { data } = await queryFulfilled;
@@ -96,6 +111,7 @@ export const klagebehandlingApi = createApi({
           );
         } catch {
           patchResult.undo();
+          documentPatchResult.undo();
         }
       },
     }),
