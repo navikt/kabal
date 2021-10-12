@@ -17,14 +17,14 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const [updateUtfall] = useUpdateUtfallMutation();
   const canEdit = useCanEdit(klagebehandlingId);
 
-  const { data: kodeverk, isLoading } = useGetKodeverkQuery();
+  const { data: kodeverk, isLoading: isKodeverkLoading } = useGetKodeverkQuery();
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
     updateUtfall({ klagebehandlingId, utfall: isUtfall(value) ? value : null });
   };
 
-  if (typeof kodeverk === 'undefined' || isLoading) {
+  if (typeof kodeverk === 'undefined' || isKodeverkLoading) {
     return <NavFrontendSpinner />;
   }
 
@@ -41,7 +41,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
         label="Utfall/resultat:"
         bredde="s"
         onChange={onUtfallResultatChange}
-        selected={utfall ?? undefined}
+        value={utfall ?? undefined}
       >
         <option value="">Ikke valgt</option>
         {options}
