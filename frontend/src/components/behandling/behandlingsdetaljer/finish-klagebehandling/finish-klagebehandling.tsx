@@ -3,6 +3,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import 'nav-frontend-knapper-style';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
+import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { ApiError } from '../../../../redux-api/error-type';
 import { useGetKlagebehandlingQuery } from '../../../../redux-api/oppgave';
@@ -14,6 +15,7 @@ import { KlagebehandlingFinished } from './klagebehandling-finished';
 export const FinishKlagebehandling = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit(klagebehandlingId);
+  const isFullfoert = useIsFullfoert(klagebehandlingId);
   const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
@@ -30,7 +32,7 @@ export const FinishKlagebehandling = () => {
     setConfirmFinish(true);
   };
 
-  if (klagebehandling.avsluttetAvSaksbehandler !== null) {
+  if (isFullfoert) {
     return <KlagebehandlingFinished utfall={klagebehandling.resultat.utfall} />;
   }
 
