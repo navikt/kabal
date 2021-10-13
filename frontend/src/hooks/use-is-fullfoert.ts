@@ -9,6 +9,6 @@ export const useIsFullfoert = (klagebehandlingId: string): boolean => {
       return false;
     }
 
-    return data.avsluttetAvSaksbehandler !== null;
+    return data.isAvsluttetAvSaksbehandler;
   }, [data]);
 };

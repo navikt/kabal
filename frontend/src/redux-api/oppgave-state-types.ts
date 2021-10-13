@@ -59,6 +59,7 @@ export interface IKlagebehandling {
   hjemler: string[];
   id: string;
   internVurdering: string;
+  isAvsluttetAvSaksbehandler: boolean;
   klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
   klager: IKlager;
