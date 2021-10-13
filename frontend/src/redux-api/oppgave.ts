@@ -142,6 +142,7 @@ export const klagebehandlingApi = createApi({
         url: `/api/klagebehandlinger/${klagebehandlingId}/fullfoer`,
         method: 'POST',
       }),
+      invalidatesTags: ['oppgave'],
       extraOptions: {
         maxRetries: 0,
       },
