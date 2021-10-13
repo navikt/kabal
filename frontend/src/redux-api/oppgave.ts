@@ -95,7 +95,7 @@ export const klagebehandlingApi = createApi({
               ...documentReference,
               harTilgangTilArkivvariant: false,
               tema: '',
-              tittel: '',
+              tittel: documentReference.title ?? '',
               registrert: '',
               vedlegg: [],
             });
@@ -147,9 +147,13 @@ export const klagebehandlingApi = createApi({
         maxRetries: 0,
       },
       onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
+        const now = new Date().toISOString();
+
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.resultat.ferdigstilt = new Date().toISOString();
+            klagebehandling.resultat.ferdigstilt = now;
+            klagebehandling.modified = now;
+            klagebehandling.isAvsluttetAvSaksbehandler = true;
           })
         );
 
@@ -159,7 +163,7 @@ export const klagebehandlingApi = createApi({
             klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
               klagebehandling.resultat.ferdigstilt = data.modified;
               klagebehandling.modified = data.modified;
-              klagebehandling.avsluttetAvSaksbehandler = data.modified;
+              klagebehandling.isAvsluttetAvSaksbehandler = true;
             })
           );
         } catch {
@@ -171,16 +175,26 @@ export const klagebehandlingApi = createApi({
       query: ({ id, tema }) => `/api/ansatte/${id}/medunderskrivere/${tema}`,
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISettMedunderskriverParams>({
-      query: ({ klagebehandlingId, ...body }) => ({
+      query: ({ klagebehandlingId, medunderskriver }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
         method: 'PUT',
-        body,
+        body: {
+          medunderskriverident: medunderskriver?.ident ?? null,
+        },
         validateStatus: ({ ok }) => ok,
       }),
       onQueryStarted: async ({ klagebehandlingId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.medunderskriverident = update.medunderskriverident;
+            if (update.medunderskriver === null) {
+              klagebehandling.medunderskriver = null;
+            } else {
+              klagebehandling.medunderskriver = {
+                navIdent: update.medunderskriver.ident,
+                navn: update.medunderskriver.navn,
+              };
+            }
+
             klagebehandling.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
           })
         );
@@ -205,23 +219,13 @@ export const klagebehandlingApi = createApi({
         validateStatus: ({ ok }) => ok,
       }),
       onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
+        const { data } = await queryFulfilled;
+        dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
+            klagebehandling.modified = data.modified;
+            klagebehandling.medunderskriverFlyt = data.medunderskriverFlyt;
           })
         );
-
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-              klagebehandling.modified = data.modified;
-              klagebehandling.medunderskriverFlyt = data.medunderskriverFlyt;
-            })
-          );
-        } catch {
-          patchResult.undo();
-        }
       },
     }),
     uploadFile: builder.mutation<IUploadFileResponse, IUploadFileParams>({

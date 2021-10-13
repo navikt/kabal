@@ -12,7 +12,7 @@ export const Row = ({
   tema,
   utfall,
   hjemmel,
-  avsluttetAvSaksbehandler,
+  avsluttetAvSaksbehandlerDate,
   person,
 }: IKlagebehandling): JSX.Element => {
   const { data: kodeverk } = useGetKodeverkQuery();
@@ -38,7 +38,7 @@ export const Row = ({
       </td>
       <td>{person?.navn}</td>
       <td>{person?.fnr}</td>
-      <td>{isoDateToPretty(avsluttetAvSaksbehandler)}</td>
+      <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
       <td>{utfallName}</td>
       <td>
         <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>

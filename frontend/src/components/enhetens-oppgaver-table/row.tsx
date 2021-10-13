@@ -14,7 +14,6 @@ export const Row = ({
   hjemmel,
   frist,
   ageKA,
-  klagebehandlingVersjon,
   tildeltSaksbehandlerNavn,
   harMedunderskriver,
 }: IKlagebehandling): JSX.Element => {
@@ -28,11 +27,10 @@ export const Row = ({
 
     tildelSaksbehandler({
       oppgaveId: id,
-      klagebehandlingVersjon,
       navIdent: userData.info.navIdent,
       enhetId: userData.valgtEnhetView.id,
     });
-  }, [id, klagebehandlingVersjon, userData, tildelSaksbehandler]);
+  }, [id, userData, tildelSaksbehandler]);
 
   const isLoading = loader.isLoading || isUserLoading;
 

@@ -19,49 +19,44 @@ export interface PersonSoekApiResponse {
   personer: IPersonResultat[];
 }
 
-// interface TildelSaksbehandlerResponse {
-//   klagebehandlingVersjon: number;
-//   modified: Date;
-//   tildelt: string;
-// }
-
 export interface Person {
   navn: string;
   fnr: string;
 }
 
 export interface IKlagebehandling {
-  id: string;
-  person: Person | null;
-  type: string;
-  tema: string;
-  hjemmel: string;
-  frist: Date;
-  mottatt: Date;
-  versjon: number;
-  klagebehandlingVersjon: number;
+  ageKA: number; // Age in days.
+  avsluttetAvSaksbehandlerDate: Date | null;
+  egenAnsatt: boolean;
   erMedunderskriver: boolean;
+  erTildelt: boolean;
+  fortrolig: boolean;
+  frist: Date;
   harMedunderskriver: boolean;
+  hjemmel: string;
+  id: string;
+  isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
-  utfall: string | null;
-  avsluttetAvSaksbehandler: string | null;
-  erTildelt: boolean;
+  mottatt: Date;
+  person: Person | null;
+  saksbehandlerHarTilgang: boolean;
+  strengtFortrolig: boolean;
+  tema: string;
   tildeltSaksbehandlerident: string | null;
   tildeltSaksbehandlerNavn: string | null;
-  saksbehandlerHarTilgang: boolean;
-  egenAnsatt: boolean;
-  fortrolig: boolean;
-  strengtFortrolig: boolean;
-  ageKA: number; // Age in days.
+  type: string;
+  utfall: string | null;
 }
 
+export type IKlagebehandlingList = IKlagebehandling[];
+
 export interface IPersonResultat {
-  aapneKlagebehandlinger: IKlagebehandling[];
-  avsluttedeKlagebehandlinger: IKlagebehandling[];
+  aapneKlagebehandlinger: IKlagebehandlingList;
+  avsluttedeKlagebehandlinger: IKlagebehandlingList;
   fnr: string;
   foedselsdato: string;
-  klagebehandlinger: IKlagebehandling[];
+  klagebehandlinger: IKlagebehandlingList;
   navn: string;
 }
 
@@ -71,11 +66,12 @@ export interface LoadKlagebehandlingerParams {
   sortering: 'FRIST';
   rekkefoelge: 'STIGENDE' | 'SYNKENDE';
   erTildeltSaksbehandler: boolean;
-  temaer: string[];
-  typer: string[];
-  hjemler: string[];
+  temaer?: string[];
+  typer?: string[];
+  hjemler?: string[];
   navIdent: string;
   ferdigstiltFom?: Date;
+  ferdigstiltDaysAgo?: number;
   tildeltSaksbehandler?: string;
   projeksjon?: 'UTVIDET';
 }
@@ -83,14 +79,12 @@ export interface LoadKlagebehandlingerParams {
 export interface TildelSaksbehandlerParams {
   navIdent: string;
   enhetId: string;
-  klagebehandlingVersjon: number;
   oppgaveId: string;
 }
 
 export interface FradelSaksbehandlerParams {
   navIdent: string;
   enhetId: string;
-  klagebehandlingVersjon: number;
   oppgaveId: string;
 }
 

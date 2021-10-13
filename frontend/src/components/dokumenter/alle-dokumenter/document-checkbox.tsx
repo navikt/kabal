@@ -21,7 +21,7 @@ export const DocumentCheckbox = ({
   harTilgangTilArkivvariant,
 }: DocumentCheckboxProps): JSX.Element => {
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
-  const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId);
+  const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId, title);
   const canEdit = useCanEdit(klagebehandlingId);
 
   const tilknyttet = useMemo<boolean>(

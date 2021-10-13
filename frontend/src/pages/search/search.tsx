@@ -11,7 +11,7 @@ export const SearchPage = () => {
   const { data: bruker } = useGetBrukerQuery();
   const [personsoek, loader] = usePersonsoekMutation();
   // Do not put the query in the URL. It will be logged, and it may contain fnr.
-  const [query, setQuery] = useState<string>('tvilsom saks'); // TODO: Set inital state to empty string.
+  const [query, setQuery] = useState<string>('25438301286'); // TODO: Set inital state to empty string.
   const [personsoekResultat, setPersonsoekResultat] = useState<PersonSoekApiResponse>(INITIAL_STATE);
 
   const getPersonsoekUpdate = useCallback(() => {

@@ -25,7 +25,11 @@ export const ListItem = styled.li`
   padding-right: 8px;
 `;
 
-export const DocumentRow = styled.article`
+interface DocumentTheme {
+  active: boolean;
+}
+
+export const DocumentRow = styled.article<{theme: DocumentTheme}>`
   margin: 0;
   display: grid;
   grid-template-areas:
@@ -34,6 +38,7 @@ export const DocumentRow = styled.article`
   grid-template-columns: 350px 140px 5em 32px;
   grid-column-gap: 1em;
   align-items: center;
+  background-color: ${({ theme }) => theme.active ? '#CCE1FF' : 'transparent'};
 `;
 
 export const DocumentDate = styled.time`

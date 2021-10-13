@@ -43,7 +43,7 @@ export const WriteMessage = () => {
 
     postMessage({
       klagebehandlingId,
-      text: message,
+      text: message.trim(),
       author: {
         name: user.info.sammensattNavn,
         saksbehandlerIdent: user.info.navIdent,
@@ -51,7 +51,7 @@ export const WriteMessage = () => {
     });
   };
 
-  const onKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       post();
     }
@@ -64,7 +64,7 @@ export const WriteMessage = () => {
 
   return (
     <StyledWriteMessage>
-      <Textarea onKeyPress={onKeyPress} value={message} onChange={onChange} maxLength={0} feil={errorMessage} />
+      <Textarea onKeyDown={onKeyDown} value={message} onChange={onChange} maxLength={0} feil={errorMessage} />
       <StyleSendMessage>
         <Knapp mini onClick={post} spinner={messageIsLoading}>
           Send

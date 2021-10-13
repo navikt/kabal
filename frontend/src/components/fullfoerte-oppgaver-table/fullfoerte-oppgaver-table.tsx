@@ -21,11 +21,9 @@ export const FullfoerteOppgaverTable = () => {
           sortering: 'FRIST',
           rekkefoelge: 'SYNKENDE',
           erTildeltSaksbehandler: true,
-          temaer: [],
-          typer: [],
-          hjemler: [],
           navIdent: bruker.info.navIdent,
           tildeltSaksbehandler: bruker.info.navIdent,
+          ferdigstiltDaysAgo: 7,
           projeksjon: 'UTVIDET',
         };
 

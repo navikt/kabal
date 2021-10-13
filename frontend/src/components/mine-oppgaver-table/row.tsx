@@ -15,7 +15,6 @@ export const Row = ({
   tema,
   hjemmel,
   frist,
-  klagebehandlingVersjon,
   person,
   ageKA,
   medunderskriverFlyt,
@@ -32,11 +31,10 @@ export const Row = ({
 
     fradelSaksbehandler({
       oppgaveId: id,
-      klagebehandlingVersjon,
       navIdent: userData.info.navIdent,
       enhetId: userData.valgtEnhetView.id,
     });
-  }, [id, klagebehandlingVersjon, userData, fradelSaksbehandler]);
+  }, [id, userData, fradelSaksbehandler]);
 
   const isLoading = loader.isLoading || isUserLoading;
 

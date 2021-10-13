@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { baseUrl } from '../../../redux-api/common';
@@ -19,11 +19,16 @@ interface DocumentProps {
 export const Document = React.memo<DocumentProps>(
   ({ document, setShownDocument, klagebehandlingId }) => {
     const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
+    const url = useMemo(
+      () =>
+        `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+      [klagebehandlingId, journalpostId, dokumentInfoId]
+    );
 
     const onClick = () =>
       setShownDocument({
         title: tittel,
-        url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+        url,
       });
 
     return (

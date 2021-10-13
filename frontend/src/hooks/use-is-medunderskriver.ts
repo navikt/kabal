@@ -11,6 +11,6 @@ export const useIsMedunderskriver = (klagebehandlingId: string) => {
       return false;
     }
 
-    return klagebehandling.medunderskriverident === userData.info.navIdent;
+    return klagebehandling.medunderskriver?.navIdent === userData.info.navIdent;
   }, [klagebehandling, userData, isLoading]);
 };

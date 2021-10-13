@@ -1,18 +1,24 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { useGetKlagebehandlingQuery } from '../redux-api/oppgave';
-import { useIsFullfoert } from './use-is-fullfoert';
 
 export const useCanEdit = (klagebehandlingId: string) => {
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
-  const { data: userData, isLoading } = useGetBrukerQuery();
-  const isFullfoert = useIsFullfoert(klagebehandlingId);
+  const { data: klagebehandling, isLoading: klagebehandlingIsLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 
   return useMemo(() => {
-    if (typeof klagebehandling === 'undefined' || isLoading || typeof userData === 'undefined') {
+    if (
+      klagebehandlingIsLoading ||
+      userIsLoading ||
+      typeof klagebehandling === 'undefined' ||
+      typeof userData === 'undefined'
+    ) {
       return false;
     }
 
-    return klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent && !isFullfoert;
-  }, [klagebehandling, userData, isLoading, isFullfoert]);
+    return (
+      !klagebehandling.isAvsluttetAvSaksbehandler &&
+      klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent
+    );
+  }, [klagebehandling, userData, userIsLoading, klagebehandlingIsLoading]);
 };

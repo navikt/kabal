@@ -2,6 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
+import { useIsFullfoert } from '../../../hooks/use-is-fullfoert';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { baseUrl } from '../../../redux-api/common';
 import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
@@ -86,6 +87,7 @@ interface NyeDokumenterProps {
 export const NyeDokumenter = ({ setShownDocument, show }: NyeDokumenterProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const isFullfoert = useIsFullfoert(klagebehandlingId);
 
   if (!show) {
     return null;
@@ -95,12 +97,26 @@ export const NyeDokumenter = ({ setShownDocument, show }: NyeDokumenterProps) =>
     return <NavFrontendSpinner />;
   }
 
-  return (
-    <StyledNyeDokumenter>
+  const ListHeader = () => {
+    if (isFullfoert) {
+      return null;
+    }
+
+    return (
       <StyledListHeader>
         <StyledTitle>Nye dokumenter</StyledTitle>
         <StyledValg>Valg</StyledValg>
       </StyledListHeader>
+    );
+  };
+
+  if (isFullfoert && klagebehandling.resultat.file === null) {
+    return null;
+  }
+
+  return (
+    <StyledNyeDokumenter>
+      <ListHeader />
       <StyledList>
         {klagebehandling.resultat.file !== null && (
           <NewDocument

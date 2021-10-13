@@ -18,11 +18,11 @@ export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriver
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
-  if (canEdit) {
+  if (canEdit || !isMedunderskriver) {
     return null;
   }
 
-  if (isMedunderskriver && klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
     return (
       <StyledFormSection>
         <AlertStripe type="info">Klagen er nå sendt tilbake til saksbehandler</AlertStripe>
@@ -30,7 +30,7 @@ export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriver
     );
   }
 
-  if (isMedunderskriver && klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
         <Hovedknapp

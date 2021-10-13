@@ -47,8 +47,8 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
-      klagebehandlingId: klagebehandling.id,
-      medunderskriverident,
+      klagebehandlingId,
+      medunderskriver: medunderskrivere.find(({ ident }) => ident === medunderskriverident) ?? null,
     });
 
   const { medunderskriver } = klagebehandling;
@@ -59,7 +59,7 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskrivere.find(({ ident }) => ident === medunderskriver?.navIdent)?.ident}
+        value={medunderskriver?.navIdent ?? NONE_SELECTED}
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>
         {medunderskrivere.map(({ navn, ident }) => (

@@ -10,6 +10,7 @@ export const StyledHeader = styled.h1`
 export const StyledContainer = styled.div`
   display: flex;
   min-height: 100%;
+  white-space: normal;
 `;
 
 export const StyledInfoHeader = styled.h2`

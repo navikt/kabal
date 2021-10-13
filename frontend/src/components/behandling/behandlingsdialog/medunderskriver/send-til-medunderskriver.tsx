@@ -2,7 +2,6 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../../../domain/date';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
@@ -26,12 +25,15 @@ export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriv
   if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
-        <AlertStripe type="info">
-          <AlertLine>
-            Sendt til medunderskriver: {medunderskriver?.navn ?? medunderskriver?.navIdent ?? 'Ukjent'}
-          </AlertLine>
-          <AlertLine>{isoDateToPretty(klagebehandling.datoSendtMedunderskriver)}</AlertLine>
-        </AlertStripe>
+        <AlertStripe type="info">Sendt til medunderskriver</AlertStripe>
+      </StyledFormSection>
+    );
+  }
+
+  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+    return (
+      <StyledFormSection>
+        <AlertStripe type="info">Sendt tilbake av medunderskriver</AlertStripe>
       </StyledFormSection>
     );
   }
@@ -52,8 +54,4 @@ export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriv
 
 const StyledFormSection = styled.div`
   margin-top: 20px;
-`;
-
-const AlertLine = styled.p`
-  margin: 0;
 `;

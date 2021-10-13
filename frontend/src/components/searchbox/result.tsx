@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IPersonResultat } from '../../redux-api/oppgaver';
+import { FullfoerteOppgaverTable } from './fullfoerte-oppgaver-table';
 import { Oppgaver } from './oppgaver';
 
-interface Props {
-  person: IPersonResultat;
-}
+export const Result = ({ fnr, navn, aapneKlagebehandlinger }: IPersonResultat) => {
+  const [open, setOpen] = useState<boolean>(false);
 
-export const Result = ({ person: { fnr, navn } }: Props) => (
-  <StyledResult key={fnr}>
-    <StyledName>{formatName(navn)}</StyledName>
-    <StyledFnr>{fnr}</StyledFnr>
-    <StyledOpenButton>Se saker</StyledOpenButton>
-    <Oppgaver />
-  </StyledResult>
-);
+  return (
+    <StyledResult key={fnr}>
+      <StyledName>{formatName(navn)}</StyledName>
+      <StyledFnr>{fnr}</StyledFnr>
+      <StyledOpenButton onClick={() => setOpen(!open)}>Se saker</StyledOpenButton>
+      <Oppgaver open={open}>
+        <FullfoerteOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
+      </Oppgaver>
+    </StyledResult>
+  );
+};
 
 const formatName = (rawString: string): string => {
   if (rawString === '') {

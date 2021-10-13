@@ -46,7 +46,7 @@ export interface ISaksbehandler {
 }
 
 export interface IKlagebehandling {
-  avsluttetAvSaksbehandler: string | null;
+  avsluttetAvSaksbehandlerDate: string | null; // LocalDate
   created: string; // LocalDateTime
   datoSendtMedunderskriver: string | null; // LocalDate
   egenansatt: boolean;
@@ -71,7 +71,6 @@ export interface IKlagebehandling {
   kommentarFraFoersteinstans: string | null;
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
-  medunderskriverident: string | null;
   modified: string; // LocalDateTime
   mottatt: string | null; // LocalDate
   mottattFoersteinstans: string | null; // LocalDate
@@ -90,7 +89,6 @@ export interface IKlagebehandling {
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
   tildeltSaksbehandler: ISaksbehandler | null;
-  tildeltSaksbehandlerident: string | null;
   tilknyttedeDokumenter: IDocumentReference[];
   type: string;
 }

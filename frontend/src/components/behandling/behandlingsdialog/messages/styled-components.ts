@@ -18,15 +18,17 @@ export const StyledMessageContent = styled.p`
   word-wrap: break-word;
 `;
 
-export const StyledMessages = styled.div`
-  margin-top: 1em;
+export const StyledMessages = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
 `;
 
 export const StyledHeader = styled.h3`
   margin-bottom: 0.25em;
 `;
 
-export const StyledMessage = styled.div`
+export const StyledMessage = styled.li`
   margin-top: 1em;
 `;
 

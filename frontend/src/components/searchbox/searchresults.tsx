@@ -38,7 +38,7 @@ const ResultList = ({ personer }: ResultatListProps) => {
   return (
     <StyledResultList>
       {personer.map((person) => (
-        <Result key={person.fnr} person={person} />
+        <Result key={person.fnr} {...person} />
       ))}
     </StyledResultList>
   );
