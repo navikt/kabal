@@ -67,7 +67,7 @@ export const WriteMessage = () => {
       <Textarea onKeyDown={onKeyDown} value={message} onChange={onChange} maxLength={0} feil={errorMessage} />
       <StyleSendMessage>
         <Knapp mini onClick={post} spinner={messageIsLoading}>
-          Send
+          Legg til melding
         </Knapp>
       </StyleSendMessage>
     </StyledWriteMessage>
