@@ -1,6 +1,6 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
-import { useAvailableTemaer } from '../../../hooks/use-available-temaer';
+import { useAllTemaer } from '../../../hooks/use-all-temaer';
 import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
@@ -29,7 +29,7 @@ export const AlleDokumenter = React.memo(
       temaer: selectedTemaer,
     });
 
-    const availableTemaer = useAvailableTemaer();
+    const allTemaer = useAllTemaer();
 
     if (!show) {
       return null;
@@ -39,7 +39,7 @@ export const AlleDokumenter = React.memo(
       <DokumenterFullvisning>
         <ListHeader>
           <ListTitle>Journalførte dokumenter</ListTitle>
-          <FilterDropdown options={availableTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
+          <FilterDropdown options={allTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
             Tema
           </FilterDropdown>
         </ListHeader>
