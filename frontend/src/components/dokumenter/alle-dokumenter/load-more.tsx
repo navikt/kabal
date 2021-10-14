@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDocumentsResponse } from '../../../redux-api/dokumenter/types';
+import { IDocumentsResponse } from '../../../redux-api/documents-types';
 import { StyledLoadMoreButton } from '../styled-components/fullvisning';
 
 interface LoadMoreProps {

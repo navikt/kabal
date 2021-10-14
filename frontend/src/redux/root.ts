@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { brukerApi } from '../redux-api/bruker';
-import { dokumenterApi } from '../redux-api/dokumenter/api';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
@@ -12,7 +11,6 @@ export const rootReducer = combineReducers({
   [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [brukerApi.reducerPath]: brukerApi.reducer,
   [klagebehandlingApi.reducerPath]: klagebehandlingApi.reducer,
-  [dokumenterApi.reducerPath]: dokumenterApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
 });

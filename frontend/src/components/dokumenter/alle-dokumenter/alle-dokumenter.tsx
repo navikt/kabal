@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useAllTemaer } from '../../../hooks/use-all-temaer';
-import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
+import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { IShownDokument } from '../../show-document/types';
 import { AllDocumentsList, DokumenterFullvisning } from '../styled-components/fullvisning';

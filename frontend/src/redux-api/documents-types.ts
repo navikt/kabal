@@ -1,3 +1,10 @@
+export interface IGetDokumenterParams {
+  klagebehandlingId: string;
+  pageReference: string | null;
+  temaer: string[];
+  pageSize: number;
+}
+
 export interface IDokumentParams {
   id: string;
   idx: number;

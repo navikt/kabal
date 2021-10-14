@@ -1,6 +1,6 @@
 import React from 'react';
 import { baseUrl } from '../../../redux-api/common';
-import { IDocument, IDocumentVedlegg } from '../../../redux-api/dokumenter/types';
+import { IDocument, IDocumentVedlegg } from '../../../redux-api/documents-types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';

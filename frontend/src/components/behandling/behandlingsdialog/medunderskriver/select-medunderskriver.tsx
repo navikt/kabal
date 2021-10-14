@@ -8,14 +8,16 @@ import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
+import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
 
 interface SelectMedunderskriverProps {
   klagebehandling: IKlagebehandling;
+  medunderskriverInfo: IMedunderskriverInfoResponse;
 }
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: SelectMedunderskriverProps) => {
   const { data: bruker } = useGetBrukerQuery();
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit(klagebehandlingId);
@@ -48,10 +50,11 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
       klagebehandlingId,
-      medunderskriver: medunderskrivere.find(({ ident }) => ident === medunderskriverident) ?? null,
+      medunderskriver:
+        medunderskriverident === null
+          ? null
+          : medunderskrivere.find(({ ident }) => ident === medunderskriverident) ?? null,
     });
-
-  const { medunderskriver } = klagebehandling;
 
   return (
     <StyledFormSection>
@@ -59,7 +62,7 @@ export const SelectMedunderskriver = ({ klagebehandling }: SelectMedunderskriver
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskriver?.navIdent ?? NONE_SELECTED}
+        value={medunderskriverInfo.medunderskriver?.navident ?? NONE_SELECTED}
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>
         {medunderskrivere.map(({ navn, ident }) => (

@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { brukerApi } from '../redux-api/bruker';
-import { dokumenterApi } from '../redux-api/dokumenter/api';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
@@ -31,7 +30,6 @@ export const reduxStore = configureStore({
       kodeverkApi.middleware,
       brukerApi.middleware,
       klagebehandlingApi.middleware,
-      dokumenterApi.middleware,
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
     ]),

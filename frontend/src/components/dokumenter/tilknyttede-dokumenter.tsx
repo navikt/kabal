@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
 import { baseUrl } from '../../redux-api/common';
-import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
-import { IDocumentVedlegg } from '../../redux-api/dokumenter/types';
+import { IDocumentVedlegg } from '../../redux-api/documents-types';
+import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgave';
 import { IDocumentReference } from '../../redux-api/oppgave-types';
 import { IShownDokument } from '../show-document/types';
 import { dokumentMatcher } from './helpers';
@@ -27,7 +27,11 @@ interface TilknyttedeDokumenterProps {
 
 export const TilknyttedeDokumenter = React.memo(
   ({ klagebehandlingId, setShownDocument, tilknyttedeDokumenter, show }: TilknyttedeDokumenterProps) => {
-    const { data: lagredeTilknyttedeDokumenter, isLoading } = useGetTilknyttedeDokumenterQuery(klagebehandlingId);
+    const {
+      data: lagredeTilknyttedeDokumenter,
+      isLoading,
+      isFetching,
+    } = useGetTilknyttedeDokumenterQuery(klagebehandlingId);
 
     const documents = useMemo<ITilknyttetDokument[]>(() => {
       if (typeof lagredeTilknyttedeDokumenter === 'undefined') {
@@ -42,13 +46,13 @@ export const TilknyttedeDokumenter = React.memo(
         .filter(({ document, tilknyttet }) => tilknyttet || document.vedlegg.length !== 0);
     }, [tilknyttedeDokumenter, lagredeTilknyttedeDokumenter]);
 
-    if (!show || documents.length === 0) {
+    if (!show) {
       return null;
     }
 
     return (
       <Container>
-        <Loading loading={isLoading} />
+        <Loading loading={isLoading || isFetching} />
         <DokumenterMinivisning>
           <TilknyttedeNyeDokumenter setShownDocument={setShownDocument} />
           <StyledSubHeader>Journalførte dokumenter</StyledSubHeader>

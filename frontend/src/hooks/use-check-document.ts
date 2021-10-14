@@ -5,8 +5,7 @@ import { ITilknyttDocumentParams } from '../redux-api/oppgave-types';
 export const useCheckDocument = (
   klagebehandlingId: string,
   dokumentInfoId: string,
-  journalpostId: string,
-  title: string
+  journalpostId: string
 ): [(checked: boolean) => void, boolean] => {
   const [tilknyttDocument, tilknyttLoader] = useTilknyttDocumentMutation();
   const [removeDocument, removeLoader] = useRemoveTilknyttetDocumentMutation();
@@ -17,7 +16,6 @@ export const useCheckDocument = (
         dokumentInfoId,
         journalpostId,
         klagebehandlingId,
-        title,
       };
 
       if (checked) {
@@ -26,7 +24,7 @@ export const useCheckDocument = (
         removeDocument(data);
       }
     },
-    [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument, title]
+    [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]
   );
 
   const isLoading = tilknyttLoader.isLoading || removeLoader.isLoading;

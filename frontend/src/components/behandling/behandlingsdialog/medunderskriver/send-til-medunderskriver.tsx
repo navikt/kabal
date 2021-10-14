@@ -5,12 +5,14 @@ import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
+import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
 
 interface SendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
+  medunderskriverInfo: IMedunderskriverInfoResponse;
 }
 
-export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriverProps) => {
+export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverInfo }: SendTilMedunderskriverProps) => {
   const { id: klagebehandlingId, medunderskriver } = klagebehandling;
   const canEdit = useCanEdit(klagebehandlingId);
 
@@ -20,25 +22,23 @@ export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriv
     return null;
   }
 
-  const sendToMedunderskriverDisabled = !canEdit || medunderskriver === null;
+  console.log(medunderskriverInfo);
 
-  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return (
-      <StyledFormSection>
-        <AlertStripe type="info">Sendt til medunderskriver</AlertStripe>
-      </StyledFormSection>
-    );
-  }
+  const sendToMedunderskriverDisabled = !canEdit || medunderskriver === null || loader.isLoading;
 
-  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
-    return (
-      <StyledFormSection>
-        <AlertStripe type="info">Sendt tilbake av medunderskriver</AlertStripe>
-      </StyledFormSection>
-    );
-  }
+  const SentToMedunderskriver = () => (
+    <StyledFormSection>
+      <AlertStripe type="info">Sendt til medunderskriver</AlertStripe>
+    </StyledFormSection>
+  );
 
-  return (
+  const SentBackToMedunderskriver = () => (
+    <StyledFormSection>
+      <AlertStripe type="info">Sendt tilbake av medunderskriver</AlertStripe>
+    </StyledFormSection>
+  );
+
+  const SendToMedunderskriver = () => (
     <StyledFormSection>
       <Hovedknapp
         mini
@@ -50,6 +50,21 @@ export const SendTilMedunderskriver = ({ klagebehandling }: SendTilMedunderskriv
       </Hovedknapp>
     </StyledFormSection>
   );
+
+  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+    return <SentToMedunderskriver />;
+  }
+
+  if (medunderskriverInfo?.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+    return (
+      <>
+        <SentBackToMedunderskriver />
+        <SendToMedunderskriver />
+      </>
+    );
+  }
+
+  return <SendToMedunderskriver />;
 };
 
 const StyledFormSection = styled.div`

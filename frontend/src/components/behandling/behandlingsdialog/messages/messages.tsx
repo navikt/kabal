@@ -17,7 +17,7 @@ import { WriteMessage } from './write-message';
 export const Messages = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const isFullfoert = useIsFullfoert(klagebehandlingId);
-  const options = isFullfoert ? undefined : { pollingInterval: 3 * 1000 };
+  const options = isFullfoert ? undefined : { pollingInterval: 30 * 1000 };
   const { data: messages, isLoading } = useGetMessagesQuery(klagebehandlingId, options);
 
   if (typeof messages === 'undefined' || isLoading) {
@@ -28,7 +28,6 @@ export const Messages = () => {
     <StyledMessagesContainer>
       <StyledHeader>Meldinger:</StyledHeader>
       <WriteMessage />
-
       <StyledMessages>
         {messages.map((message) => (
           <Message {...message} key={message.id} />

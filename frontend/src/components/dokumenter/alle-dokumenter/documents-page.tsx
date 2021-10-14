@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetDokumenterQuery } from '../../../redux-api/dokumenter/api';
+import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
 import { IShownDokument } from '../../show-document/types';
 import { ListItem } from '../styled-components/fullvisning';
 import { Document } from './document';

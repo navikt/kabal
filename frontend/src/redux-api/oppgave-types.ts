@@ -12,7 +12,6 @@ export interface IKlagebehandlingHjemlerUpdate {
 
 export interface ITilknyttDocumentParams extends IDocumentReference {
   klagebehandlingId: string;
-  title?: string;
 }
 
 export interface ITilknyttDocumentResponse {
@@ -47,6 +46,16 @@ export interface IMedunderskrivereResponse {
 export interface IMedunderskrivereInput {
   id: string;
   tema: string;
+}
+
+export interface IMedunderskriverInfoResponse {
+  medunderskriver: IMedunderskriverResponse | null;
+  medunderskriverFlyt: MedunderskriverFlyt;
+}
+
+interface IMedunderskriverResponse {
+  navident: string;
+  navn: string;
 }
 
 export interface ISettMedunderskriverParams {

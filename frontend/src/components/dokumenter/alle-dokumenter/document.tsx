@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { baseUrl } from '../../../redux-api/common';
-import { IDocument } from '../../../redux-api/dokumenter/types';
+import { IDocument } from '../../../redux-api/documents-types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';

@@ -3,18 +3,20 @@ import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
+import { useCheckIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
+import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
 
 interface SendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
+  medunderskriverInfo: IMedunderskriverInfoResponse;
 }
 
 export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriverProps) => {
   const { id: klagebehandlingId } = klagebehandling;
   const canEdit = useCanEdit(klagebehandlingId);
-  const isMedunderskriver = useIsMedunderskriver(klagebehandlingId);
+  const isMedunderskriver = useCheckIsMedunderskriver(klagebehandlingId);
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
