@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { baseUrl } from '../../../redux-api/common';
-import { IDokument } from '../../../redux-api/dokumenter/types';
+import { IDocument } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
@@ -12,7 +12,7 @@ import { VedleggList } from './vedlegg-list';
 
 interface DocumentProps {
   klagebehandlingId: string;
-  document: IDokument;
+  document: IDocument;
   setShownDocument: (document: IShownDokument) => void;
 }
 

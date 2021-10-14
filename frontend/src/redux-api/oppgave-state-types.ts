@@ -1,5 +1,4 @@
 import { Name } from '../domain/types';
-import { IKodeverkVerdi } from './kodeverk';
 import { IDocumentReference } from './oppgave-types';
 
 export enum Gender {
@@ -33,16 +32,6 @@ export interface IKlagerPerson {
 export interface IVirksomhet {
   virksomhetsnummer: string | null;
   navn: string | null;
-}
-
-export interface IKlager {
-  person: IKlagerPerson;
-  virksomhet: IVirksomhet;
-}
-
-export interface ISaksbehandler {
-  navIdent: string;
-  navn: string;
 }
 
 export interface IKlagebehandling {
@@ -93,6 +82,16 @@ export interface IKlagebehandling {
   type: string;
 }
 
+export interface IKlager {
+  person: IKlagerPerson;
+  virksomhet: IVirksomhet;
+}
+
+export interface ISaksbehandler {
+  navIdent: string;
+  navn: string;
+}
+
 export interface Resultat {
   brevMottakere: IBrevMottaker[];
   ferdigstilt: string | null; // LocalDateTime
@@ -110,45 +109,8 @@ export interface IBrevMottaker {
   rolle: string;
 }
 
-export interface IHjemmel {
-  kapittel: number;
-  paragraf: number;
-  ledd?: number;
-  bokstav?: string;
-  original?: string;
-}
-
 export interface IVedlegg {
   name: string;
   size: number;
   opplastet: string | null; // LocalDateTime
-}
-
-export interface GrunnerPerUtfall {
-  utfallId: string;
-  grunner: IKodeverkVerdi[];
-}
-
-export interface IKlagePayload {
-  id: string;
-}
-
-export interface IDokumenter {
-  saksbehandlerHarTilgang: boolean;
-}
-
-export interface IDokumentPayload {
-  id: string;
-  journalpostId: string;
-  dokumentInfoId: string;
-  erVedlegg: boolean;
-}
-
-export interface IDokumentParams {
-  id: string;
-  idx: number;
-  handling: string;
-  antall: number;
-  ref: string | null;
-  historyNavigate: boolean;
 }

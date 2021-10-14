@@ -1,4 +1,4 @@
-import { IKlagebehandling, IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
+import { IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
 
 export interface IKlagebehandlingUtfallUpdate {
   klagebehandlingId: string;
@@ -30,22 +30,8 @@ export interface IVedtakFullfoertResponse {
   ferdigstilt: boolean;
 }
 
-export interface IMedunderskriverSatt extends ISettMedunderskriverResponse {
-  medunderskriverident: string;
-}
-
-export interface IKlagebehandlingFinishedUpdate {
+export interface IFinishKlagebehandlingInput {
   klagebehandlingId: string;
-}
-
-export interface FullforVedtakProps {
-  skjult: boolean;
-  klagebehandling: IKlagebehandling;
-}
-
-export interface IMedunderskrivereState {
-  medunderskrivere: IMedunderskriver[];
-  loading: boolean;
 }
 
 export interface IMedunderskriver {
@@ -53,7 +39,7 @@ export interface IMedunderskriver {
   ident: string;
 }
 
-export interface IMedunderskriverePayload {
+export interface IMedunderskrivereResponse {
   tema: string;
   medunderskrivere: IMedunderskriver[];
 }

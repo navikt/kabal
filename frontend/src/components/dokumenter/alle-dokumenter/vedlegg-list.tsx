@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDokument } from '../../../redux-api/dokumenter/types';
+import { IDocument } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { VedleggContainer } from '../styled-components/fullvisning';
@@ -7,7 +7,7 @@ import { Vedlegg } from './vedlegg';
 
 interface VedleggListProps {
   klagebehandlingId: string;
-  document: IDokument;
+  document: IDocument;
   setShownDocument: (document: IShownDokument) => void;
 }
 

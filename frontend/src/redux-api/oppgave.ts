@@ -4,11 +4,11 @@ import { dokumenterApi } from './dokumenter/api';
 import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
 import {
   IDeleteFileParams,
-  IKlagebehandlingFinishedUpdate,
+  IFinishKlagebehandlingInput,
   IKlagebehandlingHjemlerUpdate,
   IKlagebehandlingUtfallUpdate,
   IMedunderskrivereInput,
-  IMedunderskriverePayload,
+  IMedunderskrivereResponse,
   ISettMedunderskriverParams,
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytParams,
@@ -137,7 +137,7 @@ export const klagebehandlingApi = createApi({
         }
       },
     }),
-    finishKlagebehandling: builder.mutation<IVedtakFullfoertResponse, IKlagebehandlingFinishedUpdate>({
+    finishKlagebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishKlagebehandlingInput>({
       query: ({ klagebehandlingId }) => ({
         url: `/api/klagebehandlinger/${klagebehandlingId}/fullfoer`,
         method: 'POST',
@@ -147,31 +147,17 @@ export const klagebehandlingApi = createApi({
         maxRetries: 0,
       },
       onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {
-        const now = new Date().toISOString();
-
-        const patchResult = dispatch(
+        const { data } = await queryFulfilled;
+        dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.resultat.ferdigstilt = now;
-            klagebehandling.modified = now;
+            klagebehandling.resultat.ferdigstilt = data.modified;
+            klagebehandling.modified = data.modified;
             klagebehandling.isAvsluttetAvSaksbehandler = true;
           })
         );
-
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-              klagebehandling.resultat.ferdigstilt = data.modified;
-              klagebehandling.modified = data.modified;
-              klagebehandling.isAvsluttetAvSaksbehandler = true;
-            })
-          );
-        } catch {
-          patchResult.undo();
-        }
       },
     }),
-    getMedunderskrivere: builder.query<IMedunderskriverePayload, IMedunderskrivereInput>({
+    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereInput>({
       query: ({ id, tema }) => `/api/ansatte/${id}/medunderskrivere/${tema}`,
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISettMedunderskriverParams>({

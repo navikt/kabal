@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
 import { baseUrl } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/dokumenter/api';
-import { IDokumentVedlegg } from '../../redux-api/dokumenter/types';
+import { IDocumentVedlegg } from '../../redux-api/dokumenter/types';
 import { IDocumentReference } from '../../redux-api/oppgave-types';
 import { IShownDokument } from '../show-document/types';
 import { dokumentMatcher } from './helpers';
@@ -91,7 +91,7 @@ const Container = styled.div`
 `;
 
 interface VedleggListeProps {
-  vedleggListe: IDokumentVedlegg[];
+  vedleggListe: IDocumentVedlegg[];
   tilknyttedeDokumenter: IDocumentReference[];
   journalpostId: string;
   klagebehandlingId: string;
@@ -105,7 +105,7 @@ const VedleggListe = ({
   klagebehandlingId,
   setShownDocument,
 }: VedleggListeProps) => {
-  const tilknyttedeVedlegg = useMemo<IDokumentVedlegg[]>(
+  const tilknyttedeVedlegg = useMemo<IDocumentVedlegg[]>(
     () =>
       vedleggListe.filter((vedlegg) =>
         tilknyttedeDokumenter.some(({ dokumentInfoId }) => dokumentInfoId === vedlegg.dokumentInfoId)
@@ -130,7 +130,7 @@ const VedleggListe = ({
 
 interface VedleggProps {
   journalpostId: string;
-  vedlegg: IDokumentVedlegg;
+  vedlegg: IDocumentVedlegg;
   klagebehandlingId: string;
   setShownDocument: (document: IShownDokument) => void;
 }

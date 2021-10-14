@@ -18,7 +18,7 @@ interface FinishProps {
 
 export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   const klagebehandlingId = useKlagebehandlingId();
-  const [finishKlagebehandling] = useFinishKlagebehandlingMutation();
+  const [finishKlagebehandling, loader] = useFinishKlagebehandlingMutation();
   const klagerName = useKlagerName();
 
   const finish = () => {
@@ -42,7 +42,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
         redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
       </StyledFinishKlagebehandlingText>
       <StyledFinishKlagebehandlingButtons>
-        <Hovedknapp mini onClick={finish}>
+        <Hovedknapp mini onClick={finish} spinner={loader.isLoading}>
           Fullfør
         </Hovedknapp>
         <Knapp mini onClick={cancel}>

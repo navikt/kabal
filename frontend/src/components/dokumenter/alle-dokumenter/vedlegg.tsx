@@ -1,6 +1,6 @@
 import React from 'react';
 import { baseUrl } from '../../../redux-api/common';
-import { IDokument, IDokumentVedlegg } from '../../../redux-api/dokumenter/types';
+import { IDocument, IDocumentVedlegg } from '../../../redux-api/dokumenter/types';
 import { IShownDokument } from '../../show-document/types';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
@@ -9,8 +9,8 @@ import { DocumentCheckbox } from './document-checkbox';
 
 interface VedleggProps {
   klagebehandlingId: string;
-  document: IDokument;
-  vedlegg: IDokumentVedlegg;
+  document: IDocument;
+  vedlegg: IDocumentVedlegg;
   setShownDocument: (document: IShownDokument) => void;
 }
 

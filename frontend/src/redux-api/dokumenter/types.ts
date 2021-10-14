@@ -8,7 +8,7 @@ export interface IDokumentParams {
 }
 
 export interface IDocumentsResponse {
-  dokumenter: IDokument[];
+  dokumenter: IDocument[];
   pageReference: string | null;
   antall: number;
   totaltAntall: number;
@@ -20,17 +20,17 @@ export interface IDokumenterParams {
   temaFilter: string[] | undefined;
 }
 
-export interface IDokument {
+export interface IDocument {
   journalpostId: string;
   dokumentInfoId: string; // nullable?
   tittel: string | null;
   tema: string | null;
   registrert: string; // LocalDate
   harTilgangTilArkivvariant: boolean;
-  vedlegg: IDokumentVedlegg[];
+  vedlegg: IDocumentVedlegg[];
 }
 
-export interface IDokumentVedlegg {
+export interface IDocumentVedlegg {
   dokumentInfoId: string;
   tittel: string | null;
   harTilgangTilArkivvariant: boolean;

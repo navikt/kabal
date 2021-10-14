@@ -1,11 +1,11 @@
-import { IDokument, IDokumentVedlegg } from '../../redux-api/dokumenter/types';
+import { IDocument, IDocumentVedlegg } from '../../redux-api/dokumenter/types';
 
 export interface ITilknyttetDokument {
-  document: IDokument;
+  document: IDocument;
   tilknyttet: boolean;
 }
 
 export interface ITilknyttetVedlegg {
-  vedlegg: IDokumentVedlegg;
+  vedlegg: IDocumentVedlegg;
   tilknyttet: boolean;
 }
