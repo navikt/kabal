@@ -1,23 +1,43 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IPersonResultat } from '../../redux-api/oppgaver';
+import { ActiveOppgaverTable } from './active-oppgaver-table';
 import { FullfoerteOppgaverTable } from './fullfoerte-oppgaver-table';
 import { Oppgaver } from './oppgaver';
 
-export const Result = ({ fnr, navn, aapneKlagebehandlinger }: IPersonResultat) => {
+export const Result = ({ fnr, navn, aapneKlagebehandlinger, avsluttedeKlagebehandlinger }: IPersonResultat) => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const numberOfKlagebehandlinger = aapneKlagebehandlinger.length + avsluttedeKlagebehandlinger.length;
 
   return (
     <StyledResult key={fnr}>
       <StyledName>{formatName(navn)}</StyledName>
       <StyledFnr>{fnr}</StyledFnr>
-      <StyledOpenButton onClick={() => setOpen(!open)}>Se saker</StyledOpenButton>
+      <SeSaker hasKlagebehandlinger={numberOfKlagebehandlinger !== 0} setOpen={setOpen} open={open} />
       <Oppgaver open={open}>
-        <FullfoerteOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
+        <ActiveOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
+        <FullfoerteOppgaverTable finishedOppgaver={avsluttedeKlagebehandlinger} />
       </Oppgaver>
     </StyledResult>
   );
 };
+
+interface SeSakerProps {
+  setOpen: (open: boolean) => void;
+  open: boolean;
+  hasKlagebehandlinger: boolean;
+}
+
+const SeSaker = ({ setOpen, open, hasKlagebehandlinger }: SeSakerProps) => {
+  if (!hasKlagebehandlinger) {
+    return <span>Ingen saker</span>;
+  }
+
+  return <StyledOpenButton onClick={() => setOpen(!open)}>{getOpenText(open)}</StyledOpenButton>;
+};
+
+const getOpenText = (open: boolean) => (open ? 'Skjul saker' : 'Se saker');
 
 const formatName = (rawString: string): string => {
   if (rawString === '') {

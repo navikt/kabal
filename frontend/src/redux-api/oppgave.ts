@@ -204,7 +204,7 @@ export const klagebehandlingApi = createApi({
               draft.medunderskriver = null;
             } else {
               draft.medunderskriver = {
-                navident: update.medunderskriver.ident,
+                navIdent: update.medunderskriver.ident,
                 navn: update.medunderskriver.navn,
               };
             }

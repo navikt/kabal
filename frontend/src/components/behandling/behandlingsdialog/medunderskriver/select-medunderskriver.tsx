@@ -62,7 +62,7 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: 
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskriverInfo.medunderskriver?.navident ?? NONE_SELECTED}
+        value={medunderskriverInfo.medunderskriver?.navIdent ?? NONE_SELECTED}
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>
         {medunderskrivere.map(({ navn, ident }) => (

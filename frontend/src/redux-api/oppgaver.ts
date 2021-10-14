@@ -78,14 +78,18 @@ export interface LoadKlagebehandlingerParams {
 
 export interface TildelSaksbehandlerParams {
   navIdent: string;
-  enhetId: string;
+  enhetId?: string;
   oppgaveId: string;
 }
 
 export interface FradelSaksbehandlerParams {
   navIdent: string;
-  enhetId: string;
   oppgaveId: string;
+}
+
+export interface ISaksbehandlerResponse {
+  modified: string;
+  tildelt: string;
 }
 
 export interface LoadPersonSoekParams {
@@ -127,38 +131,49 @@ export const klagebehandlingerApi = createApi({
       },
       providesTags: ['medutgaattefrister'],
     }),
-    // personsoek er POST for å ikke sende fnr inn i URLen/accesslogger
     personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
       query: ({ navIdent, ...queryParams }) => ({
         url: `/api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
-        method: 'POST',
+        method: 'POST', // Personsøk er POST for å ikke sende fnr inn i URLen, som blir logget.
         body: queryParams,
-        validateStatus: ({ ok }) => ok,
-        responseHandler: 'json',
       }),
       invalidatesTags: ['personsoek'],
     }),
-    tildelSaksbehandler: builder.mutation<string, TildelSaksbehandlerParams>({
-      query: ({ oppgaveId, navIdent, ...params }) => ({
+    tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({
+      query: ({ oppgaveId, navIdent, enhetId }) => ({
         url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
         method: 'POST',
-        body: { navIdent, ...params },
-        validateStatus: ({ ok }) => ok,
-        responseHandler: async (): Promise<string> => oppgaveId,
+        body: {
+          navIdent,
+          enhetId,
+        },
       }),
-      invalidatesTags: (oppgaveId) =>
-        typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
+      // invalidatesTags: (oppgaveId) =>
+      //   typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
+      // onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+      //   const patchResult = dispatch(
+      //     klagebehandlingerApi.util.updateQueryData('getKlagebehandlinger', {}, (draft) => {
+      //       const klagebehandling = draft.klagebehandlinger.find(({ id }) => id === oppgaveId);
+
+      //       if (typeof klagebehandling !== 'undefined') {
+      //         (klagebehandling.erTildelt = true), (klagebehandling.tildeltSaksbehandlerident = args.navIdent);
+      //       }
+      //     })
+      //   );
+
+      //   try {
+      //     const { data } = await queryFulfilled;
+      //   } catch {
+      //     patchResult.undo();
+      //   }
+      // },
     }),
-    fradelSaksbehandler: builder.mutation<string, FradelSaksbehandlerParams>({
-      query: ({ oppgaveId, navIdent, ...params }) => ({
+    fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
+      query: ({ oppgaveId, navIdent }) => ({
         url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
         method: 'POST',
-        body: { navIdent, ...params },
-        validateStatus: ({ ok }) => ok,
-        responseHandler: async (): Promise<string> => oppgaveId,
       }),
-      invalidatesTags: (oppgaveId) =>
-        typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
+      // invalidatesTags: (res, err, { oppgaveId }) => [{ type: 'oppgaver', id: oppgaveId }],
     }),
   }),
 });

@@ -33,7 +33,7 @@ const DokumenterNav = styled.div`
   z-index: 1;
   padding: 1em;
   background: white;
-  box-shadow: lightgray 0 5px 5px;
+  border-bottom: 1px solid #c6c2bf;
   height: 64px;
   align-items: center;
 `;

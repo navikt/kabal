@@ -24,6 +24,6 @@ export const useCheckIsMedunderskriver = (klagebehandlingId: string) => {
       return false;
     }
 
-    return medunderskriverInfo?.medunderskriver?.navident === userData.info.navIdent;
-  }, [medunderskriverInfo?.medunderskriver?.navident, userData, isLoading]);
+    return medunderskriverInfo?.medunderskriver?.navIdent === userData.info.navIdent;
+  }, [medunderskriverInfo?.medunderskriver?.navIdent, userData, isLoading]);
 };

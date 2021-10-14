@@ -1,34 +1,31 @@
 import React from 'react';
-import { isoDateToPretty } from '../../domain/date';
-import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
-import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { Age } from '../common-table-components/age';
+import { Deadline } from '../common-table-components/deadline';
+import { Hjemmel } from '../common-table-components/hjemmel';
+import { Tema } from '../common-table-components/tema';
 import { TildelKlagebehandlingButton } from '../common-table-components/tildel-button';
-import { StyledAge, StyledDeadline } from './styled-components';
+import { Type } from '../common-table-components/type';
 
 export const Row = ({ id, type, tema, hjemmel, frist, ageKA }: IKlagebehandling): JSX.Element => (
   <tr>
     <td>
-      <LabelMain>{useTypeFromId(type)}</LabelMain>
+      <Type type={type} />
     </td>
     <td>
-      <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
+      <Tema tema={tema} />
     </td>
     <td>
-      <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
+      <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>
-      <StyledAge age={ageKA}>
-        {ageKA} {ageKA === 1 ? 'dag' : 'dager'}
-      </StyledAge>
+      <Age age={ageKA} />
     </td>
     <td>
-      <StyledDeadline age={ageKA} dateTime={frist}>
-        {isoDateToPretty(frist)}
-      </StyledDeadline>
+      <Deadline age={ageKA} frist={frist} />
     </td>
     <td>
-      <TildelKlagebehandlingButton klagebehandlingId={id} />
+      <TildelKlagebehandlingButton klagebehandlingId={id} tema={tema} />
     </td>
   </tr>
 );

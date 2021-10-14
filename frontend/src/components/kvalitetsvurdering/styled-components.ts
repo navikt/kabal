@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
   padding: 1em;
+  width: 760px;
 `;
 
 export const FormSection = styled.div`

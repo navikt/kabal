@@ -1,11 +1,10 @@
-import { Knapp } from 'nav-frontend-knapper';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { isoDateToPretty } from '../../domain/date';
 import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { IKlagebehandling, useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
+import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { MedudunderskriverflytLabel } from './medunderskrivflyt-label';
 import { StyledAge, StyledDeadline } from './styled-components';
 
@@ -20,66 +19,49 @@ export const Row = ({
   medunderskriverFlyt,
   erMedunderskriver,
   harMedunderskriver,
-}: IKlagebehandling): JSX.Element => {
-  const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
-  const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
-
-  const onFradel = useCallback(() => {
-    if (typeof userData === 'undefined') {
-      return;
-    }
-
-    fradelSaksbehandler({
-      oppgaveId: id,
-      navIdent: userData.info.navIdent,
-      enhetId: userData.valgtEnhetView.id,
-    });
-  }, [id, userData, fradelSaksbehandler]);
-
-  const isLoading = loader.isLoading || isUserLoading;
-
-  return (
-    <tr>
-      <td>
-        <LabelMain>{useTypeFromId(type)}</LabelMain>
-      </td>
-      <td>
-        <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
-      </td>
-      <td>
-        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
-      </td>
-      <td>{person?.navn}</td>
-      <td>{person?.fnr}</td>
-      <td>
-        <StyledAge age={ageKA}>
-          {ageKA} {ageKA === 1 ? 'dag' : 'dager'}
-        </StyledAge>
-      </td>
-      <td>
-        <StyledDeadline age={ageKA} dateTime={frist}>
-          {isoDateToPretty(frist)}
-        </StyledDeadline>
-      </td>
-      <td>
-        <MedudunderskriverflytLabel
-          medunderskriverflyt={medunderskriverFlyt}
-          erMedunderskriver={erMedunderskriver}
-          harMedunderskriver={harMedunderskriver}
-        />
-      </td>
-      <td>
-        <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
-          Åpne
-        </NavLink>
-      </td>
-      <td>
-        <Knapp onClick={onFradel} spinner={isLoading} disabled={isLoading}>
-          {getFradelText(loader.isLoading)}
-        </Knapp>
-      </td>
-    </tr>
-  );
-};
-
-const getFradelText = (loading: boolean) => (loading ? 'Legger tilbake...' : 'Legg tilbake');
+  isAvsluttetAvSaksbehandler,
+  tildeltSaksbehandlerident,
+}: IKlagebehandling): JSX.Element => (
+  <tr>
+    <td>
+      <LabelMain>{useTypeFromId(type)}</LabelMain>
+    </td>
+    <td>
+      <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
+    </td>
+    <td>
+      <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
+    </td>
+    <td>{person?.navn}</td>
+    <td>{person?.fnr}</td>
+    <td>
+      <StyledAge age={ageKA}>
+        {ageKA} {ageKA === 1 ? 'dag' : 'dager'}
+      </StyledAge>
+    </td>
+    <td>
+      <StyledDeadline age={ageKA} dateTime={frist}>
+        {isoDateToPretty(frist)}
+      </StyledDeadline>
+    </td>
+    <td>
+      <MedudunderskriverflytLabel
+        medunderskriverflyt={medunderskriverFlyt}
+        erMedunderskriver={erMedunderskriver}
+        harMedunderskriver={harMedunderskriver}
+      />
+    </td>
+    <td>
+      <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
+        Åpne
+      </NavLink>
+    </td>
+    <td>
+      <FradelKlagebehandlingButton
+        klagebehandlingId={id}
+        isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
+        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
+      />
+    </td>
+  </tr>
+);

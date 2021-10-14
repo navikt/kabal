@@ -54,7 +54,7 @@ export interface IMedunderskriverInfoResponse {
 }
 
 interface IMedunderskriverResponse {
-  navident: string;
+  navIdent: string;
   navn: string;
 }
 

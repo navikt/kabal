@@ -23,6 +23,11 @@ const StyledLabel = styled.label`
   padding-right: 8px;
   user-select: none;
   position: relative;
+  align-items: center;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
 `;
 
 const StyledInput = styled.input`

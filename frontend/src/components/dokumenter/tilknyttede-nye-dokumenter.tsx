@@ -1,6 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateTimeToPretty } from '../../domain/date';
+import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useKlagebehandling } from '../../hooks/use-klagebehandling';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { baseUrl } from '../../redux-api/common';
@@ -14,6 +15,7 @@ interface TilknyttedeNyeDokumenterProps {
 export const TilknyttedeNyeDokumenter = ({ setShownDocument }: TilknyttedeNyeDokumenterProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [klagebehandling, isLoading] = useKlagebehandling();
+  const isFullfoert = useIsFullfoert(klagebehandlingId);
 
   if (typeof klagebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
@@ -32,7 +34,7 @@ export const TilknyttedeNyeDokumenter = ({ setShownDocument }: TilknyttedeNyeDok
 
   return (
     <div>
-      <StyledSubHeader>Nye dokumenter</StyledSubHeader>
+      {isFullfoert && <StyledSubHeader>Nye dokumenter</StyledSubHeader>}
       {klagebehandling.resultat.file && (
         <Tilknyttet>
           <TilknyttetDato>{isoDateTimeToPretty(klagebehandling.resultat.file.opplastet)}</TilknyttetDato>
