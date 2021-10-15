@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useAllTemaer } from '../../../hooks/use-all-temaer';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
-import { IShownDokument } from '../../show-document/types';
 import { AllDocumentsList, DokumenterFullvisning } from '../styled-components/fullvisning';
 import { ListHeader, ListTitle } from '../styled-components/list-header';
 import { DocumentsPage } from './documents-page';
@@ -12,13 +11,12 @@ import { LoadMore } from './load-more';
 interface AlleDokumenterProps {
   klagebehandlingId: string;
   show: boolean;
-  setShownDocument: (document: IShownDokument) => void;
 }
 
 const PAGE_SIZE = 10;
 
 export const AlleDokumenter = React.memo(
-  ({ klagebehandlingId, show, setShownDocument }: AlleDokumenterProps) => {
+  ({ klagebehandlingId, show }: AlleDokumenterProps) => {
     const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
     const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
@@ -52,7 +50,6 @@ export const AlleDokumenter = React.memo(
               pageReference={pageReference}
               pageSize={PAGE_SIZE}
               temaer={selectedTemaer}
-              setShownDocument={setShownDocument}
             />
           ))}
         </AllDocumentsList>
@@ -64,10 +61,7 @@ export const AlleDokumenter = React.memo(
       </DokumenterFullvisning>
     );
   },
-  (previous, next) =>
-    previous.show === next.show &&
-    previous.klagebehandlingId === next.klagebehandlingId &&
-    previous.setShownDocument === next.setShownDocument
+  (previous, next) => previous.show === next.show && previous.klagebehandlingId === next.klagebehandlingId
 );
 
 AlleDokumenter.displayName = 'AlleDokumenter';

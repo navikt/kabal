@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const DocumentButton = styled.button`
+export const DocumentButton = styled.button<{isActive: boolean}>`
   display: block;
   cursor: pointer;
   border: none;
@@ -13,6 +13,7 @@ export const DocumentButton = styled.button`
   text-overflow: ellipsis;
   text-align: left;
   text-decoration: underline;
+  font-weight: ${({isActive}) => isActive ? 'bold':'normal'};
 
   &:hover {
     color: #262626;

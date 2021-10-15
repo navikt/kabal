@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import {
   Container,
   Header,
+  LeftSide,
   PDF,
-  StyledButtonContainer,
+  RightSide,
   StyledCancelIcon,
   StyledDocumentTitle,
   StyledExtLinkIcon,
@@ -41,8 +42,8 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
   return (
     <Container width={pdfWidth}>
       <Header>
-        <StyledDocumentTitle>{title}</StyledDocumentTitle>
-        <StyledButtonContainer>
+        {/* <StyledButtonContainer> */}
+        <LeftSide>
           <HeaderButton onClick={decrease} text="Zoom ut på PDF">
             <StyledZoomOutIcon alt="Zoom ut på PDF" />
           </HeaderButton>
@@ -52,10 +53,14 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
           <StyledHeaderLink href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
             <StyledExtLinkIcon alt="Ekstern lenke" />
           </StyledHeaderLink>
+          <StyledDocumentTitle>{title}</StyledDocumentTitle>
+        </LeftSide>
+        <RightSide>
           <HeaderButton onClick={close} text="Lukk forhåndsvisning">
             <StyledCancelIcon alt="Lukk forhåndsvisning" />
           </HeaderButton>
-        </StyledButtonContainer>
+        </RightSide>
+        {/* </StyledButtonContainer> */}
       </Header>
       <PDF
         data={`${url}#toolbar=0&view=fitH&zoom=page-width`}

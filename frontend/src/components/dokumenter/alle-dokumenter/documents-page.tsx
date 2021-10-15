@@ -1,6 +1,5 @@
 import React from 'react';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
-import { IShownDokument } from '../../show-document/types';
 import { ListItem } from '../styled-components/fullvisning';
 import { Document } from './document';
 
@@ -9,16 +8,9 @@ interface DocumentsPageProps {
   pageReference: string | null;
   pageSize: number;
   temaer: string[];
-  setShownDocument: (document: IShownDokument) => void;
 }
 
-export const DocumentsPage = ({
-  klagebehandlingId,
-  pageReference,
-  pageSize,
-  temaer,
-  setShownDocument,
-}: DocumentsPageProps) => {
+export const DocumentsPage = ({ klagebehandlingId, pageReference, pageSize, temaer }: DocumentsPageProps) => {
   const { data } = useGetDokumenterQuery({
     klagebehandlingId,
     pageReference,
@@ -34,7 +26,7 @@ export const DocumentsPage = ({
     <>
       {data.dokumenter.map((document) => (
         <ListItem key={`dokument_${document.journalpostId}_${document.dokumentInfoId}`}>
-          <Document document={document} setShownDocument={setShownDocument} klagebehandlingId={klagebehandlingId} />
+          <Document document={document} />
         </ListItem>
       ))}
     </>

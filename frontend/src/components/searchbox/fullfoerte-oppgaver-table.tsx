@@ -50,4 +50,6 @@ const Row = ({ id, type, tema, hjemmel, avsluttetAvSaksbehandlerDate, tildeltSak
   </tr>
 );
 
-const StyledTable = styled.table``;
+const StyledTable = styled.table`
+  margin: 20px 0;
+`;

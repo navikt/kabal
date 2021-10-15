@@ -1,12 +1,13 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { baseUrl } from '../../redux-api/common';
-import { IDocumentVedlegg } from '../../redux-api/documents-types';
+import { IDocument, IDocumentVedlegg } from '../../redux-api/documents-types';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgave';
 import { IDocumentReference } from '../../redux-api/oppgave-types';
-import { IShownDokument } from '../show-document/types';
+import { ShownDocumentContext } from './context';
 import { dokumentMatcher } from './helpers';
 import {
   DokumenterMinivisning,
@@ -22,11 +23,10 @@ interface TilknyttedeDokumenterProps {
   klagebehandlingId: string;
   show: boolean;
   tilknyttedeDokumenter: IDocumentReference[];
-  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const TilknyttedeDokumenter = React.memo(
-  ({ klagebehandlingId, setShownDocument, tilknyttedeDokumenter, show }: TilknyttedeDokumenterProps) => {
+  ({ klagebehandlingId, tilknyttedeDokumenter, show }: TilknyttedeDokumenterProps) => {
     const {
       data: lagredeTilknyttedeDokumenter,
       isLoading,
@@ -54,30 +54,15 @@ export const TilknyttedeDokumenter = React.memo(
       <Container>
         <Loading loading={isLoading || isFetching} />
         <DokumenterMinivisning>
-          <TilknyttedeNyeDokumenter setShownDocument={setShownDocument} />
+          <TilknyttedeNyeDokumenter />
           <StyledSubHeader>Journalførte dokumenter</StyledSubHeader>
           {documents.map(({ document: dokument, tilknyttet }) => (
-            <Tilknyttet key={dokument.journalpostId + dokument.dokumentInfoId}>
-              <TilknyttetDato dateTime={dokument.registrert}>{isoDateToPretty(dokument.registrert)}</TilknyttetDato>
-              <TilknyttetKnapp
-                tilknyttet={tilknyttet}
-                onClick={() =>
-                  setShownDocument({
-                    title: dokument.tittel,
-                    url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`,
-                  })
-                }
-              >
-                {dokument.tittel}
-              </TilknyttetKnapp>
-              <VedleggListe
-                journalpostId={dokument.journalpostId}
-                vedleggListe={dokument.vedlegg}
-                tilknyttedeDokumenter={tilknyttedeDokumenter}
-                klagebehandlingId={klagebehandlingId}
-                setShownDocument={setShownDocument}
-              />
-            </Tilknyttet>
+            <TilknyttetDocument
+              key={dokument.journalpostId + dokument.dokumentInfoId}
+              dokument={dokument}
+              tilknyttet={tilknyttet}
+              tilknyttedeDokumenter={tilknyttedeDokumenter}
+            />
           ))}
         </DokumenterMinivisning>
       </Container>
@@ -85,6 +70,42 @@ export const TilknyttedeDokumenter = React.memo(
   },
   (previous, next) => previous.show === next.show && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
 );
+
+interface TilknyttetDocumentProps {
+  dokument: IDocument;
+  tilknyttet: boolean;
+  tilknyttedeDokumenter: IDocumentReference[];
+}
+
+const TilknyttetDocument = ({ dokument, tilknyttet, tilknyttedeDokumenter }: TilknyttetDocumentProps) => {
+  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const klagebehandlingId = useKlagebehandlingId();
+
+  const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
+
+  const onClick = () =>
+    setShownDocument({
+      title: dokument.tittel,
+      url,
+    });
+
+  const isActive = shownDocument?.url === url;
+
+  return (
+    <Tilknyttet>
+      <TilknyttetDato dateTime={dokument.registrert}>{isoDateToPretty(dokument.registrert)}</TilknyttetDato>
+      <TilknyttetKnapp isActive={isActive} tilknyttet={tilknyttet} onClick={onClick}>
+        {dokument.tittel}
+      </TilknyttetKnapp>
+      <VedleggListe
+        journalpostId={dokument.journalpostId}
+        vedleggListe={dokument.vedlegg}
+        tilknyttedeDokumenter={tilknyttedeDokumenter}
+        klagebehandlingId={klagebehandlingId}
+      />
+    </Tilknyttet>
+  );
+};
 
 TilknyttedeDokumenter.displayName = 'TilknyttedeDokumenter';
 
@@ -99,16 +120,9 @@ interface VedleggListeProps {
   tilknyttedeDokumenter: IDocumentReference[];
   journalpostId: string;
   klagebehandlingId: string;
-  setShownDocument: (document: IShownDokument) => void;
 }
 
-const VedleggListe = ({
-  vedleggListe,
-  tilknyttedeDokumenter,
-  journalpostId,
-  klagebehandlingId,
-  setShownDocument,
-}: VedleggListeProps) => {
+const VedleggListe = ({ vedleggListe, tilknyttedeDokumenter, journalpostId, klagebehandlingId }: VedleggListeProps) => {
   const tilknyttedeVedlegg = useMemo<IDocumentVedlegg[]>(
     () =>
       vedleggListe.filter((vedlegg) =>
@@ -125,7 +139,6 @@ const VedleggListe = ({
           journalpostId={journalpostId}
           vedlegg={vedlegg}
           klagebehandlingId={klagebehandlingId}
-          setShownDocument={setShownDocument}
         />
       ))}
     </DokumenterMinivisning>
@@ -136,24 +149,30 @@ interface VedleggProps {
   journalpostId: string;
   vedlegg: IDocumentVedlegg;
   klagebehandlingId: string;
-  setShownDocument: (document: IShownDokument) => void;
 }
 
-const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId, setShownDocument }: VedleggProps) => (
-  <Tilknyttet>
-    <TilknyttetKnapp
-      tilknyttet={true}
-      onClick={() =>
-        setShownDocument({
-          title: vedlegg.tittel,
-          url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`,
-        })
-      }
-    >
-      {vedlegg.tittel}
-    </TilknyttetKnapp>
-  </Tilknyttet>
-);
+const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId }: VedleggProps) => {
+  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+
+  const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+
+  const onClick = () =>
+    setShownDocument({
+      title: vedlegg.tittel,
+      url,
+    });
+
+  const isActive = shownDocument?.url === url;
+
+  return (
+    <Tilknyttet>
+      <TilknyttetKnapp tilknyttet={true} isActive={isActive} onClick={onClick}>
+        {vedlegg.tittel}
+      </TilknyttetKnapp>
+    </Tilknyttet>
+  );
+};
+
 interface LoadingProps {
   loading: boolean;
 }

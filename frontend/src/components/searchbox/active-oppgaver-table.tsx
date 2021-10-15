@@ -1,10 +1,10 @@
-import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { IKlagebehandling, IKlagebehandlingList } from '../../redux-api/oppgaver';
 import { Deadline } from '../common-table-components/deadline';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../common-table-components/open';
+import { SaksbehandlerButton } from '../common-table-components/saksbehandler-button';
 import { Tema } from '../common-table-components/tema';
 import { Type } from '../common-table-components/type';
 
@@ -41,6 +41,7 @@ const Row = ({
   ageKA,
   tildeltSaksbehandlerident,
   tildeltSaksbehandlerNavn,
+  isAvsluttetAvSaksbehandler,
 }: IKlagebehandling) => (
   <tr>
     <td>
@@ -56,7 +57,19 @@ const Row = ({
       <Deadline age={ageKA} frist={frist} />
     </td>
     <td>
-      <Saksbehandler navIdent={tildeltSaksbehandlerident} navn={tildeltSaksbehandlerNavn} />
+      <SaksbehandlerButton
+        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
+        name={tildeltSaksbehandlerNavn}
+        klagebehandlingId={id}
+        tema={tema}
+        isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
+      />
+      {/* <Saksbehandler
+        navIdent={tildeltSaksbehandlerident}
+        navn={tildeltSaksbehandlerNavn}
+        klagebehandlingId={id}
+        tema={tema}
+      /> */}
     </td>
     <td>
       <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
@@ -64,17 +77,21 @@ const Row = ({
   </tr>
 );
 
-interface SaksbehandlerProps {
-  navIdent: string | null;
-  navn: string | null;
-}
+// interface SaksbehandlerProps {
+//   navIdent: string | null;
+//   navn: string | null;
+//   klagebehandlingId: string;
+//   tema: string;
+// }
 
-const Saksbehandler = ({ navIdent, navn }: SaksbehandlerProps) => {
-  if (navIdent === null) {
-    return <Knapp>Tildel meg</Knapp>;
-  }
+// const Saksbehandler = ({ navIdent, navn, klagebehandlingId, tema }: SaksbehandlerProps) => {
+//   if (navIdent === null) {
+//     return <TildelKlagebehandlingButton klagebehandlingId={klagebehandlingId} tema={tema} />;
+//   }
 
-  return <span>{navn ?? 'Ukjent saksbehandler'}</span>;
-};
+//   return <span>{navn ?? 'Ukjent saksbehandler'}</span>;
+// };
 
-const StyledTable = styled.table``;
+const StyledTable = styled.table`
+  margin: 20px;
+`;

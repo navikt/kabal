@@ -16,7 +16,7 @@ export const TilknyttetDato = styled.time`
   font-size: 14px;
 `;
 
-export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
+export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean, isActive?: boolean }>`
   display: block;
   cursor: pointer;
   padding: 0;
@@ -25,6 +25,7 @@ export const TilknyttetKnapp = styled.button<{ tilknyttet: boolean }>`
   color: #0067c5;
   font-size: 16px;
   text-decoration: ${(props) => (props.tilknyttet ? 'none' : 'line-through')};
+  font-weight: ${({isActive}) => isActive ? 'bold':'normal'};
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;

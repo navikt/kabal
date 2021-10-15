@@ -1,8 +1,8 @@
-import { AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useState } from 'react';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver';
+import { SuccessStatus } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -32,7 +32,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, tema }: Props) 
   }
 
   if (done) {
-    return <AlertStripeSuksess>Tildelt!</AlertStripeSuksess>;
+    return <SuccessStatus>Tildelt!</SuccessStatus>;
   }
 
   const isLoading = loader.isLoading || isUserLoading;

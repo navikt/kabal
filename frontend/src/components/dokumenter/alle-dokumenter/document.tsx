@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
+import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { baseUrl } from '../../../redux-api/common';
 import { IDocument } from '../../../redux-api/documents-types';
-import { IShownDokument } from '../../show-document/types';
+import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
 import { DocumentDate, DocumentRow, DocumentTema, DocumentTitle } from '../styled-components/fullvisning';
@@ -11,14 +12,15 @@ import { DocumentCheckbox } from './document-checkbox';
 import { VedleggList } from './vedlegg-list';
 
 interface DocumentProps {
-  klagebehandlingId: string;
   document: IDocument;
-  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const Document = React.memo<DocumentProps>(
-  ({ document, setShownDocument, klagebehandlingId }) => {
+  ({ document }) => {
     const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
+    const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+    const klagebehandlingId = useKlagebehandlingId();
+
     const url = useMemo(
       () =>
         `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
@@ -31,10 +33,14 @@ export const Document = React.memo<DocumentProps>(
         url,
       });
 
+    const isActive = shownDocument?.url === url;
+
     return (
       <DocumentRow>
         <DocumentTitle>
-          <DocumentButton onClick={onClick}>{tittel}</DocumentButton>
+          <DocumentButton isActive={isActive} onClick={onClick}>
+            {tittel}
+          </DocumentButton>
         </DocumentTitle>
 
         <DocumentTema tema={tema}>{useFullTemaNameFromId(tema)}</DocumentTema>
@@ -49,7 +55,7 @@ export const Document = React.memo<DocumentProps>(
           klagebehandlingId={klagebehandlingId}
         />
 
-        <VedleggList document={document} klagebehandlingId={klagebehandlingId} setShownDocument={setShownDocument} />
+        <VedleggList document={document} klagebehandlingId={klagebehandlingId} />
       </DocumentRow>
     );
   },

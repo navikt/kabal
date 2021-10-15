@@ -61,6 +61,7 @@
     "prefer-destructuring": "error",
     "eol-last": ["error", "always"],
     "padded-blocks": ["error", "never"],
+    "@typescript-eslint/no-empty-function": "off",
     "prefer-arrow/prefer-arrow-functions": [
       "warn",
       {

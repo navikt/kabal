@@ -148,6 +148,18 @@ export const klagebehandlingerApi = createApi({
           enhetId,
         },
       }),
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+        await queryFulfilled;
+        await delay(3000);
+        dispatch(
+          klagebehandlingerApi.util.invalidateTags([
+            {
+              type: 'oppgaver',
+              id: oppgaveId,
+            },
+          ])
+        );
+      },
       // invalidatesTags: (oppgaveId) =>
       //   typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
       // onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
@@ -173,6 +185,18 @@ export const klagebehandlingerApi = createApi({
         url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
         method: 'POST',
       }),
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+        await queryFulfilled;
+        await delay(3000);
+        dispatch(
+          klagebehandlingerApi.util.invalidateTags([
+            {
+              type: 'oppgaver',
+              id: oppgaveId,
+            },
+          ])
+        );
+      },
       // invalidatesTags: (res, err, { oppgaveId }) => [{ type: 'oppgaver', id: oppgaveId }],
     }),
   }),
@@ -185,3 +209,5 @@ export const {
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
 } = klagebehandlingerApi;
+
+const delay = async (ms: number): Promise<void> => new Promise((res) => setTimeout(res, ms));

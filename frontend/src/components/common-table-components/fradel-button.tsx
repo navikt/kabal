@@ -1,7 +1,8 @@
 import { Knapp } from 'nav-frontend-knapper';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
+import { SuccessStatus } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -16,6 +17,7 @@ export const FradelKlagebehandlingButton = ({
 }: Props): JSX.Element | null => {
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
+  const [done, setDone] = useState<boolean>(false);
 
   const onFradel = useCallback(() => {
     if (typeof userData === 'undefined') {
@@ -25,7 +27,7 @@ export const FradelKlagebehandlingButton = ({
     fradelSaksbehandler({
       oppgaveId: klagebehandlingId,
       navIdent: userData.info.navIdent,
-    });
+    }).then(() => setDone(true));
   }, [klagebehandlingId, userData, fradelSaksbehandler]);
 
   if (isAvsluttetAvSaksbehandler) {
@@ -34,6 +36,10 @@ export const FradelKlagebehandlingButton = ({
 
   if (tildeltSaksbehandlerident !== userData?.info.navIdent) {
     return null;
+  }
+
+  if (done) {
+    return <SuccessStatus>Lagt tilbake!</SuccessStatus>;
   }
 
   const isLoading = loader.isLoading || isUserLoading;

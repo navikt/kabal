@@ -22,8 +22,6 @@ export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverInfo }:
     return null;
   }
 
-  console.log(medunderskriverInfo);
-
   const sendToMedunderskriverDisabled = !canEdit || medunderskriver === null || loader.isLoading;
 
   const SentToMedunderskriver = () => (

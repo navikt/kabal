@@ -42,7 +42,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
         redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
       </StyledFinishKlagebehandlingText>
       <StyledFinishKlagebehandlingButtons>
-        <Hovedknapp mini onClick={finish} spinner={loader.isLoading}>
+        <Hovedknapp mini onClick={finish} spinner={loader.isLoading} disabled={loader.isLoading}>
           Fullfør
         </Hovedknapp>
         <Knapp mini onClick={cancel}>

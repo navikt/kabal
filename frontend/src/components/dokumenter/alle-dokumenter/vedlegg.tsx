@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { baseUrl } from '../../../redux-api/common';
 import { IDocument, IDocumentVedlegg } from '../../../redux-api/documents-types';
-import { IShownDokument } from '../../show-document/types';
+import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
 import { VedleggRow, VedleggTitle } from '../styled-components/fullvisning';
@@ -11,21 +11,28 @@ interface VedleggProps {
   klagebehandlingId: string;
   document: IDocument;
   vedlegg: IDocumentVedlegg;
-  setShownDocument: (document: IShownDokument) => void;
 }
 
 export const Vedlegg = React.memo<VedleggProps>(
-  ({ klagebehandlingId, vedlegg, document, setShownDocument }) => {
+  ({ klagebehandlingId, vedlegg, document }) => {
+    const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+
     const onClick = () =>
       setShownDocument({
         title: vedlegg.tittel,
-        url: `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`,
+        url,
       });
+
+    const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+
+    const isActive = shownDocument?.url === url;
 
     return (
       <VedleggRow key={document.journalpostId + vedlegg.dokumentInfoId}>
         <VedleggTitle>
-          <DocumentButton onClick={onClick}>{vedlegg.tittel}</DocumentButton>
+          <DocumentButton onClick={onClick} isActive={isActive}>
+            {vedlegg.tittel}
+          </DocumentButton>
         </VedleggTitle>
         <DocumentCheckbox
           dokumentInfoId={vedlegg.dokumentInfoId}

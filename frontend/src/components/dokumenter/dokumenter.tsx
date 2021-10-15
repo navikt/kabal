@@ -7,6 +7,7 @@ import { PanelContainer } from '../klagebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
+import { ShownDocumentContext } from './context';
 import { Header } from './header';
 import { NyeDokumenter } from './nye-dokumenter/nye-dokumenter';
 import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
@@ -51,19 +52,14 @@ const Documents = ({ tilknyttedeDokumenter, id, isAvsluttetAvSaksbehandler }: Do
   const antallTilknyttede = tilknyttedeDokumenter.length;
 
   return (
-    <>
+    <ShownDocumentContext.Provider value={{ shownDocument, setShownDocument }}>
       <PanelContainer>
         <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />
-        <NyeDokumenter setShownDocument={setShownDocument} show={viewAll} />
-        <TilknyttedeDokumenter
-          klagebehandlingId={id}
-          show={!viewAll}
-          setShownDocument={setShownDocument}
-          tilknyttedeDokumenter={tilknyttedeDokumenter}
-        />
-        <AlleDokumenter show={viewAll} setShownDocument={setShownDocument} klagebehandlingId={id} />
+        <NyeDokumenter show={viewAll} />
+        <TilknyttedeDokumenter klagebehandlingId={id} show={!viewAll} tilknyttedeDokumenter={tilknyttedeDokumenter} />
+        <AlleDokumenter show={viewAll} klagebehandlingId={id} />
       </PanelContainer>
       <ShowDocument document={shownDocument} close={() => setShownDocument(null)} />
-    </>
+    </ShownDocumentContext.Provider>
   );
 };

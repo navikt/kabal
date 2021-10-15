@@ -65,7 +65,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
         };
 
   const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {
-    pollingInterval: 3 * 1000,
+    pollingInterval: 30 * 1000,
   });
   const { data: utgaatte } = useGetAntallKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
     pollingInterval: 300 * 1000,

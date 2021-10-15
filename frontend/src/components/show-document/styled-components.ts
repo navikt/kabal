@@ -29,10 +29,10 @@ export const StyledDocumentTitle = styled.h1`
   white-space: nowrap;
 `;
 
-export const StyledButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
+// export const StyledButtonContainer = styled.div`
+//   display: flex;
+//   align-items: center;
+// `;
 
 export const StyledHeaderButton = styled.button`
   border: none;
@@ -65,6 +65,9 @@ export const Header = styled.div`
   justify-content: space-between;
   height: 3.5em;
 `;
+
+export const LeftSide = styled.div``;
+export const RightSide = styled.div``;
 
 const iconStyle = css`
   & {
