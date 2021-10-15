@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Container,
   Header,
   LeftSide,
   PDF,
   RightSide,
+  StyledButtonContainer,
   StyledCancelIcon,
   StyledDocumentTitle,
+  StyledDocumentTitleContainer,
   StyledExtLinkIcon,
   StyledHeaderButton,
   StyledHeaderLink,
@@ -42,25 +44,27 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
   return (
     <Container width={pdfWidth}>
       <Header>
-        {/* <StyledButtonContainer> */}
         <LeftSide>
-          <HeaderButton onClick={decrease} text="Zoom ut på PDF">
-            <StyledZoomOutIcon alt="Zoom ut på PDF" />
-          </HeaderButton>
-          <HeaderButton onClick={increase} text="Zoom inn på PDF">
-            <StyledZoomInIcon alt="Zoom inn på PDF" />
-          </HeaderButton>
-          <StyledHeaderLink href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
-            <StyledExtLinkIcon alt="Ekstern lenke" />
-          </StyledHeaderLink>
-          <StyledDocumentTitle>{title}</StyledDocumentTitle>
+          <StyledButtonContainer>
+            <HeaderButton onClick={decrease} text="Zoom ut på PDF">
+              <StyledZoomOutIcon alt="Zoom ut på PDF" />
+            </HeaderButton>
+            <HeaderButton onClick={increase} text="Zoom inn på PDF">
+              <StyledZoomInIcon alt="Zoom inn på PDF" />
+            </HeaderButton>
+            <StyledHeaderLink href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
+              <StyledExtLinkIcon alt="Ekstern lenke" />
+            </StyledHeaderLink>
+            <StyledDocumentTitleContainer>
+              <StyledDocumentTitle>{title}</StyledDocumentTitle>
+            </StyledDocumentTitleContainer>
+          </StyledButtonContainer>
         </LeftSide>
         <RightSide>
-          <HeaderButton onClick={close} text="Lukk forhåndsvisning">
+          <HeaderButton onClick={close} text="Lukk forhåndsvisning" rightSide={true}>
             <StyledCancelIcon alt="Lukk forhåndsvisning" />
           </HeaderButton>
         </RightSide>
-        {/* </StyledButtonContainer> */}
       </Header>
       <PDF
         data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
@@ -85,12 +89,13 @@ const getSavedPdfWidth = () => {
 
 interface HeaderButtonProps {
   text: string;
+  rightSide?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }
 
-const HeaderButton = ({ text, onClick, children }: HeaderButtonProps): JSX.Element => (
-  <StyledHeaderButton onClick={onClick} title={text}>
+const HeaderButton = ({ text, rightSide, onClick, children }: HeaderButtonProps): JSX.Element => (
+  <StyledHeaderButton onClick={onClick} title={text} rightSide={rightSide ?? false}>
     {children}
   </StyledHeaderButton>
 );

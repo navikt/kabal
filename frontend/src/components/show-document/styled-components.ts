@@ -20,25 +20,29 @@ export const Container = styled.section<BeholderProps>`
   height: 100%;
 `;
 
-export const StyledDocumentTitle = styled.h1`
+export const StyledDocumentTitleContainer = styled.div`
+  height: 100%;
+  white-space: nowrap;
+`;
+export const StyledDocumentTitle = styled.div`
   font-size: 1em;
   margin: 0;
   padding: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
-// export const StyledButtonContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
+export const StyledButtonContainer = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
 
-export const StyledHeaderButton = styled.button`
+export const StyledHeaderButton = styled.button<{ rightSide: boolean }>`
   border: none;
   background-color: transparent;
   padding: 0;
-  margin-right: 15px;
+  margin-right: ${(props) => (!props.rightSide ? '15px' : '')};
   cursor: pointer;
 `;
 
@@ -60,7 +64,7 @@ export const Header = styled.div`
   display: flex;
   position: sticky;
   top: 0;
-  padding: 1em 0 1em 0.5em;
+  padding: 1em;
   z-index: 1;
   justify-content: space-between;
   height: 3.5em;
@@ -73,7 +77,6 @@ const iconStyle = css`
   & {
     color: black;
     cursor: pointer;
-    margin: 0.25em 1em 0 0.2em;
     -webkit-transition: all 0.15s ease-in-out;
     transition: all 0.15s ease-in-out;
     width: 1rem;
@@ -100,7 +103,6 @@ export const StyledCancelIcon = styled(CancelIcon)`
 export const StyledExtLinkIcon = styled(ExtLinkIcon)`
   ${iconStyle}/* cursor: pointer;
   color: #0067c5;
-  margin: 0.25em 1em 0 0.2em;
   -webkit-transition: all 0.15s ease-in-out;
   transition: all 0.15s ease-in-out;
   &:hover {
