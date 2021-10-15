@@ -24,6 +24,9 @@ export const StyledDocumentTitle = styled.h1`
   font-size: 1em;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const StyledButtonContainer = styled.div`
