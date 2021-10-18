@@ -7,6 +7,7 @@ import { getAccessTokenWithRefresh } from './tokens';
 export const authMiddleware =
   (authClient: Client): Handler =>
   async (req, res, next) => {
+    console.log('Auth middleware', req.path, req.query);
     const session = getSessionIdAndSignature(req);
     if (session === null) {
       const [sessionId, signature] = generateSessionIdAndSignature();
@@ -29,7 +30,7 @@ export const authMiddleware =
       next();
     } catch (error) {
       if (error instanceof Error || typeof error === 'string') {
-        console.warn('Auth middleware:', error);
+        console.warn('Access token error', error);
       }
       loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;

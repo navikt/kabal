@@ -34,7 +34,7 @@ export const saveToRedis = (key: string, value: string) =>
       if (err === null) {
         resolve();
       } else {
-        console.warn(`Error while saving to Redis with '${key}'`, err);
+        console.warn('Error while saving to Redis', err);
         reject(err);
       }
     })
@@ -43,8 +43,10 @@ export const saveToRedis = (key: string, value: string) =>
 export const readFromRedis = async (key: string): Promise<string | null> =>
   new Promise<string | null>((resolve, reject) =>
     client.get(key, (err, json) => {
-      if (err !== null) {
-        console.warn(`Error while reading from Redis with key '${key}'`, err);
+      if (err === null && typeof json === 'string') {
+        resolve(json);
+      } else {
+        console.warn('Error while reading from Redis', err);
         reject(err);
         return;
       }
@@ -67,7 +69,7 @@ export const deleteFromRedis = async (key: string): Promise<void> =>
       if (err === null) {
         resolve();
       } else {
-        console.warn(`Error while deleting from Redis with key '${key}'`, err);
+        console.warn('Error while deleting from Redis', err);
         reject(err);
       }
     })
