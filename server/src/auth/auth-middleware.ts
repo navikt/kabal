@@ -29,7 +29,7 @@ export const authMiddleware =
       next();
     } catch (error) {
       if (error instanceof Error || typeof error === 'string') {
-        console.warn(error);
+        console.warn('Auth middleware:', error);
       }
       loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;

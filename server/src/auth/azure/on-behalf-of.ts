@@ -20,7 +20,7 @@ export const getOnBehalfOfAccessToken = async (authClient: Client, access_token:
 
   if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
     const error = new Error(`OpenID issuer misconfigured. Missing token endpoint.`);
-    console.error(error);
+    console.error('On-Behalf-Of:', error);
     throw error;
   }
 
@@ -51,7 +51,7 @@ export const getOnBehalfOfAccessToken = async (authClient: Client, access_token:
     return obo_access_token;
   } catch (error) {
     if (error instanceof Error) {
-      console.error(error);
+      console.error('On-Behalf-Of:', error);
       throw error;
     }
 
