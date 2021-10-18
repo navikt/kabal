@@ -1,0 +1,17 @@
+{
+    "typescript.validate.enable": true,
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "prettier.requireConfig": true,
+    "npm-intellisense.importQuotes": "'",
+    "npm-intellisense.importES6": true,
+    "npm-intellisense.showBuildInLibs": true,
+  }

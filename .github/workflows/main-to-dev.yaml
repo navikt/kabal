@@ -22,19 +22,25 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Build frontend
+      - name: Install frontend dependencies
         run: |
           cd frontend
           npm ci
+      - name: Build frontend
+        run: |
+          cd frontend
           npm run build
       - name: Test frontend
         run: |
           cd frontend
           npm test
-      - name: Build server
+      - name: Install server dependencies
         run: |
           cd server
           npm ci
+      - name: Build server
+        run: |
+          cd server
           npm run build
       - name: Test server
         run: |

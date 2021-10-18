@@ -1,0 +1,64 @@
+import { createClient } from 'redis';
+import { redisConfig } from './config/redis-config';
+
+const client = createClient(redisConfig.url, {
+  db: 1,
+});
+
+client.on('error', (error: Error) => {
+  console.error('Redis Client error:', error);
+});
+
+export const serializeToRedis = <T>(key: string, value: T) => {
+  const serialized = JSON.stringify(value);
+  return saveToRedis(key, serialized);
+};
+
+export const deserializeFromRedis = async <T>(key: string): Promise<T> => {
+  const serialized = await readFromRedis(key);
+  return JSON.parse(serialized);
+};
+
+export const saveToRedis = (key: string, value: string) =>
+  new Promise<void>((resolve, reject) =>
+    client.set(key, value, (err) => {
+      if (err === null) {
+        resolve();
+      } else {
+        reject(err);
+      }
+    })
+  );
+
+export const readFromRedis = async (key: string): Promise<string> =>
+  new Promise<string>((resolve, reject) =>
+    client.get(key, (err, json) => {
+      if (err === null && typeof json === 'string') {
+        resolve(json);
+      } else {
+        reject(err);
+      }
+    })
+  );
+
+export const deleteFromRedis = async (key: string): Promise<void> =>
+  new Promise<void>((resolve, reject) =>
+    client.del(key, (err) => {
+      if (err === null) {
+        resolve();
+      } else {
+        reject(err);
+      }
+    })
+  );
+
+export interface SessionData {
+  before_login?: string;
+  access_token?: string;
+  refresh_token?: string;
+  code_verifier?: string;
+}
+
+export const saveSessionData = (sessionId: string, sessionData: SessionData) =>
+  serializeToRedis(sessionId, sessionData);
+export const getSessionData = (sessionId: string): Promise<SessionData> => deserializeFromRedis<SessionData>(sessionId);

@@ -200,7 +200,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
 
       if (ferdigstiltFom) {
         resolve(
-          rader.map((rad: any) => ({
+          (rader ?? []).map((rad: any) => ({
             totaltAntall: rad.totaltAntall ?? 0,
             id: rad.id,
             type: rad.type,
@@ -221,7 +221,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
         );
       } else if ("undefined" === typeof tildeltSaksbehandler)
         resolve(
-          rader.map((rad: any) => ({
+          (rader ?? []).map((rad: any) => ({
             totaltAntall: rad.totaltAntall ?? 0,
             id: rad.id,
             type: rad.type,
@@ -239,7 +239,7 @@ export async function filtrerOppgaver(query: OppgaveQuery) {
         );
       else
         resolve(
-          rader.map((rad: any) => ({
+          (rader ?? []).map((rad: any) => ({
             totaltAntall: rad.totaltAntall ?? 0,
             id: rad.id,
             type: rad.type,

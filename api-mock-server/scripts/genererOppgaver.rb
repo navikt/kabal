@@ -64,13 +64,10 @@ def tilfeldigTema()
     return "43"
   end
   if r == 1
-    return "30"
+    return "27"
   end
   if r == 2
-    return "56"
-  end
-  if r == 2
-    return "7"
+    return "12"
   end
 end
 
