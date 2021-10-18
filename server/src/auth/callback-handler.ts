@@ -19,14 +19,14 @@ export const callbackHandler =
 
     if (typeof code !== 'string') {
       const err = `No code in query after Azure login. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      console.warn(err);
       res.status(500).send(err);
       return;
     }
 
     if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
       const err = 'OpenID issuer misconfigured. Missing token endpoint.';
-      console.warn('Callback handler:', err);
+      console.warn(err);
       res.status(500).send(err);
       return;
     }
@@ -34,7 +34,7 @@ export const callbackHandler =
     const sessionData = await getSessionData(sessionId);
     if (sessionData === null) {
       const err = `No session data found after Azure login. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      console.warn(err);
       res.status(500).send(err);
       return;
     }
@@ -43,7 +43,7 @@ export const callbackHandler =
 
     if (typeof code_verifier !== 'string') {
       const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      console.warn(err);
       res.status(500).send(err);
       return;
     }

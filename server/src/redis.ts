@@ -19,13 +19,7 @@ export const deserializeFromRedis = async <T>(key: string): Promise<T | null> =>
   if (serialized === null) {
     return null;
   }
-  try {
-    const parsed = JSON.parse(serialized);
-    return parsed;
-  } catch (err) {
-    console.warn(`Failed to parse Redis data for key ${key}`, err);
-    return null;
-  }
+  return JSON.parse(serialized);
 };
 
 export const saveToRedis = (key: string, value: string) =>
@@ -43,8 +37,10 @@ export const saveToRedis = (key: string, value: string) =>
 export const readFromRedis = async (key: string): Promise<string | null> =>
   new Promise<string | null>((resolve, reject) =>
     client.get(key, (err, json) => {
-      if (err === null && typeof json === 'string') {
+      if (typeof json === 'string') {
         resolve(json);
+      } else if (err === null) {
+        resolve(null);
       } else {
         console.warn(`Error while reading from Redis with key '${key}'`, err);
         reject(err);
