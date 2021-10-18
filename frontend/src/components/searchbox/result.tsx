@@ -8,38 +8,19 @@ import { Oppgaver } from './oppgaver';
 export const Result = ({ fnr, navn, aapneKlagebehandlinger, avsluttedeKlagebehandlinger }: IPersonResultat) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const numberOfKlagebehandlinger = aapneKlagebehandlinger.length + avsluttedeKlagebehandlinger.length;
-
   return (
     <StyledResult key={fnr} data-testid="search-result">
       <StyledName>{formatName(navn)}</StyledName>
       <StyledFnr>{fnr}</StyledFnr>
-      <SeSaker
-        hasKlagebehandlinger={numberOfKlagebehandlinger !== 0}
-        setOpen={setOpen}
-        open={open}
-        data-testid="search-result-expand-button"
-      />
+      <StyledOpenButton onClick={() => setOpen(!open)} data-testid="search-result-expand-button">
+        {getOpenText(open)}
+      </StyledOpenButton>
       <Oppgaver open={open}>
         <ActiveOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
         <FullfoerteOppgaverTable finishedOppgaver={avsluttedeKlagebehandlinger} />
       </Oppgaver>
     </StyledResult>
   );
-};
-
-interface SeSakerProps {
-  setOpen: (open: boolean) => void;
-  open: boolean;
-  hasKlagebehandlinger: boolean;
-}
-
-const SeSaker = ({ setOpen, open, hasKlagebehandlinger }: SeSakerProps) => {
-  if (!hasKlagebehandlinger) {
-    return <span>Ingen saker</span>;
-  }
-
-  return <StyledOpenButton onClick={() => setOpen(!open)}>{getOpenText(open)}</StyledOpenButton>;
 };
 
 const getOpenText = (open: boolean) => (open ? 'Skjul saker' : 'Se saker');
