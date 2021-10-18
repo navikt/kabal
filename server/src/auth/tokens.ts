@@ -18,7 +18,13 @@ export const verifyToken = async (authClient: Client, access_token: string): Pro
 };
 
 export const getAccessTokenWithRefresh = async (authClient: Client, sessionId: string): Promise<string> => {
-  const { access_token: session_access_token, refresh_token: session_refresh_token } = await getSessionData(sessionId);
+  const sessionData = await getSessionData(sessionId);
+
+  if (sessionData === null) {
+    throw new Error(`No session data for session '${sessionId}'.`);
+  }
+
+  const { access_token: session_access_token, refresh_token: session_refresh_token } = sessionData;
 
   if (typeof session_access_token !== 'string') {
     throw new Error(`No access token for session '${sessionId}'.`);
