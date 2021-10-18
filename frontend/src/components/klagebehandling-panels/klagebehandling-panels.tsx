@@ -1,21 +1,45 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useGetFeatureTogglingEditorQuery } from '../../redux-api/feature-toggling';
 import { Behandling } from '../behandling/behandling';
 import { Dokumenter } from '../dokumenter/dokumenter';
 import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
+import { PanelContainer } from './panel';
 
 interface KlagebehandlingPanelsProps {
   toggles: PanelToggles;
 }
 
-export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => (
-  <PageContainer data-testid="klagebehandling-panels">
-    <Dokumenter shown={toggles.documents} />
-    <Behandling shown={toggles.behandling} />
-    <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
-  </PageContainer>
-);
+export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => {
+  const { data: featureTogglingEditor } = useGetFeatureTogglingEditorQuery();
+
+  return (
+    <PageContainer data-testid="klagebehandling-panels">
+      <Dokumenter shown={toggles.documents} />
+      <Brevutforming featureTogglingEditor={featureTogglingEditor} toggled={toggles.brevutforming} />
+      <Behandling shown={toggles.behandling} />
+      <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
+    </PageContainer>
+  );
+};
+
+interface BrevutformingProps {
+  featureTogglingEditor: boolean | undefined;
+  toggled: boolean;
+}
+
+const Brevutforming = ({ featureTogglingEditor, toggled }: BrevutformingProps) => {
+  if (featureTogglingEditor === true && toggled) {
+    return (
+      <PanelContainer>
+        <h2>Editor</h2>
+      </PanelContainer>
+    );
+  }
+
+  return null;
+};
 
 const PageContainer = styled.main`
   display: flex;

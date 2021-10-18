@@ -7,7 +7,6 @@ import { getAccessTokenWithRefresh } from './tokens';
 export const authMiddleware =
   (authClient: Client): Handler =>
   async (req, res, next) => {
-    console.log('Auth middleware:', req.path, req.query);
     const session = getSessionIdAndSignature(req);
     if (session === null) {
       const [sessionId, signature] = generateSessionIdAndSignature();

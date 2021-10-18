@@ -8,7 +8,6 @@ import { ensureSession } from './session-utils';
 export const callbackHandler =
   (authClient: Client): Handler =>
   async (req, res) => {
-    console.log('Callback handler:', req.path, req.query);
     const { code, error, error_description } = authClient.callbackParams(req);
     const [sessionId] = ensureSession(req, res);
 

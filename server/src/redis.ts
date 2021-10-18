@@ -11,22 +11,19 @@ client.on('error', (error: Error) => {
 
 export const serializeToRedis = <T>(key: string, value: T) => {
   const serialized = JSON.stringify(value);
-  console.debug(`Saving data to Redis with key '${key}': '${serialized}'`);
   return saveToRedis(key, serialized);
 };
 
 export const deserializeFromRedis = async <T>(key: string): Promise<T | null> => {
   const serialized = await readFromRedis(key);
   if (serialized === null) {
-    console.debug('Deserialize Redis data: null');
     return null;
   }
   try {
     const parsed = JSON.parse(serialized);
-    console.debug(`Deserialize Redis data:`, parsed);
     return parsed;
   } catch (err) {
-    console.warn(`Failed to parse Redis data for key ${key}`, serialized, err);
+    console.warn(`Failed to parse Redis data for key ${key}`, err);
     return null;
   }
 };
@@ -35,10 +32,9 @@ export const saveToRedis = (key: string, value: string) =>
   new Promise<void>((resolve, reject) =>
     client.set(key, value, (err) => {
       if (err === null) {
-        console.debug(`Successfully saved data to Redis with key '${key}': ${value}`);
         resolve();
       } else {
-        console.warn(`Error while saving to Redis with '${key}'`, value, err);
+        console.warn(`Error while saving to Redis with '${key}'`, err);
         reject(err);
       }
     })
@@ -47,8 +43,6 @@ export const saveToRedis = (key: string, value: string) =>
 export const readFromRedis = async (key: string): Promise<string | null> =>
   new Promise<string | null>((resolve, reject) =>
     client.get(key, (err, json) => {
-      console.debug('READ FROM REDIS (err, json):', err, json);
-
       if (err !== null) {
         console.warn(`Error while reading from Redis with key '${key}'`, err);
         reject(err);
@@ -56,13 +50,11 @@ export const readFromRedis = async (key: string): Promise<string | null> =>
       }
 
       if (typeof json === 'string') {
-        console.debug(`Successful read from Redis with key ${key}: '${json}'`);
         resolve(json);
         return;
       }
 
       if (err === null) {
-        console.debug(`Empty read from Redis with key ${key}: null`);
         resolve(null);
         return;
       }
