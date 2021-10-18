@@ -34,8 +34,8 @@ export const deserializeFromRedis = async <T>(key: string): Promise<T | null> =>
 export const saveToRedis = (key: string, value: string) =>
   new Promise<void>((resolve, reject) =>
     client.set(key, value, (err) => {
-      console.debug(`Successfully saved data to Redis with key '${key}': ${value}`);
       if (err === null) {
+        console.debug(`Successfully saved data to Redis with key '${key}': ${value}`);
         resolve();
       } else {
         console.warn(`Error while saving to Redis with '${key}'`, value, err);
