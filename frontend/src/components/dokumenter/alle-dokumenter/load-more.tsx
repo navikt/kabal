@@ -14,8 +14,8 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
     return null;
   }
 
-  const remaining = Math.max(totalDocuments - loadedDocuments, 0);
-  const hasMore = remaining !== 0;
+  const remaining = totalDocuments - loadedDocuments;
+  const hasMore = remaining > 0;
 
   if (!hasMore) {
     return null;
