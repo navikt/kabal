@@ -14,8 +14,11 @@ export const serializeToRedis = <T>(key: string, value: T) => {
   return saveToRedis(key, serialized);
 };
 
-export const deserializeFromRedis = async <T>(key: string): Promise<T> => {
+export const deserializeFromRedis = async <T>(key: string): Promise<T | null> => {
   const serialized = await readFromRedis(key);
+  if (serialized === null) {
+    return null;
+  }
   return JSON.parse(serialized);
 };
 
@@ -31,11 +34,13 @@ export const saveToRedis = (key: string, value: string) =>
     })
   );
 
-export const readFromRedis = async (key: string): Promise<string> =>
-  new Promise<string>((resolve, reject) =>
+export const readFromRedis = async (key: string): Promise<string | null> =>
+  new Promise<string | null>((resolve, reject) =>
     client.get(key, (err, json) => {
-      if (err === null && typeof json === 'string') {
+      if (typeof json === 'string') {
         resolve(json);
+      } else if (err === null) {
+        resolve(null);
       } else {
         console.warn(`Error while reading from Redis with key '${key}'`, err);
         reject(err);
@@ -64,4 +69,5 @@ export interface SessionData {
 
 export const saveSessionData = (sessionId: string, sessionData: SessionData) =>
   serializeToRedis(sessionId, sessionData);
-export const getSessionData = (sessionId: string): Promise<SessionData> => deserializeFromRedis<SessionData>(sessionId);
+export const getSessionData = (sessionId: string): Promise<SessionData | null> =>
+  deserializeFromRedis<SessionData>(sessionId);

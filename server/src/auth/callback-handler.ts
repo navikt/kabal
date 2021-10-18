@@ -19,19 +19,33 @@ export const callbackHandler =
     }
 
     if (typeof code !== 'string') {
-      loginRedirect(authClient, sessionId, res, req.originalUrl);
+      const err = `No code in query after Azure login. Session '${sessionId}'.`;
+      console.warn(err);
+      res.status(500).send(err);
       return;
     }
 
     if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
-      res.status(500).send('OpenID issuer misconfigured. Missing token endpoint.');
+      const err = 'OpenID issuer misconfigured. Missing token endpoint.';
+      console.warn(err);
+      res.status(500).send(err);
       return;
     }
 
-    const { before_login, code_verifier } = await getSessionData(sessionId);
+    const sessionData = await getSessionData(sessionId);
+    if (sessionData === null) {
+      const err = `No session data found after Azure login. Session '${sessionId}'.`;
+      console.warn(err);
+      res.status(500).send(err);
+      return;
+    }
+
+    const { before_login, code_verifier } = sessionData;
 
     if (typeof code_verifier !== 'string') {
-      res.status(500).send('OpenID code verifier missing in session data. Cannot validate callback code.');
+      const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
+      console.warn(err);
+      res.status(500).send(err);
       return;
     }
 
