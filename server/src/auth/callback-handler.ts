@@ -8,6 +8,7 @@ import { ensureSession } from './session-utils';
 export const callbackHandler =
   (authClient: Client): Handler =>
   async (req, res) => {
+    console.log('Callback handler:', req.path, req.query);
     const { code, error, error_description } = authClient.callbackParams(req);
     const [sessionId] = ensureSession(req, res);
 
@@ -19,14 +20,14 @@ export const callbackHandler =
 
     if (typeof code !== 'string') {
       const err = `No code in query after Azure login. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
 
     if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
       const err = 'OpenID issuer misconfigured. Missing token endpoint.';
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
@@ -34,7 +35,7 @@ export const callbackHandler =
     const sessionData = await getSessionData(sessionId);
     if (sessionData === null) {
       const err = `No session data found after Azure login. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
@@ -43,7 +44,7 @@ export const callbackHandler =
 
     if (typeof code_verifier !== 'string') {
       const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
