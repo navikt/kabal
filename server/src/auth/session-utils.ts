@@ -53,7 +53,7 @@ export const setSessionCookie = (res: Response, sessionId: string, signature: st
     maxAge: serverConfig.sessionTime,
     path: '/',
     httpOnly: true,
-    sameSite: isDeployedToProd ? 'strict' : 'strict',
+    sameSite: isDeployedToProd ? 'strict' : 'lax',
     secure: true,
   });
   return [sessionId, signature];
