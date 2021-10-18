@@ -35,4 +35,5 @@ spec:
      - {{url}}
   {{/each}}
   envFrom:
-    - secret: kabalfrontend
+    - secret: kabal-session-key
+    - secret: slack-url

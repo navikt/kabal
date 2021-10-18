@@ -3,7 +3,7 @@ import { getEnvironmentVersion } from './env';
 import { requiredEnvString, requiredEnvUrl } from './env-var';
 
 export const slack = {
-  url: requiredEnvUrl('slackhookurl'),
+  url: requiredEnvUrl('SLACK_URL'),
   channel: '#klage-notifications',
   messagePrefix: 'KABAL frontend NodeJS - ',
 };
