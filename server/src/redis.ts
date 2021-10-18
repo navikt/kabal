@@ -47,7 +47,7 @@ export const saveToRedis = (key: string, value: string) =>
 export const readFromRedis = async (key: string): Promise<string | null> =>
   new Promise<string | null>((resolve, reject) =>
     client.get(key, (err, json) => {
-      console.debug(err, json);
+      console.debug('READ FROM REDIS (err, json):', err, json);
 
       if (err !== null) {
         console.warn(`Error while reading from Redis with key '${key}'`, err);
