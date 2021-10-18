@@ -8,26 +8,26 @@ import { ensureSession } from './session-utils';
 export const callbackHandler =
   (authClient: Client): Handler =>
   async (req, res) => {
-    console.log('Callback handler', req.path, req.query);
+    console.log('Callback handler:', req.path, req.query);
     const { code, error, error_description } = authClient.callbackParams(req);
     const [sessionId] = ensureSession(req, res);
 
     if (typeof error === 'string' || typeof error_description === 'string') {
-      console.warn(error, error_description);
+      console.warn('Callback handler:', error, error_description);
       loginRedirect(authClient, sessionId, res, req.originalUrl);
       return;
     }
 
     if (typeof code !== 'string') {
       const err = `No code in query after Azure login. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
 
     if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
       const err = 'OpenID issuer misconfigured. Missing token endpoint.';
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
@@ -35,7 +35,7 @@ export const callbackHandler =
     const sessionData = await getSessionData(sessionId);
     if (sessionData === null) {
       const err = `No session data found after Azure login. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
@@ -44,7 +44,7 @@ export const callbackHandler =
 
     if (typeof code_verifier !== 'string') {
       const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
-      console.warn(err);
+      console.warn('Callback handler:', err);
       res.status(500).send(err);
       return;
     }
@@ -66,9 +66,9 @@ export const callbackHandler =
       res.redirect(before_login ?? '/');
     } catch (error) {
       if (error instanceof Error || typeof error === 'string') {
-        console.error(`Error while exchanging code for tokens.`, error);
+        console.error('Callback handler:', `Error while exchanging code for tokens.`, error);
       } else {
-        console.error('Unknown error while exchanging code for tokens.');
+        console.error('Callback handler:', 'Unknown error while exchanging code for tokens.');
       }
 
       loginRedirect(authClient, sessionId, res, before_login ?? '/');
