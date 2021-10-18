@@ -17,7 +17,7 @@ export const init = async (server: Express) => {
     const authClient = await getAzureClient();
     server.get(callbackPath, callbackHandler(authClient));
     server.get('/logout', logoutHandler(authClient));
-    server.use(['/api', '/assets', '/bundle.js', '/pdf.worker.js'], guardMiddleware(authClient));
+    server.use(['/api', '/assets', '/bundle.js', '/favicon.ico'], guardMiddleware(authClient));
     server.use(authMiddleware(authClient));
     server.use(setupProxy(authClient));
     server.use(setupStaticRoutes());
