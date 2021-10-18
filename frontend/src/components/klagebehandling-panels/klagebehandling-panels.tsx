@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Behandling } from '../behandling/behandling';
+import { Brevutforming } from '../brevutforming/brevutforming';
 import { Dokumenter } from '../dokumenter/dokumenter';
 import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
@@ -12,6 +13,7 @@ interface KlagebehandlingPanelsProps {
 export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => (
   <PageContainer data-testid="klagebehandling-panels">
     <Dokumenter shown={toggles.documents} />
+    <Brevutforming shown={toggles.brevutforming} />
     <Behandling shown={toggles.behandling} />
     <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
   </PageContainer>
