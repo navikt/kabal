@@ -1,26 +1,25 @@
 import React from 'react';
-import { IDocumentsResponse } from '../../../redux-api/documents-types';
 import { StyledLoadMoreButton } from '../styled-components/fullvisning';
 
 interface LoadMoreProps {
-  documents?: IDocumentsResponse;
+  loadedDocuments: number;
+  totalDocuments: number;
+  pageReference: string | null;
   loading: boolean;
   setPage: (pageReference: string) => void;
 }
 
-export const LoadMore = ({ documents, loading, setPage }: LoadMoreProps) => {
-  if (typeof documents === 'undefined') {
+export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loading, setPage }: LoadMoreProps) => {
+  if (totalDocuments === 0) {
     return null;
   }
 
-  const remaining = documents.totaltAntall - documents.dokumenter.length;
+  const remaining = Math.max(totalDocuments - loadedDocuments, 0);
   const hasMore = remaining !== 0;
 
   if (!hasMore) {
     return null;
   }
-
-  const { pageReference } = documents;
 
   if (pageReference === null) {
     return null;

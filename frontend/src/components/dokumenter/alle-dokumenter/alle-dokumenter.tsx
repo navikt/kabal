@@ -54,7 +54,9 @@ export const AlleDokumenter = React.memo(
           ))}
         </AllDocumentsList>
         <LoadMore
-          documents={lastPage}
+          totalDocuments={lastPage?.totaltAntall ?? 0}
+          loadedDocuments={pageReferences.length * PAGE_SIZE}
+          pageReference={lastPage?.pageReference ?? null}
           loading={isLoading}
           setPage={(pageReference: string) => setPageReferences(pageReferences.concat(pageReference))}
         />
