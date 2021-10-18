@@ -11,6 +11,7 @@ client.on('error', (error: Error) => {
 
 export const serializeToRedis = <T>(key: string, value: T) => {
   const serialized = JSON.stringify(value);
+  console.debug(`Saving data to Redis with key '${key}': '${serialized}'`);
   return saveToRedis(key, serialized);
 };
 
@@ -33,6 +34,7 @@ export const deserializeFromRedis = async <T>(key: string): Promise<T | null> =>
 export const saveToRedis = (key: string, value: string) =>
   new Promise<void>((resolve, reject) =>
     client.set(key, value, (err) => {
+      console.debug(`Successfully saved data to Redis with key '${key}': ${value}`);
       if (err === null) {
         resolve();
       } else {
