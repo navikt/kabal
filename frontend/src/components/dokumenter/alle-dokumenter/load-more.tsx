@@ -14,6 +14,14 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
     return null;
   }
 
+  if (loading) {
+    return (
+      <StyledLoadMoreButton spinner={true} autoDisableVedSpinner={true}>
+        Laster flere...
+      </StyledLoadMoreButton>
+    );
+  }
+
   const remaining = totalDocuments - loadedDocuments;
   const hasMore = remaining > 0;
 
@@ -25,9 +33,5 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
     return null;
   }
 
-  return (
-    <StyledLoadMoreButton onClick={() => setPage(pageReference)} spinner={loading} autoDisableVedSpinner={true}>
-      Last flere ({remaining})
-    </StyledLoadMoreButton>
-  );
+  return <StyledLoadMoreButton onClick={() => setPage(pageReference)}>Last flere ({remaining})</StyledLoadMoreButton>;
 };

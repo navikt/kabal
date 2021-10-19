@@ -20,7 +20,7 @@ export const AlleDokumenter = React.memo(
     const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
     const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
-    const { data: lastPage, isLoading } = useGetDokumenterQuery({
+    const { data: lastPage, isFetching } = useGetDokumenterQuery({
       klagebehandlingId,
       pageReference: pageReferences[pageReferences.length - 1],
       pageSize: PAGE_SIZE,
@@ -57,7 +57,7 @@ export const AlleDokumenter = React.memo(
           totalDocuments={lastPage?.totaltAntall ?? 0}
           loadedDocuments={pageReferences.length * PAGE_SIZE}
           pageReference={lastPage?.pageReference ?? null}
-          loading={isLoading}
+          loading={isFetching}
           setPage={(pageReference: string) => setPageReferences(pageReferences.concat(pageReference))}
         />
       </DokumenterFullvisning>
