@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { brukerApi } from '../redux-api/bruker';
+import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   [klagebehandlingApi.reducerPath]: klagebehandlingApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
+  [featureTogglingApi.reducerPath]: featureTogglingApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

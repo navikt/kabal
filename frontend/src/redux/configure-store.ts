@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { brukerApi } from '../redux-api/bruker';
+import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
@@ -32,6 +33,7 @@ export const reduxStore = configureStore({
       klagebehandlingApi.middleware,
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
+      featureTogglingApi.middleware,
     ]),
 });
 
