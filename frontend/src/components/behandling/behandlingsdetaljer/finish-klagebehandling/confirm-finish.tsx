@@ -1,6 +1,6 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useKlagerName } from '../../../../hooks/use-klager-name';
 import { ApiError, UNKNOWN_ERROR, isWrappedApiError } from '../../../../redux-api/error-type';
@@ -20,6 +20,13 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [finishKlagebehandling, loader] = useFinishKlagebehandlingMutation();
   const klagerName = useKlagerName();
+  const [ref, setRef] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (ref !== null) {
+      ref.scrollIntoView();
+    }
+  }, [ref]);
 
   const finish = () => {
     finishKlagebehandling({ klagebehandlingId })
@@ -36,7 +43,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   };
 
   return (
-    <StyledFinishKlagebehandlingBox>
+    <StyledFinishKlagebehandlingBox ref={setRef}>
       <StyledFinishKlagebehandlingText>
         Du fullfører nå klagebehandlingen, brevet sendes til {klagerName ?? 'søker'} og klagebehandlingen kan ikke
         redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
