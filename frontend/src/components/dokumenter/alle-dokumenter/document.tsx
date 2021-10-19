@@ -36,7 +36,7 @@ export const Document = React.memo<DocumentProps>(
     const isActive = shownDocument?.url === url;
 
     return (
-      <DocumentRow isActive={isActive}>
+      <DocumentRow>
         <DocumentTitle>
           <DocumentButton
             isActive={isActive}
