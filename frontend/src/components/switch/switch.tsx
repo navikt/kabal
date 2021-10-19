@@ -25,14 +25,18 @@ export const Switch = ({ checked, onChange, children, testId }: SwitchProps): JS
 const StyledLabel = styled.label`
   display: flex;
   cursor: pointer;
-  padding-left: 8px;
-  padding-right: 8px;
   user-select: none;
   position: relative;
   align-items: center;
+  padding: 6px 8px 6px 8px;
+  border-radius: 8px;
+
+  &:hover {
+    background: #c9c9c9;
+  }
 
   &:first-of-type {
-    padding-left: 0;
+    margin-left: -8px;
   }
 `;
 
