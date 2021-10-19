@@ -25,11 +25,7 @@ export const ListItem = styled.li`
   padding-right: 8px;
 `;
 
-interface DocumentProps {
-  readonly isActive: boolean;
-}
-
-export const DocumentRow = styled.article<DocumentProps>`
+export const DocumentRow = styled.article`
   margin: 0;
   display: grid;
   grid-template-areas:
@@ -38,7 +34,6 @@ export const DocumentRow = styled.article<DocumentProps>`
   grid-template-columns: 350px 140px 5em 32px;
   grid-column-gap: 1em;
   align-items: center;
-  background-color: ${({ isActive }) => (isActive ? '#CCE1FF' : 'transparent')};
 `;
 
 export const DocumentDate = styled.time`
