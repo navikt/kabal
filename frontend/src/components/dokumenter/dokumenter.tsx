@@ -10,6 +10,7 @@ import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
 import { ShownDocumentContext } from './context';
 import { Header } from './header';
 import { NyeDokumenter } from './nye-dokumenter/nye-dokumenter';
+import { StyledAllDocumentsContainer, StyledAllDocumentsSizer } from './styled-components/fullvisning';
 import { DokumenterNav, DokumenterTittel } from './styled-components/header';
 import { TilknyttedeDokumenter } from './tilknyttede-dokumenter';
 
@@ -36,38 +37,63 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
     );
   }
 
-  const { tilknyttedeDokumenter, id, isAvsluttetAvSaksbehandler } = klagebehandling;
+  const { tilknyttedeDokumenter, isAvsluttetAvSaksbehandler } = klagebehandling;
 
   return (
-    <Documents
-      id={id}
-      tilknyttedeDokumenter={tilknyttedeDokumenter}
-      isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
-    />
+    <Documents tilknyttedeDokumenter={tilknyttedeDokumenter} isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler} />
   );
 };
 
 interface DocumentsProps {
-  id: string;
   tilknyttedeDokumenter: IDocumentReference[];
   isAvsluttetAvSaksbehandler: boolean;
 }
 
-const Documents = ({ tilknyttedeDokumenter, id, isAvsluttetAvSaksbehandler }: DocumentsProps) => {
+const Documents = ({ tilknyttedeDokumenter, isAvsluttetAvSaksbehandler }: DocumentsProps) => {
   const [viewAll, setViewAll] = useState(!isAvsluttetAvSaksbehandler);
   const [shownDocument, setShownDocument] = useState<IShownDokument | null>(null);
 
   const antallTilknyttede = tilknyttedeDokumenter.length;
 
+  const header = <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />;
+
+  const children = viewAll ? (
+    <AllDocuments header={header} />
+  ) : (
+    <AttachedDocuments header={header} tilknyttedeDokumenter={tilknyttedeDokumenter} />
+  );
+
   return (
     <ShownDocumentContext.Provider value={{ shownDocument, setShownDocument }}>
-      <PanelContainer data-testid="documents-panel">
-        <Header settFullvisning={setViewAll} fullvisning={viewAll} antall={antallTilknyttede} />
-        <NyeDokumenter show={viewAll} />
-        <TilknyttedeDokumenter klagebehandlingId={id} show={!viewAll} tilknyttedeDokumenter={tilknyttedeDokumenter} />
-        <AlleDokumenter show={viewAll} klagebehandlingId={id} />
-      </PanelContainer>
+      <PanelContainer data-testid="documents-panel">{children}</PanelContainer>
+
       <ShowDocument document={shownDocument} close={() => setShownDocument(null)} />
     </ShownDocumentContext.Provider>
   );
 };
+
+interface AllDocumentsProps {
+  header: JSX.Element;
+}
+
+const AllDocuments = ({ header }: AllDocumentsProps) => (
+  <StyledAllDocumentsContainer>
+    <StyledAllDocumentsSizer>
+      {header}
+      <NyeDokumenter />
+      <AlleDokumenter />
+    </StyledAllDocumentsSizer>
+  </StyledAllDocumentsContainer>
+);
+
+interface AttachedDocumentsProps {
+  tilknyttedeDokumenter: IDocumentReference[];
+  header: JSX.Element;
+}
+
+const AttachedDocuments = ({ header, tilknyttedeDokumenter }: AttachedDocumentsProps) => (
+  <section>
+    {header}
+    <TilknyttedeDokumenter tilknyttedeDokumenter={tilknyttedeDokumenter} />
+  </section>
+);

@@ -20,18 +20,10 @@ import {
   StyledValg,
 } from './styled-components';
 
-interface NyeDokumenterProps {
-  show: boolean;
-}
-
-export const NyeDokumenter = ({ show }: NyeDokumenterProps) => {
+export const NyeDokumenter = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const isFullfoert = useIsFullfoert(klagebehandlingId);
-
-  if (!show) {
-    return null;
-  }
 
   if (typeof klagebehandling === 'undefined') {
     return <NavFrontendSpinner />;

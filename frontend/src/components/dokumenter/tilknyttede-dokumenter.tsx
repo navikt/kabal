@@ -20,13 +20,12 @@ import { TilknyttedeNyeDokumenter } from './tilknyttede-nye-dokumenter';
 import { ITilknyttetDokument } from './types';
 
 interface TilknyttedeDokumenterProps {
-  klagebehandlingId: string;
-  show: boolean;
   tilknyttedeDokumenter: IDocumentReference[];
 }
 
 export const TilknyttedeDokumenter = React.memo(
-  ({ klagebehandlingId, tilknyttedeDokumenter, show }: TilknyttedeDokumenterProps) => {
+  ({ tilknyttedeDokumenter }: TilknyttedeDokumenterProps) => {
+    const klagebehandlingId = useKlagebehandlingId();
     const {
       data: lagredeTilknyttedeDokumenter,
       isLoading,
@@ -46,10 +45,6 @@ export const TilknyttedeDokumenter = React.memo(
         .filter(({ document, tilknyttet }) => tilknyttet || document.vedlegg.length !== 0);
     }, [tilknyttedeDokumenter, lagredeTilknyttedeDokumenter]);
 
-    if (!show) {
-      return null;
-    }
-
     return (
       <Container data-testid="klagebehandling-documents-tilknyttede">
         <Loading loading={isLoading || isFetching} />
@@ -68,7 +63,7 @@ export const TilknyttedeDokumenter = React.memo(
       </Container>
     );
   },
-  (previous, next) => previous.show === next.show && previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
+  (previous, next) => previous.tilknyttedeDokumenter === next.tilknyttedeDokumenter
 );
 
 interface TilknyttetDocumentProps {
