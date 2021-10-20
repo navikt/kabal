@@ -21,6 +21,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   const [finishKlagebehandling, loader] = useFinishKlagebehandlingMutation();
   const klagerName = useKlagerName();
   const [ref, setRef] = useState<HTMLElement | null>(null);
+  const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
 
   useEffect(() => {
     if (ref !== null) {
@@ -31,6 +32,9 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
   const finish = () => {
     finishKlagebehandling({ klagebehandlingId })
       .unwrap()
+      .then((res) => {
+        setHasBeenFinished(res.ferdigstilt);
+      })
       .catch((e) => {
         if (isWrappedApiError(e)) {
           setError(e.data);
@@ -38,6 +42,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
           setError(UNKNOWN_ERROR);
         }
 
+        setHasBeenFinished(false);
         cancel();
       });
   };
@@ -52,8 +57,8 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
         <Hovedknapp
           mini
           onClick={finish}
-          spinner={loader.isLoading}
-          disabled={loader.isLoading}
+          spinner={hasBeenFinished || loader.isLoading}
+          disabled={hasBeenFinished || loader.isLoading}
           data-testid="confirm-finish-klagebehandling-button"
         >
           Fullfør
