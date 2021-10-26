@@ -1,0 +1,32 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: kabal-frontend
+  namespace: klage
+  labels:
+    team: klage
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "100M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+spec:
+  image: {{IMAGE}}
+  replicas:
+    min: 2
+    max: 3
+  azure:
+    application:
+      enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: klage-redis-fe
+        - application: kabal-api
+      external:
+        - host: login.microsoftonline.com
+  ingresses:
+  {{#each ingresses as |url|}}
+    - {{url}}
+  {{/each}}
+  envFrom:
+    - secret: kabal-session-key
+    - secret: slack-url
