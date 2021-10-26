@@ -1,12 +1,12 @@
-name: Deploy main to dev (on push)
-
+name: Deploy (dev -> e2e -> prod)
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend:${{ github.sha }}
+
 jobs:
   deploytodev:
     runs-on: ubuntu-latest
@@ -49,7 +49,6 @@ jobs:
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SESSION_KEY: ${{ secrets.klage-session-key }}
         run: |
           cat Dockerfile
           docker build --tag ${IMAGE} .
@@ -59,11 +58,10 @@ jobs:
         name: Checkout code
       - uses: nais/deploy/actions/deploy@master
         env:
-          SESSION_KEY: ${{ secrets.klage-session-key }}
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/dev.yaml
-          VARS: nais/vars.yaml
+          RESOURCE: nais/nais.yaml
+          VARS: nais/dev.yaml
   e2etest:
     name: E2E-test av deploy
     needs: deploytodev
@@ -73,17 +71,18 @@ jobs:
       - name: Set UUID
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1.1
-      - name: Run acceptance tests
+      - name: Run E2E tests
         uses: nais/deploy/actions/deploy@master
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          VAR: app=kabal,jobname=klage-job-${{ steps.generate-uuid.outputs.uuid }}
+          VAR: app=kabal-e2e-tests,jobname=kabal-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
           TEAM: klage
-          RESOURCE: deploy/e2ejob.yml
+          RESOURCE: nais/e2ejob.yaml
         timeout-minutes: 5
   deployprod:
-    name: Deploy to prod-gcp
+    name: Deploy to prod-gcp (disabled)
+    if: ${{ false }}
     needs: e2etest
     runs-on: ubuntu-latest
     steps:
@@ -93,9 +92,8 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: nais/prod.yaml
-          VARS: nais/prod.json
-          SESSION_KEY: ${{ secrets.klage-session-key }}
+          RESOURCE: nais/nais.yaml
+          VARS: nais/prod.yaml
       - name: Generate release version
         run: |
           TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)

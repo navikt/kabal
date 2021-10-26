@@ -1,10 +1,11 @@
-name: Deploy branch to dev (manual)
+name: Manual deploy to dev
 
 on:
   workflow_dispatch:
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend:${{ github.sha }}
+
 jobs:
   deploytodev:
     runs-on: ubuntu-latest
@@ -47,7 +48,6 @@ jobs:
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SESSION_KEY: ${{ secrets.klage-session-key }}
         run: |
           cat Dockerfile
           docker build --tag ${IMAGE} .
@@ -57,8 +57,25 @@ jobs:
         name: Checkout code
       - uses: nais/deploy/actions/deploy@master
         env:
-          SESSION_KEY: ${{ secrets.klage-session-key }}
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/dev.yaml
-          VARS: nais/vars.yaml
+          RESOURCE: nais/nais.yaml
+          VARS: nais/dev.yaml
+  e2etest:
+    name: E2E-test av deploy
+    needs: deploytodev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set UUID
+        id: generate-uuid
+        uses: filipstefansson/uuid-action@v1.1
+      - name: Run E2E tests
+        uses: nais/deploy/actions/deploy@master
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          VAR: app=kabal-e2e-tests,jobname=kabal-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
+          TEAM: klage
+          RESOURCE: nais/e2ejob.yaml
+        timeout-minutes: 5

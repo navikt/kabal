@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         job-name: {{jobname}}
-        app: kabal-e2e-tests
+        app: {{app}}
     spec:
       imagePullSecrets:
         - name: gpr-credentials

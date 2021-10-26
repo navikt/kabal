@@ -1,10 +1,11 @@
-name: Deploy to production (manual)
+name: Manual deploy to production
 
 on:
   workflow_dispatch:
 
 env:
-  BASEIMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/kabal-frontend:${{ github.sha }}
+
 jobs:
   deployprod:
     name: Deploy to prod-gcp
@@ -12,17 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
         name: Checkout code
-      - name: Lag tag for image
-        run: echo "TAG=$( git log -1 --pretty=oneline main | cut -d ' ' -f 1)" >> $GITHUB_ENV
-      - name: Lag full image referanse
-        run: echo "IMAGE=${BASEIMAGE}:${TAG}" >> $GITHUB_ENV
       - uses: nais/deploy/actions/deploy@master
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: nais/prod.yaml
-          VARS: nais/prod.json
-          SESSION_KEY: ${{ secrets.klage-session-key }}
+          RESOURCE: nais/nais.yaml
+          VARS: nais/prod.yaml
       - name: Generate release version
         run: |
           TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
