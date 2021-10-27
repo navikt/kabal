@@ -1,10 +1,5 @@
-e2e/auth
-oppgaver.db
 node_modules
-coverage
-secrets/*
-.env.development
 dist
+build
 .DS_Store
 .idea
-build
