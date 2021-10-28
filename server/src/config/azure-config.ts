@@ -3,7 +3,7 @@ import { AuthorizationParameters, ClientMetadata } from 'openid-client';
 import { requiredEnvString, requiredEnvUrl } from './env-var';
 import { applicationDomain } from './env';
 
-export const callbackPath = '/oauth2/callback'; //requiredEnvString('AZURE_APP_CALLBACK_PATH');
+export const callbackPath = '/oauth2/callback';
 export const callbackUrl = applicationDomain + callbackPath;
 
 export const discovery_url = requiredEnvUrl('AZURE_APP_WELL_KNOWN_URL');

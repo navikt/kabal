@@ -18,7 +18,7 @@ export const guardMiddleware =
 
     try {
       const access_token = await getAccessTokenWithRefresh(authClient, sessionId);
-      req.headers['Authorization'] = access_token;
+      req.headers['Authorization'] = access_token; // Misuse the Authorization header to not query Redis twice for the same data for the same request.
       next();
     } catch (error) {
       if (error instanceof Error || typeof error === 'string') {

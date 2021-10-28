@@ -23,12 +23,12 @@ export const kvalitetsvurderingApi = createApi({
   tagTypes: ['kvalitetsvurdering'],
   endpoints: (builder) => ({
     getKvalitetsvurdering: builder.query<IKvalitetsvurdering, string>({
-      query: (id) => `/api/klagebehandlinger/${id}/kvalitetsvurdering`,
+      query: (id) => `/api/kabal-api/klagebehandlinger/${id}/kvalitetsvurdering`,
       providesTags: ['kvalitetsvurdering'],
     }),
     updateKvalitetsvurdering: builder.mutation<{ modified: string }, IKvalitetsvurdering>({
       query: ({ klagebehandlingId, ...kvalitetsVurdering }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/kvalitetsvurdering/editerbare`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/kvalitetsvurdering/editerbare`,
         method: 'PUT',
         body: kvalitetsVurdering,
         validateStatus: ({ ok }) => ok,

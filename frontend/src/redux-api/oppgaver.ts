@@ -111,7 +111,7 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/ansatte/${navIdent}/klagebehandlinger?${query}`;
+        return `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
       providesTags: (result) =>
         typeof result !== 'undefined'
@@ -127,13 +127,13 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+        return `/api/kabal-api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
     }),
     personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
       query: ({ navIdent, ...queryParams }) => ({
-        url: `/api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
+        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
         method: 'POST', // Personsøk er POST for å ikke sende fnr inn i URLen, som blir logget.
         body: queryParams,
       }),
@@ -141,7 +141,7 @@ export const klagebehandlingerApi = createApi({
     }),
     tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, enhetId }) => ({
-        url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
+        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
         method: 'POST',
         body: {
           navIdent,
@@ -182,7 +182,7 @@ export const klagebehandlingerApi = createApi({
     }),
     fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent }) => ({
-        url: `/api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
+        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
         method: 'POST',
       }),
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {

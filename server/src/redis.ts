@@ -3,6 +3,7 @@ import { redisConfig } from './config/redis-config';
 
 const client = createClient(redisConfig.url, {
   db: 1,
+  port: redisConfig.port,
 });
 
 client.on('error', (error: Error) => {

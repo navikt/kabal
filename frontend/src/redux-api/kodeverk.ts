@@ -36,7 +36,7 @@ export const kodeverkApi = createApi({
   baseQuery: staggeredBaseQuery,
   endpoints: (builder) => ({
     getKodeverk: builder.query<IKodeverk, void>({
-      query: () => '/api/kodeverk',
+      query: () => '/api/kabal-api/kodeverk',
     }),
   }),
 });

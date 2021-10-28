@@ -1,6 +1,5 @@
 import path from 'path';
-import { getEnvironmentVersion } from './env';
-import { requiredEnvString, requiredEnvUrl } from './env-var';
+import { requiredEnvUrl } from './env-var';
 
 export const slack = {
   url: requiredEnvUrl('SLACK_URL'),
@@ -8,13 +7,7 @@ export const slack = {
   messagePrefix: 'KABAL frontend NodeJS - ',
 };
 
-export const KABAL_API_CLIENT_ID = requiredEnvString(
-  getEnvironmentVersion(
-    'DOWNSTREAM_API_CLIENT_ID_LOCAL',
-    'DOWNSTREAM_API_CLIENT_ID_DEV',
-    'DOWNSTREAM_API_CLIENT_ID_PROD'
-  )
-);
+export const API_CLIENT_IDS = ['kabal-api', 'kabal-smart-editor-api', 'kabal-json-to-pdf'];
 
 export const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
 export const serverDirectoryPath = cwd;
