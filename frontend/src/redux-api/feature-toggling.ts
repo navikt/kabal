@@ -6,7 +6,7 @@ export const featureTogglingApi = createApi({
   baseQuery: staggeredBaseQuery,
   endpoints: (builder) => ({
     getFeatureTogglingEditor: builder.query<boolean, void>({
-      query: () => '/api/featuretoggle/klage.smarteditor',
+      query: () => '/api/kabal-api/featuretoggle/klage.smarteditor',
     }),
   }),
 });

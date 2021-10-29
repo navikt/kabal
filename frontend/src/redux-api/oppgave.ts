@@ -28,12 +28,12 @@ export const klagebehandlingApi = createApi({
   tagTypes: ['oppgave', 'dokumenter', 'tilknyttedeDokumenter'],
   endpoints: (builder) => ({
     getKlagebehandling: builder.query<IKlagebehandling, string>({
-      query: (id) => `/api/klagebehandlinger/${id}/detaljer`,
+      query: (id) => `/api/kabal-api/klagebehandlinger/${id}/detaljer`,
       providesTags: ['oppgave'],
     }),
     updateUtfall: builder.mutation<{ modified: string }, IKlagebehandlingUtfallUpdate>({
       query: ({ klagebehandlingId, utfall }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/utfall`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/utfall`,
         method: 'PUT',
         body: { utfall },
       }),
@@ -53,7 +53,7 @@ export const klagebehandlingApi = createApi({
     }),
     updateHjemler: builder.mutation<{ modified: string }, IKlagebehandlingHjemlerUpdate>({
       query: ({ klagebehandlingId, hjemler }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/hjemler`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/hjemler`,
         method: 'PUT',
         body: { hjemler },
       }),
@@ -89,17 +89,17 @@ export const klagebehandlingApi = createApi({
             arrayFormat: 'comma',
           }
         );
-        return `/api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter?${query}`;
+        return `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter?${query}`;
       },
       providesTags: ['dokumenter'],
     }),
     getTilknyttedeDokumenter: builder.query<IDocumentsResponse, string>({
-      query: (klagebehandlingId) => `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
+      query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
     tilknyttDocument: builder.mutation<ITilknyttDocumentResponse, ITilknyttDocumentParams>({
       query: ({ klagebehandlingId, ...documentReference }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger`,
         method: 'POST',
         body: documentReference,
         validateStatus: ({ ok }) => ok,
@@ -126,7 +126,7 @@ export const klagebehandlingApi = createApi({
     }),
     removeTilknyttetDocument: builder.mutation<{ modified: string }, ITilknyttDocumentParams>({
       query: ({ klagebehandlingId, journalpostId, dokumentInfoId }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
         method: 'DELETE',
         validateStatus: ({ ok }) => ok,
       }),
@@ -149,7 +149,7 @@ export const klagebehandlingApi = createApi({
     }),
     finishKlagebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishKlagebehandlingInput>({
       query: ({ klagebehandlingId }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/fullfoer`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/fullfoer`,
         method: 'POST',
       }),
       invalidatesTags: ['oppgave'],
@@ -168,14 +168,14 @@ export const klagebehandlingApi = createApi({
       },
     }),
     getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereInput>({
-      query: ({ id, tema }) => `/api/ansatte/${id}/medunderskrivere/${tema}`,
+      query: ({ id, tema }) => `/api/kabal-api/ansatte/${id}/medunderskrivere/${tema}`,
     }),
     getMedunderskriverInfo: builder.query<IMedunderskriverInfoResponse, string>({
-      query: (klagebehandlingId) => `/api/klagebehandlinger/${klagebehandlingId}/medunderskriverinfo`,
+      query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverinfo`,
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISettMedunderskriverParams>({
       query: ({ klagebehandlingId, medunderskriver }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
         method: 'PUT',
         body: {
           medunderskriverident: medunderskriver?.ident ?? null,
@@ -235,7 +235,7 @@ export const klagebehandlingApi = createApi({
     }),
     switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, ISwitchMedunderskriverflytParams>({
       query: ({ klagebehandlingId }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/send`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/send`,
         method: 'POST',
         validateStatus: ({ ok }) => ok,
       }),
@@ -256,7 +256,7 @@ export const klagebehandlingApi = createApi({
         formData.append('vedlegg', file);
 
         return {
-          url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
+          url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
           method: 'POST',
           body: formData,
         };
@@ -283,7 +283,7 @@ export const klagebehandlingApi = createApi({
     }),
     deleteFile: builder.mutation<IUploadFileResponse, IDeleteFileParams>({
       query: ({ klagebehandlingId }) => ({
-        url: `/api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/vedlegg`,
         method: 'DELETE',
       }),
       onQueryStarted: async ({ klagebehandlingId }, { dispatch, queryFulfilled }) => {

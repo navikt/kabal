@@ -20,6 +20,7 @@ export const authMiddleware =
     setSessionCookie(res, sessionId, signature); // Refresh the current session cookie on every request.
 
     try {
+      // Misuse the Authorization header to not query Redis twice for the same data for the same request.
       const internalAccessToken = req.headers['Authorization'];
       const access_token =
         typeof internalAccessToken === 'string'

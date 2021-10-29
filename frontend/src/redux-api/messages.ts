@@ -26,14 +26,14 @@ export const messagesApi = createApi({
   tagTypes: ['messages'],
   endpoints: (builder) => ({
     getMessages: builder.query<IMessage[], string>({
-      query: (id) => `/api/klagebehandlinger/${id}/meldinger`,
+      query: (id) => `/api/kabal-api/klagebehandlinger/${id}/meldinger`,
       providesTags: ['messages'],
     }),
     postMessage: builder.mutation<IMessage, IPostMessage>({
       invalidatesTags: ['messages'],
       query: ({ klagebehandlingId, ...body }) => ({
         method: 'POST',
-        url: `/api/klagebehandlinger/${klagebehandlingId}/meldinger`,
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/meldinger`,
         body,
       }),
       onQueryStarted: async ({ klagebehandlingId, ...newMessage }, { dispatch, queryFulfilled }) => {

@@ -19,14 +19,14 @@ export const getSessionIdAndSignature = (req: Request): [string, string] | null 
     return null;
   }
 
-  const [session, signature, ...rest] = sessionCookie.split('.');
+  const [sessionId, signature, ...rest] = sessionCookie.split('.');
 
-  if (typeof session !== 'string' || typeof signature !== 'string' || rest.length !== 0) {
+  if (typeof sessionId !== 'string' || typeof signature !== 'string' || rest.length !== 0) {
     return null;
   }
 
-  if (validateSessionSignature(session, signature)) {
-    return [session, signature];
+  if (validateSessionSignature(sessionId, signature)) {
+    return [sessionId, signature];
   }
 
   return null;
@@ -61,9 +61,9 @@ export const setSessionCookie = (res: Response, sessionId: string, signature: st
 
 export const generateSessionIdAndSignature = (): [string, string] => {
   const sessionBytes = crypto.randomBytes(SESSION_BYTE_SIZE);
-  const session = sessionBytes.toString(SESSION_ENCODING);
+  const sessionId = sessionBytes.toString(SESSION_ENCODING);
   const hmac = crypto.createHmac(HMAC_ALGORITHM, serverConfig.sessionKey);
   const signature = hmac.update(sessionBytes).digest(SESSION_ENCODING);
 
-  return [session, signature];
+  return [sessionId, signature];
 };

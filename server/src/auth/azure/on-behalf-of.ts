@@ -1,13 +1,18 @@
 import { Client, GrantBody } from 'openid-client';
 import { client_id } from '../../config/azure-config';
-import { KABAL_API_CLIENT_ID } from '../../config/config';
+import { serverConfig } from '../../config/server-config';
 
 const oboCache: Map<string, [string, number]> = new Map();
 
-const scope = `api://${KABAL_API_CLIENT_ID}/.default`;
+export const getOnBehalfOfAccessToken = async (
+  authClient: Client,
+  access_token: string,
+  appName: string
+): Promise<string> => {
+  const scope = `api://${serverConfig.cluster}.klage.${appName}/.default`;
+  const cacheKey = `${access_token}-${appName}`;
 
-export const getOnBehalfOfAccessToken = async (authClient: Client, access_token: string): Promise<string> => {
-  const cacheHit = oboCache.get(access_token);
+  const cacheHit = oboCache.get(cacheKey);
   if (typeof cacheHit !== 'undefined') {
     const [cached_obo_access_token, expires_at] = cacheHit;
 
@@ -15,7 +20,7 @@ export const getOnBehalfOfAccessToken = async (authClient: Client, access_token:
       return cached_obo_access_token;
     }
 
-    oboCache.delete(access_token);
+    oboCache.delete(cacheKey);
   }
 
   if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
@@ -45,7 +50,7 @@ export const getOnBehalfOfAccessToken = async (authClient: Client, access_token:
     }
 
     if (typeof expires_at === 'number') {
-      oboCache.set(access_token, [obo_access_token, expires_at]);
+      oboCache.set(cacheKey, [obo_access_token, expires_at]);
     }
 
     return obo_access_token;
