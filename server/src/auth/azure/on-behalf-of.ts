@@ -1,8 +1,7 @@
 import { Client, GrantBody } from 'openid-client';
 import { client_id } from '../../config/azure-config';
 import { serverConfig } from '../../config/server-config';
-
-const oboCache: Map<string, [string, number]> = new Map();
+import { now, oboCache } from './on-behalf-of-cache';
 
 export const getOnBehalfOfAccessToken = async (
   authClient: Client,
@@ -67,5 +66,3 @@ export const getOnBehalfOfAccessToken = async (
     throw new Error('Unknown error while getting on-behalf-of access token.');
   }
 };
-
-const now = () => Math.round(Date.now() / 1000);
