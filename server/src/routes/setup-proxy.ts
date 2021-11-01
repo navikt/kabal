@@ -7,9 +7,9 @@ import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCook
 import { loginRedirect } from '../auth/login-redirect';
 import { API_CLIENT_IDS } from '../config/config';
 
-const router = express.Router();
-
 export const setupProxy = (authClient: Client) => {
+  const router = express.Router();
+
   const headers = isDeployedToProd
     ? undefined
     : {
