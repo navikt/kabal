@@ -1,7 +1,6 @@
 import express from 'express';
 import { Client } from 'openid-client';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { applicationDomain, isDeployedToProd } from '../config/env';
 import { getOnBehalfOfAccessToken } from '../auth/azure/on-behalf-of';
 import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from '../auth/session-utils';
 import { loginRedirect } from '../auth/login-redirect';
@@ -9,12 +8,6 @@ import { API_CLIENT_IDS } from '../config/config';
 
 export const setupProxy = (authClient: Client) => {
   const router = express.Router();
-
-  const headers = isDeployedToProd
-    ? undefined
-    : {
-        origin: applicationDomain,
-      };
 
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
@@ -54,7 +47,6 @@ export const setupProxy = (authClient: Client) => {
         pathRewrite: {
           [`^/api/${appName}`]: '',
         },
-        headers,
         onError: (err, req, res) => {
           res.statusCode = 500;
           res.setHeader('Content-Type', 'application/json');
