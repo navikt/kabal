@@ -93,13 +93,9 @@ export interface ISaksbehandler {
 }
 
 export interface Resultat {
-  brevMottakere: IBrevMottaker[];
-  ferdigstilt: string | null; // LocalDateTime
   file: IVedlegg | null;
-  grunn: string | null;
   hjemler: string[];
   id: string;
-  opplastet: string | null; // LocalDateTime
   utfall: Utfall | null;
 }
 
