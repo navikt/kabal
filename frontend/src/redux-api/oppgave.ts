@@ -160,7 +160,6 @@ export const klagebehandlingApi = createApi({
         const { data } = await queryFulfilled;
         dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
-            klagebehandling.resultat.ferdigstilt = data.modified;
             klagebehandling.modified = data.modified;
             klagebehandling.isAvsluttetAvSaksbehandler = true;
           })
@@ -270,7 +269,6 @@ export const klagebehandlingApi = createApi({
               size: file.size,
               opplastet,
             };
-            klagebehandling.resultat.opplastet = opplastet;
           })
         );
 
@@ -290,7 +288,6 @@ export const klagebehandlingApi = createApi({
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
             klagebehandling.resultat.file = null;
-            klagebehandling.resultat.opplastet = null;
           })
         );
 
