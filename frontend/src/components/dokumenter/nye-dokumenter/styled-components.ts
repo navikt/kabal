@@ -28,8 +28,8 @@ export const StyledNyeDokumenter = styled.div`
 
 export const StyledNewDocument = styled.li`
   display: grid;
-  grid-template-columns: 350px 140px 5em 32px;
-  grid-template-areas: 'title type date options';
+  grid-template-columns: auto 5em 32px;
+  grid-template-areas: 'title date options';
   grid-column-gap: 1em;
 `;
 

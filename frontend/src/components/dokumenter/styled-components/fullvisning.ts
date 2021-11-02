@@ -31,7 +31,7 @@ export const DocumentRow = styled.article`
   grid-template-areas:
     'title tema date checkbox'
     'vedlegg vedlegg vedlegg vedlegg';
-  grid-template-columns: 350px 140px 5em 32px;
+  grid-template-columns: auto 140px 5em 32px;
   grid-column-gap: 1em;
   align-items: center;
 `;
@@ -50,6 +50,8 @@ export const DocumentTitle = styled.h1`
   cursor: pointer;
   color: #0067c5;
   grid-area: title;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const StyledDocumentCheckbox = styled(StyledCheckbox)`
@@ -95,4 +97,12 @@ export const StyledLoadMoreButton = styled(Knapp)`
   margin-top: 1em;
   margin-left: 16px;
   margin-right: 16px;
+`;
+
+export const StyledAllDocumentsSizer = styled.section`
+  width: 760px;
+`;
+
+export const StyledAllDocumentsContainer = styled.section`
+  display: flex;
 `;
