@@ -9,9 +9,10 @@ interface DropdownProps {
   options: IKodeverkVerdi[];
   onChange: (id: string | null, active: boolean) => void;
   open: boolean;
+  fixedWidth?: boolean;
 }
 
-export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): JSX.Element | null => {
+export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: DropdownProps): JSX.Element | null => {
   if (!open) {
     return null;
   }
@@ -21,7 +22,7 @@ export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): 
   };
 
   return (
-    <StyledList>
+    <StyledList width={fixedWidth === true ? '275px' : 'auto'}>
       <StyledTopListItem>
         <Knapp mini onClick={reset}>
           Nullstill
@@ -29,7 +30,12 @@ export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): 
       </StyledTopListItem>
       {options.map(({ id, beskrivelse }) => (
         <StyledListItem key={id}>
-          <Filter active={selected.includes(id)} filterId={id} onChange={onChange}>
+          <Filter
+            active={selected.includes(id)}
+            filterId={id}
+            onChange={onChange}
+            whiteSpace={fixedWidth === true ? 'normal' : 'nowrap'}
+          >
             {beskrivelse}
           </Filter>
         </StyledListItem>
@@ -38,7 +44,7 @@ export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): 
   );
 };
 
-const StyledList = styled.ul`
+const StyledList = styled.ul<{ width: string }>`
   display: block;
   position: absolute;
   top: 100%;
@@ -56,6 +62,7 @@ const StyledList = styled.ul`
   overflow-x: hidden;
   text-overflow: ellipsis;
   z-index: 1;
+  width: ${({ width }) => width};
 `;
 
 const StyledListItem = styled.li`
