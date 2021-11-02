@@ -10,9 +10,16 @@ interface FilterDropdownProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   children: string;
+  fixedWidth?: boolean;
 }
 
-export const FilterDropdown = ({ options, selected, onChange, children }: FilterDropdownProps): JSX.Element => {
+export const FilterDropdown = ({
+  options,
+  selected,
+  onChange,
+  children,
+  fixedWidth,
+}: FilterDropdownProps): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
 
@@ -31,7 +38,7 @@ export const FilterDropdown = ({ options, selected, onChange, children }: Filter
       <ToggleButton theme={{ open }} onClick={() => setOpen(!open)}>
         {children} ({selected.length})
       </ToggleButton>
-      <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} />
+      <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} fixedWidth={fixedWidth} />
     </Container>
   );
 };
