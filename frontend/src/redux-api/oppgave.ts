@@ -161,7 +161,7 @@ export const klagebehandlingApi = createApi({
         dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
             klagebehandling.modified = data.modified;
-            klagebehandling.isAvsluttetAvSaksbehandler = true;
+            klagebehandling.isAvsluttetAvSaksbehandler = data.isAvsluttetAvSaksbehandler;
           })
         );
       },
