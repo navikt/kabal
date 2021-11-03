@@ -55,4 +55,19 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
   ],
   devtool: 'source-map',
+  devServer: {
+    contentBase: path.resolve(__dirname, 'public'),
+    hot: true,
+    host: '0.0.0.0',
+    port: 8061,
+    historyApiFallback: true,
+    proxy: {
+      '/api': {
+        target: 'https://kabal.dev.nav.no',
+        secure: false,
+        changeOrigin: true,
+        withCredentials: true,
+      },
+    },
+  },
 };
