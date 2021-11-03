@@ -1,28 +1,19 @@
 {
   "name": "kabal",
   "version": "0.0.1",
-  "description": "KABAL - Klage og Anke Behandling",
-  "main": "index.tsx",
+  "description": "KABAL - Klage- og ankebehandling",
   "scripts": {
-    "clean": "rimraf dist",
     "build:js": "webpack --mode production",
     "build:html": "copyfiles -f ./public/index.html dist",
     "build": "npm run build:js && npm run build:html",
     "start": "env-cmd -f .env.development webpack-dev-server --mode development",
-    "local": "env-cmd -f .env.development webpack-dev-server --mode development",
+    "local": "npm start",
     "test": "jest",
     "testcov": "jest --coverage --no-cache",
     "lint": "npx eslint src --color",
     "lint-fix": "npx eslint src --color --fix",
     "lint-staged": "npx lint-staged",
     "prepare": "cd .. && husky install frontend/.husky"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "coverageReporters": [
-      "json",
-      "html"
-    ]
   },
   "license": "MIT",
   "devDependencies": {
