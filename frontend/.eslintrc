@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["Dockerfile", "*.json", "*.md", ".*", "webpack.*", "jest.*"],
   "extends": [
     "prettier",
     "eslint:recommended",

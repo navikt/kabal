@@ -9,12 +9,8 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
+        loader: 'swc-loader',
         exclude: /node_modules/,
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
       },
       {
         test: /\.less$/,
@@ -59,17 +55,4 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
   ],
   devtool: 'source-map',
-  devServer: {
-    contentBase: path.resolve(__dirname, 'public'),
-    hot: true,
-    host: '0.0.0.0',
-    port: 8060,
-    historyApiFallback: true,
-    proxy: {
-      '/api': {
-        target: 'http://apimock:3000',
-        pathRewrite: { '^/api': '' },
-      },
-    },
-  },
 };
