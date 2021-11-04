@@ -33,7 +33,7 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
     finishKlagebehandling({ klagebehandlingId })
       .unwrap()
       .then((res) => {
-        setHasBeenFinished(res.ferdigstilt);
+        setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
       })
       .catch((e) => {
         if (isWrappedApiError(e)) {

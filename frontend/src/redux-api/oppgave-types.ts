@@ -26,7 +26,7 @@ export interface IDocumentReference {
 
 export interface IVedtakFullfoertResponse {
   modified: string; // LocalDateTime;
-  ferdigstilt: boolean;
+  isAvsluttetAvSaksbehandler: boolean;
 }
 
 export interface IFinishKlagebehandlingInput {
