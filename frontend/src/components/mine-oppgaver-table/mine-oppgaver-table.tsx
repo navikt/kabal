@@ -24,6 +24,7 @@ export const MineOppgaverTable = () => {
           navIdent: bruker.info.navIdent,
           tildeltSaksbehandler: bruker.info.navIdent,
           projeksjon: 'UTVIDET',
+          enhet: bruker.valgtEnhetView.id,
         };
 
   const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {

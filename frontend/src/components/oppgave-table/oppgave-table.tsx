@@ -36,7 +36,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
     hjemler: [],
     sortDescending: false,
   });
-  const { data: userData } = useGetBrukerQuery();
+  const { data: bruker } = useGetBrukerQuery();
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
@@ -50,7 +50,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
-    typeof userData === 'undefined'
+    typeof bruker === 'undefined'
       ? skipToken
       : {
           start: from,
@@ -61,7 +61,8 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           temaer,
           typer,
           hjemler,
-          navIdent: userData.info.navIdent,
+          navIdent: bruker.info.navIdent,
+          enhet: bruker.valgtEnhetView.id,
         };
 
   const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {

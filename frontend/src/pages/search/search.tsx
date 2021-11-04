@@ -25,6 +25,7 @@ export const SearchPage = () => {
       start: 0,
       fnr: query,
       soekString: query,
+      enhet: bruker.valgtEnhetView.id,
     })
       .unwrap()
       .then(setPersonsoekResultat)
