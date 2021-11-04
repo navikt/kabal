@@ -74,6 +74,7 @@ export interface LoadKlagebehandlingerParams {
   ferdigstiltDaysAgo?: number;
   tildeltSaksbehandler?: string;
   projeksjon?: 'UTVIDET';
+  enhet: string | null;
 }
 
 export interface TildelSaksbehandlerParams {
@@ -98,6 +99,7 @@ export interface LoadPersonSoekParams {
   start: number;
   fnr: string;
   soekString: string;
+  enhet: string | null;
 }
 
 export const klagebehandlingerApi = createApi({

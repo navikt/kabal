@@ -25,6 +25,7 @@ export const FullfoerteOppgaverTable = () => {
           tildeltSaksbehandler: bruker.info.navIdent,
           ferdigstiltDaysAgo: 7,
           projeksjon: 'UTVIDET',
+          enhet: bruker.valgtEnhetView.id,
         };
 
   const doneQueryParams: typeof skipToken | LoadKlagebehandlingerParams =
