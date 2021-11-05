@@ -29,6 +29,8 @@ export const getSessionIdAndSignature = (req: Request): [string, string] | null 
     return [sessionId, signature];
   }
 
+  console.warn(`Session signature invalid for session "${sessionId}.${signature}".`);
+
   return null;
 };
 

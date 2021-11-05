@@ -6,6 +6,8 @@ import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
 import { klagebehandlingApi } from '../redux-api/oppgave';
 import { klagebehandlingerApi } from '../redux-api/oppgaver';
+import { smartEditorApi } from '../redux-api/smart-editor';
+import { smartEditorIdApi } from '../redux-api/smart-editor-id';
 
 export const rootReducer = combineReducers({
   [klagebehandlingerApi.reducerPath]: klagebehandlingerApi.reducer,
@@ -15,6 +17,8 @@ export const rootReducer = combineReducers({
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
   [featureTogglingApi.reducerPath]: featureTogglingApi.reducer,
+  [smartEditorApi.reducerPath]: smartEditorApi.reducer,
+  [smartEditorIdApi.reducerPath]: smartEditorIdApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

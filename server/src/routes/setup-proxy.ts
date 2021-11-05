@@ -57,7 +57,7 @@ export const setupProxy = (authClient: Client) => {
           );
           res.end();
         },
-        logLevel: 'error',
+        logLevel: 'warn',
         changeOrigin: true,
       })
     );

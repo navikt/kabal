@@ -15,7 +15,7 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ klagebehandlingId, vedlegg, document }) => {
-    const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+    const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
     const onClick = () =>
       setShownDocument({

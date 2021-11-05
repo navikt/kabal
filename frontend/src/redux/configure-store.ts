@@ -7,6 +7,8 @@ import { kvalitetsvurderingApi } from '../redux-api/kvalitetsvurdering';
 import { messagesApi } from '../redux-api/messages';
 import { klagebehandlingApi } from '../redux-api/oppgave';
 import { klagebehandlingerApi } from '../redux-api/oppgaver';
+import { smartEditorApi } from '../redux-api/smart-editor';
+import { smartEditorIdApi } from '../redux-api/smart-editor-id';
 import { RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
@@ -34,6 +36,8 @@ export const reduxStore = configureStore({
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
       featureTogglingApi.middleware,
+      smartEditorApi.middleware,
+      smartEditorIdApi.middleware,
     ]),
 });
 

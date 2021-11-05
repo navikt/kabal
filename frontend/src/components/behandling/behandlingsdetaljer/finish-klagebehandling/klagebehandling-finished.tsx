@@ -10,7 +10,7 @@ interface KlagebehandlingFinishedProps {
 
 export const KlagebehandlingFinished = ({ utfall }: KlagebehandlingFinishedProps) => (
   <StyledPaddedContent>
-    <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>{' '}
+    <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>
     <StyledAlertstripe type="suksess">{getSucessMessage(utfall)}</StyledAlertstripe>
     <NavLink className="knapp knapp--mini" to="/oppgaver/1">
       Tilbake til oppgaver

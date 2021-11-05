@@ -6,7 +6,7 @@ import { PanelToggles } from './types';
 export const Klagebehandling = () => {
   const [toggles, setPanelToggles] = useState<PanelToggles>({
     documents: true,
-    brevutforming: true,
+    smartEditor: true,
     behandling: true,
     kvalitetsvurdering: true,
   });

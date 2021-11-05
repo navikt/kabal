@@ -23,7 +23,7 @@ export const Document = React.memo<DocumentProps>(
 
     const url = useMemo(
       () =>
-        `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+        `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
       [klagebehandlingId, journalpostId, dokumentInfoId]
     );
 
