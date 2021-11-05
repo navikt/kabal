@@ -113,7 +113,7 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
       providesTags: (result) =>
         typeof result !== 'undefined'
@@ -129,13 +129,13 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
     }),
     personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
       query: ({ navIdent, ...queryParams }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
+        url: `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger/personsoek`,
         method: 'POST', // Personsøk er POST for å ikke sende fnr inn i URLen, som blir logget.
         body: queryParams,
       }),
