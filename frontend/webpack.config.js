@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -33,14 +32,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              publicPath: '/',
-            },
-          },
-        ],
+        type: 'asset/resource'
       },
     ],
   },
@@ -51,12 +43,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-  ],
   devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'public'),
     hot: true,
     host: '0.0.0.0',
     port: 8061,
