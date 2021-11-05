@@ -24,10 +24,10 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
       </TogglePanelButton>
       {featureTogglingEditor === true && (
         <TogglePanelButton
-          panel={'brevutforming'}
-          checked={toggles.brevutforming}
+          panel={'smartEditor'}
+          checked={toggles.smartEditor}
           setPanel={togglePanel}
-          testId="klagebehandling-control-panel-toggle-brevutforming"
+          testId="klagebehandling-control-panel-toggle-smart-editor"
         >
           Brevutforming
         </TogglePanelButton>

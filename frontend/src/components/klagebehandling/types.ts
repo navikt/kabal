@@ -1,6 +1,6 @@
 export interface PanelToggles {
   documents: boolean;
-  brevutforming: boolean;
+  smartEditor: boolean;
   behandling: boolean;
   kvalitetsvurdering: boolean;
 }

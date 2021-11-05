@@ -76,7 +76,7 @@ const TilknyttetDocument = ({ dokument, tilknyttet, tilknyttedeDokumenter }: Til
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const klagebehandlingId = useKlagebehandlingId();
 
-  const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
+  const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({
@@ -154,7 +154,7 @@ interface VedleggProps {
 const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId }: VedleggProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
-  const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+  const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({

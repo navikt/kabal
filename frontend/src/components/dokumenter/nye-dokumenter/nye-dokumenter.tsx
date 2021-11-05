@@ -9,9 +9,10 @@ import { IVedlegg } from '../../../redux-api/oppgave-state-types';
 import { ShownDocumentContext } from '../context';
 import { DocumentButton } from '../styled-components/document-button';
 import { DocumentTitle } from '../styled-components/fullvisning';
+import { DeleteDocumentButton } from './delete-document-button';
+import { SmartEditorDocument } from './smart-editor-document';
 import {
   StyledDate,
-  StyledDeleteButton,
   StyledList,
   StyledListHeader,
   StyledNewDocument,
@@ -37,9 +38,10 @@ export const NyeDokumenter = () => {
     <StyledNyeDokumenter data-testid="klagebehandling-documents-new">
       <ListHeader isFullfoert={isFullfoert} />
       <StyledList data-testid="klagebehandling-documents-new-list">
-        {klagebehandling.resultat.file !== null && (
+        {klagebehandling.resultat.file && (
           <NewDocument file={klagebehandling.resultat.file} klagebehandlingId={klagebehandlingId} />
         )}
+        <SmartEditorDocument klagebehandlingId={klagebehandlingId} />
       </StyledList>
     </StyledNyeDokumenter>
   );
@@ -56,7 +58,7 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
 
   return (
     <StyledListHeader>
-      <StyledTitle>Nye dokumenter</StyledTitle>
+      <StyledTitle>Dokumenter under arbeid</StyledTitle>
       <StyledValg>Valg</StyledValg>
     </StyledListHeader>
   );
@@ -70,7 +72,7 @@ interface NewDocumentProps {
 export const NewDocument = ({ file, klagebehandlingId }: NewDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
-  const url = `${baseUrl}api/klagebehandlinger/${klagebehandlingId}/resultat/pdf`;
+  const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/pdf`;
   const onClick = () =>
     setShownDocument({
       title: file.name,
@@ -91,7 +93,7 @@ export const NewDocument = ({ file, klagebehandlingId }: NewDocumentProps) => {
         </DocumentButton>
       </DocumentTitle>
       <StyledDate>{isoDateTimeToPrettyDate(file.opplastet)}</StyledDate>
-      <StyledDeleteButton
+      <DeleteDocumentButton
         klagebehandlingId={klagebehandlingId}
         data-testid="klagebehandling-documents-new-delete-button"
       />

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { DeleteDocumentButton } from './delete-document-button';
 
 export const StyledListHeader = styled.div`
   display: grid;
@@ -52,7 +51,7 @@ export const StyledDate = styled.time`
   text-align: center;
 `;
 
-export const StyledDeleteButton = styled(DeleteDocumentButton)`
+export const StyledDeleteButton = styled.button`
   grid-area: options;
   cursor: pointer;
   background-color: transparent;
