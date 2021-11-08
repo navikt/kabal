@@ -11,7 +11,7 @@ export const ThreadList = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: smartEditorId } = useGetSmartEditorIdQuery(klagebehandlingId);
   const options = { pollingInterval: 3 * 1000 };
-  const { data: threads } = useGetAllCommentsQuery(smartEditorId?.smartEditorId ?? skipToken, options);
+  const { data: threads, isLoading } = useGetAllCommentsQuery(smartEditorId?.smartEditorId ?? skipToken, options);
   const { focusedThreadIds } = useContext(SmartEditorContext);
 
   if (focusedThreadIds.length > 0) {
@@ -25,6 +25,10 @@ export const ThreadList = () => {
   }
 
   if (threads === undefined) {
+    return null;
+  }
+
+  if (isLoading) {
     return <NavFrontendSpinner />;
   }
 
