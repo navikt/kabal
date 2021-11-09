@@ -9,7 +9,10 @@ export const featureTogglingApi = createApi({
       query: () => '/api/kabal-api/featuretoggle/klage.smarteditor',
       transformResponse: (response: boolean) => (process.env.NODE_ENV === 'development' ? true : response),
     }),
+    getFeatureToggleIndexFromSearch: builder.query<boolean, void>({
+      query: () => '/api/kabal-api/featuretoggle/klage.indexFromSearch',
+    }),
   }),
 });
 
-export const { useGetFeatureTogglingEditorQuery } = featureTogglingApi;
+export const { useGetFeatureTogglingEditorQuery, useGetFeatureToggleIndexFromSearchQuery } = featureTogglingApi;

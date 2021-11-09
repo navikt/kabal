@@ -5,6 +5,7 @@ import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useGetFeatureToggleIndexFromSearchQuery } from '../../redux-api/feature-toggling';
 import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
@@ -31,9 +32,10 @@ export const EnhetensOppgaverTable = () => {
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
 
   const { data: bruker } = useGetBrukerQuery();
+  const { data: indexFromSearchEnabled } = useGetFeatureToggleIndexFromSearchQuery();
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
-    typeof bruker === 'undefined'
+    typeof bruker === 'undefined' || typeof indexFromSearchEnabled === 'undefined'
       ? skipToken
       : {
           start: 0,
@@ -47,6 +49,7 @@ export const EnhetensOppgaverTable = () => {
           navIdent: bruker.info.navIdent,
           projeksjon: 'UTVIDET',
           enhet: bruker.valgtEnhetView.id,
+          indexFromSearchEnabled,
         };
 
   const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {
