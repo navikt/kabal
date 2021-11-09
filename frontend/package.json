@@ -4,8 +4,8 @@
   "description": "KABAL - Klage- og ankebehandling",
   "scripts": {
     "build:js": "webpack --mode production",
-    "build:html": "copyfiles -f ./public/index.html dist",
-    "build": "npm run build:js && npm run build:html",
+    "build:static": "copyfiles -f ./public/index.html dist && copyfiles -u 1 ./assets/* dist/assets",
+    "build": "npm run build:js && npm run build:static",
     "start": "env-cmd -f .env.development webpack serve",
     "local": "npm start",
     "test": "jest",

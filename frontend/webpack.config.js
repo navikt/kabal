@@ -45,6 +45,15 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
+    static: [
+      {
+        directory: path.join(__dirname, './assets'),
+        publicPath: '/assets'
+      },
+      {
+        directory: path.join(__dirname, './public'),
+      },
+    ],
     hot: true,
     host: '0.0.0.0',
     port: 8061,
