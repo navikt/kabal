@@ -30,60 +30,6 @@ const EMPTY_TEMPLATE: ISmartEditorTemplate = {
       type: 'rich-text',
       content: INITIAL_SLATE_VALUE,
     },
-    {
-      id: 'text-1',
-      label: 'Text 1',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-2',
-      label: 'Text 2',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-3',
-      label: 'Text 3',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-4',
-      label: 'Text 4',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-5',
-      label: 'Text 5',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-6',
-      label: 'Text 6',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-7',
-      label: 'Text 7',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-8',
-      label: 'Text 8',
-      type: 'text',
-      content: '',
-    },
-    {
-      id: 'text-9',
-      label: 'Text 9',
-      type: 'text',
-      content: '',
-    },
   ],
 };
 
