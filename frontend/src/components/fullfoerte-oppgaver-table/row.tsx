@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { isoDateToPretty } from '../../domain/date';
+import { formatPersonNum } from '../../functions/format-id';
 import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
@@ -37,7 +38,7 @@ export const Row = ({
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
-      <td>{person?.fnr}</td>
+      <td>{formatPersonNum(person?.fnr)}</td>
       <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
       <td>{utfallName}</td>
       <td>

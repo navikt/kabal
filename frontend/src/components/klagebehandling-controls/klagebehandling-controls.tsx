@@ -2,6 +2,7 @@ import React from 'react';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
 import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
+import { ISakenGjelder } from '../../redux-api/oppgave-state-types';
 import { PanelToggles } from '../klagebehandling/types';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
 import { ControlPanel, ExternalLink, KlagebehandlingInformation, KlagebehandlingTools } from './styled-components';
@@ -21,32 +22,39 @@ export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingCo
     return <ControlPanel>Laster...</ControlPanel>;
   }
 
-  const { sakenGjelderNavn, sakenGjelderFoedselsnummer, sakenGjelderKjoenn, fortrolig, strengtFortrolig } =
-    klagebehandling;
+  const { fortrolig, strengtFortrolig, sakenGjelder } = klagebehandling;
 
   return (
     <ControlPanel data-testid="klagebehandling-control-panel">
       <KlagebehandlingTools data-testid="klagebehandling-control-panel-tools">
-        <UserInfo
-          name={sakenGjelderNavn}
-          fnr={sakenGjelderFoedselsnummer}
-          gender={sakenGjelderKjoenn}
-          fortrolig={fortrolig}
-          strengtFortrolig={strengtFortrolig}
-        />
+        <UserInfo sakenGjelder={sakenGjelder} fortrolig={fortrolig} strengtFortrolig={strengtFortrolig} />
         <PanelToggleButtons togglePanel={setPanel} toggles={toggles} />
       </KlagebehandlingTools>
       <KlagebehandlingInformation>
-        <ExternalLink
-          href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelderFoedselsnummer}`}
-          target={'_blank'}
-          aria-label={'Ekstern lenke til Gosys for denne personen'}
-          title="Åpne i ny fane"
-          rel="noreferrer"
-        >
-          <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
-        </ExternalLink>
+        <GosysLink sakenGjelder={sakenGjelder} />
       </KlagebehandlingInformation>
     </ControlPanel>
   );
+};
+
+interface GosysLinkProps {
+  sakenGjelder: ISakenGjelder;
+}
+
+const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
+  if (sakenGjelder.person !== null) {
+    return (
+      <ExternalLink
+        href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.person.foedselsnummer}`}
+        target={'_blank'}
+        aria-label={'Ekstern lenke til Gosys for denne personen'}
+        title="Åpne i ny fane"
+        rel="noreferrer"
+      >
+        <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
+      </ExternalLink>
+    );
+  }
+
+  return null;
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatSakenGjelder } from '../../functions/format-id';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
@@ -34,7 +35,7 @@ export const Row = ({
       <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>{person?.navn}</td>
-    <td>{person?.fnr}</td>
+    <td>{formatSakenGjelder(person?.fnr)}</td>
     <td>
       <Age age={ageKA} />
     </td>
