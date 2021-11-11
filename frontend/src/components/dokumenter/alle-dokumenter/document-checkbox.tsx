@@ -22,7 +22,7 @@ export const DocumentCheckbox = ({
 }: DocumentCheckboxProps): JSX.Element => {
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId);
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
 
   const tilknyttet = useMemo<boolean>(
     () =>

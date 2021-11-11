@@ -17,9 +17,9 @@ export const Header = styled.h1`
 `;
 
 export const SubHeader = styled.h2`
-  font-size: 20px;
-  line-height: 25px;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 26px;
 `;
 
 export const RadioButtonsRow = styled.div`
@@ -29,8 +29,15 @@ export const RadioButtonsRow = styled.div`
   width: 300px;
 `;
 
-export const CommentsField = styled.div`
-  margin-top: 10px;
+export const RadioButtonsColumn = styled(RadioButtonsRow)`
+  flex-direction: column;
+  > * {
+    margin-bottom: 10px;
+  }
+`;
+
+export const StyledCommentField = styled.div`
+  margin-left: 32px;
   max-width: 50%;
 `;
 
@@ -38,8 +45,8 @@ export const ReasonsField = styled.div`
   margin-top: 10px;
 `;
 
-export const CheckboxWithHelpIcon = styled.div`
-  width: 400px;
+export const StyledCheckboxContainer = styled.div`
+  width: 500px;
   display: flex;
   justify-content: space-between;
   button {

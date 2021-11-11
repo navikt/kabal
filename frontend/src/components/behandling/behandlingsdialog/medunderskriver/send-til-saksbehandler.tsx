@@ -15,8 +15,8 @@ interface SendTilMedunderskriverProps {
 
 export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriverProps) => {
   const { id: klagebehandlingId } = klagebehandling;
-  const canEdit = useCanEdit(klagebehandlingId);
-  const isMedunderskriver = useCheckIsMedunderskriver(klagebehandlingId);
+  const canEdit = useCanEdit();
+  const isMedunderskriver = useCheckIsMedunderskriver();
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 

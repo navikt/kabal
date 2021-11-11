@@ -14,7 +14,7 @@ import { KlagebehandlingFinished } from './klagebehandling-finished';
 
 export const FinishKlagebehandling = () => {
   const klagebehandlingId = useKlagebehandlingId();
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
   const isFullfoert = useIsFullfoert(klagebehandlingId);
   const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
   const [showConfirmFinish, setConfirmFinish] = useState(false);

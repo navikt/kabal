@@ -12,7 +12,7 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
   const [uploadFile, { isLoading }] = useUploadFileMutation();
   const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
 
   const fileInput = useRef<HTMLInputElement>(null);
   const handleClick = useCallback(

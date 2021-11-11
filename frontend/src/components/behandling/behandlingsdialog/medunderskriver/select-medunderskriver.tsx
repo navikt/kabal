@@ -20,7 +20,7 @@ const NONE_SELECTED = 'NONE_SELECTED';
 export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: SelectMedunderskriverProps) => {
   const { data: bruker } = useGetBrukerQuery();
   const klagebehandlingId = useKlagebehandlingId();
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
 
   const medunderskrivereQuery =
