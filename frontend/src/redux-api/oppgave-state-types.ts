@@ -52,11 +52,6 @@ export interface IKlagebehandling {
   klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
   klager: IKlager;
-  // klagerFoedselsnummer: string | null;
-  // klagerKjoenn: Gender | null;
-  // klagerNavn: Name | null;
-  // klagerVirksomhetsnavn: string | null;
-  // klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
   kvalitetsvurderingId: string;
   medunderskriver: ISaksbehandler | null;
@@ -68,11 +63,6 @@ export interface IKlagebehandling {
   raadfoertMedLege: string | null;
   resultat: Resultat;
   sakenGjelder: ISakenGjelder;
-  // sakenGjelderFoedselsnummer: string | null;
-  // sakenGjelderKjoenn: Gender | null;
-  // sakenGjelderNavn: Name | null;
-  // sakenGjelderVirksomhetsnavn: string | null;
-  // sakenGjelderVirksomhetsnummer: string | null;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean | null;
   tema: string;
