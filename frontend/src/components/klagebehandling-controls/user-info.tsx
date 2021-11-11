@@ -1,30 +1,66 @@
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
-import { Name } from '../../domain/types';
+import { formatOrgNum } from '../../functions/format-id';
 import { CopyIcon } from '../../icons/copy';
-import { Gender } from '../../redux-api/oppgave-state-types';
-import { LabelMain } from '../../styled-components/labels';
+import { Gender, IKlager, ISakenGjelder, IVirksomhet } from '../../redux-api/oppgave-state-types';
+import { Fortrolig, StrengtFortrolig } from './fortrolig';
 import { CopyFnrButton, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';
 
 interface UserInfoProps {
-  name: Name | null;
-  fnr: string | null;
-  gender: Gender | null;
   fortrolig: boolean | null;
   strengtFortrolig: boolean | null;
+  sakenGjelder: ISakenGjelder | IKlager;
 }
 
-export const UserInfo = ({ name, fnr, gender, fortrolig, strengtFortrolig }: UserInfoProps) => {
+export const UserInfo = ({ fortrolig, strengtFortrolig, sakenGjelder }: UserInfoProps) => {
+  const { person, virksomhet } = sakenGjelder;
+
+  if (person !== null) {
+    return (
+      <SakenGjelder
+        id={person.foedselsnummer}
+        name={getFullNameWithFnr(person.navn, person.foedselsnummer)}
+        gender={person.kjoenn}
+        strengtFortrolig={strengtFortrolig}
+        fortrolig={fortrolig}
+      />
+    );
+  }
+
+  if (virksomhet !== null) {
+    return (
+      <SakenGjelder
+        id={virksomhet.virksomhetsnummer}
+        name={orgNameAndOrgnr(virksomhet)}
+        gender={null}
+        strengtFortrolig={strengtFortrolig}
+        fortrolig={fortrolig}
+      />
+    );
+  }
+
+  return <span>Fant ikke noe data på den saken gjelder.</span>;
+};
+
+interface SakenGjelderProps {
+  fortrolig: boolean | null;
+  strengtFortrolig: boolean | null;
+  id: string | null;
+  name: string;
+  gender: Gender | null;
+}
+
+const SakenGjelder = ({ id, name, gender, fortrolig, strengtFortrolig }: SakenGjelderProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const button = useRef<HTMLButtonElement>(null);
 
-  if (name === null || fnr === null) {
-    return <span>Fant ikke noe data på den saken gjelder.</span>;
-  }
+  const copyToClipboard = (text: string | null) => {
+    if (text === null) {
+      return;
+    }
 
-  const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setIsOpen(true);
   };
@@ -37,12 +73,10 @@ export const UserInfo = ({ name, fnr, gender, fortrolig, strengtFortrolig }: Use
         <UserItem>
           <UserGender gender={gender} />
         </UserItem>
+        <UserItem>{name}</UserItem>
         <UserItem>
-          <UserNameAndFnr name={name} fnr={fnr} />
-        </UserItem>
-        <UserItem>
-          <CopyFnrButton ref={button} onClick={() => copyToClipboard(fnr)}>
-            <CopyIcon alt="Kopier fødselsnummer" />
+          <CopyFnrButton ref={button} onClick={() => copyToClipboard(id)}>
+            <CopyIcon alt="Kopier" />
           </CopyFnrButton>
         </UserItem>
         <Fortrolig fortrolig={fortrolig} />
@@ -61,29 +95,18 @@ export const UserInfo = ({ name, fnr, gender, fortrolig, strengtFortrolig }: Use
   );
 };
 
-interface UserNameAndFnrProps {
-  name: Name | null;
-  fnr: string | null;
-}
+const orgNameAndOrgnr = ({ navn, virksomhetsnummer }: IVirksomhet): string => {
+  if (navn !== null && virksomhetsnummer !== null) {
+    return `${navn} ${formatOrgNum(virksomhetsnummer)}`;
+  }
 
-const UserNameAndFnr = ({ name, fnr }: UserNameAndFnrProps) => <span>{getFullNameWithFnr(name, fnr)}</span>;
-interface FortroligProps {
-  fortrolig: boolean | null;
-}
-interface StrengtFortroligProps {
-  strengtFortrolig: boolean | null;
-}
+  if (virksomhetsnummer !== null) {
+    return formatOrgNum(virksomhetsnummer);
+  }
 
-const Fortrolig = ({ fortrolig }: FortroligProps) =>
-  fortrolig === true ? (
-    <UserItem>
-      <LabelMain>Fortrolig</LabelMain>
-    </UserItem>
-  ) : null;
+  if (navn !== null) {
+    return navn;
+  }
 
-const StrengtFortrolig = ({ strengtFortrolig }: StrengtFortroligProps) =>
-  strengtFortrolig === true ? (
-    <UserItem>
-      <LabelMain>Strengt fortrolig</LabelMain>
-    </UserItem>
-  ) : null;
+  return '';
+};

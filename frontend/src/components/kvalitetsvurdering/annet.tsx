@@ -21,6 +21,8 @@ export const Annet = () => {
   const showBrukIOpplaeringReason =
     kvalitetsvurdering.vedtaketRadioValg === RadioValg.BRA || kvalitetsvurdering.utredningenRadioValg === RadioValg.BRA;
 
+  const showForm = showNyeOpplysningerMottattReason || showBetydeligAvvikReason || showBrukIOpplaeringReason;
+
   const reasons: Reason[] = [
     {
       id: 'nyeOpplysningerMottatt',
@@ -47,6 +49,10 @@ export const Annet = () => {
       helpText: 'Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.',
     },
   ];
+
+  if (!showForm) {
+    return null;
+  }
 
   return (
     <FormSection>

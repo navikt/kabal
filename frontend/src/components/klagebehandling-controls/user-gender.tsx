@@ -9,10 +9,6 @@ interface UserGenderProps {
 }
 
 export const UserGender = ({ gender }: UserGenderProps) => {
-  if (gender === null) {
-    return <NeutralGenderIcon alt="Fant ikke kjønn" />;
-  }
-
   if (gender === Gender.MALE) {
     return <MaleGenderIcon alt="Mann" />;
   }
@@ -21,5 +17,5 @@ export const UserGender = ({ gender }: UserGenderProps) => {
     return <FemaleGenderIcon alt="Kvinne" />;
   }
 
-  return null;
+  return <NeutralGenderIcon alt="Nøytral" />;
 };

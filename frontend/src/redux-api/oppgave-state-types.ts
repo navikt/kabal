@@ -26,7 +26,7 @@ export enum MedunderskriverFlyt {
 export interface IKlagerPerson {
   navn: Name;
   foedselsnummer: string | null;
-  kjoenn: string | null;
+  kjoenn: Gender | null;
 }
 
 export interface IVirksomhet {
@@ -52,11 +52,11 @@ export interface IKlagebehandling {
   klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
   klager: IKlager;
-  klagerFoedselsnummer: string | null;
-  klagerKjoenn: Gender | null;
-  klagerNavn: Name | null;
-  klagerVirksomhetsnavn: string | null;
-  klagerVirksomhetsnummer: string | null;
+  // klagerFoedselsnummer: string | null;
+  // klagerKjoenn: Gender | null;
+  // klagerNavn: Name | null;
+  // klagerVirksomhetsnavn: string | null;
+  // klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
   kvalitetsvurderingId: string;
   medunderskriver: ISaksbehandler | null;
@@ -67,12 +67,12 @@ export interface IKlagebehandling {
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
   resultat: Resultat;
-  sakenGjelder: IKlager;
-  sakenGjelderFoedselsnummer: string | null;
-  sakenGjelderKjoenn: Gender | null;
-  sakenGjelderNavn: Name | null;
-  sakenGjelderVirksomhetsnavn: string | null;
-  sakenGjelderVirksomhetsnummer: string | null;
+  sakenGjelder: ISakenGjelder;
+  // sakenGjelderFoedselsnummer: string | null;
+  // sakenGjelderKjoenn: Gender | null;
+  // sakenGjelderNavn: Name | null;
+  // sakenGjelderVirksomhetsnavn: string | null;
+  // sakenGjelderVirksomhetsnummer: string | null;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean | null;
   tema: string;
@@ -84,9 +84,11 @@ export interface IKlagebehandling {
 }
 
 export interface IKlager {
-  person: IKlagerPerson;
-  virksomhet: IVirksomhet;
+  person: IKlagerPerson | null;
+  virksomhet: IVirksomhet | null;
 }
+
+export type ISakenGjelder = IKlager;
 
 export interface ISaksbehandler {
   navIdent: string;

@@ -12,7 +12,7 @@ export const useKlagerName = (): string | null => {
     klager: { person, virksomhet },
   } = klagebehandling;
 
-  if (klagebehandling.klager.person !== null) {
+  if (person !== null) {
     return getFullName(person.navn);
   }
 
