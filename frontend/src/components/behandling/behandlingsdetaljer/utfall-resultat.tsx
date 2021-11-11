@@ -15,7 +15,7 @@ interface UtfallResultatProps {
 export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [updateUtfall] = useUpdateUtfallMutation();
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
 
   const { data: kodeverk, isLoading: isKodeverkLoading } = useGetKodeverkQuery();
 

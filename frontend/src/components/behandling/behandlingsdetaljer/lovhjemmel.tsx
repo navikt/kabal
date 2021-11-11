@@ -16,7 +16,7 @@ interface HjemmelProps {
 export const Lovhjemmel = ({ hjemler }: HjemmelProps) => {
   const [updateHjemler] = useUpdateHjemlerMutation();
   const klagebehandlingId = useKlagebehandlingId();
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
 
   const { data: kodeverk, isLoading } = useGetKodeverkQuery();
   const [localHjemler, setLocalHjemler] = useState<string[]>(hjemler);

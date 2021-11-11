@@ -58,6 +58,7 @@ export interface IKlagebehandling {
   klagerVirksomhetsnavn: string | null;
   klagerVirksomhetsnummer: string | null;
   kommentarFraFoersteinstans: string | null;
+  kvalitetsvurderingId: string;
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
 import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
 
@@ -11,8 +10,7 @@ interface MedunderskriverInfoProps {
 }
 
 export const MedunderskriverInfo = ({ klagebehandling, medunderskriverInfo }: MedunderskriverInfoProps) => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
 
   if (!canEdit) {
     return (

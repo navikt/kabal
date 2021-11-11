@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const DeleteSmartEditorDocumentButton = ({ klagebehandlingId, smartEditorId }: Props) => {
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
   const [deleteSmartEditorReference, { isLoading }] = useDeleteSmartEditorIdMutation();
   const [deleteSmartEditorContent] = useDeleteSmartEditorMutation();
 

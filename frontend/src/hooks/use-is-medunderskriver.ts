@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { useGetKlagebehandlingQuery, useGetMedunderskriverInfoQuery } from '../redux-api/oppgave';
+import { useKlagebehandlingId } from './use-klagebehandling-id';
 
-export const useIsMedunderskriver = (klagebehandlingId: string) => {
+export const useIsMedunderskriver = () => {
+  const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const { data: userData, isLoading } = useGetBrukerQuery();
 
@@ -15,7 +17,8 @@ export const useIsMedunderskriver = (klagebehandlingId: string) => {
   }, [klagebehandling, userData, isLoading]);
 };
 
-export const useCheckIsMedunderskriver = (klagebehandlingId: string) => {
+export const useCheckIsMedunderskriver = () => {
+  const klagebehandlingId = useKlagebehandlingId();
   const { data: userData, isLoading } = useGetBrukerQuery();
   const { data: medunderskriverInfo } = useGetMedunderskriverInfoQuery(klagebehandlingId);
 

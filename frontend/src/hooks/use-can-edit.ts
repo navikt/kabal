@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { useGetKlagebehandlingQuery } from '../redux-api/oppgave';
+import { useKlagebehandlingId } from './use-klagebehandling-id';
 
-export const useCanEdit = (klagebehandlingId: string) => {
+export const useCanEdit = () => {
+  const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling, isLoading: klagebehandlingIsLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
   const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 

@@ -8,7 +8,7 @@ interface DeleteDocumentButtonProps {
 }
 
 export const DeleteDocumentButton = ({ klagebehandlingId }: DeleteDocumentButtonProps) => {
-  const canEdit = useCanEdit(klagebehandlingId);
+  const canEdit = useCanEdit();
   const [deleteFile, { isLoading }] = useDeleteFileMutation();
 
   if (!canEdit) {
