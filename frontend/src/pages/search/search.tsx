@@ -33,7 +33,7 @@ export const SearchPage = () => {
       .unwrap()
       .then(setPersonsoekResultat)
       .catch(() => setPersonsoekResultat(INITIAL_STATE));
-  }, [bruker, personsoek, query]);
+  }, [bruker, indexFromSearchEnabled, personsoek, query]);
 
   useEffect(() => {
     const timeout = setTimeout(getPersonsoekUpdate, 1000);
