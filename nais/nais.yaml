@@ -40,6 +40,7 @@ spec:
         - application: kabal-smart-editor-api
         - application: kabal-json-to-pdf
         - application: kabal-search
+        - application: kaka-api
       external:
         - host: login.microsoftonline.com
   ingresses:
