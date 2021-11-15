@@ -78,8 +78,7 @@ jobs:
           RESOURCE: nais/e2ejob.yaml
         timeout-minutes: 5
   deployprod:
-    name: Deploy to prod-gcp (disabled)
-    if: ${{ false }}
+    name: Deploy to prod-gcp
     needs: e2etest
     runs-on: ubuntu-latest
     steps:
