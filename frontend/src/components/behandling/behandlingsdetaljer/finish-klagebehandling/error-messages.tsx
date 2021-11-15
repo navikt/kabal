@@ -11,5 +11,17 @@ export const ErrorMessage = ({ error }: Props) => {
     return null;
   }
 
-  return <StyledAlertstripe type="advarsel">{error.detail}</StyledAlertstripe>;
+  return (
+    <StyledAlertstripe type="advarsel">
+      <ErrorList {...error} />
+    </StyledAlertstripe>
+  );
 };
+
+const ErrorList = ({ 'invalid-properties': invalidProperties }: ApiError) => (
+  <ul>
+    {invalidProperties.map(({ reason, field }) => (
+      <li key={field}>{reason}</li>
+    ))}
+  </ul>
+);
