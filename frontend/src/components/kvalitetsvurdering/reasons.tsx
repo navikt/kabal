@@ -9,12 +9,6 @@ import { IKvalitetsvurderingBooleans } from '../../redux-api/kaka-kvalitetsvurde
 import { CommentField } from './comment-field';
 import { ReasonsField, StyledCheckboxContainer } from './styled-components';
 
-interface ReasonsProps {
-  reasons: Reason[];
-  show?: boolean;
-  legendText?: string;
-}
-
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
   label: string;
@@ -23,8 +17,14 @@ export interface Reason {
   show?: boolean;
   checked: boolean;
 }
+interface ReasonsProps {
+  reasons: Reason[];
+  show?: boolean;
+  legendText?: string;
+  error?: string | undefined;
+}
 
-export const Reasons = ({ show = true, legendText = '', reasons }: ReasonsProps) => {
+export const Reasons = ({ error, show = true, legendText = '', reasons }: ReasonsProps) => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useCanEdit();
@@ -41,7 +41,7 @@ export const Reasons = ({ show = true, legendText = '', reasons }: ReasonsProps)
 
   return (
     <ReasonsField>
-      <CheckboxGruppe legend={legendText}>
+      <CheckboxGruppe legend={legendText} feil={error}>
         {reasons
           .filter((reason) => reason.show !== false)
           .map((reason) => {

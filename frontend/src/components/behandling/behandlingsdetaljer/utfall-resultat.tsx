@@ -4,6 +4,7 @@ import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useValidationError } from '../../../hooks/use-validation-error';
 import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { useUpdateUtfallMutation } from '../../../redux-api/oppgave';
 import { StyledUtfallResultat } from '../styled-components';
@@ -16,6 +17,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [updateUtfall] = useUpdateUtfallMutation();
   const canEdit = useCanEdit();
+  const validationError = useValidationError('utfall');
 
   const { data: kodeverk, isLoading: isKodeverkLoading } = useGetKodeverkQuery();
 
@@ -43,6 +45,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
         onChange={onUtfallResultatChange}
         value={utfall ?? undefined}
         data-testid="select-utfall"
+        feil={validationError}
       >
         <option value="">Ikke valgt</option>
         {options}

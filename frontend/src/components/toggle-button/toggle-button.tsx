@@ -5,8 +5,9 @@ interface ToggleButtonTheme {
   minHeight: string | undefined;
 }
 
-export const ToggleButton = styled.button`
-  border: 1px solid #78706a;
+export const ToggleButton = styled.button<{ error?: boolean }>`
+  border: 1px solid ${({ error }) => (error === true ? '#ba3a26' : '#78706a')};
+  box-shadow: ${({ error }) => (error === true ? '0 0 0 1px #ba3a26' : 'none')};
   padding: 0 1.75rem 0 0.5rem;
   min-height: ${({ theme }: { theme: ToggleButtonTheme }) =>
     typeof theme.minHeight === 'undefined' ? '2rem' : theme.minHeight};

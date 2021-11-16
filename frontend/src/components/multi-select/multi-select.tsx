@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
+import { ErrorMessage } from '../error-message/error-message';
 import { Dropdown } from '../filter-dropdown/dropdown';
 import { ToggleButton } from '../toggle-button/toggle-button';
 import { StyledMultiSelect, StyledTitle } from './styled-components';
@@ -11,9 +12,10 @@ interface MultiSelectProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   disabled?: boolean;
+  error?: string;
 }
 
-export const MultiSelect = ({ title, onChange, options, selected, disabled }: MultiSelectProps) => {
+export const MultiSelect = ({ title, onChange, options, selected, disabled, error }: MultiSelectProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -33,12 +35,20 @@ export const MultiSelect = ({ title, onChange, options, selected, disabled }: Mu
   const toggleOpen = () => setOpen(!open);
 
   return (
-    <StyledMultiSelect ref={ref}>
-      <ToggleButton onClick={toggleOpen} disabled={disabled} theme={{ open, minHeight: '3rem' }}>
-        <StyledTitle>{title}</StyledTitle>
-      </ToggleButton>
+    <>
+      <StyledMultiSelect ref={ref}>
+        <ToggleButton
+          error={typeof error !== 'undefined'}
+          onClick={toggleOpen}
+          disabled={disabled}
+          theme={{ open, minHeight: '3rem' }}
+        >
+          <StyledTitle>{title}</StyledTitle>
+        </ToggleButton>
 
-      <Dropdown selected={selected} options={options} open={open} onChange={setSelected} />
-    </StyledMultiSelect>
+        <Dropdown selected={selected} options={options} open={open} onChange={setSelected} />
+      </StyledMultiSelect>
+      <ErrorMessage error={error} />
+    </>
   );
 };

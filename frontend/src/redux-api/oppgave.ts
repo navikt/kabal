@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
+import { IApiValidationResponse } from '../functions/error-type-guard';
 import { staggeredBaseQuery } from './common';
 import { IDocumentsResponse, IGetDokumenterParams } from './documents-types';
 import { IKlagebehandling, MedunderskriverFlyt } from './oppgave-state-types';
@@ -298,6 +299,12 @@ export const klagebehandlingApi = createApi({
         }
       },
     }),
+    validate: builder.query<IApiValidationResponse, string>({
+      query: (klagebehandlingId) => ({
+        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/validate`,
+        validateStatus: ({ status, ok }) => ok || status === 400,
+      }),
+    }),
   }),
 });
 
@@ -316,4 +323,6 @@ export const {
   useSwitchMedunderskriverflytMutation,
   useUploadFileMutation,
   useDeleteFileMutation,
+  useValidateQuery,
+  useLazyValidateQuery,
 } = klagebehandlingApi;

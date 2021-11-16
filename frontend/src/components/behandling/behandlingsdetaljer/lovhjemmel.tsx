@@ -2,6 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useValidationError } from '../../../hooks/use-validation-error';
 import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { useUpdateHjemlerMutation } from '../../../redux-api/oppgave';
 import { LabelLovhjemmel } from '../../../styled-components/labels';
@@ -17,6 +18,7 @@ export const Lovhjemmel = ({ hjemler }: HjemmelProps) => {
   const [updateHjemler] = useUpdateHjemlerMutation();
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit();
+  const validationError = useValidationError('hjemmel');
 
   const { data: kodeverk, isLoading } = useGetKodeverkQuery();
   const [localHjemler, setLocalHjemler] = useState<string[]>(hjemler);
@@ -55,6 +57,7 @@ export const Lovhjemmel = ({ hjemler }: HjemmelProps) => {
         title={title}
         selected={localHjemler}
         onChange={onLovhjemmelChange}
+        error={validationError}
       />
     </SubSection>
   );

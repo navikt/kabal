@@ -4,6 +4,7 @@ import { Behandling } from '../behandling/behandling';
 import { Dokumenter } from '../dokumenter/dokumenter';
 import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
+import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
 import { SmartEditorPanel } from '../smart-editor/smart-editor-panel';
 
 interface KlagebehandlingPanelsProps {
@@ -12,10 +13,12 @@ interface KlagebehandlingPanelsProps {
 
 export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => (
   <PageContainer data-testid="klagebehandling-panels">
-    <Dokumenter shown={toggles.documents} />
-    <SmartEditorPanel shown={toggles.smartEditor} />
-    <Behandling shown={toggles.behandling} />
-    <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
+    <ValidationErrorProvider>
+      <Dokumenter shown={toggles.documents} />
+      <SmartEditorPanel shown={toggles.smartEditor} />
+      <Behandling shown={toggles.behandling} />
+      <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
+    </ValidationErrorProvider>
   </PageContainer>
 );
 
