@@ -1,10 +1,11 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ReduxApiValidationError } from '../../../../functions/error-type-guard';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useKlagerName } from '../../../../hooks/use-klager-name';
-import { ApiError, UNKNOWN_ERROR, isWrappedApiError } from '../../../../redux-api/error-type';
 import { useFinishKlagebehandlingMutation } from '../../../../redux-api/oppgave';
+import { ValidationErrorContext } from '../../../kvalitetsvurdering/validation-error-context';
 import {
   StyledFinishKlagebehandlingBox,
   StyledFinishKlagebehandlingButtons,
@@ -13,15 +14,15 @@ import {
 
 interface FinishProps {
   cancel: () => void;
-  setError: (error: ApiError) => void;
 }
 
-export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
+export const ConfirmFinish = ({ cancel }: FinishProps) => {
   const klagebehandlingId = useKlagebehandlingId();
   const [finishKlagebehandling, loader] = useFinishKlagebehandlingMutation();
   const klagerName = useKlagerName();
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
+  const errorContext = useContext(ValidationErrorContext);
 
   useEffect(() => {
     if (ref !== null) {
@@ -29,21 +30,17 @@ export const ConfirmFinish = ({ cancel, setError }: FinishProps) => {
     }
   }, [ref]);
 
-  const finish = () => {
+  const finish = async () => {
     finishKlagebehandling({ klagebehandlingId })
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
+        errorContext?.setValidationErrors([]);
       })
-      .catch((e) => {
-        if (isWrappedApiError(e)) {
-          setError(e.data);
-        } else {
-          setError(UNKNOWN_ERROR);
+      .catch((error) => {
+        if (typeof errorContext !== 'undefined' && ReduxApiValidationError.is(error)) {
+          errorContext.setValidationErrors(error.data['invalid-properties']);
         }
-
-        setHasBeenFinished(false);
-        cancel();
       });
   };
 

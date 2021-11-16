@@ -1,8 +1,9 @@
-import { Radio } from 'nav-frontend-skjema';
+import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
+import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../redux-api/kaka-kvalitetsvurdering-types';
 import { Reason, Reasons } from './reasons';
@@ -12,6 +13,7 @@ export const Vedtaket = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useCanEdit();
+  const validationError = useValidationError('vedtaketRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
@@ -60,23 +62,30 @@ export const Vedtaket = () => {
   return (
     <FormSection>
       <SubHeader>Vedtaket</SubHeader>
-      <RadioButtonsRow>
-        <Radio
-          name={'VedtaketBra'}
-          label={'Bra/godt nok'}
-          onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
-          checked={vedtaketRadioValg === RadioValg.BRA}
-          disabled={!canEdit}
-        />
-        <Radio
-          name={'VedtaketMangelfullt'}
-          label={'Mangelfullt'}
-          onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
-          checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
-          disabled={!canEdit}
-        />
-      </RadioButtonsRow>
-      <Reasons show={vedtaketRadioValg === RadioValg.MANGELFULLT} legendText="Hva er mangelfullt?" reasons={reasons} />
+      <RadioGruppe feil={vedtaketRadioValg === null ? validationError : undefined}>
+        <RadioButtonsRow>
+          <Radio
+            name={'VedtaketBra'}
+            label={'Bra/godt nok'}
+            onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
+            checked={vedtaketRadioValg === RadioValg.BRA}
+            disabled={!canEdit}
+          />
+          <Radio
+            name={'VedtaketMangelfullt'}
+            label={'Mangelfullt'}
+            onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
+            checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
+            disabled={!canEdit}
+          />
+        </RadioButtonsRow>
+      </RadioGruppe>
+      <Reasons
+        error={validationError}
+        show={vedtaketRadioValg === RadioValg.MANGELFULLT}
+        legendText="Hva er mangelfullt?"
+        reasons={reasons}
+      />
     </FormSection>
   );
 };

@@ -23,6 +23,10 @@ export const Annet = () => {
 
   const showForm = showNyeOpplysningerMottattReason || showBetydeligAvvikReason || showBrukIOpplaeringReason;
 
+  if (!showForm) {
+    return null;
+  }
+
   const reasons: Reason[] = [
     {
       id: 'nyeOpplysningerMottatt',
@@ -49,10 +53,6 @@ export const Annet = () => {
       helpText: 'Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.',
     },
   ];
-
-  if (!showForm) {
-    return null;
-  }
 
   return (
     <FormSection>

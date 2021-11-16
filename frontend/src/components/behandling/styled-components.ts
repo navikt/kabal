@@ -97,6 +97,10 @@ export const StyledFinishKlagebehandlingBox = styled.div`
   padding: 1em;
 `;
 
+export const StyledPaddedSidesContent = styled.div`
+  padding: 0 1em;
+`;
+
 export const StyledPaddedContent = styled.div`
   padding: 1em;
 `;

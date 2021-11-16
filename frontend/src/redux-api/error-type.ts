@@ -1,7 +1,13 @@
+interface InvalidProperty {
+  field: string;
+  reason: string;
+}
+
 export interface ApiError {
   title: string;
   status: number;
   detail: string;
+  'invalid-properties': InvalidProperty[];
 }
 
 export interface WrappedApiError {
@@ -45,6 +51,7 @@ export const UNKNOWN_ERROR: ApiError = {
   title: 'Unknown error',
   status: 0,
   detail: 'Unknown error',
+  'invalid-properties': [],
 };
 
 const isObject = (e: unknown): e is Record<string, unknown> => typeof e === 'object' && !Array.isArray(e);

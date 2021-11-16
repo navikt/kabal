@@ -1,15 +1,33 @@
+import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
-import { ApiError } from '../../../../redux-api/error-type';
-import { StyledAlertstripe } from '../../styled-components';
+import styled from 'styled-components';
+import { IValidationErrors } from '../../../../functions/error-type-guard';
 
 interface Props {
-  error: ApiError | null;
+  errors: IValidationErrors;
 }
 
-export const ErrorMessage = ({ error }: Props) => {
-  if (error === null) {
+export const ValidationSummary = ({ errors }: Props) => {
+  if (errors.length === 0) {
     return null;
   }
 
-  return <StyledAlertstripe type="advarsel">{error.detail}</StyledAlertstripe>;
+  const errorMessages = errors.map(({ reason, field }) => <li key={field}>{reason}</li>);
+
+  return (
+    <StyledAlertStripe type="advarsel">
+      <div>Kan ikke fullføre behandling. Dette mangler:</div>
+      <AlertStripeListElement>{errorMessages}</AlertStripeListElement>
+    </StyledAlertStripe>
+  );
 };
+
+const StyledAlertStripe = styled(Alertstripe)`
+  margin-bottom: 1em;
+`;
+
+const AlertStripeListElement = styled.ul`
+  margin: 0;
+  padding: 0;
+  padding-left: 1em;
+`;

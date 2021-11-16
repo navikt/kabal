@@ -1,3 +1,4 @@
+import { RadioGruppe } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
@@ -25,12 +26,10 @@ export const SubHeader = styled.h2`
 export const RadioButtonsRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 0 20px;
   width: 300px;
 `;
 
-export const RadioButtonsColumn = styled(RadioButtonsRow)`
-  flex-direction: column;
+export const RadioButtonsColumn = styled(RadioGruppe)`
   > * {
     margin-bottom: 10px;
   }
