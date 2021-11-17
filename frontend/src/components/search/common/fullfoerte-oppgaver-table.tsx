@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { IKlagebehandling, IKlagebehandlingList } from '../../redux-api/oppgaver';
-import { Hjemmel } from '../common-table-components/hjemmel';
-import { OpenKlagebehandling } from '../common-table-components/open';
-import { Tema } from '../common-table-components/tema';
-import { Type } from '../common-table-components/type';
+import { isoDateToPretty } from '../../../domain/date';
+import { IKlagebehandling, IKlagebehandlingList } from '../../../redux-api/oppgaver';
+import { Hjemmel } from '../../common-table-components/hjemmel';
+import { OpenKlagebehandling } from '../../common-table-components/open';
+import { Tema } from '../../common-table-components/tema';
+import { Type } from '../../common-table-components/type';
+import { RightAlignCell, StyledTable } from './styled-components';
 
 interface Props {
   finishedOppgaver: IKlagebehandlingList;
@@ -44,12 +44,8 @@ const Row = ({ id, type, tema, hjemmel, avsluttetAvSaksbehandlerDate, tildeltSak
     </td>
     <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
     <td>{tildeltSaksbehandlerNavn}</td>
-    <td>
+    <RightAlignCell>
       <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
-    </td>
+    </RightAlignCell>
   </tr>
 );
-
-const StyledTable = styled.table`
-  margin: 20px 0;
-`;

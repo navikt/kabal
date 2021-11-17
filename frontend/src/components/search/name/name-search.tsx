@@ -1,0 +1,43 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import React from 'react';
+import { INameSearchParams, useNameSearchQuery } from '../../../redux-api/oppgaver';
+import { SearchResults } from './searchresults';
+
+interface NameSearchProps {
+  queryString: string;
+}
+
+const NUMBER_REGEX = /\d+/;
+const containsNumber = (query: string) => NUMBER_REGEX.test(query);
+
+export const NameSearch = ({ queryString }: NameSearchProps) => {
+  const query = useGetQuery(queryString);
+  const { data, isFetching } = useNameSearchQuery(query);
+
+  if (query === skipToken) {
+    return null;
+  }
+
+  if (isFetching || typeof data === 'undefined') {
+    return <NavFrontendSpinner />;
+  }
+
+  if (data.people.length === 0) {
+    return <span data-testid="search-result-none">Ingen treff</span>;
+  }
+
+  return <SearchResults people={data.people} />;
+};
+
+const useGetQuery = (queryString: string): INameSearchParams | typeof skipToken => {
+  if (queryString.length === 0) {
+    return skipToken;
+  }
+
+  if (containsNumber(queryString)) {
+    return skipToken;
+  }
+
+  return { query: queryString, antall: 200, start: 0 };
+};
