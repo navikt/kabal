@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { AdminPage } from '../../pages/admin/admin';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
 import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
 import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
@@ -34,7 +35,9 @@ export const Routes = () => (
       <KlagebehandlingPage />
     </Route>
     <Route exact path="/innstillinger" render={() => <SettingsPage />} />
-    {/* <Route exact path="/admin" render={() => <Admin />} /> */}
+    <Route exact path="/admin">
+      <AdminPage />
+    </Route>
     <Redirect to="/oppgaver/1" />
   </Switch>
 );

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { adminApi } from '../redux-api/admin';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kakaKodeverkApi } from '../redux-api/kaka-kodeverk';
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
   [smartEditorIdApi.reducerPath]: smartEditorIdApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
   [kakaKodeverkApi.reducerPath]: kakaKodeverkApi.reducer,
+  [adminApi.reducerPath]: adminApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

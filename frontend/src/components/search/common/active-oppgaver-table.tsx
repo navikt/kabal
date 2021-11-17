@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import { IKlagebehandling, IKlagebehandlingList } from '../../redux-api/oppgaver';
-import { Deadline } from '../common-table-components/deadline';
-import { Hjemmel } from '../common-table-components/hjemmel';
-import { OpenKlagebehandling } from '../common-table-components/open';
-import { SaksbehandlerButton } from '../common-table-components/saksbehandler-button';
-import { Tema } from '../common-table-components/tema';
-import { Type } from '../common-table-components/type';
+import { IKlagebehandling, IKlagebehandlingList } from '../../../redux-api/oppgaver';
+import { Deadline } from '../../common-table-components/deadline';
+import { Hjemmel } from '../../common-table-components/hjemmel';
+import { OpenKlagebehandling } from '../../common-table-components/open';
+import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
+import { Tema } from '../../common-table-components/tema';
+import { Type } from '../../common-table-components/type';
+import { RightAlignCell, StyledTable } from './styled-components';
 
 interface Props {
   activeOppgaver: IKlagebehandlingList;
@@ -71,9 +71,10 @@ const Row = ({
         tema={tema}
       /> */}
     </td>
-    <td>
+    <td></td>
+    <RightAlignCell>
       <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
-    </td>
+    </RightAlignCell>
   </tr>
 );
 
@@ -91,7 +92,3 @@ const Row = ({
 
 //   return <span>{navn ?? 'Ukjent saksbehandler'}</span>;
 // };
-
-const StyledTable = styled.table`
-  margin: 20px;
-`;

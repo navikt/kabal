@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { adminApi } from '../redux-api/admin';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kakaKodeverkApi } from '../redux-api/kaka-kodeverk';
@@ -40,6 +41,7 @@ export const reduxStore = configureStore({
       smartEditorApi.middleware,
       smartEditorIdApi.middleware,
       kakaKodeverkApi.middleware,
+      adminApi.middleware,
     ]),
 });
 

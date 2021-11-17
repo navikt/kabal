@@ -9,38 +9,41 @@ interface SearchBoxProps {
 
 export const SearchBox = ({ query, setQuery }: SearchBoxProps): JSX.Element => (
   <>
-    <StyledLabelContainer>
-      <StyledLabelText>Søk med fødselsnummer eller navn:</StyledLabelText>
+    <StyledContainer>
       <StyledInput
         type="text"
         value={query}
         onChange={({ target }) => setQuery(target.value)}
         data-testid="search-input"
+        placeholder="Søk på navn eller personnummer"
       />
       <StyledSearchButton onClick={() => setQuery(query)}>
         <StyledSearchIcon />
       </StyledSearchButton>
-    </StyledLabelContainer>
+    </StyledContainer>
   </>
 );
 
-const StyledLabelContainer = styled.label`
+const StyledContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-`;
-
-const StyledLabelText = styled.div`
-  flex-grow: 1;
-  width: 100%;
+  padding-top: 2px;
 `;
 
 const StyledInput = styled.input`
   padding: 0.5em;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border: 1px solid rgb(106, 106, 106);
-  height: 2.5em;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border: 1px solid #6a6a6a;
+  height: 40px;
   width: 40em;
+  outline: none;
+  border-radius: 4px 0 0 4px;
+
+  &:focus {
+    outline-offset: -2px;
+    border: 3px solid #254b6d;
+  }
 `;
 
 const StyledSearchButton = styled.button`
@@ -49,11 +52,12 @@ const StyledSearchButton = styled.button`
   margin: 0;
   color: white;
   cursor: pointer;
-  height: 2.5em;
-  width: 2.5em;
+  height: 40px;
+  width: 40px;
+  border-radius: 0 4px 4px 0;
 `;
 
 const StyledSearchIcon = styled(Search)`
-  height: 100%;
-  width: 100%;
+  height: 70%;
+  width: 70%;
 `;

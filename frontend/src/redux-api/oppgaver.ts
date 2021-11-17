@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
+import { Name } from '../domain/types';
 import { staggeredBaseQuery } from './common';
 import { MedunderskriverFlyt } from './oppgave-state-types';
 
@@ -12,11 +13,6 @@ export interface ApiResponse {
 
 interface UtgaatteApiResponse {
   antall: number;
-}
-
-export interface PersonSoekApiResponse {
-  antallTreffTotalt: number;
-  personer: IPersonResultat[];
 }
 
 export interface Person {
@@ -51,15 +47,6 @@ export interface IKlagebehandling {
 
 export type IKlagebehandlingList = IKlagebehandling[];
 
-export interface IPersonResultat {
-  aapneKlagebehandlinger: IKlagebehandlingList;
-  avsluttedeKlagebehandlinger: IKlagebehandlingList;
-  fnr: string;
-  foedselsdato: string;
-  klagebehandlinger: IKlagebehandlingList;
-  navn: string;
-}
-
 export interface LoadKlagebehandlingerParams {
   start: number;
   antall: number;
@@ -93,19 +80,36 @@ export interface ISaksbehandlerResponse {
   tildelt: string;
 }
 
-export interface LoadPersonSoekParams {
-  navIdent: string;
-  antall: number;
-  start: number;
+export interface IFnrSearchParams {
+  enhet: string;
+  query: string;
+}
+
+export interface IFnrSearchResponse {
   fnr: string;
-  soekString: string;
-  enhet: string | null;
+  navn: Name;
+  aapneKlagebehandlinger: IKlagebehandlingList;
+  avsluttedeKlagebehandlinger: IKlagebehandlingList;
+  klagebehandlinger: IKlagebehandlingList;
+}
+
+export interface INameSearchParams {
+  antall: number;
+  query: string;
+  start: number;
+}
+
+export interface INameSearchResponse {
+  people: {
+    fnr: string;
+    navn: Name;
+  }[];
 }
 
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
   baseQuery: staggeredBaseQuery,
-  tagTypes: ['oppgaver', 'medutgaattefrister', 'personsoek'],
+  tagTypes: ['oppgaver', 'medutgaattefrister'],
   endpoints: (builder) => ({
     getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -113,7 +117,7 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
       providesTags: (result) =>
         typeof result !== 'undefined'
@@ -129,17 +133,23 @@ export const klagebehandlingerApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
     }),
-    personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
-      query: ({ navIdent, ...queryParams }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
-        method: 'POST', // Personsøk er POST for å ikke sende fnr inn i URLen, som blir logget.
+    fnrSearch: builder.query<IFnrSearchResponse, IFnrSearchParams>({
+      query: ({ ...queryParams }) => ({
+        url: `/api/kabal-search/search/fnr`,
+        method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: queryParams,
       }),
-      invalidatesTags: ['personsoek'],
+    }),
+    nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
+      query: ({ ...queryParams }) => ({
+        url: `/api/kabal-search/search/name`,
+        method: 'POST',
+        body: queryParams,
+      }),
     }),
     tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, enhetId }) => ({
@@ -162,25 +172,6 @@ export const klagebehandlingerApi = createApi({
           ])
         );
       },
-      // invalidatesTags: (oppgaveId) =>
-      //   typeof oppgaveId !== 'undefined' ? [{ type: 'oppgaver', id: oppgaveId }] : [{ type: 'oppgaver', id: 'LIST' }],
-      // onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
-      //   const patchResult = dispatch(
-      //     klagebehandlingerApi.util.updateQueryData('getKlagebehandlinger', {}, (draft) => {
-      //       const klagebehandling = draft.klagebehandlinger.find(({ id }) => id === oppgaveId);
-
-      //       if (typeof klagebehandling !== 'undefined') {
-      //         (klagebehandling.erTildelt = true), (klagebehandling.tildeltSaksbehandlerident = args.navIdent);
-      //       }
-      //     })
-      //   );
-
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //   } catch {
-      //     patchResult.undo();
-      //   }
-      // },
     }),
     fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent }) => ({
@@ -207,9 +198,10 @@ export const klagebehandlingerApi = createApi({
 export const {
   useGetKlagebehandlingerQuery,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
-  usePersonsoekMutation,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
+  useFnrSearchQuery,
+  useNameSearchQuery,
 } = klagebehandlingerApi;
 
 const delay = async (ms: number): Promise<void> => new Promise((res) => setTimeout(res, ms));
