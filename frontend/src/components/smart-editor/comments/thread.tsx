@@ -1,10 +1,6 @@
-// import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-// import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
-// import { useGetAllCommentsQuery } from '../../../redux-api/smart-editor';
-// import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
 import { ISmartEditorComment } from '../../../redux-api/smart-editor-types';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
@@ -15,9 +11,6 @@ interface ThreadProps {
 }
 
 export const Thread = ({ threadId, threads }: ThreadProps) => {
-  // const klagebehandlingId = useKlagebehandlingId();
-  // const { data: smartEditorData } = useGetSmartEditorIdQuery(klagebehandlingId);
-  // const { data: threads, isLoading } = useGetAllCommentsQuery(smartEditorData?.smartEditorId ?? skipToken);
   const [showAddComment, setShowAddComment] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
@@ -38,7 +31,7 @@ export const Thread = ({ threadId, threads }: ThreadProps) => {
       onMouseLeave={() => setShowAddComment(false)}
       ref={ref}
     >
-      <CommentList comments={[thread, ...thread?.comments]} />
+      <CommentList comments={[thread, ...(thread?.comments ?? [])]} />
       {(showAddComment || inputFocused) && (
         <NewCommentInThread threadId={threadId} onFocusChange={setInputFocused} focused={inputFocused} />
       )}
