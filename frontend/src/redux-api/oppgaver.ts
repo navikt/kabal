@@ -75,7 +75,6 @@ export interface LoadKlagebehandlingerParams {
   tildeltSaksbehandler?: string;
   projeksjon?: 'UTVIDET';
   enhet: string | null;
-  indexFromSearchEnabled: boolean;
 }
 
 export interface TildelSaksbehandlerParams {
@@ -101,16 +100,7 @@ export interface LoadPersonSoekParams {
   fnr: string;
   soekString: string;
   enhet: string | null;
-  indexFromSearchEnabled: boolean;
 }
-
-enum SearchApi {
-  KABAL_SEARCH = 'kabal-search',
-  KABAL_API = 'kabal-api',
-}
-
-const getSearchApi = (indexFromSearchEnabled: boolean) =>
-  indexFromSearchEnabled ? SearchApi.KABAL_SEARCH : SearchApi.KABAL_API;
 
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
@@ -118,12 +108,12 @@ export const klagebehandlingerApi = createApi({
   tagTypes: ['oppgaver', 'medutgaattefrister', 'personsoek'],
   endpoints: (builder) => ({
     getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
-      query: ({ navIdent, indexFromSearchEnabled, ...queryParams }) => {
+      query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/${getSearchApi(indexFromSearchEnabled)}/ansatte/${navIdent}/klagebehandlinger?${query}`;
+        return `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger?${query}`;
       },
       providesTags: (result) =>
         typeof result !== 'undefined'
@@ -134,20 +124,18 @@ export const klagebehandlingerApi = createApi({
           : [{ type: 'oppgaver', id: 'LIST' }],
     }),
     getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadKlagebehandlingerParams>({
-      query: ({ navIdent, indexFromSearchEnabled, ...queryParams }) => {
+      query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/${getSearchApi(
-          indexFromSearchEnabled
-        )}/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+        return `/api/kabal-api/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
       },
       providesTags: ['medutgaattefrister'],
     }),
     personsoek: builder.mutation<PersonSoekApiResponse, LoadPersonSoekParams>({
-      query: ({ navIdent, indexFromSearchEnabled, ...queryParams }) => ({
-        url: `/api/${getSearchApi(indexFromSearchEnabled)}/ansatte/${navIdent}/klagebehandlinger/personsoek`,
+      query: ({ navIdent, ...queryParams }) => ({
+        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/personsoek`,
         method: 'POST', // Personsøk er POST for å ikke sende fnr inn i URLen, som blir logget.
         body: queryParams,
       }),

@@ -6,7 +6,6 @@ import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetFeatureToggleIndexFromSearchQuery } from '../../redux-api/feature-toggling';
 import {
   LoadKlagebehandlingerParams,
   useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
@@ -37,9 +36,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
     hjemler: [],
     sortDescending: false,
   });
-
   const { data: bruker } = useGetBrukerQuery();
-  const { data: indexFromSearchEnabled } = useGetFeatureToggleIndexFromSearchQuery();
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
@@ -53,7 +50,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
 
   const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
-    typeof bruker === 'undefined' || typeof indexFromSearchEnabled === 'undefined'
+    typeof bruker === 'undefined'
       ? skipToken
       : {
           start: from,
@@ -66,7 +63,6 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           hjemler,
           navIdent: bruker.info.navIdent,
           enhet: bruker.valgtEnhetView.id,
-          indexFromSearchEnabled,
         };
 
   const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {
