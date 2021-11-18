@@ -1,7 +1,7 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useState } from 'react';
-import { ReduxApiValidationError } from '../../../../functions/error-type-guard';
+import { isReduxValidationResponse } from '../../../../functions/error-type-guard';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useKlagerName } from '../../../../hooks/use-klager-name';
 import { useFinishKlagebehandlingMutation } from '../../../../redux-api/oppgave';
@@ -35,11 +35,11 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
-        errorContext?.setValidationErrors([]);
+        errorContext?.setValidationSectionErrors([]);
       })
       .catch((error) => {
-        if (typeof errorContext !== 'undefined' && ReduxApiValidationError.is(error)) {
-          errorContext.setValidationErrors(error.data['invalid-properties']);
+        if (typeof errorContext !== 'undefined' && isReduxValidationResponse(error)) {
+          errorContext.setValidationSectionErrors(error.data.sections);
         }
       });
   };

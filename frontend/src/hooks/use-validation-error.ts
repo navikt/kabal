@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
-import { IValidationErrors } from '../functions/error-type-guard';
+import { IValidationSection } from '../functions/error-type-guard';
 import { IKakaKvalitetsvurdering } from '../redux-api/kaka-kvalitetsvurdering-types';
 
 type Field = keyof IKakaKvalitetsvurdering | 'vedtaksdokument' | 'utfall' | 'hjemmel';
@@ -8,11 +8,15 @@ type Field = keyof IKakaKvalitetsvurdering | 'vedtaksdokument' | 'utfall' | 'hje
 export const useValidationError = (field: Field): string | undefined => {
   const context = useContext(ValidationErrorContext);
 
-  return context?.validationErrors.find((e) => e.field === field)?.reason;
+  const allProperties = useMemo(
+    () => context?.validationSectionErrors?.flatMap(({ properties }) => properties),
+    [context]
+  );
+  return useMemo(() => allProperties?.find((p) => p.field === field)?.reason, [allProperties, field]);
 };
 
-export const useAllValidationErrors = (): IValidationErrors => {
+export const useAllValidationErrors = (): IValidationSection[] => {
   const context = useContext(ValidationErrorContext);
 
-  return context?.validationErrors ?? [];
+  return context?.validationSectionErrors ?? [];
 };

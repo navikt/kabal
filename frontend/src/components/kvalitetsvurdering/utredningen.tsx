@@ -2,6 +2,7 @@ import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
+import { useFieldName } from '../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
@@ -14,6 +15,7 @@ export const Utredningen = () => {
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useCanEdit();
   const validationError = useValidationError('utredningenRadioValg');
+  const header = useFieldName('utredningenRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
@@ -68,7 +70,7 @@ export const Utredningen = () => {
 
   return (
     <FormSection>
-      <SubHeader>Utredningen</SubHeader>
+      <SubHeader>{header}</SubHeader>
       <RadioGruppe feil={utredningenRadioValg === null ? validationError : undefined}>
         <RadioButtonsRow>
           <Radio

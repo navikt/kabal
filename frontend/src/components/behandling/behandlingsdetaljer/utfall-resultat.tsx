@@ -3,6 +3,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
 import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useFieldName } from '../../../hooks/use-field-name';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
@@ -18,6 +19,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const [updateUtfall] = useUpdateUtfallMutation();
   const canEdit = useCanEdit();
   const validationError = useValidationError('utfall');
+  const utfallLabel = useFieldName('utfall');
 
   const { data: kodeverk, isLoading: isKodeverkLoading } = useGetKodeverkQuery();
 
@@ -40,7 +42,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
     <StyledUtfallResultat>
       <Select
         disabled={!canEdit}
-        label="Utfall/resultat:"
+        label={`${utfallLabel}:`}
         bredde="s"
         onChange={onUtfallResultatChange}
         value={utfall ?? undefined}

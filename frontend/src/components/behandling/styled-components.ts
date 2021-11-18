@@ -9,7 +9,7 @@ export const StyledHeader = styled.h1`
 
 export const StyledContainer = styled.div`
   display: flex;
-  min-height: 100%;
+  flex-basis: 100%;
   white-space: normal;
 `;
 
@@ -38,17 +38,13 @@ export const StyledLabel = styled.div`
 `;
 
 export const StyledBehandlingsdetaljer = styled.div`
-  flex-basis: 100%;
   border-right: 1px solid #c9c9c9;
-  min-height: 100%;
   width: 24em;
 `;
 
 export const StyledBehandlingsdialog = styled.div`
-  flex-basis: 100%;
-  height: 100%;
   padding: 1em;
-  max-width: 23em;
+  width: 24em;
 `;
 
 export const StyledLovhjemmelLabel = styled.span`

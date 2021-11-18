@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSectionTitle } from '../../hooks/use-section-title';
 import { PanelContainer } from '../klagebehandling-panels/panel';
 import { Kvalitetsskjema } from './kvalitetsskjema';
 import { Header, KvalitetsVurderingContainer } from './styled-components';
@@ -8,6 +9,8 @@ interface KvalitetsvurderingProps {
 }
 
 export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Element | null => {
+  const header = useSectionTitle('kvalitetsvurdering');
+
   if (!shown) {
     return null;
   }
@@ -15,7 +18,7 @@ export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Elem
   return (
     <PanelContainer data-testid="kvalitetsvurdering-panel">
       <KvalitetsVurderingContainer>
-        <Header>Kvalitetsvurdering</Header>
+        <Header>{header}</Header>
         <Kvalitetsskjema />
       </KvalitetsVurderingContainer>
     </PanelContainer>
