@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { IValidationErrors } from '../../functions/error-type-guard';
+import { IValidationSection } from '../../functions/error-type-guard';
 
 interface IValidationErrorContext {
-  validationErrors: IValidationErrors;
-  setValidationErrors: (errors: IValidationErrors) => void;
+  validationSectionErrors: IValidationSection[];
+  setValidationSectionErrors: (errors: IValidationSection[]) => void;
 }
 
 export const ValidationErrorContext = React.createContext<IValidationErrorContext | undefined>(undefined);
@@ -13,10 +13,12 @@ interface Props {
 }
 
 export const ValidationErrorProvider = ({ children }: Props) => {
-  const [validationErrors, setValidationErrors] = useState<IValidationErrors>([]);
+  const [validationErrors, setValidationErrors] = useState<IValidationSection[]>([]);
 
   return (
-    <ValidationErrorContext.Provider value={{ validationErrors, setValidationErrors }}>
+    <ValidationErrorContext.Provider
+      value={{ validationSectionErrors: validationErrors, setValidationSectionErrors: setValidationErrors }}
+    >
       {children}
     </ValidationErrorContext.Provider>
   );

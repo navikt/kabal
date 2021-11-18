@@ -2,6 +2,7 @@ import { Radio } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
+import { useFieldName } from '../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
@@ -14,6 +15,7 @@ export const BrukAvRaadgivendeLege = () => {
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const validationError = useValidationError('brukAvRaadgivendeLegeRadioValg');
   const canEdit = useCanEdit();
+  const header = useFieldName('brukAvRaadgivendeLegeRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
@@ -46,7 +48,7 @@ export const BrukAvRaadgivendeLege = () => {
 
   return (
     <FormSection>
-      <SubHeader>Bruk av rådgivende lege</SubHeader>
+      <SubHeader>{header}</SubHeader>
       <RadioButtonsColumn feil={brukAvRaadgivendeLegeRadioValg === null ? validationError : undefined}>
         <Radio
           name={'BrukAvRaadgivendeLegeIkkeAktuelt'}

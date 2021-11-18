@@ -26,12 +26,12 @@ export const FinishKlagebehandling = () => {
       return false;
     }
 
-    return data['invalid-properties'].length !== 0;
+    return data.sections.length !== 0;
   }, [data]);
 
   useEffect(() => {
     if (typeof errorContext !== 'undefined' && typeof data !== 'undefined') {
-      errorContext.setValidationErrors(data['invalid-properties']);
+      errorContext.setValidationSectionErrors(data.sections);
     }
   }, [data, errorContext]);
 
@@ -57,7 +57,7 @@ export const FinishKlagebehandling = () => {
     <>
       <StyledPaddedContent>
         <StyledSubHeader>Fullfør klagebehandling</StyledSubHeader>
-        <ValidationSummary errors={data?.['invalid-properties'] ?? []} />
+        <ValidationSummary sections={data?.sections ?? []} />
         {(!showConfirmFinish || hasErrors) && (
           <Knapp
             mini
