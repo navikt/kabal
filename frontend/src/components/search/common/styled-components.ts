@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledTable = styled.table`
-  margin: 20px 0;
+  margin: 0;
 `;
 
 export const StyledResult = styled.li`
@@ -14,8 +14,8 @@ export const StyledResult = styled.li`
   align-items: center;
   padding: 16px;
   padding-right: 32px;
-  margin-top: 20px;
   border-top: 1px solid #c6c2bf;
+  max-width: 900px;
 `;
 
 export const StyledName = styled.span`

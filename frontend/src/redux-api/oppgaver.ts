@@ -137,7 +137,7 @@ export const klagebehandlingerApi = createApi({
       },
       providesTags: ['medutgaattefrister'],
     }),
-    fnrSearch: builder.query<IFnrSearchResponse, IFnrSearchParams>({
+    fnrSearch: builder.query<IFnrSearchResponse | undefined, IFnrSearchParams>({
       query: ({ ...queryParams }) => ({
         url: `/api/kabal-search/search/fnr`,
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.

@@ -27,7 +27,7 @@ export const SearchBox = ({ query, setQuery }: SearchBoxProps): JSX.Element => (
 const StyledContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding-top: 2px;
+  padding-bottom: 1em;
 `;
 
 const StyledInput = styled.input`
