@@ -22,6 +22,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, tema }: Props) 
     tildelSaksbehandler({
       oppgaveId: klagebehandlingId,
       navIdent: userData.info.navIdent,
+      enhetId: userData.valgtEnhetView.id,
     }).then(() => setDone(true));
   }, [klagebehandlingId, userData, tildelSaksbehandler, setDone]);
 
