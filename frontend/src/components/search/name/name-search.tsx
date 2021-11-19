@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { INameSearchParams, useNameSearchQuery } from '../../../redux-api/oppgaver';
@@ -24,7 +25,11 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
   }
 
   if (data.people.length === 0) {
-    return <span data-testid="search-result-none">Ingen treff</span>;
+    return (
+      <AlertStripe type="info" data-testid="search-result-none">
+        Ingen registrerte klager på denne personen i Kabal
+      </AlertStripe>
+    );
   }
 
   return <SearchResults people={data.people} />;

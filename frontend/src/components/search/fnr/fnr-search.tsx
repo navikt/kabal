@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
@@ -26,7 +27,11 @@ export const FnrSearch = ({ queryString }: Props) => {
   }
 
   if (typeof data === 'undefined') {
-    return <span data-testid="search-result-none">Ingen treff</span>;
+    return (
+      <AlertStripe type="info" data-testid="search-result-none">
+        Ingen registrerte klager på denne personen i Kabal
+      </AlertStripe>
+    );
   }
 
   return <Result {...data} />;

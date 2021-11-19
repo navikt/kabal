@@ -1,3 +1,4 @@
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { IKlagebehandling, IKlagebehandlingList } from '../../../redux-api/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
@@ -7,30 +8,39 @@ import { SaksbehandlerButton } from '../../common-table-components/saksbehandler
 import { Tema } from '../../common-table-components/tema';
 import { Type } from '../../common-table-components/type';
 import { RightAlignCell, StyledTable } from './styled-components';
+import { StyledTableCaption } from './table-caption';
 
 interface Props {
   activeOppgaver: IKlagebehandlingList;
 }
 
-export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => (
-  <StyledTable className="tabell tabell--stripet" data-testid="search-result-active-oppgaver">
-    <thead>
-      <tr>
-        <th>Aktive klager</th>
-        <th></th>
-        <th></th>
-        <th>Frist</th>
-        <th>Saksbehandler</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {activeOppgaver.map((k) => (
-        <Row key={k.id} {...k} />
-      ))}
-    </tbody>
-  </StyledTable>
-);
+export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
+  if (activeOppgaver.length === 0) {
+    return <AlertStripeInfo>Ingen aktive oppgaver</AlertStripeInfo>;
+  }
+
+  return (
+    <StyledTable className="tabell tabell--stripet" data-testid="search-result-active-oppgaver">
+      <StyledTableCaption>Aktive oppgaver</StyledTableCaption>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Tema</th>
+          <th>Hjemmel</th>
+          <th>Frist</th>
+          <th>Saksbehandler</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {activeOppgaver.map((k) => (
+          <Row key={k.id} {...k} />
+        ))}
+      </tbody>
+    </StyledTable>
+  );
+};
 
 const Row = ({
   id,

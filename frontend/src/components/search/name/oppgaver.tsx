@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
@@ -14,14 +15,22 @@ interface Props {
 
 export const Oppgaver = ({ open, fnr }: Props) => {
   const query = useGetQuery(fnr, open);
-  const { data, isFetching, isError } = useFnrSearchQuery(query);
+  const { data, isFetching, isUninitialized } = useFnrSearchQuery(query);
 
-  if (!open || typeof data === 'undefined') {
+  if (!open) {
     return null;
   }
 
-  if (isFetching || isError) {
+  if (isFetching) {
     return <NavFrontendSpinner />;
+  }
+
+  if (typeof data === 'undefined') {
+    if (isUninitialized) {
+      return null;
+    }
+
+    return <AlertStripe type="info">Ingen registrerte klager på denne personen i Kabal</AlertStripe>;
   }
 
   const { aapneKlagebehandlinger, avsluttedeKlagebehandlinger } = data;
