@@ -2,6 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { getFullName } from '../../../domain/name';
 import { Name } from '../../../domain/types';
+import { formatPersonNum } from '../../../functions/format-id';
 import { ArrowDown } from '../../../icons/arrow-down';
 import { ArrowUp } from '../../../icons/arrow-up';
 import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
@@ -20,7 +21,7 @@ export const Result = ({ fnr, navn }: Props) => {
   return (
     <StyledResult data-testid="search-result">
       <StyledName>{getFullName(navn)}</StyledName>
-      <StyledFnr>{fnr}</StyledFnr>
+      <StyledFnr>{formatPersonNum(fnr)}</StyledFnr>
       <Knapp type="flat" mini onClick={() => setOpen(!open)} data-testid="search-result-expand-button">
         <span>{getOpenText(open)}</span>
         {chevron}
