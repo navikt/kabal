@@ -66,7 +66,7 @@ export interface LoadKlagebehandlingerParams {
 
 export interface TildelSaksbehandlerParams {
   navIdent: string;
-  enhetId?: string;
+  enhetId: string;
   oppgaveId: string;
 }
 
