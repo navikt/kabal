@@ -1,6 +1,7 @@
+const webpack = require('webpack');
 const path = require('path');
 
-module.exports = {
+module.exports = (_env, { mode }) => ({
   entry: {
     main: './src/index.tsx',
   },
@@ -67,4 +68,13 @@ module.exports = {
       },
     },
   },
-};
+  plugins: [
+    new webpack.DefinePlugin({
+      'process': {
+        env: {
+          NODE_ENV: JSON.stringify(mode),
+        }
+      }
+    }),
+  ]
+});
