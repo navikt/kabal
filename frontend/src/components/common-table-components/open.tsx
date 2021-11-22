@@ -4,12 +4,12 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 
 interface Props {
   klagebehandlingId: string;
-  tema: string;
+  ytelse: string;
 }
 
-export const OpenKlagebehandling = ({ klagebehandlingId, tema }: Props) => {
+export const OpenKlagebehandling = ({ klagebehandlingId, ytelse }: Props) => {
   const { data: userData } = useGetBrukerQuery();
-  const hasAccess = userData?.valgtEnhetView.lovligeTemaer.includes(tema) ?? false;
+  const hasAccess = userData?.valgtEnhetView.lovligeYtelser.includes(ytelse) ?? false;
 
   if (!hasAccess) {
     return null;

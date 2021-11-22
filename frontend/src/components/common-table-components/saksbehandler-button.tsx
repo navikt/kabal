@@ -16,7 +16,7 @@ export const SaksbehandlerButton = ({
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
   name,
-  tema,
+  ytelse,
 }: Props): JSX.Element => {
   const { data: userData, isLoading } = useGetBrukerQuery();
 
@@ -25,7 +25,7 @@ export const SaksbehandlerButton = ({
   }
 
   if (tildeltSaksbehandlerident === null) {
-    return <TildelKlagebehandlingButton klagebehandlingId={klagebehandlingId} tema={tema} />;
+    return <TildelKlagebehandlingButton klagebehandlingId={klagebehandlingId} ytelse={ytelse} />;
   }
 
   if (userData.info.navIdent === tildeltSaksbehandlerident) {

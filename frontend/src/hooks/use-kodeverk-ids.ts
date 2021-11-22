@@ -28,6 +28,20 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
   return 'Mangler';
 };
 
+export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
+  const { data, isLoading } = useGetKodeverkQuery();
+
+  if (isLoading || typeof data === 'undefined') {
+    return 'Laster...';
+  }
+
+  if (typeof ytelseId === 'string') {
+    return data.ytelse.find(({ id }) => id === ytelseId)?.beskrivelse ?? ytelseId;
+  }
+
+  return 'Mangler';
+};
+
 export const useTypeFromId = (typeId?: string | null): string => {
   const { data, isLoading } = useGetKodeverkQuery();
 

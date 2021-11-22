@@ -37,7 +37,7 @@ export const FullfoerteOppgaverTable = () => {
 
   const doneOppgaverHeaderTitles: (string | null)[] = [
     'Type',
-    'Tema',
+    'Ytelse',
     'Hjemmel',
     'Navn',
     'Fnr.',

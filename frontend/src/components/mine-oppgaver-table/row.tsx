@@ -6,14 +6,13 @@ import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../common-table-components/open';
-import { Tema } from '../common-table-components/tema';
 import { Type } from '../common-table-components/type';
+import { Ytelse } from '../common-table-components/ytelse';
 import { MedudunderskriverflytLabel } from './medunderskrivflyt-label';
 
 export const Row = ({
   id,
   type,
-  tema,
   hjemmel,
   frist,
   person,
@@ -23,13 +22,14 @@ export const Row = ({
   harMedunderskriver,
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
+  ytelse,
 }: IKlagebehandling): JSX.Element => (
   <tr data-testid="mine-oppgaver-row" data-klagebehandlingid={id}>
     <td>
       <Type type={type} />
     </td>
     <td>
-      <Tema tema={tema} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
       <Hjemmel hjemmel={hjemmel} />
@@ -50,7 +50,7 @@ export const Row = ({
       />
     </td>
     <td>
-      <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
+      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
     </td>
     <td>
       <FradelKlagebehandlingButton

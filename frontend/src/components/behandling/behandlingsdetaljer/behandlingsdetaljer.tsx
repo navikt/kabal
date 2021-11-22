@@ -5,10 +5,11 @@ import { useKlagebehandling } from '../../../hooks/use-klagebehandling';
 import { useKlagerName } from '../../../hooks/use-klager-name';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
 import { FinishKlagebehandling } from './finish-klagebehandling/finish-klagebehandling';
-import { Labels } from './labels';
 import { Lovhjemmel } from './lovhjemmel';
 import { SubSection } from './sub-section';
+import { Type } from './type';
 import { UtfallResultat } from './utfall-resultat';
+import { Ytelse } from './ytelse';
 
 export const Behandlingsdetaljer = () => {
   const [klagebehandling, isLoading] = useKlagebehandling();
@@ -20,13 +21,13 @@ export const Behandlingsdetaljer = () => {
 
   const {
     type,
-    tema,
     mottattFoersteinstans,
     fraNAVEnhetNavn,
     fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraFoersteinstans,
     resultat,
+    ytelse,
   } = klagebehandling;
 
   return (
@@ -36,7 +37,9 @@ export const Behandlingsdetaljer = () => {
 
         <SubSection label="Klager">{klagerName ?? ''}</SubSection>
 
-        <Labels typeId={type} temaId={tema} />
+        <Type typeId={type} />
+
+        <Ytelse ytelseId={ytelse} />
 
         <SubSection label="Mottatt førsteinstans">{isoDateToPretty(mottattFoersteinstans)}</SubSection>
         <SubSection label="Fra NAV-enhet">

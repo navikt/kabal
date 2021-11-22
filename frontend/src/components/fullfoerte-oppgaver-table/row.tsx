@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { isoDateToPretty } from '../../domain/date';
 import { formatPersonNum } from '../../functions/format-id';
-import { useHjemmelFromId, useTemaFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
+import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
@@ -10,11 +10,11 @@ import { LabelMain, LabelTema } from '../../styled-components/labels';
 export const Row = ({
   id,
   type,
-  tema,
   utfall,
   hjemmel,
   avsluttetAvSaksbehandlerDate,
   person,
+  ytelse,
 }: IKlagebehandling): JSX.Element => {
   const { data: kodeverk } = useGetKodeverkQuery();
 
@@ -32,7 +32,7 @@ export const Row = ({
         <LabelMain>{useTypeFromId(type)}</LabelMain>
       </td>
       <td>
-        <LabelTema tema={tema}>{useTemaFromId(tema)}</LabelTema>
+        <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
       </td>
       <td>
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>

@@ -1,6 +1,6 @@
 export interface Filters {
   types: string[];
-  tema: string[];
+  ytelser: string[];
   hjemler: string[];
   sortDescending: boolean;
 }

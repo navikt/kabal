@@ -5,8 +5,8 @@ import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../../common-table-components/open';
 import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
-import { Tema } from '../../common-table-components/tema';
 import { Type } from '../../common-table-components/type';
+import { Ytelse } from '../../common-table-components/ytelse';
 import { RightAlignCell, StyledTable } from './styled-components';
 import { StyledTableCaption } from './table-caption';
 
@@ -25,7 +25,7 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
       <thead>
         <tr>
           <th>Type</th>
-          <th>Tema</th>
+          <th>Ytelse</th>
           <th>Hjemmel</th>
           <th>Frist</th>
           <th>Saksbehandler</th>
@@ -45,7 +45,7 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
 const Row = ({
   id,
   type,
-  tema,
+  ytelse,
   hjemmel,
   frist,
   ageKA,
@@ -58,7 +58,7 @@ const Row = ({
       <Type type={type} />
     </td>
     <td>
-      <Tema tema={tema} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
       <Hjemmel hjemmel={hjemmel} />
@@ -71,34 +71,13 @@ const Row = ({
         tildeltSaksbehandlerident={tildeltSaksbehandlerident}
         name={tildeltSaksbehandlerNavn}
         klagebehandlingId={id}
-        tema={tema}
+        ytelse={ytelse}
         isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
       />
-      {/* <Saksbehandler
-        navIdent={tildeltSaksbehandlerident}
-        navn={tildeltSaksbehandlerNavn}
-        klagebehandlingId={id}
-        tema={tema}
-      /> */}
     </td>
     <td></td>
     <RightAlignCell>
-      <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
+      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
     </RightAlignCell>
   </tr>
 );
-
-// interface SaksbehandlerProps {
-//   navIdent: string | null;
-//   navn: string | null;
-//   klagebehandlingId: string;
-//   tema: string;
-// }
-
-// const Saksbehandler = ({ navIdent, navn, klagebehandlingId, tema }: SaksbehandlerProps) => {
-//   if (navIdent === null) {
-//     return <TildelKlagebehandlingButton klagebehandlingId={klagebehandlingId} tema={tema} />;
-//   }
-
-//   return <span>{navn ?? 'Ukjent saksbehandler'}</span>;
-// };
