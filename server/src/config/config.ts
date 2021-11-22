@@ -7,7 +7,7 @@ export const slack = {
   messagePrefix: 'KABAL frontend NodeJS - ',
 };
 
-export const API_CLIENT_IDS = ['kabal-api', 'kabal-search', 'kabal-smart-editor-api', 'kabal-json-to-pdf', 'kaka-api'];
+export const API_CLIENT_IDS = ['kabal-api', 'kabal-search', 'kabal-smart-editor-api', 'kabal-json-to-pdf', 'kaka-api', 'kabal-innstillinger'];
 
 export const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
 export const serverDirectoryPath = cwd;
