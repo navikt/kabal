@@ -45,15 +45,15 @@ export const brukerApi = createApi({
   tagTypes: ['user'],
   endpoints: (builder) => ({
     getBruker: builder.query<IUserData, void>({
-      query: () => '/api/kabal-api/me/brukerdata',
+      query: () => '/api/kabal-innstillinger/me/brukerdata',
       providesTags: ['user'],
     }),
     getAnsatt: builder.query<IUserData, string>({
-      query: (navIdent) => `/api/kabal-api/${navIdent}/brukerdata`,
+      query: (navIdent) => `/api/kabal-innstillinger/${navIdent}/brukerdata`,
     }),
     setValgtEnhet: builder.mutation<void, ISetEnhet>({
       query: ({ navIdent, enhetId }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/valgtenhet`,
+        url: `/api/kabal-innstillinger/ansatte/${navIdent}/valgtenhet`,
         method: 'PUT',
         body: { enhetId },
       }),
@@ -61,7 +61,7 @@ export const brukerApi = createApi({
     }),
     updateSettings: builder.mutation<ISettings, IPostSettingsParams>({
       query: ({ navIdent, ...params }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/brukerdata/innstillinger`,
+        url: `/api/kabal-innstillinger/ansatte/${navIdent}/brukerdata/innstillinger`,
         method: 'PUT',
         body: { navIdent, ...params },
         validateStatus: ({ ok }) => ok,
