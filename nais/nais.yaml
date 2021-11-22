@@ -41,6 +41,7 @@ spec:
         - application: kabal-json-to-pdf
         - application: kabal-search
         - application: kaka-api
+        - application: kabal-innstillinger
       external:
         - host: login.microsoftonline.com
   ingresses:
