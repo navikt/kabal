@@ -10,7 +10,7 @@ import {
   IKlagebehandlingHjemlerUpdate,
   IKlagebehandlingUtfallUpdate,
   IMedunderskriverInfoResponse,
-  IMedunderskrivereInput,
+  IMedunderskrivereParams,
   IMedunderskrivereResponse,
   ISettMedunderskriverParams,
   ISettMedunderskriverResponse,
@@ -167,8 +167,9 @@ export const klagebehandlingApi = createApi({
         );
       },
     }),
-    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereInput>({
-      query: ({ id, tema }) => `/api/kabal-api/ansatte/${id}/medunderskrivere/${tema}`,
+    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
+      query: ({ navIdent, ytelseId, enhet }) =>
+        `/api/kabal-api/medunderskrivere/ytelser/${ytelseId}/enheter/${enhet}/ansatte/${navIdent}`,
     }),
     getMedunderskriverInfo: builder.query<IMedunderskriverInfoResponse, string>({
       query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverinfo`,

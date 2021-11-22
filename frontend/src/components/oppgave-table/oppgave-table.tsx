@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
-import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import {
   LoadKlagebehandlingerParams,
@@ -32,7 +32,7 @@ const PAGE_SIZE = 10;
 export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
-    tema: [],
+    ytelser: [],
     hjemler: [],
     sortDescending: false,
   });
@@ -41,11 +41,11 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
 
-  const settingsTemaer = useSettingsTemaer();
+  const settingsYtelser = useSettingsYtelser();
   const settingsTypes = useSettingsTypes();
   const settingsHjemler = useSettingsHjemler();
 
-  const temaer = filters.tema.length === 0 ? settingsTemaer.map(({ id }) => id) : filters.tema;
+  const ytelser = filters.ytelser.length === 0 ? settingsYtelser.map(({ id }) => id) : filters.ytelser;
   const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
 
@@ -58,7 +58,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           sortering: 'FRIST',
           rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
           erTildeltSaksbehandler: false,
-          temaer,
+          ytelser,
           typer,
           hjemler,
           navIdent: bruker.info.navIdent,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
-import { useSettingsTemaer } from '../../hooks/use-settings-temaer';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
 import { StyledTableHeader } from './styled-components';
@@ -14,7 +14,7 @@ interface TableHeaderFiltersProps {
 
 export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps): JSX.Element => {
   const typeOptions = useSettingsTypes();
-  const temaOptions = useSettingsTemaer();
+  const ytelseOptions = useSettingsYtelser();
   const hjemlerOptions = useSettingsHjemler();
 
   return (
@@ -31,11 +31,11 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         </StyledTableHeader>
         <StyledTableHeader width={'225px'}>
           <FilterDropdown
-            selected={filters.tema}
-            onChange={(tema) => onChange({ ...filters, tema })}
-            options={temaOptions}
+            selected={filters.ytelser}
+            onChange={(ytelser) => onChange({ ...filters, ytelser })}
+            options={ytelseOptions}
           >
-            Tema
+            Ytelse
           </FilterDropdown>
         </StyledTableHeader>
         <StyledTableHeader width={'225px'}>

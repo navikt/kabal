@@ -42,6 +42,7 @@ export interface IKlagebehandling {
   tildeltSaksbehandlerident: string | null;
   tildeltSaksbehandlerNavn: string | null;
   type: string;
+  ytelse: string;
   utfall: string | null;
 }
 
@@ -53,7 +54,7 @@ export interface LoadKlagebehandlingerParams {
   sortering: 'FRIST';
   rekkefoelge: 'STIGENDE' | 'SYNKENDE';
   erTildeltSaksbehandler: boolean;
-  temaer?: string[];
+  ytelser?: string[];
   typer?: string[];
   hjemler?: string[];
   navIdent: string;

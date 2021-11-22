@@ -47,7 +47,7 @@ export const Document = React.memo<DocumentProps>(
           </DocumentButton>
         </DocumentTitle>
 
-        <DocumentTema tema={tema}>{useFullTemaNameFromId(tema)}</DocumentTema>
+        <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
 
         <DocumentDate dateTime={registrert}>{isoDateToPretty(registrert)}</DocumentDate>
 

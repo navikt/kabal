@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useAvailableTemaer } from '../../hooks/use-available-temaer';
+import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { ISettings, useGetBrukerQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
@@ -9,7 +9,7 @@ import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
-  temaer: [],
+  ytelser: [],
   hjemler: [],
 };
 
@@ -29,7 +29,7 @@ export const Settings = () => {
 
   const settings = userData?.innstillinger ?? EMPTY_SETTINGS;
 
-  const availableTemaer = useAvailableTemaer();
+  const availableTemaer = useAvailableYtelser();
 
   return (
     <article>
@@ -53,16 +53,16 @@ export const Settings = () => {
         </StyledSettingsSection>
         <StyledSettingsSection>
           <FilterDropdown
-            selected={settings.temaer}
-            onChange={(temaer) => onChange({ ...settings, temaer })}
+            selected={settings.ytelser}
+            onChange={(ytelser) => onChange({ ...settings, ytelser })}
             options={availableTemaer}
           >
-            Tema
+            Ytelser
           </FilterDropdown>
           <StyledFiltersList>
-            {settings.temaer.map((temaId) => (
-              <StyledFiltersListItem key={temaId}>
-                <TemaEtikett id={temaId} />
+            {settings.ytelser.map((ytelse) => (
+              <StyledFiltersListItem key={ytelse}>
+                <TemaEtikett id={ytelse} />
               </StyledFiltersListItem>
             ))}
           </StyledFiltersList>
@@ -95,14 +95,15 @@ interface EtikettProps {
 const TypeEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
 );
+
 const TemaEtikett = ({ id }: EtikettProps) => (
-  <StyledEtikettTema tema={id} fixedWidth={true}>
-    {useFullTemaNameFromId(id)}
-  </StyledEtikettTema>
+  <StyledEtikettTema fixedWidth={true}>{useFullTemaNameFromId(id)}</StyledEtikettTema>
 );
+
 const HjemmelEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
 );
+
 const StyledEtikettMain = styled(LabelMain)`
   width: 100%;
 `;

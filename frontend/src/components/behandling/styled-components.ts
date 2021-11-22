@@ -19,24 +19,6 @@ export const StyledInfoHeader = styled.h2`
   font-weight: bold;
 `;
 
-export const StyledInfoLabel = styled.h2`
-  margin: 0;
-  font-size: 1em;
-  font-weight: bold;
-`;
-
-export const StyledLabels = styled.div`
-  display: flex;
-`;
-
-export const StyledInfoDetails = styled.div`
-  margin: 0;
-`;
-
-export const StyledLabel = styled.div`
-  flex: 1;
-`;
-
 export const StyledBehandlingsdetaljer = styled.div`
   border-right: 1px solid #c9c9c9;
   width: 24em;

@@ -8,7 +8,7 @@ import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
+import { IMedunderskriverInfoResponse, IMedunderskrivereParams } from '../../../../redux-api/oppgave-types';
 
 interface SelectMedunderskriverProps {
   klagebehandling: IKlagebehandling;
@@ -23,12 +23,13 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: 
   const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
 
-  const medunderskrivereQuery =
+  const medunderskrivereQuery: IMedunderskrivereParams | typeof skipToken =
     typeof bruker === 'undefined'
       ? skipToken
       : {
-          id: bruker.info.navIdent,
-          tema: klagebehandling.tema,
+          navIdent: bruker.info.navIdent,
+          enhet: bruker.valgtEnhetView.id,
+          ytelseId: klagebehandling.ytelse,
         };
 
   const { data } = useGetMedunderskrivereQuery(medunderskrivereQuery);

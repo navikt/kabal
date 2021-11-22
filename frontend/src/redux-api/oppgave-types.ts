@@ -43,9 +43,10 @@ export interface IMedunderskrivereResponse {
   medunderskrivere: IMedunderskriver[];
 }
 
-export interface IMedunderskrivereInput {
-  id: string;
-  tema: string;
+export interface IMedunderskrivereParams {
+  navIdent: string;
+  ytelseId: string;
+  enhet: string;
 }
 
 export interface IMedunderskriverInfoResponse {

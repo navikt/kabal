@@ -25,6 +25,7 @@ export interface IKodeverk {
   grunnerPerUtfall: GrunnerPerUtfall[];
   hjemlerPerTema: IKodeverkVerdiMedHjemler[];
   tema: IKodeverkVerdi[];
+  ytelse: IKodeverkVerdi[];
   eoes: IKodeverkVerdi[];
   kvalitetsavvikUtredning: IKodeverkVerdi[];
   kvalitetsavvikOversendelsesbrev: IKodeverkVerdi[];

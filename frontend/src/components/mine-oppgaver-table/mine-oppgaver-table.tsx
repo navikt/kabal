@@ -33,7 +33,7 @@ export const MineOppgaverTable = () => {
 
   const oppgaverHeaderTitles: (string | null)[] = [
     'Type',
-    'Tema',
+    'Ytelse',
     'Hjemmel',
     'Navn',
     'Fnr.',

@@ -71,6 +71,7 @@ export interface IKlagebehandling {
   tildeltSaksbehandler: ISaksbehandler | null;
   tilknyttedeDokumenter: IDocumentReference[];
   type: string;
+  ytelse: string;
 }
 
 export interface IKlager {

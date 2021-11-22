@@ -6,10 +6,10 @@ import { SuccessStatus } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
-  tema: string;
+  ytelse: string;
 }
 
-export const TildelKlagebehandlingButton = ({ klagebehandlingId, tema }: Props) => {
+export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props) => {
   const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
   const [done, setDone] = useState<boolean>(false);
@@ -26,7 +26,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, tema }: Props) 
     }).then(() => setDone(true));
   }, [klagebehandlingId, userData, tildelSaksbehandler, setDone]);
 
-  const hasAccess = userData?.valgtEnhetView.lovligeTemaer.includes(tema) ?? false;
+  const hasAccess = userData?.valgtEnhetView.lovligeYtelser.includes(ytelse) ?? false;
 
   if (!hasAccess) {
     return null;

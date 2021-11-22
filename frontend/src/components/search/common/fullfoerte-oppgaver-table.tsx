@@ -4,8 +4,8 @@ import { isoDateToPretty } from '../../../domain/date';
 import { IKlagebehandling, IKlagebehandlingList } from '../../../redux-api/oppgaver';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../../common-table-components/open';
-import { Tema } from '../../common-table-components/tema';
 import { Type } from '../../common-table-components/type';
+import { Ytelse } from '../../common-table-components/ytelse';
 import { RightAlignCell, StyledTable } from './styled-components';
 import { StyledTableCaption } from './table-caption';
 
@@ -24,7 +24,7 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
       <thead>
         <tr>
           <th>Type</th>
-          <th>Tema</th>
+          <th>Ytelse</th>
           <th>Hjemmel</th>
           <th>Fullført</th>
           <th>Saksbehandler</th>
@@ -40,13 +40,20 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
   );
 };
 
-const Row = ({ id, type, tema, hjemmel, avsluttetAvSaksbehandlerDate, tildeltSaksbehandlerNavn }: IKlagebehandling) => (
+const Row = ({
+  id,
+  type,
+  hjemmel,
+  ytelse,
+  avsluttetAvSaksbehandlerDate,
+  tildeltSaksbehandlerNavn,
+}: IKlagebehandling) => (
   <tr data-testid="search-result-fullfoert-oppgave">
     <td>
       <Type type={type} />
     </td>
     <td>
-      <Tema tema={tema} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
       <Hjemmel hjemmel={hjemmel} />
@@ -54,7 +61,7 @@ const Row = ({ id, type, tema, hjemmel, avsluttetAvSaksbehandlerDate, tildeltSak
     <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
     <td>{tildeltSaksbehandlerNavn}</td>
     <RightAlignCell>
-      <OpenKlagebehandling klagebehandlingId={id} tema={tema} />
+      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
     </RightAlignCell>
   </tr>
 );
