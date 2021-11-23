@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { ErrorMessage } from '../error-message/error-message';
@@ -20,6 +20,12 @@ export const MultiSelect = ({ title, onChange, options, selected, disabled, erro
   const ref = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(() => setOpen(false), ref, true);
+
+  useEffect(() => {
+    if (ref.current !== null && open) {
+      ref.current.scrollIntoView();
+    }
+  }, [ref, open]);
 
   const setSelected = (id: string | null, active: boolean) => {
     if (id === null) {
