@@ -1,5 +1,6 @@
 import Knapp from 'nav-frontend-knapper';
-import React from 'react';
+import { Input } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Filter } from './option';
@@ -13,6 +14,15 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: DropdownProps): JSX.Element | null => {
+  const [filter, setFilter] = useState('');
+  const [filteredOptions, setFilteredOptions] = useState(options);
+
+  useEffect(
+    () =>
+      setFilteredOptions(options.filter(({ beskrivelse }) => beskrivelse.toLowerCase().includes(filter.toLowerCase()))),
+    [setFilteredOptions, options, filter]
+  );
+
   if (!open) {
     return null;
   }
@@ -21,14 +31,19 @@ export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: Drop
     onChange(null, false);
   };
 
+  const onFilterChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(target.value);
+  };
+
   return (
     <StyledList width={fixedWidth === true ? '275px' : 'auto'}>
       <StyledTopListItem>
-        <Knapp mini onClick={reset}>
-          Nullstill
+        <StyledInput onChange={onFilterChange} value={filter} placeholder="Søk" />
+        <Knapp mini kompakt onClick={reset}>
+          Fjern alle
         </Knapp>
       </StyledTopListItem>
-      {options.map(({ id, beskrivelse }) => (
+      {filteredOptions.map(({ id, beskrivelse }) => (
         <StyledListItem key={id}>
           <Filter
             active={selected.includes(id)}
@@ -63,6 +78,7 @@ const StyledList = styled.ul<{ width: string }>`
   text-overflow: ellipsis;
   z-index: 1;
   width: ${({ width }) => width};
+  min-width: 250px;
 `;
 
 const StyledListItem = styled.li`
@@ -75,4 +91,14 @@ const StyledTopListItem = styled(StyledListItem)`
   border-bottom: 1px solid #c6c2bf;
   background-color: white;
   padding: 8px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledInput = styled(Input)`
+  &&& {
+    margin-right: 0.5em;
+  }
+
+  width: 100%;
 `;
