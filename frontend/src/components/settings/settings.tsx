@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useFullTemaNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
+import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { ISettings, useGetBrukerQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
@@ -62,7 +62,7 @@ export const Settings = () => {
           <StyledFiltersList>
             {settings.ytelser.map((ytelse) => (
               <StyledFiltersListItem key={ytelse}>
-                <TemaEtikett id={ytelse} />
+                <YtelseLabel id={ytelse} />
               </StyledFiltersListItem>
             ))}
           </StyledFiltersList>
@@ -96,8 +96,8 @@ const TypeEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
 );
 
-const TemaEtikett = ({ id }: EtikettProps) => (
-  <StyledEtikettTema fixedWidth={true}>{useFullTemaNameFromId(id)}</StyledEtikettTema>
+const YtelseLabel = ({ id }: EtikettProps) => (
+  <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(id)}</StyledEtikettTema>
 );
 
 const HjemmelEtikett = ({ id }: EtikettProps) => (
