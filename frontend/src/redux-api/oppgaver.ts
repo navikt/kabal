@@ -60,7 +60,7 @@ export interface LoadKlagebehandlingerParams {
   navIdent: string;
   ferdigstiltFom?: Date;
   ferdigstiltDaysAgo?: number;
-  tildeltSaksbehandler?: string;
+  tildeltSaksbehandler?: string[];
   projeksjon?: 'UTVIDET';
   enhet: string | null;
 }

@@ -9,7 +9,7 @@ import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQ
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
-import { StyledTable, StyledTableContainer } from './styled-components';
+import { StyledHeader, StyledTable, StyledTableContainer } from './styled-components';
 import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
@@ -19,6 +19,7 @@ export const EnhetensOppgaverTable = () => {
     types: [],
     ytelser: [],
     hjemler: [],
+    tildeltSaksbehandler: [],
     sortDescending: false,
   });
 
@@ -47,6 +48,7 @@ export const EnhetensOppgaverTable = () => {
           navIdent: bruker.info.navIdent,
           projeksjon: 'UTVIDET',
           enhet: bruker.valgtEnhetView.id,
+          tildeltSaksbehandler: filters.tildeltSaksbehandler,
         };
 
   const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {
@@ -55,6 +57,7 @@ export const EnhetensOppgaverTable = () => {
 
   return (
     <StyledTableContainer>
+      <StyledHeader>Tildelte oppgaver</StyledHeader>
       <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-table">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} />
