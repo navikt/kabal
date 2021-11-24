@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Checkbox = (props: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => (
-  <input {...props} type={'checkbox'} />
-);
+const Checkbox = React.forwardRef<
+  HTMLInputElement,
+  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+>((props, ref) => <input {...props} type={'checkbox'} ref={ref} />);
+
+Checkbox.displayName = 'Checkbox';
 
 export const StyledCheckbox = styled(Checkbox)`
   appearance: none;
@@ -15,6 +18,8 @@ export const StyledCheckbox = styled(Checkbox)`
   flex-shrink: 0;
   border-width: 1px;
   border-style: solid;
+
+  box-shadow: ${({ theme }: { theme: { focused: boolean } }) => (theme.focused ? '0 0 0 3px #254b6d' : 'none')};
 
   &:focus,
   &:active {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { StyledCheckbox } from '../../styled-components/checkbox';
 
@@ -7,14 +7,32 @@ interface FilterProps {
   active: boolean;
   filterId?: string | null;
   children: string;
+  focused: boolean;
 }
 
-export const Filter = ({ active, filterId = null, children, onChange }: FilterProps): JSX.Element => (
-  <StyledLabel>
-    <StyledCheckbox type="checkbox" checked={active} onChange={(event) => onChange(filterId, event.target.checked)} />
-    <StyledText>{children}</StyledText>
-  </StyledLabel>
-);
+export const Filter = ({ active, filterId = null, children, onChange, focused }: FilterProps): JSX.Element => {
+  const ref = React.useRef<HTMLLabelElement>(null);
+
+  useEffect(() => {
+    if (focused && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }, [focused]);
+
+  return (
+    <StyledLabel ref={ref}>
+      <StyledCheckbox
+        type="checkbox"
+        checked={active}
+        onChange={(event) => onChange(filterId, event.target.checked)}
+        theme={{ focused }}
+      />
+      <StyledText>{children}</StyledText>
+    </StyledLabel>
+  );
+};
+
+Filter.displayName = 'Filter';
 
 const StyledLabel = styled.label`
   display: flex;
