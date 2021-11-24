@@ -22,6 +22,7 @@ export const StyledInfoHeader = styled.h2`
 export const StyledBehandlingsdetaljer = styled.div`
   border-right: 1px solid #c9c9c9;
   width: 24em;
+  padding-bottom: 1em;
 `;
 
 export const StyledBehandlingsdialog = styled.div`
