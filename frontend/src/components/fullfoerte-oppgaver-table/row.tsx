@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
 import { isoDateToPretty } from '../../domain/date';
 import { formatPersonNum } from '../../functions/format-id';
 import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { IKlagebehandling } from '../../redux-api/oppgaver';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { OpenKlagebehandling } from '../common-table-components/open';
 
 export const Row = ({
   id,
@@ -42,9 +42,7 @@ export const Row = ({
       <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
       <td>{utfallName}</td>
       <td>
-        <NavLink className="knapp knapp--hoved" to={`/klagebehandling/${id}`}>
-          Åpne
-        </NavLink>
+        <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
       </td>
     </tr>
   );
