@@ -1,39 +1,56 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled from 'styled-components';
+import { useHasAnyOfRoles } from '../../hooks/use-has-role';
+import { Role } from '../../redux-api/bruker';
 
 const oppgaverPathRegex = /^\/oppgaver\/\d+/;
 
 export const Nav = () => (
   <StyledNav role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
-      <StyledNavListItem>
-        <StyledNavLink
-          to="/oppgaver/1"
-          isActive={(match, location) => oppgaverPathRegex.test(location.pathname)}
-          data-testid="oppgaver-nav-link"
-        >
-          Oppgaver
-        </StyledNavLink>
-      </StyledNavListItem>
-      <StyledNavListItem>
-        <StyledNavLink to="/mineoppgaver" data-testid="mine-oppgaver-nav-link">
-          Mine Oppgaver
-        </StyledNavLink>
-      </StyledNavListItem>
-      <StyledNavListItem>
-        <StyledNavLink to="/sok" data-testid="search-nav-link">
-          Søk på person
-        </StyledNavLink>
-      </StyledNavListItem>
-      <StyledNavListItem>
-        <StyledNavLink to="/enhetensoppgaver" data-testid="enhetens-oppgaver-nav-link">
-          Enhetens oppgaver
-        </StyledNavLink>
-      </StyledNavListItem>
+      <NavItem
+        to="/oppgaver/1"
+        isActive={(match, location) => oppgaverPathRegex.test(location.pathname)}
+        data-testid="oppgaver-nav-link"
+      >
+        Oppgaver
+      </NavItem>
+      <NavItem to="/mineoppgaver" data-testid="mine-oppgaver-nav-link">
+        Mine Oppgaver
+      </NavItem>
+      <NavItem to="/sok" data-testid="search-nav-link">
+        Søk på person
+      </NavItem>
+      <NavItem
+        to="/enhetensoppgaver"
+        data-testid="enhetens-oppgaver-nav-link"
+        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_ADMIN]}
+      >
+        Enhetens oppgaver
+      </NavItem>
     </StyledNavLinkList>
   </StyledNav>
 );
+
+interface NavItemProps extends NavLinkProps {
+  testId?: string;
+  roles?: Role[];
+}
+
+const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
+  const hasRole = useHasAnyOfRoles(roles ?? []);
+
+  if (!hasRole) {
+    return null;
+  }
+
+  return (
+    <StyledNavListItem>
+      <StyledNavLink {...props} data-testid={testId} />
+    </StyledNavListItem>
+  );
+};
 
 const StyledNav = styled.nav`
   padding-top: 1em;
