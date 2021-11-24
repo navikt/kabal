@@ -1,6 +1,6 @@
 import Knapp from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
-import React, { KeyboardEventHandler, useEffect, useState } from 'react';
+import React, { KeyboardEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Filter } from './option';
@@ -14,14 +14,25 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({ selected, options, open, onChange, close }: DropdownProps): JSX.Element | null => {
-  const [filter, setFilter] = useState('');
+  const [rawFilter, setFilter] = useState('');
+  const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
+  const topItemRef = useRef<HTMLLIElement>(null);
 
-  useEffect(
-    () =>
-      setFilteredOptions(options.filter(({ beskrivelse }) => beskrivelse.toLowerCase().includes(filter.toLowerCase()))),
-    [setFilteredOptions, options, filter]
+  const filter = useMemo<RegExp>(
+    () => new RegExp(`.*${rawFilter.replaceAll(' ', '').split('').join('.*')}.*`, 'i'),
+    [rawFilter]
   );
+
+  useEffect(() => {
+    setFilteredOptions(options.filter(({ beskrivelse }) => filter.test(beskrivelse)));
+  }, [setFilteredOptions, options, filter]);
+
+  useEffect(() => {
+    if (!open && focused !== -1) {
+      setFocused(-1);
+    }
+  }, [open, focused]);
 
   if (!open) {
     return null;
@@ -37,22 +48,55 @@ export const Dropdown = ({ selected, options, open, onChange, close }: DropdownP
 
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
-      setFilter('');
-      close();
+      setFocused(-1);
+      return close();
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+
+      if (focused === filteredOptions.length - 1) {
+        topItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+        return setFocused(-1);
+      }
+
+      return setFocused(focused + 1);
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+
+      if (focused === -1) {
+        return setFocused(filteredOptions.length - 1);
+      }
+
+      if (focused === 0) {
+        topItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+      }
+
+      return setFocused(focused - 1);
+    }
+
+    if (event.key === 'Enter' || (event.key === ' ' && focused !== -1)) {
+      if (focused < filteredOptions.length && focused !== -1) {
+        event.preventDefault();
+        const { id } = filteredOptions[focused];
+        return onChange(id, !selected.includes(id));
+      }
     }
   };
 
   return (
     <StyledList>
-      <StyledTopListItem>
-        <StyledInput onChange={onFilterChange} value={filter} placeholder="Søk" onKeyDown={onKeyDown} autoFocus />
+      <StyledTopListItem ref={topItemRef}>
+        <StyledInput onChange={onFilterChange} value={rawFilter} placeholder="Søk" onKeyDown={onKeyDown} autoFocus />
         <Knapp mini kompakt onClick={reset}>
           Fjern alle
         </Knapp>
       </StyledTopListItem>
-      {filteredOptions.map(({ id, beskrivelse }) => (
+      {filteredOptions.map(({ id, beskrivelse }, i) => (
         <StyledListItem key={id}>
-          <Filter active={selected.includes(id)} filterId={id} onChange={onChange}>
+          <Filter active={selected.includes(id)} filterId={id} onChange={onChange} focused={i === focused}>
             {beskrivelse}
           </Filter>
         </StyledListItem>
