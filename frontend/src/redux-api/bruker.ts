@@ -24,10 +24,22 @@ export interface ISettings {
 
 export interface IUserData {
   info: IUser;
-  roller: string[];
+  roller: Role[];
   enheter: IEnhet[];
   valgtEnhetView: IEnhet;
   innstillinger: ISettings;
+}
+
+export enum Role {
+  ROLE_GOSYS_OPPGAVE_BEHANDLER = 'ROLE_GOSYS_OPPGAVE_BEHANDLER',
+  ROLE_KLAGE_SAKSBEHANDLER = 'ROLE_KLAGE_SAKSBEHANDLER',
+  ROLE_KLAGE_FAGANSVARLIG = 'ROLE_KLAGE_FAGANSVARLIG',
+  ROLE_KLAGE_LEDER = 'ROLE_KLAGE_LEDER',
+  ROLE_KLAGE_MERKANTIL = 'ROLE_KLAGE_MERKANTIL',
+  ROLE_KLAGE_FORTROLIG = 'ROLE_KLAGE_FORTROLIG',
+  ROLE_KLAGE_STRENGT_FORTROLIG = 'ROLE_KLAGE_STRENGT_FORTROLIG',
+  ROLE_KLAGE_EGEN_ANSATT = 'ROLE_KLAGE_EGEN_ANSATT',
+  ROLE_ADMIN = 'ROLE_ADMIN',
 }
 
 export interface ISetEnhet {
