@@ -29,7 +29,7 @@ export const AlleDokumenter = React.memo(() => {
     <DokumenterFullvisning data-testid="klagebehandling-documents-all">
       <ListHeader>
         <ListTitle>Journalførte dokumenter</ListTitle>
-        <FilterDropdown options={allTemaer} onChange={setSelectedTemaer} selected={selectedTemaer} fixedWidth>
+        <FilterDropdown options={allTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
           Tema
         </FilterDropdown>
       </ListHeader>
