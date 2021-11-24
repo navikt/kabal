@@ -33,7 +33,7 @@ export const Settings = () => {
 
   return (
     <article>
-      <h1>Velg hvilke ytelser og hjemmeler du har kompetanse til å behandle</h1>
+      <h1>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</h1>
       <StyledContent>
         <StyledSettingsSection>
           <FilterDropdown
