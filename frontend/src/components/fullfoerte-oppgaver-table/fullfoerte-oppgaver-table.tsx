@@ -22,7 +22,7 @@ export const FullfoerteOppgaverTable = () => {
           rekkefoelge: 'SYNKENDE',
           erTildeltSaksbehandler: true,
           navIdent: bruker.info.navIdent,
-          tildeltSaksbehandler: bruker.info.navIdent,
+          tildeltSaksbehandler: [bruker.info.navIdent],
           ferdigstiltDaysAgo: 7,
           projeksjon: 'UTVIDET',
           enhet: bruker.valgtEnhetView.id,

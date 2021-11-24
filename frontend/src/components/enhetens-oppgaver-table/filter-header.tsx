@@ -50,7 +50,15 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
           Frist
         </SortBy>
-        <th>Saksbehandler</th>
+        <th>
+          <FilterDropdown
+            selected={[]}
+            onChange={(tildeltSaksbehandler) => onChange({ ...filters, tildeltSaksbehandler })}
+            options={[]}
+          >
+            Saksbehandler
+          </FilterDropdown>
+        </th>
         <th role="columnheader"></th>
         <th role="columnheader"></th>
         <th role="columnheader"></th>

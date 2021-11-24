@@ -22,7 +22,7 @@ export const MineOppgaverTable = () => {
           rekkefoelge: 'STIGENDE',
           erTildeltSaksbehandler: true,
           navIdent: bruker.info.navIdent,
-          tildeltSaksbehandler: bruker.info.navIdent,
+          tildeltSaksbehandler: [bruker.info.navIdent],
           projeksjon: 'UTVIDET',
           enhet: bruker.valgtEnhetView.id,
         };

@@ -13,3 +13,7 @@ export const StyledTable = styled.table`
 export const StyledTableStats = styled.div`
   padding: 10px;
 `;
+
+export const StyledHeader = styled.h1`
+  margin-bottom: 1em;
+`;
