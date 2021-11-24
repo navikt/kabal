@@ -10,10 +10,9 @@ interface DropdownProps {
   options: IKodeverkVerdi[];
   onChange: (id: string | null, active: boolean) => void;
   open: boolean;
-  fixedWidth?: boolean;
 }
 
-export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: DropdownProps): JSX.Element | null => {
+export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): JSX.Element | null => {
   const [filter, setFilter] = useState('');
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -36,7 +35,7 @@ export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: Drop
   };
 
   return (
-    <StyledList width={fixedWidth === true ? '275px' : 'auto'}>
+    <StyledList>
       <StyledTopListItem>
         <StyledInput onChange={onFilterChange} value={filter} placeholder="Søk" />
         <Knapp mini kompakt onClick={reset}>
@@ -45,12 +44,7 @@ export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: Drop
       </StyledTopListItem>
       {filteredOptions.map(({ id, beskrivelse }) => (
         <StyledListItem key={id}>
-          <Filter
-            active={selected.includes(id)}
-            filterId={id}
-            onChange={onChange}
-            whiteSpace={fixedWidth === true ? 'normal' : 'nowrap'}
-          >
+          <Filter active={selected.includes(id)} filterId={id} onChange={onChange}>
             {beskrivelse}
           </Filter>
         </StyledListItem>
@@ -59,7 +53,7 @@ export const Dropdown = ({ selected, options, open, onChange, fixedWidth }: Drop
   );
 };
 
-const StyledList = styled.ul<{ width: string }>`
+const StyledList = styled.ul`
   display: block;
   position: absolute;
   top: 100%;
@@ -77,8 +71,9 @@ const StyledList = styled.ul<{ width: string }>`
   overflow-x: hidden;
   text-overflow: ellipsis;
   z-index: 1;
-  width: ${({ width }) => width};
-  min-width: 250px;
+  width: 100%;
+  min-width: 275px;
+  max-height: 256px;
 `;
 
 const StyledListItem = styled.li`

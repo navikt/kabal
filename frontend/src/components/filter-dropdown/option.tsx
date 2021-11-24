@@ -7,17 +7,16 @@ interface FilterProps {
   active: boolean;
   filterId?: string | null;
   children: string;
-  whiteSpace?: string;
 }
 
-export const Filter = ({ active, filterId = null, children, onChange, whiteSpace }: FilterProps): JSX.Element => (
-  <StyledLabel whiteSpace={whiteSpace}>
+export const Filter = ({ active, filterId = null, children, onChange }: FilterProps): JSX.Element => (
+  <StyledLabel>
     <StyledCheckbox type="checkbox" checked={active} onChange={(event) => onChange(filterId, event.target.checked)} />
     <StyledText>{children}</StyledText>
   </StyledLabel>
 );
 
-const StyledLabel = styled.label<{ whiteSpace?: string }>`
+const StyledLabel = styled.label`
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -26,7 +25,7 @@ const StyledLabel = styled.label<{ whiteSpace?: string }>`
   font-size: 1em;
   font-weight: 400;
   user-select: none;
-  white-space: ${({ whiteSpace }) => whiteSpace ?? 'nowrap'};
+  white-space: 'nowrap';
   word-break: keep-all;
   overflow: hidden;
 
