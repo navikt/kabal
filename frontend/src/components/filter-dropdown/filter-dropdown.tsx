@@ -15,6 +15,7 @@ interface FilterDropdownProps {
 export const FilterDropdown = ({ options, selected, onChange, children }: FilterDropdownProps): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const onFilterChange = (id: string | null, active: boolean) => {
     if (id === null) {
@@ -26,12 +27,17 @@ export const FilterDropdown = ({ options, selected, onChange, children }: Filter
 
   useOnClickOutside(() => setOpen(false), ref, true);
 
+  const close = () => {
+    buttonRef.current?.focus();
+    setOpen(false);
+  };
+
   return (
     <Container ref={ref}>
-      <ToggleButton theme={{ open }} onClick={() => setOpen(!open)}>
+      <ToggleButton theme={{ open }} onClick={() => setOpen(!open)} ref={buttonRef}>
         {children} ({selected.length})
       </ToggleButton>
-      <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} />
+      <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} close={close} />
     </Container>
   );
 };
