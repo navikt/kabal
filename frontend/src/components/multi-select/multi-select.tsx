@@ -39,6 +39,7 @@ export const MultiSelect = ({ title, onChange, options, selected, disabled, erro
   };
 
   const toggleOpen = () => setOpen(!open);
+  const close = () => setOpen(false);
 
   return (
     <>
@@ -52,7 +53,7 @@ export const MultiSelect = ({ title, onChange, options, selected, disabled, erro
           <StyledTitle>{title}</StyledTitle>
         </ToggleButton>
 
-        <Dropdown selected={selected} options={options} open={open} onChange={setSelected} />
+        <Dropdown selected={selected} options={options} open={open} onChange={setSelected} close={close} />
       </StyledMultiSelect>
       <ErrorMessage error={error} />
     </>

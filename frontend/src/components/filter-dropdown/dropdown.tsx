@@ -1,6 +1,6 @@
 import Knapp from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
+import React, { KeyboardEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Filter } from './option';
@@ -10,9 +10,10 @@ interface DropdownProps {
   options: IKodeverkVerdi[];
   onChange: (id: string | null, active: boolean) => void;
   open: boolean;
+  close: () => void;
 }
 
-export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): JSX.Element | null => {
+export const Dropdown = ({ selected, options, open, onChange, close }: DropdownProps): JSX.Element | null => {
   const [filter, setFilter] = useState('');
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -34,10 +35,17 @@ export const Dropdown = ({ selected, options, open, onChange }: DropdownProps): 
     setFilter(target.value);
   };
 
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Escape') {
+      setFilter('');
+      close();
+    }
+  };
+
   return (
     <StyledList>
       <StyledTopListItem>
-        <StyledInput onChange={onFilterChange} value={filter} placeholder="Søk" />
+        <StyledInput onChange={onFilterChange} value={filter} placeholder="Søk" onKeyDown={onKeyDown} autoFocus />
         <Knapp mini kompakt onClick={reset}>
           Fjern alle
         </Knapp>
