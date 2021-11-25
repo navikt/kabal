@@ -1,8 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
+import { LoadTildelteKlagebehandlingerParams, useGetTildelteKlagebehandlingerQuery } from '../../redux-api/oppgaver';
 import { TableHeader } from './header';
 import { OppgaveRader } from './rows';
 import { StyledTable, StyledTableContainer } from './styled-components';
@@ -12,7 +12,7 @@ const MAX_OPPGAVER = 100;
 export const MineOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
 
-  const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
+  const queryParams: typeof skipToken | LoadTildelteKlagebehandlingerParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -20,16 +20,20 @@ export const MineOppgaverTable = () => {
           antall: MAX_OPPGAVER,
           sortering: 'FRIST',
           rekkefoelge: 'STIGENDE',
-          erTildeltSaksbehandler: true,
           navIdent: bruker.info.navIdent,
           tildeltSaksbehandler: [bruker.info.navIdent],
           projeksjon: 'UTVIDET',
           enhet: bruker.valgtEnhetView.id,
         };
 
-  const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {
+  const { data: oppgaver, refetch } = useGetTildelteKlagebehandlingerQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
+
+  useEffect(() => {
+    refetch();
+    return refetch;
+  }, [refetch]);
 
   const oppgaverHeaderTitles: (string | null)[] = [
     'Type',

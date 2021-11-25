@@ -1,11 +1,15 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { IKlagebehandling, LoadKlagebehandlingerParams, useGetKlagebehandlingerQuery } from '../../redux-api/oppgaver';
+import {
+  IKlagebehandling,
+  LoadTildelteKlagebehandlingerParams,
+  useGetTildelteKlagebehandlingerQuery,
+} from '../../redux-api/oppgaver';
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
@@ -33,7 +37,7 @@ export const EnhetensOppgaverTable = () => {
 
   const { data: bruker } = useGetBrukerQuery();
 
-  const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
+  const queryParams: typeof skipToken | LoadTildelteKlagebehandlingerParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -41,7 +45,6 @@ export const EnhetensOppgaverTable = () => {
           antall: MAX_OPPGAVER,
           sortering: 'FRIST',
           rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
-          erTildeltSaksbehandler: true,
           ytelser,
           typer,
           hjemler,
@@ -51,9 +54,14 @@ export const EnhetensOppgaverTable = () => {
           tildeltSaksbehandler: filters.tildeltSaksbehandler,
         };
 
-  const { data: oppgaver } = useGetKlagebehandlingerQuery(queryParams, {
+  const { data: oppgaver, refetch } = useGetTildelteKlagebehandlingerQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
+
+  useEffect(() => {
+    refetch();
+    return refetch;
+  }, [refetch]);
 
   return (
     <StyledTableContainer>

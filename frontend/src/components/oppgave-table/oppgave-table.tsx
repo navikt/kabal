@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
@@ -7,9 +7,9 @@ import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import {
-  LoadKlagebehandlingerParams,
-  useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
-  useGetKlagebehandlingerQuery,
+  LoadLedigeKlagebehandlingerParams,
+  useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery,
+  useGetLedigeKlagebehandlingerQuery,
 } from '../../redux-api/oppgaver';
 import { TableHeaderFilters } from './filter-header';
 import { Pagination } from './pagination';
@@ -49,7 +49,7 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
   const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
 
-  const queryParams: typeof skipToken | LoadKlagebehandlingerParams =
+  const queryParams: typeof skipToken | LoadLedigeKlagebehandlingerParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -57,7 +57,6 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           antall: PAGE_SIZE,
           sortering: 'FRIST',
           rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
-          erTildeltSaksbehandler: false,
           ytelser,
           typer,
           hjemler,
@@ -65,12 +64,17 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           enhet: bruker.valgtEnhetView.id,
         };
 
-  const { data: klagebehandlinger } = useGetKlagebehandlingerQuery(queryParams, {
+  const { data: klagebehandlinger, refetch } = useGetLedigeKlagebehandlingerQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
-  const { data: utgaatte } = useGetAntallKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
+  const { data: utgaatte } = useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
     pollingInterval: 300 * 1000,
   });
+
+  useEffect(() => {
+    refetch();
+    return refetch;
+  }, [refetch]);
 
   const total = klagebehandlinger?.antallTreffTotalt ?? 0;
 
