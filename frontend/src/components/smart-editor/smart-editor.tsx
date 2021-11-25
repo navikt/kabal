@@ -14,9 +14,8 @@ import { NewDocument } from './new-document/new-document';
 export const SmartEditor = (): JSX.Element | null => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: smartEditorIdData } = useGetSmartEditorIdQuery(klagebehandlingId);
-  const { data: smartEditor } = useGetSmartEditorQuery(smartEditorIdData?.smartEditorId ?? skipToken);
+  const { data: smartEditor, isFetching } = useGetSmartEditorQuery(smartEditorIdData?.smartEditorId ?? skipToken);
   const [saveSmartEditor] = useUpdateSmartEditorMutation();
-
   const [value, setValue] = useState<ISmartEditor | undefined>(smartEditor?.smartEditorData);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export const SmartEditor = (): JSX.Element | null => {
     return <NewDocument />;
   }
 
-  if (typeof smartEditor === 'undefined') {
+  if (typeof smartEditor === 'undefined' || isFetching) {
     return <NavFrontendSpinner />;
   }
 

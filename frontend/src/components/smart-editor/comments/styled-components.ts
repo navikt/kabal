@@ -11,6 +11,7 @@ export const StyledNewComment = styled.div`
   padding: 1em;
   margin-bottom: 40px;
   border-radius: 4px;
+  border: 1px solid #c9c9c9;
 `;
 
 export const StyledCommentButtonContainer = styled.div`

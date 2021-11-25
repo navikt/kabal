@@ -22,5 +22,16 @@ export const StyledTemplateButtonIcon = styled.div`
 `;
 
 export const StyledNewDocument = styled.section`
-  margin: 2em;
+  width: 100%;
+`;
+
+export const StyledTemplates = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
+
+export const StyledHeader = styled.h2`
+  margin: 0;
+  margin-bottom: 1em;
 `;

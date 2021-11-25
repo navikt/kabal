@@ -27,7 +27,13 @@ export const useKeyboard = (editor: Editor) =>
         }
       }
 
-      if (event.key === 'Enter') {
+      if (event.shiftKey && event.key === 'Enter') {
+        // https://github.com/ianstormtaylor/slate/issues/3911
+        Transforms.insertText(editor, '\n');
+        return;
+      }
+
+      if (!event.shiftKey && event.key === 'Enter') {
         event.preventDefault();
 
         if (areBlocksActive(editor, [ListTypesEnum.BULLET_LIST, ListTypesEnum.NUMBERED_LIST])) {

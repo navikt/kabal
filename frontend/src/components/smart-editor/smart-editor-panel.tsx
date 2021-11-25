@@ -49,6 +49,6 @@ const SmartEditorPanelContainer = styled.div`
   display: flex;
   flex-direction: row;
   padding: 2em;
-  min-width: 850px;
+  width: 1100px;
   height: calc(100% - 48px);
 `;
