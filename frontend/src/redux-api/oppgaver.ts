@@ -48,21 +48,28 @@ export interface IKlagebehandling {
 
 export type IKlagebehandlingList = IKlagebehandling[];
 
-export interface LoadKlagebehandlingerParams {
+export interface LoadLedigeKlagebehandlingerParams {
   start: number;
   antall: number;
   sortering: 'FRIST';
   rekkefoelge: 'STIGENDE' | 'SYNKENDE';
-  erTildeltSaksbehandler: boolean;
   ytelser?: string[];
   typer?: string[];
   hjemler?: string[];
   navIdent: string;
   ferdigstiltFom?: Date;
   ferdigstiltDaysAgo?: number;
-  tildeltSaksbehandler?: string[];
   projeksjon?: 'UTVIDET';
   enhet: string | null;
+}
+
+export interface LoadTildelteKlagebehandlingerParams extends LoadLedigeKlagebehandlingerParams {
+  tildeltSaksbehandler: string[];
+}
+
+export interface LoadKlagebehandlingerParams extends LoadLedigeKlagebehandlingerParams {
+  tildeltSaksbehandler?: string[];
+  erTildeltSaksbehandler: boolean;
 }
 
 export interface TildelSaksbehandlerParams {
@@ -110,33 +117,40 @@ export interface INameSearchResponse {
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
   baseQuery: staggeredBaseQuery,
-  tagTypes: ['oppgaver', 'medutgaattefrister'],
+  tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'oppgaver', 'ledige-medutgaattefrister'],
   endpoints: (builder) => ({
-    getKlagebehandlinger: builder.query<ApiResponse, LoadKlagebehandlingerParams>({
+    getTildelteKlagebehandlinger: builder.query<ApiResponse, LoadTildelteKlagebehandlingerParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?erTildeltSaksbehandler=true&${query}`;
       },
-      providesTags: (result) =>
-        typeof result !== 'undefined'
-          ? [
-              ...result.klagebehandlinger.map(({ id }) => ({ type: 'oppgaver', id } as const)),
-              { type: 'oppgaver', id: 'LIST' },
-            ]
-          : [{ type: 'oppgaver', id: 'LIST' }],
+      providesTags: ['tildelte-oppgaver'],
     }),
-    getAntallKlagebehandlingerMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadKlagebehandlingerParams>({
+    getLedigeKlagebehandlinger: builder.query<ApiResponse, LoadLedigeKlagebehandlingerParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?erTildeltSaksbehandler=false&${query}`;
       },
-      providesTags: ['medutgaattefrister'],
+      providesTags: ['ledige-oppgaver'],
+    }),
+    getAntallLedigeKlagebehandlingerMedUtgaatteFrister: builder.query<
+      UtgaatteApiResponse,
+      LoadLedigeKlagebehandlingerParams
+    >({
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/api/kabal-search/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?erTildeltSaksbehandler=false&${query}`;
+      },
+      providesTags: ['ledige-medutgaattefrister'],
     }),
     fnrSearch: builder.query<IFnrSearchResponse | undefined, IFnrSearchParams>({
       query: ({ ...queryParams }) => ({
@@ -161,17 +175,11 @@ export const klagebehandlingerApi = createApi({
           enhetId,
         },
       }),
-      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+      invalidatesTags: ['tildelte-oppgaver'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         await queryFulfilled;
         await delay(3000);
-        dispatch(
-          klagebehandlingerApi.util.invalidateTags([
-            {
-              type: 'oppgaver',
-              id: oppgaveId,
-            },
-          ])
-        );
+        dispatch(klagebehandlingerApi.util.invalidateTags(['ledige-oppgaver']));
       },
     }),
     fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
@@ -179,26 +187,20 @@ export const klagebehandlingerApi = createApi({
         url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
         method: 'POST',
       }),
-      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+      invalidatesTags: ['ledige-oppgaver'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         await queryFulfilled;
         await delay(3000);
-        dispatch(
-          klagebehandlingerApi.util.invalidateTags([
-            {
-              type: 'oppgaver',
-              id: oppgaveId,
-            },
-          ])
-        );
+        dispatch(klagebehandlingerApi.util.invalidateTags(['tildelte-oppgaver']));
       },
-      // invalidatesTags: (res, err, { oppgaveId }) => [{ type: 'oppgaver', id: oppgaveId }],
     }),
   }),
 });
 
 export const {
-  useGetKlagebehandlingerQuery,
-  useGetAntallKlagebehandlingerMedUtgaatteFristerQuery,
+  useGetTildelteKlagebehandlingerQuery,
+  useGetLedigeKlagebehandlingerQuery,
+  useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
   useFnrSearchQuery,
