@@ -19,10 +19,13 @@ export const Dropdown = ({ selected, options, open, onChange, close }: DropdownP
   const [filteredOptions, setFilteredOptions] = useState(options);
   const topItemRef = useRef<HTMLLIElement>(null);
 
-  const filter = useMemo<RegExp>(
-    () => new RegExp(`.*${rawFilter.replaceAll(' ', '').split('').join('.*')}.*`, 'i'),
-    [rawFilter]
-  );
+  const filter = useMemo<RegExp>(() => {
+    const cleanFilter = removeRegExpTokens(rawFilter);
+    const pattern = cleanFilter.split('').join('.*');
+    const escapedPattern = escapeRegExp(pattern);
+
+    return new RegExp(`.*${escapedPattern}.*`, 'i');
+  }, [rawFilter]);
 
   useEffect(() => {
     setFilteredOptions(options.filter(({ beskrivelse }) => filter.test(beskrivelse)));
@@ -104,6 +107,9 @@ export const Dropdown = ({ selected, options, open, onChange, close }: DropdownP
     </StyledList>
   );
 };
+
+const removeRegExpTokens = (pattern: string): string => pattern.replace(/[/\\^$*+?.()|[\]{}\s]/g, '');
+const escapeRegExp = (pattern: string): string => pattern.replaceAll('-', '\\-');
 
 const StyledList = styled.ul`
   display: block;
