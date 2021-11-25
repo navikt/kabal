@@ -1,39 +1,23 @@
 import React from 'react';
-import { Descendant } from 'slate';
 import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
 import { INewSmartEditor, ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
-import { ContentTypeEnum, TextAlignEnum } from '../editor-types';
+import { AVSLAG_TEMPLATE } from '../templates/avslag-template';
+import { EMPTY_TEMPLATE } from '../templates/empty-template';
+import { MEDHOLD_TEMPLATE } from '../templates/medhold-template';
+import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
-import { StyledNewDocument, StyledTemplateButton, StyledTemplateButtonIcon } from './styled-components';
+import { MedholdBrevIcon } from './medhold-brev-icon';
+import {
+  StyledHeader,
+  StyledNewDocument,
+  StyledTemplateButton,
+  StyledTemplateButtonIcon,
+  StyledTemplates,
+} from './styled-components';
 
-const INITIAL_SLATE_VALUE: Descendant[] = [
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-];
-
-const EMPTY_TEMPLATE: ISmartEditorTemplate = {
-  templateId: 'empty',
-  title: 'Generelt brev',
-  content: [
-    {
-      id: 'test-smart-editor',
-      label: '',
-      type: 'rich-text',
-      content: INITIAL_SLATE_VALUE,
-    },
-  ],
-};
-
-const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE];
+const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE, MEDHOLD_TEMPLATE, AVSLAG_TEMPLATE];
 
 export const NewDocument = () => {
   const [createSmartEditorDocument] = useCreateSmartEditorMutation();
@@ -49,15 +33,18 @@ export const NewDocument = () => {
 
   return (
     <StyledNewDocument>
-      <h2>Opprett nytt dokument</h2>
-      {TEMPLATES.map((template) => (
-        <StyledTemplateButton onClick={() => onClick(template)} key={template.templateId}>
-          <StyledTemplateButtonIcon>
-            <TemplateIcon type={template.templateId} />
-          </StyledTemplateButtonIcon>
-          {template.title}
-        </StyledTemplateButton>
-      ))}
+      <StyledHeader>Opprett nytt dokument</StyledHeader>
+
+      <StyledTemplates>
+        {TEMPLATES.map((template) => (
+          <StyledTemplateButton onClick={() => onClick(template)} key={template.templateId}>
+            <StyledTemplateButtonIcon>
+              <TemplateIcon type={template.templateId} />
+            </StyledTemplateButtonIcon>
+            {template.title}
+          </StyledTemplateButton>
+        ))}
+      </StyledTemplates>
     </StyledNewDocument>
   );
 };
@@ -70,6 +57,10 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
   switch (type) {
     case 'empty':
       return <GenereltBrevIcon />;
+    case 'medhold':
+      return <MedholdBrevIcon />;
+    case 'avslag':
+      return <AvslagBrevIcon />;
     default:
       return null;
   }
