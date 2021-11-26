@@ -57,7 +57,6 @@ export interface LoadLedigeKlagebehandlingerParams {
   typer?: string[];
   hjemler?: string[];
   navIdent: string;
-  ferdigstiltFom?: Date;
   ferdigstiltDaysAgo?: number;
   projeksjon?: 'UTVIDET';
   enhet: string | null;
