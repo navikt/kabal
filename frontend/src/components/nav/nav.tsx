@@ -12,19 +12,19 @@ export const Nav = () => (
       <NavItem
         to="/oppgaver/1"
         isActive={(match, location) => oppgaverPathRegex.test(location.pathname)}
-        data-testid="oppgaver-nav-link"
+        testId="oppgaver-nav-link"
       >
         Oppgaver
       </NavItem>
-      <NavItem to="/mineoppgaver" data-testid="mine-oppgaver-nav-link">
+      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link">
         Mine Oppgaver
       </NavItem>
-      <NavItem to="/sok" data-testid="search-nav-link">
+      <NavItem to="/sok" testId="search-nav-link">
         Søk på person
       </NavItem>
       <NavItem
         to="/enhetensoppgaver"
-        data-testid="enhetens-oppgaver-nav-link"
+        testId="enhetens-oppgaver-nav-link"
         roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_ADMIN]}
       >
         Enhetens oppgaver
