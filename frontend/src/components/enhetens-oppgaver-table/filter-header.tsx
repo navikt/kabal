@@ -1,11 +1,9 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
+import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { IKodeverkVerdi } from '../../redux-api/kodeverk';
-import { useGetSaksbehandlereInEnhetQuery } from '../../redux-api/oppgaver';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
 import { Filters } from './types';
@@ -20,18 +18,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   const typeOptions = useSettingsTypes();
   const ytelseOptions = useSettingsYtelser();
   const hjemlerOptions = useSettingsHjemler();
-
-  const { data } = useGetSaksbehandlereInEnhetQuery(userData?.valgtEnhetView.id ?? skipToken);
-
-  if (typeof data === 'undefined') {
-    return null;
-  }
-
-  const saksbehandlerOptions = data.saksbehandlere.map<IKodeverkVerdi>(({ navIdent, navn }) => ({
-    navn,
-    beskrivelse: navn,
-    id: navIdent,
-  }));
+  const saksbehandlerOptions = useSaksbehandlereInEnhet(userData?.valgtEnhetView.id);
 
   return (
     <thead>
