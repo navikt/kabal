@@ -1,5 +1,6 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useState } from 'react';
+import { useIsLeader } from '../../hooks/use-has-role';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver';
 import { SuccessStatus } from './styled-components';
@@ -18,6 +19,7 @@ export const FradelKlagebehandlingButton = ({
   const [fradelSaksbehandler, loader] = useFradelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
   const [done, setDone] = useState<boolean>(false);
+  const isLeader = useIsLeader();
 
   const onFradel = useCallback(() => {
     if (typeof userData === 'undefined') {
@@ -34,7 +36,7 @@ export const FradelKlagebehandlingButton = ({
     return null;
   }
 
-  if (tildeltSaksbehandlerident !== userData?.info.navIdent) {
+  if (!isLeader && tildeltSaksbehandlerident !== userData?.info.navIdent) {
     return null;
   }
 
