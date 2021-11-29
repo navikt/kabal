@@ -22,11 +22,7 @@ export const Nav = () => (
       <NavItem to="/sok" testId="search-nav-link">
         Søk på person
       </NavItem>
-      <NavItem
-        to="/enhetensoppgaver"
-        testId="enhetens-oppgaver-nav-link"
-        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_ADMIN]}
-      >
+      <NavItem to="/enhetensoppgaver" testId="enhetens-oppgaver-nav-link" roles={[Role.ROLE_KLAGE_LEDER]}>
         Enhetens oppgaver
       </NavItem>
     </StyledNavLinkList>
@@ -39,7 +35,7 @@ interface NavItemProps extends NavLinkProps {
 }
 
 const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
-  const hasRole = useHasAnyOfRoles(roles ?? []);
+  const hasRole = useHasAnyOfRoles(roles);
 
   if (!hasRole) {
     return null;
