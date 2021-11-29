@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { Name } from '../domain/types';
 import { staggeredBaseQuery } from './common';
-import { MedunderskriverFlyt } from './oppgave-state-types';
+import { ISaksbehandler, MedunderskriverFlyt } from './oppgave-state-types';
 
 export type Date = string; // LocalDate
 
@@ -112,6 +112,9 @@ export interface INameSearchResponse {
     navn: Name;
   }[];
 }
+export interface IGetSaksbehandlereInEnhetResponse {
+  saksbehandlere: ISaksbehandler[];
+}
 
 export const klagebehandlingerApi = createApi({
   reducerPath: 'klagebehandlingerApi',
@@ -165,6 +168,9 @@ export const klagebehandlingerApi = createApi({
         body: queryParams,
       }),
     }),
+    getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({
+      query: (enhet) => `/api/kabal-search/enheter/${enhet}/saksbehandlere`,
+    }),
     tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, navIdent, enhetId }) => ({
         url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
@@ -204,6 +210,7 @@ export const {
   useFradelSaksbehandlerMutation,
   useFnrSearchQuery,
   useNameSearchQuery,
+  useGetSaksbehandlereInEnhetQuery,
 } = klagebehandlingerApi;
 
 const delay = async (ms: number): Promise<void> => new Promise((res) => setTimeout(res, ms));
