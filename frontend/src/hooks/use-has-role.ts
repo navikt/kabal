@@ -38,12 +38,12 @@ export const useHasAllOfRoles = (roles: Role[]) => {
   return roles.every((role) => userRoles.includes(role));
 };
 
-export const useIsLeaderOrAdmin = (): boolean => {
+export const useIsLeader = (): boolean => {
   const userRoles = useUserRoles();
 
   if (userRoles.length === 0) {
     return false;
   }
 
-  return userRoles.includes(Role.ROLE_KLAGE_LEDER) || userRoles.includes(Role.ROLE_ADMIN);
+  return userRoles.includes(Role.ROLE_KLAGE_LEDER);
 };
