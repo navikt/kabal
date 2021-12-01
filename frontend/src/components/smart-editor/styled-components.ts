@@ -4,8 +4,9 @@ import styled from 'styled-components';
 export const EditorContainer = styled.section`
   position: relative;
   width: 798px;
-  padding: 0;
-  overflow-y: auto;
+  height: fit-content;
+  padding-left: 1em;
+  padding-right: 1em;
 `;
 
 interface StyledEditableProps {
@@ -17,10 +18,12 @@ interface StyledEditableProps {
 export const StyledEditable = styled(Editable)<StyledEditableProps>`
   /* width: 210mm; */
   min-height: 150mm;
-  border: 1px solid #c9c9c9;
-  padding: 2em;
+  border-bottom: 1px solid #c9c9c9;
+  padding-left: 1em;
+  padding-right: 1em;
   opacity: ${({ theme }) => (theme.isFocused === true ? 1 : 0.5)};
   position: relative;
+
   *::selection {
     background-color: lightblue;
   }

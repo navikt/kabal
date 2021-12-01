@@ -1,35 +1,8 @@
 import { Descendant } from 'slate';
-import { ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
+import { ISignatureContent, ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
 import { ContentTypeEnum, HeadingTypesEnum, ListTypesEnum, TextAlignEnum } from '../editor-types';
 
 const INITIAL_SLATE_VALUE: Descendant[] = [
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Kari Nordmann',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_RIGHT,
-    children: [
-      {
-        text: 'dd. måned ååå',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
   {
     type: HeadingTypesEnum.HEADING_ONE,
     children: [
@@ -43,7 +16,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [
       {
-        text: 'Klager:\t',
+        text: 'Klager: ',
       },
     ],
   },
@@ -87,7 +60,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [
       {
-        text: 'Vi har omgjort vedtaket, slik at...',
+        text: 'Vi har omgjort vedtaket, slik at ...',
       },
     ],
   },
@@ -222,7 +195,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [
       {
-        text: 'Forslag til standardtekst kommer inn her. ',
+        text: 'Forslag til standardtekst kommer inn her.',
       },
     ],
   },
@@ -371,98 +344,52 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
       },
     ],
   },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Med vennlig hilsen',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'NAV Klageinstans ',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Ola Nordmann',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Rådgiver',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Kari Nordmann',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Rådgiver/saksbehandler',
-      },
-    ],
-  },
 ];
 
-export const MEDHOLD_TEMPLATE: ISmartEditorTemplate = {
-  templateId: 'medhold',
-  title: 'Vedtaksbrev medhold',
+const INITIAL_SIGNATURE_VALUE: ISignatureContent = {
+  medunderskriver: {
+    name: '',
+    title: '',
+  },
+  saksbehandler: {
+    name: '',
+    title: '',
+  },
+};
+
+export const UTFALL_TEMPLATE: ISmartEditorTemplate = {
+  templateId: 'utfall',
+  title: 'Vedtaksbrev utfall',
   content: [
+    {
+      id: 'klager',
+      label: 'Klager',
+      type: 'text',
+      content: '',
+    },
+    {
+      id: 'date',
+      label: 'Dato',
+      type: 'date',
+      content: '',
+    },
     {
       id: 'test-smart-editor',
       label: '',
       type: 'rich-text',
       content: INITIAL_SLATE_VALUE,
+    },
+    {
+      id: 'greeting',
+      label: '',
+      type: 'static-text',
+      content: ['Med vennlig hilsen', 'NAV Klageinstans'],
+    },
+    {
+      id: 'signature',
+      label: 'Signatur',
+      type: 'signature',
+      content: INITIAL_SIGNATURE_VALUE,
     },
   ],
 };

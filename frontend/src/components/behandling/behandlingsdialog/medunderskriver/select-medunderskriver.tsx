@@ -21,7 +21,7 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: Sele
   const { data: bruker } = useGetBrukerQuery();
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit();
-  const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
+  const [updateChosenMedunderskriver, { isLoading }] = useUpdateChosenMedunderskriverMutation();
 
   const medunderskrivereQuery: IMedunderskrivereParams | typeof skipToken =
     typeof bruker === 'undefined'
@@ -62,7 +62,7 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: Sele
   return (
     <StyledFormSection>
       <Select
-        disabled={!canEdit}
+        disabled={!canEdit || isLoading}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
         value={medunderskriver.medunderskriver?.navIdent ?? NONE_SELECTED}

@@ -3,10 +3,8 @@ import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
 import { INewSmartEditor, ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
-import { AVSLAG_TEMPLATE } from '../templates/avslag-template';
 import { EMPTY_TEMPLATE } from '../templates/empty-template';
-import { MEDHOLD_TEMPLATE } from '../templates/medhold-template';
-import { AvslagBrevIcon } from './avslag-brev-icon';
+import { UTFALL_TEMPLATE } from '../templates/utfall-template';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { MedholdBrevIcon } from './medhold-brev-icon';
 import {
@@ -17,10 +15,10 @@ import {
   StyledTemplates,
 } from './styled-components';
 
-const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE, MEDHOLD_TEMPLATE, AVSLAG_TEMPLATE];
+const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE, UTFALL_TEMPLATE];
 
 export const NewDocument = () => {
-  const [createSmartEditorDocument] = useCreateSmartEditorMutation();
+  const [createSmartEditorDocument, { isLoading }] = useCreateSmartEditorMutation();
   const [setSmartEditorId] = useUpdateSmartEditorIdMutation();
   const klagebehandlingId = useKlagebehandlingId();
 
@@ -37,7 +35,7 @@ export const NewDocument = () => {
 
       <StyledTemplates>
         {TEMPLATES.map((template) => (
-          <StyledTemplateButton onClick={() => onClick(template)} key={template.templateId}>
+          <StyledTemplateButton onClick={() => onClick(template)} key={template.templateId} disabled={isLoading}>
             <StyledTemplateButtonIcon>
               <TemplateIcon type={template.templateId} />
             </StyledTemplateButtonIcon>
@@ -57,10 +55,8 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
   switch (type) {
     case 'empty':
       return <GenereltBrevIcon />;
-    case 'medhold':
+    case 'utfall':
       return <MedholdBrevIcon />;
-    case 'avslag':
-      return <AvslagBrevIcon />;
     default:
       return null;
   }

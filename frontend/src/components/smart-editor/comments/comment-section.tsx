@@ -32,7 +32,7 @@ CommentSection.displayName = 'CommentSection';
 export const CommentSectionContainer = styled.section`
   width: 355px;
   height: 100%;
-  padding-left: 2em;
+  padding-right: 1em;
   overflow-y: auto;
   overflow-x: hidden;
 `;

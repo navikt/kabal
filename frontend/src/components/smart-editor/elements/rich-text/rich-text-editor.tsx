@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from 'react
 import { Descendant, Node, NodeEntry, Range, Selection, Transforms, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { ReactEditor, RenderLeafProps, Slate, withReact } from 'slate-react';
-import styled from 'styled-components';
 import { IRichTextElement } from '../../../../redux-api/smart-editor-types';
 import { SmartEditorContext } from '../../context/smart-editor-context';
 import { renderElement } from '../../slate-elements';
@@ -74,27 +73,22 @@ export const RichTextEditorElement = React.memo(
 
           savedSelection.current = editor.selection;
           setSelection(savedSelection.current);
-          // const threadIds = getFocusedCommentThreadIds(editor, editor.selection);
-          // setFocusedThreadIds(threadIds);
-          // setShowNewThread(editor.selection !== null && Range.isExpanded(editor.selection));
         }}
       >
-        <SlateElementsContainer>
-          <EditorContainer>
-            <EditorOppgavelinje />
-            <StyledEditable
-              renderElement={renderElement}
-              renderLeaf={renderLeafCallback}
-              decorate={decorate}
-              onKeyDown={keyboard}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              theme={{
-                isFocused,
-              }}
-            />
-          </EditorContainer>
-        </SlateElementsContainer>
+        <EditorContainer>
+          <EditorOppgavelinje />
+          <StyledEditable
+            renderElement={renderElement}
+            renderLeaf={renderLeafCallback}
+            decorate={decorate}
+            onKeyDown={keyboard}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            theme={{
+              isFocused,
+            }}
+          />
+        </EditorContainer>
       </Slate>
     );
   },
@@ -102,10 +96,3 @@ export const RichTextEditorElement = React.memo(
 );
 
 RichTextEditorElement.displayName = 'RichTextEditorElement';
-
-const SlateElementsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  position: relative;
-`;

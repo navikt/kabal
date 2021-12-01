@@ -18,7 +18,12 @@ interface IBaseSmartEditorElement {
   label: string; // ex. "Vedtak / Beslutning".
 }
 
-export type ISmartEditorElement = IRichTextElement | ITextElement;
+export type ISmartEditorElement =
+  | IRichTextElement
+  | IStaticTextElement
+  | ITextElement
+  | ISignatureElement
+  | IDateElement;
 
 export interface IRichTextElement extends IBaseSmartEditorElement {
   type: 'rich-text';
@@ -28,6 +33,31 @@ export interface IRichTextElement extends IBaseSmartEditorElement {
 export interface ITextElement extends IBaseSmartEditorElement {
   type: 'text';
   content: string;
+}
+
+export interface IStaticTextElement extends IBaseSmartEditorElement {
+  type: 'static-text';
+  content: string[];
+}
+
+export interface IDateElement extends IBaseSmartEditorElement {
+  type: 'date';
+  content: string;
+}
+
+export interface ISigner {
+  name: string;
+  title: string;
+}
+
+export interface ISignatureContent {
+  medunderskriver: ISigner;
+  saksbehandler: ISigner;
+}
+
+export interface ISignatureElement extends IBaseSmartEditorElement {
+  type: 'signature';
+  content: ISignatureContent;
 }
 
 export interface ISmartEditorRawResponse {

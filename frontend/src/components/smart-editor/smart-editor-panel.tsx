@@ -6,6 +6,7 @@ import { useGetFeatureTogglingEditorQuery } from '../../redux-api/feature-toggli
 import { PanelContainer } from '../klagebehandling-panels/panel';
 import { CommentSection } from './comments/comment-section';
 import { SmartEditorContextComponent } from './context/smart-editor-context';
+import { ErrorBoundary } from './error-boundary';
 import { Header } from './header/header';
 import { SmartEditor } from './smart-editor';
 
@@ -37,7 +38,9 @@ export const SmartEditorPanel = ({ shown }: Props) => {
       <Header />
       <SmartEditorPanelContainer>
         <SmartEditorContextComponent>
-          <SmartEditor />
+          <ErrorBoundary klagebehandlingId={klagebehandling.id}>
+            <SmartEditor />
+          </ErrorBoundary>
           <CommentSection />
         </SmartEditorContextComponent>
       </SmartEditorPanelContainer>
@@ -48,7 +51,7 @@ export const SmartEditorPanel = ({ shown }: Props) => {
 const SmartEditorPanelContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 2em;
+  padding: 0;
+  padding-top: 1em;
   width: 1100px;
-  height: calc(100% - 48px);
 `;

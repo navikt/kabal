@@ -6,12 +6,13 @@ export const HeadingOneStyle = styled.h1`
 `;
 
 export const HeadingTwoStyle = styled.h2`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 `;
 
 export const HeadingThreeStyle = styled.h3`
-  font-size: 2.25em;
+  font-size: 16px;
+  font-weight: 600;
 `;
 
 export const HeadingFourStyle = styled.h4`

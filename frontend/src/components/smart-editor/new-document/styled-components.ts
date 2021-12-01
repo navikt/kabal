@@ -23,6 +23,7 @@ export const StyledTemplateButtonIcon = styled.div`
 
 export const StyledNewDocument = styled.section`
   width: 100%;
+  margin: 1em;
 `;
 
 export const StyledTemplates = styled.section`

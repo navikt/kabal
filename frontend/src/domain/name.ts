@@ -1,8 +1,8 @@
 import { formatPersonNum } from '../functions/format-id';
 import { Name } from './types';
 
-export const getFullName = (name: Name | null): string => {
-  if (name === null) {
+export const getFullName = (name?: Name | null): string => {
+  if (name === null || typeof name === 'undefined') {
     return '-';
   }
 

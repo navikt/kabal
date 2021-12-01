@@ -49,6 +49,6 @@ const ToolbarStyle = styled.section`
   background-color: white;
   z-index: 1;
   padding: 0.5em;
-  border: 1px solid #c9c9c9;
+  border-bottom: 1px solid #c9c9c9;
   overflow: hidden;
 `;

@@ -189,15 +189,7 @@ export const klagebehandlingApi = createApi({
       onQueryStarted: async ({ klagebehandlingId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (draft) => {
-            if (update.medunderskriver === null) {
-              draft.medunderskriver = null;
-            } else {
-              draft.medunderskriver = {
-                navIdent: update.medunderskriver.navIdent,
-                navn: update.medunderskriver.navn,
-              };
-            }
-
+            draft.medunderskriver = update.medunderskriver;
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
           })
         );

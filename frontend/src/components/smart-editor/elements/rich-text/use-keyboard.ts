@@ -28,6 +28,8 @@ export const useKeyboard = (editor: Editor) =>
       }
 
       if (event.shiftKey && event.key === 'Enter') {
+        event.preventDefault();
+
         // https://github.com/ianstormtaylor/slate/issues/3911
         Transforms.insertText(editor, '\n');
         return;
