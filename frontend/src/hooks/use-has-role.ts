@@ -45,5 +45,5 @@ export const useIsLeader = (): boolean => {
     return false;
   }
 
-  return userRoles.includes(Role.ROLE_KLAGE_LEDER);
+  return userRoles.includes(Role.ROLE_KLAGE_LEDER) || userRoles.includes(Role.ROLE_KLAGE_FAGANSVARLIG);
 };

@@ -22,7 +22,11 @@ export const Nav = () => (
       <NavItem to="/sok" testId="search-nav-link">
         Søk på person
       </NavItem>
-      <NavItem to="/enhetensoppgaver" testId="enhetens-oppgaver-nav-link" roles={[Role.ROLE_KLAGE_LEDER]}>
+      <NavItem
+        to="/enhetensoppgaver"
+        testId="enhetens-oppgaver-nav-link"
+        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_KLAGE_FAGANSVARLIG, Role.ROLE_KLAGE_MERKANTIL]}
+      >
         Enhetens oppgaver
       </NavItem>
     </StyledNavLinkList>
