@@ -52,7 +52,7 @@ export const BrukAvRaadgivendeLege = () => {
       <RadioButtonsColumn feil={brukAvRaadgivendeLegeRadioValg === null ? validationError : undefined}>
         <Radio
           name={'BrukAvRaadgivendeLegeIkkeAktuelt'}
-          label={'Bruk av rådgivende lege er ikke aktuelt for saken'}
+          label={'Ikke aktuelt for saken'}
           onChange={() =>
             updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.IKKE_AKTUELT })
           }
