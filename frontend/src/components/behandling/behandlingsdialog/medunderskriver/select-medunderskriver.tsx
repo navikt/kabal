@@ -7,17 +7,17 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
-import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverInfoResponse, IMedunderskrivereParams } from '../../../../redux-api/oppgave-types';
+import { IKlagebehandling, ISaksbehandler } from '../../../../redux-api/oppgave-state-types';
+import { IMedunderskriverResponse, IMedunderskrivereParams } from '../../../../redux-api/oppgave-types';
 
 interface SelectMedunderskriverProps {
   klagebehandling: IKlagebehandling;
-  medunderskriverInfo: IMedunderskriverInfoResponse;
+  medunderskriver: IMedunderskriverResponse;
 }
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: SelectMedunderskriverProps) => {
   const { data: bruker } = useGetBrukerQuery();
   const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit();
@@ -54,7 +54,9 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: 
       medunderskriver:
         medunderskriverident === null
           ? null
-          : medunderskrivere.find(({ ident }) => ident === medunderskriverident) ?? null,
+          : medunderskrivere
+              .map<ISaksbehandler>(({ ident, navn }) => ({ navIdent: ident, navn })) // TODO: Remove mapping when backend is changed.
+              .find(({ navIdent }) => navIdent === medunderskriverident) ?? null,
     });
 
   return (
@@ -63,7 +65,7 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriverInfo }: 
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskriverInfo.medunderskriver?.navIdent ?? NONE_SELECTED}
+        value={medunderskriver.medunderskriver?.navIdent ?? NONE_SELECTED}
         data-testid="select-medunderskriver"
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>

@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
 import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverInfoResponse } from '../../../../redux-api/oppgave-types';
+import { IMedunderskriverflytResponse } from '../../../../redux-api/oppgave-types';
 
 interface SendTilMedunderskriverProps {
   klagebehandling: IKlagebehandling;
-  medunderskriverInfo: IMedunderskriverInfoResponse;
+  medunderskriverflyt: IMedunderskriverflytResponse;
 }
 
-export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverInfo }: SendTilMedunderskriverProps) => {
+export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverflyt }: SendTilMedunderskriverProps) => {
   const { id: klagebehandlingId, medunderskriver } = klagebehandling;
   const canEdit = useCanEdit();
 
@@ -54,7 +54,7 @@ export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverInfo }:
     return <SentToMedunderskriver />;
   }
 
-  if (medunderskriverInfo?.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+  if (medunderskriverflyt?.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
     return (
       <>
         <SentBackToMedunderskriver />

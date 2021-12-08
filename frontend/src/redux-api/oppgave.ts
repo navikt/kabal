@@ -9,9 +9,10 @@ import {
   IFinishKlagebehandlingInput,
   IKlagebehandlingHjemlerUpdate,
   IKlagebehandlingUtfallUpdate,
-  IMedunderskriverInfoResponse,
+  IMedunderskriverResponse,
   IMedunderskrivereParams,
   IMedunderskrivereResponse,
+  IMedunderskriverflytResponse,
   ISettMedunderskriverParams,
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytParams,
@@ -171,17 +172,19 @@ export const klagebehandlingApi = createApi({
       query: ({ navIdent, ytelseId, enhet }) =>
         `/api/kabal-api/medunderskrivere/ytelser/${ytelseId}/enheter/${enhet}/ansatte/${navIdent}`,
     }),
-    getMedunderskriverInfo: builder.query<IMedunderskriverInfoResponse, string>({
-      query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverinfo`,
+    getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
+      query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriver`,
+    }),
+    getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, string>({
+      query: (klagebehandlingId) => `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverflyt`,
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISettMedunderskriverParams>({
       query: ({ klagebehandlingId, medunderskriver }) => ({
         url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/medunderskriverident`,
         method: 'PUT',
         body: {
-          medunderskriverident: medunderskriver?.ident ?? null,
+          medunderskriverident: medunderskriver?.navIdent ?? null,
         },
-        validateStatus: ({ ok }) => ok,
       }),
       onQueryStarted: async ({ klagebehandlingId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
@@ -190,7 +193,7 @@ export const klagebehandlingApi = createApi({
               draft.medunderskriver = null;
             } else {
               draft.medunderskriver = {
-                navIdent: update.medunderskriver.ident,
+                navIdent: update.medunderskriver.navIdent,
                 navn: update.medunderskriver.navn,
               };
             }
@@ -199,40 +202,39 @@ export const klagebehandlingApi = createApi({
           })
         );
 
-        const infoPatchResult = dispatch(
-          klagebehandlingApi.util.updateQueryData('getMedunderskriverInfo', klagebehandlingId, (draft) => {
-            if (update.medunderskriver === null) {
-              draft.medunderskriver = null;
-            } else {
-              draft.medunderskriver = {
-                navIdent: update.medunderskriver.ident,
-                navn: update.medunderskriver.navn,
-              };
-            }
+        const medunderskriverPatchResult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getMedunderskriver', klagebehandlingId, (draft) => {
+            draft.medunderskriver = update.medunderskriver;
+          })
+        );
 
+        const flytPatchresult = dispatch(
+          klagebehandlingApi.util.updateQueryData('getMedunderskriverflyt', klagebehandlingId, (draft) => {
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
           })
         );
 
         try {
           const { data } = await queryFulfilled;
+
           dispatch(
             klagebehandlingApi.util.updateQueryData('getKlagebehandling', klagebehandlingId, (klagebehandling) => {
               klagebehandling.modified = data.modified;
               klagebehandling.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );
+
           dispatch(
-            klagebehandlingApi.util.updateQueryData('getMedunderskriverInfo', klagebehandlingId, (draft) => {
+            klagebehandlingApi.util.updateQueryData('getMedunderskriverflyt', klagebehandlingId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );
         } catch {
           patchResult.undo();
-          infoPatchResult.undo();
+          medunderskriverPatchResult.undo();
+          flytPatchresult.undo();
         }
       },
-      invalidatesTags: ['oppgave'],
     }),
     switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, ISwitchMedunderskriverflytParams>({
       query: ({ klagebehandlingId }) => ({
@@ -249,7 +251,6 @@ export const klagebehandlingApi = createApi({
           })
         );
       },
-      invalidatesTags: ['oppgave'],
     }),
     uploadFile: builder.mutation<IUploadFileResponse, IUploadFileParams>({
       query: ({ klagebehandlingId, file }) => {
@@ -319,7 +320,8 @@ export const {
   useRemoveTilknyttetDocumentMutation,
   useFinishKlagebehandlingMutation,
   useGetMedunderskrivereQuery,
-  useGetMedunderskriverInfoQuery,
+  useGetMedunderskriverQuery,
+  useGetMedunderskriverflytQuery,
   useUpdateChosenMedunderskriverMutation,
   useSwitchMedunderskriverflytMutation,
   useUploadFileMutation,
