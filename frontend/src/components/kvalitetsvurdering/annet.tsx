@@ -33,8 +33,7 @@ export const Annet = () => {
       label: 'Nye opplysninger mottatt etter oversendelse til klageinstansen',
       checked: kvalitetsvurdering.nyeOpplysningerMottatt,
       show: showNyeOpplysningerMottattReason,
-      helpText:
-        'Benyttes når vedtaksinstansen ikke kunne gjort noe annerledes for å forhindre et endret resultat i klageinstansen',
+      helpText: 'Benyttes når utredningen til vedtaksinstansen er tilstrekkelig',
     },
     {
       id: 'betydeligAvvik',
@@ -42,7 +41,7 @@ export const Annet = () => {
       checked: kvalitetsvurdering.betydeligAvvik,
       textareaId: 'betydeligAvvikText',
       show: showBetydeligAvvikReason,
-      helpText: 'Benyttes når det er et alvorlig avvik med en stor økonomisk konsekvens for bruker.',
+      helpText: 'Benyttes når førsteinstans bør varsles umiddelbart om resultatet av behandlingen',
     },
     {
       id: 'brukIOpplaering',
