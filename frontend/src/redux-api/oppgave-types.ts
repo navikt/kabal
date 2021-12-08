@@ -1,4 +1,4 @@
-import { IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
+import { ISaksbehandler, IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
 
 export interface IKlagebehandlingUtfallUpdate {
   klagebehandlingId: string;
@@ -49,19 +49,17 @@ export interface IMedunderskrivereParams {
   enhet: string;
 }
 
-export interface IMedunderskriverInfoResponse {
-  medunderskriver: IMedunderskriverResponse | null;
-  medunderskriverFlyt: MedunderskriverFlyt;
+export interface IMedunderskriverResponse {
+  medunderskriver: ISaksbehandler | null;
 }
 
-interface IMedunderskriverResponse {
-  navIdent: string;
-  navn: string;
+export interface IMedunderskriverflytResponse {
+  medunderskriverFlyt: MedunderskriverFlyt;
 }
 
 export interface ISettMedunderskriverParams {
   klagebehandlingId: string;
-  medunderskriver: IMedunderskriver | null;
+  medunderskriver: ISaksbehandler | null;
 }
 
 export interface ISettMedunderskriverResponse {

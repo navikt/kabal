@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { useKlagebehandling } from './use-klagebehandling';
 
-export const useCanEdit = () => {
+export const useIsSaksbehandler = () => {
   const [klagebehandling, klagebehandlingIsLoading] = useKlagebehandling();
   const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 
@@ -16,9 +16,6 @@ export const useCanEdit = () => {
       return false;
     }
 
-    return (
-      !klagebehandling.isAvsluttetAvSaksbehandler &&
-      klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent
-    );
+    return klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent;
   }, [klagebehandling, userData, userIsLoading, klagebehandlingIsLoading]);
 };

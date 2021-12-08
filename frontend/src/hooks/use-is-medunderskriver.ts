@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { useGetKlagebehandlingQuery, useGetMedunderskriverInfoQuery } from '../redux-api/oppgave';
+import { useGetKlagebehandlingQuery, useGetMedunderskriverQuery } from '../redux-api/oppgave';
 import { useKlagebehandlingId } from './use-klagebehandling-id';
 
 export const useIsMedunderskriver = () => {
@@ -20,13 +20,13 @@ export const useIsMedunderskriver = () => {
 export const useCheckIsMedunderskriver = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: userData, isLoading } = useGetBrukerQuery();
-  const { data: medunderskriverInfo } = useGetMedunderskriverInfoQuery(klagebehandlingId);
+  const { data: medunderskriver } = useGetMedunderskriverQuery(klagebehandlingId);
 
   return useMemo(() => {
     if (isLoading || typeof userData === 'undefined') {
       return false;
     }
 
-    return medunderskriverInfo?.medunderskriver?.navIdent === userData.info.navIdent;
-  }, [medunderskriverInfo?.medunderskriver?.navIdent, userData, isLoading]);
+    return medunderskriver?.medunderskriver?.navIdent === userData.info.navIdent;
+  }, [medunderskriver?.medunderskriver?.navIdent, userData, isLoading]);
 };
