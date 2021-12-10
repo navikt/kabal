@@ -41,7 +41,7 @@ export const CommentField = ({ textareaId }: CommentFieldProps) => {
   return (
     <StyledCommentField>
       <Textarea
-        label="Utdypende kommentar ved behov:"
+        label="Oppsummert i stikkord:"
         value={comment ?? ''}
         placeholder="NB: Ingen personopplysninger"
         maxLength={0}
