@@ -18,7 +18,7 @@ export const staggeredBaseQuery = retry(
 
     const { status } = result.error;
 
-    if (status === 401 || status === 403) {
+    if (status === 401) {
       if (!isLocalhost) {
         window.location.reload();
       }
@@ -26,7 +26,7 @@ export const staggeredBaseQuery = retry(
       retry.fail(result.error);
     }
 
-    if (status === 400) {
+    if (status === 400 || status === 403) {
       retry.fail(result.error);
     }
 
