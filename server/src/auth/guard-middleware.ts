@@ -8,7 +8,7 @@ export const guardMiddleware =
   async (req, res, next) => {
     const session = getSessionIdAndSignature(req);
     if (session === null) {
-      res.status(403).send();
+      res.status(401).send();
       return;
     }
 
@@ -24,7 +24,7 @@ export const guardMiddleware =
       if (error instanceof Error || typeof error === 'string') {
         console.warn(error);
       }
-      res.status(403).send();
+      res.status(401).send();
       return;
     }
   };
