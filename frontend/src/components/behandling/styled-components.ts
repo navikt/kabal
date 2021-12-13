@@ -1,4 +1,3 @@
-import Alertstripe from 'nav-frontend-alertstriper';
 import styled from 'styled-components';
 
 export const StyledHeader = styled.h1`
@@ -61,33 +60,6 @@ export const StyledSubHeader = styled.h3`
   font-weight: 600;
 `;
 
-export const StyledFinishKlagebehandlingButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const StyledFinishKlagebehandlingText = styled.p`
-  margin: 0 0 1em;
-  white-space: normal;
-`;
-
-export const StyledFinishKlagebehandlingBox = styled.div`
-  border: 1px solid #0067c5;
-  padding: 1em;
-`;
-
-export const StyledPaddedSidesContent = styled.div`
-  padding: 0 1em;
-`;
-
 export const StyledPaddedContent = styled.div`
   padding: 1em;
-`;
-
-export const StyledAlertstripe = styled(Alertstripe)`
-  margin-bottom: 1em;
-`;
-
-export const BehandlingsdialogInputContent = styled.div`
-  max-width: 250px;
 `;
