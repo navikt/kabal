@@ -35,8 +35,8 @@ export const OppgaveTable = (): JSX.Element => {
   const { data: bruker } = useGetBrukerQuery();
 
   const { page } = useParams();
-
-  const currentPage = parsePage(page);
+  const parsedPage = parsePage(page);
+  const currentPage = parsedPage === null ? 1 : parsedPage;
   const from = (currentPage - 1) * PAGE_SIZE;
 
   const settingsYtelser = useSettingsYtelser();
@@ -78,9 +78,13 @@ export const OppgaveTable = (): JSX.Element => {
     return refetch;
   }, [refetch]);
 
+  if (parsedPage === null) {
+    return <Navigate to="../1" />;
+  }
+
   const total = klagebehandlinger?.antallTreffTotalt ?? 0;
 
-  if (typeof klagebehandlinger !== 'undefined' && !isFetching && total < from) {
+  if (!isFetching && typeof klagebehandlinger !== 'undefined' && total < from) {
     const lastPage = Math.ceil(total / PAGE_SIZE);
     return <Navigate to={`../${lastPage.toString()}`} />;
   }
@@ -124,7 +128,7 @@ const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element =
   return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;
 };
 
-const parsePage = (page = '1'): number => {
+const parsePage = (page = '1'): number | null => {
   const parsed = Number.parseInt(page, 10);
-  return Number.isNaN(parsed) ? 1 : parsed;
+  return Number.isNaN(parsed) ? null : parsed;
 };
