@@ -1,11 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-interface IKlagebehandlingParams {
-  id?: string;
-}
-
 export const useKlagebehandlingId = (): string => {
-  const { id } = useParams<IKlagebehandlingParams>();
+  const { id } = useParams();
 
   if (typeof id !== 'string' || id.length === 0) {
     throw new Error(
