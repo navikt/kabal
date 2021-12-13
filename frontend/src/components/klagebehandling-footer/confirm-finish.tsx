@@ -1,16 +1,12 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useState } from 'react';
-import { isReduxValidationResponse } from '../../../../functions/error-type-guard';
-import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
-import { useKlagerName } from '../../../../hooks/use-klager-name';
-import { useFinishKlagebehandlingMutation } from '../../../../redux-api/oppgave';
-import { ValidationErrorContext } from '../../../kvalitetsvurdering/validation-error-context';
-import {
-  StyledFinishKlagebehandlingBox,
-  StyledFinishKlagebehandlingButtons,
-  StyledFinishKlagebehandlingText,
-} from '../../styled-components';
+import styled from 'styled-components';
+import { isReduxValidationResponse } from '../../functions/error-type-guard';
+import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
+import { useKlagerName } from '../../hooks/use-klager-name';
+import { useFinishKlagebehandlingMutation } from '../../redux-api/oppgave';
+import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 
 interface FinishProps {
   cancel: () => void;
@@ -67,3 +63,22 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
     </StyledFinishKlagebehandlingBox>
   );
 };
+
+export const StyledFinishKlagebehandlingButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const StyledFinishKlagebehandlingText = styled.p`
+  margin: 0 0 1em;
+  white-space: normal;
+`;
+
+export const StyledFinishKlagebehandlingBox = styled.div`
+  position: fixed;
+  bottom: 1em;
+  border: 1px solid #0067c5;
+  padding: 1em;
+  background-color: #fff;
+  width: 400px;
+`;

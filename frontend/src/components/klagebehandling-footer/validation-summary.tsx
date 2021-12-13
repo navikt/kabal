@@ -1,9 +1,9 @@
 import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
 import styled from 'styled-components';
-import { IValidationError, IValidationSection } from '../../../../functions/error-type-guard';
-import { useFieldName } from '../../../../hooks/use-field-name';
-import { useSectionTitle } from '../../../../hooks/use-section-title';
+import { IValidationError, IValidationSection } from '../../functions/error-type-guard';
+import { useFieldName } from '../../hooks/use-field-name';
+import { useSectionTitle } from '../../hooks/use-section-title';
 
 interface Props {
   sections: IValidationSection[];
