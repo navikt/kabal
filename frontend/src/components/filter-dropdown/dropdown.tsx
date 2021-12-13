@@ -146,12 +146,14 @@ const StyledTopListItem = styled(StyledListItem)`
   padding: 8px;
   display: flex;
   justify-content: space-between;
+  top: 0;
+  position: sticky;
 `;
 
 const StyledInput = styled(Input)`
+  width: 100%;
+
   &&& {
     margin-right: 0.5em;
   }
-
-  width: 100%;
 `;
