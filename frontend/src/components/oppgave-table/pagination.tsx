@@ -22,7 +22,7 @@ export const Pagination = ({ total, pageSize = 10, currentPage = 1 }: Props): JS
         typeof p === 'string' ? (
           p
         ) : (
-          <PageLink key={p.toString()} to={p.toString()}>
+          <PageLink key={p.toString()} to={`../${p.toString()}`}>
             {p}
           </PageLink>
         )

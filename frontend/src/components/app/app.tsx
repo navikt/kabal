@@ -5,7 +5,7 @@ import { Footer } from '../../components/footer/footer';
 import { Header } from '../../components/header/header';
 import { reduxStore } from '../../redux/configure-store';
 import { GlobalStyles } from './global-styles';
-import { Routes } from './routes';
+import { Router } from './router';
 
 export const App = () => (
   <React.StrictMode>
@@ -15,7 +15,7 @@ export const App = () => (
 
         <Header />
 
-        <Routes />
+        <Router />
 
         <Footer />
       </BrowserRouter>

@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
@@ -23,13 +23,9 @@ import {
 } from './styled-components';
 import { Filters } from './types';
 
-interface OppgaveTableParams {
-  page: string;
-}
-
 const PAGE_SIZE = 10;
 
-export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
+export const OppgaveTable = (): JSX.Element => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
@@ -37,6 +33,8 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
     sortDescending: false,
   });
   const { data: bruker } = useGetBrukerQuery();
+
+  const { page } = useParams();
 
   const currentPage = parsePage(page);
   const from = (currentPage - 1) * PAGE_SIZE;
@@ -64,7 +62,11 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
           enhet: bruker.valgtEnhetView.id,
         };
 
-  const { data: klagebehandlinger, refetch } = useGetLedigeKlagebehandlingerQuery(queryParams, {
+  const {
+    data: klagebehandlinger,
+    refetch,
+    isFetching,
+  } = useGetLedigeKlagebehandlingerQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
   const { data: utgaatte } = useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
@@ -78,9 +80,9 @@ export const OppgaveTable = ({ page }: OppgaveTableParams): JSX.Element => {
 
   const total = klagebehandlinger?.antallTreffTotalt ?? 0;
 
-  if (total < from) {
+  if (typeof klagebehandlinger !== 'undefined' && !isFetching && total < from) {
     const lastPage = Math.ceil(total / PAGE_SIZE);
-    return <Redirect to={lastPage.toString()} />;
+    return <Navigate to={`../${lastPage.toString()}`} />;
   }
 
   const fromNumber = from + 1;
@@ -122,7 +124,7 @@ const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element =
   return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;
 };
 
-const parsePage = (page: string): number => {
+const parsePage = (page = '1'): number => {
   const parsed = Number.parseInt(page, 10);
   return Number.isNaN(parsed) ? 1 : parsed;
 };

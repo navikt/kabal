@@ -4,16 +4,10 @@ import styled from 'styled-components';
 import { useHasAnyOfRoles } from '../../hooks/use-has-role';
 import { Role } from '../../redux-api/bruker';
 
-const oppgaverPathRegex = /^\/oppgaver\/\d+/;
-
 export const Nav = () => (
   <StyledNav role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
-      <NavItem
-        to="/oppgaver/1"
-        isActive={(match, location) => oppgaverPathRegex.test(location.pathname)}
-        testId="oppgaver-nav-link"
-      >
+      <NavItem to="/oppgaver/1" testId="oppgaver-nav-link">
         Oppgaver
       </NavItem>
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link">
