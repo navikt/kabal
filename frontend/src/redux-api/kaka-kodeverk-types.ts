@@ -15,6 +15,7 @@ export interface IKakaKodeverk {
   sakstyper: IKakaKodeverkValue<SakstypeEnum>[];
   partIdTyper: IKakaKodeverkValue<PartEnum>[];
   hjemler: IKakaKodeverkValue[];
+  ytelser: IKakaKodeverkValue[];
 }
 
 export enum PartEnum {

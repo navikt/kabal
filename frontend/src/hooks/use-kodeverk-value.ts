@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useGetKodeverkQuery } from '../redux-api/kaka-kodeverk';
-import { IKakaKodeverk, IKakaKodeverkValue, ITema, SakstypeEnum, UtfallEnum } from '../redux-api/kaka-kodeverk-types';
+import { IKakaKodeverk, IKakaKodeverkValue, SakstypeEnum, UtfallEnum } from '../redux-api/kaka-kodeverk-types';
 
 export const useKodeverkValue = <K extends keyof IKakaKodeverk>(
   key: K | typeof skipToken = skipToken
@@ -12,16 +12,6 @@ export const useKodeverkValue = <K extends keyof IKakaKodeverk>(
   }
 
   return data[key];
-};
-
-export const useKodeverkTema = (temaId: string | typeof skipToken = skipToken): ITema | undefined => {
-  const data = useKodeverkValue(temaId === skipToken ? skipToken : 'temaer');
-
-  if (temaId === skipToken || typeof data === 'undefined') {
-    return undefined;
-  }
-
-  return data.find(({ id }) => id === temaId);
 };
 
 export const useKodeverkUtfall = (
@@ -59,9 +49,3 @@ export const useKodeverkSakstype = (
 
   return data.find(({ id }) => id === sakstypeId);
 };
-
-export const useEnheterForTema = (temaId: string | typeof skipToken = skipToken): IKakaKodeverkValue[] =>
-  useKodeverkTema(temaId)?.enheter ?? [];
-
-export const useHjemlerForTema = (temaId: string | typeof skipToken = skipToken): IKakaKodeverkValue[] =>
-  useKodeverkTema(temaId)?.hjemler ?? [];
