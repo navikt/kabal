@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useIsRelevantYtelseForRaadgivende } from '../../hooks/use-is-relevant-ytelse-for-raadgivende';
 import { useKlagebehandling } from '../../hooks/use-klagebehandling';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { Annet } from './annet';
 import { BrukAvRaadgivendeLege } from './bruk-av-raadgivende-lege';
@@ -21,7 +21,7 @@ export const Kvalitetsskjema = () => {
     <StyledKvalitetsskjema>
       <Klageforberedelsen />
       <Utredningen />
-      <BrukAvRaadgivendeLegeDisplay tema={klagebehandling.tema} />
+      <BrukAvRaadgivendeLegeDisplay ytelse={klagebehandling.ytelse} />
       <Vedtaket />
       <Annet />
     </StyledKvalitetsskjema>
@@ -29,31 +29,17 @@ export const Kvalitetsskjema = () => {
 };
 
 interface BrukAvRaadgivendeLegeDisplayProps {
-  tema: string | null;
+  ytelse: string | null;
 }
 
-const BrukAvRaadgivendeLegeDisplay = ({ tema }: BrukAvRaadgivendeLegeDisplayProps) => {
-  const hasRelevantTema = useIsRelevantTema(tema);
+const BrukAvRaadgivendeLegeDisplay = ({ ytelse }: BrukAvRaadgivendeLegeDisplayProps) => {
+  const hasRelevantYtelse = useIsRelevantYtelseForRaadgivende(ytelse);
 
-  if (hasRelevantTema) {
+  if (hasRelevantYtelse) {
     return <BrukAvRaadgivendeLege />;
   }
 
   return null;
-};
-
-const useIsRelevantTema = (temaId: string | null): boolean => {
-  const temaData = useKodeverkValue('temaer');
-
-  return useMemo<boolean>(() => {
-    if (typeof temaData === 'undefined' || temaId === null) {
-      return false;
-    }
-
-    return ['GRU', 'SYK', 'HJE', 'AAP', 'UFO', 'YRK', 'FOR', 'OMS']
-      .map((n) => temaData.find(({ navn }) => navn === n)?.id)
-      .includes(temaId);
-  }, [temaData, temaId]);
 };
 
 const StyledKvalitetsskjema = styled.div`
