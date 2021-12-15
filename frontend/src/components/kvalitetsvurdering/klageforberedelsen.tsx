@@ -41,7 +41,7 @@ export const Klageforberedelsen = () => {
     },
     {
       id: 'begrunnelseForHvorforAvslagOpprettholdes',
-      label: 'Begrunnelse for hvorfor avslag opprettholdes / klager ikke oppfyller villkår',
+      label: 'Begrunnelse for hvorfor avslag opprettholdes / klager ikke oppfyller vilkår',
       checked: kvalitetsvurdering.begrunnelseForHvorforAvslagOpprettholdes,
     },
     {
