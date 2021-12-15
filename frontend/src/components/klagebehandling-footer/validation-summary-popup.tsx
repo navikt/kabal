@@ -1,5 +1,5 @@
 import AlertStripe from 'nav-frontend-alertstriper';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IValidationSection } from '../../functions/error-type-guard';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
@@ -18,6 +18,12 @@ export const ValidationSummaryPopup = ({ sections, hasErrors }: Props) => {
   const [open, setOpen] = useState(true);
   const klagebehandlingId = useKlagebehandlingId();
   const isFullfoert = useIsFullfoert(klagebehandlingId);
+
+  useEffect(() => {
+    if (sections.length !== 0) {
+      setOpen(true);
+    }
+  }, [sections]);
 
   if (isFullfoert) {
     return <KlagebehandlingFinished />;
