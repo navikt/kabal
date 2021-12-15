@@ -32,7 +32,7 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const StyledHeader = styled.header`
-  z-index: 1;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   width: 100%;
