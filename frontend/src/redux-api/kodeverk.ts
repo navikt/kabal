@@ -17,6 +17,20 @@ export interface IKodeverkVerdiMedHjemler {
   temaId: string;
 }
 
+export interface IRegistreringshjemmel {
+  id: string;
+  navn: string;
+}
+
+export interface ILovKildeToRegistreringshjemmel {
+  lovkilde: IKodeverkVerdi;
+  registreringshjemler: IRegistreringshjemmel[];
+}
+
+export interface IYtelse extends IKodeverkVerdi {
+  lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
+}
+
 export interface IKodeverk {
   hjemmel: IKodeverkVerdi[];
   type: IKodeverkVerdi[];
@@ -30,6 +44,8 @@ export interface IKodeverk {
   kvalitetsavvikUtredning: IKodeverkVerdi[];
   kvalitetsavvikOversendelsesbrev: IKodeverkVerdi[];
   kvalitetsavvikVedtak: IKodeverkVerdi[];
+  registreringshjemler: IKodeverkVerdi[];
+  ytelser: IYtelse[];
 }
 
 export const kodeverkApi = createApi({

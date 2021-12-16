@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { IKodeverkVerdi } from '../../redux-api/kodeverk';
+import { Dropdown } from '../dropdown/dropdown';
 import { ToggleButton } from '../toggle-button/toggle-button';
-import { Dropdown } from './dropdown';
 
 interface FilterDropdownProps {
   options: IKodeverkVerdi[];

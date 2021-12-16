@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { adminApi } from '../redux-api/admin';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
-import { kakaKodeverkApi } from '../redux-api/kaka-kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
@@ -21,7 +20,6 @@ export const rootReducer = combineReducers({
   [smartEditorApi.reducerPath]: smartEditorApi.reducer,
   [smartEditorIdApi.reducerPath]: smartEditorIdApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
-  [kakaKodeverkApi.reducerPath]: kakaKodeverkApi.reducer,
   [adminApi.reducerPath]: adminApi.reducer,
 });
 
