@@ -4,7 +4,7 @@ import { isoDateToPretty } from '../../../domain/date';
 import { useKlagebehandling } from '../../../hooks/use-klagebehandling';
 import { useKlagerName } from '../../../hooks/use-klager-name';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
-import { Lovhjemmel } from './lovhjemmel';
+import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { SubSection } from './sub-section';
 import { Type } from './type';
 import { UtfallResultat } from './utfall-resultat';
@@ -50,7 +50,7 @@ export const Behandlingsdetaljer = () => {
 
         <UtfallResultat utfall={resultat.utfall} />
 
-        <Lovhjemmel hjemler={resultat.hjemler} />
+        <Lovhjemmel />
       </StyledPaddedContent>
     </StyledBehandlingsdetaljer>
   );

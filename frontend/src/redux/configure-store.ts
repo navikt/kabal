@@ -3,7 +3,6 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { adminApi } from '../redux-api/admin';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
-import { kakaKodeverkApi } from '../redux-api/kaka-kodeverk';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
@@ -40,7 +39,6 @@ export const reduxStore = configureStore({
       featureTogglingApi.middleware,
       smartEditorApi.middleware,
       smartEditorIdApi.middleware,
-      kakaKodeverkApi.middleware,
       adminApi.middleware,
     ]),
 });

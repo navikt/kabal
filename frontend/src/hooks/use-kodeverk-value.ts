@@ -1,10 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useGetKodeverkQuery } from '../redux-api/kaka-kodeverk';
-import { IKakaKodeverk, IKakaKodeverkValue, SakstypeEnum, UtfallEnum } from '../redux-api/kaka-kodeverk-types';
+import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, useGetKodeverkQuery } from '../redux-api/kodeverk';
 
-export const useKodeverkValue = <K extends keyof IKakaKodeverk>(
+export const useKodeverkValue = <K extends keyof IKodeverk>(
   key: K | typeof skipToken = skipToken
-): IKakaKodeverk[K] | undefined => {
+): IKodeverk[K] | undefined => {
   const { data } = useGetKodeverkQuery(key === skipToken ? skipToken : undefined);
 
   if (key === skipToken || typeof data === 'undefined') {
@@ -14,38 +13,16 @@ export const useKodeverkValue = <K extends keyof IKakaKodeverk>(
   return data[key];
 };
 
-export const useKodeverkUtfall = (
-  utfallId: string | typeof skipToken = skipToken
-): IKakaKodeverkValue<UtfallEnum> | undefined => {
-  const data = useKodeverkValue(utfallId === skipToken ? skipToken : 'utfall');
+export const useKodeverkYtelse = (ytelseId: string | typeof skipToken = skipToken): IYtelse | undefined => {
+  const data = useKodeverkValue(ytelseId === skipToken ? skipToken : 'ytelser');
 
-  if (utfallId === skipToken || typeof data === 'undefined') {
+  if (ytelseId === skipToken || typeof data === 'undefined') {
     return undefined;
   }
 
-  return data.find(({ id }) => id === utfallId);
+  return data.find(({ id }) => id === ytelseId);
 };
 
-export const useKodeverkHjemmel = (
-  hjemmelId: string | typeof skipToken = skipToken
-): IKakaKodeverkValue | undefined => {
-  const data = useKodeverkValue(hjemmelId === skipToken ? skipToken : 'hjemler');
-
-  if (hjemmelId === skipToken || typeof data === 'undefined') {
-    return undefined;
-  }
-
-  return data.find(({ id }) => id === hjemmelId);
-};
-
-export const useKodeverkSakstype = (
-  sakstypeId: string | typeof skipToken = skipToken
-): IKakaKodeverkValue<SakstypeEnum> | undefined => {
-  const data = useKodeverkValue(sakstypeId === skipToken ? skipToken : 'sakstyper');
-
-  if (sakstypeId === skipToken || typeof data === 'undefined') {
-    return undefined;
-  }
-
-  return data.find(({ id }) => id === sakstypeId);
-};
+export const useLovkildeToRegistreringshjemmelForYtelse = (
+  ytelseId: string | typeof skipToken = skipToken
+): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? [];
