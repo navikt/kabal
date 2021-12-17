@@ -36,7 +36,7 @@ export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
   }
 
   if (typeof ytelseId === 'string') {
-    return data.ytelse.find(({ id }) => id === ytelseId)?.beskrivelse ?? ytelseId;
+    return data.ytelser.find(({ id }) => id === ytelseId)?.beskrivelse ?? ytelseId;
   }
 
   return 'Mangler';
