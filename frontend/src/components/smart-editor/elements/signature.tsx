@@ -2,7 +2,7 @@ import { skipToken } from '@reduxjs/toolkit/query/react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useKlagebehandling } from '../../../hooks/use-klagebehandling';
-import { useGetMedunderskriverInfoQuery } from '../../../redux-api/oppgave';
+import { useGetMedunderskriverQuery } from '../../../redux-api/oppgave';
 import { ISignatureContent, ISignatureElement, ISigner } from '../../../redux-api/smart-editor-types';
 import { AutofillInput } from './autofill-input';
 import { StyledInput } from './text-input';
@@ -13,7 +13,7 @@ interface SignatureElementProps extends Pick<ISignatureElement, 'content'> {
 
 export const SignatureElement = ({ content, onChange }: SignatureElementProps) => {
   const [klagebehandling] = useKlagebehandling();
-  const { data: medunderskriverInfo } = useGetMedunderskriverInfoQuery(klagebehandling?.id ?? skipToken);
+  const { data: actualMedunderskriver } = useGetMedunderskriverQuery(klagebehandling?.id ?? skipToken);
   const [medunderskriver, setMedunderskriver] = useState(content.medunderskriver);
   const [saksbehandler, setSaksbehandler] = useState(content.saksbehandler);
 
@@ -37,7 +37,7 @@ export const SignatureElement = ({ content, onChange }: SignatureElementProps) =
     <SignatureContainer>
       <Signer
         name={content.medunderskriver.name}
-        defaultName={medunderskriverInfo?.medunderskriver?.navn ?? ''}
+        defaultName={actualMedunderskriver?.medunderskriver?.navn ?? ''}
         title={content.medunderskriver.title.length === 0 ? 'Rådgiver' : content.medunderskriver.title}
         nameLabel="Medunderskrivernavn"
         titleLabel="Medunderskrivertittel"
