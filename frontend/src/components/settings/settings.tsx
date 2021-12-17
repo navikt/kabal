@@ -29,7 +29,7 @@ export const Settings = () => {
 
   const settings = userData?.innstillinger ?? EMPTY_SETTINGS;
 
-  const availableTemaer = useAvailableYtelser();
+  const availableYtelser = useAvailableYtelser();
 
   return (
     <article>
@@ -55,7 +55,7 @@ export const Settings = () => {
           <FilterDropdown
             selected={settings.ytelser}
             onChange={(ytelser) => onChange({ ...settings, ytelser })}
-            options={availableTemaer}
+            options={availableYtelser}
           >
             Ytelser
           </FilterDropdown>
