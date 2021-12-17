@@ -2,9 +2,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
-import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
-import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import {
   LoadLedigeKlagebehandlingerParams,
@@ -39,13 +36,9 @@ export const OppgaveTable = (): JSX.Element => {
   const currentPage = parsedPage === null ? 1 : parsedPage;
   const from = (currentPage - 1) * PAGE_SIZE;
 
-  const settingsYtelser = useSettingsYtelser();
-  const settingsTypes = useSettingsTypes();
-  const settingsHjemler = useSettingsHjemler();
-
-  const ytelser = filters.ytelser.length === 0 ? settingsYtelser.map(({ id }) => id) : filters.ytelser;
-  const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
-  const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
+  const ytelser = filters.ytelser.length === 0 ? [] : filters.ytelser;
+  const typer = filters.types.length === 0 ? [] : filters.types;
+  const hjemler = filters.hjemler.length === 0 ? [] : filters.hjemler;
 
   const queryParams: typeof skipToken | LoadLedigeKlagebehandlingerParams =
     typeof bruker === 'undefined'
