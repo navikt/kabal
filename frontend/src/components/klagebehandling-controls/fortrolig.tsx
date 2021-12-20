@@ -1,22 +1,16 @@
 import React from 'react';
+import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
 import { LabelMain } from '../../styled-components/labels';
 import { UserItem } from './styled-components';
 
-interface FortroligProps {
-  fortrolig: boolean;
-}
-interface StrengtFortroligProps {
-  strengtFortrolig: boolean;
-}
-
-export const Fortrolig = ({ fortrolig }: FortroligProps) =>
+export const Fortrolig = ({ fortrolig }: Pick<IKlagebehandling, 'fortrolig'>) =>
   fortrolig === true ? (
     <UserItem>
       <LabelMain>Fortrolig</LabelMain>
     </UserItem>
   ) : null;
 
-export const StrengtFortrolig = ({ strengtFortrolig }: StrengtFortroligProps) =>
+export const StrengtFortrolig = ({ strengtFortrolig }: Pick<IKlagebehandling, 'strengtFortrolig'>) =>
   strengtFortrolig === true ? (
     <UserItem>
       <LabelMain>Strengt fortrolig</LabelMain>
