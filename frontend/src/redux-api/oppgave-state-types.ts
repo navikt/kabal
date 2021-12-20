@@ -64,7 +64,7 @@ export interface IKlagebehandling {
   resultat: Resultat;
   sakenGjelder: ISakenGjelder;
   sendTilbakemelding: boolean | null;
-  strengtFortrolig: boolean | null;
+  strengtFortrolig: boolean;
   tema: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
