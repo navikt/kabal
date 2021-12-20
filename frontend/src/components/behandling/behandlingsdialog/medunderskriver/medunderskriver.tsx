@@ -14,7 +14,7 @@ import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';
 import { SendTilSaksbehandler } from './send-til-saksbehandler';
 
-export const Medunderskriver = (): JSX.Element => {
+export const Medunderskriver = () => {
   const klagebehandlingId = useKlagebehandlingId();
   const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
   const isSaksbehandler = useIsSaksbehandler();
@@ -36,6 +36,10 @@ export const Medunderskriver = (): JSX.Element => {
     typeof medunderskriverflyt === 'undefined'
   ) {
     return <NavFrontendSpinner />;
+  }
+
+  if (klagebehandling.strengtFortrolig === true) {
+    return null;
   }
 
   if (isFullfoert) {
