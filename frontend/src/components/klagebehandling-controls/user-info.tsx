@@ -3,16 +3,12 @@ import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
 import { formatOrgNum } from '../../functions/format-id';
 import { CopyIcon } from '../../icons/copy';
-import { Gender, IKlager, ISakenGjelder, IVirksomhet } from '../../redux-api/oppgave-state-types';
+import { Gender, IKlagebehandling, IVirksomhet } from '../../redux-api/oppgave-state-types';
 import { Fortrolig, StrengtFortrolig } from './fortrolig';
 import { CopyFnrButton, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';
 
-interface UserInfoProps {
-  fortrolig: boolean | null;
-  strengtFortrolig: boolean | null;
-  sakenGjelder: ISakenGjelder | IKlager;
-}
+type UserInfoProps = Pick<IKlagebehandling, 'sakenGjelder' | 'fortrolig' | 'strengtFortrolig'>;
 
 export const UserInfo = ({ fortrolig, strengtFortrolig, sakenGjelder }: UserInfoProps) => {
   const { person, virksomhet } = sakenGjelder;
@@ -44,9 +40,7 @@ export const UserInfo = ({ fortrolig, strengtFortrolig, sakenGjelder }: UserInfo
   return <span>Fant ikke noe data på den saken gjelder.</span>;
 };
 
-interface SakenGjelderProps {
-  fortrolig: boolean | null;
-  strengtFortrolig: boolean | null;
+interface SakenGjelderProps extends Pick<IKlagebehandling, 'fortrolig' | 'strengtFortrolig'> {
   id: string | null;
   name: string;
   gender: Gender | null;
