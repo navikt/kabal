@@ -3,10 +3,10 @@ import { LabelMain } from '../../styled-components/labels';
 import { UserItem } from './styled-components';
 
 interface FortroligProps {
-  fortrolig: boolean | null;
+  fortrolig: boolean;
 }
 interface StrengtFortroligProps {
-  strengtFortrolig: boolean | null;
+  strengtFortrolig: boolean;
 }
 
 export const Fortrolig = ({ fortrolig }: FortroligProps) =>
