@@ -1,0 +1,51 @@
+name: Sanity Build
+
+on: [pull_request]
+
+jobs:
+  frontend-sanity-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm test
+  server-sanity-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: 'server/package-lock.json'
+      - name: Install server dependencies
+        run: |
+          cd server
+          npm ci
+      - name: Build server
+        run: |
+          cd server
+          npm run build
+      - name: Test server
+        run: |
+          cd server
+          npm test
