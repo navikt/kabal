@@ -67,15 +67,15 @@ export const Vedtaket = () => {
       <RadioGruppe feil={vedtaketRadioValg === null ? validationError : undefined}>
         <RadioButtonsRow>
           <Radio
-            name={'VedtaketBra'}
-            label={'Bra/godt nok'}
+            name="VedtaketBra"
+            label="Bra/godt nok"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
             checked={vedtaketRadioValg === RadioValg.BRA}
             disabled={!canEdit}
           />
           <Radio
-            name={'VedtaketMangelfullt'}
-            label={'Mangelfullt'}
+            name="VedtaketMangelfullt"
+            label="Mangelfullt"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
             checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
             disabled={!canEdit}

@@ -26,7 +26,7 @@ export const EditorOppgavelinje = () => {
       <Marks iconSize={ICON_SIZE} disabled={!marksAvailable} />
       <Content iconSize={ICON_SIZE} />
       <ToolbarIconButton
-        label={'Fjern formatering'}
+        label="Fjern formatering"
         icon={<FormatClear width={ICON_SIZE} />}
         active={false}
         onClick={() => clearFormatting(editor)}

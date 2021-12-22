@@ -17,14 +17,14 @@ export const TextAligns = ({ iconSize, disabled = true }: TextAlignsProps) => {
   return (
     <>
       <ToolbarIconButton
-        label={'Venstrejuster'}
+        label="Venstrejuster"
         icon={<FormatAlignLeft width={iconSize} />}
         onClick={() => setTextAlign(editor, TextAlignEnum.TEXT_ALIGN_LEFT)}
         active={isTextAlignActive(editor, TextAlignEnum.TEXT_ALIGN_LEFT)}
         disabled={disabled}
       />
       <ToolbarIconButton
-        label={'Høyrejuster'}
+        label="Høyrejuster"
         icon={<FormatAlignRight width={iconSize} />}
         onClick={() => setTextAlign(editor, TextAlignEnum.TEXT_ALIGN_RIGHT)}
         active={isTextAlignActive(editor, TextAlignEnum.TEXT_ALIGN_RIGHT)}

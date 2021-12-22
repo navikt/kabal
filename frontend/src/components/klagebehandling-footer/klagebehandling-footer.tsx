@@ -52,7 +52,7 @@ export const KlagebehandlingFooter = () => {
           Fullfør
         </Hovedknapp>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
-        <NavLink to={'/mineoppgaver'} className="knapp knapp--mini footer-button">
+        <NavLink to="/mineoppgaver" className="knapp knapp--mini footer-button">
           Tilbake
         </NavLink>
       </StyledButtons>

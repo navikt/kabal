@@ -20,7 +20,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
   return (
     <>
       <ToolbarIconButton
-        label={'Punktliste'}
+        label="Punktliste"
         icon={<FormatListBulleted width={iconSize} />}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
@@ -52,7 +52,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
         active={isBulletListActive}
       />
       <ToolbarIconButton
-        label={'Nummerliste'}
+        label="Nummerliste"
         icon={<FormatListNumbered width={iconSize} />}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {

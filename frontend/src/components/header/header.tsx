@@ -7,12 +7,12 @@ import { User } from './user-menu/user';
 export const Header = () => (
   <StyledHeader>
     <Nav>
-      <StyledLogo to={'/oppgaver/1'}>
+      <StyledLogo to="/oppgaver/1">
         <HomeIcon />
         <StyledLabel>Kabal</StyledLabel>
       </StyledLogo>
       <Separator />
-      <StyledNavLink to={'/mineoppgaver'}>Mine oppgaver</StyledNavLink>
+      <StyledNavLink to="/mineoppgaver">Mine oppgaver</StyledNavLink>
     </Nav>
     <User />
   </StyledHeader>

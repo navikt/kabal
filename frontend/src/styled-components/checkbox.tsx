@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Checkbox = React.forwardRef<
   HTMLInputElement,
   React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
->((props, ref) => <input {...props} type={'checkbox'} ref={ref} />);
+>((props, ref) => <input {...props} type="checkbox" ref={ref} />);
 
 Checkbox.displayName = 'Checkbox';
 
