@@ -10,9 +10,9 @@
     "local": "npm start",
     "test": "jest",
     "testcov": "jest --coverage --no-cache",
-    "lint": "npx eslint src --color",
-    "lint-fix": "npx eslint src --color --fix",
-    "lint-staged": "npx lint-staged",
+    "lint": "eslint src --color",
+    "lint-fix": "eslint src --color --fix",
+    "lint-staged": "lint-staged",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "license": "MIT",
