@@ -46,8 +46,8 @@ const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
     return (
       <ExternalLink
         href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.person.foedselsnummer}`}
-        target={'_blank'}
-        aria-label={'Ekstern lenke til Gosys for denne personen'}
+        target="_blank"
+        aria-label="Ekstern lenke til Gosys for denne personen"
         title="Åpne i ny fane"
         rel="noreferrer"
       >

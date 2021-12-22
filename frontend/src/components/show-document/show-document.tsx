@@ -52,7 +52,7 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
             <HeaderButton onClick={increase} text="Zoom inn på PDF">
               <StyledZoomInIcon alt="Zoom inn på PDF" />
             </HeaderButton>
-            <StyledHeaderLink href={url} target={'_blank'} title="Åpne i ny fane" rel="noreferrer">
+            <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
               <StyledExtLinkIcon alt="Ekstern lenke" />
             </StyledHeaderLink>
             <StyledDocumentTitleContainer>

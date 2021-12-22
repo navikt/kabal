@@ -20,7 +20,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   return (
     <thead>
       <tr>
-        <StyledTableHeader width={'225px'}>
+        <StyledTableHeader width="225px">
           <FilterDropdown
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
@@ -29,7 +29,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
             Type
           </FilterDropdown>
         </StyledTableHeader>
-        <StyledTableHeader width={'225px'}>
+        <StyledTableHeader width="225px">
           <FilterDropdown
             selected={filters.ytelser}
             onChange={(ytelser) => onChange({ ...filters, ytelser })}
@@ -38,7 +38,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
             Ytelse
           </FilterDropdown>
         </StyledTableHeader>
-        <StyledTableHeader width={'225px'}>
+        <StyledTableHeader width="225px">
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
@@ -47,11 +47,11 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
             Hjemmel
           </FilterDropdown>
         </StyledTableHeader>
-        <StyledTableHeader width={'225px'}>Alder</StyledTableHeader>
+        <StyledTableHeader width="225px">Alder</StyledTableHeader>
         <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
           Frist
         </SortBy>
-        <StyledTableHeader width={'14em'}></StyledTableHeader>
+        <StyledTableHeader width="14em"></StyledTableHeader>
       </tr>
     </thead>
   );

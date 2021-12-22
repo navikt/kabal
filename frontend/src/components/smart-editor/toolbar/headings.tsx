@@ -10,20 +10,20 @@ export const Headings = () => {
   return (
     <>
       <ToolbarTextButton
-        label={'Paragrafnivå'}
+        label="Paragrafnivå"
         text="Normal"
         onClick={() => toggleBlock(editor, ContentTypeEnum.PARAGRAPH)}
         active={isBlockActive(editor, ContentTypeEnum.PARAGRAPH)}
       />
       <ToolbarTextButton
-        label={'Tittel nivå 1'}
+        label="Tittel nivå 1"
         text="H1"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_ONE)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_ONE)}
       />
       <ToolbarTextButton
-        label={'Tittel nivå 2'}
+        label="Tittel nivå 2"
         text="H2"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_TWO)}

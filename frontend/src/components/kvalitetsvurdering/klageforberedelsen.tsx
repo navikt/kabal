@@ -62,15 +62,15 @@ export const Klageforberedelsen = () => {
       <RadioGruppe feil={klageforberedelsenRadioValg === null ? validationError : undefined}>
         <RadioButtonsRow>
           <Radio
-            name={'KlageforberedelsenBra'}
-            label={'Bra/godt nok'}
+            name="KlageforberedelsenBra"
+            label="Bra/godt nok"
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.BRA })}
             checked={klageforberedelsenRadioValg === RadioValg.BRA}
             disabled={!canEdit}
           />
           <Radio
-            name={'KlageforberedelsenMangelfullt'}
-            label={'Mangelfullt'}
+            name="KlageforberedelsenMangelfullt"
+            label="Mangelfullt"
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.MANGELFULLT })}
             checked={klageforberedelsenRadioValg === RadioValg.MANGELFULLT}
             disabled={!canEdit}

@@ -51,8 +51,8 @@ export const BrukAvRaadgivendeLege = () => {
       <SubHeader>{header}</SubHeader>
       <RadioButtonsColumn feil={brukAvRaadgivendeLegeRadioValg === null ? validationError : undefined}>
         <Radio
-          name={'BrukAvRaadgivendeLegeIkkeAktuelt'}
-          label={'Ikke aktuelt for saken'}
+          name="BrukAvRaadgivendeLegeIkkeAktuelt"
+          label="Ikke aktuelt for saken"
           onChange={() =>
             updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.IKKE_AKTUELT })
           }
@@ -60,15 +60,15 @@ export const BrukAvRaadgivendeLege = () => {
           disabled={!canEdit}
         />
         <Radio
-          name={'BrukAvRaadgivendeLegeBra'}
-          label={'Bra/godt nok'}
+          name="BrukAvRaadgivendeLegeBra"
+          label="Bra/godt nok"
           onChange={() => updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.BRA })}
           checked={brukAvRaadgivendeLegeRadioValg === RadioValgExtended.BRA}
           disabled={!canEdit}
         />
         <Radio
-          name={'BrukAvRaadgivendeLegeMangelfullt'}
-          label={'Mangelfullt'}
+          name="BrukAvRaadgivendeLegeMangelfullt"
+          label="Mangelfullt"
           onChange={() =>
             updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.MANGELFULLT })
           }

@@ -15,7 +15,7 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
   return (
     <ToggleButtonsContainer data-testid="klagebehandling-control-panel-toggle-buttons">
       <TogglePanelButton
-        panel={'documents'}
+        panel="documents"
         checked={toggles.documents}
         setPanel={togglePanel}
         testId="klagebehandling-control-panel-toggle-documents"
@@ -24,7 +24,7 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
       </TogglePanelButton>
       {featureTogglingEditor === true && (
         <TogglePanelButton
-          panel={'smartEditor'}
+          panel="smartEditor"
           checked={toggles.smartEditor}
           setPanel={togglePanel}
           testId="klagebehandling-control-panel-toggle-smart-editor"
@@ -33,7 +33,7 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
         </TogglePanelButton>
       )}
       <TogglePanelButton
-        panel={'behandling'}
+        panel="behandling"
         checked={toggles.behandling}
         setPanel={togglePanel}
         testId="klagebehandling-control-panel-toggle-behandling"
@@ -41,7 +41,7 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
         Behandling
       </TogglePanelButton>
       <TogglePanelButton
-        panel={'kvalitetsvurdering'}
+        panel="kvalitetsvurdering"
         checked={toggles.kvalitetsvurdering}
         setPanel={togglePanel}
         testId="klagebehandling-control-panel-toggle-kvalitetsvurdering"
