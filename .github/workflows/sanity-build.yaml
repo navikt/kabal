@@ -18,14 +18,18 @@ jobs:
         run: |
           cd frontend
           npm ci
-      - name: Build frontend
+      - name: Lint frontend
         run: |
           cd frontend
-          npm run build
+          npm run lint
       - name: Test frontend
         run: |
           cd frontend
           npm test
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
   server-sanity-build:
     runs-on: ubuntu-latest
     steps:
@@ -41,11 +45,15 @@ jobs:
         run: |
           cd server
           npm ci
-      - name: Build server
+      - name: Lint server
         run: |
           cd server
-          npm run build
+          npm run lint
       - name: Test server
         run: |
           cd server
           npm test
+      - name: Build server
+        run: |
+          cd server
+          npm run build
