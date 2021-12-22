@@ -30,7 +30,7 @@ export const Headings = () => {
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_TWO)}
       />
       <ToolbarTextButton
-        label={'Tittel nivå 3'}
+        label="Tittel nivå 3"
         text="H3"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_THREE)}
