@@ -3,18 +3,20 @@ import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
+import { useOppgaveId } from '../../../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../../../hooks/use-oppgave-type';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const isFullfoert = useIsFullfoert(klagebehandlingId);
+  const isFullfoert = useIsFullfoert();
   const { data: user, isLoading } = useGetBrukerQuery();
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
 
   useEffect(() => {
     if (isSuccess) {
@@ -42,7 +44,8 @@ export const WriteMessage = () => {
     }
 
     postMessage({
-      klagebehandlingId,
+      oppgaveId,
+      type,
       text: message.trim(),
       author: {
         name: user.info.sammensattNavn,

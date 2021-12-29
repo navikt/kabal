@@ -1,19 +1,19 @@
 import Alertstripe from 'nav-frontend-alertstriper';
 import 'nav-frontend-knapper-style';
 import React from 'react';
-import { useKlagebehandling } from '../../hooks/use-klagebehandling';
-import { Utfall } from '../../redux-api/oppgave-state-types';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { Utfall } from '../../redux-api/klagebehandling-state-types';
 
-export const KlagebehandlingFinished = () => {
-  const [klagebehandling] = useKlagebehandling();
+export const OppgavebehandlingFinished = () => {
+  const { data: oppgavebehandling } = useOppgave();
 
-  if (typeof klagebehandling === 'undefined') {
+  if (typeof oppgavebehandling === 'undefined') {
     return null;
   }
 
   return (
     <Alertstripe type="suksess" form="inline">
-      {getSuccessMessage(klagebehandling.resultat.utfall)}
+      {getSuccessMessage(oppgavebehandling.resultat.utfall)}
     </Alertstripe>
   );
 };

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
 
 interface LabelProps {
   fixedWidth?: boolean;
@@ -30,15 +31,14 @@ export const LabelLovhjemmel = styled(Label)`
   border: 1px solid #0067c5;
 `;
 
-export const LabelType = styled(Label)`
-  background-color: white;
+export const LabelType = styled(Label)<{ type: OppgaveType }>`
+  background-color: ${({ type }) => (type === OppgaveType.KLAGEBEHANDLING ? 'white' : 'black')};
+  color: ${({ type }) => (type === OppgaveType.KLAGEBEHANDLING ? 'black' : 'white')};
   border: 1px solid #ba3a26;
 `;
 
 export const LabelTema = styled(Label)`
   background-color: #cce1f3;
-  border: 1px solid #0067c5;
-  background-color: #f1d8d4;
   border: 1px solid #0067c5;
   overflow: hidden;
   text-overflow: ellipsis;

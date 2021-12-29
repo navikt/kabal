@@ -1,18 +1,21 @@
 import React from 'react';
-import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
+import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
 import { ListItem } from '../styled-components/fullvisning';
 import { Document } from './document';
 
 interface DocumentsPageProps {
-  klagebehandlingId: string;
+  oppgaveId: string;
   pageReference: string | null;
   pageSize: number;
   temaer: string[];
 }
 
-export const DocumentsPage = ({ klagebehandlingId, pageReference, pageSize, temaer }: DocumentsPageProps) => {
+export const DocumentsPage = ({ oppgaveId, pageReference, pageSize, temaer }: DocumentsPageProps) => {
+  const type = useOppgaveType();
   const { data } = useGetDokumenterQuery({
-    klagebehandlingId,
+    oppgaveId,
+    type,
     pageReference,
     pageSize,
     temaer,

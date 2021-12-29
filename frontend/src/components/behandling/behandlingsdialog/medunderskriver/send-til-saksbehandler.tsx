@@ -4,15 +4,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useCheckIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
-import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
+import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgavebehandling';
+import { MedunderskriverFlyt } from '../../../../redux-api/oppgavebehandling-common-types';
+import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
 
-interface SendTilMedunderskriverProps {
-  klagebehandling: IKlagebehandling;
-}
-
-export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriverProps) => {
-  const { id: klagebehandlingId } = klagebehandling;
+export const SendTilSaksbehandler = ({
+  id: oppgaveId,
+  type,
+  medunderskriverFlyt,
+}: Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriverFlyt'>) => {
   const canEdit = useCanEdit();
   const isMedunderskriver = useCheckIsMedunderskriver();
 
@@ -22,7 +22,7 @@ export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriver
     return null;
   }
 
-  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+  if (medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
     return (
       <StyledFormSection>
         <AlertStripe type="info">Klagen er nå sendt tilbake til saksbehandler</AlertStripe>
@@ -30,12 +30,12 @@ export const SendTilSaksbehandler = ({ klagebehandling }: SendTilMedunderskriver
     );
   }
 
-  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+  if (medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
         <Hovedknapp
           mini
-          onClick={() => switchMedunderskriverflyt({ klagebehandlingId })}
+          onClick={() => switchMedunderskriverflyt({ oppgaveId, type })}
           disabled={loader.isLoading}
           spinner={loader.isLoading}
           autoDisableVedSpinner

@@ -2,7 +2,8 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { INameSearchParams, useNameSearchQuery } from '../../../redux-api/oppgaver';
+import { useNameSearchQuery } from '../../../redux-api/oppgaver';
+import { INameSearchParams } from '../../../redux-api/oppgaver-types';
 import { SearchResults } from './searchresults';
 
 interface NameSearchProps {

@@ -1,8 +1,9 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { IKodeverkVerdi, useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
 
-export const useSettingsTypes = (): IKodeverkVerdi[] => {
+export const useSettingsTypes = (): IKodeverkVerdi<OppgaveType>[] => {
   const { data: kodeverk } = useGetKodeverkQuery();
   const { data: userData } = useGetBrukerQuery();
 

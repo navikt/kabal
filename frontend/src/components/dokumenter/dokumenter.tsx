@@ -1,9 +1,8 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
-import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
-import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
-import { IDocumentReference } from '../../redux-api/oppgave-types';
-import { PanelContainer } from '../klagebehandling-panels/panel';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { IDocumentReference } from '../../redux-api/klagebehandling-types';
+import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';
 import { AlleDokumenter } from './alle-dokumenter/alle-dokumenter';
@@ -19,14 +18,13 @@ export interface DokumenterProps {
 }
 
 export const Dokumenter = ({ shown }: DokumenterProps) => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: klagebehandling, isLoading } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const { data: oppgavebehandling, isLoading } = useOppgave();
 
   if (!shown) {
     return null;
   }
 
-  if (typeof klagebehandling === 'undefined' || isLoading) {
+  if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return (
       <PanelContainer data-testid="documents-panel">
         <DokumenterNav>
@@ -37,7 +35,7 @@ export const Dokumenter = ({ shown }: DokumenterProps) => {
     );
   }
 
-  const { tilknyttedeDokumenter, isAvsluttetAvSaksbehandler } = klagebehandling;
+  const { tilknyttedeDokumenter, isAvsluttetAvSaksbehandler } = oppgavebehandling;
 
   return (
     <Documents tilknyttedeDokumenter={tilknyttedeDokumenter} isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler} />

@@ -6,8 +6,8 @@ import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
-import { klagebehandlingApi } from '../redux-api/oppgave';
-import { klagebehandlingerApi } from '../redux-api/oppgaver';
+import { oppgavebehandlingApi } from '../redux-api/oppgavebehandling';
+import { oppgaverApi } from '../redux-api/oppgaver';
 import { smartEditorApi } from '../redux-api/smart-editor';
 import { smartEditorIdApi } from '../redux-api/smart-editor-id';
 import { RootState, rootReducer } from './root';
@@ -30,10 +30,10 @@ export const reduxStore = configureStore({
         ],
       },
     }).concat([
-      klagebehandlingerApi.middleware,
+      oppgaverApi.middleware,
       kodeverkApi.middleware,
       brukerApi.middleware,
-      klagebehandlingApi.middleware,
+      oppgavebehandlingApi.middleware,
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
       featureTogglingApi.middleware,

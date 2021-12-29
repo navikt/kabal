@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../hooks/use-check-document';
-import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
 import { dokumentMatcher } from '../helpers';
 import { StyledDocumentCheckbox } from '../styled-components/fullvisning';
 
@@ -20,15 +20,15 @@ export const DocumentCheckbox = ({
   title,
   harTilgangTilArkivvariant,
 }: DocumentCheckboxProps): JSX.Element => {
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const { data: oppgavebehandling } = useOppgave();
   const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit();
 
   const tilknyttet = useMemo<boolean>(
     () =>
-      klagebehandling?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ??
+      oppgavebehandling?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ??
       false,
-    [klagebehandling, dokumentInfoId, journalpostId]
+    [oppgavebehandling, dokumentInfoId, journalpostId]
   );
 
   return (

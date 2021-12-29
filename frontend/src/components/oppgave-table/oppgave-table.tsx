@@ -3,11 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import {
-  LoadLedigeKlagebehandlingerParams,
-  useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery,
-  useGetLedigeKlagebehandlingerQuery,
-} from '../../redux-api/oppgaver';
+import { useGetAntallLedigeOppgaverMedUtgaatteFristerQuery, useGetLedigeOppgaverQuery } from '../../redux-api/oppgaver';
+import { LoadLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../redux-api/oppgaver-types';
 import { TableHeaderFilters } from './filter-header';
 import { Pagination } from './pagination';
 import { OppgaveRader } from './rows';
@@ -40,14 +37,14 @@ export const OppgaveTable = (): JSX.Element => {
   const typer = filters.types.length === 0 ? [] : filters.types;
   const hjemler = filters.hjemler.length === 0 ? [] : filters.hjemler;
 
-  const queryParams: typeof skipToken | LoadLedigeKlagebehandlingerParams =
+  const queryParams: typeof skipToken | LoadLedigeOppgaverParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
           start: from,
           antall: PAGE_SIZE,
-          sortering: 'FRIST',
-          rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
+          sortering: SortFieldEnum.FRIST,
+          rekkefoelge: filters.sortDescending ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE,
           ytelser,
           typer,
           hjemler,
@@ -56,13 +53,13 @@ export const OppgaveTable = (): JSX.Element => {
         };
 
   const {
-    data: klagebehandlinger,
+    data: oppgaver,
     refetch,
     isFetching,
-  } = useGetLedigeKlagebehandlingerQuery(queryParams, {
+  } = useGetLedigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
-  const { data: utgaatte } = useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery(queryParams, {
+  const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(queryParams, {
     pollingInterval: 300 * 1000,
   });
 
@@ -75,9 +72,9 @@ export const OppgaveTable = (): JSX.Element => {
     return <Navigate to="../1" />;
   }
 
-  const total = klagebehandlinger?.antallTreffTotalt ?? 0;
+  const total = oppgaver?.antallTreffTotalt ?? 0;
 
-  if (!isFetching && typeof klagebehandlinger !== 'undefined' && total < from) {
+  if (!isFetching && typeof oppgaver !== 'undefined' && total < from) {
     const lastPage = Math.ceil(total / PAGE_SIZE);
     return <Navigate to={`../${lastPage.toString()}`} />;
   }
@@ -89,7 +86,7 @@ export const OppgaveTable = (): JSX.Element => {
     <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet" data-testid="oppgave-table">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={klagebehandlinger?.klagebehandlinger} columnCount={7} />
+        <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} columnCount={7} />
         <StyledTableFooter>
           <tr>
             <td colSpan={7}>

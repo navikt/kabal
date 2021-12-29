@@ -1,5 +1,5 @@
 import React from 'react';
-import { IKlagebehandling } from '../../redux-api/oppgaver';
+import { IOppgave } from '../../redux-api/oppgaver-types';
 import { LabelMedunderskriver } from '../../styled-components/labels';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
@@ -20,16 +20,16 @@ export const Row = ({
   harMedunderskriver,
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
-}: IKlagebehandling): JSX.Element => (
+}: IOppgave): JSX.Element => (
   <tr data-testid="enhetens=oppgaver-table-row" data-klagebehandlingid={id}>
     <td>
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelse} type={type} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={hjemmel} type={type} />
     </td>
     <td>
       <Age age={ageKA} />

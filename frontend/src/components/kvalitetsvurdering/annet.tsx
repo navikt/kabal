@@ -1,12 +1,15 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { RadioValg } from '../../redux-api/kaka-kvalitetsvurdering-types';
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
 import { Reason, Reasons } from './reasons';
 import { FormSection, SubHeader } from './styled-components';
 
 export const Annet = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
+  const type = useOppgaveType();
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
@@ -26,7 +29,7 @@ export const Annet = () => {
     return null;
   }
 
-  const reasons: Reason[] = [
+  const baseReasons: Reason[] = [
     {
       id: 'nyeOpplysningerMottatt',
       label: 'Nye opplysninger mottatt etter oversendelse til klageinstansen',
@@ -42,6 +45,9 @@ export const Annet = () => {
       show: showBetydeligAvvikReason,
       helpText: 'Benyttes når førsteinstans bør varsles umiddelbart om resultatet av behandlingen',
     },
+  ];
+
+  const klageReasons: Reason[] = [
     {
       id: 'brukIOpplaering',
       label: 'Bruk gjerne vedtaket som eksempel i opplæring',
@@ -51,6 +57,8 @@ export const Annet = () => {
       helpText: 'Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.',
     },
   ];
+
+  const reasons = type === OppgaveType.ANKEBEHANDLING ? baseReasons : [...baseReasons, ...klageReasons];
 
   return (
     <FormSection>

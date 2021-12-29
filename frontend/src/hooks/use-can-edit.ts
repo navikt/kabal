@@ -1,24 +1,24 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { useKlagebehandling } from './use-klagebehandling';
+import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useCanEdit = () => {
-  const [klagebehandling, klagebehandlingIsLoading] = useKlagebehandling();
+  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
   const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 
   return useMemo(() => {
     if (
-      klagebehandlingIsLoading ||
+      oppgavebehandlingIsLoading ||
       userIsLoading ||
-      typeof klagebehandling === 'undefined' ||
+      typeof oppgavebehandling === 'undefined' ||
       typeof userData === 'undefined'
     ) {
       return false;
     }
 
     return (
-      !klagebehandling.isAvsluttetAvSaksbehandler &&
-      klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent
+      !oppgavebehandling.isAvsluttetAvSaksbehandler &&
+      oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent
     );
-  }, [klagebehandling, userData, userIsLoading, klagebehandlingIsLoading]);
+  }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
 };

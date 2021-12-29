@@ -4,9 +4,11 @@ import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../redux-api/kaka-kvalitetsvurdering-types';
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
 import { Reason, Reasons } from './reasons';
 import { FormSection, RadioButtonsRow, SubHeader } from './styled-components';
 
@@ -16,9 +18,14 @@ export const Klageforberedelsen = () => {
   const canEdit = useCanEdit();
   const validationError = useValidationError('klageforberedelsenRadioValg');
   const header = useFieldName('klageforberedelsenRadioValg');
+  const type = useOppgaveType();
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
+  }
+
+  if (type === OppgaveType.ANKEBEHANDLING) {
+    return null;
   }
 
   const { id, klageforberedelsenRadioValg } = kvalitetsvurdering;

@@ -1,5 +1,7 @@
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+
 export interface Filters {
-  types: string[];
+  types: OppgaveType[];
   ytelser: string[];
   hjemler: string[];
   tildeltSaksbehandler: string[];

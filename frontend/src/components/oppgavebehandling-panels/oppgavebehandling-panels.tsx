@@ -6,11 +6,11 @@ import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
 import { SmartEditorPanel } from '../smart-editor/smart-editor-panel';
 
-interface KlagebehandlingPanelsProps {
+interface OppgavebehandlingPanelsProps {
   toggles: PanelToggles;
 }
 
-export const KlagebehandlingPanels = ({ toggles }: KlagebehandlingPanelsProps): JSX.Element => (
+export const OppgavebehandlingPanels = ({ toggles }: OppgavebehandlingPanelsProps): JSX.Element => (
   <PageContainer data-testid="klagebehandling-panels">
     <Dokumenter shown={toggles.documents} />
     <SmartEditorPanel shown={toggles.smartEditor} />

@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import { useGetKlagebehandlingQuery } from '../redux-api/oppgave';
+import { useOppgave } from './oppgavebehandling/use-oppgave';
 
-export const useIsFullfoert = (klagebehandlingId: string): boolean => {
-  const { data } = useGetKlagebehandlingQuery(klagebehandlingId);
+export const useIsFullfoert = (): boolean => {
+  const { data: oppgavebehandling } = useOppgave();
 
   return useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (typeof oppgavebehandling === 'undefined') {
       return false;
     }
 
-    return data.isAvsluttetAvSaksbehandler;
-  }, [data]);
+    return oppgavebehandling.isAvsluttetAvSaksbehandler;
+  }, [oppgavebehandling]);
 };

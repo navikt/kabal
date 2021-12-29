@@ -1,9 +1,9 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
-import { useKlagebehandling } from '../../hooks/use-klagebehandling';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useGetFeatureTogglingEditorQuery } from '../../redux-api/feature-toggling';
-import { PanelContainer } from '../klagebehandling-panels/panel';
+import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { CommentSection } from './comments/comment-section';
 import { SmartEditorContextComponent } from './context/smart-editor-context';
 import { Header } from './header/header';
@@ -15,13 +15,13 @@ export interface Props {
 
 export const SmartEditorPanel = ({ shown }: Props) => {
   const { data: featureTogglingEditor } = useGetFeatureTogglingEditorQuery();
-  const [klagebehandling, isLoading] = useKlagebehandling();
+  const { data: oppgavebehandling, isLoading } = useOppgave();
 
   if (!shown || featureTogglingEditor === false) {
     return null;
   }
 
-  if (typeof klagebehandling === 'undefined' || isLoading) {
+  if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return (
       <PanelContainer data-testid="smart-editor-panel">
         <Header />

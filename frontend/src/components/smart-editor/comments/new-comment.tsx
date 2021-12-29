@@ -3,7 +3,8 @@ import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useCallback, useContext, useState } from 'react';
 import { ReactEditor } from 'slate-react';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
@@ -14,8 +15,9 @@ import { StyledCommentButton, StyledCommentButtonContainer, StyledNewComment } f
 export const NewComment = () => {
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const [postComment] = usePostCommentMutation();
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery(klagebehandlingId);
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
+  const { data: smartEditorData } = useGetSmartEditorIdQuery({ oppgaveId, type });
 
   const [text, setText] = useState<string>('');
 

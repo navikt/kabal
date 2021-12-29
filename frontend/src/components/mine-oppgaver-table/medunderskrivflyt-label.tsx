@@ -1,5 +1,5 @@
 import React from 'react';
-import { MedunderskriverFlyt } from '../../redux-api/oppgave-state-types';
+import { MedunderskriverFlyt } from '../../redux-api/klagebehandling-state-types';
 import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '../../styled-components/labels';
 
 interface MedudunderskriverflytLabelProps {

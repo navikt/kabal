@@ -1,7 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
+import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { baseUrl } from '../../../redux-api/common';
 import { IDocument } from '../../../redux-api/documents-types';
 import { ShownDocumentContext } from '../context';
@@ -19,12 +21,13 @@ export const Document = React.memo<DocumentProps>(
   ({ document }) => {
     const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
     const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-    const klagebehandlingId = useKlagebehandlingId();
+    const oppgaveId = useOppgaveId();
+    const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
+    const type = useOppgaveType();
 
     const url = useMemo(
-      () =>
-        `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
-      [klagebehandlingId, journalpostId, dokumentInfoId]
+      () => `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+      [oppgaveId, oppgavebehandlingUrl, journalpostId, dokumentInfoId]
     );
 
     const onClick = () =>
@@ -47,7 +50,7 @@ export const Document = React.memo<DocumentProps>(
           </DocumentButton>
         </DocumentTitle>
 
-        <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
+        <DocumentTema>{useFullTemaNameFromId(type, tema)}</DocumentTema>
 
         <DocumentDate dateTime={registrert}>{isoDateToPretty(registrert)}</DocumentDate>
 
@@ -56,10 +59,10 @@ export const Document = React.memo<DocumentProps>(
           journalpostId={journalpostId}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
           title={tittel ?? ''}
-          klagebehandlingId={klagebehandlingId}
+          klagebehandlingId={oppgaveId}
         />
 
-        <VedleggList document={document} klagebehandlingId={klagebehandlingId} />
+        <VedleggList document={document} klagebehandlingId={oppgaveId} />
       </DocumentRow>
     );
   },

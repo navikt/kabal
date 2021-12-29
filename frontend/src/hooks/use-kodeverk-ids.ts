@@ -1,21 +1,8 @@
 import { useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
 
-export const useTemaFromId = (temaId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
-
-  if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
-  }
-
-  if (typeof temaId === 'string') {
-    return data.tema.find(({ id }) => id === temaId)?.navn ?? temaId;
-  }
-
-  return 'Mangler';
-};
-
-export const useFullTemaNameFromId = (temaId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+export const useFullTemaNameFromId = (type: OppgaveType, temaId?: string | null): string => {
+  const { data, isLoading } = useGetKodeverkQuery(type);
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -28,14 +15,14 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
   return 'Mangler';
 };
 
-export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+export const useFullYtelseNameFromId = (type: OppgaveType, ytelseId?: string | null): string => {
+  const { data, isLoading } = useGetKodeverkQuery(type);
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
   }
 
-  if (typeof ytelseId === 'string') {
+  if (typeof data.ytelser !== 'undefined' && typeof ytelseId === 'string') {
     return data.ytelser.find(({ id }) => id === ytelseId)?.beskrivelse ?? ytelseId;
   }
 
@@ -43,7 +30,7 @@ export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
 };
 
 export const useTypeFromId = (typeId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useGetKodeverkQuery(typeId);
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -56,8 +43,8 @@ export const useTypeFromId = (typeId?: string | null): string => {
   return 'Mangler';
 };
 
-export const useHjemmelFromId = (hjemmelId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+export const useHjemmelFromId = (type: OppgaveType, hjemmelId?: string | null): string => {
+  const { data, isLoading } = useGetKodeverkQuery(type);
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';

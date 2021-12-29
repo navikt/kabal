@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
-import { staggeredBaseQuery } from './common';
+import { oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
+import { IOppgavebehandlingBaseParams } from './oppgavebehandling-params-types';
 
 export interface IMessage {
   author: IAuthor;
@@ -16,7 +17,6 @@ interface IAuthor {
 
 interface IPostMessage {
   text: string;
-  klagebehandlingId: string;
   author: IAuthor;
 }
 
@@ -25,23 +25,23 @@ export const messagesApi = createApi({
   baseQuery: staggeredBaseQuery,
   tagTypes: ['messages'],
   endpoints: (builder) => ({
-    getMessages: builder.query<IMessage[], string>({
-      query: (id) => `/api/kabal-api/klagebehandlinger/${id}/meldinger`,
+    getMessages: builder.query<IMessage[], IOppgavebehandlingBaseParams>({
+      query: ({ type, oppgaveId }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/meldinger`,
       providesTags: ['messages'],
     }),
-    postMessage: builder.mutation<IMessage, IPostMessage>({
+    postMessage: builder.mutation<IMessage, IPostMessage & IOppgavebehandlingBaseParams>({
       invalidatesTags: ['messages'],
-      query: ({ klagebehandlingId, ...body }) => ({
+      query: ({ oppgaveId, type, ...body }) => ({
         method: 'POST',
-        url: `/api/kabal-api/klagebehandlinger/${klagebehandlingId}/meldinger`,
+        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/meldinger`,
         body,
       }),
-      onQueryStarted: async ({ klagebehandlingId, ...newMessage }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, type, ...newMessage }, { dispatch, queryFulfilled }) => {
         const now = new Date().toISOString();
         const newMessageId = `new-message-optimistic-id-${now}`;
 
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getMessages', klagebehandlingId, (messages) => {
+          messagesApi.util.updateQueryData('getMessages', { oppgaveId, type }, (messages) => {
             messages.push({ ...newMessage, created: now, modified: now, id: newMessageId });
           })
         );
@@ -49,7 +49,7 @@ export const messagesApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(
-            messagesApi.util.updateQueryData('getMessages', klagebehandlingId, (messages) =>
+            messagesApi.util.updateQueryData('getMessages', { oppgaveId, type }, (messages) =>
               messages.map((m) => {
                 if (m.id === newMessageId) {
                   return data;

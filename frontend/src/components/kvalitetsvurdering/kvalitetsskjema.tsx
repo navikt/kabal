@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useIsRelevantYtelseForRaadgivende } from '../../hooks/use-is-relevant-ytelse-for-raadgivende';
-import { useKlagebehandling } from '../../hooks/use-klagebehandling';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { Annet } from './annet';
 import { BrukAvRaadgivendeLege } from './bruk-av-raadgivende-lege';
@@ -10,10 +10,10 @@ import { Utredningen } from './utredningen';
 import { Vedtaket } from './vedtaket';
 
 export const Kvalitetsskjema = () => {
-  const [klagebehandling] = useKlagebehandling();
+  const { data: oppgavebehandling } = useOppgave();
   const [kvalitetsvurdering] = useKvalitetsvurdering();
 
-  if (typeof kvalitetsvurdering === 'undefined' || typeof klagebehandling === 'undefined') {
+  if (typeof kvalitetsvurdering === 'undefined' || typeof oppgavebehandling === 'undefined') {
     return null;
   }
 
@@ -21,7 +21,7 @@ export const Kvalitetsskjema = () => {
     <StyledKvalitetsskjema>
       <Klageforberedelsen />
       <Utredningen />
-      <BrukAvRaadgivendeLegeDisplay ytelse={klagebehandling.ytelse} />
+      <BrukAvRaadgivendeLegeDisplay ytelse={oppgavebehandling.ytelse} />
       <Vedtaket />
       <Annet />
     </StyledKvalitetsskjema>

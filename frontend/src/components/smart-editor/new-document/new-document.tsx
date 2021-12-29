@@ -1,5 +1,7 @@
 import React from 'react';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
 import { INewSmartEditor, ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
@@ -22,12 +24,18 @@ const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE, MEDHOLD_TEMPLATE, AVS
 export const NewDocument = () => {
   const [createSmartEditorDocument] = useCreateSmartEditorMutation();
   const [setSmartEditorId] = useUpdateSmartEditorIdMutation();
-  const klagebehandlingId = useKlagebehandlingId();
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
+  const canEdit = useCanEdit();
+
+  if (!canEdit) {
+    return null;
+  }
 
   const onClick = (template: INewSmartEditor) => {
     createSmartEditorDocument(template)
       .unwrap()
-      .then(({ id }) => setSmartEditorId({ smartEditorId: id, klagebehandlingId }));
+      .then(({ id }) => setSmartEditorId({ smartEditorId: id, oppgaveId, type }));
     close();
   };
 

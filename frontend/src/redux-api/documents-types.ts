@@ -1,5 +1,5 @@
 export interface IGetDokumenterParams {
-  klagebehandlingId: string;
+  oppgaveId: string;
   pageReference: string | null;
   temaer: string[];
   pageSize: number;

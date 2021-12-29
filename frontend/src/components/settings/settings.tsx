@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { ISettings, useGetBrukerQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
@@ -96,13 +97,16 @@ const TypeEtikett = ({ id }: EtikettProps) => (
   <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
 );
 
-const YtelseLabel = ({ id }: EtikettProps) => (
-  <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(id)}</StyledEtikettTema>
-);
+const YtelseLabel = ({ id }: EtikettProps) => {
+  const type = useOppgaveType();
+  return <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(type, id)}</StyledEtikettTema>;
+};
 
-const HjemmelEtikett = ({ id }: EtikettProps) => (
-  <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
-);
+const HjemmelEtikett = ({ id }: EtikettProps) => {
+  const type = useOppgaveType();
+
+  return <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(type, id)}</StyledEtikettMain>;
+};
 
 const StyledEtikettMain = styled(LabelMain)`
   width: 100%;

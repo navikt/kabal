@@ -5,16 +5,16 @@ import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
-import { klagebehandlingApi } from '../redux-api/oppgave';
-import { klagebehandlingerApi } from '../redux-api/oppgaver';
+import { oppgavebehandlingApi } from '../redux-api/oppgavebehandling';
+import { oppgaverApi } from '../redux-api/oppgaver';
 import { smartEditorApi } from '../redux-api/smart-editor';
 import { smartEditorIdApi } from '../redux-api/smart-editor-id';
 
 export const rootReducer = combineReducers({
-  [klagebehandlingerApi.reducerPath]: klagebehandlingerApi.reducer,
+  [oppgaverApi.reducerPath]: oppgaverApi.reducer,
   [kodeverkApi.reducerPath]: kodeverkApi.reducer,
   [brukerApi.reducerPath]: brukerApi.reducer,
-  [klagebehandlingApi.reducerPath]: klagebehandlingApi.reducer,
+  [oppgavebehandlingApi.reducerPath]: oppgavebehandlingApi.reducer,
   [messagesApi.reducerPath]: messagesApi.reducer,
   [featureTogglingApi.reducerPath]: featureTogglingApi.reducer,
   [smartEditorApi.reducerPath]: smartEditorApi.reducer,

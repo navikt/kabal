@@ -1,6 +1,9 @@
 import React from 'react';
-import { PanelContainer } from '../klagebehandling-panels/panel';
-import { Behandlingsdetaljer } from './behandlingsdetaljer/behandlingsdetaljer';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { PanelContainer } from '../oppgavebehandling-panels/panel';
+import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
+import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledContainer } from './styled-components';
 
@@ -21,4 +24,14 @@ export const Behandling = ({ shown }: BehandlingProps) => {
       </StyledContainer>
     </PanelContainer>
   );
+};
+
+const Behandlingsdetaljer = () => {
+  const type = useOppgaveType();
+
+  if (type === OppgaveType.KLAGEBEHANDLING) {
+    return <Klagebehandlingsdetaljer />;
+  }
+
+  return <Ankebehandlingsdetaljer />;
 };

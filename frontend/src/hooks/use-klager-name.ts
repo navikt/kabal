@@ -1,16 +1,16 @@
 import { getFullName } from '../domain/name';
-import { useKlagebehandling } from './use-klagebehandling';
+import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useKlagerName = (): string | null => {
-  const [klagebehandling, isLoading] = useKlagebehandling();
+  const { data: oppgavebehandling, isLoading } = useOppgave();
 
-  if (typeof klagebehandling === 'undefined' || isLoading) {
+  if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return null;
   }
 
   const {
     klager: { person, virksomhet },
-  } = klagebehandling;
+  } = oppgavebehandling;
 
   if (person !== null) {
     return getFullName(person.navn);

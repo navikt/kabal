@@ -1,4 +1,4 @@
-import { Utfall } from '../redux-api/oppgave-state-types';
+import { Utfall } from '../redux-api/klagebehandling-state-types';
 
 export const isUtfall = (s?: string): s is Utfall => {
   if (typeof s === 'string') {
