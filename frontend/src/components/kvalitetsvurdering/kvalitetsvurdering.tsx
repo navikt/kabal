@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSectionTitle } from '../../hooks/use-section-title';
-import { PanelContainer } from '../klagebehandling-panels/panel';
+import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { Kvalitetsskjema } from './kvalitetsskjema';
 import { Header, KvalitetsVurderingContainer } from './styled-components';
 

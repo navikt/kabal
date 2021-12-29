@@ -1,8 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
-import { useKlagebehandling } from '../../../../hooks/use-klagebehandling';
+import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
+import { useOppgaveType } from '../../../../hooks/use-oppgave-type';
 import { ILovKildeToRegistreringshjemmel } from '../../../../redux-api/kodeverk';
 import {
   StyledListItem,
@@ -16,10 +17,12 @@ import {
 const EMPTY_LIST: string[] = [];
 
 export const SelectedHjemlerList = () => {
-  const [klagebehandling] = useKlagebehandling();
-  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(klagebehandling?.ytelse ?? skipToken);
+  const { data: oppgavebehandling } = useOppgave();
+  const type = useOppgaveType();
 
-  const hjemmelIdList = klagebehandling?.resultat.hjemler ?? EMPTY_LIST;
+  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgavebehandling?.ytelse ?? skipToken, type);
+
+  const hjemmelIdList = oppgavebehandling?.resultat.hjemler ?? EMPTY_LIST;
 
   const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
     () =>
@@ -34,7 +37,7 @@ export const SelectedHjemlerList = () => {
     [hjemmelIdList, hjemler]
   );
 
-  if (typeof klagebehandling === 'undefined') {
+  if (typeof oppgavebehandling === 'undefined') {
     return <NavFrontendSpinner />;
   }
 

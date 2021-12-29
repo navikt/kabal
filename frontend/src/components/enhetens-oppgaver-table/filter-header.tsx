@@ -4,6 +4,7 @@ import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
 import { Filters } from './types';
@@ -24,9 +25,14 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
     <thead>
       <tr>
         <th role="columnheader">
-          <FilterDropdown
+          <FilterDropdown<OppgaveType>
             selected={filters.types}
-            onChange={(types) => onChange({ ...filters, types })}
+            onChange={(types) =>
+              onChange({
+                ...filters,
+                types,
+              })
+            }
             options={typeOptions}
           >
             Type

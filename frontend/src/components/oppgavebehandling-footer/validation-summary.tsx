@@ -1,9 +1,14 @@
-import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
-import styled from 'styled-components';
 import { IValidationError, IValidationSection } from '../../functions/error-type-guard';
 import { useFieldName } from '../../hooks/use-field-name';
 import { useSectionTitle } from '../../hooks/use-section-title';
+import {
+  SectionTitle,
+  StyledAlertStripe,
+  StyledFieldList,
+  StyledSection,
+  ValidationSummaryContainer,
+} from './styled-components';
 
 interface Props {
   sections: IValidationSection[];
@@ -43,27 +48,3 @@ const Field = ({ field, reason }: IValidationError) => (
     <span>{reason}</span>
   </li>
 );
-
-const StyledAlertStripe = styled(Alertstripe)`
-  margin-bottom: 1em;
-`;
-
-const ValidationSummaryContainer = styled.article`
-  margin: 0;
-  margin-top: 10px;
-  padding: 0;
-`;
-
-const StyledFieldList = styled.ul`
-  margin: 0;
-  padding: 0;
-  padding-left: 1em;
-`;
-
-const SectionTitle = styled.h1`
-  margin: 0;
-`;
-
-const StyledSection = styled.section`
-  margin-top: 10px;
-`;

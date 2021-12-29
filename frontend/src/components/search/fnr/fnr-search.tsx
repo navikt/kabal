@@ -3,7 +3,8 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
-import { IFnrSearchParams, useFnrSearchQuery } from '../../../redux-api/oppgaver';
+import { useFnrSearchQuery } from '../../../redux-api/oppgaver';
+import { IFnrSearchParams } from '../../../redux-api/oppgaver-types';
 import { Result } from './result';
 
 const FNR_REGEX = /^\s*\d{6}\s*\d{5}\s*$/;

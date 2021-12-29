@@ -3,7 +3,7 @@ import { isoDateToPretty } from '../../domain/date';
 import { formatPersonNum } from '../../functions/format-id';
 import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { IKlagebehandling } from '../../redux-api/oppgaver';
+import { IOppgave } from '../../redux-api/oppgaver-types';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { OpenKlagebehandling } from '../common-table-components/open';
 
@@ -15,7 +15,7 @@ export const Row = ({
   avsluttetAvSaksbehandlerDate,
   person,
   ytelse,
-}: IKlagebehandling): JSX.Element => {
+}: IOppgave): JSX.Element => {
   const { data: kodeverk } = useGetKodeverkQuery();
 
   const utfallName = useMemo(() => {
@@ -32,10 +32,10 @@ export const Row = ({
         <LabelMain>{useTypeFromId(type)}</LabelMain>
       </td>
       <td>
-        <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
+        <LabelTema>{useFullYtelseNameFromId(type, ytelse)}</LabelTema>
       </td>
       <td>
-        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
+        <LabelMain>{useHjemmelFromId(type, hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
       <td>{formatPersonNum(person?.fnr)}</td>

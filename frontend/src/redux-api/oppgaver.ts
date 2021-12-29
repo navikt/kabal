@@ -1,127 +1,27 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { Name } from '../domain/types';
 import { staggeredBaseQuery } from './common';
-import { ISaksbehandler, MedunderskriverFlyt } from './oppgave-state-types';
+import {
+  ApiResponse,
+  FradelSaksbehandlerParams,
+  IFnrSearchParams,
+  IFnrSearchResponse,
+  IGetSaksbehandlereInEnhetResponse,
+  INameSearchParams,
+  INameSearchResponse,
+  ISaksbehandlerResponse,
+  LoadLedigeOppgaverParams,
+  LoadTildelteOppgaverParams,
+  TildelSaksbehandlerParams,
+  UtgaatteApiResponse,
+} from './oppgaver-types';
 
-export type Date = string; // LocalDate
-
-export interface ApiResponse {
-  antallTreffTotalt: number;
-  klagebehandlinger: IKlagebehandling[];
-}
-
-interface UtgaatteApiResponse {
-  antall: number;
-}
-
-export interface Person {
-  navn: string;
-  fnr: string;
-}
-
-export interface IKlagebehandling {
-  ageKA: number; // Age in days.
-  avsluttetAvSaksbehandlerDate: Date | null;
-  egenAnsatt: boolean;
-  erMedunderskriver: boolean;
-  erTildelt: boolean;
-  fortrolig: boolean;
-  frist: Date;
-  harMedunderskriver: boolean;
-  hjemmel: string;
-  id: string;
-  isAvsluttetAvSaksbehandler: boolean;
-  medunderskriverFlyt: MedunderskriverFlyt;
-  medunderskriverident: string | null;
-  mottatt: Date;
-  person: Person | null;
-  saksbehandlerHarTilgang: boolean;
-  strengtFortrolig: boolean;
-  tema: string;
-  tildeltSaksbehandlerident: string | null;
-  tildeltSaksbehandlerNavn: string | null;
-  type: string;
-  ytelse: string;
-  utfall: string | null;
-}
-
-export type IKlagebehandlingList = IKlagebehandling[];
-
-export interface LoadLedigeKlagebehandlingerParams {
-  start: number;
-  antall: number;
-  sortering: 'FRIST';
-  rekkefoelge: 'STIGENDE' | 'SYNKENDE';
-  ytelser?: string[];
-  typer?: string[];
-  hjemler?: string[];
-  navIdent: string;
-  ferdigstiltDaysAgo?: number;
-  projeksjon?: 'UTVIDET';
-  enhet: string | null;
-}
-
-export interface LoadTildelteKlagebehandlingerParams extends LoadLedigeKlagebehandlingerParams {
-  tildeltSaksbehandler: string[];
-}
-
-export interface LoadKlagebehandlingerParams extends LoadLedigeKlagebehandlingerParams {
-  tildeltSaksbehandler?: string[];
-  erTildeltSaksbehandler: boolean;
-}
-
-export interface TildelSaksbehandlerParams {
-  navIdent: string;
-  enhetId: string;
-  oppgaveId: string;
-}
-
-export interface FradelSaksbehandlerParams {
-  navIdent: string;
-  oppgaveId: string;
-}
-
-export interface ISaksbehandlerResponse {
-  modified: string;
-  tildelt: string;
-}
-
-export interface IFnrSearchParams {
-  enhet: string;
-  query: string;
-}
-
-export interface IFnrSearchResponse {
-  fnr: string;
-  navn: Name;
-  aapneKlagebehandlinger: IKlagebehandlingList;
-  avsluttedeKlagebehandlinger: IKlagebehandlingList;
-  klagebehandlinger: IKlagebehandlingList;
-}
-
-export interface INameSearchParams {
-  antall: number;
-  query: string;
-  start: number;
-}
-
-export interface INameSearchResponse {
-  people: {
-    fnr: string;
-    navn: Name;
-  }[];
-}
-export interface IGetSaksbehandlereInEnhetResponse {
-  saksbehandlere: ISaksbehandler[];
-}
-
-export const klagebehandlingerApi = createApi({
-  reducerPath: 'klagebehandlingerApi',
+export const oppgaverApi = createApi({
+  reducerPath: 'oppgaverApi',
   baseQuery: staggeredBaseQuery,
-  tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'oppgaver', 'ledige-medutgaattefrister'],
+  tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
   endpoints: (builder) => ({
-    getTildelteKlagebehandlinger: builder.query<ApiResponse, LoadTildelteKlagebehandlingerParams>({
+    getTildelteOppgaver: builder.query<ApiResponse, LoadTildelteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
@@ -131,7 +31,7 @@ export const klagebehandlingerApi = createApi({
       },
       providesTags: ['tildelte-oppgaver'],
     }),
-    getLedigeKlagebehandlinger: builder.query<ApiResponse, LoadLedigeKlagebehandlingerParams>({
+    getLedigeOppgaver: builder.query<ApiResponse, LoadLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
@@ -141,10 +41,7 @@ export const klagebehandlingerApi = createApi({
       },
       providesTags: ['ledige-oppgaver'],
     }),
-    getAntallLedigeKlagebehandlingerMedUtgaatteFrister: builder.query<
-      UtgaatteApiResponse,
-      LoadLedigeKlagebehandlingerParams
-    >({
+    getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
@@ -184,7 +81,7 @@ export const klagebehandlingerApi = createApi({
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         await queryFulfilled;
         await delay(3000);
-        dispatch(klagebehandlingerApi.util.invalidateTags(['ledige-oppgaver']));
+        dispatch(oppgaverApi.util.invalidateTags(['ledige-oppgaver']));
       },
     }),
     fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
@@ -196,21 +93,21 @@ export const klagebehandlingerApi = createApi({
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
         await queryFulfilled;
         await delay(3000);
-        dispatch(klagebehandlingerApi.util.invalidateTags(['tildelte-oppgaver']));
+        dispatch(oppgaverApi.util.invalidateTags(['tildelte-oppgaver']));
       },
     }),
   }),
 });
 
 export const {
-  useGetTildelteKlagebehandlingerQuery,
-  useGetLedigeKlagebehandlingerQuery,
-  useGetAntallLedigeKlagebehandlingerMedUtgaatteFristerQuery,
+  useGetTildelteOppgaverQuery,
+  useGetLedigeOppgaverQuery,
+  useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
   useFnrSearchQuery,
   useNameSearchQuery,
   useGetSaksbehandlereInEnhetQuery,
-} = klagebehandlingerApi;
+} = oppgaverApi;
 
 const delay = async (ms: number): Promise<void> => new Promise((res) => setTimeout(res, ms));

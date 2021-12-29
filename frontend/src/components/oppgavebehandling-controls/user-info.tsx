@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
 import { formatOrgNum } from '../../functions/format-id';
 import { CopyIcon } from '../../icons/copy';
-import { Gender, IKlagebehandling, IVirksomhet } from '../../redux-api/oppgave-state-types';
+import { Gender, IKlagebehandling, IVirksomhet } from '../../redux-api/klagebehandling-state-types';
 import { Fortrolig, StrengtFortrolig } from './fortrolig';
 import { CopyFnrButton, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';

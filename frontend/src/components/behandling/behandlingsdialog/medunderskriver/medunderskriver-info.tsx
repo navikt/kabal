@@ -1,25 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { IKlagebehandling } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverResponse } from '../../../../redux-api/oppgave-types';
+import { IMedunderskriverResponse } from '../../../../redux-api/oppgavebehandling-response-types';
+import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
 
-interface MedunderskriverInfoProps {
-  klagebehandling: IKlagebehandling;
-  medunderskriver: IMedunderskriverResponse;
-}
+type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler'> &
+  Pick<IMedunderskriverResponse, 'medunderskriver'>;
 
-export const MedunderskriverInfo = ({ klagebehandling, medunderskriver }: MedunderskriverInfoProps) => {
+export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver }: MedunderskriverInfoProps) => {
   const canEdit = useCanEdit();
 
   if (!canEdit) {
     return (
       <div data-testid="medunderskriver-info">
         <StyledInfoLine>
-          <b>Saksbehandler:</b> {klagebehandling.tildeltSaksbehandler?.navn ?? 'Ikke tildelt'}
+          <b>Saksbehandler:</b> {tildeltSaksbehandler?.navn ?? 'Ikke tildelt'}
         </StyledInfoLine>
         <StyledInfoLine>
-          <b>Medunderskriver:</b> {medunderskriver?.medunderskriver?.navn ?? 'Medunderskriver ikke satt'}
+          <b>Medunderskriver:</b> {medunderskriver?.navn ?? 'Medunderskriver ikke satt'}
         </StyledInfoLine>
       </div>
     );

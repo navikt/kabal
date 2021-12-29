@@ -4,22 +4,21 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useKlagebehandlingId } from '../../../../hooks/use-klagebehandling-id';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
-import { useGetMedunderskrivereQuery, useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgave';
-import { IKlagebehandling, ISaksbehandler } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverResponse, IMedunderskrivereParams } from '../../../../redux-api/oppgave-types';
+import {
+  useGetMedunderskrivereQuery,
+  useUpdateChosenMedunderskriverMutation,
+} from '../../../../redux-api/oppgavebehandling';
+import { ISaksbehandler } from '../../../../redux-api/oppgavebehandling-common-types';
+import { IMedunderskrivereParams } from '../../../../redux-api/oppgavebehandling-params-types';
+import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
 
-interface SelectMedunderskriverProps {
-  klagebehandling: IKlagebehandling;
-  medunderskriver: IMedunderskriverResponse;
-}
+type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
   const { data: bruker } = useGetBrukerQuery();
-  const klagebehandlingId = useKlagebehandlingId();
   const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
 
@@ -29,7 +28,8 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: Sele
       : {
           navIdent: bruker.info.navIdent,
           enhet: bruker.valgtEnhetView.id,
-          ytelseId: klagebehandling.ytelse,
+          ytelseId: ytelse,
+          type,
         };
 
   const { data } = useGetMedunderskrivereQuery(medunderskrivereQuery);
@@ -50,12 +50,13 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: Sele
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
-      klagebehandlingId,
+      oppgaveId,
+      type,
       medunderskriver:
         medunderskriverident === null
           ? null
           : medunderskrivere
-              .map<ISaksbehandler>(({ ident, navn }) => ({ navIdent: ident, navn })) // TODO: Remove mapping when backend is changed.
+              .map<ISaksbehandler>(({ ident, navn }) => ({ navIdent: ident, navn }))
               .find(({ navIdent }) => navIdent === medunderskriverident) ?? null,
     });
 
@@ -65,7 +66,7 @@ export const SelectMedunderskriver = ({ klagebehandling, medunderskriver }: Sele
         disabled={!canEdit}
         label="Medunderskriver:"
         onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskriver.medunderskriver?.navIdent ?? NONE_SELECTED}
+        value={medunderskriver?.navIdent ?? NONE_SELECTED}
         data-testid="select-medunderskriver"
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>

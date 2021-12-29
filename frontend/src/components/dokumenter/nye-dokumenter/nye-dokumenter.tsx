@@ -1,11 +1,12 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext } from 'react';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useIsFullfoert } from '../../../hooks/use-is-fullfoert';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
+import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { baseUrl } from '../../../redux-api/common';
-import { useGetKlagebehandlingQuery } from '../../../redux-api/oppgave';
-import { IVedlegg } from '../../../redux-api/oppgave-state-types';
+import { IVedlegg } from '../../../redux-api/klagebehandling-state-types';
 import { ShownDocumentContext } from '../context';
 import { DocumentButton } from '../styled-components/document-button';
 import { DocumentTitle } from '../styled-components/fullvisning';
@@ -22,15 +23,15 @@ import {
 } from './styled-components';
 
 export const NyeDokumenter = () => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
-  const isFullfoert = useIsFullfoert(klagebehandlingId);
+  const oppgaveId = useOppgaveId();
+  const { data: oppgavebehandling } = useOppgave();
+  const isFullfoert = useIsFullfoert();
 
-  if (typeof klagebehandling === 'undefined') {
+  if (typeof oppgavebehandling === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
-  if (isFullfoert && klagebehandling.resultat.file === null) {
+  if (isFullfoert && oppgavebehandling.resultat.file === null) {
     return null;
   }
 
@@ -38,10 +39,10 @@ export const NyeDokumenter = () => {
     <StyledNyeDokumenter data-testid="klagebehandling-documents-new">
       <ListHeader isFullfoert={isFullfoert} />
       <StyledList data-testid="klagebehandling-documents-new-list">
-        {klagebehandling.resultat.file && (
-          <NewDocument file={klagebehandling.resultat.file} klagebehandlingId={klagebehandlingId} />
+        {oppgavebehandling.resultat.file && (
+          <NewDocument file={oppgavebehandling.resultat.file} oppgaveId={oppgaveId} />
         )}
-        <SmartEditorDocument klagebehandlingId={klagebehandlingId} />
+        <SmartEditorDocument oppgaveId={oppgaveId} />
       </StyledList>
     </StyledNyeDokumenter>
   );
@@ -66,13 +67,14 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
 
 interface NewDocumentProps {
   file: IVedlegg;
-  klagebehandlingId: string;
+  oppgaveId: string;
 }
 
-export const NewDocument = ({ file, klagebehandlingId }: NewDocumentProps) => {
+export const NewDocument = ({ file, oppgaveId }: NewDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
 
-  const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/resultat/pdf`;
+  const url = `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/resultat/pdf`;
   const onClick = () =>
     setShownDocument({
       title: file.name,
@@ -93,10 +95,7 @@ export const NewDocument = ({ file, klagebehandlingId }: NewDocumentProps) => {
         </DocumentButton>
       </DocumentTitle>
       <StyledDate>{isoDateTimeToPrettyDate(file.opplastet)}</StyledDate>
-      <DeleteDocumentButton
-        klagebehandlingId={klagebehandlingId}
-        data-testid="klagebehandling-documents-new-delete-button"
-      />
+      <DeleteDocumentButton oppgaveId={oppgaveId} data-testid="klagebehandling-documents-new-delete-button" />
     </StyledNewDocument>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { baseUrl } from '../../../redux-api/common';
 import { IDocument, IDocumentVedlegg } from '../../../redux-api/documents-types';
 import { ShownDocumentContext } from '../context';
@@ -15,7 +16,9 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ klagebehandlingId, vedlegg, document }) => {
-    const url = `${baseUrl}api/kabal-api/klagebehandlinger/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+    const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
+
+    const url = `${baseUrl}${oppgavebehandlingUrl}${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
     const onClick = () =>
       setShownDocument({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFullYtelseNameFromId } from '../../../hooks/use-kodeverk-ids';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { LabelTema } from '../../../styled-components/labels';
 import { SubSection } from './sub-section';
 
@@ -8,7 +9,8 @@ interface Props {
 }
 
 export const Ytelse = ({ ytelseId }: Props) => {
-  const ytelse = useFullYtelseNameFromId(ytelseId);
+  const type = useOppgaveType();
+  const ytelse = useFullYtelseNameFromId(type, ytelseId);
 
   return (
     <SubSection label="Ytelse">

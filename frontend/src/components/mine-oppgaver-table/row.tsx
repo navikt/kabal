@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatSakenGjelder } from '../../functions/format-id';
-import { IKlagebehandling } from '../../redux-api/oppgaver';
+import { IOppgave } from '../../redux-api/oppgaver-types';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
@@ -23,16 +23,16 @@ export const Row = ({
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
   ytelse,
-}: IKlagebehandling): JSX.Element => (
+}: IOppgave): JSX.Element => (
   <tr data-testid="mine-oppgaver-row" data-klagebehandlingid={id}>
     <td>
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelse} type={type} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={hjemmel} type={type} />
     </td>
     <td>{person?.navn}</td>
     <td>{formatSakenGjelder(person?.fnr)}</td>

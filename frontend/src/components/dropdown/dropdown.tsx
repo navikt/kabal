@@ -4,15 +4,21 @@ import { Header } from './header';
 import { Filter } from './option';
 import { StyledDropdown, StyledListItem, StyledSectionList } from './styled-components';
 
-interface DropdownProps {
-  selected: string[];
-  options: IKodeverkVerdi[];
-  onChange: (id: string | null, active: boolean) => void;
+interface DropdownProps<T extends string> {
+  selected: T[];
+  options: IKodeverkVerdi<T>[];
+  onChange: (id: T | null, active: boolean) => void;
   open: boolean;
   close: () => void;
 }
 
-export const Dropdown = ({ selected, options, open, onChange, close }: DropdownProps): JSX.Element | null => {
+export const Dropdown = <T extends string>({
+  selected,
+  options,
+  open,
+  onChange,
+  close,
+}: DropdownProps<T>): JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(/.*/g);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);

@@ -3,17 +3,18 @@ import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgave';
-import { IKlagebehandling, MedunderskriverFlyt } from '../../../../redux-api/oppgave-state-types';
-import { IMedunderskriverflytResponse } from '../../../../redux-api/oppgave-types';
+import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgavebehandling';
+import { MedunderskriverFlyt } from '../../../../redux-api/oppgavebehandling-common-types';
+import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
 
-interface SendTilMedunderskriverProps {
-  klagebehandling: IKlagebehandling;
-  medunderskriverflyt: IMedunderskriverflytResponse;
-}
+type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;
 
-export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverflyt }: SendTilMedunderskriverProps) => {
-  const { id: klagebehandlingId, medunderskriver } = klagebehandling;
+export const SendTilMedunderskriver = ({
+  id: oppgaveId,
+  type,
+  medunderskriver,
+  medunderskriverFlyt,
+}: SendTilMedunderskriverProps) => {
   const canEdit = useCanEdit();
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
@@ -40,7 +41,7 @@ export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverflyt }:
     <StyledFormSection>
       <Hovedknapp
         mini
-        onClick={() => switchMedunderskriverflyt({ klagebehandlingId })}
+        onClick={() => switchMedunderskriverflyt({ oppgaveId, type })}
         disabled={sendToMedunderskriverDisabled}
         spinner={loader.isLoading}
         data-testid="send-to-medunderskriver"
@@ -50,11 +51,11 @@ export const SendTilMedunderskriver = ({ klagebehandling, medunderskriverflyt }:
     </StyledFormSection>
   );
 
-  if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+  if (medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return <SentToMedunderskriver />;
   }
 
-  if (medunderskriverflyt?.medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
+  if (medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
     return (
       <>
         <SentBackToMedunderskriver />

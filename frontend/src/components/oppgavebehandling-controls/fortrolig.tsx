@@ -1,5 +1,5 @@
 import React from 'react';
-import { IKlagebehandling } from '../../redux-api/oppgave-state-types';
+import { IKlagebehandling } from '../../redux-api/klagebehandling-state-types';
 import { LabelMain } from '../../styled-components/labels';
 import { UserItem } from './styled-components';
 

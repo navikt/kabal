@@ -5,19 +5,24 @@ import { IKodeverkVerdi } from '../../redux-api/kodeverk';
 import { Dropdown } from '../dropdown/dropdown';
 import { ToggleButton } from '../toggle-button/toggle-button';
 
-interface FilterDropdownProps {
-  options: IKodeverkVerdi[];
-  selected: string[];
-  onChange: (selected: string[]) => void;
+interface FilterDropdownProps<T extends string> {
+  options: IKodeverkVerdi<T>[];
+  selected: T[];
+  onChange: (selected: T[]) => void;
   children: string;
 }
 
-export const FilterDropdown = ({ options, selected, onChange, children }: FilterDropdownProps): JSX.Element => {
+export const FilterDropdown = <T extends string>({
+  options,
+  selected,
+  onChange,
+  children,
+}: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const onFilterChange = (id: string | null, active: boolean) => {
+  const onFilterChange = (id: T | null, active: boolean) => {
     if (id === null) {
       onChange([]);
     } else {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { KlagebehandlingControls } from '../klagebehandling-controls/klagebehandling-controls';
-import { KlagebehandlingFooter } from '../klagebehandling-footer/klagebehandling-footer';
-import { KlagebehandlingPanels } from '../klagebehandling-panels/klagebehandling-panels';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
+import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
+import { OppgavebehandlingFooter } from '../oppgavebehandling-footer/oppgavebehandling-footer';
+import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';
 import { PanelToggles } from './types';
 
 export const Klagebehandling = () => {
@@ -17,9 +17,9 @@ export const Klagebehandling = () => {
 
   return (
     <ValidationErrorProvider>
-      <KlagebehandlingControls setPanel={setPanel} toggles={toggles} />
-      <KlagebehandlingPanels toggles={toggles} />
-      <KlagebehandlingFooter />
+      <OppgavebehandlingControls setPanel={setPanel} toggles={toggles} />
+      <OppgavebehandlingPanels toggles={toggles} />
+      <OppgavebehandlingFooter />
     </ValidationErrorProvider>
   );
 };

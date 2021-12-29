@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTypeFromId } from '../../../hooks/use-kodeverk-ids';
+import { OppgaveType } from '../../../redux-api/oppgavebehandling-common-types';
 import { LabelType } from '../../../styled-components/labels';
 import { SubSection } from './sub-section';
 
 interface LabelsProps {
-  typeId: string;
+  typeId: OppgaveType;
 }
 
 export const Type = ({ typeId }: LabelsProps) => {
@@ -12,7 +13,7 @@ export const Type = ({ typeId }: LabelsProps) => {
 
   return (
     <SubSection label="Type">
-      <LabelType>{typeName}</LabelType>
+      <LabelType type={typeId}>{typeName}</LabelType>
     </SubSection>
   );
 };

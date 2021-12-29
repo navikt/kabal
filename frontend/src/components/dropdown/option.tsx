@@ -2,15 +2,21 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { StyledCheckbox } from '../../styled-components/checkbox';
 
-interface FilterProps {
-  onChange: (id: string | null, active: boolean) => void;
+interface FilterProps<T extends string> {
+  onChange: (id: T | null, active: boolean) => void;
   active: boolean;
-  filterId?: string | null;
+  filterId?: T | null;
   children: string;
   focused: boolean;
 }
 
-export const Filter = ({ active, filterId = null, children, onChange, focused }: FilterProps): JSX.Element => {
+export const Filter = <T extends string>({
+  active,
+  filterId = null,
+  children,
+  onChange,
+  focused,
+}: FilterProps<T>): JSX.Element => {
   const ref = React.useRef<HTMLLabelElement>(null);
 
   useEffect(() => {

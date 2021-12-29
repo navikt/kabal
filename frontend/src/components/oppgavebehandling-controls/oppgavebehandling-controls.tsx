@@ -1,38 +1,36 @@
 import React from 'react';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
-import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
-import { useGetKlagebehandlingQuery } from '../../redux-api/oppgave';
-import { ISakenGjelder } from '../../redux-api/oppgave-state-types';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { ISakenGjelder } from '../../redux-api/klagebehandling-state-types';
 import { PanelToggles } from '../klagebehandling/types';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
-import { ControlPanel, ExternalLink, KlagebehandlingInformation, KlagebehandlingTools } from './styled-components';
+import { ControlPanel, ExternalLink, OppgavebehandlingInformation, OppgavebehandlingTools } from './styled-components';
 import { PanelToggleButtons } from './toggle-buttons';
 import { UserInfo } from './user-info';
 
-interface KlagebehandlingControlsProps {
+interface OppgavebehandlingControlsProps {
   toggles: PanelToggles;
   setPanel: (panel: keyof PanelToggles, checked: boolean) => void;
 }
 
-export const KlagebehandlingControls = ({ toggles, setPanel }: KlagebehandlingControlsProps) => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+export const OppgavebehandlingControls = ({ toggles, setPanel }: OppgavebehandlingControlsProps) => {
+  const { data: oppgavebehandling } = useOppgave();
 
-  if (typeof klagebehandling === 'undefined') {
+  if (typeof oppgavebehandling === 'undefined') {
     return <ControlPanel>Laster...</ControlPanel>;
   }
 
-  const { fortrolig, strengtFortrolig, sakenGjelder } = klagebehandling;
+  const { fortrolig, strengtFortrolig, sakenGjelder } = oppgavebehandling;
 
   return (
     <ControlPanel data-testid="klagebehandling-control-panel">
-      <KlagebehandlingTools data-testid="klagebehandling-control-panel-tools">
+      <OppgavebehandlingTools data-testid="klagebehandling-control-panel-tools">
         <UserInfo sakenGjelder={sakenGjelder} fortrolig={fortrolig} strengtFortrolig={strengtFortrolig} />
         <PanelToggleButtons togglePanel={setPanel} toggles={toggles} />
-      </KlagebehandlingTools>
-      <KlagebehandlingInformation>
+      </OppgavebehandlingTools>
+      <OppgavebehandlingInformation>
         <GosysLink sakenGjelder={sakenGjelder} />
-      </KlagebehandlingInformation>
+      </OppgavebehandlingInformation>
     </ControlPanel>
   );
 };

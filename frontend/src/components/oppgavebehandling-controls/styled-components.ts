@@ -16,7 +16,7 @@ export const ControlPanel = styled.header`
   }
 `;
 
-export const KlagebehandlingTools = styled.div`
+export const OppgavebehandlingTools = styled.div`
   display: flex;
   align-items: center;
 
@@ -26,7 +26,7 @@ export const KlagebehandlingTools = styled.div`
   }
 `;
 
-export const KlagebehandlingInformation = styled.div`
+export const OppgavebehandlingInformation = styled.div`
   display: flex;
   align-items: center;
 

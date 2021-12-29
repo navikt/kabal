@@ -1,28 +1,28 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { MedunderskriverFlyt } from '../redux-api/oppgave-state-types';
-import { useKlagebehandling } from './use-klagebehandling';
+import { MedunderskriverFlyt } from '../redux-api/klagebehandling-state-types';
+import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsAsignee = () => {
-  const [klagebehandling, klagebehandlingIsLoading] = useKlagebehandling();
+  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
   const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 
   return useMemo(() => {
     if (
-      klagebehandlingIsLoading ||
+      oppgavebehandlingIsLoading ||
       userIsLoading ||
-      typeof klagebehandling === 'undefined' ||
+      typeof oppgavebehandling === 'undefined' ||
       typeof userData === 'undefined'
     ) {
       return false;
     }
 
     // If case is sent to the medunderskriver, the medunderskriver is assigned.
-    if (klagebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-      return klagebehandling.medunderskriver?.navIdent === userData.info.navIdent;
+    if (oppgavebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+      return oppgavebehandling.medunderskriver?.navIdent === userData.info.navIdent;
     }
 
     // Else, the case is assigned to the saksbehandler.
-    return klagebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent;
-  }, [klagebehandling, userData, userIsLoading, klagebehandlingIsLoading]);
+    return oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent;
+  }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
 };

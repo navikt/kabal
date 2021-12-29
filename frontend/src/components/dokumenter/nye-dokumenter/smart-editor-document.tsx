@@ -1,6 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useContext, useEffect } from 'react';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { baseUrl } from '../../../redux-api/common';
 import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
@@ -11,17 +12,18 @@ import { DeleteSmartEditorDocumentButton } from './delete-smart-editor-document-
 import { StyledDate, StyledNewDocument } from './styled-components';
 
 interface SmartEditorDocumentProps {
-  klagebehandlingId: string;
+  oppgaveId: string;
   miniDisplay?: boolean;
 }
 
-export const SmartEditorDocument = ({ klagebehandlingId, miniDisplay = false }: SmartEditorDocumentProps) => {
+export const SmartEditorDocument = ({ oppgaveId, miniDisplay = false }: SmartEditorDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-  const { data } = useGetSmartEditorIdQuery(klagebehandlingId);
+  const type = useOppgaveType();
+  const { data } = useGetSmartEditorIdQuery({ oppgaveId, type });
   const { data: smartEditorData } = useGetSmartEditorQuery(data?.smartEditorId ?? skipToken);
 
   const name = 'Smart Editor dokument';
-  const pdfBaseUrl = `${baseUrl}api/kabal-smart-editor-api/documents/${data?.smartEditorId}/pdf`;
+  const pdfBaseUrl = `${baseUrl}/api/kabal-smart-editor-api/documents/${data?.smartEditorId}/pdf`;
 
   useEffect(() => {
     if (shownDocument === null) {
@@ -85,7 +87,7 @@ export const SmartEditorDocument = ({ klagebehandlingId, miniDisplay = false }: 
       </DocumentTitle>
       <StyledDate>{isoDateTimeToPrettyDate(smartEditorData?.modified ?? null)}</StyledDate>
       <DeleteSmartEditorDocumentButton
-        klagebehandlingId={klagebehandlingId}
+        oppgaveId={oppgaveId}
         smartEditorId={data.smartEditorId}
         data-testid="klagebehandling-documents-smart-editor-document-delete-button"
       />

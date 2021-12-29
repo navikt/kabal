@@ -1,5 +1,6 @@
 import { Name } from '../domain/types';
-import { IDocumentReference } from './oppgave-types';
+import { IDocumentReference } from './klagebehandling-types';
+import { OppgaveType } from './oppgavebehandling-common-types';
 
 export enum Gender {
   MALE = 'MANN',
@@ -49,7 +50,6 @@ export interface IKlagebehandling {
   id: string;
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
-  klagebehandlingVersjon: number;
   klageInnsendtdato: string | null; // LocalDate
   klager: IKlager;
   kommentarFraFoersteinstans: string | null;
@@ -70,7 +70,7 @@ export interface IKlagebehandling {
   tildelt: string | null; // LocalDate
   tildeltSaksbehandler: ISaksbehandler | null;
   tilknyttedeDokumenter: IDocumentReference[];
-  type: string;
+  type: OppgaveType.KLAGEBEHANDLING;
   ytelse: string;
 }
 

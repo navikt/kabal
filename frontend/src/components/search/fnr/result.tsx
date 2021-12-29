@@ -1,7 +1,7 @@
 import React from 'react';
 import { getFullName } from '../../../domain/name';
 import { formatPersonNum } from '../../../functions/format-id';
-import { IFnrSearchResponse } from '../../../redux-api/oppgaver';
+import { IFnrSearchResponse } from '../../../redux-api/oppgaver-types';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/oppgaver-container';

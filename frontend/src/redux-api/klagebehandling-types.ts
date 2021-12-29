@@ -1,17 +1,17 @@
-import { ISaksbehandler, IVedlegg, MedunderskriverFlyt, Utfall } from './oppgave-state-types';
+import { ISaksbehandler, IVedlegg, MedunderskriverFlyt, Utfall } from './klagebehandling-state-types';
 
 export interface IKlagebehandlingUtfallUpdate {
-  klagebehandlingId: string;
+  oppgaveId: string;
   utfall: Utfall | null;
 }
 
 export interface IKlagebehandlingHjemlerUpdate {
-  klagebehandlingId: string;
+  oppgaveId: string;
   hjemler: string[];
 }
 
 export interface ITilknyttDocumentParams extends IDocumentReference {
-  klagebehandlingId: string;
+  oppgaveId: string;
 }
 
 export interface ITilknyttDocumentResponse {
@@ -30,7 +30,7 @@ export interface IVedtakFullfoertResponse {
 }
 
 export interface IFinishKlagebehandlingInput {
-  klagebehandlingId: string;
+  oppgaveId: string;
 }
 
 export interface IMedunderskriver {
@@ -58,7 +58,7 @@ export interface IMedunderskriverflytResponse {
 }
 
 export interface ISettMedunderskriverParams {
-  klagebehandlingId: string;
+  oppgaveId: string;
   medunderskriver: ISaksbehandler | null;
 }
 
@@ -68,7 +68,7 @@ export interface ISettMedunderskriverResponse {
 }
 
 export interface ISwitchMedunderskriverflytParams {
-  klagebehandlingId: string;
+  oppgaveId: string;
 }
 export interface ISwitchMedunderskriverflytResponse {
   modified: string;
@@ -76,7 +76,7 @@ export interface ISwitchMedunderskriverflytResponse {
 }
 
 export interface IUploadFileParams {
-  klagebehandlingId: string;
+  oppgaveId: string;
   file: File;
 }
 
@@ -86,5 +86,5 @@ export interface IUploadFileResponse {
 }
 
 export interface IDeleteFileParams {
-  klagebehandlingId: string;
+  oppgaveId: string;
 }

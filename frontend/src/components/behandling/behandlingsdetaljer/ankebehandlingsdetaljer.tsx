@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
-import { useKlagebehandling } from '../../../hooks/use-klagebehandling';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useKlagerName } from '../../../hooks/use-klager-name';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
@@ -10,24 +10,16 @@ import { Type } from './type';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
-export const Behandlingsdetaljer = () => {
-  const [klagebehandling, isLoading] = useKlagebehandling();
+export const Ankebehandlingsdetaljer = () => {
+  const { data: oppgavebehandling, isLoading } = useOppgave();
   const klagerName = useKlagerName();
 
-  if (typeof klagebehandling === 'undefined' || isLoading) {
+  if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;
   }
 
-  const {
-    type,
-    mottattFoersteinstans,
-    fraNAVEnhetNavn,
-    fraNAVEnhet,
-    mottattKlageinstans,
-    kommentarFraFoersteinstans,
-    resultat,
-    ytelse,
-  } = klagebehandling;
+  const { type, klageInnsendtdato, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, resultat, ytelse } =
+    oppgavebehandling;
 
   return (
     <StyledBehandlingsdetaljer>
@@ -40,13 +32,11 @@ export const Behandlingsdetaljer = () => {
 
         <Ytelse ytelseId={ytelse} />
 
-        <SubSection label="Mottatt førsteinstans">{isoDateToPretty(mottattFoersteinstans)}</SubSection>
-        <SubSection label="Fra NAV-enhet">
-          {fraNAVEnhetNavn} - {fraNAVEnhet}
+        <SubSection label="Vedtak klageinstans">{isoDateToPretty(klageInnsendtdato)}</SubSection>
+        <SubSection label="Behandlet av">
+          {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
         </SubSection>
-        <SubSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</SubSection>
-
-        <SubSection label="Melding fra førsteinstans for intern bruk">{kommentarFraFoersteinstans}</SubSection>
+        <SubSection label="Anke mottatt dato">{isoDateToPretty(mottattKlageinstans)}</SubSection>
 
         <UtfallResultat utfall={resultat.utfall} />
 

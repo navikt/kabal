@@ -1,8 +1,9 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useRef } from 'react';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
-import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
-import { useGetKlagebehandlingQuery, useUploadFileMutation } from '../../redux-api/oppgave';
+import { useOppgaveId } from '../../hooks/use-oppgave-id';
+import { useUploadFileMutation } from '../../redux-api/oppgavebehandling';
 
 interface UploadFileButtonProps {
   show: boolean;
@@ -10,8 +11,8 @@ interface UploadFileButtonProps {
 
 export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
   const [uploadFile, { isLoading }] = useUploadFileMutation();
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: klagebehandling } = useGetKlagebehandlingQuery(klagebehandlingId);
+  const oppgaveId = useOppgaveId();
+  const { data: oppgavebehandling } = useOppgave();
   const canEdit = useCanEdit();
 
   const fileInput = useRef<HTMLInputElement>(null);
@@ -27,6 +28,10 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
 
+      if (typeof oppgavebehandling === 'undefined') {
+        return;
+      }
+
       const { files } = event.target;
 
       if (files === null || files.length !== 1) {
@@ -38,19 +43,20 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
 
       uploadFile({
         file,
-        klagebehandlingId,
+        oppgaveId,
+        type: oppgavebehandling.type,
       });
 
       event.currentTarget.value = '';
     },
-    [klagebehandlingId, uploadFile]
+    [oppgaveId, uploadFile, oppgavebehandling]
   );
 
-  if (!show || !canEdit || typeof klagebehandling === 'undefined') {
+  if (!show || !canEdit || typeof oppgavebehandling === 'undefined') {
     return null;
   }
 
-  const hasFile = klagebehandling.resultat.file !== null;
+  const hasFile = oppgavebehandling.resultat.file !== null;
 
   return (
     <>

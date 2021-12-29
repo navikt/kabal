@@ -5,11 +5,8 @@ import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import {
-  IKlagebehandling,
-  LoadTildelteKlagebehandlingerParams,
-  useGetTildelteKlagebehandlingerQuery,
-} from '../../redux-api/oppgaver';
+import { useGetTildelteOppgaverQuery } from '../../redux-api/oppgaver';
+import { IOppgaveList, LoadTildelteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../redux-api/oppgaver-types';
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
@@ -37,14 +34,14 @@ export const EnhetensOppgaverTable = () => {
 
   const { data: bruker } = useGetBrukerQuery();
 
-  const queryParams: typeof skipToken | LoadTildelteKlagebehandlingerParams =
+  const queryParams: typeof skipToken | LoadTildelteOppgaverParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
           start: 0,
           antall: MAX_OPPGAVER,
-          sortering: 'FRIST',
-          rekkefoelge: filters.sortDescending ? 'SYNKENDE' : 'STIGENDE',
+          sortering: SortFieldEnum.FRIST,
+          rekkefoelge: filters.sortDescending ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE,
           ytelser,
           typer,
           hjemler,
@@ -54,7 +51,7 @@ export const EnhetensOppgaverTable = () => {
           tildeltSaksbehandler: filters.tildeltSaksbehandler,
         };
 
-  const { data: oppgaver, refetch } = useGetTildelteKlagebehandlingerQuery(queryParams, {
+  const { data: oppgaver, refetch } = useGetTildelteOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
 
@@ -75,7 +72,7 @@ export const EnhetensOppgaverTable = () => {
 };
 
 interface OppgaveRaderProps {
-  oppgaver?: IKlagebehandling[];
+  oppgaver?: IOppgaveList;
 }
 
 const OppgaveRader = ({ oppgaver }: OppgaveRaderProps): JSX.Element => {

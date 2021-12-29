@@ -1,8 +1,9 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useAllTemaer } from '../../../hooks/use-all-temaer';
-import { useKlagebehandlingId } from '../../../hooks/use-klagebehandling-id';
-import { useGetDokumenterQuery } from '../../../redux-api/oppgave';
+import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
+import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { AllDocumentsList, DokumenterFullvisning } from '../styled-components/fullvisning';
 import { ListHeader, ListTitle } from '../styled-components/list-header';
@@ -12,12 +13,14 @@ import { LoadMore } from './load-more';
 const PAGE_SIZE = 10;
 
 export const AlleDokumenter = React.memo(() => {
-  const klagebehandlingId = useKlagebehandlingId();
+  const oppgaveId = useOppgaveId();
   const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
+  const type = useOppgaveType();
 
   const { data: lastPage, isFetching } = useGetDokumenterQuery({
-    klagebehandlingId,
+    oppgaveId,
+    type,
     pageReference: pageReferences[pageReferences.length - 1],
     pageSize: PAGE_SIZE,
     temaer: selectedTemaer,
@@ -38,7 +41,7 @@ export const AlleDokumenter = React.memo(() => {
         {pageReferences.map((pageReference) => (
           <DocumentsPage
             key={pageReference}
-            klagebehandlingId={klagebehandlingId}
+            oppgaveId={oppgaveId}
             pageReference={pageReference}
             pageSize={PAGE_SIZE}
             temaer={selectedTemaer}

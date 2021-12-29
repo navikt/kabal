@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
 import { AdminPage } from '../../pages/admin/admin';
+import { AnkebehandlingPage } from '../../pages/ankebehandling/ankebehandling';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
 import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
 import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
@@ -23,6 +24,7 @@ export const Router = () => (
     <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
     <Route path="sok" element={<SearchPage />} />
     <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
+    <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
     <Route path="innstillinger" element={<SettingsPage />} />
     <Route path="admin" element={<AdminPage />} />
   </Switch>

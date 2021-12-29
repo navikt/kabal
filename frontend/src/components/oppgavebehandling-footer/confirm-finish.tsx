@@ -1,20 +1,27 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
-import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
 import { useKlagerName } from '../../hooks/use-klager-name';
-import { useFinishKlagebehandlingMutation } from '../../redux-api/oppgave';
+import { useOppgaveId } from '../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
+import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgavebehandling';
+import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
+import {
+  StyledFinishKlagebehandlingBox,
+  StyledFinishKlagebehandlingButtons,
+  StyledFinishKlagebehandlingText,
+} from './styled-components';
 
 interface FinishProps {
   cancel: () => void;
 }
 
 export const ConfirmFinish = ({ cancel }: FinishProps) => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const [finishKlagebehandling, loader] = useFinishKlagebehandlingMutation();
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
+  const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
   const klagerName = useKlagerName();
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
@@ -27,7 +34,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   }, [ref]);
 
   const finish = async () => {
-    finishKlagebehandling({ klagebehandlingId })
+    finishOppgavebehandling({ oppgaveId, type })
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
@@ -42,10 +49,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
 
   return (
     <StyledFinishKlagebehandlingBox ref={setRef}>
-      <StyledFinishKlagebehandlingText>
-        Du fullfører nå klagebehandlingen, brevet sendes til {klagerName ?? 'søker'} og klagebehandlingen kan ikke
-        redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
-      </StyledFinishKlagebehandlingText>
+      <OppgavebehandlingText klagerName={klagerName} type={type} />
       <StyledFinishKlagebehandlingButtons>
         <Hovedknapp
           mini
@@ -64,21 +68,25 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   );
 };
 
-export const StyledFinishKlagebehandlingButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+interface OppgavebehandlingTextProps {
+  type: OppgaveType;
+  klagerName: string | null;
+}
 
-export const StyledFinishKlagebehandlingText = styled.p`
-  margin: 0 0 1em;
-  white-space: normal;
-`;
+const OppgavebehandlingText = ({ type, klagerName }: OppgavebehandlingTextProps) => {
+  if (type === OppgaveType.KLAGEBEHANDLING) {
+    return (
+      <StyledFinishKlagebehandlingText>
+        Du fullfører nå klagebehandlingen, brevet sendes til {klagerName ?? 'søker'} og klagebehandlingen kan ikke
+        redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
+      </StyledFinishKlagebehandlingText>
+    );
+  }
 
-export const StyledFinishKlagebehandlingBox = styled.div`
-  position: fixed;
-  bottom: 1em;
-  border: 1px solid #0067c5;
-  padding: 1em;
-  background-color: #fff;
-  width: 400px;
-`;
+  return (
+    <StyledFinishKlagebehandlingText>
+      Du fullfører nå ankebehandlingen, brevet sendes til {klagerName ?? 'søker'} og ankebehandlingen kan ikke
+      redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
+    </StyledFinishKlagebehandlingText>
+  );
+};

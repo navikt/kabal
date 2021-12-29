@@ -1,11 +1,11 @@
 import React from 'react';
 import 'nav-frontend-tabell-style';
-import { IKlagebehandling } from '../../redux-api/oppgaver';
+import { IOppgaveList } from '../../redux-api/oppgaver-types';
 import { Loader } from '../loader/loader';
 import { Row } from './row';
 
 interface OppgaveRaderProps {
-  oppgaver?: IKlagebehandling[];
+  oppgaver?: IOppgaveList;
   columnCount: number;
 }
 

@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import { useCreateSmartEditorMutation } from '../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery, useUpdateSmartEditorIdMutation } from '../redux-api/smart-editor-id';
 import { INewSmartEditor } from '../redux-api/smart-editor-types';
-import { useKlagebehandlingId } from './use-klagebehandling-id';
+import { useOppgaveId } from './use-oppgave-id';
+import { useOppgaveType } from './use-oppgave-type';
 
 export const useSmartEditorId = (initialContent: INewSmartEditor): string | null => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery(klagebehandlingId);
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
+
+  const { data: smartEditorData } = useGetSmartEditorIdQuery({ oppgaveId, type });
   const [createSmartEditorDocument, { isLoading: createSmartEditorIsLoading }] = useCreateSmartEditorMutation();
 
   const [updateSmartEditorId] = useUpdateSmartEditorIdMutation();
@@ -30,12 +33,14 @@ export const useSmartEditorId = (initialContent: INewSmartEditor): string | null
       .then(({ id }) => {
         setReturnValue(id);
         updateSmartEditorId({
-          klagebehandlingId,
+          oppgaveId,
+          type,
           smartEditorId: id,
         });
       });
   }, [
-    klagebehandlingId,
+    oppgaveId,
+    type,
     createSmartEditorDocument,
     initialContent,
     setReturnValue,

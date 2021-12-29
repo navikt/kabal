@@ -1,6 +1,7 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { SuccessIcon } from '../../icons/success';
 import {
   useRebuildElasticAdminMutation,
@@ -13,7 +14,7 @@ export const Admin = () => (
     <h1>Administrasjon</h1>
     <StyledContent>
       <StyledSettingsSection>
-        <Button useApi={useRebuildElasticAdminMutation} text="KABAL-SEARCH ELASTIC REBUILD" />
+        <RebuildElasticButton useApi={useRebuildElasticAdminMutation} text="KABAL-SEARCH ELASTIC REBUILD" />
         <Button useApi={useRefillElasticAdminMutation} text="KABAL-API KAFKA REFILL" />
         <Button useApi={useResendDvhMutation} text="KABAL-API DVH RESEND" />
       </StyledSettingsSection>
@@ -21,16 +22,31 @@ export const Admin = () => (
   </article>
 );
 
+interface RebuildElasticButtonProps {
+  useApi: typeof useRebuildElasticAdminMutation;
+  text: string;
+}
 interface ButtonProps {
-  useApi: typeof useRebuildElasticAdminMutation | typeof useRefillElasticAdminMutation | typeof useResendDvhMutation;
+  useApi: typeof useRefillElasticAdminMutation | typeof useResendDvhMutation;
   text: string;
 }
 
-const Button = ({ text, useApi }: ButtonProps): JSX.Element => {
+const RebuildElasticButton = ({ text, useApi }: RebuildElasticButtonProps): JSX.Element => {
   const [callApi, { isSuccess, isLoading, isUninitialized }] = useApi();
 
   return (
     <Hovedknapp onClick={() => callApi()} spinner={isLoading} autoDisableVedSpinner>
+      <span>{text}</span>
+      <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
+    </Hovedknapp>
+  );
+};
+
+const Button = ({ text, useApi }: ButtonProps): JSX.Element => {
+  const [callApi, { isSuccess, isLoading, isUninitialized }] = useApi();
+  const type = useOppgaveType();
+  return (
+    <Hovedknapp onClick={() => callApi(type)} spinner={isLoading} autoDisableVedSpinner>
       <span>{text}</span>
       <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
     </Hovedknapp>

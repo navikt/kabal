@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Descendant } from 'slate';
 import styled from 'styled-components';
 import { isNotNull } from '../../functions/is-not-type-guards';
-import { useKlagebehandlingId } from '../../hooks/use-klagebehandling-id';
+import { useOppgaveId } from '../../hooks/use-oppgave-id';
+import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useGetSmartEditorQuery, useUpdateSmartEditorMutation } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ISmartEditor, ISmartEditorElement } from '../../redux-api/smart-editor-types';
@@ -12,8 +13,9 @@ import { RichTextEditorElement } from './elements/rich-text/rich-text-editor';
 import { NewDocument } from './new-document/new-document';
 
 export const SmartEditor = (): JSX.Element | null => {
-  const klagebehandlingId = useKlagebehandlingId();
-  const { data: smartEditorIdData } = useGetSmartEditorIdQuery(klagebehandlingId);
+  const oppgaveId = useOppgaveId();
+  const type = useOppgaveType();
+  const { data: smartEditorIdData } = useGetSmartEditorIdQuery({ oppgaveId, type });
   const { data: smartEditor, isFetching } = useGetSmartEditorQuery(smartEditorIdData?.smartEditorId ?? skipToken);
   const [saveSmartEditor] = useUpdateSmartEditorMutation();
   const [value, setValue] = useState<ISmartEditor | undefined>(smartEditor?.smartEditorData);

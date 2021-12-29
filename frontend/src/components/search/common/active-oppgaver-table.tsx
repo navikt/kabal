@@ -1,6 +1,6 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
-import { IKlagebehandling, IKlagebehandlingList } from '../../../redux-api/oppgaver';
+import { IOppgave, IOppgaveList } from '../../../redux-api/oppgaver-types';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../../common-table-components/open';
@@ -11,7 +11,7 @@ import { RightAlignCell, StyledTable } from './styled-components';
 import { StyledTableCaption } from './table-caption';
 
 interface Props {
-  activeOppgaver: IKlagebehandlingList;
+  activeOppgaver: IOppgaveList;
 }
 
 export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
@@ -52,16 +52,16 @@ const Row = ({
   tildeltSaksbehandlerident,
   tildeltSaksbehandlerNavn,
   isAvsluttetAvSaksbehandler,
-}: IKlagebehandling) => (
+}: IOppgave) => (
   <tr data-testid="search-result-active-oppgave">
     <td>
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelse} type={type} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={hjemmel} type={type} />
     </td>
     <td>
       <Deadline age={ageKA} frist={frist} />

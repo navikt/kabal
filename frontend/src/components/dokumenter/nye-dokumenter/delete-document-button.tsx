@@ -1,14 +1,16 @@
 import React from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useDeleteFileMutation } from '../../../redux-api/oppgave';
+import { useOppgaveType } from '../../../hooks/use-oppgave-type';
+import { useDeleteFileMutation } from '../../../redux-api/oppgavebehandling';
 import { StyledDeleteButton } from './styled-components';
 
 interface DeleteDocumentButtonProps {
-  klagebehandlingId: string;
+  oppgaveId: string;
 }
 
-export const DeleteDocumentButton = ({ klagebehandlingId }: DeleteDocumentButtonProps) => {
+export const DeleteDocumentButton = ({ oppgaveId }: DeleteDocumentButtonProps) => {
   const canEdit = useCanEdit();
+  const type = useOppgaveType();
   const [deleteFile, { isLoading }] = useDeleteFileMutation();
 
   if (!canEdit) {
@@ -16,7 +18,7 @@ export const DeleteDocumentButton = ({ klagebehandlingId }: DeleteDocumentButton
   }
 
   return (
-    <StyledDeleteButton disabled={isLoading} onClick={() => deleteFile({ klagebehandlingId })}>
+    <StyledDeleteButton disabled={isLoading} onClick={() => deleteFile({ oppgaveId, type })}>
       Slett
     </StyledDeleteButton>
   );
