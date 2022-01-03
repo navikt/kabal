@@ -1,4 +1,4 @@
-import { Utfall } from '../redux-api/klagebehandling-state-types';
+import { Utfall } from '../types/kodeverk';
 
 export const isUtfall = (s?: string): s is Utfall => {
   if (typeof s === 'string') {

@@ -1,5 +1,5 @@
 import { useMatch } from 'react-router-dom';
-import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../types/kodeverk';
 
 export const useOppgaveType = (): OppgaveType => {
   const klageMatch = useMatch('/klagebehandling/:id');

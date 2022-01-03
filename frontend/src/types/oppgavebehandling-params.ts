@@ -1,4 +1,5 @@
-import { IDocumentReference, ISaksbehandler, OppgaveType, Utfall } from './oppgavebehandling-common-types';
+import { OppgaveType, Utfall } from './kodeverk';
+import { IDocumentReference, ISaksbehandler } from './oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;

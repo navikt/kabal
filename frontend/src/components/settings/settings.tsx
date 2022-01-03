@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
+import { useFullYtelseNameFromId, useHjemmelFromId, useTypeNameFromId } from '../../hooks/use-kodeverk-ids';
 import { ISettings, useGetBrukerQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { OppgaveType } from '../../types/kodeverk';
+import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 
 const EMPTY_SETTINGS: ISettings = {
@@ -32,6 +33,10 @@ export const Settings = () => {
 
   const availableYtelser = useAvailableYtelser();
 
+  if (typeof kodeverk === 'undefined') {
+    return null;
+  }
+
   return (
     <article>
       <h1>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</h1>
@@ -40,7 +45,7 @@ export const Settings = () => {
           <FilterDropdown
             selected={settings.typer}
             onChange={(typer) => onChange({ ...settings, typer })}
-            options={kodeverk?.type ?? []}
+            options={kodeverkSimpleValuesToDropdownOptions(kodeverk.sakstyper)}
           >
             Type
           </FilterDropdown>
@@ -56,7 +61,7 @@ export const Settings = () => {
           <FilterDropdown
             selected={settings.ytelser}
             onChange={(ytelser) => onChange({ ...settings, ytelser })}
-            options={availableYtelser}
+            options={kodeverkValuesToDropdownOptions(availableYtelser)}
           >
             Ytelser
           </FilterDropdown>
@@ -72,7 +77,7 @@ export const Settings = () => {
           <FilterDropdown
             selected={settings.hjemler}
             onChange={(hjemler) => onChange({ ...settings, hjemler })}
-            options={kodeverk?.hjemmel ?? []}
+            options={kodeverkValuesToDropdownOptions(kodeverk.hjemler)}
           >
             Hjemmel
           </FilterDropdown>
@@ -89,24 +94,21 @@ export const Settings = () => {
   );
 };
 
-interface EtikettProps {
-  id: string;
+interface EtikettProps<T = string> {
+  id: T;
 }
 
-const TypeEtikett = ({ id }: EtikettProps) => (
-  <StyledEtikettMain fixedWidth={true}>{useTypeFromId(id)}</StyledEtikettMain>
+const TypeEtikett = ({ id }: EtikettProps<OppgaveType>) => (
+  <StyledEtikettMain fixedWidth={true}>{useTypeNameFromId(id)}</StyledEtikettMain>
 );
 
-const YtelseLabel = ({ id }: EtikettProps) => {
-  const type = useOppgaveType();
-  return <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(type, id)}</StyledEtikettTema>;
-};
+const YtelseLabel = ({ id }: EtikettProps) => (
+  <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(id)}</StyledEtikettTema>
+);
 
-const HjemmelEtikett = ({ id }: EtikettProps) => {
-  const type = useOppgaveType();
-
-  return <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(type, id)}</StyledEtikettMain>;
-};
+const HjemmelEtikett = ({ id }: EtikettProps) => (
+  <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
+);
 
 const StyledEtikettMain = styled(LabelMain)`
   width: 100%;

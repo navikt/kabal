@@ -1,19 +1,14 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { getFullName } from '../../../domain/name';
-import { Name } from '../../../domain/types';
 import { formatPersonNum } from '../../../functions/format-id';
 import { ArrowDown } from '../../../icons/arrow-down';
 import { ArrowUp } from '../../../icons/arrow-up';
+import { ISearchPerson } from '../../../types/oppgaver';
 import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';
 
-interface Props {
-  fnr: string;
-  navn: Name;
-}
-
-export const Result = ({ fnr, navn }: Props) => {
+export const Result = ({ fnr, navn }: ISearchPerson) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const chevron = open ? <ArrowUp /> : <ArrowDown />;

@@ -1,16 +1,19 @@
+import { useMemo } from 'react';
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { IYtelse, useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { IYtelse } from '../types/kodeverk';
+import { useKodeverkValue } from './use-kodeverk-value';
 
 export const useAvailableYtelser = (): IYtelse[] => {
-  const { data: kodeverk } = useGetKodeverkQuery();
+  const ytelser = useKodeverkValue('ytelser');
   const { data: userData } = useGetBrukerQuery();
 
-  if (typeof userData === 'undefined' || typeof kodeverk === 'undefined') {
-    return [];
-  }
+  return useMemo<IYtelse[]>(() => {
+    if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
+      return [];
+    }
 
-  return userData.valgtEnhetView.lovligeYtelser
-    .map((ytelseId) => kodeverk.ytelser.find(({ id }) => id === ytelseId))
-    .filter(isNotUndefined);
+    const ytelseSet: Set<string> = new Set(userData.enheter.flatMap(({ lovligeYtelser }) => lovligeYtelser));
+    return Array.from(ytelseSet, (ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
+  }, [userData, ytelser]);
 };

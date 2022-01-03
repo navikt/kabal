@@ -1,6 +1,6 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
-import { IOppgave, IOppgaveList } from '../../../redux-api/oppgaver-types';
+import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../../common-table-components/open';
@@ -58,10 +58,10 @@ const Row = ({
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} type={type} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} type={type} />
+      <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>
       <Deadline age={ageKA} frist={frist} />

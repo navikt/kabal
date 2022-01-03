@@ -1,21 +1,21 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { IKodeverkVerdi, useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { IKodeverkValue } from '../types/kodeverk';
+import { useKodeverkValue } from './use-kodeverk-value';
 
-export const useSettingsHjemler = (): IKodeverkVerdi[] => {
-  const { data: kodeverk } = useGetKodeverkQuery();
+export const useSettingsHjemler = (): IKodeverkValue[] => {
+  const hjemler = useKodeverkValue('hjemler');
   const { data: userData } = useGetBrukerQuery();
 
-  if (typeof userData === 'undefined' || typeof kodeverk === 'undefined') {
+  if (typeof userData === 'undefined' || typeof hjemler === 'undefined') {
     return [];
   }
 
   const settingsHjemler = userData.innstillinger.hjemler;
-  const allHjemler = kodeverk.hjemmel;
 
   if (settingsHjemler.length === 0) {
-    return allHjemler;
+    return hjemler;
   }
 
-  return settingsHjemler.map((hjemmelId) => allHjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
+  return settingsHjemler.map((hjemmelId) => hjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
 };

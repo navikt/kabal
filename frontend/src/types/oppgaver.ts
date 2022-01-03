@@ -1,5 +1,6 @@
 import { Name } from '../domain/types';
-import { ISaksbehandler, MedunderskriverFlyt, OppgaveType } from './oppgavebehandling-common-types';
+import { MedunderskriverFlyt, OppgaveType } from './kodeverk';
+import { ISaksbehandler } from './oppgave-common';
 
 export type Date = string; // LocalDate
 
@@ -56,27 +57,51 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-export interface LoadLedigeOppgaverParams {
+export interface CommonOppgaverParams {
+  typer?: string[];
+  ytelser?: string[];
+  hjemler?: string[];
+  sortering: 'FRIST' | 'MOTTATT' | 'ALDER';
+  rekkefoelge: 'STIGENDE' | 'SYNKENDE';
   start: number;
   antall: number;
-  sortering: SortFieldEnum;
-  rekkefoelge: SortOrderEnum;
-  ytelser?: string[];
-  typer?: OppgaveType[];
-  hjemler?: string[];
+}
+
+interface EnhetParam {
+  enhetId: string;
+}
+
+interface FerdigstiltParam extends CommonOppgaverParams {
+  ferdigstiltDaysAgo: number;
+}
+
+interface NavidentParam {
   navIdent: string;
-  ferdigstiltDaysAgo?: number;
-  projeksjon?: 'UTVIDET';
-  enhet: string | null;
 }
 
-export interface LoadTildelteOppgaverParams extends LoadLedigeOppgaverParams {
-  tildeltSaksbehandler: string[];
+interface TildelteSaksbehandlereParam {
+  tildelteSaksbehandlere?: string[];
 }
 
-export interface LoadOppgaverParams extends LoadLedigeOppgaverParams {
-  tildeltSaksbehandler?: string[];
-  erTildeltSaksbehandler: boolean;
+export type MineUferdigeOppgaverParams = CommonOppgaverParams & NavidentParam;
+
+export type MineFerdigstilteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
+
+export type MineLedigeOppgaverParams = CommonOppgaverParams & NavidentParam;
+
+export type UtgaatteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
+
+export type EnhetensFerdigstilteOppgaverParams = CommonOppgaverParams &
+  FerdigstiltParam &
+  EnhetParam &
+  TildelteSaksbehandlereParam;
+
+export type EnhetensUferdigeOppgaverParams = CommonOppgaverParams & EnhetParam & TildelteSaksbehandlereParam;
+
+export interface INameSearchParams {
+  antall: number;
+  query: string;
+  start: number;
 }
 
 export interface TildelSaksbehandlerParams {
@@ -100,9 +125,7 @@ export interface IFnrSearchParams {
   query: string;
 }
 
-export interface IFnrSearchResponse {
-  fnr: string;
-  navn: Name;
+export interface IFnrSearchResponse extends ISearchPerson {
   aapneKlagebehandlinger: IOppgaveList;
   avsluttedeKlagebehandlinger: IOppgaveList;
   klagebehandlinger: IOppgaveList;
@@ -114,12 +137,20 @@ export interface INameSearchParams {
   start: number;
 }
 
+export interface ISearchPerson {
+  fnr: string;
+  navn: Name;
+}
+
 export interface INameSearchResponse {
-  people: {
-    fnr: string;
-    navn: Name;
-  }[];
+  people: ISearchPerson[];
 }
 export interface IGetSaksbehandlereInEnhetResponse {
   saksbehandlere: ISaksbehandler[];
+}
+
+export interface IPersonAndOppgaverResponse extends ISearchPerson {
+  aapneKlagebehandlinger: IOppgave[];
+  avsluttedeKlagebehandlinger: IOppgave[];
+  klagebehandlinger: IOppgave[];
 }

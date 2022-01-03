@@ -6,9 +6,9 @@ import { useOppgavebehandlingApiUrl } from '../../hooks/oppgavebehandling/use-op
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { baseUrl } from '../../redux-api/common';
-import { IDocument, IDocumentVedlegg } from '../../redux-api/documents-types';
-import { IDocumentReference } from '../../redux-api/klagebehandling-state-types';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgavebehandling';
+import { IDocument, IDocumentVedlegg } from '../../types/documents';
+import { IDocumentReference } from '../../types/oppgave-common';
 import { ShownDocumentContext } from './context';
 import { dokumentMatcher } from './helpers';
 import {

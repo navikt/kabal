@@ -2,6 +2,7 @@ import React from 'react';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
+import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
 import { StyledTableHeader } from './styled-components';
@@ -24,7 +25,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
-            options={typeOptions}
+            options={kodeverkSimpleValuesToDropdownOptions(typeOptions)}
           >
             Type
           </FilterDropdown>
@@ -33,7 +34,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.ytelser}
             onChange={(ytelser) => onChange({ ...filters, ytelser })}
-            options={ytelseOptions}
+            options={kodeverkValuesToDropdownOptions(ytelseOptions)}
           >
             Ytelse
           </FilterDropdown>
@@ -42,7 +43,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
-            options={hjemlerOptions}
+            options={kodeverkValuesToDropdownOptions(hjemlerOptions)}
           >
             Hjemmel
           </FilterDropdown>

@@ -1,4 +1,4 @@
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../../types/kodeverk';
 
 export interface Filters {
   types: OppgaveType[];

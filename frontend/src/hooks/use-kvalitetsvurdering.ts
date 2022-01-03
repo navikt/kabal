@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useGetKvalitetsvurderingQuery } from '../redux-api/kaka-kvalitetsvurdering';
-import { IKakaKvalitetsvurdering } from '../redux-api/kaka-kvalitetsvurdering-types';
+import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useKvalitetsvurdering = (): [IKakaKvalitetsvurdering | undefined, boolean] => {

@@ -4,9 +4,9 @@ import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetTildelteOppgaverQuery } from '../../redux-api/oppgaver';
-import { IOppgaveList, LoadTildelteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../redux-api/oppgaver-types';
+import { IEnhet, useGetBrukerQuery } from '../../redux-api/bruker';
+import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
+import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
@@ -15,7 +15,11 @@ import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
 
-export const EnhetensOppgaverTable = () => {
+interface EnhetensOppgaverTableProps {
+  enhet: IEnhet;
+}
+
+export const EnhetensOppgaverTable = ({ enhet }: EnhetensOppgaverTableProps) => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
@@ -34,7 +38,7 @@ export const EnhetensOppgaverTable = () => {
 
   const { data: bruker } = useGetBrukerQuery();
 
-  const queryParams: typeof skipToken | LoadTildelteOppgaverParams =
+  const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -45,13 +49,11 @@ export const EnhetensOppgaverTable = () => {
           ytelser,
           typer,
           hjemler,
-          navIdent: bruker.info.navIdent,
-          projeksjon: 'UTVIDET',
-          enhet: bruker.valgtEnhetView.id,
-          tildeltSaksbehandler: filters.tildeltSaksbehandler,
+          enhetId: enhet.id,
+          tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
-  const { data: oppgaver, refetch } = useGetTildelteOppgaverQuery(queryParams, {
+  const { data: oppgaver, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
 
@@ -62,9 +64,9 @@ export const EnhetensOppgaverTable = () => {
 
   return (
     <StyledTableContainer>
-      <StyledHeader>Tildelte oppgaver</StyledHeader>
+      <StyledHeader>Tildelte oppgaver - {enhet.navn}</StyledHeader>
       <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-table">
-        <TableHeaderFilters filters={filters} onChange={setFilters} />
+        <TableHeaderFilters filters={filters} onChange={setFilters} enhetId={enhet.id} />
         <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} />
       </StyledTable>
     </StyledTableContainer>

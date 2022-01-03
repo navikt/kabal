@@ -1,15 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Name } from '../../../domain/types';
+import { ISearchPerson } from '../../../types/oppgaver';
 import { Result } from './result';
 
 interface SearchResultsProps {
-  people: Person[];
-}
-
-interface Person {
-  fnr: string;
-  navn: Name;
+  people: ISearchPerson[];
 }
 
 export const SearchResults = ({ people }: SearchResultsProps) => (

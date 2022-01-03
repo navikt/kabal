@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 
 interface Props {
   klagebehandlingId: string;
@@ -8,8 +8,8 @@ interface Props {
 }
 
 export const OpenKlagebehandling = ({ klagebehandlingId, ytelse }: Props) => {
-  const { data: userData } = useGetBrukerQuery();
-  const hasAccess = userData?.valgtEnhetView.lovligeYtelser.includes(ytelse) ?? false;
+  const enheter = useAvailableEnheterForYtelse(ytelse);
+  const hasAccess = enheter.length !== 0;
 
   if (!hasAccess) {
     return null;

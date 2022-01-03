@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { OppgaveType } from '../types/kodeverk';
 import { apiUrl, staggeredBaseQuery } from './common';
-import { OppgaveType } from './oppgavebehandling-common-types';
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',

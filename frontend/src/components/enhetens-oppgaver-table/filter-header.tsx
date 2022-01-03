@@ -3,8 +3,8 @@ import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhe
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../../types/kodeverk';
+import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { SortBy } from './sortby';
 import { Filters } from './types';
@@ -12,14 +12,14 @@ import { Filters } from './types';
 interface TableHeaderFiltersProps {
   onChange: (filters: Filters) => void;
   filters: Filters;
+  enhetId: string;
 }
 
-export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps) => {
-  const { data: userData } = useGetBrukerQuery();
+export const TableHeaderFilters = ({ onChange, filters, enhetId }: TableHeaderFiltersProps) => {
   const typeOptions = useSettingsTypes();
   const ytelseOptions = useSettingsYtelser();
   const hjemlerOptions = useSettingsHjemler();
-  const saksbehandlerOptions = useSaksbehandlereInEnhet(userData?.valgtEnhetView.id);
+  const saksbehandlerOptions = useSaksbehandlereInEnhet(enhetId);
 
   return (
     <thead>
@@ -33,7 +33,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
                 types,
               })
             }
-            options={typeOptions}
+            options={kodeverkSimpleValuesToDropdownOptions(typeOptions)}
           >
             Type
           </FilterDropdown>
@@ -42,7 +42,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.ytelser}
             onChange={(ytelse) => onChange({ ...filters, ytelser: ytelse })}
-            options={ytelseOptions}
+            options={kodeverkValuesToDropdownOptions(ytelseOptions)}
           >
             Ytelse
           </FilterDropdown>
@@ -51,7 +51,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
-            options={hjemlerOptions}
+            options={kodeverkValuesToDropdownOptions(hjemlerOptions)}
           >
             Hjemmel
           </FilterDropdown>
@@ -64,7 +64,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.tildeltSaksbehandler}
             onChange={(tildeltSaksbehandler) => onChange({ ...filters, tildeltSaksbehandler })}
-            options={saksbehandlerOptions}
+            options={kodeverkValuesToDropdownOptions(saksbehandlerOptions)}
           >
             Saksbehandler
           </FilterDropdown>

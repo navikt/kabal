@@ -1,13 +1,18 @@
 import React from 'react';
 import { getFullName } from '../../../domain/name';
 import { formatPersonNum } from '../../../functions/format-id';
-import { IFnrSearchResponse } from '../../../redux-api/oppgaver-types';
+import { IPersonAndOppgaverResponse } from '../../../types/oppgaver';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/oppgaver-container';
 import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
 
-export const Result = ({ fnr, navn, aapneKlagebehandlinger, avsluttedeKlagebehandlinger }: IFnrSearchResponse) => (
+export const Result = ({
+  fnr,
+  navn,
+  aapneKlagebehandlinger,
+  avsluttedeKlagebehandlinger,
+}: IPersonAndOppgaverResponse) => (
   <StyledResult key={fnr} data-testid="search-result">
     <StyledName>{getFullName(navn)}</StyledName>
     <StyledFnr>{formatPersonNum(fnr)}</StyledFnr>

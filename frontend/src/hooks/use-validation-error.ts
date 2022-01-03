@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
 import { IValidationSection } from '../functions/error-type-guard';
-import { IKakaKvalitetsvurdering } from '../redux-api/kaka-kvalitetsvurdering-types';
+import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
 
 type Field = keyof IKakaKvalitetsvurdering | 'vedtaksdokument' | 'utfall' | 'hjemmel';
 

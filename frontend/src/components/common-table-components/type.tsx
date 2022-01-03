@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTypeFromId } from '../../hooks/use-kodeverk-ids';
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { useTypeNameFromId } from '../../hooks/use-kodeverk-ids';
 import { LabelMain } from '../../styled-components/labels';
+import { OppgaveType } from '../../types/kodeverk';
 
 interface Props {
   type: OppgaveType;
 }
 
-export const Type = ({ type }: Props) => <LabelMain>{useTypeFromId(type)}</LabelMain>;
+export const Type = ({ type }: Props) => <LabelMain>{useTypeNameFromId(type)}</LabelMain>;

@@ -1,7 +1,7 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
-import { IOppgave, IOppgaveList } from '../../../redux-api/oppgaver-types';
+import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenKlagebehandling } from '../../common-table-components/open';
 import { Type } from '../../common-table-components/type';
@@ -46,10 +46,10 @@ const Row = ({ id, type, hjemmel, ytelse, avsluttetAvSaksbehandlerDate, tildeltS
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} type={type} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} type={type} />
+      <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
     <td>{tildeltSaksbehandlerNavn}</td>

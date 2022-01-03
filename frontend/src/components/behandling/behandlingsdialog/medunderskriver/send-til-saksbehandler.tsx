@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useCheckIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgavebehandling';
-import { MedunderskriverFlyt } from '../../../../redux-api/oppgavebehandling-common-types';
-import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
+import { MedunderskriverFlyt } from '../../../../types/kodeverk';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 
 export const SendTilSaksbehandler = ({
   id: oppgaveId,

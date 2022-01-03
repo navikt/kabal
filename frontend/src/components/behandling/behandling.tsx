@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../../types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';

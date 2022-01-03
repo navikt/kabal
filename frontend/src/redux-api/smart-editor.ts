@@ -1,5 +1,4 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { staggeredBaseQuery } from './common';
 import {
   IGetCommentParams,
   INewSmartEditor,
@@ -9,7 +8,8 @@ import {
   ISmartEditorCommentRequest,
   ISmartEditorRawResponse,
   ISmartEditorResponse,
-} from './smart-editor-types';
+} from '../types/smart-editor';
+import { staggeredBaseQuery } from './common';
 
 export const smartEditorApi = createApi({
   reducerPath: 'smartEditorApi',

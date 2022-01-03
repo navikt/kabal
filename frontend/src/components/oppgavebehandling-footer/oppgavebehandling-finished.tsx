@@ -2,7 +2,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import 'nav-frontend-knapper-style';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { Utfall } from '../../redux-api/klagebehandling-state-types';
+import { Utfall } from '../../types/kodeverk';
 
 export const OppgavebehandlingFinished = () => {
   const { data: oppgavebehandling } = useOppgave();

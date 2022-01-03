@@ -1,22 +1,21 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { IKodeverkVerdi, useGetKodeverkQuery } from '../redux-api/kodeverk';
-import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
+import { IKodeverkSimpleValue, OppgaveType } from '../types/kodeverk';
+import { useKodeverkValue } from './use-kodeverk-value';
 
-export const useSettingsTypes = (): IKodeverkVerdi<OppgaveType>[] => {
-  const { data: kodeverk } = useGetKodeverkQuery();
+export const useSettingsTypes = (): IKodeverkSimpleValue<OppgaveType>[] => {
+  const types = useKodeverkValue('sakstyper');
   const { data: userData } = useGetBrukerQuery();
 
-  if (typeof userData === 'undefined' || typeof kodeverk === 'undefined') {
+  if (typeof userData === 'undefined' || typeof types === 'undefined') {
     return [];
   }
 
   const settingsTypes = userData.innstillinger.typer;
-  const allTyper = kodeverk.type;
 
   if (settingsTypes.length === 0) {
-    return allTyper;
+    return types;
   }
 
-  return settingsTypes.map((typeId) => allTyper.find(({ id }) => id === typeId)).filter(isNotUndefined);
+  return settingsTypes.map((typeId) => types.find(({ id }) => id === typeId)).filter(isNotUndefined);
 };

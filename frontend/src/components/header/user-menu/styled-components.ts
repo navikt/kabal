@@ -6,19 +6,21 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledButton = styled.button`
+  display: flex;
+  align-items: center;
   cursor: pointer;
   background-color: transparent;
   border: none;
   padding: 0.5em;
   color: white;
   text-align: right;
-  min-width: 20em;
 `;
 
 export const StyledDropdown = styled.div`
   position: absolute;
   text-align: left;
-  left: 0;
+  right: 0;
+  min-width: 100%;
   background-color: white;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 `;

@@ -1,4 +1,5 @@
-import { IMedunderskriver, ISaksbehandler, IVedlegg, MedunderskriverFlyt } from './oppgavebehandling-common-types';
+import { MedunderskriverFlyt } from './kodeverk';
+import { IMedunderskriver, ISaksbehandler, IVedlegg } from './oppgave-common';
 
 export interface ITilknyttDocumentResponse {
   modified: string;

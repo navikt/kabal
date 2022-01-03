@@ -1,6 +1,6 @@
 import React from 'react';
 import 'nav-frontend-tabell-style';
-import { IOppgaveList } from '../../redux-api/oppgaver-types';
+import { IOppgaveList } from '../../types/oppgaver';
 import { Loader } from '../loader/loader';
 import { Row } from './row';
 
