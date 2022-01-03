@@ -1,9 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { IApiValidationResponse } from '../functions/error-type-guard';
-import { apiUrl, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
-import { IDocumentsResponse } from './documents-types';
-import { MedunderskriverFlyt } from './oppgavebehandling-common-types';
+import { IDocumentsResponse } from '../types/documents';
+import { MedunderskriverFlyt } from '../types/kodeverk';
+import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
   IGetDokumenterParams,
   IMedunderskrivereParams,
@@ -13,7 +13,7 @@ import {
   ISetMedunderskriverParams,
   ITilknyttDocumentParams,
   IUploadFileParams,
-} from './oppgavebehandling-params-types';
+} from '../types/oppgavebehandling-params';
 import {
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
@@ -23,8 +23,8 @@ import {
   ITilknyttDocumentResponse,
   IUploadFileResponse,
   IVedtakFullfoertResponse,
-} from './oppgavebehandling-response-types';
-import { IOppgavebehandling } from './oppgavebehandling-types';
+} from '../types/oppgavebehandling-response';
+import { apiUrl, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
 
 export const oppgavebehandlingApi = createApi({
   reducerPath: 'oppgavebehandlingApi',

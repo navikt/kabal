@@ -8,7 +8,7 @@ import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useGetSmartEditorQuery, useUpdateSmartEditorMutation } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
-import { ISmartEditor, ISmartEditorElement } from '../../redux-api/smart-editor-types';
+import { ISmartEditor, ISmartEditorElement } from '../../types/smart-editor';
 import { RichTextEditorElement } from './elements/rich-text/rich-text-editor';
 import { NewDocument } from './new-document/new-document';
 

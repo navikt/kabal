@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { IMedunderskriverResponse } from '../../../../redux-api/oppgavebehandling-response-types';
-import { IOppgavebehandling } from '../../../../redux-api/oppgavebehandling-types';
+import { IOppgavebehandlingBase } from '../../../../types/oppgavebehandling';
+import { IMedunderskriverResponse } from '../../../../types/oppgavebehandling-response';
 
-type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler'> &
+type MedunderskriverInfoProps = Pick<IOppgavebehandlingBase, 'tildeltSaksbehandler'> &
   Pick<IMedunderskriverResponse, 'medunderskriver'>;
 
 export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver }: MedunderskriverInfoProps) => {

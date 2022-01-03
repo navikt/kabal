@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
+import { ISmartEditorTemplate } from '../../../types/smart-editor';
 import { ContentTypeEnum, TextAlignEnum } from '../editor-types';
 
 const INITIAL_SLATE_VALUE: Descendant[] = [

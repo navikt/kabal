@@ -3,8 +3,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
-import { useOppgaveType } from '../../../../hooks/use-oppgave-type';
-import { ILovKildeToRegistreringshjemmel } from '../../../../redux-api/kodeverk';
+import { ILovKildeToRegistreringshjemmel } from '../../../../types/kodeverk';
 import {
   StyledListItem,
   StyledNoneSelected,
@@ -18,9 +17,8 @@ const EMPTY_LIST: string[] = [];
 
 export const SelectedHjemlerList = () => {
   const { data: oppgavebehandling } = useOppgave();
-  const type = useOppgaveType();
 
-  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgavebehandling?.ytelse ?? skipToken, type);
+  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgavebehandling?.ytelse ?? skipToken);
 
   const hjemmelIdList = oppgavebehandling?.resultat.hjemler ?? EMPTY_LIST;
 

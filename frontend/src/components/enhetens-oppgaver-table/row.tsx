@@ -1,6 +1,6 @@
 import React from 'react';
-import { IOppgave } from '../../redux-api/oppgaver-types';
 import { LabelMedunderskriver } from '../../styled-components/labels';
+import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
@@ -26,10 +26,10 @@ export const Row = ({
       <Type type={type} />
     </td>
     <td>
-      <Ytelse ytelseId={ytelse} type={type} />
+      <Ytelse ytelseId={ytelse} />
     </td>
     <td>
-      <Hjemmel hjemmel={hjemmel} type={type} />
+      <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>
       <Age age={ageKA} />

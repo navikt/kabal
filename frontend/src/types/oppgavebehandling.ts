@@ -1,14 +1,8 @@
 import { Name } from '../domain/types';
-import {
-  Gender,
-  IDocumentReference,
-  IVedlegg,
-  MedunderskriverFlyt,
-  OppgaveType,
-  Utfall,
-} from './oppgavebehandling-common-types';
+import { Gender, MedunderskriverFlyt, OppgaveType, Utfall } from './kodeverk';
+import { IDocumentReference, ISaksbehandler, IVedlegg } from './oppgave-common';
 
-export interface IOppgavebehandling {
+export interface IOppgavebehandlingBase {
   avsluttetAvSaksbehandlerDate: string | null; // LocalDate
   created: string; // LocalDateTime
   datoSendtMedunderskriver: string | null; // LocalDate
@@ -42,10 +36,20 @@ export interface IOppgavebehandling {
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
   tildeltSaksbehandler: ISaksbehandler | null;
+  tildeltSaksbehandlerEnhet: string | null;
   tilknyttedeDokumenter: IDocumentReference[];
-  type: OppgaveType;
   ytelse: string;
 }
+
+export interface IKlagebehandling extends IOppgavebehandlingBase {
+  type: OppgaveType.KLAGEBEHANDLING;
+}
+
+export interface IAnkebehandling extends IOppgavebehandlingBase {
+  type: OppgaveType.ANKEBEHANDLING;
+}
+
+export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;
 
 export interface IKlager {
   person: IKlagerPerson | null;
@@ -53,11 +57,6 @@ export interface IKlager {
 }
 
 export type ISakenGjelder = IKlager;
-
-export interface ISaksbehandler {
-  navIdent: string;
-  navn: string;
-}
 
 export interface Resultat {
   file: IVedlegg | null;

@@ -5,7 +5,7 @@ import React, { Fragment } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
-import { IKvalitetsvurderingBooleans } from '../../redux-api/kaka-kvalitetsvurdering-types';
+import { IKvalitetsvurderingBooleans } from '../../types/kaka-kvalitetsvurdering';
 import { CommentField } from './comment-field';
 import { ReasonsField, StyledCheckboxContainer } from './styled-components';
 

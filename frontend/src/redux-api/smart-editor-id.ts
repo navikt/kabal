@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling-params';
 import { oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
-import { IOppgavebehandlingBaseParams } from './oppgavebehandling-params-types';
 
 export interface SmartEditorIdResponse {
   smartEditorId: string | null;

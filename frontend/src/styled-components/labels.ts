@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { OppgaveType } from '../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../types/kodeverk';
 
 interface LabelProps {
   fixedWidth?: boolean;

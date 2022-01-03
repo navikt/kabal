@@ -1,4 +1,4 @@
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../../types/kodeverk';
 import { useOppgaveType } from '../use-oppgave-type';
 
 const klagebehandlingUrl = '/api/kabal-api/klagebehandlinger/';

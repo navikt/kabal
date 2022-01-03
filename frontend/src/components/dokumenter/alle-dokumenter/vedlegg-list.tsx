@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDocument } from '../../../redux-api/documents-types';
+import { IDocument } from '../../../types/documents';
 import { dokumentMatcher } from '../helpers';
 import { VedleggContainer } from '../styled-components/fullvisning';
 import { Vedlegg } from './vedlegg';

@@ -1,68 +1,97 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { staggeredBaseQuery } from './common';
 import {
   ApiResponse,
+  EnhetensFerdigstilteOppgaverParams,
+  EnhetensUferdigeOppgaverParams,
   FradelSaksbehandlerParams,
-  IFnrSearchParams,
-  IFnrSearchResponse,
   IGetSaksbehandlereInEnhetResponse,
   INameSearchParams,
   INameSearchResponse,
+  IPersonAndOppgaverResponse,
   ISaksbehandlerResponse,
-  LoadLedigeOppgaverParams,
-  LoadTildelteOppgaverParams,
+  MineFerdigstilteOppgaverParams,
+  MineLedigeOppgaverParams,
+  MineUferdigeOppgaverParams,
   TildelSaksbehandlerParams,
   UtgaatteApiResponse,
-} from './oppgaver-types';
+  UtgaatteOppgaverParams,
+} from '../types/oppgaver';
+import { staggeredBaseQuery } from './common';
 
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
   baseQuery: staggeredBaseQuery,
   tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
   endpoints: (builder) => ({
-    getTildelteOppgaver: builder.query<ApiResponse, LoadTildelteOppgaverParams>({
+    getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?erTildeltSaksbehandler=true&${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/ferdigstilte?${query}`;
+      },
+    }),
+    getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/uferdige?${query}`;
       },
       providesTags: ['tildelte-oppgaver'],
     }),
-    getLedigeOppgaver: builder.query<ApiResponse, LoadLedigeOppgaverParams>({
+    getMineLedigeOppgaver: builder.query<ApiResponse, MineLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/klagebehandlinger?erTildeltSaksbehandler=false&${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/ledige?${query}`;
       },
-      providesTags: ['ledige-oppgaver'],
     }),
-    getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, LoadLedigeOppgaverParams>({
+    getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
+      query: ({ enhetId, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/api/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte?${query}`;
+      },
+    }),
+    getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
+      query: ({ enhetId, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/api/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
+      },
+    }),
+    getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/antallklagebehandlingermedutgaattefrister?erTildeltSaksbehandler=false&${query}`;
+        return `/api/kabal-search/ansatte/${navIdent}/antalloppgavermedutgaattefrister?${query}`;
       },
       providesTags: ['ledige-medutgaattefrister'],
-    }),
-    fnrSearch: builder.query<IFnrSearchResponse | undefined, IFnrSearchParams>({
-      query: ({ ...queryParams }) => ({
-        url: `/api/kabal-search/search/fnr`,
-        method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
-        body: queryParams,
-      }),
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
       query: ({ ...queryParams }) => ({
         url: `/api/kabal-search/search/name`,
         method: 'POST',
         body: queryParams,
+      }),
+    }),
+    personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
+      query: (query) => ({
+        url: `/api/kabal-search/search/personogoppgaver`,
+        method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
+        body: { query },
       }),
     }),
     getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({
@@ -100,12 +129,15 @@ export const oppgaverApi = createApi({
 });
 
 export const {
-  useGetTildelteOppgaverQuery,
-  useGetLedigeOppgaverQuery,
+  useGetEnhetensFerdigstilteOppgaverQuery,
+  useGetEnhetensUferdigeOppgaverQuery,
+  useGetMineFerdigstilteOppgaverQuery,
+  useGetMineUferdigeOppgaverQuery,
+  useGetMineLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useTildelSaksbehandlerMutation,
   useFradelSaksbehandlerMutation,
-  useFnrSearchQuery,
+  usePersonAndOppgaverQuery,
   useNameSearchQuery,
   useGetSaksbehandlereInEnhetQuery,
 } = oppgaverApi;

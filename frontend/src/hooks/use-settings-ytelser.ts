@@ -1,21 +1,21 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { IKodeverkVerdi } from '../redux-api/kodeverk';
-import { useAvailableYtelser } from './use-available-ytelser';
+import { IKodeverkValue } from '../types/kodeverk';
+import { useKodeverkValue } from './use-kodeverk-value';
 
-export const useSettingsYtelser = (): IKodeverkVerdi[] => {
+export const useSettingsYtelser = (): IKodeverkValue[] => {
   const { data: userData } = useGetBrukerQuery();
-  const availableYtelser = useAvailableYtelser();
+  const ytelser = useKodeverkValue('ytelser');
 
-  if (typeof userData === 'undefined' || availableYtelser.length === 0) {
+  if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
     return [];
   }
 
   const settingsYtelser = userData.innstillinger.ytelser;
 
   if (settingsYtelser.length === 0) {
-    return availableYtelser;
+    return ytelser;
   }
 
-  return settingsYtelser.map((ytelseId) => availableYtelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
+  return settingsYtelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
 };

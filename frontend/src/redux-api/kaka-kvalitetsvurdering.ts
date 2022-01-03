@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { staggeredBaseQuery } from './common';
 import {
   IKakaKvalitetsvurdering,
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingRadio,
   IKvalitetsvurderingRadioExtended,
   IKvalitetsvurderingTexts,
-} from './kaka-kvalitetsvurdering-types';
+} from '../types/kaka-kvalitetsvurdering';
+import { staggeredBaseQuery } from './common';
 
 type WithId = Pick<IKakaKvalitetsvurdering, 'id'>;
 

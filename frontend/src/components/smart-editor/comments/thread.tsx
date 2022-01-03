@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ISmartEditorComment } from '../../../redux-api/smart-editor-types';
+import { ISmartEditorComment } from '../../../types/smart-editor';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
 

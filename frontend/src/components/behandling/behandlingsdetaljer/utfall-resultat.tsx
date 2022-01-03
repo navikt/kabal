@@ -7,8 +7,8 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useFieldName } from '../../../hooks/use-field-name';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../../hooks/use-oppgave-type';
+import { useUtfall } from '../../../hooks/use-utfall';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useGetKodeverkQuery } from '../../../redux-api/kodeverk';
 import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {
@@ -23,18 +23,21 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const utfallLabel = useFieldName('utfall');
   const type = useOppgaveType();
 
-  const { data: kodeverk, isLoading: isKodeverkLoading } = useGetKodeverkQuery(type);
+  const utfallKodeverk = useUtfall(type);
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
-    updateUtfall({ oppgaveId, type, utfall: isUtfall(value) ? value : null });
+
+    if (isUtfall(value)) {
+      updateUtfall({ oppgaveId, type, utfall: value });
+    }
   };
 
-  if (typeof kodeverk === 'undefined' || isKodeverkLoading) {
+  if (typeof utfallKodeverk === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
-  const options = kodeverk.utfall.map(({ id, navn }) => (
+  const options = utfallKodeverk.map(({ id, navn }) => (
     <option key={id} value={id}>
       {navn}
     </option>

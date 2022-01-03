@@ -4,7 +4,7 @@ import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
-import { INewSmartEditor, ISmartEditorTemplate } from '../../../redux-api/smart-editor-types';
+import { INewSmartEditor, ISmartEditorTemplate } from '../../../types/smart-editor';
 import { AVSLAG_TEMPLATE } from '../templates/avslag-template';
 import { EMPTY_TEMPLATE } from '../templates/empty-template';
 import { MEDHOLD_TEMPLATE } from '../templates/medhold-template';

@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { IKodeverkVerdi } from '../../redux-api/kodeverk';
+import { IKodeverkSimpleValue, IKodeverkValue } from '../../types/kodeverk';
 import { Header } from './header';
 import { Filter } from './option';
 import { StyledDropdown, StyledListItem, StyledSectionList } from './styled-components';
 
+export interface IDropdownOption<T> {
+  value: T;
+  label: string;
+}
+
 interface DropdownProps<T extends string> {
   selected: T[];
-  options: IKodeverkVerdi<T>[];
+  options: IDropdownOption<T>[];
   onChange: (id: T | null, active: boolean) => void;
   open: boolean;
   close: () => void;
@@ -24,7 +29,7 @@ export const Dropdown = <T extends string>({
   const [filteredOptions, setFilteredOptions] = useState(options);
 
   useEffect(() => {
-    setFilteredOptions(options.filter(({ beskrivelse }) => filter.test(beskrivelse)));
+    setFilteredOptions(options.filter(({ label }) => filter.test(label)));
   }, [setFilteredOptions, options, filter]);
 
   useEffect(() => {
@@ -42,7 +47,7 @@ export const Dropdown = <T extends string>({
   };
 
   const onSelectFocused = () => {
-    const focusedOption = options[focused].id;
+    const focusedOption = options[focused].value;
     onChange(focusedOption, !selected.includes(focusedOption));
   };
 
@@ -59,10 +64,10 @@ export const Dropdown = <T extends string>({
         showFjernAlle={true}
       />
       <StyledSectionList>
-        {filteredOptions.map(({ id, beskrivelse }, i) => (
-          <StyledListItem key={id}>
-            <Filter active={selected.includes(id)} filterId={id} onChange={onChange} focused={i === focused}>
-              {beskrivelse}
+        {filteredOptions.map(({ value, label }, i) => (
+          <StyledListItem key={value}>
+            <Filter active={selected.includes(value)} filterId={value} onChange={onChange} focused={i === focused}>
+              {label}
             </Filter>
           </StyledListItem>
         ))}
@@ -70,3 +75,13 @@ export const Dropdown = <T extends string>({
     </StyledDropdown>
   );
 };
+
+export const kodeverkValuesToDropdownOptions = <T extends string = string>(
+  kodeverkValues: IKodeverkValue<T>[],
+  labelKey: keyof IKodeverkValue<T> = 'beskrivelse'
+): IDropdownOption<T>[] => kodeverkValues.map(({ id, [labelKey]: label }) => ({ value: id, label }));
+
+export const kodeverkSimpleValuesToDropdownOptions = <T extends string = string>(
+  kodeverkValues: IKodeverkSimpleValue<T>[],
+  labelKey: keyof IKodeverkSimpleValue<T> = 'navn'
+): IDropdownOption<T>[] => kodeverkValues.map(({ id, [labelKey]: label }) => ({ value: id, label }));

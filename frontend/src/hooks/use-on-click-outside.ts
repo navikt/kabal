@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from 'react';
 
-type Callback = (event: MouseEvent | TouchEvent) => void;
+type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
 
 export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   callback: Callback,
@@ -8,7 +8,7 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   children = false
 ) =>
   useEffect(() => {
-    const listener: Callback = (event) => {
+    const mouseListener = (event: MouseEvent | TouchEvent) => {
       if (ref.current === null) {
         return;
       }
@@ -24,11 +24,23 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
       }
     };
 
-    window.addEventListener('mousedown', listener);
-    document.addEventListener(`touchstart`, listener);
+    const escapeListener = (event: KeyboardEvent) => {
+      if (ref.current === null) {
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        callback(event);
+      }
+    };
+
+    window.addEventListener('mousedown', mouseListener);
+    document.addEventListener(`touchstart`, mouseListener);
+    window.addEventListener('keydown', escapeListener);
 
     return () => {
-      window.removeEventListener('mousedown', listener);
-      document.removeEventListener(`touchstart`, listener);
+      window.removeEventListener('mousedown', mouseListener);
+      document.removeEventListener(`touchstart`, mouseListener);
+      window.removeEventListener('keydown', escapeListener);
     };
   }, [callback, ref, children]);

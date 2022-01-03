@@ -3,7 +3,7 @@ import { Descendant, Node, NodeEntry, Range, Selection, Transforms, createEditor
 import { withHistory } from 'slate-history';
 import { ReactEditor, RenderLeafProps, Slate, withReact } from 'slate-react';
 import styled from 'styled-components';
-import { IRichTextElement } from '../../../../redux-api/smart-editor-types';
+import { IRichTextElement } from '../../../../types/smart-editor';
 import { SmartEditorContext } from '../../context/smart-editor-context';
 import { renderElement } from '../../slate-elements';
 import { EditorContainer, StyledEditable } from '../../styled-components';

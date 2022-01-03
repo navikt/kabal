@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { OppgaveType } from '../types/kodeverk';
 import { staggeredBaseQuery } from './common';
-import { OppgaveType } from './oppgavebehandling-common-types';
 
 export interface IUser {
   navIdent: string;
@@ -27,7 +27,6 @@ export interface IUserData {
   info: IUser;
   roller: Role[];
   enheter: IEnhet[];
-  valgtEnhetView: IEnhet;
   innstillinger: ISettings;
 }
 

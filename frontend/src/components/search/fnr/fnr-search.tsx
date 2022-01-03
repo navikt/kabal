@@ -2,9 +2,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useGetBrukerQuery } from '../../../redux-api/bruker';
-import { useFnrSearchQuery } from '../../../redux-api/oppgaver';
-import { IFnrSearchParams } from '../../../redux-api/oppgaver-types';
+import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver';
 import { Result } from './result';
 
 const FNR_REGEX = /^\s*\d{6}\s*\d{5}\s*$/;
@@ -16,8 +14,8 @@ interface Props {
 }
 
 export const FnrSearch = ({ queryString }: Props) => {
-  const query = useGetQuery(queryString);
-  const { data, isFetching } = useFnrSearchQuery(query);
+  const query = useCleanQuery(queryString);
+  const { data, isFetching } = usePersonAndOppgaverQuery(query);
 
   if (query === skipToken) {
     return null;
@@ -38,16 +36,10 @@ export const FnrSearch = ({ queryString }: Props) => {
   return <Result {...data} />;
 };
 
-const useGetQuery = (queryString: string): IFnrSearchParams | typeof skipToken => {
-  const { data: bruker } = useGetBrukerQuery();
-
-  if (typeof bruker === 'undefined') {
-    return skipToken;
-  }
-
+const useCleanQuery = (queryString: string): string | typeof skipToken => {
   if (!isFnr(queryString)) {
     return skipToken;
   }
 
-  return { query: cleanFnr(queryString), enhet: bruker.valgtEnhetView.id };
+  return cleanFnr(queryString);
 };

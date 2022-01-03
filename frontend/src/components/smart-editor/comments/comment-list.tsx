@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ISmartEditorComment } from '../../../redux-api/smart-editor-types';
+import { ISmartEditorComment } from '../../../types/smart-editor';
 import { Comment } from './comment';
 
 interface CommentListProps {

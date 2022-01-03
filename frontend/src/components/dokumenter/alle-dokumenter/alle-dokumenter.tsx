@@ -4,6 +4,7 @@ import { useAllTemaer } from '../../../hooks/use-all-temaer';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
+import { kodeverkValuesToDropdownOptions } from '../../dropdown/dropdown';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
 import { AllDocumentsList, DokumenterFullvisning } from '../styled-components/fullvisning';
 import { ListHeader, ListTitle } from '../styled-components/list-header';
@@ -32,7 +33,11 @@ export const AlleDokumenter = React.memo(() => {
     <DokumenterFullvisning data-testid="klagebehandling-documents-all">
       <ListHeader>
         <ListTitle>Journalførte dokumenter</ListTitle>
-        <FilterDropdown options={allTemaer} onChange={setSelectedTemaer} selected={selectedTemaer}>
+        <FilterDropdown
+          options={kodeverkValuesToDropdownOptions(allTemaer)}
+          onChange={setSelectedTemaer}
+          selected={selectedTemaer}
+        >
           Tema
         </FilterDropdown>
       </ListHeader>

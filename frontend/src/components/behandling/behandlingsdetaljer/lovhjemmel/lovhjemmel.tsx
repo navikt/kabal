@@ -19,8 +19,7 @@ export const Lovhjemmel = () => {
   const validationError = useValidationError('hjemmel');
   const type = useOppgaveType();
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(
-    oppgavebehandling?.ytelse ?? skipToken,
-    type
+    oppgavebehandling?.ytelse ?? skipToken
   );
 
   const options = useMemo(

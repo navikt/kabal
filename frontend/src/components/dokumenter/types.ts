@@ -1,4 +1,4 @@
-import { IDocument, IDocumentVedlegg } from '../../redux-api/documents-types';
+import { IDocument, IDocumentVedlegg } from '../../types/documents';
 
 export interface ITilknyttetDokument {
   document: IDocument;

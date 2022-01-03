@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetAntallLedigeOppgaverMedUtgaatteFristerQuery, useGetLedigeOppgaverQuery } from '../../redux-api/oppgaver';
-import { LoadLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../redux-api/oppgaver-types';
+import {
+  useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
+  useGetMineLedigeOppgaverQuery,
+} from '../../redux-api/oppgaver';
+import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
 import { Pagination } from './pagination';
 import { OppgaveRader } from './rows';
@@ -37,7 +40,7 @@ export const OppgaveTable = (): JSX.Element => {
   const typer = filters.types.length === 0 ? [] : filters.types;
   const hjemler = filters.hjemler.length === 0 ? [] : filters.hjemler;
 
-  const queryParams: typeof skipToken | LoadLedigeOppgaverParams =
+  const queryParams: typeof skipToken | MineLedigeOppgaverParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -45,23 +48,26 @@ export const OppgaveTable = (): JSX.Element => {
           antall: PAGE_SIZE,
           sortering: SortFieldEnum.FRIST,
           rekkefoelge: filters.sortDescending ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE,
+          navIdent: bruker.info.navIdent,
           ytelser,
           typer,
           hjemler,
-          navIdent: bruker.info.navIdent,
-          enhet: bruker.valgtEnhetView.id,
         };
 
   const {
     data: oppgaver,
     refetch,
     isFetching,
-  } = useGetLedigeOppgaverQuery(queryParams, {
+  } = useGetMineLedigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
-  const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(queryParams, {
-    pollingInterval: 300 * 1000,
-  });
+
+  const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
+    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
+    {
+      pollingInterval: 300 * 1000,
+    }
+  );
 
   useEffect(() => {
     refetch();

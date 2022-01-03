@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { baseUrl } from '../../../redux-api/common';
-import { IDocument, IDocumentVedlegg } from '../../../redux-api/documents-types';
+import { IDocument, IDocumentVedlegg } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';

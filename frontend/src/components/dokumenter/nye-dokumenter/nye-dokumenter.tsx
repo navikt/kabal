@@ -6,7 +6,7 @@ import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use
 import { useIsFullfoert } from '../../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { baseUrl } from '../../../redux-api/common';
-import { IVedlegg } from '../../../redux-api/klagebehandling-state-types';
+import { IVedlegg } from '../../../types/oppgave-common';
 import { ShownDocumentContext } from '../context';
 import { DocumentButton } from '../styled-components/document-button';
 import { DocumentTitle } from '../styled-components/fullvisning';

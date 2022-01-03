@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { ITilknyttDocumentParams } from '../redux-api/klagebehandling-types';
 import { useRemoveTilknyttetDocumentMutation, useTilknyttDocumentMutation } from '../redux-api/oppgavebehandling';
+import { ITilknyttDocumentParams } from '../types/oppgavebehandling-params';
 import { useOppgaveType } from './use-oppgave-type';
 
 export const useCheckDocument = (
@@ -18,6 +18,7 @@ export const useCheckDocument = (
         dokumentInfoId,
         journalpostId,
         oppgaveId: klagebehandlingId,
+        type,
       };
 
       if (checked) {

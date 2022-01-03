@@ -1,6 +1,6 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useIsAsignee } from '../../../../hooks/use-is-asignee';
+import { useIsAssignee } from '../../../../hooks/use-is-assignee';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
 import { useOppgaveId } from '../../../../hooks/use-oppgave-id';
@@ -10,7 +10,7 @@ import {
   useGetMedunderskriverflytQuery,
   useGetOppgavebehandlingQuery,
 } from '../../../../redux-api/oppgavebehandling';
-import { IOppgavebehandlingBaseParams } from '../../../../redux-api/oppgavebehandling-params-types';
+import { IOppgavebehandlingBaseParams } from '../../../../types/oppgavebehandling-params';
 import { MedunderskriverInfo } from './medunderskriver-info';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';
@@ -21,12 +21,12 @@ export const Medunderskriver = () => {
   const type = useOppgaveType();
   const { data: oppgave } = useGetOppgavebehandlingQuery({ oppgaveId, type });
   const isSaksbehandler = useIsSaksbehandler();
-  const isAsignee = useIsAsignee();
+  const isAssignee = useIsAssignee();
   const isFullfoert = useIsFullfoert();
   const options = isFullfoert ? undefined : { pollingInterval: 3 * 1000 };
   const query: IOppgavebehandlingBaseParams = { oppgaveId, type };
   const { data: medunderskriver } = useGetMedunderskriverQuery(query, isSaksbehandler ? undefined : options);
-  const { data: medunderskriverflyt } = useGetMedunderskriverflytQuery(query, isAsignee ? undefined : options);
+  const { data: medunderskriverflyt } = useGetMedunderskriverflytQuery(query, isAssignee ? undefined : options);
 
   if (
     typeof oppgave === 'undefined' ||

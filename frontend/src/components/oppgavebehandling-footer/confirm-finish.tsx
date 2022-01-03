@@ -6,7 +6,7 @@ import { useKlagerName } from '../../hooks/use-klager-name';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgavebehandling';
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { OppgaveType } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import {
   StyledFinishKlagebehandlingBox,

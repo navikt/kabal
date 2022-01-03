@@ -40,15 +40,15 @@ export const ToggleButton = styled.button<{ error?: boolean }>`
   ::before {
     transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
       theme.open
-        ? 'translateX(-3px) translateY(-50%) rotate(-45deg)'
-        : 'translateX(-3px) translateY(-50%) rotate(45deg)'};
+        ? 'translateX(-31%) translateY(-50%) rotate(-45deg)'
+        : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
   }
 
   ::after {
     transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
       theme.open
-        ? 'translateX(1.5px) translateY(-50%) rotate(45deg)'
-        : 'translateX(1.5px) translateY(-50%) rotate(-45deg)'};
+        ? 'translateX(31%) translateY(-50%) rotate(45deg)'
+        : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
   }
 
   &:active,

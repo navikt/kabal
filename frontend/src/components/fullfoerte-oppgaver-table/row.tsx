@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../domain/date';
 import { formatPersonNum } from '../../functions/format-id';
-import { useFullYtelseNameFromId, useHjemmelFromId, useTypeFromId } from '../../hooks/use-kodeverk-ids';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { IOppgave } from '../../redux-api/oppgaver-types';
+import { useFullYtelseNameFromId, useHjemmelFromId, useTypeNameFromId } from '../../hooks/use-kodeverk-ids';
+import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
+import { IOppgave } from '../../types/oppgaver';
 import { OpenKlagebehandling } from '../common-table-components/open';
 
 export const Row = ({
@@ -16,26 +16,26 @@ export const Row = ({
   person,
   ytelse,
 }: IOppgave): JSX.Element => {
-  const { data: kodeverk } = useGetKodeverkQuery();
+  const utfallList = useKodeverkValue('utfall');
 
   const utfallName = useMemo(() => {
-    if (typeof kodeverk === 'undefined') {
+    if (typeof utfallList === 'undefined') {
       return '';
     }
 
-    return kodeverk.utfall.find((u) => u.id === utfall)?.navn;
-  }, [kodeverk, utfall]);
+    return utfallList.find((u) => u.id === utfall)?.navn;
+  }, [utfallList, utfall]);
 
   return (
     <tr>
       <td>
-        <LabelMain>{useTypeFromId(type)}</LabelMain>
+        <LabelMain>{useTypeNameFromId(type)}</LabelMain>
       </td>
       <td>
-        <LabelTema>{useFullYtelseNameFromId(type, ytelse)}</LabelTema>
+        <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
       </td>
       <td>
-        <LabelMain>{useHjemmelFromId(type, hjemmel)}</LabelMain>
+        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
       <td>{formatPersonNum(person?.fnr)}</td>

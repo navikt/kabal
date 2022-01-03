@@ -3,9 +3,8 @@ import { isoDateToPretty } from '../../../domain/date';
 import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { baseUrl } from '../../../redux-api/common';
-import { IDocument } from '../../../redux-api/documents-types';
+import { IDocument } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
 import { DocumentButton } from '../styled-components/document-button';
@@ -23,7 +22,6 @@ export const Document = React.memo<DocumentProps>(
     const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
     const oppgaveId = useOppgaveId();
     const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
-    const type = useOppgaveType();
 
     const url = useMemo(
       () => `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
@@ -50,7 +48,7 @@ export const Document = React.memo<DocumentProps>(
           </DocumentButton>
         </DocumentTitle>
 
-        <DocumentTema>{useFullTemaNameFromId(type, tema)}</DocumentTema>
+        <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
 
         <DocumentDate dateTime={registrert}>{isoDateToPretty(registrert)}</DocumentDate>
 

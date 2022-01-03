@@ -1,17 +1,17 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useMemo } from 'react';
-import { IKodeverkVerdi } from '../redux-api/kodeverk';
 import { useGetSaksbehandlereInEnhetQuery } from '../redux-api/oppgaver';
+import { IKodeverkValue } from '../types/kodeverk';
 
-export const useSaksbehandlereInEnhet = (enhetId?: string): IKodeverkVerdi[] => {
+export const useSaksbehandlereInEnhet = (enhetId?: string): IKodeverkValue[] => {
   const { data } = useGetSaksbehandlereInEnhetQuery(enhetId ?? skipToken);
 
-  return useMemo<IKodeverkVerdi[]>(() => {
+  return useMemo<IKodeverkValue[]>(() => {
     if (typeof data === 'undefined') {
       return [];
     }
 
-    return data.saksbehandlere.map<IKodeverkVerdi>(({ navIdent, navn }) => ({
+    return data.saksbehandlere.map<IKodeverkValue>(({ navIdent, navn }) => ({
       navn,
       beskrivelse: navn,
       id: navIdent,

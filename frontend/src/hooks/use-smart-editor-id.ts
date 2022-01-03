@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useCreateSmartEditorMutation } from '../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery, useUpdateSmartEditorIdMutation } from '../redux-api/smart-editor-id';
-import { INewSmartEditor } from '../redux-api/smart-editor-types';
+import { INewSmartEditor } from '../types/smart-editor';
 import { useOppgaveId } from './use-oppgave-id';
 import { useOppgaveType } from './use-oppgave-type';
 

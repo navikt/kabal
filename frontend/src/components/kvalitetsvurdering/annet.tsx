@@ -2,8 +2,8 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
-import { RadioValg } from '../../redux-api/kaka-kvalitetsvurdering-types';
-import { OppgaveType } from '../../redux-api/oppgavebehandling-common-types';
+import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
+import { OppgaveType } from '../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection, SubHeader } from './styled-components';
 

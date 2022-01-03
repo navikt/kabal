@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { MedunderskriverFlyt } from '../redux-api/klagebehandling-state-types';
+import { MedunderskriverFlyt } from '../types/kodeverk';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
-export const useIsAsignee = () => {
+export const useIsAssignee = () => {
   const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
   const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
 

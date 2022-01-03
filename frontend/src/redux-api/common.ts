@@ -1,5 +1,5 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-import { OppgaveType } from './oppgavebehandling-common-types';
+import { OppgaveType } from '../types/kodeverk';
 
 const isLocalhost = window.location.hostname === 'localhost';
 export const baseUrl = isLocalhost ? 'https://kabal.dev.nav.no' : '';

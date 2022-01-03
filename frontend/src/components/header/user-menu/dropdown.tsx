@@ -1,46 +1,17 @@
 import React from 'react';
-import { useGetBrukerQuery, useSetValgtEnhetMutation } from '../../../redux-api/bruker';
-import {
-  Enhet,
-  EnhetList,
-  LinkList,
-  StyledDropdown,
-  StyledEnhetButton,
-  StyledLink,
-  StyledNavLink,
-} from './styled-components';
+import { LinkList, StyledDropdown, StyledLink, StyledNavLink } from './styled-components';
 
 interface DropdownProps {
   open: boolean;
-  close: () => void;
 }
 
-export const Dropdown = ({ open, close }: DropdownProps): JSX.Element | null => {
-  const { data: userData } = useGetBrukerQuery();
-  const [setValgtEnhet] = useSetValgtEnhetMutation();
-
-  if (!open || typeof userData === 'undefined') {
+export const Dropdown = ({ open }: DropdownProps): JSX.Element | null => {
+  if (!open) {
     return null;
   }
 
-  const { enheter, valgtEnhetView } = userData;
-
-  const onClickVelgEnhet = (enhetId: string) => {
-    setValgtEnhet({ enhetId, navIdent: userData?.info.navIdent });
-    close();
-  };
-
   return (
     <StyledDropdown>
-      <EnhetList>
-        {enheter.map(({ id, navn }) => (
-          <Enhet key={id}>
-            <StyledEnhetButton onClick={() => onClickVelgEnhet(id)} disabled={id === valgtEnhetView.id}>
-              {id} {navn}
-            </StyledEnhetButton>
-          </Enhet>
-        ))}
-      </EnhetList>
       <LinkList>
         <li>
           <StyledNavLink to="/innstillinger">Innstillinger</StyledNavLink>
