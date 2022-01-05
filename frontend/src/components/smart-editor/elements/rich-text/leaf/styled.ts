@@ -1,13 +1,5 @@
 import styled from 'styled-components';
-import { IMarks } from '../../../editor-types';
-import { getColor, getFontSize, getScriptDecoration, getTextDecoration } from './helpers';
-
-export interface LeafStyleProps extends IMarks {
-  selected?: boolean;
-  focused?: boolean;
-  commentIds: string[];
-  children: React.ReactNode;
-}
+import { LeafStyleProps, getColor, getFontSize, getScriptDecoration, getTextDecoration } from './helpers';
 
 export const StyledLeaf = styled.span<LeafStyleProps>`
   font-weight: ${({ bold }) => (bold === true ? '700' : 'auto')};

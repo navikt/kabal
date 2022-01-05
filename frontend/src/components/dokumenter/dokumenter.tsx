@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { IDocumentReference } from '../../redux-api/klagebehandling-types';
+import { IDocumentReference } from '../../redux-api/klagebehandling-state-types';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDokument } from '../show-document/types';

@@ -5,6 +5,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
@@ -111,6 +112,8 @@
     "keyword-spacing": ["error", {
       "before": true
     }],
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
     "import/first": "error",
     "import/no-default-export": "error",
     "import/newline-after-import": ["error", { "count": 1 }],
