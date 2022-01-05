@@ -1,4 +1,10 @@
-import { ISaksbehandler, IVedlegg, MedunderskriverFlyt, Utfall } from './klagebehandling-state-types';
+import {
+  IDocumentReference,
+  ISaksbehandler,
+  IVedlegg,
+  MedunderskriverFlyt,
+  Utfall,
+} from './klagebehandling-state-types';
 
 export interface IKlagebehandlingUtfallUpdate {
   oppgaveId: string;
@@ -17,11 +23,6 @@ export interface ITilknyttDocumentParams extends IDocumentReference {
 export interface ITilknyttDocumentResponse {
   modified: string;
   file: IVedlegg;
-}
-
-export interface IDocumentReference {
-  journalpostId: string;
-  dokumentInfoId: string;
 }
 
 export interface IVedtakFullfoertResponse {

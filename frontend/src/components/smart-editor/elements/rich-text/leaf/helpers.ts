@@ -1,4 +1,11 @@
-import { LeafStyleProps } from './styled';
+import { IMarks } from '../../../editor-types';
+
+export interface LeafStyleProps extends IMarks {
+  selected?: boolean;
+  focused?: boolean;
+  commentIds: string[];
+  children: React.ReactNode;
+}
 
 export const getTextDecoration = ({ underline, strikethrough }: LeafStyleProps) => {
   if (underline === true && strikethrough === true) {

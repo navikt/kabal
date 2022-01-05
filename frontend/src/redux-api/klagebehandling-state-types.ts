@@ -1,5 +1,4 @@
 import { Name } from '../domain/types';
-import { IDocumentReference } from './klagebehandling-types';
 import { OppgaveType } from './oppgavebehandling-common-types';
 
 export enum Gender {
@@ -103,4 +102,9 @@ export interface IVedlegg {
   name: string;
   size: number;
   opplastet: string | null; // LocalDateTime
+}
+
+export interface IDocumentReference {
+  journalpostId: string;
+  dokumentInfoId: string;
 }
