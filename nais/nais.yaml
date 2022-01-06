@@ -42,6 +42,7 @@ spec:
         - application: kabal-search
         - application: kaka-api
         - application: kabal-innstillinger
+        - application: klage-kodeverk-api
       external:
         - host: login.microsoftonline.com
   ingresses:

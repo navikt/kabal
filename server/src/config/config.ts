@@ -15,6 +15,7 @@ export const API_CLIENT_IDS = [
   'kabal-json-to-pdf',
   'kaka-api',
   'kabal-innstillinger',
+  'klage-kodeverk-api',
 ];
 
 export const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
