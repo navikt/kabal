@@ -38,3 +38,7 @@ export interface IUploadFileResponse {
   file: IVedlegg;
   modified: string;
 }
+
+export interface IFinishedInGosysResponse {
+  modified: string;
+}

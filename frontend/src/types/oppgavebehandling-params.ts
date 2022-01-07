@@ -14,6 +14,10 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
   hjemler: string[];
 }
 
+export interface IOppgavebehandlingFullfoertGosysUpdateParams extends IOppgavebehandlingBaseParams {
+  type: OppgaveType.ANKEBEHANDLING;
+}
+
 export type ITilknyttDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
 
 export interface IMedunderskrivereParams extends Omit<IOppgavebehandlingBaseParams, 'oppgaveId'> {

@@ -5,16 +5,16 @@ const isLocalhost = window.location.hostname === 'localhost';
 export const baseUrl = isLocalhost ? 'https://kabal.dev.nav.no' : '';
 const mode: RequestMode | undefined = isLocalhost ? 'cors' : undefined;
 
-export const klageApiUrl = '/api/kabal-api/';
-export const ankeApiUrl = '/api/kabal-anke-api/';
+export const KLAGE_API_URL = '/api/kabal-api/';
+export const ANKE_API_URL = '/api/kabal-anke-api/';
 
-const klagebehandlingUrl = klageApiUrl + 'klagebehandlinger/';
-const ankebehandlingUrl = ankeApiUrl + 'ankebehandlinger/';
+export const KLAGEBEHANDLING_URL = KLAGE_API_URL + 'klagebehandlinger/';
+export const ANKEBEHANDLING_URL = ANKE_API_URL + 'ankebehandlinger/';
 
-export const apiUrl = (type: OppgaveType) => (type === OppgaveType.KLAGEBEHANDLING ? klageApiUrl : ankeApiUrl);
+export const apiUrl = (type: OppgaveType) => (type === OppgaveType.KLAGEBEHANDLING ? KLAGE_API_URL : ANKE_API_URL);
 
 export const oppgavebehandlingApiUrl = (type: OppgaveType) =>
-  type === OppgaveType.KLAGEBEHANDLING ? klagebehandlingUrl : ankebehandlingUrl;
+  type === OppgaveType.KLAGEBEHANDLING ? KLAGEBEHANDLING_URL : ANKEBEHANDLING_URL;
 
 export const staggeredBaseQuery = retry(
   async (args: string | FetchArgs, api, extraOptions) => {
