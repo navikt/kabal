@@ -1,22 +1,19 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
+import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useLazyValidateQuery } from '../../redux-api/oppgavebehandling';
+import { OppgaveType } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
+import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
-import {
-  StyledButtons,
-  StyledFinishedFooter,
-  StyledUnfinishedErrorFooter,
-  StyledUnfinishedFooter,
-} from './styled-components';
+import { StyledButtons, StyledUnfinishedErrorFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
-export const OppgavebehandlingFooter = () => {
+export const UnfinishedFooter = () => {
   const canEdit = useCanEdit();
   const oppgaveId = useOppgaveId();
   const [validate, { data, isFetching }] = useLazyValidateQuery();
@@ -41,6 +38,8 @@ export const OppgavebehandlingFooter = () => {
 
   const showConfirmFinishDisplay = !isFullfoert && showConfirmFinish && !hasErrors && !isFetching;
 
+  const finishText = type === OppgaveType.KLAGEBEHANDLING ? 'Fullfør' : 'Send innstilling til bruker';
+
   const children = (
     <>
       <StyledButtons>
@@ -56,27 +55,20 @@ export const OppgavebehandlingFooter = () => {
           data-testid="complete-button"
           className="footer-button"
         >
-          Fullfør
+          {finishText}
         </Hovedknapp>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
-        <NavLink to="/mineoppgaver" className="knapp knapp--mini footer-button">
-          Tilbake
-        </NavLink>
+        <BackLink />
       </StyledButtons>
-
       <ValidationSummaryPopup sections={data?.sections ?? []} hasErrors={hasErrors} />
     </>
   );
-
-  if (isFullfoert) {
-    return <StyledFinishedFooter>{children}</StyledFinishedFooter>;
-  }
 
   if (hasErrors) {
     return <StyledUnfinishedErrorFooter>{children}</StyledUnfinishedErrorFooter>;
   }
 
-  return <StyledUnfinishedFooter>{children}</StyledUnfinishedFooter>;
+  return <StyledUnfinishedNoErrorFooter>{children}</StyledUnfinishedNoErrorFooter>;
 };
 
 interface ConfirmFinishProps {

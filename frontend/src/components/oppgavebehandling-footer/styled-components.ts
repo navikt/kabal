@@ -55,7 +55,7 @@ export const StyledButtons = styled.div`
   justify-content: space-between;
 
   .footer-button {
-    width: 200px;
+    width: 230px;
     margin-right: 1em;
   }
 `;
@@ -80,7 +80,7 @@ export const StyledFinishedFooter = styled(StyledFooter)`
   background-color: #cde7d8;
 `;
 
-export const StyledUnfinishedFooter = styled(StyledFooter)`
+export const StyledUnfinishedNoErrorFooter = styled(StyledFooter)`
   border-top: 1px solid #368da8;
   background-color: #e0f5fb;
 `;

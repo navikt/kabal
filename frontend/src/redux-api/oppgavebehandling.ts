@@ -8,6 +8,7 @@ import {
   IGetDokumenterParams,
   IMedunderskrivereParams,
   IOppgavebehandlingBaseParams,
+  IOppgavebehandlingFullfoertGosysUpdateParams,
   IOppgavebehandlingHjemlerUpdateParams,
   IOppgavebehandlingUtfallUpdateParams,
   ISetMedunderskriverParams,
@@ -15,6 +16,7 @@ import {
   IUploadFileParams,
 } from '../types/oppgavebehandling-params';
 import {
+  IFinishedInGosysResponse,
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
   IMedunderskriverflytResponse,
@@ -24,7 +26,7 @@ import {
   IUploadFileResponse,
   IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
-import { apiUrl, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
+import { ANKEBEHANDLING_URL, apiUrl, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
 
 export const oppgavebehandlingApi = createApi({
   reducerPath: 'oppgavebehandlingApi',
@@ -168,6 +170,36 @@ export const oppgavebehandlingApi = createApi({
             draft.isAvsluttetAvSaksbehandler = data.isAvsluttetAvSaksbehandler;
           })
         );
+      },
+    }),
+    updateFinishedInGosys: builder.mutation<IFinishedInGosysResponse, IOppgavebehandlingFullfoertGosysUpdateParams>({
+      query: ({ oppgaveId }) => ({
+        url: `${ANKEBEHANDLING_URL}${oppgaveId}/fullfoertgosys`,
+        method: 'POST',
+        body: {
+          value: true,
+        },
+      }),
+      onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+            if (draft.type === type) {
+              draft.fullfoertGosys = true;
+            }
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+              draft.modified = data.modified;
+            })
+          );
+        } catch {
+          patchResult.undo();
+        }
       },
     }),
     getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
@@ -329,6 +361,7 @@ export const {
   useSwitchMedunderskriverflytMutation,
   useUploadFileMutation,
   useDeleteFileMutation,
+  useUpdateFinishedInGosysMutation,
   useValidateQuery,
   useLazyValidateQuery,
 } = oppgavebehandlingApi;

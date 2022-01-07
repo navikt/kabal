@@ -47,6 +47,7 @@ export interface IKlagebehandling extends IOppgavebehandlingBase {
 
 export interface IAnkebehandling extends IOppgavebehandlingBase {
   type: OppgaveType.ANKEBEHANDLING;
+  fullfoertGosys: boolean;
 }
 
 export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;

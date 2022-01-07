@@ -7,7 +7,7 @@ import { useGetSmartEditorQuery } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
-import { OppgavebehandlingFooter } from '../oppgavebehandling-footer/oppgavebehandling-footer';
+import { AnkeFooter } from '../oppgavebehandling-footer/anke-footer';
 import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';
 import { PanelToggles } from './types';
 
@@ -31,7 +31,7 @@ export const Ankebehandling = () => {
     <ValidationErrorProvider>
       <OppgavebehandlingControls setPanel={setPanel} toggles={toggles} />
       <OppgavebehandlingPanels toggles={toggles} />
-      <OppgavebehandlingFooter />
+      <AnkeFooter />
     </ValidationErrorProvider>
   );
 };
