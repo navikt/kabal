@@ -9,6 +9,7 @@ interface FilterDropdownProps<T extends string> {
   selected: T[];
   onChange: (selected: T[]) => void;
   children: string;
+  testId?: string;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -16,6 +17,7 @@ export const FilterDropdown = <T extends string>({
   selected,
   onChange,
   children,
+  testId,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -37,7 +39,7 @@ export const FilterDropdown = <T extends string>({
   };
 
   return (
-    <Container ref={ref}>
+    <Container ref={ref} data-testid={testId}>
       <ToggleButton theme={{ open }} onClick={() => setOpen(!open)} ref={buttonRef}>
         {children} ({selected.length})
       </ToggleButton>
