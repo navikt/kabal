@@ -46,7 +46,7 @@ export const Settings = () => {
             selected={settings.typer}
             onChange={(typer) => onChange({ ...settings, typer })}
             options={kodeverkSimpleValuesToDropdownOptions(kodeverk.sakstyper)}
-            data-testid="typer-settings-dropdown"
+            testId="typer-settings-dropdown"
           >
             Type
           </FilterDropdown>
@@ -63,7 +63,7 @@ export const Settings = () => {
             selected={settings.ytelser}
             onChange={(ytelser) => onChange({ ...settings, ytelser })}
             options={kodeverkValuesToDropdownOptions(availableYtelser)}
-            data-testid="ytelser-settings-dropdown"
+            testId="ytelser-settings-dropdown"
           >
             Ytelser
           </FilterDropdown>
@@ -80,7 +80,7 @@ export const Settings = () => {
             selected={settings.hjemler}
             onChange={(hjemler) => onChange({ ...settings, hjemler })}
             options={kodeverkValuesToDropdownOptions(kodeverk.hjemler)}
-            data-testid="hjemler-settings-dropdown"
+            testId="hjemler-settings-dropdown"
           >
             Hjemmel
           </FilterDropdown>
