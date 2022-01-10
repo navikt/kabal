@@ -27,7 +27,7 @@ export const User = () => {
 
   return (
     <StyledContainer ref={ref}>
-      <StyledButton onClick={() => setIsOpen(!isOpen)}>
+      <StyledButton onClick={() => setIsOpen(!isOpen)} data-testid="user-menu-button">
         <People />
         <ButtonText>{bruker.info.sammensattNavn}</ButtonText>
         <Arrow isOpen={isOpen} />
