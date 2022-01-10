@@ -14,7 +14,9 @@ export const Dropdown = ({ open }: DropdownProps): JSX.Element | null => {
     <StyledDropdown>
       <LinkList>
         <li>
-          <StyledNavLink to="/innstillinger">Innstillinger</StyledNavLink>
+          <StyledNavLink to="/innstillinger" data-testid="innstillinger-link">
+            Innstillinger
+          </StyledNavLink>
         </li>
         <li>
           <StyledLink href="/logout">Logg ut</StyledLink>
