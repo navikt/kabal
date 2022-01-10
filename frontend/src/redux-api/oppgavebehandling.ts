@@ -176,9 +176,6 @@ export const oppgavebehandlingApi = createApi({
       query: ({ oppgaveId }) => ({
         url: `${ANKEBEHANDLING_URL}${oppgaveId}/fullfoertgosys`,
         method: 'POST',
-        body: {
-          value: true,
-        },
       }),
       onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
