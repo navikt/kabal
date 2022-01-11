@@ -1,12 +1,13 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { SuccessIcon } from '../../icons/success';
 import {
   useRebuildElasticAdminMutation,
-  useRefillElasticAdminMutation,
-  useResendDvhMutation,
+  useRefillElasticAdminAnkeMutation,
+  useRefillElasticAdminKlageMutation,
+  useResendDvhAnkeMutation,
+  useResendDvhKlageMutation,
 } from '../../redux-api/admin';
 
 export const Admin = () => (
@@ -15,8 +16,11 @@ export const Admin = () => (
     <StyledContent>
       <StyledSettingsSection>
         <RebuildElasticButton useApi={useRebuildElasticAdminMutation} text="KABAL-SEARCH ELASTIC REBUILD" />
-        <Button useApi={useRefillElasticAdminMutation} text="KABAL-API KAFKA REFILL" />
-        <Button useApi={useResendDvhMutation} text="KABAL-API DVH RESEND" />
+        <Button useApi={useRefillElasticAdminKlageMutation} text="KABAL-API KAFKA REFILL" />
+        <Button useApi={useResendDvhKlageMutation} text="KABAL-API DVH RESEND" />
+
+        <Button useApi={useRefillElasticAdminAnkeMutation} text="KABAL-ANKE-API KAFKA REFILL" />
+        <Button useApi={useResendDvhAnkeMutation} text="KABAL-ANKE-API DVH RESEND" />
       </StyledSettingsSection>
     </StyledContent>
   </article>
@@ -27,7 +31,11 @@ interface RebuildElasticButtonProps {
   text: string;
 }
 interface ButtonProps {
-  useApi: typeof useRefillElasticAdminMutation | typeof useResendDvhMutation;
+  useApi:
+    | typeof useRefillElasticAdminKlageMutation
+    | typeof useResendDvhKlageMutation
+    | typeof useRefillElasticAdminAnkeMutation
+    | typeof useResendDvhAnkeMutation;
   text: string;
 }
 
@@ -44,9 +52,9 @@ const RebuildElasticButton = ({ text, useApi }: RebuildElasticButtonProps): JSX.
 
 const Button = ({ text, useApi }: ButtonProps): JSX.Element => {
   const [callApi, { isSuccess, isLoading, isUninitialized }] = useApi();
-  const type = useOppgaveType();
+
   return (
-    <Hovedknapp onClick={() => callApi(type)} spinner={isLoading} autoDisableVedSpinner>
+    <Hovedknapp onClick={() => callApi()} spinner={isLoading} autoDisableVedSpinner>
       <span>{text}</span>
       <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
     </Hovedknapp>
