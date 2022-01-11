@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { OppgaveType } from '../types/kodeverk';
-import { apiUrl, staggeredBaseQuery } from './common';
+import { staggeredBaseQuery } from './common';
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
@@ -12,19 +11,38 @@ export const adminApi = createApi({
         method: 'POST',
       }),
     }),
-    refillElasticAdmin: builder.mutation<void, OppgaveType>({
-      query: (type) => ({
-        url: `${apiUrl(type)}internal/kafkaadmin/refill`,
+    refillElasticAdminKlage: builder.mutation<void, void>({
+      query: () => ({
+        url: `/api/kabal-api/internal/kafkaadmin/refill`,
         method: 'POST',
       }),
     }),
-    resendDvh: builder.mutation<void, OppgaveType>({
-      query: (type) => ({
-        url: `${apiUrl(type)}internal/dvh/resend`,
+    resendDvhKlage: builder.mutation<void, void>({
+      query: () => ({
+        url: `/api/kabal-api/internal/dvh/resend`,
+        method: 'POST',
+      }),
+    }),
+
+    refillElasticAdminAnke: builder.mutation<void, void>({
+      query: () => ({
+        url: `/api/kabal-anke-api/internal/kafkaadmin/refill`,
+        method: 'POST',
+      }),
+    }),
+    resendDvhAnke: builder.mutation<void, void>({
+      query: () => ({
+        url: `/api/kabal-anke-api/internal/dvh/resend`,
         method: 'POST',
       }),
     }),
   }),
 });
 
-export const { useRebuildElasticAdminMutation, useRefillElasticAdminMutation, useResendDvhMutation } = adminApi;
+export const {
+  useRebuildElasticAdminMutation,
+  useRefillElasticAdminKlageMutation,
+  useResendDvhKlageMutation,
+  useRefillElasticAdminAnkeMutation,
+  useResendDvhAnkeMutation,
+} = adminApi;
