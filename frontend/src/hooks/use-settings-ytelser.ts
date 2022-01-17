@@ -1,11 +1,11 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { IKodeverkValue } from '../types/kodeverk';
-import { useKodeverkValue } from './use-kodeverk-value';
+import { useAvailableYtelser } from './use-available-ytelser';
 
 export const useSettingsYtelser = (): IKodeverkValue[] => {
   const { data: userData } = useGetBrukerQuery();
-  const ytelser = useKodeverkValue('ytelser');
+  const ytelser = useAvailableYtelser();
 
   if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
     return [];
