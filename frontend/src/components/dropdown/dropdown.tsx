@@ -24,7 +24,7 @@ export const Dropdown = <T extends string>({
   onChange,
   close,
 }: DropdownProps<T>): JSX.Element | null => {
-  const [filter, setFilter] = useState<RegExp>(/.*/g);
+  const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
 
