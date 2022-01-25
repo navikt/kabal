@@ -6,7 +6,6 @@ import { MedunderskriverFlyt } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
   IGetDokumenterParams,
-  IMedunderskrivereParams,
   IOppgavebehandlingBaseParams,
   IOppgavebehandlingFullfoertGosysUpdateParams,
   IOppgavebehandlingHjemlerUpdateParams,
@@ -18,7 +17,6 @@ import {
 import {
   IFinishedInGosysResponse,
   IMedunderskriverResponse,
-  IMedunderskrivereResponse,
   IMedunderskriverflytResponse,
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytResponse,
@@ -26,7 +24,7 @@ import {
   IUploadFileResponse,
   IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
-import { ANKEBEHANDLING_URL, apiUrl, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
+import { ANKEBEHANDLING_URL, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
 
 export const oppgavebehandlingApi = createApi({
   reducerPath: 'oppgavebehandlingApi',
@@ -199,10 +197,6 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
-      query: ({ type, navIdent, ytelseId, enhet }) =>
-        `${apiUrl(type)}medunderskrivere/ytelser/${ytelseId}/enheter/${enhet}/ansatte/${navIdent}`,
-    }),
     getMedunderskriver: builder.query<IMedunderskriverResponse, IOppgavebehandlingBaseParams>({
       query: ({ oppgaveId, type }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/medunderskriver`,
     }),
@@ -351,7 +345,6 @@ export const {
   useTilknyttDocumentMutation,
   useRemoveTilknyttetDocumentMutation,
   useFinishOppgavebehandlingMutation,
-  useGetMedunderskrivereQuery,
   useGetMedunderskriverQuery,
   useGetMedunderskriverflytQuery,
   useUpdateChosenMedunderskriverMutation,

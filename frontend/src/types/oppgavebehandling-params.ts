@@ -20,7 +20,7 @@ export interface IOppgavebehandlingFullfoertGosysUpdateParams extends IOppgavebe
 
 export type ITilknyttDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
 
-export interface IMedunderskrivereParams extends Omit<IOppgavebehandlingBaseParams, 'oppgaveId'> {
+export interface IMedunderskrivereParams {
   navIdent: string;
   ytelseId: string;
   enhet: string;
