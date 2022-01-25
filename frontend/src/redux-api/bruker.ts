@@ -1,5 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { OppgaveType } from '../types/kodeverk';
+import { IMedunderskrivereParams } from '../types/oppgavebehandling-params';
+import { IMedunderskrivereResponse } from '../types/oppgavebehandling-response';
 import { staggeredBaseQuery } from './common';
 
 export interface IUser {
@@ -99,7 +101,12 @@ export const brukerApi = createApi({
         }
       },
     }),
+    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
+      query: ({ navIdent, ytelseId, enhet }) =>
+        `/api/kabal-innstillinger/medunderskrivere/ytelser/${ytelseId}/enheter/${enhet}/ansatte/${navIdent}`,
+    }),
   }),
 });
 
-export const { useGetBrukerQuery, useSetValgtEnhetMutation, useUpdateSettingsMutation } = brukerApi;
+export const { useGetBrukerQuery, useSetValgtEnhetMutation, useUpdateSettingsMutation, useGetMedunderskrivereQuery } =
+  brukerApi;

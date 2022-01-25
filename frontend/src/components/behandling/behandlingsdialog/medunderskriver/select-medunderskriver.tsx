@@ -5,11 +5,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useGetBrukerQuery } from '../../../../redux-api/bruker';
-import {
-  useGetMedunderskrivereQuery,
-  useUpdateChosenMedunderskriverMutation,
-} from '../../../../redux-api/oppgavebehandling';
+import { useGetBrukerQuery, useGetMedunderskrivereQuery } from '../../../../redux-api/bruker';
+import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgavebehandling';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling-params';
@@ -31,7 +28,6 @@ export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskr
           navIdent: bruker.info.navIdent,
           enhet: oppgave.tildeltSaksbehandlerEnhet,
           ytelseId: ytelse,
-          type,
         };
 
   const { data } = useGetMedunderskrivereQuery(medunderskrivereQuery);
