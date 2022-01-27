@@ -5,7 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useGetBrukerQuery, useGetMedunderskrivereQuery } from '../../../../redux-api/bruker';
+import { useGetBrukerQuery, useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgavebehandling';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
@@ -22,15 +22,16 @@ export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskr
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
 
   const medunderskrivereQuery: IMedunderskrivereParams | typeof skipToken =
-    typeof bruker === 'undefined' || typeof oppgave?.tildeltSaksbehandlerEnhet !== 'string'
+    typeof bruker === 'undefined' || typeof oppgave === 'undefined' || oppgave.tildeltSaksbehandlerEnhet === null
       ? skipToken
       : {
           navIdent: bruker.info.navIdent,
           enhet: oppgave.tildeltSaksbehandlerEnhet,
           ytelseId: ytelse,
+          fnr: oppgave.sakenGjelder.person?.foedselsnummer ?? null,
         };
 
-  const { data } = useGetMedunderskrivereQuery(medunderskrivereQuery);
+  const { data } = useSearchMedunderskrivereQuery(medunderskrivereQuery);
 
   if (!canEdit) {
     return null;

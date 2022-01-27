@@ -24,6 +24,7 @@ export interface IMedunderskrivereParams {
   navIdent: string;
   ytelseId: string;
   enhet: string;
+  fnr: string | null;
 }
 
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
