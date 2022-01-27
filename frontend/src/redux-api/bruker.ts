@@ -101,12 +101,19 @@ export const brukerApi = createApi({
         }
       },
     }),
-    getMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
-      query: ({ navIdent, ytelseId, enhet }) =>
-        `/api/kabal-innstillinger/medunderskrivere/ytelser/${ytelseId}/enheter/${enhet}/ansatte/${navIdent}`,
+    searchMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
+      query: (body) => ({
+        method: 'POST',
+        url: '/api/kabal-innstillinger/search/medunderskrivere',
+        body,
+      }),
     }),
   }),
 });
 
-export const { useGetBrukerQuery, useSetValgtEnhetMutation, useUpdateSettingsMutation, useGetMedunderskrivereQuery } =
-  brukerApi;
+export const {
+  useGetBrukerQuery,
+  useSetValgtEnhetMutation,
+  useUpdateSettingsMutation,
+  useSearchMedunderskrivereQuery,
+} = brukerApi;
