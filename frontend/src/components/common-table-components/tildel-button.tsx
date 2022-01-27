@@ -18,10 +18,9 @@ interface Props {
 }
 
 export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props) => {
-  const [tildelSaksbehandler, loader] = useTildelSaksbehandlerMutation();
+  const [tildelSaksbehandler, result] = useTildelSaksbehandlerMutation();
   const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
   const enheter = useAvailableEnheterForYtelse(ytelse);
-  const [done, setDone] = useState<boolean>(false);
 
   const onTildel = useCallback(
     (enhetId: string) => {
@@ -33,9 +32,9 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
         oppgaveId: klagebehandlingId,
         navIdent: userData.info.navIdent,
         enhetId,
-      }).then(() => setDone(true));
+      });
     },
-    [klagebehandlingId, userData, tildelSaksbehandler, setDone]
+    [klagebehandlingId, userData, tildelSaksbehandler]
   );
 
   const hasAccess = enheter.length !== 0;
@@ -44,7 +43,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
     return null;
   }
 
-  if (done) {
+  if (result.isSuccess) {
     return <SuccessStatus>Tildelt!</SuccessStatus>;
   }
 
@@ -61,10 +60,10 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
       <TildelEnhetButton
         enhet={enheter[0]}
         oppgaveId={klagebehandlingId}
-        isLoading={loader.isLoading}
+        isLoading={result.isLoading}
         onTildel={onTildel}
       >
-        {getTildelText(loader.isLoading)}
+        {getTildelText(result.isLoading)}
       </TildelEnhetButton>
     );
   }
@@ -74,7 +73,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
       <TildelEnhetDropdownButton
         enhet={enhet}
         oppgaveId={klagebehandlingId}
-        isLoading={loader.isLoading}
+        isLoading={result.isLoading}
         onTildel={onTildel}
       >
         {enhet.navn}
@@ -82,7 +81,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
     </li>
   ));
 
-  return <TildelDropdown isLoading={loader.isLoading}>{tildelButtons}</TildelDropdown>;
+  return <TildelDropdown isLoading={result.isLoading}>{tildelButtons}</TildelDropdown>;
 };
 
 interface DropdownButtonProps {
