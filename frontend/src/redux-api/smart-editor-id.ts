@@ -1,14 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling-params';
-import { oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
+import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
 
 export interface SmartEditorIdResponse {
   smartEditorId: string | null;
 }
-
-// interface SmartEditorIdUpdate extends SmartEditorIdResponse {
-//   oppgavebehandlingId: string;
-// }
 
 interface SmartEditorIdUpdateResponse {
   modified: string;
@@ -17,24 +13,24 @@ interface SmartEditorIdUpdateResponse {
 export const smartEditorIdApi = createApi({
   reducerPath: 'smartEditorIdApi',
   tagTypes: ['smart-editor'],
-  baseQuery: staggeredBaseQuery,
+  baseQuery: KABAL_OPPGAVEBEHANDLING_BASE_QUERY,
   endpoints: (builder) => ({
-    getSmartEditorId: builder.query<SmartEditorIdResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/smarteditorid`,
+    getSmartEditorId: builder.query<SmartEditorIdResponse, string>({
+      query: (oppgaveId) => `/${oppgaveId}/smarteditorid`,
       providesTags: ['smart-editor'],
     }),
     updateSmartEditorId: builder.mutation<
       SmartEditorIdUpdateResponse,
       SmartEditorIdResponse & IOppgavebehandlingBaseParams
     >({
-      query: ({ smartEditorId, type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/smarteditorid`,
+      query: ({ smartEditorId, oppgaveId }) => ({
+        url: `/${oppgaveId}/smarteditorid`,
         method: 'PUT',
         body: { smartEditorId },
       }),
-      onQueryStarted: async ({ smartEditorId, type, oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ smartEditorId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          smartEditorIdApi.util.updateQueryData('getSmartEditorId', { oppgaveId, type }, (draft) => {
+          smartEditorIdApi.util.updateQueryData('getSmartEditorId', oppgaveId, (draft) => {
             draft.smartEditorId = smartEditorId;
           })
         );
@@ -47,14 +43,14 @@ export const smartEditorIdApi = createApi({
       },
       invalidatesTags: ['smart-editor'],
     }),
-    deleteSmartEditorId: builder.mutation<SmartEditorIdUpdateResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/smarteditorid`,
+    deleteSmartEditorId: builder.mutation<SmartEditorIdUpdateResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/smarteditorid`,
         method: 'DELETE',
       }),
-      onQueryStarted: async ({ type, oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          smartEditorIdApi.util.updateQueryData('getSmartEditorId', { oppgaveId, type }, (draft) => {
+          smartEditorIdApi.util.updateQueryData('getSmartEditorId', oppgaveId, (draft) => {
             draft.smartEditorId = null;
           })
         );

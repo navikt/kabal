@@ -16,11 +16,11 @@ import {
 const EMPTY_LIST: string[] = [];
 
 export const SelectedHjemlerList = () => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
 
-  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgavebehandling?.ytelse ?? skipToken);
+  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelse ?? skipToken);
 
-  const hjemmelIdList = oppgavebehandling?.resultat.hjemler ?? EMPTY_LIST;
+  const hjemmelIdList = oppgave?.resultat.hjemler ?? EMPTY_LIST;
 
   const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
     () =>
@@ -35,7 +35,7 @@ export const SelectedHjemlerList = () => {
     [hjemmelIdList, hjemler]
   );
 
-  if (typeof oppgavebehandling === 'undefined') {
+  if (typeof oppgave === 'undefined') {
     return <NavFrontendSpinner />;
   }
 

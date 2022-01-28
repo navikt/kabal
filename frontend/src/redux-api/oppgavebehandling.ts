@@ -2,12 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { IApiValidationResponse } from '../functions/error-type-guard';
 import { IDocumentsResponse } from '../types/documents';
-import { MedunderskriverFlyt } from '../types/kodeverk';
+import { MedunderskriverFlyt, OppgaveType } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
   IGetDokumenterParams,
-  IOppgavebehandlingBaseParams,
-  IOppgavebehandlingFullfoertGosysUpdateParams,
   IOppgavebehandlingHjemlerUpdateParams,
   IOppgavebehandlingUtfallUpdateParams,
   ISetMedunderskriverParams,
@@ -24,26 +22,26 @@ import {
   IUploadFileResponse,
   IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
-import { ANKEBEHANDLING_URL, oppgavebehandlingApiUrl, staggeredBaseQuery } from './common';
+import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
 
 export const oppgavebehandlingApi = createApi({
   reducerPath: 'oppgavebehandlingApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: KABAL_OPPGAVEBEHANDLING_BASE_QUERY,
   tagTypes: ['oppgavebehandling', 'dokumenter', 'tilknyttedeDokumenter'],
   endpoints: (builder) => ({
-    getOppgavebehandling: builder.query<IOppgavebehandling, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/detaljer`,
+    getOppgavebehandling: builder.query<IOppgavebehandling, string>({
+      query: (oppgaveId) => `/${oppgaveId}/detaljer`,
       providesTags: ['oppgavebehandling'],
     }),
     updateUtfall: builder.mutation<{ modified: string }, IOppgavebehandlingUtfallUpdateParams>({
-      query: ({ type, oppgaveId, utfall }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/resultat/utfall`,
+      query: ({ oppgaveId, utfall }) => ({
+        url: `/${oppgaveId}/resultat/utfall`,
         method: 'PUT',
         body: { utfall },
       }),
-      onQueryStarted: async ({ oppgaveId, type, utfall }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, utfall }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.utfall = utfall;
           })
         );
@@ -56,14 +54,14 @@ export const oppgavebehandlingApi = createApi({
       },
     }),
     updateHjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
-      query: ({ type, oppgaveId, hjemler }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/resultat/hjemler`,
+      query: ({ oppgaveId, hjemler }) => ({
+        url: `/${oppgaveId}/resultat/hjemler`,
         method: 'PUT',
         body: { hjemler },
       }),
-      onQueryStarted: async ({ oppgaveId, type, hjemler }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, hjemler }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.hjemler = hjemler;
           })
         );
@@ -71,7 +69,7 @@ export const oppgavebehandlingApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
             })
           );
@@ -81,7 +79,7 @@ export const oppgavebehandlingApi = createApi({
       },
     }),
     getDokumenter: builder.query<IDocumentsResponse, IGetDokumenterParams>({
-      query: ({ type, oppgaveId, pageReference, temaer }) => {
+      query: ({ oppgaveId, pageReference, temaer }) => {
         const query = qs.stringify(
           {
             antall: 10,
@@ -93,25 +91,25 @@ export const oppgavebehandlingApi = createApi({
             arrayFormat: 'comma',
           }
         );
-        return `${oppgavebehandlingApiUrl(type)}${oppgaveId}/arkivertedokumenter?${query}`;
+        return `/${oppgaveId}/arkivertedokumenter?${query}`;
       },
       providesTags: ['dokumenter'],
     }),
-    getTilknyttedeDokumenter: builder.query<IDocumentsResponse, IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId, type }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/dokumenttilknytninger`,
+    getTilknyttedeDokumenter: builder.query<IDocumentsResponse, string>({
+      query: (oppgaveId) => `/${oppgaveId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
     tilknyttDocument: builder.mutation<ITilknyttDocumentResponse, ITilknyttDocumentParams>({
-      query: ({ oppgaveId, type, ...documentReference }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/dokumenttilknytninger`,
+      query: ({ oppgaveId, ...documentReference }) => ({
+        url: `/${oppgaveId}/dokumenttilknytninger`,
         method: 'POST',
         body: documentReference,
         validateStatus: ({ ok }) => ok,
       }),
       invalidatesTags: ['tilknyttedeDokumenter'],
-      onQueryStarted: async ({ oppgaveId, type, ...documentReference }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, ...documentReference }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.tilknyttedeDokumenter.push(documentReference);
           })
         );
@@ -119,7 +117,7 @@ export const oppgavebehandlingApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
             })
           );
@@ -129,15 +127,15 @@ export const oppgavebehandlingApi = createApi({
       },
     }),
     removeTilknyttetDocument: builder.mutation<{ modified: string }, ITilknyttDocumentParams>({
-      query: ({ type, oppgaveId, journalpostId, dokumentInfoId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+      query: ({ oppgaveId, journalpostId, dokumentInfoId }) => ({
+        url: `/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
         method: 'DELETE',
         validateStatus: ({ ok }) => ok,
       }),
       invalidatesTags: ['tilknyttedeDokumenter'],
-      onQueryStarted: async ({ oppgaveId, type, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.tilknyttedeDokumenter = draft.tilknyttedeDokumenter.filter(
               (d) => !(d.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
             );
@@ -151,34 +149,34 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/fullfoer`,
+    finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/fullfoer`,
         method: 'POST',
       }),
       invalidatesTags: ['oppgavebehandling'],
       extraOptions: {
         maxRetries: 0,
       },
-      onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.modified = data.modified;
             draft.isAvsluttetAvSaksbehandler = data.isAvsluttetAvSaksbehandler;
           })
         );
       },
     }),
-    updateFinishedInGosys: builder.mutation<IFinishedInGosysResponse, IOppgavebehandlingFullfoertGosysUpdateParams>({
-      query: ({ oppgaveId }) => ({
-        url: `${ANKEBEHANDLING_URL}${oppgaveId}/fullfoertgosys`,
+    updateFinishedInGosys: builder.mutation<IFinishedInGosysResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/fullfoertgosys`,
         method: 'POST',
       }),
-      onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
-            if (draft.type === type) {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.type === OppgaveType.ANKEBEHANDLING) {
               draft.fullfoertGosys = true;
             }
           })
@@ -188,7 +186,7 @@ export const oppgavebehandlingApi = createApi({
           const { data } = await queryFulfilled;
 
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
             })
           );
@@ -197,23 +195,23 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    getMedunderskriver: builder.query<IMedunderskriverResponse, IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId, type }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/medunderskriver`,
+    getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
+      query: (oppgaveId) => `/${oppgaveId}/medunderskriver`,
     }),
-    getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId, type }) => `${oppgavebehandlingApiUrl(type)}${oppgaveId}/medunderskriverflyt`,
+    getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, string>({
+      query: (oppgaveId) => `/${oppgaveId}/medunderskriverflyt`,
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISetMedunderskriverParams>({
-      query: ({ oppgaveId, type, medunderskriver }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/medunderskriverident`,
+      query: ({ oppgaveId, medunderskriver }) => ({
+        url: `/${oppgaveId}/medunderskriverident`,
         method: 'PUT',
         body: {
           medunderskriverident: medunderskriver === null ? null : medunderskriver.navIdent,
         },
       }),
-      onQueryStarted: async ({ oppgaveId, type, ...update }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             if (update.medunderskriver === null) {
               draft.medunderskriver = null;
             } else {
@@ -228,13 +226,13 @@ export const oppgavebehandlingApi = createApi({
         );
 
         const medunderskriverPatchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getMedunderskriver', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
             draft.medunderskriver = update.medunderskriver;
           })
         );
 
         const flytPatchresult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getMedunderskriverflyt', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
           })
         );
@@ -243,14 +241,14 @@ export const oppgavebehandlingApi = createApi({
           const { data } = await queryFulfilled;
 
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );
 
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getMedunderskriverflyt', { oppgaveId, type }, (draft) => {
+            oppgavebehandlingApi.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );
@@ -261,16 +259,16 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/send`,
+    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/send`,
         method: 'POST',
         validateStatus: ({ ok }) => ok,
       }),
-      onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.modified = data.modified;
             draft.medunderskriverFlyt = data.medunderskriverFlyt;
           })
@@ -278,19 +276,19 @@ export const oppgavebehandlingApi = createApi({
       },
     }),
     uploadFile: builder.mutation<IUploadFileResponse, IUploadFileParams>({
-      query: ({ type, oppgaveId, file }) => {
+      query: ({ oppgaveId, file }) => {
         const formData = new FormData();
         formData.append('vedlegg', file);
 
         return {
-          url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/resultat/vedlegg`,
+          url: `/${oppgaveId}/resultat/vedlegg`,
           method: 'POST',
           body: formData,
         };
       },
-      onQueryStarted: async ({ oppgaveId, type, file }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, file }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             const opplastet = new Date().toISOString();
             draft.resultat.file = {
               name: file.name,
@@ -307,14 +305,14 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    deleteFile: builder.mutation<IUploadFileResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/resultat/vedlegg`,
+    deleteFile: builder.mutation<IUploadFileResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/resultat/vedlegg`,
         method: 'DELETE',
       }),
-      onQueryStarted: async ({ oppgaveId, type }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', { oppgaveId, type }, (draft) => {
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.file = null;
           })
         );
@@ -326,9 +324,9 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    validate: builder.query<IApiValidationResponse, IOppgavebehandlingBaseParams>({
-      query: ({ type, oppgaveId }) => ({
-        url: `${oppgavebehandlingApiUrl(type)}${oppgaveId}/validate`,
+    validate: builder.query<IApiValidationResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/validate`,
         validateStatus: ({ status, ok }) => ok || status === 400,
       }),
     }),

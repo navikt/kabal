@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
 import { INewSmartEditor, ISmartEditorTemplate } from '../../../types/smart-editor';
@@ -25,7 +24,6 @@ export const NewDocument = () => {
   const [createSmartEditorDocument] = useCreateSmartEditorMutation();
   const [setSmartEditorId] = useUpdateSmartEditorIdMutation();
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
   const canEdit = useCanEdit();
 
   if (!canEdit) {
@@ -35,7 +33,7 @@ export const NewDocument = () => {
   const onClick = (template: INewSmartEditor) => {
     createSmartEditorDocument(template)
       .unwrap()
-      .then(({ id }) => setSmartEditorId({ smartEditorId: id, oppgaveId, type }));
+      .then(({ id }) => setSmartEditorId({ smartEditorId: id, oppgaveId }));
     close();
   };
 

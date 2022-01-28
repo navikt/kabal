@@ -2,7 +2,6 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useAllTemaer } from '../../../hooks/use-all-temaer';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
 import { kodeverkValuesToDropdownOptions } from '../../dropdown/dropdown';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';
@@ -17,11 +16,9 @@ export const AlleDokumenter = React.memo(() => {
   const oppgaveId = useOppgaveId();
   const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
-  const type = useOppgaveType();
 
   const { data: lastPage, isFetching } = useGetDokumenterQuery({
     oppgaveId,
-    type,
     pageReference: pageReferences[pageReferences.length - 1],
     pageSize: PAGE_SIZE,
     temaer: selectedTemaer,

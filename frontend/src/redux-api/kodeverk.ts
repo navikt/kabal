@@ -1,13 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IKodeverk } from '../types/kodeverk';
-import { staggeredBaseQuery } from './common';
+import { KODEVERK_BASE_QUERY } from './common';
 
 export const kodeverkApi = createApi({
   reducerPath: 'kodeverkApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: KODEVERK_BASE_QUERY,
   endpoints: (builder) => ({
     getKodeverk: builder.query<IKodeverk, void>({
-      query: () => '/api/klage-kodeverk-api/kodeverk',
+      query: () => '/kodeverk',
     }),
   }),
 });

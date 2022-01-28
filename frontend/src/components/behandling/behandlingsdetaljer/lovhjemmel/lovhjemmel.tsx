@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
-import { useOppgaveType } from '../../../../hooks/use-oppgave-type';
 import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { useUpdateHjemlerMutation } from '../../../../redux-api/oppgavebehandling';
@@ -14,13 +13,10 @@ import { SelectedHjemlerList } from './selected-hjemler-list';
 export const Lovhjemmel = () => {
   const { data: user } = useGetBrukerQuery();
   const [updateHjemler] = useUpdateHjemlerMutation();
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
   const validationError = useValidationError('hjemmel');
-  const type = useOppgaveType();
-  const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(
-    oppgavebehandling?.ytelse ?? skipToken
-  );
+  const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelse ?? skipToken);
 
   const options = useMemo(
     () =>
@@ -37,7 +33,7 @@ export const Lovhjemmel = () => {
     [lovKildeToRegistreringshjemler]
   );
 
-  if (typeof oppgavebehandling === 'undefined' || typeof user === 'undefined') {
+  if (typeof oppgave === 'undefined' || typeof user === 'undefined') {
     return null;
   }
 
@@ -49,9 +45,8 @@ export const Lovhjemmel = () => {
     }
 
     updateHjemler({
-      oppgaveId: oppgavebehandling.id,
+      oppgaveId: oppgave.id,
       hjemler,
-      type,
     });
   };
 
@@ -61,7 +56,7 @@ export const Lovhjemmel = () => {
       <LovhjemmelSelect
         disabled={!canEdit || noHjemler}
         options={options}
-        selected={oppgavebehandling.resultat.hjemler}
+        selected={oppgave.resultat.hjemler}
         onChange={onLovhjemmelChange}
         error={validationError}
         data-testid="lovhjemmel"

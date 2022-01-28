@@ -2,10 +2,9 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext } from 'react';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useIsFullfoert } from '../../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { baseUrl } from '../../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../../redux-api/common';
 import { IVedlegg } from '../../../types/oppgave-common';
 import { ShownDocumentContext } from '../context';
 import { DocumentButton } from '../styled-components/document-button';
@@ -24,14 +23,14 @@ import {
 
 export const NyeDokumenter = () => {
   const oppgaveId = useOppgaveId();
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const isFullfoert = useIsFullfoert();
 
-  if (typeof oppgavebehandling === 'undefined') {
+  if (typeof oppgave === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
-  if (isFullfoert && oppgavebehandling.resultat.file === null) {
+  if (isFullfoert && oppgave.resultat.file === null) {
     return null;
   }
 
@@ -39,9 +38,7 @@ export const NyeDokumenter = () => {
     <StyledNyeDokumenter data-testid="klagebehandling-documents-new">
       <ListHeader isFullfoert={isFullfoert} />
       <StyledList data-testid="klagebehandling-documents-new-list">
-        {oppgavebehandling.resultat.file && (
-          <NewDocument file={oppgavebehandling.resultat.file} oppgaveId={oppgaveId} />
-        )}
+        {oppgave.resultat.file && <NewDocument file={oppgave.resultat.file} oppgaveId={oppgaveId} />}
         <SmartEditorDocument oppgaveId={oppgaveId} />
       </StyledList>
     </StyledNyeDokumenter>
@@ -72,9 +69,8 @@ interface NewDocumentProps {
 
 export const NewDocument = ({ file, oppgaveId }: NewDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-  const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
 
-  const url = `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/resultat/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/resultat/pdf`;
   const onClick = () =>
     setShownDocument({
       title: file.name,

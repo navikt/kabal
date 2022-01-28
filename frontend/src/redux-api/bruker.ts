@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { OppgaveType } from '../types/kodeverk';
 import { IMedunderskrivereParams } from '../types/oppgavebehandling-params';
 import { IMedunderskrivereResponse } from '../types/oppgavebehandling-response';
-import { staggeredBaseQuery } from './common';
+import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export interface IUser {
   navIdent: string;
@@ -54,19 +54,19 @@ export interface IPostSettingsParams extends ISettings {
 
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: INNSTILLINGER_BASE_QUERY,
   tagTypes: ['user'],
   endpoints: (builder) => ({
     getBruker: builder.query<IUserData, void>({
-      query: () => '/api/kabal-innstillinger/me/brukerdata',
+      query: () => '/me/brukerdata',
       providesTags: ['user'],
     }),
     getAnsatt: builder.query<IUserData, string>({
-      query: (navIdent) => `/api/kabal-innstillinger/${navIdent}/brukerdata`,
+      query: (navIdent) => `/${navIdent}/brukerdata`,
     }),
     setValgtEnhet: builder.mutation<void, ISetEnhet>({
       query: ({ navIdent, enhetId }) => ({
-        url: `/api/kabal-innstillinger/ansatte/${navIdent}/valgtenhet`,
+        url: `/ansatte/${navIdent}/valgtenhet`,
         method: 'PUT',
         body: { enhetId },
       }),
@@ -74,7 +74,7 @@ export const brukerApi = createApi({
     }),
     updateSettings: builder.mutation<ISettings, IPostSettingsParams>({
       query: ({ navIdent, ...params }) => ({
-        url: `/api/kabal-innstillinger/ansatte/${navIdent}/brukerdata/innstillinger`,
+        url: `/ansatte/${navIdent}/brukerdata/innstillinger`,
         method: 'PUT',
         body: { navIdent, ...params },
         validateStatus: ({ ok }) => ok,
@@ -104,7 +104,7 @@ export const brukerApi = createApi({
     searchMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
       query: (body) => ({
         method: 'POST',
-        url: '/api/kabal-innstillinger/search/medunderskrivere',
+        url: '/search/medunderskrivere',
         body,
       }),
     }),

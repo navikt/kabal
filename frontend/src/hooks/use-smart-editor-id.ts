@@ -3,13 +3,11 @@ import { useCreateSmartEditorMutation } from '../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery, useUpdateSmartEditorIdMutation } from '../redux-api/smart-editor-id';
 import { INewSmartEditor } from '../types/smart-editor';
 import { useOppgaveId } from './use-oppgave-id';
-import { useOppgaveType } from './use-oppgave-type';
 
 export const useSmartEditorId = (initialContent: INewSmartEditor): string | null => {
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
 
-  const { data: smartEditorData } = useGetSmartEditorIdQuery({ oppgaveId, type });
+  const { data: smartEditorData } = useGetSmartEditorIdQuery(oppgaveId);
   const [createSmartEditorDocument, { isLoading: createSmartEditorIsLoading }] = useCreateSmartEditorMutation();
 
   const [updateSmartEditorId] = useUpdateSmartEditorIdMutation();
@@ -34,13 +32,11 @@ export const useSmartEditorId = (initialContent: INewSmartEditor): string | null
         setReturnValue(id);
         updateSmartEditorId({
           oppgaveId,
-          type,
           smartEditorId: id,
         });
       });
   }, [
     oppgaveId,
-    type,
     createSmartEditorDocument,
     initialContent,
     setReturnValue,

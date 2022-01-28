@@ -4,7 +4,6 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useCallback, useContext, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
@@ -16,8 +15,7 @@ export const NewComment = () => {
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const [postComment] = usePostCommentMutation();
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery({ oppgaveId, type });
+  const { data: smartEditorData } = useGetSmartEditorIdQuery(oppgaveId);
 
   const [text, setText] = useState<string>('');
 

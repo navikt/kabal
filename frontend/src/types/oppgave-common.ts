@@ -9,7 +9,7 @@ export interface ISaksbehandler {
 }
 
 export interface IMedunderskriver {
-  ident: string;
+  navIdent: string;
   navn: string;
 }
 

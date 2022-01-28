@@ -1,8 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useContext, useEffect } from 'react';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
-import { baseUrl } from '../../../redux-api/common';
+import { DOMAIN } from '../../../redux-api/common';
 import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
 import { ShownDocumentContext } from '../context';
@@ -18,12 +17,11 @@ interface SmartEditorDocumentProps {
 
 export const SmartEditorDocument = ({ oppgaveId, miniDisplay = false }: SmartEditorDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-  const type = useOppgaveType();
-  const { data } = useGetSmartEditorIdQuery({ oppgaveId, type });
+  const { data } = useGetSmartEditorIdQuery(oppgaveId);
   const { data: smartEditorData } = useGetSmartEditorQuery(data?.smartEditorId ?? skipToken);
 
   const name = 'Smart Editor dokument';
-  const pdfBaseUrl = `${baseUrl}/api/kabal-smart-editor-api/documents/${data?.smartEditorId}/pdf`;
+  const pdfBaseUrl = `${DOMAIN}/api/kabal-smart-editor-api/documents/${data?.smartEditorId}/pdf`;
 
   useEffect(() => {
     if (shownDocument === null) {

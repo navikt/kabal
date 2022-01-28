@@ -1,10 +1,10 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useLazyValidateQuery } from '../../redux-api/oppgavebehandling';
 import { OppgaveType } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
@@ -20,7 +20,7 @@ export const UnfinishedFooter = () => {
   const errorContext = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const isFullfoert = useIsFullfoert();
-  const type = useOppgaveType();
+  const { data: oppgave } = useOppgave();
 
   const hasErrors = useMemo<boolean>(() => {
     if (typeof data === 'undefined') {
@@ -38,7 +38,11 @@ export const UnfinishedFooter = () => {
 
   const showConfirmFinishDisplay = !isFullfoert && showConfirmFinish && !hasErrors && !isFetching;
 
-  const finishText = type === OppgaveType.KLAGEBEHANDLING ? 'Fullfør' : 'Send innstilling til bruker';
+  if (typeof oppgave === 'undefined') {
+    return null;
+  }
+
+  const finishText = oppgave.type === OppgaveType.KLAGEBEHANDLING ? 'Fullfør' : 'Send innstilling til bruker';
 
   const children = (
     <>
@@ -47,7 +51,7 @@ export const UnfinishedFooter = () => {
           mini
           disabled={!canEdit || isFullfoert || showConfirmFinishDisplay}
           onClick={() => {
-            validate({ oppgaveId, type });
+            validate(oppgaveId);
             setConfirmFinish(true);
           }}
           spinner={isFetching}

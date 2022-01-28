@@ -10,10 +10,10 @@ import { Utredningen } from './utredningen';
 import { Vedtaket } from './vedtaket';
 
 export const Kvalitetsskjema = () => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const [kvalitetsvurdering] = useKvalitetsvurdering();
 
-  if (typeof kvalitetsvurdering === 'undefined' || typeof oppgavebehandling === 'undefined') {
+  if (typeof kvalitetsvurdering === 'undefined' || typeof oppgave === 'undefined') {
     return null;
   }
 
@@ -21,7 +21,7 @@ export const Kvalitetsskjema = () => {
     <StyledKvalitetsskjema>
       <Klageforberedelsen />
       <Utredningen />
-      <BrukAvRaadgivendeLegeDisplay ytelse={oppgavebehandling.ytelse} />
+      <BrukAvRaadgivendeLegeDisplay ytelse={oppgave.ytelse} />
       <Vedtaket />
       <Annet />
     </StyledKvalitetsskjema>

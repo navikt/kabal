@@ -10,9 +10,8 @@ import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 
 export const SendTilSaksbehandler = ({
   id: oppgaveId,
-  type,
   medunderskriverFlyt,
-}: Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriverFlyt'>) => {
+}: Pick<IOppgavebehandling, 'id' | 'medunderskriverFlyt'>) => {
   const canEdit = useCanEdit();
   const isMedunderskriver = useCheckIsMedunderskriver();
 
@@ -35,7 +34,7 @@ export const SendTilSaksbehandler = ({
       <StyledFormSection>
         <Hovedknapp
           mini
-          onClick={() => switchMedunderskriverflyt({ oppgaveId, type })}
+          onClick={() => switchMedunderskriverflyt(oppgaveId)}
           disabled={loader.isLoading}
           spinner={loader.isLoading}
           autoDisableVedSpinner

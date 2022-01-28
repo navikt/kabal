@@ -2,11 +2,11 @@ import { Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useUpdateUtfall } from '../../../hooks/oppgavebehandling/use-update-utfall';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useFieldName } from '../../../hooks/use-field-name';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useUtfall } from '../../../hooks/use-utfall';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { StyledUtfallResultat } from '../styled-components';
@@ -21,15 +21,15 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const canEdit = useCanEdit();
   const validationError = useValidationError('utfall');
   const utfallLabel = useFieldName('utfall');
-  const type = useOppgaveType();
+  const { data: oppgave } = useOppgave();
 
-  const utfallKodeverk = useUtfall(type);
+  const utfallKodeverk = useUtfall(oppgave?.type);
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
     if (isUtfall(value)) {
-      updateUtfall({ oppgaveId, type, utfall: value });
+      updateUtfall({ oppgaveId, utfall: value });
     }
   };
 

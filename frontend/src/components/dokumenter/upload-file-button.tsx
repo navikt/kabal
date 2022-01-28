@@ -12,7 +12,7 @@ interface UploadFileButtonProps {
 export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
   const [uploadFile, { isLoading }] = useUploadFileMutation();
   const oppgaveId = useOppgaveId();
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
 
   const fileInput = useRef<HTMLInputElement>(null);
@@ -28,7 +28,7 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
 
-      if (typeof oppgavebehandling === 'undefined') {
+      if (typeof oppgave === 'undefined') {
         return;
       }
 
@@ -44,19 +44,18 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
       uploadFile({
         file,
         oppgaveId,
-        type: oppgavebehandling.type,
       });
 
       event.currentTarget.value = '';
     },
-    [oppgaveId, uploadFile, oppgavebehandling]
+    [oppgaveId, uploadFile, oppgave]
   );
 
-  if (!show || !canEdit || typeof oppgavebehandling === 'undefined') {
+  if (!show || !canEdit || typeof oppgave === 'undefined') {
     return null;
   }
 
-  const hasFile = oppgavebehandling.resultat.file !== null;
+  const hasFile = oppgave.resultat.file !== null;
 
   return (
     <>

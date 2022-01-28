@@ -2,10 +2,8 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
-import { useOppgavebehandlingApiUrl } from '../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
-import { baseUrl } from '../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgavebehandling';
 import { IDocument, IDocumentVedlegg } from '../../types/documents';
 import { IDocumentReference } from '../../types/oppgave-common';
@@ -28,13 +26,8 @@ interface TilknyttedeDokumenterProps {
 export const TilknyttedeDokumenter = React.memo(
   ({ tilknyttedeDokumenter }: TilknyttedeDokumenterProps) => {
     const oppgaveId = useOppgaveId();
-    const type = useOppgaveType();
 
-    const {
-      data: lagredeTilknyttedeDokumenter,
-      isLoading,
-      isFetching,
-    } = useGetTilknyttedeDokumenterQuery({ oppgaveId, type });
+    const { data: lagredeTilknyttedeDokumenter, isLoading, isFetching } = useGetTilknyttedeDokumenterQuery(oppgaveId);
 
     const documents = useMemo<ITilknyttetDokument[]>(() => {
       if (typeof lagredeTilknyttedeDokumenter === 'undefined') {
@@ -79,9 +72,8 @@ interface TilknyttetDocumentProps {
 const TilknyttetDocument = ({ dokument, tilknyttet, tilknyttedeDokumenter }: TilknyttetDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
-  const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
 
-  const url = `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({
@@ -158,9 +150,8 @@ interface VedleggProps {
 
 const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId }: VedleggProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-  const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
 
-  const url = `${baseUrl}${oppgavebehandlingUrl}${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({

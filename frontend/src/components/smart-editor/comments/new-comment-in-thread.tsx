@@ -3,7 +3,6 @@ import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { usePostCommentReplyMutation } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
@@ -19,8 +18,7 @@ export const NewCommentInThread = ({ threadId, onFocusChange, focused }: NewComm
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const [postReply] = usePostCommentReplyMutation();
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery({ oppgaveId, type });
+  const { data: smartEditorData } = useGetSmartEditorIdQuery(oppgaveId);
 
   const [text, setText] = useState<string>('');
 

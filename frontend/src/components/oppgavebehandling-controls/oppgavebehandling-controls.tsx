@@ -14,13 +14,13 @@ interface OppgavebehandlingControlsProps {
 }
 
 export const OppgavebehandlingControls = ({ toggles, setPanel }: OppgavebehandlingControlsProps) => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
 
-  if (typeof oppgavebehandling === 'undefined') {
+  if (typeof oppgave === 'undefined') {
     return <ControlPanel>Laster...</ControlPanel>;
   }
 
-  const { fortrolig, strengtFortrolig, sakenGjelder } = oppgavebehandling;
+  const { fortrolig, strengtFortrolig, sakenGjelder } = oppgave;
 
   return (
     <ControlPanel data-testid="klagebehandling-control-panel">

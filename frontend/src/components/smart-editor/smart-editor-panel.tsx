@@ -2,7 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useGetFeatureTogglingEditorQuery } from '../../redux-api/feature-toggling';
+import { FeatureToggles, useGetFeatureToggleQuery } from '../../redux-api/feature-toggling';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { CommentSection } from './comments/comment-section';
 import { SmartEditorContextComponent } from './context/smart-editor-context';
@@ -14,7 +14,7 @@ export interface Props {
 }
 
 export const SmartEditorPanel = ({ shown }: Props) => {
-  const { data: featureTogglingEditor } = useGetFeatureTogglingEditorQuery();
+  const { data: featureTogglingEditor } = useGetFeatureToggleQuery(FeatureToggles.SMART_EDITOR);
   const { data: oppgavebehandling, isLoading } = useOppgave();
 
   if (!shown || featureTogglingEditor === false) {

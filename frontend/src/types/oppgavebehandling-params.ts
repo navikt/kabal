@@ -1,9 +1,8 @@
-import { OppgaveType, Utfall } from './kodeverk';
+import { Utfall } from './kodeverk';
 import { IDocumentReference, ISaksbehandler } from './oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
-  type: OppgaveType;
 }
 
 export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandlingBaseParams {
@@ -12,10 +11,6 @@ export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandling
 
 export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlingBaseParams {
   hjemler: string[];
-}
-
-export interface IOppgavebehandlingFullfoertGosysUpdateParams extends IOppgavebehandlingBaseParams {
-  type: OppgaveType.ANKEBEHANDLING;
 }
 
 export type ITilknyttDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
