@@ -6,7 +6,7 @@ import {
   IKvalitetsvurderingRadioExtended,
   IKvalitetsvurderingTexts,
 } from '../types/kaka-kvalitetsvurdering';
-import { staggeredBaseQuery } from './common';
+import { KAKA_KVALITETSVURDERING_BASE_QUERY } from './common';
 
 type WithId = Pick<IKakaKvalitetsvurdering, 'id'>;
 
@@ -17,10 +17,10 @@ export type UpdateRadioExtended = Partial<IKvalitetsvurderingRadioExtended> & Wi
 
 export const kvalitetsvurderingApi = createApi({
   reducerPath: 'kvalitetsvurderingApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: KAKA_KVALITETSVURDERING_BASE_QUERY,
   endpoints: (builder) => ({
     getKvalitetsvurdering: builder.query<IKakaKvalitetsvurdering, string>({
-      query: (id) => `/api/kaka-api/kvalitetsvurdering/${id}`,
+      query: (id) => `/${id}`,
     }),
     updateKvalitetsvurdering: builder.mutation<
       IKakaKvalitetsvurdering,
@@ -34,7 +34,7 @@ export const kvalitetsvurderingApi = createApi({
         }
 
         return {
-          url: `/api/kaka-api/kvalitetsvurdering/${id}/${key.toLowerCase()}`,
+          url: `/${id}/${key.toLowerCase()}`,
           method: 'PUT',
           body: {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

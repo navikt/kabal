@@ -1,9 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
-import { useOppgavebehandlingApiUrl } from '../../../hooks/oppgavebehandling/use-oppgavebehandling-api-url';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { baseUrl } from '../../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../../redux-api/common';
 import { IDocument } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
@@ -21,11 +20,11 @@ export const Document = React.memo<DocumentProps>(
     const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
     const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
     const oppgaveId = useOppgaveId();
-    const oppgavebehandlingUrl = useOppgavebehandlingApiUrl();
 
     const url = useMemo(
-      () => `${baseUrl}${oppgavebehandlingUrl}${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
-      [oppgaveId, oppgavebehandlingUrl, journalpostId, dokumentInfoId]
+      () =>
+        `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+      [oppgaveId, journalpostId, dokumentInfoId]
     );
 
     const onClick = () =>

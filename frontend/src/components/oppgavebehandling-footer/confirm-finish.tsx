@@ -2,9 +2,9 @@ import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKlagerName } from '../../hooks/use-klager-name';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgavebehandling';
 import { OppgaveType } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
@@ -20,7 +20,6 @@ interface FinishProps {
 
 export const ConfirmFinish = ({ cancel }: FinishProps) => {
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
   const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
   const klagerName = useKlagerName();
   const [ref, setRef] = useState<HTMLElement | null>(null);
@@ -34,7 +33,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   }, [ref]);
 
   const finish = async () => {
-    finishOppgavebehandling({ oppgaveId, type })
+    finishOppgavebehandling(oppgaveId)
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
@@ -49,7 +48,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
 
   return (
     <StyledFinishKlagebehandlingBox ref={setRef}>
-      <OppgavebehandlingText klagerName={klagerName} type={type} />
+      <OppgavebehandlingText klagerName={klagerName} />
       <StyledFinishKlagebehandlingButtons>
         <Hovedknapp
           mini
@@ -69,12 +68,17 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
 };
 
 interface OppgavebehandlingTextProps {
-  type: OppgaveType;
   klagerName: string | null;
 }
 
-const OppgavebehandlingText = ({ type, klagerName }: OppgavebehandlingTextProps) => {
-  if (type === OppgaveType.KLAGEBEHANDLING) {
+const OppgavebehandlingText = ({ klagerName }: OppgavebehandlingTextProps) => {
+  const { data: oppgave } = useOppgave();
+
+  if (typeof oppgave === 'undefined') {
+    return null;
+  }
+
+  if (oppgave.type === OppgaveType.KLAGEBEHANDLING) {
     return (
       <StyledFinishKlagebehandlingText>
         Du fullfører nå klagebehandlingen, brevet sendes til {klagerName ?? 'søker'} og klagebehandlingen kan ikke

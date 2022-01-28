@@ -1,17 +1,17 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { OppgaveType } from '../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection, SubHeader } from './styled-components';
 
 export const Annet = () => {
+  const { data: oppgave } = useOppgave();
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
-  const type = useOppgaveType();
 
-  if (isLoading || typeof kvalitetsvurdering === 'undefined') {
+  if (isLoading || typeof oppgave === 'undefined' || typeof kvalitetsvurdering === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
@@ -58,7 +58,7 @@ export const Annet = () => {
     },
   ];
 
-  const reasons = type === OppgaveType.ANKEBEHANDLING ? baseReasons : [...baseReasons, ...klageReasons];
+  const reasons = oppgave.type === OppgaveType.ANKEBEHANDLING ? baseReasons : [...baseReasons, ...klageReasons];
 
   return (
     <FormSection>

@@ -1,28 +1,28 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { useGetMedunderskriverQuery } from '../redux-api/oppgavebehandling';
+import { useGetMedunderskriverQuery, useGetOppgavebehandlingQuery } from '../redux-api/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 import { useOppgaveId } from './use-oppgave-id';
-import { useOppgaveType } from './use-oppgave-type';
 
 export const useIsMedunderskriver = () => {
   const { data: userData, isLoading } = useGetBrukerQuery();
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
 
   return useMemo(() => {
-    if (typeof oppgavebehandling === 'undefined' || isLoading || typeof userData === 'undefined') {
+    if (typeof oppgave === 'undefined' || isLoading || typeof userData === 'undefined') {
       return false;
     }
 
-    return oppgavebehandling.medunderskriver?.navIdent === userData.info.navIdent;
-  }, [oppgavebehandling, userData, isLoading]);
+    return oppgave.medunderskriver?.navIdent === userData.info.navIdent;
+  }, [oppgave, userData, isLoading]);
 };
 
 export const useCheckIsMedunderskriver = () => {
   const oppgaveId = useOppgaveId();
   const { data: userData, isLoading } = useGetBrukerQuery();
-  const type = useOppgaveType();
-  const { data: medunderskriver } = useGetMedunderskriverQuery({ oppgaveId, type });
+  const { data: oppgave } = useGetOppgavebehandlingQuery(oppgaveId);
+  const { data: medunderskriver } = useGetMedunderskriverQuery(typeof oppgave === 'undefined' ? skipToken : oppgaveId);
 
   return useMemo(() => {
     if (isLoading || typeof userData === 'undefined') {

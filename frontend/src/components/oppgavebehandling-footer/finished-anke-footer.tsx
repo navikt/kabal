@@ -10,28 +10,28 @@ import { BackLink } from './back-link';
 import { StyledButtons, StyledFinishedFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
 
 export const FinishedAnkeFooter = () => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const [update] = useUpdateFinishedInGosysMutation();
 
-  if (typeof oppgavebehandling === 'undefined' || oppgavebehandling.type !== OppgaveType.ANKEBEHANDLING) {
+  if (typeof oppgave === 'undefined' || oppgave.type !== OppgaveType.ANKEBEHANDLING) {
     return null;
   }
 
-  const Wrapper = oppgavebehandling.fullfoertGosys ? StyledFinishedFooter : StyledUnfinishedNoErrorFooter;
+  const Wrapper = oppgave.fullfoertGosys ? StyledFinishedFooter : StyledUnfinishedNoErrorFooter;
 
   return (
     <Wrapper>
       <StyledButtons>
         <StyledCheckbox
           label="Fullført i Gosys"
-          checked={oppgavebehandling.fullfoertGosys}
-          disabled={oppgavebehandling.fullfoertGosys}
-          onChange={() => update({ type: oppgavebehandling.type, oppgaveId: oppgavebehandling.id })}
+          checked={oppgave.fullfoertGosys}
+          disabled={oppgave.fullfoertGosys}
+          onChange={() => update(oppgave.id)}
         />
         <BackLink />
       </StyledButtons>
-      <Alertstripe type={oppgavebehandling.fullfoertGosys ? 'suksess' : 'info'} form="inline">
-        {getSuccessMessage(oppgavebehandling.fullfoertGosys)}
+      <Alertstripe type={oppgave.fullfoertGosys ? 'suksess' : 'info'} form="inline">
+        {getSuccessMessage(oppgave.fullfoertGosys)}
       </Alertstripe>
     </Wrapper>
   );

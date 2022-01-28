@@ -2,13 +2,8 @@ import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { SuccessIcon } from '../../icons/success';
-import {
-  useRebuildElasticAdminMutation,
-  useRefillElasticAdminAnkeMutation,
-  useRefillElasticAdminKlageMutation,
-  useResendDvhAnkeMutation,
-  useResendDvhKlageMutation,
-} from '../../redux-api/admin';
+import { useRefillElasticAdminMutation, useResendDvhMutation } from '../../redux-api/internal';
+import { useRebuildElasticAdminMutation } from '../../redux-api/oppgaver';
 
 export const Admin = () => (
   <article>
@@ -20,11 +15,8 @@ export const Admin = () => (
           text="KABAL-SEARCH OPENSEARCH REBUILD"
           helptext='Denne operasjonen er avhengig av å treffe rett pod. Juster ned antall pods for kabal-search til 1 før du trykker på knappen, og verifiser at operasjonen var vellykket ved å søke etter "Seeking to beginning of topic klage.klage-endret.v1 and partition 0" i loggene til kabal-search.'
         />
-        <Button useApi={useRefillElasticAdminKlageMutation} text="KABAL-API KAFKA REFILL" />
-        <Button useApi={useResendDvhKlageMutation} text="KABAL-API DVH RESEND" />
-
-        <Button useApi={useRefillElasticAdminAnkeMutation} text="KABAL-ANKE-API KAFKA REFILL" />
-        <Button useApi={useResendDvhAnkeMutation} text="KABAL-ANKE-API DVH RESEND" />
+        <Button useApi={useRefillElasticAdminMutation} text="KABAL-API KAFKA REFILL" />
+        <Button useApi={useResendDvhMutation} text="KABAL-API DVH RESEND" />
       </StyledSettingsSection>
     </StyledContent>
   </article>
@@ -36,11 +28,7 @@ interface RebuildElasticButtonProps {
   helptext: string;
 }
 interface ButtonProps {
-  useApi:
-    | typeof useRefillElasticAdminKlageMutation
-    | typeof useResendDvhKlageMutation
-    | typeof useRefillElasticAdminAnkeMutation
-    | typeof useResendDvhAnkeMutation;
+  useApi: typeof useRefillElasticAdminMutation | typeof useResendDvhMutation;
   text: string;
 }
 

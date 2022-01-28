@@ -4,7 +4,6 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../../../hooks/use-oppgave-type';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
@@ -16,7 +15,6 @@ export const WriteMessage = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
 
   useEffect(() => {
     if (isSuccess) {
@@ -45,7 +43,6 @@ export const WriteMessage = () => {
 
     postMessage({
       oppgaveId,
-      type,
       text: message.trim(),
       author: {
         name: user.info.sammensattNavn,

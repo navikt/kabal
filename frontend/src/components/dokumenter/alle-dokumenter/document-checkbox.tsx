@@ -20,15 +20,13 @@ export const DocumentCheckbox = ({
   title,
   harTilgangTilArkivvariant,
 }: DocumentCheckboxProps): JSX.Element => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const [setDocument, isUpdating] = useCheckDocument(klagebehandlingId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit();
 
   const tilknyttet = useMemo<boolean>(
-    () =>
-      oppgavebehandling?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ??
-      false,
-    [oppgavebehandling, dokumentInfoId, journalpostId]
+    () => oppgave?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ?? false,
+    [oppgave, dokumentInfoId, journalpostId]
   );
 
   return (

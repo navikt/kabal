@@ -4,8 +4,8 @@ import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useKvalitetsvurdering = (): [IKakaKvalitetsvurdering | undefined, boolean] => {
-  const { data: oppgavebehandling } = useOppgave();
-  const { data, isLoading } = useGetKvalitetsvurderingQuery(oppgavebehandling?.kvalitetsvurderingId ?? skipToken);
+  const { data: oppgave } = useOppgave();
+  const { data, isLoading } = useGetKvalitetsvurderingQuery(oppgave?.kvalitetsvurderingId ?? skipToken);
 
   return [data, isLoading];
 };

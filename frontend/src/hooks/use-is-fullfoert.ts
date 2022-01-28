@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsFullfoert = (): boolean => {
-  const { data: oppgavebehandling } = useOppgave();
+  const { data: oppgave } = useOppgave();
 
   return useMemo(() => {
-    if (typeof oppgavebehandling === 'undefined') {
+    if (typeof oppgave === 'undefined') {
       return false;
     }
 
-    return oppgavebehandling.isAvsluttetAvSaksbehandler;
-  }, [oppgavebehandling]);
+    return oppgave.isAvsluttetAvSaksbehandler;
+  }, [oppgave]);
 };

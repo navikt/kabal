@@ -9,14 +9,14 @@ import {
   ISmartEditorRawResponse,
   ISmartEditorResponse,
 } from '../types/smart-editor';
-import { staggeredBaseQuery } from './common';
+import { EDITOR_BASE_QUERY } from './common';
 
 export const smartEditorApi = createApi({
   reducerPath: 'smartEditorApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: EDITOR_BASE_QUERY,
   endpoints: (builder) => ({
     getSmartEditor: builder.query<ISmartEditorResponse | null, string>({
-      query: (documentId) => `/api/kabal-smart-editor-api/documents/${documentId}`,
+      query: (documentId) => `/documents/${documentId}`,
       transformResponse: ({ id, created, modified, json }: ISmartEditorRawResponse) => ({
         id,
         created,
@@ -26,7 +26,7 @@ export const smartEditorApi = createApi({
     }),
     createSmartEditor: builder.mutation<ISmartEditorResponse, INewSmartEditor>({
       query: (body) => ({
-        url: '/api/kabal-smart-editor-api/documents/',
+        url: '/documents/',
         method: 'POST',
         body,
       }),
@@ -39,7 +39,7 @@ export const smartEditorApi = createApi({
     }),
     updateSmartEditor: builder.mutation<ISmartEditorResponse, ISmartEditor>({
       query: ({ id, ...smartEditor }) => ({
-        url: `/api/kabal-smart-editor-api/documents/${id}`,
+        url: `/documents/${id}`,
         method: 'PUT',
         body: smartEditor,
       }),
@@ -68,7 +68,7 @@ export const smartEditorApi = createApi({
     }),
     deleteSmartEditor: builder.mutation<null, string>({
       query: (id) => ({
-        url: `/api/kabal-smart-editor-api/documents/${id}`,
+        url: `/documents/${id}`,
         method: 'DELETE',
       }),
       onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
@@ -84,7 +84,7 @@ export const smartEditorApi = createApi({
     }),
     postComment: builder.mutation<ISmartEditorComment, ISmartEditorCommentRequest>({
       query: ({ documentId, ...body }) => ({
-        url: `/api/kabal-smart-editor-api/documents/${documentId}/comments`,
+        url: `/documents/${documentId}/comments`,
         method: 'POST',
         body,
       }),
@@ -120,7 +120,7 @@ export const smartEditorApi = createApi({
     }),
     postCommentReply: builder.mutation<ISmartEditorComment, ISmartEditorCommentReply>({
       query: ({ documentId, threadId, ...body }) => ({
-        url: `/api/kabal-smart-editor-api/documents/${documentId}/comments/${threadId}/replies`,
+        url: `/documents/${documentId}/comments/${threadId}/replies`,
         method: 'POST',
         body,
       }),
@@ -165,10 +165,10 @@ export const smartEditorApi = createApi({
       },
     }),
     getAllComments: builder.query<ISmartEditorComment[], string>({
-      query: (documentId) => `/api/kabal-smart-editor-api/documents/${documentId}/comments`,
+      query: (documentId) => `/documents/${documentId}/comments`,
     }),
     getComment: builder.query<ISmartEditorComment, IGetCommentParams>({
-      query: ({ documentId, commentId }) => `/api/kabal-smart-editor-api/documents/${documentId}/comments/${commentId}`,
+      query: ({ documentId, commentId }) => `/documents/${documentId}/comments/${commentId}`,
     }),
   }),
 });

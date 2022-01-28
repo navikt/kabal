@@ -1,5 +1,5 @@
 import React from 'react';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { OppgaveType } from '../../types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
@@ -27,9 +27,13 @@ export const Behandling = ({ shown }: BehandlingProps) => {
 };
 
 const Behandlingsdetaljer = () => {
-  const type = useOppgaveType();
+  const { data: oppgave } = useOppgave();
 
-  if (type === OppgaveType.KLAGEBEHANDLING) {
+  if (typeof oppgave === 'undefined') {
+    return null;
+  }
+
+  if (oppgave.type === OppgaveType.KLAGEBEHANDLING) {
     return <Klagebehandlingsdetaljer />;
   }
 

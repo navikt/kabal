@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
-import { adminApi } from '../redux-api/admin';
+import { ansatteApi } from '../redux-api/ansatte';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
+import { kabalInternalApi } from '../redux-api/internal';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
@@ -20,7 +21,8 @@ export const rootReducer = combineReducers({
   [smartEditorApi.reducerPath]: smartEditorApi.reducer,
   [smartEditorIdApi.reducerPath]: smartEditorIdApi.reducer,
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
-  [adminApi.reducerPath]: adminApi.reducer,
+  [kabalInternalApi.reducerPath]: kabalInternalApi.reducer,
+  [ansatteApi.reducerPath]: ansatteApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

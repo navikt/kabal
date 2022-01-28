@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetFeatureTogglingEditorQuery } from '../../redux-api/feature-toggling';
+import { FeatureToggles, useGetFeatureToggleQuery } from '../../redux-api/feature-toggling';
 import { PanelToggles } from '../klagebehandling/types';
 import { Switch } from '../switch/switch';
 import { ToggleButtonsContainer } from './styled-components';
@@ -10,7 +10,7 @@ interface PanelToggleButtonsProps {
 }
 
 export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsProps) => {
-  const { data: featureTogglingEditor } = useGetFeatureTogglingEditorQuery();
+  const { data: featureTogglingEditor } = useGetFeatureToggleQuery(FeatureToggles.SMART_EDITOR);
 
   return (
     <ToggleButtonsContainer data-testid="klagebehandling-control-panel-toggle-buttons">

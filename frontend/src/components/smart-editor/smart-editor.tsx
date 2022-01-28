@@ -5,7 +5,6 @@ import { Descendant } from 'slate';
 import styled from 'styled-components';
 import { isNotNull } from '../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useGetSmartEditorQuery, useUpdateSmartEditorMutation } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ISmartEditor, ISmartEditorElement } from '../../types/smart-editor';
@@ -14,8 +13,7 @@ import { NewDocument } from './new-document/new-document';
 
 export const SmartEditor = (): JSX.Element | null => {
   const oppgaveId = useOppgaveId();
-  const type = useOppgaveType();
-  const { data: smartEditorIdData } = useGetSmartEditorIdQuery({ oppgaveId, type });
+  const { data: smartEditorIdData } = useGetSmartEditorIdQuery(oppgaveId);
   const { data: smartEditor, isFetching } = useGetSmartEditorQuery(smartEditorIdData?.smartEditorId ?? skipToken);
   const [saveSmartEditor] = useUpdateSmartEditorMutation();
   const [value, setValue] = useState<ISmartEditor | undefined>(smartEditor?.smartEditorData);

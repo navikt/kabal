@@ -15,7 +15,7 @@ type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'me
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
   const { data: oppgave } = useOppgave();
   const { data: bruker } = useGetBrukerQuery();
   const canEdit = useCanEdit();
@@ -50,12 +50,11 @@ export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskr
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
       oppgaveId,
-      type,
       medunderskriver:
         medunderskriverident === null
           ? null
           : medunderskrivere
-              .map<ISaksbehandler>(({ ident, navn }) => ({ navIdent: ident, navn }))
+              .map<ISaksbehandler>(({ navIdent, navn }) => ({ navIdent, navn }))
               .find(({ navIdent }) => navIdent === medunderskriverident) ?? null,
     });
 
@@ -69,8 +68,8 @@ export const SelectMedunderskriver = ({ type, ytelse, id: oppgaveId, medunderskr
         data-testid="select-medunderskriver"
       >
         <option value={NONE_SELECTED}>Ingen medunderskriver</option>
-        {medunderskrivere.map(({ navn, ident }) => (
-          <option key={ident} value={ident}>
+        {medunderskrivere.map(({ navn, navIdent }) => (
+          <option key={navIdent} value={navIdent}>
             {navn}
           </option>
         ))}

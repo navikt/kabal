@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useRemoveTilknyttetDocumentMutation, useTilknyttDocumentMutation } from '../redux-api/oppgavebehandling';
 import { ITilknyttDocumentParams } from '../types/oppgavebehandling-params';
-import { useOppgaveType } from './use-oppgave-type';
 
 export const useCheckDocument = (
   klagebehandlingId: string,
@@ -10,7 +9,6 @@ export const useCheckDocument = (
 ): [(checked: boolean) => void, boolean] => {
   const [tilknyttDocument, tilknyttLoader] = useTilknyttDocumentMutation();
   const [removeDocument, removeLoader] = useRemoveTilknyttetDocumentMutation();
-  const type = useOppgaveType();
 
   const onCheck = useCallback(
     (checked: boolean) => {
@@ -18,16 +16,15 @@ export const useCheckDocument = (
         dokumentInfoId,
         journalpostId,
         oppgaveId: klagebehandlingId,
-        type,
       };
 
       if (checked) {
-        tilknyttDocument({ ...data, type });
+        tilknyttDocument(data);
       } else {
-        removeDocument({ ...data, type });
+        removeDocument(data);
       }
     },
-    [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument, type]
+    [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]
   );
 
   const isLoading = tilknyttLoader.isLoading || removeLoader.isLoading;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useOppgaveType } from '../../../hooks/use-oppgave-type';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
 import { ListItem } from '../styled-components/fullvisning';
 import { Document } from './document';
@@ -12,10 +11,8 @@ interface DocumentsPageProps {
 }
 
 export const DocumentsPage = ({ oppgaveId, pageReference, pageSize, temaer }: DocumentsPageProps) => {
-  const type = useOppgaveType();
   const { data } = useGetDokumenterQuery({
     oppgaveId,
-    type,
     pageReference,
     pageSize,
     temaer,

@@ -7,11 +7,10 @@ import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppg
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 
-type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;
+type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'medunderskriver' | 'medunderskriverFlyt'>;
 
 export const SendTilMedunderskriver = ({
   id: oppgaveId,
-  type,
   medunderskriver,
   medunderskriverFlyt,
 }: SendTilMedunderskriverProps) => {
@@ -41,7 +40,7 @@ export const SendTilMedunderskriver = ({
     <StyledFormSection>
       <Hovedknapp
         mini
-        onClick={() => switchMedunderskriverflyt({ oppgaveId, type })}
+        onClick={() => switchMedunderskriverflyt(oppgaveId)}
         disabled={sendToMedunderskriverDisabled}
         spinner={loader.isLoading}
         data-testid="send-to-medunderskriver"

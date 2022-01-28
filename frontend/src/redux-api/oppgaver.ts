@@ -4,24 +4,21 @@ import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
   EnhetensUferdigeOppgaverParams,
-  FradelSaksbehandlerParams,
   IGetSaksbehandlereInEnhetResponse,
   INameSearchParams,
   INameSearchResponse,
   IPersonAndOppgaverResponse,
-  ISaksbehandlerResponse,
   MineFerdigstilteOppgaverParams,
   MineLedigeOppgaverParams,
   MineUferdigeOppgaverParams,
-  TildelSaksbehandlerParams,
   UtgaatteApiResponse,
   UtgaatteOppgaverParams,
 } from '../types/oppgaver';
-import { staggeredBaseQuery } from './common';
+import { SEARCH_BASE_QUERY } from './common';
 
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
-  baseQuery: staggeredBaseQuery,
+  baseQuery: SEARCH_BASE_QUERY,
   tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
@@ -30,7 +27,7 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/ferdigstilte?${query}`;
+        return `/ansatte/${navIdent}/oppgaver/ferdigstilte?${query}`;
       },
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
@@ -39,7 +36,7 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/uferdige?${query}`;
+        return `/ansatte/${navIdent}/oppgaver/uferdige?${query}`;
       },
       providesTags: ['tildelte-oppgaver'],
     }),
@@ -49,7 +46,7 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/oppgaver/ledige?${query}`;
+        return `/ansatte/${navIdent}/oppgaver/ledige?${query}`;
       },
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
@@ -58,7 +55,7 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte?${query}`;
+        return `/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte?${query}`;
       },
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
@@ -67,7 +64,7 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
+        return `/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
       },
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
@@ -76,54 +73,32 @@ export const oppgaverApi = createApi({
           arrayFormat: 'comma',
           skipNulls: true,
         });
-        return `/api/kabal-search/ansatte/${navIdent}/antalloppgavermedutgaattefrister?${query}`;
+        return `/ansatte/${navIdent}/antalloppgavermedutgaattefrister?${query}`;
       },
       providesTags: ['ledige-medutgaattefrister'],
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
       query: ({ ...queryParams }) => ({
-        url: `/api/kabal-search/search/name`,
+        url: `/search/name`,
         method: 'POST',
         body: queryParams,
       }),
     }),
     personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
       query: (query) => ({
-        url: `/api/kabal-search/search/personogoppgaver`,
+        url: `/search/personogoppgaver`,
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
       }),
     }),
     getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({
-      query: (enhet) => `/api/kabal-search/enheter/${enhet}/saksbehandlere`,
+      query: (enhet) => `/enheter/${enhet}/saksbehandlere`,
     }),
-    tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({
-      query: ({ oppgaveId, navIdent, enhetId }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlertildeling`,
-        method: 'POST',
-        body: {
-          navIdent,
-          enhetId,
-        },
-      }),
-      invalidatesTags: ['tildelte-oppgaver'],
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        await queryFulfilled;
-        await delay(3000);
-        dispatch(oppgaverApi.util.invalidateTags(['ledige-oppgaver']));
-      },
-    }),
-    fradelSaksbehandler: builder.mutation<ISaksbehandlerResponse, FradelSaksbehandlerParams>({
-      query: ({ oppgaveId, navIdent }) => ({
-        url: `/api/kabal-api/ansatte/${navIdent}/klagebehandlinger/${oppgaveId}/saksbehandlerfradeling`,
+    rebuildElasticAdmin: builder.mutation<void, void>({
+      query: () => ({
+        url: `/internal/elasticadmin/rebuild`,
         method: 'POST',
       }),
-      invalidatesTags: ['ledige-oppgaver'],
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        await queryFulfilled;
-        await delay(3000);
-        dispatch(oppgaverApi.util.invalidateTags(['tildelte-oppgaver']));
-      },
     }),
   }),
 });
@@ -135,11 +110,8 @@ export const {
   useGetMineUferdigeOppgaverQuery,
   useGetMineLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
-  useTildelSaksbehandlerMutation,
-  useFradelSaksbehandlerMutation,
   usePersonAndOppgaverQuery,
   useNameSearchQuery,
   useGetSaksbehandlereInEnhetQuery,
+  useRebuildElasticAdminMutation,
 } = oppgaverApi;
-
-const delay = async (ms: number): Promise<void> => new Promise((res) => setTimeout(res, ms));

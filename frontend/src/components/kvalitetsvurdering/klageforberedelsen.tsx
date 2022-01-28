@@ -1,10 +1,10 @@
 import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
-import { useOppgaveType } from '../../hooks/use-oppgave-type';
 import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
@@ -18,13 +18,18 @@ export const Klageforberedelsen = () => {
   const canEdit = useCanEdit();
   const validationError = useValidationError('klageforberedelsenRadioValg');
   const header = useFieldName('klageforberedelsenRadioValg');
-  const type = useOppgaveType();
+  const { data: oppgave, isLoading: isOppgavebehandlingLoading } = useOppgave();
 
-  if (isLoading || typeof kvalitetsvurdering === 'undefined') {
+  if (
+    isLoading ||
+    typeof kvalitetsvurdering === 'undefined' ||
+    isOppgavebehandlingLoading ||
+    typeof oppgave === 'undefined'
+  ) {
     return <NavFrontendSpinner />;
   }
 
-  if (type === OppgaveType.ANKEBEHANDLING) {
+  if (oppgave.type === OppgaveType.ANKEBEHANDLING) {
     return null;
   }
 
