@@ -15,6 +15,8 @@ interface UtfallResultatProps {
   utfall: string | null;
 }
 
+const NOT_SELECTED = 'NOT_SELECTED';
+
 export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const oppgaveId = useOppgaveId();
   const [updateUtfall] = useUpdateUtfall();
@@ -30,6 +32,8 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
 
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfall: value });
+    } else if (value === NOT_SELECTED) {
+      updateUtfall({ oppgaveId, utfall: null });
     }
   };
 
@@ -54,7 +58,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
         data-testid="select-utfall"
         feil={validationError}
       >
-        <option value="">Ikke valgt</option>
+        <option value={NOT_SELECTED}>Ikke valgt</option>
         {options}
       </Select>
     </StyledUtfallResultat>
