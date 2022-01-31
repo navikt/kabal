@@ -5,7 +5,7 @@ import { isoDateTimeToPretty, isoDateTimeToPrettyDate } from '../../domain/date'
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../redux-api/common';
 import { useGetSmartEditorQuery } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ShownDocumentContext } from './context';
@@ -28,7 +28,7 @@ export const TilknyttedeNyeDokumenter = () => {
     resultat: { file },
   } = oppgavebehandling;
 
-  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/resultat/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/resultat/pdf`;
 
   const onNewDocumentClick = () => {
     setShownDocument({

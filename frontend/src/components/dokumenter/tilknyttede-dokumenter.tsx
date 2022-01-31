@@ -3,7 +3,7 @@ import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
 import { useOppgaveId } from '../../hooks/use-oppgave-id';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgavebehandling';
 import { IDocument, IDocumentVedlegg } from '../../types/documents';
 import { IDocumentReference } from '../../types/oppgave-common';
@@ -73,7 +73,7 @@ const TilknyttetDocument = ({ dokument, tilknyttet, tilknyttedeDokumenter }: Til
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
 
-  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${dokument.journalpostId}/${dokument.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({
@@ -151,7 +151,7 @@ interface VedleggProps {
 const Vedlegg = ({ journalpostId, vedlegg, klagebehandlingId }: VedleggProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
-  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${klagebehandlingId}/arkivertedokumenter/${journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({

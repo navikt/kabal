@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../redux-api/common';
 import { IDocument } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
@@ -23,7 +23,7 @@ export const Document = React.memo<DocumentProps>(
 
     const url = useMemo(
       () =>
-        `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+        `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
       [oppgaveId, journalpostId, dokumentInfoId]
     );
 

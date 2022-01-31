@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../redux-api/common';
 import { IDocument, IDocumentVedlegg } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';
 import { dokumentMatcher } from '../helpers';
@@ -15,7 +15,7 @@ interface VedleggProps {
 
 export const Vedlegg = React.memo<VedleggProps>(
   ({ klagebehandlingId, vedlegg, document }) => {
-    const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
+    const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${klagebehandlingId}/arkivertedokumenter/${document.journalpostId}/${vedlegg.dokumentInfoId}/pdf`;
 
     const onClick = () =>
       setShownDocument({

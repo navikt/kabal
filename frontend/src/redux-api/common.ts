@@ -39,8 +39,10 @@ const staggeredBaseQuery = (baseUrl: string) =>
     }
   );
 
+export const KABAL_OPPGAVEBEHANDLING_PATH = '/api/kabal-api/klagebehandlinger';
+
 export const KABAL_INTERNAL_BASE_QUERY = staggeredBaseQuery('/api/kabal-api/internal');
-export const KABAL_OPPGAVEBEHANDLING_BASE_QUERY = staggeredBaseQuery('/api/kabal-api/klagebehandlinger');
+export const KABAL_OPPGAVEBEHANDLING_BASE_QUERY = staggeredBaseQuery(KABAL_OPPGAVEBEHANDLING_PATH);
 export const KABAL_ANSATTE_BASE_QUERY = staggeredBaseQuery('/api/kabal-api/ansatte');
 export const SEARCH_BASE_QUERY = staggeredBaseQuery('/api/kabal-search');
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery('/api/kabal-innstillinger');

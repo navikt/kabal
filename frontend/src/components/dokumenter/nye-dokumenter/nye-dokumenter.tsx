@@ -4,7 +4,7 @@ import { isoDateTimeToPrettyDate } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '../../../hooks/use-is-fullfoert';
 import { useOppgaveId } from '../../../hooks/use-oppgave-id';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from '../../../redux-api/common';
+import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../redux-api/common';
 import { IVedlegg } from '../../../types/oppgave-common';
 import { ShownDocumentContext } from '../context';
 import { DocumentButton } from '../styled-components/document-button';
@@ -70,7 +70,7 @@ interface NewDocumentProps {
 export const NewDocument = ({ file, oppgaveId }: NewDocumentProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
-  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_BASE_QUERY}${oppgaveId}/resultat/pdf`;
+  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/resultat/pdf`;
   const onClick = () =>
     setShownDocument({
       title: file.name,
