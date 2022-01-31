@@ -137,6 +137,8 @@
     "@typescript-eslint/prefer-includes": "error",
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "no-type-imports" }],
+    "@typescript-eslint/no-base-to-string": "error",
+    "@typescript-eslint/restrict-template-expressions": ["error", { "allowNumber": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     "react/jsx-curly-brace-presence": "error",

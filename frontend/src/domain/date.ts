@@ -16,7 +16,14 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
 
   const [isoDate, isoTime] = isoDateTime.split('T');
 
-  return `${isoDateToPretty(isoDate)} ${isoTimeToPretty(isoTime)}`;
+  const prettyDate = isoDateToPretty(isoDate);
+  const prettyTime = isoTimeToPretty(isoTime);
+
+  if (prettyDate === null || prettyTime === null) {
+    return null;
+  }
+
+  return `${prettyDate} ${prettyTime}`;
 };
 
 export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null): prettyDateTime | null => {

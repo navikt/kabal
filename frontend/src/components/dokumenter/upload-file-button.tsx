@@ -35,7 +35,7 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
       const { files } = event.target;
 
       if (files === null || files.length !== 1) {
-        console.error(`Wrong number of files ${files?.length}.`);
+        console.error(`Wrong number of files ${files?.length ?? 0}.`);
         return;
       }
 

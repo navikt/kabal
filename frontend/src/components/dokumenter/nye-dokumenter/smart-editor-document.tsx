@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useContext, useEffect } from 'react';
 import { isoDateTimeToPrettyDate } from '../../../domain/date';
-import { DOMAIN } from '../../../redux-api/common';
+import { DOMAIN, EDITOR_PATH } from '../../../redux-api/common';
 import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
 import { ShownDocumentContext } from '../context';
@@ -21,7 +21,8 @@ export const SmartEditorDocument = ({ oppgaveId, miniDisplay = false }: SmartEdi
   const { data: smartEditorData } = useGetSmartEditorQuery(data?.smartEditorId ?? skipToken);
 
   const name = 'Smart Editor dokument';
-  const pdfBaseUrl = `${DOMAIN}/api/kabal-smart-editor-api/documents/${data?.smartEditorId}/pdf`;
+  const pdfBaseUrl =
+    typeof data?.smartEditorId !== 'string' ? null : `${DOMAIN}${EDITOR_PATH}/documents/${data.smartEditorId}/pdf`;
 
   useEffect(() => {
     if (shownDocument === null) {
@@ -32,7 +33,7 @@ export const SmartEditorDocument = ({ oppgaveId, miniDisplay = false }: SmartEdi
       return;
     }
 
-    if (!shownDocument.url.startsWith(pdfBaseUrl)) {
+    if (pdfBaseUrl === null || !shownDocument.url.startsWith(pdfBaseUrl)) {
       return;
     }
 
@@ -46,7 +47,7 @@ export const SmartEditorDocument = ({ oppgaveId, miniDisplay = false }: SmartEdi
     });
   }, [shownDocument, smartEditorData, setShownDocument, pdfBaseUrl]);
 
-  if (typeof data?.smartEditorId !== 'string' || typeof smartEditorData?.modified !== 'string') {
+  if (typeof data?.smartEditorId !== 'string' || typeof smartEditorData?.modified !== 'string' || pdfBaseUrl === null) {
     return null;
   }
 
