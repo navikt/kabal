@@ -40,19 +40,19 @@ interface GosysLinkProps {
 }
 
 const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
-  if (sakenGjelder.person !== null) {
-    return (
-      <ExternalLink
-        href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.person.foedselsnummer}`}
-        target="_blank"
-        aria-label="Ekstern lenke til Gosys for denne personen"
-        title="Åpne i ny fane"
-        rel="noreferrer"
-      >
-        <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
-      </ExternalLink>
-    );
+  if (typeof sakenGjelder.person?.foedselsnummer !== 'string') {
+    return null;
   }
 
-  return null;
+  return (
+    <ExternalLink
+      href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.person.foedselsnummer}`}
+      target="_blank"
+      aria-label="Ekstern lenke til Gosys for denne personen"
+      title="Åpne i ny fane"
+      rel="noreferrer"
+    >
+      <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
+    </ExternalLink>
+  );
 };
