@@ -39,6 +39,6 @@ export interface IUploadFileResponse {
   modified: string;
 }
 
-export interface IFinishedInGosysResponse {
+export interface IModifiedResponse {
   modified: string;
 }

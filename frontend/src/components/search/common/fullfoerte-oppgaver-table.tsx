@@ -3,9 +3,9 @@ import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Hjemmel } from '../../common-table-components/hjemmel';
-import { OpenKlagebehandling } from '../../common-table-components/open';
-import { Type } from '../../common-table-components/type';
+import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { Ytelse } from '../../common-table-components/ytelse';
+import { Type } from '../../type/type';
 import { RightAlignCell, StyledTable } from './styled-components';
 import { StyledTableCaption } from './table-caption';
 
@@ -54,7 +54,7 @@ const Row = ({ id, type, hjemmel, ytelse, avsluttetAvSaksbehandlerDate, tildeltS
     <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
     <td>{tildeltSaksbehandlerNavn}</td>
     <RightAlignCell>
-      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
+      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
     </RightAlignCell>
   </tr>
 );

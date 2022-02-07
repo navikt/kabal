@@ -92,7 +92,7 @@ export const OppgaveTable = (): JSX.Element => {
     <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet" data-testid="oppgave-table">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} columnCount={7} />
+        <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={7} />
         <StyledTableFooter>
           <tr>
             <td colSpan={7}>

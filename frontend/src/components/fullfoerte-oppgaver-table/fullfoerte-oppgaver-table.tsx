@@ -10,6 +10,8 @@ import { StyledCaption, StyledTable, StyledTableContainer } from './styled-compo
 
 const MAX_OPPGAVER = 100;
 
+const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Navn', 'Fnr.', 'Fullført', 'Utfall', null];
+
 export const FullfoerteOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
 
@@ -34,23 +36,12 @@ export const FullfoerteOppgaverTable = () => {
     return refetch;
   }, [refetch]);
 
-  const doneOppgaverHeaderTitles: (string | null)[] = [
-    'Type',
-    'Ytelse',
-    'Hjemmel',
-    'Navn',
-    'Fnr.',
-    'Fullført',
-    'Utfall',
-    null,
-  ];
-
   return (
     <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet">
         <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
-        <TableHeader headers={doneOppgaverHeaderTitles} />
-        <OppgaveRader oppgaver={doneOppgaver?.klagebehandlinger} columnCount={doneOppgaverHeaderTitles.length} />
+        <TableHeader headers={TABLE_HEADERS} />
+        <OppgaveRader oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />
       </StyledTable>
     </StyledTableContainer>
   );

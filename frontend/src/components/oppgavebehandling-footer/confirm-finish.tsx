@@ -1,5 +1,4 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import 'nav-frontend-knapper-style';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';

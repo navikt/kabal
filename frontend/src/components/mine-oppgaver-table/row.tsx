@@ -5,9 +5,9 @@ import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { Hjemmel } from '../common-table-components/hjemmel';
-import { OpenKlagebehandling } from '../common-table-components/open';
-import { Type } from '../common-table-components/type';
+import { OpenOppgavebehandling } from '../common-table-components/open';
 import { Ytelse } from '../common-table-components/ytelse';
+import { Type } from '../type/type';
 import { MedudunderskriverflytLabel } from './medunderskrivflyt-label';
 
 export const Row = ({
@@ -50,7 +50,7 @@ export const Row = ({
       />
     </td>
     <td>
-      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
+      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
     </td>
     <td>
       <FradelKlagebehandlingButton

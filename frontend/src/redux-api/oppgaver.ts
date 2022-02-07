@@ -19,7 +19,7 @@ import { SEARCH_BASE_QUERY } from './common';
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
   baseQuery: SEARCH_BASE_QUERY,
-  tagTypes: ['tildelte-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
+  tagTypes: ['tildelte-oppgaver', 'ventende-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -39,6 +39,16 @@ export const oppgaverApi = createApi({
         return `/ansatte/${navIdent}/oppgaver/uferdige?${query}`;
       },
       providesTags: ['tildelte-oppgaver'],
+    }),
+    getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
+      query: ({ navIdent, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/ansatte/${navIdent}/oppgaver/paavent?${query}`;
+      },
+      providesTags: ['ventende-oppgaver'],
     }),
     getMineLedigeOppgaver: builder.query<ApiResponse, MineLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -108,6 +118,7 @@ export const {
   useGetEnhetensUferdigeOppgaverQuery,
   useGetMineFerdigstilteOppgaverQuery,
   useGetMineUferdigeOppgaverQuery,
+  useGetMineVentendeOppgaverQuery,
   useGetMineLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   usePersonAndOppgaverQuery,

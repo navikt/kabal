@@ -53,11 +53,7 @@ export const StyledButtons = styled.div`
   align-items: center;
   align-content: center;
   justify-content: space-between;
-
-  .footer-button {
-    width: 230px;
-    margin-right: 1em;
-  }
+  gap: 16px;
 `;
 
 export const StyledFooter = styled.div`

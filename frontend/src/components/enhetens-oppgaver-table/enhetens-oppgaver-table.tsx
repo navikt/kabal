@@ -67,7 +67,7 @@ export const EnhetensOppgaverTable = ({ enhet }: EnhetensOppgaverTableProps) => 
       <StyledHeader>Tildelte oppgaver - {enhet.navn}</StyledHeader>
       <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-table">
         <TableHeaderFilters filters={filters} onChange={setFilters} enhetId={enhet.id} />
-        <OppgaveRader oppgaver={oppgaver?.klagebehandlinger} />
+        <OppgaveRader oppgaver={oppgaver?.behandlinger} />
       </StyledTable>
     </StyledTableContainer>
   );
