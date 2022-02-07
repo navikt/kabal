@@ -4,8 +4,8 @@ import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { TildelKlagebehandlingButton } from '../common-table-components/tildel-button';
-import { Type } from '../common-table-components/type';
 import { Ytelse } from '../common-table-components/ytelse';
+import { Type } from '../type/type';
 
 export const Row = ({ id, type, ytelse, hjemmel, frist, ageKA }: IOppgave): JSX.Element => (
   <tr data-testid="oppgave-table-row" data-klagebehandlingid={id}>

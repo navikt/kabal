@@ -1,6 +1,5 @@
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Checkbox } from 'nav-frontend-skjema';
-import 'nav-frontend-knapper-style';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';

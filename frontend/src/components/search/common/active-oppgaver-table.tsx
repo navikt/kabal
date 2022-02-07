@@ -3,10 +3,10 @@ import React from 'react';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
-import { OpenKlagebehandling } from '../../common-table-components/open';
+import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
-import { Type } from '../../common-table-components/type';
 import { Ytelse } from '../../common-table-components/ytelse';
+import { Type } from '../../type/type';
 import { RightAlignCell, StyledTable } from './styled-components';
 import { StyledTableCaption } from './table-caption';
 
@@ -77,7 +77,7 @@ const Row = ({
     </td>
     <td></td>
     <RightAlignCell>
-      <OpenKlagebehandling klagebehandlingId={id} ytelse={ytelse} />
+      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
     </RightAlignCell>
   </tr>
 );

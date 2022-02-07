@@ -13,9 +13,9 @@ import {
   IUploadFileParams,
 } from '../types/oppgavebehandling-params';
 import {
-  IFinishedInGosysResponse,
   IMedunderskriverResponse,
   IMedunderskriverflytResponse,
+  IModifiedResponse,
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytResponse,
   ITilknyttDocumentResponse,
@@ -23,6 +23,7 @@ import {
   IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
 import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
+import { oppgaverApi } from './oppgaver';
 
 export const oppgavebehandlingApi = createApi({
   reducerPath: 'oppgavebehandlingApi',
@@ -168,7 +169,7 @@ export const oppgavebehandlingApi = createApi({
         );
       },
     }),
-    updateFinishedInGosys: builder.mutation<IFinishedInGosysResponse, string>({
+    updateFinishedInGosys: builder.mutation<IModifiedResponse, string>({
       query: (oppgaveId) => ({
         url: `/${oppgaveId}/fullfoertgosys`,
         method: 'POST',
@@ -330,6 +331,50 @@ export const oppgavebehandlingApi = createApi({
         validateStatus: ({ status, ok }) => ok || status === 400,
       }),
     }),
+    sattPaaVent: builder.mutation<IModifiedResponse, string>({
+      query: (oppgaveId) => ({
+        url: `${oppgaveId}/sattpaavent`,
+        method: 'POST',
+      }),
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.type === OppgaveType.ANKEBEHANDLING) {
+              draft.sattPaaVent = new Date().toISOString();
+            }
+          })
+        );
+
+        try {
+          await queryFulfilled;
+          dispatch(oppgaverApi.util.invalidateTags(['ventende-oppgaver', 'tildelte-oppgaver']));
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    deleteSattPaaVent: builder.mutation<IModifiedResponse, string>({
+      query: (oppgaveId) => ({
+        url: `/${oppgaveId}/sattpaavent`,
+        method: 'DELETE',
+      }),
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.type === OppgaveType.ANKEBEHANDLING) {
+              draft.sattPaaVent = null;
+            }
+          })
+        );
+
+        try {
+          await queryFulfilled;
+          dispatch(oppgaverApi.util.invalidateTags(['ventende-oppgaver', 'tildelte-oppgaver']));
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -352,4 +397,6 @@ export const {
   useUpdateFinishedInGosysMutation,
   useValidateQuery,
   useLazyValidateQuery,
+  useSattPaaVentMutation,
+  useDeleteSattPaaVentMutation,
 } = oppgavebehandlingApi;

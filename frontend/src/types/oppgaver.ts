@@ -6,7 +6,7 @@ export type Date = string; // LocalDate
 
 export interface ApiResponse {
   antallTreffTotalt: number;
-  klagebehandlinger: IOppgave[];
+  behandlinger: IOppgave[];
 }
 
 export interface UtgaatteApiResponse {
@@ -16,6 +16,12 @@ export interface UtgaatteApiResponse {
 export interface Person {
   navn: string;
   fnr: string;
+}
+
+export interface IVenteperiode {
+  from: Date;
+  to: Date;
+  isExpired: boolean;
 }
 
 export interface IOppgave {
@@ -42,6 +48,7 @@ export interface IOppgave {
   type: OppgaveType;
   ytelse: string;
   utfall: string | null;
+  sattPaaVent: IVenteperiode | null;
 }
 
 export type IOppgaveList = IOppgave[];
