@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { ansatteApi } from '../redux-api/ansatte';
 import { brukerApi } from '../redux-api/bruker';
+import { documentsApi } from '../redux-api/documents';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
@@ -8,7 +9,9 @@ import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
 import { oppgavebehandlingApi } from '../redux-api/oppgavebehandling';
 import { oppgaverApi } from '../redux-api/oppgaver';
-import { smartEditorApi } from '../redux-api/smart-editor';
+import { smartEditorApi as smartEditorApiOld } from '../redux-api/smart-editor';
+import { smartEditorApi } from '../redux-api/smart-editor-api';
+import { smartEditorCommentsApi } from '../redux-api/smart-editor-comments';
 import { smartEditorIdApi } from '../redux-api/smart-editor-id';
 
 export const rootReducer = combineReducers({
@@ -23,6 +26,9 @@ export const rootReducer = combineReducers({
   [kvalitetsvurderingApi.reducerPath]: kvalitetsvurderingApi.reducer,
   [kabalInternalApi.reducerPath]: kabalInternalApi.reducer,
   [ansatteApi.reducerPath]: ansatteApi.reducer,
+  [documentsApi.reducerPath]: documentsApi.reducer,
+  [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
+  [smartEditorApiOld.reducerPath]: smartEditorApiOld.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

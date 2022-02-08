@@ -4,9 +4,10 @@ import { getFocusedCommentThreadIds } from './get-focused-thread-ids';
 
 interface Props {
   children: JSX.Element[] | null;
+  documentId: null | string;
 }
 
-export const SmartEditorContextComponent = ({ children }: Props) => {
+export const SmartEditorContextComponent = ({ children, documentId }: Props) => {
   const [elementId, setElementId] = useState<string | null>(null);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [selection, setSelection] = useState<Selection>(null);
@@ -17,14 +18,15 @@ export const SmartEditorContextComponent = ({ children }: Props) => {
   return (
     <SmartEditorContext.Provider
       value={{
+        documentId,
+        editor,
         elementId,
         focusedThreadIds,
-        showNewThread,
-        editor,
         selection,
-        setElementId,
         setEditor,
+        setElementId,
         setSelection,
+        showNewThread,
       }}
     >
       {children}
@@ -33,23 +35,25 @@ export const SmartEditorContextComponent = ({ children }: Props) => {
 };
 
 interface ISmartEditorContext {
-  focusedThreadIds: string[];
-  showNewThread: boolean;
-  elementId: string | null;
+  documentId: string | null;
   editor: Editor | null;
+  elementId: string | null;
+  focusedThreadIds: string[];
   selection: Selection;
-  setElementId: (elementId: string) => void;
   setEditor: (editor: Editor | null) => void;
+  setElementId: (elementId: string) => void;
   setSelection: (selection: Selection) => void;
+  showNewThread: boolean;
 }
 
 export const SmartEditorContext = React.createContext<ISmartEditorContext>({
-  focusedThreadIds: [],
-  showNewThread: false,
-  elementId: null,
+  documentId: null,
   editor: null,
+  elementId: null,
+  focusedThreadIds: [],
   selection: null,
-  setElementId: () => {},
   setEditor: () => {},
+  setElementId: () => {},
   setSelection: () => {},
+  showNewThread: false,
 });

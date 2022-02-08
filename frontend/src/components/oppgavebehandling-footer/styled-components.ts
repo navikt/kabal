@@ -86,17 +86,17 @@ export const StyledUnfinishedErrorFooter = styled(StyledFooter)`
   background-color: #ffe9cc;
 `;
 
-export const StyledFinishKlagebehandlingButtons = styled.div`
+export const StyledFinishOppgaveButtons = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-export const StyledFinishKlagebehandlingText = styled.p`
+export const StyledFinishOppgaveText = styled.p`
   margin: 0 0 1em;
   white-space: normal;
 `;
 
-export const StyledFinishKlagebehandlingBox = styled.div`
+export const StyledFinishOppgaveBox = styled.div`
   position: fixed;
   bottom: 1em;
   border: 1px solid #0067c5;

@@ -52,7 +52,7 @@
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
-    "@navikt/ds-icons": "^0.7.0",
+    "@navikt/ds-icons": "^0.8.4",
     "@navikt/fnrvalidator": "^1.1.4",
     "@reduxjs/toolkit": "^1.7.2",
     "@styled-icons/material": "^10.34.0",

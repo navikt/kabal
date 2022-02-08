@@ -74,6 +74,11 @@ export const StyledTopListItem = styled.div`
   justify-content: space-between;
 `;
 
+export const StyledHeader = styled(StyledTopListItem)`
+  position: sticky;
+  top: 0;
+`;
+
 export const StyledKnapp = styled(Knapp)`
   &&& {
     margin-left: 0.5em;

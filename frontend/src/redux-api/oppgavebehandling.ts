@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
 import { IApiValidationResponse } from '../functions/error-type-guard';
-import { IDocumentsResponse } from '../types/documents';
+import { IArkiverteDocumentsResponse } from '../types/arkiverte-documents';
 import { MedunderskriverFlyt, OppgaveType } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
@@ -79,7 +79,7 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    getDokumenter: builder.query<IDocumentsResponse, IGetDokumenterParams>({
+    getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, IGetDokumenterParams>({
       query: ({ oppgaveId, pageReference, temaer }) => {
         const query = qs.stringify(
           {
@@ -96,7 +96,7 @@ export const oppgavebehandlingApi = createApi({
       },
       providesTags: ['dokumenter'],
     }),
-    getTilknyttedeDokumenter: builder.query<IDocumentsResponse, string>({
+    getTilknyttedeDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
       query: (oppgaveId) => `/${oppgaveId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
@@ -379,7 +379,7 @@ export const {
   useLazyGetOppgavebehandlingQuery,
   useUpdateUtfallMutation,
   useUpdateHjemlerMutation,
-  useGetDokumenterQuery,
+  useGetArkiverteDokumenterQuery,
   useGetTilknyttedeDokumenterQuery,
   useTilknyttDocumentMutation,
   useRemoveTilknyttetDocumentMutation,

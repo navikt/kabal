@@ -1,7 +1,7 @@
 import { Descendant } from 'slate';
 
 export interface INewSmartEditor {
-  title: string; // ex. "Vedtak om klagebehandling 123".
+  tittel: string; // ex. "Vedtak om klagebehandling 123".
   content: ISmartEditorElement[];
 }
 

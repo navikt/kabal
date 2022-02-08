@@ -5,17 +5,16 @@ import React, { useCallback, useContext, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
-import { usePostCommentMutation } from '../../../redux-api/smart-editor';
-import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
+import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { connectCommentThread } from '../elements/rich-text/connect-thread';
 import { StyledCommentButton, StyledCommentButtonContainer, StyledNewComment } from './styled-components';
 
 export const NewComment = () => {
+  const oppgaveId = useOppgaveId();
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const [postComment] = usePostCommentMutation();
-  const oppgaveId = useOppgaveId();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery(oppgaveId);
+  const { documentId } = useContext(SmartEditorContext);
 
   const [text, setText] = useState<string>('');
 
@@ -33,17 +32,12 @@ export const NewComment = () => {
     [editor, selection]
   );
 
-  if (
-    typeof bruker === 'undefined' ||
-    brukerIsLoading ||
-    typeof smartEditorData === 'undefined' ||
-    smartEditorData?.smartEditorId === null
-  ) {
+  if (typeof bruker === 'undefined' || brukerIsLoading) {
     return <NavFrontendSpinner />;
   }
 
   const onSubmit = () => {
-    if (smartEditorData?.smartEditorId === null || text.length <= 0) {
+    if (documentId === null || text.length <= 0) {
       return;
     }
 
@@ -52,8 +46,9 @@ export const NewComment = () => {
         ident: bruker.info.navIdent,
         name: bruker.info.sammensattNavn,
       },
-      documentId: smartEditorData?.smartEditorId,
+      dokumentId: documentId,
       text,
+      oppgaveId,
     })
       .unwrap()
       .then(({ id }) => {

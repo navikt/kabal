@@ -11,6 +11,7 @@ export const StyledTemplateButton = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   &:hover {
     background: #ddd;
@@ -23,6 +24,8 @@ export const StyledTemplateButtonIcon = styled.div`
 
 export const StyledNewDocument = styled.section`
   width: 100%;
+  padding: 32px;
+  padding-top: 16px;
 `;
 
 export const StyledTemplates = styled.section`
@@ -34,4 +37,15 @@ export const StyledTemplates = styled.section`
 export const StyledHeader = styled.h2`
   margin: 0;
   margin-bottom: 1em;
+`;
+
+export const StyledLoadingOverlay = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  top: 0;
 `;

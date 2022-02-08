@@ -1,19 +1,21 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor';
-import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
+import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor-api';
+import { SmartEditorContext } from '../context/smart-editor-context';
 import { NewCommentThread } from './new-thread';
 import { ThreadList } from './thread-list';
 
 export const CommentSection = React.memo(
   () => {
     const oppgaveId = useOppgaveId();
-    const { data: smartEditorIdData } = useGetSmartEditorIdQuery(oppgaveId);
-    const { data: smartEditor } = useGetSmartEditorQuery(smartEditorIdData?.smartEditorId ?? skipToken);
+    const { documentId } = useContext(SmartEditorContext);
+    const { data: smartEditor } = useGetSmartEditorQuery(
+      documentId === null ? skipToken : { oppgaveId, dokumentId: documentId }
+    );
 
-    if (typeof smartEditorIdData === 'undefined' || smartEditorIdData?.smartEditorId === null || smartEditor === null) {
+    if (smartEditor === null) {
       return null;
     }
 
@@ -30,7 +32,7 @@ export const CommentSection = React.memo(
 CommentSection.displayName = 'CommentSection';
 
 export const CommentSectionContainer = styled.section`
-  width: 355px;
+  width: 30%;
   height: 100%;
   padding-left: 2em;
   overflow-y: auto;

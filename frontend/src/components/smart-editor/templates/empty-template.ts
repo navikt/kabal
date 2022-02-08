@@ -16,7 +16,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 
 export const EMPTY_TEMPLATE: ISmartEditorTemplate = {
   templateId: 'empty',
-  title: 'Generelt brev',
+  tittel: 'Generelt brev',
   content: [
     {
       id: 'test-smart-editor',

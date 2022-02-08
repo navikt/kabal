@@ -1,44 +1,28 @@
-export interface IGetDokumenterParams {
-  oppgaveId: string;
-  pageReference: string | null;
-  temaer: string[];
-  pageSize: number;
+export type UUID = string;
+
+export enum DocumentType {
+  BREV = '1',
+  NOTAT = '2',
+  VEDTAKSBREV = '4',
+  BESLUTNING = '5',
 }
 
-export interface IDokumentParams {
-  id: string;
-  idx: number;
-  handling: string;
-  antall: number;
-  ref: string | null;
-  historyNavigate: boolean;
+export interface IBaseDocument {
+  id: UUID;
+  tittel: string;
+  dokumentTypeId: DocumentType;
+  opplastet: string; // LocalDateTime,
+  isSmartDokument: boolean;
+  isMarkertAvsluttet: boolean;
+  parent: UUID | null;
 }
 
-export interface IDocumentsResponse {
-  dokumenter: IDocument[];
-  pageReference: string | null;
-  antall: number;
-  totaltAntall: number;
+export interface IFileDocument extends IBaseDocument {
+  isSmartDokument: false;
 }
 
-export interface IDokumenterParams {
-  klagebehandlingId: string;
-  pageReference: string | null;
-  temaFilter: string[] | undefined;
+export interface ISmartDocument extends IBaseDocument {
+  isSmartDokument: true;
 }
 
-export interface IDocument {
-  journalpostId: string;
-  dokumentInfoId: string; // nullable?
-  tittel: string | null;
-  tema: string | null;
-  registrert: string; // LocalDate
-  harTilgangTilArkivvariant: boolean;
-  vedlegg: IDocumentVedlegg[];
-}
-
-export interface IDocumentVedlegg {
-  dokumentInfoId: string;
-  tittel: string | null;
-  harTilgangTilArkivvariant: boolean;
-}
+export type IMainDocument = IFileDocument | ISmartDocument;

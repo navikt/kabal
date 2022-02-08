@@ -456,7 +456,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 
 export const MEDHOLD_TEMPLATE: ISmartEditorTemplate = {
   templateId: 'medhold',
-  title: 'Vedtaksbrev medhold',
+  tittel: 'Vedtaksbrev medhold',
   content: [
     {
       id: 'test-smart-editor',

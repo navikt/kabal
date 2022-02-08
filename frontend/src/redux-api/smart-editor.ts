@@ -12,7 +12,7 @@ import {
 import { EDITOR_BASE_QUERY } from './common';
 
 export const smartEditorApi = createApi({
-  reducerPath: 'smartEditorApi',
+  reducerPath: 'smartEditorApiOld',
   baseQuery: EDITOR_BASE_QUERY,
   endpoints: (builder) => ({
     getSmartEditor: builder.query<ISmartEditorResponse | null, string>({

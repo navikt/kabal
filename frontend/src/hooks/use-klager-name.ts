@@ -1,4 +1,5 @@
 import { getFullName } from '../domain/name';
+import { ISakenGjelder } from '../types/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useKlagerName = (): string | null => {
@@ -8,9 +9,11 @@ export const useKlagerName = (): string | null => {
     return null;
   }
 
-  const {
-    klager: { person, virksomhet },
-  } = oppgavebehandling;
+  return getSakenGjelderName(oppgavebehandling.sakenGjelder);
+};
+
+export const getSakenGjelderName = (sakenGjelder: ISakenGjelder) => {
+  const { person, virksomhet } = sakenGjelder;
 
   if (person !== null) {
     return getFullName(person.navn);
