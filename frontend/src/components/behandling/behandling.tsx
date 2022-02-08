@@ -33,7 +33,7 @@ const Behandlingsdetaljer = () => {
     return null;
   }
 
-  if (oppgave.type === OppgaveType.KLAGEBEHANDLING) {
+  if (oppgave.type === OppgaveType.KLAGE) {
     return <Klagebehandlingsdetaljer />;
   }
 

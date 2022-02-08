@@ -2,7 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { usePostCommentReplyMutation } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Descendant } from 'slate';
 import styled from 'styled-components';
 import { isNotNull } from '../../functions/is-not-type-guards';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetSmartEditorQuery, useUpdateSmartEditorMutation } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ISmartEditor, ISmartEditorElement } from '../../types/smart-editor';

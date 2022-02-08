@@ -2,15 +2,15 @@ import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useKlagerName } from '../../hooks/use-klager-name';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgavebehandling';
-import { OppgaveType } from '../../types/kodeverk';
+import { OppgaveType, Utfall } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import {
   StyledFinishKlagebehandlingBox,
   StyledFinishKlagebehandlingButtons,
-  StyledFinishKlagebehandlingText,
+  StyledFinishKlagebehandlingText as StyledFinishOppgaveText,
 } from './styled-components';
 
 interface FinishProps {
@@ -71,25 +71,36 @@ interface OppgavebehandlingTextProps {
 }
 
 const OppgavebehandlingText = ({ klagerName }: OppgavebehandlingTextProps) => {
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isLoading } = useOppgave();
 
-  if (typeof oppgave === 'undefined') {
+  if (isLoading || typeof oppgave === 'undefined') {
     return null;
   }
 
-  if (oppgave.type === OppgaveType.KLAGEBEHANDLING) {
+  if (oppgave.type === OppgaveType.KLAGE) {
     return (
-      <StyledFinishKlagebehandlingText>
+      <StyledFinishOppgaveText>
         Du fullfører nå klagebehandlingen, brevet sendes til {klagerName ?? 'søker'} og klagebehandlingen kan ikke
         redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
-      </StyledFinishKlagebehandlingText>
+      </StyledFinishOppgaveText>
+    );
+  }
+
+  const { utfall } = oppgave.resultat;
+
+  if (utfall === Utfall.STADFESTELSE || utfall === Utfall.AVVIST || utfall === Utfall.DELVIS_MEDHOLD) {
+    return (
+      <StyledFinishOppgaveText>
+        Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
+        Ankebehandlingen kan ikke redigeres når den er fullført.
+      </StyledFinishOppgaveText>
     );
   }
 
   return (
-    <StyledFinishKlagebehandlingText>
-      Du fullfører nå ankebehandlingen, brevet sendes til {klagerName ?? 'søker'} og ankebehandlingen kan ikke
-      redigeres. Bekreft at du faktisk ønsker å fullføre behandlingen.
-    </StyledFinishKlagebehandlingText>
+    <StyledFinishOppgaveText>
+      Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk
+      ønsker å fullføre behandlingen.
+    </StyledFinishOppgaveText>
   );
 };

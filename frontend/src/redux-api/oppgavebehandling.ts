@@ -177,7 +177,7 @@ export const oppgavebehandlingApi = createApi({
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === OppgaveType.ANKEBEHANDLING) {
+            if (draft.type === OppgaveType.ANKE) {
               draft.fullfoertGosys = true;
             }
           })
@@ -339,9 +339,7 @@ export const oppgavebehandlingApi = createApi({
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === OppgaveType.ANKEBEHANDLING) {
-              draft.sattPaaVent = new Date().toISOString();
-            }
+            draft.sattPaaVent = new Date().toISOString();
           })
         );
 
@@ -361,9 +359,7 @@ export const oppgavebehandlingApi = createApi({
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === OppgaveType.ANKEBEHANDLING) {
-              draft.sattPaaVent = null;
-            }
+            draft.sattPaaVent = null;
           })
         );
 

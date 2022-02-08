@@ -1,6 +1,6 @@
 import React from 'react';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { useCreateSmartEditorMutation } from '../../../redux-api/smart-editor';
 import { useUpdateSmartEditorIdMutation } from '../../../redux-api/smart-editor-id';
 import { INewSmartEditor, ISmartEditorTemplate } from '../../../types/smart-editor';

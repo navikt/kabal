@@ -2,8 +2,8 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateTimeToPretty } from '../../../../domain/date';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useOppgaveId } from '../../../../hooks/use-oppgave-id';
 import { IMessage, useGetMessagesQuery } from '../../../../redux-api/messages';
 import {
   StyledAuthor,

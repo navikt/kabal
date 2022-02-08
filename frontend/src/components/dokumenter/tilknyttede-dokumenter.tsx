@@ -2,7 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../redux-api/common';
 import { useGetTilknyttedeDokumenterQuery } from '../../redux-api/oppgavebehandling';
 import { IDocument, IDocumentVedlegg } from '../../types/documents';

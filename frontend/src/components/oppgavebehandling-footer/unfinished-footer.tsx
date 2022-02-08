@@ -1,9 +1,8 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useLazyValidateQuery } from '../../redux-api/oppgavebehandling';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
@@ -12,14 +11,13 @@ import { StyledButtons, StyledUnfinishedErrorFooter, StyledUnfinishedNoErrorFoot
 import { ValidationSummaryPopup } from './validation-summary-popup';
 import { VentButton } from './vent-button';
 
-export const UnfinishedAnkeFooter = () => {
+export const UnfinishedFooter = () => {
   const canEdit = useCanEdit();
-  const oppgaveId = useOppgaveId();
   const [validate, { data, isFetching }] = useLazyValidateQuery();
   const errorContext = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const isFullfoert = useIsFullfoert();
-  const { data: oppgave } = useOppgave();
+  const oppgaveId = useOppgaveId();
 
   const hasErrors = useMemo<boolean>(() => {
     if (typeof data === 'undefined') {
@@ -37,10 +35,6 @@ export const UnfinishedAnkeFooter = () => {
 
   const showConfirmFinishDisplay = !isFullfoert && showConfirmFinish && !hasErrors && !isFetching;
 
-  if (typeof oppgave === 'undefined') {
-    return null;
-  }
-
   const Wrapper = hasErrors ? StyledUnfinishedErrorFooter : StyledUnfinishedNoErrorFooter;
 
   return (
@@ -57,7 +51,7 @@ export const UnfinishedAnkeFooter = () => {
           autoDisableVedSpinner
           data-testid="complete-button"
         >
-          Send innstilling til bruker
+          Fullfør
         </Hovedknapp>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />

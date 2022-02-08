@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext } from 'react';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetAllCommentsQuery } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
 import { SmartEditorContext } from '../context/smart-editor-context';

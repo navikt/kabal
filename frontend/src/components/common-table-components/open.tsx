@@ -17,7 +17,7 @@ export const OpenOppgavebehandling = ({ oppgavebehandlingId, ytelse, type }: Pro
     return null;
   }
 
-  if (type === OppgaveType.KLAGEBEHANDLING) {
+  if (type === OppgaveType.KLAGE) {
     return (
       <NavLink
         className="knapp knapp--hoved"

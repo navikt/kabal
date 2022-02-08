@@ -58,7 +58,7 @@ export const Annet = () => {
     },
   ];
 
-  const reasons = oppgave.type === OppgaveType.ANKEBEHANDLING ? baseReasons : [...baseReasons, ...klageReasons];
+  const reasons = oppgave.type === OppgaveType.ANKE ? baseReasons : [...baseReasons, ...klageReasons];
 
   return (
     <FormSection>

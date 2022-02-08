@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
 import { NewCommentThread } from './new-thread';
