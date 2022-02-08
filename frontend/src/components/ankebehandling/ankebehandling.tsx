@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useGetSmartEditorQuery } from '../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../redux-api/smart-editor-id';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';

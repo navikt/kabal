@@ -29,7 +29,7 @@ export const Klageforberedelsen = () => {
     return <NavFrontendSpinner />;
   }
 
-  if (oppgave.type === OppgaveType.ANKEBEHANDLING) {
+  if (oppgave.type === OppgaveType.ANKE) {
     return null;
   }
 

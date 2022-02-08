@@ -1,10 +1,10 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsAssignee } from '../../../../hooks/use-is-assignee';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
-import { useOppgaveId } from '../../../../hooks/use-oppgave-id';
 import { useGetMedunderskriverQuery, useGetMedunderskriverflytQuery } from '../../../../redux-api/oppgavebehandling';
 import { MedunderskriverInfo } from './medunderskriver-info';
 import { SelectMedunderskriver } from './select-medunderskriver';

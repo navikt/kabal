@@ -3,7 +3,7 @@ import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useCallback, useContext, useState } from 'react';
 import { ReactEditor } from 'slate-react';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';

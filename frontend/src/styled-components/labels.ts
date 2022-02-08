@@ -32,8 +32,8 @@ export const LabelLovhjemmel = styled(Label)`
 `;
 
 export const LabelType = styled(Label)<{ type: OppgaveType }>`
-  background-color: ${({ type }) => (type === OppgaveType.KLAGEBEHANDLING ? 'white' : 'black')};
-  color: ${({ type }) => (type === OppgaveType.KLAGEBEHANDLING ? 'black' : 'white')};
+  background-color: ${({ type }) => (type === OppgaveType.KLAGE ? 'white' : 'black')};
+  color: ${({ type }) => (type === OppgaveType.KLAGE ? 'black' : 'white')};
   border: 1px solid #ba3a26;
 `;
 

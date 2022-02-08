@@ -1,5 +1,5 @@
 import { useGetOppgavebehandlingQuery } from '../../redux-api/oppgavebehandling';
-import { useOppgaveId } from '../use-oppgave-id';
+import { useOppgaveId } from './use-oppgave-id';
 
 export const useOppgave = () => {
   const oppgaveId = useOppgaveId();

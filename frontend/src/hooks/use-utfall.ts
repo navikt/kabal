@@ -10,7 +10,7 @@ export const useUtfall = (type?: OppgaveType): IKodeverkSimpleValue<Utfall>[] =>
       return [];
     }
 
-    if (type === OppgaveType.KLAGEBEHANDLING) {
+    if (type === OppgaveType.KLAGE) {
       return utfall;
     }
 

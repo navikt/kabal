@@ -12,7 +12,7 @@ export const FinishedAnkeFooter = () => {
   const { data: oppgave } = useOppgave();
   const [update] = useUpdateFinishedInGosysMutation();
 
-  if (typeof oppgave === 'undefined' || oppgave.type !== OppgaveType.ANKEBEHANDLING) {
+  if (typeof oppgave === 'undefined' || oppgave.type !== OppgaveType.ANKE) {
     return null;
   }
 

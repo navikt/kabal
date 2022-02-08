@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { isoDateToPretty } from '../../../domain/date';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFullTemaNameFromId } from '../../../hooks/use-kodeverk-ids';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../redux-api/common';
 import { IDocument } from '../../../types/documents';
 import { ShownDocumentContext } from '../context';

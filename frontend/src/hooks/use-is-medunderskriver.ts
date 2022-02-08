@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
 import { useGetMedunderskriverQuery, useGetOppgavebehandlingQuery } from '../redux-api/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
-import { useOppgaveId } from './use-oppgave-id';
+import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 
 export const useIsMedunderskriver = () => {
   const { data: userData, isLoading } = useGetBrukerQuery();

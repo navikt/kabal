@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useCreateSmartEditorMutation } from '../redux-api/smart-editor';
 import { useGetSmartEditorIdQuery, useUpdateSmartEditorIdMutation } from '../redux-api/smart-editor-id';
 import { INewSmartEditor } from '../types/smart-editor';
-import { useOppgaveId } from './use-oppgave-id';
+import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 
 export const useSmartEditorId = (initialContent: INewSmartEditor): string | null => {
   const oppgaveId = useOppgaveId();

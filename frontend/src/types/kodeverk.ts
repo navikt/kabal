@@ -10,8 +10,8 @@ export enum MedunderskriverFlyt {
 }
 
 export enum OppgaveType {
-  KLAGEBEHANDLING = '1',
-  ANKEBEHANDLING = '2',
+  KLAGE = '1',
+  ANKE = '2',
 }
 
 export enum Utfall {
@@ -20,7 +20,7 @@ export enum Utfall {
   OPPHEVET = '3',
   MEDHOLD = '4',
   DELVIS_MEDHOLD = '5',
-  OPPRETTHOLDT = '6',
+  STADFESTELSE = '6',
   UGUNST = '7',
   AVVIST = '8',
 }

@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
+import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '../../../hooks/use-all-temaer';
-import { useOppgaveId } from '../../../hooks/use-oppgave-id';
 import { useGetDokumenterQuery } from '../../../redux-api/oppgavebehandling';
 import { kodeverkValuesToDropdownOptions } from '../../dropdown/dropdown';
 import { FilterDropdown } from '../../filter-dropdown/filter-dropdown';

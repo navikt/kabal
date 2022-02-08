@@ -30,6 +30,7 @@ export interface IOppgavebehandlingBase {
   raadfoertMedLege: string | null;
   resultat: Resultat;
   sakenGjelder: ISakenGjelder;
+  sattPaaVent: string | null; // LocalDateTime
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
   tema: string;
@@ -42,13 +43,12 @@ export interface IOppgavebehandlingBase {
 }
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {
-  type: OppgaveType.KLAGEBEHANDLING;
+  type: OppgaveType.KLAGE;
 }
 
 export interface IAnkebehandling extends IOppgavebehandlingBase {
-  type: OppgaveType.ANKEBEHANDLING;
+  type: OppgaveType.ANKE;
   fullfoertGosys: boolean;
-  sattPaaVent: string | null; // LocalDateTime
 }
 
 export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;

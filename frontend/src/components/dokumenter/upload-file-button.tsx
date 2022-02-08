@@ -1,8 +1,8 @@
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useCallback, useRef } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
-import { useOppgaveId } from '../../hooks/use-oppgave-id';
 import { useUploadFileMutation } from '../../redux-api/oppgavebehandling';
 
 interface UploadFileButtonProps {
