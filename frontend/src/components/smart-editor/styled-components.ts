@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const EditorContainer = styled.section`
   position: relative;
-  width: 798px;
+  width: 100%;
   padding: 0;
   overflow-y: auto;
 `;
@@ -15,7 +15,6 @@ interface StyledEditableProps {
 }
 
 export const StyledEditable = styled(Editable)<StyledEditableProps>`
-  /* width: 210mm; */
   min-height: 150mm;
   border: 1px solid #c9c9c9;
   padding: 2em;

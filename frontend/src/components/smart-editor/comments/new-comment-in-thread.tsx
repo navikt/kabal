@@ -1,11 +1,11 @@
 import { Knapp } from 'nav-frontend-knapper';
 import { Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
-import { usePostCommentReplyMutation } from '../../../redux-api/smart-editor';
-import { useGetSmartEditorIdQuery } from '../../../redux-api/smart-editor-id';
+import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
+import { SmartEditorContext } from '../context/smart-editor-context';
 import { StyledCommentButton, StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
 
 interface NewCommentInThreadProps {
@@ -16,34 +16,30 @@ interface NewCommentInThreadProps {
 
 export const NewCommentInThread = ({ threadId, onFocusChange, focused }: NewCommentInThreadProps) => {
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
-  const [postReply] = usePostCommentReplyMutation();
+  const [postReply] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
-  const { data: smartEditorData } = useGetSmartEditorIdQuery(oppgaveId);
+  const { documentId } = useContext(SmartEditorContext);
 
   const [text, setText] = useState<string>('');
 
-  if (
-    typeof bruker === 'undefined' ||
-    brukerIsLoading ||
-    typeof smartEditorData === 'undefined' ||
-    smartEditorData?.smartEditorId === null
-  ) {
+  if (typeof bruker === 'undefined' || brukerIsLoading) {
     return <NavFrontendSpinner />;
   }
 
   const onSubmit = () => {
-    if (smartEditorData?.smartEditorId === null || text.length <= 0) {
+    if (documentId === null || text.length <= 0) {
       return;
     }
 
     postReply({
+      oppgaveId,
       author: {
         ident: bruker.info.navIdent,
         name: bruker.info.sammensattNavn,
       },
-      documentId: smartEditorData?.smartEditorId,
+      dokumentId: documentId,
       text,
-      threadId,
+      commentId: threadId,
     }).then(() => {
       setText('');
     });

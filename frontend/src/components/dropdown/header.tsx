@@ -2,6 +2,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Input } from 'nav-frontend-skjema';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
+import { StyledHeader } from './styled-components';
 
 export interface Option {
   label: string;
@@ -114,16 +115,6 @@ export const Header = ({
 
 const removeRegExpTokens = (pattern: string): string => pattern.replace(/[/\\^$*+?.()|[\]{}\s]/g, '');
 const escapeRegExp = (pattern: string): string => pattern.replaceAll('-', '\\-');
-
-const StyledHeader = styled.div`
-  display: flex;
-  position: sticky;
-  justify-content: space-between;
-  top: 0;
-  padding: 8px;
-  border-bottom: 1px solid #c6c2bf;
-  background-color: white;
-`;
 
 const StyledKnapp = styled(Knapp)`
   &&& {

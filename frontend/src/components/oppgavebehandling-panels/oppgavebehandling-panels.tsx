@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Behandling } from '../behandling/behandling';
-import { Dokumenter } from '../dokumenter/dokumenter';
+import { Documents } from '../documents/documents';
 import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
 import { SmartEditorPanel } from '../smart-editor/smart-editor-panel';
@@ -12,7 +12,7 @@ interface OppgavebehandlingPanelsProps {
 
 export const OppgavebehandlingPanels = ({ toggles }: OppgavebehandlingPanelsProps): JSX.Element => (
   <PageContainer data-testid="klagebehandling-panels">
-    <Dokumenter shown={toggles.documents} />
+    <Documents shown={toggles.documents} />
     <SmartEditorPanel shown={toggles.smartEditor} />
     <Behandling shown={toggles.behandling} />
     <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />

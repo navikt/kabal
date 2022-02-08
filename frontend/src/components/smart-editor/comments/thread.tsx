@@ -1,7 +1,7 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ISmartEditorComment } from '../../../types/smart-editor';
+import { ISmartEditorComment } from '../../../types/smart-editor-comments';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
 

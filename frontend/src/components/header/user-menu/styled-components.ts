@@ -3,26 +3,32 @@ import styled, { css } from 'styled-components';
 
 export const StyledContainer = styled.div`
   position: relative;
+  height: 100%;
+  color: #fff;
 `;
 
 export const StyledButton = styled.button`
   display: flex;
   align-items: center;
+  gap: 8px;
+  height: 100%;
   cursor: pointer;
   background-color: transparent;
   border: none;
-  padding: 0.5em;
+  padding: 0;
   color: white;
-  text-align: right;
 `;
 
 export const StyledDropdown = styled.div`
   position: absolute;
   text-align: left;
   right: 0;
+  top: 100%;
   min-width: 100%;
-  background-color: white;
+  background-color: #3e3832;
+  color: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 `;
 
 export const EnhetList = styled.ul`
@@ -33,7 +39,6 @@ export const EnhetList = styled.ul`
 
 export const LinkList = styled.ul`
   margin-top: 10px;
-  border-top: 1px solid #dcd9d9;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -52,13 +57,14 @@ const itemCSS = css`
   border: none;
   padding: 0.5em;
   text-align: left;
-  color: black;
   padding: 0.5em;
   padding-left: 2em;
   text-decoration: none;
+  color: inherit;
+  border-top: 1px solid #fff;
 
-  &:hover {
-    background-color: lightgrey;
+  :hover {
+    background-color: rgba(255, 255, 255, 0.2);
   }
 
   :disabled {

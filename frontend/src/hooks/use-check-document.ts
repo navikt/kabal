@@ -3,7 +3,7 @@ import { useRemoveTilknyttetDocumentMutation, useTilknyttDocumentMutation } from
 import { ITilknyttDocumentParams } from '../types/oppgavebehandling-params';
 
 export const useCheckDocument = (
-  klagebehandlingId: string,
+  oppgavebehandlingId: string,
   dokumentInfoId: string,
   journalpostId: string
 ): [(checked: boolean) => void, boolean] => {
@@ -15,7 +15,7 @@ export const useCheckDocument = (
       const data: ITilknyttDocumentParams = {
         dokumentInfoId,
         journalpostId,
-        oppgaveId: klagebehandlingId,
+        oppgaveId: oppgavebehandlingId,
       };
 
       if (checked) {
@@ -24,7 +24,7 @@ export const useCheckDocument = (
         removeDocument(data);
       }
     },
-    [klagebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]
+    [oppgavebehandlingId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]
   );
 
   const isLoading = tilknyttLoader.isLoading || removeLoader.isLoading;
