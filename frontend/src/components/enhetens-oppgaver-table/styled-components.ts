@@ -7,7 +7,7 @@ export const StyledTableContainer = styled.div`
 `;
 
 export const StyledTable = styled.table`
-  max-width: 1200px;
+  max-width: 2000px;
 `;
 
 export const StyledTableStats = styled.div`

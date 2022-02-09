@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { useGetSaksbehandlereInEnhetQuery } from '../redux-api/oppgaver';
 import { IKodeverkValue } from '../types/kodeverk';
 
-export const useSaksbehandlereInEnhet = (enhetId?: string): IKodeverkValue[] => {
-  const { data } = useGetSaksbehandlereInEnhetQuery(enhetId ?? skipToken);
+export const useSaksbehandlereInEnhet = (enhetId: string | typeof skipToken = skipToken): IKodeverkValue[] => {
+  const { data } = useGetSaksbehandlereInEnhetQuery(enhetId);
 
   return useMemo<IKodeverkValue[]>(() => {
     if (typeof data === 'undefined') {

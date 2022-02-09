@@ -3,6 +3,7 @@ import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhe
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { OppgaveType } from '../../types/kodeverk';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
@@ -12,14 +13,16 @@ import { Filters } from './types';
 interface TableHeaderFiltersProps {
   onChange: (filters: Filters) => void;
   filters: Filters;
-  enhetId: string;
 }
 
-export const TableHeaderFilters = ({ onChange, filters, enhetId }: TableHeaderFiltersProps) => {
+export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps) => {
   const typeOptions = useSettingsTypes();
   const ytelseOptions = useSettingsYtelser();
   const hjemlerOptions = useSettingsHjemler();
-  const saksbehandlerOptions = useSaksbehandlereInEnhet(enhetId);
+
+  const { data: bruker } = useGetBrukerQuery();
+
+  const saksbehandlerOptions = useSaksbehandlereInEnhet(bruker?.ansattEnhet.id);
 
   return (
     <thead>
