@@ -29,6 +29,7 @@ export interface IUserData {
   info: IUser;
   roller: Role[];
   enheter: IEnhet[];
+  ansattEnhet: IEnhet;
   innstillinger: ISettings;
 }
 

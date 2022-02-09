@@ -1,10 +1,10 @@
 import React from 'react';
-import { LabelMedunderskriver } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { Hjemmel } from '../common-table-components/hjemmel';
+import { MedudunderskriverflytLabel } from '../common-table-components/medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { Ytelse } from '../common-table-components/ytelse';
 import { Type } from '../type/type';
@@ -20,6 +20,8 @@ export const Row = ({
   harMedunderskriver,
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
+  erMedunderskriver,
+  medunderskriverFlyt,
 }: IOppgave): JSX.Element => (
   <tr data-testid="enhetens-oppgaver-table-row" data-klagebehandlingid={id}>
     <td>
@@ -38,7 +40,13 @@ export const Row = ({
       <Deadline age={ageKA} frist={frist} />
     </td>
     <td>{tildeltSaksbehandlerNavn}</td>
-    <td>{harMedunderskriver ? <LabelMedunderskriver>Sendt til medunderskriver</LabelMedunderskriver> : ''}</td>
+    <td>
+      <MedudunderskriverflytLabel
+        erMedunderskriver={erMedunderskriver}
+        harMedunderskriver={harMedunderskriver}
+        medunderskriverFlyt={medunderskriverFlyt}
+      />
+    </td>
     <td>
       <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
     </td>

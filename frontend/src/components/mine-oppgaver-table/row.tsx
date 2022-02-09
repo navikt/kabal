@@ -5,10 +5,10 @@ import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { Hjemmel } from '../common-table-components/hjemmel';
+import { MedudunderskriverflytLabel } from '../common-table-components/medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { Ytelse } from '../common-table-components/ytelse';
 import { Type } from '../type/type';
-import { MedudunderskriverflytLabel } from './medunderskrivflyt-label';
 
 export const Row = ({
   id,
@@ -44,7 +44,7 @@ export const Row = ({
     </td>
     <td>
       <MedudunderskriverflytLabel
-        medunderskriverflyt={medunderskriverFlyt}
+        medunderskriverFlyt={medunderskriverFlyt}
         erMedunderskriver={erMedunderskriver}
         harMedunderskriver={harMedunderskriver}
       />

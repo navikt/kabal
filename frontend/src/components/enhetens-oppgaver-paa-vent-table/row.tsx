@@ -1,14 +1,21 @@
 import React, { useMemo } from 'react';
-import { formatPersonNum } from '../../functions/format-id';
-import { useFullYtelseNameFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
-import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
+import { Hjemmel } from '../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { PaaVent } from '../common-table-components/paa-vent';
+import { Ytelse } from '../common-table-components/ytelse';
 import { Type } from '../type/type';
 
-export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: IOppgave): JSX.Element => {
+export const Row = ({
+  id,
+  type,
+  utfall,
+  hjemmel,
+  ytelse,
+  sattPaaVent,
+  tildeltSaksbehandlerNavn,
+}: IOppgave): JSX.Element => {
   const utfallList = useKodeverkValue('utfall');
 
   const utfallName = useMemo(() => {
@@ -20,22 +27,21 @@ export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: 
   }, [utfallList, utfall]);
 
   return (
-    <tr>
+    <tr data-testid="enhetens-oppgaver-paa-vent-table-row" data-klagebehandlingid={id}>
       <td>
         <Type type={type} />
       </td>
       <td>
-        <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
+        <Ytelse ytelseId={ytelse} />
       </td>
       <td>
-        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
+        <Hjemmel hjemmel={hjemmel} />
       </td>
-      <td>{person?.navn}</td>
-      <td>{formatPersonNum(person?.fnr)}</td>
       <td>
         <PaaVent sattPaaVent={sattPaaVent} />
       </td>
       <td>{utfallName}</td>
+      <td>{tildeltSaksbehandlerNavn}</td>
       <td>
         <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
       </td>

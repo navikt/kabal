@@ -77,6 +77,15 @@ export const oppgaverApi = createApi({
         return `/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
       },
     }),
+    getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
+      query: ({ enhetId, ...queryParams }) => {
+        const query = qs.stringify(queryParams, {
+          arrayFormat: 'comma',
+          skipNulls: true,
+        });
+        return `/enhet/${enhetId}/oppgaver/tildelte/paavent?${query}`;
+      },
+    }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = qs.stringify(queryParams, {
@@ -116,6 +125,7 @@ export const oppgaverApi = createApi({
 export const {
   useGetEnhetensFerdigstilteOppgaverQuery,
   useGetEnhetensUferdigeOppgaverQuery,
+  useGetEnhetensVentendeOppgaverQuery,
   useGetMineFerdigstilteOppgaverQuery,
   useGetMineUferdigeOppgaverQuery,
   useGetMineVentendeOppgaverQuery,

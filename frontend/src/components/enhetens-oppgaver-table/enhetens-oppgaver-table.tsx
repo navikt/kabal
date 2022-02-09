@@ -4,7 +4,7 @@ import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
-import { IEnhet, useGetBrukerQuery } from '../../redux-api/bruker';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { Loader } from '../loader/loader';
@@ -15,11 +15,7 @@ import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
 
-interface EnhetensOppgaverTableProps {
-  enhet: IEnhet;
-}
-
-export const EnhetensOppgaverTable = ({ enhet }: EnhetensOppgaverTableProps) => {
+export const EnhetensOppgaverTable = () => {
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
@@ -49,7 +45,7 @@ export const EnhetensOppgaverTable = ({ enhet }: EnhetensOppgaverTableProps) => 
           ytelser,
           typer,
           hjemler,
-          enhetId: enhet.id,
+          enhetId: bruker.ansattEnhet.id,
           tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
@@ -64,9 +60,9 @@ export const EnhetensOppgaverTable = ({ enhet }: EnhetensOppgaverTableProps) => 
 
   return (
     <StyledTableContainer>
-      <StyledHeader>Tildelte oppgaver - {enhet.navn}</StyledHeader>
+      <StyledHeader>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledHeader>
       <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-table">
-        <TableHeaderFilters filters={filters} onChange={setFilters} enhetId={enhet.id} />
+        <TableHeaderFilters filters={filters} onChange={setFilters} />
         <OppgaveRader oppgaver={oppgaver?.behandlinger} />
       </StyledTable>
     </StyledTableContainer>
