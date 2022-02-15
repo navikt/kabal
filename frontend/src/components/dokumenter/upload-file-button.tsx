@@ -1,9 +1,17 @@
+import { Warning } from '@navikt/ds-icons';
 import { Knapp } from 'nav-frontend-knapper';
-import React, { useCallback, useRef } from 'react';
+import Popover, { PopoverOrientering } from 'nav-frontend-popover';
+import React, { useCallback, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
+import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { useUploadFileMutation } from '../../redux-api/oppgavebehandling';
+
+const MAX_SIZE_BYTES = 8388608;
+const MEBI = 1024 * 1024;
+const MAX_SIZE_MIB = MAX_SIZE_BYTES / MEBI;
 
 interface UploadFileButtonProps {
   show: boolean;
@@ -14,6 +22,7 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
   const oppgaveId = useOppgaveId();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
+  const [error, setError] = useState<string | null>(null);
 
   const fileInput = useRef<HTMLInputElement>(null);
   const handleClick = useCallback(
@@ -35,11 +44,20 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
       const { files } = event.target;
 
       if (files === null || files.length !== 1) {
-        console.error(`Wrong number of files ${files?.length ?? 0}.`);
-        return;
+        return setError('Kun én fil kan lastes opp av gangen.');
       }
 
       const [file] = files;
+
+      if (file.size > MAX_SIZE_BYTES) {
+        return setError(
+          `Filstørrelsen (${(
+            file.size / MEBI
+          ).toLocaleString()} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`
+        );
+      }
+
+      setError(null);
 
       uploadFile({
         file,
@@ -59,6 +77,8 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
 
   return (
     <>
+      <ErrorInfo error={error} />
+
       <Knapp
         onClick={handleClick}
         disabled={isLoading || hasFile}
@@ -67,6 +87,7 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
       >
         Last opp dokument
       </Knapp>
+
       <input
         type="file"
         accept=".pdf"
@@ -78,3 +99,57 @@ export const UploadFileButton = ({ show }: UploadFileButtonProps) => {
     </>
   );
 };
+
+interface ErrorInfoProps {
+  error: string | null;
+}
+
+const ErrorInfo = ({ error }: ErrorInfoProps) => {
+  const [open, setOpen] = useState(true);
+  const [ref, setRef] = useState<HTMLButtonElement | null>(null);
+
+  useOnClickOutside(() => setOpen(false), { current: ref }, true);
+
+  if (error === null) {
+    return null;
+  }
+
+  const toggleOpen = () => setOpen(!open);
+
+  return (
+    <StyledErrorInfo>
+      <StyledButton onClick={toggleOpen} ref={setRef}>
+        <Warning />
+      </StyledButton>
+      <Popover
+        ankerEl={open ? ref ?? undefined : undefined}
+        onRequestClose={() => setOpen(false)}
+        autoFokus={false}
+        orientering={PopoverOrientering.Under}
+      >
+        <StyledErrorMessage>{error}</StyledErrorMessage>
+      </Popover>
+    </StyledErrorInfo>
+  );
+};
+
+const StyledButton = styled.button`
+  color: #ba3a26;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 0;
+  padding: 2px;
+  padding-left: 0.5em;
+`;
+
+const StyledErrorMessage = styled.p`
+  padding: 0.5em;
+  margin: 0;
+  color: #ba3a26;
+`;
+
+const StyledErrorInfo = styled.div`
+  margin-right: 0.5em;
+`;
