@@ -7,7 +7,7 @@ export interface IArkiverteDocumentsResponse {
 
 export interface IArkivertDocument {
   journalpostId: string;
-  dokumentInfoId: string; // nullable?
+  dokumentInfoId: string;
   tittel: string | null;
   tema: string | null;
   registrert: string; // LocalDate

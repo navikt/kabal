@@ -7,9 +7,9 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   padding: 0;
   font-size: inherit;
   background-color: transparent;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  line-height: 1.375;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1.25;
   font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -17,6 +17,7 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   text-decoration: none;
   font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
   color: #0067c5;
+  height: 100%;
 
   &:hover {
     color: #262626;

@@ -48,8 +48,8 @@ const EditButton = ({ setEditMode, editMode, isMarkertAvsluttet }: EditButtonPro
 };
 
 const StyledEditButton = styled.button`
-  padding-top: 7px;
-  padding-bottom: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
   padding-left: 8px;
   padding-right: 8px;
   margin: 0;

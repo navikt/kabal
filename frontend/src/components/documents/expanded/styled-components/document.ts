@@ -9,6 +9,7 @@ export const StyledDocument = styled.div`
   border-radius: 4px;
   background-color: #fff;
   transition: background-color 0.2s ease-in-out;
+  min-height: 34.5px;
 
   :hover {
     background-color: #f5f5f5;
@@ -26,6 +27,7 @@ export const StyledDocumentTitle = styled.h1`
   grid-area: title;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 100%;
 `;
 
 export const StyledDate = styled.time`

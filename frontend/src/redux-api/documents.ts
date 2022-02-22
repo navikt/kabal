@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IFileDocument, IMainDocument } from '../types/documents';
 import { IDocumentParams } from '../types/documents-common-params';
-import { ICreateFileDocument, ISetNameParams, ISetParentParams, ISetTypeParams } from '../types/documents-params';
+import { ICreateFileDocumentParams, ISetNameParams, ISetParentParams, ISetTypeParams } from '../types/documents-params';
 import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling-params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 
@@ -120,7 +120,7 @@ export const documentsApi = createApi({
         }
       },
     }),
-    uploadFileDocument: builder.mutation<IFileDocument, ICreateFileDocument>({
+    uploadFileDocument: builder.mutation<IFileDocument, ICreateFileDocumentParams>({
       query: ({ oppgaveId, file }) => {
         const formData = new FormData();
         formData.append('file', file);

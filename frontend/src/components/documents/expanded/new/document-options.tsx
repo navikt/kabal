@@ -50,7 +50,7 @@ const Container = styled.div`
   &::before {
     content: '';
     position: absolute;
-    right: 7.5px;
+    right: 11px;
     top: -7.5px;
     width: 15px;
     height: 15px;

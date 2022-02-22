@@ -14,6 +14,6 @@ export interface ISetNameParams extends IDocumentParams {
   title: string;
 }
 
-export interface ICreateFileDocument extends IOppgavebehandlingBaseParams {
+export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams {
   file: File;
 }
