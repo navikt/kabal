@@ -10,7 +10,6 @@ import {
   IOppgavebehandlingUtfallUpdateParams,
   ISetMedunderskriverParams,
   ITilknyttDocumentParams,
-  IUploadFileParams,
 } from '../types/oppgavebehandling-params';
 import {
   IMedunderskriverResponse,
@@ -19,7 +18,6 @@ import {
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytResponse,
   ITilknyttDocumentResponse,
-  IUploadFileResponse,
   IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
 import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
@@ -276,55 +274,6 @@ export const oppgavebehandlingApi = createApi({
         );
       },
     }),
-    uploadFile: builder.mutation<IUploadFileResponse, IUploadFileParams>({
-      query: ({ oppgaveId, file }) => {
-        const formData = new FormData();
-        formData.append('vedlegg', file);
-
-        return {
-          url: `/${oppgaveId}/resultat/vedlegg`,
-          method: 'POST',
-          body: formData,
-        };
-      },
-      onQueryStarted: async ({ oppgaveId, file }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            const opplastet = new Date().toISOString();
-            draft.resultat.file = {
-              name: file.name,
-              size: file.size,
-              opplastet,
-            };
-          })
-        );
-
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
-    deleteFile: builder.mutation<IUploadFileResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/${oppgaveId}/resultat/vedlegg`,
-        method: 'DELETE',
-      }),
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.resultat.file = null;
-          })
-        );
-
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
     validate: builder.query<IApiValidationResponse, string>({
       query: (oppgaveId) => ({
         url: `/${oppgaveId}/validate`,
@@ -388,8 +337,6 @@ export const {
   useGetMedunderskriverflytQuery,
   useUpdateChosenMedunderskriverMutation,
   useSwitchMedunderskriverflytMutation,
-  useUploadFileMutation,
-  useDeleteFileMutation,
   useUpdateFinishedInGosysMutation,
   useValidateQuery,
   useLazyValidateQuery,

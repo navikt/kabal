@@ -1,4 +1,4 @@
-import { Warning } from '@navikt/ds-icons';
+import { Upload, Warning } from '@navikt/ds-icons';
 import { Knapp } from 'nav-frontend-knapper';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useCallback, useRef, useState } from 'react';
@@ -7,14 +7,14 @@ import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
-import { useUploadFileMutation } from '../../../redux-api/oppgavebehandling';
+import { useUploadFileDocumentMutation } from '../../../redux-api/documents';
 
 const MAX_SIZE_BYTES = 8388608;
 const MEBI = 1024 * 1024;
 const MAX_SIZE_MIB = MAX_SIZE_BYTES / MEBI;
 
 export const UploadFileButton = () => {
-  const [uploadFile, { isLoading }] = useUploadFileMutation();
+  const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
   const oppgaveId = useOppgaveId();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
@@ -73,9 +73,9 @@ export const UploadFileButton = () => {
     <>
       <ErrorInfo error={error} />
 
-      <Knapp onClick={handleClick} disabled={isLoading} mini spinner={isLoading}>
-        Last opp dokument
-      </Knapp>
+      <StyledUploadButton onClick={handleClick} disabled={isLoading} mini spinner={isLoading}>
+        <Upload /> Last opp dokument
+      </StyledUploadButton>
 
       <input
         type="file"
@@ -121,6 +121,12 @@ const ErrorInfo = ({ error }: ErrorInfoProps) => {
     </StyledErrorInfo>
   );
 };
+
+const StyledUploadButton = styled(Knapp)`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
 
 const StyledButton = styled.button`
   color: #ba3a26;

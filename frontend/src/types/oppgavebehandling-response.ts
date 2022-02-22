@@ -34,11 +34,6 @@ export interface ISwitchMedunderskriverflytResponse {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
-export interface IUploadFileResponse {
-  file: IVedlegg;
-  modified: string;
-}
-
 export interface IModifiedResponse {
   modified: string;
 }

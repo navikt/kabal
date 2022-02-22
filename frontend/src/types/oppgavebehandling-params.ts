@@ -26,10 +26,6 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
   medunderskriver: ISaksbehandler | null;
 }
 
-export interface IUploadFileParams extends IOppgavebehandlingBaseParams {
-  file: File;
-}
-
 export interface IGetDokumenterParams extends IOppgavebehandlingBaseParams {
   pageReference: string | null;
   temaer: string[];

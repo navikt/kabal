@@ -5,7 +5,7 @@ export const DocumentsHeader = styled.div`
   gap: 16px;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 5;
   padding: 1em;
   background: white;
   border-bottom: 1px solid #c6c2bf;

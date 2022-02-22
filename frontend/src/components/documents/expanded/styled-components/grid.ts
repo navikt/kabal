@@ -7,6 +7,9 @@ export const documentsGridCSS = css`
     grid-template-areas: 'title meta date action';
     grid-column-gap: 16px;
     align-items: center;
-    padding: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
   }
 `;

@@ -20,7 +20,7 @@ export const StyledAttachmentList = styled.ul`
     position: absolute;
     left: 0;
     top: 0;
-    bottom: 20px;
+    bottom: 17px;
     border-left: 1px solid #c6c2bf;
   }
 `;
@@ -34,7 +34,7 @@ export const StyledAttachmentListItem = styled(StyledDocumentListItem)`
     width: 12px;
     position: absolute;
     left: 0;
-    top: 20px;
+    top: 50%;
     border-bottom: 1px solid #c6c2bf;
   }
 `;
