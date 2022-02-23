@@ -79,8 +79,6 @@ export const oppgavebehandlingApi = createApi({
     }),
     getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, IGetDokumenterParams>({
       query: ({ oppgaveId, pageReference, temaer }) => {
-        console.log('LOAD', oppgaveId, pageReference, temaer);
-
         const query = qs.stringify(
           {
             antall: 10,
@@ -115,15 +113,6 @@ export const oppgavebehandlingApi = createApi({
         { oppgaveId, journalpostId, dokumentInfoId, pageReferences, temaer },
         { dispatch, queryFulfilled }
       ) => {
-        console.log(
-          'UPDATE',
-          pageReferences.map((pageReference) => ({
-            oppgaveId,
-            pageReference,
-            temaer,
-          }))
-        );
-
         const patchResults = pageReferences.map((pageReference) =>
           dispatch(
             oppgavebehandlingApi.util.updateQueryData(
