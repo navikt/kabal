@@ -1,8 +1,6 @@
-import React, { useMemo } from 'react';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
+import React from 'react';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../../hooks/use-check-document';
-import { dokumentMatcher } from '../../helpers';
 import { StyledDocumentCheckbox } from './styled-components';
 
 interface Props {
@@ -11,6 +9,9 @@ interface Props {
   dokumentInfoId: string;
   journalpostId: string;
   harTilgangTilArkivvariant: boolean;
+  valgt: boolean;
+  pageReferences: (string | null)[];
+  temaer: string[];
 }
 
 export const DocumentCheckbox = ({
@@ -19,21 +20,24 @@ export const DocumentCheckbox = ({
   journalpostId,
   title,
   harTilgangTilArkivvariant,
+  valgt,
+  pageReferences,
+  temaer,
 }: Props): JSX.Element => {
-  const { data: oppgave } = useOppgave();
-  const [setDocument, isUpdating] = useCheckDocument(oppgavebehandlingId, dokumentInfoId, journalpostId);
-  const canEdit = useCanEdit();
-
-  const tilknyttet = useMemo<boolean>(
-    () => oppgave?.tilknyttedeDokumenter.some((t) => dokumentMatcher(t, { dokumentInfoId, journalpostId })) ?? false,
-    [oppgave, dokumentInfoId, journalpostId]
+  const [setDocument, isUpdating] = useCheckDocument(
+    oppgavebehandlingId,
+    dokumentInfoId,
+    journalpostId,
+    pageReferences,
+    temaer
   );
+  const canEdit = useCanEdit();
 
   return (
     <StyledDocumentCheckbox
       title={title}
       disabled={!harTilgangTilArkivvariant || !canEdit || isUpdating}
-      checked={tilknyttet}
+      checked={valgt}
       onChange={(e) => setDocument(e.currentTarget.checked)}
       data-testid="oppgavebehandling-documents-document-checkbox"
     />

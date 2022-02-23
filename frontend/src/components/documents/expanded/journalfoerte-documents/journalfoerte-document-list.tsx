@@ -10,9 +10,7 @@ import { StyledFilterDropdown, StyledListHeader, StyledListTitle } from '../styl
 import { DocumentsPage } from './documents-page';
 import { LoadMore } from './load-more';
 
-const PAGE_SIZE = 10;
-
-export const JournalfoerteDocumentList = React.memo(() => {
+export const JournalfoerteDocumentList = () => {
   const oppgaveId = useOppgaveId();
   const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
@@ -20,7 +18,6 @@ export const JournalfoerteDocumentList = React.memo(() => {
   const { data: lastPage, isFetching } = useGetArkiverteDokumenterQuery({
     oppgaveId,
     pageReference: pageReferences[pageReferences.length - 1],
-    pageSize: PAGE_SIZE,
     temaer: selectedTemaer,
   });
 
@@ -45,21 +42,21 @@ export const JournalfoerteDocumentList = React.memo(() => {
             key={pageReference}
             oppgaveId={oppgaveId}
             pageReference={pageReference}
-            pageSize={PAGE_SIZE}
             temaer={selectedTemaer}
+            pageReferences={pageReferences}
           />
         ))}
       </StyledDocumentList>
       <LoadMore
         totalDocuments={lastPage?.totaltAntall ?? 0}
-        loadedDocuments={pageReferences.length * PAGE_SIZE}
+        loadedDocuments={pageReferences.length * 10}
         pageReference={lastPage?.pageReference ?? null}
         loading={isFetching}
         setPage={(pageReference: string) => setPageReferences(pageReferences.concat(pageReference))}
       />
     </StyledDocumentsContainer>
   );
-});
+};
 
 JournalfoerteDocumentList.displayName = 'JournalfoerteDocuments';
 

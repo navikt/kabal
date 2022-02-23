@@ -1,6 +1,6 @@
 import { Name } from '../domain/types';
 import { Gender, MedunderskriverFlyt, OppgaveType, Utfall } from './kodeverk';
-import { IDocumentReference, ISaksbehandler, IVedlegg } from './oppgave-common';
+import { ISaksbehandler, IVedlegg } from './oppgave-common';
 
 export interface IOppgavebehandlingBase {
   avsluttetAvSaksbehandlerDate: string | null; // LocalDate
@@ -38,7 +38,6 @@ export interface IOppgavebehandlingBase {
   tildelt: string | null; // LocalDate
   tildeltSaksbehandler: ISaksbehandler | null;
   tildeltSaksbehandlerEnhet: string | null;
-  tilknyttedeDokumenter: IDocumentReference[];
   ytelse: string;
 }
 

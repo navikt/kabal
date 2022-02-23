@@ -13,10 +13,12 @@ export interface IArkivertDocument {
   registrert: string; // LocalDate
   harTilgangTilArkivvariant: boolean;
   vedlegg: IArkivertDocumentVedlegg[];
+  valgt: boolean;
 }
 
 export interface IArkivertDocumentVedlegg {
   dokumentInfoId: string;
   tittel: string | null;
   harTilgangTilArkivvariant: boolean;
+  valgt: boolean;
 }

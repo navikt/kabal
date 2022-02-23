@@ -8,10 +8,10 @@ interface Props {
   title: string;
   journalpostId: string;
   dokumentInfoId: string;
-  tilknyttet?: boolean;
+  valgt: boolean;
 }
 
-export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, tilknyttet = true }: Props) => {
+export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, valgt }: Props) => {
   const oppgaveId = useOppgaveId();
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
@@ -26,7 +26,7 @@ export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, tilkn
   const isActive = shownDocument?.url === url;
 
   return (
-    <ViewDocumentButton isActive={isActive} tilknyttet={tilknyttet} onClick={onClick}>
+    <ViewDocumentButton isActive={isActive} tilknyttet={valgt} onClick={onClick}>
       {title}
     </ViewDocumentButton>
   );

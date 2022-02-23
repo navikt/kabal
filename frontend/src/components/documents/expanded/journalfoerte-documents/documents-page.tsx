@@ -5,16 +5,15 @@ import { Document } from './document';
 
 interface Props {
   oppgaveId: string;
+  pageReferences: (string | null)[];
   pageReference: string | null;
-  pageSize: number;
   temaer: string[];
 }
 
-export const DocumentsPage = ({ oppgaveId, pageReference, pageSize, temaer }: Props) => {
+export const DocumentsPage = ({ oppgaveId, pageReference, pageReferences, temaer }: Props) => {
   const { data } = useGetArkiverteDokumenterQuery({
     oppgaveId,
     pageReference,
-    pageSize,
     temaer,
   });
 
@@ -29,7 +28,7 @@ export const DocumentsPage = ({ oppgaveId, pageReference, pageSize, temaer }: Pr
           key={`dokument_${document.journalpostId}_${document.dokumentInfoId}`}
           data-testid="oppgavebehandling-documents-all-list-item"
         >
-          <Document document={document} />
+          <Document document={document} pageReferences={pageReferences} temaer={temaer} />
         </StyledDocumentListItem>
       ))}
     </>

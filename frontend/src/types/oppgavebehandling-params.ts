@@ -13,7 +13,11 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
   hjemler: string[];
 }
 
-export type ITilknyttDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
+export type ICheckDocumentParams = IDocumentReference &
+  IOppgavebehandlingBaseParams & {
+    pageReferences: (string | null)[];
+    temaer: string[];
+  };
 
 export interface IMedunderskrivereParams {
   navIdent: string;
@@ -29,5 +33,4 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
 export interface IGetDokumenterParams extends IOppgavebehandlingBaseParams {
   pageReference: string | null;
   temaer: string[];
-  pageSize: number;
 }

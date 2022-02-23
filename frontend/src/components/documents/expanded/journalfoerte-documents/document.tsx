@@ -5,7 +5,6 @@ import { useFullTemaNameFromId } from '../../../../hooks/use-kodeverk-ids';
 import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../../redux-api/common';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { ShownDocumentContext } from '../../context';
-import { dokumentMatcher } from '../../helpers';
 import { StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDate, StyledDocument, StyledDocumentTitle } from '../styled-components/document';
 import { AttachmentList } from './attachment-list';
@@ -14,55 +13,60 @@ import { DocumentTema } from './styled-components';
 
 interface Props {
   document: IArkivertDocument;
+  pageReferences: (string | null)[];
+  temaer: string[];
 }
 
-export const Document = React.memo<Props>(
-  ({ document }) => {
-    const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema } = document;
-    const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-    const oppgaveId = useOppgaveId();
+export const Document = ({ document, pageReferences, temaer }: Props) => {
+  const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema, valgt } = document;
+  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const oppgaveId = useOppgaveId();
 
-    const url = useMemo(
-      () =>
-        `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
-      [oppgaveId, journalpostId, dokumentInfoId]
-    );
+  const url = useMemo(
+    () =>
+      `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
+    [oppgaveId, journalpostId, dokumentInfoId]
+  );
 
-    const onClick = () =>
-      setShownDocument({
-        title: tittel,
-        url,
-      });
+  const onClick = () =>
+    setShownDocument({
+      title: tittel,
+      url,
+    });
 
-    const isActive = shownDocument?.url === url;
+  const isActive = shownDocument?.url === url;
 
-    return (
-      <>
-        <StyledDocument>
-          <StyledDocumentTitle>
-            <StyledDocumentButton
-              isActive={isActive}
-              onClick={onClick}
-              data-testid="oppgavebehandling-documents-open-document-button"
-            >
-              {tittel}
-            </StyledDocumentButton>
-          </StyledDocumentTitle>
-          <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
-          <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
-          <DocumentCheckbox
-            dokumentInfoId={dokumentInfoId}
-            journalpostId={journalpostId}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-            title={tittel ?? ''}
-            oppgavebehandlingId={oppgaveId}
-          />
-        </StyledDocument>
-        <AttachmentList document={document} oppgavebehandlingId={oppgaveId} />
-      </>
-    );
-  },
-  (previous, next) => dokumentMatcher(previous.document, next.document)
-);
-
-Document.displayName = 'Document';
+  return (
+    <>
+      <StyledDocument>
+        <StyledDocumentTitle>
+          <StyledDocumentButton
+            isActive={isActive}
+            onClick={onClick}
+            data-testid="oppgavebehandling-documents-open-document-button"
+          >
+            {tittel}
+          </StyledDocumentButton>
+        </StyledDocumentTitle>
+        <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
+        <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
+        <DocumentCheckbox
+          dokumentInfoId={dokumentInfoId}
+          journalpostId={journalpostId}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          title={tittel ?? ''}
+          oppgavebehandlingId={oppgaveId}
+          valgt={valgt}
+          pageReferences={pageReferences}
+          temaer={temaer}
+        />
+      </StyledDocument>
+      <AttachmentList
+        document={document}
+        oppgavebehandlingId={oppgaveId}
+        pageReferences={pageReferences}
+        temaer={temaer}
+      />
+    </>
+  );
+};
