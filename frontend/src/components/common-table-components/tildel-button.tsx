@@ -44,7 +44,11 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
   }
 
   if (result.isSuccess) {
-    return <SuccessStatus>Tildelt!</SuccessStatus>;
+    return (
+      <SuccessStatus data-testid="oppgave-tildel-success" data-oppgaveid={klagebehandlingId}>
+        Tildelt!
+      </SuccessStatus>
+    );
   }
 
   if (isUserLoading) {

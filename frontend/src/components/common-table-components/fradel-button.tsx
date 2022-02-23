@@ -41,7 +41,11 @@ export const FradelKlagebehandlingButton = ({
   }
 
   if (done) {
-    return <SuccessStatus>Lagt tilbake!</SuccessStatus>;
+    return (
+      <SuccessStatus data-testid="oppgave-fradel-success" data-oppgaveid={klagebehandlingId}>
+        Lagt tilbake!
+      </SuccessStatus>
+    );
   }
 
   const isLoading = loader.isLoading || isUserLoading;
