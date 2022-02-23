@@ -5,11 +5,11 @@ import { IArkiverteDocumentsResponse } from '../types/arkiverte-documents';
 import { MedunderskriverFlyt, OppgaveType } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
+  ICheckDocumentParams,
   IGetDokumenterParams,
   IOppgavebehandlingHjemlerUpdateParams,
   IOppgavebehandlingUtfallUpdateParams,
   ISetMedunderskriverParams,
-  ITilknyttDocumentParams,
 } from '../types/oppgavebehandling-params';
 import {
   IMedunderskriverResponse,
@@ -79,6 +79,8 @@ export const oppgavebehandlingApi = createApi({
     }),
     getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, IGetDokumenterParams>({
       query: ({ oppgaveId, pageReference, temaer }) => {
+        console.log('LOAD', oppgaveId, pageReference, temaer);
+
         const query = qs.stringify(
           {
             antall: 10,
@@ -98,52 +100,154 @@ export const oppgavebehandlingApi = createApi({
       query: (oppgaveId) => `/${oppgaveId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
-    tilknyttDocument: builder.mutation<ITilknyttDocumentResponse, ITilknyttDocumentParams>({
-      query: ({ oppgaveId, ...documentReference }) => ({
+    tilknyttDocument: builder.mutation<ITilknyttDocumentResponse, ICheckDocumentParams>({
+      query: ({ oppgaveId, dokumentInfoId, journalpostId }) => ({
         url: `/${oppgaveId}/dokumenttilknytninger`,
         method: 'POST',
-        body: documentReference,
+        body: {
+          journalpostId,
+          dokumentInfoId,
+        },
         validateStatus: ({ ok }) => ok,
       }),
       invalidatesTags: ['tilknyttedeDokumenter'],
-      onQueryStarted: async ({ oppgaveId, ...documentReference }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.tilknyttedeDokumenter.push(documentReference);
-          })
+      onQueryStarted: async (
+        { oppgaveId, journalpostId, dokumentInfoId, pageReferences, temaer },
+        { dispatch, queryFulfilled }
+      ) => {
+        console.log(
+          'UPDATE',
+          pageReferences.map((pageReference) => ({
+            oppgaveId,
+            pageReference,
+            temaer,
+          }))
         );
 
-        try {
-          const { data } = await queryFulfilled;
+        const patchResults = pageReferences.map((pageReference) =>
           dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              draft.modified = data.modified;
-            })
-          );
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
-    removeTilknyttetDocument: builder.mutation<{ modified: string }, ITilknyttDocumentParams>({
-      query: ({ oppgaveId, journalpostId, dokumentInfoId }) => ({
-        url: `/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
-        method: 'DELETE',
-        validateStatus: ({ ok }) => ok,
-      }),
-      invalidatesTags: ['tilknyttedeDokumenter'],
-      onQueryStarted: async ({ oppgaveId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+            oppgavebehandlingApi.util.updateQueryData(
+              'getArkiverteDokumenter',
+              { oppgaveId, pageReference, temaer },
+              (draft) => ({
+                ...draft,
+                dokumenter: draft.dokumenter.map((d) => {
+                  if (d.journalpostId === journalpostId) {
+                    if (d.dokumentInfoId === dokumentInfoId) {
+                      return { ...d, valgt: true };
+                    }
+
+                    return {
+                      ...d,
+                      vedlegg: d.vedlegg.map((v) => {
+                        if (v.dokumentInfoId === dokumentInfoId) {
+                          return { ...v, valgt: true };
+                        }
+
+                        return v;
+                      }),
+                    };
+                  }
+
+                  return d;
+                }),
+              })
+            )
+          )
+        );
+
         const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.tilknyttedeDokumenter = draft.tilknyttedeDokumenter.filter(
-              (d) => !(d.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
-            );
+          oppgavebehandlingApi.util.updateQueryData('getTilknyttedeDokumenter', oppgaveId, (draft) => {
+            draft.dokumenter = draft.dokumenter.map((d) => {
+              if (d.journalpostId === journalpostId) {
+                if (d.dokumentInfoId === dokumentInfoId) {
+                  return { ...d, valgt: true };
+                }
+
+                return {
+                  ...d,
+                  vedlegg: d.vedlegg.map((v) => {
+                    if (v.dokumentInfoId === dokumentInfoId) {
+                      return { ...v, valgt: true };
+                    }
+
+                    return v;
+                  }),
+                };
+              }
+
+              return d;
+            });
           })
         );
 
         try {
           await queryFulfilled;
         } catch {
+          patchResults.forEach(({ undo }) => undo());
+          patchResult.undo();
+        }
+      },
+    }),
+    removeTilknyttetDocument: builder.mutation<{ modified: string }, ICheckDocumentParams>({
+      query: ({ oppgaveId, journalpostId, dokumentInfoId }) => ({
+        url: `/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['tilknyttedeDokumenter'],
+      onQueryStarted: async (
+        { oppgaveId, journalpostId, dokumentInfoId, pageReferences, temaer },
+        { dispatch, queryFulfilled }
+      ) => {
+        const patchResults = pageReferences.map((pageReference) =>
+          dispatch(
+            oppgavebehandlingApi.util.updateQueryData(
+              'getArkiverteDokumenter',
+              { oppgaveId, pageReference, temaer },
+              (draft) => ({
+                ...draft,
+                dokumenter: draft.dokumenter.map((d) => {
+                  if (d.journalpostId === journalpostId) {
+                    if (d.dokumentInfoId === dokumentInfoId) {
+                      return { ...d, valgt: false };
+                    }
+
+                    return {
+                      ...d,
+                      vedlegg: d.vedlegg.map((v) => {
+                        if (v.dokumentInfoId === dokumentInfoId) {
+                          return { ...v, valgt: false };
+                        }
+
+                        return v;
+                      }),
+                    };
+                  }
+
+                  return d;
+                }),
+              })
+            )
+          )
+        );
+
+        const patchResult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getTilknyttedeDokumenter', oppgaveId, (draft) => {
+            draft.dokumenter = draft.dokumenter
+              .filter((d) => !(d.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId))
+              .map((d) => ({
+                ...d,
+                vedlegg: d.vedlegg.filter(
+                  (v) => !(v.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
+                ),
+              }));
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResults.forEach(({ undo }) => undo());
           patchResult.undo();
         }
       },

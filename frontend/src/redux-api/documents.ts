@@ -3,7 +3,8 @@ import { IFileDocument, IMainDocument } from '../types/documents';
 import { IDocumentParams } from '../types/documents-common-params';
 import { ICreateFileDocumentParams, ISetNameParams, ISetParentParams, ISetTypeParams } from '../types/documents-params';
 import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling-params';
-import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
+import { DOMAIN, IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH, KABAL_BEHANDLINGER_BASE_QUERY } from './common';
+import { oppgavebehandlingApi } from './oppgavebehandling';
 
 export const documentsApi = createApi({
   reducerPath: 'documentsApi',
@@ -11,6 +12,21 @@ export const documentsApi = createApi({
   endpoints: (builder) => ({
     getDocuments: builder.query<IMainDocument[], IOppgavebehandlingBaseParams>({
       query: ({ oppgaveId }) => `/${oppgaveId}/dokumenter`,
+      onCacheEntryAdded: async ({ oppgaveId }, { updateCachedData, dispatch }) => {
+        const events = new EventSource(`${DOMAIN}${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/dokumenter/events`, {
+          withCredentials: IS_LOCALHOST,
+        });
+
+        events.addEventListener('finished', (event) => {
+          if (isServerSentEvent(event) && event.data.length !== 0) {
+            updateCachedData(
+              (draft) => draft.filter(({ id, parent }) => id !== event.data || parent === event.data) // Remove finished document from list.
+            );
+
+            dispatch(oppgavebehandlingApi.util.invalidateTags(['dokumenter', 'tilknyttedeDokumenter']));
+          }
+        });
+      },
     }),
     setType: builder.mutation<IMainDocument, ISetTypeParams>({
       query: ({ oppgaveId, dokumentId, dokumentTypeId }) => ({
@@ -148,3 +164,9 @@ export const {
   useSetTypeMutation,
   useUploadFileDocumentMutation,
 } = documentsApi;
+
+interface ServerSentEvent extends Event {
+  data: string;
+}
+
+const isServerSentEvent = (event: Event): event is ServerSentEvent => typeof event['data'] !== 'undefined';
