@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { ansatteApi } from '../redux-api/ansatte';
+import { behandlingerApi } from '../redux-api/behandlinger';
 import { brukerApi } from '../redux-api/bruker';
 import { documentsApi } from '../redux-api/documents';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
@@ -29,6 +30,7 @@ export const rootReducer = combineReducers({
   [documentsApi.reducerPath]: documentsApi.reducer,
   [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
   [smartEditorApiOld.reducerPath]: smartEditorApiOld.reducer,
+  [behandlingerApi.reducerPath]: behandlingerApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

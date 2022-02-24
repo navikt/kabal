@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgavebehandling';
+import { useFinishOppgavebehandlingMutation } from '../../redux-api/behandlinger';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
