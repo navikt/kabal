@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { ansatteApi } from '../redux-api/ansatte';
+import { behandlingerApi } from '../redux-api/behandlinger';
 import { brukerApi } from '../redux-api/bruker';
 import { documentsApi } from '../redux-api/documents';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
@@ -49,6 +50,7 @@ export const reduxStore = configureStore({
       documentsApi.middleware,
       smartEditorApiOld.middleware,
       smartEditorCommentsApi.middleware,
+      behandlingerApi.middleware,
     ]),
 });
 
