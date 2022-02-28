@@ -103,6 +103,7 @@ export const Header = ({
         inputRef={(e) => {
           inputRef.current = e;
         }}
+        data-testid="dropdown-search"
       />
       {showFjernAlle && (
         <StyledKnapp mini kompakt onClick={onReset}>

@@ -11,7 +11,6 @@ interface LovhjemmelSelectProps {
   onChange: (selected: string[]) => void;
   disabled?: boolean;
   error?: string;
-  'data-testid'?: string;
   showFjernAlle?: boolean;
   show: boolean;
 }
@@ -22,7 +21,6 @@ export const LovhjemmelSelect = ({
   selected,
   disabled,
   error,
-  'data-testid': testId,
   showFjernAlle,
   show,
 }: LovhjemmelSelectProps) => {
@@ -51,9 +49,9 @@ export const LovhjemmelSelect = ({
 
   return (
     <>
-      <StyledLovhjemmelSelect ref={ref} data-testid={testId} data-selected={selected.join(',')}>
+      <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel" data-selected={selected.join(',')}>
         <StyledHjemler>
-          <Søkeknapp mini onClick={toggleOpen} disabled={disabled}>
+          <Søkeknapp mini onClick={toggleOpen} disabled={disabled} data-testid="lovhjemmel-button">
             <span>Hjemmel</span>
           </Søkeknapp>
         </StyledHjemler>
@@ -68,6 +66,7 @@ export const LovhjemmelSelect = ({
           top={0}
           left="370px"
           maxHeight="400px"
+          testId="lovhjemmel-dropdown"
         />
       </StyledLovhjemmelSelect>
       <ErrorMessage error={error} />

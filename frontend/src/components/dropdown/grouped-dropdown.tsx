@@ -32,6 +32,7 @@ interface DropdownProps extends StyledDropdownProps {
   open: boolean;
   close: () => void;
   showFjernAlle?: boolean;
+  testId?: string;
 }
 
 export const GroupedDropdown = ({
@@ -43,6 +44,7 @@ export const GroupedDropdown = ({
   top,
   left,
   maxHeight,
+  testId,
   showFjernAlle = true,
 }: DropdownProps): JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(/.*/g);
@@ -97,13 +99,13 @@ export const GroupedDropdown = ({
         close={close}
         showFjernAlle={showFjernAlle}
       />
-      <StyledSectionList>
+      <StyledSectionList data-testid={`${testId ?? 'grouped-dropdown'}-list`}>
         {filteredOptions.map(({ sectionHeader, sectionOptions }) => (
           <li key={sectionHeader.id}>
             {typeof sectionHeader.name !== 'undefined' && (
               <StyledSectionHeader>{sectionHeader.name}</StyledSectionHeader>
             )}
-            <StyledOptionList>
+            <StyledOptionList data-testid={`${sectionHeader.name ?? 'grouped-dropdown'}-option-list`}>
               {sectionOptions.map(({ value, label }) => (
                 <StyledListItem key={value}>
                   <Filter

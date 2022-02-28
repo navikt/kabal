@@ -56,7 +56,7 @@ const SelectedChildren = ({
   }
 
   return (
-    <>
+    <section data-testid="selected-hjemler-list">
       {registreringshjemmelIdList.map(({ lovkilde, registreringshjemler }) => (
         <StyledSelectedSection key={lovkilde.id}>
           <StyledSelectedSectionHeader>{lovkilde.navn}</StyledSelectedSectionHeader>
@@ -68,6 +68,6 @@ const SelectedChildren = ({
           </StyledSelectedList>
         </StyledSelectedSection>
       ))}
-    </>
+    </section>
   );
 };
