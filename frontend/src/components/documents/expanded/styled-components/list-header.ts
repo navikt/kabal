@@ -9,6 +9,9 @@ export const StyledListHeader = styled.div`
 `;
 
 export const StyledListTitle = styled.h1`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
   font-size: 1em;
   grid-area: title;

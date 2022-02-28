@@ -1,6 +1,14 @@
-const SECTION_TITLES = {
-  klagebehandling: 'Klagebehandling',
-  kvalitetsvurdering: 'Kvalitetsvurdering',
-};
+import { SECTION_KEY } from '../functions/error-type-guard';
 
-export const useSectionTitle = (section: keyof typeof SECTION_TITLES): string => SECTION_TITLES[section] ?? section;
+export const useSectionTitle = (sectionKey: SECTION_KEY): string => {
+  switch (sectionKey) {
+    case SECTION_KEY.BEHANDLING:
+      return 'Behandling';
+    case SECTION_KEY.KVALITETSVURDERING:
+      return 'Kvalitetsvurdering';
+    case SECTION_KEY.DOKUMENTER:
+      return 'Dokumenter';
+    default:
+      return '';
+  }
+};

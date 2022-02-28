@@ -1,4 +1,5 @@
 import React from 'react';
+import { SECTION_KEY } from '../../functions/error-type-guard';
 import { useSectionTitle } from '../../hooks/use-section-title';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { Kvalitetsskjema } from './kvalitetsskjema';
@@ -9,7 +10,7 @@ interface KvalitetsvurderingProps {
 }
 
 export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Element | null => {
-  const header = useSectionTitle('kvalitetsvurdering');
+  const header = useSectionTitle(SECTION_KEY.KVALITETSVURDERING);
 
   if (!shown) {
     return null;

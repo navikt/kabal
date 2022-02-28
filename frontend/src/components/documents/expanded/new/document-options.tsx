@@ -6,7 +6,7 @@ import { useGetDocumentsQuery } from '../../../../redux-api/documents';
 import { IMainDocument } from '../../../../types/documents';
 import { DeleteDocumentButton } from './delete-document-button';
 import { FinishDocument } from './finish-document/finish-document';
-import { ParentDocument } from './parent-document';
+import { SetParentDocument } from './set-parent-document';
 
 interface Props {
   document: IMainDocument;
@@ -26,7 +26,7 @@ export const DocumentOptions = ({ document }: Props) => {
 
   return (
     <Container>
-      <ParentDocument document={document} />
+      <SetParentDocument document={document} />
       <FinishDocument document={document} />
       <DeleteDocumentButton document={document} />
     </Container>

@@ -47,7 +47,7 @@ export const GroupedDropdown = ({
   testId,
   showFjernAlle = true,
 }: DropdownProps): JSX.Element | null => {
-  const [filter, setFilter] = useState<RegExp>(/.*/g);
+  const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [flattenedFilteredOptions, setFlattenedFilteredOptions] = useState<Option[]>(
