@@ -38,7 +38,7 @@ export const FullfoerteOppgaverTable = () => {
 
   return (
     <StyledTableContainer>
-      <StyledTable className="tabell tabell--stripet">
+      <StyledTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table">
         <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
         <TableHeader headers={TABLE_HEADERS} />
         <OppgaveRader oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />

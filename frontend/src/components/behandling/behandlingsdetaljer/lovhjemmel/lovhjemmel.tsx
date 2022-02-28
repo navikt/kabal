@@ -59,7 +59,6 @@ export const Lovhjemmel = () => {
         selected={oppgave.resultat.hjemler}
         onChange={onLovhjemmelChange}
         error={validationError}
-        data-testid="lovhjemmel"
         showFjernAlle={false}
         show={canEdit}
       />
