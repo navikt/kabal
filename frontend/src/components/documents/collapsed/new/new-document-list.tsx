@@ -1,6 +1,8 @@
+import { Warning } from '@navikt/ds-icons';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetDocumentsQuery } from '../../../../redux-api/documents';
 import { Loading } from '../../loading';
 import { ListContainer, StyledSubHeader } from '../styled-components/container';
@@ -15,21 +17,40 @@ export const NewDocumentList = () => {
     return <NavFrontendSpinner />;
   }
 
+  const documents = data.filter(({ parent }) => parent === null);
+
+  if (documents.length === 0) {
+    return null;
+  }
+
   return (
     <ListContainer data-testid="oppgavebehandling-documents-tilknyttede">
-      <StyledSubHeader>Nye dokumenter</StyledSubHeader>
+      <ListHeader />
       <Loading loading={isLoading || isFetching} />
       <DocumentList data-testid="oppgavebehandling-documents-tilknyttede-list">
-        {data
-          .filter(({ parent }) => parent === null)
-          .map((document) => (
-            <NewDocument
-              {...document}
-              attachments={data.filter(({ parent }) => parent === document.id)}
-              key={document.id}
-            />
-          ))}
+        {documents.map((document) => (
+          <NewDocument
+            {...document}
+            attachments={data.filter(({ parent }) => parent === document.id)}
+            key={document.id}
+          />
+        ))}
       </DocumentList>
     </ListContainer>
   );
+};
+
+const ListHeader = () => {
+  const errorMessage = useValidationError('dokument');
+
+  if (typeof errorMessage === 'string') {
+    return (
+      <StyledSubHeader>
+        Nye dokumenter
+        <Warning title={errorMessage} color="#ba3a26" />
+      </StyledSubHeader>
+    );
+  }
+
+  return <StyledSubHeader>Nye dokumenter</StyledSubHeader>;
 };

@@ -7,6 +7,9 @@ export const ListContainer = styled.section`
 `;
 
 export const StyledSubHeader = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   line-height: 1;
   font-size: 1em;
   font-weight: bold;

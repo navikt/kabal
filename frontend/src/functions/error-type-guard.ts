@@ -5,8 +5,14 @@ export interface IValidationError {
   field: keyof typeof FIELD_NAMES;
 }
 
+export enum SECTION_KEY {
+  BEHANDLING = 'behandling',
+  KVALITETSVURDERING = 'kvalitetsvurdering',
+  DOKUMENTER = 'dokumenter',
+}
+
 export interface IValidationSection {
-  section: 'kvalitetsvurdering' | 'klagebehandling';
+  section: SECTION_KEY;
   properties: IValidationError[];
 }
 

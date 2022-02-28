@@ -11,10 +11,10 @@ interface Props {
   document: IMainDocument;
 }
 
-export const ParentDocument = ({ document }: Props) => {
+export const SetParentDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetDocumentsQuery({ oppgaveId });
-  const [setParent] = useSetParentMutation();
+  const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery({ oppgaveId });
+  const [setParent, { isLoading: isSettingParent }] = useSetParentMutation();
 
   const hasAttachments = useMemo(() => {
     if (typeof data === 'undefined') {
@@ -24,7 +24,7 @@ export const ParentDocument = ({ document }: Props) => {
     return data.some(({ parent }) => parent === document.id);
   }, [data, document.id]);
 
-  const options = useMemo(() => {
+  const potentialParents = useMemo(() => {
     if (hasAttachments || typeof data === 'undefined') {
       return [];
     }
@@ -38,7 +38,7 @@ export const ParentDocument = ({ document }: Props) => {
       ));
   }, [hasAttachments, data, document.id, document.parent]);
 
-  if (hasAttachments || isLoading || typeof data === 'undefined') {
+  if (hasAttachments || isLoadingDocuments || typeof data === 'undefined') {
     return null;
   }
 
@@ -57,14 +57,14 @@ export const ParentDocument = ({ document }: Props) => {
       value={document.parent ?? NONE_SELECTED}
       onChange={onChange}
       title="Gjør til vedlegg for"
-      disabled={options.length === 0}
+      disabled={isSettingParent}
     >
       <option key={NONE_SELECTED} value={NONE_SELECTED}>
         {getText(document)}
       </option>
       <optgroup label="Gjør til vedlegg for">
         {currentOption}
-        {options}
+        {potentialParents}
       </optgroup>
     </StyledSelect>
   );

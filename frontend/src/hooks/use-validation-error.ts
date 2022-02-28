@@ -3,7 +3,7 @@ import { ValidationErrorContext } from '../components/kvalitetsvurdering/validat
 import { IValidationSection } from '../functions/error-type-guard';
 import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
 
-type Field = keyof IKakaKvalitetsvurdering | 'vedtaksdokument' | 'utfall' | 'hjemmel';
+type Field = keyof IKakaKvalitetsvurdering | 'utfall' | 'hjemmel' | 'dokument';
 
 export const useValidationError = (field: Field): string | undefined => {
   const context = useContext(ValidationErrorContext);
