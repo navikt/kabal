@@ -30,7 +30,7 @@ export const SendDocument = ({ document }: Props) => {
 
   return (
     <StyledSendDocument ref={ref}>
-      <StyledSendButton onClick={toggleOpen} kompakt>
+      <StyledSendButton onClick={toggleOpen} kompakt data-testid="document-send-button">
         <Send /> {buttonText}
       </StyledSendButton>
       <ConfirmFinishDocument isOpen={isOpen} close={() => setIsOpen(false)} document={document} />

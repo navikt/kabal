@@ -32,6 +32,7 @@ export const SetFilename = ({ document, onDone }: Props) => {
       mini
       value={localFilename}
       title="Trykk Enter for å lagre. Escape for å avbryte."
+      data-testid="document-filename-input"
       onChange={({ target }) => setLocalFilename(target.value)}
       onBlur={save}
       onKeyDown={({ key }) => {

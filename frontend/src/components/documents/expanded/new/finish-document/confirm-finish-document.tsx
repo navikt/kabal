@@ -75,10 +75,10 @@ const FinishView = ({ title, mainText, confirmText, sakenGjelder, dokumentId, cl
       <StyledMainText>{mainText}</StyledMainText>
       {sakenGjelderText}
       <StyledButtons>
-        <Hovedknapp mini onClick={() => finish({ dokumentId, oppgaveId })}>
+        <Hovedknapp mini onClick={() => finish({ dokumentId, oppgaveId })} data-testid="document-finish-confirm">
           {confirmText}
         </Hovedknapp>
-        <Knapp mini onClick={close}>
+        <Knapp mini onClick={close} data-testid="document-finish-cancel">
           Avbryt
         </Knapp>
       </StyledButtons>

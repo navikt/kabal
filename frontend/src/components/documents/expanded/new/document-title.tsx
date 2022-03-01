@@ -47,11 +47,7 @@ export const DocumentTitle = ({ document }: Props) => {
 
   return (
     <StyledDocumentTitle>
-      <StyledDocumentButton
-        isActive={isActive}
-        onClick={onClick}
-        data-testid="oppgavebehandling-documents-open-document-button"
-      >
+      <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
         {document.tittel}
       </StyledDocumentButton>
       <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />

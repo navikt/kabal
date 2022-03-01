@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { documentsGridCSS } from './grid';
 
-export const StyledDocument = styled.div`
+export const StyledDocument = styled.article`
   ${documentsGridCSS}
   position: relative;
   width: 100%;

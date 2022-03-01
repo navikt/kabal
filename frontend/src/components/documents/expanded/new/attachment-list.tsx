@@ -17,11 +17,17 @@ export const AttachmentList = ({ parentId }: Props) => {
   }
 
   return (
-    <StyledAttachmentList data-testid="oppgavebehandling-documents-new-attachment-list">
+    <StyledAttachmentList data-testid="new-attachments-list">
       {data
         .filter(({ parent }) => parent === parentId)
         .map((attachment) => (
-          <StyledAttachmentListItem key={attachment.id}>
+          <StyledAttachmentListItem
+            key={attachment.id}
+            data-testid="new-attachments-list-item"
+            data-documentname={attachment.tittel}
+            data-documentid={attachment.id}
+            data-documenttype="attachment"
+          >
             <NewDocument document={attachment} />
           </StyledAttachmentListItem>
         ))}

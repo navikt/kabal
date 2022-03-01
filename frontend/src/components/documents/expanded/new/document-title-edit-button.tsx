@@ -19,7 +19,7 @@ export const EditButton = ({ setEditMode, editMode, isMarkertAvsluttet }: Props)
   const Icon = editMode ? StyledSuccessIcon : StyledEditIcon;
 
   return (
-    <StyledEditButton onClick={() => setEditMode(!editMode)}>
+    <StyledEditButton onClick={() => setEditMode(!editMode)} data-testid="document-title-edit-save-button">
       <Icon />
     </StyledEditButton>
   );

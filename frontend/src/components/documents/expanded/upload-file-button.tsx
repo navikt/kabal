@@ -73,7 +73,13 @@ export const UploadFileButton = () => {
     <>
       <ErrorInfo error={error} />
 
-      <StyledUploadButton onClick={handleClick} disabled={isLoading} mini spinner={isLoading}>
+      <StyledUploadButton
+        onClick={handleClick}
+        disabled={isLoading}
+        mini
+        spinner={isLoading}
+        data-testid="upload-document-button"
+      >
         <Upload /> Last opp dokument
       </StyledUploadButton>
 
