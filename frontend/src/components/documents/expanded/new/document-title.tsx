@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { DOMAIN, KABAL_BEHANDLINGER_BASE_PATH } from '../../../../redux-api/common';
 import { IMainDocument } from '../../../../types/documents';
 import { ShownDocumentContext } from '../../context';
 import { StyledDocumentButton } from '../../styled-components/document-button';
-import { SetFilename } from './filename';
+import { StyledDocumentTitle } from '../styled-components/document';
+import { EditButton } from './document-title-edit-button';
+import { SetFilename } from './set-filename';
 
 interface Props {
   document: IMainDocument;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
 }
 
-export const DocumentTitle = ({ document, editMode, setEditMode }: Props) => {
+export const DocumentTitle = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const [editMode, setEditMode] = useState(false);
 
   const url = useMemo(() => getURL(oppgaveId, document), [oppgaveId, document]);
 
@@ -30,7 +31,12 @@ export const DocumentTitle = ({ document, editMode, setEditMode }: Props) => {
   }, [isActive, url, document.tittel, setShownDocument]);
 
   if (editMode) {
-    return <SetFilename document={document} onDone={() => setEditMode(false)} />;
+    return (
+      <StyledDocumentTitle>
+        <SetFilename document={document} onDone={() => setEditMode(false)} />
+        <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />
+      </StyledDocumentTitle>
+    );
   }
 
   const onClick = () =>
@@ -40,13 +46,16 @@ export const DocumentTitle = ({ document, editMode, setEditMode }: Props) => {
     });
 
   return (
-    <StyledDocumentButton
-      isActive={isActive}
-      onClick={onClick}
-      data-testid="oppgavebehandling-documents-open-document-button"
-    >
-      {document.tittel}
-    </StyledDocumentButton>
+    <StyledDocumentTitle>
+      <StyledDocumentButton
+        isActive={isActive}
+        onClick={onClick}
+        data-testid="oppgavebehandling-documents-open-document-button"
+      >
+        {document.tittel}
+      </StyledDocumentButton>
+      <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />
+    </StyledDocumentTitle>
   );
 };
 
