@@ -24,7 +24,7 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <StyledAlertStripe type="advarsel">
+    <StyledAlertStripe type="advarsel" data-testid="validation-summary">
       <div>Kan ikke fullføre behandling. Dette mangler:</div>
       <ValidationSummaryContainer>{errorMessages}</ValidationSummaryContainer>
     </StyledAlertStripe>
