@@ -1,12 +1,14 @@
 import { EllipsisV, Sandglass } from '@navikt/ds-icons';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { isoDateTimeToPrettyDate } from '../../../../domain/date';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { DocumentType, IMainDocument } from '../../../../types/documents';
-import { StyledDocument } from '../styled-components/document';
-import { Document } from './document';
+import { StyledDate, StyledDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
+import { DocumentTitle } from './document-title';
+import { DocumentTypeOrFrikoble } from './document-type-or-frikoble';
 import { StyledToggleExpandButton } from './styled-components';
 
 interface Props {
@@ -15,7 +17,9 @@ interface Props {
 
 export const NewDocument = ({ document }: Props) => (
   <StyledDocument>
-    <Document document={document} />
+    <DocumentTitle document={document} />
+    <DocumentTypeOrFrikoble document={document} />
+    <StyledDate>{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
     <ActionContent document={document} />
   </StyledDocument>
 );
