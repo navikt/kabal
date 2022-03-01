@@ -3,7 +3,7 @@ import { Checkbox } from 'nav-frontend-skjema';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useUpdateFinishedInGosysMutation } from '../../redux-api/oppgavebehandling';
+import { useUpdateFinishedInGosysMutation } from '../../redux-api/behandlinger';
 import { OppgaveType } from '../../types/kodeverk';
 import { BackLink } from './back-link';
 import { StyledButtons, StyledFinishedFooter, StyledUnfinishedNoErrorFooter } from './styled-components';

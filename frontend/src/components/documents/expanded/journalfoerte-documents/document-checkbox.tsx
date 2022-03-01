@@ -23,7 +23,7 @@ export const DocumentCheckbox = ({
   valgt,
   pageReferences,
   temaer,
-}: Props): JSX.Element => {
+}: Props): JSX.Element | null => {
   const [setDocument, isUpdating] = useCheckDocument(
     oppgavebehandlingId,
     dokumentInfoId,
@@ -33,10 +33,14 @@ export const DocumentCheckbox = ({
   );
   const canEdit = useCanEdit();
 
+  if (!canEdit) {
+    return null;
+  }
+
   return (
     <StyledDocumentCheckbox
       title={title}
-      disabled={!harTilgangTilArkivvariant || !canEdit || isUpdating}
+      disabled={!harTilgangTilArkivvariant || isUpdating}
       checked={valgt}
       onChange={(e) => setDocument(e.currentTarget.checked)}
       data-testid="oppgavebehandling-documents-document-checkbox"
