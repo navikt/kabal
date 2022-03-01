@@ -1,9 +1,4 @@
-import Alertstripe from 'nav-frontend-alertstriper';
 import styled from 'styled-components';
-
-export const StyledAlertStripe = styled(Alertstripe)`
-  margin-bottom: 1em;
-`;
 
 export const ValidationSummaryContainer = styled.article`
   margin: 0;
@@ -27,9 +22,10 @@ export const StyledSection = styled.section`
 
 export const StyledPopup = styled.div`
   position: absolute;
-  bottom: 4em;
-  right: 1em;
   width: 400px;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 8px;
 `;
 
 export const StyledButton = styled.button`
@@ -45,7 +41,7 @@ export const StyledStatusText = styled.span`
 export const StyledIconButton = styled(StyledButton)`
   position: absolute;
   right: 0;
-  padding: 1em;
+  padding: 16px;
 `;
 
 export const StyledButtons = styled.div`
@@ -69,6 +65,7 @@ export const StyledFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   align-content: center;
+  z-index: 15;
 `;
 
 export const StyledFinishedFooter = styled(StyledFooter)`
