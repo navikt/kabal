@@ -1,5 +1,5 @@
 import { Input } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '../../../../redux-api/documents';
@@ -15,16 +15,15 @@ export const SetFilename = ({ document, onDone }: Props) => {
   const [localFilename, setLocalFilename] = useState(document.tittel);
   const [setFilename] = useSetTitleMutation();
 
-  useEffect(() => {
-    if (typeof localFilename === 'undefined' || localFilename === document.tittel) {
+  const save = () => {
+    onDone();
+
+    if (localFilename === document.tittel) {
       return;
     }
 
-    const timeout = setTimeout(() => {
-      setFilename({ oppgaveId, dokumentId: document.id, title: localFilename });
-    }, 250);
-    return () => clearTimeout(timeout); // Clear existing timer every time it runs.
-  }, [oppgaveId, document, setFilename, localFilename]);
+    setFilename({ oppgaveId, dokumentId: document.id, title: localFilename });
+  };
 
   return (
     <StyledInput
@@ -32,16 +31,12 @@ export const SetFilename = ({ document, onDone }: Props) => {
       bredde="fullbredde"
       mini
       value={localFilename}
+      title="Trykk Enter for å lagre. Escape for å avbryte."
       onChange={({ target }) => setLocalFilename(target.value)}
-      onBlur={({ target }) => {
-        setLocalFilename(target.value);
-        setFilename({ oppgaveId, dokumentId: document.id, title: localFilename });
-        onDone();
-      }}
+      onBlur={save}
       onKeyDown={({ key }) => {
         if (key === 'Enter') {
-          setFilename({ oppgaveId, dokumentId: document.id, title: localFilename });
-          onDone();
+          save();
         }
 
         if (key === 'Escape') {
