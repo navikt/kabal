@@ -48,7 +48,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   ));
 
   return (
-    <StyledUtfallResultat>
+    <StyledUtfallResultat data-testid="utfall-section">
       <Select
         disabled={!canEdit}
         label={`${utfallLabel}:`}
