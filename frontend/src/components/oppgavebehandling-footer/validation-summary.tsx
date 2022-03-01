@@ -1,14 +1,9 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { IValidationError, IValidationSection } from '../../functions/error-type-guard';
 import { useFieldName } from '../../hooks/use-field-name';
 import { useSectionTitle } from '../../hooks/use-section-title';
-import {
-  SectionTitle,
-  StyledAlertStripe,
-  StyledFieldList,
-  StyledSection,
-  ValidationSummaryContainer,
-} from './styled-components';
+import { SectionTitle, StyledFieldList, StyledSection, ValidationSummaryContainer } from './styled-components';
 
 interface Props {
   sections: IValidationSection[];
@@ -24,10 +19,10 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <StyledAlertStripe type="advarsel" data-testid="validation-summary">
+    <AlertStripeAdvarsel data-testid="validation-summary">
       <div>Kan ikke fullføre behandling. Dette mangler:</div>
       <ValidationSummaryContainer>{errorMessages}</ValidationSummaryContainer>
-    </StyledAlertStripe>
+    </AlertStripeAdvarsel>
   );
 };
 
