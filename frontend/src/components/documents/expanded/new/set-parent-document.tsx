@@ -58,6 +58,7 @@ export const SetParentDocument = ({ document }: Props) => {
       onChange={onChange}
       title="Gjør til vedlegg for"
       disabled={isSettingParent}
+      data-testid="document-set-parent-document"
     >
       <option key={NONE_SELECTED} value={NONE_SELECTED}>
         {getText(document)}

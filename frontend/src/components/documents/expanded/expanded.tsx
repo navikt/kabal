@@ -15,7 +15,7 @@ export const ExpandedDocuments = ({ toggleExpanded }: Props) => (
     <DocumentsHeader>
       <DocumentsTitle>Dokumenter</DocumentsTitle>
       <UploadFileButton />
-      <ExpandCollapseButton onClick={toggleExpanded} data-testid="oppgavebehandling-documents-toggle-view-button">
+      <ExpandCollapseButton onClick={toggleExpanded} data-testid="documents-collapse-view-button">
         <Back />
       </ExpandCollapseButton>
     </DocumentsHeader>

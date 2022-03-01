@@ -25,7 +25,7 @@ export const DocumentOptions = ({ document }: Props) => {
   }
 
   return (
-    <Container>
+    <Container data-testid="document-actions-container">
       <SetParentDocument document={document} />
       <FinishDocument document={document} />
       <DeleteDocumentButton document={document} />

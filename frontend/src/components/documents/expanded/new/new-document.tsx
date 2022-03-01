@@ -8,7 +8,7 @@ import { DocumentType, IMainDocument } from '../../../../types/documents';
 import { StyledDate, StyledDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
 import { DocumentTitle } from './document-title';
-import { DocumentTypeOrFrikoble } from './document-type-or-frikoble';
+import { SetDocumentType } from './document-type';
 import { StyledToggleExpandButton } from './styled-components';
 
 interface Props {
@@ -16,9 +16,14 @@ interface Props {
 }
 
 export const NewDocument = ({ document }: Props) => (
-  <StyledDocument>
+  <StyledDocument
+    data-documentname={document.tittel}
+    data-documentid={document.id}
+    data-testid="new-document-list-item-content"
+    data-documenttype={document.parent === null ? 'parent' : 'attachment'}
+  >
     <DocumentTitle document={document} />
-    <DocumentTypeOrFrikoble document={document} />
+    <SetDocumentType document={document} />
     <StyledDate>{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
     <ActionContent document={document} />
   </StyledDocument>
@@ -58,7 +63,7 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
 
   return (
     <DropdownContainer ref={ref}>
-      <StyledToggleExpandButton onClick={() => setOpen(!open)}>
+      <StyledToggleExpandButton onClick={() => setOpen(!open)} data-testid="document-actions-button">
         <EllipsisV />
       </StyledToggleExpandButton>
       {open ? children : null}

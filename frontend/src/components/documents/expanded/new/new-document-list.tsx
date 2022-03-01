@@ -26,9 +26,9 @@ export const NewDocumentList = () => {
   }
 
   return (
-    <StyledDocumentsContainer data-testid="oppgavebehandling-documents-new">
+    <StyledDocumentsContainer data-testid="new-documents-section">
       <ListHeader isFullfoert={isFullfoert} />
-      <StyledDocumentList data-testid="oppgavebehandling-documents-new-list">
+      <StyledDocumentList data-testid="new-documents-list">
         {documents.map((document) => (
           <NewParentDocument document={document} key={document.id} />
         ))}

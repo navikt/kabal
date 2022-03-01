@@ -9,7 +9,12 @@ interface Props {
 }
 
 export const NewParentDocument = ({ document }: Props) => (
-  <StyledDocumentListItem data-testid="oppgavebehandling-documents-new-list-item">
+  <StyledDocumentListItem
+    data-testid="new-documents-list-item"
+    data-documentname={document.tittel}
+    data-documentid={document.id}
+    data-documenttype="parent"
+  >
     <NewDocument document={document} />
     <AttachmentList parentId={document.id} />
   </StyledDocumentListItem>

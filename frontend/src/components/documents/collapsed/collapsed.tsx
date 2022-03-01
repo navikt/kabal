@@ -13,7 +13,7 @@ export const CollapsedDocuments = ({ toggleExpanded }: Props) => (
   <StyledCollapsedContainer>
     <DocumentsHeader>
       <DocumentsTitle>Dokumenter</DocumentsTitle>
-      <ExpandCollapseButton onClick={toggleExpanded} data-testid="oppgavebehandling-documents-toggle-view-button">
+      <ExpandCollapseButton onClick={toggleExpanded} data-testid="documents-expand-view-button">
         <Next />
       </ExpandCollapseButton>
     </DocumentsHeader>

@@ -24,7 +24,12 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   if (showConfirm) {
     return (
       <>
-        <StyledButton type="standard" kompakt onClick={() => setShowConfirm(false)}>
+        <StyledButton
+          type="standard"
+          kompakt
+          onClick={() => setShowConfirm(false)}
+          data-testid="document-delete-cancel"
+        >
           <Cancel />
           Avbryt
         </StyledButton>
@@ -33,6 +38,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           kompakt
           disabled={isLoading}
           onClick={() => deleteDocument({ dokumentId: document.id, oppgaveId })}
+          data-testid="document-delete-confirm"
         >
           <Delete />
           Slett
@@ -42,7 +48,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   }
 
   return (
-    <StyledButton type="fare" kompakt onClick={() => setShowConfirm(true)}>
+    <StyledButton type="fare" kompakt onClick={() => setShowConfirm(true)} data-testid="document-delete-button">
       <Delete />
       Slett
     </StyledButton>

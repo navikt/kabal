@@ -30,7 +30,7 @@ interface Props {
   document: IMainDocument;
 }
 
-export const DocumentTypeOrFrikoble = ({ document }: Props) => {
+export const SetDocumentType = ({ document }: Props) => {
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
@@ -46,7 +46,9 @@ export const DocumentTypeOrFrikoble = ({ document }: Props) => {
   if (!canEdit || document.isMarkertAvsluttet) {
     return (
       <Container>
-        <TextContainer>{OPTIONS.find((option) => option.value === document.dokumentTypeId)?.label}</TextContainer>
+        <TextContainer data-testid="document-type">
+          {OPTIONS.find((option) => option.value === document.dokumentTypeId)?.label}
+        </TextContainer>
       </Container>
     );
   }
@@ -66,6 +68,7 @@ export const DocumentTypeOrFrikoble = ({ document }: Props) => {
       <StyledRadioLabel key={value}>
         <StyledRadio
           type="radio"
+          data-testid="document-set-type"
           name={`documenttype-${document.id}`}
           key={value}
           value={value}
