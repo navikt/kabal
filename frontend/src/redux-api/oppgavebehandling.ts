@@ -1,8 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
-import { IApiValidationResponse } from '../functions/error-type-guard';
 import { IArkiverteDocumentsResponse } from '../types/arkiverte-documents';
-import { MedunderskriverFlyt, OppgaveType } from '../types/kodeverk';
+import { MedunderskriverFlyt } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
 import {
   ICheckDocumentParams,
@@ -18,7 +17,6 @@ import {
   ISettMedunderskriverResponse,
   ISwitchMedunderskriverflytResponse,
   ITilknyttDocumentResponse,
-  IVedtakFullfoertResponse,
 } from '../types/oppgavebehandling-response';
 import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
 import { oppgaverApi } from './oppgaver';
@@ -241,52 +239,6 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/${oppgaveId}/fullfoer`,
-        method: 'POST',
-      }),
-      invalidatesTags: ['oppgavebehandling'],
-      extraOptions: {
-        maxRetries: 0,
-      },
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.modified = data.modified;
-            draft.isAvsluttetAvSaksbehandler = data.isAvsluttetAvSaksbehandler;
-          })
-        );
-      },
-    }),
-    updateFinishedInGosys: builder.mutation<IModifiedResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/${oppgaveId}/fullfoertgosys`,
-        method: 'POST',
-      }),
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === OppgaveType.ANKE) {
-              draft.fullfoertGosys = true;
-            }
-          })
-        );
-
-        try {
-          const { data } = await queryFulfilled;
-
-          dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              draft.modified = data.modified;
-            })
-          );
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
     getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
       query: (oppgaveId) => `/${oppgaveId}/medunderskriver`,
     }),
@@ -367,12 +319,6 @@ export const oppgavebehandlingApi = createApi({
         );
       },
     }),
-    validate: builder.query<IApiValidationResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/${oppgaveId}/validate`,
-        validateStatus: ({ status, ok }) => ok || status === 400,
-      }),
-    }),
     sattPaaVent: builder.mutation<IModifiedResponse, string>({
       query: (oppgaveId) => ({
         url: `${oppgaveId}/sattpaavent`,
@@ -425,14 +371,10 @@ export const {
   useGetTilknyttedeDokumenterQuery,
   useTilknyttDocumentMutation,
   useRemoveTilknyttetDocumentMutation,
-  useFinishOppgavebehandlingMutation,
   useGetMedunderskriverQuery,
   useGetMedunderskriverflytQuery,
   useUpdateChosenMedunderskriverMutation,
   useSwitchMedunderskriverflytMutation,
-  useUpdateFinishedInGosysMutation,
-  useValidateQuery,
-  useLazyValidateQuery,
   useSattPaaVentMutation,
   useDeleteSattPaaVentMutation,
 } = oppgavebehandlingApi;
