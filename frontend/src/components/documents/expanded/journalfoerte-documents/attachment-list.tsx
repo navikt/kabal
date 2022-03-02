@@ -21,6 +21,7 @@ export const AttachmentList = ({ oppgavebehandlingId, document, pageReferences, 
         <StyledAttachmentListItem
           key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
           data-testid="oppgavebehandling-documents-all-list-item"
+          data-documentname={vedlegg.tittel}
         >
           <Attachment
             oppgavebehandlingId={oppgavebehandlingId}

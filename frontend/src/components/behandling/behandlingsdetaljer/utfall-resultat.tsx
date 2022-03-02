@@ -1,5 +1,4 @@
 import { Select } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
@@ -25,7 +24,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const utfallLabel = useFieldName('utfall');
   const { data: oppgave } = useOppgave();
 
-  const utfallKodeverk = useUtfall(oppgave?.type);
+  const [utfallKodeverk, isLoading] = useUtfall(oppgave?.type);
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
@@ -37,28 +36,21 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
     }
   };
 
-  if (typeof utfallKodeverk === 'undefined') {
-    return <NavFrontendSpinner />;
-  }
-
-  const options = utfallKodeverk.map(({ id, navn }) => (
-    <option key={id} value={id}>
-      {navn}
-    </option>
-  ));
+  const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
     <StyledUtfallResultat data-testid="utfall-section">
       <Select
-        disabled={!canEdit}
+        disabled={!canEdit || isLoading}
         label={`${utfallLabel}:`}
         bredde="s"
         onChange={onUtfallResultatChange}
         value={utfall ?? undefined}
         data-testid="select-utfall"
+        data-ready={!isLoading}
         feil={validationError}
       >
-        <option value={NOT_SELECTED}>Ikke valgt</option>
+        <option value={NOT_SELECTED} label="Ikke valgt" />
         {options}
       </Select>
     </StyledUtfallResultat>

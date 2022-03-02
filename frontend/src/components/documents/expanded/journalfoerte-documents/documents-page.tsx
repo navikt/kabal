@@ -27,6 +27,7 @@ export const DocumentsPage = ({ oppgaveId, pageReference, pageReferences, temaer
         <StyledDocumentListItem
           key={`dokument_${document.journalpostId}_${document.dokumentInfoId}`}
           data-testid="oppgavebehandling-documents-all-list-item"
+          data-documentname={document.tittel}
         >
           <Document document={document} pageReferences={pageReferences} temaer={temaer} />
         </StyledDocumentListItem>

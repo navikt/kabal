@@ -38,7 +38,12 @@ export const Document = ({ document, pageReferences, temaer }: Props) => {
 
   return (
     <>
-      <StyledDocument>
+      <StyledDocument
+        data-testid="document-jounalfoert"
+        data-journalpostid={document.journalpostId}
+        data-dokumentinfoid={document.dokumentInfoId}
+        data-documentname={document.tittel}
+      >
         <StyledDocumentTitle>
           <StyledDocumentButton
             isActive={isActive}

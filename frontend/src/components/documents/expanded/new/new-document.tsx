@@ -32,10 +32,10 @@ export const NewDocument = ({ document }: Props) => (
 const ActionContent = ({ document }: Props) => {
   if (document.isMarkertAvsluttet) {
     if (document.dokumentTypeId === DocumentType.NOTAT) {
-      return <StyledIcon title="Dokumentet er under journalføring." />;
+      return <StyledIcon title="Dokumentet er under journalføring." data-testid="document-archiving" />;
     }
 
-    return <StyledIcon title="Dokumentet er under journalføring og utsending." />;
+    return <StyledIcon title="Dokumentet er under journalføring og utsending." data-testid="document-archiving" />;
   }
 
   return (

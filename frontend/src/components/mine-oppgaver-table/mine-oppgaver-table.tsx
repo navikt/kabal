@@ -37,7 +37,11 @@ export const MineOppgaverTable = () => {
           navIdent: bruker.info.navIdent,
         };
 
-  const { data: oppgaver, refetch } = useGetMineUferdigeOppgaverQuery(queryParams, {
+  const {
+    data: oppgaver,
+    refetch,
+    isFetching,
+  } = useGetMineUferdigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
   });
 
@@ -50,7 +54,7 @@ export const MineOppgaverTable = () => {
     <StyledTableContainer>
       <StyledTable className="tabell tabell--stripet" data-testid="mine-oppgaver-table">
         <TableHeader headers={TABLE_HEADERS} />
-        <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />
+        <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} isFetching={isFetching} />
       </StyledTable>
     </StyledTableContainer>
   );
