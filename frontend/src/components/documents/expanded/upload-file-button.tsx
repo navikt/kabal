@@ -84,6 +84,7 @@ export const UploadFileButton = () => {
       </StyledUploadButton>
 
       <input
+        data-testid="upload-document-input"
         type="file"
         accept=".pdf"
         ref={fileInput}

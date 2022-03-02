@@ -31,6 +31,9 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document, pageReferen
     <StyledDocument
       key={document.journalpostId + vedlegg.dokumentInfoId}
       data-testid="oppgavebehandling-documents-all-list-item"
+      data-journalpostid={document.journalpostId}
+      data-dokumentinfoid={vedlegg.dokumentInfoId}
+      data-documentname={vedlegg.tittel}
     >
       <StyledDocumentTitle>
         <StyledDocumentButton

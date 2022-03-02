@@ -43,7 +43,7 @@ export const DocumentCheckbox = ({
       disabled={!harTilgangTilArkivvariant || isUpdating}
       checked={valgt}
       onChange={(e) => setDocument(e.currentTarget.checked)}
-      data-testid="oppgavebehandling-documents-document-checkbox"
+      data-testid="journalfoert-document-checkbox"
     />
   );
 };

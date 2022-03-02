@@ -22,13 +22,29 @@ export const Pagination = ({ total, pageSize = 10, currentPage = 1 }: Props): JS
         typeof p === 'string' ? (
           p
         ) : (
-          <PageLink key={p.toString()} to={`../${p.toString()}`}>
+          <PageLink key={p.toString()} to={`../${p.toString()}`} data-testid={getTestId(p, currentPage)}>
             {p}
           </PageLink>
         )
       )}
     </div>
   );
+};
+
+const getTestId = (page: number, currentPage: number): string => {
+  if (page === currentPage) {
+    return 'page-current';
+  }
+
+  if (page === currentPage + 1) {
+    return 'page-next';
+  }
+
+  if (page === currentPage - 1) {
+    return 'page-prev';
+  }
+
+  return `page-${page}`;
 };
 
 const PageLink = styled(NavLink)`
