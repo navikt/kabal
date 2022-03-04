@@ -31,11 +31,7 @@ export const SetParentDocument = ({ document }: Props) => {
 
     return data
       .filter(({ id, parent }) => document.id !== id && document.parent !== id && parent === null)
-      .map(({ tittel, id }) => (
-        <option key={id} value={id}>
-          {tittel}
-        </option>
-      ));
+      .map(({ tittel, id }) => <option key={id} value={id} label={tittel} />);
   }, [hasAttachments, data, document.id, document.parent]);
 
   if (hasAttachments || isLoadingDocuments || typeof data === 'undefined') {
@@ -47,9 +43,11 @@ export const SetParentDocument = ({ document }: Props) => {
 
   const currentOption =
     document.parent === null ? null : (
-      <option key={document.parent} value={document.parent}>
-        {data.find(({ id }) => document.parent === id)?.tittel ?? 'Ukjent dokument'}
-      </option>
+      <option
+        key={document.parent}
+        value={document.parent}
+        label={data.find(({ id }) => document.parent === id)?.tittel ?? 'Ukjent dokument'}
+      />
     );
 
   return (
@@ -60,9 +58,7 @@ export const SetParentDocument = ({ document }: Props) => {
       disabled={isSettingParent}
       data-testid="document-set-parent-document"
     >
-      <option key={NONE_SELECTED} value={NONE_SELECTED}>
-        {getText(document)}
-      </option>
+      <option key={NONE_SELECTED} value={NONE_SELECTED} label={getText(document)} />
       <optgroup label="Gjør til vedlegg for">
         {currentOption}
         {potentialParents}

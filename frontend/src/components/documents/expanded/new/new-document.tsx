@@ -24,7 +24,7 @@ export const NewDocument = ({ document }: Props) => (
   >
     <DocumentTitle document={document} />
     <SetDocumentType document={document} />
-    <StyledDate>{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
+    <StyledDate data-testid="new-document-date">{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
     <ActionContent document={document} />
   </StyledDocument>
 );

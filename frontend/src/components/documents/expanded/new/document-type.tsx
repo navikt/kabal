@@ -26,6 +26,7 @@ const OPTIONS = [
   //   value: DocumentType.NOTAT,
   // },
 ];
+
 interface Props {
   document: IMainDocument;
 }
@@ -43,12 +44,12 @@ export const SetDocumentType = ({ document }: Props) => {
     return null;
   }
 
+  const selectecOption = OPTIONS.find((option) => option.value === document.dokumentTypeId);
+
   if (!canEdit || document.isMarkertAvsluttet) {
     return (
       <Container>
-        <TextContainer data-testid="document-type">
-          {OPTIONS.find((option) => option.value === document.dokumentTypeId)?.label}
-        </TextContainer>
+        <TextContainer data-testid="document-type-label">{selectecOption?.label}</TextContainer>
       </Container>
     );
   }
@@ -65,10 +66,9 @@ export const SetDocumentType = ({ document }: Props) => {
     const icon = isActive ? <StyledRadioSelectedIcon /> : null;
 
     return (
-      <StyledRadioLabel key={value}>
+      <StyledRadioLabel data-testid={`document-set-type-${value}`} key={value}>
         <StyledRadio
           type="radio"
-          data-testid="document-set-type"
           name={`documenttype-${document.id}`}
           key={value}
           value={value}
@@ -81,13 +81,18 @@ export const SetDocumentType = ({ document }: Props) => {
     );
   });
 
+  const TEST_ID = 'document-type-button';
+
   if (!open) {
     return (
       <Container ref={ref}>
-        <StyledEditButton title="Endre" onClick={() => setOpen(!open)}>
-          <StyledButtonText>
-            {OPTIONS.find((option) => option.value === document.dokumentTypeId)?.label}
-          </StyledButtonText>
+        <StyledEditButton
+          title="Endre"
+          onClick={() => setOpen(!open)}
+          data-testid={TEST_ID}
+          data-value={selectecOption?.value}
+        >
+          <StyledButtonText>{selectecOption?.label}</StyledButtonText>
           <Expand />
         </StyledEditButton>
       </Container>
@@ -96,11 +101,11 @@ export const SetDocumentType = ({ document }: Props) => {
 
   return (
     <Container ref={ref}>
-      <StyledEditButton title="Endre" onClick={() => setOpen(!open)}>
+      <StyledEditButton title="Endre" onClick={() => setOpen(!open)} data-testid={TEST_ID}>
         <StyledButtonText>{OPTIONS.find((option) => option.value === document.dokumentTypeId)?.label}</StyledButtonText>
         <Collapse />
       </StyledEditButton>
-      <Dropdown>
+      <Dropdown data-testid="document-type-dropdown">
         <StyledRadioGroup>{options}</StyledRadioGroup>
       </Dropdown>
     </Container>

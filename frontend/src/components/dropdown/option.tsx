@@ -28,6 +28,9 @@ export const Filter = <T extends string>({
   return (
     <StyledLabel ref={ref}>
       <StyledCheckbox
+        data-testid="filter"
+        data-filterid={filterId}
+        data-label={children}
         type="checkbox"
         checked={active}
         onChange={(event) => onChange(filterId, event.target.checked)}
