@@ -23,6 +23,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
       <tr>
         <StyledTableHeader width="225px">
           <FilterDropdown
+            testId="filter-type"
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
             options={kodeverkSimpleValuesToDropdownOptions(typeOptions)}
@@ -32,6 +33,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         </StyledTableHeader>
         <StyledTableHeader width="225px">
           <FilterDropdown
+            testId="filter-ytelse"
             selected={filters.ytelser}
             onChange={(ytelser) => onChange({ ...filters, ytelser })}
             options={kodeverkValuesToDropdownOptions(ytelseOptions)}
@@ -41,6 +43,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         </StyledTableHeader>
         <StyledTableHeader width="225px">
           <FilterDropdown
+            testId="filter-hjemler"
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
             options={kodeverkValuesToDropdownOptions(hjemlerOptions)}

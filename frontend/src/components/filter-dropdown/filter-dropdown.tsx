@@ -40,7 +40,7 @@ export const FilterDropdown = <T extends string>({
 
   return (
     <Container ref={ref} data-testid={testId}>
-      <ToggleButton theme={{ open }} onClick={() => setOpen(!open)} ref={buttonRef}>
+      <ToggleButton theme={{ open }} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length})
       </ToggleButton>
       <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} close={close} />

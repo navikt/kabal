@@ -52,7 +52,7 @@ export const Dropdown = <T extends string>({
   };
 
   return (
-    <StyledDropdown>
+    <StyledDropdown data-testid="filter-dropdown">
       <Header
         onFocusChange={setFocused}
         onFilterChange={setFilter}
@@ -63,7 +63,7 @@ export const Dropdown = <T extends string>({
         close={close}
         showFjernAlle={true}
       />
-      <StyledSectionList>
+      <StyledSectionList data-testid="filter-list">
         {filteredOptions.map(({ value, label }, i) => (
           <StyledListItem key={value}>
             <Filter active={selected.includes(value)} filterId={value} onChange={onChange} focused={i === focused}>
