@@ -43,7 +43,7 @@ export const Annet = () => {
       checked: kvalitetsvurdering.betydeligAvvik,
       textareaId: 'betydeligAvvikText',
       show: showBetydeligAvvikReason,
-      helpText: 'Benyttes når førsteinstans bør varsles umiddelbart om resultatet av behandlingen',
+      helpText: 'Benyttes når vedtaksinstans bør varsles umiddelbart om resultatet av behandlingen',
     },
   ];
 
@@ -54,7 +54,7 @@ export const Annet = () => {
       checked: kvalitetsvurdering.brukIOpplaering,
       textareaId: 'brukIOpplaeringText',
       show: showBrukIOpplaeringReason,
-      helpText: 'Benyttes på spesielt gode vedtak, til opplæring i førsteinstans.',
+      helpText: 'Benyttes på spesielt gode vedtak, til opplæring i vedtaksinstans.',
     },
   ];
 

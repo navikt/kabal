@@ -42,13 +42,13 @@ export const Klagebehandlingsdetaljer = () => {
 
         <Ytelse ytelseId={ytelse} />
 
-        <SubSection label="Mottatt førsteinstans">{isoDateToPretty(mottattFoersteinstans)}</SubSection>
+        <SubSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattFoersteinstans)}</SubSection>
         <SubSection label="Fra NAV-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </SubSection>
         <SubSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</SubSection>
 
-        <SubSection label="Melding fra førsteinstans for intern bruk">{kommentarFraFoersteinstans}</SubSection>
+        <SubSection label="Melding fra vedtaksinstans for intern bruk">{kommentarFraFoersteinstans}</SubSection>
 
         <UtfallResultat utfall={resultat.utfall} />
 
