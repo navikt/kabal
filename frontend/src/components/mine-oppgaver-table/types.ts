@@ -1,9 +1,5 @@
-import { OppgaveType } from '../../types/kodeverk';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 
 export interface Filters {
-  types: OppgaveType[];
-  ytelser: string[];
-  hjemler: string[];
   sorting: [SortFieldEnum, SortOrderEnum];
 }

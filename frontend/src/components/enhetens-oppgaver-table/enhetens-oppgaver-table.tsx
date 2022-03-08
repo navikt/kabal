@@ -21,7 +21,7 @@ export const EnhetensOppgaverTable = () => {
     ytelser: [],
     hjemler: [],
     tildeltSaksbehandler: [],
-    sortDescending: false,
+    sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
 
   const settingsYtelser = useSettingsYtelser();
@@ -31,6 +31,7 @@ export const EnhetensOppgaverTable = () => {
   const ytelser = filters.ytelser.length === 0 ? settingsYtelser.map(({ id }) => id) : filters.ytelser;
   const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
   const hjemler = filters.hjemler.length === 0 ? settingsHjemler.map(({ id }) => id) : filters.hjemler;
+  const [sortering, rekkefoelge] = filters.sorting;
 
   const { data: bruker } = useGetBrukerQuery();
 
@@ -40,8 +41,8 @@ export const EnhetensOppgaverTable = () => {
       : {
           start: 0,
           antall: MAX_OPPGAVER,
-          sortering: SortFieldEnum.FRIST,
-          rekkefoelge: filters.sortDescending ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE,
+          sortering,
+          rekkefoelge,
           ytelser,
           typer,
           hjemler,
