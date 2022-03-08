@@ -5,9 +5,10 @@ import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { OppgaveType } from '../../types/kodeverk';
+import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { SortBy } from '../common-table-components/sort-by';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { SortBy } from './sortby';
 import { Filters } from './types';
 
 interface TableHeaderFiltersProps {
@@ -59,8 +60,19 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
             Hjemmel
           </FilterDropdown>
         </th>
-        <th>Alder</th>
-        <SortBy desc={filters.sortDescending} onChange={(sortDescending) => onChange({ ...filters, sortDescending })}>
+        <SortBy
+          sorting={filters.sorting}
+          sortField={SortFieldEnum.ALDER}
+          defaultSortOrder={SortOrderEnum.SYNKENDE}
+          onChange={(sorting) => onChange({ ...filters, sorting })}
+        >
+          Alder
+        </SortBy>
+        <SortBy
+          sorting={filters.sorting}
+          sortField={SortFieldEnum.FRIST}
+          onChange={(sorting) => onChange({ ...filters, sorting })}
+        >
           Frist
         </SortBy>
         <th>

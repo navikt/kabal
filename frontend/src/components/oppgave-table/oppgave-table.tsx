@@ -27,7 +27,7 @@ export const OppgaveTable = (): JSX.Element => {
     types: [],
     ytelser: [],
     hjemler: [],
-    sortDescending: false,
+    sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
   const { data: bruker } = useGetBrukerQuery();
 
@@ -39,6 +39,7 @@ export const OppgaveTable = (): JSX.Element => {
   const ytelser = filters.ytelser.length === 0 ? [] : filters.ytelser;
   const typer = filters.types.length === 0 ? [] : filters.types;
   const hjemler = filters.hjemler.length === 0 ? [] : filters.hjemler;
+  const [sortering, rekkefoelge] = filters.sorting;
 
   const queryParams: typeof skipToken | MineLedigeOppgaverParams =
     typeof bruker === 'undefined'
@@ -46,8 +47,8 @@ export const OppgaveTable = (): JSX.Element => {
       : {
           start: from,
           antall: PAGE_SIZE,
-          sortering: SortFieldEnum.FRIST,
-          rekkefoelge: filters.sortDescending ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE,
+          sortering,
+          rekkefoelge,
           navIdent: bruker.info.navIdent,
           ytelser,
           typer,
