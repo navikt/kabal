@@ -1,9 +1,8 @@
+import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
 import { Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { getFullName } from '../../../domain/name';
 import { formatPersonNum } from '../../../functions/format-id';
-import { ArrowDown } from '../../../icons/arrow-down';
-import { ArrowUp } from '../../../icons/arrow-up';
 import { ISearchPerson } from '../../../types/oppgaver';
 import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';
@@ -11,7 +10,7 @@ import { Oppgaver } from './oppgaver';
 export const Result = ({ fnr, navn }: ISearchPerson) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const chevron = open ? <ArrowUp /> : <ArrowDown />;
+  const chevron = open ? <CollapseFilled /> : <ExpandFilled />;
 
   return (
     <StyledResult data-testid="search-result">

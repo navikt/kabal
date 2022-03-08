@@ -1,7 +1,6 @@
+import { Close, SuccessStroke } from '@navikt/ds-icons';
 import React from 'react';
 import styled from 'styled-components';
-import { CancelIcon } from '../../icons/cancelblack';
-import { HakeIcon } from '../../icons/hake';
 
 interface SwitchProps {
   onChange: (checked: boolean) => void;
@@ -69,41 +68,51 @@ interface SliderProps {
   checked: boolean;
 }
 
+const WIDTH = 20;
+const PADDING = 2;
+
 const StyledContainer = styled.div<SliderProps>`
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
   position: relative;
-  padding: 2px;
-  width: 48px;
-  height: 24px;
+  padding: ${PADDING}px;
+  width: ${WIDTH * 2 + PADDING * 2}px;
+  height: ${WIDTH + PADDING * 2}px;
   border-radius: 4px;
+  color: #fff;
+  font-size: ${WIDTH}px;
   background-color: ${({ checked }) => (checked ? '#0067C5' : '#4F4F4F')};
+  transition: ease-in-out background-color 50ms;
+  will-change: background-color;
 
   ::before {
     content: '';
     position: absolute;
-    left: 4px;
-    height: 20px;
-    width: 20px;
+    left: ${PADDING}px;
+    height: ${WIDTH}px;
+    width: ${WIDTH}px;
     background-color: white;
     border-radius: 4px;
     transform: ${({ checked }) => (checked ? 'translateX(100%)' : 'translateX(0)')};
-    transition: ease-in-out transform 100ms;
+    transition: ease-in-out transform 50ms;
     will-change: transform;
   }
 `;
 
 const StyledText = styled.span`
-  padding-left: 0.5em;
+  padding-left: 8px;
 `;
 
-const OffIcon = styled(CancelIcon)`
+const OffIcon = styled(Close)`
   width: 50%;
   height: 100%;
-  padding: 4px;
+  color: #fff;
+  padding: 2px;
 `;
 
-const OnIcon = styled(HakeIcon)`
+const OnIcon = styled(SuccessStroke)`
   width: 50%;
   height: 100%;
-  padding: 4px;
+  color: #fff;
+  padding: 2px;
 `;

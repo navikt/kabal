@@ -1,15 +1,13 @@
+import { Close, ExternalLink, ZoomIn, ZoomOut } from '@navikt/ds-icons';
 import styled, { css } from 'styled-components';
-import { CancelIcon } from '../../icons/cancelblack';
-import { ExtLinkIcon } from '../../icons/extlink';
-import { ZoomInIcon } from '../../icons/zoom-in';
-import { ZoomOutIcon } from '../../icons/zoom-out';
 
 interface BeholderProps {
   width: number;
 }
 
 export const Container = styled.section<BeholderProps>`
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-width: ${(props) => props.width}px;
   margin: 0.25em 0.5em;
   background: white;
@@ -56,18 +54,16 @@ export const StyledHeaderLink = styled.a`
 
 export const PDF = styled.object`
   width: 100%;
-  height: calc(100% - 3.5em);
+  flex-grow: 1;
 `;
 
 export const Header = styled.div`
   background: #cde7d8;
   display: flex;
-  position: sticky;
-  top: 0;
-  padding: 1em;
+  position: relative;
+  padding: 8px;
   z-index: 1;
   justify-content: space-between;
-  height: 3.5em;
 `;
 
 export const LeftSide = styled.div``;
@@ -79,8 +75,8 @@ const iconStyle = css`
     cursor: pointer;
     -webkit-transition: all 0.15s ease-in-out;
     transition: all 0.15s ease-in-out;
-    width: 1rem;
-    height: 1rem;
+    width: 12px;
+    height: 12px;
 
     :hover {
       transform: scale(1.1);
@@ -88,24 +84,18 @@ const iconStyle = css`
   }
 `;
 
-export const StyledZoomInIcon = styled(ZoomInIcon)`
+export const StyledZoomInIcon = styled(ZoomIn)`
   ${iconStyle}
 `;
 
-export const StyledZoomOutIcon = styled(ZoomOutIcon)`
+export const StyledZoomOutIcon = styled(ZoomOut)`
   ${iconStyle}
 `;
 
-export const StyledCancelIcon = styled(CancelIcon)`
+export const StyledCancelIcon = styled(Close)`
   ${iconStyle}
 `;
 
-export const StyledExtLinkIcon = styled(ExtLinkIcon)`
-  ${iconStyle}/* cursor: pointer;
-  color: #0067c5;
-  -webkit-transition: all 0.15s ease-in-out;
-  transition: all 0.15s ease-in-out;
-  &:hover {
-    transform: scale(1.1);
-  } */
+export const StyledExtLinkIcon = styled(ExternalLink)`
+  ${iconStyle}
 `;

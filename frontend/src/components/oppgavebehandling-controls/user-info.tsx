@@ -1,8 +1,8 @@
+import { Copy } from '@navikt/ds-icons';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
 import { formatOrgNum } from '../../functions/format-id';
-import { CopyIcon } from '../../icons/copy';
 import { Gender } from '../../types/kodeverk';
 import { IOppgavebehandlingBase, IVirksomhet } from '../../types/oppgavebehandling';
 import { Fortrolig, StrengtFortrolig } from './fortrolig';
@@ -71,7 +71,7 @@ const SakenGjelder = ({ id, name, gender, fortrolig, strengtFortrolig }: SakenGj
         <UserItem>{name}</UserItem>
         <UserItem>
           <CopyFnrButton ref={button} onClick={() => copyToClipboard(id)}>
-            <CopyIcon alt="Kopier" />
+            <Copy title="Kopier" />
           </CopyFnrButton>
         </UserItem>
         <Fortrolig fortrolig={fortrolig} />

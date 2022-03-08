@@ -47,13 +47,13 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
         <LeftSide>
           <StyledButtonContainer>
             <HeaderButton onClick={decrease} text="Zoom ut på PDF">
-              <StyledZoomOutIcon alt="Zoom ut på PDF" />
+              <StyledZoomOutIcon title="Zoom ut på PDF" />
             </HeaderButton>
             <HeaderButton onClick={increase} text="Zoom inn på PDF">
-              <StyledZoomInIcon alt="Zoom inn på PDF" />
+              <StyledZoomInIcon title="Zoom inn på PDF" />
             </HeaderButton>
             <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
-              <StyledExtLinkIcon alt="Ekstern lenke" />
+              <StyledExtLinkIcon title="Ekstern lenke" />
             </StyledHeaderLink>
             <StyledDocumentTitleContainer>
               <StyledDocumentTitle>{title}</StyledDocumentTitle>
@@ -62,7 +62,7 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
         </LeftSide>
         <RightSide>
           <HeaderButton onClick={close} text="Lukk forhåndsvisning" rightSide={true}>
-            <StyledCancelIcon alt="Lukk forhåndsvisning" />
+            <StyledCancelIcon title="Lukk forhåndsvisning" />
           </HeaderButton>
         </RightSide>
       </Header>
