@@ -52,7 +52,7 @@ const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
       title="Åpne i ny fane"
       rel="noreferrer"
     >
-      <span>Gosys</span> <StyledExtLinkIcon alt="Ekstern lenke" />
+      <span>Gosys</span> <StyledExtLinkIcon title="Ekstern lenke" />
     </ExternalLink>
   );
 };

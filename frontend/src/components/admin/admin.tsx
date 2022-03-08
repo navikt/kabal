@@ -1,7 +1,7 @@
+import { Success } from '@navikt/ds-icons';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
-import { SuccessIcon } from '../../icons/success';
 import { useRefillElasticAdminMutation, useResendDvhMutation } from '../../redux-api/internal';
 import { useRebuildElasticAdminMutation } from '../../redux-api/oppgaver';
 
@@ -68,7 +68,7 @@ const StatusIcon = ({ success, init, isLoading }: StatusIconProps) => {
     return null;
   }
 
-  return success ? <SuccessIcon /> : <span>(Failed)</span>;
+  return success ? <Success /> : <span>(Failed)</span>;
 };
 
 const StyledContent = styled.div`
