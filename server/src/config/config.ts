@@ -9,7 +9,6 @@ export const slack = {
 
 export const API_CLIENT_IDS = [
   'kabal-api',
-  'kabal-anke-api',
   'kabal-search',
   'kabal-smart-editor-api',
   'kabal-json-to-pdf',
