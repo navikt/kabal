@@ -43,7 +43,7 @@ export interface IYtelse extends IKodeverkSimpleValue {
   lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
 }
 
-export interface IKlageEnhet extends IKodeverkValue {
+export interface IKlageEnhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }
 
@@ -51,7 +51,7 @@ export interface IKodeverk {
   ytelser: IYtelse[];
   tema: IKodeverkValue[];
   hjemler: IKodeverkValue[];
-  enheter: IKodeverkValue[];
+  enheter: IKodeverkSimpleValue[];
   klageenheter: IKlageEnhet[];
   sakstyper: IKodeverkSimpleValue<OppgaveType>[];
   utfall: IKodeverkSimpleValue<Utfall>[];
