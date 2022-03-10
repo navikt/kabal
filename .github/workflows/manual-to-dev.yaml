@@ -26,6 +26,8 @@ jobs:
           cd frontend
           npm ci
       - name: Build frontend
+        env:
+          VERSION: ${{ github.sha }}
         run: |
           cd frontend
           npm run build
@@ -48,9 +50,10 @@ jobs:
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.sha }}
         run: |
           cat Dockerfile
-          docker build --tag ${IMAGE} .
+          docker build --build-arg VERSION --tag ${IMAGE} .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
       - uses: actions/checkout@v2

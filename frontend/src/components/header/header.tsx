@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { VersionCheckerStatus } from '../version-checker/version-checker-status';
 import { HomeIcon } from './home-icon';
 import { User } from './user-menu/user';
 
@@ -14,6 +15,8 @@ export const Header = () => (
       <Separator />
       <StyledNavLink to="/mineoppgaver">Mine oppgaver</StyledNavLink>
     </Nav>
+
+    <VersionCheckerStatus />
     <User />
   </StyledHeader>
 );
@@ -23,6 +26,7 @@ const Nav = styled.div`
   flex-direction: row;
   align-items: center;
   height: 100%;
+  padding-left: 16px;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -35,11 +39,10 @@ const StyledHeader = styled.header`
   z-index: 2;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 3em;
-  padding: 0 1.5rem;
   background: #3e3832;
-  align-items: center;
 `;
 
 const StyledLogo = styled(NavLink)`
