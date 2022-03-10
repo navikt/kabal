@@ -46,7 +46,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.ytelser}
             onChange={(ytelse) => onChange({ ...filters, ytelser: ytelse })}
-            options={kodeverkValuesToDropdownOptions(ytelseOptions)}
+            options={kodeverkSimpleValuesToDropdownOptions(ytelseOptions)}
           >
             Ytelse
           </FilterDropdown>

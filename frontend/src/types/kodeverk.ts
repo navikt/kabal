@@ -39,12 +39,12 @@ export interface ILovKildeToRegistreringshjemmel {
   registreringshjemler: IKodeverkSimpleValue[];
 }
 
-export interface IYtelse extends IKodeverkValue {
+export interface IYtelse extends IKodeverkSimpleValue {
   lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
 }
 
 export interface IKlageEnhet extends IKodeverkValue {
-  ytelser: IKodeverkValue[];
+  ytelser: IKodeverkSimpleValue[];
 }
 
 export interface IKodeverk {

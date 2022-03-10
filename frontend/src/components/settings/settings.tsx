@@ -62,7 +62,7 @@ export const Settings = () => {
           <FilterDropdown
             selected={settings.ytelser}
             onChange={(ytelser) => onChange({ ...settings, ytelser })}
-            options={kodeverkValuesToDropdownOptions(availableYtelser)}
+            options={kodeverkSimpleValuesToDropdownOptions(availableYtelser)}
             testId="ytelser-settings-dropdown"
           >
             Ytelser
