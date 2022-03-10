@@ -79,7 +79,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           <FilterDropdown
             selected={filters.tildeltSaksbehandler}
             onChange={(tildeltSaksbehandler) => onChange({ ...filters, tildeltSaksbehandler })}
-            options={kodeverkValuesToDropdownOptions(saksbehandlerOptions)}
+            options={kodeverkSimpleValuesToDropdownOptions(saksbehandlerOptions)}
           >
             Saksbehandler
           </FilterDropdown>
