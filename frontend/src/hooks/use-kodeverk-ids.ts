@@ -23,7 +23,7 @@ export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
   }
 
   if (typeof data.ytelser !== 'undefined' && typeof ytelseId === 'string') {
-    return data.ytelser.find(({ id }) => id === ytelseId)?.beskrivelse ?? ytelseId;
+    return data.ytelser.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
   }
 
   return 'Mangler';
