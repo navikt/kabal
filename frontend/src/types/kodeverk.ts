@@ -52,6 +52,8 @@ export interface IKodeverk {
   tema: IKodeverkValue[];
   hjemler: IKodeverkValue[];
   enheter: IKodeverkSimpleValue[];
+  styringsenheter: IKodeverkSimpleValue[];
+  vedtaksenheter: IKodeverkSimpleValue[];
   klageenheter: IKlageEnhet[];
   sakstyper: IKodeverkSimpleValue<OppgaveType>[];
   utfall: IKodeverkSimpleValue<Utfall>[];
