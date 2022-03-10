@@ -13,7 +13,7 @@ export const Admin = () => (
         <RebuildElasticButton
           useApi={useRebuildElasticAdminMutation}
           text="KABAL-SEARCH OPENSEARCH REBUILD"
-          helptext='Denne operasjonen er avhengig av å treffe rett pod. Juster ned antall pods for kabal-search til 1 før du trykker på knappen, og verifiser at operasjonen var vellykket ved å søke etter "Seeking to beginning of topic klage.klage-endret.v1 and partition 0" i loggene til kabal-search.'
+          helptext='Denne operasjonen er avhengig av å treffe rett pod. Juster ned antall pods for kabal-search til 1 før du trykker på knappen, og verifiser at operasjonen var vellykket ved å søke etter "Seeking to beginning of topic klage.behandling-endret.v2 and partition 0" i loggene til kabal-search.'
         />
         <Button useApi={useRefillElasticAdminMutation} text="KABAL-API KAFKA REFILL" />
         <Button useApi={useResendDvhMutation} text="KABAL-API DVH RESEND" />
