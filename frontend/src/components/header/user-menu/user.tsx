@@ -1,10 +1,10 @@
 import { Collapse, Expand, People } from '@navikt/ds-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
 import { useGetBrukerQuery } from '../../../redux-api/bruker';
 import { Dropdown } from './dropdown';
-import { StyledButton, StyledContainer } from './styled-components';
 
 export const User = () => {
   const { data: bruker } = useGetBrukerQuery();
@@ -35,3 +35,29 @@ export const User = () => {
     </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  position: relative;
+  height: 100%;
+  color: #fff;
+`;
+
+const iconText = css`
+  & {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+`;
+
+const StyledButton = styled.button`
+  ${iconText}
+  border: none;
+  padding: 0;
+  padding-right: 16px;
+  margin: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  height: 100%;
+`;

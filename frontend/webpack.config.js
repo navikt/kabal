@@ -76,5 +76,6 @@ module.exports = (_env, { mode }) => ({
         }
       }
     }),
+    new webpack.EnvironmentPlugin({'VERSION': 'dev'}),
   ]
 });

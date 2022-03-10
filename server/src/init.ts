@@ -9,12 +9,14 @@ import { callbackPath } from './config/azure-config';
 import { callbackHandler } from './auth/callback-handler';
 import { logoutHandler } from './auth/logout-handler';
 import { guardMiddleware } from './auth/guard-middleware';
+import { setupVersionRoute } from './routes/version';
 
 const PORT = serverConfig.port;
 
 export const init = async (server: Express) => {
   try {
     const authClient = await getAzureClient();
+    server.use(setupVersionRoute());
     server.get(callbackPath, callbackHandler(authClient));
     server.get('/logout', logoutHandler(authClient));
     server.use(['/api', '/assets', '/bundle.js', '/favicon.ico'], guardMiddleware(authClient));
