@@ -15,5 +15,6 @@
     "source.fixAll.eslint": true
   },
   "tslint.enable": false,
-  "prettier.requireConfig": true
+  "prettier.requireConfig": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
