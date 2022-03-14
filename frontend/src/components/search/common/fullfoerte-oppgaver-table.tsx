@@ -1,13 +1,13 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
+import { StyledCaption, StyledTable } from '../../../styled-components/table';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { Ytelse } from '../../common-table-components/ytelse';
 import { Type } from '../../type/type';
-import { RightAlignCell, StyledTable } from './styled-components';
-import { StyledTableCaption } from './table-caption';
+import { RightAlignCell } from './styled-components';
 
 interface Props {
   finishedOppgaver: IOppgaveList;
@@ -19,8 +19,8 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
   }
 
   return (
-    <StyledTable className="tabell tabell--stripet" data-testid="search-result-fullfoerte-oppgaver">
-      <StyledTableCaption>Fullførte oppgaver siste 12 måneder</StyledTableCaption>
+    <StyledTable data-testid="search-result-fullfoerte-oppgaver">
+      <StyledCaption>Fullførte oppgaver siste 12 måneder</StyledCaption>
       <thead>
         <tr>
           <th>Type</th>

@@ -1,23 +1,16 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetMineLedigeOppgaverQuery,
 } from '../../redux-api/oppgaver';
+import { StyledFooterContent, StyledTable } from '../../styled-components/table';
 import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
 import { Pagination } from './pagination';
 import { OppgaveRader } from './rows';
-import {
-  StyledFooter,
-  StyledTable,
-  StyledTableContainer,
-  StyledTableFooter,
-  StyledTableStats,
-} from './styled-components';
 import { Filters } from './types';
 
 const PAGE_SIZE = 10;
@@ -90,24 +83,24 @@ export const OppgaveTable = (): JSX.Element => {
   const toNumber = Math.min(total, from + PAGE_SIZE);
 
   return (
-    <StyledTableContainer>
-      <StyledTable className="tabell tabell--stripet" data-testid="oppgave-table">
+    <>
+      <StyledTable data-testid="oppgave-table">
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={7} isFetching={isFetching} />
-        <StyledTableFooter>
+        <tfoot>
           <tr>
-            <td colSpan={7}>
-              <StyledFooter>
+            <td colSpan={6}>
+              <StyledFooterContent>
                 <PageInfo total={total} fromNumber={fromNumber} toNumber={toNumber} />
                 <Pagination total={total} pageSize={PAGE_SIZE} currentPage={currentPage} />
-              </StyledFooter>
+              </StyledFooterContent>
             </td>
           </tr>
-        </StyledTableFooter>
+        </tfoot>
       </StyledTable>
 
-      <StyledTableStats>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledTableStats>
-    </StyledTableContainer>
+      <div>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</div>
+    </>
   );
 };
 

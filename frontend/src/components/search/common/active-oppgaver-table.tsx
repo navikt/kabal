@@ -1,5 +1,6 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
+import { StyledCaption, StyledTable } from '../../../styled-components/table';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
@@ -7,8 +8,7 @@ import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
 import { Ytelse } from '../../common-table-components/ytelse';
 import { Type } from '../../type/type';
-import { RightAlignCell, StyledTable } from './styled-components';
-import { StyledTableCaption } from './table-caption';
+import { RightAlignCell } from './styled-components';
 
 interface Props {
   activeOppgaver: IOppgaveList;
@@ -20,8 +20,8 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
   }
 
   return (
-    <StyledTable className="tabell tabell--stripet" data-testid="search-result-active-oppgaver">
-      <StyledTableCaption>Aktive oppgaver</StyledTableCaption>
+    <StyledTable data-testid="search-result-active-oppgaver">
+      <StyledCaption>Aktive oppgaver</StyledCaption>
       <thead>
         <tr>
           <th>Type</th>

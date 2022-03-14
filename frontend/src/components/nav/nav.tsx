@@ -47,8 +47,8 @@ const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
 };
 
 const StyledNav = styled.nav`
-  padding-top: 1em;
-  padding-bottom: 1em;
+  padding-top: 16px;
+  padding-bottom: 0;
 `;
 
 const StyledNavLinkList = styled.ul`

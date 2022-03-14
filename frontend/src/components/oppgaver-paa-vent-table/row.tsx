@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { formatPersonNum } from '../../functions/format-id';
 import { useFullYtelseNameFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { PaaVent } from '../common-table-components/paa-vent';
+import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';
 
 export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: IOppgave): JSX.Element => {
@@ -31,7 +31,9 @@ export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: 
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
-      <td>{formatPersonNum(person?.fnr)}</td>
+      <td>
+        <CopyFnrButton fnr={person?.fnr} />
+      </td>
       <td>
         <PaaVent sattPaaVent={sattPaaVent} />
       </td>

@@ -28,10 +28,10 @@ export const Dropdown = ({ open }: DropdownProps): JSX.Element | null => {
         </StyledLink>
       </StyledLi>
       <StyledLi>
-        <CopyButton title="Klikk for å kopiere versjonsnummeret" text={version}>
+        <StyledCopyButton title="Klikk for å kopiere versjonsnummeret" text={version}>
           <AutomaticSystem />
           KABAL-versjon: <VersionNumber>{version}</VersionNumber>
-        </CopyButton>
+        </StyledCopyButton>
       </StyledLi>
     </StyledList>
   );
@@ -94,4 +94,8 @@ const StyledLi = styled.li`
   :hover {
     background: rgba(255, 255, 255, 0.2);
   }
+`;
+
+const StyledCopyButton = styled(CopyButton)`
+  ${linkStyle}
 `;

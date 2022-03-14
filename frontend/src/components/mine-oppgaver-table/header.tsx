@@ -1,7 +1,6 @@
 import React from 'react';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
-import { StyledTableHeader } from './styled-components';
 import { Filters } from './types';
 
 interface TableHeaderProps {
@@ -12,11 +11,11 @@ interface TableHeaderProps {
 export const TableHeader = ({ filters, onChange }: TableHeaderProps): JSX.Element => (
   <thead>
     <tr>
-      <StyledTableHeader>Type</StyledTableHeader>
-      <StyledTableHeader>Ytelse</StyledTableHeader>
-      <StyledTableHeader>Hjemmel</StyledTableHeader>
-      <StyledTableHeader>Navn</StyledTableHeader>
-      <StyledTableHeader>Fnr.</StyledTableHeader>
+      <th>Type</th>
+      <th>Ytelse</th>
+      <th>Hjemmel</th>
+      <th>Navn</th>
+      <th>Fnr.</th>
       <SortBy
         sorting={filters.sorting}
         sortField={SortFieldEnum.ALDER}
@@ -32,9 +31,9 @@ export const TableHeader = ({ filters, onChange }: TableHeaderProps): JSX.Elemen
       >
         Frist
       </SortBy>
-      <StyledTableHeader />
-      <StyledTableHeader />
-      <StyledTableHeader />
+      <th />
+      <th />
+      <th />
     </tr>
   </thead>
 );

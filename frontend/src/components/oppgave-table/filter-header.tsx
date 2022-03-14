@@ -6,7 +6,6 @@ import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { StyledTableHeader } from './styled-components';
 import { Filters } from './types';
 
 interface TableHeaderFiltersProps {
@@ -22,7 +21,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   return (
     <thead>
       <tr>
-        <StyledTableHeader width="225px">
+        <th>
           <FilterDropdown
             testId="filter-type"
             selected={filters.types}
@@ -31,8 +30,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Type
           </FilterDropdown>
-        </StyledTableHeader>
-        <StyledTableHeader width="225px">
+        </th>
+        <th>
           <FilterDropdown
             testId="filter-ytelse"
             selected={filters.ytelser}
@@ -41,8 +40,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Ytelse
           </FilterDropdown>
-        </StyledTableHeader>
-        <StyledTableHeader width="225px">
+        </th>
+        <th>
           <FilterDropdown
             testId="filter-hjemler"
             selected={filters.hjemler}
@@ -51,7 +50,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Hjemmel
           </FilterDropdown>
-        </StyledTableHeader>
+        </th>
         <SortBy
           sorting={filters.sorting}
           sortField={SortFieldEnum.ALDER}
@@ -67,7 +66,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         >
           Frist
         </SortBy>
-        <StyledTableHeader width="14em"></StyledTableHeader>
+        <th></th>
       </tr>
     </thead>
   );

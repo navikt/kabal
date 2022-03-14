@@ -8,6 +8,7 @@ interface Props {
   text?: string | null;
   title?: string;
   popoverOrientation?: PopoverOrientering;
+  className?: string;
 }
 
 export const CopyButton = ({
@@ -15,6 +16,7 @@ export const CopyButton = ({
   text,
   title = 'Klikk for å kopiere',
   popoverOrientation = PopoverOrientering.Under,
+  className,
 }: Props) => {
   const [popoverText, setPopoverText] = useState<string | null>(null);
   const [ref, setRef] = useState<HTMLButtonElement | null>(null);
@@ -25,6 +27,7 @@ export const CopyButton = ({
 
   return (
     <StyledCopyButton
+      className={className}
       title={title}
       onClick={async () => {
         const copied = await copy(text);
@@ -33,7 +36,7 @@ export const CopyButton = ({
       ref={setRef}
     >
       {children}
-      <Copy />
+      <Icon />
       <Popover
         ankerEl={popoverText !== null ? ref ?? undefined : undefined}
         orientering={popoverOrientation}
@@ -66,14 +69,14 @@ const StyledCopyButton = styled.button`
   padding: 0;
   margin: 0;
   cursor: pointer;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 12px;
-  padding-bottom: 12px;
 `;
 
 const StyledPopoverText = styled.span`
   display: block;
   padding: 8px;
   color: #000;
+`;
+
+const Icon = styled(Copy)`
+  flex-shrink: 0;
 `;

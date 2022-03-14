@@ -1,12 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
-import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver';
+import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
-import { TableHeader } from './header';
+import { TableHeader } from '../common-table-components/header';
 import { OppgaveRader } from './rows';
-import { StyledCaption, StyledTable, StyledTableContainer } from './styled-components';
 
 const MAX_OPPGAVER = 100;
 
@@ -37,12 +36,10 @@ export const FullfoerteOppgaverTable = () => {
   }, [refetch]);
 
   return (
-    <StyledTableContainer>
-      <StyledTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table">
-        <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
-        <TableHeader headers={TABLE_HEADERS} />
-        <OppgaveRader oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />
-      </StyledTable>
-    </StyledTableContainer>
+    <StyledTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table">
+      <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
+      <TableHeader headers={TABLE_HEADERS} />
+      <OppgaveRader oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />
+    </StyledTable>
   );
 };

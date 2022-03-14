@@ -14,6 +14,7 @@ export const StyledFieldList = styled.ul`
 
 export const SectionTitle = styled.h1`
   margin: 0;
+  font-size: 18px;
 `;
 
 export const StyledSection = styled.section`

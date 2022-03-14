@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../domain/date';
-import { formatPersonNum } from '../../functions/format-id';
 import { useFullYtelseNameFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
+import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';
 
 export const Row = ({
@@ -39,7 +39,9 @@ export const Row = ({
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
       </td>
       <td>{person?.navn}</td>
-      <td>{formatPersonNum(person?.fnr)}</td>
+      <td>
+        <CopyFnrButton fnr={person?.fnr} />
+      </td>
       <td>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</td>
       <td>{utfallName}</td>
       <td>
