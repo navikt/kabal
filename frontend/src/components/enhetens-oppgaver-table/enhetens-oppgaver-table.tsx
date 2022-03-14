@@ -1,16 +1,15 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import 'nav-frontend-tabell-style';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
+import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
-import { StyledHeader, StyledTable, StyledTableContainer } from './styled-components';
 import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
@@ -60,13 +59,11 @@ export const EnhetensOppgaverTable = () => {
   }, [refetch]);
 
   return (
-    <StyledTableContainer>
-      <StyledHeader>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledHeader>
-      <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-table">
-        <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={oppgaver?.behandlinger} />
-      </StyledTable>
-    </StyledTableContainer>
+    <StyledTable data-testid="enhetens-oppgaver-table">
+      <StyledCaption>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledCaption>
+      <TableHeaderFilters filters={filters} onChange={setFilters} />
+      <OppgaveRader oppgaver={oppgaver?.behandlinger} />
+    </StyledTable>
   );
 };
 

@@ -1,12 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
-import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineVentendeOppgaverQuery } from '../../redux-api/oppgaver';
+import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
-import { TableHeader } from './header';
+import { TableHeader } from '../common-table-components/header';
 import { OppgaveRader } from './rows';
-import { StyledCaption, StyledTable, StyledTableContainer } from './styled-components';
 
 const MAX_OPPGAVER = 100;
 
@@ -41,17 +40,15 @@ export const OppgaverPaaVentTable = () => {
   }, [refetch]);
 
   return (
-    <StyledTableContainer>
-      <StyledTable className="tabell tabell--stripet" data-testid="oppgaver-paa-vent-table">
-        <StyledCaption>Oppgaver på vent</StyledCaption>
-        <TableHeader headers={TABLE_HEADERS} />
-        <OppgaveRader
-          oppgaver={oppgaver?.behandlinger}
-          columnCount={TABLE_HEADERS.length}
-          isLoading={isLoading}
-          isError={isError}
-        />
-      </StyledTable>
-    </StyledTableContainer>
+    <StyledTable data-testid="oppgaver-paa-vent-table">
+      <StyledCaption>Oppgaver på vent</StyledCaption>
+      <TableHeader headers={TABLE_HEADERS} />
+      <OppgaveRader
+        oppgaver={oppgaver?.behandlinger}
+        columnCount={TABLE_HEADERS.length}
+        isLoading={isLoading}
+        isError={isError}
+      />
+    </StyledTable>
   );
 };

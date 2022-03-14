@@ -1,5 +1,4 @@
 import React from 'react';
-import { formatSakenGjelder } from '../../functions/format-id';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
@@ -8,6 +7,7 @@ import { Hjemmel } from '../common-table-components/hjemmel';
 import { MedudunderskriverflytLabel } from '../common-table-components/medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { Ytelse } from '../common-table-components/ytelse';
+import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';
 
 export const Row = ({
@@ -35,7 +35,9 @@ export const Row = ({
       <Hjemmel hjemmel={hjemmel} />
     </td>
     <td>{person?.navn}</td>
-    <td>{formatSakenGjelder(person?.fnr)}</td>
+    <td>
+      <CopyFnrButton fnr={person?.fnr} />
+    </td>
     <td>
       <Age age={ageKA} />
     </td>

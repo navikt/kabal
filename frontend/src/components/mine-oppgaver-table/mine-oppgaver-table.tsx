@@ -1,12 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import 'nav-frontend-tabell-style';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
+import { StyledTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from './header';
 import { OppgaveRader } from './rows';
-import { StyledTable, StyledTableContainer } from './styled-components';
 import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
@@ -44,11 +43,9 @@ export const MineOppgaverTable = () => {
   }, [refetch]);
 
   return (
-    <StyledTableContainer>
-      <StyledTable className="tabell tabell--stripet" data-testid="mine-oppgaver-table">
-        <TableHeader filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
-      </StyledTable>
-    </StyledTableContainer>
+    <StyledTable data-testid="mine-oppgaver-table">
+      <TableHeader filters={filters} onChange={setFilters} />
+      <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
+    </StyledTable>
   );
 };

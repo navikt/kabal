@@ -26,7 +26,7 @@ export const Filter = <T extends string>({
   }, [focused]);
 
   return (
-    <StyledLabel ref={ref}>
+    <StyledLabel ref={ref} title={children}>
       <StyledCheckbox
         data-testid="filter"
         data-filterid={filterId}
@@ -52,9 +52,11 @@ const StyledLabel = styled.label`
   font-size: 1em;
   font-weight: 400;
   user-select: none;
-  white-space: 'nowrap';
+  flex-wrap: nowrap;
+  white-space: nowrap;
   word-break: keep-all;
   overflow: hidden;
+  text-align: left;
 
   &:hover {
     color: #0067c5;
@@ -64,4 +66,7 @@ const StyledLabel = styled.label`
 const StyledText = styled.span`
   width: 100%;
   margin-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

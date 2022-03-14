@@ -5,7 +5,7 @@ import React from 'react';
 import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
-import { StyledOppgaverContainer } from '../common/oppgaver-container';
+import { StyledOppgaverContainer } from '../common/styled-components';
 
 interface Props {
   open: boolean;

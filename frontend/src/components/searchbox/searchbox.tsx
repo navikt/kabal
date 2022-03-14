@@ -28,6 +28,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 1em;
+  margin-top: 16px;
 `;
 
 const StyledInput = styled.input`
