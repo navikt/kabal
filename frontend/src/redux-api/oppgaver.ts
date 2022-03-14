@@ -19,7 +19,13 @@ import { SEARCH_BASE_QUERY } from './common';
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
   baseQuery: SEARCH_BASE_QUERY,
-  tagTypes: ['tildelte-oppgaver', 'ventende-oppgaver', 'ledige-oppgaver', 'ledige-medutgaattefrister'],
+  tagTypes: [
+    'tildelte-oppgaver',
+    'ventende-oppgaver',
+    'ledige-oppgaver',
+    'ledige-medutgaattefrister',
+    'enhetens-tildelte-oppgaver',
+  ],
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -76,6 +82,7 @@ export const oppgaverApi = createApi({
         });
         return `/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
       },
+      providesTags: ['enhetens-tildelte-oppgaver'],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
