@@ -25,12 +25,4 @@ export interface ISmartDocument extends IBaseDocument {
   isSmartDokument: true;
 }
 
-export interface IParentDocument extends IBaseDocument {
-  parent: null;
-}
-
-export interface IAttachmentDocument extends IBaseDocument {
-  parent: UUID;
-}
-
-export type IMainDocument = (IFileDocument | ISmartDocument) & (IParentDocument | IAttachmentDocument);
+export type IMainDocument = IFileDocument | ISmartDocument;
