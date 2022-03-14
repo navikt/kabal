@@ -1,8 +1,13 @@
-import { Utfall } from './kodeverk';
+import { OppgaveType, Utfall } from './kodeverk';
 import { IDocumentReference, ISaksbehandler } from './oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
+}
+
+export interface IMottattKlageinstansParams extends IOppgavebehandlingBaseParams {
+  mottattKlageinstans: string; // LocalDate
+  type: OppgaveType.ANKE;
 }
 
 export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandlingBaseParams {

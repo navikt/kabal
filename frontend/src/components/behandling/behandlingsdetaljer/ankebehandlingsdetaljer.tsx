@@ -1,10 +1,10 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import { isoDateToPretty } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useKlagerName } from '../../../hooks/use-klager-name';
 import { Type } from '../../type/type';
 import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
+import { AnkeMottattDato } from './anke-mottatt-dato';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { SubSection } from './sub-section';
 import { UtfallResultat } from './utfall-resultat';
@@ -18,7 +18,7 @@ export const Ankebehandlingsdetaljer = () => {
     return <NavFrontendSpinner />;
   }
 
-  const { type, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, resultat, ytelse } = oppgavebehandling;
+  const { type, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelse } = oppgavebehandling;
 
   return (
     <StyledBehandlingsdetaljer>
@@ -36,7 +36,8 @@ export const Ankebehandlingsdetaljer = () => {
         <SubSection label="Behandlet av">
           {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
         </SubSection>
-        <SubSection label="Anke mottatt dato">{isoDateToPretty(mottattKlageinstans)}</SubSection>
+
+        <AnkeMottattDato />
 
         <UtfallResultat utfall={resultat.utfall} />
 
