@@ -17,7 +17,6 @@ export interface IOppgavebehandlingBase {
   id: string;
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
-  klageInnsendtdato: string | null; // LocalDate
   klager: IKlager;
   kommentarFraFoersteinstans: string | null;
   kvalitetsvurderingId: string;

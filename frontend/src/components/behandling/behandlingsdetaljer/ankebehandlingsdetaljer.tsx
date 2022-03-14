@@ -18,8 +18,7 @@ export const Ankebehandlingsdetaljer = () => {
     return <NavFrontendSpinner />;
   }
 
-  const { type, klageInnsendtdato, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, resultat, ytelse } =
-    oppgavebehandling;
+  const { type, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, resultat, ytelse } = oppgavebehandling;
 
   return (
     <StyledBehandlingsdetaljer>
@@ -34,7 +33,6 @@ export const Ankebehandlingsdetaljer = () => {
 
         <Ytelse ytelseId={ytelse} />
 
-        <SubSection label="Vedtak klageinstans">{isoDateToPretty(klageInnsendtdato)}</SubSection>
         <SubSection label="Behandlet av">
           {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
         </SubSection>
