@@ -30,7 +30,7 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
 
       tildelSaksbehandler({
         oppgaveId: klagebehandlingId,
-        navIdent: userData.info.navIdent,
+        navIdent: userData.navIdent,
         enhetId,
       });
     },

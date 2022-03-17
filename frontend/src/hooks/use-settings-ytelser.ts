@@ -1,17 +1,17 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useGetSettingsQuery } from '../redux-api/bruker';
 import { IKodeverkSimpleValue } from '../types/kodeverk';
 import { useAvailableYtelser } from './use-available-ytelser';
 
 export const useSettingsYtelser = (): IKodeverkSimpleValue[] => {
-  const { data: userData } = useGetBrukerQuery();
+  const { data } = useGetSettingsQuery();
   const ytelser = useAvailableYtelser();
 
-  if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
+  if (typeof data === 'undefined' || typeof ytelser === 'undefined') {
     return [];
   }
 
-  const settingsYtelser = userData.innstillinger.ytelser;
+  const settingsYtelser = data.ytelser;
 
   if (settingsYtelser.length === 0) {
     return ytelser;

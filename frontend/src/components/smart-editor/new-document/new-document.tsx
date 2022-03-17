@@ -1,11 +1,12 @@
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCreateSmartDocumentMutation } from '../../../redux-api/smart-editor-api';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
-import { AVSLAG_TEMPLATE } from '../templates/avslag-template';
 import { EMPTY_TEMPLATE } from '../templates/empty-template';
-import { MEDHOLD_TEMPLATE } from '../templates/medhold-template';
+import { UTFALL_SIMPLE_TEMPLATE } from '../templates/utfall-simple-template';
+import { UTFALL_TEMPLATE } from '../templates/utfall-template';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { MedholdBrevIcon } from './medhold-brev-icon';
@@ -18,7 +19,7 @@ import {
   StyledTemplates,
 } from './styled-components';
 
-const TEMPLATES: ISmartEditorTemplate[] = [EMPTY_TEMPLATE, MEDHOLD_TEMPLATE, AVSLAG_TEMPLATE];
+const TEMPLATES = [EMPTY_TEMPLATE, UTFALL_SIMPLE_TEMPLATE, UTFALL_TEMPLATE];
 
 interface Props {
   oppgaveId: string;
@@ -29,8 +30,9 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const canEdit = useCanEdit();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
+  const { data: oppgave } = useOppgave();
 
-  if (!canEdit) {
+  if (!canEdit || typeof oppgave === 'undefined') {
     return null;
   }
 
@@ -74,7 +76,7 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
     case 'avslag':
       return <AvslagBrevIcon />;
     default:
-      return null;
+      return <GenereltBrevIcon />;
   }
 };
 

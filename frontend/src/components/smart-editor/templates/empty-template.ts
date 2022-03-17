@@ -1,4 +1,5 @@
 import { Descendant } from 'slate';
+import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
 import { ContentTypeEnum, TextAlignEnum } from '../editor-types';
 
@@ -14,15 +15,20 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
   },
 ];
 
-export const EMPTY_TEMPLATE: ISmartEditorTemplate = {
+export const EMPTY_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: 'empty',
   tittel: 'Generelt brev',
   content: [
     {
-      id: 'test-smart-editor',
-      label: '',
-      type: 'rich-text',
-      content: INITIAL_SLATE_VALUE,
+      type: 'section',
+      id: 'data-section',
+      content: [
+        {
+          id: 'test-smart-editor',
+          type: 'rich-text',
+          content: INITIAL_SLATE_VALUE,
+        },
+      ],
     },
   ],
-};
+});

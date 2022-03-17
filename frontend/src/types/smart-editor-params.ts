@@ -1,29 +1,15 @@
-import { Descendant } from 'slate';
 import { IDocumentParams } from './documents-common-params';
 import { IOppgavebehandlingBaseParams } from './oppgavebehandling-params';
+import { ISmartEditorElement } from './smart-editor';
+import { Immutable } from './types';
 
-export interface ICreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
+interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;
   content: ISmartEditorElement[];
 }
 
+export type ICreateSmartDocumentParams = Immutable<IMutableCreateSmartDocumentParams>;
+
 export interface IUpdateSmartDocumentParams extends IDocumentParams {
   content: ISmartEditorElement[];
-}
-
-interface IBaseSmartEditorElement {
-  id: string;
-  label: string; // ex. "Vedtak / Beslutning".
-}
-
-export type ISmartEditorElement = IRichTextElement | ITextElement;
-
-export interface IRichTextElement extends IBaseSmartEditorElement {
-  type: 'rich-text';
-  content: Descendant[];
-}
-
-export interface ITextElement extends IBaseSmartEditorElement {
-  type: 'text';
-  content: string;
 }

@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
-import { useGetBrukerQuery } from '../../../redux-api/bruker';
+import { useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { Dropdown } from './dropdown';
 
 export const User = () => {
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -18,7 +18,7 @@ export const User = () => {
     setIsOpen(false);
   }, [location]);
 
-  if (typeof bruker === 'undefined') {
+  if (signatureIsLoading || typeof signature === 'undefined') {
     return <StyledContainer>Laster...</StyledContainer>;
   }
 
@@ -28,7 +28,7 @@ export const User = () => {
     <StyledContainer ref={ref}>
       <StyledButton onClick={() => setIsOpen(!isOpen)} data-testid="user-menu-button">
         <People />
-        {bruker.info.sammensattNavn}
+        {signature.customLongName ?? signature.longName}
         <Arrow />
       </StyledButton>
       <Dropdown open={isOpen} />

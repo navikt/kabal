@@ -14,7 +14,7 @@ export const useIsMedunderskriver = () => {
       return false;
     }
 
-    return oppgave.medunderskriver?.navIdent === userData.info.navIdent;
+    return oppgave.medunderskriver?.navIdent === userData.navIdent;
   }, [oppgave, userData, isLoading]);
 };
 
@@ -29,6 +29,6 @@ export const useCheckIsMedunderskriver = () => {
       return false;
     }
 
-    return medunderskriver?.medunderskriver?.navIdent === userData.info.navIdent;
+    return medunderskriver?.medunderskriver?.navIdent === userData.navIdent;
   }, [medunderskriver?.medunderskriver?.navIdent, userData, isLoading]);
 };

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useDeleteDocumentMutation } from '../../../../redux-api/documents';
+import { useDeleteDocumentMutation, useGetDocumentsQuery } from '../../../../redux-api/documents';
 import { IMainDocument } from '../../../../types/documents';
 
 interface Props {
@@ -14,10 +14,17 @@ interface Props {
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
+  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery({ oppgaveId });
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
 
-  if (!canEdit) {
+  if (!canEdit || documentsIsLoading || typeof data === 'undefined') {
+    return null;
+  }
+
+  const hasAttachments = data.some(({ parent }) => parent === document.id);
+
+  if (hasAttachments) {
     return null;
   }
 

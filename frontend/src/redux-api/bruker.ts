@@ -4,15 +4,6 @@ import { IMedunderskrivereParams } from '../types/oppgavebehandling-params';
 import { IMedunderskrivereResponse } from '../types/oppgavebehandling-response';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
-export interface IUser {
-  navIdent: string;
-  azureId: string;
-  fornavn: string;
-  etternavn: string;
-  sammensattNavn: string;
-  epost: string;
-}
-
 export interface IEnhet {
   id: string;
   navn: string;
@@ -26,11 +17,21 @@ export interface ISettings {
 }
 
 export interface IUserData {
-  info: IUser;
+  navIdent: string;
   roller: Role[];
   enheter: IEnhet[];
   ansattEnhet: IEnhet;
-  innstillinger: ISettings;
+}
+
+interface ICustomUserInfo {
+  customLongName: string | null;
+  customShortName: string | null;
+  customJobTitle: string | null;
+}
+
+export interface ISignatureResponse extends ICustomUserInfo {
+  longName: string;
+  generatedShortName: string;
 }
 
 export enum Role {
@@ -53,6 +54,16 @@ export interface IPostSettingsParams extends ISettings {
   navIdent: string;
 }
 
+export interface ISetInfoParams {
+  value: string;
+}
+
+export interface ISetCustomInfoParams {
+  key: keyof ICustomUserInfo;
+  value: string | null;
+  navIdent: string;
+}
+
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
   baseQuery: INNSTILLINGER_BASE_QUERY,
@@ -62,43 +73,57 @@ export const brukerApi = createApi({
       query: () => '/me/brukerdata',
       providesTags: ['user'],
     }),
-    getAnsatt: builder.query<IUserData, string>({
-      query: (navIdent) => `/${navIdent}/brukerdata`,
+    getMySignature: builder.query<ISignatureResponse, void>({
+      query: () => '/me/signature',
     }),
-    setValgtEnhet: builder.mutation<void, ISetEnhet>({
-      query: ({ navIdent, enhetId }) => ({
-        url: `/ansatte/${navIdent}/valgtenhet`,
-        method: 'PUT',
-        body: { enhetId },
-      }),
-      invalidatesTags: ['user'],
+    getSignature: builder.query<ISignatureResponse, string>({
+      query: (navIdent) => `/ansatte/${navIdent}/signature`,
     }),
-    updateSettings: builder.mutation<ISettings, IPostSettingsParams>({
-      query: ({ navIdent, ...params }) => ({
-        url: `/ansatte/${navIdent}/brukerdata/innstillinger`,
+    getSettings: builder.query<ISettings, void>({
+      query: () => '/me/innstillinger',
+    }),
+    updateSettings: builder.mutation<ISettings, ISettings>({
+      query: (body) => ({
+        url: `/me/innstillinger`,
         method: 'PUT',
-        body: { navIdent, ...params },
-        validateStatus: ({ ok }) => ok,
-        responseHandler: async (): Promise<ISettings> => params,
+        body,
       }),
-      invalidatesTags: ['user'],
-      extraOptions: { maxRetries: 0 },
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
-        const settings: ISettings = {
-          hjemler: params.hjemler,
-          typer: params.typer,
-          ytelser: params.ytelser,
-        };
-        const patchResult = dispatch(
-          brukerApi.util.updateQueryData('getBruker', undefined, (draft) => {
-            draft.innstillinger = settings;
+        const patchResult = dispatch(brukerApi.util.updateQueryData('getSettings', undefined, () => params));
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    setCustomInfo: builder.mutation<{ value: string }, ISetCustomInfoParams>({
+      query: ({ key, value }) => ({
+        method: 'PUT',
+        url: `/me/${key}`,
+        body: { value: cleanValue(value) },
+      }),
+      onQueryStarted: async ({ key, value, navIdent }, { dispatch, queryFulfilled }) => {
+        const cleanedValue = cleanValue(value);
+
+        const myPatchResult = dispatch(
+          brukerApi.util.updateQueryData('getMySignature', undefined, (draft) => {
+            draft[key] = cleanedValue;
+          })
+        );
+
+        const ansattPatchResult = dispatch(
+          brukerApi.util.updateQueryData('getSignature', navIdent, (draft) => {
+            draft[key] = cleanedValue;
           })
         );
 
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          myPatchResult.undo();
+          ansattPatchResult.undo();
         }
       },
     }),
@@ -112,9 +137,26 @@ export const brukerApi = createApi({
   }),
 });
 
+const cleanValue = (value: string | null) => {
+  if (value === null) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+
+  if (trimmed.length === 0) {
+    return null;
+  }
+
+  return trimmed.replaceAll(/\s+/g, ' ');
+};
+
 export const {
   useGetBrukerQuery,
-  useSetValgtEnhetMutation,
-  useUpdateSettingsMutation,
+  useGetMySignatureQuery,
+  useGetSettingsQuery,
+  useGetSignatureQuery,
   useSearchMedunderskrivereQuery,
+  useUpdateSettingsMutation,
+  useSetCustomInfoMutation,
 } = brukerApi;

@@ -10,6 +10,5 @@ export const ToolbarSeparator = ({ display = true }: ToolbarSeparatorProps) =>
 
 const ToolbarSeparatorStyle = styled.div`
   display: flex;
-  margin-right: 0.5em;
   border-left: 1px solid #c9c9c9;
 `;

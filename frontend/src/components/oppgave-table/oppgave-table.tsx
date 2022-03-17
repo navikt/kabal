@@ -42,7 +42,7 @@ export const OppgaveTable = (): JSX.Element => {
           antall: PAGE_SIZE,
           sortering,
           rekkefoelge,
-          navIdent: bruker.info.navIdent,
+          navIdent: bruker.navIdent,
           ytelser,
           typer,
           hjemler,

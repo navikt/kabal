@@ -4,21 +4,24 @@ import { pruneSelection } from './pruneSelection';
 
 export const isMarkActive = (editor: Editor, mark: keyof IMarks): boolean => {
   if (editor.selection === null || Range.isCollapsed(editor.selection)) {
-    const editorMarkStatus = getEditorMarkStatus(editor, mark);
-
-    if (typeof editorMarkStatus === 'boolean') {
-      return editorMarkStatus;
-    }
+    return getEditorMarkStatus(editor, mark);
   }
 
-  const [match] = Editor.nodes(editor, {
+  const matchGenerator = Editor.nodes(editor, {
     mode: 'lowest',
     reverse: true,
     universal: true,
     at: pruneSelection(editor) ?? undefined,
-    match: (n) => Text.isText(n) && n[mark] === true,
+    match: Text.isText,
   });
-  return Boolean(match);
+
+  for (const [node] of matchGenerator) {
+    if (node[mark] === true) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 const getEditorMarkStatus = (editor: Editor, mark: keyof IMarks) => {

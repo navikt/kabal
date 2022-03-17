@@ -25,7 +25,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
     typeof bruker === 'undefined' || typeof oppgave === 'undefined' || oppgave.tildeltSaksbehandlerEnhet === null
       ? skipToken
       : {
-          navIdent: bruker.info.navIdent,
+          navIdent: bruker.navIdent,
           enhet: oppgave.tildeltSaksbehandlerEnhet,
           ytelseId: ytelse,
           fnr: oppgave.sakenGjelder.person?.foedselsnummer ?? null,

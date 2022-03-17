@@ -22,7 +22,7 @@ export const FullfoerteOppgaverTable = () => {
           antall: MAX_OPPGAVER,
           sortering: SortFieldEnum.FRIST,
           rekkefoelge: SortOrderEnum.SYNKENDE,
-          navIdent: bruker.info.navIdent,
+          navIdent: bruker.navIdent,
           ferdigstiltDaysAgo: 7,
         };
 

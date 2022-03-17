@@ -61,8 +61,8 @@ export const ToolbarTextButton = ({
 );
 
 const ToolbarButtonStyle = styled.button<ToolbarButtonStyleProps>`
-  padding: 0.25em;
-  margin-right: 0.5em;
+  padding-left: 4px;
+  padding-right: 4px;
   cursor: pointer;
   border: none;
   border-radius: 4px;
@@ -70,10 +70,8 @@ const ToolbarButtonStyle = styled.button<ToolbarButtonStyleProps>`
   opacity: ${({ active }) => (active ? 1 : 0.5)};
   font-family: Source Sans Pro;
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: ${({ fontWeight }) => fontWeight ?? 'normal'};
-  min-width: 2em;
-  min-height: 2em;
 
   :hover {
     opacity: 1;

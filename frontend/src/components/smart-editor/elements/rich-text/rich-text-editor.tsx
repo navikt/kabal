@@ -2,9 +2,9 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from 'react
 import { Descendant, Node, NodeEntry, Range, Selection, Transforms, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { ReactEditor, RenderLeafProps, Slate, withReact } from 'slate-react';
-import styled from 'styled-components';
 import { IRichTextElement } from '../../../../types/smart-editor';
 import { SmartEditorContext } from '../../context/smart-editor-context';
+import { CustomTextType, ListItemElementType } from '../../editor-types';
 import { renderElement } from '../../slate-elements';
 import { EditorContainer, StyledEditable } from '../../styled-components';
 import { EditorOppgavelinje } from '../../toolbar/toolbar';
@@ -12,13 +12,13 @@ import { renderLeaf } from './leaf/render';
 import { useKeyboard } from './use-keyboard';
 import { withNormalization } from './with-normalization';
 
-interface RichTextElementProps extends Pick<IRichTextElement, 'content'> {
-  elementId: string;
-  onChange: (value: Descendant[]) => void;
+interface RichTextElementProps {
+  element: IRichTextElement;
+  onChange: (value: Descendant[], element: IRichTextElement) => void;
 }
 
 export const RichTextEditorElement = React.memo(
-  ({ content, onChange, elementId }: RichTextElementProps) => {
+  ({ onChange, element }: RichTextElementProps) => {
     const editor = useMemo(() => withHistory(withNormalization(withReact(createEditor()))), []);
     const keyboard = useKeyboard(editor);
     const [isFocused, setIsFocused] = useState<boolean>(ReactEditor.isFocused(editor));
@@ -40,19 +40,22 @@ export const RichTextEditorElement = React.memo(
 
     const onFocus = useCallback<React.FocusEventHandler<HTMLDivElement>>(
       (event) => {
-        if (!isFocused) {
-          setIsFocused(true);
-          setEditor(editor);
-          setElementId(elementId);
+        setIsFocused(true);
+        setEditor(editor);
+        setElementId(element.id);
 
-          if (editor.selection === null && savedSelection.current !== null) {
-            event.preventDefault();
-            Transforms.select(editor, savedSelection.current);
-            ReactEditor.focus(editor);
-          }
+        if (
+          editor.selection === null &&
+          savedSelection.current !== null &&
+          Range.isExpanded(savedSelection.current) &&
+          ReactEditor.hasRange(editor, savedSelection.current)
+        ) {
+          event.preventDefault();
+          Transforms.select(editor, savedSelection.current);
+          ReactEditor.focus(editor);
         }
       },
-      [editor, isFocused, savedSelection, elementId, setElementId, setEditor]
+      [editor, element.id, setElementId, setEditor]
     );
 
     const onBlur = useCallback(() => {
@@ -68,44 +71,66 @@ export const RichTextEditorElement = React.memo(
     return (
       <Slate
         editor={editor}
-        value={content}
+        value={element.content}
         onChange={(value) => {
-          onChange(value);
+          onChange(value, element);
 
           savedSelection.current = editor.selection;
           setSelection(savedSelection.current);
-          // const threadIds = getFocusedCommentThreadIds(editor, editor.selection);
-          // setFocusedThreadIds(threadIds);
-          // setShowNewThread(editor.selection !== null && Range.isExpanded(editor.selection));
         }}
       >
-        <SlateElementsContainer>
-          <EditorContainer>
-            <EditorOppgavelinje />
-            <StyledEditable
-              renderElement={renderElement}
-              renderLeaf={renderLeafCallback}
-              decorate={decorate}
-              onKeyDown={keyboard}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              theme={{
-                isFocused,
-              }}
-            />
-          </EditorContainer>
-        </SlateElementsContainer>
+        <EditorContainer>
+          <EditorOppgavelinje visible={isFocused} />
+          <StyledEditable
+            renderElement={renderElement}
+            renderLeaf={renderLeafCallback}
+            decorate={decorate}
+            onKeyDown={keyboard}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            isFocused={isFocused}
+            spellCheck
+          />
+        </EditorContainer>
       </Slate>
     );
   },
-  (prevProps, nextProps) => JSON.stringify(prevProps) === JSON.stringify(nextProps)
+  (prevProps, nextProps) => {
+    if (
+      prevProps.element.id !== nextProps.element.id ||
+      prevProps.element.content.length !== nextProps.element.content.length
+    ) {
+      return false;
+    }
+
+    return prevProps.element.content.every((p, i) => {
+      const n = nextProps.element.content[i];
+
+      if (p === n) {
+        return true;
+      }
+
+      const { type, children } = p;
+
+      if (type !== n.type) {
+        return false;
+      }
+
+      if (typeof children === 'undefined' || typeof children === 'boolean' || typeof children === 'string') {
+        return children === n.children;
+      }
+
+      const nChildren = n.children as typeof children;
+
+      if (children.length !== nChildren.length) {
+        return false;
+      }
+
+      const childList: (CustomTextType | ListItemElementType)[] = children;
+
+      return childList.every((c, ii) => c === nChildren[ii]);
+    });
+  }
 );
 
 RichTextEditorElement.displayName = 'RichTextEditorElement';
-
-const SlateElementsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  position: relative;
-`;
