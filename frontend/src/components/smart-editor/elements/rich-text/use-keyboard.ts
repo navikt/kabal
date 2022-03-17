@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Editor, Point, Transforms } from 'slate';
+import { Editor, Element, Point, Transforms } from 'slate';
 import { ContentTypeEnum, ListItemElementType, ListTypesEnum, MarkKeys, isOfElementType } from '../../editor-types';
 import { addBlock, areBlocksActive, createNewParagraph, isBlockActive } from '../../toolbar/functions/blocks';
 import { toggleMark } from '../../toolbar/functions/marks';
@@ -18,9 +18,8 @@ export const useKeyboard = (editor: Editor) =>
 
           if (Point.equals(editor.selection?.focus, start)) {
             event.preventDefault();
-            Editor.withoutNormalizing(editor, () => {
-              Transforms.liftNodes(editor);
-              Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
+            Transforms.liftNodes(editor, {
+              match: (n) => Element.isElement(n) && n.type === ListTypesEnum.LIST_ITEM,
             });
             return;
           }
@@ -28,7 +27,7 @@ export const useKeyboard = (editor: Editor) =>
       }
 
       if (event.shiftKey && event.key === 'Enter') {
-        // https://github.com/ianstormtaylor/slate/issues/3911
+        event.preventDefault();
         Transforms.insertText(editor, '\n');
         return;
       }
@@ -61,6 +60,38 @@ export const useKeyboard = (editor: Editor) =>
 
       if (event.key === 'Tab') {
         event.preventDefault();
+
+        if (event.shiftKey) {
+          Transforms.liftNodes(editor, {
+            match: (n) => Element.isElement(n) && n.type === ListTypesEnum.LIST_ITEM,
+          });
+          return;
+        }
+
+        if (isBlockActive(editor, ListTypesEnum.BULLET_LIST)) {
+          Transforms.wrapNodes(editor, {
+            type: ListTypesEnum.BULLET_LIST,
+            children: [
+              {
+                type: ListTypesEnum.LIST_ITEM,
+                children: [{ text: '' }],
+              },
+            ],
+          });
+        }
+
+        if (isBlockActive(editor, ListTypesEnum.NUMBERED_LIST)) {
+          Transforms.wrapNodes(editor, {
+            type: ListTypesEnum.NUMBERED_LIST,
+            children: [
+              {
+                type: ListTypesEnum.LIST_ITEM,
+                children: [{ text: '' }],
+              },
+            ],
+          });
+        }
+
         return;
       }
 
