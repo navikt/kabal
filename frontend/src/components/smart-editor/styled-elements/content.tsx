@@ -7,6 +7,8 @@ export const ParagraphStyle = styled.p<AlignableStyleProps>`
   font-size: 16px;
   text-align: ${({ textAlign }) => getTextAlign(textAlign)};
   white-space: pre-wrap;
+  margin-top: 16px;
+  margin-bottom: 0;
 `;
 
 export const BlockQuoteStyle = styled.blockquote<AlignableStyleProps>`
@@ -21,17 +23,13 @@ export const BlockQuoteStyle = styled.blockquote<AlignableStyleProps>`
 const getStyles = (textAlign: TextAlignEnum) => {
   if (textAlign === TextAlignEnum.TEXT_ALIGN_RIGHT) {
     return css`
-      & {
-        border-right: 2px solid #ddd;
-        padding-right: 0.5em;
-      }
+      border-right: 2px solid #ddd;
+      padding-right: 8px;
     `;
   }
 
   return css`
-    & {
-      border-left: 2px solid #ddd;
-      padding-left: 0.5em;
-    }
+    border-left: 2px solid #ddd;
+    padding-left: 8px;
   `;
 };
