@@ -19,10 +19,10 @@ export const useIsAssignee = () => {
 
     // If case is sent to the medunderskriver, the medunderskriver is assigned.
     if (oppgavebehandling.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-      return oppgavebehandling.medunderskriver?.navIdent === userData.info.navIdent;
+      return oppgavebehandling.medunderskriver?.navIdent === userData.navIdent;
     }
 
     // Else, the case is assigned to the saksbehandler.
-    return oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.info.navIdent;
+    return oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent;
   }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
 };

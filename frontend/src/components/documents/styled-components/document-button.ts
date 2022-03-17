@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   border: none;
   padding: 0;

@@ -5,8 +5,6 @@ export const pruneSelection = (editor: Editor): Selection => {
     return editor.selection;
   }
 
-  editor.selection = Editor.unhangRange(editor, editor.selection);
-
   const nodeGenerator = Editor.nodes(editor, {
     at: editor.selection,
     match: Text.isText,

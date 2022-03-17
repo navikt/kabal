@@ -4,17 +4,18 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useGetBrukerQuery } from '../../../../redux-api/bruker';
+import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const { data: user, isLoading } = useGetBrukerQuery();
+  const { data: user, isLoading: userIsLoading } = useGetBrukerQuery();
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
   const oppgaveId = useOppgaveId();
+  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   useEffect(() => {
     if (isSuccess) {
@@ -22,7 +23,7 @@ export const WriteMessage = () => {
     }
   }, [isSuccess, setMessage]);
 
-  if (typeof user === 'undefined' || isLoading) {
+  if (signatureIsLoading || userIsLoading || typeof user === 'undefined' || typeof signature === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
@@ -45,8 +46,8 @@ export const WriteMessage = () => {
       oppgaveId,
       text: message.trim(),
       author: {
-        name: user.info.sammensattNavn,
-        saksbehandlerIdent: user.info.navIdent,
+        name: signature.customLongName ?? signature.longName,
+        saksbehandlerIdent: user.navIdent,
       },
     });
   };

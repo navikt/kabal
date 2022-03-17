@@ -22,7 +22,7 @@ export const OppgaverPaaVentTable = () => {
           antall: MAX_OPPGAVER,
           sortering: SortFieldEnum.FRIST,
           rekkefoelge: SortOrderEnum.STIGENDE,
-          navIdent: bruker.info.navIdent,
+          navIdent: bruker.navIdent,
         };
 
   const {

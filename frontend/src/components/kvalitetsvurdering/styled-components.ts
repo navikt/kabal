@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
   padding: 1em;
-  width: 760px;
+  width: 700px;
 `;
 
-export const FormSection = styled.div`
-  margin-bottom: 30px;
+export const FormSection = styled.section`
+  margin-bottom: 32px;
 `;
 
 export const SubHeader = styled.h2`

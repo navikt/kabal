@@ -1,3 +1,4 @@
+import { FileContent, Notes } from '@navikt/ds-icons';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { DOMAIN, KABAL_BEHANDLINGER_BASE_PATH } from '../../../../redux-api/common';
@@ -45,9 +46,12 @@ export const DocumentTitle = ({ document }: Props) => {
       url,
     });
 
+  const Icon = document.isSmartDokument ? Notes : FileContent;
+
   return (
     <StyledDocumentTitle>
       <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
+        <Icon />
         {document.tittel}
       </StyledDocumentButton>
       <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />

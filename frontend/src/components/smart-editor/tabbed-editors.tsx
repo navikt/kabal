@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartDocuments } from '../../hooks/use-smart-documents';
-import { IMainDocument } from '../../types/documents';
+import { ISmartDocument } from '../../types/documents';
 import { CommentSection } from './comments/comment-section';
 import { SmartEditorContextComponent } from './context/smart-editor-context';
 import { NewDocument } from './new-document/new-document';
@@ -12,24 +12,39 @@ import { SmartEditor } from './smart-editor';
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
   const documents = useSmartDocuments(oppgaveId);
-  const [documentId, setDocumentId] = useState<string | null>(null);
 
   if (typeof documents === 'undefined') {
     return null;
   }
+
+  return <Tabbed oppgaveId={oppgaveId} documents={documents} />;
+};
+
+interface TabbedProps {
+  oppgaveId: string;
+  documents: ISmartDocument[];
+}
+
+const Tabbed = ({ oppgaveId, documents }: TabbedProps) => {
+  const [documentId, setDocumentId] = useState<string | null>(documents[0]?.id);
 
   const activeDocumentId = documents.some(({ id }) => id === documentId) ? documentId : null;
 
   return (
     <>
       <Tabs documents={documents} activeTab={activeDocumentId} setActiveTab={setDocumentId} />
-      <ShowTab documentId={activeDocumentId} oppgaveId={oppgaveId} onCreate={setDocumentId} />
+      <ShowTab
+        documents={documents}
+        activeDocumentId={activeDocumentId}
+        oppgaveId={oppgaveId}
+        onCreate={setDocumentId}
+      />
     </>
   );
 };
 
 interface TabsProps {
-  documents: IMainDocument[];
+  documents: ISmartDocument[];
   activeTab: string | null;
   setActiveTab: (id: string | null) => void;
 }
@@ -59,40 +74,54 @@ const Tabs = ({ documents, activeTab, setActiveTab }: TabsProps) => {
 
 interface Props {
   oppgaveId: string;
-  documentId: string | null;
+  activeDocumentId: string | null;
+  documents: ISmartDocument[];
   onCreate: (documentId: string) => void;
 }
 
-const ShowTab = ({ documentId, oppgaveId, onCreate }: Props) => {
-  if (documentId === null) {
-    return <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} />;
-  }
+const ShowTab = ({ activeDocumentId, documents, oppgaveId, onCreate }: Props) => {
+  const editors = documents.map((document) => {
+    const isActive = document.id === activeDocumentId;
+
+    return (
+      <EditorContainer key={document.id} isActive={isActive}>
+        <SmartEditorContextComponent documentId={document.id}>
+          <SmartEditor />
+          <CommentSection />
+        </SmartEditorContextComponent>
+      </EditorContainer>
+    );
+  });
+
+  const newTab = activeDocumentId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
 
   return (
-    <EditorContainer>
-      <SmartEditorContextComponent documentId={documentId}>
-        <SmartEditor />
-        <CommentSection />
-      </SmartEditorContextComponent>
-    </EditorContainer>
+    <>
+      {editors}
+      {newTab}
+    </>
   );
 };
 
-const EditorContainer = styled.div`
-  display: flex;
+const EditorContainer = styled.div<{ isActive: boolean }>`
+  display: ${({ isActive }) => (isActive ? 'flex' : 'none')};
   flex-direction: row;
   position: relative;
   width: 100%;
+  max-height: 100%;
 `;
 
 const TabsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-shrink: 0;
   gap: 4px;
   border-bottom: 1px solid lightgrey;
   width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
+  height: fit-content;
 `;
 
 const TabButton = styled.button`

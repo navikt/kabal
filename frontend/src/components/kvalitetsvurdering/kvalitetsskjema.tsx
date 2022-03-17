@@ -17,13 +17,13 @@ export const Kvalitetsskjema = () => {
   }
 
   return (
-    <section>
+    <>
       <Klageforberedelsen />
       <Utredningen />
       <BrukAvRaadgivendeLegeDisplay ytelse={oppgave.ytelse} />
       <Vedtaket />
       <Annet />
-    </section>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
-export const formatSakenGjelder = (id: string | undefined): string | null => {
+export const formatSakenGjelder = (id: string | undefined): string => {
   if (typeof id === 'undefined') {
-    return null;
+    return '';
   }
 
   if (id.length === 9) {
@@ -19,9 +19,9 @@ export const formatOrgNum = (n: string): string => {
   return `${a}${b}${c} ${d}${e}${f} ${g}${h}${i}`;
 };
 
-export const formatPersonNum = (n: string | undefined): string | null => {
-  if (typeof n === 'undefined') {
-    return null;
+export const formatPersonNum = (n: string | undefined | null): string => {
+  if (n === null || typeof n === 'undefined') {
+    return '';
   }
 
   const [a, b, c, d, e, f, g, h, i, j, k] = n;

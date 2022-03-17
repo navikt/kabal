@@ -28,7 +28,7 @@ export const FradelKlagebehandlingButton = ({
 
     fradelSaksbehandler({
       oppgaveId: klagebehandlingId,
-      navIdent: userData.info.navIdent,
+      navIdent: userData.navIdent,
     }).then(() => setDone(true));
   }, [klagebehandlingId, userData, fradelSaksbehandler]);
 
@@ -36,7 +36,7 @@ export const FradelKlagebehandlingButton = ({
     return null;
   }
 
-  if (!isLeader && tildeltSaksbehandlerident !== userData?.info.navIdent) {
+  if (!isLeader && tildeltSaksbehandlerident !== userData?.navIdent) {
     return null;
   }
 

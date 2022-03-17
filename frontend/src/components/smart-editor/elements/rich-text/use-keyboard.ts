@@ -19,7 +19,7 @@ export const useKeyboard = (editor: Editor) =>
           if (Point.equals(editor.selection?.focus, start)) {
             event.preventDefault();
             Transforms.liftNodes(editor, {
-              match: (n) => Element.isElement(n) && n.type === ListTypesEnum.LIST_ITEM,
+              match: (n) => isOfElementType(n, ListTypesEnum.LIST_ITEM),
             });
             return;
           }

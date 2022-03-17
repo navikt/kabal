@@ -28,7 +28,7 @@ export const SaksbehandlerButton = ({
     return <TildelKlagebehandlingButton klagebehandlingId={klagebehandlingId} ytelse={ytelse} />;
   }
 
-  if (userData.info.navIdent === tildeltSaksbehandlerident) {
+  if (userData.navIdent === tildeltSaksbehandlerident) {
     return (
       <FradelKlagebehandlingButton
         klagebehandlingId={klagebehandlingId}

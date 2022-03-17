@@ -1,5 +1,5 @@
 import React from 'react';
-import { RenderElementProps } from 'slate-react';
+import { RenderElementProps as RenderElementPropsBase } from 'slate-react';
 import { AlignableElementTypes, ContentTypeEnum, HeadingTypesEnum, ListTypesEnum } from './editor-types';
 import { BlockQuoteStyle, ParagraphStyle } from './styled-elements/content';
 import {
@@ -11,6 +11,10 @@ import {
   HeadingTwoStyle,
 } from './styled-elements/headings';
 import { BulletListStyle, NumberedListStyle } from './styled-elements/lists';
+
+export interface RenderElementProps extends RenderElementPropsBase {
+  key?: string | number;
+}
 
 interface AlignableProps extends RenderElementProps {
   element: AlignableElementTypes;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Editor, Range, Selection } from 'slate';
+import { ReactEditor } from 'slate-react';
 import { getFocusedCommentThreadIds } from './get-focused-thread-ids';
 
 interface Props {
@@ -12,8 +13,9 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
   const [editor, setEditor] = useState<Editor | null>(null);
   const [selection, setSelection] = useState<Selection>(null);
 
-  const focusedThreadIds = getFocusedCommentThreadIds(editor);
-  const showNewThread = editor !== null && editor.selection !== null && Range.isExpanded(editor.selection);
+  const focusedThreadIds = getFocusedCommentThreadIds(editor, selection);
+  const showNewThread =
+    editor !== null && selection !== null && Range.isExpanded(selection) && ReactEditor.hasRange(editor, selection);
 
   return (
     <SmartEditorContext.Provider

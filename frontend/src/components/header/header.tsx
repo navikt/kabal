@@ -38,10 +38,11 @@ const StyledNavLink = styled(NavLink)`
 const StyledHeader = styled.header`
   z-index: 2;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 3em;
+  height: 48px;
   background: #3e3832;
 `;
 

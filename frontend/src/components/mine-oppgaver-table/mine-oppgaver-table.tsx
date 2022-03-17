@@ -26,7 +26,7 @@ export const MineOppgaverTable = () => {
           antall: MAX_OPPGAVER,
           sortering,
           rekkefoelge,
-          navIdent: bruker.info.navIdent,
+          navIdent: bruker.navIdent,
         };
 
   const {

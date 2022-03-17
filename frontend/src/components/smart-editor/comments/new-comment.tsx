@@ -4,7 +4,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useCallback, useContext, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetBrukerQuery } from '../../../redux-api/bruker';
+import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { connectCommentThread } from '../elements/rich-text/connect-thread';
@@ -15,6 +15,7 @@ export const NewComment = () => {
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const [postComment] = usePostCommentMutation();
   const { documentId } = useContext(SmartEditorContext);
+  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   const [text, setText] = useState<string>('');
 
@@ -32,7 +33,7 @@ export const NewComment = () => {
     [editor, selection]
   );
 
-  if (typeof bruker === 'undefined' || brukerIsLoading) {
+  if (signatureIsLoading || brukerIsLoading || typeof bruker === 'undefined' || typeof signature === 'undefined') {
     return <NavFrontendSpinner />;
   }
 
@@ -43,8 +44,8 @@ export const NewComment = () => {
 
     postComment({
       author: {
-        ident: bruker.info.navIdent,
-        name: bruker.info.sammensattNavn,
+        ident: bruker.navIdent,
+        name: signature.customLongName ?? signature.longName,
       },
       dokumentId: documentId,
       text,

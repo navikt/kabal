@@ -44,6 +44,12 @@ export const smartEditorApi = createApi({
         method: 'PUT',
         body: content,
       }),
+      transformResponse: ({ id, created, modified, json }: ISmartEditorRawResponse) => ({
+        id,
+        created,
+        modified,
+        content: JSON.parse(json) as ISmartEditorElement[],
+      }),
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
         const query: IDocumentParams = { oppgaveId: params.oppgaveId, dokumentId: params.dokumentId };
         const patchResult = dispatch(
@@ -60,6 +66,7 @@ export const smartEditorApi = createApi({
             smartEditorApi.util.updateQueryData('getSmartEditor', query, (draft) => {
               if (draft !== null) {
                 draft.modified = data.modified;
+                draft.content = data.content;
               }
             })
           );

@@ -1,4 +1,5 @@
 import { Descendant } from 'slate';
+import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
 import { ContentTypeEnum, HeadingTypesEnum, ListTypesEnum, TextAlignEnum } from '../editor-types';
 
@@ -17,7 +18,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_RIGHT,
     children: [
       {
-        text: 'dd. måned ååå',
+        text: 'dd. måned åååå',
       },
     ],
   },
@@ -398,71 +399,40 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
       },
     ],
   },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Ola Nordmann',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Rådgiver',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Kari Nordmann',
-      },
-    ],
-  },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Rådgiver/saksbehandler',
-      },
-    ],
-  },
 ];
 
-export const MEDHOLD_TEMPLATE: ISmartEditorTemplate = {
+export const MEDHOLD_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: 'medhold',
   tittel: 'Vedtaksbrev medhold',
   content: [
     {
-      id: 'test-smart-editor',
-      label: '',
-      type: 'rich-text',
-      content: INITIAL_SLATE_VALUE,
+      type: 'document-title',
+      id: 'document-title',
+      content: 'NAV Klageinstans har behandlet klagen din',
+    },
+    {
+      type: 'section',
+      id: 'data-section',
+      content: [
+        {
+          id: 'test-smart-editor',
+          type: 'rich-text',
+          content: INITIAL_SLATE_VALUE,
+        },
+        {
+          type: 'static',
+          id: 'regards',
+          source: 'regards',
+          content: undefined,
+        },
+      ],
+    },
+    {
+      type: 'signature',
+      id: 'signature',
+      content: {
+        useShortName: false,
+      },
     },
   ],
-};
+});

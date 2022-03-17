@@ -15,14 +15,18 @@ import { ToolbarIconButton } from './toolbarbutton';
 
 const ICON_SIZE = 24;
 
-export const EditorOppgavelinje = () => {
+interface Props {
+  visible: boolean;
+}
+
+export const EditorOppgavelinje = ({ visible }: Props) => {
   const editor = useSlate();
 
   const marksAvailable = isMarkingAvailable(editor);
   const textAlignAvailable = isTextAlignAvailable(editor);
 
   return (
-    <ToolbarStyle>
+    <ToolbarStyle visible={visible} aria-hidden={!visible}>
       <Marks iconSize={ICON_SIZE} disabled={!marksAvailable} />
       <Content iconSize={ICON_SIZE} />
       <ToolbarIconButton
@@ -31,9 +35,11 @@ export const EditorOppgavelinje = () => {
         active={false}
         onClick={() => clearFormatting(editor)}
       />
+
       <ToolbarSeparator />
 
       <Headings />
+
       <ToolbarSeparator />
 
       <Lists iconSize={ICON_SIZE} />
@@ -42,13 +48,23 @@ export const EditorOppgavelinje = () => {
   );
 };
 
-const ToolbarStyle = styled.section`
+const ToolbarStyle = styled.section<{ visible: boolean }>`
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
   position: sticky;
   top: 0;
+  left: 0;
   background-color: white;
   z-index: 1;
-  padding: 0.5em;
-  border: 1px solid #c9c9c9;
+  padding: 2px;
+  margin-left: 16px;
+  margin-right: 16px;
   overflow: hidden;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2);
+  will-change: opacity, visibility;
+  transition: opacity 0.2s ease-in-out;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
 `;

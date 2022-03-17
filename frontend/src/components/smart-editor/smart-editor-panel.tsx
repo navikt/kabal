@@ -25,7 +25,9 @@ export const SmartEditorPanel = ({ shown }: Props) => {
 };
 
 const SmartEditorPanelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 0;
-  width: 1300px;
+  min-width: 210mm;
   min-height: 100%;
 `;
