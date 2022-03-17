@@ -14,3 +14,10 @@ export const PanelContainer = styled.section`
   white-space: nowrap;
   flex-direction: column;
 `;
+
+export const PanelHeader = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 24px;
+`;

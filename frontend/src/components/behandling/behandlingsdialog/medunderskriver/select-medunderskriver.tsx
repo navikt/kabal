@@ -79,6 +79,5 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
 };
 
 const StyledFormSection = styled.div`
-  margin-top: 20px;
   width: 250px;
 `;

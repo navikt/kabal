@@ -2,11 +2,12 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useKlagerName } from '../../../hooks/use-klager-name';
+import { PanelHeader } from '../../oppgavebehandling-panels/panel';
 import { Type } from '../../type/type';
-import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
+import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
 import { AnkeMottattDato } from './anke-mottatt-dato';
+import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
-import { SubSection } from './sub-section';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
@@ -23,19 +24,19 @@ export const Ankebehandlingsdetaljer = () => {
   return (
     <StyledBehandlingsdetaljer>
       <StyledPaddedContent>
-        <StyledHeader>Behandling</StyledHeader>
+        <PanelHeader>Behandling</PanelHeader>
 
-        <SubSection label="Klager">{klagerName ?? ''}</SubSection>
+        <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
 
-        <SubSection label="Type">
+        <BehandlingSection label="Type">
           <Type type={type}></Type>
-        </SubSection>
+        </BehandlingSection>
 
         <Ytelse ytelseId={ytelse} />
 
-        <SubSection label="Behandlet av">
+        <BehandlingSection label="Behandlet av">
           {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
-        </SubSection>
+        </BehandlingSection>
 
         <AnkeMottattDato />
 

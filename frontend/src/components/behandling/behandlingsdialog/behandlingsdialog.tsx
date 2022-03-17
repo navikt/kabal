@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyledBehandlingsdialog, StyledSubHeader } from '../styled-components';
+import { PanelHeader } from '../../oppgavebehandling-panels/panel';
+import { StyledBehandlingsdialog } from '../styled-components';
 import { Medunderskriver } from './medunderskriver/medunderskriver';
 import { Messages } from './messages/messages';
 
 export const Behandlingsdialog = () => (
   <StyledBehandlingsdialog>
-    <StyledSubHeader>Behandlingsdialog</StyledSubHeader>
+    <PanelHeader>Behandlingsdialog</PanelHeader>
     <Medunderskriver />
     <Messages />
   </StyledBehandlingsdialog>
