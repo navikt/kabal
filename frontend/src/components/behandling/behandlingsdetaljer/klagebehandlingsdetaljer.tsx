@@ -3,10 +3,11 @@ import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useKlagerName } from '../../../hooks/use-klager-name';
+import { PanelHeader } from '../../oppgavebehandling-panels/panel';
 import { Type } from '../../type/type';
-import { StyledBehandlingsdetaljer, StyledHeader, StyledPaddedContent } from '../styled-components';
+import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
+import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
-import { SubSection } from './sub-section';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
@@ -32,23 +33,25 @@ export const Klagebehandlingsdetaljer = () => {
   return (
     <StyledBehandlingsdetaljer>
       <StyledPaddedContent>
-        <StyledHeader>Behandling</StyledHeader>
+        <PanelHeader>Behandling</PanelHeader>
 
-        <SubSection label="Klager">{klagerName ?? ''}</SubSection>
+        <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
 
-        <SubSection label="Type">
+        <BehandlingSection label="Type">
           <Type type={type}></Type>
-        </SubSection>
+        </BehandlingSection>
 
         <Ytelse ytelseId={ytelse} />
 
-        <SubSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattFoersteinstans)}</SubSection>
-        <SubSection label="Fra NAV-enhet">
+        <BehandlingSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattFoersteinstans)}</BehandlingSection>
+        <BehandlingSection label="Fra NAV-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
-        </SubSection>
-        <SubSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</SubSection>
+        </BehandlingSection>
+        <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
-        <SubSection label="Melding fra vedtaksinstans for intern bruk">{kommentarFraFoersteinstans}</SubSection>
+        <BehandlingSection label="Melding fra vedtaksinstans for intern bruk">
+          {kommentarFraFoersteinstans}
+        </BehandlingSection>
 
         <UtfallResultat utfall={resultat.utfall} />
 

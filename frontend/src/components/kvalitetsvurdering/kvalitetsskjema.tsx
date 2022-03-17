@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useIsRelevantYtelseForRaadgivende } from '../../hooks/use-is-relevant-ytelse-for-raadgivende';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -18,13 +17,13 @@ export const Kvalitetsskjema = () => {
   }
 
   return (
-    <StyledKvalitetsskjema>
+    <section>
       <Klageforberedelsen />
       <Utredningen />
       <BrukAvRaadgivendeLegeDisplay ytelse={oppgave.ytelse} />
       <Vedtaket />
       <Annet />
-    </StyledKvalitetsskjema>
+    </section>
   );
 };
 
@@ -41,7 +40,3 @@ const BrukAvRaadgivendeLegeDisplay = ({ ytelse }: BrukAvRaadgivendeLegeDisplayPr
 
   return null;
 };
-
-const StyledKvalitetsskjema = styled.div`
-  margin: 30px 0;
-`;

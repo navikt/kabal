@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 
-export const StyledHeader = styled.h1`
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0;
-`;
-
 export const StyledContainer = styled.div`
   display: flex;
   flex-basis: 100%;
   white-space: normal;
 `;
 
-export const StyledInfoHeader = styled.h2`
-  margin: 1em 0 0;
+export const BehandlingSectionHeader = styled.h2`
+  margin-bottom: 8px;
   font-size: 1em;
   font-weight: bold;
 `;
@@ -43,21 +37,12 @@ export const StyledLovhjemmelLabels = styled.div`
   margin: -0.25em;
 `;
 
-export const StyledInfoChildren = styled.div`
-  min-height: 2em;
+export const BehandlingSectionChildren = styled.div`
+  margin-bottom: 32px;
 `;
 
 export const StyledUtfallResultat = styled.div`
-  margin-bottom: 1em;
-  margin-top: 1em;
-`;
-
-export const StyledSubHeader = styled.h3`
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  font-size: 20px;
-  line-height: 25px;
-  font-weight: 600;
+  margin-bottom: 32px;
 `;
 
 export const StyledPaddedContent = styled.div`

@@ -10,13 +10,6 @@ export const FormSection = styled.div`
   margin-bottom: 30px;
 `;
 
-export const Header = styled.h1`
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: bold;
-  margin: 0 0 20px 0;
-`;
-
 export const SubHeader = styled.h2`
   font-weight: 600;
   font-size: 22px;

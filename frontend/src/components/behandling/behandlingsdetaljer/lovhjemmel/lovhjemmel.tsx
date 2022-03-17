@@ -70,4 +70,5 @@ export const Lovhjemmel = () => {
 const StyledHeader = styled.h2`
   font-size: 16px;
   font-weight: bold;
+  margin-bottom: 8px;
 `;
