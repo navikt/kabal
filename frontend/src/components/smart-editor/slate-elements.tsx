@@ -10,6 +10,7 @@ import {
   HeadingThreeStyle,
   HeadingTwoStyle,
 } from './styled-elements/headings';
+import { BulletListStyle, NumberedListStyle } from './styled-elements/lists';
 
 interface AlignableProps extends RenderElementProps {
   element: AlignableElementTypes;
@@ -39,9 +40,13 @@ export const HeadingSixElement = (props: RenderElementProps) => (
   <HeadingSixStyle {...props.attributes}>{props.children}</HeadingSixStyle>
 );
 
-export const BulletListElement = (props: RenderElementProps) => <ul {...props.attributes}>{props.children}</ul>;
+export const BulletListElement = (props: RenderElementProps) => (
+  <BulletListStyle {...props.attributes}>{props.children}</BulletListStyle>
+);
 
-export const NumberedListElement = (props: RenderElementProps) => <ol {...props.attributes}>{props.children}</ol>;
+export const NumberedListElement = (props: RenderElementProps) => (
+  <NumberedListStyle {...props.attributes}>{props.children}</NumberedListStyle>
+);
 
 export const ListItemElement = (props: RenderElementProps) => <li {...props.attributes}>{props.children}</li>;
 

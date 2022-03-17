@@ -20,6 +20,11 @@ export const StyledEditable = styled(Editable)<StyledEditableProps>`
   padding: 2em;
   opacity: ${({ theme }) => (theme.isFocused === true ? 1 : 0.5)};
   position: relative;
+
+  > :first-child {
+    margin-top: 0;
+  }
+
   *::selection {
     background-color: lightblue;
   }
