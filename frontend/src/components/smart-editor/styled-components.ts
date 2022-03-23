@@ -8,11 +8,11 @@ export const EditorContainer = styled.section`
   overflow: visible;
 `;
 
-export const StyledEditable = styled(Editable)<{ isFocused: boolean }>`
+export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean }>`
   min-height: 64px;
   position: relative;
   padding: 16px;
-  box-shadow: -5px 0px 0 0px ${({ isFocused }) => (isFocused ? '#00bcd4' : '#c9c9c9')};
+  box-shadow: -5px 0px 0 0px ${({ 'data-is-focused': isFocused }) => (isFocused ? '#00bcd4' : '#c9c9c9')};
   border-radius: 5px;
   transition: box-shadow 0.2s ease-in-out;
 

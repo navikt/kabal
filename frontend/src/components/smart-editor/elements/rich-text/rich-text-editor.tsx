@@ -88,7 +88,7 @@ export const RichTextEditorElement = React.memo(
             onKeyDown={keyboard}
             onFocus={onFocus}
             onBlur={onBlur}
-            isFocused={isFocused}
+            data-is-focused={isFocused}
             spellCheck
           />
         </EditorContainer>
