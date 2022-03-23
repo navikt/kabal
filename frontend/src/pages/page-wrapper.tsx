@@ -18,7 +18,6 @@ export const OppgaverPageWrapper = ({ children }: OppgaverPageWrapperProps): JSX
 export const StyledArticle = styled.article`
   padding-left: 16px;
   padding-right: 16px;
-  overflow-y: auto;
 `;
 
 const StyledMain = styled.main`
