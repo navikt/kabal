@@ -4,7 +4,13 @@ import { withHistory } from 'slate-history';
 import { ReactEditor, RenderLeafProps, Slate, withReact } from 'slate-react';
 import { IRichTextElement } from '../../../../types/smart-editor';
 import { SmartEditorContext } from '../../context/smart-editor-context';
-import { CustomTextType, ListItemElementType } from '../../editor-types';
+import {
+  BulletListElementType,
+  CustomTextType,
+  ListItemContainerElementType,
+  ListItemElementType,
+  NumberedListElementType,
+} from '../../editor-types';
 import { renderElement } from '../../slate-elements';
 import { EditorContainer, StyledEditable } from '../../styled-components';
 import { EditorOppgavelinje } from '../../toolbar/toolbar';
@@ -126,7 +132,13 @@ export const RichTextEditorElement = React.memo(
         return false;
       }
 
-      const childList: (CustomTextType | ListItemElementType)[] = children;
+      const childList: (
+        | BulletListElementType
+        | NumberedListElementType
+        | ListItemElementType
+        | ListItemContainerElementType
+        | CustomTextType
+      )[] = children;
 
       return childList.every((c, ii) => c === nChildren[ii]);
     });

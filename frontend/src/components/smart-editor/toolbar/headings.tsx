@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSlate } from 'slate-react';
-import { ContentTypeEnum, HeadingTypesEnum } from '../editor-types';
-import { isBlockActive, toggleBlock } from './functions/blocks';
+import { ContentTypeEnum, HeadingTypesEnum, ListContentEnum } from '../editor-types';
+import { areBlocksActive, isBlockActive, toggleBlock } from './functions/blocks';
 import { ToolbarTextButton } from './toolbarbutton';
 
 export const Headings = () => {
@@ -14,6 +14,7 @@ export const Headings = () => {
         text="Normal"
         onClick={() => toggleBlock(editor, ContentTypeEnum.PARAGRAPH)}
         active={isBlockActive(editor, ContentTypeEnum.PARAGRAPH)}
+        disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
         label="Tittel nivå 1"
@@ -21,6 +22,7 @@ export const Headings = () => {
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_ONE)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_ONE)}
+        disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
         label="Tittel nivå 2"
@@ -28,6 +30,7 @@ export const Headings = () => {
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_TWO)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_TWO)}
+        disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
         label="Tittel nivå 3"
@@ -35,6 +38,7 @@ export const Headings = () => {
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_THREE)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_THREE)}
+        disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
     </>
   );

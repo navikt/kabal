@@ -3,15 +3,12 @@ import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
 import { ContentTypeEnum, HeadingTypesEnum, TextAlignEnum } from '../editor-types';
 
+/* eslint-disable max-lines */
 const EMPTY_SLATE_VALUE: Descendant[] = [
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: '',
-      },
-    ],
+    children: [{ text: '' }],
   },
 ];
 
@@ -61,28 +58,18 @@ export const UTFALL_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
             {
               type: ContentTypeEnum.PARAGRAPH,
               textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-              children: [
-                {
-                  text: '[Alt 1 stadfestelse] Vi er enige i vedtaket.',
-                },
-              ],
+              children: [{ text: '[Alt 1 stadfestelse] Vi er enige i vedtaket.' }],
+            },
+            {
+              type: ContentTypeEnum.PARAGRAPH,
+              textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+              children: [{ text: '[Alt 2 omgjøring] Vi har omgjort vedtaket, slik at' }],
             },
             {
               type: ContentTypeEnum.PARAGRAPH,
               textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
               children: [
-                {
-                  text: '[Alt 2 omgjøring] Vi har omgjort vedtaket, slik at',
-                },
-              ],
-            },
-            {
-              type: ContentTypeEnum.PARAGRAPH,
-              textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-              children: [
-                {
-                  text: '[Alt 3 avvisning] Vi har avvist klagen din fordi du ikke har overholdt klagefristen.',
-                },
+                { text: '[Alt 3 avvisning] Vi har avvist klagen din fordi du ikke har overholdt klagefristen.' },
               ],
             },
             {
@@ -171,11 +158,7 @@ export const UTFALL_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
             {
               type: ContentTypeEnum.PARAGRAPH,
               textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-              children: [
-                {
-                  text: 'Vedtaket er gjort etter folketrygdloven § [hjemmel].',
-                },
-              ],
+              children: [{ text: 'Vedtaket er gjort etter folketrygdloven § [hjemmel].' }],
             },
             {
               type: ContentTypeEnum.PARAGRAPH,
@@ -189,11 +172,7 @@ export const UTFALL_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
             {
               type: ContentTypeEnum.PARAGRAPH,
               textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-              children: [
-                {
-                  text: 'Saken er vurdert etter folketrygdloven §.',
-                },
-              ],
+              children: [{ text: 'Saken er vurdert etter folketrygdloven §.' }],
             },
           ],
         },
@@ -209,11 +188,7 @@ export const UTFALL_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
           content: [
             {
               type: HeadingTypesEnum.HEADING_ONE,
-              children: [
-                {
-                  text: 'Du har rett til å anke',
-                },
-              ],
+              children: [{ text: 'Du har rett til å anke' }],
             },
             {
               type: ContentTypeEnum.PARAGRAPH,
@@ -255,9 +230,7 @@ export const UTFALL_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
     {
       type: 'signature',
       id: 'signature',
-      content: {
-        useShortName: false,
-      },
+      content: { useShortName: false },
     },
   ],
 });

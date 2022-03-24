@@ -1,54 +1,35 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
-import { ContentTypeEnum, HeadingTypesEnum, ListTypesEnum, TextAlignEnum } from '../editor-types';
+import { ContentTypeEnum, HeadingTypesEnum, ListContentEnum, ListTypesEnum, TextAlignEnum } from '../editor-types';
 
+/* eslint-disable max-lines */
 const INITIAL_SLATE_VALUE: Descendant[] = [
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'NAV Klageinstans har behandlet klagen din' }] },
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Klager: ',
-      },
-    ],
+    children: [{ text: 'Klager: ' }],
   },
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Fødselsnummer: ',
-      },
-    ],
+    children: [{ text: 'Fødselsnummer: ' }],
   },
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Prosessfullmektig: ',
-      },
-    ],
+    children: [{ text: 'Prosessfullmektig: ' }],
   },
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Saken gjelder: Klagen din av [] på NAV []s vedtak av ',
-      },
-    ],
+    children: [{ text: 'Saken gjelder: Klagen din av [] på NAV []s vedtak av ' }],
   },
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Problemstilling: Om',
-      },
-    ],
+    children: [{ text: 'Problemstilling: Om' }],
   },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Vedtak' }] },
   {
@@ -76,12 +57,33 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     children: [{ text: 'Vi har opphevet vedtaket og sendt saken tilbake til NAV [], som skal behandle den på nytt.' }],
   },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'I klagen din har du lagt vekt på:' }] },
-  { type: ListTypesEnum.BULLET_LIST, children: [{ type: ListTypesEnum.LIST_ITEM, children: [{ text: 'osv.' }] }] },
+  {
+    type: ListTypesEnum.BULLET_LIST,
+    children: [
+      {
+        type: ListContentEnum.LIST_ITEM,
+        children: [{ type: ListContentEnum.LIST_ITEM_CONTAINER, children: [{ text: 'osv.' }] }],
+      },
+    ],
+  },
   {
     type: HeadingTypesEnum.HEADING_ONE,
     children: [{ text: 'I vurderingen vår har vi lagt vekt på disse dokumentene:' }],
   },
-  { type: ListTypesEnum.BULLET_LIST, children: [{ type: ListTypesEnum.LIST_ITEM, children: [{ text: 'osv.' }] }] },
+  {
+    type: ListTypesEnum.BULLET_LIST,
+    children: [
+      {
+        type: ListContentEnum.LIST_ITEM,
+        children: [
+          {
+            type: ListContentEnum.LIST_ITEM_CONTAINER,
+            children: [{ text: 'osv.' }],
+          },
+        ],
+      },
+    ],
+  },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Vurderingen vår' }] },
   {
     type: ContentTypeEnum.PARAGRAPH,
@@ -150,9 +152,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [
-      {
-        text: 'I trygdesaker må du først anke til Trygderetten før du kan ta saken videre til lagmannsretten.',
-      },
+      { text: 'I trygdesaker må du først anke til Trygderetten før du kan ta saken videre til lagmannsretten.' },
     ],
   },
   {
@@ -253,9 +253,7 @@ export const UTFALL_SIMPLE_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
     {
       type: 'signature',
       id: 'signature',
-      content: {
-        useShortName: false,
-      },
+      content: { useShortName: false },
     },
   ],
 });

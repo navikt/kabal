@@ -1,26 +1,36 @@
 import React, { useCallback } from 'react';
-import { Editor, Element, Point, Transforms } from 'slate';
-import { ContentTypeEnum, ListItemElementType, ListTypesEnum, MarkKeys, isOfElementType } from '../../editor-types';
-import { addBlock, areBlocksActive, createNewParagraph, isBlockActive } from '../../toolbar/functions/blocks';
+import { Editor, Point, Range, Transforms } from 'slate';
+import {
+  ContentTypeEnum,
+  ListContentEnum,
+  ListItemContainerElementType,
+  ListTypesEnum,
+  MarkKeys,
+  isOfElementType,
+} from '../../editor-types';
+import { createNewParagraph, getSelectedListTypes, isBlockActive } from '../../toolbar/functions/blocks';
 import { toggleMark } from '../../toolbar/functions/marks';
+import { indentList } from './slate-event-handlers/list/indent';
+import { unindentList } from './slate-event-handlers/list/unindent';
+import { addTab, removeTab } from './slate-event-handlers/tabs/collapsed-selection';
+import { addTabs, removeTabs } from './slate-event-handlers/tabs/expanded-selection';
 
 export const useKeyboard = (editor: Editor) =>
   useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (event.key === 'Backspace') {
-        if (isBlockActive(editor, ListTypesEnum.LIST_ITEM) && editor.selection?.focus.offset === 0) {
-          const [[, path]] = Editor.nodes<ListItemElementType>(editor, {
+        if (isBlockActive(editor, ListContentEnum.LIST_ITEM_CONTAINER) && editor.selection?.focus.offset === 0) {
+          const [[, path]] = Editor.nodes<ListItemContainerElementType>(editor, {
             mode: 'lowest',
             reverse: true,
-            match: (n) => isOfElementType<ListItemElementType>(n, ListTypesEnum.LIST_ITEM),
+            match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
           });
+
           const start = Editor.start(editor, path);
 
-          if (Point.equals(editor.selection?.focus, start)) {
+          if (Range.isCollapsed(editor.selection) && Point.equals(editor.selection?.focus, start)) {
             event.preventDefault();
-            Transforms.liftNodes(editor, {
-              match: (n) => isOfElementType(n, ListTypesEnum.LIST_ITEM),
-            });
+            unindentList(editor);
             return;
           }
         }
@@ -35,22 +45,28 @@ export const useKeyboard = (editor: Editor) =>
       if (!event.shiftKey && event.key === 'Enter') {
         event.preventDefault();
 
-        if (areBlocksActive(editor, [ListTypesEnum.BULLET_LIST, ListTypesEnum.NUMBERED_LIST])) {
-          const [[element]] = Editor.nodes<ListItemElementType>(editor, {
+        if (
+          getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
+          getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
+        ) {
+          const [[element, path]] = Editor.nodes<ListItemContainerElementType>(editor, {
             mode: 'lowest',
             reverse: true,
-            match: (n) => isOfElementType<ListItemElementType>(n, ListTypesEnum.LIST_ITEM),
+            match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
           });
 
           if (Editor.isEmpty(editor, element)) {
             Editor.withoutNormalizing(editor, () => {
-              Transforms.liftNodes(editor);
+              for (let i = 1; i < path.length; i++) {
+                Transforms.liftNodes(editor);
+              }
+
               Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
             });
             return;
           }
 
-          addBlock(editor, ListTypesEnum.LIST_ITEM);
+          Transforms.splitNodes(editor, { always: true, match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM) });
           return;
         }
 
@@ -61,35 +77,37 @@ export const useKeyboard = (editor: Editor) =>
       if (event.key === 'Tab') {
         event.preventDefault();
 
-        if (event.shiftKey) {
-          Transforms.liftNodes(editor, {
-            match: (n) => Element.isElement(n) && n.type === ListTypesEnum.LIST_ITEM,
-          });
+        if (
+          getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
+          getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
+        ) {
+          if (event.shiftKey) {
+            unindentList(editor);
+            return;
+          }
+
+          indentList(editor);
           return;
         }
 
-        if (isBlockActive(editor, ListTypesEnum.BULLET_LIST)) {
-          Transforms.wrapNodes(editor, {
-            type: ListTypesEnum.BULLET_LIST,
-            children: [
-              {
-                type: ListTypesEnum.LIST_ITEM,
-                children: [{ text: '' }],
-              },
-            ],
-          });
-        }
+        if (isBlockActive(editor, ContentTypeEnum.PARAGRAPH)) {
+          if (editor.selection === null) {
+            return;
+          }
 
-        if (isBlockActive(editor, ListTypesEnum.NUMBERED_LIST)) {
-          Transforms.wrapNodes(editor, {
-            type: ListTypesEnum.NUMBERED_LIST,
-            children: [
-              {
-                type: ListTypesEnum.LIST_ITEM,
-                children: [{ text: '' }],
-              },
-            ],
-          });
+          if (Range.isCollapsed(editor.selection)) {
+            if (event.shiftKey) {
+              return removeTab(editor);
+            }
+
+            return addTab(editor);
+          }
+
+          if (event.shiftKey) {
+            return removeTabs(editor);
+          }
+
+          return addTabs(editor);
         }
 
         return;

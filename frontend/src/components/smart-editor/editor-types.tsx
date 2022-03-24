@@ -10,7 +10,11 @@ export enum ContentTypeEnum {
 export enum ListTypesEnum {
   BULLET_LIST = 'bullet-list',
   NUMBERED_LIST = 'numbered-list',
+}
+
+export enum ListContentEnum {
   LIST_ITEM = 'list-item',
+  LIST_ITEM_CONTAINER = 'list-item-container',
 }
 
 export enum HeadingTypesEnum {
@@ -23,7 +27,7 @@ export enum HeadingTypesEnum {
 }
 
 export const AlignableTypeEnum = { ...ContentTypeEnum };
-export const MarkableTypeEnum = { ...ContentTypeEnum, ...ListTypesEnum };
+export const MarkableTypeEnum = { ...ContentTypeEnum, ...ListTypesEnum, ...ListContentEnum };
 
 export enum TextAlignEnum {
   TEXT_ALIGN_LEFT = 'text-align-left',
@@ -45,14 +49,9 @@ export interface BlockquoteElementType {
 }
 
 export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType;
-export type MarkableElementTypes =
-  | ParagraphElementType
-  | BlockquoteElementType
-  | ListItemElementType
-  | BulletListElementType
-  | NumberedListElementType;
+export type MarkableElementTypes = ParagraphElementType | BlockquoteElementType | ListItemContainerElementType;
 
-export type ElementTypes = ContentTypeEnum | HeadingTypesEnum | ListTypesEnum;
+export type ElementTypes = ContentTypeEnum | HeadingTypesEnum | ListTypesEnum | ListContentEnum;
 
 export interface HeadingOneElementType {
   type: HeadingTypesEnum.HEADING_ONE;
@@ -95,10 +94,23 @@ export interface NumberedListElementType {
   children: ListItemElementType[];
 }
 export interface ListItemElementType {
-  type: ListTypesEnum.LIST_ITEM;
+  type: ListContentEnum.LIST_ITEM;
+  children:
+    | [ListItemContainerElementType, BulletListElementType | NumberedListElementType]
+    | [ListItemContainerElementType]
+    | [];
+}
+
+export interface ListItemContainerElementType {
+  type: ListContentEnum.LIST_ITEM_CONTAINER;
   children: CustomTextType[];
 }
-export type ListsType = BulletListElementType | NumberedListElementType | ListItemElementType;
+
+export type ListsType =
+  | BulletListElementType
+  | NumberedListElementType
+  | ListItemElementType
+  | ListItemContainerElementType;
 
 export type SecondLevelElementsType = ListItemElementType;
 
@@ -144,10 +156,17 @@ export const isOfElementType = <T extends ParagraphElementType | HeadingsType | 
   type: ElementTypes
 ): n is T => Element.isElement(n) && n.type === type;
 
+export const isOfElementTypes = <T extends ParagraphElementType | HeadingsType | ListsType>(
+  n: Node,
+  types: ElementTypes[]
+): n is T => Element.isElement(n) && types.includes(n.type);
+
 export const isNodeOfSameElementType = <T extends Element>(n: Node, element: T): n is T =>
   Element.isElement(n) && n.type === element.type;
 
-export const isTypeAlignable = (type: HeadingTypesEnum | ListTypesEnum | ContentTypeEnum): type is ContentTypeEnum => {
+export const isTypeAlignable = (
+  type: HeadingTypesEnum | ListTypesEnum | ListContentEnum | ContentTypeEnum
+): type is ContentTypeEnum => {
   for (const alignableType of Object.values(AlignableTypeEnum)) {
     if (type === alignableType) {
       return true;

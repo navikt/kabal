@@ -45,14 +45,14 @@
       }
     ],
     "max-lines": ["error", {
-      "max": 1024,
-      "skipBlankLines": true,
+      "max": 400,
+      "skipBlankLines": false,
       "skipComments": true
     }],
     "linebreak-style": ["error", "unix"],
-    "max-depth": ["error", { "max": 3 }],
+    "max-depth": ["error", { "max": 4 }],
     "no-lonely-if": "error",
-    "complexity": ["error", { "max": 25 }],
+    "complexity": ["error", { "max": 30 }],
     "curly": ["error", "all"],
     "default-case": "error",
     "default-case-last": "error",

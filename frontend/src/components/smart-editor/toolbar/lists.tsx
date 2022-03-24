@@ -1,10 +1,17 @@
 import { FormatListBulleted } from '@styled-icons/material/FormatListBulleted';
 import { FormatListNumbered } from '@styled-icons/material/FormatListNumbered';
 import React from 'react';
-import { Editor, Element, Transforms } from 'slate';
+import { Editor, Element, Path, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
-import { ContentTypeEnum, ListTypesEnum, NumberedListElementType, isOfElementType } from '../editor-types';
-import { isBlockActive } from './functions/blocks';
+import {
+  BulletListElementType,
+  ListContentEnum,
+  ListItemContainerElementType,
+  ListTypesEnum,
+  NumberedListElementType,
+  isOfElementType,
+} from '../editor-types';
+import { getSelectedListTypes } from './functions/blocks';
 import { ToolbarIconButton } from './toolbarbutton';
 
 interface ListsProps {
@@ -14,8 +21,8 @@ interface ListsProps {
 export const Lists = ({ iconSize }: ListsProps) => {
   const editor = useSlate();
 
-  const isBulletListActive = isBlockActive(editor, ListTypesEnum.BULLET_LIST);
-  const isNumberedListActive = isBlockActive(editor, ListTypesEnum.NUMBERED_LIST);
+  const isBulletListActive = getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST];
+  const isNumberedListActive = getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST];
 
   return (
     <>
@@ -24,11 +31,35 @@ export const Lists = ({ iconSize }: ListsProps) => {
         icon={<FormatListBulleted width={iconSize} />}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
+            if (isBulletListActive && isNumberedListActive) {
+              const listItemContainers = Editor.nodes<ListItemContainerElementType>(editor, {
+                match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM_CONTAINER),
+                mode: 'lowest',
+              });
+
+              for (const [, licPath] of listItemContainers) {
+                const [parent, at] = Editor.parent(editor, Path.parent(licPath));
+
+                if (isOfElementType<BulletListElementType>(parent, ListTypesEnum.BULLET_LIST)) {
+                  Transforms.setNodes(
+                    editor,
+                    { type: ListTypesEnum.NUMBERED_LIST },
+                    {
+                      at,
+                    }
+                  );
+                }
+              }
+
+              return;
+            }
+
             if (isNumberedListActive) {
               Transforms.setNodes(
                 editor,
                 { type: ListTypesEnum.BULLET_LIST },
                 {
+                  mode: 'lowest',
                   match: (n) => isOfElementType<NumberedListElementType>(n, ListTypesEnum.NUMBERED_LIST),
                 }
               );
@@ -36,17 +67,12 @@ export const Lists = ({ iconSize }: ListsProps) => {
             }
 
             if (isBulletListActive) {
-              Editor.withoutNormalizing(editor, () => {
-                Transforms.liftNodes(editor);
-                Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
-              });
               return;
             }
 
-            Editor.withoutNormalizing(editor, () => {
-              Transforms.setNodes(editor, { type: ListTypesEnum.LIST_ITEM });
-              Transforms.wrapNodes(editor, { type: ListTypesEnum.BULLET_LIST, children: [] });
-            });
+            Transforms.setNodes(editor, { type: ListContentEnum.LIST_ITEM_CONTAINER });
+            Transforms.wrapNodes(editor, { type: ListTypesEnum.BULLET_LIST, children: [] });
+            Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });
           });
         }}
         active={isBulletListActive}
@@ -56,27 +82,48 @@ export const Lists = ({ iconSize }: ListsProps) => {
         icon={<FormatListNumbered width={iconSize} />}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
+            if (isBulletListActive && isNumberedListActive) {
+              const listItemContainers = Editor.nodes<ListItemContainerElementType>(editor, {
+                match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM_CONTAINER),
+                mode: 'lowest',
+              });
+
+              for (const [, licPath] of listItemContainers) {
+                const [parent, at] = Editor.parent(editor, Path.parent(licPath));
+
+                if (isOfElementType<BulletListElementType>(parent, ListTypesEnum.NUMBERED_LIST)) {
+                  Transforms.setNodes(
+                    editor,
+                    { type: ListTypesEnum.BULLET_LIST },
+                    {
+                      at,
+                    }
+                  );
+                }
+              }
+
+              return;
+            }
+
             if (isBulletListActive) {
               Transforms.setNodes(
                 editor,
                 { type: ListTypesEnum.NUMBERED_LIST },
-                { match: (n) => Element.isElement(n) && n.type === ListTypesEnum.BULLET_LIST }
+                {
+                  mode: 'lowest',
+                  match: (n) => Element.isElement(n) && n.type === ListTypesEnum.BULLET_LIST,
+                }
               );
               return;
             }
 
             if (isNumberedListActive) {
-              Editor.withoutNormalizing(editor, () => {
-                Transforms.liftNodes(editor);
-                Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
-              });
               return;
             }
 
-            Editor.withoutNormalizing(editor, () => {
-              Transforms.setNodes(editor, { type: ListTypesEnum.LIST_ITEM });
-              Transforms.wrapNodes(editor, { type: ListTypesEnum.NUMBERED_LIST, children: [] });
-            });
+            Transforms.setNodes(editor, { type: ListContentEnum.LIST_ITEM_CONTAINER });
+            Transforms.wrapNodes(editor, { type: ListTypesEnum.NUMBERED_LIST, children: [] });
+            Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });
           });
         }}
         active={isNumberedListActive}
