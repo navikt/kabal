@@ -6,7 +6,7 @@ import { useGetDocumentsQuery } from '../../../../redux-api/documents';
 import { useGetTilknyttedeDokumenterQuery } from '../../../../redux-api/oppgavebehandling';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 import { IDocumentListElement } from '../../../../types/smart-editor';
-import { ListTypesEnum } from '../../editor-types';
+import { ListContentEnum, ListTypesEnum } from '../../editor-types';
 import { BulletListElement, ListItemElement } from '../../slate-elements';
 
 type Content = IDocumentListElement['content'];
@@ -75,7 +75,7 @@ export const DocumentListElement = React.memo(
           {documents.map(({ id, title, include }) => (
             <ListItemElement
               key={id}
-              element={{ type: ListTypesEnum.LIST_ITEM, children: [] }}
+              element={{ type: ListContentEnum.LIST_ITEM, children: [] }}
               attributes={{ 'data-slate-node': 'element', ref: undefined }}
             >
               <StyledCheckbox

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Descendant, Element } from 'slate';
 import styled from 'styled-components';
 import { IStaticElement } from '../../../../types/smart-editor';
-import { ContentTypeEnum, HeadingTypesEnum, ListTypesEnum, TextAlignEnum } from '../../editor-types';
+import { ContentTypeEnum, HeadingTypesEnum, TextAlignEnum } from '../../editor-types';
 import { renderElement } from '../../slate-elements';
 import { renderLeaf } from '../rich-text/leaf/render';
 
@@ -169,47 +169,5 @@ const getStaticContent = ({ source }: IStaticElement): Element[] => {
     ];
   }
 
-  return [
-    {
-      type: HeadingTypesEnum.HEADING_ONE,
-      children: [
-        {
-          text: `${source} tittel`,
-        },
-      ],
-    },
-    {
-      type: ContentTypeEnum.PARAGRAPH,
-      textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-      children: [
-        {
-          text: source,
-          bold: true,
-          italic: true,
-          underline: true,
-        },
-      ],
-    },
-    {
-      type: ListTypesEnum.BULLET_LIST,
-      children: [
-        {
-          type: ListTypesEnum.LIST_ITEM,
-          children: [
-            {
-              text: 'List item 1',
-            },
-          ],
-        },
-        {
-          type: ListTypesEnum.LIST_ITEM,
-          children: [
-            {
-              text: 'List item 2',
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  return [];
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSlate } from 'slate-react';
-import { ContentTypeEnum } from '../editor-types';
-import { isBlockActive, toggleBlock } from './functions/blocks';
+import { ContentTypeEnum, ListContentEnum } from '../editor-types';
+import { areBlocksActive, isBlockActive, toggleBlock } from './functions/blocks';
 import { BlockquoteIcon } from './icons/blockquote';
 import { ToolbarIconButton } from './toolbarbutton';
 
@@ -22,6 +22,7 @@ export const Content = ({ iconSize, display = true }: ContentProps) => {
       label="Blockquote"
       onClick={() => toggleBlock(editor, ContentTypeEnum.BLOCKQUOTE)}
       active={isBlockActive(editor, ContentTypeEnum.BLOCKQUOTE)}
+      disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       icon={<BlockquoteIcon height={iconSize} />}
     />
   );

@@ -4,6 +4,9 @@ import {
   ContentTypeEnum,
   CustomTextType,
   IMarks,
+  ListContentEnum,
+  ListItemContainerElementType,
+  ListItemElementType,
   ListTypesEnum,
   MarkKeyList,
   MarkKeys,
@@ -31,7 +34,7 @@ export const withNormalization = (editor: Editor) => {
       const next = Editor.next(editor, { at: path });
 
       // If there is an element after it.
-      if (next !== undefined) {
+      if (typeof next !== 'undefined') {
         const [nextNode, nextPath] = next;
 
         if (isNodeOfSameElementType(nextNode, node)) {
@@ -63,14 +66,37 @@ export const withNormalization = (editor: Editor) => {
       }
     }
 
-    // If the node is a list item, and is on the top level, transform to a paragraph.
-    if (Element.isElement(node) && node.type === ListTypesEnum.LIST_ITEM && path.length === 1) {
-      Transforms.setNodes(
-        editor,
-        { type: ContentTypeEnum.PARAGRAPH },
-        { at: path, match: (n) => Element.isElement(n) && n.type === ListTypesEnum.LIST_ITEM }
-      );
-      return;
+    // If the node is a list item.
+    if (isOfElementType<ListItemElementType>(node, ListContentEnum.LIST_ITEM)) {
+      // And the first child of the list item is not a list item container.
+      if (
+        node.children.length === 0 ||
+        !isOfElementType<ListItemContainerElementType>(node.children[0], ListContentEnum.LIST_ITEM_CONTAINER)
+      ) {
+        Transforms.insertNodes(
+          editor,
+          {
+            type: ListContentEnum.LIST_ITEM_CONTAINER,
+            children: [
+              {
+                text: '',
+              },
+            ],
+          },
+          { at: [...path, 0] }
+        );
+        return;
+      }
+
+      // And is on the top level, transform to a paragraph.
+      if (path.length === 1) {
+        Transforms.setNodes(
+          editor,
+          { type: ContentTypeEnum.PARAGRAPH },
+          { at: path, match: (n) => Element.isElement(n) && n.type === ListContentEnum.LIST_ITEM }
+        );
+        return;
+      }
     }
 
     // If the node is not alignable and has a the text align property set.

@@ -1,6 +1,12 @@
 import React from 'react';
 import { RenderElementProps as RenderElementPropsBase } from 'slate-react';
-import { AlignableElementTypes, ContentTypeEnum, HeadingTypesEnum, ListTypesEnum } from './editor-types';
+import {
+  AlignableElementTypes,
+  ContentTypeEnum,
+  HeadingTypesEnum,
+  ListContentEnum,
+  ListTypesEnum,
+} from './editor-types';
 import { BlockQuoteStyle, ParagraphStyle } from './styled-elements/content';
 import {
   HeadingFiveStyle,
@@ -10,7 +16,7 @@ import {
   HeadingThreeStyle,
   HeadingTwoStyle,
 } from './styled-elements/headings';
-import { BulletListStyle, NumberedListStyle } from './styled-elements/lists';
+import { BulletListStyle, ListItemStyle, NumberedListStyle } from './styled-elements/lists';
 
 export interface RenderElementProps extends RenderElementPropsBase {
   key?: string | number;
@@ -52,7 +58,9 @@ export const NumberedListElement = (props: RenderElementProps) => (
   <NumberedListStyle {...props.attributes}>{props.children}</NumberedListStyle>
 );
 
-export const ListItemElement = (props: RenderElementProps) => <li {...props.attributes}>{props.children}</li>;
+export const ListItemElement = (props: RenderElementProps) => (
+  <ListItemStyle {...props.attributes}>{props.children}</ListItemStyle>
+);
 
 export const ParagraphElement = (props: AlignableProps) => (
   <ParagraphStyle {...props.attributes} textAlign={props.element.textAlign}>
@@ -86,8 +94,10 @@ export const renderElement = (props: RenderElementProps) => {
       return <BulletListElement {...props} />;
     case ListTypesEnum.NUMBERED_LIST:
       return <NumberedListElement {...props} />;
-    case ListTypesEnum.LIST_ITEM:
+    case ListContentEnum.LIST_ITEM:
       return <ListItemElement {...props} />;
+    case ListContentEnum.LIST_ITEM_CONTAINER:
+      return <div {...props.attributes}>{props.children}</div>;
     case ContentTypeEnum.BLOCKQUOTE:
       return <QuoteElement {...props} element={props.element} />;
     default:
