@@ -13,8 +13,8 @@ import { StyledCommentButton, StyledCommentButtonContainer, StyledNewComment } f
 export const NewComment = () => {
   const oppgaveId = useOppgaveId();
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
-  const [postComment] = usePostCommentMutation();
-  const { documentId } = useContext(SmartEditorContext);
+  const [postComment, { isLoading }] = usePostCommentMutation();
+  const { documentId, setFocusedThreadId } = useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
   const [show, setShow] = useState(true);
 
@@ -60,6 +60,10 @@ export const NewComment = () => {
       .then(({ id }) => {
         onNewThread(id);
         setText('');
+        setShow(false);
+        setTimeout(() => {
+          setFocusedThreadId(id);
+        }, 1000);
       });
   };
 
@@ -78,12 +82,19 @@ export const NewComment = () => {
         onKeyDown={onKeyDown}
         placeholder="Skriv inn en kommentar"
         maxLength={0}
+        disabled={isLoading}
       />
       <StyledCommentButtonContainer>
-        <StyledCommentButton mini onClick={onSubmit} disabled={text.length <= 0}>
+        <StyledCommentButton
+          mini
+          onClick={onSubmit}
+          disabled={text.length <= 0}
+          spinner={isLoading}
+          autoDisableVedSpinner
+        >
           Legg til
         </StyledCommentButton>
-        <Knapp onClick={() => setShow(false)} mini>
+        <Knapp onClick={() => setShow(false)} mini disabled={isLoading}>
           Avbryt
         </Knapp>
       </StyledCommentButtonContainer>

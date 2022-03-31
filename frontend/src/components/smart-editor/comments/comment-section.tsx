@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
+import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
+import { SmartEditorContext } from '../context/smart-editor-context';
 import { NewCommentThread } from './new-thread';
 import { ThreadList } from './thread-list';
 
 export const CommentSection = () => (
-  <StyledCommentSection>
+  <CommentsClickBoundry>
     <NewCommentThread />
     <StyledThreadList>
       <ThreadList />
     </StyledThreadList>
-  </StyledCommentSection>
+  </CommentsClickBoundry>
 );
 
 export const StyledThreadList = styled.section`
@@ -24,3 +26,14 @@ const StyledCommentSection = styled.div`
   height: 100%;
   position: relative;
 `;
+
+const CommentsClickBoundry: React.FC = ({ children }) => {
+  const { setFocusedThreadId } = useContext(SmartEditorContext);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(() => {
+    setFocusedThreadId(null);
+  }, ref);
+
+  return <StyledCommentSection ref={ref}>{children}</StyledCommentSection>;
+};

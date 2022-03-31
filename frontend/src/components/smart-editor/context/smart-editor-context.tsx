@@ -17,12 +17,9 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
   useEffect(() => {
     if (editor !== null && selection !== null) {
       const threadId = getFocusedCommentThreadId(editor, selection);
-
-      if (focusedThreadId !== threadId) {
-        setFocusedThreadId(threadId);
-      }
+      setFocusedThreadId(threadId);
     }
-  }, [editor, focusedThreadId, selection, setFocusedThreadId]);
+  }, [editor, selection, setFocusedThreadId]);
 
   const showNewThread =
     editor !== null && selection !== null && Range.isExpanded(selection) && ReactEditor.hasRange(editor, selection);

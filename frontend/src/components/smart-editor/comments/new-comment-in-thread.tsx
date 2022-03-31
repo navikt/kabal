@@ -19,7 +19,7 @@ interface NewCommentInThreadProps {
 export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
   const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
   const { data: signature } = useGetMySignatureQuery();
-  const [postReply] = usePostReplyMutation();
+  const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
 
@@ -65,9 +65,10 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
           placeholder="Svar"
           maxLength={0}
           onFocus={onFocus}
+          disabled={isLoading}
         />
       </StyledTextAreaContainer>
-      <Buttons show={isFocused} close={close} onSubmit={onSubmit} text={text} />
+      <Buttons show={isFocused} close={close} onSubmit={onSubmit} text={text} isLoading={isLoading} />
     </StyledNewCommentInThread>
   );
 };
@@ -77,19 +78,26 @@ interface ButtonsProps {
   close: () => void;
   onSubmit: () => void;
   text: string;
+  isLoading: boolean;
 }
 
-const Buttons = ({ show, text, close, onSubmit }: ButtonsProps) => {
+const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
   if (!show) {
     return null;
   }
 
   return (
     <StyledCommentButtonContainer>
-      <StyledCommentButton mini onClick={onSubmit} disabled={text.length <= 0}>
+      <StyledCommentButton
+        mini
+        onClick={onSubmit}
+        disabled={text.length <= 0}
+        spinner={isLoading}
+        autoDisableVedSpinner
+      >
         Legg til
       </StyledCommentButton>
-      <Knapp mini onClick={close}>
+      <Knapp mini onClick={close} disabled={isLoading}>
         Avbryt
       </Knapp>
     </StyledCommentButtonContainer>
