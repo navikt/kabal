@@ -16,6 +16,7 @@ export const NewComment = () => {
   const [postComment] = usePostCommentMutation();
   const { documentId } = useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
+  const [show, setShow] = useState(true);
 
   const [text, setText] = useState<string>('');
 
@@ -32,6 +33,10 @@ export const NewComment = () => {
     },
     [editor, selection]
   );
+
+  if (!show) {
+    return null;
+  }
 
   if (signatureIsLoading || brukerIsLoading || typeof bruker === 'undefined' || typeof signature === 'undefined') {
     return <NavFrontendSpinner />;
@@ -78,7 +83,9 @@ export const NewComment = () => {
         <StyledCommentButton mini onClick={onSubmit} disabled={text.length <= 0}>
           Legg til
         </StyledCommentButton>
-        <Knapp mini>Avbryt</Knapp>
+        <Knapp onClick={() => setShow(false)} mini>
+          Avbryt
+        </Knapp>
       </StyledCommentButtonContainer>
     </StyledNewComment>
   );
