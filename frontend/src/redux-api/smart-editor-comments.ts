@@ -41,6 +41,15 @@ export const smartEditorCommentsApi = createApi({
         method: 'POST',
         body,
       }),
+      onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        dispatch(
+          smartEditorCommentsApi.util.updateQueryData('getComment', { oppgaveId, dokumentId, commentId }, (draft) => ({
+            ...draft,
+            comments: [...draft.comments, data],
+          }))
+        );
+      },
     }),
   }),
 });

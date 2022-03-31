@@ -33,7 +33,8 @@ export const useThreads = (): Threads => {
   );
 
   const { data: threads, isLoading: threadsIsLoading } = useGetCommentsQuery(
-    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId }
+    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId },
+    { pollingInterval: 3000 }
   );
 
   if (
