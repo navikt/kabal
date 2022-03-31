@@ -21,11 +21,11 @@ export const Klagebehandlingsdetaljer = () => {
 
   const {
     type,
-    mottattFoersteinstans,
+    mottattVedtaksinstans,
     fraNAVEnhetNavn,
     fraNAVEnhet,
     mottattKlageinstans,
-    kommentarFraFoersteinstans,
+    kommentarFraVedtaksinstans,
     resultat,
     ytelse,
   } = oppgavebehandling;
@@ -43,14 +43,14 @@ export const Klagebehandlingsdetaljer = () => {
 
         <Ytelse ytelseId={ytelse} />
 
-        <BehandlingSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattFoersteinstans)}</BehandlingSection>
+        <BehandlingSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattVedtaksinstans)}</BehandlingSection>
         <BehandlingSection label="Fra NAV-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </BehandlingSection>
         <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
         <BehandlingSection label="Melding fra vedtaksinstans for intern bruk">
-          {kommentarFraFoersteinstans}
+          {kommentarFraVedtaksinstans}
         </BehandlingSection>
 
         <UtfallResultat utfall={resultat.utfall} />

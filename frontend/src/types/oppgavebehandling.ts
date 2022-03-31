@@ -18,13 +18,13 @@ export interface IOppgavebehandlingBase {
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
   klager: IKlager;
-  kommentarFraFoersteinstans: string | null;
+  kommentarFraVedtaksinstans: string | null;
   kvalitetsvurderingId: string;
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
   mottatt: string | null; // LocalDate
-  mottattFoersteinstans: string | null; // LocalDate
+  mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
   resultat: Resultat;
