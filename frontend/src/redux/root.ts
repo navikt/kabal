@@ -10,7 +10,6 @@ import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
 import { oppgavebehandlingApi } from '../redux-api/oppgavebehandling';
 import { oppgaverApi } from '../redux-api/oppgaver';
-import { smartEditorApi as smartEditorApiOld } from '../redux-api/smart-editor';
 import { smartEditorApi } from '../redux-api/smart-editor-api';
 import { smartEditorCommentsApi } from '../redux-api/smart-editor-comments';
 import { smartEditorIdApi } from '../redux-api/smart-editor-id';
@@ -29,7 +28,6 @@ export const rootReducer = combineReducers({
   [ansatteApi.reducerPath]: ansatteApi.reducer,
   [documentsApi.reducerPath]: documentsApi.reducer,
   [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
-  [smartEditorApiOld.reducerPath]: smartEditorApiOld.reducer,
   [behandlingerApi.reducerPath]: behandlingerApi.reducer,
 });
 

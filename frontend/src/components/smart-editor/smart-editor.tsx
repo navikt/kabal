@@ -105,9 +105,10 @@ const RenderSmartEditor = React.memo(
 RenderSmartEditor.displayName = 'RenderSmartEditor';
 
 const ElementsSection = styled.article`
-  width: 210mm;
-  height: fit-content;
   flex-grow: 1;
+  width: 210mm;
+  height: 100%;
+  overflow-y: auto;
   padding: 24px;
 
   > :first-child {

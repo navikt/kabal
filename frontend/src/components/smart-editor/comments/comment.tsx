@@ -50,6 +50,7 @@ const StyledText = styled.p`
   text-align: left;
   margin: 0;
   white-space: normal;
+  word-wrap: break-word;
 `;
 
 const StyledCommentContainer = styled.li`

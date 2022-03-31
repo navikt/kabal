@@ -28,7 +28,8 @@ export const RichTextEditorElement = React.memo(
     const editor = useMemo(() => withHistory(withNormalization(withReact(createEditor()))), []);
     const keyboard = useKeyboard(editor);
     const [isFocused, setIsFocused] = useState<boolean>(ReactEditor.isFocused(editor));
-    const { focusedThreadIds, setElementId, setEditor, setSelection } = useContext(SmartEditorContext);
+    const { focusedThreadId, setFocusedThreadId, setElementId, setEditor, setSelection } =
+      useContext(SmartEditorContext);
 
     const savedSelection = useRef<Selection>(editor.selection);
 
@@ -59,19 +60,21 @@ export const RichTextEditorElement = React.memo(
           event.preventDefault();
           Transforms.select(editor, savedSelection.current);
           ReactEditor.focus(editor);
+          setSelection(editor.selection);
         }
       },
-      [editor, element.id, setElementId, setEditor]
+      [setEditor, editor, setElementId, element.id, setSelection]
     );
 
     const onBlur = useCallback(() => {
       setIsFocused(false);
       savedSelection.current = editor.selection;
-    }, [editor, savedSelection, setIsFocused]);
+      setFocusedThreadId(null);
+    }, [editor, savedSelection, setIsFocused, setFocusedThreadId]);
 
     const renderLeafCallback = useCallback(
-      (props: RenderLeafProps) => renderLeaf(props, focusedThreadIds),
-      [focusedThreadIds]
+      (props: RenderLeafProps) => renderLeaf(props, focusedThreadId),
+      [focusedThreadId]
     );
 
     return (

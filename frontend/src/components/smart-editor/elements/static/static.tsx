@@ -95,17 +95,14 @@ const renderTemplateElement = (elements: Descendant[]): JSX.Element[] =>
 
     return (
       <React.Fragment key={i}>
-        {renderLeaf(
-          {
-            leaf: e,
-            children: e.text,
-            text: e,
-            attributes: {
-              'data-slate-leaf': true,
-            },
+        {renderLeaf({
+          leaf: e,
+          children: e.text,
+          text: e,
+          attributes: {
+            'data-slate-leaf': true,
           },
-          []
-        )}
+        })}
       </React.Fragment>
     );
   });
