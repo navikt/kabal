@@ -1,44 +1,37 @@
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Checkbox } from 'nav-frontend-skjema';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
-import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useUpdateFinishedInGosysMutation } from '../../redux-api/behandlinger';
-import { OppgaveType } from '../../types/kodeverk';
+import { OppgaveType, Utfall } from '../../types/kodeverk';
 import { BackLink } from './back-link';
-import { StyledButtons, StyledFinishedFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
+import { StyledButtons, StyledFinishedFooter } from './styled-components';
 
 export const FinishedAnkeFooter = () => {
   const { data: oppgave } = useOppgave();
-  const [update] = useUpdateFinishedInGosysMutation();
 
   if (typeof oppgave === 'undefined' || oppgave.type !== OppgaveType.ANKE) {
     return null;
   }
 
-  const Wrapper = oppgave.fullfoertGosys ? StyledFinishedFooter : StyledUnfinishedNoErrorFooter;
-
   return (
-    <Wrapper>
+    <StyledFinishedFooter>
       <StyledButtons>
-        <StyledCheckbox
-          label="Fullført i Gosys"
-          checked={oppgave.fullfoertGosys}
-          disabled={oppgave.fullfoertGosys}
-          onChange={() => update(oppgave.id)}
-        />
+        <Hovedknapp mini disabled data-testid="complete-button">
+          Fullfør
+        </Hovedknapp>
         <BackLink />
       </StyledButtons>
-      <Alertstripe type={oppgave.fullfoertGosys ? 'suksess' : 'info'} form="inline">
-        {getSuccessMessage(oppgave.fullfoertGosys)}
+      <Alertstripe type="suksess" form="inline">
+        {getSuccessMessage(oppgave.resultat.utfall)}
       </Alertstripe>
-    </Wrapper>
+    </StyledFinishedFooter>
   );
 };
 
-const StyledCheckbox = styled(Checkbox)`
-  margin-right: 16px;
-`;
+const getSuccessMessage = (utfall: Utfall | null) => {
+  if (utfall === Utfall.OPPHEVET) {
+    return 'Innstilling sendt til klager';
+  }
 
-const getSuccessMessage = (fullfoertGosys: boolean) =>
-  fullfoertGosys ? 'Fullført behandling' : 'Innstilling sendt til klager';
+  return 'Fullført behandling';
+};
