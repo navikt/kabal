@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IApiValidationResponse } from '../functions/error-type-guard';
 import { OppgaveType } from '../types/kodeverk';
-import { IMottattKlageinstansParams } from '../types/oppgavebehandling-params';
+import { IMottattKlageinstansParams, IMottattVedtaksinstansParams } from '../types/oppgavebehandling-params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../types/oppgavebehandling-response';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { oppgavebehandlingApi } from './oppgavebehandling';
@@ -88,6 +88,31 @@ export const behandlingerApi = createApi({
         }
       },
     }),
+    setMottattVedtaksinstans: builder.mutation<IModifiedResponse, IMottattVedtaksinstansParams>({
+      query: ({ oppgaveId, mottattVedtaksinstans }) => ({
+        url: `/${oppgaveId}/mottattvedtaksinstans`,
+        method: 'PUT',
+        body: {
+          date: mottattVedtaksinstans,
+        },
+      }),
+      onQueryStarted: async ({ oppgaveId, mottattVedtaksinstans, type }, { dispatch, queryFulfilled }) => {
+        if (type === OppgaveType.KLAGE) {
+          const getOppgavebehandlingPatchResult = dispatch(
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+              draft.mottattVedtaksinstans = mottattVedtaksinstans;
+            })
+          );
+
+          try {
+            await queryFulfilled;
+            dispatch(oppgaverApi.util.invalidateTags(['tildelte-oppgaver', 'enhetens-tildelte-oppgaver']));
+          } catch {
+            getOppgavebehandlingPatchResult.undo();
+          }
+        }
+      },
+    }),
   }),
 });
 
@@ -97,4 +122,5 @@ export const {
   useLazyValidateQuery,
   useUpdateFinishedInGosysMutation,
   useSetMottattKlageinstansMutation,
+  useSetMottattVedtaksinstansMutation,
 } = behandlingerApi;

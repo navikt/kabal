@@ -8,6 +8,7 @@ import { Type } from '../../type/type';
 import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
+import { MottattVedtaksinstans } from './mottatt-vedtaksinstans';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
@@ -19,16 +20,8 @@ export const Klagebehandlingsdetaljer = () => {
     return <NavFrontendSpinner />;
   }
 
-  const {
-    type,
-    mottattVedtaksinstans,
-    fraNAVEnhetNavn,
-    fraNAVEnhet,
-    mottattKlageinstans,
-    kommentarFraVedtaksinstans,
-    resultat,
-    ytelse,
-  } = oppgavebehandling;
+  const { type, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, kommentarFraVedtaksinstans, resultat, ytelse } =
+    oppgavebehandling;
 
   return (
     <StyledBehandlingsdetaljer>
@@ -43,7 +36,7 @@ export const Klagebehandlingsdetaljer = () => {
 
         <Ytelse ytelseId={ytelse} />
 
-        <BehandlingSection label="Mottatt vedtaksinstans">{isoDateToPretty(mottattVedtaksinstans)}</BehandlingSection>
+        <MottattVedtaksinstans />
         <BehandlingSection label="Fra NAV-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </BehandlingSection>
