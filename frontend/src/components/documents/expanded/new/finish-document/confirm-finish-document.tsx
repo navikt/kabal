@@ -1,12 +1,10 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgave } from '../../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { getSakenGjelderName } from '../../../../../hooks/use-klager-name';
+import { useSakspartName } from '../../../../../hooks/use-klager-name';
 import { useFinishDocumentMutation } from '../../../../../redux-api/documents';
 import { DocumentType, IMainDocument } from '../../../../../types/documents';
-import { ISakenGjelder } from '../../../../../types/oppgavebehandling';
 
 interface Props {
   document: IMainDocument;
@@ -15,8 +13,6 @@ interface Props {
 }
 
 export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
-  const { data, isLoading } = useOppgave();
-
   if (!isOpen) {
     return null;
   }
@@ -36,10 +32,6 @@ export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
     );
   }
 
-  if (isLoading || typeof data === 'undefined') {
-    return null;
-  }
-
   return (
     <FinishView
       dokumentId={id}
@@ -47,7 +39,6 @@ export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
       mainText={`Send brevet ${tittel} til`}
       confirmText="Send ut"
       close={close}
-      sakenGjelder={data.sakenGjelder}
     />
   );
 };
@@ -55,19 +46,16 @@ export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
 interface FinishProps {
   title: string;
   mainText: string;
-  sakenGjelder?: ISakenGjelder;
   confirmText: string;
   dokumentId: string;
   close: () => void;
 }
 
-const FinishView = ({ title, mainText, confirmText, sakenGjelder, dokumentId, close }: FinishProps) => {
-  const [finish] = useFinishDocumentMutation();
+const FinishView = ({ title, mainText, confirmText, dokumentId, close }: FinishProps) => {
+  const [finish, { isLoading }] = useFinishDocumentMutation();
   const oppgaveId = useOppgaveId();
-  const sakenGjelderText =
-    typeof sakenGjelder === 'undefined' ? null : (
-      <StyledSakenGjelder>{getSakenGjelderName(sakenGjelder)}</StyledSakenGjelder>
-    );
+  const sakspart = useSakspartName('sakenGjelder');
+  const sakenGjelderText = typeof sakspart === 'undefined' ? null : <StyledSakenGjelder>{sakspart}</StyledSakenGjelder>;
 
   return (
     <StyledFinishDocument>
@@ -75,10 +63,16 @@ const FinishView = ({ title, mainText, confirmText, sakenGjelder, dokumentId, cl
       <StyledMainText>{mainText}</StyledMainText>
       {sakenGjelderText}
       <StyledButtons>
-        <Hovedknapp mini onClick={() => finish({ dokumentId, oppgaveId })} data-testid="document-finish-confirm">
+        <Hovedknapp
+          mini
+          onClick={() => finish({ dokumentId, oppgaveId })}
+          spinner={isLoading}
+          autoDisableVedSpinner
+          data-testid="document-finish-confirm"
+        >
           {confirmText}
         </Hovedknapp>
-        <Knapp mini onClick={close} data-testid="document-finish-cancel">
+        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isLoading}>
           Avbryt
         </Knapp>
       </StyledButtons>
