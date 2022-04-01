@@ -28,12 +28,13 @@ export const Thread = ({ thread, isFocused }: Props) => {
 
   const onFocus = useCallback(() => {
     setFocusedThreadId(thread.id);
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [setFocusedThreadId, thread.id]);
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() =>
+        requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
+      );
     }
   }, [isFocused, ref]);
 
@@ -63,14 +64,14 @@ const StyledThread = styled.section<{ isFocused: boolean }>`
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   margin: 24px;
-  cursor: ${({ isFocused }) => (isFocused ? 'default' : 'pointer')};
+  cursor: ${({ isFocused }) => (isFocused ? 'auto' : 'pointer')};
   user-select: ${({ isFocused }) => (isFocused ? 'auto' : 'none')};
   opacity: ${({ isFocused }) => (isFocused ? '1' : '0.5')};
   box-shadow: ${({ isFocused }) => (isFocused ? '0 1px 4px 0 rgba(0, 0, 0, 0.3)' : 'none')};
   transform: ${({ isFocused }) => (isFocused ? 'translateX(-16px)' : 'translateX(0px)')};
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
-  transition-property: transform, opacity;
+  transition-property: transform, opacity, box-shadow;
 
   &::last-of-type {
     margin-bottom: 0;

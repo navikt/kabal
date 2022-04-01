@@ -20,7 +20,7 @@ const Leaf = ({ attributes, leaf, children, focusedThreadId }: LeafProps) => {
 
   useEffect(() => {
     if (focused && ref.current !== null) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
     }
   }, [focused]);
 
