@@ -47,19 +47,21 @@ export const useThreads = (): Threads => {
     return LOADING;
   }
 
-  const attachedThreadIds = smartEditor.content.flatMap<string>(({ type, content }) => {
-    if (type === 'section') {
-      return content.flatMap<string>((sectionChild) => {
-        if (sectionChild.type === 'rich-text') {
-          return getRichTextThreadIds(sectionChild.content);
-        }
+  const attachedThreadIds = smartEditor.content
+    .flatMap<string>(({ type, content }) => {
+      if (type === 'section') {
+        return content.flatMap<string>((sectionChild) => {
+          if (sectionChild.type === 'rich-text') {
+            return getRichTextThreadIds(sectionChild.content);
+          }
 
-        return [];
-      });
-    }
+          return [];
+        });
+      }
 
-    return [];
-  });
+      return [];
+    })
+    .reduce<string[]>((acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]), []);
 
   return {
     attached: attachedThreadIds
