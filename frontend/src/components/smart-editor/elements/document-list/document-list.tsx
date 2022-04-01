@@ -64,8 +64,6 @@ export const DocumentListElement = React.memo(
       return null;
     }
 
-    // TODO: Generate Slate data and pass into RichTextEditor as default value.
-
     return (
       <Container>
         <BulletListElement
@@ -78,7 +76,7 @@ export const DocumentListElement = React.memo(
               element={{ type: ListContentEnum.LIST_ITEM, children: [] }}
               attributes={{ 'data-slate-node': 'element', ref: undefined }}
             >
-              <StyledCheckbox
+              <Checkbox
                 label={title}
                 value={id}
                 checked={include}
@@ -105,12 +103,6 @@ DocumentListElement.displayName = 'DocumentListElement';
 
 const Container = styled.div`
   padding-left: 16px;
-`;
-
-const StyledCheckbox = styled(Checkbox)`
-  > label {
-    text-decoration: ${({ checked }) => (checked === true ? 'none' : 'line-through')};
-  }
 `;
 
 const hasTitle = <T, R extends T & { tittel: string }>(d: T & { tittel: string | null }): d is R => isNotNull(d.tittel);
