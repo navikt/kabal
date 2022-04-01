@@ -8,6 +8,8 @@ export const FIELD_NAMES = {
   hjemmel: 'Lovhjemmel',
   dokument: 'Dokumenter',
   underArbeid: 'Under arbeid',
+  mottattKlageinstans: 'Mottatt klageinstans',
+  mottattVedtaksinstans: 'Mottatt vedtaksinstans',
 };
 
 export const useFieldName = (field: keyof typeof FIELD_NAMES): string => FIELD_NAMES[field] ?? field;

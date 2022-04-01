@@ -7,6 +7,7 @@ import { IOppgavebehandlingBase } from '../types/oppgavebehandling';
 type Field =
   | keyof IKakaKvalitetsvurdering
   | keyof Pick<IOppgavebehandlingBase, 'mottattKlageinstans'>
+  | keyof Pick<IOppgavebehandlingBase, 'mottattVedtaksinstans'>
   | 'utfall'
   | 'hjemmel'
   | 'dokument';

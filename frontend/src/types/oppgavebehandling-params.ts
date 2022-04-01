@@ -10,6 +10,11 @@ export interface IMottattKlageinstansParams extends IOppgavebehandlingBaseParams
   type: OppgaveType.ANKE;
 }
 
+export interface IMottattVedtaksinstansParams extends IOppgavebehandlingBaseParams {
+  mottattVedtaksinstans: string; // LocalDate
+  type: OppgaveType.KLAGE;
+}
+
 export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandlingBaseParams {
   utfall: Utfall | null;
 }
