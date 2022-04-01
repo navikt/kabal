@@ -2,7 +2,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useKlagerName } from '../../../hooks/use-klager-name';
+import { useSakspartName } from '../../../hooks/use-klager-name';
 import { PanelHeader } from '../../oppgavebehandling-panels/panel';
 import { Type } from '../../type/type';
 import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
@@ -14,7 +14,7 @@ import { Ytelse } from './ytelse';
 
 export const Klagebehandlingsdetaljer = () => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
-  const klagerName = useKlagerName();
+  const klagerName = useSakspartName('klager');
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <NavFrontendSpinner />;

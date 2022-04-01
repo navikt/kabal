@@ -1,19 +1,21 @@
 import { getFullName } from '../domain/name';
-import { ISakenGjelder } from '../types/oppgavebehandling';
+import { IOppgavebehandlingBase, ISakspart } from '../types/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
-export const useKlagerName = (): string | null => {
+type Key = keyof Pick<IOppgavebehandlingBase, 'klager' | 'sakenGjelder'>;
+
+export const useSakspartName = (key: Key): string | null => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return null;
   }
 
-  return getSakenGjelderName(oppgavebehandling.sakenGjelder);
+  return getSakspartName(oppgavebehandling[key]);
 };
 
-export const getSakenGjelderName = (sakenGjelder: ISakenGjelder) => {
-  const { person, virksomhet } = sakenGjelder;
+export const getSakspartName = (sakspart: ISakspart) => {
+  const { person, virksomhet } = sakspart;
 
   if (person !== null) {
     return getFullName(person.navn);

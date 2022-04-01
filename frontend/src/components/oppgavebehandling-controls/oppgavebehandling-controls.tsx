@@ -1,7 +1,7 @@
 import React from 'react';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { ISakenGjelder } from '../../types/oppgavebehandling';
+import { ISakspart } from '../../types/oppgavebehandling';
 import { PanelToggles } from '../klagebehandling/types';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
 import { ControlPanel, ExternalLink, OppgavebehandlingInformation, OppgavebehandlingTools } from './styled-components';
@@ -36,7 +36,7 @@ export const OppgavebehandlingControls = ({ toggles, setPanel }: Oppgavebehandli
 };
 
 interface GosysLinkProps {
-  sakenGjelder: ISakenGjelder;
+  sakenGjelder: ISakspart;
 }
 
 const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {

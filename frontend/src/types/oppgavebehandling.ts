@@ -17,7 +17,7 @@ export interface IOppgavebehandlingBase {
   id: string;
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
-  klager: IKlager;
+  klager: ISakspart;
   kommentarFraVedtaksinstans: string | null;
   kvalitetsvurderingId: string;
   medunderskriver: ISaksbehandler | null;
@@ -28,7 +28,7 @@ export interface IOppgavebehandlingBase {
   mottattKlageinstans: string | null; // LocalDate
   raadfoertMedLege: string | null;
   resultat: Resultat;
-  sakenGjelder: ISakenGjelder;
+  sakenGjelder: ISakspart;
   sattPaaVent: string | null; // LocalDateTime
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
@@ -51,12 +51,10 @@ export interface IAnkebehandling extends IOppgavebehandlingBase {
 
 export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;
 
-export interface IKlager {
+export interface ISakspart {
   person: IKlagerPerson | null;
   virksomhet: IVirksomhet | null;
 }
-
-export type ISakenGjelder = IKlager;
 
 export interface Resultat {
   file: IVedlegg | null;
