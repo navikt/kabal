@@ -41,7 +41,7 @@ export const DocumentListElement = React.memo(
               const existing = element.content.find(({ id: eId }) => eId === id);
 
               if (typeof existing === 'undefined') {
-                return { id, title, include: true };
+                return { id, title, include: false };
               }
 
               return { ...existing, title };
