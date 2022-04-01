@@ -38,7 +38,7 @@ export const SendTilMedunderskriver = ({
 
   const SendToMedunderskriver = () => (
     <StyledFormSection>
-      <Hovedknapp
+      <StyledHovedknapp
         mini
         onClick={() => switchMedunderskriverflyt(oppgaveId)}
         disabled={sendToMedunderskriverDisabled}
@@ -46,7 +46,7 @@ export const SendTilMedunderskriver = ({
         data-testid="send-to-medunderskriver"
       >
         Send til medunderskriver
-      </Hovedknapp>
+      </StyledHovedknapp>
     </StyledFormSection>
   );
 
@@ -68,4 +68,9 @@ export const SendTilMedunderskriver = ({
 
 const StyledFormSection = styled.div`
   margin-top: 20px;
+  width: 100%;
+`;
+
+const StyledHovedknapp = styled(Hovedknapp)`
+  width: 100%;
 `;

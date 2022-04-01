@@ -30,6 +30,9 @@ const PageContainer = styled.main`
   padding-left: 8px;
   padding-right: 8px;
   background-color: #e5e5e5;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 8px;
+  scroll-padding-right: 8px;
 
   @media screen and (max-width: 1400px) {
     height: calc(100vh - 6.25em);

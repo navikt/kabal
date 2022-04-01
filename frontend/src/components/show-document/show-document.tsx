@@ -17,9 +17,9 @@ import {
 } from './styled-components';
 import { IShownDokument } from './types';
 
-const MIN_PDF_WIDTH = 760;
-const MAX_PDF_WIDTH = 1960;
+const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
+const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 interface ShowDokumentProps {
   document: IShownDokument | null;

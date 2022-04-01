@@ -8,6 +8,7 @@ import {
   StyledListItem,
   StyledNoneSelected,
   StyledSelectedHjemler,
+  StyledSelectedHjemlerWrapper,
   StyledSelectedList,
   StyledSelectedSection,
   StyledSelectedSectionHeader,
@@ -40,9 +41,11 @@ export const SelectedHjemlerList = () => {
   }
 
   return (
-    <StyledSelectedHjemler>
-      <SelectedChildren registreringshjemmelIdList={list} />
-    </StyledSelectedHjemler>
+    <StyledSelectedHjemlerWrapper>
+      <StyledSelectedHjemler>
+        <SelectedChildren registreringshjemmelIdList={list} />
+      </StyledSelectedHjemler>
+    </StyledSelectedHjemlerWrapper>
   );
 };
 

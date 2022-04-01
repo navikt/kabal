@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Editor, Range, Selection } from 'slate';
-import { ReactEditor } from 'slate-react';
-import { getFocusedCommentThreadId } from './get-focused-thread-id';
+import React, { useState } from 'react';
+import { Editor, Element, Range, Selection } from 'slate';
+import { CommentableVoidElementTypes, isCommentableVoid } from '../editor-types';
+import { getFocusedThreadIdFromText } from './get-focused-thread-id';
 
 interface Props {
-  children: JSX.Element[] | null;
+  children: React.ReactNode;
   documentId: null | string;
 }
 
@@ -12,17 +12,9 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
   const [elementId, setElementId] = useState<string | null>(null);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [selection, setSelection] = useState<Selection>(null);
-  const [focusedThreadId, setFocusedThreadId] = useState<string | null>(getFocusedCommentThreadId(editor, selection));
-
-  useEffect(() => {
-    if (editor !== null && selection !== null) {
-      const threadId = getFocusedCommentThreadId(editor, selection);
-      setFocusedThreadId(threadId);
-    }
-  }, [editor, selection, setFocusedThreadId]);
-
-  const showNewThread =
-    editor !== null && selection !== null && Range.isExpanded(selection) && ReactEditor.hasRange(editor, selection);
+  const [focusedThreadId, setFocusedThreadId] = useState<string | null>(getFocusedThreadIdFromText(editor, selection));
+  const [activeElement, setActiveElement] = useState<CommentableVoidElementTypes | null>(null);
+  const [showNewComment, setShowNewComment] = useState<boolean>(false);
 
   return (
     <SmartEditorContext.Provider
@@ -35,8 +27,59 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
         focusedThreadId,
         setFocusedThreadId,
         selection,
-        setSelection,
-        showNewThread,
+        setSelection: (newSelection) => {
+          if (editor === null || newSelection === null) {
+            setFocusedThreadId(null);
+            setActiveElement(null);
+            setSelection(null);
+            setShowNewComment(false);
+            return;
+          }
+
+          if (Range.isCollapsed(newSelection)) {
+            const [selectedEntry] = Editor.nodes(editor, {
+              at: newSelection,
+              voids: true,
+              match: Element.isElement,
+            });
+
+            if (typeof selectedEntry === 'undefined') {
+              setFocusedThreadId(null);
+              setActiveElement(null);
+              setShowNewComment(false);
+              setSelection(newSelection);
+              return;
+            }
+
+            const [selectedNode] = selectedEntry;
+
+            const isVoid = isCommentableVoid(selectedNode);
+
+            if (isVoid) {
+              const [threadId] = selectedNode.threadIds;
+              setFocusedThreadId(threadId);
+              setShowNewComment(false);
+              setSelection(newSelection);
+              return;
+            }
+
+            const threadId = getFocusedThreadIdFromText(editor, newSelection);
+            setFocusedThreadId(threadId);
+            setActiveElement(null);
+            setShowNewComment(false);
+            setSelection(newSelection);
+            return;
+          }
+
+          setFocusedThreadId(null);
+          setActiveElement(null);
+          setShowNewComment(false);
+          setSelection(newSelection);
+        },
+        activeElement,
+        setActiveElement,
+        showNewComment,
+        setShowNewComment,
       }}
     >
       {children}
@@ -44,7 +87,7 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
   );
 };
 
-interface ISmartEditorContext {
+export interface ISmartEditorContext {
   documentId: string | null;
   editor: Editor | null;
   setEditor: (editor: Editor | null) => void;
@@ -54,7 +97,10 @@ interface ISmartEditorContext {
   setFocusedThreadId: (threadId: string | null) => void;
   selection: Selection;
   setSelection: (selection: Selection) => void;
-  showNewThread: boolean;
+  activeElement: CommentableVoidElementTypes | null;
+  setActiveElement: (activeElement: CommentableVoidElementTypes | null) => void;
+  showNewComment: boolean;
+  setShowNewComment: (showNewComment: boolean) => void;
 }
 
 export const SmartEditorContext = React.createContext<ISmartEditorContext>({
@@ -67,5 +113,8 @@ export const SmartEditorContext = React.createContext<ISmartEditorContext>({
   setFocusedThreadId: () => {},
   selection: null,
   setSelection: () => {},
-  showNewThread: false,
+  activeElement: null,
+  setActiveElement: () => {},
+  showNewComment: false,
+  setShowNewComment: () => {},
 });

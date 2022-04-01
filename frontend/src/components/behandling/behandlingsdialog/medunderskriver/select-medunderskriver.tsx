@@ -2,7 +2,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
-import styled from 'styled-components';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useGetBrukerQuery, useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
@@ -59,25 +58,19 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
     });
 
   return (
-    <StyledFormSection>
-      <Select
-        disabled={!canEdit}
-        label="Medunderskriver:"
-        onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-        value={medunderskriver?.navIdent ?? NONE_SELECTED}
-        data-testid="select-medunderskriver"
-      >
-        <option value={NONE_SELECTED}>Ingen medunderskriver</option>
-        {medunderskrivere.map(({ navn, navIdent }) => (
-          <option key={navIdent} value={navIdent}>
-            {navn}
-          </option>
-        ))}
-      </Select>
-    </StyledFormSection>
+    <Select
+      disabled={!canEdit}
+      label="Medunderskriver:"
+      onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
+      value={medunderskriver?.navIdent ?? NONE_SELECTED}
+      data-testid="select-medunderskriver"
+    >
+      <option value={NONE_SELECTED}>Ingen medunderskriver</option>
+      {medunderskrivere.map(({ navn, navIdent }) => (
+        <option key={navIdent} value={navIdent}>
+          {navn}
+        </option>
+      ))}
+    </Select>
   );
 };
-
-const StyledFormSection = styled.div`
-  width: 250px;
-`;

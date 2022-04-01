@@ -8,12 +8,12 @@ export const StyledNewCommentInThread = styled.div`
 export const StyledNewComment = styled.div`
   position: absolute;
   top: 0;
-  left: 24px;
-  width: calc(100% - 48px);
+  left: 16px;
+  width: calc(100% - 32px);
   background-color: white;
   z-index: 5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 24px;
+  padding: 16px;
   margin-bottom: 40px;
   border-radius: 4px;
   border: 1px solid #c9c9c9;

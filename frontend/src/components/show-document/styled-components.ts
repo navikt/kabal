@@ -16,6 +16,7 @@ export const Container = styled.section<BeholderProps>`
   position: relative;
   overflow: hidden;
   height: 100%;
+  scroll-snap-align: start;
 `;
 
 export const StyledDocumentTitleContainer = styled.div`

@@ -1,7 +1,10 @@
+import { Cancel, DialogDots } from '@navikt/ds-icons';
 import { FormatClear } from '@styled-icons/material/FormatClear';
-import React from 'react';
+import React, { useContext } from 'react';
+import { Range } from 'slate';
 import { useSlate } from 'slate-react';
 import styled from 'styled-components';
+import { SmartEditorContext } from '../context/smart-editor-context';
 import { Content } from './content';
 import { clearFormatting } from './functions/clearFormatting';
 import { isMarkingAvailable } from './functions/marks';
@@ -19,11 +22,14 @@ interface Props {
   visible: boolean;
 }
 
-export const EditorOppgavelinje = ({ visible }: Props) => {
+export const Toolbar = ({ visible }: Props) => {
   const editor = useSlate();
 
   const marksAvailable = isMarkingAvailable(editor);
   const textAlignAvailable = isTextAlignAvailable(editor);
+  const { selection, setShowNewComment } = useContext(SmartEditorContext);
+
+  const addCommentEnabled = Range.isRange(selection) && Range.isExpanded(selection);
 
   return (
     <ToolbarStyle visible={visible} aria-hidden={!visible}>
@@ -44,6 +50,29 @@ export const EditorOppgavelinje = ({ visible }: Props) => {
 
       <Lists iconSize={ICON_SIZE} />
       <TextAligns iconSize={ICON_SIZE} disabled={!textAlignAvailable} />
+      <ToolbarSeparator />
+      <ToolbarIconButton
+        label="Legg til kommentar (Ctrl/⌘ + K)"
+        icon={<DialogDots width={ICON_SIZE} />}
+        active={false}
+        onClick={() => setShowNewComment(true)}
+        disabled={!addCommentEnabled}
+      />
+
+      <ToolbarSeparator />
+
+      <ToolbarIconButton
+        label="Angre (Ctrl/⌘ + Z)"
+        icon={<Cancel width={ICON_SIZE} />}
+        active={false}
+        onClick={editor.undo}
+      />
+      <ToolbarIconButton
+        label="Gjenopprett (Ctrl/⌘ + Shift + Z)"
+        icon={<Redo width={ICON_SIZE} />}
+        active={false}
+        onClick={editor.redo}
+      />
     </ToolbarStyle>
   );
 };
@@ -67,4 +96,8 @@ const ToolbarStyle = styled.section<{ visible: boolean }>`
   transition: opacity 0.2s ease-in-out;
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+`;
+
+const Redo = styled(Cancel)`
+  transform: scaleX(-1);
 `;

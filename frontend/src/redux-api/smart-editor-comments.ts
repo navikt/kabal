@@ -49,6 +49,14 @@ export const smartEditorCommentsApi = createApi({
             comments: [...draft.comments, data],
           }))
         );
+
+        dispatch(
+          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+            draft.map((thread) =>
+              thread.id === commentId ? { ...thread, comments: [...thread.comments, data] } : thread
+            )
+          )
+        );
       },
     }),
   }),

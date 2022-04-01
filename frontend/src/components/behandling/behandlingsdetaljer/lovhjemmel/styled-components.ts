@@ -2,16 +2,10 @@ import styled from 'styled-components';
 
 export const StyledLovhjemmelSelect = styled.div`
   position: relative;
-  max-width: 360px;
 `;
 
-export const StyledHjemler = styled.div`
-  width: 360px;
-  margin-right: 20px;
-
-  > button {
-    width: 100%;
-  }
+export const StyledSelectedHjemlerWrapper = styled.div`
+  min-height: 350px;
 `;
 
 export const StyledSelectedHjemler = styled.div`

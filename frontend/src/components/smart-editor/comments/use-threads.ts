@@ -7,6 +7,7 @@ import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor-api';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '../../../types/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
+import { isCommentableVoid } from '../editor-types';
 
 export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;
@@ -33,8 +34,7 @@ export const useThreads = (): Threads => {
   );
 
   const { data: threads, isLoading: threadsIsLoading } = useGetCommentsQuery(
-    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId },
-    { pollingInterval: 3000 }
+    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId }
   );
 
   if (
@@ -47,21 +47,7 @@ export const useThreads = (): Threads => {
     return LOADING;
   }
 
-  const attachedThreadIds = smartEditor.content
-    .flatMap<string>(({ type, content }) => {
-      if (type === 'section') {
-        return content.flatMap<string>((sectionChild) => {
-          if (sectionChild.type === 'rich-text') {
-            return getRichTextThreadIds(sectionChild.content);
-          }
-
-          return [];
-        });
-      }
-
-      return [];
-    })
-    .reduce<string[]>((acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]), []);
+  const attachedThreadIds = [...new Set(getRichTextThreadIds(smartEditor.content))];
 
   return {
     attached: attachedThreadIds
@@ -94,6 +80,10 @@ const getRichTextThreadIds = (richText: Descendant[]): string[] =>
       return Object.keys(child)
         .filter((key) => key.startsWith('commentThreadId_'))
         .map((key) => key.replace('commentThreadId_', ''));
+    }
+
+    if (isCommentableVoid(child)) {
+      return child.threadIds;
     }
 
     return getRichTextThreadIds(child.children);

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ISmartEditorComment } from '../../../types/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
@@ -30,22 +30,15 @@ export const Thread = ({ thread, isFocused }: Props) => {
     setFocusedThreadId(thread.id);
   }, [setFocusedThreadId, thread.id]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isFocused && ref.current !== null) {
-      setTimeout(() =>
-        requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
-      );
+      requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
     }
   }, [isFocused, ref]);
 
   const comments: ISmartEditorComment[] = isFocused
     ? [thread, ...thread.comments]
-    : [
-        {
-          ...thread,
-          text: thread.text.length >= 90 ? `${thread.text.substring(0, 85)}\u2026` : thread.text,
-        },
-      ];
+    : [{ ...thread, text: thread.text.length >= 90 ? `${thread.text.substring(0, 85)}\u2026` : thread.text }];
 
   return (
     <StyledThread ref={ref} isFocused={isFocused} onClick={open}>
@@ -59,11 +52,14 @@ const StyledThread = styled.section<{ isFocused: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: transparent;
-  padding: 24px;
+  background-color: transparent;
+  padding: 16px;
+  padding-bottom: ${({ isFocused }) => (isFocused ? '16px' : '0')};
   border: 1px solid #c9c9c9;
   border-radius: 4px;
-  margin: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+  will-change: transform, opacity, box-shadow;
   cursor: ${({ isFocused }) => (isFocused ? 'auto' : 'pointer')};
   user-select: ${({ isFocused }) => (isFocused ? 'auto' : 'none')};
   opacity: ${({ isFocused }) => (isFocused ? '1' : '0.5')};
@@ -72,10 +68,7 @@ const StyledThread = styled.section<{ isFocused: boolean }>`
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   transition-property: transform, opacity, box-shadow;
-
-  &::last-of-type {
-    margin-bottom: 0;
-  }
+  scroll-snap-align: start;
 
   &:hover {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

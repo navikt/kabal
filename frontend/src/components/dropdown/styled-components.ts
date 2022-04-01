@@ -6,7 +6,6 @@ export const StyledList = styled.ul`
   display: block;
   position: absolute;
   top: 0;
-  left: 370px;
   padding: 0;
   margin: 0;
   list-style: none;
