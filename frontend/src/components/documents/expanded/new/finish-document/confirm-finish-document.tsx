@@ -1,10 +1,12 @@
+import { Applicant, CoApplicant, People } from '@navikt/ds-icons';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { useOppgave } from '../../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useSakspartName } from '../../../../../hooks/use-klager-name';
 import { useFinishDocumentMutation } from '../../../../../redux-api/documents';
 import { DocumentType, IMainDocument } from '../../../../../types/documents';
+import { Saksrolle } from '../../../../../types/oppgavebehandling';
 
 interface Props {
   document: IMainDocument;
@@ -18,66 +20,108 @@ export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
   }
 
   const { tittel, id, dokumentTypeId } = document;
-  const shouldArchive = dokumentTypeId === DocumentType.NOTAT;
+  const willSend = dokumentTypeId !== DocumentType.NOTAT;
 
-  if (shouldArchive) {
-    return (
-      <FinishView
-        title="Arkiver dokument"
-        mainText={`Arkiver notatet ${tittel}`}
-        confirmText="Arkiver"
-        dokumentId={id}
-        close={close}
-      />
-    );
+  if (willSend) {
+    return <SendView dokumentId={id} documentTitle={tittel} close={close} />;
   }
 
-  return (
-    <FinishView
-      dokumentId={id}
-      title="Send dokument"
-      mainText={`Send brevet ${tittel} til`}
-      confirmText="Send ut"
-      close={close}
-    />
-  );
+  return <ArchiveView dokumentId={id} documentTitle={tittel} close={close} />;
 };
 
 interface FinishProps {
-  title: string;
-  mainText: string;
-  confirmText: string;
+  documentTitle: string;
   dokumentId: string;
   close: () => void;
 }
 
-const FinishView = ({ title, mainText, confirmText, dokumentId, close }: FinishProps) => {
-  const [finish, { isLoading }] = useFinishDocumentMutation();
+const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
+  const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
   const oppgaveId = useOppgaveId();
-  const sakspart = useSakspartName('sakenGjelder');
-  const sakenGjelderText = typeof sakspart === 'undefined' ? null : <StyledSakenGjelder>{sakspart}</StyledSakenGjelder>;
 
   return (
     <StyledFinishDocument>
-      <StyledHeader>{title}</StyledHeader>
-      <StyledMainText>{mainText}</StyledMainText>
-      {sakenGjelderText}
+      <StyledHeader>Arkiver dokument</StyledHeader>
+      <StyledMainText>{`Arkiver notatet "${documentTitle}".`}</StyledMainText>
       <StyledButtons>
         <Hovedknapp
           mini
           onClick={() => finish({ dokumentId, oppgaveId })}
-          spinner={isLoading}
+          spinner={isFinishing}
           autoDisableVedSpinner
           data-testid="document-finish-confirm"
         >
-          {confirmText}
+          Arkiver
         </Hovedknapp>
-        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isLoading}>
+        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isFinishing}>
           Avbryt
         </Knapp>
       </StyledButtons>
     </StyledFinishDocument>
   );
+};
+
+const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
+  const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
+  const { data, isLoading: oppgaveIsLoading } = useOppgave();
+
+  if (oppgaveIsLoading || typeof data === 'undefined') {
+    return null;
+  }
+
+  return (
+    <StyledFinishDocument>
+      <StyledHeader>{documentTitle}</StyledHeader>
+      <StyledMainText>{`Send brevet "${documentTitle}" til`}</StyledMainText>
+      <StyledBrevmottakerList>
+        {data.brevmottakere.map(({ partId, navn, rolle }) => (
+          <StyledBrevmottaker key={partId} title={getRolleName(rolle)}>
+            {getIcon(rolle)} {navn}
+          </StyledBrevmottaker>
+        ))}
+      </StyledBrevmottakerList>
+      <StyledButtons>
+        <Hovedknapp
+          mini
+          onClick={() => finish({ dokumentId, oppgaveId: data?.id })}
+          spinner={isFinishing}
+          autoDisableVedSpinner
+          data-testid="document-finish-confirm"
+        >
+          Send ut
+        </Hovedknapp>
+        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isFinishing}>
+          Avbryt
+        </Knapp>
+      </StyledButtons>
+    </StyledFinishDocument>
+  );
+};
+
+const getIcon = (rolle: Saksrolle) => {
+  switch (rolle) {
+    case Saksrolle.KLAGER:
+      return <StyledApplicant />;
+    case Saksrolle.PROSESSFULLMEKTIG:
+      return <StyledCoApplicant />;
+    case Saksrolle.SAKEN_GJELDER:
+      return <StyledPeople />;
+    default:
+      return null;
+  }
+};
+
+const getRolleName = (rolle: Saksrolle): string => {
+  switch (rolle) {
+    case Saksrolle.KLAGER:
+      return 'Klager';
+    case Saksrolle.PROSESSFULLMEKTIG:
+      return 'Prosessfullmektig';
+    case Saksrolle.SAKEN_GJELDER:
+      return 'Saken gjelder';
+    default:
+      return '';
+  }
 };
 
 const StyledFinishDocument = styled.section`
@@ -97,11 +141,41 @@ const StyledButtons = styled.div`
   margin-top: 16px;
 `;
 
-const StyledSakenGjelder = styled.p`
+const StyledBrevmottakerList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   font-weight: bold;
   margin: 0;
   margin-top: 8px;
   white-space: normal;
+  list-style: none;
+  padding-left: 0;
+`;
+
+const StyledBrevmottaker = styled.li`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+`;
+
+const iconStyle = css`
+  & {
+    width: 16px;
+    flex-shrink: 0;
+  }
+`;
+
+const StyledApplicant = styled(Applicant)`
+  ${iconStyle}
+`;
+const StyledCoApplicant = styled(CoApplicant)`
+  ${iconStyle}
+`;
+const StyledPeople = styled(People)`
+  ${iconStyle}
 `;
 
 const StyledHeader = styled.h1`
