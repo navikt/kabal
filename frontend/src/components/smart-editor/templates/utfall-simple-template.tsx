@@ -196,7 +196,16 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [
       {
-        text: 'Vi har gjort om vedtaket til din fordel. Du kan ha rett til å få dekket vesentlige kostnader som har vært nødvendige for å få endret vedtaket.',
+        text: 'Dersom vi har gjort om vedtaket til din fordel kan du ha rett til å få dekket vesentlige kostnader som har vært nødvendige for å få endret vedtaket.',
+      },
+    ],
+  },
+  {
+    type: ContentTypeEnum.PARAGRAPH,
+    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    children: [
+      {
+        text: 'Dette må du søke om innen tre uker fra den datoen dette vedtaket er kommet fram til deg. Når du søker om å få dekket utgifter til juridisk bistand, må du legge ved spesifisert timeliste og faktura. Søknaden sender du til NAV Klageinstans Sakskostnader, Postboks 644, Lundsiden, 4606 Kristiansand.',
       },
     ],
   },
