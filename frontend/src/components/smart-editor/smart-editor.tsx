@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isNotNull } from '../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
+import { IS_LOCALHOST } from '../../redux-api/common';
 import { useGetSmartEditorQuery, useUpdateSmartEditorMutation } from '../../redux-api/smart-editor-api';
 import {
   IDocumentTitleElement,
@@ -16,6 +17,19 @@ import { SmartEditorContext } from './context/smart-editor-context';
 import { DocumentTitleElement } from './elements/document-title/document-title';
 import { SectionElement } from './elements/section/section';
 import { Signature } from './elements/signature/signature';
+
+const DOMAIN = IS_LOCALHOST ? 'wss://kabal.dev.nav.no' : '';
+const ws = new WebSocket(`${DOMAIN}/api/kabal-api/websocket`);
+
+ws.addEventListener('open', (event) => {
+  console.log('WS OPEN', event);
+  ws.send('Hello World from WebSocket!');
+});
+ws.addEventListener('message', (event) => console.log('WS MESSAGE', event));
+ws.addEventListener('close', (event) => console.log('WS CLOSE', event));
+ws.addEventListener('error', (event) => console.log('WS ERROR', event));
+
+// <button onClick={() => ws.send(`WebSocket event ${Math.random()}`)}>Send WebSocket event</button>
 
 export const SmartEditor = (): JSX.Element | null => {
   const oppgaveId = useOppgaveId();
