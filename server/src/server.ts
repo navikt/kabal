@@ -22,7 +22,7 @@ server.use(cookieParser());
 server.use(
   cors({
     credentials: true,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'CONNECT', 'OPTIONS'],
     allowedHeaders: [
       'Accept-Language',
       'Accept',
@@ -38,6 +38,10 @@ server.use(
       'Sec-Fetch-Dest',
       'Sec-Fetch-Mode',
       'Sec-Fetch-Site',
+      'Sec-WebSocket-Extensions',
+      'Sec-WebSocket-Key',
+      'Sec-WebSocket-Version',
+      'Upgrade',
       'User-Agent',
       'X-Forwarded-For',
       'X-Forwarded-Host',

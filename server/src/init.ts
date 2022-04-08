@@ -13,17 +13,17 @@ import { setupVersionRoute } from './routes/version';
 
 const PORT = serverConfig.port;
 
-export const init = async (server: Express) => {
+export const init = async (app: Express) => {
   try {
     const authClient = await getAzureClient();
-    server.use(setupVersionRoute());
-    server.get(callbackPath, callbackHandler(authClient));
-    server.get('/logout', logoutHandler(authClient));
-    server.use(['/api', '/assets', '/bundle.js', '/favicon.ico'], guardMiddleware(authClient));
-    server.use(authMiddleware(authClient));
-    server.use(setupProxy(authClient));
-    server.use(setupStaticRoutes());
-    server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+    app.use(setupVersionRoute());
+    app.get(callbackPath, callbackHandler(authClient));
+    app.get('/logout', logoutHandler(authClient));
+    app.use(['/api', '/assets', '/bundle.js', '/favicon.ico'], guardMiddleware(authClient));
+    app.use(authMiddleware(authClient));
+    const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+    app.use(setupProxy(authClient, server));
+    app.use(setupStaticRoutes());
   } catch (e) {
     if (e instanceof Error || typeof e === 'string' || typeof e === 'number') {
       await sendToSlack(`Server crashed: ${e}`, EmojiIcons.Scream);
