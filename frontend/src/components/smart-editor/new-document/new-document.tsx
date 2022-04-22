@@ -6,7 +6,6 @@ import { useCreateSmartDocumentMutation } from '../../../redux-api/smart-editor-
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
 import { EMPTY_TEMPLATE } from '../templates/empty-template';
 import { UTFALL_SIMPLE_TEMPLATE } from '../templates/utfall-simple-template';
-import { UTFALL_TEMPLATE } from '../templates/utfall-template';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { MedholdBrevIcon } from './medhold-brev-icon';
@@ -19,7 +18,7 @@ import {
   StyledTemplates,
 } from './styled-components';
 
-const TEMPLATES = [EMPTY_TEMPLATE, UTFALL_SIMPLE_TEMPLATE, UTFALL_TEMPLATE];
+const TEMPLATES = [EMPTY_TEMPLATE, UTFALL_SIMPLE_TEMPLATE];
 
 interface Props {
   oppgaveId: string;
