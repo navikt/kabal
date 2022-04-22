@@ -209,17 +209,6 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
       },
     ],
   },
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Dette må du søke om innen tre uker fra den datoen dette vedtaket er kommet fram til deg. Når du søker om å få dekket utgifter til juridisk bistand, må du legge ved spesifisert timeliste og faktura. Du finner første side for innsending på ',
-      },
-      { text: 'www.nav.no/klage', underline: true },
-      { text: '. Velg NAV Klageinstans Sakskostnader.' },
-    ],
-  },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Har du spørsmål?' }] },
   {
     type: ContentTypeEnum.PARAGRAPH,
@@ -234,7 +223,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 
 export const UTFALL_SIMPLE_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: 'utfall-simple',
-  tittel: 'Enkelt utfall-/vedtaksbrev',
+  tittel: 'Klagevedtak',
   content: [
     {
       type: 'section',

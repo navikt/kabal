@@ -27,7 +27,11 @@ const StyledCommentSection = styled.div`
   position: relative;
 `;
 
-const CommentsClickBoundry: React.FC = ({ children }) => {
+interface CommentsClickBoundryProps {
+  children: React.ReactNode;
+}
+
+const CommentsClickBoundry = ({ children }: CommentsClickBoundryProps) => {
   const { setFocusedThreadId } = useContext(SmartEditorContext);
   const ref = useRef<HTMLDivElement>(null);
 
