@@ -32,6 +32,7 @@ export const Document = ({ document, pageReferences, temaer }: Props) => {
     setShownDocument({
       title: tittel,
       url,
+      documentId: null,
     });
 
   const isActive = shownDocument?.url === url;

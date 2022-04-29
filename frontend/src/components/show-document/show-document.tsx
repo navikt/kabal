@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {
   Container,
   Header,
   LeftSide,
-  PDF,
   RightSide,
   StyledButtonContainer,
   StyledCancelIcon,
@@ -66,12 +66,7 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
           </HeaderButton>
         </RightSide>
       </Header>
-      <PDF
-        data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
-        role="document"
-        type="application/pdf"
-        name={title ?? undefined}
-      />
+      <NoFlickerReloadPdf url={`${url}#toolbar=0&view=fitH&zoom=page-width`} name={title ?? undefined} />
     </Container>
   );
 };
