@@ -18,21 +18,21 @@ export const Marks = ({ iconSize, disabled = true }: MarksProps) => {
   return (
     <>
       <ToolbarIconButton
-        label="Bold"
+        label="Fet skrift (Ctrl/⌘ + B)"
         onClick={() => toggleMark(editor, MarkKeys.bold)}
         active={isMarkActive(editor, MarkKeys.bold) && !disabled}
         icon={<FormatBold width={iconSize} />}
         disabled={disabled}
       />
       <ToolbarIconButton
-        label="Italic"
+        label="Kursiv (Ctrl/⌘ + I)"
         onClick={() => toggleMark(editor, MarkKeys.italic)}
         active={isMarkActive(editor, MarkKeys.italic) && !disabled}
         icon={<FormatItalic width={iconSize} />}
         disabled={disabled}
       />
       <ToolbarIconButton
-        label="Underline"
+        label="Underline (Ctrl/⌘ + U)"
         onClick={() => toggleMark(editor, MarkKeys.underline)}
         active={isMarkActive(editor, MarkKeys.underline) && !disabled}
         icon={<FormatUnderlined width={iconSize} />}

@@ -1,9 +1,10 @@
 import { Søkeknapp } from 'nav-frontend-ikonknapper';
 import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { GroupedDropdown, OptionGroup } from '../../../dropdown/grouped-dropdown';
 import { ErrorMessage } from '../../../error-message/error-message';
-import { StyledHjemler, StyledLovhjemmelSelect } from './styled-components';
+import { StyledLovhjemmelSelect } from './styled-components';
 
 interface LovhjemmelSelectProps {
   options: OptionGroup[];
@@ -50,11 +51,9 @@ export const LovhjemmelSelect = ({
   return (
     <>
       <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel" data-selected={selected.join(',')}>
-        <StyledHjemler>
-          <Søkeknapp mini onClick={toggleOpen} disabled={disabled} data-testid="lovhjemmel-button">
-            <span>Hjemmel</span>
-          </Søkeknapp>
-        </StyledHjemler>
+        <StyledSøkeknapp mini onClick={toggleOpen} disabled={disabled} data-testid="lovhjemmel-button">
+          <span>Hjemmel</span>
+        </StyledSøkeknapp>
 
         <GroupedDropdown
           selected={selected}
@@ -64,7 +63,7 @@ export const LovhjemmelSelect = ({
           close={close}
           showFjernAlle={showFjernAlle}
           top={0}
-          left="370px"
+          left="100%"
           maxHeight="400px"
           testId="lovhjemmel-dropdown"
         />
@@ -73,3 +72,7 @@ export const LovhjemmelSelect = ({
     </>
   );
 };
+
+export const StyledSøkeknapp = styled(Søkeknapp)`
+  width: 100%;
+`;

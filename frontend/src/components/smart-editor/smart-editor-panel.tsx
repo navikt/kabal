@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FeatureToggles, useGetFeatureToggleQuery } from '../../redux-api/feature-toggling';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
-import { TabbedEditors } from './tabbed-editors';
+import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 
 export interface Props {
   shown: boolean;

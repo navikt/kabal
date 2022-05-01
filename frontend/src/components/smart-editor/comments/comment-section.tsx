@@ -1,43 +1,49 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
+import { Range } from 'slate';
+import { ReactEditor } from 'slate-react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { NewCommentThread } from './new-thread';
 import { ThreadList } from './thread-list';
+import { useThreads } from './use-threads';
 
-export const CommentSection = () => (
-  <CommentsClickBoundry>
-    <NewCommentThread />
-    <StyledThreadList>
+export const CommentSection = () => {
+  const { attached, orphans } = useThreads();
+  const { selection, showNewComment, setShowNewComment, activeElement, setActiveElement, editor } =
+    useContext(SmartEditorContext);
+
+  const isValidSelection = Range.isRange(selection) && Range.isExpanded(selection);
+  const isVoid = activeElement !== null;
+
+  const showNewThread = showNewComment && (isValidSelection || isVoid);
+
+  // If there are comments, either attached or orphans, show the comment list.
+  const showCommentSection = showNewThread || attached.length !== 0 || orphans.length !== 0;
+
+  if (!showCommentSection) {
+    return null;
+  }
+
+  return (
+    <StyledCommentSection>
+      <NewCommentThread
+        show={showNewThread}
+        close={() => {
+          setShowNewComment(false);
+          setActiveElement(null);
+
+          if (editor !== null) {
+            ReactEditor.focus(editor);
+          }
+        }}
+      />
       <ThreadList />
-    </StyledThreadList>
-  </CommentsClickBoundry>
-);
-
-export const StyledThreadList = styled.section`
-  flex-shrink: 0;
-  width: 350px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
-`;
+    </StyledCommentSection>
+  );
+};
 
 const StyledCommentSection = styled.div`
   height: 100%;
+  width: 350px;
   position: relative;
 `;
-
-interface CommentsClickBoundryProps {
-  children: React.ReactNode;
-}
-
-const CommentsClickBoundry = ({ children }: CommentsClickBoundryProps) => {
-  const { setFocusedThreadId } = useContext(SmartEditorContext);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(() => {
-    setFocusedThreadId(null);
-  }, ref);
-
-  return <StyledCommentSection ref={ref}>{children}</StyledCommentSection>;
-};

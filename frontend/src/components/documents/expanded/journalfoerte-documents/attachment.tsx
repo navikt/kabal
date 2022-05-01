@@ -21,6 +21,7 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document, pageReferen
     setShownDocument({
       title: vedlegg.tittel,
       url,
+      documentId: null,
     });
 
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);

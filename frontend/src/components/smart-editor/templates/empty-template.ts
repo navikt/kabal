@@ -18,17 +18,5 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 export const EMPTY_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: 'empty',
   tittel: 'Generelt brev',
-  content: [
-    {
-      type: 'section',
-      id: 'data-section',
-      content: [
-        {
-          id: 'test-smart-editor',
-          type: 'rich-text',
-          content: INITIAL_SLATE_VALUE,
-        },
-      ],
-    },
-  ],
+  children: INITIAL_SLATE_VALUE,
 });

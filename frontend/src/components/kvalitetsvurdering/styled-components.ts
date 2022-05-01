@@ -1,9 +1,9 @@
-import { RadioGruppe } from 'nav-frontend-skjema';
+import { Checkbox, RadioGruppe } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
-  padding: 1em;
-  width: 700px;
+  padding: 16px;
+  width: 400px;
 `;
 
 export const FormSection = styled.section`
@@ -30,7 +30,7 @@ export const RadioButtonsColumn = styled(RadioGruppe)`
 
 export const StyledCommentField = styled.div`
   margin-left: 32px;
-  max-width: 50%;
+  width: calc(100% - 32px);
 `;
 
 export const ReasonsField = styled.div`
@@ -38,10 +38,11 @@ export const ReasonsField = styled.div`
 `;
 
 export const StyledCheckboxContainer = styled.div`
-  width: 500px;
   display: flex;
   justify-content: space-between;
-  button {
-    margin-left: 5px;
-  }
+  width: 100%;
+`;
+
+export const StyledCheckbox = styled(Checkbox)`
+  white-space: normal;
 `;

@@ -2,7 +2,7 @@ import { Editor, Range, Selection, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { COMMENT_PREFIX } from '../constants';
 
-export const getFocusedCommentThreadId = (editor: Editor | null, selection: Selection): string | null => {
+export const getFocusedThreadIdFromText = (editor: Editor | null, selection: Selection): string | null => {
   if (editor === null || selection === null) {
     return null;
   }
@@ -11,7 +11,13 @@ export const getFocusedCommentThreadId = (editor: Editor | null, selection: Sele
     return null;
   }
 
-  const [[textNode]] = Editor.nodes(editor, { at: selection.focus, mode: 'lowest', match: Text.isText });
+  const [textEntry] = Editor.nodes(editor, { at: selection.focus, mode: 'lowest', match: Text.isText });
+
+  if (typeof textEntry === 'undefined') {
+    return null;
+  }
+
+  const [textNode] = textEntry;
 
   const threadIds = Object.keys(textNode)
     .filter((k) => k.startsWith(COMMENT_PREFIX))
@@ -21,5 +27,5 @@ export const getFocusedCommentThreadId = (editor: Editor | null, selection: Sele
     return null;
   }
 
-  return threadIds[threadIds.length - 1];
+  return threadIds[0];
 };

@@ -19,6 +19,7 @@ export const OpenDocumentButton = ({ id, title }: Props) => {
     setShownDocument({
       title,
       url,
+      documentId: id,
     });
 
   const isActive = shownDocument?.url === url;

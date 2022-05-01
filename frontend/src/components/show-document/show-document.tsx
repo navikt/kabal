@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {
   Container,
   Header,
   LeftSide,
-  PDF,
   RightSide,
   StyledButtonContainer,
   StyledCancelIcon,
@@ -17,9 +17,9 @@ import {
 } from './styled-components';
 import { IShownDokument } from './types';
 
-const MIN_PDF_WIDTH = 760;
-const MAX_PDF_WIDTH = 1960;
+const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
+const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 interface ShowDokumentProps {
   document: IShownDokument | null;
@@ -66,12 +66,7 @@ export const ShowDocument = ({ document, close }: ShowDokumentProps) => {
           </HeaderButton>
         </RightSide>
       </Header>
-      <PDF
-        data={`${url}#toolbar=0&view=fitH&zoom=page-width`}
-        role="document"
-        type="application/pdf"
-        name={title ?? undefined}
-      />
+      <NoFlickerReloadPdf url={`${url}#toolbar=0&view=fitH&zoom=page-width`} name={title ?? undefined} />
     </Container>
   );
 };

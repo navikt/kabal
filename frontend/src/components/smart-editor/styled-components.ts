@@ -8,13 +8,16 @@ export const EditorContainer = styled.section`
   overflow: visible;
 `;
 
-export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean }>`
+export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean; readOnly: boolean }>`
   min-height: 64px;
+  width: 100%;
   position: relative;
-  padding: 16px;
-  box-shadow: -5px 0px 0 0px ${({ 'data-is-focused': isFocused }) => (isFocused ? '#00bcd4' : '#c9c9c9')};
-  border-radius: 5px;
-  transition: box-shadow 0.2s ease-in-out;
+  padding-top: 16px;
+  padding-left: 20px;
+  padding-right: 40px;
+  padding-bottom: 32px;
+  color: ${({ readOnly }) => (readOnly ? '#999' : '#000')};
+  cursor: ${({ readOnly }) => (readOnly ? 'not-allowed' : 'unset')};
 
   > :first-child {
     margin-top: 0;

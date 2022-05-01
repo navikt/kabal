@@ -1,4 +1,4 @@
-import { BaseEditor, BaseRange, Element, Node } from 'slate';
+import { BaseEditor, BaseRange, Descendant, Element, Node } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
 
@@ -36,6 +36,22 @@ export enum TextAlignEnum {
   TEXT_ALIGN_JUSTIFY = 'text-align-justify',
 }
 
+export enum VoidElementsEnum {
+  SIGNATURE = 'signature',
+  MALTEKST = 'maltekst',
+  LABEL_CONTENT = 'label-content',
+  DOCUMENT_LIST = 'document-list',
+  CURRENT_DATE = 'current-date',
+}
+
+export const VOID_ELEMENT_TYPES = Object.values(VoidElementsEnum);
+
+export const isVoid = (element: Element): element is VoidElementTypes =>
+  VOID_ELEMENT_TYPES.some((t) => t === element.type);
+
+export const isCommentableVoid = (element: Element): element is CommentableVoidElementTypes =>
+  'threadIds' in element && Object.hasOwn(element, 'threadIds') && Array.isArray(element.threadIds);
+
 export interface ParagraphElementType {
   type: ContentTypeEnum.PARAGRAPH;
   children: CustomTextType[];
@@ -50,8 +66,23 @@ export interface BlockquoteElementType {
 
 export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType;
 export type MarkableElementTypes = ParagraphElementType | BlockquoteElementType | ListItemContainerElementType;
+export type NonVoidElementTypes = ParagraphElementType | BlockquoteElementType | HeadingsType | ListsType;
+export type CommentableVoidElementTypes =
+  | SignatureElementType
+  | LabelContentElementType
+  | MaltekstElementType
+  | DocumentListElementType;
+export type VoidElementTypes = CommentableVoidElementTypes | CurrentDateType;
 
-export type ElementTypes = ContentTypeEnum | HeadingTypesEnum | ListTypesEnum | ListContentEnum;
+export type ElementTypes = ContentTypeEnum | HeadingTypesEnum | ListTypesEnum | ListContentEnum | VoidElementsEnum;
+
+interface IWithThreads {
+  threadIds: string[];
+}
+
+interface IBaseVoid {
+  children: [CustomTextType];
+}
 
 export interface HeadingOneElementType {
   type: HeadingTypesEnum.HEADING_ONE;
@@ -77,6 +108,48 @@ export interface HeadingSixElementType {
   type: HeadingTypesEnum.HEADING_SIX;
   children: CustomTextType[];
 }
+export interface SignatureElementType extends ISignatureContent, IBaseVoid, IWithThreads {
+  type: VoidElementsEnum.SIGNATURE;
+}
+
+export interface ISignature {
+  name: string;
+  title: string;
+}
+
+export interface ISignatureContent {
+  useShortName: boolean;
+  saksbehandler?: ISignature;
+  medunderskriver?: ISignature;
+}
+export interface LabelContentElementType extends IBaseVoid, IWithThreads {
+  type: VoidElementsEnum.LABEL_CONTENT;
+  label: string;
+  source: string;
+  result?: string;
+}
+
+export interface MaltekstElementType extends IWithThreads {
+  type: VoidElementsEnum.MALTEKST;
+  source: string;
+  maltekst: NonVoidElementTypes[] | null;
+  children: Descendant[];
+}
+
+export interface IDocumentItem {
+  id: string;
+  title: string;
+}
+
+export interface DocumentListElementType extends IBaseVoid, IWithThreads {
+  type: VoidElementsEnum.DOCUMENT_LIST;
+  documents: IDocumentItem[];
+}
+
+export interface CurrentDateType extends IBaseVoid {
+  type: VoidElementsEnum.CURRENT_DATE;
+}
+
 export type HeadingsType =
   | HeadingOneElementType
   | HeadingTwoElementType
@@ -112,6 +185,13 @@ export type ListsType =
   | ListItemElementType
   | ListItemContainerElementType;
 
+export type VoidsType =
+  | SignatureElementType
+  | MaltekstElementType
+  | LabelContentElementType
+  | DocumentListElementType
+  | CurrentDateType;
+
 export type SecondLevelElementsType = ListItemElementType;
 
 export enum MarkKeys {
@@ -145,18 +225,18 @@ interface CustomRange extends BaseRange {
 declare module 'slate' {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & HistoryEditor;
-    Element: ParagraphElementType | BlockquoteElementType | HeadingsType | ListsType;
+    Element: ParagraphElementType | BlockquoteElementType | HeadingsType | ListsType | VoidsType;
     Text: CustomTextType;
     Range: CustomRange;
   }
 }
 
-export const isOfElementType = <T extends ParagraphElementType | HeadingsType | ListsType>(
+export const isOfElementType = <T extends ParagraphElementType | HeadingsType | ListsType | VoidsType>(
   n: Node,
   type: ElementTypes
 ): n is T => Element.isElement(n) && n.type === type;
 
-export const isOfElementTypes = <T extends ParagraphElementType | HeadingsType | ListsType>(
+export const isOfElementTypes = <T extends ParagraphElementType | HeadingsType | ListsType | VoidsType>(
   n: Node,
   types: ElementTypes[]
 ): n is T => Element.isElement(n) && types.includes(n.type);
@@ -165,7 +245,7 @@ export const isNodeOfSameElementType = <T extends Element>(n: Node, element: T):
   Element.isElement(n) && n.type === element.type;
 
 export const isTypeAlignable = (
-  type: HeadingTypesEnum | ListTypesEnum | ListContentEnum | ContentTypeEnum
+  type: HeadingTypesEnum | ListTypesEnum | ListContentEnum | ContentTypeEnum | VoidElementsEnum
 ): type is ContentTypeEnum => {
   for (const alignableType of Object.values(AlignableTypeEnum)) {
     if (type === alignableType) {

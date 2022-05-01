@@ -1,10 +1,18 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { parseJSON } from '../functions/parse-json';
 import { ISmartDocument } from '../types/documents';
-import { IDocumentParams } from '../types/documents-common-params';
 import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling-params';
-import { ISmartEditorElement } from '../types/smart-editor';
-import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '../types/smart-editor-params';
-import { ISmartEditorRawResponse, ISmartEditorResponse } from '../types/smart-editor-response';
+import {
+  ICreateSmartDocumentParams,
+  IGetSmartEditorParams,
+  IPatchSmartDocumentParams,
+  IUpdateSmartDocumentParams,
+} from '../types/smart-editor-params';
+import {
+  ISmartEditorPatchResponse,
+  ISmartEditorRawResponse,
+  ISmartEditorResponse,
+} from '../types/smart-editor-response';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { documentsApi } from './documents';
 
@@ -16,12 +24,12 @@ export const smartEditorApi = createApi({
       query: ({ oppgaveId }) => `${oppgaveId}/dokumenter/smart`,
     }),
     createSmartDocument: builder.mutation<ISmartDocument, ICreateSmartDocumentParams>({
-      query: ({ oppgaveId, content, tittel }) => ({
+      query: ({ oppgaveId, children, tittel }) => ({
         url: `/${oppgaveId}/dokumenter/smart`,
         method: 'POST',
         body: {
           tittel,
-          json: JSON.stringify(content),
+          json: JSON.stringify(children),
         },
       }),
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
@@ -29,13 +37,21 @@ export const smartEditorApi = createApi({
         dispatch(documentsApi.util.updateQueryData('getDocuments', { oppgaveId }, (draft) => [...draft, data]));
       },
     }),
-    getSmartEditor: builder.query<ISmartEditorResponse | null, IDocumentParams>({
+    getSmartEditor: builder.query<ISmartEditorResponse | null, IGetSmartEditorParams>({
       query: ({ oppgaveId, dokumentId }) => `${oppgaveId}/dokumenter/smarteditor/${dokumentId}`,
-      transformResponse: ({ id, created, modified, json }: ISmartEditorRawResponse) => ({
+      transformResponse: ({ id, created, modified, patchVersion, json }: ISmartEditorRawResponse) => ({
         id,
         created,
         modified,
-        content: JSON.parse(json) as ISmartEditorElement[],
+        content: parseJSON(json) ?? [],
+        patchVersion,
+      }),
+    }),
+    patchSmartEditor: builder.mutation<ISmartEditorPatchResponse, IPatchSmartDocumentParams>({
+      query: ({ oppgaveId, dokumentId, ...body }) => ({
+        url: `/${oppgaveId}/dokumenter/smarteditor/${dokumentId}`,
+        method: 'PATCH',
+        body,
       }),
     }),
     updateSmartEditor: builder.mutation<ISmartEditorResponse, IUpdateSmartDocumentParams>({
@@ -48,14 +64,14 @@ export const smartEditorApi = createApi({
         id,
         created,
         modified,
-        content: JSON.parse(json) as ISmartEditorElement[],
+        content: parseJSON(json) ?? [],
+        patchVersion: -1,
       }),
-      onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
-        const query: IDocumentParams = { oppgaveId: params.oppgaveId, dokumentId: params.dokumentId };
+      onQueryStarted: async ({ dokumentId, oppgaveId, content }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          smartEditorApi.util.updateQueryData('getSmartEditor', query, (draft) => {
+          smartEditorApi.util.updateQueryData('getSmartEditor', { dokumentId, oppgaveId }, (draft) => {
             if (draft !== null) {
-              draft.content = params.content;
+              draft.content = content;
             }
           })
         );
@@ -63,7 +79,7 @@ export const smartEditorApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(
-            smartEditorApi.util.updateQueryData('getSmartEditor', query, (draft) => {
+            smartEditorApi.util.updateQueryData('getSmartEditor', { dokumentId, oppgaveId }, (draft) => {
               if (draft !== null) {
                 draft.modified = data.modified;
                 draft.content = data.content;
@@ -83,4 +99,5 @@ export const {
   useGetSmartDocumentsQuery,
   useGetSmartEditorQuery,
   useUpdateSmartEditorMutation,
+  usePatchSmartEditorMutation,
 } = smartEditorApi;

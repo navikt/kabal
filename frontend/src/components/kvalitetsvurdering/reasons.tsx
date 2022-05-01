@@ -1,5 +1,5 @@
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { Checkbox, CheckboxGruppe } from 'nav-frontend-skjema';
+import { CheckboxGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { Fragment } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
@@ -7,7 +7,7 @@ import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { IKvalitetsvurderingBooleans } from '../../types/kaka-kvalitetsvurdering';
 import { CommentField } from './comment-field';
-import { ReasonsField, StyledCheckboxContainer } from './styled-components';
+import { ReasonsField, StyledCheckbox, StyledCheckboxContainer } from './styled-components';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
@@ -49,7 +49,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
             return (
               <Fragment key={String(reason.id)}>
                 <StyledCheckboxContainer>
-                  <Checkbox
+                  <StyledCheckbox
                     label={reason.label}
                     value={reason.id}
                     checked={reason.checked}

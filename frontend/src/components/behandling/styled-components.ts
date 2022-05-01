@@ -4,23 +4,25 @@ export const StyledContainer = styled.div`
   display: flex;
   flex-basis: 100%;
   white-space: normal;
+  width: 600px;
 `;
 
 export const BehandlingSectionHeader = styled.h2`
   margin-bottom: 8px;
-  font-size: 1em;
+  font-size: 16px;
   font-weight: bold;
 `;
 
 export const StyledBehandlingsdetaljer = styled.div`
   border-right: 1px solid #c9c9c9;
-  width: 24em;
-  padding-bottom: 1em;
+  width: 50%;
+  padding-bottom: 16px;
 `;
 
 export const StyledBehandlingsdialog = styled.div`
-  padding: 1em;
-  width: 24em;
+  border-left: 1px solid #c9c9c9;
+  padding: 16px;
+  width: 50%;
 `;
 
 export const StyledLovhjemmelLabel = styled.span`
@@ -46,5 +48,5 @@ export const StyledUtfallResultat = styled.div`
 `;
 
 export const StyledPaddedContent = styled.div`
-  padding: 1em;
+  padding: 16px;
 `;

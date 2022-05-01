@@ -21,6 +21,7 @@ export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, valgt
     setShownDocument({
       title,
       url,
+      documentId: null,
     });
 
   const isActive = shownDocument?.url === url;

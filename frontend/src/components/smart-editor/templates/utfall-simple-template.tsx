@@ -1,20 +1,41 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
-import { ContentTypeEnum, HeadingTypesEnum, ListContentEnum, ListTypesEnum, TextAlignEnum } from '../editor-types';
+import {
+  ContentTypeEnum,
+  HeadingTypesEnum,
+  ListContentEnum,
+  ListTypesEnum,
+  TextAlignEnum,
+  VoidElementsEnum,
+} from '../editor-types';
 
 /* eslint-disable max-lines */
-const INITIAL_SLATE_VALUE: Descendant[] = [
-  { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'NAV Klageinstans har behandlet klagen din' }] },
+export const INITIAL_SLATE_VALUE: Descendant[] = [
   {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [{ text: 'Klager: ' }],
+    type: VoidElementsEnum.CURRENT_DATE,
+    children: [{ text: '' }],
   },
   {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [{ text: 'Fødselsnummer: ' }],
+    type: VoidElementsEnum.MALTEKST,
+    children: [{ text: '' }],
+    source: 'document-title',
+    maltekst: null,
+    threadIds: [],
+  },
+  {
+    type: VoidElementsEnum.LABEL_CONTENT,
+    children: [{ text: '' }],
+    source: 'sakenGjelder.name',
+    label: 'Klager',
+    threadIds: [],
+  },
+  {
+    type: VoidElementsEnum.LABEL_CONTENT,
+    children: [{ text: '' }],
+    source: 'sakenGjelder.fnr',
+    label: 'Fødselsnummer',
+    threadIds: [],
   },
   {
     type: ContentTypeEnum.PARAGRAPH,
@@ -56,7 +77,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [{ text: 'Vi har opphevet vedtaket og sendt saken tilbake til NAV [], som skal behandle den på nytt.' }],
   },
-  { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'I klagen din har du lagt vekt på:' }] },
+  { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'I klagen din har du lagt vekt på' }] },
   {
     type: ListTypesEnum.BULLET_LIST,
     children: [
@@ -68,21 +89,13 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
   },
   {
     type: HeadingTypesEnum.HEADING_ONE,
-    children: [{ text: 'I vurderingen vår har vi lagt vekt på disse dokumentene:' }],
+    children: [{ text: 'I vurderingen vår har vi lagt vekt på disse dokumentene' }],
   },
   {
-    type: ListTypesEnum.BULLET_LIST,
-    children: [
-      {
-        type: ListContentEnum.LIST_ITEM,
-        children: [
-          {
-            type: ListContentEnum.LIST_ITEM_CONTAINER,
-            children: [{ text: 'osv.' }],
-          },
-        ],
-      },
-    ],
+    type: VoidElementsEnum.DOCUMENT_LIST,
+    children: [{ text: '' }],
+    threadIds: [],
+    documents: [],
   },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Vurderingen vår' }] },
   {
@@ -209,49 +222,30 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
       },
     ],
   },
-  { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Har du spørsmål?' }] },
   {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [
-      {
-        text: 'Du finner mer informasjon på nav.no. Hvis du ikke finner svar på spørsmålet ditt, kontakt oss på nav.no/kontakt.',
-      },
-    ],
+    type: VoidElementsEnum.MALTEKST,
+    source: 'questions',
+    children: [{ text: '' }],
+    maltekst: null,
+    threadIds: [],
+  },
+  {
+    type: VoidElementsEnum.MALTEKST,
+    source: 'regards',
+    children: [{ text: '' }],
+    maltekst: null,
+    threadIds: [],
+  },
+  {
+    type: VoidElementsEnum.SIGNATURE,
+    useShortName: false,
+    children: [{ text: '' }],
+    threadIds: [],
   },
 ];
 
 export const UTFALL_SIMPLE_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: 'utfall-simple',
   tittel: 'Klagevedtak',
-  content: [
-    {
-      type: 'section',
-      id: 'main-section',
-      content: [
-        {
-          type: 'rich-text',
-          id: 'avslag-brev',
-          content: INITIAL_SLATE_VALUE,
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'section-regards',
-      content: [
-        {
-          type: 'static',
-          id: 'regards',
-          source: 'regards',
-          content: undefined,
-        },
-      ],
-    },
-    {
-      type: 'signature',
-      id: 'signature',
-      content: { useShortName: false },
-    },
-  ],
+  children: INITIAL_SLATE_VALUE,
 });

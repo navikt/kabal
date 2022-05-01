@@ -90,6 +90,7 @@ const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
     <StyledCommentButtonContainer>
       <StyledCommentButton
         mini
+        kompakt
         onClick={onSubmit}
         disabled={text.length <= 0}
         spinner={isLoading}
@@ -97,7 +98,7 @@ const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
       >
         Legg til
       </StyledCommentButton>
-      <Knapp mini onClick={close} disabled={isLoading}>
+      <Knapp mini kompakt onClick={close} disabled={isLoading}>
         Avbryt
       </Knapp>
     </StyledCommentButtonContainer>

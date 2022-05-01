@@ -1,16 +1,15 @@
-import React, { useContext } from 'react';
-import { Range } from 'slate';
-import { SmartEditorContext } from '../context/smart-editor-context';
+import React from 'react';
 import { NewComment } from './new-comment';
 
-export const NewCommentThread = () => {
-  const { selection } = useContext(SmartEditorContext);
+interface Props {
+  show: boolean;
+  close: () => void;
+}
 
-  const showNewThread = selection !== null && Range.isExpanded(selection);
-
-  if (!showNewThread) {
+export const NewCommentThread = ({ show, close }: Props) => {
+  if (!show) {
     return null;
   }
 
-  return <NewComment />;
+  return <NewComment close={close} />;
 };

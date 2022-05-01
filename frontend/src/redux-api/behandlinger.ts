@@ -36,33 +36,6 @@ export const behandlingerApi = createApi({
         oppgavebehandlingApi.util.invalidateTags(['oppgavebehandling']);
       },
     }),
-    updateFinishedInGosys: builder.mutation<IModifiedResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/${oppgaveId}/fullfoertgosys`,
-        method: 'POST',
-      }),
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === OppgaveType.ANKE) {
-              draft.fullfoertGosys = true;
-            }
-          })
-        );
-
-        try {
-          const { data } = await queryFulfilled;
-
-          dispatch(
-            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              draft.modified = data.modified;
-            })
-          );
-        } catch {
-          patchResult.undo();
-        }
-      },
-    }),
     setMottattKlageinstans: builder.mutation<IModifiedResponse, IMottattKlageinstansParams>({
       query: ({ oppgaveId, mottattKlageinstans }) => ({
         url: `/${oppgaveId}/mottattklageinstans`,
@@ -120,7 +93,6 @@ export const {
   useFinishOppgavebehandlingMutation,
   useValidateQuery,
   useLazyValidateQuery,
-  useUpdateFinishedInGosysMutation,
   useSetMottattKlageinstansMutation,
   useSetMottattVedtaksinstansMutation,
 } = behandlingerApi;

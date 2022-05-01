@@ -1,27 +1,43 @@
+import { parseJSON } from '../functions/parse-json';
 import { IS_LOCALHOST } from './common';
 
 export enum ServerSentEventType {
   FINISHED = 'finished',
+  PATCH = 'patch',
+  OPERATION = 'operation',
 }
 
 type ServerSentEvent = MessageEvent<string>;
 
-type ListenerFn = (event: ServerSentEvent) => void;
+type ListenerFn<T> = (event: T) => void;
+type JsonListenerFn<T> = (data: T | null, event: ServerSentEvent) => void;
 type EventListenerFn = (event: Event) => void;
 type EventListener = [ServerSentEventType, EventListenerFn];
 
 export class ServerSentEventManager {
   private events: EventSource;
   private listeners: EventListener[] = [];
+  private connectionListeners: ListenerFn<boolean>[] = [];
   private url: string;
   private lastEventId: string | null = null;
 
-  constructor(url: string) {
+  public isConnected = false;
+
+  constructor(url: string, initialEventId: string | null = null) {
     this.url = url;
+    this.lastEventId = initialEventId;
     this.events = this.createEventSource();
   }
 
-  public addEventListener(eventName: ServerSentEventType, listener: ListenerFn) {
+  public addConnectionListener(listener: ListenerFn<boolean>) {
+    if (!this.connectionListeners.includes(listener)) {
+      this.connectionListeners.push(listener);
+    }
+
+    listener(this.isConnected);
+  }
+
+  public addEventListener(eventName: ServerSentEventType, listener: ListenerFn<ServerSentEvent>) {
     const eventListener: EventListenerFn = (event) => {
       if (isServerSentEvent(event)) {
         this.lastEventId = event.lastEventId;
@@ -32,6 +48,19 @@ export class ServerSentEventManager {
 
     this.listeners.push([eventName, eventListener]);
     this.events?.addEventListener(eventName, eventListener);
+
+    return this;
+  }
+
+  public addJsonEventListener<T>(eventName: ServerSentEventType, listener: JsonListenerFn<T>) {
+    this.addEventListener(eventName, (event) => {
+      if (event.data.length === 0) {
+        return listener(null, event);
+      }
+
+      const parsed = parseJSON<T>(event.data);
+      listener(parsed, event);
+    });
 
     return this;
   }
@@ -53,9 +82,14 @@ export class ServerSentEventManager {
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {
+        this.isConnected = false;
+        this.connectionListeners.forEach((listener) => listener(this.isConnected));
+
         console.debug(`%cEventSource closed due to an error. Attempting to reconnect... - ${url}`, 'color: red');
 
-        this.events = this.createEventSource();
+        setTimeout(() => {
+          this.events = this.createEventSource();
+        }, 3000);
       } else {
         console.debug(`%cEventSource error (${readyState(events.readyState)}) - ${url}`, 'color: red;');
       }
@@ -65,6 +99,8 @@ export class ServerSentEventManager {
       console.debug(`%cEventSource connected (${readyState(events.readyState)}) - ${url}`, 'color: green;');
 
       this.listeners.forEach(([event, listener]) => events.addEventListener(event, listener));
+      this.isConnected = true;
+      this.connectionListeners.forEach((listener) => listener(this.isConnected));
     });
 
     return events;

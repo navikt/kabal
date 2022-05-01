@@ -61,3 +61,37 @@ export const prettyDateToISO = (prettyDate: prettyDate | null): ISODate | null =
 
   return prettyDate.split('.').reverse().join('-');
 };
+
+export const formatLongDate = (year: number, month: number, day: number): string | null => {
+  if (month < 0 || month > 11) {
+    return null;
+  }
+
+  if (day < 1 || day > 31) {
+    return null;
+  }
+
+  const monthName = MONTHS[month];
+
+  return `${day}. ${monthName} ${year}`;
+};
+
+const MONTHS = [
+  'januar',
+  'februar',
+  'mars',
+  'april',
+  'mai',
+  'juni',
+  'juli',
+  'august',
+  'oktober',
+  'november',
+  'desember',
+];
+
+export const zeroPad = (number: number, length = 2): string => {
+  const string = number.toString();
+
+  return string.length >= length ? string : '0'.repeat(length - string.length) + string;
+};

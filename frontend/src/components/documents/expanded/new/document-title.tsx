@@ -27,9 +27,10 @@ export const DocumentTitle = ({ document }: Props) => {
       setShownDocument({
         title: document.tittel,
         url,
+        documentId: document.id,
       });
     }
-  }, [isActive, url, document.tittel, setShownDocument]);
+  }, [isActive, url, document.tittel, document.id, setShownDocument]);
 
   if (editMode) {
     return (
@@ -44,6 +45,7 @@ export const DocumentTitle = ({ document }: Props) => {
     setShownDocument({
       title: document.tittel,
       url,
+      documentId: document.id,
     });
 
   const Icon = document.isSmartDokument ? Notes : FileContent;
