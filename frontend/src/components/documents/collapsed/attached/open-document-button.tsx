@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../../redux-api/common';
+import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
 import { ViewDocumentButton } from '../styled-components/document';
 
@@ -12,19 +11,21 @@ interface Props {
 }
 
 export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, valgt }: Props) => {
-  const oppgaveId = useOppgaveId();
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-
-  const url = `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`;
 
   const onClick = () =>
     setShownDocument({
       title,
-      url,
-      documentId: null,
+      dokumentInfoId,
+      journalpostId,
+      type: DocumentTypeEnum.ARCHIVED,
     });
 
-  const isActive = shownDocument?.url === url;
+  const isActive =
+    shownDocument !== null &&
+    shownDocument.type === DocumentTypeEnum.ARCHIVED &&
+    shownDocument.dokumentInfoId === dokumentInfoId &&
+    shownDocument.journalpostId === journalpostId;
 
   return (
     <ViewDocumentButton isActive={isActive} tilknyttet={valgt} onClick={onClick}>

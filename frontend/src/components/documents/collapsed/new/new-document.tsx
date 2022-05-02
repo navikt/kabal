@@ -10,14 +10,14 @@ type Props = {
   attachments: IMainDocument[];
 } & IMainDocument;
 
-export const NewDocument = ({ id, opplastet, tittel, attachments }: Props) => (
+export const NewDocument = ({ id, opplastet, tittel, attachments, isSmartDokument }: Props) => (
   <DocumentListItem>
     <DocumentDate>{isoDateTimeToPretty(opplastet)}</DocumentDate>
-    <OpenDocumentButton id={id} title={tittel} />
+    <OpenDocumentButton id={id} title={tittel} isSmartDokument={isSmartDokument} />
     <StyledAttachmentList data-testid="oppgavebehandling-documents-tilknyttede-list">
       {attachments.map((a) => (
         <AttachmentListItem key={a.id}>
-          <OpenDocumentButton id={a.id} title={a.tittel} />
+          <OpenDocumentButton id={a.id} title={a.tittel} isSmartDokument={a.isSmartDokument} />
         </AttachmentListItem>
       ))}
     </StyledAttachmentList>
