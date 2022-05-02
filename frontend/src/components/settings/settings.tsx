@@ -12,7 +12,8 @@ export const Settings = () => (
 
 const StyledSettings = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-flow: row;
+  flex-wrap: wrap;
   gap: 16px;
   padding-top: 16px;
   padding-bottom: 16px;

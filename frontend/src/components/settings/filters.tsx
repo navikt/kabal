@@ -1,14 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
+import { Delete, SuccessStroke } from '@navikt/ds-icons';
+import { Button, Switch } from '@navikt/ds-react';
+import React, { useMemo } from 'react';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useFullYtelseNameFromId, useHjemmelFromId, useTypeNameFromId } from '../../hooks/use-kodeverk-ids';
 import { ISettings, useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { LabelMain, LabelTema } from '../../styled-components/labels';
-import { OppgaveType } from '../../types/kodeverk';
-import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { SectionHeader, SettingsSection } from './styled-components';
+import { IKodeverkSimpleValue, IKodeverkValue } from '../../types/kodeverk';
+import {
+  ButtonContainer,
+  SectionHeader,
+  SettingsSection,
+  StyledFieldset,
+  StyledFilterContainer,
+  StyledFilters,
+} from './styled-components';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
@@ -16,8 +20,80 @@ const EMPTY_SETTINGS: ISettings = {
   hjemler: [],
 };
 
+const useHjemler = () => {
+  const { data } = useGetSettingsQuery();
+  const ytelser = useAvailableYtelser();
+
+  const availableHjemler = useMemo(
+    () =>
+      ytelser
+        .filter((ytelse) => data?.ytelser.includes(ytelse.id))
+        .flatMap(({ innsendingshjemler }) => innsendingshjemler)
+        .reduce<IKodeverkValue<string>[]>((acc, item) => {
+          const exists = acc.some(({ id }) => id === item.id);
+
+          if (!exists) {
+            acc.push(item);
+          }
+
+          return acc;
+        }, [])
+        .sort(({ navn: a }, { navn: b }) => a.localeCompare(b)),
+    [data?.ytelser, ytelser]
+  );
+
+  return availableHjemler;
+};
+
 export const Filters = () => {
   const { data: kodeverk } = useGetKodeverkQuery();
+  const { data: settingsData } = useGetSettingsQuery();
+  const hjemler = useHjemler();
+  const ytelser = useAvailableYtelser();
+
+  const ytelserOptions = useMemo(
+    () =>
+      ytelser.map(({ navn, innsendingshjemler, ...rest }) => {
+        const selectedHjemler = innsendingshjemler.filter(({ id }) => settingsData?.hjemler.includes(id)).length;
+        const totalHjemler = innsendingshjemler.length;
+        const name = `${navn} (${selectedHjemler}/${totalHjemler})`;
+
+        return {
+          ...rest,
+          navn: name,
+          innsendingshjemler,
+        };
+      }),
+    [settingsData?.hjemler, ytelser]
+  );
+
+  const settings = settingsData ?? EMPTY_SETTINGS;
+
+  if (typeof kodeverk === 'undefined') {
+    return null;
+  }
+
+  return (
+    <SettingsSection>
+      <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
+
+      <StyledFilters>
+        <SettingsFilter label="Typer" options={kodeverk.sakstyper} selected={settings.typer} settingKey="typer" />
+        <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
+        <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
+      </StyledFilters>
+    </SettingsSection>
+  );
+};
+
+interface SettingsSectionProps {
+  label: string;
+  options: IKodeverkSimpleValue[];
+  selected: string[];
+  settingKey: keyof ISettings;
+}
+
+const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectionProps) => {
   const [updateSettings, { isLoading }] = useUpdateSettingsMutation();
   const { data: settingsData } = useGetSettingsQuery();
 
@@ -31,116 +107,48 @@ export const Filters = () => {
 
   const settings = settingsData ?? EMPTY_SETTINGS;
 
-  const availableYtelser = useAvailableYtelser();
+  const selectAll = () => {
+    onChange({ ...settings, [settingKey]: options.map(({ id }) => id) });
+  };
 
-  if (typeof kodeverk === 'undefined') {
-    return null;
-  }
+  const removeAll = () => {
+    onChange({ ...settings, [settingKey]: [] });
+  };
+
+  const orphanText = selected.length > options.length ? `, ${selected.length - options.length} skjulte` : '';
+
+  const legend = `${label} (${selected.length} av ${options.length} valgt${orphanText})`;
 
   return (
-    <SettingsSection>
-      <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
-
-      <StyledFilters>
-        <StyledFilter>
-          <FilterDropdown
-            selected={settings.typer}
-            onChange={(typer) => onChange({ ...settings, typer })}
-            options={kodeverkSimpleValuesToDropdownOptions(kodeverk.sakstyper)}
-            testId="typer-settings-dropdown"
+    <StyledFilterContainer>
+      <ButtonContainer>
+        <Button variant="secondary" size="small" onClick={removeAll}>
+          <Delete /> Fjern alle
+        </Button>
+        <Button variant="secondary" size="small" onClick={selectAll}>
+          <SuccessStroke /> Velg alle
+        </Button>
+      </ButtonContainer>
+      <StyledFieldset data-test-id={`${settingKey}-settings`} legend={legend}>
+        {options.map(({ id, navn }) => (
+          <Switch
+            key={id}
+            value={id}
+            size="medium"
+            position="left"
+            checked={selected.includes(id)}
+            onChange={(event) => {
+              if (event.target.checked === true) {
+                onChange({ ...settings, [settingKey]: [...selected, id] });
+              } else {
+                onChange({ ...settings, [settingKey]: selected.filter((t) => t !== id) });
+              }
+            }}
           >
-            Type
-          </FilterDropdown>
-          <StyledFiltersList>
-            {settings.typer.map((typeId) => (
-              <StyledFiltersListItem key={typeId}>
-                <TypeEtikett id={typeId} />
-              </StyledFiltersListItem>
-            ))}
-          </StyledFiltersList>
-        </StyledFilter>
-
-        <StyledFilter>
-          <FilterDropdown
-            selected={settings.ytelser}
-            onChange={(ytelser) => onChange({ ...settings, ytelser })}
-            options={kodeverkSimpleValuesToDropdownOptions(availableYtelser)}
-            testId="ytelser-settings-dropdown"
-          >
-            Ytelser
-          </FilterDropdown>
-          <StyledFiltersList>
-            {settings.ytelser.map((ytelse) => (
-              <StyledFiltersListItem key={ytelse}>
-                <YtelseLabel id={ytelse} />
-              </StyledFiltersListItem>
-            ))}
-          </StyledFiltersList>
-        </StyledFilter>
-
-        <StyledFilter>
-          <FilterDropdown
-            selected={settings.hjemler}
-            onChange={(hjemler) => onChange({ ...settings, hjemler })}
-            options={kodeverkValuesToDropdownOptions(kodeverk.hjemler)}
-            testId="hjemler-settings-dropdown"
-          >
-            Hjemmel
-          </FilterDropdown>
-          <StyledFiltersList>
-            {settings.hjemler.map((hjemmelId) => (
-              <StyledFiltersListItem key={hjemmelId}>
-                <HjemmelEtikett id={hjemmelId} />
-              </StyledFiltersListItem>
-            ))}
-          </StyledFiltersList>
-        </StyledFilter>
-      </StyledFilters>
-    </SettingsSection>
+            {navn}
+          </Switch>
+        ))}
+      </StyledFieldset>
+    </StyledFilterContainer>
   );
 };
-
-interface EtikettProps<T = string> {
-  id: T;
-}
-
-const TypeEtikett = ({ id }: EtikettProps<OppgaveType>) => (
-  <StyledEtikettMain fixedWidth={true}>{useTypeNameFromId(id)}</StyledEtikettMain>
-);
-
-const YtelseLabel = ({ id }: EtikettProps) => (
-  <StyledEtikettTema fixedWidth={true}>{useFullYtelseNameFromId(id)}</StyledEtikettTema>
-);
-
-const HjemmelEtikett = ({ id }: EtikettProps) => (
-  <StyledEtikettMain fixedWidth={true}>{useHjemmelFromId(id)}</StyledEtikettMain>
-);
-
-const StyledEtikettMain = styled(LabelMain)`
-  width: 100%;
-`;
-
-const StyledEtikettTema = styled(LabelTema)`
-  width: 100%;
-`;
-
-const StyledFilter = styled.section`
-  margin-right: 20px;
-`;
-
-const StyledFiltersList = styled.ul`
-  padding: 0;
-  margin: 0;
-  margin-top: 20px;
-  margin-right: 20px;
-  list-style: none;
-  width: 100%;
-`;
-
-const StyledFiltersListItem = styled.li`
-  width: 100%;
-`;
-
-const StyledFilters = styled.div`
-  display: flex;
-`;

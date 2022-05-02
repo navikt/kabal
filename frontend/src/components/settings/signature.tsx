@@ -72,10 +72,12 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   const [value, setDefaultValue] = useState<string>(savedValue ?? '');
 
   useEffect(() => {
-    if (value !== savedValue) {
-      const timeout = setTimeout(() => setInfo({ key: infoKey, value, navIdent }), 1000);
-      return () => clearTimeout(timeout);
+    if (value === savedValue || (value === '' && savedValue === null)) {
+      return;
     }
+
+    const timeout = setTimeout(() => setInfo({ key: infoKey, value, navIdent }), 1000);
+    return () => clearTimeout(timeout);
   }, [value, savedValue, navIdent, infoKey, setInfo]);
 
   return (
