@@ -92,10 +92,13 @@ export const INITIAL_SLATE_VALUE: Descendant[] = [
     children: [{ text: 'I vurderingen vår har vi lagt vekt på disse dokumentene' }],
   },
   {
-    type: VoidElementsEnum.DOCUMENT_LIST,
-    children: [{ text: '' }],
-    threadIds: [],
-    documents: [],
+    type: ListTypesEnum.BULLET_LIST,
+    children: [
+      {
+        type: ListContentEnum.LIST_ITEM,
+        children: [{ type: ListContentEnum.LIST_ITEM_CONTAINER, children: [{ text: 'osv.' }] }],
+      },
+    ],
   },
   { type: HeadingTypesEnum.HEADING_ONE, children: [{ text: 'Vurderingen vår' }] },
   {
