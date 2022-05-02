@@ -16,6 +16,7 @@ import {
   StyledZoomInIcon,
   StyledZoomOutIcon,
 } from './styled-components';
+import { DocumentTypeEnum, IShownDocument } from './types';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
@@ -35,7 +36,7 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
   useEffect(() => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()), [pdfWidth]);
 
   const [version, setVersion] = useState<number>(Date.now());
-  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const oppgaveId = useOppgaveId();
   const { shownDocument } = useContext(ShownDocumentContext);
@@ -47,9 +48,23 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
   const url = getDocumentUrl(oppgaveId, shownDocument);
   const { title } = shownDocument;
 
+  const onClick = () => {
+    setIsLoading(true);
+    setVersion(Date.now());
+  };
+
   return (
     <Container width={pdfWidth} data-testid="show-document">
       <Header>
+        <HeaderSubContainer>
+          <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
+            <StyledCancelIcon title="Lukk forhåndsvisning" />
+          </StyledHeaderButton>
+          <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
+            <StyledExtLinkIcon title="Ekstern lenke" />
+          </StyledHeaderLink>
+          <StyledDocumentTitle>{title}</StyledDocumentTitle>
+        </HeaderSubContainer>
         <HeaderSubContainer>
           <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
             <StyledZoomOutIcon title="Zoom ut på PDF" />
@@ -57,33 +72,34 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
           <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
             <StyledZoomInIcon title="Zoom inn på PDF" />
           </StyledHeaderButton>
-          <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
-            <StyledExtLinkIcon title="Ekstern lenke" />
-          </StyledHeaderLink>
-          <StyledDocumentTitle>{title}</StyledDocumentTitle>
-          <StyledHeaderButton
-            onClick={() => {
-              setIsLoaded(false);
-              setVersion(Date.now());
-            }}
-            title="Oppdater"
-          >
-            <StyledRefreshIcon title="Oppdater" $isLoading={!isLoaded} />
-          </StyledHeaderButton>
-        </HeaderSubContainer>
-        <HeaderSubContainer>
-          <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
-            <StyledCancelIcon title="Lukk forhåndsvisning" />
-          </StyledHeaderButton>
+          <ReloadButton document={shownDocument} isLoading={isLoading} onClick={onClick} />
         </HeaderSubContainer>
       </Header>
       <NoFlickerReloadPdf
         url={url}
         version={version}
         name={title ?? undefined}
-        onVersionLoaded={() => setIsLoaded(true)}
+        onVersionLoaded={() => setIsLoading(false)}
       />
     </Container>
+  );
+};
+
+interface ReloadButtonProps {
+  document: IShownDocument;
+  isLoading: boolean;
+  onClick: () => void;
+}
+
+const ReloadButton = ({ document, isLoading, onClick }: ReloadButtonProps) => {
+  if (document.type !== DocumentTypeEnum.SMART) {
+    return null;
+  }
+
+  return (
+    <StyledHeaderButton onClick={onClick} title="Oppdater" disabled={isLoading}>
+      <StyledRefreshIcon title="Oppdater" $isLoading={isLoading} />
+    </StyledHeaderButton>
   );
 };
 
