@@ -41,6 +41,7 @@ export interface ILovKildeToRegistreringshjemmel {
 
 export interface IYtelse extends IKodeverkSimpleValue {
   lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
+  innsendingshjemler: IKodeverkValue[];
 }
 
 export interface IKlageEnhet extends IKodeverkSimpleValue {
@@ -48,14 +49,14 @@ export interface IKlageEnhet extends IKodeverkSimpleValue {
 }
 
 export interface IKodeverk {
-  ytelser: IYtelse[];
-  tema: IKodeverkValue[];
-  hjemler: IKodeverkValue[];
   enheter: IKodeverkSimpleValue[];
-  styringsenheter: IKodeverkSimpleValue[];
-  vedtaksenheter: IKodeverkSimpleValue[];
+  hjemler: IKodeverkValue[];
   klageenheter: IKlageEnhet[];
   sakstyper: IKodeverkSimpleValue<OppgaveType>[];
-  utfall: IKodeverkSimpleValue<Utfall>[];
   sources: IKodeverkSimpleValue[];
+  styringsenheter: IKodeverkSimpleValue[];
+  tema: IKodeverkValue[];
+  utfall: IKodeverkSimpleValue<Utfall>[];
+  vedtaksenheter: IKodeverkSimpleValue[];
+  ytelser: IYtelse[];
 }
