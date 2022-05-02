@@ -1,28 +1,26 @@
 import React, { useContext } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { DOMAIN, KABAL_BEHANDLINGER_BASE_PATH } from '../../../../redux-api/common';
+import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
 import { ViewDocumentButton } from '../styled-components/document';
 
 interface Props {
   id: string;
   title: string;
+  isSmartDokument: boolean;
 }
 
-export const OpenDocumentButton = ({ id, title }: Props) => {
-  const oppgaveId = useOppgaveId();
+export const OpenDocumentButton = ({ id, title, isSmartDokument }: Props) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-
-  const url = `${DOMAIN}${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/dokumenter/${id}/pdf`;
 
   const onClick = () =>
     setShownDocument({
       title,
-      url,
+      type: isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.FILE,
       documentId: id,
     });
 
-  const isActive = shownDocument?.url === url;
+  const isActive =
+    shownDocument !== null && shownDocument.type !== DocumentTypeEnum.ARCHIVED && shownDocument.documentId === id;
 
   return (
     <ViewDocumentButton isActive={isActive} tilknyttet={true} onClick={onClick}>

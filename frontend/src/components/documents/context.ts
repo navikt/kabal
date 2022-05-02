@@ -1,12 +1,12 @@
 import React from 'react';
-import { IShownDokument } from '../show-document/types';
+import { IShownDocument } from '../show-document/types';
 
-interface ShownDocumentType {
-  shownDocument: IShownDokument | null;
-  setShownDocument: (value: IShownDokument | null) => void;
+interface ShownDocumentContext {
+  shownDocument: IShownDocument | null;
+  setShownDocument: (value: IShownDocument | null) => void;
 }
 
-export const ShownDocumentContext = React.createContext<ShownDocumentType>({
+export const ShownDocumentContext = React.createContext<ShownDocumentContext>({
   shownDocument: null,
   setShownDocument: () => {},
 });

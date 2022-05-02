@@ -1,60 +1,68 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetSmartEditorQuery } from '../../redux-api/smart-editor-api';
-import { ShownDocumentContext } from '../documents/context';
 import { PDF } from './styled-components';
 
 interface Props {
   url: string;
+  version: number;
   name?: string;
+  onVersionLoaded: () => void;
 }
 
-export const NoFlickerReloadPdf = ({ url, name }: Props) => {
-  const [versions, setVersions] = useState<string[]>([]);
-  const [readyIndex, setReadyIndex] = useState<number>(0);
-  const { shownDocument } = useContext(ShownDocumentContext);
-  const oppgaveId = useOppgaveId();
-  const { data } = useGetSmartEditorQuery(
-    typeof shownDocument?.documentId === 'string' ? { oppgaveId, dokumentId: shownDocument.documentId } : skipToken
+export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Props) => {
+  const [versionMap, setVersionMap] = useState<Map<string, { versions: number[]; readyIndex: number }>>(
+    new Map([[url, { versions: [version], readyIndex: 0 }]])
   );
 
   useEffect(() => {
-    if (typeof data === 'undefined' || data === null) {
-      return;
-    }
+    const data = versionMap.get(url);
 
-    const { modified } = data;
-    const version = encodeURIComponent(modified);
-
-    if (!versions.includes(version)) {
-      setVersions([...versions, version]);
+    if (typeof data === 'undefined') {
+      setVersionMap(new Map([...versionMap, [url, { versions: [version], readyIndex: 0 }]]));
+    } else if (!data.versions.includes(version)) {
+      setVersionMap(new Map([...versionMap, [url, { ...data, versions: [...data.versions, version] }]]));
     }
-  }, [data, versions]);
+  }, [url, version, versionMap]);
 
   const onLoad = useCallback(
-    (index: number) => {
-      if (index > readyIndex) {
-        setTimeout(
-          () =>
-            requestAnimationFrame(() => {
-              if (index > readyIndex) {
-                setReadyIndex(index);
+    (index: number, loadedUrl: string) => {
+      setTimeout(
+        () =>
+          requestAnimationFrame(() => {
+            setVersionMap((map) => {
+              const data = map.get(loadedUrl);
+
+              if (typeof data === 'undefined') {
+                return map;
               }
-            }),
-          1000
-        );
-      }
+
+              const { readyIndex } = data;
+
+              if (index > readyIndex) {
+                return new Map([...map, [loadedUrl, { ...data, readyIndex: index }]]);
+              }
+
+              return map;
+            });
+            onVersionLoaded();
+          }),
+        3000
+      );
     },
-    [readyIndex]
+    [onVersionLoaded]
   );
+
+  const data = versionMap.get(url);
+
+  if (data === undefined) {
+    return null;
+  }
 
   return (
     <StyledSwitcher>
-      {versions.map((version, index) => {
-        const current = index === readyIndex;
-        const render = current || index > readyIndex;
+      {data.versions.map((v, index) => {
+        const current = index === data.readyIndex;
+        const render = current || index > data.readyIndex;
 
         if (!render) {
           return null;
@@ -62,13 +70,13 @@ export const NoFlickerReloadPdf = ({ url, name }: Props) => {
 
         return (
           <StyledPDF
-            key={version}
+            key={v}
             aria-hidden={!current}
-            data={`${url}?version=${version}#toolbar=0&view=fitH&zoom=page-width`}
+            data={`${url}?version=${v}#toolbar=0&view=fitH&zoom=page-width`}
             role="document"
             type="application/pdf"
             name={name}
-            onLoad={() => onLoad(index)}
+            onLoad={() => onLoad(index, url)}
             current={current}
           />
         );
@@ -83,7 +91,7 @@ const StyledPDF = styled(PDF)<{ current: boolean }>`
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: ${({ current }) => (current ? 1 : 0)};
+  z-index: ${({ current }) => (current ? 0 : -1)};
 `;
 
 const StyledSwitcher = styled.div`

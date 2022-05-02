@@ -4,7 +4,7 @@ import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '../../types/oppgavebehandling';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
-import { IShownDokument } from '../show-document/types';
+import { IShownDocument } from '../show-document/types';
 import { CollapsedDocuments } from './collapsed/collapsed';
 import { ShownDocumentContext } from './context';
 import { ExpandedDocuments } from './expanded/expanded';
@@ -37,7 +37,7 @@ interface DocumentsViewProps {
 
 const DocumentsView = ({ oppgave }: DocumentsViewProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(!oppgave.isAvsluttetAvSaksbehandler);
-  const [shownDocument, setShownDocument] = useState<IShownDokument | null>(null);
+  const [shownDocument, setShownDocument] = useState<IShownDocument | null>(null);
 
   const DocumentList = isExpanded ? ExpandedDocuments : CollapsedDocuments;
 
@@ -46,7 +46,7 @@ const DocumentsView = ({ oppgave }: DocumentsViewProps) => {
       <PanelContainer data-testid="documents-panel">
         <DocumentList toggleExpanded={() => setIsExpanded(!isExpanded)} />
       </PanelContainer>
-      <ShowDocument document={shownDocument} close={() => setShownDocument(null)} />
+      <ShowDocument close={() => setShownDocument(null)} />
     </ShownDocumentContext.Provider>
   );
 };

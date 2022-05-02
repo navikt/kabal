@@ -1,5 +1,5 @@
-import { Close, ExternalLink, ZoomIn, ZoomOut } from '@navikt/ds-icons';
-import styled, { css } from 'styled-components';
+import { Close, ExternalLink, Refresh, ZoomIn, ZoomOut } from '@navikt/ds-icons';
+import styled, { css, keyframes } from 'styled-components';
 
 interface BeholderProps {
   width: number;
@@ -9,7 +9,7 @@ export const Container = styled.section<BeholderProps>`
   display: flex;
   flex-direction: column;
   min-width: ${(props) => props.width}px;
-  margin: 0.25em 0.5em;
+  margin: 4px 8px;
   background: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
@@ -19,37 +19,42 @@ export const Container = styled.section<BeholderProps>`
   scroll-snap-align: start;
 `;
 
-export const StyledDocumentTitleContainer = styled.div`
-  height: 100%;
-  white-space: nowrap;
-`;
-export const StyledDocumentTitle = styled.div`
-  font-size: 1em;
+export const StyledDocumentTitle = styled.h1`
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: normal;
   margin: 0;
   padding: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 100%;
+  white-space: nowrap;
 `;
 
-export const StyledButtonContainer = styled.div`
-  height: 100%;
+export const StyledHeaderButton = styled.button`
   display: flex;
   align-items: center;
-`;
-
-export const StyledHeaderButton = styled.button<{ rightSide: boolean }>`
+  height: 100%;
   border: none;
   background-color: transparent;
   padding: 0;
-  margin-right: ${(props) => (!props.rightSide ? '15px' : '')};
+  margin: 0;
   cursor: pointer;
+
+  :disabled {
+    cursor: not-allowed;
+  }
 `;
 
 export const StyledHeaderLink = styled.a`
+  display: flex;
+  align-items: center;
+  height: 100%;
   border: none;
   background-color: transparent;
   padding: 0;
-  margin-right: 15px;
+  margin: 0;
   cursor: pointer;
 `;
 
@@ -62,25 +67,29 @@ export const Header = styled.div`
   background: #cde7d8;
   display: flex;
   position: relative;
-  padding: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  height: 32px;
   z-index: 1;
   justify-content: space-between;
 `;
 
-export const LeftSide = styled.div``;
-export const RightSide = styled.div``;
+export const HeaderSubContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
 
 const iconStyle = css`
   & {
     color: black;
-    cursor: pointer;
-    -webkit-transition: all 0.15s ease-in-out;
-    transition: all 0.15s ease-in-out;
-    width: 12px;
-    height: 12px;
+    transform: scale(1);
+    transition: transform 0.15s ease-in-out;
+    width: 16px;
+    height: 16px;
 
     :hover {
-      transform: scale(1.1);
+      transform: scale(1.25);
     }
   }
 `;
@@ -99,4 +108,23 @@ export const StyledCancelIcon = styled(Close)`
 
 export const StyledExtLinkIcon = styled(ExternalLink)`
   ${iconStyle}
+`;
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const StyledRefreshIcon = styled(Refresh)<{ $isLoading: boolean }>`
+  ${iconStyle}
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-name: ${(props) => (props.$isLoading ? rotate : 'none')};
+  animation-timing-function: linear;
+  animation-play-state: 'running';
 `;

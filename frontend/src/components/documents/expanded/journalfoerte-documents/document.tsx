@@ -1,9 +1,9 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { isoDateToPretty } from '../../../../domain/date';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFullTemaNameFromId } from '../../../../hooks/use-kodeverk-ids';
-import { DOMAIN, KABAL_OPPGAVEBEHANDLING_PATH } from '../../../../redux-api/common';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
+import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
 import { StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDate, StyledDocument, StyledDocumentTitle } from '../styled-components/document';
@@ -18,32 +18,32 @@ interface Props {
 }
 
 export const Document = ({ document, pageReferences, temaer }: Props) => {
-  const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema, valgt } = document;
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
 
-  const url = useMemo(
-    () =>
-      `${DOMAIN}${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`,
-    [oppgaveId, journalpostId, dokumentInfoId]
-  );
+  const { dokumentInfoId, journalpostId, tittel, registrert, harTilgangTilArkivvariant, tema, valgt } = document;
 
   const onClick = () =>
     setShownDocument({
-      title: tittel,
-      url,
-      documentId: null,
+      title: tittel ?? 'Ingen tittel',
+      dokumentInfoId,
+      journalpostId,
+      type: DocumentTypeEnum.ARCHIVED,
     });
 
-  const isActive = shownDocument?.url === url;
+  const isActive =
+    shownDocument !== null &&
+    shownDocument.type === DocumentTypeEnum.ARCHIVED &&
+    shownDocument.dokumentInfoId === dokumentInfoId &&
+    shownDocument.journalpostId === journalpostId;
 
   return (
     <>
       <StyledDocument
         data-testid="document-jounalfoert"
-        data-journalpostid={document.journalpostId}
-        data-dokumentinfoid={document.dokumentInfoId}
-        data-documentname={document.tittel}
+        data-journalpostid={journalpostId}
+        data-dokumentinfoid={dokumentInfoId}
+        data-documentname={tittel}
       >
         <StyledDocumentTitle>
           <StyledDocumentButton
