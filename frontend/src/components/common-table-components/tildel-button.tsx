@@ -60,13 +60,14 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
   }
 
   if (enheter.length === 1) {
+    const [enhet] = enheter;
+
+    if (enhet === undefined) {
+      return null;
+    }
+
     return (
-      <TildelEnhetButton
-        enhet={enheter[0]}
-        oppgaveId={klagebehandlingId}
-        isLoading={result.isLoading}
-        onTildel={onTildel}
-      >
+      <TildelEnhetButton enhet={enhet} oppgaveId={klagebehandlingId} isLoading={result.isLoading} onTildel={onTildel}>
         {getTildelText(result.isLoading)}
       </TildelEnhetButton>
     );

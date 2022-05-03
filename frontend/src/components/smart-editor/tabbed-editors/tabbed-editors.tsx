@@ -28,7 +28,8 @@ interface TabbedProps {
 }
 
 const Tabbed = ({ oppgaveId, documents }: TabbedProps) => {
-  const [documentId, setDocumentId] = useState<string | null>(documents[0]?.id);
+  const [firstDocument] = documents;
+  const [documentId, setDocumentId] = useState<string | null>(firstDocument?.id ?? null);
 
   const activeDocumentId = documents.some(({ id }) => id === documentId) ? documentId : null;
 

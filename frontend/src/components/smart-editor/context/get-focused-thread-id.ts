@@ -23,9 +23,11 @@ export const getFocusedThreadIdFromText = (editor: Editor | null, selection: Sel
     .filter((k) => k.startsWith(COMMENT_PREFIX))
     .map((k) => k.replace(COMMENT_PREFIX, ''));
 
-  if (threadIds.length === 0) {
+  const [threadId] = threadIds;
+
+  if (threadId === undefined) {
     return null;
   }
 
-  return threadIds[0];
+  return threadId;
 };

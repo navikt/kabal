@@ -16,7 +16,7 @@
     "noEmit": false,
     "jsx": "react",
     "sourceMap": true,
-    "noUncheckedIndexedAccess": false
+    "noUncheckedIndexedAccess": true
   },
   "outDir": "./dist",
   "include": ["./src"],

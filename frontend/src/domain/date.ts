@@ -26,8 +26,8 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
   return `${prettyDate} ${prettyTime}`;
 };
 
-export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null): prettyDateTime | null => {
-  if (isoDateTime === null || !isoDateTimeRegex.test(isoDateTime)) {
+export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null | undefined): prettyDateTime | null => {
+  if (isoDateTime === null || isoDateTime === undefined || !isoDateTimeRegex.test(isoDateTime)) {
     return null;
   }
 
@@ -36,16 +36,22 @@ export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null): pretty
   return isoDateToPretty(isoDate);
 };
 
-export const isoTimeToPretty = (isoTime: ISOTime | null): prettyTime | null => {
-  if (isoTime === null || !isoTimeRegex.test(isoTime)) {
+export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime | null => {
+  if (isoTime === null || isoTime === undefined || !isoTimeRegex.test(isoTime)) {
     return null;
   }
 
-  return isoTime.split('.')[0];
+  const [first] = isoTime.split('.');
+
+  if (first === undefined) {
+    return null;
+  }
+
+  return first;
 };
 
-export const isoDateToPretty = (isoDate: ISODate | null): prettyDate | null => {
-  if (isoDate === null || !isoDateRegex.test(isoDate)) {
+export const isoDateToPretty = (isoDate: ISODate | null | undefined): prettyDate | null => {
+  if (isoDate === null || isoDate === undefined || !isoDateRegex.test(isoDate)) {
     return null;
   }
 
@@ -54,8 +60,8 @@ export const isoDateToPretty = (isoDate: ISODate | null): prettyDate | null => {
 
 const prettyRegex = /^\d{2}.\d{2}.\d{4}$/;
 
-export const prettyDateToISO = (prettyDate: prettyDate | null): ISODate | null => {
-  if (prettyDate === null || !prettyRegex.test(prettyDate)) {
+export const prettyDateToISO = (prettyDate: prettyDate | null | undefined): ISODate | null => {
+  if (prettyDate === null || prettyDate === undefined || !prettyRegex.test(prettyDate)) {
     return null;
   }
 
@@ -63,15 +69,15 @@ export const prettyDateToISO = (prettyDate: prettyDate | null): ISODate | null =
 };
 
 export const formatLongDate = (year: number, month: number, day: number): string | null => {
-  if (month < 0 || month > 11) {
-    return null;
-  }
-
   if (day < 1 || day > 31) {
     return null;
   }
 
   const monthName = MONTHS[month];
+
+  if (monthName === undefined) {
+    return null;
+  }
 
   return `${day}. ${monthName} ${year}`;
 };

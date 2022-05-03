@@ -7,7 +7,13 @@ export const removeTab = (editor: Editor) => {
     reverse: true,
   });
 
-  const [[textNode, textPath]] = textNodeEntries;
+  const [firstEntry] = textNodeEntries;
+
+  if (firstEntry === undefined) {
+    return;
+  }
+
+  const [textNode, textPath] = firstEntry;
 
   if (Text.matches(textNode, { text: '\t' })) {
     const indexes = textNode.text

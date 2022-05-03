@@ -46,7 +46,13 @@ export const indentList = (editor: Editor) =>
         return acc.set(key, [...existingGroup, lic]);
       }, new Map())
       .forEach((group) => {
-        const [[, firstLicPath]] = group.sort(([, a], [, b]) => Path.compare(a, b));
+        const [firstEntry] = group.sort(([, a], [, b]) => Path.compare(a, b));
+
+        if (firstEntry === undefined) {
+          return;
+        }
+
+        const [, firstLicPath] = firstEntry;
         const firstLiPath = Path.parent(firstLicPath);
 
         if (!Path.hasPrevious(firstLiPath)) {
@@ -61,10 +67,16 @@ export const indentList = (editor: Editor) =>
 
         const parentListPath = Path.parent(firstLiPath);
 
+        const parentPath = firstLiPath[firstLiPath.length - 1];
+
+        if (parentPath === undefined) {
+          return;
+        }
+
         const at: Range = {
           focus: { path: firstLiPath, offset: 0 },
           anchor: {
-            path: [...parentListPath, firstLiPath[firstLiPath.length - 1] + group.length - 1],
+            path: [...parentListPath, parentPath + group.length - 1],
             offset: 0,
           },
         };

@@ -93,8 +93,10 @@ export interface ISyncEvent {
 const sseManagers: Record<string, ServerSentEventManager> = {};
 
 const getSSE = (url: string): ServerSentEventManager => {
-  if (Object.hasOwn(sseManagers, url)) {
-    return sseManagers[url];
+  const sseManager = sseManagers[url];
+
+  if (sseManager !== undefined) {
+    return sseManager;
   }
 
   const sse = new ServerSentEventManager(url);

@@ -53,7 +53,10 @@ export const CommentWrapper = <T extends CommentableVoidElementTypes>({
 
     if (!isFocused && element.threadIds.length !== 0) {
       const [threadId] = element.threadIds;
-      setFocusedThreadId(threadId);
+
+      if (threadId !== undefined) {
+        setFocusedThreadId(threadId);
+      }
     }
   };
 
