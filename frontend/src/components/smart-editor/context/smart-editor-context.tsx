@@ -57,7 +57,11 @@ export const SmartEditorContextComponent = ({ children, documentId }: Props) => 
 
             if (isVoid) {
               const [threadId] = selectedNode.threadIds;
-              setFocusedThreadId(threadId);
+
+              if (threadId !== undefined) {
+                setFocusedThreadId(threadId);
+              }
+
               setShowNewComment(false);
               setSelection(newSelection);
               return;

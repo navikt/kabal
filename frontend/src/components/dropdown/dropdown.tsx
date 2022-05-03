@@ -47,8 +47,14 @@ export const Dropdown = <T extends string>({
   };
 
   const onSelectFocused = () => {
-    const focusedOption = options[focused].value;
-    onChange(focusedOption, !selected.includes(focusedOption));
+    const focusedOption = options[focused];
+
+    if (focusedOption === undefined) {
+      return;
+    }
+
+    const { value } = focusedOption;
+    onChange(value, !selected.includes(value));
   };
 
   return (

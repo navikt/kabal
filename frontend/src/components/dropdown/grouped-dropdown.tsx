@@ -83,8 +83,14 @@ export const GroupedDropdown = ({
   };
 
   const onSelectFocused = () => {
-    const focusedOption = flattenedFilteredOptions[focused].value;
-    onChange(focusedOption, !selected.includes(focusedOption));
+    const focusedOption = flattenedFilteredOptions[focused];
+
+    if (focusedOption === undefined) {
+      return;
+    }
+
+    const { value } = focusedOption;
+    onChange(value, !selected.includes(value));
   };
 
   return (

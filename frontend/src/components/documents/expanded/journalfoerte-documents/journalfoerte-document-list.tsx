@@ -17,7 +17,7 @@ export const JournalfoerteDocumentList = () => {
 
   const { data: lastPage, isFetching } = useGetArkiverteDokumenterQuery({
     oppgaveId,
-    pageReference: pageReferences[pageReferences.length - 1],
+    pageReference: pageReferences[pageReferences.length - 1] ?? null,
     temaer: selectedTemaer,
   });
 

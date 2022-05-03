@@ -24,11 +24,17 @@ export const useKeyboard = (editor: Editor) => {
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (event.key === 'Backspace') {
         if (isBlockActive(editor, ListContentEnum.LIST_ITEM_CONTAINER) && editor.selection?.focus.offset === 0) {
-          const [[, path]] = Editor.nodes<ListItemContainerElementType>(editor, {
+          const [firstEntry] = Editor.nodes<ListItemContainerElementType>(editor, {
             mode: 'lowest',
             reverse: true,
             match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
           });
+
+          if (firstEntry === undefined) {
+            return;
+          }
+
+          const [, path] = firstEntry;
 
           const start = Editor.start(editor, path);
 
@@ -53,11 +59,17 @@ export const useKeyboard = (editor: Editor) => {
           getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
           getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
         ) {
-          const [[element, path]] = Editor.nodes<ListItemContainerElementType>(editor, {
+          const [firstEntry] = Editor.nodes<ListItemContainerElementType>(editor, {
             mode: 'lowest',
             reverse: true,
             match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
           });
+
+          if (firstEntry === undefined) {
+            return;
+          }
+
+          const [element, path] = firstEntry;
 
           if (Editor.isEmpty(editor, element)) {
             Editor.withoutNormalizing(editor, () => {

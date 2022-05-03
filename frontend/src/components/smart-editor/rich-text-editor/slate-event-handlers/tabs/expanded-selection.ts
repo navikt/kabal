@@ -23,6 +23,10 @@ export const removeTabs = (editor: Editor) => {
 
           const [previous] = acc;
 
+          if (previous === undefined) {
+            return acc;
+          }
+
           return [
             {
               startOffset: previous.startOffset + (previous.text.length + 1),
@@ -64,6 +68,10 @@ export const addTabs = (editor: Editor) => {
           }
 
           const [previous] = acc;
+
+          if (previous === undefined) {
+            return acc;
+          }
 
           return [
             {

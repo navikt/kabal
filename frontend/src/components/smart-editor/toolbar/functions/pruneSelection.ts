@@ -9,29 +9,42 @@ export const pruneSelection = (editor: Editor): Selection => {
     at: editor.selection,
     match: Text.isText,
   });
-  const nodes = Array.from(nodeGenerator);
+  const nodeEntries = Array.from(nodeGenerator);
 
-  if (nodes.length > 1) {
+  if (nodeEntries.length > 1) {
+    const [firstEntry] = nodeEntries;
+
+    if (firstEntry === undefined) {
+      return editor.selection;
+    }
+
+    const [firstNode] = firstEntry;
+
     let [focus, anchor] = Range.edges(editor.selection);
-    const [[firstNode]] = nodes;
 
     if (firstNode.text.length === focus.offset) {
-      const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        1: [_, secondPath],
-      } = nodes;
-      focus = {
-        offset: 0,
-        path: secondPath,
-      };
+      const [, secondEntry] = nodeEntries;
+
+      if (secondEntry !== undefined) {
+        const [, secondPath] = secondEntry;
+
+        focus = {
+          offset: 0,
+          path: secondPath,
+        };
+      }
     }
 
     if (anchor.offset === 0) {
-      const [secondLastNode, secondLastPath] = nodes[nodes.length - 2];
-      anchor = {
-        offset: secondLastNode.text.length,
-        path: secondLastPath,
-      };
+      const secondLastEntry = nodeEntries[nodeEntries.length - 2];
+
+      if (secondLastEntry !== undefined) {
+        const [secondLastNode, secondLastPath] = secondLastEntry;
+        anchor = {
+          offset: secondLastNode.text.length,
+          path: secondLastPath,
+        };
+      }
     }
 
     return { focus, anchor };

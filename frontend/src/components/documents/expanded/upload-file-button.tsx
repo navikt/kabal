@@ -45,6 +45,10 @@ export const UploadFileButton = () => {
 
       const [file] = files;
 
+      if (file === undefined) {
+        return setError('Ingen fil valgt.');
+      }
+
       if (file.size > MAX_SIZE_BYTES) {
         return setError(
           `Filstørrelsen (${(

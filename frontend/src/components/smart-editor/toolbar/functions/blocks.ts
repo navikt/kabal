@@ -121,7 +121,13 @@ export const toggleBlock = (editor: Editor, block: ElementTypes) => {
     return;
   }
 
-  const [[, path]] = matchesArray;
+  const [first] = matchesArray;
+
+  if (first === undefined) {
+    return;
+  }
+
+  const [, path] = first;
 
   Editor.withoutNormalizing(editor, () => {
     if (path.length !== 1) {
