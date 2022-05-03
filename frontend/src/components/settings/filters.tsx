@@ -122,14 +122,14 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
   return (
     <StyledFilterContainer>
       <ButtonContainer>
-        <Button variant="secondary" size="small" onClick={removeAll}>
+        <Button variant="secondary" size="small" onClick={removeAll} data-testid={`${settingKey}-remove-all`}>
           <Delete /> Fjern alle
         </Button>
-        <Button variant="secondary" size="small" onClick={selectAll}>
+        <Button variant="secondary" size="small" onClick={selectAll} data-testid={`${settingKey}-select-all`}>
           <SuccessStroke /> Velg alle
         </Button>
       </ButtonContainer>
-      <StyledFieldset data-test-id={`${settingKey}-settings`} legend={legend}>
+      <StyledFieldset data-testid={`${settingKey}-settings`} legend={legend}>
         {options.map(({ id, navn }) => (
           <Switch
             key={id}
@@ -137,6 +137,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
             size="medium"
             position="left"
             checked={selected.includes(id)}
+            data-type={settingKey}
+            data-id={id}
+            data-testid={`${settingKey}-${id}`}
             onChange={(event) => {
               if (event.target.checked === true) {
                 onChange({ ...settings, [settingKey]: [...selected, id] });
