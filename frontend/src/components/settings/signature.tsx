@@ -72,7 +72,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   const [value, setDefaultValue] = useState<string>(savedValue ?? '');
 
   useEffect(() => {
-    if (value === savedValue || (value === '' && savedValue === null)) {
+    if (value === (savedValue ?? '')) {
       return;
     }
 

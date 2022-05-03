@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useGetBrukerQuery, useGetSettingsQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetMineLedigeOppgaverQuery,
@@ -23,19 +23,26 @@ export const OppgaveTable = (): JSX.Element => {
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
   const { data: bruker } = useGetBrukerQuery();
+  const { data: settingsData } = useGetSettingsQuery();
 
   const { page } = useParams();
   const parsedPage = parsePage(page);
+
   const currentPage = parsedPage === null ? 1 : parsedPage;
   const from = (currentPage - 1) * PAGE_SIZE;
 
-  const ytelser = filters.ytelser.length === 0 ? [] : filters.ytelser;
-  const typer = filters.types.length === 0 ? [] : filters.types;
-  const hjemler = filters.hjemler.length === 0 ? [] : filters.hjemler;
+  const settingsTyper = settingsData?.typer ?? [];
+  const settingsYtelser = settingsData?.ytelser ?? [];
+  const settingsHjemler = settingsData?.hjemler ?? [];
+
+  const typer = filters.types.length === 0 ? settingsTyper : filters.types;
+  const ytelser = filters.ytelser.length === 0 ? settingsYtelser : filters.ytelser;
+  const hjemler = filters.hjemler.length === 0 ? settingsHjemler : filters.hjemler;
+
   const [sortering, rekkefoelge] = filters.sorting;
 
   const queryParams: typeof skipToken | MineLedigeOppgaverParams =
-    typeof bruker === 'undefined'
+    typeof bruker === 'undefined' || typeof settingsData === 'undefined'
       ? skipToken
       : {
           start: from,
@@ -52,15 +59,11 @@ export const OppgaveTable = (): JSX.Element => {
     data: oppgaver,
     refetch,
     isFetching,
-  } = useGetMineLedigeOppgaverQuery(queryParams, {
-    pollingInterval: 30 * 1000,
-  });
+  } = useGetMineLedigeOppgaverQuery(queryParams, { pollingInterval: 30 * 1000 });
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
     queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
-    {
-      pollingInterval: 300 * 1000,
-    }
+    { pollingInterval: 300 * 1000 }
   );
 
   useEffect(() => {

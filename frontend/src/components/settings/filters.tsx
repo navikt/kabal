@@ -1,10 +1,11 @@
 import { Delete, SuccessStroke } from '@navikt/ds-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
+import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { ISettings, useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
-import { IKodeverkSimpleValue, IKodeverkValue } from '../../types/kodeverk';
+import { IKodeverkSimpleValue } from '../../types/kodeverk';
 import {
   ButtonContainer,
   SectionHeader,
@@ -20,35 +21,10 @@ const EMPTY_SETTINGS: ISettings = {
   hjemler: [],
 };
 
-const useHjemler = () => {
-  const { data } = useGetSettingsQuery();
-  const ytelser = useAvailableYtelser();
-
-  const availableHjemler = useMemo(
-    () =>
-      ytelser
-        .filter((ytelse) => data?.ytelser.includes(ytelse.id))
-        .flatMap(({ innsendingshjemler }) => innsendingshjemler)
-        .reduce<IKodeverkValue<string>[]>((acc, item) => {
-          const exists = acc.some(({ id }) => id === item.id);
-
-          if (!exists) {
-            acc.push(item);
-          }
-
-          return acc;
-        }, [])
-        .sort(({ navn: a }, { navn: b }) => a.localeCompare(b)),
-    [data?.ytelser, ytelser]
-  );
-
-  return availableHjemler;
-};
-
 export const Filters = () => {
   const { data: kodeverk } = useGetKodeverkQuery();
   const { data: settingsData } = useGetSettingsQuery();
-  const hjemler = useHjemler();
+  const hjemler = useAvailableHjemler();
   const ytelser = useAvailableYtelser();
 
   const ytelserOptions = useMemo(
