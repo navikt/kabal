@@ -1,4 +1,4 @@
-const PAGES: { [key: number]: number[] } = {
+const PAGES = {
   0: [1],
   1: [1],
   2: [1, 2],

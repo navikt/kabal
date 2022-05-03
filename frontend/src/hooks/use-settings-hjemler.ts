@@ -11,11 +11,5 @@ export const useSettingsHjemler = (): IKodeverkValue[] => {
     return [];
   }
 
-  const settingsHjemler = data.hjemler;
-
-  if (settingsHjemler.length === 0) {
-    return hjemler;
-  }
-
-  return settingsHjemler.map((hjemmelId) => hjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
+  return data.hjemler.map((hjemmelId) => hjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
 };

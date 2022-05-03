@@ -11,11 +11,5 @@ export const useSettingsTypes = (): IKodeverkSimpleValue<OppgaveType>[] => {
     return [];
   }
 
-  const settingsTypes = data.typer;
-
-  if (settingsTypes.length === 0) {
-    return types;
-  }
-
-  return settingsTypes.map((typeId) => types.find(({ id }) => id === typeId)).filter(isNotUndefined);
+  return data.typer.map((typeId) => types.find(({ id }) => id === typeId)).filter(isNotUndefined);
 };

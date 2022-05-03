@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import qs from 'qs';
+import { queryStringify } from '../functions/query-string';
 import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
@@ -58,10 +59,7 @@ export const oppgaverApi = createApi({
     }),
     getMineLedigeOppgaver: builder.query<ApiResponse, MineLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/ansatte/${navIdent}/oppgaver/ledige?${query}`;
       },
     }),

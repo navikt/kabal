@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react",
-    "sourceMap": true
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": false
   },
   "outDir": "./dist",
   "include": ["./src"],

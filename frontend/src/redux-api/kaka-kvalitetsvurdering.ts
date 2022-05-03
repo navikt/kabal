@@ -27,7 +27,13 @@ export const kvalitetsvurderingApi = createApi({
       UpdateBoolean | UpdateText | UpdateRadio | UpdateRadioExtended
     >({
       query: ({ id, ...body }) => {
-        const [[key, value], ...rest] = Object.entries(body);
+        const [first, ...rest]: [string, unknown][] = Object.entries(body);
+
+        if (first === undefined) {
+          throw new Error('No keys in body');
+        }
+
+        const [key, value] = first;
 
         if (rest.length !== 0) {
           throw new Error('Only one key allowed');
@@ -37,7 +43,6 @@ export const kvalitetsvurderingApi = createApi({
           url: `/${id}/${key.toLowerCase()}`,
           method: 'PUT',
           body: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value,
           },
         };

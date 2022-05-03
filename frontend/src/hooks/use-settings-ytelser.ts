@@ -11,11 +11,5 @@ export const useSettingsYtelser = (): IKodeverkSimpleValue[] => {
     return [];
   }
 
-  const settingsYtelser = data.ytelser;
-
-  if (settingsYtelser.length === 0) {
-    return ytelser;
-  }
-
-  return settingsYtelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
+  return data.ytelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
 };
