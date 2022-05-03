@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import qs from 'qs';
+import { queryStringify } from '../functions/query-string';
 import { IArkiverteDocumentsResponse } from '../types/arkiverte-documents';
 import { MedunderskriverFlyt } from '../types/kodeverk';
 import { IOppgavebehandling } from '../types/oppgavebehandling';
@@ -77,17 +77,11 @@ export const oppgavebehandlingApi = createApi({
     }),
     getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, IGetDokumenterParams>({
       query: ({ oppgaveId, pageReference, temaer }) => {
-        const query = qs.stringify(
-          {
-            antall: 10,
-            forrigeSide: pageReference,
-            temaer,
-          },
-          {
-            skipNulls: true,
-            arrayFormat: 'comma',
-          }
-        );
+        const query = queryStringify({
+          antall: 10,
+          forrigeSide: pageReference,
+          temaer,
+        });
         return `/${oppgaveId}/arkivertedokumenter?${query}`;
       },
       providesTags: ['dokumenter'],

@@ -1,5 +1,4 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import qs from 'qs';
 import { queryStringify } from '../functions/query-string';
 import {
   ApiResponse,
@@ -30,29 +29,20 @@ export const oppgaverApi = createApi({
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/ansatte/${navIdent}/oppgaver/ferdigstilte?${query}`;
       },
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/ansatte/${navIdent}/oppgaver/uferdige?${query}`;
       },
       providesTags: ['tildelte-oppgaver'],
     }),
     getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/ansatte/${navIdent}/oppgaver/paavent?${query}`;
       },
       providesTags: ['ventende-oppgaver'],
@@ -65,38 +55,26 @@ export const oppgaverApi = createApi({
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte?${query}`;
       },
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/enhet/${enhetId}/oppgaver/tildelte/uferdige?${query}`;
       },
       providesTags: ['enhetens-tildelte-oppgaver'],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/enhet/${enhetId}/oppgaver/tildelte/paavent?${query}`;
       },
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
-        const query = qs.stringify(queryParams, {
-          arrayFormat: 'comma',
-          skipNulls: true,
-        });
+        const query = queryStringify(queryParams);
         return `/ansatte/${navIdent}/antalloppgavermedutgaattefrister?${query}`;
       },
       providesTags: ['ledige-medutgaattefrister'],
