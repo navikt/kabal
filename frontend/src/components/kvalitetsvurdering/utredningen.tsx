@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { Radio, RadioGruppe } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../hooks/use-can-edit';
@@ -19,7 +19,7 @@ export const Utredningen = () => {
   const header = useFieldName('utredningenRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const { id, utredningenRadioValg } = kvalitetsvurdering;

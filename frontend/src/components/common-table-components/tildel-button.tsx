@@ -1,16 +1,10 @@
+import { Button } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/ansatte';
 import { IEnhet, useGetBrukerQuery } from '../../redux-api/bruker';
-import {
-  Dropdown,
-  DropdownContainer,
-  DropdownOption,
-  StyledButton,
-  SuccessStatus,
-  TildelDropdownButton,
-} from './styled-components';
+import { Dropdown, DropdownContainer, DropdownOption, SuccessStatus, TildelDropdownButton } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -53,9 +47,9 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
 
   if (isUserLoading) {
     return (
-      <StyledButton disabled autoDisableVedSpinner spinner>
+      <Button variant="secondary" size="medium" type="button" disabled loading>
         Tildel meg
-      </StyledButton>
+      </Button>
     );
   }
 
@@ -138,17 +132,19 @@ interface TildelEnhetButtonProps {
 }
 
 const TildelEnhetButton = ({ oppgaveId, enhet, children, isLoading, onTildel }: TildelEnhetButtonProps) => (
-  <StyledButton
+  <Button
+    variant="secondary"
+    size="medium"
+    type="button"
     onClick={() => onTildel(enhet.id)}
-    spinner={isLoading}
     disabled={isLoading}
-    autoDisableVedSpinner
+    loading={isLoading}
     data-testid="klagebehandling-tildel-button"
     data-klagebehandlingid={oppgaveId}
     title={`Tildel meg under ${enhet.navn}.`}
   >
     {children}
-  </StyledButton>
+  </Button>
 );
 
 const TildelEnhetDropdownButton = ({ oppgaveId, enhet, children, isLoading, onTildel }: TildelEnhetButtonProps) => (

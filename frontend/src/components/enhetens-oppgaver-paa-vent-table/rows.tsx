@@ -1,6 +1,6 @@
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
-import { Loader } from '../loader/loader';
 import { Row } from './row';
 
 interface OppgaveRaderProps {
@@ -26,7 +26,7 @@ export const OppgaveRader = ({ oppgaver, columnCount, isLoading, isError }: Oppg
       <tbody data-testid="enhetens-oppgaver-paa-vent-table-loading">
         <tr>
           <td colSpan={columnCount}>
-            <Loader>Laster oppgaver...</Loader>
+            <Loader size="xlarge" title="Laster oppgaver..." />
           </td>
         </tr>
       </tbody>

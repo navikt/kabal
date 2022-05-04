@@ -1,5 +1,5 @@
 import { AutomaticSystem, Success } from '@navikt/ds-icons';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { VersionChecker } from './version-checker';
@@ -24,8 +24,8 @@ export const VersionCheckerStatus = () => {
     <UpdateButton
       title="Det finnes en ny versjon av KABAL. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
       onClick={() => window.location.reload()}
-      kompakt
-      mini
+      size="small"
+      data-testid="update-kabal-button"
     >
       <AutomaticSystem /> Oppdater til siste versjon
     </UpdateButton>
@@ -63,6 +63,6 @@ const IconText = styled.span`
   color: #fff;
 `;
 
-const UpdateButton = styled(Knapp)`
+const UpdateButton = styled(Button)`
   ${iconText}
 `;

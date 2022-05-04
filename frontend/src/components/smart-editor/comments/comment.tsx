@@ -29,17 +29,22 @@ const StyledComment = styled.article`
   gap: 4px;
 `;
 
-const StyledName = styled.p`
+const StyledName = styled.span`
+  display: block;
+  width: 100%;
+  font-size: 16px;
   font-weight: bold;
-  margin: 0;
 `;
 
 const StyledDate = styled.time`
   display: block;
   width: 100%;
+  font-size: 14px;
+  color: #828282;
 `;
 
 const StyledText = styled.p`
+  font-size: 16px;
   margin: 0;
   white-space: normal;
   word-wrap: break-word;

@@ -98,10 +98,22 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
   return (
     <StyledFilterContainer>
       <ButtonContainer>
-        <Button variant="secondary" size="small" onClick={removeAll} data-testid={`${settingKey}-remove-all`}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="small"
+          onClick={removeAll}
+          data-testid={`${settingKey}-remove-all`}
+        >
           <Delete /> Fjern alle
         </Button>
-        <Button variant="secondary" size="small" onClick={selectAll} data-testid={`${settingKey}-select-all`}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="small"
+          onClick={selectAll}
+          data-testid={`${settingKey}-select-all`}
+        >
           <SuccessStroke /> Velg alle
         </Button>
       </ButtonContainer>

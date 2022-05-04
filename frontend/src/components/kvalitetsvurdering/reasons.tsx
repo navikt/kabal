@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { Fragment } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -29,7 +29,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
   const canEdit = useCanEdit();
 
   if (isLoading) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (!show || typeof kvalitetsvurdering === 'undefined') {

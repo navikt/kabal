@@ -1,4 +1,5 @@
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Close, SuccessStroke } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
@@ -43,18 +44,28 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
     <StyledFinishOppgaveBox ref={setRef}>
       <OppgavebehandlingText />
       <StyledFinishOppgaveButtons>
-        <Hovedknapp
-          mini
+        <Button
+          variant="primary"
+          size="small"
+          type="button"
           onClick={finish}
-          spinner={hasBeenFinished || loader.isLoading}
+          loading={hasBeenFinished || loader.isLoading}
           disabled={hasBeenFinished || loader.isLoading}
           data-testid="confirm-finish-klagebehandling-button"
         >
-          Fullfør
-        </Hovedknapp>
-        <Knapp mini onClick={cancel} data-testid="cancel-finish-klagebehandling-button">
-          Avbryt
-        </Knapp>
+          <SuccessStroke />
+          <span>Fullfør</span>
+        </Button>
+        <Button
+          variant="secondary"
+          type="button"
+          size="small"
+          onClick={cancel}
+          data-testid="cancel-finish-klagebehandling-button"
+        >
+          <Close />
+          <span>Avbryt</span>
+        </Button>
       </StyledFinishOppgaveButtons>
     </StyledFinishOppgaveBox>
   );

@@ -32,11 +32,9 @@ export const StyledPopup = styled.div`
 export const StyledButton = styled.button`
   background: transparent;
   border: 0;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
-`;
-
-export const StyledStatusText = styled.span`
-  margin-right: 1em;
 `;
 
 export const StyledIconButton = styled(StyledButton)`

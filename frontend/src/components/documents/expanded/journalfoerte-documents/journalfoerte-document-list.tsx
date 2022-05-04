@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '../../../../hooks/use-all-temaer';
@@ -70,5 +70,5 @@ const DocumentsSpinner = ({ hasDocuments, pageCount }: DocumentsSpinnerProps): J
     return null;
   }
 
-  return <NavFrontendSpinner />;
+  return <Loader size="xlarge" />;
 };

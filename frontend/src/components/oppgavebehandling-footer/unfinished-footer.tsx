@@ -1,4 +1,5 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { SuccessStroke } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
@@ -40,19 +41,20 @@ export const UnfinishedFooter = () => {
   return (
     <Wrapper>
       <StyledButtons>
-        <Hovedknapp
-          mini
+        <Button
+          type="button"
+          size="small"
           disabled={!canEdit || isFullfoert || showConfirmFinishDisplay}
           onClick={() => {
             validate(oppgaveId);
             setConfirmFinish(true);
           }}
-          spinner={isFetching}
-          autoDisableVedSpinner
           data-testid="complete-button"
+          loading={isFetching}
         >
-          Fullfør
-        </Hovedknapp>
+          <SuccessStroke />
+          <span>Fullfør</span>
+        </Button>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />
         <BackLink />

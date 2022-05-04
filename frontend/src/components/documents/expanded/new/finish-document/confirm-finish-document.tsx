@@ -1,5 +1,5 @@
-import { Applicant, CoApplicant, People } from '@navikt/ds-icons';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Applicant, Close, CoApplicant, FileFolder, People, Send } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useOppgave } from '../../../../../hooks/oppgavebehandling/use-oppgave';
@@ -44,18 +44,28 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
       <StyledHeader>Arkiver dokument</StyledHeader>
       <StyledMainText>{`Arkiver notatet "${documentTitle}".`}</StyledMainText>
       <StyledButtons>
-        <Hovedknapp
-          mini
+        <Button
+          type="button"
+          size="small"
+          variant="primary"
           onClick={() => finish({ dokumentId, oppgaveId })}
-          spinner={isFinishing}
-          autoDisableVedSpinner
+          loading={isFinishing}
           data-testid="document-finish-confirm"
         >
-          Arkiver
-        </Hovedknapp>
-        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isFinishing}>
-          Avbryt
-        </Knapp>
+          <FileFolder />
+          <span>Arkiver</span>
+        </Button>
+        <Button
+          type="button"
+          size="small"
+          variant="secondary"
+          onClick={close}
+          data-testid="document-finish-cancel"
+          disabled={isFinishing}
+        >
+          <Close />
+          <span>Avbryt</span>
+        </Button>
       </StyledButtons>
     </StyledFinishDocument>
   );
@@ -81,18 +91,28 @@ const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
         ))}
       </StyledBrevmottakerList>
       <StyledButtons>
-        <Hovedknapp
-          mini
+        <Button
+          type="button"
+          size="small"
+          variant="primary"
           onClick={() => finish({ dokumentId, oppgaveId: data?.id })}
-          spinner={isFinishing}
-          autoDisableVedSpinner
+          loading={isFinishing}
           data-testid="document-finish-confirm"
         >
-          Send ut
-        </Hovedknapp>
-        <Knapp mini onClick={close} data-testid="document-finish-cancel" disabled={isFinishing}>
-          Avbryt
-        </Knapp>
+          <Send />
+          <span>Send ut</span>
+        </Button>
+        <Button
+          type="button"
+          size="small"
+          variant="secondary"
+          onClick={close}
+          data-testid="document-finish-cancel"
+          disabled={isFinishing}
+        >
+          <Close />
+          <span>Avbryt</span>
+        </Button>
       </StyledButtons>
     </StyledFinishDocument>
   );

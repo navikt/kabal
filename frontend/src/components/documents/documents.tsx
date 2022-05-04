@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '../../types/oppgavebehandling';
@@ -23,7 +23,7 @@ export const Documents = ({ shown }: Props) => {
   if (isLoading || typeof data === 'undefined') {
     return (
       <PanelContainer data-testid="documents-panel">
-        <NavFrontendSpinner />
+        <Loader size="xlarge" />
       </PanelContainer>
     );
   }

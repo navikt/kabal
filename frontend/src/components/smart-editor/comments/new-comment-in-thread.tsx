@@ -1,13 +1,12 @@
-import { Knapp } from 'nav-frontend-knapper';
-import { Textarea } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Close, SuccessStroke } from '@navikt/ds-icons';
+import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { StyledCommentButton, StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
+import { StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
 
 interface NewCommentInThreadProps {
   threadId: string;
@@ -26,7 +25,7 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
   const [text, setText] = useState<string>('');
 
   if (typeof bruker === 'undefined' || brukerIsLoading || typeof signature === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const onSubmit = () => {
@@ -49,9 +48,13 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
   };
 
   const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-    if (!event.shiftKey && event.key === 'Enter') {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault();
       onSubmit();
+    }
+
+    if (event.key === 'Escape') {
+      close();
     }
   };
 
@@ -60,9 +63,12 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
       <StyledTextAreaContainer isFocused={isFocused}>
         <Textarea
           value={text}
+          size="small"
           onChange={(e) => setText(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder="Svar"
+          label="Nytt svar"
+          minRows={3}
           maxLength={0}
           onFocus={onFocus}
           disabled={isLoading}
@@ -88,19 +94,21 @@ const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
 
   return (
     <StyledCommentButtonContainer>
-      <StyledCommentButton
-        mini
-        kompakt
+      <Button
+        type="button"
+        size="small"
+        variant="primary"
         onClick={onSubmit}
         disabled={text.length <= 0}
-        spinner={isLoading}
-        autoDisableVedSpinner
+        loading={isLoading}
       >
-        Legg til
-      </StyledCommentButton>
-      <Knapp mini kompakt onClick={close} disabled={isLoading}>
-        Avbryt
-      </Knapp>
+        <SuccessStroke />
+        <span>Legg til</span>
+      </Button>
+      <Button type="button" size="small" variant="secondary" onClick={close} disabled={isLoading}>
+        <Close />
+        <span>Avbryt</span>
+      </Button>
     </StyledCommentButtonContainer>
   );
 };

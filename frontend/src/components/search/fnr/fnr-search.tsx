@@ -1,6 +1,6 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver';
 import { Result } from './result';
@@ -22,7 +22,7 @@ export const FnrSearch = ({ queryString }: Props) => {
   }
 
   if (isFetching) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (typeof data === 'undefined') {

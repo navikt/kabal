@@ -23,6 +23,9 @@ export const TabsContainer = styled.div`
 `;
 
 export const TabButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   background-color: transparent;
   border: none;
   color: rgb(112, 112, 112);

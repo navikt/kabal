@@ -1,4 +1,5 @@
-import { Fareknapp } from 'nav-frontend-knapper';
+import { Delete } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../hooks/use-can-edit';
@@ -77,7 +78,12 @@ const DeleteButton = ({ oppgaveId, documentId }: DeleteButtonProps) => {
     return null;
   }
 
-  return <Fareknapp onClick={onClick}>Slett dokument</Fareknapp>;
+  return (
+    <Button type="button" variant="danger" size="small" onClick={onClick}>
+      <Delete />
+      <span>Slett dokument</span>
+    </Button>
+  );
 };
 
 const ErrorContainer = styled.section`

@@ -1,4 +1,4 @@
-import { NewTab } from '@navikt/ds-icons';
+import { NewTab, Notes } from '@navikt/ds-icons';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartDocuments } from '../../../hooks/use-smart-documents';
@@ -57,8 +57,8 @@ const Tabs = ({ documents, activeTab, setActiveTab }: TabsProps) => {
     const Button = id === activeTab ? ActiveTabButton : TabButton;
 
     return (
-      <Button key={id} onClick={() => setActiveTab(id)}>
-        {tittel}
+      <Button type="button" key={id} onClick={() => setActiveTab(id)}>
+        <Notes /> {tittel}
       </Button>
     );
   });

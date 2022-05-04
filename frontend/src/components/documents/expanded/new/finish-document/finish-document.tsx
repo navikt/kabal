@@ -1,5 +1,5 @@
 import { Send } from '@navikt/ds-icons';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../../hooks/use-can-edit';
@@ -30,7 +30,7 @@ export const FinishDocument = ({ document }: Props) => {
 
   return (
     <StyledSendDocument ref={ref}>
-      <StyledSendButton onClick={toggleOpen} kompakt data-testid="document-finish-button">
+      <StyledSendButton onClick={toggleOpen} size="small" variant="primary" data-testid="document-finish-button">
         <Send /> {buttonText}
       </StyledSendButton>
       <ConfirmFinishDocument isOpen={isOpen} close={() => setIsOpen(false)} document={document} />
@@ -38,7 +38,7 @@ export const FinishDocument = ({ document }: Props) => {
   );
 };
 
-const StyledSendButton = styled(Hovedknapp)`
+const StyledSendButton = styled(Button)`
   display: flex;
   gap: 8px;
   width: 100%;

@@ -1,5 +1,5 @@
 import { Upload, Warning } from '@navikt/ds-icons';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -78,10 +78,12 @@ export const UploadFileButton = () => {
       <ErrorInfo error={error} />
 
       <StyledUploadButton
+        type="button"
+        variant="secondary"
+        size="small"
         onClick={handleClick}
         disabled={isLoading}
-        mini
-        spinner={isLoading}
+        loading={isLoading}
         data-testid="upload-document-button"
       >
         <Upload /> Last opp dokument
@@ -133,7 +135,7 @@ const ErrorInfo = ({ error }: ErrorInfoProps) => {
   );
 };
 
-const StyledUploadButton = styled(Knapp)`
+const StyledUploadButton = styled(Button)`
   display: flex;
   flex-direction: row;
   gap: 8px;

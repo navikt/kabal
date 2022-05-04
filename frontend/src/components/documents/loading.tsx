@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ export const Loading = ({ loading }: LoadingProps) => {
 
   return (
     <SpinnerBackground>
-      <NavFrontendSpinner type="XL" />
+      <Loader size="xlarge" />
     </SpinnerBackground>
   );
 };

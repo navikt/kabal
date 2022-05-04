@@ -1,5 +1,6 @@
+import { SuccessStroke } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
@@ -16,9 +17,10 @@ export const FinishedAnkeFooter = () => {
   return (
     <StyledFinishedFooter>
       <StyledButtons>
-        <Hovedknapp mini disabled data-testid="complete-button">
-          Fullfør
-        </Hovedknapp>
+        <Button variant="primary" type="button" size="small" disabled data-testid="complete-button">
+          <SuccessStroke />
+          <span>Fullfør</span>
+        </Button>
         <BackLink />
       </StyledButtons>
       <Alertstripe type="suksess" form="inline">
