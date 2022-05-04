@@ -1,13 +1,16 @@
 import { useMemo } from 'react';
-import { IKodeverkValue } from '../types/kodeverk';
-import { useAvailableYtelser } from './use-available-ytelser';
+import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
+import { useGetSettingsQuery } from '../../redux-api/bruker';
+import { IKodeverkValue } from '../../types/kodeverk';
 
-export const useAvailableHjemler = () => {
+export const useHjemlerFromSettingsYtelser = () => {
+  const { data } = useGetSettingsQuery();
   const ytelser = useAvailableYtelser();
 
   const availableHjemler = useMemo(
     () =>
       ytelser
+        .filter((ytelse) => data?.ytelser.includes(ytelse.id))
         .flatMap(({ innsendingshjemler }) => innsendingshjemler)
         .reduce<IKodeverkValue<string>[]>((acc, item) => {
           const exists = acc.some(({ id }) => id === item.id);
@@ -19,7 +22,7 @@ export const useAvailableHjemler = () => {
           return acc;
         }, [])
         .sort(({ navn: a }, { navn: b }) => a.localeCompare(b)),
-    [ytelser]
+    [data?.ytelser, ytelser]
   );
 
   return availableHjemler;

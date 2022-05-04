@@ -1,7 +1,6 @@
 import { Delete, SuccessStroke } from '@navikt/ds-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { ISettings, useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
@@ -14,6 +13,7 @@ import {
   StyledFilterContainer,
   StyledFilters,
 } from './styled-components';
+import { useHjemlerFromSettingsYtelser } from './use-hjemler-from-settings-ytelser';
 
 const EMPTY_SETTINGS: ISettings = {
   typer: [],
@@ -24,7 +24,7 @@ const EMPTY_SETTINGS: ISettings = {
 export const Filters = () => {
   const { data: kodeverk } = useGetKodeverkQuery();
   const { data: settingsData } = useGetSettingsQuery();
-  const hjemler = useAvailableHjemler();
+  const hjemler = useHjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
 
   const ytelserOptions = useMemo(
