@@ -40,6 +40,8 @@ export const Klageforberedelsen = () => {
       id: 'sakensDokumenter',
       label: 'Sakens dokumenter',
       checked: kvalitetsvurdering.sakensDokumenter,
+      helpText:
+        'Dokumentene er ikke komplette; f.eks. mangler fysisk saksmappe, feil eller mangelfull journalføring av relevante opplysninger i klagebehandlingen.',
     },
     {
       id: 'oversittetKlagefristIkkeKommentert',
@@ -60,11 +62,14 @@ export const Klageforberedelsen = () => {
       id: 'konklusjonen',
       label: 'Konklusjonen',
       checked: kvalitetsvurdering.konklusjonen,
+      helpText: 'Mangler konklusjon eller konklusjonen er feil.',
     },
     {
       id: 'oversendelsesbrevetsInnholdIkkeISamsvarMedTema',
       label: 'Oversendelsesbrevets innhold er ikke i samsvar med sakens tema',
       checked: kvalitetsvurdering.oversendelsesbrevetsInnholdIkkeISamsvarMedTema,
+      helpText:
+        'Misforstått tema for saken og dermed treffer ikke behandlingen problemstillingen, tar opp nye forhold som ikke er behandlet i det opprinnelige vedtaket.',
     },
   ];
 
