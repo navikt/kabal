@@ -2,7 +2,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
+import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
@@ -23,11 +23,11 @@ export const EnhetensOppgaverTable = () => {
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
 
-  const settingsTypes = useSettingsTypes();
+  const types = useKodeverkValue('sakstyper');
   const availableYtelser = useAvailableYtelser();
   const availableHjemler = useAvailableHjemler();
 
-  const typer = filters.types.length === 0 ? settingsTypes.map(({ id }) => id) : filters.types;
+  const typer = filters.types.length === 0 ? types?.map(({ id }) => id) : filters.types;
   const ytelser = filters.ytelser.length === 0 ? availableYtelser.map(({ id }) => id) : filters.ytelser;
   const hjemler = filters.hjemler.length === 0 ? availableHjemler.map(({ id }) => id) : filters.hjemler;
   const [sortering, rekkefoelge] = filters.sorting;
@@ -35,7 +35,7 @@ export const EnhetensOppgaverTable = () => {
   const { data: bruker } = useGetBrukerQuery();
 
   const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
-    typeof bruker === 'undefined'
+    typeof bruker === 'undefined' || typeof types === 'undefined'
       ? skipToken
       : {
           start: 0,

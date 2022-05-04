@@ -1,8 +1,8 @@
 import React from 'react';
+import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
+import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
+import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
-import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
-import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { OppgaveType } from '../../types/kodeverk';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
@@ -17,9 +17,9 @@ interface TableHeaderFiltersProps {
 }
 
 export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps) => {
-  const typeOptions = useSettingsTypes();
-  const ytelseOptions = useSettingsYtelser();
-  const hjemlerOptions = useSettingsHjemler();
+  const typeOptions = useKodeverkValue('sakstyper') ?? [];
+  const ytelseOptions = useAvailableYtelser();
+  const hjemlerOptions = useAvailableHjemler();
 
   const { data: bruker } = useGetBrukerQuery();
 
