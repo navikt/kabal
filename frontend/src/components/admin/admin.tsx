@@ -1,4 +1,4 @@
-import { Error, Helptext, Sandglass, Success } from '@navikt/ds-icons';
+import { Error, MinusCircle, Sandglass, Success } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -51,7 +51,7 @@ interface StatusIconProps {
 
 const StatusIcon = ({ success, init, isLoading }: StatusIconProps) => {
   if (!init) {
-    return <Helptext />;
+    return <MinusCircle />;
   }
 
   if (isLoading) {
