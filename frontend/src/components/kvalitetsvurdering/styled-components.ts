@@ -1,3 +1,4 @@
+import { HelpText } from '@navikt/ds-react';
 import { Checkbox, RadioGruppe } from 'nav-frontend-skjema';
 import styled from 'styled-components';
 
@@ -39,10 +40,19 @@ export const ReasonsField = styled.div`
 
 export const StyledCheckboxContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  gap: 8px;
   width: 100%;
+  position: relative;
 `;
 
 export const StyledCheckbox = styled(Checkbox)`
   white-space: normal;
+`;
+
+export const StyledHelpText = styled(HelpText)`
+  + .navds-popover {
+    max-width: 100%;
+    white-space: normal;
+  }
 `;

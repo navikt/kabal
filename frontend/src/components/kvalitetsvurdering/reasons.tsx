@@ -1,4 +1,3 @@
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { Fragment } from 'react';
@@ -7,7 +6,7 @@ import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { IKvalitetsvurderingBooleans } from '../../types/kaka-kvalitetsvurdering';
 import { CommentField } from './comment-field';
-import { ReasonsField, StyledCheckbox, StyledCheckboxContainer } from './styled-components';
+import { ReasonsField, StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
@@ -94,5 +93,5 @@ const HjelpetekstDisplay = ({ helpText }: HjelpetekstDisplayProps) => {
     return null;
   }
 
-  return <Hjelpetekst>{helpText}</Hjelpetekst>;
+  return <StyledHelpText title="Hjelpetekst">{helpText}</StyledHelpText>;
 };

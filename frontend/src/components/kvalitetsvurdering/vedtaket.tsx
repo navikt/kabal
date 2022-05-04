@@ -26,38 +26,44 @@ export const Vedtaket = () => {
   const reasons: Reason[] = [
     {
       id: 'detErIkkeBruktRiktigHjemmel',
-      label: 'Det er ikke brukt riktig hjemmel(er)',
+      label: 'Det er ikke brukt riktig hjemmel/hjemler',
       checked: kvalitetsvurdering.detErIkkeBruktRiktigHjemmel,
+      helpText: 'Gjelder også når det mangler hjemler.',
+    },
+    {
+      id: 'rettsregelenErBenyttetFeil',
+      label: 'Lovbestemmelsen er tolket feil',
+      checked: kvalitetsvurdering.rettsregelenErBenyttetFeil,
     },
     {
       id: 'innholdetIRettsregleneErIkkeTilstrekkeligBeskrevet',
       label: 'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet',
       checked: kvalitetsvurdering.innholdetIRettsregleneErIkkeTilstrekkeligBeskrevet,
-    },
-    {
-      id: 'rettsregelenErBenyttetFeil',
-      label: 'Rettsregelen er benyttet eller tolket feil',
-      checked: kvalitetsvurdering.rettsregelenErBenyttetFeil,
+      helpText: 'Det er ikke forståelig for bruker hvordan NAV tolker lovbestemmelsen/innholdet i rettsregelen.',
     },
     {
       id: 'vurderingAvFaktumErMangelfull',
-      label: 'Vurdering av faktum / bevisvurdering er mangelfull',
+      label: 'Relevant faktum mangler eller er vurdert feil',
       checked: kvalitetsvurdering.vurderingAvFaktumErMangelfull,
+      helpText: 'Har ikke sett relevante opplysninger. Har vektet eller tolket faktum feil.',
     },
     {
       id: 'detErFeilIKonkretRettsanvendelse',
       label: 'Det er feil i den konkrete rettsanvendelsen',
       checked: kvalitetsvurdering.detErFeilIKonkretRettsanvendelse,
+      helpText: 'Rettsregelen og faktum er riktig, men likevel kommet til feil resultat - subsumsjonen er feil.',
     },
     {
       id: 'begrunnelsenErIkkeKonkretOgIndividuell',
       label: 'Begrunnelsen er ikke konkret og individuell',
       checked: kvalitetsvurdering.begrunnelsenErIkkeKonkretOgIndividuell,
+      helpText: 'Mye standardtekst som ikke er tilpasset saken.',
     },
     {
       id: 'spraaketErIkkeTydelig',
-      label: 'Språket/Formidlingen er ikke tydelig',
+      label: 'Språket/formidlingen er ikke tydelig',
       checked: kvalitetsvurdering.spraaketErIkkeTydelig,
+      helpText: 'Språk som ikke er tilpasset mottaker, ulogisk oppbygging av innhold.',
     },
   ];
 
