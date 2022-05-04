@@ -1,6 +1,6 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { Select } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -37,7 +37,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
   }
 
   if (typeof data === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const { medunderskrivere } = data;

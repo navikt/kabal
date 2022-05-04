@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
@@ -100,6 +100,6 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
 const LoadingOverlay = ({ loading }: { loading: boolean }) =>
   loading ? (
     <StyledLoadingOverlay>
-      <NavFrontendSpinner type="L" />
+      <Loader size="xlarge" />
     </StyledLoadingOverlay>
   ) : null;

@@ -1,3 +1,4 @@
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
@@ -19,27 +20,31 @@ export const OpenOppgavebehandling = ({ oppgavebehandlingId, ytelse, type }: Pro
 
   if (type === OppgaveType.KLAGE) {
     return (
-      <NavLink
-        className="knapp knapp--hoved"
+      <Button
+        as={NavLink}
+        variant="primary"
+        size="medium"
         to={`/klagebehandling/${oppgavebehandlingId}`}
         data-testid="klagebehandling-open-link"
         data-klagebehandlingid={oppgavebehandlingId}
         data-oppgavebehandlingid={oppgavebehandlingId}
       >
         Åpne
-      </NavLink>
+      </Button>
     );
   }
 
   return (
-    <NavLink
-      className="knapp knapp--hoved"
+    <Button
+      as={NavLink}
+      variant="primary"
+      size="medium"
       to={`/ankebehandling/${oppgavebehandlingId}`}
       data-testid="ankebehandling-open-link"
       data-ankebehandlingid={oppgavebehandlingId}
       data-oppgavebehandlingid={oppgavebehandlingId}
     >
       Åpne
-    </NavLink>
+    </Button>
   );
 };

@@ -1,4 +1,4 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { IValidationError, IValidationSection } from '../../functions/error-type-guard';
 import { useFieldName } from '../../hooks/use-field-name';
@@ -19,10 +19,10 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <AlertStripeAdvarsel data-testid="validation-summary">
+    <Alert variant="warning" size="small" data-testid="validation-summary">
       <div>Kan ikke fullføre behandling. Dette mangler:</div>
       <ValidationSummaryContainer>{errorMessages}</ValidationSummaryContainer>
-    </AlertStripeAdvarsel>
+    </Alert>
   );
 };
 

@@ -1,4 +1,5 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Delete } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
@@ -106,8 +107,9 @@ export const Header = ({
         data-testid="dropdown-search"
       />
       {showFjernAlle && (
-        <StyledKnapp mini kompakt onClick={onReset}>
-          Fjern alle
+        <StyledKnapp size="xsmall" variant="danger" onClick={onReset}>
+          <Delete />
+          <span>Fjern alle</span>
         </StyledKnapp>
       )}
     </StyledHeader>
@@ -117,12 +119,11 @@ export const Header = ({
 const removeRegExpTokens = (pattern: string): string => pattern.replace(/[/\\^$*+?.()|[\]{}\s]/g, '');
 const escapeRegExp = (pattern: string): string => pattern.replaceAll('-', '\\-');
 
-const StyledKnapp = styled(Knapp)`
-  &&& {
-    margin-left: 0.5em;
-  }
+const StyledKnapp = styled(Button)`
+  margin-left: 0.5em;
+  flex-shrink: 0;
 `;
 
 const StyledInput = styled(Input)`
-  flex-grow: 1;
+  width: 100%;
 `;

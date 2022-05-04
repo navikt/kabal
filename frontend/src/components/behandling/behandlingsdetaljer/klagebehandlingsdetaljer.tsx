@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
@@ -17,7 +17,7 @@ export const Klagebehandlingsdetaljer = () => {
   const klagerName = useSakspartName('klager');
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const { type, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, kommentarFraVedtaksinstans, resultat, ytelse } =

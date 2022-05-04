@@ -1,6 +1,5 @@
-import { Knapp } from 'nav-frontend-knapper';
-import { Textarea } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Close, Send } from '@navikt/ds-icons';
+import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
 import { Range, Transforms } from 'slate';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -9,7 +8,7 @@ import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { CommentableVoidElementTypes } from '../editor-types';
 import { connectCommentThread } from '../rich-text-editor/connect-thread';
-import { StyledCommentButton, StyledCommentButtonContainer, StyledNewComment } from './styled-components';
+import { StyledCommentButtonContainer, StyledNewComment } from './styled-components';
 
 interface Props {
   close: () => void;
@@ -50,7 +49,7 @@ export const NewComment = ({ close }: Props) => {
   );
 
   if (signatureIsLoading || brukerIsLoading || typeof bruker === 'undefined' || typeof signature === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const onSubmit = () => {
@@ -93,28 +92,34 @@ export const NewComment = ({ close }: Props) => {
     <StyledNewComment>
       <Textarea
         value={text}
+        size="small"
         onChange={(e) => setText(e.target.value)}
         onKeyDown={onKeyDown}
         placeholder="Skriv inn en kommentar"
+        label="Ny kommentar"
+        hideLabel
+        minRows={3}
         maxLength={0}
         disabled={isLoading}
         autoFocus
       />
       <StyledCommentButtonContainer>
-        <StyledCommentButton
-          mini
-          kompakt
+        <Button
+          type="button"
+          variant="primary"
+          size="small"
           onClick={onSubmit}
           disabled={text.length <= 0}
-          spinner={isLoading}
-          autoDisableVedSpinner
+          loading={isLoading}
           title="Ctrl/⌘ + Enter"
         >
-          Legg til
-        </StyledCommentButton>
-        <Knapp onClick={close} mini kompakt disabled={isLoading} title="Escape">
-          Avbryt
-        </Knapp>
+          <Send />
+          <span>Legg til</span>
+        </Button>
+        <Button type="button" variant="secondary" size="small" onClick={close} disabled={isLoading} title="Escape">
+          <Close />
+          <span>Avbryt</span>
+        </Button>
       </StyledCommentButtonContainer>
     </StyledNewComment>
   );

@@ -1,6 +1,6 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Send } from '@navikt/ds-icons';
+import { Button, Loader } from '@navikt/ds-react';
 import { Textarea } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
@@ -24,7 +24,7 @@ export const WriteMessage = () => {
   }, [isSuccess, setMessage]);
 
   if (signatureIsLoading || userIsLoading || typeof user === 'undefined' || typeof signature === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (isFullfoert) {
@@ -74,9 +74,17 @@ export const WriteMessage = () => {
         data-testid="message-textarea"
       />
       <StyleSendMessage>
-        <Knapp mini onClick={post} spinner={messageIsLoading} data-testid="send-message-button">
-          Legg til melding
-        </Knapp>
+        <Button
+          type="button"
+          size="small"
+          variant="secondary"
+          onClick={post}
+          loading={messageIsLoading}
+          data-testid="send-message-button"
+        >
+          <Send />
+          <span>Legg til melding</span>
+        </Button>
       </StyleSendMessage>
     </StyledWriteMessage>
   );

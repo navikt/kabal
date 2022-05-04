@@ -1,5 +1,5 @@
 import { Warning } from '@navikt/ds-icons';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useValidationError } from '../../../../hooks/use-validation-error';
@@ -14,7 +14,7 @@ export const NewDocumentList = () => {
   const { data, isLoading, isFetching } = useGetDocumentsQuery({ oppgaveId });
 
   if (isLoading || typeof data === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const documents = data.filter(({ parent }) => parent === null);

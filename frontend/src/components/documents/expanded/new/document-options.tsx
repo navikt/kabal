@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -19,7 +19,7 @@ export const DocumentOptions = ({ document }: Props) => {
   if (isLoading || typeof data === 'undefined') {
     return (
       <Container>
-        <NavFrontendSpinner />
+        <Loader size="xlarge" />
       </Container>
     );
   }

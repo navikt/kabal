@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
@@ -15,7 +15,7 @@ export const SmartEditor = (): JSX.Element | null => {
   );
 
   if (isFetching || typeof smartEditor === 'undefined' || smartEditor === null || documentId === null) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   return (

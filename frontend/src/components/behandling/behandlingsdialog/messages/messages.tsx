@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateTimeToPretty } from '../../../../domain/date';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
@@ -25,7 +25,7 @@ export const Messages = () => {
   const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId, options);
 
   if (typeof oppgave === 'undefined' || typeof messages === 'undefined' || isLoading) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   return (

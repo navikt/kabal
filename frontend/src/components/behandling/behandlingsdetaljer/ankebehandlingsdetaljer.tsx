@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useSakspartName } from '../../../hooks/use-klager-name';
@@ -16,7 +16,7 @@ export const Ankebehandlingsdetaljer = () => {
   const klagerName = useSakspartName('klager');
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
-    return <NavFrontendSpinner />;
+    return <Loader />;
   }
 
   const { type, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelse } = oppgavebehandling;

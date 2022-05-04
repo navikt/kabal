@@ -1,5 +1,5 @@
 import { Cancel, Delete } from '@navikt/ds-icons';
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -55,14 +55,19 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   }
 
   return (
-    <StyledButton type="fare" kompakt onClick={() => setShowConfirm(true)} data-testid="document-delete-button">
+    <StyledButton
+      variant="danger"
+      size="small"
+      onClick={() => setShowConfirm(true)}
+      data-testid="document-delete-button"
+    >
       <Delete />
       Slett
     </StyledButton>
   );
 };
 
-const StyledButton = styled(Knapp)`
+const StyledButton = styled(Button)`
   display: flex;
   gap: 8px;
   width: 100%;

@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { Radio, RadioGruppe } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
@@ -26,7 +26,7 @@ export const Klageforberedelsen = () => {
     isOppgavebehandlingLoading ||
     typeof oppgave === 'undefined'
   ) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (oppgave.type === OppgaveType.ANKE) {

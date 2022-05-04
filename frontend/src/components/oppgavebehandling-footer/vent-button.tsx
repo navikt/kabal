@@ -1,4 +1,5 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Close, Sandglass } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '../../redux-api/oppgavebehandling';
@@ -16,15 +17,21 @@ export const VentButton = () => {
 
   if (typeof data.sattPaaVent === 'string') {
     return (
-      <Knapp mini kompakt onClick={() => deleteSettPaavent(data.id)} autoDisableVedSpinner spinner={isLoading}>
-        Avslutt venteperiode
-      </Knapp>
+      <Button
+        type="button"
+        variant="secondary"
+        size="small"
+        onClick={() => deleteSettPaavent(data.id)}
+        loading={isLoading}
+      >
+        <Close /> Avslutt venteperiode
+      </Button>
     );
   }
 
   return (
-    <Knapp mini kompakt onClick={() => settPaavent(data.id)} autoDisableVedSpinner spinner={isLoading}>
-      Sett på vent
-    </Knapp>
+    <Button type="button" variant="secondary" size="small" onClick={() => settPaavent(data.id)} loading={isLoading}>
+      <Sandglass /> Sett på vent
+    </Button>
   );
 };

@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -12,7 +12,7 @@ export const Annet = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
 
   if (isLoading || typeof oppgave === 'undefined' || typeof kvalitetsvurdering === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const showNyeOpplysningerMottattReason = kvalitetsvurdering.utredningenRadioValg === RadioValg.BRA;

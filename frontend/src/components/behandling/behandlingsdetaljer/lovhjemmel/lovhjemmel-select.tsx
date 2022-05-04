@@ -1,4 +1,5 @@
-import { Søkeknapp } from 'nav-frontend-ikonknapper';
+import { Search } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
@@ -51,9 +52,16 @@ export const LovhjemmelSelect = ({
   return (
     <>
       <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel" data-selected={selected.join(',')}>
-        <StyledSøkeknapp mini onClick={toggleOpen} disabled={disabled} data-testid="lovhjemmel-button">
+        <StyledButton
+          size="small"
+          variant="secondary"
+          onClick={toggleOpen}
+          disabled={disabled}
+          data-testid="lovhjemmel-button"
+        >
+          <Search />
           <span>Hjemmel</span>
-        </StyledSøkeknapp>
+        </StyledButton>
 
         <GroupedDropdown
           selected={selected}
@@ -73,6 +81,6 @@ export const LovhjemmelSelect = ({
   );
 };
 
-export const StyledSøkeknapp = styled(Søkeknapp)`
+export const StyledButton = styled(Button)`
   width: 100%;
 `;

@@ -1,5 +1,6 @@
+import { Send } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -32,16 +33,18 @@ export const SendTilSaksbehandler = ({
   if (medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return (
       <StyledFormSection>
-        <Hovedknapp
-          mini
+        <Button
+          type="button"
+          variant="primary"
+          size="small"
           onClick={() => switchMedunderskriverflyt(oppgaveId)}
           disabled={loader.isLoading}
-          spinner={loader.isLoading}
-          autoDisableVedSpinner
+          loading={loader.isLoading}
           data-testid="send-to-saksbehandler"
         >
-          Send til saksbehandler
-        </Hovedknapp>
+          <Send />
+          <span>Send til saksbehandler</span>
+        </Button>
       </StyledFormSection>
     );
   }

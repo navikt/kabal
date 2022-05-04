@@ -1,5 +1,6 @@
+import { Send } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import AlertStripe from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -38,15 +39,18 @@ export const SendTilMedunderskriver = ({
 
   const SendToMedunderskriver = () => (
     <StyledFormSection>
-      <StyledHovedknapp
-        mini
+      <StyledButton
+        size="small"
+        variant="primary"
+        type="button"
         onClick={() => switchMedunderskriverflyt(oppgaveId)}
         disabled={sendToMedunderskriverDisabled}
-        spinner={loader.isLoading}
+        loading={loader.isLoading}
         data-testid="send-to-medunderskriver"
       >
-        Send til medunderskriver
-      </StyledHovedknapp>
+        <Send />
+        <span>Send til medunderskriver</span>
+      </StyledButton>
     </StyledFormSection>
   );
 
@@ -71,6 +75,6 @@ const StyledFormSection = styled.div`
   width: 100%;
 `;
 
-const StyledHovedknapp = styled(Hovedknapp)`
+const StyledButton = styled(Button)`
   width: 100%;
 `;

@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { Radio } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
@@ -18,7 +18,7 @@ export const BrukAvRaadgivendeLege = () => {
   const header = useFieldName('brukAvRaadgivendeLegeRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   const { id, brukAvRaadgivendeLegeRadioValg } = kvalitetsvurdering;

@@ -1,3 +1,4 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
@@ -7,7 +8,6 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
-import { Loader } from '../loader/loader';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
 import { Filters } from './types';
@@ -77,7 +77,7 @@ const OppgaveRader = ({ oppgaver }: OppgaveRaderProps): JSX.Element => {
       <tbody>
         <tr>
           <td colSpan={100}>
-            <Loader>Laster oppgaver...</Loader>
+            <Loader size="xlarge" title="Laster oppgaver..." />
           </td>
         </tr>
       </tbody>

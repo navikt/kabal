@@ -1,5 +1,5 @@
+import { Button } from '@navikt/ds-react';
 import React from 'react';
-import { StyledLoadMoreButton } from './styled-components';
 
 interface Props {
   loadedDocuments: number;
@@ -16,9 +16,9 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
 
   if (loading) {
     return (
-      <StyledLoadMoreButton spinner={true} autoDisableVedSpinner={true}>
+      <Button loading={true} type="button" variant="secondary">
         Laster flere...
-      </StyledLoadMoreButton>
+      </Button>
     );
   }
 
@@ -33,5 +33,9 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
     return null;
   }
 
-  return <StyledLoadMoreButton onClick={() => setPage(pageReference)}>Last flere ({remaining})</StyledLoadMoreButton>;
+  return (
+    <Button type="button" variant="secondary" onClick={() => setPage(pageReference)}>
+      Last flere ({remaining})
+    </Button>
+  );
 };

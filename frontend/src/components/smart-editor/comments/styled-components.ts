@@ -1,4 +1,3 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
 import styled from 'styled-components';
 
 export const StyledNewCommentInThread = styled.div`
@@ -23,11 +22,8 @@ export const StyledCommentButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-top: 1em;
+  gap: 16px;
+  margin-top: 16px;
   margin-right: 20px;
   width: 100%;
-`;
-
-export const StyledCommentButton = styled(Hovedknapp)`
-  margin-right: 10px;
 `;

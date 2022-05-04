@@ -1,4 +1,4 @@
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -27,7 +27,7 @@ export const Medunderskriver = () => {
     typeof medunderskriver === 'undefined' ||
     typeof medunderskriverflyt === 'undefined'
   ) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (oppgave.strengtFortrolig === true) {

@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
@@ -37,7 +37,7 @@ export const SelectedHjemlerList = () => {
   );
 
   if (typeof oppgave === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   return (

@@ -1,6 +1,6 @@
 import { Error, Success } from '@navikt/ds-icons';
+import { Loader } from '@navikt/ds-react';
 import { Input, Radio, RadioGruppe } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -128,7 +128,7 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   if (isLoading) {
     return (
       <StyledStatus>
-        <NavFrontendSpinner type="XXS" /> <StyledStatusText>Lagrer ...</StyledStatusText>
+        <Loader size="xsmall" /> <StyledStatusText>Lagrer ...</StyledStatusText>
       </StyledStatus>
     );
   }

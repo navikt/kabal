@@ -1,5 +1,4 @@
 import { AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import styled from 'styled-components';
 
 export const SuccessStatus = styled(AlertStripeSuksess)`
@@ -85,8 +84,4 @@ export const Dropdown = styled.ul`
   padding: 0;
   margin: 0;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
-`;
-
-export const StyledButton = styled(Knapp)`
-  width: 100%;
 `;

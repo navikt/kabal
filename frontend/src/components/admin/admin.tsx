@@ -1,96 +1,85 @@
-import { Success } from '@navikt/ds-icons';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Error, Helptext, Sandglass, Success } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useRefillElasticAdminMutation, useResendDvhMutation } from '../../redux-api/internal';
 import { useRebuildElasticAdminMutation } from '../../redux-api/oppgaver';
 
 export const Admin = () => (
-  <article>
+  <StyledPageContent>
     <h1>Administrasjon</h1>
-    <StyledContent>
-      <StyledSettingsSection>
-        <RebuildElasticButton
-          useApi={useRebuildElasticAdminMutation}
-          text="KABAL-SEARCH OPENSEARCH REBUILD"
-          helptext='Denne operasjonen er avhengig av å treffe rett pod. Juster ned antall pods for kabal-search til 1 før du trykker på knappen, og verifiser at operasjonen var vellykket ved å søke etter "Seeking to beginning of topic klage.behandling-endret.v2 and partition 0" i loggene til kabal-search.'
-        />
-        <Button useApi={useRefillElasticAdminMutation} text="KABAL-API KAFKA REFILL" />
-        <Button useApi={useResendDvhMutation} text="KABAL-API DVH RESEND" />
-      </StyledSettingsSection>
-    </StyledContent>
-  </article>
+    <AdminButton useApi={useRebuildElasticAdminMutation}>KABAL-SEARCH OPENSEARCH REBUILD</AdminButton>
+    <p>
+      Operasjonen <Code>KABAL-SEARCH OPENSEARCH REBUILD</Code> er avhengig av å treffe rett pod. Juster ned antall pods
+      for <Code>kabal-search</Code> til <Code>1</Code> før du trykker på knappen, og verifiser at operasjonen var
+      vellykket ved å søke etter <Code>Seeking to beginning of topic klage.behandling-endret.v2 and partition 0</Code> i
+      loggene til <Code>kabal-search</Code>.
+    </p>
+    <AdminButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</AdminButton>
+    <AdminButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</AdminButton>
+  </StyledPageContent>
 );
 
-interface RebuildElasticButtonProps {
-  useApi: typeof useRebuildElasticAdminMutation;
-  text: string;
-  helptext: string;
-}
-interface ButtonProps {
-  useApi: typeof useRefillElasticAdminMutation | typeof useResendDvhMutation;
-  text: string;
+interface AdminButtonProps {
+  useApi: typeof useRefillElasticAdminMutation | typeof useResendDvhMutation | typeof useRebuildElasticAdminMutation;
+  children: React.ReactNode;
 }
 
-const RebuildElasticButton = ({ text, helptext, useApi }: RebuildElasticButtonProps): JSX.Element => {
+const AdminButton = ({ children, useApi }: AdminButtonProps): JSX.Element => {
   const [callApi, { isSuccess, isLoading, isUninitialized }] = useApi();
 
   return (
-    <ButtonContainer>
-      <StyledHovedknapp onClick={() => callApi()} spinner={isLoading} autoDisableVedSpinner>
-        <span>{text}</span>
-        <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
-      </StyledHovedknapp>
-      <div>{helptext}</div>
-    </ButtonContainer>
-  );
-};
-
-const Button = ({ text, useApi }: ButtonProps): JSX.Element => {
-  const [callApi, { isSuccess, isLoading, isUninitialized }] = useApi();
-
-  return (
-    <StyledHovedknapp onClick={() => callApi()} spinner={isLoading} autoDisableVedSpinner>
-      <span>{text}</span>
+    <Button
+      type="button"
+      variant="primary"
+      size="medium"
+      onClick={() => callApi()}
+      loading={isLoading}
+      disabled={isLoading}
+    >
+      {children}
       <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
-    </StyledHovedknapp>
+    </Button>
   );
 };
 
 interface StatusIconProps {
   success: boolean;
   init: boolean;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 const StatusIcon = ({ success, init, isLoading }: StatusIconProps) => {
-  if (!init || isLoading === true) {
-    return null;
+  if (!init) {
+    return <Helptext />;
   }
 
-  return success ? <Success /> : <span>(Failed)</span>;
+  if (isLoading) {
+    return <Sandglass />;
+  }
+
+  return success ? <Success /> : <Error />;
 };
 
-const StyledContent = styled.div`
+const StyledPageContent = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-bottom: 20px;
-`;
-
-const StyledSettingsSection = styled.section`
-  margin-right: 20px;
-  > button {
-    margin-right: 20px;
-  }
-`;
-
-const ButtonContainer = styled.div`
+  flex-direction: column;
+  gap: 16px;
   max-width: 400px;
-  margin-bottom: 64px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
-const StyledHovedknapp = styled(Hovedknapp)`
-  margin: 10px 0;
+const Code = styled.code`
+  color: #e8912d;
+  border: 1px solid #e8912d;
+  background-color: rgb(29, 28, 29);
+  padding-top: 2px;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-bottom: 1px;
+  border-radius: 3px;
+  font-size: 16px;
+  user-select: all;
 `;

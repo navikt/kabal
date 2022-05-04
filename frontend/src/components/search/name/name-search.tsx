@@ -1,6 +1,6 @@
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React from 'react';
 import { useNameSearchQuery } from '../../../redux-api/oppgaver';
 import { INameSearchParams } from '../../../types/oppgaver';
@@ -22,7 +22,7 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
   }
 
   if (isFetching || typeof data === 'undefined') {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (data.people.length === 0) {

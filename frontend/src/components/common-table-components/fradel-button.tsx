@@ -1,4 +1,4 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import React, { useCallback, useState } from 'react';
 import { useIsLeader } from '../../hooks/use-has-role';
 import { useFradelSaksbehandlerMutation } from '../../redux-api/ansatte';
@@ -51,15 +51,18 @@ export const FradelKlagebehandlingButton = ({
   const isLoading = loader.isLoading || isUserLoading;
 
   return (
-    <Knapp
+    <Button
+      variant="secondary"
+      size="medium"
+      type="button"
       onClick={onFradel}
-      spinner={isLoading}
+      loading={isLoading}
       disabled={isLoading}
       data-testid="klagebehandling-fradel-button"
       data-klagebehandlingid={klagebehandlingId}
     >
       {getFradelText(loader.isLoading)}
-    </Knapp>
+    </Button>
   );
 };
 

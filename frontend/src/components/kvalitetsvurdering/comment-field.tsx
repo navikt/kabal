@@ -1,5 +1,5 @@
+import { Loader } from '@navikt/ds-react';
 import { Textarea } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useState } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -31,7 +31,7 @@ export const CommentField = ({ textareaId }: CommentFieldProps) => {
   }, [comment, kvalitetsvurdering, textareaId, updateKvalitetsvurdering]);
 
   if (isLoading) {
-    return <NavFrontendSpinner />;
+    return <Loader size="xlarge" />;
   }
 
   if (typeof kvalitetsvurdering === 'undefined') {
