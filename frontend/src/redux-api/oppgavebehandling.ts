@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { queryStringify } from '../functions/query-string';
 import { IArkiverteDocumentsResponse } from '../types/arkiverte-documents';
@@ -15,6 +16,7 @@ import {
   IMedunderskriverflytResponse,
   IModifiedResponse,
   ISettMedunderskriverResponse,
+  ISwitchMedunderskriverflytParams,
   ISwitchMedunderskriverflytResponse,
   ITilknyttDocumentResponse,
 } from '../types/oppgavebehandling-response';
@@ -235,9 +237,27 @@ export const oppgavebehandlingApi = createApi({
     }),
     getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
       query: (oppgaveId) => `/${oppgaveId}/medunderskriver`,
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            draft.medunderskriver = data.medunderskriver;
+          })
+        );
+      },
     }),
     getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, string>({
       query: (oppgaveId) => `/${oppgaveId}/medunderskriverflyt`,
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            draft.medunderskriverFlyt = data.medunderskriverFlyt;
+          })
+        );
+      },
     }),
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISetMedunderskriverParams>({
       query: ({ oppgaveId, medunderskriver }) => ({
@@ -250,15 +270,7 @@ export const oppgavebehandlingApi = createApi({
       onQueryStarted: async ({ oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (update.medunderskriver === null) {
-              draft.medunderskriver = null;
-            } else {
-              draft.medunderskriver = {
-                navIdent: update.medunderskriver.navIdent,
-                navn: update.medunderskriver.navn,
-              };
-            }
-
+            draft.medunderskriver = update.medunderskriver;
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
           })
         );
@@ -297,20 +309,42 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, string>({
-      query: (oppgaveId) => ({
+    switchMedunderskriverflyt: builder.mutation<ISwitchMedunderskriverflytResponse, ISwitchMedunderskriverflytParams>({
+      query: ({ oppgaveId }) => ({
         url: `/${oppgaveId}/send`,
         method: 'POST',
         validateStatus: ({ ok }) => ok,
       }),
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(
+      onQueryStarted: async ({ oppgaveId, isSaksbehandler }, { dispatch, queryFulfilled }) => {
+        const oppgavePatchResult = dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.modified = data.modified;
-            draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            draft.medunderskriverFlyt = isSaksbehandler
+              ? MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER
+              : MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
           })
         );
+
+        const flytPatchresult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
+            draft.medunderskriverFlyt = isSaksbehandler
+              ? MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER
+              : MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+              draft.modified = data.modified;
+              draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            })
+          );
+        } catch {
+          oppgavePatchResult.undo();
+          flytPatchresult.undo();
+        }
       },
     }),
     sattPaaVent: builder.mutation<IModifiedResponse, string>({

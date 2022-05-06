@@ -1,6 +1,7 @@
 import { NewTab, Notes } from '@navikt/ds-icons';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useIsMedunderskriver } from '../../../hooks/use-is-medunderskriver';
 import { useSmartDocuments } from '../../../hooks/use-smart-documents';
 import { ISmartDocument } from '../../../types/documents';
 import { CommentSection } from '../comments/comment-section';
@@ -63,15 +64,32 @@ const Tabs = ({ documents, activeTab, setActiveTab }: TabsProps) => {
     );
   });
 
-  const NewTabButton = activeTab === null ? ActiveTabButton : TabButton;
-
   return (
     <TabsContainer>
       {tabs}
-      <NewTabButton onClick={() => setActiveTab(null)} title="Nytt dokument">
-        <NewTab />
-      </NewTabButton>
+      <ShowNewYTabButton onClick={() => setActiveTab(null)} isActive={activeTab === null} />
     </TabsContainer>
+  );
+};
+
+interface ShowNewTabProps {
+  onClick: () => void;
+  isActive: boolean;
+}
+
+const ShowNewYTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
+  const isMedunderskriver = useIsMedunderskriver();
+
+  if (isMedunderskriver) {
+    return null;
+  }
+
+  const NewTabButton = isActive === null ? ActiveTabButton : TabButton;
+
+  return (
+    <NewTabButton onClick={onClick} title="Nytt dokument">
+      <NewTab />
+    </NewTabButton>
   );
 };
 

@@ -18,7 +18,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
   const { data: oppgave } = useOppgave();
   const { data: bruker } = useGetBrukerQuery();
   const canEdit = useCanEdit();
-  const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation();
+  const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: oppgaveId });
 
   const medunderskrivereQuery: IMedunderskrivereParams | typeof skipToken =
     typeof bruker === 'undefined' || typeof oppgave === 'undefined' || oppgave.tildeltSaksbehandlerEnhet === null

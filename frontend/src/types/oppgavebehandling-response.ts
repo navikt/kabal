@@ -34,6 +34,11 @@ export interface ISwitchMedunderskriverflytResponse {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
+export interface ISwitchMedunderskriverflytParams {
+  oppgaveId: string;
+  isSaksbehandler: boolean;
+}
+
 export interface IModifiedResponse {
   modified: string;
 }

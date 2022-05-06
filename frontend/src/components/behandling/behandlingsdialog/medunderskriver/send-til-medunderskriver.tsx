@@ -4,7 +4,11 @@ import AlertStripe from 'nav-frontend-alertstriper';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgavebehandling';
+import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
+import {
+  useSwitchMedunderskriverflytMutation,
+  useUpdateChosenMedunderskriverMutation,
+} from '../../../../redux-api/oppgavebehandling';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 
@@ -16,14 +20,19 @@ export const SendTilMedunderskriver = ({
   medunderskriverFlyt,
 }: SendTilMedunderskriverProps) => {
   const canEdit = useCanEdit();
+  const isSaksbehandler = useIsSaksbehandler();
 
+  const [, medunderskriverLoader] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: oppgaveId });
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
   if (!canEdit) {
     return null;
   }
 
-  const sendToMedunderskriverDisabled = !canEdit || medunderskriver === null || loader.isLoading;
+  const sendToMedunderskriverDisabled =
+    !canEdit || medunderskriver === null || loader.isLoading || medunderskriverLoader.isLoading;
+
+  const onClick = () => switchMedunderskriverflyt({ oppgaveId, isSaksbehandler });
 
   const SentToMedunderskriver = () => (
     <StyledFormSection>
@@ -43,9 +52,9 @@ export const SendTilMedunderskriver = ({
         size="small"
         variant="primary"
         type="button"
-        onClick={() => switchMedunderskriverflyt(oppgaveId)}
+        onClick={onClick}
         disabled={sendToMedunderskriverDisabled}
-        loading={loader.isLoading}
+        loading={loader.isLoading || medunderskriverLoader.isLoading}
         data-testid="send-to-medunderskriver"
       >
         <Send />

@@ -6,6 +6,8 @@ import { useIsAssignee } from '../../../../hooks/use-is-assignee';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
 import { useGetMedunderskriverQuery, useGetMedunderskriverflytQuery } from '../../../../redux-api/oppgavebehandling';
+import { MedunderskriverFlyt } from '../../../../types/kodeverk';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
 import { MedunderskriverInfo } from './medunderskriver-info';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';
@@ -17,7 +19,7 @@ export const Medunderskriver = () => {
   const isSaksbehandler = useIsSaksbehandler();
   const isAssignee = useIsAssignee();
   const isFullfoert = useIsFullfoert();
-  const options = isFullfoert ? undefined : { pollingInterval: 3 * 1000 };
+  const options = isFullfoert ? undefined : getOptions(isSaksbehandler, oppgave);
 
   const { data: medunderskriver } = useGetMedunderskriverQuery(oppgaveId, isSaksbehandler ? undefined : options);
   const { data: medunderskriverflyt } = useGetMedunderskriverflytQuery(oppgaveId, isAssignee ? undefined : options);
@@ -63,4 +65,20 @@ export const Medunderskriver = () => {
       <SendTilSaksbehandler id={oppgave.id} medunderskriverFlyt={medunderskriverflyt.medunderskriverFlyt} />
     </>
   );
+};
+
+const getOptions = (isSaksbehandler: boolean, oppgave: IOppgavebehandling | undefined) => {
+  if (typeof oppgave === 'undefined') {
+    return undefined;
+  }
+
+  if (isSaksbehandler && oppgave.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+    return { pollingInterval: 3 * 1000 };
+  }
+
+  if (!isSaksbehandler && oppgave.medunderskriverFlyt !== MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
+    return { pollingInterval: 3 * 1000 };
+  }
+
+  return undefined;
 };
