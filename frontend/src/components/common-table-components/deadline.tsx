@@ -18,5 +18,5 @@ interface StyledDeadlineProps {
 }
 
 const StyledDeadline = styled.time<StyledDeadlineProps>`
-  color: ${({ age }) => (typeof age === 'number' && age >= 120 ? '#C30000' : '#54483F')};
+  color: ${({ age }) => (typeof age === 'number' && age >= 84 ? '#C30000' : '#54483F')};
 `;
