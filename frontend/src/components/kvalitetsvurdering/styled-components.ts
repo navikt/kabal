@@ -56,3 +56,9 @@ export const StyledHelpText = styled(HelpText)`
     white-space: normal;
   }
 `;
+
+export const StyledHeaderHelpTextWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
