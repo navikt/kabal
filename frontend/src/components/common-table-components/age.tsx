@@ -16,5 +16,5 @@ interface StyledAgeProps {
 }
 
 const StyledAge = styled.span<StyledAgeProps>`
-  color: ${({ age }) => (age >= 120 ? '#C30000' : '#54483F')};
+  color: ${({ age }) => (age >= 84 ? '#C30000' : '#54483F')};
 `;
