@@ -10,7 +10,13 @@ import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalit
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { OppgaveType } from '../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
-import { FormSection, RadioButtonsRow, SubHeader } from './styled-components';
+import {
+  FormSection,
+  RadioButtonsRow,
+  StyledHeaderHelpTextWrapper,
+  StyledHelpText,
+  SubHeader,
+} from './styled-components';
 
 export const Klageforberedelsen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
@@ -75,7 +81,13 @@ export const Klageforberedelsen = () => {
 
   return (
     <FormSection>
-      <SubHeader>{header}</SubHeader>
+      <StyledHeaderHelpTextWrapper>
+        <SubHeader>{header}</SubHeader>
+        <StyledHelpText>
+          Vedtaksinstansen skal gjøre en ny prøving av eget vedtak, vise klagers argumenter og begrunne hvorfor vedtaket
+          blir fastholdt.
+        </StyledHelpText>
+      </StyledHeaderHelpTextWrapper>
       <RadioGruppe feil={klageforberedelsenRadioValg === null ? validationError : undefined}>
         <RadioButtonsRow>
           <Radio

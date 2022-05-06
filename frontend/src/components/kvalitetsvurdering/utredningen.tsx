@@ -1,7 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import styled from 'styled-components';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -9,7 +8,13 @@ import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { Reason, Reasons } from './reasons';
-import { FormSection, RadioButtonsRow, StyledHelpText, SubHeader } from './styled-components';
+import {
+  FormSection,
+  RadioButtonsRow,
+  StyledHeaderHelpTextWrapper,
+  StyledHelpText,
+  SubHeader,
+} from './styled-components';
 
 export const Utredningen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
@@ -73,14 +78,14 @@ export const Utredningen = () => {
 
   return (
     <FormSection>
-      <StyledHeaderWrapper>
+      <StyledHeaderHelpTextWrapper>
         <SubHeader>{header}</SubHeader>
         <StyledHelpText>
           Gjelder kvaliteten på utredningen i perioden frem til og med oversendelse til klageinstansen. Er det kommet
           nye opplysninger etter at saken er oversendt klageinstansen, som vedtaksinstansen burde innhentet, skal dette
           også registreres her.
         </StyledHelpText>
-      </StyledHeaderWrapper>
+      </StyledHeaderHelpTextWrapper>
       <RadioGruppe feil={utredningenRadioValg === null ? validationError : undefined}>
         <RadioButtonsRow>
           <Radio
@@ -108,9 +113,3 @@ export const Utredningen = () => {
     </FormSection>
   );
 };
-
-const StyledHeaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
