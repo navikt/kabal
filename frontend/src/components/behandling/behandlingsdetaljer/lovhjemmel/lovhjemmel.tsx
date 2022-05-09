@@ -1,3 +1,4 @@
+import { HelpText } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
@@ -52,7 +53,13 @@ export const Lovhjemmel = () => {
 
   return (
     <>
-      <StyledHeader>Utfallet er basert på lovhjemmel:</StyledHeader>
+      <StyledHeaderHelpTextWrapper>
+        <StyledHeader>Utfallet er basert på lovhjemmel:</StyledHeader>
+        <HelpText>
+          Hjemlene skal i utgangspunktet være de samme som i klagevedtaket. Dersom saken har flere klagetemaer og
+          kvaliteten er bra nok på det ene og mangelfull på det andre, velger du de hjemlene kvalitetsavviket gjelder.
+        </HelpText>
+      </StyledHeaderHelpTextWrapper>
       <LovhjemmelSelect
         disabled={!canEdit || noHjemler}
         options={options}
@@ -71,4 +78,10 @@ const StyledHeader = styled.h2`
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
+`;
+
+const StyledHeaderHelpTextWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
