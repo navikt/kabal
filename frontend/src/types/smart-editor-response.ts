@@ -15,5 +15,5 @@ export interface ISmartEditorBaseResponse extends ISmartEditorPatchResponse {
 }
 
 export interface ISmartEditorPatchResponse {
-  patchVersion: number;
+  patchVersion: number; // TODO: Replace with CRDT response.
 }
