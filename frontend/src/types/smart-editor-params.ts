@@ -1,4 +1,3 @@
-import { Operation } from 'fast-json-patch';
 import { Descendant } from 'slate';
 import { IDocumentParams } from './documents-common-params';
 import { IOppgavebehandlingBaseParams } from './oppgavebehandling-params';
@@ -16,6 +15,5 @@ export type IGetSmartEditorParams = IDocumentParams;
 export interface IUpdateSmartDocumentParams extends IGetSmartEditorParams {
   content: Descendant[];
 }
-export interface IPatchSmartDocumentParams extends IGetSmartEditorParams {
-  patch: Operation[];
-}
+
+export type IPatchSmartDocumentParams = IGetSmartEditorParams;

@@ -1,4 +1,3 @@
-import { Operation } from 'fast-json-patch';
 import { Descendant } from 'slate';
 
 export interface ISmartEditorRawResponse extends ISmartEditorBaseResponse {
@@ -17,8 +16,4 @@ export interface ISmartEditorBaseResponse extends ISmartEditorPatchResponse {
 
 export interface ISmartEditorPatchResponse {
   patchVersion: number;
-}
-
-export interface ISmartEditorPatch {
-  patch: Operation[];
 }

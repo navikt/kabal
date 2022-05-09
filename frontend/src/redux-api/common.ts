@@ -5,14 +5,16 @@ export const DOMAIN = IS_LOCALHOST ? 'https://kabal.dev.nav.no' : '';
 
 const mode: RequestMode | undefined = IS_LOCALHOST ? 'cors' : undefined;
 
-const staggeredBaseQuery = (baseUrl: string) =>
-  retry(
+const staggeredBaseQuery = (baseUrl: string) => {
+  const fetch = fetchBaseQuery({
+    baseUrl: `${DOMAIN}${baseUrl}`,
+    mode,
+    credentials: 'include',
+  });
+
+  return retry(
     async (args: string | FetchArgs, api, extraOptions) => {
-      const result = await fetchBaseQuery({
-        baseUrl: `${DOMAIN}${baseUrl}`,
-        mode,
-        credentials: 'include',
-      })(args, api, extraOptions);
+      const result = await fetch(args, api, extraOptions);
 
       if (typeof result.error === 'undefined') {
         return result;
@@ -38,6 +40,7 @@ const staggeredBaseQuery = (baseUrl: string) =>
       maxRetries: 3,
     }
   );
+};
 
 export const KABAL_OPPGAVEBEHANDLING_PATH = '/api/kabal-api/klagebehandlinger';
 export const KABAL_BEHANDLINGER_BASE_PATH = '/api/kabal-api/behandlinger';

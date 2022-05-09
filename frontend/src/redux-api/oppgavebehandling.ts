@@ -242,7 +242,9 @@ export const oppgavebehandlingApi = createApi({
 
         dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.medunderskriver = data.medunderskriver;
+            if (typeof draft !== 'undefined') {
+              draft.medunderskriver = data.medunderskriver;
+            }
           })
         );
       },
@@ -254,7 +256,9 @@ export const oppgavebehandlingApi = createApi({
 
         dispatch(
           oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            if (typeof draft !== 'undefined') {
+              draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            }
           })
         );
       },
