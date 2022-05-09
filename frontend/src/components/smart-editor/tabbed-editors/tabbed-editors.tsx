@@ -67,7 +67,7 @@ const Tabs = ({ documents, activeTab, setActiveTab }: TabsProps) => {
   return (
     <TabsContainer>
       {tabs}
-      <ShowNewYTabButton onClick={() => setActiveTab(null)} isActive={activeTab === null} />
+      <ShowNewTabButton onClick={() => setActiveTab(null)} isActive={activeTab === null} />
     </TabsContainer>
   );
 };
@@ -77,14 +77,14 @@ interface ShowNewTabProps {
   isActive: boolean;
 }
 
-const ShowNewYTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
+const ShowNewTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
   const isMedunderskriver = useIsMedunderskriver();
 
   if (isMedunderskriver) {
     return null;
   }
 
-  const NewTabButton = isActive === null ? ActiveTabButton : TabButton;
+  const NewTabButton = isActive ? ActiveTabButton : TabButton;
 
   return (
     <NewTabButton onClick={onClick} title="Nytt dokument">
