@@ -32,8 +32,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     return (
       <>
         <StyledButton
-          type="standard"
-          kompakt
+          size="small"
+          variant="secondary"
           onClick={() => setShowConfirm(false)}
           data-testid="document-delete-cancel"
         >
@@ -41,8 +41,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           Avbryt
         </StyledButton>
         <StyledButton
-          type="fare"
-          kompakt
+          variant="danger"
+          size="small"
           disabled={isLoading}
           onClick={() => deleteDocument({ dokumentId: document.id, oppgaveId })}
           data-testid="document-delete-confirm"
