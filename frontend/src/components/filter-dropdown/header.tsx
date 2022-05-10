@@ -3,22 +3,6 @@ import { Button } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
-import { StyledHeader } from './styled-components';
-
-export interface Option {
-  label: string;
-  value: string;
-}
-
-export interface SectionHeader {
-  id: string;
-  name?: string;
-}
-
-export interface OptionGroup {
-  sectionHeader: SectionHeader;
-  sectionOptions: Option[];
-}
 
 interface HeaderProps {
   focused: number;
@@ -126,4 +110,14 @@ const StyledKnapp = styled(Button)`
 
 const StyledInput = styled(Input)`
   width: 100%;
+`;
+
+const StyledHeader = styled.div`
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid #c6c2bf;
+  background-color: white;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
 `;

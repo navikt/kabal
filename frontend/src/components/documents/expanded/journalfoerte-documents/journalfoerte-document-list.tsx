@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '../../../../hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgavebehandling';
-import { kodeverkValuesToDropdownOptions } from '../../../dropdown/dropdown';
+import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
 import { StyledDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { StyledFilterDropdown, StyledListHeader, StyledListTitle } from '../styled-components/list-header';

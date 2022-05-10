@@ -7,8 +7,8 @@ import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { OppgaveType } from '../../types/kodeverk';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
-import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
 import { Filters } from './types';
 
 interface TableHeaderFiltersProps {

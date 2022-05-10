@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { Dropdown, IDropdownOption } from '../dropdown/dropdown';
 import { ToggleButton } from '../toggle-button/toggle-button';
+import { Dropdown } from './dropdown';
+import { BaseProps } from './props';
 
-interface FilterDropdownProps<T extends string> {
-  options: IDropdownOption<T>[];
-  selected: T[];
-  onChange: (selected: T[]) => void;
+interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   children: string;
   testId?: string;
 }
@@ -23,14 +21,6 @@ export const FilterDropdown = <T extends string>({
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const onFilterChange = (id: T | null, active: boolean) => {
-    if (id === null) {
-      onChange([]);
-    } else {
-      onChange(active ? [...selected, id] : selected.filter((s) => s !== id));
-    }
-  };
-
   useOnClickOutside(() => setOpen(false), ref, true);
 
   const close = () => {
@@ -43,11 +33,40 @@ export const FilterDropdown = <T extends string>({
       <ToggleButton theme={{ open }} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length})
       </ToggleButton>
-      <Dropdown selected={selected} options={options} open={open} onChange={onFilterChange} close={close} />
+      <Popup isOpen={open}>
+        <Dropdown selected={selected} options={options} open={open} onChange={onChange} close={close} />
+      </Popup>
     </Container>
   );
 };
 
 const Container = styled.section`
   position: relative;
+`;
+
+interface PopupProps {
+  isOpen: boolean;
+  children: React.ReactNode;
+}
+
+const Popup = ({ isOpen, children }: PopupProps) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  return <StyledPopup>{children}</StyledPopup>;
+};
+
+const StyledPopup = styled.div`
+  display: flex;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 275px;
+  max-height: 256px;
+
+  background-color: white;
+  border-radius: 0.25rem;
+  border: 1px solid #c6c2bf;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 `;
