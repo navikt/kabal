@@ -5,6 +5,7 @@ const styles = css`
   html {
     box-sizing: border-box;
     font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-size: 16px;
   }
 
   *,
@@ -21,6 +22,7 @@ const styles = css`
     margin: 0;
     padding: 0;
     overflow: hidden;
+    font-size: 16px;
   }
 
   #app {
