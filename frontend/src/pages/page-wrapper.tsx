@@ -2,26 +2,31 @@ import React from 'react';
 import styled from 'styled-components';
 import { Nav } from '../components/nav/nav';
 
-interface OppgaverPageWrapperProps {
+interface Props {
   children: React.ReactNode;
 }
 
-export const OppgaverPageWrapper = ({ children }: OppgaverPageWrapperProps): JSX.Element => (
+export const PageWrapper = ({ children }: Props) => (
   <>
     <Nav />
-    <StyledMain>
-      <StyledArticle>{children}</StyledArticle>
-    </StyledMain>
+    <StyledMain>{children}</StyledMain>
   </>
 );
-
-export const StyledArticle = styled.article`
-  padding-left: 16px;
-  padding-right: 16px;
-  overflow: auto;
-`;
 
 const StyledMain = styled.main`
   overflow: auto;
   flex: 1;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+export const OppgaverPageWrapper = ({ children }: Props): JSX.Element => (
+  <PageWrapper>
+    <StyledArticle>{children}</StyledArticle>
+  </PageWrapper>
+);
+
+export const StyledArticle = styled.article`
+  overflow: auto;
+  min-height: 100%;
 `;

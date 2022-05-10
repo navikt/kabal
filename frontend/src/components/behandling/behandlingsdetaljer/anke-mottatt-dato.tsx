@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useSetMottattKlageinstansMutation } from '../../../redux-api/behandlinger';
+import { useSetMottattKlageinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType } from '../../../types/kodeverk';
 import { DatepickerWithError } from '../../date-picker-with-error/date-picker-with-error';
 

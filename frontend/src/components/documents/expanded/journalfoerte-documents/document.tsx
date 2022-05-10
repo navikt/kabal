@@ -67,12 +67,7 @@ export const Document = ({ document, pageReferences, temaer }: Props) => {
           temaer={temaer}
         />
       </StyledDocument>
-      <AttachmentList
-        document={document}
-        oppgavebehandlingId={oppgaveId}
-        pageReferences={pageReferences}
-        temaer={temaer}
-      />
+      <AttachmentList document={document} oppgaveId={oppgaveId} pageReferences={pageReferences} temaer={temaer} />
     </>
   );
 };

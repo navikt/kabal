@@ -1,4 +1,5 @@
-import { Role, useGetBrukerQuery } from '../redux-api/bruker';
+import { useGetBrukerQuery } from '../redux-api/bruker';
+import { Role } from '../types/bruker';
 
 export const useUserRoles = () => {
   const { data } = useGetBrukerQuery();

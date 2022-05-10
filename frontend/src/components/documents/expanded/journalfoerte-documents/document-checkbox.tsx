@@ -1,10 +1,11 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useCheckDocument } from '../../../../hooks/use-check-document';
 import { StyledDocumentCheckbox } from './styled-components';
 
 interface Props {
-  oppgavebehandlingId: string;
+  oppgavebehandlingId: string | typeof skipToken;
   title: string;
   dokumentInfoId: string;
   journalpostId: string;
@@ -40,7 +41,7 @@ export const DocumentCheckbox = ({
   return (
     <StyledDocumentCheckbox
       title={title}
-      disabled={!harTilgangTilArkivvariant || isUpdating}
+      disabled={!harTilgangTilArkivvariant || isUpdating || oppgavebehandlingId === skipToken}
       checked={valgt}
       onChange={(e) => setDocument(e.currentTarget.checked)}
       data-testid="journalfoert-document-checkbox"

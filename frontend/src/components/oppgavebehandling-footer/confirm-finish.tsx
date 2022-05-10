@@ -1,10 +1,11 @@
 import { Close, SuccessStroke } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { useFinishOppgavebehandlingMutation } from '../../redux-api/behandlinger';
+import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
@@ -27,6 +28,10 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   }, [ref]);
 
   const finish = async () => {
+    if (oppgaveId === skipToken) {
+      return;
+    }
+
     finishOppgavebehandling(oppgaveId)
       .unwrap()
       .then((res) => {

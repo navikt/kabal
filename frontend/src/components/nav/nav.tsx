@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled from 'styled-components';
+import { FeatureToggles, useFeatureToggle } from '../../hooks/use-feature-toggle';
 import { useHasAnyOfRoles } from '../../hooks/use-has-role';
-import { Role } from '../../redux-api/bruker';
+import { Role } from '../../types/bruker';
 
 export const Nav = () => (
   <StyledNav role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
@@ -19,9 +20,29 @@ export const Nav = () => (
       <NavItem
         to="/enhetensoppgaver"
         testId="enhetens-oppgaver-nav-link"
-        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_KLAGE_FAGANSVARLIG, Role.ROLE_KLAGE_MERKANTIL]}
+        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_KLAGE_FAGANSVARLIG, Role.ROLE_KLAGE_MERKANTIL, Role.ROLE_ADMIN]}
       >
         Enhetens oppgaver
+      </NavItem>
+      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/maltekster" testId="maltekster-nav-link">
+        Maltekster
+      </NavItem>
+      <NavItem
+        requiredFeature={FeatureToggles.MALTEKSTER}
+        to="/redigerbare-maltekster"
+        testId="redigerbare-maltekster-nav-link"
+      >
+        Redigerbare maltekster
+      </NavItem>
+      <NavItem
+        requiredFeature={FeatureToggles.MALTEKSTER}
+        to="/gode-formuleringer"
+        testId="gode-formuleringer-nav-link"
+      >
+        Gode formuleringer
+      </NavItem>
+      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/regelverk" testId="regelverk-nav-link">
+        Regelverk
       </NavItem>
     </StyledNavLinkList>
   </StyledNav>
@@ -30,12 +51,15 @@ export const Nav = () => (
 interface NavItemProps extends NavLinkProps {
   testId?: string;
   roles?: Role[];
+  requiredFeature?: FeatureToggles;
 }
 
-const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
+const NavItem = ({ testId, roles, requiredFeature: feature, ...props }: NavItemProps) => {
   const hasRole = useHasAnyOfRoles(roles);
+  const enabled = useFeatureToggle(feature);
+  const featureDisabled = typeof feature !== 'undefined' && !enabled;
 
-  if (!hasRole) {
+  if (!hasRole || featureDisabled) {
     return null;
   }
 

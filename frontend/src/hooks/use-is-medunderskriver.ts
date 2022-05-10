@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
 import { useGetBrukerQuery } from '../redux-api/bruker';
-import { useGetMedunderskriverQuery, useGetOppgavebehandlingQuery } from '../redux-api/oppgavebehandling';
+import { useGetMedunderskriverQuery, useGetOppgavebehandlingQuery } from '../redux-api/oppgaver/queries/behandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 

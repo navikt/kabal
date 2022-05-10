@@ -32,7 +32,7 @@ export const WriteMessage = () => {
   }
 
   const post = () => {
-    if (messageIsLoading) {
+    if (messageIsLoading || typeof oppgaveId !== 'string') {
       return;
     }
 

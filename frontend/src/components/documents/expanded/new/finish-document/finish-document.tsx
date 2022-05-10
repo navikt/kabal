@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../../hooks/use-on-click-outside';
-import { DocumentType, IMainDocument } from '../../../../../types/documents';
+import { DocumentType, IMainDocument } from '../../../../../types/documents/documents';
 import { ConfirmFinishDocument } from './confirm-finish-document';
 
 interface Props {

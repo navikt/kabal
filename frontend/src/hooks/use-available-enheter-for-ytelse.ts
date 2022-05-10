@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { IEnhet, useGetBrukerQuery } from '../redux-api/bruker';
+import { useGetBrukerQuery } from '../redux-api/bruker';
+import { IEnhet } from '../types/bruker';
 
 export const useAvailableEnheterForYtelse = (ytelseId: string): IEnhet[] => {
   const { data: userData } = useGetBrukerQuery();

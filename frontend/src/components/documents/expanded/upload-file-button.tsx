@@ -4,10 +4,9 @@ import Popover, { PopoverOrientering } from 'nav-frontend-popover';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
-import { useUploadFileDocumentMutation } from '../../../redux-api/documents';
+import { useUploadFileDocumentMutation } from '../../../redux-api/oppgaver/mutations/documents';
 
 const MAX_SIZE_BYTES = 8388608;
 const MEBI = 1024 * 1024;
@@ -15,7 +14,6 @@ const MAX_SIZE_MIB = MAX_SIZE_BYTES / MEBI;
 
 export const UploadFileButton = () => {
   const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
-  const oppgaveId = useOppgaveId();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
   const [error, setError] = useState<string | null>(null);
@@ -61,12 +59,12 @@ export const UploadFileButton = () => {
 
       uploadFile({
         file,
-        oppgaveId,
+        oppgaveId: oppgave.id,
       });
 
       event.currentTarget.value = '';
     },
-    [oppgaveId, oppgave, uploadFile, setError]
+    [oppgave, uploadFile, setError]
   );
 
   if (!canEdit || typeof oppgave === 'undefined') {

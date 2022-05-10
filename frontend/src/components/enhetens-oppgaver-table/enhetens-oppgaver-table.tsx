@@ -5,7 +5,7 @@ import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver';
+import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';

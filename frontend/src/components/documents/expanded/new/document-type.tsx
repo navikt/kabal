@@ -1,11 +1,12 @@
 import { Collapse, Expand, SuccessStroke } from '@navikt/ds-icons';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { useSetTypeMutation } from '../../../../redux-api/documents';
-import { DocumentType, IMainDocument } from '../../../../types/documents';
+import { useSetTypeMutation } from '../../../../redux-api/oppgaver/mutations/documents';
+import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
 
 const OPTIONS = [
   {
@@ -55,7 +56,7 @@ export const SetDocumentType = ({ document }: Props) => {
   }
 
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    if (isDocumentType(target.value)) {
+    if (isDocumentType(target.value) && oppgaveId !== skipToken) {
       setType({ oppgaveId, dokumentId: document.id, dokumentTypeId: target.value });
       setOpen(false);
     }
@@ -74,6 +75,7 @@ export const SetDocumentType = ({ document }: Props) => {
           value={value}
           checked={isActive}
           onChange={onChange}
+          disabled={oppgaveId === skipToken}
         />
         {icon}
         {label}

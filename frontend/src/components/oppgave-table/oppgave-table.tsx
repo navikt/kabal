@@ -5,7 +5,7 @@ import { useGetBrukerQuery, useGetSettingsQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetMineLedigeOppgaverQuery,
-} from '../../redux-api/oppgaver';
+} from '../../redux-api/oppgaver/queries/oppgaver';
 import { StyledFooterContent, StyledTable } from '../../styled-components/table';
 import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';

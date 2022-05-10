@@ -2,8 +2,8 @@ import { AddCircle } from '@navikt/ds-icons';
 import React, { useContext, useEffect, useLayoutEffect } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
 import styled from 'styled-components';
+import { CommentableVoidElementTypes } from '../../rich-text/types/editor-void-types';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { CommentableVoidElementTypes } from '../editor-void-types';
 
 interface CommentWrapperProps<T extends CommentableVoidElementTypes> extends RenderElementProps {
   content: JSX.Element;
@@ -17,7 +17,7 @@ export const CommentWrapper = <T extends CommentableVoidElementTypes>({
   attributes,
 }: CommentWrapperProps<T>) => {
   const isSelected = useSelected();
-  const { setFocusedThreadId, focusedThreadId, setActiveElement, activeElement, setShowNewComment } =
+  const { setFocusedThreadId, focusedThreadId, setActiveElement, activeElement, showNewComment, setShowNewComment } =
     useContext(SmartEditorContext);
 
   const isFocused = focusedThreadId !== null && element.threadIds.includes(focusedThreadId);
@@ -51,12 +51,9 @@ export const CommentWrapper = <T extends CommentableVoidElementTypes>({
     setShowNewComment(false);
     setActiveElement(element);
 
-    if (!isFocused && element.threadIds.length !== 0) {
+    if (!isFocused) {
       const [threadId] = element.threadIds;
-
-      if (threadId !== undefined) {
-        setFocusedThreadId(threadId);
-      }
+      setFocusedThreadId(threadId ?? null);
     }
   };
 
@@ -71,6 +68,7 @@ export const CommentWrapper = <T extends CommentableVoidElementTypes>({
         isSelected={isSelected}
         commentCount={commentCount}
         contentEditable={false}
+        showNewComment={showNewComment}
       >
         <ShowContent commentCount={commentCount} onView={onView}>
           {content}
@@ -92,20 +90,16 @@ interface ShowContentProps {
 }
 
 const ShowContent = ({ children, commentCount, onView }: ShowContentProps): JSX.Element => {
-  if (commentCount === 0) {
-    return <StyledViewCommentsButton>{children}</StyledViewCommentsButton>;
-  }
-
   const commentCountText = commentCount === 1 ? 'kommentar' : 'kommentarer';
 
   return (
-    <StyledViewCommentsButton onFocus={onView} title={`Se ${commentCount} ${commentCountText}`} tabIndex={0}>
+    <StyledViewComments onFocus={onView} title={`Se ${commentCount} ${commentCountText}`} tabIndex={0}>
       {children}
-    </StyledViewCommentsButton>
+    </StyledViewComments>
   );
 };
 
-const StyledViewCommentsButton = styled.div`
+const StyledViewComments = styled.div`
   display: block;
   width: 100%;
   border: none;
@@ -144,13 +138,45 @@ const StyledButtonWrapper = styled.div`
   height: 100%;
 `;
 
-const StyledCommentWrapper = styled.div<{ isActive: boolean; commentCount: number; isSelected: boolean }>`
+interface StyledCommentWrapperProps {
+  isActive: boolean;
+  commentCount: number;
+  isSelected: boolean;
+  showNewComment: boolean;
+}
+
+const getColor = ({ commentCount, isActive, isSelected, showNewComment }: StyledCommentWrapperProps) => {
+  if (!isActive && isSelected) {
+    return '#f5f5f5';
+  }
+
+  if (commentCount === 0) {
+    if (showNewComment && isActive) {
+      return 'hsla(0, 75%, 85%, 1)';
+    }
+
+    if (isSelected) {
+      return '#f5f5f5';
+    }
+
+    return 'transparent';
+  }
+
+  const lightness = 100 - 15 * Math.min(commentCount, 3);
+  const hue = isActive ? 0 : 125;
+  const saturation = isActive ? 75 : 50;
+  return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
+};
+
+const StyledCommentWrapper = styled.div<StyledCommentWrapperProps>`
   position: relative;
   margin-top: 4px;
   border-radius: 2px;
-  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
-  background-color: ${({ commentCount, isActive, isSelected }) => getColor(commentCount, isActive, isSelected)};
-  outline-color: ${({ commentCount, isActive, isSelected }) => getColor(commentCount, isActive, isSelected)};
+  transition-property: background-color, outline-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  background-color: ${getColor};
+  outline-color: ${getColor};
   outline-style: solid;
   outline-width: 8px;
 
@@ -160,18 +186,3 @@ const StyledCommentWrapper = styled.div<{ isActive: boolean; commentCount: numbe
     }
   }
 `;
-
-const getColor = (comments: number, isActive: boolean, isSelected: boolean) => {
-  if (!isActive && isSelected) {
-    return '#f5f5f5';
-  }
-
-  if (comments === 0) {
-    return isActive ? 'hsla(0, 75%, 85%, 1)' : 'transparent';
-  }
-
-  const lightness = 100 - 15 * Math.min(comments, 3);
-  const hue = isActive ? 0 : 125;
-  const saturation = isActive ? 75 : 50;
-  return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
-};

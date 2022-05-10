@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import React from 'react';
-import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver';
+import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver/queries/oppgaver';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/styled-components';

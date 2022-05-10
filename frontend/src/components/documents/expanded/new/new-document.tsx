@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { isoDateTimeToPrettyDate } from '../../../../domain/date';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { DocumentType, IMainDocument } from '../../../../types/documents';
+import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
 import { StyledDate, StyledDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
 import { DocumentTitle } from './document-title';

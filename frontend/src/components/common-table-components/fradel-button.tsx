@@ -1,8 +1,8 @@
 import { Button } from '@navikt/ds-react';
 import React, { useCallback, useState } from 'react';
 import { useIsLeader } from '../../hooks/use-has-role';
-import { useFradelSaksbehandlerMutation } from '../../redux-api/ansatte';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
 import { SuccessStatus } from './styled-components';
 
 interface Props {

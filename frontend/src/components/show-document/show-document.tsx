@@ -1,3 +1,4 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useEffect, useState } from 'react';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { ShownDocumentContext } from '../documents/context';
@@ -41,7 +42,7 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
   const oppgaveId = useOppgaveId();
   const { shownDocument } = useContext(ShownDocumentContext);
 
-  if (shownDocument === null) {
+  if (shownDocument === null || oppgaveId === skipToken) {
     return null;
   }
 

@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
-import { useLazyValidateQuery } from '../../redux-api/behandlinger';
+import { useLazyValidateQuery } from '../../redux-api/oppgaver/queries/behandling';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
@@ -47,6 +47,10 @@ export const UnfinishedFooter = () => {
           size="small"
           disabled={!canEdit || isFullfoert || showConfirmFinishDisplay}
           onClick={() => {
+            if (typeof oppgaveId !== 'string') {
+              return;
+            }
+
             validate(oppgaveId);
             setConfirmFinish(true);
           }}

@@ -5,9 +5,12 @@ import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id
 import { useIsAssignee } from '../../../../hooks/use-is-assignee';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
-import { useGetMedunderskriverQuery, useGetMedunderskriverflytQuery } from '../../../../redux-api/oppgavebehandling';
+import {
+  useGetMedunderskriverQuery,
+  useGetMedunderskriverflytQuery,
+} from '../../../../redux-api/oppgaver/queries/behandling';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { MedunderskriverInfo } from './medunderskriver-info';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';

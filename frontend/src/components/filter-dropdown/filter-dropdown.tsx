@@ -64,7 +64,7 @@ const StyledPopup = styled.div`
   left: 0;
   width: 275px;
   max-height: 256px;
-
+  z-index: 2;
   background-color: white;
   border-radius: 0.25rem;
   border: 1px solid #c6c2bf;

@@ -5,9 +5,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgavebehandling';
+import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 
 export const SendTilSaksbehandler = ({
   id: oppgaveId,

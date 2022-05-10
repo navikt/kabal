@@ -1,11 +1,13 @@
 import { Cancel, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useDeleteDocumentMutation, useGetDocumentsQuery } from '../../../../redux-api/documents';
-import { IMainDocument } from '../../../../types/documents';
+import { useDeleteDocumentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 
 interface Props {
   document: IMainDocument;
@@ -14,9 +16,19 @@ interface Props {
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
-  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery({ oppgaveId });
+  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(
+    oppgaveId === skipToken ? skipToken : { oppgaveId }
+  );
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const onDelete = () => {
+    if (typeof oppgaveId !== 'string') {
+      return;
+    }
+
+    deleteDocument({ dokumentId: document.id, oppgaveId });
+  };
 
   if (!canEdit || documentsIsLoading || typeof data === 'undefined') {
     return null;
@@ -44,7 +56,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           variant="danger"
           size="small"
           disabled={isLoading}
-          onClick={() => deleteDocument({ dokumentId: document.id, oppgaveId })}
+          onClick={onDelete}
           data-testid="document-delete-confirm"
         >
           <Delete />

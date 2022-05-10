@@ -1,7 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
-// import { Loader } from '../loader/loader';
 import { Row } from './row';
 
 interface OppgaveRaderProps {

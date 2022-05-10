@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetEnhetensVentendeOppgaverQuery } from '../../redux-api/oppgaver';
+import { useGetEnhetensVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from '../common-table-components/header';

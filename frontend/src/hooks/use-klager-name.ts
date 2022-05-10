@@ -1,5 +1,5 @@
 import { getFullName } from '../domain/name';
-import { IOppgavebehandlingBase, ISakspart } from '../types/oppgavebehandling';
+import { IOppgavebehandlingBase, ISakspart } from '../types/oppgavebehandling/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 type Key = keyof Pick<IOppgavebehandlingBase, 'klager' | 'sakenGjelder'>;

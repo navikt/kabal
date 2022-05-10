@@ -1,6 +1,6 @@
 import { FileContent, Notes } from '@navikt/ds-icons';
 import React, { useContext, useEffect, useState } from 'react';
-import { IMainDocument } from '../../../../types/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
 import { StyledDocumentButton } from '../../styled-components/document-button';

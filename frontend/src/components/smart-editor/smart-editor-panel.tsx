@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FeatureToggles, useGetFeatureToggleQuery } from '../../redux-api/feature-toggling';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 
@@ -9,9 +8,7 @@ export interface Props {
 }
 
 export const SmartEditorPanel = ({ shown }: Props) => {
-  const { data: featureTogglingEditor } = useGetFeatureToggleQuery(FeatureToggles.SMART_EDITOR);
-
-  if (!shown || featureTogglingEditor === false) {
+  if (!shown) {
     return null;
   }
 
