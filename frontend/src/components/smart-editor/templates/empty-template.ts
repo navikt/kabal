@@ -1,7 +1,7 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '../../../functions/deep-freeze';
 import { ISmartEditorTemplate } from '../../../types/smart-editor';
-import { ContentTypeEnum, TextAlignEnum } from '../editor-types';
+import { ContentTypeEnum, TextAlignEnum } from '../editor-enums';
 
 const INITIAL_SLATE_VALUE: Descendant[] = [
   {

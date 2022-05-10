@@ -1,17 +1,10 @@
 import { Editor, Element, Node, Path, Range, Text, Transforms } from 'slate';
-import {
-  BulletListElementType,
-  ContentTypeEnum,
-  ElementTypes,
-  ListContentEnum,
-  ListTypesEnum,
-  NumberedListElementType,
-  isOfElementType,
-  isOfElementTypes,
-} from '../../editor-types';
+import { ContentTypeEnum, ElementTypesEnum, ListContentEnum, ListTypesEnum } from '../../editor-enums';
+import { isOfElementType, isOfElementTypes } from '../../editor-type-guards';
+import { BulletListElementType, NumberedListElementType } from '../../editor-types';
 import { pruneSelection } from './pruneSelection';
 
-export const isBlockActive = (editor: Editor, block: ElementTypes) => {
+export const isBlockActive = (editor: Editor, block: ElementTypesEnum) => {
   const [match] = Editor.nodes(editor, {
     match: (n) => isOfElementType(n, block),
     reverse: true,
@@ -20,7 +13,7 @@ export const isBlockActive = (editor: Editor, block: ElementTypes) => {
   return Boolean(match);
 };
 
-export const areBlocksActive = (editor: Editor, blocks: ElementTypes[], universal = true) => {
+export const areBlocksActive = (editor: Editor, blocks: ElementTypesEnum[], universal = true) => {
   const [match] = Editor.nodes(editor, {
     match: (n) => isOfElementTypes(n, blocks),
     reverse: true,
@@ -29,10 +22,10 @@ export const areBlocksActive = (editor: Editor, blocks: ElementTypes[], universa
   return Boolean(match);
 };
 
-export const areElementsActive = (editor: Editor, elementTypes: ElementTypes[]) =>
+export const areElementsActive = (editor: Editor, elementTypes: ElementTypesEnum[]) =>
   elementTypes.some((element) => isElementActive(editor, element));
 
-export const isElementActive = (editor: Editor, elementType: ElementTypes) => {
+export const isElementActive = (editor: Editor, elementType: ElementTypesEnum) => {
   const elements = getLowestSelectedElements(editor);
 
   for (const [element] of elements) {
@@ -108,7 +101,7 @@ export const getLowestSelectedElements = (editor: Editor) =>
     reverse: true,
   });
 
-export const toggleBlock = (editor: Editor, block: ElementTypes) => {
+export const toggleBlock = (editor: Editor, block: ElementTypesEnum) => {
   const matches = Editor.nodes(editor, {
     mode: 'lowest',
     match: Element.isElement,
@@ -148,7 +141,7 @@ export const toggleBlock = (editor: Editor, block: ElementTypes) => {
 
 export const createNewParagraph = (editor: Editor) => addBlock(editor, ContentTypeEnum.PARAGRAPH);
 
-export const addBlock = (editor: Editor, type: ElementTypes) =>
+export const addBlock = (editor: Editor, type: ElementTypesEnum) =>
   Editor.withoutNormalizing(editor, () => {
     Transforms.splitNodes(editor, { always: true });
     Transforms.setNodes(editor, { type }, { match: Element.isElement });

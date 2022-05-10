@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Editor, Element, Range, Selection } from 'slate';
-import { CommentableVoidElementTypes, isCommentableVoid } from '../editor-types';
+import { isCommentableVoid } from '../editor-type-guards';
+import { CommentableVoidElementTypes } from '../editor-void-types';
 import { getFocusedThreadIdFromText } from './get-focused-thread-id';
 
 interface Props {

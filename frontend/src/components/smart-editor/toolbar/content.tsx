@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSlate } from 'slate-react';
-import { ContentTypeEnum, ListContentEnum } from '../editor-types';
+import { ContentTypeEnum, ListContentEnum } from '../editor-enums';
 import { areBlocksActive, isBlockActive, toggleBlock } from './functions/blocks';
 import { BlockquoteIcon } from './icons/blockquote';
 import { ToolbarIconButton } from './toolbarbutton';

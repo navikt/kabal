@@ -1,5 +1,6 @@
 import { Editor, Text, Transforms } from 'slate';
-import { ContentTypeEnum, HeadingTypesEnum, TextAlignEnum, isOfElementTypes } from '../../editor-types';
+import { ContentTypeEnum, HeadingTypesEnum, TextAlignEnum } from '../../editor-enums';
+import { isOfElementTypes } from '../../editor-type-guards';
 
 export const clearFormatting = (editor: Editor) =>
   Editor.withoutNormalizing(editor, () => {

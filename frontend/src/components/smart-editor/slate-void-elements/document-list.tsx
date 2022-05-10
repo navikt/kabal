@@ -7,7 +7,7 @@ import { isNotNull } from '../../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '../../../redux-api/documents';
 import { useGetTilknyttedeDokumenterQuery } from '../../../redux-api/oppgavebehandling';
-import { DocumentListElementType } from '../editor-types';
+import { DocumentListElementType } from '../editor-void-types';
 import { BulletListStyle, ListItemStyle } from '../styled-elements/lists';
 import { voidStyle } from './style';
 
