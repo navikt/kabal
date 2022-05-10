@@ -1,5 +1,5 @@
 import { Editor, Location } from 'slate';
-import { isVoid as isVoidElement } from '../editor-types';
+import { isVoid as isVoidElement } from '../editor-type-guards';
 
 export const withEditableVoids = (editor: Editor) => {
   const { isVoid, deleteFragment, deleteBackward, deleteForward } = editor;

@@ -3,14 +3,9 @@ import { FormatListNumbered } from '@styled-icons/material/FormatListNumbered';
 import React from 'react';
 import { Editor, Element, Path, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
-import {
-  BulletListElementType,
-  ListContentEnum,
-  ListItemContainerElementType,
-  ListTypesEnum,
-  NumberedListElementType,
-  isOfElementType,
-} from '../editor-types';
+import { ListContentEnum, ListTypesEnum } from '../editor-enums';
+import { isOfElementType } from '../editor-type-guards';
+import { BulletListElementType, ListItemContainerElementType, NumberedListElementType } from '../editor-types';
 import { getSelectedListTypes } from './functions/blocks';
 import { ToolbarIconButton } from './toolbarbutton';
 

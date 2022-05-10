@@ -1,3 +1,4 @@
+import './slate-global-types';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useContext } from 'react';

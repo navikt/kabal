@@ -1,14 +1,11 @@
 import { Editor, Path, Transforms } from 'slate';
+import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../../editor-enums';
+import { isOfElementType, isOfElementTypes } from '../../../editor-type-guards';
 import {
   BulletListElementType,
-  ContentTypeEnum,
-  ListContentEnum,
   ListItemContainerElementType,
   ListItemElementType,
-  ListTypesEnum,
   NumberedListElementType,
-  isOfElementType,
-  isOfElementTypes,
 } from '../../../editor-types';
 import { pruneSelection } from '../../../toolbar/functions/pruneSelection';
 

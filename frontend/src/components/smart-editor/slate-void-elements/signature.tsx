@@ -7,7 +7,7 @@ import { useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { ISignatureResponse, useGetSignatureQuery } from '../../../redux-api/bruker';
-import { ISignature, SignatureElementType } from '../editor-types';
+import { ISignature, SignatureElementType } from '../editor-void-types';
 import { voidStyle } from './style';
 
 interface Props {

@@ -8,20 +8,13 @@ import {
   ListTypesEnum,
   TextAlignEnum,
   VoidElementsEnum,
-} from '../editor-types';
+} from '../editor-enums';
 
 /* eslint-disable max-lines */
 export const INITIAL_SLATE_VALUE: Descendant[] = [
   {
     type: VoidElementsEnum.CURRENT_DATE,
     children: [{ text: '' }],
-  },
-  {
-    type: VoidElementsEnum.MALTEKST,
-    children: [{ text: '' }],
-    source: 'document-title',
-    maltekst: null,
-    threadIds: [],
   },
   {
     type: VoidElementsEnum.LABEL_CONTENT,
@@ -224,20 +217,6 @@ export const INITIAL_SLATE_VALUE: Descendant[] = [
         text: 'Dette må du søke om innen tre uker fra den datoen dette vedtaket er kommet fram til deg. Når du søker om å få dekket utgifter til juridisk bistand, må du legge ved spesifisert timeliste og faktura. Søknaden sender du til NAV Klageinstans Sakskostnader, Postboks 644, Lundsiden, 4606 Kristiansand.',
       },
     ],
-  },
-  {
-    type: VoidElementsEnum.MALTEKST,
-    source: 'questions',
-    children: [{ text: '' }],
-    maltekst: null,
-    threadIds: [],
-  },
-  {
-    type: VoidElementsEnum.MALTEKST,
-    source: 'regards',
-    children: [{ text: '' }],
-    maltekst: null,
-    threadIds: [],
   },
   {
     type: VoidElementsEnum.SIGNATURE,

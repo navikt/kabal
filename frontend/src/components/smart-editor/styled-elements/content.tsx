@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { TextAlignEnum } from '../editor-types';
+import { TextAlignEnum } from '../editor-enums';
 import { getTextAlign } from './getTextAlign';
 import { AlignableStyleProps } from './types';
 

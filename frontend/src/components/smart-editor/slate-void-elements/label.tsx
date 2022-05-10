@@ -6,7 +6,8 @@ import { getFullName } from '../../../domain/name';
 import { formatPersonNum } from '../../../functions/format-id';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '../../../types/oppgavebehandling';
-import { LabelContentElementType, TextAlignEnum } from '../editor-types';
+import { TextAlignEnum } from '../editor-enums';
+import { LabelContentElementType } from '../editor-void-types';
 import { ParagraphStyle } from '../styled-elements/content';
 import { voidStyle } from './style';
 

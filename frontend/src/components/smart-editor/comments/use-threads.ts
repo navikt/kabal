@@ -7,7 +7,7 @@ import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor-api';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '../../../types/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { isCommentableVoid } from '../editor-types';
+import { isCommentableVoid } from '../editor-type-guards';
 
 export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;

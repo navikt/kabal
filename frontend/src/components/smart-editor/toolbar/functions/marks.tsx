@@ -1,5 +1,6 @@
 import { Editor, Range, Text } from 'slate';
-import { IMarks, isNodeMarkableElementType } from '../../editor-types';
+import { isNodeMarkableElementType } from '../../editor-type-guards';
+import { IMarks } from '../../editor-types';
 import { pruneSelection } from './pruneSelection';
 
 export const isMarkActive = (editor: Editor, mark: keyof IMarks): boolean => {
