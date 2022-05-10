@@ -7,13 +7,13 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
 import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
-import { useUpdateHjemlerMutation } from '../../../../redux-api/oppgavebehandling';
+import { useUpdateRegistreringshjemlerMutation } from '../../../../redux-api/oppgavebehandling';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 
 export const Lovhjemmel = () => {
   const { data: user } = useGetBrukerQuery();
-  const [updateHjemler] = useUpdateHjemlerMutation();
+  const [updateHjemler] = useUpdateRegistreringshjemlerMutation();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
   const validationError = useValidationError('hjemmel');

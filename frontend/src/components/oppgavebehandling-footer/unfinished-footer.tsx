@@ -8,6 +8,7 @@ import { useLazyValidateQuery } from '../../redux-api/behandlinger';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
+import { DeassignOppgave } from './deassign-oppgave';
 import { StyledButtons, StyledUnfinishedErrorFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 import { VentButton } from './vent-button';
@@ -58,6 +59,7 @@ export const UnfinishedFooter = () => {
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />
         <BackLink />
+        <DeassignOppgave />
       </StyledButtons>
       <ValidationSummaryPopup sections={data?.sections ?? []} hasErrors={hasErrors} />
     </Wrapper>

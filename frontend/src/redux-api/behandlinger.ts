@@ -1,7 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IApiValidationResponse } from '../functions/error-type-guard';
 import { OppgaveType } from '../types/kodeverk';
-import { IMottattKlageinstansParams, IMottattVedtaksinstansParams } from '../types/oppgavebehandling-params';
+import {
+  IMottattKlageinstansParams,
+  IMottattVedtaksinstansParams,
+  IOppgavebehandlingHjemlerUpdateParams,
+} from '../types/oppgavebehandling-params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../types/oppgavebehandling-response';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { oppgavebehandlingApi } from './oppgavebehandling';
@@ -86,6 +90,31 @@ export const behandlingerApi = createApi({
         }
       },
     }),
+    updateInnsendingshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
+      query: ({ oppgaveId, hjemler }) => ({
+        url: `/${oppgaveId}/innsendingshjemler`,
+        method: 'PUT',
+        body: { hjemler },
+      }),
+      onQueryStarted: async ({ oppgaveId, hjemler }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            draft.hjemler = hjemler;
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            oppgavebehandlingApi.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+              draft.modified = data.modified;
+            })
+          );
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -95,4 +124,5 @@ export const {
   useLazyValidateQuery,
   useSetMottattKlageinstansMutation,
   useSetMottattVedtaksinstansMutation,
+  useUpdateInnsendingshjemlerMutation,
 } = behandlingerApi;

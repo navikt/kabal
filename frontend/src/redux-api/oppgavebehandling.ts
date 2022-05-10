@@ -52,7 +52,7 @@ export const oppgavebehandlingApi = createApi({
         }
       },
     }),
-    updateHjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
+    updateRegistreringshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
       query: ({ oppgaveId, hjemler }) => ({
         url: `/${oppgaveId}/resultat/hjemler`,
         method: 'PUT',
@@ -398,7 +398,7 @@ export const {
   useGetOppgavebehandlingQuery,
   useLazyGetOppgavebehandlingQuery,
   useUpdateUtfallMutation,
-  useUpdateHjemlerMutation,
+  useUpdateRegistreringshjemlerMutation,
   useGetArkiverteDokumenterQuery,
   useGetTilknyttedeDokumenterQuery,
   useTilknyttDocumentMutation,

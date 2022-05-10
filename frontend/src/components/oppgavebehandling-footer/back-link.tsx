@@ -6,6 +6,6 @@ import { NavLink } from 'react-router-dom';
 export const BackLink = () => (
   <Button to="/mineoppgaver" as={NavLink} variant="secondary" size="small" data-testid="footer-button-back">
     <Back />
-    <span>Tilbake</span>
+    <span>Mine oppgaver</span>
   </Button>
 );

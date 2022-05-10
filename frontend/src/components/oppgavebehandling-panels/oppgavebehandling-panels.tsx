@@ -23,7 +23,8 @@ const PageContainer = styled.main`
   display: flex;
   width: 100%;
   margin: 0 0.25em 0 0;
-  height: calc(100vh - 9em);
+  /* height: calc(100vh - 9em); */
+  flex-grow: 1;
   overflow-x: scroll;
   overflow-y: hidden;
   padding-bottom: 1em;

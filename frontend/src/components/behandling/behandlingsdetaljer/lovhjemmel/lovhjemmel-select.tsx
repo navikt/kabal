@@ -3,21 +3,21 @@ import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { GroupedDropdown, OptionGroup } from '../../../dropdown/grouped-dropdown';
 import { ErrorMessage } from '../../../error-message/error-message';
+import { GroupedDropdown, OptionGroup } from '../../../filter-dropdown/grouped-dropdown';
 import { StyledLovhjemmelSelect } from './styled-components';
 
-interface LovhjemmelSelectProps {
-  options: OptionGroup[];
-  selected: string[];
-  onChange: (selected: string[]) => void;
+interface LovhjemmelSelectProps<T extends string> {
+  options: OptionGroup<T>[];
+  selected: T[];
+  onChange: (selected: T[]) => void;
   disabled?: boolean;
   error?: string;
   showFjernAlle?: boolean;
   show: boolean;
 }
 
-export const LovhjemmelSelect = ({
+export const LovhjemmelSelect = <T extends string>({
   onChange,
   options,
   selected,
@@ -25,7 +25,7 @@ export const LovhjemmelSelect = ({
   error,
   showFjernAlle,
   show,
-}: LovhjemmelSelectProps) => {
+}: LovhjemmelSelectProps<T>) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,17 +34,6 @@ export const LovhjemmelSelect = ({
   if (!show) {
     return null;
   }
-
-  const setSelected = (id: string | null, active: boolean) => {
-    if (id === null) {
-      onChange([]);
-      return;
-    }
-
-    const newList = active ? [...selected, id] : selected.filter((selectedValue: string) => selectedValue !== id);
-
-    onChange(newList);
-  };
 
   const toggleOpen = () => setOpen(!open);
   const close = () => setOpen(false);
@@ -63,18 +52,17 @@ export const LovhjemmelSelect = ({
           <span>Hjemmel</span>
         </StyledButton>
 
-        <GroupedDropdown
-          selected={selected}
-          options={options}
-          open={open}
-          onChange={setSelected}
-          close={close}
-          showFjernAlle={showFjernAlle}
-          top={0}
-          left="100%"
-          maxHeight="400px"
-          testId="lovhjemmel-dropdown"
-        />
+        <Popup isOpen={open}>
+          <GroupedDropdown<T>
+            selected={selected}
+            options={options}
+            open={open}
+            onChange={onChange}
+            close={close}
+            showFjernAlle={showFjernAlle}
+            testId="lovhjemmel-dropdown"
+          />
+        </Popup>
       </StyledLovhjemmelSelect>
       <ErrorMessage error={error} />
     </>
@@ -83,4 +71,31 @@ export const LovhjemmelSelect = ({
 
 export const StyledButton = styled(Button)`
   width: 100%;
+`;
+
+interface PopupProps {
+  isOpen: boolean;
+  children: React.ReactNode;
+}
+
+const Popup = ({ isOpen, children }: PopupProps) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  return <StyledPopup>{children}</StyledPopup>;
+};
+
+const StyledPopup = styled.div`
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  max-height: 400px;
+  max-width: 275px;
+
+  background-color: white;
+  border-radius: 0.25rem;
+  border: 1px solid #c6c2bf;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 `;

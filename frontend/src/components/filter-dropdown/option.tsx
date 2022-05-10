@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { StyledCheckbox } from '../../styled-components/checkbox';
 
 interface FilterProps<T extends string> {
-  onChange: (id: T | null, active: boolean) => void;
+  onChange: (id: T, active: boolean) => void;
   active: boolean;
-  filterId?: T | null;
+  filterId: T;
   children: string;
   focused: boolean;
 }
 
 export const Filter = <T extends string>({
   active,
-  filterId = null,
+  filterId,
   children,
   onChange,
   focused,

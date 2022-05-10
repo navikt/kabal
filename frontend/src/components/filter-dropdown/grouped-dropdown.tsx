@@ -1,56 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { FilterList } from './filter-list';
 import { Header } from './header';
-import { Filter } from './option';
-import {
-  StyledDropdown,
-  StyledDropdownProps,
-  StyledListItem,
-  StyledOptionList,
-  StyledSectionHeader,
-  StyledSectionList,
-} from './styled-components';
-
-export interface Option {
-  label: string;
-  value: string;
-}
+import { BaseProps, DropdownProps, IOption } from './props';
 
 export interface SectionHeader {
   id: string;
   name?: string;
 }
 
-export interface OptionGroup {
+export interface OptionGroup<T extends string> {
   sectionHeader: SectionHeader;
-  sectionOptions: Option[];
+  sectionOptions: IOption<T>[];
 }
 
-interface DropdownProps extends StyledDropdownProps {
-  selected: string[];
-  options: OptionGroup[];
-  onChange: (id: string | null, active: boolean) => void;
-  open: boolean;
-  close: () => void;
+interface GroupedDropdownProps<T extends string> extends BaseProps<T, OptionGroup<T>>, DropdownProps {
   showFjernAlle?: boolean;
   testId?: string;
 }
 
-export const GroupedDropdown = ({
+export const GroupedDropdown = <T extends string>({
   selected,
   options,
   open,
   onChange,
   close,
-  top,
-  left,
-  maxHeight,
   testId,
   showFjernAlle = true,
-}: DropdownProps): JSX.Element | null => {
+}: GroupedDropdownProps<T>): JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
-  const [flattenedFilteredOptions, setFlattenedFilteredOptions] = useState<Option[]>(
+  const [flattenedFilteredOptions, setFlattenedFilteredOptions] = useState<IOption<T>[]>(
     options.flatMap(({ sectionOptions }) => sectionOptions)
   );
 
@@ -74,13 +55,7 @@ export const GroupedDropdown = ({
     }
   }, [open, focused]);
 
-  if (!open) {
-    return null;
-  }
-
-  const reset = () => {
-    onChange(null, false);
-  };
+  const reset = () => onChange([]);
 
   const onSelectFocused = () => {
     const focusedOption = flattenedFilteredOptions[focused];
@@ -90,11 +65,19 @@ export const GroupedDropdown = ({
     }
 
     const { value } = focusedOption;
-    onChange(value, !selected.includes(value));
+    const isSelected = selected.includes(value);
+
+    if (isSelected) {
+      onChange(selected.filter((s) => s !== value));
+    } else {
+      onChange([...selected, value]);
+    }
   };
 
+  const focusedOption = flattenedFilteredOptions[focused] ?? null;
+
   return (
-    <StyledDropdown top={top} left={left} maxHeight={maxHeight}>
+    <StyledDropdown>
       <Header
         onFocusChange={setFocused}
         onFilterChange={setFilter}
@@ -111,23 +94,41 @@ export const GroupedDropdown = ({
             {typeof sectionHeader.name !== 'undefined' && (
               <StyledSectionHeader>{sectionHeader.name}</StyledSectionHeader>
             )}
-            <StyledOptionList data-testid={`${sectionHeader.name ?? 'grouped-dropdown'}-option-list`}>
-              {sectionOptions.map(({ value, label }) => (
-                <StyledListItem key={value}>
-                  <Filter
-                    active={selected.includes(value)}
-                    filterId={value}
-                    onChange={onChange}
-                    focused={focused === flattenedFilteredOptions.findIndex((o) => o.value === value)}
-                  >
-                    {label}
-                  </Filter>
-                </StyledListItem>
-              ))}
-            </StyledOptionList>
+            <FilterList options={sectionOptions} selected={selected} onChange={onChange} focused={focusedOption} />
           </li>
         ))}
       </StyledSectionList>
     </StyledDropdown>
   );
 };
+
+const StyledDropdown = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+  width: 100%;
+  min-width: 275px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+`;
+
+const StyledSectionHeader = styled.h3`
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 16px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+`;
+
+const StyledSectionList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+`;

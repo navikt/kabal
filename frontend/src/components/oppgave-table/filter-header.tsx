@@ -4,8 +4,8 @@ import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
-import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../dropdown/dropdown';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
 import { Filters } from './types';
 
 interface TableHeaderFiltersProps {
