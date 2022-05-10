@@ -6,7 +6,7 @@ import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { CommentableVoidElementTypes } from '../editor-types';
+import { CommentableVoidElementTypes } from '../editor-void-types';
 import { connectCommentThread } from '../rich-text-editor/connect-thread';
 import { StyledCommentButtonContainer, StyledNewComment } from './styled-components';
 

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useLayoutEffect } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
 import styled from 'styled-components';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { CommentableVoidElementTypes } from '../editor-types';
+import { CommentableVoidElementTypes } from '../editor-void-types';
 
 interface CommentWrapperProps<T extends CommentableVoidElementTypes> extends RenderElementProps {
   content: JSX.Element;

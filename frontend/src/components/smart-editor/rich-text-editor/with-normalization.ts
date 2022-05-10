@@ -1,23 +1,23 @@
 import { Editor, Element, Node, Path, Text, Transforms } from 'slate';
+import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../editor-enums';
 import {
-  BulletListElementType,
-  ContentTypeEnum,
-  CustomTextType,
-  IMarks,
-  ListContentEnum,
-  ListItemContainerElementType,
-  ListItemElementType,
-  ListTypesEnum,
-  MarkKeyList,
-  MarkKeys,
-  NumberedListElementType,
-  hasAnyComments,
-  hasAnyMark,
   isMarkKey,
   isNodeAlignableElementType,
   isNodeMarkableElementType,
   isNodeOfSameElementType,
   isOfElementType,
+} from '../editor-type-guards';
+import {
+  BulletListElementType,
+  CustomTextType,
+  IMarks,
+  ListItemContainerElementType,
+  ListItemElementType,
+  MarkKeyList,
+  MarkKeys,
+  NumberedListElementType,
+  hasAnyComments,
+  hasAnyMark,
 } from '../editor-types';
 
 export const withNormalization = (editor: Editor) => {

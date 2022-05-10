@@ -2,7 +2,7 @@ import { FormatAlignLeft } from '@styled-icons/material/FormatAlignLeft';
 import { FormatAlignRight } from '@styled-icons/material/FormatAlignRight';
 import React from 'react';
 import { useSlate } from 'slate-react';
-import { TextAlignEnum } from '../editor-types';
+import { TextAlignEnum } from '../editor-enums';
 import { isTextAlignActive, setTextAlign } from './functions/textAlign';
 import { ToolbarIconButton } from './toolbarbutton';
 

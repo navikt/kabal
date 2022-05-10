@@ -1,4 +1,4 @@
-import { TextAlignEnum } from '../editor-types';
+import { TextAlignEnum } from '../editor-enums';
 
 export const getTextAlign = (textAlign: TextAlignEnum) => {
   switch (textAlign) {

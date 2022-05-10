@@ -2,19 +2,12 @@ import React from 'react';
 import { Descendant, Element } from 'slate';
 import { RenderElementProps as RenderElementPropsBase } from 'slate-react';
 import { CommentWrapper } from './comments/comment-wrapper';
-import {
-  AlignableElementTypes,
-  ContentTypeEnum,
-  HeadingTypesEnum,
-  ListContentEnum,
-  ListTypesEnum,
-  VoidElementsEnum,
-} from './editor-types';
+import { ContentTypeEnum, HeadingTypesEnum, ListContentEnum, ListTypesEnum, VoidElementsEnum } from './editor-enums';
+import { AlignableElementTypes } from './editor-types';
 import { renderLeaf } from './rich-text-editor/leaf/render';
 import { CurrentDate } from './slate-void-elements/current-date';
 import { DocumentListElement } from './slate-void-elements/document-list';
 import { LabelElement } from './slate-void-elements/label';
-import { MaltekstElement } from './slate-void-elements/maltekst/maltekst';
 import { Signature } from './slate-void-elements/signature';
 import { BlockQuoteStyle, ParagraphStyle } from './styled-elements/content';
 import {
@@ -111,10 +104,6 @@ export const renderElement = (props: RenderElementProps) => {
       return <QuoteElement {...props} element={props.element} />;
     case VoidElementsEnum.SIGNATURE:
       return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
-    case VoidElementsEnum.MALTEKST:
-      return (
-        <CommentWrapper {...props} element={props.element} content={<MaltekstElement element={props.element} />} />
-      );
     case VoidElementsEnum.LABEL_CONTENT:
       return <CommentWrapper {...props} element={props.element} content={<LabelElement element={props.element} />} />;
     case VoidElementsEnum.DOCUMENT_LIST:

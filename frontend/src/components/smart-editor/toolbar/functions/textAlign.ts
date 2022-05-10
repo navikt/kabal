@@ -1,5 +1,6 @@
 import { Editor, Element, Transforms } from 'slate';
-import { TextAlignEnum, isNodeAlignableElementType } from '../../editor-types';
+import { TextAlignEnum } from '../../editor-enums';
+import { isNodeAlignableElementType } from '../../editor-type-guards';
 
 export const setTextAlign = (editor: Editor, textAlign: TextAlignEnum) => {
   Transforms.setNodes(

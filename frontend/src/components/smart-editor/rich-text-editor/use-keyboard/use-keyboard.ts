@@ -1,14 +1,9 @@
 import React, { useCallback, useContext } from 'react';
 import { Editor, Point, Range, Transforms } from 'slate';
 import { SmartEditorContext } from '../../context/smart-editor-context';
-import {
-  ContentTypeEnum,
-  ListContentEnum,
-  ListItemContainerElementType,
-  ListTypesEnum,
-  MarkKeys,
-  isOfElementType,
-} from '../../editor-types';
+import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../editor-enums';
+import { isOfElementType } from '../../editor-type-guards';
+import { ListItemContainerElementType, MarkKeys } from '../../editor-types';
 import { createNewParagraph, getSelectedListTypes, isBlockActive } from '../../toolbar/functions/blocks';
 import { toggleMark } from '../../toolbar/functions/marks';
 import { indentList } from '../slate-event-handlers/list/indent';
