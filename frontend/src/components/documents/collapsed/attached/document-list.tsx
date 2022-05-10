@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetTilknyttedeDokumenterQuery } from '../../../../redux-api/oppgavebehandling';
+import { useGetTilknyttedeDokumenterQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { Loading } from '../../loading';
 import { ListContainer, StyledSubHeader } from '../styled-components/container';
 import { DocumentList } from '../styled-components/document-list';

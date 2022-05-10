@@ -1,5 +1,5 @@
 import React from 'react';
-import { IMainDocument } from '../../../../types/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 import { StyledDocumentListItem } from '../styled-components/document-list';
 import { AttachmentList } from './attachment-list';
 import { NewDocument } from './new-document';

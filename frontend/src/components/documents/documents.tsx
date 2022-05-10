@@ -1,7 +1,7 @@
 import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { IOppgavebehandling } from '../../types/oppgavebehandling';
+import { IOppgavebehandling } from '../../types/oppgavebehandling/oppgavebehandling';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { ShowDocument } from '../show-document/show-document';
 import { IShownDocument } from '../show-document/types';

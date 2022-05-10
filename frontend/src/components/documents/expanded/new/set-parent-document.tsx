@@ -1,9 +1,11 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { Select } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery, useSetParentMutation } from '../../../../redux-api/documents';
-import { IMainDocument } from '../../../../types/documents';
+import { useSetParentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
@@ -13,7 +15,9 @@ interface Props {
 
 export const SetParentDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery({ oppgaveId });
+  const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(
+    oppgaveId === skipToken ? skipToken : { oppgaveId }
+  );
   const [setParent, { isLoading: isSettingParent }] = useSetParentMutation();
 
   const hasAttachments = useMemo(() => {
@@ -38,8 +42,13 @@ export const SetParentDocument = ({ document }: Props) => {
     return null;
   }
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) =>
+  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    if (typeof oppgaveId !== 'string') {
+      return;
+    }
+
     setParent({ dokumentId: document.id, oppgaveId, parentId: target.value === NONE_SELECTED ? null : target.value });
+  };
 
   const currentOption =
     document.parent === null ? null : (

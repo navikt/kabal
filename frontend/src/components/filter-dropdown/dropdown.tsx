@@ -30,7 +30,7 @@ export const Dropdown = <T extends string>({
   const reset = () => onChange([]);
 
   const onSelectFocused = () => {
-    const focusedOption = options[focused];
+    const focusedOption = filteredOptions[focused];
 
     if (focusedOption === undefined) {
       return;

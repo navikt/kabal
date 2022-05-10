@@ -1,5 +1,6 @@
 import { Close, SuccessStroke } from '@navikt/ds-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -24,7 +25,7 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
 
   const [text, setText] = useState<string>('');
 
-  if (typeof bruker === 'undefined' || brukerIsLoading || typeof signature === 'undefined') {
+  if (typeof bruker === 'undefined' || brukerIsLoading || typeof signature === 'undefined' || oppgaveId === skipToken) {
     return <Loader size="xlarge" />;
   }
 

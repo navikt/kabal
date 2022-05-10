@@ -5,12 +5,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
-import {
-  useSwitchMedunderskriverflytMutation,
-  useUpdateChosenMedunderskriverMutation,
-} from '../../../../redux-api/oppgavebehandling';
+import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 
 type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'medunderskriver' | 'medunderskriverFlyt'>;
 

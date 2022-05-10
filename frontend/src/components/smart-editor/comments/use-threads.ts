@@ -1,13 +1,12 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { Descendant, Text } from 'slate';
 import { isNotUndefined } from '../../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetSmartEditorQuery } from '../../../redux-api/smart-editor-api';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
-import { ISmartEditorComment } from '../../../types/smart-editor-comments';
+import { ISmartEditorComment } from '../../../types/smart-editor/comments';
+import { isCommentableVoid } from '../../rich-text/types/editor-type-guards';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { isCommentableVoid } from '../editor-type-guards';
 
 export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;
@@ -27,27 +26,23 @@ const LOADING: Threads = {
 
 export const useThreads = (): Threads => {
   const oppgaveId = useOppgaveId();
-  const { focusedThreadId, documentId } = useContext(SmartEditorContext);
+  const { focusedThreadId, documentId, editor } = useContext(SmartEditorContext);
 
-  const { data: smartEditor, isLoading } = useGetSmartEditorQuery(
-    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId }
-  );
+  const query = useMemo(() => {
+    if (documentId === null || oppgaveId === skipToken) {
+      return skipToken;
+    }
 
-  const { data: threads, isLoading: threadsIsLoading } = useGetCommentsQuery(
-    documentId === null ? skipToken : { oppgaveId, dokumentId: documentId }
-  );
+    return { oppgaveId, dokumentId: documentId };
+  }, [documentId, oppgaveId]);
 
-  if (
-    isLoading ||
-    threadsIsLoading ||
-    smartEditor === null ||
-    typeof smartEditor === 'undefined' ||
-    typeof threads === 'undefined'
-  ) {
+  const { data: threads, isLoading: threadsIsLoading } = useGetCommentsQuery(query);
+
+  if (threadsIsLoading || editor === null || typeof threads === 'undefined') {
     return LOADING;
   }
 
-  const attachedThreadIds = [...new Set(getRichTextThreadIds(smartEditor.content))];
+  const attachedThreadIds = [...new Set(getRichTextThreadIds(editor.children))];
 
   return {
     attached: attachedThreadIds
@@ -80,6 +75,10 @@ const getRichTextThreadIds = (richText: Descendant[]): string[] =>
       return Object.keys(child)
         .filter((key) => key.startsWith('commentThreadId_'))
         .map((key) => key.replace('commentThreadId_', ''));
+    }
+
+    if (typeof child === 'undefined' || child === null) {
+      return [];
     }
 
     if (isCommentableVoid(child)) {

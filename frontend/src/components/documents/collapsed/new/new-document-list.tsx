@@ -1,9 +1,10 @@
 import { Warning } from '@navikt/ds-icons';
 import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useValidationError } from '../../../../hooks/use-validation-error';
-import { useGetDocumentsQuery } from '../../../../redux-api/documents';
+import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { Loading } from '../../loading';
 import { ListContainer, StyledSubHeader } from '../styled-components/container';
 import { DocumentList } from '../styled-components/document-list';
@@ -11,7 +12,7 @@ import { NewDocument } from './new-document';
 
 export const NewDocumentList = () => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading, isFetching } = useGetDocumentsQuery({ oppgaveId });
+  const { data, isLoading, isFetching } = useGetDocumentsQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
 
   if (isLoading || typeof data === 'undefined') {
     return <Loader size="xlarge" />;

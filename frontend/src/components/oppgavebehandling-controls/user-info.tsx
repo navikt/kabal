@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
 import { formatOrgNum } from '../../functions/format-id';
 import { Gender } from '../../types/kodeverk';
-import { IOppgavebehandlingBase, IVirksomhet } from '../../types/oppgavebehandling';
+import { IOppgavebehandlingBase, IVirksomhet } from '../../types/oppgavebehandling/oppgavebehandling';
 import { Fortrolig, StrengtFortrolig } from './fortrolig';
 import { CopyFnrButton, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';

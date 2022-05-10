@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { isoDateTimeToPretty } from '../../../domain/date';
-import { ISmartEditorComment } from '../../../types/smart-editor-comments';
+import { ISmartEditorComment } from '../../../types/smart-editor/comments';
 
 export const Comment = ({ author, created, text }: ISmartEditorComment) => (
   <StyledListItem>

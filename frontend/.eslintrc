@@ -52,7 +52,7 @@
     "linebreak-style": ["error", "unix"],
     "max-depth": ["error", { "max": 4 }],
     "no-lonely-if": "error",
-    "complexity": ["error", { "max": 34 }],
+    "complexity": ["error", { "max": 20 }],
     "curly": ["error", "all"],
     "no-alert": "error",
     "no-eval": "error",
@@ -61,6 +61,21 @@
     "no-return-assign": ["error", "always"],
     "no-implicit-coercion": "error",
     "no-nested-ternary": "error",
+    "no-restricted-globals": [
+      "error",
+      {
+          "name": "event",
+          "message": "Use local parameter instead."
+      },
+      {
+          "name": "Element",
+          "message": "Import Element from slate"
+      },
+      {
+        "name": "DocumentType",
+        "message": "Import DocumentType locally"
+      }
+    ],
     "no-unneeded-ternary": "error",
     "arrow-body-style": ["error", "as-needed"],
     "prefer-const": "error",

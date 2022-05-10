@@ -5,10 +5,10 @@ import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useGetBrukerQuery, useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
-import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgavebehandling';
+import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling';
-import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling-params';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 

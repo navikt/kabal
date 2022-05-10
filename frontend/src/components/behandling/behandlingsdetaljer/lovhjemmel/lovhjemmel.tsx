@@ -7,7 +7,7 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
 import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetBrukerQuery } from '../../../../redux-api/bruker';
-import { useUpdateRegistreringshjemlerMutation } from '../../../../redux-api/oppgavebehandling';
+import { useUpdateRegistreringshjemlerMutation } from '../../../../redux-api/oppgaver/mutations/set-registreringshjemler';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 

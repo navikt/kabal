@@ -3,6 +3,7 @@ import { Button } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
+import { stringToRegExp } from '../../functions/string-to-regex';
 
 interface HeaderProps {
   focused: number;
@@ -27,14 +28,8 @@ export const Header = ({
 }: HeaderProps): JSX.Element | null => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const onInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const cleanFilter = removeRegExpTokens(target.value);
-    const pattern = cleanFilter.split('').join('.*');
-    const escapedPattern = escapeRegExp(pattern);
-
-    const filter = new RegExp(`.*${escapedPattern}.*`, 'i');
-    onFilterChange(filter);
-  };
+  const onInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
+    onFilterChange(stringToRegExp(target.value));
 
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
@@ -99,9 +94,6 @@ export const Header = ({
     </StyledHeader>
   );
 };
-
-const removeRegExpTokens = (pattern: string): string => pattern.replace(/[/\\^$*+?.()|[\]{}\s]/g, '');
-const escapeRegExp = (pattern: string): string => pattern.replaceAll('-', '\\-');
 
 const StyledKnapp = styled(Button)`
   margin-left: 0.5em;

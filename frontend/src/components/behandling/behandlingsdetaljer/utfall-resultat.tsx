@@ -29,6 +29,10 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
+    if (typeof oppgaveId !== 'string') {
+      return;
+    }
+
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfall: value });
     } else if (value === NOT_SELECTED) {

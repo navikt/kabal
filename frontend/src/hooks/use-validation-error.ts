@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
 import { IValidationSection } from '../functions/error-type-guard';
 import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
-import { IOppgavebehandlingBase } from '../types/oppgavebehandling';
+import { IOppgavebehandlingBase } from '../types/oppgavebehandling/oppgavebehandling';
 
 type Field =
   | keyof IKakaKvalitetsvurdering

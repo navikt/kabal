@@ -1,11 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IDocumentParams } from '../types/documents-common-params';
+import { IDocumentParams } from '../types/documents/common-params';
 import {
   IGetCommentParams,
   IPostCommentParams,
   IPostReplyParams,
   ISmartEditorComment,
-} from '../types/smart-editor-comments';
+} from '../types/smart-editor/comments';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 
 export const smartEditorCommentsApi = createApi({
@@ -13,15 +13,15 @@ export const smartEditorCommentsApi = createApi({
   baseQuery: KABAL_BEHANDLINGER_BASE_QUERY,
   endpoints: (builder) => ({
     getComments: builder.query<ISmartEditorComment[], IDocumentParams>({
-      query: ({ oppgaveId, dokumentId }) => `${oppgaveId}/dokumenter/smarteditor/${dokumentId}/comments`,
+      query: ({ oppgaveId, dokumentId }) => `${oppgaveId}/smartdokumenter/${dokumentId}/comments`,
     }),
     getComment: builder.query<ISmartEditorComment, IGetCommentParams>({
       query: ({ oppgaveId, dokumentId, commentId }) =>
-        `${oppgaveId}/dokumenter/smarteditor/${dokumentId}/comments/${commentId}`,
+        `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}`,
     }),
     postComment: builder.mutation<ISmartEditorComment, IPostCommentParams>({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
-        url: `${oppgaveId}/dokumenter/smarteditor/${dokumentId}/comments`,
+        url: `${oppgaveId}/smartdokumenter/${dokumentId}/comments`,
         method: 'POST',
         body,
       }),
@@ -37,7 +37,7 @@ export const smartEditorCommentsApi = createApi({
     }),
     postReply: builder.mutation<ISmartEditorComment, IPostReplyParams>({
       query: ({ oppgaveId, dokumentId, commentId, ...body }) => ({
-        url: `${oppgaveId}/dokumenter/smarteditor/${dokumentId}/comments/${commentId}/replies`,
+        url: `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}/replies`,
         method: 'POST',
         body,
       }),

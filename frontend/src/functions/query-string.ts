@@ -5,7 +5,13 @@ export const queryStringify = (query: unknown): string => {
     return '';
   }
 
-  return Object.keys(query)
+  const keys = Object.keys(query);
+
+  if (keys.length === 0) {
+    return '';
+  }
+
+  const params = keys
     .map((key) => {
       const value: unknown = query[key];
 
@@ -34,6 +40,12 @@ export const queryStringify = (query: unknown): string => {
     })
     .filter(isNotNull)
     .join('&');
+
+  if (params.length === 0) {
+    return '';
+  }
+
+  return `?${params}`;
 };
 
 const stringifyValue = (value: string | number | boolean): string | null => {

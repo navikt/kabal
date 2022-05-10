@@ -2,8 +2,9 @@ import { Button } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useTildelSaksbehandlerMutation } from '../../redux-api/ansatte';
-import { IEnhet, useGetBrukerQuery } from '../../redux-api/bruker';
+import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
+import { IEnhet } from '../../types/bruker';
 import { Dropdown, DropdownContainer, DropdownOption, SuccessStatus, TildelDropdownButton } from './styled-components';
 
 interface Props {

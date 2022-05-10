@@ -1,12 +1,19 @@
 import { NewTab, Notes } from '@navikt/ds-icons';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
+import {
+  ErrorBoundary,
+  StyledDescriptionTerm,
+  StyledPreDescriptionDetails,
+} from '../../../error-boundary/error-boundary';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsMedunderskriver } from '../../../hooks/use-is-medunderskriver';
-import { useSmartDocuments } from '../../../hooks/use-smart-documents';
-import { ISmartDocument } from '../../../types/documents';
+import { useSmartEditors } from '../../../hooks/use-smart-editors';
+import { useDeleteDocumentMutation } from '../../../redux-api/oppgaver/mutations/documents';
+import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
 import { CommentSection } from '../comments/comment-section';
 import { SmartEditorContextComponent } from '../context/smart-editor-context';
-import { ErrorBoundary } from '../error-boundary/error-boundary';
+import { GodeFormuleringer } from '../gode-formuleringer/gode-formuleringer';
 import { NewDocument } from '../new-document/new-document';
 import { SmartEditor } from '../smart-editor';
 import { CommentsClickBoundary } from './comments-click-boundry';
@@ -14,47 +21,42 @@ import { ActiveTabButton, TabButton, TabsContainer } from './styled-components';
 
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
-  const documents = useSmartDocuments(oppgaveId);
+  const editors = useSmartEditors(oppgaveId);
 
-  if (typeof documents === 'undefined') {
+  if (typeof editors === 'undefined' || oppgaveId === skipToken) {
     return null;
   }
 
-  return <Tabbed oppgaveId={oppgaveId} documents={documents} />;
+  return <Tabbed oppgaveId={oppgaveId} editors={editors} />;
 };
 
 interface TabbedProps {
   oppgaveId: string;
-  documents: ISmartDocument[];
+  editors: ISmartEditor[];
 }
 
-const Tabbed = ({ oppgaveId, documents }: TabbedProps) => {
-  const [firstDocument] = documents;
-  const [documentId, setDocumentId] = useState<string | null>(firstDocument?.id ?? null);
+const Tabbed = ({ oppgaveId, editors }: TabbedProps) => {
+  const [firstEditor] = editors;
+  const [editorId, setEditorId] = useState<string | null>(firstEditor?.id ?? null);
 
-  const activeDocumentId = documents.some(({ id }) => id === documentId) ? documentId : null;
+  const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : null;
 
   return (
     <>
-      <Tabs documents={documents} activeTab={activeDocumentId} setActiveTab={setDocumentId} />
-      <ShowTab
-        documents={documents}
-        activeDocumentId={activeDocumentId}
-        oppgaveId={oppgaveId}
-        onCreate={setDocumentId}
-      />
+      <Tabs editors={editors} activeTab={activeEditorId} setActiveTab={setEditorId} />
+      <ShowTab editors={editors} activeEditorId={activeEditorId} oppgaveId={oppgaveId} onCreate={setEditorId} />
     </>
   );
 };
 
 interface TabsProps {
-  documents: ISmartDocument[];
+  editors: ISmartEditor[];
   activeTab: string | null;
   setActiveTab: (id: string | null) => void;
 }
 
-const Tabs = ({ documents, activeTab, setActiveTab }: TabsProps) => {
-  const tabs = documents.map(({ id, tittel }) => {
+const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
+  const tabs = editors.map(({ id, tittel }) => {
     const Button = id === activeTab ? ActiveTabButton : TabButton;
 
     return (
@@ -95,19 +97,27 @@ const ShowNewTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
 
 interface Props {
   oppgaveId: string;
-  activeDocumentId: string | null;
-  documents: ISmartDocument[];
+  activeEditorId: string | null;
+  editors: ISmartEditor[];
   onCreate: (documentId: string) => void;
 }
 
-const ShowTab = ({ activeDocumentId, documents, oppgaveId, onCreate }: Props) => {
-  const editors = documents.map((document) => {
-    const isActive = document.id === activeDocumentId;
+const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
+  const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
+
+  const editorComponents = editors.map((editor) => {
+    const isActive = editor.id === activeEditorId;
 
     return (
-      <SmartEditorContextComponent key={document.id} documentId={document.id}>
+      <SmartEditorContextComponent key={editor.id} documentId={editor.id} templateId={editor.templateId}>
         <CommentsClickBoundary isActive={isActive}>
-          <ErrorBoundary documentId={document.id} oppgaveId={oppgaveId}>
+          <ErrorBoundary
+            onDelete={() => deleteDocument({ dokumentId: editor.id, oppgaveId })}
+            isDeleting={isLoading}
+            deleteButtonText="Slett dokument"
+            errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}
+          >
+            <GodeFormuleringer templateId={editor.templateId} />
             <SmartEditor />
             <CommentSection />
           </ErrorBoundary>
@@ -116,12 +126,26 @@ const ShowTab = ({ activeDocumentId, documents, oppgaveId, onCreate }: Props) =>
     );
   });
 
-  const newTab = activeDocumentId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
+  const newTab = activeEditorId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
 
   return (
     <>
-      {editors}
+      {editorComponents}
       {newTab}
     </>
   );
 };
+
+interface DocumentErrorComponentProps {
+  oppgaveId: string;
+  documentId: string;
+}
+
+const DocumentErrorComponent = ({ oppgaveId, documentId }: DocumentErrorComponentProps) => (
+  <dl>
+    <StyledDescriptionTerm>Behandlings-ID</StyledDescriptionTerm>
+    <StyledPreDescriptionDetails>{oppgaveId}</StyledPreDescriptionDetails>
+    <StyledDescriptionTerm>Dokument-ID</StyledDescriptionTerm>
+    <StyledPreDescriptionDetails>{documentId}</StyledPreDescriptionDetails>
+  </dl>
+);

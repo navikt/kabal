@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
-import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver';
+import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from '../common-table-components/header';

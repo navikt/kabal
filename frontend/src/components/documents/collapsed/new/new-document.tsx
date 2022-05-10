@@ -1,6 +1,6 @@
 import React from 'react';
 import { isoDateTimeToPretty } from '../../../../domain/date';
-import { IMainDocument } from '../../../../types/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 import { AttachmentListItem, StyledAttachmentList } from '../styled-components/attachment-list';
 import { DocumentDate } from '../styled-components/document';
 import { DocumentListItem } from '../styled-components/document-list';

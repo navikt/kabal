@@ -1,17 +1,18 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { StyledAttachmentList, StyledAttachmentListItem } from '../styled-components/attachment-list';
 import { Attachment } from './attachment';
 
 interface Props {
-  oppgavebehandlingId: string;
+  oppgaveId: string | typeof skipToken;
   document: IArkivertDocument;
   pageReferences: (string | null)[];
   temaer: string[];
 }
 
-export const AttachmentList = ({ oppgavebehandlingId, document, pageReferences, temaer }: Props) => {
-  if (document.vedlegg.length === 0) {
+export const AttachmentList = ({ oppgaveId, document, pageReferences, temaer }: Props) => {
+  if (document.vedlegg.length === 0 || typeof oppgaveId !== 'string') {
     return null;
   }
 
@@ -24,7 +25,7 @@ export const AttachmentList = ({ oppgavebehandlingId, document, pageReferences, 
           data-documentname={vedlegg.tittel}
         >
           <Attachment
-            oppgavebehandlingId={oppgavebehandlingId}
+            oppgavebehandlingId={oppgaveId}
             vedlegg={vedlegg}
             document={document}
             pageReferences={pageReferences}

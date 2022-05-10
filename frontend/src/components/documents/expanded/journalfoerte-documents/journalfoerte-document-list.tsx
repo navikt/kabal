@@ -1,8 +1,9 @@
 import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '../../../../hooks/use-all-temaer';
-import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgavebehandling';
+import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
 import { StyledDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentList } from '../styled-components/document-list';
@@ -15,11 +16,15 @@ export const JournalfoerteDocumentList = () => {
   const [pageReferences, setPageReferences] = useState<(string | null)[]>([null]);
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
 
-  const { data: lastPage, isFetching } = useGetArkiverteDokumenterQuery({
-    oppgaveId,
-    pageReference: pageReferences[pageReferences.length - 1] ?? null,
-    temaer: selectedTemaer,
-  });
+  const { data: lastPage, isFetching } = useGetArkiverteDokumenterQuery(
+    oppgaveId === skipToken
+      ? skipToken
+      : {
+          oppgaveId,
+          pageReference: pageReferences[pageReferences.length - 1] ?? null,
+          temaer: selectedTemaer,
+        }
+  );
 
   const allTemaer = useAllTemaer();
 

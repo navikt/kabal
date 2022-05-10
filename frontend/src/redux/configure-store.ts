@@ -1,19 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { ansatteApi } from '../redux-api/ansatte';
-import { behandlingerApi } from '../redux-api/behandlinger';
 import { brukerApi } from '../redux-api/bruker';
-import { documentsApi } from '../redux-api/documents';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
 import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
-import { oppgavebehandlingApi } from '../redux-api/oppgavebehandling';
-import { oppgaverApi } from '../redux-api/oppgaver';
-import { smartEditorApi } from '../redux-api/smart-editor-api';
+import { oppgaverApi } from '../redux-api/oppgaver/oppgaver';
 import { smartEditorCommentsApi } from '../redux-api/smart-editor-comments';
-import { smartEditorIdApi } from '../redux-api/smart-editor-id';
+import { textsApi } from '../redux-api/texts';
 import { RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
@@ -38,17 +33,12 @@ export const reduxStore = configureStore({
       oppgaverApi.middleware,
       kodeverkApi.middleware,
       brukerApi.middleware,
-      oppgavebehandlingApi.middleware,
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
       featureTogglingApi.middleware,
-      smartEditorApi.middleware,
-      smartEditorIdApi.middleware,
       kabalInternalApi.middleware,
-      ansatteApi.middleware,
-      documentsApi.middleware,
       smartEditorCommentsApi.middleware,
-      behandlingerApi.middleware,
+      textsApi.middleware,
     ]),
 });
 

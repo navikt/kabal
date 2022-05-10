@@ -3,13 +3,8 @@ import { Loader } from '@navikt/ds-react';
 import { Input, Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  ISetCustomInfoParams,
-  ISignatureResponse,
-  useGetBrukerQuery,
-  useGetMySignatureQuery,
-  useSetCustomInfoMutation,
-} from '../../redux-api/bruker';
+import { useGetBrukerQuery, useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
+import { ISetCustomInfoParams, ISignatureResponse } from '../../types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {

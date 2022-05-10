@@ -4,9 +4,9 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { useOppgave } from '../../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useFinishDocumentMutation } from '../../../../../redux-api/documents';
-import { DocumentType, IMainDocument } from '../../../../../types/documents';
-import { Saksrolle } from '../../../../../types/oppgavebehandling';
+import { useFinishDocumentMutation } from '../../../../../redux-api/oppgaver/mutations/documents';
+import { DocumentType, IMainDocument } from '../../../../../types/documents/documents';
+import { Saksrolle } from '../../../../../types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   document: IMainDocument;
@@ -39,6 +39,14 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
   const oppgaveId = useOppgaveId();
 
+  const onClick = () => {
+    if (typeof oppgaveId !== 'string') {
+      return;
+    }
+
+    finish({ dokumentId, oppgaveId });
+  };
+
   return (
     <StyledFinishDocument>
       <StyledHeader>Arkiver dokument</StyledHeader>
@@ -48,7 +56,7 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           type="button"
           size="small"
           variant="primary"
-          onClick={() => finish({ dokumentId, oppgaveId })}
+          onClick={onClick}
           loading={isFinishing}
           data-testid="document-finish-confirm"
         >

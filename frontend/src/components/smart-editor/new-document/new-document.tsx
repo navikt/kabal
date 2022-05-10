@@ -2,11 +2,12 @@ import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useCreateSmartDocumentMutation } from '../../../redux-api/smart-editor-api';
-import { ISmartEditorTemplate } from '../../../types/smart-editor';
-import { EMPTY_TEMPLATE } from '../templates/empty-template';
-import { UTFALL_SIMPLE_TEMPLATE } from '../templates/utfall-simple-template';
-// import { UTFALL_TEMPLATE } from '../templates/utfall-template';
+import { useFeatureToggle } from '../../../hooks/use-feature-toggle';
+import { FeatureToggles } from '../../../redux-api/feature-toggling';
+import { useCreateSmartDocumentMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
+import { OppgaveType } from '../../../types/kodeverk';
+import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
+import { ANKE_TEMPLATES, EXPERIMENTAL_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { MedholdBrevIcon } from './medhold-brev-icon';
@@ -19,14 +20,13 @@ import {
   StyledTemplates,
 } from './styled-components';
 
-const TEMPLATES = [EMPTY_TEMPLATE, UTFALL_SIMPLE_TEMPLATE /* UTFALL_TEMPLATE */];
-
 interface Props {
   oppgaveId: string;
   onCreate: (id: string) => void;
 }
 
 export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
+  const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const canEdit = useCanEdit();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
@@ -45,12 +45,16 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
       .finally(() => setLoadingTemplate(null));
   };
 
+  const templates = (oppgave.type === OppgaveType.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES).filter(({ templateId }) =>
+    EXPERIMENTAL_TEMPLATES.some((e) => e.templateId === templateId) ? malteksterEnabled : true
+  );
+
   return (
     <StyledNewDocument>
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {TEMPLATES.map((template) => (
+        {templates.map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}

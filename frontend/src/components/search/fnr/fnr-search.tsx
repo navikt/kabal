@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import AlertStripe from 'nav-frontend-alertstriper';
 import React from 'react';
-import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver';
+import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver/queries/oppgaver';
 import { Result } from './result';
 
 const FNR_REGEX = /^\s*\d{6}\s*\d{5}\s*$/;

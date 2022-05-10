@@ -56,3 +56,17 @@ export const useHjemmelFromId = (hjemmelId?: string | null): string => {
 
   return 'Mangler';
 };
+
+export const useEnhetNameFromId = (enhetId?: string | null): string => {
+  const { data, isLoading } = useGetKodeverkQuery();
+
+  if (isLoading || typeof data === 'undefined') {
+    return 'Laster...';
+  }
+
+  if (typeof enhetId === 'string') {
+    return data.enheter.find(({ id }) => id === enhetId)?.navn ?? enhetId;
+  }
+
+  return 'Mangler';
+};

@@ -2,8 +2,8 @@ import { Input } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useSetTitleMutation } from '../../../../redux-api/documents';
-import { IMainDocument } from '../../../../types/documents';
+import { useSetTitleMutation } from '../../../../redux-api/oppgaver/mutations/documents';
+import { IMainDocument } from '../../../../types/documents/documents';
 
 interface Props {
   document: IMainDocument;
@@ -18,7 +18,7 @@ export const SetFilename = ({ document, onDone }: Props) => {
   const save = () => {
     onDone();
 
-    if (localFilename === document.tittel) {
+    if (localFilename === document.tittel || typeof oppgaveId !== 'string') {
       return;
     }
 

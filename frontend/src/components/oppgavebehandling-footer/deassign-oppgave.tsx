@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '../../hooks/use-kodeverk-value';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useFradelSaksbehandlerMutation } from '../../redux-api/ansatte';
-import { useUpdateInnsendingshjemlerMutation } from '../../redux-api/behandlinger';
 import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
+import { useUpdateInnsendingshjemlerMutation } from '../../redux-api/oppgaver/mutations/behandling';
 import { FilterList } from '../filter-dropdown/filter-list';
 
 export const DeassignOppgave = () => {

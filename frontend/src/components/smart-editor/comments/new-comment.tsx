@@ -1,13 +1,14 @@
 import { Close, Send } from '@navikt/ds-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useCallback, useContext, useState } from 'react';
 import { Range, Transforms } from 'slate';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments';
+import { connectCommentThread } from '../../rich-text/rich-text-editor/connect-thread';
+import { CommentableVoidElementTypes } from '../../rich-text/types/editor-void-types';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { CommentableVoidElementTypes } from '../editor-void-types';
-import { connectCommentThread } from '../rich-text-editor/connect-thread';
 import { StyledCommentButtonContainer, StyledNewComment } from './styled-components';
 
 interface Props {
@@ -48,7 +49,13 @@ export const NewComment = ({ close }: Props) => {
     [activeElement, editor, selection]
   );
 
-  if (signatureIsLoading || brukerIsLoading || typeof bruker === 'undefined' || typeof signature === 'undefined') {
+  if (
+    signatureIsLoading ||
+    brukerIsLoading ||
+    typeof bruker === 'undefined' ||
+    typeof signature === 'undefined' ||
+    oppgaveId === skipToken
+  ) {
     return <Loader size="xlarge" />;
   }
 

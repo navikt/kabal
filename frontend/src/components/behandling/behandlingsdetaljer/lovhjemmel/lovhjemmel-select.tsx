@@ -1,6 +1,6 @@
 import { Search } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { ErrorMessage } from '../../../error-message/error-message';
@@ -79,11 +79,19 @@ interface PopupProps {
 }
 
 const Popup = ({ isOpen, children }: PopupProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+    }
+  }, [isOpen]);
+
   if (!isOpen) {
     return null;
   }
 
-  return <StyledPopup>{children}</StyledPopup>;
+  return <StyledPopup ref={ref}>{children}</StyledPopup>;
 };
 
 const StyledPopup = styled.div`
@@ -93,6 +101,7 @@ const StyledPopup = styled.div`
   left: 100%;
   max-height: 400px;
   max-width: 275px;
+  scroll-margin-bottom: 16px;
 
   background-color: white;
   border-radius: 0.25rem;
