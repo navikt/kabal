@@ -23,7 +23,6 @@ const PageContainer = styled.main`
   display: flex;
   width: 100%;
   margin: 0 0.25em 0 0;
-  /* height: calc(100vh - 9em); */
   flex-grow: 1;
   overflow-x: scroll;
   overflow-y: hidden;
@@ -34,8 +33,4 @@ const PageContainer = styled.main`
   scroll-snap-type: x proximity;
   scroll-padding-left: 8px;
   scroll-padding-right: 8px;
-
-  @media screen and (max-width: 1400px) {
-    height: calc(100vh - 6.25em);
-  }
 `;
