@@ -15,7 +15,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
   return (
     <StyledFilterList data-testid="filter-list">
       {options.map(({ value, label }) => (
-        <StyledListItem key={value}>
+        <StyledListItem key={value} data-testid="filter-list-item" data-filterid={value}>
           <Filter
             active={selected.includes(value)}
             filterId={value}

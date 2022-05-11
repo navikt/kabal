@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { ErrorMessage } from '../../../error-message/error-message';
-import { GroupedDropdown, OptionGroup } from '../../../filter-dropdown/grouped-dropdown';
+import { GroupedFilterList, OptionGroup } from '../../../filter-dropdown/grouped-filter-list';
 import { StyledLovhjemmelSelect } from './styled-components';
 
 interface LovhjemmelSelectProps<T extends string> {
@@ -40,7 +40,7 @@ export const LovhjemmelSelect = <T extends string>({
 
   return (
     <>
-      <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel" data-selected={selected.join(',')}>
+      <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel-select" data-selected={selected.join(',')}>
         <StyledButton
           size="small"
           variant="secondary"
@@ -53,14 +53,14 @@ export const LovhjemmelSelect = <T extends string>({
         </StyledButton>
 
         <Popup isOpen={open}>
-          <GroupedDropdown<T>
+          <GroupedFilterList<T>
             selected={selected}
             options={options}
             open={open}
             onChange={onChange}
             close={close}
             showFjernAlle={showFjernAlle}
-            testId="lovhjemmel-dropdown"
+            testType="lovhjemmel"
           />
         </Popup>
       </StyledLovhjemmelSelect>
