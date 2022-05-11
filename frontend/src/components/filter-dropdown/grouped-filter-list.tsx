@@ -16,16 +16,16 @@ export interface OptionGroup<T extends string> {
 
 interface GroupedDropdownProps<T extends string> extends BaseProps<T, OptionGroup<T>>, DropdownProps {
   showFjernAlle?: boolean;
-  testId?: string;
+  testType: string;
 }
 
-export const GroupedDropdown = <T extends string>({
+export const GroupedFilterList = <T extends string>({
   selected,
   options,
   open,
   onChange,
   close,
-  testId,
+  testType,
   showFjernAlle = true,
 }: GroupedDropdownProps<T>): JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(/.*/);
@@ -77,7 +77,7 @@ export const GroupedDropdown = <T extends string>({
   const focusedOption = flattenedFilteredOptions[focused] ?? null;
 
   return (
-    <StyledDropdown>
+    <Container>
       <Header
         onFocusChange={setFocused}
         onFilterChange={setFilter}
@@ -88,21 +88,36 @@ export const GroupedDropdown = <T extends string>({
         close={close}
         showFjernAlle={showFjernAlle}
       />
-      <StyledSectionList data-testid={`${testId ?? 'grouped-dropdown'}-list`}>
+      <GroupList data-testid="group-filter-list" data-type={testType}>
         {filteredOptions.map(({ sectionHeader, sectionOptions }) => (
-          <li key={sectionHeader.id}>
-            {typeof sectionHeader.name !== 'undefined' && (
-              <StyledSectionHeader>{sectionHeader.name}</StyledSectionHeader>
-            )}
+          <li
+            key={sectionHeader.id}
+            data-testid="filter-group"
+            data-groupid={sectionHeader.id}
+            data-groupname={sectionHeader.name}
+          >
+            <GroupHeader header={sectionHeader.name} />
             <FilterList options={sectionOptions} selected={selected} onChange={onChange} focused={focusedOption} />
           </li>
         ))}
-      </StyledSectionList>
-    </StyledDropdown>
+      </GroupList>
+    </Container>
   );
 };
 
-const StyledDropdown = styled.div`
+interface GroupHeaderProps {
+  header?: string | undefined;
+}
+
+const GroupHeader = ({ header }: GroupHeaderProps) => {
+  if (typeof header !== 'string') {
+    return null;
+  }
+
+  return <StyledGroupHeader data-testid="group-title">{header}</StyledGroupHeader>;
+};
+
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -115,7 +130,7 @@ const StyledDropdown = styled.div`
   overflow-y: auto;
 `;
 
-const StyledSectionHeader = styled.h3`
+const StyledGroupHeader = styled.h3`
   font-size: 16px;
   font-weight: 700;
   margin-left: 16px;
@@ -123,7 +138,7 @@ const StyledSectionHeader = styled.h3`
   margin-bottom: 8px;
 `;
 
-const StyledSectionList = styled.ul`
+const GroupList = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;

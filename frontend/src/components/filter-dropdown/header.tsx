@@ -88,7 +88,7 @@ export const Header = ({
         inputRef={(e) => {
           inputRef.current = e;
         }}
-        data-testid="dropdown-search"
+        data-testid="header-filter"
       />
       {showFjernAlle && (
         <StyledKnapp size="xsmall" variant="danger" onClick={onReset}>
