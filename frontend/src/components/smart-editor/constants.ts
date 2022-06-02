@@ -1,10 +1,10 @@
-import { AddressSection, TemplateSections } from '../../types/texts/texts';
+import { TemplateSections } from '../../types/texts/texts';
 import { Flettefelt } from '../rich-text/types/editor-void-types';
 
 export const COMMENT_PREFIX = 'commentThreadId_';
 
-export const MALTEKST_SECTION_NAMES: Record<TemplateSections | AddressSection, string> = {
-  [AddressSection.ADDRESS]: 'Adresse',
+export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
+  [TemplateSections.HEADER]: 'Adresse',
   [TemplateSections.TITLE]: 'Dokumenttittel',
   [TemplateSections.INTRODUCTION]: 'Introduksjon',
   [TemplateSections.AVGJOERELSE]: 'Avgjørelse',

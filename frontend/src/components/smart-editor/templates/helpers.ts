@@ -1,4 +1,4 @@
-import { AddressSection, TemplateSections } from '../../../types/texts/texts';
+import { TemplateSections } from '../../../types/texts/texts';
 import {
   ContentTypeEnum,
   HeadingTypesEnum,
@@ -31,7 +31,7 @@ export const createLabelContent = (source: string, label: string): LabelContentE
   threadIds: [],
 });
 
-export const createMaltekst = (section: TemplateSections | AddressSection): VoidElementTypes => ({
+export const createMaltekst = (section: TemplateSections): VoidElementTypes => ({
   type: UndeletableVoidElementsEnum.MALTEKST,
   section,
   children: [{ text: '' }],

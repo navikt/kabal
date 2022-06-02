@@ -1,6 +1,5 @@
-import { AddressSection, IText, TemplateSections, TextMetadata } from '../../../types/texts/texts';
+import { IText, TemplateSections, TextMetadata } from '../../../types/texts/texts';
 import { DeletableVoidElementsEnum, UndeletableVoidElementsEnum } from './editor-enums';
-import { NonVoidElementTypes } from './editor-types';
 import { IMarks } from './marks';
 
 interface IWithThreads {
@@ -38,12 +37,6 @@ export interface MaltekstElementType extends IBaseVoid, IWithThreads, Partial<Te
   content: IText[] | null;
 }
 
-export interface AddressElementType extends IBaseVoid, IWithThreads, Partial<TextMetadata> {
-  type: UndeletableVoidElementsEnum.MALTEKST;
-  section: AddressSection.ADDRESS;
-  content: NonVoidElementTypes[] | null;
-}
-
 export interface IDocumentItem {
   id: string;
   title: string;
@@ -78,7 +71,6 @@ export type DeletableVoidTypes = FlettefeltElementType;
 export type VoidTypes =
   | SignatureElementType
   | MaltekstElementType
-  | AddressElementType
   | LabelContentElementType
   | DocumentListElementType
   | CurrentDateType
@@ -88,7 +80,6 @@ export type CommentableVoidElementTypes =
   | SignatureElementType
   | LabelContentElementType
   | MaltekstElementType
-  | DocumentListElementType
-  | AddressElementType;
+  | DocumentListElementType;
 
 export type VoidElementTypes = CommentableVoidElementTypes | VoidTypes | DeletableVoidTypes;

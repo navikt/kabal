@@ -3,12 +3,10 @@ import { VERSION } from '../../components/rich-text/version';
 import { Utfall } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
-export enum AddressSection {
-  ADDRESS = 'section-address',
-}
-
 // No specific order.
 export enum TemplateSections {
+  HEADER = 'section-header',
+  FOOTER = 'section-footer',
   TITLE = 'section-esel',
   INTRODUCTION = 'section-rev',
   KONKLUSJON = 'section-elg',
@@ -23,7 +21,7 @@ export enum TemplateSections {
   SAKSKOSTNADER = 'section-gris',
 }
 
-export type AllMaltekstSections = TemplateSections | AddressSection;
+export type AllMaltekstSections = TemplateSections;
 
 export interface AppQuery {
   hjemler: string[];

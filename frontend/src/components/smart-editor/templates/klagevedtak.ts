@@ -3,7 +3,7 @@ import { deepFreeze } from '../../../functions/deep-freeze';
 import { OppgaveType } from '../../../types/kodeverk';
 import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { AddressSection, TemplateSections } from '../../../types/texts/texts';
+import { TemplateSections } from '../../../types/texts/texts';
 import { VERSION } from '../../rich-text/version';
 import {
   createCurrentDate,
@@ -17,7 +17,7 @@ import {
 
 export const INITIAL_SLATE_VALUE: Descendant[] = [
   createCurrentDate(),
-  createMaltekst(AddressSection.ADDRESS),
+  createMaltekst(TemplateSections.HEADER),
   createMaltekst(TemplateSections.TITLE),
   createLabelContent('sakenGjelder.name', 'Klager'),
   createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),

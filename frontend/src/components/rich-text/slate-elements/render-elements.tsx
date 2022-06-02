@@ -1,7 +1,6 @@
 import React from 'react';
-import { AddressSection, TextTypes } from '../../../types/texts/texts';
+import { TextTypes } from '../../../types/texts/texts';
 import { CommentWrapper } from '../../smart-editor/comments/comment-wrapper';
-import { AddressElement } from '../slate-void-elements/address';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';
@@ -65,9 +64,9 @@ export const renderElement = (props: RenderElementProps) => {
       return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
 
     case UndeletableVoidElementsEnum.MALTEKST: {
-      if (props.element.section === AddressSection.ADDRESS) {
-        return <AddressElement {...props} />;
-      }
+      // if (props.element.section === AddressSection.ADDRESS) {
+      //   return <AddressElement {...props} />;
+      // }
 
       return (
         <CommentWrapper {...props} element={props.element} content={<MaltekstElement element={props.element} />} />
