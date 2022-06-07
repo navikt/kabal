@@ -1,7 +1,7 @@
 import { Editor, Node, NodeEntry, Path, Range, Transforms } from 'slate';
 import { pruneSelection } from '../../../functions/prune-selection';
 import { ListContentEnum, ListTypesEnum } from '../../../types/editor-enums';
-import { isOfElementType, isOfElementTypes } from '../../../types/editor-type-guards';
+import { isOfElementType, isOfElementTypeFn, isOfElementTypes } from '../../../types/editor-type-guards';
 import {
   BulletListElementType,
   ListItemContainerElementType,
@@ -18,8 +18,8 @@ export const indentList = (editor: Editor) =>
     }
 
     const listItemContainerEntries = Editor.nodes<ListItemContainerElementType>(editor, {
+      match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
       mode: 'lowest',
-      match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
       reverse: false,
       at: selection,
     });

@@ -12,6 +12,7 @@ import {
   HeadingTwoStyle,
 } from '../../../rich-text/styled-elements/headings';
 import { BulletListStyle, ListItemStyle, NumberedListStyle } from '../../../rich-text/styled-elements/lists';
+import { IndentStyle } from '../../styled-elements/indent';
 import {
   ContentTypeEnum,
   HeadingTypesEnum,
@@ -121,6 +122,14 @@ export const renderElement = (element: Descendant, key: string) => {
         <StyledListItemContainer {...getAttributes(element)} key={key}>
           {renderedChildren}
         </StyledListItemContainer>
+      );
+    }
+
+    case ContentTypeEnum.INDENT: {
+      return (
+        <IndentStyle {...getAttributes(element)} key={key}>
+          {renderedChildren}
+        </IndentStyle>
       );
     }
 

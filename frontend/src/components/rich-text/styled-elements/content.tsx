@@ -4,10 +4,10 @@ import { getTextAlign } from './getTextAlign';
 import { AlignableStyleProps } from './types';
 
 export const ParagraphStyle = styled.p<AlignableStyleProps>`
-  font-size: 16px;
+  font-size: 12pt;
   text-align: ${({ textAlign }) => getTextAlign(textAlign)};
   white-space: pre-wrap;
-  margin-top: 16px;
+  margin-top: 1em;
   margin-bottom: 0;
 `;
 

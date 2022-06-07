@@ -1,7 +1,6 @@
 import { TextField } from '@navikt/ds-react';
 import React, { Fragment, useCallback } from 'react';
 import styled from 'styled-components';
-import { ErrorBoundary } from '../../../error-boundary/error-boundary';
 import { useDebounced } from '../../../hooks/use-debounce';
 import { useEnhetNameFromId, useFullYtelseNameFromId, useHjemmelFromId } from '../../../hooks/use-kodeverk-ids';
 import { useUtfallName } from '../../../hooks/use-utfall-name';
@@ -12,7 +11,6 @@ import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { TEMPLATES } from '../../smart-editor/templates/templates';
 import { ResolvedTags } from '../../tags/resolved-tag';
-import { ErrorComponent } from '../error-component';
 import { useTextQuery } from '../hooks/use-text-query';
 import { SavedStatus } from '../saved-status';
 import { KodeverkSelect, SectionSelect, TemplateSelect } from '../select';
@@ -50,65 +48,59 @@ export const EditSmartEditorText = (savedText: IText) => {
 
   return (
     <Fragment key={id}>
-      <ErrorBoundary errorComponent={() => <ErrorComponent textId={id} />}>
-        <Header>
-          <TextField label="Tittel" size="small" value={title} onChange={(event) => setTitle(event.target.value)} />
+      <Header>
+        <TextField label="Tittel" size="small" value={title} onChange={(event) => setTitle(event.target.value)} />
 
-          <LineContainer>
-            <strong>Sist endret:</strong>
-            <DateTime modified={modified} created={created} />
-            <SavedStatus isSaved={!isLoading || isUninitialized} />
-          </LineContainer>
+        <LineContainer>
+          <strong>Sist endret:</strong>
+          <DateTime modified={modified} created={created} />
+          <SavedStatus isSaved={!isLoading || isUninitialized} />
+        </LineContainer>
 
-          <LineContainer>
-            <TemplateSelect
-              selected={templates.filter((t): t is TemplateIdEnum => t !== NoTemplateIdEnum.NONE)}
-              onChange={(value) => immediateUpdate(value, 'templates')}
-            >
-              Maler
-            </TemplateSelect>
-            {sectionSelect}
+        <LineContainer>
+          <TemplateSelect
+            selected={templates.filter((t): t is TemplateIdEnum => t !== NoTemplateIdEnum.NONE)}
+            onChange={(value) => immediateUpdate(value, 'templates')}
+          >
+            Maler
+          </TemplateSelect>
+          {sectionSelect}
 
-            <FilterDivider />
+          <FilterDivider />
 
-            <KodeverkSelect kodeverkKey="hjemler" selected={hjemler} onChange={immediateUpdate}>
-              Hjemler
-            </KodeverkSelect>
-            <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={immediateUpdate}>
-              Ytelser
-            </KodeverkSelect>
-            <KodeverkSelect kodeverkKey="utfall" selected={utfall} onChange={immediateUpdate}>
-              Utfall
-            </KodeverkSelect>
-            <KodeverkSelect kodeverkKey="enheter" selected={enheter} onChange={immediateUpdate}>
-              Enheter
-            </KodeverkSelect>
-          </LineContainer>
+          <KodeverkSelect kodeverkKey="hjemler" selected={hjemler} onChange={immediateUpdate}>
+            Hjemler
+          </KodeverkSelect>
+          <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={immediateUpdate}>
+            Ytelser
+          </KodeverkSelect>
+          <KodeverkSelect kodeverkKey="utfall" selected={utfall} onChange={immediateUpdate}>
+            Utfall
+          </KodeverkSelect>
+          <KodeverkSelect kodeverkKey="enheter" selected={enheter} onChange={immediateUpdate}>
+            Enheter
+          </KodeverkSelect>
+        </LineContainer>
 
-          <TagContainer>
-            <ResolvedTags
-              ids={templates}
-              useName={(tId) => TEMPLATES.find(({ templateId }) => templateId === tId)?.tittel ?? tId}
-              variant="templates"
-            />
+        <TagContainer>
+          <ResolvedTags
+            ids={templates}
+            useName={(tId) => TEMPLATES.find(({ templateId }) => templateId === tId)?.tittel ?? tId}
+            variant="templates"
+          />
 
-            <ResolvedTags
-              ids={sections}
-              useName={(sectionId) => MALTEKST_SECTION_NAMES[sectionId]}
-              variant="sections"
-            />
+          <ResolvedTags ids={sections} useName={(sectionId) => MALTEKST_SECTION_NAMES[sectionId]} variant="sections" />
 
-            <ResolvedTags ids={hjemler} useName={useHjemmelFromId} variant="hjemler" />
+          <ResolvedTags ids={hjemler} useName={useHjemmelFromId} variant="hjemler" />
 
-            <ResolvedTags ids={ytelser} useName={useFullYtelseNameFromId} variant="ytelser" />
+          <ResolvedTags ids={ytelser} useName={useFullYtelseNameFromId} variant="ytelser" />
 
-            <ResolvedTags ids={utfall} useName={useUtfallName} variant="utfall" />
+          <ResolvedTags ids={utfall} useName={useUtfallName} variant="utfall" />
 
-            <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
-          </TagContainer>
-        </Header>
-        <Editor {...savedText} />
-      </ErrorBoundary>
+          <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
+        </TagContainer>
+      </Header>
+      <Editor {...savedText} />
       <DeleteTextButton id={id} />
     </Fragment>
   );

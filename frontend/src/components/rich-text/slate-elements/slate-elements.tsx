@@ -8,6 +8,7 @@ import {
   HeadingThreeStyle,
   HeadingTwoStyle,
 } from '../styled-elements/headings';
+import { IndentStyle } from '../styled-elements/indent';
 import { BulletListStyle, ListItemStyle, NumberedListStyle } from '../styled-elements/lists';
 import { AlignableElementTypes } from '../types/editor-types';
 import { RenderElementProps } from './render-props';
@@ -54,7 +55,11 @@ export const ParagraphElement = (props: RenderElementProps<AlignableElementTypes
   </ParagraphStyle>
 );
 
-export const QuoteElement = (props: RenderElementProps<AlignableElementTypes>) => (
+export const IndentElement = (props: RenderElementProps) => (
+  <IndentStyle {...props.attributes}>{props.children}</IndentStyle>
+);
+
+export const BlockQuoteElement = (props: RenderElementProps<AlignableElementTypes>) => (
   <BlockQuoteStyle {...props.attributes} textAlign={props.element.textAlign}>
     {props.children}
   </BlockQuoteStyle>

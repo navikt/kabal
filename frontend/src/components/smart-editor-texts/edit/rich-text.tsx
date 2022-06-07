@@ -1,3 +1,4 @@
+import { Historic } from '@navikt/ds-icons';
 import React, { useCallback } from 'react';
 import { Descendant } from 'slate';
 import styled from 'styled-components';
@@ -6,7 +7,7 @@ import { useDebounced } from '../../../hooks/use-debounce';
 import { useUpdateTextPropertyMutation } from '../../../redux-api/texts';
 import { RichTextEditorElement } from '../../rich-text/rich-text-editor/rich-text-editor';
 import { ErrorComponent } from '../error-component';
-import { NEW_TEXT } from '../functions/new-text';
+// import { NEW_TEXT } from '../functions/new-text';
 import { useTextQuery } from '../hooks/use-text-query';
 
 interface Props {
@@ -29,8 +30,13 @@ export const RichTextEditor = ({ textId, savedContent }: Props) => {
   return (
     <ErrorBoundary
       errorComponent={() => <ErrorComponent textId={textId} />}
-      onDelete={() => setContent(NEW_TEXT)}
-      deleteButtonText="Nullstill tekst"
+      actionButton={{
+        onClick: async () => setContent(savedContent),
+        buttonText: 'Gjenopprett tekst',
+        buttonIcon: <Historic />,
+        variant: 'primary',
+        size: 'small',
+      }}
     >
       <StyledRichTextEditorElement key={textId} id={textId} savedContent={savedContent} onChange={setContent} canEdit />
     </ErrorBoundary>

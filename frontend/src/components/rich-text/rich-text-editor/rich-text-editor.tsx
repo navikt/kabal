@@ -54,7 +54,10 @@ export const RichTextEditorElement = React.memo(
       [savedSelection, isFocused]
     );
 
-    useEffect(() => setEditor(editor));
+    useEffect(() => {
+      setEditor(editor);
+      return () => setEditor(null);
+    });
 
     const onFocus = useCallback<React.FocusEventHandler<HTMLDivElement>>(() => {
       setIsFocused(true);

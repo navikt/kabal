@@ -24,7 +24,7 @@ export const smartEditorQuerySlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useGetSmartEditorsQuery, useGetSmartEditorQuery } = smartEditorQuerySlice;
+export const { useGetSmartEditorsQuery, useGetSmartEditorQuery, useLazyGetSmartEditorQuery } = smartEditorQuerySlice;
 
 const migrate = (smartEditor: VersionedSmartEditor): RichText_Latest_SmartEditor => {
   if (smartEditor.version === VERSION) {

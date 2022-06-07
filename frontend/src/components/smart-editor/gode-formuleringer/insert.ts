@@ -1,7 +1,7 @@
 import { Descendant, Editor, Range, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
-import { isOfElementType } from '../../rich-text/types/editor-type-guards';
+import { isOfElementTypeFn } from '../../rich-text/types/editor-type-guards';
 import { ParagraphElementType } from '../../rich-text/types/editor-types';
 
 export const insertGodFormulering = (editor: Editor, content: Descendant[]) => {
@@ -29,7 +29,7 @@ export const isAvailable = (editor: Editor): boolean => {
   }
 
   const [firstNode] = Editor.nodes<ParagraphElementType>(editor, {
-    match: (n) => isOfElementType(n, ContentTypeEnum.PARAGRAPH),
+    match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH),
     at: focus,
     mode: 'lowest',
   });

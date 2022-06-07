@@ -21,6 +21,7 @@ import { PageBreak } from './page-break';
 import { RedigerbareMalteskterElement } from './redigerbare-maltekster';
 import { RenderElementProps } from './render-props';
 import {
+  BlockQuoteElement,
   BulletListElement,
   HeadingFiveElement,
   HeadingFourElement,
@@ -28,10 +29,10 @@ import {
   HeadingSixElement,
   HeadingThreeElement,
   HeadingTwoElement,
+  IndentElement,
   ListItemElement,
   NumberedListElement,
   ParagraphElement,
-  QuoteElement,
 } from './slate-elements';
 
 // eslint-disable-next-line complexity
@@ -59,8 +60,10 @@ export const renderElement = (props: RenderElementProps) => {
       return <ListItemElement {...props} />;
     case ListContentEnum.LIST_ITEM_CONTAINER:
       return <div {...props.attributes}>{props.children}</div>;
+    case ContentTypeEnum.INDENT:
+      return <IndentElement {...props} element={props.element} />;
     case ContentTypeEnum.BLOCKQUOTE:
-      return <QuoteElement {...props} element={props.element} />;
+      return <BlockQuoteElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.SIGNATURE:
       return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
 

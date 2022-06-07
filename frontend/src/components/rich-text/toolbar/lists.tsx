@@ -1,15 +1,11 @@
 import { FormatListBulleted } from '@styled-icons/material/FormatListBulleted';
 import { FormatListNumbered } from '@styled-icons/material/FormatListNumbered';
 import React from 'react';
-import { Editor, Element, Path, Transforms } from 'slate';
+import { Editor, Path, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
 import { ListContentEnum, ListTypesEnum } from '../../rich-text/types/editor-enums';
-import { isOfElementType } from '../../rich-text/types/editor-type-guards';
-import {
-  BulletListElementType,
-  ListItemContainerElementType,
-  NumberedListElementType,
-} from '../../rich-text/types/editor-types';
+import { isOfElementType, isOfElementTypeFn } from '../../rich-text/types/editor-type-guards';
+import { BulletListElementType, ListItemContainerElementType } from '../../rich-text/types/editor-types';
 import { getSelectedListTypes } from '../functions/blocks';
 import { ToolbarIconButton } from './toolbarbutton';
 
@@ -32,7 +28,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
           Editor.withoutNormalizing(editor, () => {
             if (isBulletListActive && isNumberedListActive) {
               const listItemContainers = Editor.nodes<ListItemContainerElementType>(editor, {
-                match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM_CONTAINER),
+                match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
                 mode: 'lowest',
               });
 
@@ -40,13 +36,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
                 const [parent, at] = Editor.parent(editor, Path.parent(licPath));
 
                 if (isOfElementType<BulletListElementType>(parent, ListTypesEnum.BULLET_LIST)) {
-                  Transforms.setNodes(
-                    editor,
-                    { type: ListTypesEnum.NUMBERED_LIST },
-                    {
-                      at,
-                    }
-                  );
+                  Transforms.setNodes(editor, { type: ListTypesEnum.NUMBERED_LIST }, { at });
                 }
               }
 
@@ -57,10 +47,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
               Transforms.setNodes(
                 editor,
                 { type: ListTypesEnum.BULLET_LIST },
-                {
-                  mode: 'lowest',
-                  match: (n) => isOfElementType<NumberedListElementType>(n, ListTypesEnum.NUMBERED_LIST),
-                }
+                { mode: 'lowest', match: isOfElementTypeFn(ListTypesEnum.NUMBERED_LIST) }
               );
               return;
             }
@@ -83,7 +70,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
           Editor.withoutNormalizing(editor, () => {
             if (isBulletListActive && isNumberedListActive) {
               const listItemContainers = Editor.nodes<ListItemContainerElementType>(editor, {
-                match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM_CONTAINER),
+                match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
                 mode: 'lowest',
               });
 
@@ -91,13 +78,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
                 const [parent, at] = Editor.parent(editor, Path.parent(licPath));
 
                 if (isOfElementType<BulletListElementType>(parent, ListTypesEnum.NUMBERED_LIST)) {
-                  Transforms.setNodes(
-                    editor,
-                    { type: ListTypesEnum.BULLET_LIST },
-                    {
-                      at,
-                    }
-                  );
+                  Transforms.setNodes(editor, { type: ListTypesEnum.BULLET_LIST }, { at });
                 }
               }
 
@@ -108,10 +89,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
               Transforms.setNodes(
                 editor,
                 { type: ListTypesEnum.NUMBERED_LIST },
-                {
-                  mode: 'lowest',
-                  match: (n) => Element.isElement(n) && n.type === ListTypesEnum.BULLET_LIST,
-                }
+                { mode: 'lowest', match: isOfElementTypeFn(ListTypesEnum.BULLET_LIST) }
               );
               return;
             }

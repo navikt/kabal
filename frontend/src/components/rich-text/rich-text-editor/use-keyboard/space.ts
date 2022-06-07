@@ -1,7 +1,7 @@
 import { BasePoint, Editor, Path, Range, Text, Transforms } from 'slate';
 import { isBlockActive } from '../../functions/blocks';
 import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
-import { isOfElementType } from '../../types/editor-type-guards';
+import { isOfElementTypeFn } from '../../types/editor-type-guards';
 import { HandlerFn, HandlerFnArg } from './types';
 
 export const space: HandlerFn = ({ editor, event }) => {
@@ -75,7 +75,7 @@ const makeList = (
       editor,
       { type: ListContentEnum.LIST_ITEM_CONTAINER },
       {
-        match: (n) => isOfElementType(n, ContentTypeEnum.PARAGRAPH),
+        match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH),
         voids: false,
         mode: 'lowest',
         at: Path.parent(focus.path),

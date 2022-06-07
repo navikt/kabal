@@ -24,6 +24,11 @@ export interface ParagraphElementType {
   textAlign: TextAlignEnum;
 }
 
+export interface IndentElementType {
+  type: ContentTypeEnum.INDENT;
+  children: CustomTextType[];
+}
+
 export interface BlockquoteElementType {
   type: ContentTypeEnum.BLOCKQUOTE;
   children: CustomTextType[];
@@ -34,12 +39,14 @@ export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType
 
 export type MarkableElementTypes =
   | ParagraphElementType
+  | IndentElementType
   | BlockquoteElementType
   | ListItemContainerElementType
   | FlettefeltElementType;
 
 export type NonVoidElementTypes =
   | ParagraphElementType
+  | IndentElementType
   | BlockquoteElementType
   | HeadingsType
   | ListsType

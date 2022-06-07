@@ -1,5 +1,6 @@
 export enum ContentTypeEnum {
   PARAGRAPH = 'paragraph',
+  INDENT = 'indent',
   BLOCKQUOTE = 'blockquote',
 }
 

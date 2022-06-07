@@ -40,8 +40,8 @@ const StyledPageBreak = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-left: -20px;
-  margin-right: -40px;
+  margin-left: -20mm;
+  margin-right: -20mm;
   background-color: rgba(0, 0, 0, 0.05);
   position: relative;
 

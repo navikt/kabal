@@ -1,4 +1,4 @@
-import { NewTab, Notes } from '@navikt/ds-icons';
+import { Historic, NewTab, Notes } from '@navikt/ds-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import {
@@ -9,7 +9,7 @@ import {
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsMedunderskriver } from '../../../hooks/use-is-medunderskriver';
 import { useSmartEditors } from '../../../hooks/use-smart-editors';
-import { useDeleteDocumentMutation } from '../../../redux-api/oppgaver/mutations/documents';
+import { useLazyGetSmartEditorQuery } from '../../../redux-api/oppgaver/queries/smart-editor';
 import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
 import { CommentSection } from '../comments/comment-section';
 import { SmartEditorContextComponent } from '../context/smart-editor-context';
@@ -103,7 +103,7 @@ interface Props {
 }
 
 const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
-  const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
+  const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
 
   const editorComponents = editors.map((editor) => {
     const isActive = editor.id === activeEditorId;
@@ -112,10 +112,16 @@ const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
       <SmartEditorContextComponent key={editor.id} documentId={editor.id} templateId={editor.templateId}>
         <CommentsClickBoundary isActive={isActive}>
           <ErrorBoundary
-            onDelete={() => deleteDocument({ dokumentId: editor.id, oppgaveId })}
-            isDeleting={isLoading}
-            deleteButtonText="Slett dokument"
             errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}
+            actionButton={{
+              onClick: () => getSmartEditor({ dokumentId: editor.id, oppgaveId }, false).unwrap(),
+              loading: isLoading,
+              disabled: isLoading,
+              buttonText: 'Gjenopprett dokument',
+              buttonIcon: <Historic />,
+              variant: 'primary',
+              size: 'small',
+            }}
           >
             <GodeFormuleringer templateId={editor.templateId} />
             <SmartEditor />
