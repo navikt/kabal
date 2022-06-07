@@ -55,6 +55,16 @@ export interface PageBreakElementType extends IBaseVoid {
   type: UndeletableVoidElementsEnum.PAGE_BREAK;
 }
 
+export interface HeaderElementType extends IBaseVoid, IWithThreads {
+  type: UndeletableVoidElementsEnum.HEADER;
+  content: string | null;
+}
+
+export interface FooterElementType extends IBaseVoid, IWithThreads {
+  type: UndeletableVoidElementsEnum.FOOTER;
+  content: string | null;
+}
+
 export enum Flettefelt {
   FNR = 'fnr',
   ENHET_NAME = 'enhet-name',
@@ -80,6 +90,10 @@ export type CommentableVoidElementTypes =
   | SignatureElementType
   | LabelContentElementType
   | MaltekstElementType
-  | DocumentListElementType;
+  | DocumentListElementType
+  | HeaderElementType
+  | FooterElementType;
 
 export type VoidElementTypes = CommentableVoidElementTypes | VoidTypes | DeletableVoidTypes;
+
+export type MaltekstElementTypes = MaltekstElementType | HeaderElementType | FooterElementType;

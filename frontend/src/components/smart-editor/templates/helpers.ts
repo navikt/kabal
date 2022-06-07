@@ -17,6 +17,8 @@ import {
 } from '../../rich-text/types/editor-types';
 import {
   CurrentDateType,
+  FooterElementType,
+  HeaderElementType,
   LabelContentElementType,
   PageBreakElementType,
   SignatureElementType,
@@ -90,4 +92,18 @@ export const createPageBreak = (): PageBreakElementType => ({
 export const createCurrentDate = (): CurrentDateType => ({
   type: UndeletableVoidElementsEnum.CURRENT_DATE,
   children: [{ text: '' }],
+});
+
+export const createHeader = (): HeaderElementType => ({
+  type: UndeletableVoidElementsEnum.HEADER,
+  children: [{ text: '' }],
+  threadIds: [],
+  content: null,
+});
+
+export const createFooter = (): FooterElementType => ({
+  type: UndeletableVoidElementsEnum.FOOTER,
+  children: [{ text: '' }],
+  threadIds: [],
+  content: null,
 });

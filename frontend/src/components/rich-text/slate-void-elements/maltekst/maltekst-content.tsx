@@ -2,7 +2,6 @@ import { Refresh } from '@navikt/ds-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import styled from 'styled-components';
 import { ApiQuery } from '../../../../types/texts/texts';
 import { MALTEKST_SECTION_NAMES } from '../../../smart-editor/constants';
 import { ParagraphStyle } from '../../styled-elements/content';
@@ -10,6 +9,7 @@ import { TextAlignEnum } from '../../types/editor-enums';
 import { MaltekstElementType } from '../../types/editor-void-types';
 import { renderElement } from './render';
 import { ShowTags } from './show-tags';
+import { ReloadButton, ReloadButtonWrapper } from './styled-components';
 
 interface Props {
   element: MaltekstElementType;
@@ -58,23 +58,3 @@ export const MaltekstContent = ({ element, query, isLoading, reload }: Props) =>
     </>
   );
 };
-
-const ReloadButton = styled.button`
-  position: sticky;
-  top: 24px;
-  background-color: transparent;
-  height: fit-content;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  border: none;
-`;
-
-const ReloadButtonWrapper = styled.div`
-  position: absolute;
-  display: flex;
-  top: 0;
-  left: 100%;
-  height: 100%;
-  padding-left: 12px;
-`;

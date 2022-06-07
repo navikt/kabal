@@ -44,6 +44,14 @@ export const Nav = () => (
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/regelverk" testId="regelverk-nav-link">
         Regelverk
       </NavItem>
+
+      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/topptekster" testId="topptekster-nav-link">
+        Topptekster
+      </NavItem>
+
+      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/bunntekster" testId="bunntekster-nav-link">
+        Bunntekster
+      </NavItem>
     </StyledNavLinkList>
   </StyledNav>
 );

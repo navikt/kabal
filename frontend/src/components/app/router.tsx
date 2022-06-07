@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
 import { AdminPage } from '../../pages/admin/admin';
 import { AnkebehandlingPage } from '../../pages/ankebehandling/ankebehandling';
+import { BunnteksterPage } from '../../pages/bunntekster/bunntekster';
 import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
 import { GodeFormuleringerPage } from '../../pages/gode-formuleringer/gode-formuleringer';
 import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
@@ -12,6 +13,7 @@ import { RedigerbareMalteksterPage } from '../../pages/redigerbare-maltekster/re
 import { RegelverkPage } from '../../pages/regelverk/regelverk';
 import { SearchPage } from '../../pages/search/search';
 import { SettingsPage } from '../../pages/settings/settings';
+import { ToppteksterPage } from '../../pages/topptekster/topptekster';
 
 export const Router = () => (
   <Switch>
@@ -38,6 +40,11 @@ export const Router = () => (
     <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
     <Route path="regelverk/:id" element={<RegelverkPage />} />
     <Route path="regelverk/" element={<RegelverkPage />} />
+    <Route path="topptekster/" element={<ToppteksterPage />} />
+    <Route path="topptekster/:id" element={<ToppteksterPage />} />
+
+    <Route path="bunntekster/" element={<BunnteksterPage />} />
+    <Route path="bunntekster/:id" element={<BunnteksterPage />} />
 
     <Route path="innstillinger" element={<SettingsPage />} />
     <Route path="admin" element={<AdminPage />} />

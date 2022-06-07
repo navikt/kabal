@@ -4,9 +4,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAddTextMutation } from '../../redux-api/texts';
 import { TextTypes } from '../../types/texts/texts';
+import { LoadText } from './edit/load-text';
 import { getNewText } from './functions/new-text';
 import { useTextNavigate } from './hooks/use-text-navigate';
-import { LoadText } from './smart-editor-texts-edit';
 import { FilteredTextList } from './smart-editor-texts-list';
 
 interface Props {
