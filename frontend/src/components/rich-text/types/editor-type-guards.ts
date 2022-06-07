@@ -1,14 +1,6 @@
 import { Element, Node } from 'slate';
 import { AlignableTypeEnum, ContentTypeEnum, ElementTypesEnum, MarkableTypeEnum } from './editor-enums';
-import {
-  AlignableElementTypes,
-  HeadingsType,
-  ListsType,
-  MarkKeyList,
-  MarkableElementTypes,
-  ParagraphElementType,
-  VOID_ELEMENT_TYPES,
-} from './editor-types';
+import { AlignableElementTypes, MarkKeyList, MarkableElementTypes, VOID_ELEMENT_TYPES } from './editor-types';
 import { CommentableVoidElementTypes, VoidElementTypes } from './editor-void-types';
 import { MarkKeys } from './marks';
 
@@ -48,15 +40,21 @@ export const isNodeMarkableElementType = (n: Node): n is MarkableElementTypes =>
   return false;
 };
 
-export const isOfElementType = <T extends ParagraphElementType | HeadingsType | ListsType | VoidElementTypes>(
-  n: Node,
-  type: ElementTypesEnum
-): n is T => Element.isElement(n) && n.type === type;
+export const isOfElementTypeFn =
+  <T extends Element>(type: ElementTypesEnum) =>
+  (n: Node): n is T =>
+    Element.isElement(n) && n.type === type;
 
-export const isOfElementTypes = <T extends ParagraphElementType | HeadingsType | ListsType | VoidElementTypes>(
-  n: Node,
-  types: ElementTypesEnum[]
-): n is T => Element.isElement(n) && types.includes(n.type);
+export const isOfElementType = <T extends Element>(n: Node, type: ElementTypesEnum): n is T =>
+  Element.isElement(n) && n.type === type;
+
+export const isOfElementTypesFn =
+  <T extends Element>(types: ElementTypesEnum[]) =>
+  (n: Node): n is T =>
+    Element.isElement(n) && types.includes(n.type);
+
+export const isOfElementTypes = <T extends Element>(n: Node, types: ElementTypesEnum[]): n is T =>
+  Element.isElement(n) && types.includes(n.type);
 
 export const isNodeOfSameElementType = <T extends Element>(n: Node, element: T): n is T =>
   Element.isElement(n) && n.type === element.type;

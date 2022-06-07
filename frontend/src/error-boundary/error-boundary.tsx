@@ -1,21 +1,22 @@
-import { Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, ButtonProps } from '@navikt/ds-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface Props extends DeleteButtonProps {
+interface Props {
   children: ReactNode;
   errorComponent: (error: Error) => ReactNode;
+  actionButton?: ActionButtonProps;
 }
 
 interface State {
   error: Error | null;
+  loading: boolean;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { error: null };
+    this.state = { error: null, loading: false };
   }
 
   static getDerivedStateFromError(error: Error) {
@@ -27,62 +28,46 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   render() {
-    if (this.state.error !== null) {
-      const { errorComponent, onDelete, deleteButtonText, isDeleting, deleteButtonDisabled } = this.props;
+    const { children, errorComponent, actionButton } = this.props;
 
+    if (this.state.error !== null) {
       return (
         <ErrorContainer>
           <h1>Ooops, noe gikk galt :(</h1>
           {errorComponent(this.state.error)}
-          <DeleteButton
-            onDelete={onDelete}
-            deleteButtonText={deleteButtonText}
-            isDeleting={isDeleting}
-            deleteButtonDisabled={deleteButtonDisabled}
-          />
+          {typeof actionButton === 'undefined' ? null : (
+            <ActionButton
+              {...actionButton}
+              loading={Boolean(actionButton.loading) || this.state.loading}
+              onClick={async (event) => {
+                this.setState({ loading: true });
+                await actionButton.onClick(event);
+                this.setState({ error: null, loading: false });
+              }}
+            />
+          )}
           <h2>Feilmelding</h2>
           <StyledErrorMessage>{this.state.error.message}</StyledErrorMessage>
         </ErrorContainer>
       );
     }
 
-    return this.props.children;
+    return children;
   }
 }
 
-interface DeleteButtonProps {
-  onDelete?: () => void;
-  isDeleting?: boolean;
-  deleteButtonDisabled?: boolean;
-  deleteButtonText?: string;
+interface ActionButtonProps extends Omit<ButtonProps, 'children'> {
+  buttonText: string;
+  buttonIcon: ReactNode;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 }
 
-export const DeleteButton = ({
-  onDelete,
-  isDeleting = false,
-  deleteButtonText = 'Slett',
-  deleteButtonDisabled = false,
-}: DeleteButtonProps) => {
-  if (typeof onDelete === 'undefined') {
-    return null;
-  }
-
-  const onClick = () => onDelete();
-
-  return (
-    <Button
-      type="button"
-      variant="danger"
-      size="small"
-      onClick={onClick}
-      disabled={deleteButtonDisabled}
-      loading={isDeleting}
-    >
-      <Delete />
-      <span>{deleteButtonText}</span>
-    </Button>
-  );
-};
+export const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) => (
+  <Button {...rest}>
+    {buttonIcon}
+    <span>{buttonText}</span>
+  </Button>
+);
 
 const ErrorContainer = styled.section`
   display: block;

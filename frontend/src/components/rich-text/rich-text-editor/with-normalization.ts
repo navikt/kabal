@@ -6,10 +6,12 @@ import {
   isNodeMarkableElementType,
   isNodeOfSameElementType,
   isOfElementType,
+  isOfElementTypeFn,
 } from '../types/editor-type-guards';
 import {
   BulletListElementType,
   CustomTextType,
+  IndentElementType,
   ListItemContainerElementType,
   ListItemElementType,
   MarkKeyList,
@@ -26,10 +28,12 @@ export const withNormalization = (editor: Editor) => {
   editor.normalizeNode = (entry) => {
     const [node, path] = entry;
 
-    // If node is a list element.
+    // If node mergable.
     if (
       isOfElementType<BulletListElementType>(node, ListTypesEnum.BULLET_LIST) ||
-      isOfElementType<NumberedListElementType>(node, ListTypesEnum.NUMBERED_LIST)
+      isOfElementType<NumberedListElementType>(node, ListTypesEnum.NUMBERED_LIST) ||
+      isOfElementType<IndentElementType>(node, ContentTypeEnum.INDENT) ||
+      isOfElementType<ListItemContainerElementType>(node, ListContentEnum.LIST_ITEM_CONTAINER)
     ) {
       const next = Editor.next(editor, { at: path });
 
@@ -77,16 +81,22 @@ export const withNormalization = (editor: Editor) => {
           editor,
           {
             type: ListContentEnum.LIST_ITEM_CONTAINER,
-            children: [
-              {
-                text: '',
-              },
-            ],
+            children: [{ text: '' }],
           },
           { at: [...path, 0] }
         );
         return;
       }
+
+      node.children.forEach((child, index) => {
+        if (
+          child.type !== ListContentEnum.LIST_ITEM_CONTAINER &&
+          child.type !== ListTypesEnum.BULLET_LIST &&
+          child.type !== ListTypesEnum.NUMBERED_LIST
+        ) {
+          Transforms.setNodes(editor, { type: ListContentEnum.LIST_ITEM_CONTAINER }, { at: [...path, index] });
+        }
+      });
 
       // And is on the top level, transform to a paragraph.
       if (path.length === 1) {
@@ -105,10 +115,7 @@ export const withNormalization = (editor: Editor) => {
         Transforms.setNodes(
           editor,
           { type: ContentTypeEnum.PARAGRAPH },
-          {
-            at: path,
-            match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
-          }
+          { at: path, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER) }
         );
         return;
       }

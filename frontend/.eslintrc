@@ -49,6 +49,8 @@
       "skipBlankLines": false,
       "skipComments": true
     }],
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }],
+    "no-debugger": "error",
     "linebreak-style": ["error", "unix"],
     "max-depth": ["error", { "max": 4 }],
     "no-lonely-if": "error",

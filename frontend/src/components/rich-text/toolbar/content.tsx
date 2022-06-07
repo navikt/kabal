@@ -1,8 +1,10 @@
+import { FormatIndentDecrease } from '@styled-icons/material/FormatIndentDecrease';
+import { FormatIndentIncrease } from '@styled-icons/material/FormatIndentIncrease';
 import React from 'react';
 import { useSlate } from 'slate-react';
-import { areBlocksActive, isBlockActive, toggleBlock } from '../functions/blocks';
-import { ContentTypeEnum, ListContentEnum } from '../types/editor-enums';
-import { BlockquoteIcon } from './icons/blockquote';
+import { isBlockActive } from '../functions/blocks';
+import { decreaseIndent, increaseIndent } from '../functions/indent';
+import { ContentTypeEnum } from '../types/editor-enums';
 import { ToolbarIconButton } from './toolbarbutton';
 
 interface ContentProps {
@@ -18,12 +20,22 @@ export const Content = ({ iconSize, display = true }: ContentProps) => {
   }
 
   return (
-    <ToolbarIconButton
-      label="Blockquote"
-      onClick={() => toggleBlock(editor, ContentTypeEnum.BLOCKQUOTE)}
-      active={isBlockActive(editor, ContentTypeEnum.BLOCKQUOTE)}
-      disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
-      icon={<BlockquoteIcon height={iconSize} />}
-    />
+    <>
+      <ToolbarIconButton
+        label="Innrykk"
+        onClick={() => increaseIndent(editor)}
+        active={isBlockActive(editor, ContentTypeEnum.INDENT)}
+        disabled={false}
+        icon={<FormatIndentIncrease height={iconSize} />}
+      />
+
+      <ToolbarIconButton
+        label="Fjern innrykk"
+        onClick={() => decreaseIndent(editor)}
+        disabled={!isBlockActive(editor, ContentTypeEnum.INDENT)}
+        icon={<FormatIndentDecrease height={iconSize} />}
+        active={false}
+      />
+    </>
   );
 };

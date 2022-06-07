@@ -3,7 +3,7 @@ import { createNewParagraph, getSelectedListTypes } from '../../functions/blocks
 import { containsVoid } from '../../functions/contains-void';
 import { insertPageBreak } from '../../functions/insert-page-break';
 import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
-import { isOfElementType } from '../../types/editor-type-guards';
+import { isOfElementTypeFn } from '../../types/editor-type-guards';
 import { ListItemContainerElementType } from '../../types/editor-types';
 import { HandlerFn } from './types';
 
@@ -35,7 +35,7 @@ export const enter: HandlerFn = ({ editor, event }) => {
       const [firstEntry] = Editor.nodes<ListItemContainerElementType>(editor, {
         mode: 'lowest',
         reverse: true,
-        match: (n) => isOfElementType<ListItemContainerElementType>(n, ListContentEnum.LIST_ITEM_CONTAINER),
+        match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
       });
 
       if (firstEntry === undefined) {
@@ -55,7 +55,7 @@ export const enter: HandlerFn = ({ editor, event }) => {
         return;
       }
 
-      Transforms.splitNodes(editor, { always: true, match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM) });
+      Transforms.splitNodes(editor, { always: true, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM) });
       return;
     }
 

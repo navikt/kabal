@@ -23,7 +23,7 @@ export const withSync = (editor: Editor, { oppgaveId, documentId, onConnectionCh
 
   sse.addConnectionListener((connected) => {
     onConnectionChange(connected);
-    console.log('EMPTYING QUEUE');
+    // console.log('EMPTYING QUEUE');
     QUEUE.forEach((op) => sendOperation(url, op));
     QUEUE.length = 0;
   });
@@ -33,24 +33,24 @@ export const withSync = (editor: Editor, { oppgaveId, documentId, onConnectionCh
       return;
     }
 
-    console.log('RECEIVE SSE OPERATION', data);
+    // console.log('RECEIVE SSE OPERATION', data);
 
     HistoryEditor.withoutSaving(editor, () => {
       applyWithoutNormalization(editor, data.operation);
     });
 
-    console.log(editor.children);
+    // console.log(editor.children);
   });
 
   editor.apply = (operation) => {
     if (operation.type !== 'set_selection') {
-      console.log('BEFORE OPERATION', operation, editor.children);
+      // console.log('BEFORE OPERATION', operation, editor.children);
     }
 
     apply(operation);
 
     if (operation.type !== 'set_selection') {
-      console.log('AFTER OPERATION', operation, editor.children);
+      // console.log('AFTER OPERATION', operation, editor.children);
     }
 
     if (operation.type !== 'set_selection') {
@@ -72,7 +72,7 @@ const sendOperation = (url: string, operation: BaseOperation) => {
     operation,
   };
 
-  console.log('SEND OPERATION', op);
+  // console.log('SEND OPERATION', op);
 
   return fetch(url, {
     method: 'PATCH',

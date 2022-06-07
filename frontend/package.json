@@ -70,9 +70,9 @@
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "redux": "^4.1.2",
-    "slate": "^0.78.0",
+    "slate": "^0.81.0",
     "slate-history": "^0.66.0",
-    "slate-react": "^0.79.0",
+    "slate-react": "^0.81.0",
     "styled-components": "^5.3.5",
     "uuid": "^8.3.2"
   }

@@ -1,11 +1,11 @@
 import { Editor, Path, Text, Transforms } from 'slate';
 import { DeletableVoidElementsEnum } from '../types/editor-enums';
-import { isOfElementType } from '../types/editor-type-guards';
+import { isOfElementTypeFn } from '../types/editor-type-guards';
 import { FlettefeltElementType } from '../types/editor-void-types';
 
 const getFlettefeltPath = (editor: Editor): Path | null => {
   const [flettefeltEntry] = Editor.nodes<FlettefeltElementType>(editor, {
-    match: (n) => isOfElementType<FlettefeltElementType>(n, DeletableVoidElementsEnum.FLETTEFELT),
+    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
     voids: true,
   });
 

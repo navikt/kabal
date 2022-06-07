@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 const listStyle = css`
   & {
     margin-bottom: 0;
-    margin-top: 16px;
-    padding-left: 16px;
+    margin-top: 12pt;
+    padding-left: 12pt;
   }
 `;
 

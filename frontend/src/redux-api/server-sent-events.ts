@@ -41,7 +41,6 @@ export class ServerSentEventManager {
     const eventListener: EventListenerFn = (event) => {
       if (isServerSentEvent(event)) {
         this.lastEventId = event.lastEventId;
-        console.debug(`Setting lastEventId to ${this.lastEventId}`);
         listener(event);
       }
     };
@@ -78,26 +77,20 @@ export class ServerSentEventManager {
       withCredentials: IS_LOCALHOST,
     });
 
-    console.debug(`%cEventSource created (${readyState(events.readyState)}) - ${url}`, 'color: orange;');
-
     events.addEventListener('error', () => {
-      if (events.readyState === EventSource.CLOSED) {
-        this.isConnected = false;
-        this.connectionListeners.forEach((listener) => listener(this.isConnected));
-
-        console.debug(`%cEventSource closed due to an error. Attempting to reconnect... - ${url}`, 'color: red');
-
-        setTimeout(() => {
-          this.events = this.createEventSource();
-        }, 3000);
-      } else {
-        console.debug(`%cEventSource error (${readyState(events.readyState)}) - ${url}`, 'color: red;');
+      if (events.readyState !== EventSource.CLOSED) {
+        return;
       }
+
+      this.isConnected = false;
+      this.connectionListeners.forEach((listener) => listener(this.isConnected));
+
+      setTimeout(() => {
+        this.events = this.createEventSource();
+      }, 3000);
     });
 
     events.addEventListener('open', () => {
-      console.debug(`%cEventSource connected (${readyState(events.readyState)}) - ${url}`, 'color: green;');
-
       this.listeners.forEach(([event, listener]) => events.addEventListener(event, listener));
       this.isConnected = true;
       this.connectionListeners.forEach((listener) => listener(this.isConnected));
@@ -113,16 +106,3 @@ export class ServerSentEventManager {
 }
 
 const isServerSentEvent = (event: Event): event is ServerSentEvent => typeof event['data'] !== 'undefined';
-
-const readyState = (state: number) => {
-  switch (state) {
-    case EventSource.CONNECTING:
-      return 'CONNECTING';
-    case EventSource.OPEN:
-      return 'OPEN';
-    case EventSource.CLOSED:
-      return 'CLOSED';
-    default:
-      return 'UNKNOWN';
-  }
-};

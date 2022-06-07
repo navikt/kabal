@@ -6,25 +6,17 @@ import {
   ListTypesEnum,
   NonVoidElementsEnum,
 } from '../types/editor-enums';
-import { isOfElementType, isOfElementTypes } from '../types/editor-type-guards';
+import { isOfElementType, isOfElementTypeFn, isOfElementTypesFn } from '../types/editor-type-guards';
 import { BulletListElementType, NumberedListElementType } from '../types/editor-types';
 import { pruneSelection } from './prune-selection';
 
 export const isBlockActive = (editor: Editor, block: ElementTypesEnum) => {
-  const [match] = Editor.nodes(editor, {
-    match: (n) => isOfElementType(n, block),
-    reverse: true,
-    universal: true,
-  });
+  const [match] = Editor.nodes(editor, { match: isOfElementTypeFn(block), reverse: true, universal: true });
   return Boolean(match);
 };
 
 export const areBlocksActive = (editor: Editor, blocks: ElementTypesEnum[], universal = true) => {
-  const [match] = Editor.nodes(editor, {
-    match: (n) => isOfElementTypes(n, blocks),
-    reverse: true,
-    universal,
-  });
+  const [match] = Editor.nodes(editor, { match: isOfElementTypesFn(blocks), reverse: true, universal });
   return Boolean(match);
 };
 
@@ -57,7 +49,7 @@ export const getSelectedListTypes = (
 
   if (Range.isCollapsed(editor.selection)) {
     const [listMatch] = Editor.nodes<BulletListElementType | NumberedListElementType>(editor, {
-      match: (n) => isOfElementTypes(n, [ListTypesEnum.BULLET_LIST, ListTypesEnum.NUMBERED_LIST]),
+      match: isOfElementTypesFn([ListTypesEnum.BULLET_LIST, ListTypesEnum.NUMBERED_LIST]),
       mode: 'lowest',
     });
 
@@ -84,7 +76,7 @@ export const getSelectedListTypes = (
   }
 
   const [...listItemContainerEntries] = Editor.nodes<BulletListElementType | NumberedListElementType>(editor, {
-    match: (n) => isOfElementType(n, ListContentEnum.LIST_ITEM_CONTAINER),
+    match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
     mode: 'lowest',
     at: selection,
   });
@@ -101,18 +93,10 @@ export const getSelectedListTypes = (
 };
 
 export const getLowestSelectedElements = (editor: Editor) =>
-  Editor.nodes<Element>(editor, {
-    match: (n) => Element.isElement(n),
-    mode: 'lowest',
-    reverse: true,
-  });
+  Editor.nodes<Element>(editor, { match: Element.isElement, mode: 'lowest', reverse: true });
 
 export const toggleBlock = (editor: Editor, block: NonVoidElementsEnum) => {
-  const matches = Editor.nodes(editor, {
-    mode: 'lowest',
-    match: Element.isElement,
-    universal: true,
-  });
+  const matches = Editor.nodes(editor, { mode: 'lowest', match: Element.isElement, universal: true });
 
   const matchesArray = Array.from(matches);
 
@@ -151,13 +135,7 @@ export const addBlock = (editor: Editor, type: ContentTypeEnum) =>
   Editor.withoutNormalizing(editor, () => {
     Transforms.splitNodes(editor, { always: true });
     Transforms.setNodes(editor, { type }, { match: Element.isElement });
-    Transforms.setNodes(
-      editor,
-      {
-        ...editor.marks,
-      },
-      { match: Text.isText }
-    );
+    Transforms.setNodes(editor, { ...editor.marks }, { match: Text.isText });
   });
 
 export const insertBlock = (editor: Editor, children: Node | Node[]): void =>

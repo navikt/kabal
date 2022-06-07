@@ -1,6 +1,6 @@
 import { Editor, Range, Text, Transforms } from 'slate';
 import { DeletableVoidElementsEnum } from '../types/editor-enums';
-import { isNodeMarkableElementType, isOfElementType } from '../types/editor-type-guards';
+import { isNodeMarkableElementType, isOfElementTypeFn } from '../types/editor-type-guards';
 import { FlettefeltElementType } from '../types/editor-void-types';
 import { IMarks } from '../types/marks';
 import { pruneSelection } from './prune-selection';
@@ -25,7 +25,7 @@ export const isMarkActive = (editor: Editor, mark: keyof IMarks): boolean => {
   }
 
   const flettefeltGenerator = Editor.nodes<FlettefeltElementType>(editor, {
-    match: (n) => isOfElementType<FlettefeltElementType>(n, DeletableVoidElementsEnum.FLETTEFELT),
+    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
     voids: true,
   });
 
@@ -48,7 +48,7 @@ const getEditorMarkStatus = (editor: Editor, mark: keyof IMarks) => {
   }
 
   const flettefeltGenerator = Editor.nodes(editor, {
-    match: (n) => isOfElementType(n, DeletableVoidElementsEnum.FLETTEFELT),
+    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
     voids: true,
   });
 
@@ -63,7 +63,7 @@ const getEditorMarkStatus = (editor: Editor, mark: keyof IMarks) => {
 
 export const isMarkingAvailable = (editor: Editor) => {
   const [flettefeltMatch] = Editor.nodes(editor, {
-    match: (n) => isOfElementType(n, DeletableVoidElementsEnum.FLETTEFELT),
+    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
     voids: true,
   });
 
@@ -95,9 +95,5 @@ export const toggleMark = (editor: Editor, mark: keyof IMarks): void => {
 
   Editor.addMark(editor, mark, value);
 
-  Transforms.setNodes(
-    editor,
-    { [mark]: value },
-    { match: (n) => isOfElementType<FlettefeltElementType>(n, DeletableVoidElementsEnum.FLETTEFELT) }
-  );
+  Transforms.setNodes(editor, { [mark]: value }, { match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT) });
 };

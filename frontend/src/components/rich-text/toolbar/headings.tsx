@@ -22,35 +22,27 @@ export const Headings = ({ iconSize }: Props) => {
         disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
-        label="Dokumenttittel"
-        text="H"
+        label="Dokumenttittel / Overskrift 1"
+        text="H1"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_ONE)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_ONE)}
         disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
-        label="Tittel nivå 1"
-        text="H1"
+        label="Overskrift 2"
+        text="H2"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_TWO)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_TWO)}
         disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
       <ToolbarTextButton
-        label="Tittel nivå 2"
-        text="H2"
+        label="Overskrift 3"
+        text="H3"
         fontWeight={600}
         onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_THREE)}
         active={isBlockActive(editor, HeadingTypesEnum.HEADING_THREE)}
-        disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
-      />
-      <ToolbarTextButton
-        label="Tittel nivå 3"
-        text="H3"
-        fontWeight={600}
-        onClick={() => toggleBlock(editor, HeadingTypesEnum.HEADING_FOUR)}
-        active={isBlockActive(editor, HeadingTypesEnum.HEADING_FOUR)}
         disabled={areBlocksActive(editor, [ListContentEnum.LIST_ITEM_CONTAINER])}
       />
     </>

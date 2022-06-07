@@ -15,8 +15,8 @@ export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean; rea
   width: 100%;
   position: relative;
   padding-top: 16px;
-  padding-left: 20px;
-  padding-right: 40px;
+  padding-left: 20mm;
+  padding-right: 20mm;
   padding-bottom: 32px;
   color: ${({ readOnly }) => (readOnly ? '#999' : '#000')};
   cursor: ${({ readOnly }) => (readOnly ? 'not-allowed' : 'unset')};
