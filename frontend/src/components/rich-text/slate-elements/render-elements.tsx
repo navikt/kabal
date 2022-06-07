@@ -4,6 +4,7 @@ import { CommentWrapper } from '../../smart-editor/comments/comment-wrapper';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';
+import { HeaderFooterElement } from '../slate-void-elements/header-footer';
 import { LabelElement } from '../slate-void-elements/label';
 import { MaltekstElement } from '../slate-void-elements/maltekst/maltekst';
 import { Signature } from '../slate-void-elements/signature';
@@ -63,15 +64,10 @@ export const renderElement = (props: RenderElementProps) => {
     case UndeletableVoidElementsEnum.SIGNATURE:
       return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
 
-    case UndeletableVoidElementsEnum.MALTEKST: {
-      // if (props.element.section === AddressSection.ADDRESS) {
-      //   return <AddressElement {...props} />;
-      // }
-
+    case UndeletableVoidElementsEnum.MALTEKST:
       return (
         <CommentWrapper {...props} element={props.element} content={<MaltekstElement element={props.element} />} />
       );
-    }
 
     case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST:
       return (
@@ -93,6 +89,16 @@ export const renderElement = (props: RenderElementProps) => {
 
     case DeletableVoidElementsEnum.FLETTEFELT:
       return <FlettefeltElement {...props} element={props.element} />;
+
+    case UndeletableVoidElementsEnum.HEADER:
+    case UndeletableVoidElementsEnum.FOOTER:
+      return (
+        <CommentWrapper
+          {...props}
+          element={props.element}
+          content={<HeaderFooterElement {...props} element={props.element} />}
+        />
+      );
 
     default:
       return <ParagraphElement {...props} element={props.element} />;

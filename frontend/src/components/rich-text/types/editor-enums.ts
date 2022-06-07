@@ -35,7 +35,9 @@ export enum UndeletableVoidElementsEnum {
   DOCUMENT_LIST = 'document-list',
   CURRENT_DATE = 'current-date',
   MALTEKST = 'maltekst',
-  PAGE_BREAK = 'page-break',
+  PAGE_BREAK = 'page-break', // Undeletable with conventional methods (backspace etc.), but has special delete button
+  HEADER = 'header',
+  FOOTER = 'footer',
 }
 
 export enum DeletableVoidElementsEnum {

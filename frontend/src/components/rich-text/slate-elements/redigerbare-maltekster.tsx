@@ -5,7 +5,7 @@ import { useSlateStatic } from 'slate-react';
 import { useLazyGetTextsQuery } from '../../../redux-api/texts';
 import { ApiQuery, TextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
-import { useQuery } from '../../smart-editor/hooks';
+import { useQuery } from '../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../smart-editor/templates/helpers';
 import { RedigerbareMalteksterElementType } from '../types/editor-types';
 import { RenderElementProps } from './render-props';

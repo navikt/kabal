@@ -7,6 +7,8 @@ import { TemplateSections } from '../../../types/texts/texts';
 import { VERSION } from '../../rich-text/version';
 import {
   createCurrentDate,
+  createFooter,
+  createHeader,
   createLabelContent,
   createMaltekst,
   createPageBreak,
@@ -17,7 +19,7 @@ import {
 
 export const INITIAL_SLATE_VALUE: Descendant[] = [
   createCurrentDate(),
-  createMaltekst(TemplateSections.HEADER),
+  createHeader(),
   createMaltekst(TemplateSections.TITLE),
   createLabelContent('sakenGjelder.name', 'Klager'),
   createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
@@ -35,6 +37,7 @@ export const INITIAL_SLATE_VALUE: Descendant[] = [
   createMaltekst(TemplateSections.SAKSKOSTNADER),
   createMaltekst(TemplateSections.GENERELL_INFO),
   createSignature(),
+  createFooter(),
   createPageBreak(),
   createMaltekst(TemplateSections.REGELVERK),
   createRegelverktekst(TemplateSections.REGELVERK),

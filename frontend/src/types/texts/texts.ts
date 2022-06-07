@@ -5,8 +5,6 @@ import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums
 
 // No specific order.
 export enum TemplateSections {
-  HEADER = 'section-header',
-  FOOTER = 'section-footer',
   TITLE = 'section-esel',
   INTRODUCTION = 'section-rev',
   KONKLUSJON = 'section-elg',
@@ -20,8 +18,6 @@ export enum TemplateSections {
   VI_VEKTLAGT = 'section-oter',
   SAKSKOSTNADER = 'section-gris',
 }
-
-export type AllMaltekstSections = TemplateSections;
 
 export interface AppQuery {
   hjemler: string[];
@@ -47,6 +43,8 @@ export enum TextTypes {
   MALTEKST = 'MALTEKST',
   REDIGERBAR_MALTEKST = 'REDIGERBAR_MALTEKST',
   REGELVERK = 'REGELVERK',
+  HEADER = 'HEADER',
+  FOOTER = 'FOOTER',
 }
 
 export type IGetTextsParams = Partial<ApiQuery>;
@@ -61,6 +59,7 @@ export interface ITextMetadata extends ITextBaseMetadata {
 
 export interface INewTextParams extends ITextBaseMetadata {
   content: Descendant[];
+  plainText?: string;
   version: typeof VERSION;
 }
 

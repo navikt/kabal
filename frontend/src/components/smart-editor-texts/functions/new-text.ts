@@ -13,6 +13,7 @@ export const NEW_TEXT: INewTextParams['content'] = [
 export const getNewText = (textType: TextTypes): INewTextParams => ({
   textType,
   content: NEW_TEXT,
+  plainText: '',
   hjemler: [],
   enheter: [],
   ytelser: [],

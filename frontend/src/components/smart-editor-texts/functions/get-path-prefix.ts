@@ -10,5 +10,9 @@ export const getPathPrefix = (textType: TextTypes): string => {
       return '/gode-formuleringer';
     case TextTypes.REGELVERK:
       return '/regelverk';
+    case TextTypes.HEADER:
+      return '/topptekster';
+    case TextTypes.FOOTER:
+      return '/bunntekster';
   }
 };

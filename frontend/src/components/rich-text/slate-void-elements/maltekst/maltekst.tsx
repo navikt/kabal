@@ -3,14 +3,13 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import { Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
 import { useLazyGetTextsQuery } from '../../../../redux-api/texts';
 import { ApiQuery, TextTypes } from '../../../../types/texts/texts';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
-import { useQuery } from '../../../smart-editor/hooks';
+import { useQuery } from '../../../smart-editor/hooks/use-query';
 import { MaltekstElementType } from '../../types/editor-void-types';
-import { voidStyle } from '../style';
 import { MaltekstContent } from './maltekst-content';
+import { MaltekstContainer } from './styled-components';
 
 interface Props {
   element: MaltekstElementType;
@@ -68,29 +67,3 @@ export const MaltekstElement = ({ element }: Props) => {
     </MaltekstContainer>
   );
 };
-
-interface MaltekstContainerProps {
-  isActive: boolean;
-  showTags: boolean;
-}
-
-const getColor = ({ isActive, showTags }: MaltekstContainerProps) => {
-  if (showTags && !isActive) {
-    return '#e9f1fc';
-  }
-
-  return 'transparent';
-};
-
-const MaltekstContainer = styled.div<MaltekstContainerProps>`
-  position: relative;
-  ${voidStyle}
-  border-radius: 2px;
-  transition-property: background-color, outline-color;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-  background-color: ${getColor};
-  outline-color: ${getColor};
-  outline-style: solid;
-  outline-width: 8px;
-`;

@@ -9,7 +9,7 @@ import { useGetTextsQuery } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { TextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { useQuery } from '../hooks';
+import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
 import { GodFormulering } from './god-formulering';
 import { insertGodFormulering } from './insert';
