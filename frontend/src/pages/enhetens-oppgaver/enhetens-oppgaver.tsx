@@ -9,3 +9,6 @@ export const EnhetensOppgaverPage = () => (
     <EnhetensOppgaverPaaVentTable />
   </OppgaverPageWrapper>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default EnhetensOppgaverPage;

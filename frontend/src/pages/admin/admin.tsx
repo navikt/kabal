@@ -7,3 +7,6 @@ export const AdminPage = () => (
     <Admin />
   </StyledArticle>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default AdminPage;

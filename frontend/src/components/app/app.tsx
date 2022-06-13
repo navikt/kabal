@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { Header } from '../../components/header/header';
+import { NavHeader } from '../../components/header/header';
 import { reduxStore } from '../../redux/configure-store';
 import { GlobalStyles } from './global-styles';
 import { Router } from './router';
@@ -11,9 +11,7 @@ export const App = () => (
     <Provider store={reduxStore}>
       <BrowserRouter>
         <GlobalStyles />
-
-        <Header />
-
+        <NavHeader />
         <Router />
       </BrowserRouter>
     </Provider>

@@ -8,3 +8,6 @@ export const MalteksterPage = () => (
     <SmartEditorTexts textType={TextTypes.MALTEKST} />
   </PageWrapper>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default MalteksterPage;

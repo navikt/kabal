@@ -1,60 +1,51 @@
 import { AutomaticSystem, Logout, Settings } from '@navikt/ds-icons';
+import { Dropdown } from '@navikt/ds-react-internal';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { CopyButton } from '../../copy-button/copy-button';
 
-interface DropdownProps {
-  open: boolean;
-}
-
-export const Dropdown = ({ open }: DropdownProps): JSX.Element | null => {
-  if (!open) {
-    return null;
-  }
-
+export const UserDropdown = (): JSX.Element | null => {
   const version = process.env.VERSION ?? 'UKJENT';
 
   return (
-    <StyledList>
-      <StyledLi>
-        <StyledNavLink to="/innstillinger" data-testid="innstillinger-link">
+    <Menu>
+      <Dropdown.Menu.List>
+        <Dropdown.Menu.List.Item as={StyledNavLink} to="/innstillinger" data-testid="innstillinger-link">
           <Settings /> Innstillinger
-        </StyledNavLink>
-      </StyledLi>
-      <StyledLi>
-        <StyledLink href="/logout">
+        </Dropdown.Menu.List.Item>
+        <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/logout" data-testid="logout-link">
           <Logout /> Logg ut
-        </StyledLink>
-      </StyledLi>
-      <StyledLi>
-        <StyledCopyButton title="Klikk for å kopiere versjonsnummeret" text={version}>
-          <AutomaticSystem />
+        </Dropdown.Menu.List.Item>
+        <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
+          <VersionIcon />
           KABAL-versjon: <VersionNumber>{version}</VersionNumber>
-        </StyledCopyButton>
-      </StyledLi>
-    </StyledList>
+        </Dropdown.Menu.List.Item>
+      </Dropdown.Menu.List>
+    </Menu>
   );
 };
 
-const iconText = css`
-  & {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+const Menu = styled(Dropdown.Menu)`
+  overflow: visible;
+  width: auto;
+
+  & .navds-body-short {
+    font-size: 16px;
   }
 `;
 
 const VersionNumber = styled.code`
-  max-width: 80px;
+  width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const linkStyle = css`
-  ${iconText}
   & {
-    color: #fff;
+    display: flex;
+    gap: 8px;
+    align-items: center;
     text-decoration: none;
     cursor: pointer;
     background: transparent;
@@ -69,33 +60,19 @@ const StyledLink = styled.a`
   ${linkStyle}
 `;
 
+const StyledLogoutLink = styled(StyledLink)`
+  color: #c30000;
+`;
+
 export const StyledNavLink = styled(NavLink)`
   ${linkStyle}
 `;
 
-const StyledList = styled.ul`
-  position: absolute;
-  right: 0;
-  top: 100%;
-  list-style: none;
-  background-color: #3e3832;
-  color: #fff;
-  padding: 0;
-  margin: 0;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-`;
-
-const StyledLi = styled.li`
-  padding: 0;
-  border-top: 1px solid #fff;
-  white-space: nowrap;
-
-  :hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-`;
-
 const StyledCopyButton = styled(CopyButton)`
   ${linkStyle}
+  white-space: nowrap;
+`;
+
+const VersionIcon = styled(AutomaticSystem)`
+  flex-shrink: 0;
 `;

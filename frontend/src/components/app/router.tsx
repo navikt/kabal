@@ -1,52 +1,56 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
-import { AdminPage } from '../../pages/admin/admin';
-import { AnkebehandlingPage } from '../../pages/ankebehandling/ankebehandling';
-import { BunnteksterPage } from '../../pages/bunntekster/bunntekster';
-import { EnhetensOppgaverPage } from '../../pages/enhetens-oppgaver/enhetens-oppgaver';
-import { GodeFormuleringerPage } from '../../pages/gode-formuleringer/gode-formuleringer';
-import { KlagebehandlingPage } from '../../pages/klagebehandling/klagebehandling';
-import { MalteksterPage } from '../../pages/maltekster/maltekster';
-import { MineOppgaverPage } from '../../pages/mine-oppgaver/mine-oppgaver';
-import { OppgaverPage } from '../../pages/oppgaver/oppgaver';
-import { RedigerbareMalteksterPage } from '../../pages/redigerbare-maltekster/redigerbare-maltekster';
-import { RegelverkPage } from '../../pages/regelverk/regelverk';
-import { SearchPage } from '../../pages/search/search';
-import { SettingsPage } from '../../pages/settings/settings';
-import { ToppteksterPage } from '../../pages/topptekster/topptekster';
+import { RouterLoader } from './loader';
+
+const AdminPage = lazy(() => import('../../pages/admin/admin'));
+const AnkebehandlingPage = lazy(() => import('../../pages/ankebehandling/ankebehandling'));
+const BunnteksterPage = lazy(() => import('../../pages/bunntekster/bunntekster'));
+const EnhetensOppgaverPage = lazy(() => import('../../pages/enhetens-oppgaver/enhetens-oppgaver'));
+const GodeFormuleringerPage = lazy(() => import('../../pages/gode-formuleringer/gode-formuleringer'));
+const KlagebehandlingPage = lazy(() => import('../../pages/klagebehandling/klagebehandling'));
+const MalteksterPage = lazy(() => import('../../pages/maltekster/maltekster'));
+const MineOppgaverPage = lazy(() => import('../../pages/mine-oppgaver/mine-oppgaver'));
+const OppgaverPage = lazy(() => import('../../pages/oppgaver/oppgaver'));
+const RedigerbareMalteksterPage = lazy(() => import('../../pages/redigerbare-maltekster/redigerbare-maltekster'));
+const RegelverkPage = lazy(() => import('../../pages/regelverk/regelverk'));
+const SearchPage = lazy(() => import('../../pages/search/search'));
+const SettingsPage = lazy(() => import('../../pages/settings/settings'));
+const ToppteksterPage = lazy(() => import('../../pages/topptekster/topptekster'));
 
 export const Router = () => (
-  <Switch>
-    <Route path="/" element={<Navigate to="oppgaver/1" />} />
+  <Suspense fallback={<RouterLoader />}>
+    <Switch>
+      <Route path="/" element={<Navigate to="oppgaver/1" />} />
 
-    <Route path="oppgaver">
-      <Route path="" element={<Navigate to="1" />} />
-      <Route path="0" element={<Navigate to="../1" />} />
+      <Route path="oppgaver">
+        <Route path="" element={<Navigate to="1" />} />
+        <Route path="0" element={<Navigate to="../1" />} />
 
-      <Route path=":page" element={<OppgaverPage />} />
-    </Route>
+        <Route path=":page" element={<OppgaverPage />} />
+      </Route>
 
-    <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-    <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
-    <Route path="sok" element={<SearchPage />} />
-    <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
-    <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
+      <Route path="mineoppgaver" element={<MineOppgaverPage />} />
+      <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
+      <Route path="sok" element={<SearchPage />} />
+      <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
+      <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
 
-    <Route path="maltekster/:id" element={<MalteksterPage />} />
-    <Route path="maltekster/" element={<MalteksterPage />} />
-    <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
-    <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
-    <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
-    <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
-    <Route path="regelverk/:id" element={<RegelverkPage />} />
-    <Route path="regelverk/" element={<RegelverkPage />} />
-    <Route path="topptekster/" element={<ToppteksterPage />} />
-    <Route path="topptekster/:id" element={<ToppteksterPage />} />
+      <Route path="maltekster/:id" element={<MalteksterPage />} />
+      <Route path="maltekster/" element={<MalteksterPage />} />
+      <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
+      <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
+      <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
+      <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
+      <Route path="regelverk/:id" element={<RegelverkPage />} />
+      <Route path="regelverk/" element={<RegelverkPage />} />
+      <Route path="topptekster/" element={<ToppteksterPage />} />
+      <Route path="topptekster/:id" element={<ToppteksterPage />} />
 
-    <Route path="bunntekster/" element={<BunnteksterPage />} />
-    <Route path="bunntekster/:id" element={<BunnteksterPage />} />
+      <Route path="bunntekster/" element={<BunnteksterPage />} />
+      <Route path="bunntekster/:id" element={<BunnteksterPage />} />
 
-    <Route path="innstillinger" element={<SettingsPage />} />
-    <Route path="admin" element={<AdminPage />} />
-  </Switch>
+      <Route path="innstillinger" element={<SettingsPage />} />
+      <Route path="admin" element={<AdminPage />} />
+    </Switch>
+  </Suspense>
 );
