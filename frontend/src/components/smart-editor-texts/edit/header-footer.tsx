@@ -19,16 +19,18 @@ export const HeaderFooterEditor = ({ textId, savedPlainText, type }: Props) => {
   const query = useTextQuery();
 
   useEffect(() => {
+    if (value === savedPlainText) {
+      return;
+    }
+
     const timeout = setTimeout(() => {
       updateProperty({ id: textId, key: 'plainText', value, query });
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [query, textId, updateProperty, value]);
+  }, [query, savedPlainText, textId, updateProperty, value]);
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(target.value);
-  };
+  const onChange = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => setValue(target.value);
 
   return (
     <StyledTextarea minRows={4} label={getLabel(type)} key={textId} id={textId} value={value} onChange={onChange} />
