@@ -11,3 +11,6 @@ export const MineOppgaverPage = () => (
     <FullfoerteOppgaverTable />
   </OppgaverPageWrapper>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default MineOppgaverPage;

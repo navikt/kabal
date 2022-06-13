@@ -15,3 +15,6 @@ export const SearchPage = () => {
     </OppgaverPageWrapper>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default SearchPage;

@@ -1,3 +1,7 @@
+import { Facilitet, FileContent, Law, LightBulb, List, Office1, Search, Task } from '@navikt/ds-icons';
+import { Header } from '@navikt/ds-react-internal';
+import { VerticalAlignBottom } from '@styled-icons/material/VerticalAlignBottom';
+import { VerticalAlignTop } from '@styled-icons/material/VerticalAlignTop';
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,54 +10,54 @@ import { useHasAnyOfRoles } from '../../hooks/use-has-role';
 import { Role } from '../../types/bruker';
 
 export const Nav = () => (
-  <StyledNav role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
+  <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
       <NavItem to="/oppgaver/1" testId="oppgaver-nav-link">
-        Oppgaver
+        <List /> Oppgaver
       </NavItem>
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link">
-        Mine Oppgaver
+        <Task /> Mine Oppgaver
       </NavItem>
       <NavItem to="/sok" testId="search-nav-link">
-        Søk på person
+        <Search /> Søk på person
       </NavItem>
       <NavItem
         to="/enhetensoppgaver"
         testId="enhetens-oppgaver-nav-link"
         roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_KLAGE_FAGANSVARLIG, Role.ROLE_KLAGE_MERKANTIL, Role.ROLE_ADMIN]}
       >
-        Enhetens oppgaver
+        <Office1 /> Enhetens oppgaver
       </NavItem>
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/maltekster" testId="maltekster-nav-link">
-        Maltekster
+        <Facilitet /> Maltekster
       </NavItem>
       <NavItem
         requiredFeature={FeatureToggles.MALTEKSTER}
         to="/redigerbare-maltekster"
         testId="redigerbare-maltekster-nav-link"
       >
-        Redigerbare maltekster
+        <FileContent /> Redigerbare maltekster
       </NavItem>
       <NavItem
         requiredFeature={FeatureToggles.MALTEKSTER}
         to="/gode-formuleringer"
         testId="gode-formuleringer-nav-link"
       >
-        Gode formuleringer
+        <LightBulb /> Gode formuleringer
       </NavItem>
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/regelverk" testId="regelverk-nav-link">
-        Regelverk
+        <Law /> Regelverk
       </NavItem>
 
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/topptekster" testId="topptekster-nav-link">
-        Topptekster
+        <VerticalAlignTop size={22} color="#fff" /> Topptekster
       </NavItem>
 
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/bunntekster" testId="bunntekster-nav-link">
-        Bunntekster
+        <VerticalAlignBottom size={22} color="#fff" /> Bunntekster
       </NavItem>
     </StyledNavLinkList>
-  </StyledNav>
+  </Header.Title>
 );
 
 interface NavItemProps extends NavLinkProps {
@@ -79,43 +83,47 @@ const NavItem = ({ testId, roles, requiredFeature: feature, ...props }: NavItemP
 };
 
 const StyledNav = styled.nav`
-  padding-top: 16px;
-  padding-bottom: 0;
+  height: 100%;
+  flex-grow: 1;
+  overflow-x: auto;
 `;
 
 const StyledNavLinkList = styled.ul`
+  height: 100%;
   display: flex;
   list-style: none;
   padding: 0;
-  padding-top: 5px;
-  margin: 0 1em;
-  border-bottom: 1px solid #3e3832;
+  align-items: center;
+  margin: 0;
+  gap: 16px;
 `;
 
 const StyledNavListItem = styled.li`
-  min-width: 10em;
   text-align: center;
-  padding-right: 1em;
 `;
 
 const StyledNavLink = styled(NavLink)`
-  display: block;
+  display: flex;
+  gap: 8px;
+  align-items: center;
   width: 100%;
-  font-size: 1.2em;
-  font-weight: bold;
-  text-decoration: none;
-  color: #54483f;
-  border-bottom: 5px solid transparent;
-  margin: 0;
-  padding: 0.25em 0 0.25em 0;
+  border-bottom: 4px solid transparent;
   word-break: keep-all;
   white-space: nowrap;
-  min-width: 10em;
+  border-left: none;
+  text-decoration: none;
+  color: var(--navds-semantic-color-text-inverted);
+  padding: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  transition: border-bottom-color 0.2s ease-in-out;
 
-  &.active,
+  &.active {
+    border-bottom: 4px solid var(--navds-global-color-blue-300);
+  }
+
   &:hover {
-    text-decoration: none;
-    color: #0067c5;
-    border-bottom: 5px solid #0067c5;
+    /* border-bottom: 4px solid var(--navds-semantic-color-link); */
+    border-bottom: 4px solid #666;
   }
 `;

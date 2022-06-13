@@ -7,3 +7,6 @@ export const OppgaverPage = () => (
     <OppgaveTable />
   </OppgaverPageWrapper>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default OppgaverPage;

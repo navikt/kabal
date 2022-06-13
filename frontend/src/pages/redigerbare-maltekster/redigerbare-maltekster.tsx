@@ -8,3 +8,6 @@ export const RedigerbareMalteksterPage = () => (
     <SmartEditorTexts textType={TextTypes.REDIGERBAR_MALTEKST} />
   </PageWrapper>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default RedigerbareMalteksterPage;

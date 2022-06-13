@@ -40,17 +40,18 @@ export const ValidationSummaryPopup = ({ sections, hasErrors }: Props) => {
           </StyledAlertStripeChildren>
         </Alert>
       </StyledButton>
-      <Popup hasErrors={hasErrors} sections={sections} setOpen={setOpen} />
+      <Popup hasErrors={hasErrors} sections={sections} setOpen={setOpen} open={open} />
     </>
   );
 };
 
 interface PopupProps extends Props {
   setOpen: (open: boolean) => void;
+  open: boolean;
 }
 
-const Popup = ({ hasErrors, sections, setOpen }: PopupProps) => {
-  if (!hasErrors) {
+const Popup = ({ hasErrors, sections, open, setOpen }: PopupProps) => {
+  if (!open || !hasErrors) {
     return null;
   }
 

@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = (_env, { mode }) => ({
+  mode,
   entry: {
     main: './src/index.tsx',
   },
@@ -42,9 +43,9 @@ module.exports = (_env, { mode }) => ({
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
-  devtool: 'eval-source-map',
+  devtool: mode === 'production' ? 'source-map' : 'eval-source-map',
   devServer: {
     static: [
       {
