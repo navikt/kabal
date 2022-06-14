@@ -5,6 +5,11 @@ export const SuccessStatus = styled(AlertStripeSuksess)`
   display: flex;
   align-items: center;
   height: 48px;
+
+  &.alertstripe {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 `;
 
 export const TildelDropdownButton = styled.button`
