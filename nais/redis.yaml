@@ -9,7 +9,7 @@ metadata:
   annotations:
     nais.io/restricted: "true"
 spec:
-  image: docker.pkg.github.com/navikt/klage-redis/klage-redis:latest
+  image: ghcr.io/navikt/klage-redis/klage-redis:latest
   port: 6379
   replicas: # A single Redis-app doesn't scale
     min: 1
