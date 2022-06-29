@@ -2,8 +2,6 @@ import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useFeatureToggle } from '../../../hooks/use-feature-toggle';
-import { FeatureToggles } from '../../../redux-api/feature-toggling';
 import { useCreateSmartDocumentMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
 import { OppgaveType } from '../../../types/kodeverk';
 import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';

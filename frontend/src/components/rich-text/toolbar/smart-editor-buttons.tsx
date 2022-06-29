@@ -1,8 +1,6 @@
 import { DialogDots, Information, Law } from '@navikt/ds-icons';
 import React, { useContext } from 'react';
 import { Range } from 'slate';
-import { useFeatureToggle } from '../../../hooks/use-feature-toggle';
-import { FeatureToggles } from '../../../redux-api/feature-toggling';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { ToolbarSeparator } from './separator';
 import { ToolbarIconButton } from './toolbarbutton';
