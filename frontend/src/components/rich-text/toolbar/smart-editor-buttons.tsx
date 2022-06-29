@@ -20,20 +20,20 @@ export const SmartEditorButtons = ({
   showAnnotationsButton = false,
   showGodeFormuleringerButton = false,
 }: SmartEditorButtonsProps) => {
-  const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
-
-  const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
-  const showAnnotations = malteksterEnabled && showAnnotationsButton;
-
-  if (!showCommentsButton && !showAnnotations && !showGodeFormuleringer) {
-    return null;
-  }
+  // const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
+  //
+  // const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
+  // const showAnnotations = malteksterEnabled && showAnnotationsButton;
+  //
+  // if (!showCommentsButton && !showAnnotations && !showGodeFormuleringer) {
+  //   return null;
+  // }
 
   return (
     <>
-      <CommentsButton show={showCommentsButton} />
-      <AnnotationsButton show={showAnnotations} />
-      <GodeFormuleringerButton show={showGodeFormuleringer} />
+      <CommentsButton show={true} />
+      <AnnotationsButton show={true} />
+      <GodeFormuleringerButton show={true} />
 
       <ToolbarSeparator />
     </>
