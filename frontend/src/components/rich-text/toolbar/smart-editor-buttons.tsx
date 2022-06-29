@@ -1,8 +1,6 @@
 import { DialogDots, Information, Law } from '@navikt/ds-icons';
 import React, { useContext } from 'react';
 import { Range } from 'slate';
-import { useFeatureToggle } from '../../../hooks/use-feature-toggle';
-import { FeatureToggles } from '../../../redux-api/feature-toggling';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { ToolbarSeparator } from './separator';
 import { ToolbarIconButton } from './toolbarbutton';
@@ -20,20 +18,20 @@ export const SmartEditorButtons = ({
   showAnnotationsButton = false,
   showGodeFormuleringerButton = false,
 }: SmartEditorButtonsProps) => {
-  const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
-
-  const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
-  const showAnnotations = malteksterEnabled && showAnnotationsButton;
-
-  if (!showCommentsButton && !showAnnotations && !showGodeFormuleringer) {
+  // const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
+  //
+  // const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
+  // const showAnnotations = malteksterEnabled && showAnnotationsButton;
+  //
+  if (!showCommentsButton && !showAnnotationsButton && !showGodeFormuleringerButton) {
     return null;
   }
 
   return (
     <>
       <CommentsButton show={showCommentsButton} />
-      <AnnotationsButton show={showAnnotations} />
-      <GodeFormuleringerButton show={showGodeFormuleringer} />
+      <AnnotationsButton show={showAnnotationsButton} />
+      <GodeFormuleringerButton show={showGodeFormuleringerButton} />
 
       <ToolbarSeparator />
     </>
