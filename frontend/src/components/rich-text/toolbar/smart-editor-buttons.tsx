@@ -25,15 +25,15 @@ export const SmartEditorButtons = ({
   // const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
   // const showAnnotations = malteksterEnabled && showAnnotationsButton;
   //
-  // if (!showCommentsButton && !showAnnotations && !showGodeFormuleringer) {
-  //   return null;
-  // }
+  if (!showCommentsButton && !showAnnotationsButton && !showGodeFormuleringerButton) {
+    return null;
+  }
 
   return (
     <>
-      <CommentsButton show={true} />
-      <AnnotationsButton show={true} />
-      <GodeFormuleringerButton show={true} />
+      <CommentsButton show={showCommentsButton} />
+      <AnnotationsButton show={showAnnotationsButton} />
+      <GodeFormuleringerButton show={showGodeFormuleringerButton} />
 
       <ToolbarSeparator />
     </>
