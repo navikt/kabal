@@ -26,7 +26,7 @@ interface Props {
 }
 
 export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
-  const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
+  const malteksterEnabled = true; //useFeatureToggle(FeatureToggles.MALTEKSTER);
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const canEdit = useCanEdit();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);

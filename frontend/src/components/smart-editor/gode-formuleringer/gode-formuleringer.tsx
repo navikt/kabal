@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
-  const enabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
+  const enabled = true; //useFeatureToggle(FeatureToggles.MALTEKSTER);
 
   const [filter, setFilter] = useState<string>('');
   const [focused, setFocused] = useState<number>(-1);
