@@ -4,7 +4,7 @@ import { FilterList } from './filter-list';
 import { Header } from './header';
 import { BaseProps, DropdownProps, IOption } from './props';
 
-export interface SectionHeader {
+interface SectionHeader {
   id: string;
   name?: string;
 }

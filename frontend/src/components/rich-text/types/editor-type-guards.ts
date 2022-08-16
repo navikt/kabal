@@ -59,7 +59,7 @@ export const isOfElementTypes = <T extends Element>(n: Node, types: ElementTypes
 export const isNodeOfSameElementType = <T extends Element>(n: Node, element: T): n is T =>
   Element.isElement(n) && n.type === element.type;
 
-export const isTypeAlignable = (type: ElementTypesEnum): type is ContentTypeEnum => {
+const isTypeAlignable = (type: ElementTypesEnum): type is ContentTypeEnum => {
   for (const alignableType of Object.values(AlignableTypeEnum)) {
     if (type === alignableType) {
       return true;

@@ -1,9 +1,9 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
 import { useSettingsTypes } from '../../hooks/use-settings-types';
 import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
-import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
-import { SortBy } from '../common-table-components/sort-by';
+import { SortFieldEnum } from '../../types/oppgaver';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
 import { Filters } from './types';
@@ -19,9 +19,9 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   const hjemlerOptions = useSettingsHjemler();
 
   return (
-    <thead>
-      <tr>
-        <th>
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell>
           <FilterDropdown
             testId="filter-type"
             selected={filters.types}
@@ -30,8 +30,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Type
           </FilterDropdown>
-        </th>
-        <th>
+        </Table.HeaderCell>
+        <Table.HeaderCell>
           <FilterDropdown
             testId="filter-ytelse"
             selected={filters.ytelser}
@@ -40,8 +40,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Ytelse
           </FilterDropdown>
-        </th>
-        <th>
+        </Table.HeaderCell>
+        <Table.HeaderCell>
           <FilterDropdown
             testId="filter-hjemler"
             selected={filters.hjemler}
@@ -50,24 +50,15 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Hjemmel
           </FilterDropdown>
-        </th>
-        <SortBy
-          sorting={filters.sorting}
-          sortField={SortFieldEnum.ALDER}
-          defaultSortOrder={SortOrderEnum.SYNKENDE}
-          onChange={(sorting) => onChange({ ...filters, sorting })}
-        >
+        </Table.HeaderCell>
+        <Table.ColumnHeader sortKey={SortFieldEnum.ALDER} sortable scope="col">
           Alder
-        </SortBy>
-        <SortBy
-          sorting={filters.sorting}
-          sortField={SortFieldEnum.FRIST}
-          onChange={(sorting) => onChange({ ...filters, sorting })}
-        >
+        </Table.ColumnHeader>
+        <Table.ColumnHeader sortKey={SortFieldEnum.FRIST} sortable scope="col">
           Frist
-        </SortBy>
-        <th></th>
-      </tr>
-    </thead>
+        </Table.ColumnHeader>
+        <Table.HeaderCell></Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
   );
 };

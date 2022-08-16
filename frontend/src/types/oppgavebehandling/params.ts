@@ -28,6 +28,16 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
   hjemler: string[];
 }
 
+export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
+  kjennelseMottatt: string; // LocalDate
+  type: OppgaveType.ANKE_I_TRYGDERETTEN;
+}
+
+export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParams {
+  sendtTilTrygderetten: string; // LocalDate
+  type: OppgaveType.ANKE_I_TRYGDERETTEN;
+}
+
 export type ICheckDocumentParams = IDocumentReference &
   IOppgavebehandlingBaseParams & {
     pageReferences: (string | null)[];

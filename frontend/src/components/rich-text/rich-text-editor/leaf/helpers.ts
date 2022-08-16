@@ -50,6 +50,7 @@ export const getColor = (comments: number, selected: boolean, focused: boolean) 
   const lightness = 100 - 15 * Math.min(comments, 3);
   const hue = focused ? 0 : 125;
   const saturation = focused ? 75 : 50;
+
   return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
 };
 

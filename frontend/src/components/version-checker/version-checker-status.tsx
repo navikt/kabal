@@ -14,6 +14,7 @@ export const VersionCheckerStatus = () => {
     }
 
     const versionChecker = new VersionChecker(setNeedsUpdate);
+
     return () => versionChecker.close();
   }, []);
 

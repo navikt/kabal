@@ -1,15 +1,15 @@
 import { Express } from 'express';
-import { serverConfig } from './config/server-config';
+import { authMiddleware } from './auth/auth-middleware';
 import { getAzureClient } from './auth/azure/client';
-import { EmojiIcons, sendToSlack } from './slack';
+import { callbackHandler } from './auth/callback-handler';
+import { guardMiddleware } from './auth/guard-middleware';
+import { logoutHandler } from './auth/logout-handler';
+import { callbackPath } from './config/azure-config';
+import { serverConfig } from './config/server-config';
 import { setupProxy } from './routes/setup-proxy';
 import { setupStaticRoutes } from './routes/static-routes';
-import { authMiddleware } from './auth/auth-middleware';
-import { callbackPath } from './config/azure-config';
-import { callbackHandler } from './auth/callback-handler';
-import { logoutHandler } from './auth/logout-handler';
-import { guardMiddleware } from './auth/guard-middleware';
 import { setupVersionRoute } from './routes/version';
+import { EmojiIcons, sendToSlack } from './slack';
 
 const PORT = serverConfig.port;
 
@@ -23,10 +23,10 @@ export const init = async (server: Express) => {
     server.use(authMiddleware(authClient));
     server.use(setupProxy(authClient));
     server.use(setupStaticRoutes());
-    server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+    server.listen(PORT, () => console.info(`Listening on port ${PORT}`));
   } catch (e) {
-    if (e instanceof Error || typeof e === 'string' || typeof e === 'number') {
-      await sendToSlack(`Server crashed: ${e}`, EmojiIcons.Scream);
+    if (e instanceof Error) {
+      await sendToSlack(`Server crashed: ${e.message}`, EmojiIcons.Scream);
     } else {
       await sendToSlack(`Server crashed: ${JSON.stringify(e)}`, EmojiIcons.Scream);
     }

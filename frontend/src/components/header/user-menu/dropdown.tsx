@@ -19,7 +19,7 @@ export const UserDropdown = (): JSX.Element | null => {
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
           <VersionIcon />
-          KABAL-versjon: <VersionNumber>{version}</VersionNumber>
+          KABAL-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
         </Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>
@@ -29,6 +29,7 @@ export const UserDropdown = (): JSX.Element | null => {
 const Menu = styled(Dropdown.Menu)`
   overflow: visible;
   width: auto;
+  max-width: 300px;
 
   & .navds-body-short {
     font-size: 16px;
@@ -64,7 +65,7 @@ const StyledLogoutLink = styled(StyledLink)`
   color: #c30000;
 `;
 
-export const StyledNavLink = styled(NavLink)`
+const StyledNavLink = styled(NavLink)`
   ${linkStyle}
 `;
 
@@ -74,5 +75,13 @@ const StyledCopyButton = styled(CopyButton)`
 `;
 
 const VersionIcon = styled(AutomaticSystem)`
-  flex-shrink: 0;
+  margin-right: 8px;
 `;
+
+const getShortVersion = (version: string): string => {
+  if (version.length <= 7) {
+    return version;
+  }
+
+  return version.substring(0, 7) + '...';
+};

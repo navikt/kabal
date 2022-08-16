@@ -3,14 +3,18 @@ import { EmojiIcons, sendToSlack } from './slack';
 export const processErrors = () => {
   process
     .on('unhandledRejection', (reason, promise) => {
-      console.error(`Process ${process.pid} received a unhandledRejection signal, ${reason}`);
+      console.error(`Process ${process.pid} received a unhandledRejection signal`, reason);
       promise.catch((err) => {
-        console.error(`Uncaught error: ${err}`);
+        console.error(`Uncaught error:`, err);
         process.exit(1);
       });
     })
     .on('uncaughtException', (e) => {
-      console.error(`Process ${process.pid} received a uncaughtException signal, ${e}`);
+      if (e instanceof Error) {
+        console.error(`Process ${process.pid} received a uncaughtException signal, ${e.message}`);
+      } else {
+        console.error(`Process ${process.pid} received a uncaughtException signal`);
+      }
       process.exit(1);
     })
     .on('SIGTERM', (signal) => {

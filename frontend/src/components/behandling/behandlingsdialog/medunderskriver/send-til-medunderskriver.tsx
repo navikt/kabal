@@ -1,6 +1,5 @@
 import { Send } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import AlertStripe from 'nav-frontend-alertstriper';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -9,10 +8,12 @@ import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/op
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { getTitleLowercase } from './getTitle';
 
-type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'medunderskriver' | 'medunderskriverFlyt'>;
+type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;
 
 export const SendTilMedunderskriver = ({
+  type,
   id: oppgaveId,
   medunderskriver,
   medunderskriverFlyt,
@@ -34,13 +35,17 @@ export const SendTilMedunderskriver = ({
 
   const SentToMedunderskriver = () => (
     <StyledFormSection>
-      <AlertStripe type="info">Sendt til medunderskriver</AlertStripe>
+      <Alert variant="info" size="small">
+        Sendt til {getTitleLowercase(type)}
+      </Alert>
     </StyledFormSection>
   );
 
   const SentBackToMedunderskriver = () => (
     <StyledFormSection>
-      <AlertStripe type="info">Sendt tilbake av medunderskriver</AlertStripe>
+      <Alert variant="info" size="small">
+        Sendt tilbake av {getTitleLowercase(type)}
+      </Alert>
     </StyledFormSection>
   );
 
@@ -54,9 +59,9 @@ export const SendTilMedunderskriver = ({
         disabled={sendToMedunderskriverDisabled}
         loading={loader.isLoading || medunderskriverLoader.isLoading}
         data-testid="send-to-medunderskriver"
+        icon={<Send aria-hidden />}
       >
-        <Send />
-        <span>Send til medunderskriver</span>
+        Send til {getTitleLowercase(type)}
       </StyledButton>
     </StyledFormSection>
   );

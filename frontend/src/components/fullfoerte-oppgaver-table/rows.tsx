@@ -1,41 +1,41 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
 import { Row } from './row';
 
-interface OppgaveRaderProps {
+interface OppgaveRowsProps {
   oppgaver?: IOppgaveList;
   columnCount: number;
 }
 
-export const OppgaveRader = ({ oppgaver, columnCount }: OppgaveRaderProps): JSX.Element => {
+export const OppgaveRows = ({ oppgaver, columnCount }: OppgaveRowsProps): JSX.Element => {
   if (typeof oppgaver === 'undefined') {
     return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>
+      <Table.Body>
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>
             <Loader size="xlarge" title="Laster oppgaver..." />
-          </td>
-        </tr>
-      </tbody>
+          </Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   if (oppgaver.length === 0) {
     return (
-      <tbody>
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
+      <Table.Body>
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>Ingen oppgaver i liste</Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   return (
-    <tbody>
+    <Table.Body>
       {oppgaver.map((k) => (
         <Row {...k} key={k.id} />
       ))}
-    </tbody>
+    </Table.Body>
   );
 };

@@ -8,11 +8,11 @@ import { ISmartEditorComment } from '../../../types/smart-editor/comments';
 import { isCommentableVoid } from '../../rich-text/types/editor-type-guards';
 import { SmartEditorContext } from '../context/smart-editor-context';
 
-export interface FocusedComment extends ISmartEditorComment {
+interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;
 }
 
-export interface Threads {
+interface Threads {
   attached: FocusedComment[];
   orphans: FocusedComment[];
   isLoading: boolean;

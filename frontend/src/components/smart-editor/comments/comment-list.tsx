@@ -15,7 +15,7 @@ export const CommentList = ({ comments }: CommentListProps) => (
   </List>
 );
 
-export const List = styled.ul`
+const List = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 16px;

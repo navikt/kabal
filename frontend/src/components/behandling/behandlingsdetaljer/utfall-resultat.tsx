@@ -1,4 +1,4 @@
-import { Select } from 'nav-frontend-skjema';
+import { Select } from '@navikt/ds-react';
 import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
@@ -47,12 +47,12 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
       <Select
         disabled={!canEdit || isLoading}
         label={`${utfallLabel}:`}
-        bredde="s"
+        size="small"
         onChange={onUtfallResultatChange}
         value={utfall ?? undefined}
         data-testid="select-utfall"
         data-ready={!isLoading}
-        feil={validationError}
+        error={validationError}
       >
         <option value={NOT_SELECTED} label="Ikke valgt" />
         {options}

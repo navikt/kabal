@@ -41,19 +41,6 @@ export enum Role {
   ROLE_ADMIN = 'ROLE_ADMIN',
 }
 
-export interface ISetEnhet {
-  enhetId: string;
-  navIdent: string;
-}
-
-export interface IPostSettingsParams extends ISettings {
-  navIdent: string;
-}
-
-export interface ISetInfoParams {
-  value: string;
-}
-
 export interface ISetCustomInfoParams {
   key: keyof ICustomUserInfo;
   value: string | null;

@@ -43,6 +43,7 @@ export const withNormalization = (editor: Editor) => {
 
         if (isNodeOfSameElementType(nextNode, node)) {
           Transforms.mergeNodes(editor, { at: nextPath });
+
           return;
         }
       }
@@ -55,6 +56,7 @@ export const withNormalization = (editor: Editor) => {
 
         if (isNodeOfSameElementType(previousNode, node)) {
           Transforms.mergeNodes(editor, { at: path });
+
           return;
         }
       }
@@ -65,6 +67,7 @@ export const withNormalization = (editor: Editor) => {
       for (const [child, childPath] of Node.descendants(node)) {
         if (Element.isElement(child) && !editor.isInline(child)) {
           Transforms.unwrapNodes(editor, { at: [...path, ...childPath] });
+
           return;
         }
       }
@@ -85,6 +88,7 @@ export const withNormalization = (editor: Editor) => {
           },
           { at: [...path, 0] }
         );
+
         return;
       }
 
@@ -105,6 +109,7 @@ export const withNormalization = (editor: Editor) => {
           { type: ContentTypeEnum.PARAGRAPH },
           { at: path, match: (n) => Element.isElement(n) && n.type === ListContentEnum.LIST_ITEM }
         );
+
         return;
       }
     }
@@ -117,6 +122,7 @@ export const withNormalization = (editor: Editor) => {
           { type: ContentTypeEnum.PARAGRAPH },
           { at: path, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER) }
         );
+
         return;
       }
     }
@@ -125,6 +131,7 @@ export const withNormalization = (editor: Editor) => {
     if (!isNodeAlignableElementType(node) && typeof node['textAlign'] === 'string') {
       // Remove text align property.
       Transforms.unsetNodes(editor, 'textAlign', { match: Element.isElement });
+
       return;
     }
 
@@ -145,12 +152,14 @@ export const withNormalization = (editor: Editor) => {
           at: path,
           match: Text.isText,
         });
+
         return;
       }
     }
 
     if (Text.isText(node) && node.text.length === 0 && (hasAnyMark(node) || hasAnyComments(node))) {
       removeMarksAndComments(editor, node, path);
+
       return;
     }
 

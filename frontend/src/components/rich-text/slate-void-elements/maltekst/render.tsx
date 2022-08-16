@@ -1,6 +1,6 @@
 import React from 'react';
 import { Descendant, Text } from 'slate';
-import styled from 'styled-components';
+import { omit } from '../../../../functions/omit';
 import { StyledLeaf } from '../../../rich-text/rich-text-editor/leaf/styled';
 import { BlockQuoteStyle, ParagraphStyle } from '../../../rich-text/styled-elements/content';
 import {
@@ -44,7 +44,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </ParagraphStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_ONE: {
       return (
         <HeadingOneStyle {...getAttributes(element)} key={key}>
@@ -52,7 +51,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingOneStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_TWO: {
       return (
         <HeadingTwoStyle {...getAttributes(element)} key={key}>
@@ -60,7 +58,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingTwoStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_THREE: {
       return (
         <HeadingThreeStyle {...getAttributes(element)} key={key}>
@@ -68,7 +65,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingThreeStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_FOUR: {
       return (
         <HeadingFourStyle {...getAttributes(element)} key={key}>
@@ -76,7 +72,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingFourStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_FIVE: {
       return (
         <HeadingFiveStyle {...getAttributes(element)} key={key}>
@@ -84,7 +79,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingFiveStyle>
       );
     }
-
     case HeadingTypesEnum.HEADING_SIX: {
       return (
         <HeadingSixStyle {...getAttributes(element)} key={key}>
@@ -92,7 +86,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </HeadingSixStyle>
       );
     }
-
     case ListTypesEnum.BULLET_LIST: {
       return (
         <BulletListStyle {...getAttributes(element)} key={key}>
@@ -100,7 +93,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </BulletListStyle>
       );
     }
-
     case ListTypesEnum.NUMBERED_LIST: {
       return (
         <NumberedListStyle {...getAttributes(element)} key={key}>
@@ -108,7 +100,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </NumberedListStyle>
       );
     }
-
     case ListContentEnum.LIST_ITEM: {
       return (
         <ListItemStyle {...getAttributes(element)} key={key}>
@@ -116,15 +107,13 @@ export const renderElement = (element: Descendant, key: string) => {
         </ListItemStyle>
       );
     }
-
     case ListContentEnum.LIST_ITEM_CONTAINER: {
       return (
-        <StyledListItemContainer {...getAttributes(element)} key={key}>
+        <div {...getAttributes(element)} key={key}>
           {renderedChildren}
-        </StyledListItemContainer>
+        </div>
       );
     }
-
     case ContentTypeEnum.INDENT: {
       return (
         <IndentStyle {...getAttributes(element)} key={key}>
@@ -132,7 +121,6 @@ export const renderElement = (element: Descendant, key: string) => {
         </IndentStyle>
       );
     }
-
     case ContentTypeEnum.BLOCKQUOTE: {
       return (
         <BlockQuoteStyle {...getAttributes(element)} key={key}>
@@ -140,26 +128,18 @@ export const renderElement = (element: Descendant, key: string) => {
         </BlockQuoteStyle>
       );
     }
-
     case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST: {
       return null;
     }
-
     case RedigerbarMaltekstEnum.REGELVERKTEKST: {
       return null;
     }
   }
 };
 
-const getAttributes = <T extends NonVoidElementTypes>(element: T): Omit<T, 'children' | 'type'> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { type, children, ...attributes } = element;
-  return attributes;
-};
+const getAttributes = <T extends NonVoidElementTypes>(element: T) => omit(element, 'children', 'type');
 
-const StyledListItemContainer = styled.div``;
-
-export const renderLeaf = ({ text, ...attributes }: CustomTextType, key: string) => (
+const renderLeaf = ({ text, ...attributes }: CustomTextType, key: string) => (
   <StyledLeaf {...attributes} commentIds={[]} key={key}>
     {text}
   </StyledLeaf>

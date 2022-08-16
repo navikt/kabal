@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
@@ -23,39 +24,40 @@ export const Row = ({
   erMedunderskriver,
   medunderskriverFlyt,
 }: IOppgave): JSX.Element => (
-  <tr data-testid="enhetens-oppgaver-table-row" data-klagebehandlingid={id}>
-    <td>
+  <Table.Row data-testid="enhetens-oppgaver-table-row" data-klagebehandlingid={id}>
+    <Table.DataCell>
       <Type type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Ytelse ytelseId={ytelse} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Hjemmel hjemmel={hjemmel} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Age age={ageKA} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Deadline age={ageKA} frist={frist} />
-    </td>
-    <td>{tildeltSaksbehandlerNavn}</td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>{tildeltSaksbehandlerNavn}</Table.DataCell>
+    <Table.DataCell>
       <MedudunderskriverflytLabel
+        type={type}
         erMedunderskriver={erMedunderskriver}
         harMedunderskriver={harMedunderskriver}
         medunderskriverFlyt={medunderskriverFlyt}
       />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <FradelKlagebehandlingButton
         klagebehandlingId={id}
         tildeltSaksbehandlerident={tildeltSaksbehandlerident}
         isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
       />
-    </td>
-  </tr>
+    </Table.DataCell>
+  </Table.Row>
 );

@@ -4,7 +4,7 @@
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact"
+    "typescriptreact",
   ],
   "eslint.run": "onType",
   "eslint.codeActionsOnSave.mode": "all",
@@ -17,5 +17,14 @@
   },
   "tslint.enable": false,
   "prettier.requireConfig": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "liveshare.autoShareServers": true,
+  "liveshare.openSharedServers": false,
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.allowGuestDebugControl": true,
+  "liveshare.allowGuestTaskControl": true,
+  "liveshare.notebooks.allowGuestExecuteCells": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
 }

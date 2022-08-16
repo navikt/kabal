@@ -41,7 +41,7 @@ export interface IOppgavebehandlingBase {
   ytelse: string;
 }
 
-export enum PartIdType {
+enum PartIdType {
   PERSON = 'PERSON',
   VIRKSOMHET = 'VIRKSOMHET',
 }
@@ -52,42 +52,42 @@ export enum Saksrolle {
   PROSESSFULLMEKTIG = 'PROSESSFULLMEKTIG',
 }
 
-export interface IBrevmottaker {
+interface IBrevmottaker {
   partId: string;
   partIdType: PartIdType;
   navn: string;
   rolle: Saksrolle;
 }
 
-export interface IKlagebehandling extends IOppgavebehandlingBase {
+interface IKlagebehandling extends IOppgavebehandlingBase {
   type: OppgaveType.KLAGE;
 }
 
-export interface IAnkebehandling extends IOppgavebehandlingBase {
+interface IAnkebehandling extends IOppgavebehandlingBase {
   type: OppgaveType.ANKE;
 }
 
-export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;
+export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
+  type: OppgaveType.ANKE_I_TRYGDERETTEN;
+  kjennelseMottatt: string | null; // LocalDate
+  sendtTilTrygderetten: string | null; // LocalDate
+}
+
+export type IOppgavebehandling = IKlagebehandling | IAnkebehandling | ITrygderettsankebehandling;
 
 export interface ISakspart {
   person: IKlagerPerson | null;
   virksomhet: IVirksomhet | null;
 }
 
-export interface Resultat {
+interface Resultat {
   file: IVedlegg | null;
   hjemler: string[];
   id: string;
   utfall: Utfall | null;
 }
 
-export interface IBrevMottaker {
-  type: string;
-  id: string;
-  rolle: string;
-}
-
-export interface IKlagerPerson {
+interface IKlagerPerson {
   navn: Name;
   foedselsnummer: string | null;
   kjoenn: Gender | null;

@@ -1,11 +1,11 @@
 import { formatPersonNum } from '../../../../functions/format-id';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useGetBrukerQuery } from '../../../../redux-api/bruker';
+import { useUser } from '../../../../simple-api-state/use-user';
 import { Flettefelt } from '../../types/editor-void-types';
 
 export const useFlettefeltValue = (flettefelt: Flettefelt | null): string | null => {
   const { data: oppgave } = useOppgave();
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   if (flettefelt === null || typeof oppgave === 'undefined' || typeof bruker === 'undefined') {
     return null;

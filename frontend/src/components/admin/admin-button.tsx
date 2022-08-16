@@ -11,8 +11,16 @@ interface Props {
 }
 
 export const AdminButton = ({ children, isLoading, isSuccess, isUninitialized, onClick }: Props): JSX.Element => (
-  <Button type="button" variant="primary" size="medium" onClick={onClick} loading={isLoading} disabled={isLoading}>
+  <Button
+    type="button"
+    variant="primary"
+    size="medium"
+    onClick={onClick}
+    loading={isLoading}
+    disabled={isLoading}
+    icon={<StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />}
+    iconPosition="right"
+  >
     {children}
-    <StatusIcon success={isSuccess} init={!isUninitialized} isLoading={isLoading} />
   </Button>
 );

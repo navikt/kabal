@@ -1,6 +1,5 @@
 import { Upload, Warning } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import Popover, { PopoverOrientering } from 'nav-frontend-popover';
+import { Button, Popover } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
@@ -121,13 +120,10 @@ const ErrorInfo = ({ error }: ErrorInfoProps) => {
       <StyledButton onClick={toggleOpen} ref={setRef}>
         <Warning />
       </StyledButton>
-      <Popover
-        ankerEl={open ? ref ?? undefined : undefined}
-        onRequestClose={() => setOpen(false)}
-        autoFokus={false}
-        orientering={PopoverOrientering.Under}
-      >
-        <StyledErrorMessage>{error}</StyledErrorMessage>
+      <Popover anchorEl={ref} onClose={() => setOpen(false)} placement="bottom" open={open}>
+        <Popover.Content>
+          <StyledErrorMessage>{error}</StyledErrorMessage>
+        </Popover.Content>
       </Popover>
     </StyledErrorInfo>
   );

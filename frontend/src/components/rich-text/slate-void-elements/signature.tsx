@@ -1,6 +1,5 @@
+import { Alert, Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { Checkbox } from 'nav-frontend-skjema';
 import React, { useEffect } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
@@ -95,7 +94,6 @@ export const Signature = React.memo(
     return (
       <SignaturesContainer>
         <StyledCheckbox
-          label="Bruk forkortede navn"
           checked={element.useShortName}
           onChange={({ target }) => {
             Transforms.setNodes<SignatureElementType>(
@@ -104,7 +102,9 @@ export const Signature = React.memo(
               { at: [], voids: true, mode: 'lowest', match: (n) => n === element }
             );
           }}
-        />
+        >
+          Bruk forkortede navn
+        </StyledCheckbox>
         <StyledSignatures>
           <IndividualSignature signature={element.medunderskriver} />
           <IndividualSignature signature={element.saksbehandler} />
@@ -187,7 +187,7 @@ interface TitleProps {
 
 const Title = ({ title }: TitleProps): JSX.Element => {
   if (title === MISSING_TITLE) {
-    return <StyledWarning>Tittel mangler</StyledWarning>;
+    return <StyledWarning variant="warning">Tittel mangler</StyledWarning>;
   }
 
   return <div>{title}</div>;
@@ -205,6 +205,6 @@ const getTitle = (title: string | null, suffix?: string): string | null => {
   return `${title}/${suffix}`;
 };
 
-const StyledWarning = styled(AlertStripeAdvarsel)`
+const StyledWarning = styled(Alert)`
   margin-top: 4px;
 `;

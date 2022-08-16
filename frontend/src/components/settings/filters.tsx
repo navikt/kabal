@@ -3,7 +3,7 @@ import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
-import { useGetKodeverkQuery } from '../../redux-api/kodeverk';
+import { useKodeverk } from '../../simple-api-state/use-kodeverk';
 import { ISettings } from '../../types/bruker';
 import { IKodeverkSimpleValue } from '../../types/kodeverk';
 import {
@@ -23,7 +23,7 @@ const EMPTY_SETTINGS: ISettings = {
 };
 
 export const Filters = () => {
-  const { data: kodeverk } = useGetKodeverkQuery();
+  const { data: kodeverk } = useKodeverk();
   const { data: settingsData } = useGetSettingsQuery();
   const hjemler = useHjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
@@ -105,8 +105,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={removeAll}
           data-testid={`${settingKey}-remove-all`}
+          icon={<Delete aria-hidden />}
         >
-          <Delete /> Fjern alle
+          Fjern alle
         </Button>
         <Button
           type="button"
@@ -114,8 +115,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={selectAll}
           data-testid={`${settingKey}-select-all`}
+          icon={<SuccessStroke aria-hidden />}
         >
-          <SuccessStroke /> Velg alle
+          Velg alle
         </Button>
       </ButtonContainer>
       <StyledFieldset data-testid={`${settingKey}-settings`} legend={legend}>

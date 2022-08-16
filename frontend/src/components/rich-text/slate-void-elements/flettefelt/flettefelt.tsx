@@ -50,18 +50,21 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
       if (event.key === 'Enter' || event.key === 'Tab' || event.key === ' ') {
         event.preventDefault();
         setField(OPTIONS[focused] ?? null);
+
         return;
       }
 
       if (event.key === 'ArrowDown') {
         event.preventDefault();
         setFocused((f) => (f < MAX_FOCUSED ? f + 1 : MIN_FOCUSED));
+
         return;
       }
 
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         setFocused((f) => (f > MIN_FOCUSED ? f - 1 : MAX_FOCUSED));
+
         return;
       }
 
@@ -76,6 +79,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
   useEffect(() => {
     if (isOpen) {
       window.addEventListener('keydown', onKeyDown);
+
       return () => window.removeEventListener('keydown', onKeyDown);
     }
   }, [isOpen, onKeyDown]);

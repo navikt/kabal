@@ -134,11 +134,9 @@ export const {
   useGetTextByIdQuery,
   useGetTextsQuery,
   useLazyGetTextsQuery,
-  useLazyGetTextByIdQuery,
   useAddTextMutation,
   useDeleteTextMutation,
   useUpdateTextPropertyMutation,
-  useMigrateGetAllTextsQuery,
   useLazyMigrateGetAllTextsQuery,
   useMigrateUpdateTextsMutation,
 } = textsApi;

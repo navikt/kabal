@@ -16,11 +16,6 @@ export const StyledSelectedHjemler = styled.div`
   border-left: 2px solid #ccc;
 `;
 
-export const StyledTitle = styled.div`
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-`;
-
 export const StyledNoneSelected = styled.p`
   color: #a0a0a0;
   margin: 0;

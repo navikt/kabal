@@ -1,5 +1,5 @@
 import { FileContent } from '@navikt/ds-icons';
-import { Loader, TextField } from '@navikt/ds-react';
+import { Loader, Search } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -25,11 +25,11 @@ export const FilteredTextList = ({ textType }: Props) => {
     <Container>
       <Header>
         <Filters />
-        <TextField
+        <Search
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={setFilter}
           placeholder="Filtrer på tittel"
-          label="Tittel"
+          label="Filtrer på tittel"
           size="small"
           hideLabel
         />

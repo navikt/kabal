@@ -4,13 +4,13 @@ export enum DocumentTypeEnum {
   ARCHIVED = 'ARCHIVED',
 }
 
-export interface IShownNewDocument {
+interface IShownNewDocument {
   documentId: string;
   title: string;
   type: DocumentTypeEnum.SMART | DocumentTypeEnum.FILE;
 }
 
-export interface IShownArchivedDocument {
+interface IShownArchivedDocument {
   dokumentInfoId: string;
   journalpostId: string;
   title: string;

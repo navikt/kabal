@@ -21,16 +21,6 @@ export const LabelMain = styled(Label)`
   border: 1px solid #634689;
 `;
 
-export const LabelHjemmel = styled(Label)`
-  background-color: #f1d8d4;
-  border: 1px solid #ba3a26;
-`;
-
-export const LabelLovhjemmel = styled(Label)`
-  background-color: #cce1ff;
-  border: 1px solid #0067c5;
-`;
-
 export const LabelType = styled(Label)<{ type: OppgaveType }>`
   background-color: ${({ type }) => (type === OppgaveType.KLAGE ? 'white' : 'black')};
   color: ${({ type }) => (type === OppgaveType.KLAGE ? '#262626' : 'white')};

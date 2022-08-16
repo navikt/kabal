@@ -1,7 +1,6 @@
+import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { Select } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
@@ -60,25 +59,23 @@ export const SetParentDocument = ({ document }: Props) => {
     );
 
   return (
-    <StyledSelect
+    <Select
+      size="small"
       value={document.parent ?? NONE_SELECTED}
       onChange={onChange}
       title="Gjør til vedlegg for"
+      label="Gjør til vedlegg for"
       disabled={isSettingParent}
       data-testid="document-set-parent-document"
+      hideLabel
     >
       <option key={NONE_SELECTED} value={NONE_SELECTED} label={getText(document)} />
       <optgroup label="Gjør til vedlegg for">
         {currentOption}
         {potentialParents}
       </optgroup>
-    </StyledSelect>
+    </Select>
   );
 };
 
 const getText = ({ parent }: IMainDocument) => (parent === null ? 'Hoveddokument' : 'Gjør til hoveddokument');
-
-const StyledSelect = styled(Select)`
-  width: 100%;
-  cursor: pointer;
-`;

@@ -6,7 +6,7 @@ import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { VERSION } from '../../rich-text/version';
 
-export const INITIAL_SLATE_VALUE: Descendant[] = [];
+const INITIAL_SLATE_VALUE: Descendant[] = [];
 
 export const ANKEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: TemplateIdEnum.ANKEVEDTAK,

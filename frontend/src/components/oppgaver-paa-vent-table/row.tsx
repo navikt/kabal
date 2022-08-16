@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useFullYtelseNameFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
@@ -20,27 +21,27 @@ export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: 
   }, [utfallList, utfall]);
 
   return (
-    <tr>
-      <td>
+    <Table.Row>
+      <Table.DataCell>
         <Type type={type} />
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
-      </td>
-      <td>{person?.navn}</td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>{person?.navn}</Table.DataCell>
+      <Table.DataCell>
         <CopyFnrButton fnr={person?.fnr} />
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <PaaVent sattPaaVent={sattPaaVent} />
-      </td>
-      <td>{utfallName}</td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>{utfallName}</Table.DataCell>
+      <Table.DataCell>
         <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
-      </td>
-    </tr>
+      </Table.DataCell>
+    </Table.Row>
   );
 };

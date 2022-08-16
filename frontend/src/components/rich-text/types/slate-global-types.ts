@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unused-modules */
 import { BaseEditor } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';

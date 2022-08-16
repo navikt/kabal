@@ -1,8 +1,8 @@
-import { useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { useKodeverk } from '../simple-api-state/use-kodeverk';
 import { IKodeverkValue } from '../types/kodeverk';
 
 export const useAllTemaer = (): IKodeverkValue[] => {
-  const { data } = useGetKodeverkQuery();
+  const { data } = useKodeverk();
 
   if (typeof data === 'undefined') {
     return [];

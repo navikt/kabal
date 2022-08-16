@@ -1,8 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { StyledTable } from '../../styled-components/table';
+import { useUser } from '../../simple-api-state/use-user';
+import { StyledMineOppgaverTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from './header';
 import { OppgaveRader } from './rows';
@@ -14,7 +14,7 @@ export const MineOppgaverTable = () => {
   const [filters, setFilters] = useState<Filters>({
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const [sortering, rekkefoelge] = filters.sorting;
 
@@ -39,13 +39,35 @@ export const MineOppgaverTable = () => {
 
   useEffect(() => {
     refetch();
+
     return refetch;
   }, [refetch]);
 
   return (
-    <StyledTable data-testid="mine-oppgaver-table">
-      <TableHeader filters={filters} onChange={setFilters} />
+    <StyledMineOppgaverTable
+      data-testid="mine-oppgaver-table"
+      zebraStripes
+      sort={{
+        orderBy: filters.sorting[0],
+        direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
+      }}
+      onSortChange={(field?: string) => {
+        if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
+          const [currentField, currentOrder] = filters.sorting;
+
+          const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
+
+          setFilters({
+            sorting: [field, order],
+          });
+        }
+      }}
+    >
+      <TableHeader />
       <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
-    </StyledTable>
+    </StyledMineOppgaverTable>
   );
 };
+
+const invertSort = (order: SortOrderEnum) =>
+  order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;

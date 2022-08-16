@@ -14,6 +14,7 @@ const getFlettefeltPath = (editor: Editor): Path | null => {
   }
 
   const [, flettefeltPath] = flettefeltEntry;
+
   return flettefeltPath;
 };
 

@@ -5,16 +5,19 @@ import { serverConfig } from '../config/server-config';
 
 export const ensureSession = (req: Request, res: Response): [string, string] => {
   const existingSession = getSessionIdAndSignature(req);
+
   if (existingSession !== null) {
     return existingSession;
   }
   const [sessionId, signature] = generateSessionIdAndSignature();
   setSessionCookie(res, sessionId, signature);
+
   return [sessionId, signature];
 };
 
 export const getSessionIdAndSignature = (req: Request): [string, string] | null => {
-  const sessionCookie = req.cookies[serverConfig.cookieName];
+  const sessionCookie: unknown = req.cookies[serverConfig.cookieName];
+
   if (typeof sessionCookie !== 'string' || sessionCookie.length === 0) {
     return null;
   }
@@ -37,14 +40,16 @@ export const getSessionIdAndSignature = (req: Request): [string, string] | null 
 const SESSION_ENCODING: BufferEncoding = 'hex';
 const HMAC_ALGORITHM = 'SHA256';
 
-export const validateSessionSignature = (session: string, signature: string) => {
+const validateSessionSignature = (session: string, signature: string) => {
   const hmac = crypto.createHmac(HMAC_ALGORITHM, serverConfig.sessionKey);
   const sessionBytes = Buffer.from(session, SESSION_ENCODING);
   const actualSignature = Buffer.from(signature, SESSION_ENCODING);
   const expectedSignature = hmac.update(sessionBytes).digest();
+
   if (expectedSignature.length !== actualSignature.length) {
     return false;
   }
+
   return crypto.timingSafeEqual(expectedSignature, actualSignature);
 };
 
@@ -58,6 +63,7 @@ export const setSessionCookie = (res: Response, sessionId: string, signature: st
     sameSite: isDeployedToProd ? 'lax' : 'none', // Strict breaks Azure login flow because of redirect (third-party init).
     secure: true,
   });
+
   return [sessionId, signature];
 };
 

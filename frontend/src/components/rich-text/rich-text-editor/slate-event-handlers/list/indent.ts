@@ -86,6 +86,7 @@ export const indentList = (editor: Editor) =>
         if (previousSiblingNode.children.length === 2) {
           const to: Path = [...previousSiblingPath, 1, previousSiblingNode.children[1].children.length];
           Transforms.moveNodes(editor, { at, to, match });
+
           return;
         }
 

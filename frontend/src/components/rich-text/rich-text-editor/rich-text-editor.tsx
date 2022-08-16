@@ -46,6 +46,7 @@ export const RichTextEditorElement = React.memo(
       ([, path]) => {
         if (!isFocused && savedSelection.current !== null && Range.includes(savedSelection.current, path)) {
           const selectionRange = { ...savedSelection.current, selected: true };
+
           return [selectionRange];
         }
 
@@ -56,6 +57,7 @@ export const RichTextEditorElement = React.memo(
 
     useEffect(() => {
       setEditor(editor);
+
       return () => setEditor(null);
     });
 
@@ -68,6 +70,7 @@ export const RichTextEditorElement = React.memo(
       // Click on all focusable elements inside the editor will trigger a blur event.
       if (containerRef.current !== null && containerRef.current.contains(event.relatedTarget)) {
         event.preventDefault();
+
         return;
       }
 

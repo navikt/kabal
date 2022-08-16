@@ -1,14 +1,14 @@
 import { Error, Success } from '@navikt/ds-icons';
-import { Loader } from '@navikt/ds-react';
-import { Input, Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useGetBrukerQuery, useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
+import { useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
+import { useUser } from '../../simple-api-state/use-user';
 import { ISetCustomInfoParams, ISignatureResponse } from '../../types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const { data: saksbehandlerSignature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   if (
@@ -72,17 +72,13 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
     }
 
     const timeout = setTimeout(() => setInfo({ key: infoKey, value, navIdent }), 1000);
+
     return () => clearTimeout(timeout);
   }, [value, savedValue, navIdent, infoKey, setInfo]);
 
   return (
     <StyledSignature>
-      <StyledInput
-        label={label}
-        value={value}
-        bredde="fullbredde"
-        onChange={({ target }) => setDefaultValue(target.value)}
-      />
+      <StyledInput label={label} value={value} onChange={({ target }) => setDefaultValue(target.value)} />
       <Status {...updateStatus} />
     </StyledSignature>
   );
@@ -101,11 +97,12 @@ const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: Sig
           <Radio
             name={infoKey}
             onChange={() => setInfo({ key: infoKey, value, navIdent })}
-            label={value}
             value={value}
             checked={value === savedValue}
             key={value}
-          />
+          >
+            {value}
+          </Radio>
         ))}
       </StyledRadioGroup>
       <Status {...updateStatus} />
@@ -147,13 +144,13 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   return null;
 };
 
-const StyledInput = styled(Input)`
+const StyledInput = styled(TextField)`
   margin-top: 16px;
   margin-right: 6px;
   width: 350px;
 `;
 
-const StyledRadioGroup = styled(RadioGruppe)`
+const StyledRadioGroup = styled(RadioGroup)`
   margin-top: 16px;
 `;
 

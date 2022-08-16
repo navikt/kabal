@@ -1,6 +1,5 @@
 import { Send } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import AlertStripe from 'nav-frontend-alertstriper';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -25,7 +24,9 @@ export const SendTilSaksbehandler = ({
   if (medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
     return (
       <StyledFormSection>
-        <AlertStripe type="info">Klagen er nå sendt tilbake til saksbehandler</AlertStripe>
+        <Alert variant="info" size="small">
+          Klagen er nå sendt tilbake til saksbehandler
+        </Alert>
       </StyledFormSection>
     );
   }
@@ -41,9 +42,9 @@ export const SendTilSaksbehandler = ({
           disabled={loader.isLoading}
           loading={loader.isLoading}
           data-testid="send-to-saksbehandler"
+          icon={<Send aria-hidden />}
         >
-          <Send />
-          <span>Send til saksbehandler</span>
+          Send til saksbehandler
         </Button>
       </StyledFormSection>
     );

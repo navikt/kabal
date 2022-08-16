@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '../../hooks/use-kodeverk-value';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
 import { useUpdateInnsendingshjemlerMutation } from '../../redux-api/oppgaver/mutations/behandling';
+import { useUser } from '../../simple-api-state/use-user';
 import { FilterList } from '../filter-dropdown/filter-list';
 
 export const DeassignOppgave = () => {
@@ -22,8 +22,13 @@ export const DeassignOppgave = () => {
   return (
     <Container ref={ref}>
       <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <Button variant="secondary" size="small" onClick={() => setIsOpen(!isOpen)} loading={isLoading}>
-        <Icon />
+      <Button
+        variant="secondary"
+        size="small"
+        onClick={() => setIsOpen(!isOpen)}
+        loading={isLoading}
+        icon={<Icon aria-hidden />}
+      >
         Legg tilbake med ny hjemmel
       </Button>
     </Container>
@@ -48,7 +53,7 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const [setHjemler] = useUpdateInnsendingshjemlerMutation();
   const [fradel, { isLoading }] = useFradelSaksbehandlerMutation();
-  const { data: bruker, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: userIsLoading } = useUser();
   const ytelse = useKodeverkYtelse(oppgave?.ytelse);
 
   const options = useMemo(
@@ -76,12 +81,10 @@ const Popup = ({ isOpen, close }: PopupProps) => {
       <StyledTitle>Endre hjemmel?</StyledTitle>
       <FilterList options={options} selected={oppgave.hjemler} onChange={setSelected} />
       <ButtonContainer>
-        <Button variant="secondary" size="small" disabled={isLoading} onClick={close}>
-          <Close />
+        <Button variant="secondary" size="small" disabled={isLoading} onClick={close} icon={<Close aria-hidden />}>
           Avbryt
         </Button>
-        <Button variant="primary" size="small" loading={isLoading} onClick={onClick}>
-          <FileFolder />
+        <Button variant="primary" size="small" loading={isLoading} onClick={onClick} icon={<FileFolder aria-hidden />}>
           Legg tilbake
         </Button>
       </ButtonContainer>

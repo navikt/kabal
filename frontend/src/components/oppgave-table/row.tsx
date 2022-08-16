@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
@@ -8,24 +9,24 @@ import { Ytelse } from '../common-table-components/ytelse';
 import { Type } from '../type/type';
 
 export const Row = ({ id, type, ytelse, hjemmel, frist, ageKA }: IOppgave): JSX.Element => (
-  <tr data-testid="oppgave-table-row" data-klagebehandlingid={id}>
-    <td>
+  <Table.Row data-testid="oppgave-table-row" data-klagebehandlingid={id}>
+    <Table.DataCell>
       <Type type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Ytelse ytelseId={ytelse} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Hjemmel hjemmel={hjemmel} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Age age={ageKA} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Deadline age={ageKA} frist={frist} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <TildelKlagebehandlingButton klagebehandlingId={id} ytelse={ytelse} />
-    </td>
-  </tr>
+    </Table.DataCell>
+  </Table.Row>
 );

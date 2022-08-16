@@ -1,12 +1,12 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useUser } from '../../simple-api-state/use-user';
 import { OppgaveType } from '../../types/kodeverk';
-import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
-import { SortBy } from '../common-table-components/sort-by';
+import { SortFieldEnum } from '../../types/oppgaver';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
 import { Filters } from './types';
@@ -21,14 +21,14 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   const ytelseOptions = useAvailableYtelser();
   const hjemlerOptions = useAvailableHjemler();
 
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const saksbehandlerOptions = useSaksbehandlereInEnhet(bruker?.ansattEnhet.id);
 
   return (
-    <thead>
-      <tr>
-        <th role="columnheader">
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell role="columnheader">
           <FilterDropdown<OppgaveType>
             selected={filters.types}
             onChange={(types) =>
@@ -41,8 +41,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Type
           </FilterDropdown>
-        </th>
-        <th role="columnheader">
+        </Table.HeaderCell>
+        <Table.HeaderCell role="columnheader">
           <FilterDropdown
             selected={filters.ytelser}
             onChange={(ytelse) => onChange({ ...filters, ytelser: ytelse })}
@@ -50,8 +50,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Ytelse
           </FilterDropdown>
-        </th>
-        <th role="columnheader">
+        </Table.HeaderCell>
+        <Table.HeaderCell role="columnheader">
           <FilterDropdown
             selected={filters.hjemler}
             onChange={(hjemler) => onChange({ ...filters, hjemler })}
@@ -59,23 +59,14 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Hjemmel
           </FilterDropdown>
-        </th>
-        <SortBy
-          sorting={filters.sorting}
-          sortField={SortFieldEnum.ALDER}
-          defaultSortOrder={SortOrderEnum.SYNKENDE}
-          onChange={(sorting) => onChange({ ...filters, sorting })}
-        >
+        </Table.HeaderCell>
+        <Table.ColumnHeader sortKey={SortFieldEnum.ALDER} sortable scope="col">
           Alder
-        </SortBy>
-        <SortBy
-          sorting={filters.sorting}
-          sortField={SortFieldEnum.FRIST}
-          onChange={(sorting) => onChange({ ...filters, sorting })}
-        >
+        </Table.ColumnHeader>
+        <Table.ColumnHeader sortKey={SortFieldEnum.FRIST} sortable scope="col">
           Frist
-        </SortBy>
-        <th>
+        </Table.ColumnHeader>
+        <Table.HeaderCell>
           <FilterDropdown
             selected={filters.tildeltSaksbehandler}
             onChange={(tildeltSaksbehandler) => onChange({ ...filters, tildeltSaksbehandler })}
@@ -83,11 +74,11 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
           >
             Saksbehandler
           </FilterDropdown>
-        </th>
-        <th role="columnheader"></th>
-        <th role="columnheader"></th>
-        <th role="columnheader"></th>
-      </tr>
-    </thead>
+        </Table.HeaderCell>
+        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
+        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
+        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
   );
 };

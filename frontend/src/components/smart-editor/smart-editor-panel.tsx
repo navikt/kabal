@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PanelContainer } from '../oppgavebehandling-panels/panel';
+import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 
-export interface Props {
+interface Props {
   shown: boolean;
 }
 

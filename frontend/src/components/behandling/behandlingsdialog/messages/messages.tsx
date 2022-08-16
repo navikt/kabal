@@ -1,13 +1,13 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateTimeToPretty } from '../../../../domain/date';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
+import { useGetSignatureQuery } from '../../../../redux-api/bruker';
 import { IMessage, useGetMessagesQuery } from '../../../../redux-api/messages';
 import {
   StyledAuthor,
-  StyledHeader,
   StyledMessage,
   StyledMessageContent,
   StyledMessages,
@@ -30,7 +30,9 @@ export const Messages = () => {
 
   return (
     <StyledMessagesContainer>
-      <StyledHeader>Meldinger:</StyledHeader>
+      <Heading level="1" size="xsmall" spacing>
+        Meldinger
+      </Heading>
       <WriteMessage />
       <StyledMessages data-testid="messages-list">
         {messages.map((message) => (
@@ -41,10 +43,14 @@ export const Messages = () => {
   );
 };
 
-export const Message = ({ author, modified, text, created }: IMessage) => (
-  <StyledMessage data-testid="message-list-item">
-    <StyledAuthor>{author.name}</StyledAuthor>
-    <StyledMessageContent>{isoDateTimeToPretty(modified ?? created)}</StyledMessageContent>
-    <StyledMessageContent>{text}</StyledMessageContent>
-  </StyledMessage>
-);
+const Message = ({ author, modified, text, created }: IMessage) => {
+  const { data } = useGetSignatureQuery(author.saksbehandlerIdent);
+
+  return (
+    <StyledMessage data-testid="message-list-item">
+      <StyledAuthor>{data?.customLongName ?? author.name}</StyledAuthor>
+      <StyledMessageContent>{isoDateTimeToPretty(modified ?? created)}</StyledMessageContent>
+      <StyledMessageContent>{text}</StyledMessageContent>
+    </StyledMessage>
+  );
+};

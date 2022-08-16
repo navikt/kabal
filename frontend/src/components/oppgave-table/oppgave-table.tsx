@@ -1,28 +1,30 @@
+import { Pagination, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import { useGetBrukerQuery, useGetSettingsQuery } from '../../redux-api/bruker';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useGetSettingsQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetMineLedigeOppgaverQuery,
 } from '../../redux-api/oppgaver/queries/oppgaver';
-import { StyledFooterContent, StyledTable } from '../../styled-components/table';
+import { useUser } from '../../simple-api-state/use-user';
+import { StyledFooterContent } from '../../styled-components/table';
 import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
-import { Pagination } from './pagination';
 import { OppgaveRader } from './rows';
 import { Filters } from './types';
 
 const PAGE_SIZE = 10;
 
 export const OppgaveTable = (): JSX.Element => {
+  const naviagte = useNavigate();
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
     hjemler: [],
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
   const { data: settingsData } = useGetSettingsQuery();
 
   const { page } = useParams();
@@ -68,6 +70,7 @@ export const OppgaveTable = (): JSX.Element => {
 
   useEffect(() => {
     refetch();
+
     return refetch;
   }, [refetch]);
 
@@ -79,6 +82,7 @@ export const OppgaveTable = (): JSX.Element => {
 
   if (!isFetching && typeof oppgaver !== 'undefined' && total < from) {
     const lastPage = Math.ceil(total / PAGE_SIZE);
+
     return <Navigate to={`../${lastPage.toString()}`} />;
   }
 
@@ -87,20 +91,43 @@ export const OppgaveTable = (): JSX.Element => {
 
   return (
     <>
-      <StyledTable data-testid="oppgave-table">
+      <Table
+        data-testid="oppgave-table"
+        zebraStripes
+        sort={{
+          orderBy: filters.sorting[0],
+          direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
+        }}
+        onSortChange={(field?: string) => {
+          if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
+            const [currentField, currentOrder] = filters.sorting;
+
+            const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
+
+            setFilters((f) => ({
+              ...f,
+              sorting: [field, order],
+            }));
+          }
+        }}
+      >
         <TableHeaderFilters filters={filters} onChange={setFilters} />
         <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={7} isFetching={isFetching} />
         <tfoot>
-          <tr>
-            <td colSpan={6}>
+          <Table.Row>
+            <Table.DataCell colSpan={6}>
               <StyledFooterContent>
                 <PageInfo total={total} fromNumber={fromNumber} toNumber={toNumber} />
-                <Pagination total={total} pageSize={PAGE_SIZE} currentPage={currentPage} />
+                <Pagination
+                  page={currentPage}
+                  onPageChange={(p) => naviagte(`../${p}`)}
+                  count={Math.max(Math.ceil(total / PAGE_SIZE), 1)}
+                />
               </StyledFooterContent>
-            </td>
-          </tr>
+            </Table.DataCell>
+          </Table.Row>
         </tfoot>
-      </StyledTable>
+      </Table>
 
       <div>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</div>
     </>
@@ -123,5 +150,9 @@ const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element =
 
 const parsePage = (page = '1'): number | null => {
   const parsed = Number.parseInt(page, 10);
+
   return Number.isNaN(parsed) ? null : parsed;
 };
+
+const invertSort = (order: SortOrderEnum) =>
+  order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;

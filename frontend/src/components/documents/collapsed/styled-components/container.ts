@@ -5,14 +5,3 @@ export const ListContainer = styled.section`
   padding-left: 16px;
   padding-bottom: 16px;
 `;
-
-export const StyledSubHeader = styled.h2`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  line-height: 1;
-  font-size: 1em;
-  font-weight: bold;
-  margin: 0;
-  padding-bottom: 4px;
-`;

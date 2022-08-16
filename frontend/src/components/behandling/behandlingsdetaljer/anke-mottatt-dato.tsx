@@ -13,13 +13,17 @@ export const AnkeMottattDato = () => {
   const error = useValidationError('mottattKlageinstans');
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
 
+  if (data?.type !== OppgaveType.ANKE) {
+    return null;
+  }
+
   return (
     <StyledAnkeMottattDato>
       <DatepickerWithError
         label="Anke mottatt dato:"
         disabled={!canEdit}
         onChange={(mottattKlageinstans) => {
-          if (mottattKlageinstans !== null && data?.type === OppgaveType.ANKE) {
+          if (data?.type === OppgaveType.ANKE) {
             setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans, type: data.type });
           }
         }}
@@ -31,6 +35,8 @@ export const AnkeMottattDato = () => {
         showYearSelector
         error={error}
         data-testid="anke-mottatt-dato"
+        inputName="anke-mottatt-dato"
+        size="small"
       />
     </StyledAnkeMottattDato>
   );

@@ -17,10 +17,12 @@ export const tab: HandlerFn = ({ editor, event }) => {
     ) {
       if (event.shiftKey) {
         unindentList(editor);
+
         return;
       }
 
       indentList(editor);
+
       return;
     }
 

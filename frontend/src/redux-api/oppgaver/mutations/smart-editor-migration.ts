@@ -4,7 +4,7 @@ import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { smartEditorQuerySlice } from '../queries/smart-editor';
 
-export const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
+const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     migrateUpdateSmartEditors: builder.mutation<ISmartEditor[], IMigrateSmartEditorsParams>({
@@ -36,4 +36,5 @@ export const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const { useMigrateUpdateSmartEditorsMutation } = smartEditorMigrationMutationSlice;

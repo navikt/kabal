@@ -34,14 +34,30 @@ export const OpenOppgavebehandling = ({ oppgavebehandlingId, ytelse, type }: Pro
     );
   }
 
+  if (type === OppgaveType.ANKE) {
+    return (
+      <Button
+        as={NavLink}
+        variant="primary"
+        size="medium"
+        to={`/ankebehandling/${oppgavebehandlingId}`}
+        data-testid="ankebehandling-open-link"
+        data-ankebehandlingid={oppgavebehandlingId}
+        data-oppgavebehandlingid={oppgavebehandlingId}
+      >
+        Åpne
+      </Button>
+    );
+  }
+
   return (
     <Button
       as={NavLink}
       variant="primary"
       size="medium"
-      to={`/ankebehandling/${oppgavebehandlingId}`}
-      data-testid="ankebehandling-open-link"
-      data-ankebehandlingid={oppgavebehandlingId}
+      to={`/trygderettsankebehandling/${oppgavebehandlingId}`}
+      data-testid="trygderettsankebehandling-open-link"
+      data-trygderettsankebehandlingid={oppgavebehandlingId}
       data-oppgavebehandlingid={oppgavebehandlingId}
     >
       Åpne

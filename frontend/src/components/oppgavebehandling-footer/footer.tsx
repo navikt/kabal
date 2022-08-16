@@ -1,10 +1,10 @@
 import React from 'react';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
-import { FinishedKlageFooter } from './finished-klage-footer';
+import { FinishedFooter } from './finished-footer';
 import { UnfinishedFooter } from './unfinished-footer';
 
-export const KlageFooter = () => {
+export const Footer = () => {
   const isFullfoert = useIsFullfoert();
 
-  return isFullfoert ? <FinishedKlageFooter /> : <UnfinishedFooter />;
+  return isFullfoert ? <FinishedFooter /> : <UnfinishedFooter />;
 };

@@ -1,18 +1,20 @@
+import { Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import styled from 'styled-components';
 import { useGetEnhetensVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { StyledCaption, StyledTable } from '../../styled-components/table';
+import { useUser } from '../../simple-api-state/use-user';
+import { StyledCaption } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
-import { OppgaveRader } from './rows';
+import { OppgaveRows } from './rows';
 
 const MAX_OPPGAVER = 100;
 
 const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'På vent til', 'Utfall', 'Saksbehandler', null];
 
 export const EnhetensOppgaverPaaVentTable = () => {
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
     typeof bruker === 'undefined'
@@ -36,14 +38,15 @@ export const EnhetensOppgaverPaaVentTable = () => {
 
   useEffect(() => {
     refetch();
+
     return refetch;
   }, [refetch]);
 
   return (
-    <StyledTable className="tabell tabell--stripet" data-testid="enhetens-oppgaver-paa-vent-table">
+    <StyledTable zebraStripes data-testid="enhetens-oppgaver-paa-vent-table">
       <StyledCaption>Oppgaver på vent</StyledCaption>
       <TableHeader headers={TABLE_HEADERS} />
-      <OppgaveRader
+      <OppgaveRows
         oppgaver={oppgaver?.behandlinger}
         columnCount={TABLE_HEADERS.length}
         isLoading={isLoading}
@@ -52,3 +55,8 @@ export const EnhetensOppgaverPaaVentTable = () => {
     </StyledTable>
   );
 };
+
+const StyledTable = styled(Table)`
+  max-width: 2048px;
+  width: 100%;
+`;

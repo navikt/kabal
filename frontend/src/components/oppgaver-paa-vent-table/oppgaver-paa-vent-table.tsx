@@ -1,18 +1,18 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { StyledCaption, StyledTable } from '../../styled-components/table';
+import { useUser } from '../../simple-api-state/use-user';
+import { StyledCaption, StyledMineOppgaverTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
-import { OppgaveRader } from './rows';
+import { OppgaveRows } from './rows';
 
 const MAX_OPPGAVER = 100;
 
 const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Navn', 'Fnr.', 'På vent til', 'Utfall', null];
 
 export const OppgaverPaaVentTable = () => {
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
     typeof bruker === 'undefined'
@@ -36,19 +36,20 @@ export const OppgaverPaaVentTable = () => {
 
   useEffect(() => {
     refetch();
+
     return refetch;
   }, [refetch]);
 
   return (
-    <StyledTable data-testid="oppgaver-paa-vent-table">
+    <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>
       <StyledCaption>Oppgaver på vent</StyledCaption>
       <TableHeader headers={TABLE_HEADERS} />
-      <OppgaveRader
+      <OppgaveRows
         oppgaver={oppgaver?.behandlinger}
         columnCount={TABLE_HEADERS.length}
         isLoading={isLoading}
         isError={isError}
       />
-    </StyledTable>
+    </StyledMineOppgaverTable>
   );
 };

@@ -57,9 +57,9 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
           loading={hasBeenFinished || loader.isLoading}
           disabled={hasBeenFinished || loader.isLoading}
           data-testid="confirm-finish-klagebehandling-button"
+          icon={<SuccessStroke aria-hidden />}
         >
-          <SuccessStroke />
-          <span>Fullfør</span>
+          Fullfør
         </Button>
         <Button
           variant="secondary"
@@ -67,9 +67,9 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
           size="small"
           onClick={cancel}
           data-testid="cancel-finish-klagebehandling-button"
+          icon={<Close aria-hidden />}
         >
-          <Close />
-          <span>Avbryt</span>
+          Avbryt
         </Button>
       </StyledFinishOppgaveButtons>
     </StyledFinishOppgaveBox>

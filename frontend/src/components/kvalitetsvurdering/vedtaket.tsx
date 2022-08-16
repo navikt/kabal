@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
@@ -8,7 +7,7 @@ import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { Reason, Reasons } from './reasons';
-import { FormSection, RadioButtonsRow, SubHeader } from './styled-components';
+import { FormSection, RadioButtonsRow } from './styled-components';
 
 export const Vedtaket = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
@@ -69,25 +68,33 @@ export const Vedtaket = () => {
 
   return (
     <FormSection>
-      <SubHeader>{header}</SubHeader>
-      <RadioGruppe feil={vedtaketRadioValg === null ? validationError : undefined}>
+      <Heading level="2" size="small">
+        {header}
+      </Heading>
+      <RadioGroup
+        error={vedtaketRadioValg === null ? validationError : undefined}
+        legend={header}
+        hideLegend
+        disabled={!canEdit}
+        size="small"
+      >
         <RadioButtonsRow>
           <Radio
-            name="VedtaketBra"
-            label="Bra/godt nok"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
+            value={RadioValg.BRA}
             checked={vedtaketRadioValg === RadioValg.BRA}
-            disabled={!canEdit}
-          />
+          >
+            Bra/godt nok
+          </Radio>
           <Radio
-            name="VedtaketMangelfullt"
-            label="Mangelfullt"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
             checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
-            disabled={!canEdit}
-          />
+            value={RadioValg.MANGELFULLT}
+          >
+            Mangelfullt
+          </Radio>
         </RadioButtonsRow>
-      </RadioGruppe>
+      </RadioGroup>
       <Reasons
         error={validationError}
         show={vedtaketRadioValg === RadioValg.MANGELFULLT}

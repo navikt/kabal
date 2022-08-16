@@ -12,7 +12,7 @@ export const StyledResult = styled.li`
   grid-template-areas:
     'result-name result-fnr result-open'
     'oppgaver oppgaver oppgaver';
-  grid-template-columns: 2fr 10em 10em;
+  grid-template-columns: 1fr max-content 10em;
   grid-column-gap: 16px;
   align-items: center;
   padding: 16px;
@@ -29,8 +29,4 @@ export const StyledName = styled.span`
 
 export const StyledFnr = styled.span`
   justify-self: left;
-`;
-
-export const RightAlignCell = styled.td`
-  text-align: right;
 `;

@@ -10,10 +10,10 @@ import { KAKA_KVALITETSVURDERING_BASE_QUERY } from './common';
 
 type WithId = Pick<IKakaKvalitetsvurdering, 'id'>;
 
-export type UpdateBoolean = Partial<IKvalitetsvurderingBooleans> & WithId;
-export type UpdateText = Partial<IKvalitetsvurderingTexts> & WithId;
-export type UpdateRadio = Partial<IKvalitetsvurderingRadio> & WithId;
-export type UpdateRadioExtended = Partial<IKvalitetsvurderingRadioExtended> & WithId;
+type UpdateBoolean = Partial<IKvalitetsvurderingBooleans> & WithId;
+type UpdateText = Partial<IKvalitetsvurderingTexts> & WithId;
+type UpdateRadio = Partial<IKvalitetsvurderingRadio> & WithId;
+type UpdateRadioExtended = Partial<IKvalitetsvurderingRadioExtended> & WithId;
 
 export const kvalitetsvurderingApi = createApi({
   reducerPath: 'kvalitetsvurderingApi',

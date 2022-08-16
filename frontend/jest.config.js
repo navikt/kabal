@@ -1,5 +1,6 @@
 module.exports = {
   preset: "ts-jest",
+  passWithNoTests: true,
   moduleNameMapper: {
     "^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
   },

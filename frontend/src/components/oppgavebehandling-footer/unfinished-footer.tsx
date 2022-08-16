@@ -1,10 +1,11 @@
 import { SuccessStroke } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
+import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useLazyValidateQuery } from '../../redux-api/oppgaver/queries/behandling';
+import { OppgaveType } from '../../types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
@@ -19,7 +20,7 @@ export const UnfinishedFooter = () => {
   const errorContext = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const isFullfoert = useIsFullfoert();
-  const oppgaveId = useOppgaveId();
+  const { data: oppgave } = useOppgave();
 
   const hasErrors = useMemo<boolean>(() => {
     if (typeof data === 'undefined') {
@@ -47,23 +48,23 @@ export const UnfinishedFooter = () => {
           size="small"
           disabled={!canEdit || isFullfoert || showConfirmFinishDisplay}
           onClick={() => {
-            if (typeof oppgaveId !== 'string') {
+            if (typeof oppgave === 'undefined') {
               return;
             }
 
-            validate(oppgaveId);
+            validate(oppgave.id);
             setConfirmFinish(true);
           }}
           data-testid="complete-button"
           loading={isFetching}
+          icon={<SuccessStroke aria-hidden />}
         >
-          <SuccessStroke />
-          <span>Fullfør</span>
+          Fullfør
         </Button>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />
         <BackLink />
-        <DeassignOppgave />
+        <Deassign type={oppgave?.type} />
       </StyledButtons>
       <ValidationSummaryPopup sections={data?.sections ?? []} hasErrors={hasErrors} />
     </Wrapper>
@@ -78,6 +79,14 @@ interface ConfirmFinishProps {
 const ConfirmFinishDisplay = ({ show, cancel }: ConfirmFinishProps) => {
   if (show) {
     return <ConfirmFinish cancel={cancel} />;
+  }
+
+  return null;
+};
+
+const Deassign = ({ type }: { type?: OppgaveType }) => {
+  if (type === OppgaveType.ANKE || type === OppgaveType.KLAGE) {
+    return <DeassignOppgave />;
   }
 
   return null;

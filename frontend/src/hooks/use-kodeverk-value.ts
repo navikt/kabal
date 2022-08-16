@@ -1,12 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useMemo } from 'react';
-import { useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { useKodeverk } from '../simple-api-state/use-kodeverk';
 import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse } from '../types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
   key: K | typeof skipToken = skipToken
 ): IKodeverk[K] | undefined => {
-  const { data } = useGetKodeverkQuery();
+  const { data } = useKodeverk();
 
   if (key === skipToken || typeof data === 'undefined') {
     return undefined;
@@ -28,24 +27,3 @@ export const useKodeverkYtelse = (ytelseId: string | typeof skipToken = skipToke
 export const useLovkildeToRegistreringshjemmelForYtelse = (
   ytelseId: string | typeof skipToken = skipToken
 ): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? [];
-
-export const useLovkildeToRegistreringshjemmelForYtelser = (
-  ytelseIds: string[] | typeof skipToken = skipToken
-): ILovKildeToRegistreringshjemmel[] => {
-  const data = useKodeverkValue('ytelser');
-
-  return useMemo(() => {
-    if (ytelseIds === skipToken || typeof data === 'undefined') {
-      return [];
-    }
-
-    const ytelser = data.filter(({ id }) => ytelseIds.includes(id));
-    return ytelser.reduce<ILovKildeToRegistreringshjemmel[]>((acc, { lovKildeToRegistreringshjemler }) => {
-      const newHjemler = lovKildeToRegistreringshjemler.filter(
-        ({ lovkilde }) => !acc.some((a) => a.lovkilde.id === lovkilde.id)
-      );
-
-      return [...acc, ...newHjemler];
-    }, []);
-  }, [data, ytelseIds]);
-};

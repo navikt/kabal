@@ -53,6 +53,7 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
         setActiveElement(null);
         setSelection(null);
         setShowNewComment(false);
+
         return;
       }
 
@@ -68,6 +69,7 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
           setActiveElement(null);
           setShowNewComment(false);
           setSelection(newSelection);
+
           return;
         }
 
@@ -84,6 +86,7 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
 
           setShowNewComment(false);
           setSelection(newSelection);
+
           return;
         }
 
@@ -92,6 +95,7 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
         setActiveElement(null);
         setShowNewComment(false);
         setSelection(newSelection);
+
         return;
       }
 

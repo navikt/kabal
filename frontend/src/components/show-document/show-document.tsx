@@ -112,5 +112,6 @@ const getSavedPdfWidth = () => {
   }
 
   const parsed = Number.parseInt(localStorageValue, 10);
+
   return Number.isNaN(parsed) ? MIN_PDF_WIDTH : parsed;
 };

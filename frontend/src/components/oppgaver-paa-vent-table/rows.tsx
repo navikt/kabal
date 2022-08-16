@@ -1,53 +1,53 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
 import { Row } from './row';
 
-interface OppgaveRaderProps {
+interface OppgaveRowsProps {
   oppgaver?: IOppgaveList;
   columnCount: number;
   isLoading: boolean;
   isError: boolean;
 }
 
-export const OppgaveRader = ({ oppgaver, columnCount, isLoading, isError }: OppgaveRaderProps): JSX.Element => {
+export const OppgaveRows = ({ oppgaver, columnCount, isLoading, isError }: OppgaveRowsProps): JSX.Element => {
   if (isError) {
     return (
-      <tbody data-testid="mine-oppgaver-table-error">
-        <tr>
-          <td colSpan={columnCount}>Kunne ikke laste oppgaver.</td>
-        </tr>
-      </tbody>
+      <Table.Body data-testid="mine-oppgaver-table-error">
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>Kunne ikke laste oppgaver.</Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   if (isLoading || typeof oppgaver === 'undefined') {
     return (
-      <tbody data-testid="mine-oppgaver-table-loading">
-        <tr>
-          <td colSpan={columnCount}>
+      <Table.Body data-testid="mine-oppgaver-table-loading">
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>
             <Loader size="xlarge" title="Laster oppgaver..." />
-          </td>
-        </tr>
-      </tbody>
+          </Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   if (oppgaver.length === 0) {
     return (
-      <tbody data-testid="mine-oppgaver-table-none">
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
+      <Table.Body data-testid="mine-oppgaver-table-none">
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>Ingen oppgaver i liste</Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   return (
-    <tbody data-testid="mine-oppgaver-table-rows">
+    <Table.Body data-testid="mine-oppgaver-table-rows">
       {oppgaver.map((k) => (
         <Row {...k} key={k.id} />
       ))}
-    </tbody>
+    </Table.Body>
   );
 };

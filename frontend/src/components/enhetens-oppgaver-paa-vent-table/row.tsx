@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { IOppgave } from '../../types/oppgaver';
@@ -27,24 +28,24 @@ export const Row = ({
   }, [utfallList, utfall]);
 
   return (
-    <tr data-testid="enhetens-oppgaver-paa-vent-table-row" data-klagebehandlingid={id}>
-      <td>
+    <Table.Row data-testid="enhetens-oppgaver-paa-vent-table-row" data-klagebehandlingid={id}>
+      <Table.DataCell>
         <Type type={type} />
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <Ytelse ytelseId={ytelse} />
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <Hjemmel hjemmel={hjemmel} />
-      </td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>
         <PaaVent sattPaaVent={sattPaaVent} />
-      </td>
-      <td>{utfallName}</td>
-      <td>{tildeltSaksbehandlerNavn}</td>
-      <td>
+      </Table.DataCell>
+      <Table.DataCell>{utfallName}</Table.DataCell>
+      <Table.DataCell>{tildeltSaksbehandlerNavn}</Table.DataCell>
+      <Table.DataCell>
         <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
-      </td>
-    </tr>
+      </Table.DataCell>
+    </Table.Row>
   );
 };

@@ -98,6 +98,7 @@ export const addTabs = (editor: Editor) => {
               focus: { ...start, offset: 0 },
               anchor: end,
             });
+
             return;
           }
 

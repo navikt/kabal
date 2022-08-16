@@ -1,10 +1,9 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useSakspartName } from '../../../hooks/use-klager-name';
-import { PanelHeader } from '../../oppgavebehandling-panels/panel';
 import { Type } from '../../type/type';
-import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
+import { StyledBehandlingSection } from '../styled-components';
 import { AnkeMottattDato } from './anke-mottatt-dato';
 import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
@@ -22,28 +21,28 @@ export const Ankebehandlingsdetaljer = () => {
   const { type, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelse } = oppgavebehandling;
 
   return (
-    <StyledBehandlingsdetaljer>
-      <StyledPaddedContent>
-        <PanelHeader>Behandling</PanelHeader>
+    <StyledBehandlingSection>
+      <Heading level="1" size="medium" spacing>
+        Behandling
+      </Heading>
 
-        <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
+      <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
 
-        <BehandlingSection label="Type">
-          <Type type={type}></Type>
-        </BehandlingSection>
+      <BehandlingSection label="Type">
+        <Type type={type}></Type>
+      </BehandlingSection>
 
-        <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelse} />
 
-        <BehandlingSection label="Behandlet av">
-          {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
-        </BehandlingSection>
+      <BehandlingSection label="Behandlet av">
+        {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
+      </BehandlingSection>
 
-        <AnkeMottattDato />
+      <AnkeMottattDato />
 
-        <UtfallResultat utfall={resultat.utfall} />
+      <UtfallResultat utfall={resultat.utfall} />
 
-        <Lovhjemmel />
-      </StyledPaddedContent>
-    </StyledBehandlingsdetaljer>
+      <Lovhjemmel />
+    </StyledBehandlingSection>
   );
 };

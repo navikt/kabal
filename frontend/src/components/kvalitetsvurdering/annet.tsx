@@ -1,11 +1,11 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { OppgaveType } from '../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
-import { FormSection, SubHeader } from './styled-components';
+import { FormSection } from './styled-components';
 
 export const Annet = () => {
   const { data: oppgave } = useOppgave();
@@ -62,7 +62,9 @@ export const Annet = () => {
 
   return (
     <FormSection>
-      <SubHeader>Annet</SubHeader>
+      <Heading level="2" size="small">
+        Annet
+      </Heading>
       <Reasons reasons={reasons} />
     </FormSection>
   );

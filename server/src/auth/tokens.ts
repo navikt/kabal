@@ -4,19 +4,6 @@ import { azureClientMetadata, client_id } from '../config/azure-config';
 import { deleteFromRedis, getSessionData } from '../redis';
 import { refreshAndSaveTokens } from './azure/refresh-tokens';
 
-export const verifyToken = async (authClient: Client, access_token: string): Promise<JWK.Key> => {
-  const keyStore = await authClient.issuer.keystore();
-
-  const valid = JWT.verify(access_token, keyStore, {
-    issuer: authClient.issuer.metadata.issuer,
-    algorithms: [azureClientMetadata.token_endpoint_auth_signing_alg],
-    audience: client_id,
-    complete: true,
-  });
-
-  return valid.key;
-};
-
 export const getAccessTokenWithRefresh = async (authClient: Client, sessionId: string): Promise<string> => {
   const sessionData = await getSessionData(sessionId);
 
@@ -32,6 +19,7 @@ export const getAccessTokenWithRefresh = async (authClient: Client, sessionId: s
 
   try {
     await verifyToken(authClient, session_access_token);
+
     return session_access_token;
   } catch (verifyError) {
     if (verifyError instanceof errors.JWTExpired && typeof session_refresh_token === 'string') {
@@ -50,4 +38,17 @@ export const getAccessTokenWithRefresh = async (authClient: Client, sessionId: s
 
     throw new Error('Unknown error while getting and verifying access token.');
   }
+};
+
+const verifyToken = async (authClient: Client, access_token: string): Promise<JWK.Key> => {
+  const keyStore = await authClient.issuer.keystore();
+
+  const valid = JWT.verify(access_token, keyStore, {
+    issuer: authClient.issuer.metadata.issuer,
+    algorithms: [azureClientMetadata.token_endpoint_auth_signing_alg],
+    audience: client_id,
+    complete: true,
+  });
+
+  return valid.key;
 };

@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 
 interface TableHeaderProps {
@@ -5,7 +6,11 @@ interface TableHeaderProps {
 }
 
 export const TableHeader = ({ headers }: TableHeaderProps): JSX.Element => (
-  <thead>
-    <tr>{headers.map((h, i) => (typeof h === 'string' ? <th key={h}>{h}</th> : <th key={i} />))}</tr>
-  </thead>
+  <Table.Header>
+    <Table.Row>
+      {headers.map((h, i) =>
+        typeof h === 'string' ? <Table.ColumnHeader key={h}>{h}</Table.ColumnHeader> : <Table.ColumnHeader key={i} />
+      )}
+    </Table.Row>
+  </Table.Header>
 );

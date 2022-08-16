@@ -4,7 +4,7 @@ export type IKakaKvalitetsvurdering = IKvalitetsvurderingBase &
   IKvalitetsvurderingRadio &
   IKvalitetsvurderingRadioExtended;
 
-export interface IKvalitetsvurderingBase {
+interface IKvalitetsvurderingBase {
   readonly created: string; // LocalDateTime;
   readonly id: string;
   modified: string; // LocalDateTime;

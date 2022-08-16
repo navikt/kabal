@@ -1,4 +1,4 @@
-import { TextField } from '@navikt/ds-react';
+import { Search } from '@navikt/ds-react';
 import React, { useEffect, useRef } from 'react';
 
 interface Props {
@@ -7,6 +7,8 @@ interface Props {
   setFilter: (filter: string) => void;
   onFocus: () => void;
 }
+
+const LABEL = 'Filtrer på tittel';
 
 export const Filter = ({ isFocused, filter, setFilter, onFocus }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -20,13 +22,14 @@ export const Filter = ({ isFocused, filter, setFilter, onFocus }: Props) => {
   }, [isFocused]);
 
   return (
-    <TextField
+    <Search
       value={filter}
-      onChange={(e) => setFilter(e.target.value)}
+      onChange={setFilter}
       onFocus={onFocus}
       size="small"
-      label="Filtrer på tittel"
-      placeholder="Filtrer på tittel"
+      variant="simple"
+      label={LABEL}
+      placeholder={LABEL}
       hideLabel
       autoFocus
       ref={inputRef}

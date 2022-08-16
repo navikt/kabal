@@ -10,7 +10,7 @@ export enum DocumentType {
   BESLUTNING = '5',
 }
 
-export interface IBaseDocument {
+interface IBaseDocument {
   id: UUID;
   tittel: string;
   dokumentTypeId: DocumentType;
@@ -25,7 +25,7 @@ export interface IFileDocument extends IBaseDocument {
   templateId: null;
 }
 
-export interface ISmartDocument extends IBaseDocument {
+interface ISmartDocument extends IBaseDocument {
   isSmartDokument: true;
   templateId: TemplateIdEnum | NoTemplateIdEnum | null; // Nullable until all smart documents without this are finished. Make not nullable once all legacy smart documents are finished.
   version?: typeof VERSION;

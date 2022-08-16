@@ -57,6 +57,7 @@ export const unindentList = (editor: Editor) =>
             { type: ContentTypeEnum.PARAGRAPH },
             { at: isFirstListItem ? parentListPath : Path.next(parentListPath) }
           );
+
           return;
         }
 
@@ -112,6 +113,7 @@ export const unindentList = (editor: Editor) =>
 
         if (isFirstListItem) {
           Transforms.liftNodes(editor, { at: parentListPath });
+
           return;
         }
 

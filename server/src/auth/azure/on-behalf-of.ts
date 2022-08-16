@@ -12,6 +12,7 @@ export const getOnBehalfOfAccessToken = async (
   const cacheKey = `${access_token}-${appName}`;
 
   const cacheHit = oboCache.get(cacheKey);
+
   if (typeof cacheHit !== 'undefined') {
     const [cached_obo_access_token, expires_at] = cacheHit;
 

@@ -51,7 +51,7 @@ export const StyledButtons = styled.div`
   gap: 16px;
 `;
 
-export const StyledFooter = styled.div`
+const StyledFooter = styled.div`
   display: flex;
   position: sticky;
   bottom: 0em;

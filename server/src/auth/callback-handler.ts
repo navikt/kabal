@@ -14,6 +14,7 @@ export const callbackHandler =
     if (typeof error === 'string' || typeof error_description === 'string') {
       console.warn('Callback handler:', error, error_description);
       loginRedirect(authClient, sessionId, res, req.originalUrl);
+
       return;
     }
 
@@ -21,6 +22,7 @@ export const callbackHandler =
       const err = `No code in query after Azure login. Session '${sessionId}'.`;
       console.warn('Callback handler:', err);
       res.status(500).send(err);
+
       return;
     }
 
@@ -28,14 +30,17 @@ export const callbackHandler =
       const err = 'OpenID issuer misconfigured. Missing token endpoint.';
       console.warn('Callback handler:', err);
       res.status(500).send(err);
+
       return;
     }
 
     const sessionData = await getSessionData(sessionId);
+
     if (sessionData === null) {
       const err = `No session data found after Azure login. Session '${sessionId}'.`;
       console.warn('Callback handler:', err);
       res.status(500).send(err);
+
       return;
     }
 
@@ -45,6 +50,7 @@ export const callbackHandler =
       const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
       console.warn('Callback handler:', err);
       res.status(500).send(err);
+
       return;
     }
 
@@ -63,9 +69,9 @@ export const callbackHandler =
       await saveSessionData(sessionId, { access_token, refresh_token });
 
       res.redirect(before_login ?? '/');
-    } catch (error) {
-      if (error instanceof Error || typeof error === 'string') {
-        console.error('Callback handler:', `Error while exchanging code for tokens.`, error);
+    } catch (e) {
+      if (e instanceof Error || typeof e === 'string') {
+        console.error('Callback handler:', `Error while exchanging code for tokens.`, e);
       } else {
         console.error('Callback handler:', 'Unknown error while exchanging code for tokens.');
       }

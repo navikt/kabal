@@ -1,6 +1,5 @@
 import { Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import { Input } from 'nav-frontend-skjema';
+import { Button, Search } from '@navikt/ds-react';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
 import { stringToRegExp } from '../../functions/string-to-regex';
@@ -28,12 +27,12 @@ export const Header = ({
 }: HeaderProps): JSX.Element | null => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const onInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
-    onFilterChange(stringToRegExp(target.value));
+  const onInputChange = (value: string) => onFilterChange(stringToRegExp(value));
 
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
       onFocusChange(-1);
+
       return close();
     }
 
@@ -42,6 +41,7 @@ export const Header = ({
 
       if (focused === optionsCount - 1) {
         inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
         return onFocusChange(-1);
       }
 
@@ -72,17 +72,17 @@ export const Header = ({
 
   return (
     <StyledHeader>
-      <StyledInput
+      <Search
         onChange={onInputChange}
         defaultValue=""
         placeholder="Søk"
+        label="Søk"
+        hideLabel
         onKeyDown={onKeyDown}
         autoFocus
-        type="search"
-        bredde="fullbredde"
-        inputRef={(e) => {
-          inputRef.current = e;
-        }}
+        size="small"
+        variant="simple"
+        ref={inputRef}
         data-testid="header-filter"
       />
       {showFjernAlle && (
@@ -98,10 +98,6 @@ export const Header = ({
 const StyledKnapp = styled(Button)`
   margin-left: 0.5em;
   flex-shrink: 0;
-`;
-
-const StyledInput = styled(Input)`
-  width: 100%;
 `;
 
 const StyledHeader = styled.div`

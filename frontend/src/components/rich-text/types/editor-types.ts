@@ -29,7 +29,7 @@ export interface IndentElementType {
   children: CustomTextType[];
 }
 
-export interface BlockquoteElementType {
+interface BlockquoteElementType {
   type: ContentTypeEnum.BLOCKQUOTE;
   children: CustomTextType[];
   textAlign: TextAlignEnum;
@@ -66,24 +66,24 @@ export interface HeadingTwoElementType {
   type: HeadingTypesEnum.HEADING_TWO;
   children: CustomTextType[];
 }
-export interface HeadingThreeElementType {
+interface HeadingThreeElementType {
   type: HeadingTypesEnum.HEADING_THREE;
   children: CustomTextType[];
 }
-export interface HeadingFourElementType {
+interface HeadingFourElementType {
   type: HeadingTypesEnum.HEADING_FOUR;
   children: CustomTextType[];
 }
-export interface HeadingFiveElementType {
+interface HeadingFiveElementType {
   type: HeadingTypesEnum.HEADING_FIVE;
   children: CustomTextType[];
 }
-export interface HeadingSixElementType {
+interface HeadingSixElementType {
   type: HeadingTypesEnum.HEADING_SIX;
   children: CustomTextType[];
 }
 
-export type HeadingsType =
+type HeadingsType =
   | HeadingOneElementType
   | HeadingTwoElementType
   | HeadingThreeElementType
@@ -112,11 +112,7 @@ export interface ListItemContainerElementType {
   children: CustomTextType[];
 }
 
-export type ListsType =
-  | BulletListElementType
-  | NumberedListElementType
-  | ListItemElementType
-  | ListItemContainerElementType;
+type ListsType = BulletListElementType | NumberedListElementType | ListItemElementType | ListItemContainerElementType;
 
 export interface CustomTextType extends IMarks {
   text: string;

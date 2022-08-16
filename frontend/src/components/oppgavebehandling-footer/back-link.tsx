@@ -4,8 +4,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 export const BackLink = () => (
-  <Button to="/mineoppgaver" as={NavLink} variant="secondary" size="small" data-testid="footer-button-back">
-    <Back />
-    <span>Mine oppgaver</span>
+  <Button
+    to="/mineoppgaver"
+    as={NavLink}
+    variant="secondary"
+    size="small"
+    data-testid="footer-button-back"
+    icon={<Back aria-hidden />}
+  >
+    Mine oppgaver
   </Button>
 );

@@ -8,10 +8,12 @@ export const authMiddleware =
   (authClient: Client): Handler =>
   async (req, res, next) => {
     const session = getSessionIdAndSignature(req);
+
     if (session === null) {
       const [sessionId, signature] = generateSessionIdAndSignature();
       setSessionCookie(res, sessionId, signature);
       loginRedirect(authClient, sessionId, res, req.originalUrl);
+
       return;
     }
 
@@ -33,6 +35,5 @@ export const authMiddleware =
         console.warn('Auth middleware:', error);
       }
       loginRedirect(authClient, sessionId, res, req.originalUrl);
-      return;
     }
   };
