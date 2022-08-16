@@ -1,15 +1,15 @@
 import { DeletableVoidElementsEnum } from './editor-enums';
 import { IMarks } from './marks';
 
-export interface IWithThreads {
+interface IWithThreads {
   threadIds: string[];
 }
 
-export interface IBaseVoid {
+interface IBaseVoid {
   children: [{ text: '' }];
 }
 
-export enum Flettefelt {
+enum Flettefelt {
   FNR = 'fnr',
   ENHET_NAME = 'enhet-name',
 }
@@ -19,5 +19,3 @@ export interface FlettefeltElementType extends IBaseVoid, IMarks, IWithThreads {
   content: string | null;
   field: Flettefelt | null;
 }
-
-export type DeletableVoidTypes = FlettefeltElementType;

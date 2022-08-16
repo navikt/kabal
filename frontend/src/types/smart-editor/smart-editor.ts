@@ -3,7 +3,7 @@ import { OppgaveType } from '../kodeverk';
 import { Immutable } from '../types';
 import { INewSmartEditorMetadata, ISmartEditorMetadata } from './metadata';
 
-export interface INewSmartEditor extends INewSmartEditorMetadata {
+interface INewSmartEditor extends INewSmartEditorMetadata {
   content: Descendant[];
 }
 

@@ -16,9 +16,18 @@ export const PanelContainer = styled.section`
   scroll-snap-align: start;
 `;
 
-export const PanelHeader = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-  margin-bottom: 24px;
+export const PageContainer = styled.main`
+  display: flex;
+  width: 100%;
+  margin: 0 0.25em 0 0;
+  flex-grow: 1;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-bottom: 1em;
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: #e5e5e5;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 8px;
+  scroll-padding-right: 8px;
 `;

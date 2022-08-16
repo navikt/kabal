@@ -4,8 +4,9 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
+import { useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
+import { useUser } from '../../../simple-api-state/use-user';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
 
@@ -17,7 +18,7 @@ interface NewCommentInThreadProps {
 }
 
 export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
@@ -102,13 +103,19 @@ const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
         onClick={onSubmit}
         disabled={text.length <= 0}
         loading={isLoading}
+        icon={<SuccessStroke aria-hidden />}
       >
-        <SuccessStroke />
-        <span>Legg til</span>
+        Legg til
       </Button>
-      <Button type="button" size="small" variant="secondary" onClick={close} disabled={isLoading}>
-        <Close />
-        <span>Avbryt</span>
+      <Button
+        type="button"
+        size="small"
+        variant="secondary"
+        onClick={close}
+        disabled={isLoading}
+        icon={<Close aria-hidden />}
+      >
+        Avbryt
       </Button>
     </StyledCommentButtonContainer>
   );

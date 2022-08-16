@@ -29,5 +29,3 @@ export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean; rea
     background-color: lightblue;
   }
 `;
-
-export const CommentSectionContainer = styled.section``;

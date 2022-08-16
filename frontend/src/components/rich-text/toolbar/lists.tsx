@@ -49,6 +49,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
                 { type: ListTypesEnum.BULLET_LIST },
                 { mode: 'lowest', match: isOfElementTypeFn(ListTypesEnum.NUMBERED_LIST) }
               );
+
               return;
             }
 
@@ -91,6 +92,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
                 { type: ListTypesEnum.NUMBERED_LIST },
                 { mode: 'lowest', match: isOfElementTypeFn(ListTypesEnum.BULLET_LIST) }
               );
+
               return;
             }
 

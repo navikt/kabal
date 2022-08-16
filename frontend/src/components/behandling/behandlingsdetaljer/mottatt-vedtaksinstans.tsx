@@ -13,13 +13,17 @@ export const MottattVedtaksinstans = () => {
   const error = useValidationError('mottattVedtaksinstans');
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
+  if (data?.type === OppgaveType.ANKE_I_TRYGDERETTEN) {
+    return null;
+  }
+
   return (
     <StyledMottattVedtaksinstans>
       <DatepickerWithError
         label="Mottatt vedtaksinstans:"
         disabled={!canEdit}
         onChange={(mottattVedtaksinstans) => {
-          if (mottattVedtaksinstans !== null && data?.type === OppgaveType.KLAGE) {
+          if (data?.type === OppgaveType.KLAGE) {
             setMottattVedtaksinstans({ oppgaveId: data.id, mottattVedtaksinstans, type: data.type });
           }
         }}
@@ -31,6 +35,8 @@ export const MottattVedtaksinstans = () => {
         showYearSelector
         error={error}
         data-testid="mottatt-vedtaksinstans"
+        inputName="mottatt-vedtaksinstans"
+        size="small"
       />
     </StyledMottattVedtaksinstans>
   );

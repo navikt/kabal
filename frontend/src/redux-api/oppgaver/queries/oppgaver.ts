@@ -16,18 +16,20 @@ import {
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 
-export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
+const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/ansatte/${navIdent}/oppgaver/ferdigstilte${query}`;
       },
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/ansatte/${navIdent}/oppgaver/uferdige${query}`;
       },
       providesTags: ['tildelte-oppgaver'],
@@ -35,6 +37,7 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/ansatte/${navIdent}/oppgaver/paavent${query}`;
       },
       providesTags: ['ventende-oppgaver'],
@@ -42,18 +45,21 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMineLedigeOppgaver: builder.query<ApiResponse, MineLedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/ansatte/${navIdent}/oppgaver/ledige${query}`;
       },
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${query}`;
       },
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${query}`;
       },
       providesTags: ['enhetens-tildelte-oppgaver'],
@@ -61,21 +67,23 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${query}`;
       },
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
+
         return `/kabal-search/ansatte/${navIdent}/antalloppgavermedutgaattefrister${query}`;
       },
       providesTags: ['ledige-medutgaattefrister'],
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
-      query: ({ ...queryParams }) => ({
+      query: (body) => ({
         url: `/kabal-search/search/name`,
         method: 'POST',
-        body: queryParams,
+        body,
       }),
     }),
     personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
@@ -83,6 +91,19 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         url: `/kabal-search/search/personogoppgaver`,
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
+      }),
+      transformResponse: ({
+        aapneBehandlinger,
+        avsluttedeBehandlinger,
+        behandlinger,
+        fnr,
+        navn,
+      }: IPersonAndOppgaverResponse) => ({
+        aapneBehandlinger,
+        avsluttedeBehandlinger,
+        behandlinger,
+        fnr,
+        navn,
       }),
     }),
     getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({
@@ -92,7 +113,6 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 });
 
 export const {
-  useGetEnhetensFerdigstilteOppgaverQuery,
   useGetEnhetensUferdigeOppgaverQuery,
   useGetEnhetensVentendeOppgaverQuery,
   useGetMineFerdigstilteOppgaverQuery,

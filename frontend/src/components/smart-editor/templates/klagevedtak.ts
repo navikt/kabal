@@ -18,7 +18,7 @@ import {
   createSignature,
 } from './helpers';
 
-export const INITIAL_SLATE_VALUE: Descendant[] = [
+const INITIAL_SLATE_VALUE: Descendant[] = [
   createCurrentDate(),
   createHeader(),
   createMaltekst(TemplateSections.TITLE),

@@ -29,6 +29,10 @@ export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
     method: 'POST',
     body,
   }).catch((err) => {
-    console.error(`Failed to send message to Slack. ${err}. Message: '${text}'`);
+    if (err instanceof Error) {
+      console.error(`Failed to send message to Slack. ${err.message}. Message: '${text}'`);
+    } else {
+      console.error(`Failed to send message to Slack.`);
+    }
   });
 };

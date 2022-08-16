@@ -1,6 +1,5 @@
-import { Loader } from '@navikt/ds-react';
+import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import AlertStripe from 'nav-frontend-alertstriper';
 import React from 'react';
 import { useNameSearchQuery } from '../../../redux-api/oppgaver/queries/oppgaver';
 import { INameSearchParams } from '../../../types/oppgaver';
@@ -27,9 +26,9 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
 
   if (data.people.length === 0) {
     return (
-      <AlertStripe type="info" data-testid="search-result-none">
+      <Alert variant="info" data-testid="search-result-none">
         Ingen registrerte klager på denne personen i Kabal
-      </AlertStripe>
+      </Alert>
     );
   }
 

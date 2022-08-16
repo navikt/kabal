@@ -3,7 +3,7 @@ import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
-export const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
+const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     removeTilknyttetDocument: builder.mutation<{ modified: string }, ICheckDocumentParams>({

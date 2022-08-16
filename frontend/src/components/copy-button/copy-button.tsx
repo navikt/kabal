@@ -1,6 +1,5 @@
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
-import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
@@ -15,15 +14,15 @@ export const CopyButton = ({ children, text, title = 'Klikk for å kopiere', cla
   }
 
   return (
-    <StyledCopyButton className={className} popoverText="Kopiert!" copyText={text} iconPlacement="right" title={title}>
+    <CopyToClipboard
+      className={className}
+      popoverText="Kopiert!"
+      copyText={text}
+      iconPosition="right"
+      title={title}
+      size="small"
+    >
       {children}
-    </StyledCopyButton>
+    </CopyToClipboard>
   );
 };
-
-const StyledCopyButton = styled(CopyToClipboard)`
-  &.navds-button__inner,
-  &.navds-button svg {
-    font-size: 16px;
-  }
-`;

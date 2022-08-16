@@ -1,16 +1,16 @@
 import { Send } from '@navikt/ds-icons';
-import { Button, Loader } from '@navikt/ds-react';
-import { Textarea } from 'nav-frontend-skjema';
+import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../../redux-api/bruker';
+import { useGetMySignatureQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
+import { useUser } from '../../../../simple-api-state/use-user';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const { data: user, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: user, isLoading: userIsLoading } = useUser();
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
@@ -66,12 +66,15 @@ export const WriteMessage = () => {
   return (
     <StyledWriteMessage>
       <Textarea
+        size="small"
         onKeyDown={onKeyDown}
         value={message}
         onChange={onChange}
         maxLength={0}
-        feil={errorMessage}
+        error={errorMessage}
         data-testid="message-textarea"
+        label="Skriv en melding"
+        hideLabel
       />
       <StyleSendMessage>
         <Button
@@ -81,9 +84,9 @@ export const WriteMessage = () => {
           onClick={post}
           loading={messageIsLoading}
           data-testid="send-message-button"
+          icon={<Send aria-hidden />}
         >
-          <Send />
-          <span>Legg til melding</span>
+          Legg til melding
         </Button>
       </StyleSendMessage>
     </StyledWriteMessage>

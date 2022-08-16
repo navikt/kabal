@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useUser } from '../simple-api-state/use-user';
 import { MedunderskriverFlyt } from '../types/kodeverk';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsAssignee = () => {
   const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
-  const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: userData, isLoading: userIsLoading } = useUser();
 
   return useMemo(() => {
     if (

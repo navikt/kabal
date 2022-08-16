@@ -45,7 +45,7 @@ export enum DeletableVoidElementsEnum {
   FLETTEFELT = 'flettefelt',
 }
 
-export type VoidElementsEnum = UndeletableVoidElementsEnum | DeletableVoidElementsEnum;
+type VoidElementsEnum = UndeletableVoidElementsEnum | DeletableVoidElementsEnum;
 
 export enum RedigerbarMaltekstEnum {
   REDIGERBAR_MALTEKST = 'redigerbar-maltekst',

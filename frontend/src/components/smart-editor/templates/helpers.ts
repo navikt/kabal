@@ -53,11 +53,13 @@ export const createRegelverktekst = (section: TemplateSections): RedigerbareMalt
   children: [createSimpleParagraph()],
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const createHeadingOne = (text: string): HeadingOneElementType => ({
   type: HeadingTypesEnum.HEADING_ONE,
   children: [{ text }],
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const createHeadingTwo = (text: string): HeadingTwoElementType => ({
   type: HeadingTypesEnum.HEADING_TWO,
   children: [{ text }],
@@ -69,6 +71,7 @@ export const createSimpleParagraph = (text = ''): ParagraphElementType => ({
   textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const createSimpleBulletList = (...textItems: string[]): BulletListElementType => ({
   type: ListTypesEnum.BULLET_LIST,
   children: textItems.map((text) => ({

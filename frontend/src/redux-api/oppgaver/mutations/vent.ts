@@ -3,7 +3,7 @@ import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
-export const ventMutationSlice = oppgaverApi.injectEndpoints({
+const ventMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     sattPaaVent: builder.mutation<IModifiedResponse, string>({

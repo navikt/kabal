@@ -76,6 +76,7 @@ const RenderTags = ({ query, limits, type }: TagIdsProps) => {
 
   if (limits[type].length === 0) {
     const TagComponent = VARIANTS[type];
+
     return (
       <TagComponent variant="info" size="small">
         Gjelder alle {getTypeName(type)}
@@ -111,6 +112,7 @@ const getTypeName = (type: keyof TextMetadata): string => {
 
 const getIds = (query: TextMetadata, limits: TextMetadata, key: keyof TextMetadata): string[] => {
   const ids = query[key];
+
   return limits[key].filter((limit) => ids.some((id) => id === limit));
 };
 

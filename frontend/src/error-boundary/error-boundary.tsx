@@ -62,9 +62,8 @@ interface ActionButtonProps extends Omit<ButtonProps, 'children'> {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 }
 
-export const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) => (
-  <Button {...rest}>
-    {buttonIcon}
+const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) => (
+  <Button {...rest} icon={buttonIcon}>
     <span>{buttonText}</span>
   </Button>
 );

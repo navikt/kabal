@@ -1,13 +1,15 @@
+import { Heading } from '@navikt/ds-react';
 import React from 'react';
-import { PanelHeader } from '../../oppgavebehandling-panels/panel';
-import { StyledBehandlingsdialog } from '../styled-components';
+import { StyledBehandlingSection } from '../styled-components';
 import { Medunderskriver } from './medunderskriver/medunderskriver';
 import { Messages } from './messages/messages';
 
 export const Behandlingsdialog = () => (
-  <StyledBehandlingsdialog>
-    <PanelHeader>Behandlingsdialog</PanelHeader>
+  <StyledBehandlingSection>
+    <Heading level="1" size="medium" spacing>
+      Behandlingsdialog
+    </Heading>
     <Medunderskriver />
     <Messages />
-  </StyledBehandlingsdialog>
+  </StyledBehandlingSection>
 );

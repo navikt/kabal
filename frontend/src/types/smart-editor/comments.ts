@@ -22,7 +22,7 @@ export interface ISmartEditorComment extends IPostCommentParams {
   text: string;
 }
 
-export interface ICommentAuthor {
+interface ICommentAuthor {
   ident: string;
   name: string;
 }

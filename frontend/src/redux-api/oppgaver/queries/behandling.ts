@@ -52,6 +52,5 @@ export const {
   useGetOppgavebehandlingQuery,
   useGetMedunderskriverQuery,
   useGetMedunderskriverflytQuery,
-  useValidateQuery,
   useLazyValidateQuery,
 } = behandlingerQuerySlice;

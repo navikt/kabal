@@ -1,7 +1,8 @@
+import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { SECTION_KEY } from '../../functions/error-type-guard';
 import { useSectionTitle } from '../../hooks/use-section-title';
-import { PanelContainer, PanelHeader } from '../oppgavebehandling-panels/panel';
+import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Kvalitetsskjema } from './kvalitetsskjema';
 import { KvalitetsVurderingContainer } from './styled-components';
 
@@ -19,7 +20,10 @@ export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Elem
   return (
     <PanelContainer data-testid="kvalitetsvurdering-panel">
       <KvalitetsVurderingContainer>
-        <PanelHeader>{header}</PanelHeader>
+        <Heading level="1" size="medium" spacing>
+          {header}
+        </Heading>
+
         <Kvalitetsskjema />
       </KvalitetsVurderingContainer>
     </PanelContainer>

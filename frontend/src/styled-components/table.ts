@@ -1,34 +1,5 @@
+import { Table } from '@navikt/ds-react';
 import styled from 'styled-components';
-
-export const StyledTable = styled.table`
-  border-spacing: 0;
-  border-collapse: collapse;
-  margin-bottom: 32px;
-  min-width: 900px;
-
-  td,
-  th {
-    padding: 16px;
-    width: auto;
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  thead {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
-  }
-
-  tbody,
-  tfoot {
-    tr {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-
-      :nth-child(odd) {
-        background-color: rgba(0, 0, 0, 0.03);
-      }
-    }
-  }
-`;
 
 export const StyledCaption = styled.caption`
   text-align: left;
@@ -36,7 +7,6 @@ export const StyledCaption = styled.caption`
   font-style: normal;
   color: black;
   caption-side: top;
-  padding-top: 16px;
 `;
 
 export const StyledFooterContent = styled.div`
@@ -44,4 +14,9 @@ export const StyledFooterContent = styled.div`
   width: 100%;
   align-items: center;
   justify-content: space-between;
+`;
+
+export const StyledMineOppgaverTable = styled(Table)`
+  max-width: 2048px;
+  width: 100%;
 `;

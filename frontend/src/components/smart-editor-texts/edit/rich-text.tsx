@@ -33,7 +33,7 @@ export const RichTextEditor = ({ textId, savedContent }: Props) => {
       actionButton={{
         onClick: async () => setContent(savedContent),
         buttonText: 'Gjenopprett tekst',
-        buttonIcon: <Historic />,
+        buttonIcon: <Historic aria-hidden />,
         variant: 'primary',
         size: 'small',
       }}

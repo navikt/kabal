@@ -91,7 +91,7 @@ interface HeaderFooterContentProps {
   type: UndeletableVoidElementsEnum.HEADER | UndeletableVoidElementsEnum.FOOTER;
 }
 
-export const HeaderFooterContent = ({ text, query, isLoading, reload, type }: HeaderFooterContentProps) => {
+const HeaderFooterContent = ({ text, query, isLoading, reload, type }: HeaderFooterContentProps) => {
   if (isLoading || typeof text === 'undefined') {
     return (
       <ParagraphStyle textAlign={TextAlignEnum.TEXT_ALIGN_LEFT}>

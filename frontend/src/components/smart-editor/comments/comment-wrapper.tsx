@@ -165,6 +165,7 @@ const getColor = ({ commentCount, isActive, isSelected, showNewComment }: Styled
   const lightness = 100 - 15 * Math.min(commentCount, 3);
   const hue = isActive ? 0 : 125;
   const saturation = isActive ? 75 : 50;
+
   return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
 };
 

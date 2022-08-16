@@ -19,7 +19,7 @@ export interface ISignature {
   title: string;
 }
 
-export interface ISignatureContent {
+interface ISignatureContent {
   useShortName: boolean;
   saksbehandler?: ISignature;
   medunderskriver?: ISignature;
@@ -37,7 +37,7 @@ export interface MaltekstElementType extends IBaseVoid, IWithThreads, Partial<Te
   content: IText[] | null;
 }
 
-export interface IDocumentItem {
+interface IDocumentItem {
   id: string;
   title: string;
 }
@@ -76,9 +76,9 @@ export interface FlettefeltElementType extends IBaseVoid, IMarks, IWithThreads {
   field: Flettefelt | null;
 }
 
-export type DeletableVoidTypes = FlettefeltElementType;
+type DeletableVoidTypes = FlettefeltElementType;
 
-export type VoidTypes =
+type VoidTypes =
   | SignatureElementType
   | MaltekstElementType
   | LabelContentElementType
@@ -95,5 +95,3 @@ export type CommentableVoidElementTypes =
   | FooterElementType;
 
 export type VoidElementTypes = CommentableVoidElementTypes | VoidTypes | DeletableVoidTypes;
-
-export type MaltekstElementTypes = MaltekstElementType | HeaderElementType | FooterElementType;

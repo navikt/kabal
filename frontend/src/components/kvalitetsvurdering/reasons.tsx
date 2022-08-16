@@ -1,12 +1,11 @@
-import { Loader } from '@navikt/ds-react';
-import { CheckboxGruppe } from 'nav-frontend-skjema';
+import { CheckboxGroup, Loader } from '@navikt/ds-react';
 import React, { Fragment } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { IKvalitetsvurderingBooleans } from '../../types/kaka-kvalitetsvurdering';
 import { CommentField } from './comment-field';
-import { ReasonsField, StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
+import { StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
@@ -38,36 +37,38 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
 
   const { id } = kvalitetsvurdering;
 
+  const value = reasons.filter((reason) => reason.checked).map((reason) => reason.id);
+
   return (
-    <ReasonsField>
-      <CheckboxGruppe legend={legendText} feil={error}>
-        {reasons
-          .filter((reason) => reason.show !== false)
-          .map((reason) => {
-            const showTextArea = reason.checked === true && typeof reason.textareaId !== 'undefined';
-            return (
-              <Fragment key={String(reason.id)}>
-                <StyledCheckboxContainer>
-                  <StyledCheckbox
-                    label={reason.label}
-                    value={reason.id}
-                    checked={reason.checked}
-                    onChange={({ target }) =>
-                      updateKvalitetsvurdering({
-                        id,
-                        [reason.id]: target.checked,
-                      })
-                    }
-                    disabled={!canEdit}
-                  />
-                  <HjelpetekstDisplay helpText={reason.helpText} />
-                </StyledCheckboxContainer>
-                <CommentFieldDisplay textareaId={reason.textareaId} show={showTextArea} />
-              </Fragment>
-            );
-          })}
-      </CheckboxGruppe>
-    </ReasonsField>
+    <CheckboxGroup legend={legendText} error={error} size="small" value={value}>
+      {reasons
+        .filter((reason) => reason.show !== false)
+        .map((reason) => {
+          const showTextArea = reason.checked === true && typeof reason.textareaId !== 'undefined';
+
+          return (
+            <Fragment key={String(reason.id)}>
+              <StyledCheckboxContainer>
+                <StyledCheckbox
+                  size="small"
+                  value={reason.id}
+                  onChange={({ target }) =>
+                    updateKvalitetsvurdering({
+                      id,
+                      [reason.id]: target.checked,
+                    })
+                  }
+                  disabled={!canEdit}
+                >
+                  {reason.label}
+                </StyledCheckbox>
+                <HjelpetekstDisplay helpText={reason.helpText} />
+              </StyledCheckboxContainer>
+              <CommentFieldDisplay textareaId={reason.textareaId} show={showTextArea} />
+            </Fragment>
+          );
+        })}
+    </CheckboxGroup>
   );
 };
 

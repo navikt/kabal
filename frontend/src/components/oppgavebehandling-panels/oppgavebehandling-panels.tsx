@@ -1,10 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Behandling } from '../behandling/behandling';
 import { Documents } from '../documents/documents';
 import { PanelToggles } from '../klagebehandling/types';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
 import { SmartEditorPanel } from '../smart-editor/smart-editor-panel';
+import { PageContainer } from './styled-components';
 
 interface OppgavebehandlingPanelsProps {
   toggles: PanelToggles;
@@ -12,25 +12,9 @@ interface OppgavebehandlingPanelsProps {
 
 export const OppgavebehandlingPanels = ({ toggles }: OppgavebehandlingPanelsProps): JSX.Element => (
   <PageContainer data-testid="klagebehandling-panels">
-    <Documents shown={toggles.documents} />
-    <SmartEditorPanel shown={toggles.smartEditor} />
-    <Behandling shown={toggles.behandling} />
-    <Kvalitetsvurdering shown={toggles.kvalitetsvurdering} />
+    <Documents shown={toggles.documents.showContent} />
+    <SmartEditorPanel shown={toggles.smartEditor.showContent} />
+    <Behandling shown={toggles.behandling.showContent} />
+    <Kvalitetsvurdering shown={toggles.kvalitetsvurdering.showContent} />
   </PageContainer>
 );
-
-const PageContainer = styled.main`
-  display: flex;
-  width: 100%;
-  margin: 0 0.25em 0 0;
-  flex-grow: 1;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding-bottom: 1em;
-  padding-left: 8px;
-  padding-right: 8px;
-  background-color: #e5e5e5;
-  scroll-snap-type: x proximity;
-  scroll-padding-left: 8px;
-  scroll-padding-right: 8px;
-`;

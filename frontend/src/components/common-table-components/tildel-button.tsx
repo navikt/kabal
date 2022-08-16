@@ -1,11 +1,11 @@
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
+import { useUser } from '../../simple-api-state/use-user';
 import { IEnhet } from '../../types/bruker';
-import { Dropdown, DropdownContainer, DropdownOption, SuccessStatus, TildelDropdownButton } from './styled-components';
+import { Dropdown, DropdownContainer, DropdownOption, TildelDropdownButton } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -14,7 +14,7 @@ interface Props {
 
 export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props) => {
   const [tildelSaksbehandler, result] = useTildelSaksbehandlerMutation();
-  const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
+  const { data: userData, isLoading: isUserLoading } = useUser();
   const enheter = useAvailableEnheterForYtelse(ytelse);
 
   const onTildel = useCallback(
@@ -40,9 +40,9 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
 
   if (result.isSuccess) {
     return (
-      <SuccessStatus data-testid="oppgave-tildel-success" data-oppgaveid={klagebehandlingId}>
+      <Alert data-testid="oppgave-tildel-success" data-oppgaveid={klagebehandlingId} variant="success" size="small">
         Tildelt!
-      </SuccessStatus>
+      </Alert>
     );
   }
 

@@ -2,7 +2,7 @@ import { INewTextParams, TextTypes } from '../../../types/texts/texts';
 import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
 import { VERSION } from '../../rich-text/version';
 
-export const NEW_TEXT: INewTextParams['content'] = [
+const NEW_TEXT: INewTextParams['content'] = [
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,

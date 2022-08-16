@@ -75,6 +75,8 @@ export const CopyFnrButton = styled.button`
 
 export const ToggleButtonsContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  column-gap: 16px;
   margin-left: 24px;
 
   @media (max-width: ${BREAKPOINT}) {

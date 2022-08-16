@@ -59,9 +59,9 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={onClick}
           loading={isFinishing}
           data-testid="document-finish-confirm"
+          icon={<FileFolder aria-hidden />}
         >
-          <FileFolder />
-          <span>Arkiver</span>
+          Arkiver
         </Button>
         <Button
           type="button"
@@ -70,9 +70,9 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={close}
           data-testid="document-finish-cancel"
           disabled={isFinishing}
+          icon={<Close aria-hidden />}
         >
-          <Close />
-          <span>Avbryt</span>
+          Avbryt
         </Button>
       </StyledButtons>
     </StyledFinishDocument>
@@ -106,9 +106,9 @@ const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={() => finish({ dokumentId, oppgaveId: data?.id })}
           loading={isFinishing}
           data-testid="document-finish-confirm"
+          icon={<Send aria-hidden />}
         >
-          <Send />
-          <span>Send ut</span>
+          Send ut
         </Button>
         <Button
           type="button"
@@ -117,9 +117,9 @@ const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={close}
           data-testid="document-finish-cancel"
           disabled={isFinishing}
+          icon={<Close aria-hidden />}
         >
-          <Close />
-          <span>Avbryt</span>
+          Avbryt
         </Button>
       </StyledButtons>
     </StyledFinishDocument>
@@ -129,11 +129,11 @@ const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
 const getIcon = (rolle: Saksrolle) => {
   switch (rolle) {
     case Saksrolle.KLAGER:
-      return <StyledApplicant />;
+      return <StyledApplicant aria-hidden />;
     case Saksrolle.PROSESSFULLMEKTIG:
-      return <StyledCoApplicant />;
+      return <StyledCoApplicant aria-hidden />;
     case Saksrolle.SAKEN_GJELDER:
-      return <StyledPeople />;
+      return <StyledPeople aria-hidden />;
     default:
       return null;
   }

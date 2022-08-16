@@ -18,8 +18,7 @@ export const API_CLIENT_IDS = [
   'kabal-text-templates',
 ];
 
-export const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
-export const serverDirectoryPath = cwd;
-export const serverDistDirectoryPath = path.resolve(path.dirname(serverDirectoryPath), './dist');
-export const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
+const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
+const serverDirectoryPath = cwd;
+const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');

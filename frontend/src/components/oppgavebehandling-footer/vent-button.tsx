@@ -23,15 +23,23 @@ export const VentButton = () => {
         size="small"
         onClick={() => deleteSettPaavent(data.id)}
         loading={isLoading}
+        icon={<Close aria-hidden />}
       >
-        <Close /> Avslutt venteperiode
+        Avslutt venteperiode
       </Button>
     );
   }
 
   return (
-    <Button type="button" variant="secondary" size="small" onClick={() => settPaavent(data.id)} loading={isLoading}>
-      <Sandglass /> Sett på vent
+    <Button
+      type="button"
+      variant="secondary"
+      size="small"
+      onClick={() => settPaavent(data.id)}
+      loading={isLoading}
+      icon={<Sandglass aria-hidden />}
+    >
+      Sett på vent
     </Button>
   );
 };

@@ -1,14 +1,10 @@
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useUser } from '../simple-api-state/use-user';
 import { Role } from '../types/bruker';
 
-export const useUserRoles = () => {
-  const { data } = useGetBrukerQuery();
-  return data?.roller ?? [];
-};
+const useUserRoles = () => {
+  const { data } = useUser();
 
-export const useHasRole = (role: Role): boolean => {
-  const userRoles = useUserRoles();
-  return userRoles.includes(role);
+  return data?.roller ?? [];
 };
 
 export const useHasAnyOfRoles = (roles?: Role[]) => {
@@ -23,20 +19,6 @@ export const useHasAnyOfRoles = (roles?: Role[]) => {
   }
 
   return roles.some((role) => userRoles.includes(role));
-};
-
-export const useHasAllOfRoles = (roles: Role[]) => {
-  const userRoles = useUserRoles();
-
-  if (roles.length === 0) {
-    return true;
-  }
-
-  if (userRoles.length === 0) {
-    return false;
-  }
-
-  return roles.every((role) => userRoles.includes(role));
 };
 
 export const useIsLeader = (): boolean => {

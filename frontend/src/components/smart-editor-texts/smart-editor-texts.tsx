@@ -25,8 +25,8 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   return (
     <Container>
       <Header>
-        <Button size="small" variant="secondary" loading={isLoading} onClick={onClick}>
-          <Add /> Legg til ny
+        <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<Add aria-hidden />}>
+          Legg til ny
         </Button>
       </Header>
       <Content>

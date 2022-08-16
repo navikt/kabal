@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 
-export const StyledMessagesContainer = styled.div`
-  margin-bottom: 1em;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
+export const StyledMessagesContainer = styled.section`
+  padding-bottom: 1em;
 `;
 
 export const StyledAuthor = styled.p`
@@ -22,10 +18,6 @@ export const StyledMessages = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`;
-
-export const StyledHeader = styled.h3`
-  margin-bottom: 0.25em;
 `;
 
 export const StyledMessage = styled.li`

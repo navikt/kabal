@@ -6,9 +6,9 @@ import { Descendant } from 'slate';
 import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useUpdateSmartEditorMutation } from '../../redux-api/oppgaver/mutations/smart-editor';
 import { useGetSmartEditorQuery } from '../../redux-api/oppgaver/queries/smart-editor';
+import { useUser } from '../../simple-api-state/use-user';
 import { IDocumentParams } from '../../types/documents/common-params';
 import { MedunderskriverFlyt } from '../../types/kodeverk';
 import { RichTextEditorElement } from '../rich-text/rich-text-editor/rich-text-editor';
@@ -80,7 +80,7 @@ const ElementsSection = styled.article`
 
 const useCanEditDocument = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
-  const { data: user, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: user, isLoading: userIsLoading } = useUser();
 
   return useMemo<boolean>(() => {
     if (oppgaveIsLoading || userIsLoading || oppgaveIsFetching) {

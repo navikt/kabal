@@ -33,6 +33,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const texts = useMemo(() => {
     const filterRegexp = stringToRegExp(filter);
+
     return data?.filter(({ title }) => filterRegexp.test(title)) ?? [];
   }, [data, filter]);
 
@@ -41,12 +42,14 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       if (event.key === 'ArrowDown') {
         setFocused((f) => Math.min(texts.length - 1, f + 1));
         event.preventDefault();
+
         return;
       }
 
       if (event.key === 'ArrowUp') {
         setFocused((f) => Math.max(-1, f - 1));
         event.preventDefault();
+
         return;
       }
 
@@ -55,11 +58,13 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
         if (focused !== -1) {
           setFocused(-1);
+
           return;
         }
 
         if (filter.length !== 0) {
           setFilter('');
+
           return;
         }
 

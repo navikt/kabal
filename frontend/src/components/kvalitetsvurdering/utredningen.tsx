@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
@@ -8,13 +7,7 @@ import { useValidationError } from '../../hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
 import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
 import { Reason, Reasons } from './reasons';
-import {
-  FormSection,
-  RadioButtonsRow,
-  StyledHeaderHelpTextWrapper,
-  StyledHelpText,
-  SubHeader,
-} from './styled-components';
+import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
 
 export const Utredningen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
@@ -79,31 +72,39 @@ export const Utredningen = () => {
   return (
     <FormSection>
       <StyledHeaderHelpTextWrapper>
-        <SubHeader>{header}</SubHeader>
+        <Heading level="2" size="small">
+          {header}
+        </Heading>
         <StyledHelpText>
           Gjelder kvaliteten på utredningen i perioden frem til og med oversendelse til klageinstansen. Er det kommet
           nye opplysninger etter at saken er oversendt klageinstansen, som vedtaksinstansen burde innhentet, skal dette
           også registreres her.
         </StyledHelpText>
       </StyledHeaderHelpTextWrapper>
-      <RadioGruppe feil={utredningenRadioValg === null ? validationError : undefined}>
+      <RadioGroup
+        error={utredningenRadioValg === null ? validationError : undefined}
+        legend=""
+        hideLegend
+        disabled={!canEdit}
+        size="small"
+      >
         <RadioButtonsRow>
           <Radio
-            name="UtredningenBra"
-            label="Bra/godt nok"
+            value={RadioValg.BRA}
             onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: RadioValg.BRA })}
             checked={utredningenRadioValg === RadioValg.BRA}
-            disabled={!canEdit}
-          />
+          >
+            Bra/godt nok
+          </Radio>
           <Radio
-            name="UtredningenMangelfullt"
-            label="Mangelfullt"
+            value={RadioValg.MANGELFULLT}
             onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: RadioValg.MANGELFULLT })}
             checked={utredningenRadioValg === RadioValg.MANGELFULLT}
-            disabled={!canEdit}
-          />
+          >
+            Mangelfullt
+          </Radio>
         </RadioButtonsRow>
-      </RadioGruppe>
+      </RadioGroup>
       <Reasons
         error={validationError}
         show={utredningenRadioValg === RadioValg.MANGELFULLT}

@@ -2,7 +2,7 @@ import { FradelSaksbehandlerParams, ISaksbehandlerResponse, TildelSaksbehandlerP
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 
-export const ansatteMutationSlice = oppgaverApi.injectEndpoints({
+const ansatteMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     tildelSaksbehandler: builder.mutation<ISaksbehandlerResponse, TildelSaksbehandlerParams>({

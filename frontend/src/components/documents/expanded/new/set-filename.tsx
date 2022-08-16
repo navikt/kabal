@@ -1,6 +1,5 @@
-import { Input } from 'nav-frontend-skjema';
+import { TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '../../../../redux-api/oppgaver/mutations/documents';
 import { IMainDocument } from '../../../../types/documents/documents';
@@ -26,12 +25,13 @@ export const SetFilename = ({ document, onDone }: Props) => {
   };
 
   return (
-    <StyledInput
+    <TextField
       autoFocus
-      bredde="fullbredde"
-      mini
+      size="small"
       value={localFilename}
       title="Trykk Enter for å lagre. Escape for å avbryte."
+      label="Trykk Enter for å lagre. Escape for å avbryte."
+      hideLabel
       data-testid="document-filename-input"
       onChange={({ target }) => setLocalFilename(target.value)}
       onBlur={save}
@@ -48,7 +48,3 @@ export const SetFilename = ({ document, onDone }: Props) => {
     />
   );
 };
-
-const StyledInput = styled(Input)`
-  flex-grow: 1;
-`;

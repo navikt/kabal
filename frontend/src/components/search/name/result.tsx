@@ -24,9 +24,10 @@ export const Result = ({ fnr, navn }: ISearchPerson) => {
         size="small"
         onClick={() => setOpen(!open)}
         data-testid="search-result-expand-button"
+        icon={<Chevron aria-hidden />}
+        iconPosition="right"
       >
-        <span>{getOpenText(open)}</span>
-        <Chevron />
+        {getOpenText(open)}
       </Button>
       <Oppgaver open={open} fnr={fnr} />
     </StyledResult>

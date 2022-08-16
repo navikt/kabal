@@ -1,6 +1,7 @@
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert, Table } from '@navikt/ds-react';
 import React from 'react';
-import { StyledCaption, StyledTable } from '../../../styled-components/table';
+import styled from 'styled-components';
+import { StyledCaption } from '../../../styled-components/table';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
@@ -8,7 +9,6 @@ import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
 import { Ytelse } from '../../common-table-components/ytelse';
 import { Type } from '../../type/type';
-import { RightAlignCell } from './styled-components';
 
 interface Props {
   activeOppgaver: IOppgaveList;
@@ -16,28 +16,27 @@ interface Props {
 
 export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
   if (activeOppgaver.length === 0) {
-    return <AlertStripeInfo>Ingen aktive oppgaver</AlertStripeInfo>;
+    return <Alert variant="info">Ingen aktive oppgaver</Alert>;
   }
 
   return (
-    <StyledTable data-testid="search-result-active-oppgaver">
+    <StyledTable data-testid="search-result-active-oppgaver" zebraStripes>
       <StyledCaption>Aktive oppgaver</StyledCaption>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Ytelse</th>
-          <th>Hjemmel</th>
-          <th>Frist</th>
-          <th>Saksbehandler</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeader>Type</Table.ColumnHeader>
+          <Table.ColumnHeader>Ytelse</Table.ColumnHeader>
+          <Table.ColumnHeader>Hjemmel</Table.ColumnHeader>
+          <Table.ColumnHeader>Frist</Table.ColumnHeader>
+          <Table.ColumnHeader>Saksbehandler</Table.ColumnHeader>
+          <Table.ColumnHeader></Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {activeOppgaver.map((k) => (
           <Row key={k.id} {...k} />
         ))}
-      </tbody>
+      </Table.Body>
     </StyledTable>
   );
 };
@@ -53,20 +52,20 @@ const Row = ({
   tildeltSaksbehandlerNavn,
   isAvsluttetAvSaksbehandler,
 }: IOppgave) => (
-  <tr data-testid="search-result-active-oppgave">
-    <td>
+  <Table.Row data-testid="search-result-active-oppgave">
+    <Table.DataCell>
       <Type type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Ytelse ytelseId={ytelse} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Hjemmel hjemmel={hjemmel} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Deadline age={ageKA} frist={frist} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <SaksbehandlerButton
         tildeltSaksbehandlerident={tildeltSaksbehandlerident}
         name={tildeltSaksbehandlerNavn}
@@ -74,10 +73,14 @@ const Row = ({
         ytelse={ytelse}
         isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
       />
-    </td>
-    <td></td>
-    <RightAlignCell>
+    </Table.DataCell>
+    <Table.DataCell align="right">
       <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
-    </RightAlignCell>
-  </tr>
+    </Table.DataCell>
+  </Table.Row>
 );
+
+const StyledTable = styled(Table)`
+  max-width: 2048px;
+  width: 100%;
+`;

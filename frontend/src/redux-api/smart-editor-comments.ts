@@ -62,5 +62,4 @@ export const smartEditorCommentsApi = createApi({
   }),
 });
 
-export const { useGetCommentQuery, useGetCommentsQuery, usePostCommentMutation, usePostReplyMutation } =
-  smartEditorCommentsApi;
+export const { useGetCommentsQuery, usePostCommentMutation, usePostReplyMutation } = smartEditorCommentsApi;

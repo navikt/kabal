@@ -14,7 +14,7 @@ export const useSakspartName = (key: Key): string | null => {
   return getSakspartName(oppgavebehandling[key]);
 };
 
-export const getSakspartName = (sakspart: ISakspart) => {
+const getSakspartName = (sakspart: ISakspart) => {
   const { person, virksomhet } = sakspart;
 
   if (person !== null) {

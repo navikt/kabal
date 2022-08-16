@@ -1,12 +1,13 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { StyledCaption, StyledTable } from '../../styled-components/table';
+import { useUser } from '../../simple-api-state/use-user';
+import { StyledCaption } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
 import { Row } from './row';
@@ -32,7 +33,7 @@ export const EnhetensOppgaverTable = () => {
   const hjemler = filters.hjemler.length === 0 ? availableHjemler.map(({ id }) => id) : filters.hjemler;
   const [sortering, rekkefoelge] = filters.sorting;
 
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
     typeof bruker === 'undefined' || typeof types === 'undefined'
@@ -55,17 +56,40 @@ export const EnhetensOppgaverTable = () => {
 
   useEffect(() => {
     refetch();
+
     return refetch;
   }, [refetch]);
 
   return (
-    <StyledTable data-testid="enhetens-oppgaver-table">
+    <StyledTable
+      data-testid="enhetens-oppgaver-table"
+      zebraStripes
+      sort={{
+        orderBy: filters.sorting[0],
+        direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
+      }}
+      onSortChange={(field?: string) => {
+        if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
+          const [currentField, currentOrder] = filters.sorting;
+
+          const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
+
+          setFilters((f) => ({
+            ...f,
+            sorting: [field, order],
+          }));
+        }
+      }}
+    >
       <StyledCaption>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledCaption>
       <TableHeaderFilters filters={filters} onChange={setFilters} />
       <OppgaveRader oppgaver={oppgaver?.behandlinger} />
     </StyledTable>
   );
 };
+
+const invertSort = (order: SortOrderEnum) =>
+  order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;
 
 interface OppgaveRaderProps {
   oppgaver?: IOppgaveList;
@@ -74,31 +98,36 @@ interface OppgaveRaderProps {
 const OppgaveRader = ({ oppgaver }: OppgaveRaderProps): JSX.Element => {
   if (typeof oppgaver === 'undefined') {
     return (
-      <tbody>
-        <tr>
-          <td colSpan={100}>
+      <Table.Body>
+        <Table.Row>
+          <Table.DataCell colSpan={100}>
             <Loader size="xlarge" title="Laster oppgaver..." />
-          </td>
-        </tr>
-      </tbody>
+          </Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   if (oppgaver.length === 0) {
     return (
-      <tbody data-testid="enhetens-oppgaver-table-none">
-        <tr>
-          <td colSpan={5}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
+      <Table.Body data-testid="enhetens-oppgaver-table-none">
+        <Table.Row>
+          <Table.DataCell colSpan={5}>Ingen oppgaver i liste</Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   return (
-    <tbody data-testid="enhetens-oppgaver-table-rows">
+    <Table.Body data-testid="enhetens-oppgaver-table-rows">
       {oppgaver.map((k) => (
         <Row {...k} key={k.id} />
       ))}
-    </tbody>
+    </Table.Body>
   );
 };
+
+const StyledTable = styled(Table)`
+  max-width: 2048px;
+  width: 100%;
+`;

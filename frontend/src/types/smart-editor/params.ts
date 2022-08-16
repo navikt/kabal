@@ -22,5 +22,3 @@ export interface IUpdateSmartDocumentParams extends IGetSmartEditorParams {
   templateId?: TemplateIdEnum;
   version?: typeof VERSION;
 }
-
-export type IPatchSmartDocumentParams = IGetSmartEditorParams;

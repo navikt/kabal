@@ -14,6 +14,7 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
   if (typeof envVariable === 'string' && envVariable.length !== 0) {
     return envVariable;
   }
+
   if (typeof defaultValue === 'string' && defaultValue.length !== 0) {
     return defaultValue;
   }
@@ -24,9 +25,11 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
 
 export const requiredEnvUrl = (name: string, defaultValue?: string): string => {
   const envString = requiredEnvString(name, defaultValue);
+
   if (envString.startsWith('http://')) {
     return envString.replace('http://', 'https://');
   }
+
   if (envString.startsWith('https://')) {
     return envString;
   }
@@ -46,6 +49,8 @@ export const requiredEnvNumber = (name: string, defaultValue?: number): number =
     return defaultValue;
   }
 
-  console.error(`Could not parse environment variable '${name}' as integer/number. Parsed value: '${envString}'.`);
+  console.error(
+    `Could not parse environment variable '${name}' as integer/number. Parsed value: '${envString ?? 'undefined'}'.`
+  );
   process.exit(1);
 };

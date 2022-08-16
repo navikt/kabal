@@ -1,5 +1,5 @@
+import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { Checkbox } from 'nav-frontend-skjema';
 import React, { useEffect, useMemo } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
@@ -65,7 +65,6 @@ export const DocumentListElement = React.memo(
         {sourceDocuments.map((d) => (
           <ListItemStyle key={d.id}>
             <Checkbox
-              label={d.title}
               value={d.id}
               checked={element.documents.some(({ id }) => d.id === id)}
               onChange={(e) => {
@@ -75,7 +74,9 @@ export const DocumentListElement = React.memo(
 
                 Transforms.setNodes(editor, { documents: value }, { at: [], voids: true, match: (n) => n === element });
               }}
-            />
+            >
+              {d.title}
+            </Checkbox>
           </ListItemStyle>
         ))}
       </StyledBulletList>

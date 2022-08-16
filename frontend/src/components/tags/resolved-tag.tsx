@@ -12,7 +12,7 @@ interface Props extends BaseProps {
   id: string;
 }
 
-export const ResolvedTag = ({ id, variant, useName }: Props) => {
+const ResolvedTag = ({ id, variant, useName }: Props) => {
   const name = useName(id);
 
   const StyledTag = VARIANTS[variant];
@@ -40,27 +40,27 @@ const BaseTagStyle = styled(Tag)`
   height: fit-content;
 `;
 
-export const HjemmelTag = styled(BaseTagStyle)`
+const HjemmelTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-purple-100);
   border: 1px solid var(--navds-global-color-purple-300);
 `;
-export const YtelseTag = styled(BaseTagStyle)`
+const YtelseTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-blue-100);
   border: 1px solid var(--navds-global-color-blue-300);
 `;
-export const UtfallTag = styled(BaseTagStyle)`
+const UtfallTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-limegreen-100);
   border: 1px solid var(--navds-global-color-limegreen-300);
 `;
-export const SectionTag = styled(BaseTagStyle)`
+const SectionTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-deepblue-100);
   border: 1px solid var(--navds-global-color-deepblue-300);
 `;
-export const EnhetTag = styled(BaseTagStyle)`
+const EnhetTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-orange-100);
   border: 1px solid var(--navds-global-color-orange-300);
 `;
-export const TemplateTag = styled(BaseTagStyle)`
+const TemplateTag = styled(BaseTagStyle)`
   background-color: var(--navds-global-color-red-100);
   border: 1px solid var(--navds-global-color-red-300);
 `;

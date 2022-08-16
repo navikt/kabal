@@ -19,6 +19,7 @@ export const isTextAlignActive = (editor: Editor, textAlign: TextAlignEnum) => {
       isNodeAlignableElementType(n) &&
       (n.textAlign ?? TextAlignEnum.TEXT_ALIGN_LEFT) === textAlign,
   });
+
   return Boolean(match);
 };
 
@@ -26,5 +27,6 @@ export const isTextAlignAvailable = (editor: Editor) => {
   const [match] = Editor.nodes(editor, {
     match: isNodeAlignableElementType,
   });
+
   return Boolean(match);
 };

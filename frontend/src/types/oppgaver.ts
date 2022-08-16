@@ -2,7 +2,7 @@ import { Name } from '../domain/types';
 import { MedunderskriverFlyt, OppgaveType } from './kodeverk';
 import { ISaksbehandler } from './oppgave-common';
 
-export type Date = string; // LocalDate
+type Date = string; // LocalDate
 
 export interface ApiResponse {
   antallTreffTotalt: number;
@@ -13,12 +13,12 @@ export interface UtgaatteApiResponse {
   antall: number;
 }
 
-export interface Person {
+interface Person {
   navn: string;
   fnr: string;
 }
 
-export interface IVenteperiode {
+interface IVenteperiode {
   from: Date;
   to: Date;
   isExpired: boolean;
@@ -64,7 +64,7 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-export interface CommonOppgaverParams {
+interface CommonOppgaverParams {
   typer?: string[];
   ytelser?: string[];
   hjemler?: string[];
@@ -127,17 +127,6 @@ export interface ISaksbehandlerResponse {
   tildelt: string;
 }
 
-export interface IFnrSearchParams {
-  enhet: string;
-  query: string;
-}
-
-export interface IFnrSearchResponse extends ISearchPerson {
-  aapneKlagebehandlinger: IOppgaveList;
-  avsluttedeKlagebehandlinger: IOppgaveList;
-  klagebehandlinger: IOppgaveList;
-}
-
 export interface INameSearchParams {
   antall: number;
   query: string;
@@ -157,7 +146,7 @@ export interface IGetSaksbehandlereInEnhetResponse {
 }
 
 export interface IPersonAndOppgaverResponse extends ISearchPerson {
-  aapneKlagebehandlinger: IOppgave[];
-  avsluttedeKlagebehandlinger: IOppgave[];
-  klagebehandlinger: IOppgave[];
+  aapneBehandlinger: IOppgave[];
+  avsluttedeBehandlinger: IOppgave[];
+  behandlinger: IOppgave[];
 }

@@ -66,12 +66,10 @@ export const renderElement = (props: RenderElementProps) => {
       return <BlockQuoteElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.SIGNATURE:
       return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
-
     case UndeletableVoidElementsEnum.MALTEKST:
       return (
         <CommentWrapper {...props} element={props.element} content={<MaltekstElement element={props.element} />} />
       );
-
     case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST:
       return (
         <RedigerbareMalteskterElement {...props} element={props.element} textType={TextTypes.REDIGERBAR_MALTEKST} />
@@ -86,13 +84,10 @@ export const renderElement = (props: RenderElementProps) => {
       );
     case UndeletableVoidElementsEnum.CURRENT_DATE:
       return <CurrentDate {...props} />;
-
     case UndeletableVoidElementsEnum.PAGE_BREAK:
       return <PageBreak {...props} />;
-
     case DeletableVoidElementsEnum.FLETTEFELT:
       return <FlettefeltElement {...props} element={props.element} />;
-
     case UndeletableVoidElementsEnum.HEADER:
     case UndeletableVoidElementsEnum.FOOTER:
       return (
@@ -102,7 +97,6 @@ export const renderElement = (props: RenderElementProps) => {
           content={<HeaderFooterElement {...props} element={props.element} />}
         />
       );
-
     default:
       return <ParagraphElement {...props} element={props.element} />;
   }

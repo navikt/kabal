@@ -8,15 +8,6 @@ export const StyledListHeader = styled.div`
   border-bottom: 1px solid #c6c2bf;
 `;
 
-export const StyledListTitle = styled.h1`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 1em;
-  grid-area: title;
-`;
-
 export const StyledFilterDropdown = styled(FilterDropdown)`
   grid-area: meta;
 `;

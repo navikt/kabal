@@ -21,6 +21,10 @@ export const OppgaverPageWrapper = ({ children }: Props): JSX.Element => (
 );
 
 export const StyledArticle = styled.article`
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
   overflow: auto;
   min-height: 100%;
+  padding-bottom: 32px;
 `;

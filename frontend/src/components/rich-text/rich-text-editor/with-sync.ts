@@ -1,7 +1,8 @@
+/* eslint-disable import/no-unused-modules */
 import { BaseOperation, Editor, PathRef, PointRef, RangeRef, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { v4 } from 'uuid';
-import { DOMAIN, KABAL_BEHANDLINGER_BASE_PATH } from '../../../redux-api/common';
+import { KABAL_BEHANDLINGER_BASE_PATH } from '../../../redux-api/common';
 import { ServerSentEventManager, ServerSentEventType } from '../../../redux-api/server-sent-events';
 
 export interface ISyncOptions {
@@ -17,7 +18,7 @@ const QUEUE: BaseOperation[] = [];
 export const withSync = (editor: Editor, { oppgaveId, documentId, onConnectionChange }: ISyncOptions): Editor => {
   const { apply } = editor;
 
-  const url = `${DOMAIN}${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/dokumenter/smarteditor/${documentId}/editors/${documentId}`;
+  const url = `${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/dokumenter/smarteditor/${documentId}/editors/${documentId}`;
 
   const sse = getSSE(url);
 
@@ -56,6 +57,7 @@ export const withSync = (editor: Editor, { oppgaveId, documentId, onConnectionCh
     if (operation.type !== 'set_selection') {
       if (!sse.isConnected) {
         QUEUE.push(operation);
+
         return;
       }
 
@@ -101,6 +103,7 @@ const getSSE = (url: string): ServerSentEventManager => {
 
   const sse = new ServerSentEventManager(url);
   sseManagers[url] = sse;
+
   return sse;
 };
 

@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
+import { PanelToggles } from '../klagebehandling/types';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
-import { AnkeFooter } from '../oppgavebehandling-footer/anke-footer';
+import { Footer } from '../oppgavebehandling-footer/footer';
 import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';
-import { PanelToggles } from './types';
 
 export const Ankebehandling = () => {
   const [toggles, setPanelToggles] = useState<PanelToggles>({
-    documents: true,
-    smartEditor: true,
-    behandling: true,
-    kvalitetsvurdering: true,
+    documents: {
+      showSwitch: true,
+      showContent: true,
+    },
+    smartEditor: {
+      showSwitch: true,
+      showContent: true,
+    },
+    behandling: {
+      showSwitch: true,
+      showContent: true,
+    },
+    kvalitetsvurdering: {
+      showSwitch: true,
+      showContent: true,
+    },
   });
 
-  const setPanel = (panel: keyof PanelToggles, checked: boolean) => setPanelToggles({ ...toggles, [panel]: checked });
+  const setPanel = (panel: keyof PanelToggles, showContent: boolean) =>
+    setPanelToggles({ ...toggles, [panel]: { ...toggles[panel], showContent } });
 
   return (
     <ValidationErrorProvider>
       <OppgavebehandlingControls setPanel={setPanel} toggles={toggles} />
       <OppgavebehandlingPanels toggles={toggles} />
-      <AnkeFooter />
+      <Footer />
     </ValidationErrorProvider>
   );
 };

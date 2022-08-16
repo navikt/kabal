@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useUser } from '../simple-api-state/use-user';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useCanEdit = () => {
   const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
-  const { data: userData, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: userData, isLoading: userIsLoading } = useUser();
 
   return useMemo(() => {
     if (

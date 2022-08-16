@@ -18,41 +18,42 @@ export const hotkeys: HandlerFn = ({ editor, event, context }) => {
       case 'b': {
         event.preventDefault();
         toggleMark(editor, MarkKeys.bold);
+
         return;
       }
-
       case 'i': {
         event.preventDefault();
         toggleMark(editor, MarkKeys.italic);
+
         return;
       }
-
       case 'u': {
         event.preventDefault();
         toggleMark(editor, MarkKeys.underline);
+
         return;
       }
-
       case 's': {
         event.preventDefault();
+
         return;
       }
-
       case 'k': {
         event.preventDefault();
         setShowNewComment(!showNewComment);
+
         return;
       }
-
       case 'd': {
         event.preventDefault();
         setShowMaltekstTags(!showMaltekstTags);
+
         return;
       }
-
       case 'a': {
         event.preventDefault();
         selectAll(event, editor);
+
         return;
       }
     }
@@ -64,7 +65,6 @@ export const hotkeys: HandlerFn = ({ editor, event, context }) => {
           event.preventDefault();
           setShowGodeFormuleringer(!showGodeFormuleringer);
           break;
-
         default:
       }
     }

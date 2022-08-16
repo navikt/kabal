@@ -1,13 +1,14 @@
 import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
-import { IValidationSection } from '../functions/error-type-guard';
 import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
-import { IOppgavebehandlingBase } from '../types/oppgavebehandling/oppgavebehandling';
+import { IOppgavebehandlingBase, ITrygderettsankebehandling } from '../types/oppgavebehandling/oppgavebehandling';
 
 type Field =
   | keyof IKakaKvalitetsvurdering
   | keyof Pick<IOppgavebehandlingBase, 'mottattKlageinstans'>
   | keyof Pick<IOppgavebehandlingBase, 'mottattVedtaksinstans'>
+  | keyof Pick<ITrygderettsankebehandling, 'kjennelseMottatt'>
+  | keyof Pick<ITrygderettsankebehandling, 'sendtTilTrygderetten'>
   | 'utfall'
   | 'hjemmel'
   | 'dokument';
@@ -19,11 +20,6 @@ export const useValidationError = (field: Field): string | undefined => {
     () => context?.validationSectionErrors?.flatMap(({ properties }) => properties),
     [context]
   );
+
   return useMemo(() => allProperties?.find((p) => p.field === field)?.reason, [allProperties, field]);
-};
-
-export const useAllValidationErrors = (): IValidationSection[] => {
-  const context = useContext(ValidationErrorContext);
-
-  return context?.validationSectionErrors ?? [];
 };

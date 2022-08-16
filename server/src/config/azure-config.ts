@@ -1,7 +1,7 @@
 import jose from 'jose';
 import { AuthorizationParameters, ClientMetadata } from 'openid-client';
-import { requiredEnvString, requiredEnvUrl } from './env-var';
 import { applicationDomain } from './env';
+import { requiredEnvString, requiredEnvUrl } from './env-var';
 
 export const callbackPath = '/oauth2/callback';
 export const callbackUrl = applicationDomain + callbackPath;
@@ -9,9 +9,8 @@ export const callbackUrl = applicationDomain + callbackPath;
 export const discovery_url = requiredEnvUrl('AZURE_APP_WELL_KNOWN_URL');
 
 export const client_jwks = jose.JWKS.asKeyStore(JSON.parse(requiredEnvString('AZURE_APP_JWKS'))).toJWKS(true);
-export const client_jwk = jose.JWK.asKey(requiredEnvString('AZURE_APP_JWK'));
 export const client_id = requiredEnvString('AZURE_APP_CLIENT_ID');
-export const client_secret = requiredEnvString('AZURE_APP_CLIENT_SECRET');
+const client_secret = requiredEnvString('AZURE_APP_CLIENT_SECRET');
 
 interface AzureClientMetadata extends ClientMetadata {
   client_id: string;

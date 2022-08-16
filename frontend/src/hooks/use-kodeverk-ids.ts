@@ -1,8 +1,8 @@
-import { useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { useKodeverk } from '../simple-api-state/use-kodeverk';
 import { OppgaveType } from '../types/kodeverk';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -16,7 +16,7 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
 };
 
 export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -30,7 +30,7 @@ export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
 };
 
 export const useTypeNameFromId = (type?: OppgaveType): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -44,7 +44,7 @@ export const useTypeNameFromId = (type?: OppgaveType): string => {
 };
 
 export const useHjemmelFromId = (hjemmelId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
@@ -58,7 +58,7 @@ export const useHjemmelFromId = (hjemmelId?: string | null): string => {
 };
 
 export const useEnhetNameFromId = (enhetId?: string | null): string => {
-  const { data, isLoading } = useGetKodeverkQuery();
+  const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';

@@ -49,7 +49,7 @@ export enum TextTypes {
 
 export type IGetTextsParams = Partial<ApiQuery>;
 
-export interface ITextBaseMetadata extends BaseQuery {
+interface ITextBaseMetadata extends BaseQuery {
   title: string;
 }
 
@@ -65,7 +65,7 @@ export interface INewTextParams extends ITextBaseMetadata {
 
 export interface IUpdateText extends INewTextParams, ITextMetadata {}
 
-export type IUpdatable = Omit<IUpdateText, 'id'>;
+type IUpdatable = Omit<IUpdateText, 'id'>;
 
 export interface IUpdateTextPropertyParams<K extends keyof IUpdatable = keyof IUpdatable> {
   id: IUpdateText['id'];

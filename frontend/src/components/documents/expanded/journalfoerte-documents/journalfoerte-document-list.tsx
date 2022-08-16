@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -7,7 +7,7 @@ import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgaver/q
 import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
 import { StyledDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentList } from '../styled-components/document-list';
-import { StyledFilterDropdown, StyledListHeader, StyledListTitle } from '../styled-components/list-header';
+import { StyledFilterDropdown, StyledListHeader } from '../styled-components/list-header';
 import { DocumentsPage } from './documents-page';
 import { LoadMore } from './load-more';
 
@@ -31,7 +31,9 @@ export const JournalfoerteDocumentList = () => {
   return (
     <StyledDocumentsContainer data-testid="oppgavebehandling-documents-all">
       <StyledListHeader>
-        <StyledListTitle>Journalførte dokumenter</StyledListTitle>
+        <Heading size="xsmall" level="2">
+          Journalførte dokumenter
+        </Heading>
         <StyledFilterDropdown
           options={kodeverkValuesToDropdownOptions(allTemaer)}
           onChange={setSelectedTemaer}

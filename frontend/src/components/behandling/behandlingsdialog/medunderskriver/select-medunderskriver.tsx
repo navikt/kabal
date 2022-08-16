@@ -1,22 +1,23 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useGetBrukerQuery, useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
+import { useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
+import { useUser } from '../../../../simple-api-state/use-user';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
+import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, type }: SelectMedunderskriverProps) => {
   const { data: oppgave } = useOppgave();
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
   const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: oppgaveId });
 
@@ -43,7 +44,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <p>Fant ingen medunderskrivere</p>;
+    return <p>Fant ingen {getTitlePlural(type)}</p>;
   }
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
@@ -59,13 +60,14 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
 
   return (
     <Select
+      size="small"
       disabled={!canEdit}
-      label="Medunderskriver:"
+      label={`${getTitleCapitalized(type)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
       value={medunderskriver?.navIdent ?? NONE_SELECTED}
       data-testid="select-medunderskriver"
     >
-      <option value={NONE_SELECTED}>Ingen medunderskriver</option>
+      <option value={NONE_SELECTED}>Ingen {getTitleLowercase(type)}</option>
       {medunderskrivere.map(({ navn, navIdent }) => (
         <option key={navIdent} value={navIdent}>
           {navn}

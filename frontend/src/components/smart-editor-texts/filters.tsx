@@ -61,12 +61,3 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-export const useQueryFilter = (filter: keyof AppQuery): string | null => {
-  const [searchParams] = useSearchParams();
-  return searchParams.get(filter);
-};
-
-const EMPTY_ARRAY: string[] = [];
-
-export const useQueryFilters = (filter: keyof AppQuery): string[] => useQueryFilter(filter)?.split(',') ?? EMPTY_ARRAY;

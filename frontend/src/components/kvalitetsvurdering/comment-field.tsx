@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { Textarea } from 'nav-frontend-skjema';
+import { Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -27,6 +26,7 @@ export const CommentField = ({ textareaId }: CommentFieldProps) => {
     const timeout = setTimeout(() => {
       updateKvalitetsvurdering({ id, [textareaId]: comment });
     }, 1000);
+
     return () => clearTimeout(timeout); // Clear existing timer every time it runs.
   }, [comment, kvalitetsvurdering, textareaId, updateKvalitetsvurdering]);
 
@@ -42,6 +42,7 @@ export const CommentField = ({ textareaId }: CommentFieldProps) => {
     <StyledCommentField>
       <Textarea
         label="Oppsummert i stikkord:"
+        size="small"
         value={comment ?? ''}
         placeholder="NB: Ingen personopplysninger"
         maxLength={0}

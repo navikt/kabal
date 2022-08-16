@@ -10,6 +10,16 @@ export const useUtfall = (type?: OppgaveType): [IKodeverkSimpleValue<Utfall>[], 
       return [[], true];
     }
 
-    return [utfall, false];
+    if (type === OppgaveType.ANKE_I_TRYGDERETTEN) {
+      return [utfall.filter(({ id }) => !(id === Utfall.UGUNST || id === Utfall.RETUR)), false];
+    }
+
+    return [
+      utfall.filter(
+        ({ id }) =>
+          !(id === Utfall.HENVISES || id === Utfall.MEDHOLD_I_TRYGDERETTEN || id === Utfall.MEDHOLD_I_KLAGEINSTANSEN)
+      ),
+      false,
+    ];
   }, [type, utfall]);
 };

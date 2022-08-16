@@ -12,17 +12,26 @@ export enum MedunderskriverFlyt {
 export enum OppgaveType {
   KLAGE = '1',
   ANKE = '2',
+  ANKE_I_TRYGDERETTEN = '3',
 }
 
 export enum Utfall {
+  // Klage & Anke & Trygderettsanke
   TRUKKET = '1',
-  RETUR = '2',
   OPPHEVET = '3',
   MEDHOLD = '4',
   DELVIS_MEDHOLD = '5',
   STADFESTELSE = '6',
-  UGUNST = '7',
   AVVIST = '8',
+
+  // Klage & Anke
+  RETUR = '2',
+  UGUNST = '7',
+
+  // Trygderettsanke
+  HENVISES = '9',
+  MEDHOLD_I_TRYGDERETTEN = '10',
+  MEDHOLD_I_KLAGEINSTANSEN = '11',
 }
 
 export interface IKodeverkSimpleValue<T extends string = string> {
@@ -44,7 +53,7 @@ export interface IYtelse extends IKodeverkSimpleValue {
   innsendingshjemler: IKodeverkValue[];
 }
 
-export interface IKlageEnhet extends IKodeverkSimpleValue {
+interface IKlageEnhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }
 

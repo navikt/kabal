@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
@@ -24,42 +25,43 @@ export const Row = ({
   tildeltSaksbehandlerident,
   ytelse,
 }: IOppgave): JSX.Element => (
-  <tr data-testid="mine-oppgaver-row" data-klagebehandlingid={id}>
-    <td>
+  <Table.Row data-testid="mine-oppgaver-row" data-klagebehandlingid={id}>
+    <Table.DataCell>
       <Type type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Ytelse ytelseId={ytelse} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Hjemmel hjemmel={hjemmel} />
-    </td>
-    <td>{person?.navn}</td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>{person?.navn}</Table.DataCell>
+    <Table.DataCell>
       <CopyFnrButton fnr={person?.fnr} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Age age={ageKA} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <Deadline age={ageKA} frist={frist} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <MedudunderskriverflytLabel
+        type={type}
         medunderskriverFlyt={medunderskriverFlyt}
         erMedunderskriver={erMedunderskriver}
         harMedunderskriver={harMedunderskriver}
       />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
-    </td>
-    <td>
+    </Table.DataCell>
+    <Table.DataCell>
       <FradelKlagebehandlingButton
         klagebehandlingId={id}
         isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
         tildeltSaksbehandlerident={tildeltSaksbehandlerident}
       />
-    </td>
-  </tr>
+    </Table.DataCell>
+  </Table.Row>
 );

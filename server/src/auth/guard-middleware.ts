@@ -7,8 +7,10 @@ export const guardMiddleware =
   (authClient: Client): Handler =>
   async (req, res, next) => {
     const session = getSessionIdAndSignature(req);
+
     if (session === null) {
       res.status(401).send();
+
       return;
     }
 
@@ -25,6 +27,5 @@ export const guardMiddleware =
         console.warn(error);
       }
       res.status(401).send();
-      return;
     }
   };

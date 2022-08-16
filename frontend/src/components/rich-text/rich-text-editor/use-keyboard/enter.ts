@@ -10,18 +10,21 @@ import { HandlerFn } from './types';
 export const enter: HandlerFn = ({ editor, event }) => {
   if (event.key === 'Enter' && containsVoid(editor, editor.selection)) {
     event.preventDefault();
+
     return;
   }
 
   if (event.shiftKey && event.key === 'Enter') {
     event.preventDefault();
     Transforms.insertText(editor, '\n');
+
     return;
   }
 
   if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
     event.preventDefault();
     insertPageBreak(editor);
+
     return;
   }
 
@@ -52,10 +55,12 @@ export const enter: HandlerFn = ({ editor, event }) => {
 
           Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
         });
+
         return;
       }
 
       Transforms.splitNodes(editor, { always: true, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM) });
+
       return;
     }
 

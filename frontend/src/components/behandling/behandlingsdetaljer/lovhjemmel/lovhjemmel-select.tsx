@@ -3,8 +3,8 @@ import { Button } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { ErrorMessage } from '../../../error-message/error-message';
 import { GroupedFilterList, OptionGroup } from '../../../filter-dropdown/grouped-filter-list';
+import { InputError } from '../../../input-error/input-error';
 import { StyledLovhjemmelSelect } from './styled-components';
 
 interface LovhjemmelSelectProps<T extends string> {
@@ -47,9 +47,9 @@ export const LovhjemmelSelect = <T extends string>({
           onClick={toggleOpen}
           disabled={disabled}
           data-testid="lovhjemmel-button"
+          icon={<Search aria-hidden />}
         >
-          <Search />
-          <span>Hjemmel</span>
+          Hjemmel
         </StyledButton>
 
         <Popup isOpen={open}>
@@ -64,12 +64,12 @@ export const LovhjemmelSelect = <T extends string>({
           />
         </Popup>
       </StyledLovhjemmelSelect>
-      <ErrorMessage error={error} />
+      <InputError error={error} />
     </>
   );
 };
 
-export const StyledButton = styled(Button)`
+const StyledButton = styled(Button)`
   width: 100%;
 `;
 
