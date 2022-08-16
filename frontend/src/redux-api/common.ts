@@ -1,13 +1,12 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
-export const DOMAIN = IS_LOCALHOST ? 'https://kabal.dev.nav.no' : '';
 
 const mode: RequestMode | undefined = IS_LOCALHOST ? 'cors' : undefined;
 
 const staggeredBaseQuery = (baseUrl: string) => {
   const fetch = fetchBaseQuery({
-    baseUrl: `${DOMAIN}${baseUrl}`,
+    baseUrl,
     mode,
     credentials: 'include',
   });
