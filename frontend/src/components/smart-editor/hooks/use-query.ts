@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useGetBrukerQuery } from '../../../redux-api/bruker';
+import { useUser } from '../../../simple-api-state/use-user';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { ApiQuery, TemplateSections, TextTypes } from '../../../types/texts/texts';
 
@@ -14,7 +14,7 @@ interface Params {
 
 export const useQuery = ({ textType, templateId, section, requiredSection }: Params) => {
   const { data, isLoading } = useOppgave();
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: brukerIsLoading } = useUser();
 
   return useMemo<ApiQuery | typeof skipToken>(() => {
     if (isLoading || brukerIsLoading || typeof data === 'undefined' || typeof bruker === 'undefined') {

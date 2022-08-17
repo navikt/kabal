@@ -1,12 +1,12 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useMemo } from 'react';
-import { useGetKodeverkQuery } from '../redux-api/kodeverk';
+import { useKodeverk } from '../simple-api-state/use-kodeverk';
 import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse } from '../types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
   key: K | typeof skipToken = skipToken
 ): IKodeverk[K] | undefined => {
-  const { data } = useGetKodeverkQuery();
+  const { data } = useKodeverk();
 
   if (key === skipToken || typeof data === 'undefined') {
     return undefined;

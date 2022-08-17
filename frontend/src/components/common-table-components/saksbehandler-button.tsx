@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useUser } from '../../simple-api-state/use-user';
 import { FradelKlagebehandlingButton } from './fradel-button';
 import { TildelKlagebehandlingButton } from './tildel-button';
 
@@ -18,7 +18,7 @@ export const SaksbehandlerButton = ({
   name,
   ytelse,
 }: Props): JSX.Element => {
-  const { data: userData, isLoading } = useGetBrukerQuery();
+  const { data: userData, isLoading } = useUser();
 
   if (typeof userData === 'undefined' || isLoading) {
     return <span>Laster...</span>;

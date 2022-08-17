@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '../../simple-api-state/use-user';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
@@ -32,7 +32,7 @@ export const EnhetensOppgaverTable = () => {
   const hjemler = filters.hjemler.length === 0 ? availableHjemler.map(({ id }) => id) : filters.hjemler;
   const [sortering, rekkefoelge] = filters.sorting;
 
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
     typeof bruker === 'undefined' || typeof types === 'undefined'

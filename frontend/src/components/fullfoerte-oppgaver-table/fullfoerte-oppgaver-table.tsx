@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect } from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '../../simple-api-state/use-user';
 import { StyledCaption, StyledTable } from '../../styled-components/table';
 import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
@@ -12,7 +12,7 @@ const MAX_OPPGAVER = 100;
 const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Navn', 'Fnr.', 'Fullført', 'Utfall', null];
 
 export const FullfoerteOppgaverTable = () => {
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | MineFerdigstilteOppgaverParams =
     typeof bruker === 'undefined'

@@ -4,13 +4,14 @@ import { Textarea } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../../redux-api/bruker';
+import { useGetMySignatureQuery } from '../../../../redux-api/bruker';
 import { usePostMessageMutation } from '../../../../redux-api/messages';
+import { useUser } from '../../../../simple-api-state/use-user';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const { data: user, isLoading: userIsLoading } = useGetBrukerQuery();
+  const { data: user, isLoading: userIsLoading } = useUser();
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();

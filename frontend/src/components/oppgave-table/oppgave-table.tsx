@@ -1,11 +1,12 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { useGetBrukerQuery, useGetSettingsQuery } from '../../redux-api/bruker';
+import { useGetSettingsQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetMineLedigeOppgaverQuery,
 } from '../../redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '../../simple-api-state/use-user';
 import { StyledFooterContent, StyledTable } from '../../styled-components/table';
 import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
@@ -22,7 +23,7 @@ export const OppgaveTable = (): JSX.Element => {
     hjemler: [],
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
   const { data: settingsData } = useGetSettingsQuery();
 
   const { page } = useParams();

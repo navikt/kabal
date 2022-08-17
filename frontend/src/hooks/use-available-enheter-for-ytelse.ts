@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useUser } from '../simple-api-state/use-user';
 import { IEnhet } from '../types/bruker';
 
 export const useAvailableEnheterForYtelse = (ytelseId: string): IEnhet[] => {
-  const { data: userData } = useGetBrukerQuery();
+  const { data: userData } = useUser();
 
   return useMemo(() => {
     if (typeof userData === 'undefined' || userData.enheter.length === 0) {

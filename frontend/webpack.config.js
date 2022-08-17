@@ -71,11 +71,7 @@ module.exports = (_env, { mode }) => ({
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process': {
-        env: {
-          NODE_ENV: JSON.stringify(mode),
-        }
-      }
+      'process.env.NODE_ENV': JSON.stringify(mode),
     }),
     new webpack.EnvironmentPlugin({'VERSION': 'dev'}),
   ]

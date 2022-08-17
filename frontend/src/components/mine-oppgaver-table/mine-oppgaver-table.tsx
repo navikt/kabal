@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useGetMineUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '../../simple-api-state/use-user';
 import { StyledTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from './header';
@@ -14,7 +14,7 @@ export const MineOppgaverTable = () => {
   const [filters, setFilters] = useState<Filters>({
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const [sortering, rekkefoelge] = filters.sorting;
 

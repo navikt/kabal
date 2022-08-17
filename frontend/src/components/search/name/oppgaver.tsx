@@ -31,7 +31,7 @@ export const Oppgaver = ({ open, fnr }: Props) => {
     return <AlertStripe type="info">Ingen registrerte klager på denne personen i Kabal</AlertStripe>;
   }
 
-  const { aapneKlagebehandlinger, avsluttedeKlagebehandlinger } = data;
+  const { aapneBehandlinger: aapneKlagebehandlinger, avsluttedeBehandlinger: avsluttedeKlagebehandlinger } = data;
 
   return (
     <StyledOppgaverContainer data-testid="search-result-expanded-container">

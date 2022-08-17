@@ -4,8 +4,9 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetBrukerQuery, useGetMySignatureQuery } from '../../../redux-api/bruker';
+import { useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
+import { useUser } from '../../../simple-api-state/use-user';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
 
@@ -17,7 +18,7 @@ interface NewCommentInThreadProps {
 }
 
 export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();

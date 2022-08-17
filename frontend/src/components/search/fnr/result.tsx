@@ -6,20 +6,15 @@ import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledFnr, StyledName, StyledOppgaverContainer, StyledResult } from '../common/styled-components';
 
-export const Result = ({
-  fnr,
-  navn,
-  aapneKlagebehandlinger,
-  avsluttedeKlagebehandlinger,
-}: IPersonAndOppgaverResponse) => (
+export const Result = ({ fnr, navn, aapneBehandlinger, avsluttedeBehandlinger }: IPersonAndOppgaverResponse) => (
   <StyledResult key={fnr} data-testid="search-result">
     <StyledName>{getFullName(navn)}</StyledName>
     <StyledFnr>
       <CopyFnrButton fnr={fnr} />
     </StyledFnr>
     <StyledOppgaverContainer>
-      <ActiveOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
-      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeKlagebehandlinger} />
+      <ActiveOppgaverTable activeOppgaver={aapneBehandlinger} />
+      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeBehandlinger} />
     </StyledOppgaverContainer>
   </StyledResult>
 );

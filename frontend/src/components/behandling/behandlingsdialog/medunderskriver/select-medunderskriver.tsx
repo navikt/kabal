@@ -4,8 +4,9 @@ import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useGetBrukerQuery, useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
+import { useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
+import { useUser } from '../../../../simple-api-state/use-user';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
@@ -16,7 +17,7 @@ const NONE_SELECTED = 'NONE_SELECTED';
 
 export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
   const { data: oppgave } = useOppgave();
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
   const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: oppgaveId });
 

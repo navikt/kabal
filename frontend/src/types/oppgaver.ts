@@ -157,7 +157,7 @@ export interface IGetSaksbehandlereInEnhetResponse {
 }
 
 export interface IPersonAndOppgaverResponse extends ISearchPerson {
-  aapneKlagebehandlinger: IOppgave[];
-  avsluttedeKlagebehandlinger: IOppgave[];
-  klagebehandlinger: IOppgave[];
+  aapneBehandlinger: IOppgave[];
+  avsluttedeBehandlinger: IOppgave[];
+  behandlinger: IOppgave[];
 }

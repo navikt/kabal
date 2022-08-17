@@ -1,8 +1,8 @@
-import { useGetBrukerQuery } from '../redux-api/bruker';
+import { useUser } from '../simple-api-state/use-user';
 import { Role } from '../types/bruker';
 
 export const useUserRoles = () => {
-  const { data } = useGetBrukerQuery();
+  const { data } = useUser();
   return data?.roller ?? [];
 };
 

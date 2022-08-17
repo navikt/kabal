@@ -72,10 +72,10 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: ['ledige-medutgaattefrister'],
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
-      query: ({ ...queryParams }) => ({
+      query: (body) => ({
         url: `/kabal-search/search/name`,
         method: 'POST',
-        body: queryParams,
+        body,
       }),
     }),
     personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
@@ -83,6 +83,19 @@ export const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         url: `/kabal-search/search/personogoppgaver`,
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
+      }),
+      transformResponse: ({
+        aapneBehandlinger,
+        avsluttedeBehandlinger,
+        behandlinger,
+        fnr,
+        navn,
+      }: IPersonAndOppgaverResponse) => ({
+        aapneBehandlinger,
+        avsluttedeBehandlinger,
+        behandlinger,
+        fnr,
+        navn,
       }),
     }),
     getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({

@@ -2,8 +2,8 @@ import { Button } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
+import { useUser } from '../../simple-api-state/use-user';
 import { IEnhet } from '../../types/bruker';
 import { Dropdown, DropdownContainer, DropdownOption, SuccessStatus, TildelDropdownButton } from './styled-components';
 
@@ -14,7 +14,7 @@ interface Props {
 
 export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props) => {
   const [tildelSaksbehandler, result] = useTildelSaksbehandlerMutation();
-  const { data: userData, isLoading: isUserLoading } = useGetBrukerQuery();
+  const { data: userData, isLoading: isUserLoading } = useUser();
   const enheter = useAvailableEnheterForYtelse(ytelse);
 
   const onTildel = useCallback(

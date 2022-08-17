@@ -9,7 +9,7 @@ export const SearchPage = () => {
 
   return (
     <OppgaverPageWrapper>
-      <SearchBox query={query} setQuery={setQuery} />
+      <SearchBox setQuery={setQuery} />
       <NameSearch queryString={query} />
       <FnrSearch queryString={query} />
     </OppgaverPageWrapper>

@@ -3,7 +3,7 @@ import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
-import { useGetBrukerQuery } from '../../redux-api/bruker';
+import { useUser } from '../../simple-api-state/use-user';
 import { OppgaveType } from '../../types/kodeverk';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
@@ -21,7 +21,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
   const ytelseOptions = useAvailableYtelser();
   const hjemlerOptions = useAvailableHjemler();
 
-  const { data: bruker } = useGetBrukerQuery();
+  const { data: bruker } = useUser();
 
   const saksbehandlerOptions = useSaksbehandlereInEnhet(bruker?.ansattEnhet.id);
 

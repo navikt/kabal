@@ -3,12 +3,13 @@ import { Loader } from '@navikt/ds-react';
 import { Input, Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useGetBrukerQuery, useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
+import { useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
+import { useUser } from '../../simple-api-state/use-user';
 import { ISetCustomInfoParams, ISignatureResponse } from '../../types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {
-  const { data: bruker, isLoading: brukerIsLoading } = useGetBrukerQuery();
+  const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const { data: saksbehandlerSignature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   if (

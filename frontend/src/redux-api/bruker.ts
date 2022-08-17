@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { ISetCustomInfoParams, ISettings, ISignatureResponse, IUserData } from '../types/bruker';
+import { ISetCustomInfoParams, ISettings, ISignatureResponse } from '../types/bruker';
 import { IMedunderskrivereParams } from '../types/oppgavebehandling/params';
 import { IMedunderskrivereResponse } from '../types/oppgavebehandling/response';
 import { INNSTILLINGER_BASE_QUERY } from './common';
@@ -7,12 +7,7 @@ import { INNSTILLINGER_BASE_QUERY } from './common';
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
   baseQuery: INNSTILLINGER_BASE_QUERY,
-  tagTypes: ['user'],
   endpoints: (builder) => ({
-    getBruker: builder.query<IUserData, void>({
-      query: () => '/me/brukerdata',
-      providesTags: ['user'],
-    }),
     getMySignature: builder.query<ISignatureResponse, void>({
       query: () => '/me/signature',
     }),
@@ -92,7 +87,6 @@ const cleanValue = (value: string | null) => {
 };
 
 export const {
-  useGetBrukerQuery,
   useGetMySignatureQuery,
   useGetSettingsQuery,
   useGetSignatureQuery,

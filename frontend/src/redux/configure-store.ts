@@ -4,7 +4,6 @@ import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
 import { kvalitetsvurderingApi } from '../redux-api/kaka-kvalitetsvurdering';
-import { kodeverkApi } from '../redux-api/kodeverk';
 import { messagesApi } from '../redux-api/messages';
 import { oppgaverApi } from '../redux-api/oppgaver/oppgaver';
 import { smartEditorCommentsApi } from '../redux-api/smart-editor-comments';
@@ -13,7 +12,7 @@ import { RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
-  devTools: true,
+  devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -31,7 +30,6 @@ export const reduxStore = configureStore({
       },
     }).concat([
       oppgaverApi.middleware,
-      kodeverkApi.middleware,
       brukerApi.middleware,
       kvalitetsvurderingApi.middleware,
       messagesApi.middleware,
