@@ -2,12 +2,14 @@ import { useContext, useMemo } from 'react';
 import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
 import { IValidationSection } from '../functions/error-type-guard';
 import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
-import { IOppgavebehandlingBase } from '../types/oppgavebehandling/oppgavebehandling';
+import { IOppgavebehandlingBase, ITrygderettsankebehandling } from '../types/oppgavebehandling/oppgavebehandling';
 
 type Field =
   | keyof IKakaKvalitetsvurdering
   | keyof Pick<IOppgavebehandlingBase, 'mottattKlageinstans'>
   | keyof Pick<IOppgavebehandlingBase, 'mottattVedtaksinstans'>
+  | keyof Pick<ITrygderettsankebehandling, 'kjennelseMottatt'>
+  | keyof Pick<ITrygderettsankebehandling, 'sendtTilTrygderetten'>
   | 'utfall'
   | 'hjemmel'
   | 'dokument';

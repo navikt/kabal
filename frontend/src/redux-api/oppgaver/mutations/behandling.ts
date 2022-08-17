@@ -2,9 +2,11 @@ import { reduxStore } from '../../../redux/configure-store';
 import { OppgaveType } from '../../../types/kodeverk';
 import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
 import {
+  IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
   IOppgavebehandlingHjemlerUpdateParams,
+  ISendtTilTrygderettenParams,
 } from '../../../types/oppgavebehandling/params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
@@ -75,7 +77,53 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    updateInnsendingshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
+    setKjennelseMottatt: builder.mutation<IModifiedResponse, IKjennelseMottattParams>({
+      query: ({ oppgaveId, kjennelseMottatt }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/kjennelsemottatt`,
+        method: 'PUT',
+        body: { date: kjennelseMottatt },
+      }),
+      onQueryStarted: async ({ oppgaveId, kjennelseMottatt, type }, { queryFulfilled, dispatch }) => {
+        const patchResult = dispatch(
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.type === type) {
+              draft.kjennelseMottatt = kjennelseMottatt;
+            }
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, [['modified', data.modified]]);
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    setSendtTilTrygderetten: builder.mutation<IModifiedResponse, ISendtTilTrygderettenParams>({
+      query: ({ oppgaveId, sendtTilTrygderetten }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/sendttiltrygderetten`,
+        method: 'PUT',
+        body: { date: sendtTilTrygderetten },
+      }),
+      onQueryStarted: async ({ oppgaveId, sendtTilTrygderetten, type }, { queryFulfilled, dispatch }) => {
+        const patchResult = dispatch(
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.type === type) {
+              draft.sendtTilTrygderetten = sendtTilTrygderetten;
+            }
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, [['modified', data.modified]]);
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
+    updateInnsendingshjemler: builder.mutation<IModifiedResponse, IOppgavebehandlingHjemlerUpdateParams>({
       query: ({ oppgaveId, hjemler }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/innsendingshjemler`,
         method: 'PUT',
@@ -112,4 +160,6 @@ export const {
   useSetMottattKlageinstansMutation,
   useSetMottattVedtaksinstansMutation,
   useUpdateInnsendingshjemlerMutation,
+  useSetKjennelseMottattMutation,
+  useSetSendtTilTrygderettenMutation,
 } = behandlingerMutationSlice;

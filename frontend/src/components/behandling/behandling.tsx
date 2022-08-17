@@ -4,6 +4,7 @@ import { OppgaveType } from '../../types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/panel';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';
+import { Trygderettsankebehandlingsdetaljer } from './behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledContainer } from './styled-components';
 
@@ -37,5 +38,9 @@ const Behandlingsdetaljer = () => {
     return <Klagebehandlingsdetaljer />;
   }
 
-  return <Ankebehandlingsdetaljer />;
+  if (oppgave.type === OppgaveType.ANKE) {
+    return <Ankebehandlingsdetaljer />;
+  }
+
+  return <Trygderettsankebehandlingsdetaljer />;
 };

@@ -13,6 +13,10 @@ export const MottattVedtaksinstans = () => {
   const error = useValidationError('mottattVedtaksinstans');
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
+  if (data?.type === OppgaveType.ANKE_I_TRYGDERETTEN) {
+    return null;
+  }
+
   return (
     <StyledMottattVedtaksinstans>
       <DatepickerWithError

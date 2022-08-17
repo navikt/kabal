@@ -67,7 +67,13 @@ export interface IAnkebehandling extends IOppgavebehandlingBase {
   type: OppgaveType.ANKE;
 }
 
-export type IOppgavebehandling = IKlagebehandling | IAnkebehandling;
+export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
+  type: OppgaveType.ANKE_I_TRYGDERETTEN;
+  kjennelseMottatt: string | null; // LocalDate
+  sendtTilTrygderetten: string | null; // LocalDate
+}
+
+export type IOppgavebehandling = IKlagebehandling | IAnkebehandling | ITrygderettsankebehandling;
 
 export interface ISakspart {
   person: IKlagerPerson | null;

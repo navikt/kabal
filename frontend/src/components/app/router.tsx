@@ -1,5 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
+import TrygderettsankebehandlingPage from '../../pages/trygderettsankebehandling/trygderettsankebehandling';
+import { Trygderettsankebehandling } from '../trygderettsankebehandling/trygderettsankebehandling';
 import { RouterLoader } from './loader';
 
 const AdminPage = lazy(() => import('../../pages/admin/admin'));
@@ -34,6 +36,7 @@ export const Router = () => (
       <Route path="sok" element={<SearchPage />} />
       <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
       <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
+      <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
 
       <Route path="maltekster/:id" element={<MalteksterPage />} />
       <Route path="maltekster/" element={<MalteksterPage />} />

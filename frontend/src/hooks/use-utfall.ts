@@ -14,6 +14,10 @@ export const useUtfall = (type?: OppgaveType): [IKodeverkSimpleValue<Utfall>[], 
       return [utfall, false];
     }
 
-    return [utfall.filter(({ id }) => id !== Utfall.AVVIST), false];
+    if (type === OppgaveType.ANKE) {
+      return [utfall.filter(({ id }) => id !== Utfall.AVVIST), false];
+    }
+
+    return [utfall.filter(({ id }) => !(id === Utfall.UGUNST || id === Utfall.RETUR)), false];
   }, [type, utfall]);
 };
