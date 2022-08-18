@@ -4,12 +4,12 @@ export const StyledContainer = styled.div`
   display: flex;
   flex-basis: 100%;
   white-space: normal;
-  width: 600px;
+  width: 640px;
 `;
 
 export const BehandlingSectionHeader = styled.h2`
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
 `;
 
