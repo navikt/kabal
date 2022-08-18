@@ -8,7 +8,7 @@ import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/op
 import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
 import { MedunderskriverFlyt } from '../../../../types/kodeverk';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
-import { getTitle } from './getTitle';
+import { getTitleLowercase } from './getTitle';
 
 type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;
 
@@ -36,7 +36,7 @@ export const SendTilMedunderskriver = ({
   const SentToMedunderskriver = () => (
     <StyledFormSection>
       <Alert variant="info" size="small">
-        Sendt til {getTitle(type)}
+        Sendt til {getTitleLowercase(type)}
       </Alert>
     </StyledFormSection>
   );
@@ -44,7 +44,7 @@ export const SendTilMedunderskriver = ({
   const SentBackToMedunderskriver = () => (
     <StyledFormSection>
       <Alert variant="info" size="small">
-        Sendt tilbake av {getTitle(type)}
+        Sendt tilbake av {getTitleLowercase(type)}
       </Alert>
     </StyledFormSection>
   );
@@ -61,7 +61,7 @@ export const SendTilMedunderskriver = ({
         data-testid="send-to-medunderskriver"
         icon={<Send aria-hidden />}
       >
-        Send til {getTitle(type)}
+        Send til {getTitleLowercase(type)}
       </StyledButton>
     </StyledFormSection>
   );

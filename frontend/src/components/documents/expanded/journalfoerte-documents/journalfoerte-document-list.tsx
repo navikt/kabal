@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -31,7 +31,9 @@ export const JournalfoerteDocumentList = () => {
   return (
     <StyledDocumentsContainer data-testid="oppgavebehandling-documents-all">
       <StyledListHeader>
-        <StyledListTitle>Journalførte dokumenter</StyledListTitle>
+        <Heading size="xsmall" level="2">
+          Journalførte dokumenter
+        </Heading>
         <StyledFilterDropdown
           options={kodeverkValuesToDropdownOptions(allTemaer)}
           onChange={setSelectedTemaer}

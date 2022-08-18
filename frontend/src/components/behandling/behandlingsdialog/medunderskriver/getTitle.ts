@@ -1,9 +1,10 @@
 import { OppgaveType } from '../../../../types/kodeverk';
 
-export const getTitle = (type: OppgaveType, capitalize = false) => {
-  if (capitalize) {
-    return type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'Medunderskriver';
-  }
+export const getTitleLowercase = (type: OppgaveType) =>
+  type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'medunderskriver';
 
-  return type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'medunderskriver';
-};
+export const getTitleCapitalized = (type: OppgaveType) =>
+  type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'Medunderskriver';
+
+export const getTitlePlural = (type: OppgaveType) =>
+  type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'fagansvarlige' : 'medunderskrivere';

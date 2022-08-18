@@ -2,7 +2,7 @@ import React from 'react';
 import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '../../styled-components/labels';
 import { MedunderskriverFlyt } from '../../types/kodeverk';
 import { IOppgave } from '../../types/oppgaver';
-import { getTitle } from '../behandling/behandlingsdialog/medunderskriver/getTitle';
+import { getTitleCapitalized, getTitleLowercase } from '../behandling/behandlingsdialog/medunderskriver/getTitle';
 
 type MedudunderskriverflytLabelProps = Pick<
   IOppgave,
@@ -20,15 +20,15 @@ export const MedudunderskriverflytLabel = ({
   }
 
   if (erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return <LabelMedunderskriver>{getTitle(type, true)}</LabelMedunderskriver>;
+    return <LabelMedunderskriver>{getTitleCapitalized(type)}</LabelMedunderskriver>;
   }
 
   if (!erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return <LabelMedunderskriver>Sendt til {getTitle(type)}</LabelMedunderskriver>;
+    return <LabelMedunderskriver>Sendt til {getTitleLowercase(type)}</LabelMedunderskriver>;
   }
 
   if (!erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
-    return <LabelReturnertTilSaksbehandler>Sendt tilbake av {getTitle(type)}</LabelReturnertTilSaksbehandler>;
+    return <LabelReturnertTilSaksbehandler>Sendt tilbake av {getTitleLowercase(type)}</LabelReturnertTilSaksbehandler>;
   }
 
   return null;

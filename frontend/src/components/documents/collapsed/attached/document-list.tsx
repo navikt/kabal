@@ -1,3 +1,4 @@
+import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetTilknyttedeDokumenterQuery } from '../../../../redux-api/oppgaver/queries/documents';
@@ -14,7 +15,9 @@ export const AttachedDocumentList = () => {
   return (
     <ListContainer data-testid="oppgavebehandling-documents-tilknyttede">
       <Loading loading={isLoading || isFetching} />
-      <StyledSubHeader>Journalførte dokumenter</StyledSubHeader>
+      <Heading size="xsmall" level="2">
+        Journalførte dokumenter
+      </Heading>
       <DocumentList data-testid="oppgavebehandling-documents-tilknyttede-list">
         {documents.map((document) => (
           <AttachedDocument key={document.journalpostId + document.dokumentInfoId} document={document} />

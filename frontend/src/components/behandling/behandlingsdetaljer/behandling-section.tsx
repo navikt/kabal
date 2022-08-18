@@ -1,4 +1,3 @@
-import { Label } from '@navikt/ds-react';
 import React from 'react';
 import { BehandlingSectionChildren, BehandlingSectionHeader } from '../styled-components';
 
@@ -8,8 +7,8 @@ interface SubSectionProps {
 }
 
 export const BehandlingSection = ({ label, children }: SubSectionProps) => (
-  <label>
-    <Label spacing>{label}:</Label>
+  <div>
+    <BehandlingSectionHeader>{label}:</BehandlingSectionHeader>
     <BehandlingSectionChildren>{children}</BehandlingSectionChildren>
-  </label>
+  </div>
 );

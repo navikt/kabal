@@ -1,5 +1,5 @@
 import { Warning } from '@navikt/ds-icons';
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -46,12 +46,16 @@ const ListHeader = () => {
 
   if (typeof errorMessage === 'string') {
     return (
-      <StyledSubHeader>
+      <Heading size="xsmall" level="2">
         Nye dokumenter
         <Warning title={errorMessage} color="#ba3a26" />
-      </StyledSubHeader>
+      </Heading>
     );
   }
 
-  return <StyledSubHeader>Nye dokumenter</StyledSubHeader>;
+  return (
+    <Heading size="xsmall" level="2">
+      Nye dokumenter
+    </Heading>
+  );
 };

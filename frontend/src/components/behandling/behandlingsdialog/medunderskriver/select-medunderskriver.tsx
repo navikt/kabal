@@ -6,11 +6,10 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
 import { useUser } from '../../../../simple-api-state/use-user';
-import { OppgaveType } from '../../../../types/kodeverk';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
-import { getTitle } from './getTitle';
+import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 
@@ -45,7 +44,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, 
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <p>Fant ingen {`${type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'medunderskrivere'}`}</p>;
+    return <p>Fant ingen {getTitlePlural(type)}</p>;
   }
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
@@ -63,12 +62,12 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, 
     <Select
       size="medium"
       disabled={!canEdit}
-      label={`${getTitle(type, true)}:`}
+      label={`${getTitleCapitalized(type)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
       value={medunderskriver?.navIdent ?? NONE_SELECTED}
       data-testid="select-medunderskriver"
     >
-      <option value={NONE_SELECTED}>Ingen {getTitle(type)}</option>
+      <option value={NONE_SELECTED}>Ingen {getTitleLowercase(type)}</option>
       {medunderskrivere.map(({ navn, navIdent }) => (
         <option key={navIdent} value={navIdent}>
           {navn}

@@ -1,5 +1,5 @@
 import { Warning } from '@navikt/ds-icons';
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -8,7 +8,7 @@ import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { StyledDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentList } from '../styled-components/document-list';
-import { StyledListHeader, StyledListTitle } from '../styled-components/list-header';
+import { StyledListHeader } from '../styled-components/list-header';
 import { NewParentDocument } from './new-parent-document';
 
 export const NewDocumentList = () => {
@@ -52,17 +52,19 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
   if (typeof errorMessage === 'string') {
     return (
       <StyledListHeader>
-        <StyledListTitle>
+        <Heading size="xsmall" level="2">
           Dokumenter under arbeid
           <Warning title={errorMessage} color="#ba3a26" />
-        </StyledListTitle>
+        </Heading>
       </StyledListHeader>
     );
   }
 
   return (
     <StyledListHeader>
-      <StyledListTitle>Dokumenter under arbeid</StyledListTitle>
+      <Heading size="xsmall" level="2">
+        Dokumenter under arbeid
+      </Heading>
     </StyledListHeader>
   );
 };
