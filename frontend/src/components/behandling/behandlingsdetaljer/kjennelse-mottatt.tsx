@@ -35,6 +35,7 @@ export const KjennelseMottatt = () => {
         showYearSelector
         error={error}
         data-testid="kjennelse-mottatt"
+        inputName="kjennelse-mottatt"
       />
     </StyledKjennelseMottatt>
   );

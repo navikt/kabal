@@ -35,6 +35,7 @@ export const MottattVedtaksinstans = () => {
         showYearSelector
         error={error}
         data-testid="mottatt-vedtaksinstans"
+        inputName="mottatt-vedtaksinstans"
       />
     </StyledMottattVedtaksinstans>
   );

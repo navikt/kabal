@@ -35,6 +35,7 @@ export const SendtTilTrygderetten = () => {
         showYearSelector
         error={error}
         data-testid="sendt-til-trygderetten"
+        inputName="sendt-til-trygderetten"
       />
     </StyledSendtTilTrygderetten>
   );

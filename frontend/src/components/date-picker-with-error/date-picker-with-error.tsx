@@ -1,45 +1,16 @@
-import { Datepicker } from 'nav-datovelger';
-import { DatepickerChange, DatepickerProps } from 'nav-datovelger/lib/Datepicker';
+import { Datepicker } from '@navikt/ds-datepicker';
+import { DatepickerChange, DatepickerProps } from '@navikt/ds-datepicker/lib/Datepicker';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ErrorMessage } from '../error-message/error-message';
-
-const StyledLabelText = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 0.5em;
-  line-height: 22px;
-`;
-
-const StyledErrorLabel = styled.label`
-  & .nav-datovelger {
-    border: 1px solid #ba3a26;
-    box-shadow: 0 0 0 1px #ba3a26;
-    border-radius: 4px;
-  }
-
-  & .nav-datovelger__input {
-    border: none;
-  }
-
-  & .nav-datovelger__kalenderknapp {
-    border-right: none;
-    border-top: none;
-    border-bottom: none;
-  }
-
-  & .nav-datovelger__kalenderknapp {
-    min-height: 38px;
-  }
-`;
+import '@navikt/ds-datepicker/lib/index.css';
 
 export interface DateTimePickerProps extends DatepickerProps {
-  label: string;
   error?: string;
   onChange: (date: string | null) => void;
 }
 
-export const DatepickerWithError = ({ label, error, onChange, ...props }: DateTimePickerProps) => {
+export const DatepickerWithError = ({ error, onChange, ...props }: DateTimePickerProps) => {
   const [inputError, setInputError] = useState<string>();
   const [value, setValue] = useState(props.value);
 
@@ -62,16 +33,21 @@ export const DatepickerWithError = ({ label, error, onChange, ...props }: DateTi
   };
 
   const children = (
-    <>
-      <StyledLabelText>{label}</StyledLabelText>
+    <Container>
       <Datepicker {...props} value={value} onChange={onChangeWithValidation} />
       <ErrorMessage error={error ?? inputError} />
-    </>
+    </Container>
   );
 
   if (typeof error !== 'undefined' || typeof inputError !== 'undefined') {
-    return <StyledErrorLabel>{children}</StyledErrorLabel>;
+    return <label>{children}</label>;
   }
 
   return <label>{children}</label>;
 };
+
+const Container = styled.div`
+  .navds-label {
+    font-size: 16px;
+  }
+`;

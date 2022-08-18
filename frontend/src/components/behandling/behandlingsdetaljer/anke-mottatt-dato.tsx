@@ -35,6 +35,7 @@ export const AnkeMottattDato = () => {
         showYearSelector
         error={error}
         data-testid="anke-mottatt-dato"
+        inputName="anke-mottatt-dato"
       />
     </StyledAnkeMottattDato>
   );
