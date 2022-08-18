@@ -6,15 +6,17 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
 import { useUser } from '../../../../simple-api-state/use-user';
+import { OppgaveType } from '../../../../types/kodeverk';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
+import { getTitle } from './getTitle';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, type }: SelectMedunderskriverProps) => {
   const { data: oppgave } = useOppgave();
   const { data: bruker } = useUser();
   const canEdit = useCanEdit();
@@ -43,7 +45,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <p>Fant ingen medunderskrivere</p>;
+    return <p>Fant ingen {`${type === OppgaveType.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'medunderskrivere'}`}</p>;
   }
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
@@ -61,12 +63,12 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
     <Select
       size="medium"
       disabled={!canEdit}
-      label="Medunderskriver:"
+      label={`${getTitle(type, true)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
       value={medunderskriver?.navIdent ?? NONE_SELECTED}
       data-testid="select-medunderskriver"
     >
-      <option value={NONE_SELECTED}>Ingen medunderskriver</option>
+      <option value={NONE_SELECTED}>Ingen {getTitle(type)}</option>
       {medunderskrivere.map(({ navn, navIdent }) => (
         <option key={navIdent} value={navIdent}>
           {navn}

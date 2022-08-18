@@ -42,6 +42,7 @@ export const Row = ({
     <td>{tildeltSaksbehandlerNavn}</td>
     <td>
       <MedudunderskriverflytLabel
+        type={type}
         erMedunderskriver={erMedunderskriver}
         harMedunderskriver={harMedunderskriver}
         medunderskriverFlyt={medunderskriverFlyt}

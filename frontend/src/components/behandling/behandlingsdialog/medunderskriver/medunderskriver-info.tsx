@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { IOppgavebehandlingBase } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
 import { IMedunderskriverResponse } from '../../../../types/oppgavebehandling/response';
+import { getTitle } from './getTitle';
 
-type MedunderskriverInfoProps = Pick<IOppgavebehandlingBase, 'tildeltSaksbehandler'> &
+type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler' | 'type'> &
   Pick<IMedunderskriverResponse, 'medunderskriver'>;
 
-export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver }: MedunderskriverInfoProps) => {
+export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver, type }: MedunderskriverInfoProps) => {
   const canEdit = useCanEdit();
 
   if (!canEdit) {
@@ -17,7 +18,7 @@ export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver }: M
           <b>Saksbehandler:</b> {tildeltSaksbehandler?.navn ?? 'Ikke tildelt'}
         </StyledInfoLine>
         <StyledInfoLine>
-          <b>Medunderskriver:</b> {medunderskriver?.navn ?? 'Medunderskriver ikke satt'}
+          <b>{getTitle(type, true)}:</b> {medunderskriver?.navn ?? `${getTitle(type, true)} ikke satt`}
         </StyledInfoLine>
       </div>
     );

@@ -46,6 +46,7 @@ export const Row = ({
     </td>
     <td>
       <MedudunderskriverflytLabel
+        type={type}
         medunderskriverFlyt={medunderskriverFlyt}
         erMedunderskriver={erMedunderskriver}
         harMedunderskriver={harMedunderskriver}
