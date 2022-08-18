@@ -31,8 +31,15 @@ export const VentButton = () => {
   }
 
   return (
-    <Button type="button" variant="secondary" size="small" onClick={() => settPaavent(data.id)} loading={isLoading}>
-      <Sandglass /> Sett på vent
+    <Button
+      type="button"
+      variant="secondary"
+      size="small"
+      onClick={() => settPaavent(data.id)}
+      loading={isLoading}
+      icon={<Sandglass aria-hidden />}
+    >
+      Sett på vent
     </Button>
   );
 };

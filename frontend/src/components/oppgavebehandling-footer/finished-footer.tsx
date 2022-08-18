@@ -3,15 +3,12 @@ import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
+import { IOppgavebehandling } from '../../types/oppgavebehandling/oppgavebehandling';
 import { BackLink } from './back-link';
 import { StyledButtons, StyledFinishedFooter } from './styled-components';
 
-export const FinishedAnkeFooter = () => {
+export const FinishedFooter = () => {
   const { data: oppgave } = useOppgave();
-
-  if (typeof oppgave === 'undefined' || oppgave.type !== OppgaveType.ANKE) {
-    return null;
-  }
 
   return (
     <StyledFinishedFooter>
@@ -29,14 +26,14 @@ export const FinishedAnkeFooter = () => {
         <BackLink />
       </StyledButtons>
       <Alert variant="success" inline>
-        {getSuccessMessage(oppgave.resultat.utfall)}
+        {getSuccessMessage(oppgave)}
       </Alert>
     </StyledFinishedFooter>
   );
 };
 
-const getSuccessMessage = (utfall: Utfall | null) => {
-  if (utfall === Utfall.OPPHEVET) {
+const getSuccessMessage = (oppgave?: IOppgavebehandling) => {
+  if (oppgave?.type === OppgaveType.ANKE && oppgave.resultat.utfall === Utfall.OPPHEVET) {
     return 'Innstilling sendt til klager';
   }
 

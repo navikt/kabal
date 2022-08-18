@@ -57,9 +57,9 @@ export const SendTilMedunderskriver = ({
         disabled={sendToMedunderskriverDisabled}
         loading={loader.isLoading || medunderskriverLoader.isLoading}
         data-testid="send-to-medunderskriver"
+        icon={<Send aria-hidden />}
       >
-        <Send />
-        <span>Send til medunderskriver</span>
+        Send til medunderskriver
       </StyledButton>
     </StyledFormSection>
   );

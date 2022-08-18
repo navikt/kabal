@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useSakspartName } from '../../../hooks/use-klager-name';
-import { PanelHeader } from '../../oppgavebehandling-panels/panel';
+import { PanelHeader } from '../../oppgavebehandling-panels/styled-components';
 import { Type } from '../../type/type';
 import { StyledBehandlingsdetaljer, StyledPaddedContent } from '../styled-components';
 import { AnkeMottattDato } from './anke-mottatt-dato';

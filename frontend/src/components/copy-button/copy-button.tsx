@@ -1,6 +1,5 @@
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
-import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;

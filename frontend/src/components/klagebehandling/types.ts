@@ -1,6 +1,10 @@
+export interface PanelToggle {
+  showSwitch: boolean;
+  showContent: boolean;
+}
 export interface PanelToggles {
-  documents: boolean;
-  smartEditor: boolean;
-  behandling: boolean;
-  kvalitetsvurdering: boolean;
+  documents: PanelToggle;
+  smartEditor: PanelToggle;
+  behandling: PanelToggle;
+  kvalitetsvurdering: PanelToggle;
 }

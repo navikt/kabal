@@ -12,7 +12,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
   <ToggleButtonsContainer data-testid="klagebehandling-control-panel-toggle-buttons">
     <TogglePanelButton
       panel="documents"
-      checked={toggles.documents}
+      checked={toggles.documents.showContent}
+      show={toggles.documents.showSwitch}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-documents"
     >
@@ -20,7 +21,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="smartEditor"
-      checked={toggles.smartEditor}
+      checked={toggles.smartEditor.showContent}
+      show={toggles.smartEditor.showSwitch}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-smart-editor"
     >
@@ -28,7 +30,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="behandling"
-      checked={toggles.behandling}
+      checked={toggles.behandling.showContent}
+      show={toggles.behandling.showSwitch}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-behandling"
     >
@@ -36,7 +39,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="kvalitetsvurdering"
-      checked={toggles.kvalitetsvurdering}
+      checked={toggles.kvalitetsvurdering.showContent}
+      show={toggles.kvalitetsvurdering.showSwitch}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-kvalitetsvurdering"
     >
@@ -48,13 +52,20 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
 interface TogglePanelButtonProps {
   setPanel: (panel: keyof PanelToggles, checked: boolean) => void;
   checked: boolean;
+  show: boolean;
   children: string;
   panel: keyof PanelToggles;
   testId?: string;
 }
 
-const TogglePanelButton = ({ setPanel, children, checked, panel, testId }: TogglePanelButtonProps): JSX.Element => (
-  <Switch checked={checked} onChange={(isChecked) => setPanel(panel, isChecked)} testId={testId}>
-    {children}
-  </Switch>
-);
+const TogglePanelButton = ({ show, setPanel, children, checked, panel, testId }: TogglePanelButtonProps) => {
+  if (!show) {
+    return null;
+  }
+
+  return (
+    <Switch checked={checked} onChange={(isChecked) => setPanel(panel, isChecked)} testId={testId}>
+      {children}
+    </Switch>
+  );
+};

@@ -47,9 +47,9 @@ export const LovhjemmelSelect = <T extends string>({
           onClick={toggleOpen}
           disabled={disabled}
           data-testid="lovhjemmel-button"
+          icon={<Search aria-hidden />}
         >
-          <Search />
-          <span>Hjemmel</span>
+          Hjemmel
         </StyledButton>
 
         <Popup isOpen={open}>

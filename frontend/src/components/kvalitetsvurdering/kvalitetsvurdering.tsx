@@ -1,7 +1,7 @@
 import React from 'react';
 import { SECTION_KEY } from '../../functions/error-type-guard';
 import { useSectionTitle } from '../../hooks/use-section-title';
-import { PanelContainer, PanelHeader } from '../oppgavebehandling-panels/panel';
+import { PanelContainer, PanelHeader } from '../oppgavebehandling-panels/styled-components';
 import { Kvalitetsskjema } from './kvalitetsskjema';
 import { KvalitetsVurderingContainer } from './styled-components';
 
