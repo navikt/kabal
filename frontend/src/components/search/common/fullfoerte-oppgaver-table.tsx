@@ -1,4 +1,4 @@
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateToPretty } from '../../../domain/date';
 import { StyledCaption, StyledTable } from '../../../styled-components/table';
@@ -15,7 +15,7 @@ interface Props {
 
 export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
   if (finishedOppgaver.length === 0) {
-    return <AlertStripeInfo>Ingen fullførte oppgaver siste 12 måneder</AlertStripeInfo>;
+    return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
   }
 
   return (

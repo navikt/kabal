@@ -9,12 +9,12 @@ interface StatusIconProps {
 
 export const StatusIcon = ({ success, init, isLoading }: StatusIconProps) => {
   if (!init) {
-    return <MinusCircle />;
+    return <MinusCircle aria-hidden />;
   }
 
   if (isLoading) {
-    return <Sandglass />;
+    return <Sandglass aria-hidden />;
   }
 
-  return success ? <Success /> : <Error />;
+  return success ? <Success aria-hidden /> : <Error aria-hidden />;
 };

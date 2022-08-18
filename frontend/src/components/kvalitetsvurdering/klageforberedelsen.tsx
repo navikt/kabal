@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
@@ -88,24 +87,29 @@ export const Klageforberedelsen = () => {
           blir fastholdt.
         </StyledHelpText>
       </StyledHeaderHelpTextWrapper>
-      <RadioGruppe feil={klageforberedelsenRadioValg === null ? validationError : undefined}>
+      <RadioGroup
+        error={klageforberedelsenRadioValg === null ? validationError : undefined}
+        legend="Vedtaksinstansen skal gjøre en ny prøving av eget vedtak, vise klagers argumenter og begrunne hvorfor vedtaket blir fastholdt."
+        hideLegend
+        disabled={!canEdit}
+      >
         <RadioButtonsRow>
           <Radio
-            name="KlageforberedelsenBra"
-            label="Bra/godt nok"
+            value={RadioValg.BRA}
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.BRA })}
             checked={klageforberedelsenRadioValg === RadioValg.BRA}
-            disabled={!canEdit}
-          />
+          >
+            Bra/godt nok
+          </Radio>
           <Radio
-            name="KlageforberedelsenMangelfullt"
-            label="Mangelfullt"
+            value={RadioValg.MANGELFULLT}
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.MANGELFULLT })}
             checked={klageforberedelsenRadioValg === RadioValg.MANGELFULLT}
-            disabled={!canEdit}
-          />
+          >
+            Mangelfullt
+          </Radio>
         </RadioButtonsRow>
-      </RadioGruppe>
+      </RadioGroup>
       <Reasons
         show={klageforberedelsenRadioValg === RadioValg.MANGELFULLT}
         legendText="Hva er mangelfullt?"

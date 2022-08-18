@@ -61,7 +61,8 @@ const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
 
     return (
       <Button type="button" key={id} onClick={() => setActiveTab(id)}>
-        <Notes /> {tittel}
+        <Notes aria-hidden />
+        {tittel}
       </Button>
     );
   });
@@ -118,7 +119,7 @@ const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
               loading: isLoading,
               disabled: isLoading,
               buttonText: 'Gjenopprett dokument',
-              buttonIcon: <Historic />,
+              buttonIcon: <Historic aria-hidden />,
               variant: 'primary',
               size: 'small',
             }}

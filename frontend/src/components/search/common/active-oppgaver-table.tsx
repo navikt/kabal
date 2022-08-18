@@ -1,4 +1,4 @@
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { StyledCaption, StyledTable } from '../../../styled-components/table';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
@@ -16,7 +16,7 @@ interface Props {
 
 export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
   if (activeOppgaver.length === 0) {
-    return <AlertStripeInfo>Ingen aktive oppgaver</AlertStripeInfo>;
+    return <Alert variant="info">Ingen aktive oppgaver</Alert>;
   }
 
   return (

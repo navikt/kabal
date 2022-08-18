@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { CheckboxGruppe } from 'nav-frontend-skjema';
+import { CheckboxGroup, Loader } from '@navikt/ds-react';
 import React, { Fragment } from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
@@ -40,7 +39,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
 
   return (
     <ReasonsField>
-      <CheckboxGruppe legend={legendText} feil={error}>
+      <CheckboxGroup legend={legendText} error={error} size="medium">
         {reasons
           .filter((reason) => reason.show !== false)
           .map((reason) => {
@@ -49,7 +48,6 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
               <Fragment key={String(reason.id)}>
                 <StyledCheckboxContainer>
                   <StyledCheckbox
-                    label={reason.label}
                     value={reason.id}
                     checked={reason.checked}
                     onChange={({ target }) =>
@@ -59,14 +57,16 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
                       })
                     }
                     disabled={!canEdit}
-                  />
+                  >
+                    {reason.label}
+                  </StyledCheckbox>
                   <HjelpetekstDisplay helpText={reason.helpText} />
                 </StyledCheckboxContainer>
                 <CommentFieldDisplay textareaId={reason.textareaId} show={showTextArea} />
               </Fragment>
             );
           })}
-      </CheckboxGruppe>
+      </CheckboxGroup>
     </ReasonsField>
   );
 };

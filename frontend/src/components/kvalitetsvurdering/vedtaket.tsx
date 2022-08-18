@@ -1,5 +1,4 @@
-import { Loader } from '@navikt/ds-react';
-import { Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useFieldName } from '../../hooks/use-field-name';
@@ -70,24 +69,29 @@ export const Vedtaket = () => {
   return (
     <FormSection>
       <SubHeader>{header}</SubHeader>
-      <RadioGruppe feil={vedtaketRadioValg === null ? validationError : undefined}>
+      <RadioGroup
+        error={vedtaketRadioValg === null ? validationError : undefined}
+        legend={header}
+        hideLegend
+        disabled={!canEdit}
+      >
         <RadioButtonsRow>
           <Radio
-            name="VedtaketBra"
-            label="Bra/godt nok"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
+            value={RadioValg.BRA}
             checked={vedtaketRadioValg === RadioValg.BRA}
-            disabled={!canEdit}
-          />
+          >
+            Bra/godt nok
+          </Radio>
           <Radio
-            name="VedtaketMangelfullt"
-            label="Mangelfullt"
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
             checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
-            disabled={!canEdit}
-          />
+            value={RadioValg.MANGELFULLT}
+          >
+            Mangelfullt
+          </Radio>
         </RadioButtonsRow>
-      </RadioGruppe>
+      </RadioGroup>
       <Reasons
         error={validationError}
         show={vedtaketRadioValg === RadioValg.MANGELFULLT}

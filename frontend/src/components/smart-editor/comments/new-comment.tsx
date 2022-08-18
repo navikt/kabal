@@ -120,13 +120,20 @@ export const NewComment = ({ close }: Props) => {
           disabled={text.length <= 0}
           loading={isLoading}
           title="Ctrl/⌘ + Enter"
+          icon={<Send aria-hidden />}
         >
-          <Send />
-          <span>Legg til</span>
+          Legg til
         </Button>
-        <Button type="button" variant="secondary" size="small" onClick={close} disabled={isLoading} title="Escape">
-          <Close />
-          <span>Avbryt</span>
+        <Button
+          type="button"
+          variant="secondary"
+          size="small"
+          onClick={close}
+          disabled={isLoading}
+          title="Escape"
+          icon={<Close aria-hidden />}
+        >
+          Avbryt
         </Button>
       </StyledCommentButtonContainer>
     </StyledNewComment>

@@ -22,8 +22,13 @@ export const DeassignOppgave = () => {
   return (
     <Container ref={ref}>
       <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <Button variant="secondary" size="small" onClick={() => setIsOpen(!isOpen)} loading={isLoading}>
-        <Icon />
+      <Button
+        variant="secondary"
+        size="small"
+        onClick={() => setIsOpen(!isOpen)}
+        loading={isLoading}
+        icon={<Icon aria-hidden />}
+      >
         Legg tilbake med ny hjemmel
       </Button>
     </Container>
@@ -76,12 +81,10 @@ const Popup = ({ isOpen, close }: PopupProps) => {
       <StyledTitle>Endre hjemmel?</StyledTitle>
       <FilterList options={options} selected={oppgave.hjemler} onChange={setSelected} />
       <ButtonContainer>
-        <Button variant="secondary" size="small" disabled={isLoading} onClick={close}>
-          <Close />
+        <Button variant="secondary" size="small" disabled={isLoading} onClick={close} icon={<Close aria-hidden />}>
           Avbryt
         </Button>
-        <Button variant="primary" size="small" loading={isLoading} onClick={onClick}>
-          <FileFolder />
+        <Button variant="primary" size="small" loading={isLoading} onClick={onClick} icon={<FileFolder aria-hidden />}>
           Legg tilbake
         </Button>
       </ButtonContainer>

@@ -1,6 +1,5 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -60,6 +59,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver }
 
   return (
     <Select
+      size="medium"
       disabled={!canEdit}
       label="Medunderskriver:"
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}

@@ -1,11 +1,11 @@
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
 import { useUser } from '../../simple-api-state/use-user';
 import { IEnhet } from '../../types/bruker';
-import { Dropdown, DropdownContainer, DropdownOption, SuccessStatus, TildelDropdownButton } from './styled-components';
+import { Dropdown, DropdownContainer, DropdownOption, TildelDropdownButton } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -40,9 +40,9 @@ export const TildelKlagebehandlingButton = ({ klagebehandlingId, ytelse }: Props
 
   if (result.isSuccess) {
     return (
-      <SuccessStatus data-testid="oppgave-tildel-success" data-oppgaveid={klagebehandlingId}>
+      <Alert data-testid="oppgave-tildel-success" data-oppgaveid={klagebehandlingId} variant="success" size="small">
         Tildelt!
-      </SuccessStatus>
+      </Alert>
     );
   }
 

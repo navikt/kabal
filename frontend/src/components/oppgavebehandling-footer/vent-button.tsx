@@ -23,8 +23,9 @@ export const VentButton = () => {
         size="small"
         onClick={() => deleteSettPaavent(data.id)}
         loading={isLoading}
+        icon={<Close aria-hidden />}
       >
-        <Close /> Avslutt venteperiode
+        Avslutt venteperiode
       </Button>
     );
   }

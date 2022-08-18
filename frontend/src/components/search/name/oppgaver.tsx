@@ -1,6 +1,5 @@
-import { Loader } from '@navikt/ds-react';
+import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import AlertStripe from 'nav-frontend-alertstriper';
 import React from 'react';
 import { usePersonAndOppgaverQuery } from '../../../redux-api/oppgaver/queries/oppgaver';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
@@ -28,7 +27,7 @@ export const Oppgaver = ({ open, fnr }: Props) => {
       return null;
     }
 
-    return <AlertStripe type="info">Ingen registrerte klager på denne personen i Kabal</AlertStripe>;
+    return <Alert variant="info">Ingen registrerte klager på denne personen i Kabal</Alert>;
   }
 
   const { aapneBehandlinger: aapneKlagebehandlinger, avsluttedeBehandlinger: avsluttedeKlagebehandlinger } = data;

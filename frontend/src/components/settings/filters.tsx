@@ -105,8 +105,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={removeAll}
           data-testid={`${settingKey}-remove-all`}
+          icon={<Delete aria-hidden />}
         >
-          <Delete /> Fjern alle
+          Fjern alle
         </Button>
         <Button
           type="button"
@@ -114,8 +115,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={selectAll}
           data-testid={`${settingKey}-select-all`}
+          icon={<SuccessStroke aria-hidden />}
         >
-          <SuccessStroke /> Velg alle
+          Velg alle
         </Button>
       </ButtonContainer>
       <StyledFieldset data-testid={`${settingKey}-settings`} legend={legend}>

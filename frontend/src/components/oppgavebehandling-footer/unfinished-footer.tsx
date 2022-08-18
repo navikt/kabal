@@ -56,9 +56,9 @@ export const UnfinishedFooter = () => {
           }}
           data-testid="complete-button"
           loading={isFetching}
+          icon={<SuccessStroke aria-hidden />}
         >
-          <SuccessStroke />
-          <span>Fullfør</span>
+          Fullfør
         </Button>
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />

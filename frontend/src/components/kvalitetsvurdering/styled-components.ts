@@ -1,5 +1,4 @@
-import { HelpText } from '@navikt/ds-react';
-import { Checkbox, RadioGruppe } from 'nav-frontend-skjema';
+import { Checkbox, HelpText } from '@navikt/ds-react';
 import styled from 'styled-components';
 
 export const KvalitetsVurderingContainer = styled.div`
@@ -21,12 +20,6 @@ export const RadioButtonsRow = styled.div`
   display: flex;
   justify-content: space-between;
   width: 300px;
-`;
-
-export const RadioButtonsColumn = styled(RadioGruppe)`
-  > * {
-    margin-bottom: 10px;
-  }
 `;
 
 export const StyledCommentField = styled.div`

@@ -1,5 +1,5 @@
 import { Copy } from '@navikt/ds-icons';
-import Popover, { PopoverOrientering } from 'nav-frontend-popover';
+import { Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '../../domain/name';
 import { formatOrgNum } from '../../functions/format-id';
@@ -60,8 +60,6 @@ const SakenGjelder = ({ id, name, gender, fortrolig, strengtFortrolig }: SakenGj
     setIsOpen(true);
   };
 
-  const ankerEl = isOpen ? button.current ?? undefined : undefined;
-
   return (
     <>
       <User>
@@ -78,13 +76,8 @@ const SakenGjelder = ({ id, name, gender, fortrolig, strengtFortrolig }: SakenGj
         <StrengtFortrolig strengtFortrolig={strengtFortrolig} />
       </User>
 
-      <Popover
-        ankerEl={ankerEl}
-        onRequestClose={() => setIsOpen(false)}
-        orientering={PopoverOrientering.Under}
-        autoFokus={false}
-      >
-        <span style={{ padding: '.5rem', display: 'block' }}>Kopiert</span>
+      <Popover open={isOpen} anchorEl={button.current} onClose={() => setIsOpen(false)} placement="bottom">
+        <Popover.Content>Kopiert</Popover.Content>
       </Popover>
     </>
   );

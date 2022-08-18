@@ -103,13 +103,19 @@ const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
         onClick={onSubmit}
         disabled={text.length <= 0}
         loading={isLoading}
+        icon={<SuccessStroke aria-hidden />}
       >
-        <SuccessStroke />
-        <span>Legg til</span>
+        Legg til
       </Button>
-      <Button type="button" size="small" variant="secondary" onClick={close} disabled={isLoading}>
-        <Close />
-        <span>Avbryt</span>
+      <Button
+        type="button"
+        size="small"
+        variant="secondary"
+        onClick={close}
+        disabled={isLoading}
+        icon={<Close aria-hidden />}
+      >
+        Avbryt
       </Button>
     </StyledCommentButtonContainer>
   );

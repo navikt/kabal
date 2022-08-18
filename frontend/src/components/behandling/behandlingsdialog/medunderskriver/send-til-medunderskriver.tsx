@@ -1,6 +1,5 @@
 import { Send } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import AlertStripe from 'nav-frontend-alertstriper';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
@@ -34,13 +33,17 @@ export const SendTilMedunderskriver = ({
 
   const SentToMedunderskriver = () => (
     <StyledFormSection>
-      <AlertStripe type="info">Sendt til medunderskriver</AlertStripe>
+      <Alert variant="info" size="small">
+        Sendt til medunderskriver
+      </Alert>
     </StyledFormSection>
   );
 
   const SentBackToMedunderskriver = () => (
     <StyledFormSection>
-      <AlertStripe type="info">Sendt tilbake av medunderskriver</AlertStripe>
+      <Alert variant="info" size="small">
+        Sendt tilbake av medunderskriver
+      </Alert>
     </StyledFormSection>
   );
 

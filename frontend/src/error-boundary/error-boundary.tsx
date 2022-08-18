@@ -63,8 +63,7 @@ interface ActionButtonProps extends Omit<ButtonProps, 'children'> {
 }
 
 export const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) => (
-  <Button {...rest}>
-    {buttonIcon}
+  <Button {...rest} icon={buttonIcon}>
     <span>{buttonText}</span>
   </Button>
 );

@@ -1,9 +1,8 @@
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import React, { useCallback, useState } from 'react';
 import { useIsLeader } from '../../hooks/use-has-role';
 import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
 import { useUser } from '../../simple-api-state/use-user';
-import { SuccessStatus } from './styled-components';
 
 interface Props {
   klagebehandlingId: string;
@@ -42,9 +41,9 @@ export const FradelKlagebehandlingButton = ({
 
   if (done) {
     return (
-      <SuccessStatus data-testid="oppgave-fradel-success" data-oppgaveid={klagebehandlingId}>
+      <Alert data-testid="oppgave-fradel-success" data-oppgaveid={klagebehandlingId} variant="success" size="small">
         Lagt tilbake!
-      </SuccessStatus>
+      </Alert>
     );
   }
 
