@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
@@ -29,8 +30,9 @@ export const SortBy = ({
   const SortButton = useMemo(() => getSortButton(sort), [sort]);
 
   return (
-    <th aria-sort={sort} role="columnheader">
-      <SortButton
+    <Table.ColumnHeader aria-sort={sort} role="columnheader" sortable scope="col">
+      {children}
+      {/* <SortButton
         aria-label="Sorter"
         onClick={() => {
           if (field !== sortField || sort === Sort.NONE) {
@@ -49,8 +51,8 @@ export const SortBy = ({
         }}
       >
         {children}
-      </SortButton>
-    </th>
+      </SortButton> */}
+    </Table.ColumnHeader>
   );
 };
 

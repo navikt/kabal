@@ -1,8 +1,9 @@
+import { Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useGetMineUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
-import { StyledTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from './header';
 import { OppgaveRader } from './rows';
@@ -43,9 +44,18 @@ export const MineOppgaverTable = () => {
   }, [refetch]);
 
   return (
-    <StyledTable data-testid="mine-oppgaver-table">
-      <TableHeader filters={filters} onChange={setFilters} />
+    <StyledTable data-testid="mine-oppgaver-table" zebraStripes>
+      <TableHeader filters={filters} onSortChange={(sortKey?: string) => {}} />
       <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
     </StyledTable>
+
+    // <StyledTable data-testid="mine-oppgaver-table">
+    //   <TableHeader filters={filters} onChange={setFilters} />
+    //   <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
+    // </StyledTable>
   );
 };
+
+const StyledTable = styled(Table)`
+  width: 900px;
+`;

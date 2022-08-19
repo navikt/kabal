@@ -1,3 +1,4 @@
+import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { SortBy } from '../common-table-components/sort-by';
@@ -9,13 +10,13 @@ interface TableHeaderProps {
 }
 
 export const TableHeader = ({ filters, onChange }: TableHeaderProps): JSX.Element => (
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Ytelse</th>
-      <th>Hjemmel</th>
-      <th>Navn</th>
-      <th>Fnr.</th>
+  <Table.Header>
+    <Table.Row>
+      <Table.ColumnHeader scope="col">Type</Table.ColumnHeader>
+      <Table.ColumnHeader scope="col">Ytelse</Table.ColumnHeader>
+      <Table.ColumnHeader scope="col">Hjemmel</Table.ColumnHeader>
+      <Table.ColumnHeader scope="col">Navn</Table.ColumnHeader>
+      <Table.ColumnHeader scope="col">Fnr.</Table.ColumnHeader>
       <SortBy
         sorting={filters.sorting}
         sortField={SortFieldEnum.ALDER}
@@ -31,9 +32,9 @@ export const TableHeader = ({ filters, onChange }: TableHeaderProps): JSX.Elemen
       >
         Frist
       </SortBy>
-      <th />
-      <th />
-      <th />
-    </tr>
-  </thead>
+      <Table.ColumnHeader scope="col" />
+      <Table.ColumnHeader scope="col" />
+      <Table.ColumnHeader scope="col" />
+    </Table.Row>
+  </Table.Header>
 );

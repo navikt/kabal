@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, Table } from '@navikt/ds-react';
 import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
 import { Row } from './row';
@@ -12,31 +12,31 @@ interface OppgaveRaderProps {
 export const OppgaveRader = ({ oppgaver, columnCount, isFetching }: OppgaveRaderProps): JSX.Element => {
   if (typeof oppgaver === 'undefined') {
     return (
-      <tbody data-testid="mine-oppgaver-table-loading" data-isfetching="false">
-        <tr>
-          <td colSpan={columnCount}>
+      <Table.Body data-testid="mine-oppgaver-table-loading" data-isfetching="false">
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>
             <Loader size="xlarge" title="Laster oppgaver..." />
-          </td>
-        </tr>
-      </tbody>
+          </Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   if (oppgaver.length === 0) {
     return (
-      <tbody data-testid="mine-oppgaver-table-none" data-isfetching="false">
-        <tr>
-          <td colSpan={columnCount}>Ingen oppgaver i liste</td>
-        </tr>
-      </tbody>
+      <Table.Body data-testid="mine-oppgaver-table-none" data-isfetching="false">
+        <Table.Row>
+          <Table.DataCell colSpan={columnCount}>Ingen oppgaver i liste</Table.DataCell>
+        </Table.Row>
+      </Table.Body>
     );
   }
 
   return (
-    <tbody data-testid="mine-oppgaver-table-rows" data-isfetching={isFetching.toString()}>
+    <Table.Body data-testid="mine-oppgaver-table-rows" data-isfetching={isFetching.toString()}>
       {oppgaver.map((k) => (
         <Row {...k} key={k.id} />
       ))}
-    </tbody>
+    </Table.Body>
   );
 };
