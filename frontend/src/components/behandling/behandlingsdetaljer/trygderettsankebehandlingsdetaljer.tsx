@@ -27,7 +27,7 @@ export const Trygderettsankebehandlingsdetaljer = () => {
       <StyledPaddedContent>
         <PanelHeader>Behandling</PanelHeader>
 
-        <BehandlingSection label="Anker">{klagerName ?? ''}</BehandlingSection>
+        <BehandlingSection label="A n k e r">{klagerName ?? ''}</BehandlingSection>
 
         <BehandlingSection label="Type">
           <Type type={type}></Type>
