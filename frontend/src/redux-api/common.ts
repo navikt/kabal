@@ -21,7 +21,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
 
       if (result.error.status === 401) {
         if (!IS_LOCALHOST) {
-          window.location.reload();
+          window.location.assign('/oauth2/login');
         }
 
         retry.fail(result.error);

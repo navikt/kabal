@@ -1,18 +1,16 @@
 import { Client, GrantBody } from 'openid-client';
-import { client_id } from '../../config/azure-config';
-import { serverConfig } from '../../config/server-config';
-import { getLogger } from '../../logger';
+import { AZURE_APP_CLIENT_ID, NAIS_CLUSTER_NAME } from '../config/config';
+import { getLogger } from '../logger';
 import { now, oboCache } from './on-behalf-of-cache';
 
 const log = getLogger('auth');
 
 export const getOnBehalfOfAccessToken = async (
   authClient: Client,
-  access_token: string,
+  authHeader: string,
   appName: string
 ): Promise<string> => {
-  const scope = `api://${serverConfig.cluster}.klage.${appName}/.default`;
-  const cacheKey = `${access_token}-${appName}`;
+  const cacheKey = `${authHeader}-${appName}`;
 
   const cacheHit = oboCache.get(cacheKey);
 
@@ -32,14 +30,16 @@ export const getOnBehalfOfAccessToken = async (
     throw error;
   }
 
+  const scope = `api://${NAIS_CLUSTER_NAME}.klage.${appName}/.default`;
+
   try {
     const params: GrantBody = {
-      client_id,
+      client_id: AZURE_APP_CLIENT_ID,
       scope,
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
       client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
       requested_token_use: 'on_behalf_of',
-      assertion: access_token,
+      assertion: getSubjectAccessToken(authHeader),
     };
 
     const { access_token: obo_access_token, expires_at } = await authClient.grant(params, {
@@ -62,4 +62,14 @@ export const getOnBehalfOfAccessToken = async (
 
     throw error;
   }
+};
+
+const getSubjectAccessToken = (authHeader: string) => {
+  const parts = authHeader.split(' ');
+
+  if (parts.length !== 2) {
+    throw new Error('Error while splitting bearer token');
+  }
+
+  return parts[1];
 };
