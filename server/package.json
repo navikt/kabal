@@ -16,36 +16,28 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.12",
-    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv-flow": "^3.2.0",
     "express": "^4.18.1",
-    "helmet": "^4.6.0",
     "http-proxy-middleware": "^2.0.6",
-    "jose": "^2.0.5",
+    "jose": "^4.9.2",
     "node-fetch": "^3.2.10",
-    "openid-client": "^4.9.1",
-    "redis": "^3.1.2"
+    "openid-client": "^5.1.9"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.3",
-    "@types/dotenv-flow": "^3.2.0",
+    "@types/express": "^4.17.14",
     "@types/jest": "^28.1.8",
-    "@types/morgan": "^1.9.3",
-    "@types/redis": "^2.8.32",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
-    "env-cmd": "^10.1.0",
-    "eslint": "^8.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.0.1",
+    "eslint-plugin-jest": "^27.0.4",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.8",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.3"
   }
 }

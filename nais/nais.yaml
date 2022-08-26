@@ -24,6 +24,9 @@ spec:
         {{/each}}
         extra:
           - NAVident
+    sidecar:
+      enabled: true
+      autoLogin: true
   accessPolicy:
     outbound:
       rules:

@@ -1,5 +1,5 @@
 import express from 'express';
-import { VERSION } from '../config/version';
+import { VERSION } from '../config/config';
 
 const router = express.Router();
 

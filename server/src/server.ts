@@ -1,7 +1,6 @@
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import { applicationDomain, isDeployed, isDeployedToProd } from './config/env';
+import { APPLICATION_DOMAIN, IS_DEPLOYED, IS_PRODUCTION } from './config/config';
 import { init } from './init';
 import { getLogger, httpLoggingMiddleware } from './logger';
 import { processErrors } from './process-errors';
@@ -11,7 +10,7 @@ processErrors();
 
 const log = getLogger('server');
 
-if (isDeployed) {
+if (IS_DEPLOYED) {
   log.info({ msg: 'Started!' });
 
   sendToSlack('Starting...', EmojiIcons.StartStruck);
@@ -23,8 +22,6 @@ server.use(httpLoggingMiddleware);
 
 server.set('trust proxy', true);
 server.disable('x-powered-by');
-
-server.use(cookieParser());
 
 server.use(
   cors({
@@ -51,7 +48,7 @@ server.use(
       'X-Forwarded-Proto',
       'X-Requested-With',
     ],
-    origin: isDeployedToProd ? applicationDomain : [applicationDomain, /https?:\/\/localhost:\d{4,}/],
+    origin: IS_PRODUCTION ? APPLICATION_DOMAIN : [APPLICATION_DOMAIN, /https?:\/\/localhost:\d{4,}/],
   })
 );
 

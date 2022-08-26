@@ -1,50 +1,33 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { Client } from 'openid-client';
-import { getOnBehalfOfAccessToken } from '../auth/azure/on-behalf-of';
-import { loginRedirect } from '../auth/login-redirect';
-import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from '../auth/session-utils';
+import { getAzureADClient } from '../auth/get-auth-client';
+import { getOnBehalfOfAccessToken } from '../auth/on-behalf-of';
 import { API_CLIENT_IDS } from '../config/config';
 import { getLogger } from '../logger';
 
 const log = getLogger('proxy');
 
-export const setupProxy = (authClient: Client) => {
+export const setupProxy = async () => {
+  const authClient = await getAzureADClient();
   const router = express.Router();
 
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
 
     router.use(route, async (req, res, next) => {
-      const session = getSessionIdAndSignature(req);
+      const authHeader = req.header('Authorization');
 
-      if (session === null) {
-        const [sessionId, signature] = generateSessionIdAndSignature();
-        setSessionCookie(res, sessionId, signature);
-        loginRedirect(authClient, sessionId, res, req.originalUrl);
-
-        return;
+      if (typeof authHeader === 'string') {
+        try {
+          const obo_access_token = await getOnBehalfOfAccessToken(authClient, authHeader, appName);
+          req.headers['authorization'] = `Bearer ${obo_access_token}`;
+          req.headers['azure-ad-token'] = authHeader;
+        } catch (error) {
+          log.warn({ msg: `Failed to prepare request with OBO token.`, error, data: { route } });
+        }
       }
 
-      const [sessionId] = session;
-      const access_token = req.headers['Authorization'];
-
-      if (typeof access_token !== 'string') {
-        loginRedirect(authClient, sessionId, res, req.originalUrl);
-
-        return;
-      }
-
-      try {
-        const obo_access_token = await getOnBehalfOfAccessToken(authClient, access_token, appName);
-        req.headers['Authorization'] = `Bearer ${obo_access_token}`;
-        next();
-
-        return;
-      } catch (error) {
-        log.warn({ msg: `Failed to prepare request with on-behalf-of token` });
-        loginRedirect(authClient, sessionId, res, req.originalUrl);
-      }
+      next();
     });
 
     router.use(
@@ -80,13 +63,6 @@ export const setupProxy = (authClient: Client) => {
           });
         },
         logLevel: 'warn',
-        logProvider: () => ({
-          log: (msg: string) => log.info({ msg, data: { appName } }),
-          info: (msg: string) => log.info({ msg, data: { appName } }),
-          debug: (msg: string) => log.debug({ msg, data: { appName } }),
-          warn: (msg: string) => log.warn({ msg, data: { appName } }),
-          error: (msg: string) => log.error({ msg, data: { appName } }),
-        }),
         changeOrigin: true,
       })
     );
