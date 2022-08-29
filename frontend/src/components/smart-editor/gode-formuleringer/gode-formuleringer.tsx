@@ -3,8 +3,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import { ReactEditor } from 'slate-react';
 import styled from 'styled-components';
 import { stringToRegExp } from '../../../functions/string-to-regex';
-import { useFeatureToggle } from '../../../hooks/use-feature-toggle';
-import { FeatureToggles } from '../../../redux-api/feature-toggling';
 import { useGetTextsQuery } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { TextTypes } from '../../../types/texts/texts';
@@ -19,7 +17,7 @@ interface Props {
 }
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
-  const enabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
+  const enabled = true; //useFeatureToggle(FeatureToggles.MALTEKSTER);
 
   const [filter, setFilter] = useState<string>('');
   const [focused, setFocused] = useState<number>(-1);
