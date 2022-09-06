@@ -10,10 +10,6 @@ export const useUtfall = (type?: OppgaveType): [IKodeverkSimpleValue<Utfall>[], 
       return [[], true];
     }
 
-    if (type === OppgaveType.KLAGE) {
-      return [utfall, false];
-    }
-
-    return [utfall.filter(({ id }) => id !== Utfall.AVVIST), false];
+    return [utfall, false];
   }, [type, utfall]);
 };
