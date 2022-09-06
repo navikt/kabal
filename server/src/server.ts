@@ -3,16 +3,23 @@ import cors from 'cors';
 import express from 'express';
 import { applicationDomain, isDeployed, isDeployedToProd } from './config/env';
 import { init } from './init';
+import { getLogger, httpLoggingMiddleware } from './logger';
 import { processErrors } from './process-errors';
 import { EmojiIcons, sendToSlack } from './slack';
 
 processErrors();
 
+const log = getLogger('server');
+
 if (isDeployed) {
+  log.info({ msg: 'Started!' });
+
   sendToSlack('Starting...', EmojiIcons.StartStruck);
 }
 
 const server = express();
+
+server.use(httpLoggingMiddleware);
 
 server.set('trust proxy', true);
 server.disable('x-powered-by');
@@ -50,15 +57,5 @@ server.use(
 
 server.get('/isAlive', (req, res) => res.status(200).send('Alive'));
 server.get('/isReady', (req, res) => res.status(200).send('Ready'));
-
-// morganBody(server, {
-//   noColors: true,
-//   prettify: false,
-//   includeNewLine: false,
-//   logReqUserAgent: false,
-//   logRequestBody: false, // så slipper vi å se tokens i loggen
-//   maxBodyLength: 5000,
-//   logIP: false,
-// });
 
 init(server);

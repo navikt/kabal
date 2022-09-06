@@ -6,10 +6,13 @@ import { guardMiddleware } from './auth/guard-middleware';
 import { logoutHandler } from './auth/logout-handler';
 import { callbackPath } from './config/azure-config';
 import { serverConfig } from './config/server-config';
+import { getLogger } from './logger';
 import { setupProxy } from './routes/setup-proxy';
 import { setupStaticRoutes } from './routes/static-routes';
 import { setupVersionRoute } from './routes/version';
 import { EmojiIcons, sendToSlack } from './slack';
+
+const log = getLogger('init');
 
 const PORT = serverConfig.port;
 
@@ -23,12 +26,15 @@ export const init = async (server: Express) => {
     server.use(authMiddleware(authClient));
     server.use(setupProxy(authClient));
     server.use(setupStaticRoutes());
-    server.listen(PORT, () => console.info(`Listening on port ${PORT}`));
+    server.listen(PORT, () => log.info({ msg: `Listening on port ${PORT}` }));
   } catch (e) {
     if (e instanceof Error) {
+      log.error({ error: e, msg: 'Server crashed' });
       await sendToSlack(`Server crashed: ${e.message}`, EmojiIcons.Scream);
-    } else {
-      await sendToSlack(`Server crashed: ${JSON.stringify(e)}`, EmojiIcons.Scream);
+    } else if (typeof e === 'string' || typeof e === 'number') {
+      const msg = `Server crashed: ${JSON.stringify(e)}`;
+      log.error({ msg });
+      await sendToSlack(msg, EmojiIcons.Scream);
     }
     process.exit(1);
   }

@@ -1,7 +1,10 @@
 import { Response } from 'express';
 import { Client, generators } from 'openid-client';
 import { azureAdAuthParams } from '../config/azure-config';
+import { getLogger } from '../logger';
 import { saveSessionData } from '../redis';
+
+const log = getLogger('auth');
 
 export const loginRedirect = async (authClient: Client, session: string, res: Response, before_login: string) => {
   try {
@@ -10,8 +13,8 @@ export const loginRedirect = async (authClient: Client, session: string, res: Re
     const authUrl = authClient.authorizationUrl({ ...azureAdAuthParams, code_challenge });
     await saveSessionData(session, { before_login, code_verifier });
     res.redirect(authUrl);
-  } catch (err) {
-    console.warn('Failed to redirect to login', err);
-    throw err;
+  } catch (error) {
+    log.warn({ msg: 'Failed to redirect to login', error });
+    throw error;
   }
 };

@@ -5,6 +5,9 @@ import { getOnBehalfOfAccessToken } from '../auth/azure/on-behalf-of';
 import { loginRedirect } from '../auth/login-redirect';
 import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from '../auth/session-utils';
 import { API_CLIENT_IDS } from '../config/config';
+import { getLogger } from '../logger';
+
+const log = getLogger('proxy');
 
 export const setupProxy = (authClient: Client) => {
   const router = express.Router();
@@ -39,11 +42,7 @@ export const setupProxy = (authClient: Client) => {
 
         return;
       } catch (error) {
-        if (error instanceof Error) {
-          console.warn(`Failed to prepare request with on-behalf-of token. ${error.message}`);
-        } else {
-          console.warn(`Failed to prepare request with on-behalf-of token.`);
-        }
+        log.warn({ msg: `Failed to prepare request with on-behalf-of token` });
         loginRedirect(authClient, sessionId, res, req.originalUrl);
       }
     });
@@ -55,19 +54,39 @@ export const setupProxy = (authClient: Client) => {
         pathRewrite: {
           [`^/api/${appName}`]: '',
         },
-        onError: (err, req, res) => {
-          res.statusCode = 500;
-          res.setHeader('Content-Type', 'application/json');
+        onError: (error, req, res) => {
+          if (res.headersSent) {
+            log.error({
+              msg: 'Headers already sent.',
+              error,
+              data: {
+                appName,
+                statusCode: res.statusCode,
+                url: req.originalUrl,
+                method: req.method,
+              },
+            });
 
-          if (err instanceof Error) {
-            res.write(JSON.stringify({ error: `Failed to connect to API. Reason: ${err.message}` }));
-          } else {
-            res.write(JSON.stringify({ error: `Failed to connect to API.` }));
+            return;
           }
 
-          res.end();
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          const body = JSON.stringify({ error: `Failed to connect to API. Reason: ${error.message}` });
+          res.end(body);
+          log.error({
+            msg: 'Failed to connect to API.',
+            error,
+            data: { appName, url: req.originalUrl, method: req.method },
+          });
         },
         logLevel: 'warn',
+        logProvider: () => ({
+          log: (msg: string) => log.info({ msg, data: { appName } }),
+          info: (msg: string) => log.info({ msg, data: { appName } }),
+          debug: (msg: string) => log.debug({ msg, data: { appName } }),
+          warn: (msg: string) => log.warn({ msg, data: { appName } }),
+          error: (msg: string) => log.error({ msg, data: { appName } }),
+        }),
         changeOrigin: true,
       })
     );

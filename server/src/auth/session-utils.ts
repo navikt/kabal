@@ -2,6 +2,9 @@ import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { isDeployedToProd } from '../config/env';
 import { serverConfig } from '../config/server-config';
+import { getLogger } from '../logger';
+
+const log = getLogger('auth');
 
 export const ensureSession = (req: Request, res: Response): [string, string] => {
   const existingSession = getSessionIdAndSignature(req);
@@ -32,7 +35,7 @@ export const getSessionIdAndSignature = (req: Request): [string, string] | null 
     return [sessionId, signature];
   }
 
-  console.warn(`Session signature invalid for session "${sessionId}.${signature}".`);
+  log.warn({ msg: `Session signature invalid for session "${sessionId}.${signature}".` });
 
   return null;
 };
