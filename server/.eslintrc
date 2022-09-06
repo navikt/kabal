@@ -157,7 +157,8 @@
         "allow": [
           "warn",
           "error",
-          "info"
+          "info",
+          "debug"
         ]
       }
     ],

@@ -1,5 +1,8 @@
 import { createClient } from 'redis';
 import { redisConfig } from './config/redis-config';
+import { getLogger } from './logger';
+
+const log = getLogger('redis');
 
 const client = createClient(redisConfig.url, {
   db: 1,
@@ -7,7 +10,7 @@ const client = createClient(redisConfig.url, {
 });
 
 client.on('error', (error: Error) => {
-  console.error('Redis Client error:', error);
+  log.error({ msg: 'Redis Client error', error });
 });
 
 const serializeToRedis = <T>(key: string, value: T) => {
@@ -25,8 +28,8 @@ const deserializeFromRedis = async <T>(key: string): Promise<T | null> => {
 
   try {
     return JSON.parse(serialized) as T;
-  } catch (err) {
-    console.warn(`Failed to parse Redis data for key ${key}`, err);
+  } catch (error) {
+    log.warn({ msg: `Failed to parse Redis data for key ${key}`, error });
 
     return null;
   }
@@ -34,27 +37,23 @@ const deserializeFromRedis = async <T>(key: string): Promise<T | null> => {
 
 const saveToRedis = (key: string, value: string) =>
   new Promise<void>((resolve, reject) =>
-    client.set(key, value, (err) => {
-      if (err === null) {
+    client.set(key, value, (error) => {
+      if (error === null) {
         resolve();
       } else {
-        if (err instanceof Error) {
-          console.warn(`Error while saving to Redis with '${key}'`, err.message);
-        } else {
-          console.warn(`Error while saving to Redis with '${key}'`);
-        }
+        log.warn({ msg: `Error while saving to Redis with '${key}'`, error });
 
-        reject(err);
+        reject(error);
       }
     })
   );
 
 const readFromRedis = async (key: string): Promise<string | null> =>
   new Promise<string | null>((resolve, reject) =>
-    client.get(key, (err, json) => {
-      if (err !== null) {
-        console.warn(`Error while reading from Redis with key '${key}'`, err);
-        reject(err);
+    client.get(key, (error, json) => {
+      if (error !== null) {
+        log.warn({ msg: `Error while reading from Redis with key '${key}'`, error });
+        reject(error);
 
         return;
       }
@@ -65,7 +64,7 @@ const readFromRedis = async (key: string): Promise<string | null> =>
         return;
       }
 
-      if (err === null) {
+      if (error === null) {
         resolve(null);
       }
     })
@@ -73,17 +72,13 @@ const readFromRedis = async (key: string): Promise<string | null> =>
 
 export const deleteFromRedis = async (key: string): Promise<void> =>
   new Promise<void>((resolve, reject) =>
-    client.del(key, (err) => {
-      if (err === null) {
+    client.del(key, (error) => {
+      if (error === null) {
         resolve();
       } else {
-        if (err instanceof Error) {
-          console.warn(`Error while deleting from Redis with key '${key}'`, err.message);
-        } else {
-          console.warn(`Error while deleting from Redis with key '${key}'`);
-        }
+        log.warn({ msg: `Error while deleting from Redis with key '${key}'`, error });
 
-        reject(err);
+        reject(error);
       }
     })
   );

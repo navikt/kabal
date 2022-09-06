@@ -1,8 +1,11 @@
 import { Handler } from 'express';
 import { Client } from 'openid-client';
+import { getLogger } from '../logger';
 import { loginRedirect } from './login-redirect';
 import { generateSessionIdAndSignature, getSessionIdAndSignature, setSessionCookie } from './session-utils';
 import { getAccessTokenWithRefresh } from './tokens';
+
+const log = getLogger('auth');
 
 export const authMiddleware =
   (authClient: Client): Handler =>
@@ -31,9 +34,8 @@ export const authMiddleware =
       req.headers['Authorization'] = access_token;
       next();
     } catch (error) {
-      if (error instanceof Error || typeof error === 'string') {
-        console.warn('Auth middleware:', error);
-      }
+      log.warn({ msg: 'Auth middleware error', error });
+
       loginRedirect(authClient, sessionId, res, req.originalUrl);
     }
   };

@@ -1,9 +1,12 @@
 import { Handler } from 'express';
 import { Client } from 'openid-client';
 import { callbackUrl } from '../config/azure-config';
+import { getLogger } from '../logger';
 import { getSessionData, saveSessionData } from '../redis';
 import { loginRedirect } from './login-redirect';
 import { ensureSession } from './session-utils';
+
+const log = getLogger('auth');
 
 export const callbackHandler =
   (authClient: Client): Handler =>
@@ -12,7 +15,7 @@ export const callbackHandler =
     const [sessionId] = ensureSession(req, res);
 
     if (typeof error === 'string' || typeof error_description === 'string') {
-      console.warn('Callback handler:', error, error_description);
+      log.warn({ msg: 'Callback handler error', error });
       loginRedirect(authClient, sessionId, res, req.originalUrl);
 
       return;
@@ -20,7 +23,7 @@ export const callbackHandler =
 
     if (typeof code !== 'string') {
       const err = `No code in query after Azure login. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      log.warn({ msg: 'Callback handler error', error: err });
       res.status(500).send(err);
 
       return;
@@ -28,7 +31,7 @@ export const callbackHandler =
 
     if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
       const err = 'OpenID issuer misconfigured. Missing token endpoint.';
-      console.warn('Callback handler:', err);
+      log.warn({ msg: 'Callback handler error', error: err });
       res.status(500).send(err);
 
       return;
@@ -38,7 +41,7 @@ export const callbackHandler =
 
     if (sessionData === null) {
       const err = `No session data found after Azure login. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      log.warn({ msg: 'Callback handler error', error: err });
       res.status(500).send(err);
 
       return;
@@ -48,7 +51,7 @@ export const callbackHandler =
 
     if (typeof code_verifier !== 'string') {
       const err = `OpenID code verifier missing in session data. Session '${sessionId}'.`;
-      console.warn('Callback handler:', err);
+      log.warn({ msg: 'Callback handler error', error: err });
       res.status(500).send(err);
 
       return;
@@ -69,12 +72,8 @@ export const callbackHandler =
       await saveSessionData(sessionId, { access_token, refresh_token });
 
       res.redirect(before_login ?? '/');
-    } catch (e) {
-      if (e instanceof Error || typeof e === 'string') {
-        console.error('Callback handler:', `Error while exchanging code for tokens.`, e);
-      } else {
-        console.error('Callback handler:', 'Unknown error while exchanging code for tokens.');
-      }
+    } catch (err) {
+      log.error({ msg: `Callback handler: Error while exchanging code for tokens.`, error: err });
 
       loginRedirect(authClient, sessionId, res, before_login ?? '/');
     }

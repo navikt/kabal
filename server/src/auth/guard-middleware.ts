@@ -1,7 +1,10 @@
 import { Handler } from 'express';
 import { Client } from 'openid-client';
+import { getLogger } from '../logger';
 import { getSessionIdAndSignature, setSessionCookie } from './session-utils';
 import { getAccessTokenWithRefresh } from './tokens';
+
+const log = getLogger('auth');
 
 export const guardMiddleware =
   (authClient: Client): Handler =>
@@ -23,9 +26,7 @@ export const guardMiddleware =
       req.headers['Authorization'] = access_token; // Misuse the Authorization header to not query Redis twice for the same data for the same request.
       next();
     } catch (error) {
-      if (error instanceof Error || typeof error === 'string') {
-        console.warn(error);
-      }
+      log.warn({ error });
       res.status(401).send();
     }
   };
