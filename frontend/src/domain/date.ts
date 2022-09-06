@@ -91,6 +91,7 @@ const MONTHS = [
   'juni',
   'juli',
   'august',
+  'september',
   'oktober',
   'november',
   'desember',
