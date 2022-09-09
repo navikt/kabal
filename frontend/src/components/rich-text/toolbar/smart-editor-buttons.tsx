@@ -18,11 +18,6 @@ export const SmartEditorButtons = ({
   showAnnotationsButton = false,
   showGodeFormuleringerButton = false,
 }: SmartEditorButtonsProps) => {
-  // const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
-  //
-  // const showGodeFormuleringer = malteksterEnabled && showGodeFormuleringerButton;
-  // const showAnnotations = malteksterEnabled && showAnnotationsButton;
-  //
   if (!showCommentsButton && !showAnnotationsButton && !showGodeFormuleringerButton) {
     return null;
   }

@@ -17,8 +17,6 @@ interface Props {
 }
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
-  const enabled = true; //useFeatureToggle(FeatureToggles.MALTEKSTER);
-
   const [filter, setFilter] = useState<string>('');
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,7 +87,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     [editor, filter.length, focused, setShowGodeFormuleringer, texts]
   );
 
-  if (!showGodeFormuleringer || isLoading || typeof data === 'undefined' || editor === null || !enabled) {
+  if (!showGodeFormuleringer || isLoading || typeof data === 'undefined' || editor === null) {
     return null;
   }
 

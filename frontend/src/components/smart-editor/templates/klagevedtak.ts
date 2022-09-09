@@ -46,7 +46,7 @@ export const INITIAL_SLATE_VALUE: Descendant[] = [
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: TemplateIdEnum.KLAGEVEDTAK,
   type: OppgaveType.KLAGE,
-  tittel: 'Klagevedtak (test)',
+  tittel: 'Klagevedtak',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,
 });

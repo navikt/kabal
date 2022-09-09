@@ -1,15 +1,9 @@
-import { FeatureToggles } from '../../../../redux-api/feature-toggling';
 import { toggleMark } from '../../functions/marks';
 import { MarkKeys } from '../../types/marks';
 import { selectAll } from './select-all';
 import { HandlerFn } from './types';
 
-export const hotkeys: HandlerFn = ({
-  editor,
-  event,
-  context,
-  featureFlags: { [FeatureToggles.MALTEKSTER]: malteksterEnabled },
-}) => {
+export const hotkeys: HandlerFn = ({ editor, event, context }) => {
   const {
     showNewComment,
     setShowNewComment,
@@ -67,10 +61,6 @@ export const hotkeys: HandlerFn = ({
       switch (event.key) {
         case 'F':
         case 'f':
-          if (!malteksterEnabled) {
-            return;
-          }
-
           event.preventDefault();
           setShowGodeFormuleringer(!showGodeFormuleringer);
           break;

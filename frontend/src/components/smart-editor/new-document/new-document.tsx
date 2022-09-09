@@ -5,7 +5,7 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCreateSmartDocumentMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
 import { OppgaveType } from '../../../types/kodeverk';
 import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
-import { ANKE_TEMPLATES, EXPERIMENTAL_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
+import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { MedholdBrevIcon } from './medhold-brev-icon';
@@ -24,7 +24,6 @@ interface Props {
 }
 
 export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
-  const malteksterEnabled = true; //useFeatureToggle(FeatureToggles.MALTEKSTER);
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const canEdit = useCanEdit();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
@@ -43,9 +42,7 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
       .finally(() => setLoadingTemplate(null));
   };
 
-  const templates = (oppgave.type === OppgaveType.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES).filter(({ templateId }) =>
-    EXPERIMENTAL_TEMPLATES.some((e) => e.templateId === templateId) ? malteksterEnabled : true
-  );
+  const templates = oppgave.type === OppgaveType.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
 
   return (
     <StyledNewDocument>
