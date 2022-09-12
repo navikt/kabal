@@ -6,6 +6,7 @@ export interface INewSmartEditorMetadata {
   templateId: TemplateIdEnum;
   tittel: string;
   version: typeof VERSION;
+  dokumentTypeId: DocumentType;
 }
 
 export interface ISmartEditorMetadata extends Omit<INewSmartEditorMetadata, 'templateId'> {
@@ -14,5 +15,4 @@ export interface ISmartEditorMetadata extends Omit<INewSmartEditorMetadata, 'tem
   id: string; // "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   modified: string; // "2021-10-26T12:20:44.230Z"
   parent: UUID | null;
-  dokumentTypeId: DocumentType;
 }

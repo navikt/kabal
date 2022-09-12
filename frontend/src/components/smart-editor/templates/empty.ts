@@ -1,5 +1,6 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '../../../functions/deep-freeze';
+import { DocumentType } from '../../../types/documents/documents';
 import { ISmartEditorTemplate, TemplateTypeEnum } from '../../../types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { VERSION } from '../../rich-text/version';
@@ -13,4 +14,5 @@ export const EMPTY_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   tittel: 'Generelt brev',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,
+  dokumentTypeId: DocumentType.BREV,
 });
