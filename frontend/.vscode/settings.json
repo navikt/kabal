@@ -10,6 +10,7 @@
   "eslint.codeActionsOnSave.mode": "all",
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
+  "editor.linkedEditing": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
