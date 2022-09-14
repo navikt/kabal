@@ -1,12 +1,14 @@
 import { Applicant, Close, CoApplicant, FileFolder, People, Send } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { useOppgave } from '../../../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFinishDocumentMutation } from '../../../../../redux-api/oppgaver/mutations/documents';
 import { DocumentType, IMainDocument } from '../../../../../types/documents/documents';
 import { Saksrolle } from '../../../../../types/oppgavebehandling/oppgavebehandling';
+import { DocumentTypeEnum } from '../../../../show-document/types';
+import { ShownDocumentContext } from '../../../context';
 
 interface Props {
   document: IMainDocument;
@@ -37,6 +39,7 @@ interface FinishProps {
 
 const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
+  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
 
   const onClick = () => {
@@ -44,6 +47,13 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
       return;
     }
 
+    if (
+      shownDocument !== null &&
+      shownDocument.type !== DocumentTypeEnum.ARCHIVED &&
+      shownDocument.documentId === dokumentId
+    ) {
+      setShownDocument(null);
+    }
     finish({ dokumentId, oppgaveId });
   };
 
@@ -82,10 +92,26 @@ const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
 const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
+  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
   if (oppgaveIsLoading || typeof data === 'undefined') {
     return null;
   }
+
+  const onClick = () => {
+    if (typeof data?.id !== 'string') {
+      return;
+    }
+
+    if (
+      shownDocument !== null &&
+      shownDocument.type !== DocumentTypeEnum.ARCHIVED &&
+      shownDocument.documentId === dokumentId
+    ) {
+      setShownDocument(null);
+    }
+    finish({ dokumentId, oppgaveId: data.id });
+  };
 
   return (
     <StyledFinishDocument>
@@ -103,7 +129,7 @@ const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           type="button"
           size="small"
           variant="primary"
-          onClick={() => finish({ dokumentId, oppgaveId: data?.id })}
+          onClick={onClick}
           loading={isFinishing}
           data-testid="document-finish-confirm"
           icon={<Send aria-hidden />}
