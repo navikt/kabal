@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
+import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledCaption } from '../../styled-components/table';
@@ -24,7 +24,7 @@ export const EnhetensOppgaverTable = () => {
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
 
-  const types = useKodeverkValue('sakstyper');
+  const types = useSakstyper();
   const availableYtelser = useAvailableYtelser();
   const availableHjemler = useAvailableHjemler();
 

@@ -2,6 +2,7 @@ import { Delete, SuccessStroke } from '@navikt/ds-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
+import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
 import { useKodeverk } from '../../simple-api-state/use-kodeverk';
 import { ISettings } from '../../types/bruker';
@@ -27,6 +28,7 @@ export const Filters = () => {
   const { data: settingsData } = useGetSettingsQuery();
   const hjemler = useHjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
+  const sakstyper = useSakstyper();
 
   const ytelserOptions = useMemo(
     () =>
@@ -55,7 +57,7 @@ export const Filters = () => {
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
       <StyledFilters>
-        <SettingsFilter label="Typer" options={kodeverk.sakstyper} selected={settings.typer} settingKey="typer" />
+        <SettingsFilter label="Typer" options={sakstyper} selected={settings.typer} settingKey="typer" />
         <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
         <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
       </StyledFilters>

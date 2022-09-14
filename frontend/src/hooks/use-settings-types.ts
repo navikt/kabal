@@ -1,10 +1,10 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetSettingsQuery } from '../redux-api/bruker';
 import { IKodeverkSimpleValue, OppgaveType } from '../types/kodeverk';
-import { useKodeverkValue } from './use-kodeverk-value';
+import { useSakstyper } from './use-kodeverk-value';
 
 export const useSettingsTypes = (): IKodeverkSimpleValue<OppgaveType>[] => {
-  const types = useKodeverkValue('sakstyper');
+  const types = useSakstyper();
   const { data } = useGetSettingsQuery();
 
   if (typeof data === 'undefined' || typeof types === 'undefined') {
