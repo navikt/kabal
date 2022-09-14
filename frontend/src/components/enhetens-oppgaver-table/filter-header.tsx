@@ -2,7 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
+import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
 import { useUser } from '../../simple-api-state/use-user';
 import { OppgaveType } from '../../types/kodeverk';
@@ -17,7 +17,7 @@ interface TableHeaderFiltersProps {
 }
 
 export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps) => {
-  const typeOptions = useKodeverkValue('sakstyper') ?? [];
+  const sakstyper = useSakstyper();
   const ytelseOptions = useAvailableYtelser();
   const hjemlerOptions = useAvailableHjemler();
 
@@ -31,13 +31,8 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         <Table.HeaderCell role="columnheader">
           <FilterDropdown<OppgaveType>
             selected={filters.types}
-            onChange={(types) =>
-              onChange({
-                ...filters,
-                types,
-              })
-            }
-            options={kodeverkSimpleValuesToDropdownOptions(typeOptions)}
+            onChange={(types) => onChange({ ...filters, types })}
+            options={kodeverkSimpleValuesToDropdownOptions(sakstyper)}
           >
             Type
           </FilterDropdown>
