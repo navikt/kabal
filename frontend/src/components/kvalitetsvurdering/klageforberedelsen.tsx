@@ -89,19 +89,18 @@ export const Klageforberedelsen = () => {
         hideLegend
         disabled={!canEdit}
         size="small"
+        value={klageforberedelsenRadioValg}
       >
         <RadioButtonsRow>
           <Radio
             value={RadioValg.BRA}
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.BRA })}
-            checked={klageforberedelsenRadioValg === RadioValg.BRA}
           >
             Bra/godt nok
           </Radio>
           <Radio
             value={RadioValg.MANGELFULLT}
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.MANGELFULLT })}
-            checked={klageforberedelsenRadioValg === RadioValg.MANGELFULLT}
           >
             Mangelfullt
           </Radio>

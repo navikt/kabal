@@ -77,18 +77,17 @@ export const Vedtaket = () => {
         hideLegend
         disabled={!canEdit}
         size="small"
+        value={vedtaketRadioValg}
       >
         <RadioButtonsRow>
           <Radio
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.BRA })}
             value={RadioValg.BRA}
-            checked={vedtaketRadioValg === RadioValg.BRA}
           >
             Bra/godt nok
           </Radio>
           <Radio
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: RadioValg.MANGELFULLT })}
-            checked={vedtaketRadioValg === RadioValg.MANGELFULLT}
             value={RadioValg.MANGELFULLT}
           >
             Mangelfullt

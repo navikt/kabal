@@ -56,20 +56,19 @@ export const BrukAvRaadgivendeLege = () => {
         hideLegend
         disabled={!canEdit}
         size="small"
+        value={brukAvRaadgivendeLegeRadioValg}
       >
         <Radio
           value={RadioValgExtended.IKKE_AKTUELT}
           onChange={() =>
             updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.IKKE_AKTUELT })
           }
-          checked={brukAvRaadgivendeLegeRadioValg === RadioValgExtended.IKKE_AKTUELT}
         >
           Ikke aktuelt for saken
         </Radio>
         <Radio
           value={RadioValgExtended.BRA}
           onChange={() => updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.BRA })}
-          checked={brukAvRaadgivendeLegeRadioValg === RadioValgExtended.BRA}
         >
           Bra/godt nok
         </Radio>
@@ -78,7 +77,6 @@ export const BrukAvRaadgivendeLege = () => {
           onChange={() =>
             updateKvalitetsvurdering({ id, brukAvRaadgivendeLegeRadioValg: RadioValgExtended.MANGELFULLT })
           }
-          checked={brukAvRaadgivendeLegeRadioValg === RadioValgExtended.MANGELFULLT}
         >
           Mangelfullt
         </Radio>
