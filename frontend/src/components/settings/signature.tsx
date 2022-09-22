@@ -92,15 +92,9 @@ const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: Sig
 
   return (
     <>
-      <StyledRadioGroup legend={label}>
+      <StyledRadioGroup legend={label} value={savedValue}>
         {TITLES.map((value) => (
-          <Radio
-            name={infoKey}
-            onChange={() => setInfo({ key: infoKey, value, navIdent })}
-            value={value}
-            checked={value === savedValue}
-            key={value}
-          >
+          <Radio name={infoKey} onChange={() => setInfo({ key: infoKey, value, navIdent })} value={value} key={value}>
             {value}
           </Radio>
         ))}
