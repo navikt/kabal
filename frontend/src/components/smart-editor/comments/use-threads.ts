@@ -6,6 +6,7 @@ import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '../../../types/smart-editor/comments';
 import { isCommentableVoid } from '../../rich-text/types/editor-type-guards';
+import { COMMENT_PREFIX } from '../constants';
 import { SmartEditorContext } from '../context/smart-editor-context';
 
 interface FocusedComment extends ISmartEditorComment {
@@ -73,8 +74,8 @@ const getRichTextThreadIds = (richText: Descendant[]): string[] =>
   richText.flatMap<string>((child) => {
     if (Text.isText(child)) {
       return Object.keys(child)
-        .filter((key) => key.startsWith('commentThreadId_'))
-        .map((key) => key.replace('commentThreadId_', ''));
+        .filter((key) => key.startsWith(COMMENT_PREFIX))
+        .map((key) => key.replace(COMMENT_PREFIX, ''));
     }
 
     if (typeof child === 'undefined' || child === null) {

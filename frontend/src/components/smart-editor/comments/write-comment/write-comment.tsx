@@ -1,0 +1,110 @@
+import { Close, Send } from '@navikt/ds-icons';
+import { Button, Textarea } from '@navikt/ds-react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { StyledCommentButtonContainer } from '../styled-components';
+
+interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
+  close: () => void;
+  isLoading: boolean;
+  label: string;
+  onFocus?: () => void;
+  onSubmit: (value: string) => Promise<void>;
+  text?: string;
+}
+
+export const WriteComment = ({
+  close,
+  isLoading,
+  label,
+  onFocus = () => {},
+  onSubmit,
+  primaryButtonLabel,
+  text = '',
+}: Props) => {
+  const [value, setValue] = useState('');
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useLayoutEffect(() => {
+    if (ref.current !== null) {
+      ref.current.setSelectionRange(0, text.length, 'forward');
+    }
+  }, [text.length]);
+
+  const save = () => onSubmit(value);
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      event.preventDefault();
+      save();
+
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      close();
+    }
+  };
+
+  return (
+    <>
+      <Textarea
+        autoFocus
+        disabled={isLoading}
+        hideLabel
+        label={label}
+        maxLength={0}
+        minRows={3}
+        onChange={({ target }) => setValue(target.value)}
+        onFocus={onFocus}
+        onKeyDown={onKeyDown}
+        placeholder="Skriv inn en kommentar"
+        ref={ref}
+        size="small"
+        value={value.length === 0 ? text : value}
+      />
+      <Buttons
+        close={close}
+        disabled={value.length === 0}
+        isLoading={isLoading}
+        onSubmit={save}
+        primaryButtonLabel={primaryButtonLabel}
+      />
+    </>
+  );
+};
+
+interface ButtonsProps {
+  close: () => void;
+  disabled: boolean;
+  isLoading: boolean;
+  onSubmit: () => void;
+  primaryButtonLabel: string;
+}
+
+const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: ButtonsProps) => (
+  <StyledCommentButtonContainer>
+    <Button
+      disabled={disabled}
+      icon={<Send aria-hidden />}
+      loading={isLoading}
+      onClick={onSubmit}
+      size="small"
+      title="Ctrl/⌘ + Enter"
+      type="button"
+      variant="primary"
+    >
+      {primaryButtonLabel}
+    </Button>
+    <Button
+      disabled={isLoading}
+      icon={<Close aria-hidden />}
+      onClick={close}
+      size="small"
+      title="Escape"
+      type="button"
+      variant="secondary"
+    >
+      Avbryt
+    </Button>
+  </StyledCommentButtonContainer>
+);

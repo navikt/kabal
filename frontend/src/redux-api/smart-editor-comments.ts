@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IDocumentParams } from '../types/documents/common-params';
 import {
-  IGetCommentParams,
+  IDeleteCommentOrReplyParams,
+  IPatchCommentOrReplyParams,
   IPostCommentParams,
   IPostReplyParams,
   ISmartEditorComment,
@@ -15,10 +16,6 @@ export const smartEditorCommentsApi = createApi({
     getComments: builder.query<ISmartEditorComment[], IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `${oppgaveId}/smartdokumenter/${dokumentId}/comments`,
     }),
-    getComment: builder.query<ISmartEditorComment, IGetCommentParams>({
-      query: ({ oppgaveId, dokumentId, commentId }) =>
-        `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}`,
-    }),
     postComment: builder.mutation<ISmartEditorComment, IPostCommentParams>({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `${oppgaveId}/smartdokumenter/${dokumentId}/comments`,
@@ -27,11 +24,29 @@ export const smartEditorCommentsApi = createApi({
       }),
       onQueryStarted: async ({ oppgaveId, dokumentId }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
+
         dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) => [
             ...draft,
             data,
           ])
+        );
+      },
+    }),
+    deleteCommentOrThread: builder.mutation<void, IDeleteCommentOrReplyParams>({
+      query: ({ oppgaveId, dokumentId, commentId }) => ({
+        url: `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}`,
+        method: 'DELETE',
+      }),
+      onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
+        await queryFulfilled;
+
+        dispatch(
+          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+            draft
+              .filter((thread) => thread.id !== commentId)
+              .map((thread) => ({ ...thread, comments: thread.comments.filter((c) => c.id !== commentId) }))
+          )
         );
       },
     }),
@@ -43,12 +58,6 @@ export const smartEditorCommentsApi = createApi({
       }),
       onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
-        dispatch(
-          smartEditorCommentsApi.util.updateQueryData('getComment', { oppgaveId, dokumentId, commentId }, (draft) => ({
-            ...draft,
-            comments: [...draft.comments, data],
-          }))
-        );
 
         dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
@@ -59,7 +68,33 @@ export const smartEditorCommentsApi = createApi({
         );
       },
     }),
+    updateCommentOrReply: builder.mutation<ISmartEditorComment, IPatchCommentOrReplyParams>({
+      query: ({ oppgaveId, dokumentId, commentId, ...body }) => ({
+        url: `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}`,
+        method: 'PATCH',
+        body,
+      }),
+      onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+            draft.map((t) =>
+              t.id === commentId
+                ? { ...t, ...data }
+                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) }
+            )
+          )
+        );
+      },
+    }),
   }),
 });
 
-export const { useGetCommentsQuery, usePostCommentMutation, usePostReplyMutation } = smartEditorCommentsApi;
+export const {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+  usePostReplyMutation,
+  useDeleteCommentOrThreadMutation,
+  useUpdateCommentOrReplyMutation,
+} = smartEditorCommentsApi;

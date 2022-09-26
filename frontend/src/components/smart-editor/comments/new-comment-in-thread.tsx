@@ -1,14 +1,13 @@
-import { Close, SuccessStroke } from '@navikt/ds-icons';
-import { Button, Loader, Textarea } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
 import { useUser } from '../../../simple-api-state/use-user';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { StyledCommentButtonContainer, StyledNewCommentInThread } from './styled-components';
+import { StyledNewCommentInThread } from './styled-components';
+import { WriteComment } from './write-comment/write-comment';
 
 interface NewCommentInThreadProps {
   threadId: string;
@@ -24,18 +23,20 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
 
-  const [text, setText] = useState<string>('');
+  if (!isFocused) {
+    return null;
+  }
 
   if (typeof bruker === 'undefined' || brukerIsLoading || typeof signature === 'undefined' || oppgaveId === skipToken) {
     return <Loader size="xlarge" />;
   }
 
-  const onSubmit = () => {
-    if (documentId === null || text.length <= 0) {
+  const onSubmit = async (text: string): Promise<void> => {
+    if (documentId === null) {
       return;
     }
 
-    postReply({
+    await postReply({
       oppgaveId,
       author: {
         ident: bruker.navIdent,
@@ -44,84 +45,19 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
       dokumentId: documentId,
       text,
       commentId: threadId,
-    }).then(() => {
-      setText('');
     });
-  };
-
-  const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-      event.preventDefault();
-      onSubmit();
-    }
-
-    if (event.key === 'Escape') {
-      close();
-    }
   };
 
   return (
     <StyledNewCommentInThread>
-      <StyledTextAreaContainer isFocused={isFocused}>
-        <Textarea
-          value={text}
-          size="small"
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={onKeyDown}
-          placeholder="Svar"
-          label="Nytt svar"
-          minRows={3}
-          maxLength={0}
-          onFocus={onFocus}
-          disabled={isLoading}
-        />
-      </StyledTextAreaContainer>
-      <Buttons show={isFocused} close={close} onSubmit={onSubmit} text={text} isLoading={isLoading} />
+      <WriteComment
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+        label="Svar på kommentar"
+        close={close}
+        onFocus={onFocus}
+        primaryButtonLabel="Legg til"
+      />
     </StyledNewCommentInThread>
   );
 };
-
-interface ButtonsProps {
-  show: boolean;
-  close: () => void;
-  onSubmit: () => void;
-  text: string;
-  isLoading: boolean;
-}
-
-const Buttons = ({ show, text, isLoading, close, onSubmit }: ButtonsProps) => {
-  if (!show) {
-    return null;
-  }
-
-  return (
-    <StyledCommentButtonContainer>
-      <Button
-        type="button"
-        size="small"
-        variant="primary"
-        onClick={onSubmit}
-        disabled={text.length <= 0}
-        loading={isLoading}
-        icon={<SuccessStroke aria-hidden />}
-      >
-        Legg til
-      </Button>
-      <Button
-        type="button"
-        size="small"
-        variant="secondary"
-        onClick={close}
-        disabled={isLoading}
-        icon={<Close aria-hidden />}
-      >
-        Avbryt
-      </Button>
-    </StyledCommentButtonContainer>
-  );
-};
-
-const StyledTextAreaContainer = styled.div<{ isFocused: boolean }>`
-  height: ${({ isFocused }) => (isFocused ? 'auto' : '0px')};
-  overflow: hidden;
-`;

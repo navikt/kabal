@@ -1,4 +1,5 @@
 import { Editor, Element, Node, Path, Text, Transforms } from 'slate';
+import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../types/editor-enums';
 import {
   isMarkKey,
@@ -184,7 +185,7 @@ const removeMarksAndComments = (editor: Editor, node: Text, path: Path) => {
 
   editor.marks = preservedMarks;
 
-  const comments = Object.keys(node).filter((k) => k.startsWith('commentThreadId_'));
+  const comments = Object.keys(node).filter((k) => k.startsWith(COMMENT_PREFIX));
 
   Transforms.unsetNodes(editor, [...MarkKeyList, ...comments], { at: path, match: Text.isText });
 };
