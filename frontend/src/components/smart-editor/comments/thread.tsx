@@ -43,7 +43,7 @@ export const Thread = ({ thread, isFocused }: Props) => {
 
   return (
     <StyledThread ref={ref} isFocused={isFocused} onClick={open}>
-      <CommentList comments={comments} />
+      <CommentList comments={comments} isFocused={isFocused} />
       <NewCommentInThread threadId={thread.id} close={close} isFocused={isFocused} onFocus={onFocus} />
     </StyledThread>
   );
@@ -55,7 +55,6 @@ const StyledThread = styled.section<{ isFocused: boolean }>`
   gap: 16px;
   background-color: transparent;
   padding: 16px;
-  padding-bottom: ${({ isFocused }) => (isFocused ? '16px' : '0')};
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   margin-left: 16px;

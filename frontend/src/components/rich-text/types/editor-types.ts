@@ -1,5 +1,6 @@
 import { BaseRange, Descendant } from 'slate';
 import { TemplateSections, TextMetadata } from '../../../types/texts/texts';
+import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import { FlettefeltElementType } from './deletable-void-types';
 import {
   ContentTypeEnum,
@@ -128,4 +129,4 @@ export const MarkKeyList = Object.keys(MarkKeys);
 
 export const hasAnyMark = (node: CustomTextType) => MarkKeyList.some((mk) => node[mk]);
 
-export const hasAnyComments = (node: CustomTextType) => Object.keys(node).some((k) => k.startsWith('commentThreadId_'));
+export const hasAnyComments = (node: CustomTextType) => Object.keys(node).some((k) => k.startsWith(COMMENT_PREFIX));

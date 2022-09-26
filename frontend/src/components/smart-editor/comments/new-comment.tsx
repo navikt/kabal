@@ -1,7 +1,6 @@
-import { Close, Send } from '@navikt/ds-icons';
-import { Button, Loader, Textarea } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Range, Transforms } from 'slate';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetMySignatureQuery } from '../../../redux-api/bruker';
@@ -10,7 +9,8 @@ import { useUser } from '../../../simple-api-state/use-user';
 import { connectCommentThread } from '../../rich-text/rich-text-editor/connect-thread';
 import { CommentableVoidElementTypes } from '../../rich-text/types/editor-void-types';
 import { SmartEditorContext } from '../context/smart-editor-context';
-import { StyledCommentButtonContainer, StyledNewComment } from './styled-components';
+import { StyledNewComment } from './styled-components';
+import { WriteComment } from './write-comment/write-comment';
 
 interface Props {
   close: () => void;
@@ -22,7 +22,6 @@ export const NewComment = ({ close }: Props) => {
   const [postComment, { isLoading }] = usePostCommentMutation();
   const { documentId, setFocusedThreadId, activeElement, editor, selection } = useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
-  const [text, setText] = useState<string>('');
 
   const onNewThread = useCallback(
     (threadId: string) => {
@@ -41,10 +40,7 @@ export const NewComment = ({ close }: Props) => {
         Transforms.setNodes<CommentableVoidElementTypes>(
           editor,
           { threadIds: [...threadIds, threadId] },
-          {
-            at: [],
-            match: (n) => n === activeElement,
-          }
+          { at: [], match: (n) => n === activeElement }
         );
       }
     },
@@ -61,12 +57,12 @@ export const NewComment = ({ close }: Props) => {
     return <Loader size="xlarge" />;
   }
 
-  const onSubmit = () => {
-    if (documentId === null || text.length <= 0) {
+  const onSubmit = async (text: string) => {
+    if (documentId === null) {
       return;
     }
 
-    postComment({
+    await postComment({
       author: {
         ident: bruker.navIdent,
         name: signature.customLongName ?? signature.longName,
@@ -78,7 +74,6 @@ export const NewComment = ({ close }: Props) => {
       .unwrap()
       .then(({ id }) => {
         onNewThread(id);
-        setText('');
         close();
         setTimeout(() => {
           setFocusedThreadId(id);
@@ -86,57 +81,15 @@ export const NewComment = ({ close }: Props) => {
       });
   };
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-      event.preventDefault();
-      onSubmit();
-    }
-
-    if (event.key === 'Escape') {
-      close();
-    }
-  };
-
   return (
     <StyledNewComment>
-      <Textarea
-        value={text}
-        size="small"
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={onKeyDown}
-        placeholder="Skriv inn en kommentar"
+      <WriteComment
+        onSubmit={onSubmit}
+        isLoading={isLoading}
         label="Ny kommentar"
-        hideLabel
-        minRows={3}
-        maxLength={0}
-        disabled={isLoading}
-        autoFocus
+        close={close}
+        primaryButtonLabel="Legg til"
       />
-      <StyledCommentButtonContainer>
-        <Button
-          type="button"
-          variant="primary"
-          size="small"
-          onClick={onSubmit}
-          disabled={text.length <= 0}
-          loading={isLoading}
-          title="Ctrl/⌘ + Enter"
-          icon={<Send aria-hidden />}
-        >
-          Legg til
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          size="small"
-          onClick={close}
-          disabled={isLoading}
-          title="Escape"
-          icon={<Close aria-hidden />}
-        >
-          Avbryt
-        </Button>
-      </StyledCommentButtonContainer>
     </StyledNewComment>
   );
 };

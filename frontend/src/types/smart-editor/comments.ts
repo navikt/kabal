@@ -1,7 +1,15 @@
 import { IDocumentParams } from '../documents/common-params';
 
-export interface IGetCommentParams extends IDocumentParams {
+export interface IDeleteCommentOrReplyParams extends IDocumentParams {
   commentId: string;
+}
+
+export interface IPatchCommentOrReplyParams extends IDeleteCommentOrReplyParams {
+  text: string;
+}
+
+export interface IPostReplyParams extends IPatchCommentOrReplyParams {
+  author: ICommentAuthor;
 }
 
 export interface IPostCommentParams extends IDocumentParams {
@@ -9,11 +17,7 @@ export interface IPostCommentParams extends IDocumentParams {
   text: string;
 }
 
-export interface IPostReplyParams extends IPostCommentParams {
-  commentId: string;
-}
-
-export interface ISmartEditorComment extends IPostCommentParams {
+export interface ISmartEditorComment {
   author: ICommentAuthor;
   comments: ISmartEditorComment[];
   created: string; // "2021-10-26T12:37:10.929Z",

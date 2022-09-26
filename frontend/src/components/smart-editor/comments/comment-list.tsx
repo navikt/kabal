@@ -5,12 +5,13 @@ import { Comment } from './comment';
 
 interface CommentListProps {
   comments: ISmartEditorComment[];
+  isFocused: boolean;
 }
 
-export const CommentList = ({ comments }: CommentListProps) => (
+export const CommentList = ({ comments, isFocused }: CommentListProps) => (
   <List>
     {comments.map(({ id, ...comment }) => (
-      <Comment key={id} id={id} {...comment} />
+      <Comment key={id} id={id} isFocused={isFocused} {...comment} />
     ))}
   </List>
 );
