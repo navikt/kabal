@@ -21,7 +21,7 @@ export const WriteComment = ({
   primaryButtonLabel,
   text = '',
 }: Props) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(text);
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
@@ -30,7 +30,7 @@ export const WriteComment = ({
     }
   }, [text.length]);
 
-  const save = () => onSubmit(value);
+  const save = () => onSubmit(value).then(() => setValue(''));
 
   const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
@@ -60,7 +60,7 @@ export const WriteComment = ({
         placeholder="Skriv inn en kommentar"
         ref={ref}
         size="small"
-        value={value.length === 0 ? text : value}
+        value={value}
       />
       <Buttons
         close={close}
