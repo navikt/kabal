@@ -122,6 +122,7 @@ export const OppgaveTable = (): JSX.Element => {
                   page={currentPage}
                   onPageChange={(p) => naviagte(`../${p}`)}
                   count={Math.max(Math.ceil(total / PAGE_SIZE), 1)}
+                  prevNextTexts
                 />
               </StyledFooterContent>
             </Table.DataCell>
