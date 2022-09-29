@@ -16,22 +16,14 @@ export enum OppgaveType {
 }
 
 export enum Utfall {
-  // Klage & Anke & Trygderettsanke
   TRUKKET = '1',
+  RETUR = '2',
   OPPHEVET = '3',
   MEDHOLD = '4',
   DELVIS_MEDHOLD = '5',
   STADFESTELSE = '6',
-  AVVIST = '8',
-
-  // Klage & Anke
-  RETUR = '2',
   UGUNST = '7',
-
-  // Trygderettsanke
-  HENVISES = '9',
-  MEDHOLD_I_TRYGDERETTEN = '10',
-  MEDHOLD_I_KLAGEINSTANSEN = '11',
+  AVVIST = '8',
 }
 
 export interface IKodeverkSimpleValue<T extends string = string> {
@@ -57,6 +49,10 @@ interface IKlageEnhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }
 
+interface ISakstyperToUtfall extends IKodeverkSimpleValue<OppgaveType> {
+  utfall: IKodeverkSimpleValue<Utfall>[];
+}
+
 export interface IKodeverk {
   enheter: IKodeverkSimpleValue[];
   hjemler: IKodeverkValue[];
@@ -68,4 +64,5 @@ export interface IKodeverk {
   utfall: IKodeverkSimpleValue<Utfall>[];
   vedtaksenheter: IKodeverkSimpleValue[];
   ytelser: IYtelse[];
+  sakstyperToUtfall: ISakstyperToUtfall[];
 }

@@ -3,11 +3,11 @@ import React from 'react';
 import { isUtfall } from '../../../functions/is-utfall';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateUtfall } from '../../../hooks/oppgavebehandling/use-update-utfall';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useFieldName } from '../../../hooks/use-field-name';
 import { useUtfall } from '../../../hooks/use-utfall';
 import { useValidationError } from '../../../hooks/use-validation-error';
+import { useUpdateUtfallMutation } from '../../../redux-api/oppgaver/mutations/set-utfall';
 import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {
@@ -18,7 +18,7 @@ const NOT_SELECTED = 'NOT_SELECTED';
 
 export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const oppgaveId = useOppgaveId();
-  const [updateUtfall] = useUpdateUtfall();
+  const [updateUtfall] = useUpdateUtfallMutation();
   const canEdit = useCanEdit();
   const validationError = useValidationError('utfall');
   const utfallLabel = useFieldName('utfall');

@@ -3,23 +3,15 @@ import { IKodeverkSimpleValue, OppgaveType, Utfall } from '../types/kodeverk';
 import { useKodeverkValue } from './use-kodeverk-value';
 
 export const useUtfall = (type?: OppgaveType): [IKodeverkSimpleValue<Utfall>[], boolean] => {
-  const utfall = useKodeverkValue('utfall');
+  const sakstyperToUtfall = useKodeverkValue('sakstyperToUtfall');
 
   return useMemo(() => {
-    if (typeof utfall === 'undefined' || typeof type === 'undefined') {
+    if (typeof sakstyperToUtfall === 'undefined' || typeof type === 'undefined') {
       return [[], true];
     }
 
-    if (type === OppgaveType.ANKE_I_TRYGDERETTEN) {
-      return [utfall.filter(({ id }) => !(id === Utfall.UGUNST || id === Utfall.RETUR)), false];
-    }
+    const utfall = sakstyperToUtfall.find(({ id }) => id === type)?.utfall ?? [];
 
-    return [
-      utfall.filter(
-        ({ id }) =>
-          !(id === Utfall.HENVISES || id === Utfall.MEDHOLD_I_TRYGDERETTEN || id === Utfall.MEDHOLD_I_KLAGEINSTANSEN)
-      ),
-      false,
-    ];
-  }, [type, utfall]);
+    return [utfall, false];
+  }, [sakstyperToUtfall, type]);
 };
