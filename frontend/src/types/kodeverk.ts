@@ -24,6 +24,8 @@ export enum Utfall {
   STADFESTELSE = '6',
   UGUNST = '7',
   AVVIST = '8',
+  INNSTILLING_STADFESTELSE = '9',
+  INNSTILLING_AVVIST = '10',
 }
 
 export interface IKodeverkSimpleValue<T extends string = string> {
