@@ -14,7 +14,7 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledNavLink} to="/innstillinger" data-testid="innstillinger-link">
           <Settings /> Innstillinger
         </Dropdown.Menu.List.Item>
-        <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/logout" data-testid="logout-link">
+        <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
           <Logout /> Logg ut
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
