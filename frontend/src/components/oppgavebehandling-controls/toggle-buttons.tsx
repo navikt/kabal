@@ -1,19 +1,20 @@
 import { Switch } from '@navikt/ds-react';
 import React from 'react';
-import { PanelToggles } from '../klagebehandling/types';
+import { PanelToggles } from '../oppgavebehandling/types';
 import { ToggleButtonsContainer } from './styled-components';
 
 interface PanelToggleButtonsProps {
   toggles: PanelToggles;
+  switches: PanelToggles;
   togglePanel: (panel: keyof PanelToggles, checked: boolean) => void;
 }
 
-export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsProps) => (
+export const PanelToggleButtons = ({ togglePanel, toggles, switches }: PanelToggleButtonsProps) => (
   <ToggleButtonsContainer data-testid="klagebehandling-control-panel-toggle-buttons">
     <TogglePanelButton
       panel="documents"
-      checked={toggles.documents.showContent}
-      show={toggles.documents.showSwitch}
+      checked={toggles.documents}
+      show={switches.documents}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-documents"
     >
@@ -21,8 +22,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="smartEditor"
-      checked={toggles.smartEditor.showContent}
-      show={toggles.smartEditor.showSwitch}
+      checked={toggles.smartEditor}
+      show={switches.smartEditor}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-smart-editor"
     >
@@ -30,8 +31,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="behandling"
-      checked={toggles.behandling.showContent}
-      show={toggles.behandling.showSwitch}
+      checked={toggles.behandling}
+      show={switches.behandling}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-behandling"
     >
@@ -39,8 +40,8 @@ export const PanelToggleButtons = ({ togglePanel, toggles }: PanelToggleButtonsP
     </TogglePanelButton>
     <TogglePanelButton
       panel="kvalitetsvurdering"
-      checked={toggles.kvalitetsvurdering.showContent}
-      show={toggles.kvalitetsvurdering.showSwitch}
+      checked={toggles.kvalitetsvurdering}
+      show={switches.kvalitetsvurdering}
       setPanel={togglePanel}
       testId="klagebehandling-control-panel-toggle-kvalitetsvurdering"
     >

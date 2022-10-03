@@ -2,7 +2,7 @@ import React from 'react';
 import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { ISakspart } from '../../types/oppgavebehandling/oppgavebehandling';
-import { PanelToggles } from '../klagebehandling/types';
+import { PanelToggles } from '../oppgavebehandling/types';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
 import { ControlPanel, ExternalLink, OppgavebehandlingInformation, OppgavebehandlingTools } from './styled-components';
 import { PanelToggleButtons } from './toggle-buttons';
@@ -10,10 +10,11 @@ import { UserInfo } from './user-info';
 
 interface OppgavebehandlingControlsProps {
   toggles: PanelToggles;
+  switches: PanelToggles;
   setPanel: (panel: keyof PanelToggles, checked: boolean) => void;
 }
 
-export const OppgavebehandlingControls = ({ toggles, setPanel }: OppgavebehandlingControlsProps) => {
+export const OppgavebehandlingControls = ({ toggles, setPanel, switches }: OppgavebehandlingControlsProps) => {
   const { data: oppgave } = useOppgave();
 
   if (typeof oppgave === 'undefined') {
@@ -26,7 +27,7 @@ export const OppgavebehandlingControls = ({ toggles, setPanel }: Oppgavebehandli
     <ControlPanel data-testid="klagebehandling-control-panel">
       <OppgavebehandlingTools data-testid="klagebehandling-control-panel-tools">
         <UserInfo sakenGjelder={sakenGjelder} fortrolig={fortrolig} strengtFortrolig={strengtFortrolig} />
-        <PanelToggleButtons togglePanel={setPanel} toggles={toggles} />
+        <PanelToggleButtons togglePanel={setPanel} toggles={toggles} switches={switches} />
       </OppgavebehandlingTools>
       <OppgavebehandlingInformation>
         <GosysLink sakenGjelder={sakenGjelder} />

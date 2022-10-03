@@ -1,7 +1,7 @@
 import React from 'react';
-import { Klagebehandling } from '../../components/klagebehandling/klagebehandling';
+import { Oppgavebehandling } from '../../components/oppgavebehandling/oppgavebehandling';
 
-export const KlagebehandlingPage = () => <Klagebehandling />;
+export const KlagebehandlingPage = () => <Oppgavebehandling />;
 
 // eslint-disable-next-line import/no-default-export
 export default KlagebehandlingPage;
