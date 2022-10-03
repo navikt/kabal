@@ -1,7 +1,7 @@
 import React from 'react';
-import { Trygderettsankebehandling } from '../../components/trygderettsankebehandling/trygderettsankebehandling';
+import { Oppgavebehandling } from '../../components/oppgavebehandling/oppgavebehandling';
 
-const TrygderettsankebehandlingPage = () => <Trygderettsankebehandling />;
+const TrygderettsankebehandlingPage = () => <Oppgavebehandling />;
 
 // eslint-disable-next-line import/no-default-export
 export default TrygderettsankebehandlingPage;
