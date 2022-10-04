@@ -7,6 +7,7 @@ import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
+import { MeldingFraVedtaksinstans } from './melding-fra-vedtaksinstans';
 import { MottattVedtaksinstans } from './mottatt-vedtaksinstans';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
@@ -42,9 +43,7 @@ export const Klagebehandlingsdetaljer = () => {
       </BehandlingSection>
       <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
-      <BehandlingSection label="Melding fra vedtaksinstans for intern bruk">
-        {kommentarFraVedtaksinstans}
-      </BehandlingSection>
+      <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
       <UtfallResultat utfall={resultat.utfall} />
 
