@@ -28,6 +28,12 @@ export enum Utfall {
   INNSTILLING_AVVIST = '10',
 }
 
+export enum Brevmottakertype {
+  KLAGER = '1',
+  SAKEN_GJELDER = '2',
+  PROSESSFULLMEKTIG = '3',
+}
+
 export interface IKodeverkSimpleValue<T extends string = string> {
   id: T;
   navn: string;
@@ -67,4 +73,5 @@ export interface IKodeverk {
   vedtaksenheter: IKodeverkSimpleValue[];
   ytelser: IYtelse[];
   sakstyperToUtfall: ISakstyperToUtfall[];
+  brevmottakertyper: IKodeverkSimpleValue<Brevmottakertype>[];
 }

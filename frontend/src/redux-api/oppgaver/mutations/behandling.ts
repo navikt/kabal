@@ -1,12 +1,13 @@
 import { reduxStore } from '../../../redux/configure-store';
 import { OppgaveType } from '../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
+import { IOppgavebehandling, ISakspart } from '../../../types/oppgavebehandling/oppgavebehandling';
 import {
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
   IOppgavebehandlingHjemlerUpdateParams,
   ISendtTilTrygderettenParams,
+  ISetFullmektigParams,
 } from '../../../types/oppgavebehandling/params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
@@ -140,6 +141,32 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
+      query: ({ oppgaveId, fullmektig: { person, virksomhet } }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
+        method: 'PUT',
+        body: {
+          identifikator: person?.foedselsnummer ?? virksomhet?.virksomhetsnummer ?? null,
+        },
+      }),
+      onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
+        const undo = update(oppgaveId, [['prosessfullmektig', fullmektig]]);
+
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, [['modified', data.modified]]);
+        } catch {
+          undo();
+        }
+      },
+    }),
+    searchFullmektig: builder.query<ISakspart, string>({
+      query: (identifikator) => ({
+        url: `/kabal-api/searchfullmektig`,
+        method: 'POST',
+        body: { identifikator },
+      }),
+    }),
   }),
 });
 
@@ -162,4 +189,6 @@ export const {
   useUpdateInnsendingshjemlerMutation,
   useSetKjennelseMottattMutation,
   useSetSendtTilTrygderettenMutation,
+  useUpdateFullmektigMutation,
+  useLazySearchFullmektigQuery,
 } = behandlingerMutationSlice;

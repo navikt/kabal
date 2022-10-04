@@ -1,6 +1,7 @@
 import { OppgaveType, Utfall } from '../kodeverk';
 import { IDocumentReference, ISaksbehandler } from '../oppgave-common';
 import { ISmartEditor } from '../smart-editor/smart-editor';
+import { ISakspart } from './oppgavebehandling';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
@@ -58,4 +59,8 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
 export interface IGetDokumenterParams extends IOppgavebehandlingBaseParams {
   pageReference: string | null;
   temaer: string[];
+}
+
+export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
+  fullmektig: ISakspart;
 }

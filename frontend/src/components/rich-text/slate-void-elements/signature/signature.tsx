@@ -1,14 +1,16 @@
-import { Alert, Checkbox } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useEffect } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useGetSignatureQuery } from '../../../redux-api/bruker';
-import { ISignatureResponse } from '../../../types/bruker';
-import { ISignature, SignatureElementType } from '../types/editor-void-types';
-import { voidStyle } from './style';
+import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
+import { useGetSignatureQuery } from '../../../../redux-api/bruker';
+import { ISignature, SignatureElementType } from '../../types/editor-void-types';
+import { voidStyle } from '../style';
+import { getName, getTitle } from './functions';
+import { IndividualSignature } from './individual-signature';
+import { MISSING_TITLE } from './title';
 
 interface Props {
   element: SignatureElementType;
@@ -152,59 +154,4 @@ const SignaturesContainer = styled.div`
 const StyledSignatures = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-interface IndividualSignatureProps {
-  signature: ISignature | undefined;
-}
-
-const IndividualSignature = ({ signature }: IndividualSignatureProps) => {
-  if (typeof signature === 'undefined') {
-    return null;
-  }
-
-  return (
-    <div>
-      <div>{signature.name}</div>
-      <Title title={signature.title} />
-    </div>
-  );
-};
-
-const MISSING_TITLE = 'TITTEL MANGLER';
-
-const getName = (user: ISignatureResponse, useShortName: boolean) =>
-  useShortName ? getShortName(user) : getLongName(user);
-
-const getShortName = ({ customShortName, generatedShortName }: ISignatureResponse): string =>
-  customShortName ?? generatedShortName;
-
-const getLongName = ({ customLongName, longName }: ISignatureResponse): string => customLongName ?? longName;
-
-interface TitleProps {
-  title: string;
-}
-
-const Title = ({ title }: TitleProps): JSX.Element => {
-  if (title === MISSING_TITLE) {
-    return <StyledWarning variant="warning">Tittel mangler</StyledWarning>;
-  }
-
-  return <div>{title}</div>;
-};
-
-const getTitle = (title: string | null, suffix?: string): string | null => {
-  if (title === null) {
-    return null;
-  }
-
-  if (typeof suffix === 'undefined') {
-    return title;
-  }
-
-  return `${title}/${suffix}`;
-};
-
-const StyledWarning = styled(Alert)`
-  margin-top: 4px;
 `;

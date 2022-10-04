@@ -6,6 +6,7 @@ import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { AnkeMottattDato } from './anke-mottatt-dato';
 import { BehandlingSection } from './behandling-section';
+import { Fullmektig } from './fullmektig/fullmektig';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
@@ -26,7 +27,9 @@ export const Ankebehandlingsdetaljer = () => {
         Behandling
       </Heading>
 
-      <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
+      <BehandlingSection label="Anker">{klagerName ?? ''}</BehandlingSection>
+
+      <Fullmektig />
 
       <BehandlingSection label="Type">
         <Type type={type}></Type>

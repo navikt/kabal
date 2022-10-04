@@ -1,4 +1,4 @@
-import { formatPersonNum } from '../../../../functions/format-id';
+import { formatFoedselsnummer } from '../../../../functions/format-id';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useUser } from '../../../../simple-api-state/use-user';
 import { Flettefelt } from '../../types/editor-void-types';
@@ -14,7 +14,7 @@ export const useFlettefeltValue = (flettefelt: Flettefelt | null): string | null
   switch (flettefelt) {
     case Flettefelt.FNR:
       return oppgave.sakenGjelder.person !== null
-        ? formatPersonNum(oppgave.sakenGjelder.person.foedselsnummer)
+        ? formatFoedselsnummer(oppgave.sakenGjelder.person.foedselsnummer)
         : '<Ikke funnet>';
     case Flettefelt.ENHET_NAME:
       return bruker.ansattEnhet.navn;

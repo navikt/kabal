@@ -1,4 +1,4 @@
-import { formatPersonNum } from '../functions/format-id';
+import { formatFoedselsnummer } from '../functions/format-id';
 import { Name } from './types';
 
 export const getFullName = (name?: Name | null): string => {
@@ -20,8 +20,10 @@ export const getFullNameWithFnr = (name: Name | null, fnr: string | null) => {
   const fulltNavn = getFullName(name);
 
   if (typeof fnr === 'string' && fnr.length === 11) {
-    return `${fulltNavn} (${formatPersonNum(fnr)})`;
+    return `${fulltNavn} (${formatFoedselsnummer(fnr)})`;
   }
 
   return fulltNavn;
 };
+
+export const getOrgName = (navn: string | null): string => (navn !== null ? navn : '-');
