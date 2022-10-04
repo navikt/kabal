@@ -3,7 +3,7 @@ import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { getFullName } from '../../../domain/name';
-import { formatPersonNum } from '../../../functions/format-id';
+import { formatFoedselsnummer } from '../../../functions/format-id';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
 import { ParagraphStyle } from '../styled-elements/content';
@@ -59,7 +59,7 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string => {
   }
 
   if (source === 'sakenGjelder.fnr') {
-    return formatPersonNum(oppgave.sakenGjelder.person?.foedselsnummer);
+    return formatFoedselsnummer(oppgave.sakenGjelder.person?.foedselsnummer);
   }
 
   return 'Verdi mangler';

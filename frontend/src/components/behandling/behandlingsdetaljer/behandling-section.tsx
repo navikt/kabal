@@ -2,12 +2,12 @@ import { Label } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 
-interface SubSectionProps {
+interface Props {
   label: string;
   children: React.ReactNode;
 }
 
-export const BehandlingSection = ({ label, children }: SubSectionProps) => {
+export const BehandlingSection = ({ label, children }: Props) => {
   const id = 'behandling-section-' + label.toLowerCase().replaceAll(/\s/g, '-');
 
   return (

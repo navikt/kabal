@@ -4,7 +4,6 @@ import { ISaksbehandler, IVedlegg } from '../oppgave-common';
 
 export interface IOppgavebehandlingBase {
   avsluttetAvSaksbehandlerDate: string | null; // LocalDate
-  brevmottakere: IBrevmottaker[];
   created: string; // LocalDateTime
   datoSendtMedunderskriver: string | null; // LocalDate
   egenansatt: boolean;
@@ -27,6 +26,7 @@ export interface IOppgavebehandlingBase {
   mottatt: string | null; // LocalDate
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
+  prosessfullmektig: ISakspart | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
   sakenGjelder: ISakspart;
@@ -39,24 +39,6 @@ export interface IOppgavebehandlingBase {
   tildeltSaksbehandler: ISaksbehandler | null;
   tildeltSaksbehandlerEnhet: string | null;
   ytelse: string;
-}
-
-enum PartIdType {
-  PERSON = 'PERSON',
-  VIRKSOMHET = 'VIRKSOMHET',
-}
-
-export enum Saksrolle {
-  KLAGER = 'KLAGER',
-  SAKEN_GJELDER = 'SAKEN_GJELDER',
-  PROSESSFULLMEKTIG = 'PROSESSFULLMEKTIG',
-}
-
-interface IBrevmottaker {
-  partId: string;
-  partIdType: PartIdType;
-  navn: string;
-  rolle: Saksrolle;
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {

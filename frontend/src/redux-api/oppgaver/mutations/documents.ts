@@ -1,8 +1,10 @@
+/* eslint-disable max-lines */
 import { reduxStore } from '../../../redux/configure-store';
 import { IDocumentParams } from '../../../types/documents/common-params';
 import { IFileDocument, IMainDocument } from '../../../types/documents/documents';
 import {
   ICreateFileDocumentParams,
+  IFinishDocumentParams,
   ISetNameParams,
   ISetParentParams,
   ISetTypeParams,
@@ -70,14 +72,15 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    finishDocument: builder.mutation<IMainDocument, IDocumentParams>({
-      query: ({ oppgaveId, dokumentId }) => ({
+    finishDocument: builder.mutation<IMainDocument, IFinishDocumentParams>({
+      query: ({ oppgaveId, dokumentId, brevmottakertypeIds }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
+        body: { brevmottakertypeIds },
       }),
-      onQueryStarted: async ({ dokumentId, ...baseParams }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const documentsPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', baseParams, (draft) =>
+          documentsQuerySlice.util.updateQueryData('getDocuments', { oppgaveId }, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId || doc.parent === dokumentId ? { ...doc, isMarkertAvsluttet: true } : doc
             )
@@ -85,11 +88,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         );
 
         const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { ...baseParams, dokumentId }, () => null)
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null)
         );
 
         const smartEditorsPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', baseParams, (draft) =>
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
             draft.filter(({ id }) => id !== dokumentId)
           )
         );

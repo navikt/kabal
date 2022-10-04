@@ -7,7 +7,7 @@ import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt'
 import { HeaderFooterElement } from '../slate-void-elements/header-footer';
 import { LabelElement } from '../slate-void-elements/label';
 import { MaltekstElement } from '../slate-void-elements/maltekst/maltekst';
-import { Signature } from '../slate-void-elements/signature';
+import { Signature } from '../slate-void-elements/signature/signature';
 import {
   ContentTypeEnum,
   DeletableVoidElementsEnum,

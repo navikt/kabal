@@ -5,6 +5,7 @@ import { useSakspartName } from '../../../hooks/use-klager-name';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
+import { Fullmektig } from './fullmektig/fullmektig';
 import { KjennelseMottatt } from './kjennelse-mottatt';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { SendtTilTrygderetten } from './sendt-til-trygderetten';
@@ -28,6 +29,8 @@ export const Trygderettsankebehandlingsdetaljer = () => {
       </Heading>
 
       <BehandlingSection label="Anker">{klagerName ?? ''}</BehandlingSection>
+
+      <Fullmektig />
 
       <BehandlingSection label="Type">
         <Type type={type}></Type>

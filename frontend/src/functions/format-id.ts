@@ -9,18 +9,18 @@ export const formatSakenGjelder = (id: string | undefined): string => {
     return unsafeFormatOrgNum(array);
   }
 
-  if (isPersonNum(array)) {
-    return unsafeFormatPersonNum(array);
+  if (isFoedselsnummer(array)) {
+    return unsafeFormatFoedselsnummer(array);
   }
 
   return id;
 };
 
 type OrgNum = [string, string, string, string, string, string, string, string, string];
-type PersonNum = [string, string, string, string, string, string, string, string, string, string, string];
+type Foedselsnumer = [string, string, string, string, string, string, string, string, string, string, string];
 
 const isOrgNum = (id: string[]): id is OrgNum => id.length === 9;
-const isPersonNum = (id: string[]): id is PersonNum => id.length === 11;
+const isFoedselsnummer = (id: string[]): id is Foedselsnumer => id.length === 11;
 
 const unsafeFormatOrgNum = ([a, b, c, d, e, f, g, h, i]: OrgNum): string => `${a}${b}${c} ${d}${e}${f} ${g}${h}${i}`;
 
@@ -34,18 +34,18 @@ export const formatOrgNum = (n: string): string => {
   return n;
 };
 
-const unsafeFormatPersonNum = ([a, b, c, d, e, f, g, h, i, j, k]: PersonNum) =>
+const unsafeFormatFoedselsnummer = ([a, b, c, d, e, f, g, h, i, j, k]: Foedselsnumer) =>
   `${a}${b}${c}${d}${e}${f} ${g}${h}${i}${j}${k}`;
 
-export const formatPersonNum = (n: string | undefined | null): string => {
+export const formatFoedselsnummer = (n: string | undefined | null): string => {
   if (n === null || typeof n === 'undefined') {
     return '';
   }
 
   const array = n.split('');
 
-  if (isPersonNum(array)) {
-    return unsafeFormatPersonNum(array);
+  if (isFoedselsnummer(array)) {
+    return unsafeFormatFoedselsnummer(array);
   }
 
   return n;

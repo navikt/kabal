@@ -6,6 +6,7 @@ import { useSakspartName } from '../../../hooks/use-klager-name';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
+import { Fullmektig } from './fullmektig/fullmektig';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { MeldingFraVedtaksinstans } from './melding-fra-vedtaksinstans';
 import { MottattVedtaksinstans } from './mottatt-vedtaksinstans';
@@ -31,6 +32,8 @@ export const Klagebehandlingsdetaljer = () => {
 
       <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
 
+      <Fullmektig />
+
       <BehandlingSection label="Type">
         <Type type={type}></Type>
       </BehandlingSection>
@@ -38,9 +41,11 @@ export const Klagebehandlingsdetaljer = () => {
       <Ytelse ytelseId={ytelse} />
 
       <MottattVedtaksinstans />
+
       <BehandlingSection label="Fra NAV-enhet">
         {fraNAVEnhetNavn} - {fraNAVEnhet}
       </BehandlingSection>
+
       <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
