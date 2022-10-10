@@ -2,22 +2,10 @@ import path from 'path';
 import { JWK } from 'jose';
 import { requiredEnvJson, requiredEnvString, requiredEnvUrl } from './env-var';
 
-const getEnvironmentVersion = <T>(local: T, development: T, production: T): T => {
-  if (IS_DEVELOPMENT) {
-    return development;
-  }
-
-  if (IS_PRODUCTION) {
-    return production;
-  }
-
-  return local;
-};
-
 export const slack = {
   url: requiredEnvUrl('SLACK_URL'),
   channel: '#klage-notifications',
-  messagePrefix: 'KABAL frontend NodeJS - ',
+  messagePrefix: `${requiredEnvString('NAIS_APP_NAME', 'kabal-frontend').toUpperCase()} frontend NodeJS -`,
 };
 
 export const API_CLIENT_IDS = [
@@ -42,13 +30,3 @@ export const AZURE_APP_JWK = requiredEnvJson<JWK>('AZURE_APP_JWK');
 export const VERSION = requiredEnvString('VERSION');
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME');
-export const IS_PRODUCTION = NAIS_CLUSTER_NAME === 'prod-gcp';
-const IS_DEVELOPMENT = NAIS_CLUSTER_NAME === 'dev-gcp';
-export const IS_DEPLOYED = IS_PRODUCTION || IS_DEVELOPMENT;
-
-export const ENVIRONMENT_NAME = getEnvironmentVersion('local', 'development', 'production');
-export const APPLICATION_DOMAIN: string = getEnvironmentVersion(
-  `http://localhost:${PORT}`,
-  'https://kabal.dev.nav.no',
-  'https://kabal.intern.nav.no'
-);

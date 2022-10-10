@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
-import { ENVIRONMENT_NAME, IS_DEPLOYED, slack } from './config/config';
+import { slack } from './config/config';
+import { ENVIRONMENT, isDeployed } from './config/env';
 import { getLogger } from './logger';
 
 const log = getLogger('slack');
@@ -13,9 +14,9 @@ const { url, channel, messagePrefix } = slack;
 const isConfigured = typeof url === 'string' && url.length !== 0;
 
 export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
-  const text = `[${ENVIRONMENT_NAME}] ${messagePrefix} ${message}`;
+  const text = `[${ENVIRONMENT}] ${messagePrefix} ${message}`;
 
-  if (!IS_DEPLOYED || !isConfigured) {
+  if (!isDeployed || !isConfigured) {
     return;
   }
 

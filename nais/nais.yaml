@@ -27,6 +27,8 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
+  prometheus:
+    enabled: true
   accessPolicy:
     outbound:
       rules:
