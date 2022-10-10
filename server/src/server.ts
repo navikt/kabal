@@ -1,22 +1,26 @@
 import cors from 'cors';
 import express from 'express';
-import { APPLICATION_DOMAIN, IS_DEPLOYED, IS_PRODUCTION } from './config/config';
+import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
 import { init } from './init';
 import { getLogger, httpLoggingMiddleware } from './logger';
 import { processErrors } from './process-errors';
+import { metricsMiddleware } from './prometheus/middleware';
 import { EmojiIcons, sendToSlack } from './slack';
 
 processErrors();
 
 const log = getLogger('server');
 
-if (IS_DEPLOYED) {
+if (isDeployed) {
   log.info({ msg: 'Started!' });
 
   sendToSlack('Starting...', EmojiIcons.StartStruck);
 }
 
 const server = express();
+
+// Add the prometheus middleware to all routes
+server.use(metricsMiddleware);
 
 server.use(httpLoggingMiddleware);
 
@@ -48,7 +52,7 @@ server.use(
       'X-Forwarded-Proto',
       'X-Requested-With',
     ],
-    origin: IS_PRODUCTION ? APPLICATION_DOMAIN : [APPLICATION_DOMAIN, /https?:\/\/localhost:\d{4,}/],
+    origin: isDeployedToProd ? DOMAIN : [DOMAIN, /https?:\/\/localhost:\d{4,}/],
   })
 );
 
