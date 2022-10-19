@@ -1,3 +1,9 @@
+import { Range } from 'slate';
+import {
+  insertPlaceholderFromSelection,
+  isPlaceholderActive,
+  removePlaceholder,
+} from '../../functions/insert-placeholder';
 import { toggleMark } from '../../functions/marks';
 import { MarkKeys } from '../../types/marks';
 import { selectAll } from './select-all';
@@ -53,6 +59,23 @@ export const hotkeys: HandlerFn = ({ editor, event, context }) => {
       case 'a': {
         event.preventDefault();
         selectAll(event, editor);
+
+        return;
+      }
+      case 'p': {
+        event.preventDefault();
+
+        if (isPlaceholderActive(editor)) {
+          removePlaceholder(editor);
+
+          return;
+        }
+
+        if (Range.isCollapsed(editor.selection)) {
+          return;
+        }
+
+        insertPlaceholderFromSelection(editor);
 
         return;
       }

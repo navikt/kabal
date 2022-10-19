@@ -5,7 +5,6 @@ import { isNotUndefined } from '../../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '../../../types/smart-editor/comments';
-import { isCommentableVoid } from '../../rich-text/types/editor-type-guards';
 import { COMMENT_PREFIX } from '../constants';
 import { SmartEditorContext } from '../context/smart-editor-context';
 
@@ -80,10 +79,6 @@ const getRichTextThreadIds = (richText: Descendant[]): string[] =>
 
     if (typeof child === 'undefined' || child === null) {
       return [];
-    }
-
-    if (isCommentableVoid(child)) {
-      return child.threadIds;
     }
 
     return getRichTextThreadIds(child.children);

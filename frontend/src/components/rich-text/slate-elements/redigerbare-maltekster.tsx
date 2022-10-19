@@ -42,7 +42,7 @@ export const RedigerbareMalteskterElement = ({
         const nodes =
           redigerbareMaltekster.length === 0
             ? [createSimpleParagraph()]
-            : redigerbareMaltekster.flatMap(({ content }) => content);
+            : redigerbareMaltekster.flatMap((r) => r.content);
 
         Transforms.insertNodes<RedigerbareMalteksterElementType>(editor, nodes, {
           match: (n) => n === e,

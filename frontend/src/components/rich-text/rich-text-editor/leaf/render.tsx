@@ -13,7 +13,7 @@ interface LeafProps extends RenderLeafProps {
 
 const Leaf = ({ attributes, leaf, children, focusedThreadId }: LeafProps) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const { bold, italic, underline, strikethrough, subscript, superscript, selected, ...rest } = leaf;
+  const { bold, italic, underline, strikethrough, subscript, superscript, selected, placeholder, ...rest } = leaf;
 
   const commentThreadIds = Object.keys(rest).filter((n) => n.startsWith(COMMENT_PREFIX));
   const isFocused = getFocused(commentThreadIds, focusedThreadId);
@@ -33,9 +33,11 @@ const Leaf = ({ attributes, leaf, children, focusedThreadId }: LeafProps) => {
       strikethrough={strikethrough}
       subscript={subscript}
       superscript={superscript}
+      placeholder={typeof placeholder === 'string' ? placeholder : undefined}
       commentIds={commentThreadIds}
       selected={selected}
       focused={isFocused}
+      hasText={leaf.text.length !== 0}
       ref={ref}
     >
       {children}

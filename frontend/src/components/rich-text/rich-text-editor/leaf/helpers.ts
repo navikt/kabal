@@ -5,6 +5,8 @@ export interface LeafStyleProps extends IMarks {
   focused?: boolean;
   commentIds: string[];
   children: React.ReactNode;
+  hasText: boolean;
+  placeholder?: string;
 }
 
 export const getTextDecoration = ({ underline, strikethrough }: LeafStyleProps) => {

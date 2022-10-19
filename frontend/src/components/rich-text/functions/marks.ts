@@ -2,7 +2,7 @@ import { Editor, Range, Text, Transforms } from 'slate';
 import { DeletableVoidElementsEnum } from '../types/editor-enums';
 import { isNodeMarkableElementType, isOfElementTypeFn } from '../types/editor-type-guards';
 import { FlettefeltElementType } from '../types/editor-void-types';
-import { IMarks } from '../types/marks';
+import { IMarks, MarkKeys } from '../types/marks';
 import { pruneSelection } from './prune-selection';
 
 export const isMarkActive = (editor: Editor, mark: keyof IMarks): boolean => {
@@ -71,11 +71,13 @@ export const isMarkingAvailable = (editor: Editor) => {
     return true;
   }
 
+  const at = pruneSelection(editor) ?? undefined;
+
   const [match] = Editor.nodes(editor, {
     mode: 'all',
     universal: true,
     voids: false,
-    at: pruneSelection(editor) ?? undefined,
+    at,
     match: isNodeMarkableElementType,
   });
 
@@ -83,12 +85,12 @@ export const isMarkingAvailable = (editor: Editor) => {
 };
 
 export const toggleMark = (editor: Editor, mark: keyof IMarks): void => {
-  if (mark === 'subscript') {
-    Editor.addMark(editor, 'superscript', false);
+  if (mark === MarkKeys.subscript) {
+    Editor.addMark(editor, MarkKeys.superscript, false);
   }
 
-  if (mark === 'superscript') {
-    Editor.addMark(editor, 'subscript', false);
+  if (mark === MarkKeys.superscript) {
+    Editor.addMark(editor, MarkKeys.subscript, false);
   }
 
   const value = !isMarkActive(editor, mark);
@@ -96,4 +98,14 @@ export const toggleMark = (editor: Editor, mark: keyof IMarks): void => {
   Editor.addMark(editor, mark, value);
 
   Transforms.setNodes(editor, { [mark]: value }, { match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT) });
+
+  if (editor.selection === null || Range.isCollapsed(editor.selection)) {
+    return;
+  }
+
+  Transforms.setNodes(
+    editor,
+    { [mark]: value },
+    { match: Text.isText, mode: 'lowest', split: true, at: editor.selection }
+  );
 };

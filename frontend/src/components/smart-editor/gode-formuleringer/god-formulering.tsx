@@ -3,7 +3,7 @@ import { Editor } from 'slate';
 import styled from 'styled-components';
 import { IText } from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
-import { renderElement } from '../../rich-text/slate-void-elements/maltekst/render';
+import { renderElement } from '../../rich-text/slate-elements/maltekst/render';
 import { AddButton } from './add-button';
 
 interface Props extends IText {

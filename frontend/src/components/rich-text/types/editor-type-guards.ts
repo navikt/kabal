@@ -1,18 +1,11 @@
-import { Element, Node } from 'slate';
-import { AlignableTypeEnum, ContentTypeEnum, ElementTypesEnum, MarkableTypeEnum } from './editor-enums';
-import { AlignableElementTypes, MarkKeyList, MarkableElementTypes, VOID_ELEMENT_TYPES } from './editor-types';
-import { CommentableVoidElementTypes, VoidElementTypes } from './editor-void-types';
+import { Editor, Element, Node, Text } from 'slate';
+import { AlignableTypeEnum, ContentTypeEnum, ElementTypesEnum, HeadingTypesEnum } from './editor-enums';
+import { AlignableElementTypes, MarkKeyList, VOID_ELEMENT_TYPES } from './editor-types';
+import { VoidElementTypes } from './editor-void-types';
 import { MarkKeys } from './marks';
 
 export const isVoid = (element: Element): element is VoidElementTypes =>
   VOID_ELEMENT_TYPES.some((t) => t === element.type);
-
-export const isCommentableVoid = (element: Element): element is CommentableVoidElementTypes =>
-  typeof element === 'object' &&
-  element !== null &&
-  'threadIds' in element &&
-  Object.hasOwn(element, 'threadIds') &&
-  Array.isArray(element.threadIds);
 
 export const isMarkKey = (s: string): s is MarkKeys => MarkKeyList.includes(s);
 
@@ -24,20 +17,14 @@ export const isNodeAlignableElementType = (n: Node): n is AlignableElementTypes 
   return isTypeAlignable(n.type);
 };
 
-const MARKABLE_TYPES = Object.values(MarkableTypeEnum);
+const NON_MARKABLE_TYPES = Object.values(HeadingTypesEnum);
 
-export const isNodeMarkableElementType = (n: Node): n is MarkableElementTypes => {
-  if (!Element.isElement(n)) {
-    return false;
+export const isNodeMarkableElementType = (n: Node) => {
+  if (Text.isText(n) || Editor.isEditor(n)) {
+    return true;
   }
 
-  for (const type of MARKABLE_TYPES) {
-    if (n.type === type) {
-      return true;
-    }
-  }
-
-  return false;
+  return NON_MARKABLE_TYPES.every((t) => t !== n.type);
 };
 
 export const isOfElementTypeFn =

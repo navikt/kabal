@@ -6,12 +6,14 @@ import {
   ListTypesEnum,
   RedigerbarMaltekstEnum,
   TextAlignEnum,
+  UndeletableContentEnum,
   UndeletableVoidElementsEnum,
 } from '../../rich-text/types/editor-enums';
 import {
   BulletListElementType,
   HeadingOneElementType,
   HeadingTwoElementType,
+  MaltekstElementType,
   ParagraphElementType,
   RedigerbareMalteksterElementType,
 } from '../../rich-text/types/editor-types';
@@ -22,7 +24,6 @@ import {
   LabelContentElementType,
   PageBreakElementType,
   SignatureElementType,
-  VoidElementTypes,
 } from '../../rich-text/types/editor-void-types';
 
 export const createLabelContent = (source: string, label: string): LabelContentElementType => ({
@@ -33,12 +34,10 @@ export const createLabelContent = (source: string, label: string): LabelContentE
   threadIds: [],
 });
 
-export const createMaltekst = (section: TemplateSections): VoidElementTypes => ({
-  type: UndeletableVoidElementsEnum.MALTEKST,
+export const createMaltekst = (section: TemplateSections): MaltekstElementType => ({
+  type: UndeletableContentEnum.MALTEKST,
   section,
   children: [{ text: '' }],
-  content: null,
-  threadIds: [],
 });
 
 export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbareMalteksterElementType => ({

@@ -2,6 +2,11 @@ export enum ContentTypeEnum {
   PARAGRAPH = 'paragraph',
   INDENT = 'indent',
   BLOCKQUOTE = 'blockquote',
+  PLACEHOLDER = 'placeholder',
+}
+
+export enum UndeletableContentEnum {
+  MALTEKST = 'maltekst',
 }
 
 export enum ListTypesEnum {
@@ -35,7 +40,6 @@ export enum UndeletableVoidElementsEnum {
   LABEL_CONTENT = 'label-content',
   DOCUMENT_LIST = 'document-list',
   CURRENT_DATE = 'current-date',
-  MALTEKST = 'maltekst',
   PAGE_BREAK = 'page-break', // Undeletable with conventional methods (backspace etc.), but has special delete button
   HEADER = 'header',
   FOOTER = 'footer',
@@ -54,6 +58,7 @@ export enum RedigerbarMaltekstEnum {
 
 export type NonVoidElementsEnum =
   | ContentTypeEnum
+  | UndeletableContentEnum
   | HeadingTypesEnum
   | ListTypesEnum
   | ListContentEnum
@@ -62,9 +67,3 @@ export type NonVoidElementsEnum =
 export type ElementTypesEnum = NonVoidElementsEnum | VoidElementsEnum;
 
 export const AlignableTypeEnum = { ...ContentTypeEnum };
-export const MarkableTypeEnum = {
-  ...ContentTypeEnum,
-  ...ListTypesEnum,
-  ...ListContentEnum,
-  ...DeletableVoidElementsEnum,
-};

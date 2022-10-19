@@ -201,6 +201,30 @@
         "message": "Import Element from slate"
       },
       {
+        "name": "Node",
+        "message": "Import Node from slate"
+      },
+      {
+        "name": "Range",
+        "message": "Import Range from slate"
+      },
+      {
+        "name": "Path",
+        "message": "Import Path from slate"
+      },
+      {
+        "name": "Text",
+        "message": "Import Text from slate"
+      },
+      {
+        "name": "Descendant",
+        "message": "Import Descendant from slate"
+      },
+      {
+        "name": "close",
+        "message": "Don't use global close()"
+      },
+      {
         "name": "DocumentType",
         "message": "Import DocumentType locally"
       }

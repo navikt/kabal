@@ -9,13 +9,11 @@ import { useThreads } from './use-threads';
 
 export const CommentSection = () => {
   const { attached, orphans } = useThreads();
-  const { selection, showNewComment, setShowNewComment, activeElement, setActiveElement, editor } =
-    useContext(SmartEditorContext);
+  const { selection, showNewComment, setShowNewComment, editor } = useContext(SmartEditorContext);
 
   const isValidSelection = Range.isRange(selection) && Range.isExpanded(selection);
-  const isVoid = activeElement !== null;
 
-  const showNewThread = showNewComment && (isValidSelection || isVoid);
+  const showNewThread = showNewComment && isValidSelection;
 
   // If there are comments, either attached or orphans, show the comment list.
   const showCommentSection = showNewThread || attached.length !== 0 || orphans.length !== 0;
@@ -30,7 +28,6 @@ export const CommentSection = () => {
         show={showNewThread}
         close={() => {
           setShowNewComment(false);
-          setActiveElement(null);
 
           if (editor !== null) {
             ReactEditor.focus(editor);

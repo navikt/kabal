@@ -1,4 +1,4 @@
-import { RichText_V1_SmartEditor, RichText_V1_Text } from './v1';
+import { RichText_V2_SmartEditor, RichText_V2_Text } from './v2';
 
-export type RichText_Latest_SmartEditor = RichText_V1_SmartEditor;
-export type RichText_Latest_Text = RichText_V1_Text;
+export type RichText_Latest_SmartEditor = RichText_V2_SmartEditor;
+export type RichText_Latest_Text = RichText_V2_Text;

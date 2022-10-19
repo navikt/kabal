@@ -2,19 +2,16 @@ import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useEffect } from 'react';
 import { Transforms } from 'slate';
-import { useSlateStatic } from 'slate-react';
+import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useGetSignatureQuery } from '../../../../redux-api/bruker';
+import { RenderElementProps } from '../../slate-elements/render-props';
 import { ISignature, SignatureElementType } from '../../types/editor-void-types';
 import { voidStyle } from '../style';
 import { getName, getTitle } from './functions';
 import { IndividualSignature } from './individual-signature';
 import { MISSING_TITLE } from './title';
-
-interface Props {
-  element: SignatureElementType;
-}
 
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
@@ -88,13 +85,14 @@ const useSignatureData = (element: SignatureElementType) => {
 };
 
 export const Signature = React.memo(
-  ({ element }: Props) => {
+  ({ element, attributes, children }: RenderElementProps<SignatureElementType>) => {
     const editor = useSlateStatic();
+    const isSelected = useSelected();
 
     useSignatureData(element);
 
     return (
-      <SignaturesContainer>
+      <SignaturesContainer {...attributes} contentEditable={false} $isFocused={isSelected}>
         <StyledCheckbox
           checked={element.useShortName}
           onChange={({ target }) => {
@@ -111,6 +109,7 @@ export const Signature = React.memo(
           <IndividualSignature signature={element.medunderskriver} />
           <IndividualSignature signature={element.saksbehandler} />
         </StyledSignatures>
+        {children}
       </SignaturesContainer>
     );
   },
@@ -136,19 +135,25 @@ const StyledCheckbox = styled(Checkbox)`
   border-style: dashed;
   border-color: inherit;
   border-radius: 4px;
-  padding: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 8px;
   user-select: none;
 `;
 
-const SignaturesContainer = styled.div`
+const SignaturesContainer = styled.div<{ $isFocused: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
   margin-top: 32px;
   ${voidStyle}
+  border-radius: 2px;
+  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
+  outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;
 
 const StyledSignatures = styled.div`

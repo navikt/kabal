@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { RenderElementProps } from './render-props';
+import { RenderElementProps } from '../slate-elements/render-props';
 
 export const PageBreak = ({ element, children, attributes }: RenderElementProps) => {
   const editor = useSlateStatic();
@@ -15,7 +15,7 @@ export const PageBreak = ({ element, children, attributes }: RenderElementProps)
   );
 
   return (
-    <StyledPageBreak contentEditable={false} {...attributes}>
+    <StyledPageBreak {...attributes} contentEditable={false}>
       <StyledDeleteButton onClick={onClick} title="Fjern sideskift" variant="danger" size="small">
         <Delete /> Fjern sideskift
       </StyledDeleteButton>

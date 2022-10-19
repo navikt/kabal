@@ -2,7 +2,7 @@ import { DialogDots, Information, Law } from '@navikt/ds-icons';
 import React, { useContext } from 'react';
 import { Range } from 'slate';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
-import { ToolbarSeparator } from './separator';
+import { Placeholder } from './placeholder';
 import { ToolbarIconButton } from './toolbarbutton';
 
 const ICON_SIZE = 24;
@@ -11,24 +11,25 @@ export interface SmartEditorButtonsProps {
   showCommentsButton?: boolean;
   showAnnotationsButton?: boolean;
   showGodeFormuleringerButton?: boolean;
+  showPlaceholderButton?: boolean;
 }
 
 export const SmartEditorButtons = ({
   showCommentsButton = false,
   showAnnotationsButton = false,
   showGodeFormuleringerButton = false,
+  showPlaceholderButton = false,
 }: SmartEditorButtonsProps) => {
-  if (!showCommentsButton && !showAnnotationsButton && !showGodeFormuleringerButton) {
+  if (!showCommentsButton && !showAnnotationsButton && !showGodeFormuleringerButton && !showPlaceholderButton) {
     return null;
   }
 
   return (
     <>
       <CommentsButton show={showCommentsButton} />
+      <Placeholder show={showPlaceholderButton} />
       <AnnotationsButton show={showAnnotationsButton} />
       <GodeFormuleringerButton show={showGodeFormuleringerButton} />
-
-      <ToolbarSeparator />
     </>
   );
 };

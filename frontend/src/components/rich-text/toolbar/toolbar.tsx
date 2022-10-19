@@ -1,12 +1,12 @@
-// import { Cognition } from '@navikt/ds-icons';
 import { Cancel } from '@navikt/ds-icons';
 import { FormatClear } from '@styled-icons/material/FormatClear';
 import React from 'react';
 import { useSlate } from 'slate-react';
 import styled from 'styled-components';
 import { clearFormatting } from '../functions/clear-formatting';
-// import { insertFlettefelt } from '../functions/insert-flettefelt';
 import { insertPageBreak, insertPageBreakIsAvailable } from '../functions/insert-page-break';
+import { isInPlaceholderInMaltekst } from '../functions/maltekst';
+// import { insertFlettefelt } from '../functions/insert-flettefelt';
 import { isMarkingAvailable } from '../functions/marks';
 import { isTextAlignAvailable } from '../functions/text-align';
 import { Content } from './content';
@@ -25,11 +25,18 @@ interface Props extends SmartEditorButtonsProps {
   visible: boolean;
 }
 
-export const Toolbar = ({ visible, showCommentsButton, showAnnotationsButton, showGodeFormuleringerButton }: Props) => {
+export const Toolbar = ({
+  visible,
+  showCommentsButton,
+  showAnnotationsButton,
+  showGodeFormuleringerButton,
+  showPlaceholderButton,
+}: Props) => {
   const editor = useSlate();
 
   const marksAvailable = isMarkingAvailable(editor);
   const textAlignAvailable = isTextAlignAvailable(editor);
+  const notEditable = isInPlaceholderInMaltekst(editor);
 
   return (
     <ToolbarStyle visible={visible} aria-hidden={!visible}>
@@ -56,7 +63,7 @@ export const Toolbar = ({ visible, showCommentsButton, showAnnotationsButton, sh
       <ToolbarSeparator />
 
       <Lists iconSize={ICON_SIZE} />
-      <TextAligns iconSize={ICON_SIZE} disabled={!textAlignAvailable} />
+      <TextAligns iconSize={ICON_SIZE} disabled={!textAlignAvailable || notEditable} />
 
       <ToolbarSeparator />
 
@@ -71,7 +78,10 @@ export const Toolbar = ({ visible, showCommentsButton, showAnnotationsButton, sh
         showCommentsButton={showCommentsButton}
         showAnnotationsButton={showAnnotationsButton}
         showGodeFormuleringerButton={showGodeFormuleringerButton}
+        showPlaceholderButton={showPlaceholderButton}
       />
+
+      <ToolbarSeparator />
 
       <ToolbarIconButton
         label="Angre (Ctrl/⌘ + Z)"
@@ -79,6 +89,7 @@ export const Toolbar = ({ visible, showCommentsButton, showAnnotationsButton, sh
         active={false}
         onClick={editor.undo}
       />
+
       <ToolbarIconButton
         label="Gjenopprett (Ctrl/⌘ + Shift + Z)"
         icon={<Redo width={ICON_SIZE} />}
@@ -102,7 +113,7 @@ const ToolbarStyle = styled.section<{ visible: boolean }>`
   padding: 2px;
   margin-left: 16px;
   margin-right: 16px;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2);
   will-change: opacity, visibility;
   transition: opacity 0.2s ease-in-out;

@@ -7,6 +7,7 @@ import { ListContentEnum, ListTypesEnum } from '../../rich-text/types/editor-enu
 import { isOfElementType, isOfElementTypeFn } from '../../rich-text/types/editor-type-guards';
 import { BulletListElementType, ListItemContainerElementType } from '../../rich-text/types/editor-types';
 import { getSelectedListTypes } from '../functions/blocks';
+import { isInPlaceholderInMaltekst } from '../functions/maltekst';
 import { ToolbarIconButton } from './toolbarbutton';
 
 interface ListsProps {
@@ -18,12 +19,14 @@ export const Lists = ({ iconSize }: ListsProps) => {
 
   const isBulletListActive = getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST];
   const isNumberedListActive = getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST];
+  const notEditable = isInPlaceholderInMaltekst(editor);
 
   return (
     <>
       <ToolbarIconButton
         label="Punktliste"
         icon={<FormatListBulleted width={iconSize} />}
+        disabled={notEditable}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
             if (isBulletListActive && isNumberedListActive) {
@@ -67,6 +70,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
       <ToolbarIconButton
         label="Nummerliste"
         icon={<FormatListNumbered width={iconSize} />}
+        disabled={notEditable}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
             if (isBulletListActive && isNumberedListActive) {

@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
 import styled from 'styled-components';
 import { formatLongDate, zeroPad } from '../../../domain/date';
 
-export const CurrentDate = (props: RenderElementProps) => {
-  const now = new Date();
-
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const day = now.getDate();
-
-  return <RenderCurrentDate {...props} year={year} month={month} day={day} />;
-};
-
-interface Props extends RenderElementProps {
+interface DateParts {
   year: number;
   month: number;
   day: number;
 }
+
+export const CurrentDate = (props: RenderElementProps) => {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const millisecondsToNextDay = 86400000 - (now.getTime() % 86400000);
+    const timeout = setTimeout(() => setNow(new Date()), millisecondsToNextDay);
+
+    return () => clearTimeout(timeout);
+  });
+
+  const parts = useMemo<DateParts>(
+    () => ({
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDate(),
+    }),
+    [now]
+  );
+
+  return <RenderCurrentDate {...props} {...parts} />;
+};
+
+interface Props extends RenderElementProps, DateParts {}
 
 const RenderCurrentDate = React.memo<Props>(
   ({ year, month, day, children, attributes }) => {
@@ -26,9 +40,9 @@ const RenderCurrentDate = React.memo<Props>(
     const isoDate = `${year}-${zeroPad(month + 1)}-${zeroPad(day)}`;
 
     return (
-      <div {...attributes}>
+      <div {...attributes} contentEditable={false}>
         {children}
-        <CurrentDateContainer dateTime={isoDate} isFocused={isSelected} contentEditable={false}>
+        <CurrentDateContainer dateTime={isoDate} $isFocused={isSelected} contentEditable={false}>
           <span>Dato: {formatLongDate(year, month, day)}</span>
         </CurrentDateContainer>
       </div>
@@ -40,14 +54,14 @@ const RenderCurrentDate = React.memo<Props>(
 
 RenderCurrentDate.displayName = 'RenderCurrentDate';
 
-const CurrentDateContainer = styled.time<{ isFocused: boolean }>`
+const CurrentDateContainer = styled.time<{ $isFocused: boolean }>`
   display: block;
   text-align: right;
   width: 100%;
   border-radius: 2px;
   transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
-  background-color: ${({ isFocused }) => (isFocused ? '#f5f5f5' : 'transparent')};
-  outline-color: ${({ isFocused }) => (isFocused ? '#f5f5f5' : 'transparent')};
+  background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
+  outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-style: solid;
   outline-width: 8px;
 `;

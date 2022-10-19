@@ -1,4 +1,3 @@
-import { IText, TemplateSections, TextMetadata } from '../../../types/texts/texts';
 import { DeletableVoidElementsEnum, UndeletableVoidElementsEnum } from './editor-enums';
 import { IMarks } from './marks';
 
@@ -29,12 +28,6 @@ export interface LabelContentElementType extends IBaseVoid, IWithThreads {
   label: string;
   source: string;
   result?: string;
-}
-
-export interface MaltekstElementType extends IBaseVoid, IWithThreads, Partial<TextMetadata> {
-  type: UndeletableVoidElementsEnum.MALTEKST;
-  section: TemplateSections;
-  content: IText[] | null;
 }
 
 interface IDocumentItem {
@@ -80,18 +73,11 @@ type DeletableVoidTypes = FlettefeltElementType;
 
 type VoidTypes =
   | SignatureElementType
-  | MaltekstElementType
   | LabelContentElementType
   | DocumentListElementType
   | CurrentDateType
-  | PageBreakElementType;
-
-export type CommentableVoidElementTypes =
-  | SignatureElementType
-  | LabelContentElementType
-  | MaltekstElementType
-  | DocumentListElementType
+  | PageBreakElementType
   | HeaderElementType
   | FooterElementType;
 
-export type VoidElementTypes = CommentableVoidElementTypes | VoidTypes | DeletableVoidTypes;
+export type VoidElementTypes = VoidTypes | DeletableVoidTypes;

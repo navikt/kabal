@@ -1,21 +1,44 @@
 import { Editor } from 'slate';
 import { containsUndeletableVoid, containsVoid } from '../functions/contains-void';
-import { DeletableVoidElementsEnum } from '../types/editor-enums';
+import { isPlaceholderSelectedInMaltekstWithOverlap } from '../functions/insert-placeholder';
+import {
+  isAtEndOfPlaceholder,
+  isInMaltekst,
+  isInMaltekstAndNotPlaceholder,
+  isInPlaceholder,
+} from '../functions/maltekst';
+import { ContentTypeEnum, DeletableVoidElementsEnum } from '../types/editor-enums';
 import { isVoid as isVoidElement } from '../types/editor-type-guards';
 
+const INLINE_TYPES = [DeletableVoidElementsEnum.FLETTEFELT, ContentTypeEnum.PLACEHOLDER];
+
 export const withEditableVoids = (editor: Editor) => {
-  const { isVoid, deleteFragment, deleteBackward, deleteForward, insertBreak, isInline } = editor;
+  const {
+    deleteBackward,
+    deleteForward,
+    deleteFragment,
+    insertBreak,
+    insertData,
+    insertSoftBreak,
+    insertText,
+    isInline,
+    isVoid,
+  } = editor;
 
   editor.isVoid = (element) => (isVoidElement(element) ? true : isVoid(element));
 
-  editor.isInline = (e) => (e.type === DeletableVoidElementsEnum.FLETTEFELT ? true : isInline(e));
+  editor.isInline = (e) => (INLINE_TYPES.some((t) => t === e.type) ? true : isInline(e));
 
   editor.deleteBackward = (unit) => {
     if (editor.selection === null) {
       return;
     }
 
-    if (containsUndeletableVoid(editor, editor.selection)) {
+    if (editor.selection.focus.offset === 0 && isInPlaceholder(editor)) {
+      return;
+    }
+
+    if (containsUndeletableVoid(editor, editor.selection) || isInMaltekstAndNotPlaceholder(editor)) {
       return;
     }
 
@@ -36,6 +59,10 @@ export const withEditableVoids = (editor: Editor) => {
       return;
     }
 
+    if (isAtEndOfPlaceholder(editor)) {
+      return;
+    }
+
     if (containsUndeletableVoid(editor, editor.selection)) {
       return;
     }
@@ -53,7 +80,7 @@ export const withEditableVoids = (editor: Editor) => {
   };
 
   editor.deleteFragment = (direction) => {
-    if (containsUndeletableVoid(editor, editor.selection)) {
+    if (containsUndeletableVoid(editor, editor.selection) || isInMaltekstAndNotPlaceholder(editor)) {
       return;
     }
 
@@ -61,11 +88,39 @@ export const withEditableVoids = (editor: Editor) => {
   };
 
   editor.insertBreak = () => {
-    if (containsVoid(editor, editor.selection)) {
+    if (containsVoid(editor, editor.selection) || isInMaltekst(editor)) {
       return;
     }
 
     insertBreak();
+  };
+
+  editor.insertData = (node) => {
+    if (isInPlaceholder(editor)) {
+      return insertText(node.getData('text/plain').replaceAll('\n', ' '));
+    }
+
+    if (isInMaltekst(editor)) {
+      return;
+    }
+
+    return insertData(node);
+  };
+
+  editor.insertText = (text: string) => {
+    if (isPlaceholderSelectedInMaltekstWithOverlap(editor)) {
+      return;
+    }
+
+    return insertText(text);
+  };
+
+  editor.insertSoftBreak = () => {
+    if (isInMaltekst(editor)) {
+      return;
+    }
+
+    return insertSoftBreak();
   };
 
   return editor;
