@@ -137,7 +137,7 @@ export const withNormalization = (editor: Editor) => {
     }
 
     // If the node is an element and it is not markable.
-    if (Element.isElement(node) && !isNodeMarkableElementType(node)) {
+    if (!isNodeMarkableElementType(node)) {
       // Find text nodes with at least one mark set to true.
       const [match] = Editor.nodes(editor, {
         at: path,

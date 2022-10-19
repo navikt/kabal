@@ -30,6 +30,7 @@ export const RichTextEditorElement = React.memo(
     showCommentsButton,
     showAnnotationsButton,
     showGodeFormuleringerButton,
+    showPlaceholderButton,
     className,
     focusedThreadId,
     onSelect,
@@ -114,6 +115,7 @@ export const RichTextEditorElement = React.memo(
             showAnnotationsButton={showAnnotationsButton}
             showCommentsButton={showCommentsButton}
             showGodeFormuleringerButton={showGodeFormuleringerButton}
+            showPlaceholderButton={showPlaceholderButton}
           />
           <StyledEditable
             readOnly={!canEdit}
@@ -139,6 +141,7 @@ export const RichTextEditorElement = React.memo(
     prevProps.showAnnotationsButton === nextProps.showAnnotationsButton &&
     prevProps.showCommentsButton === nextProps.showCommentsButton &&
     prevProps.showGodeFormuleringerButton === nextProps.showGodeFormuleringerButton &&
+    prevProps.showPlaceholderButton === nextProps.showPlaceholderButton &&
     prevProps.focusedThreadId === nextProps.focusedThreadId
 );
 

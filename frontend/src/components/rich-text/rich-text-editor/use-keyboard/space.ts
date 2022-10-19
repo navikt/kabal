@@ -5,10 +5,6 @@ import { isOfElementTypeFn } from '../../types/editor-type-guards';
 import { HandlerFn, HandlerFnArg } from './types';
 
 export const space: HandlerFn = ({ editor, event }) => {
-  if (event.key !== ' ') {
-    return;
-  }
-
   const { focus } = editor.selection;
 
   // Focus must be at the beginning of the text node.

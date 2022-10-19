@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Transforms } from 'slate';
-import { useSlateStatic } from 'slate-react';
+import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { getFullName } from '../../../domain/name';
 import { formatFoedselsnummer } from '../../../functions/format-id';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
+import { RenderElementProps } from '../slate-elements/render-props';
 import { ParagraphStyle } from '../styled-elements/content';
 import { TextAlignEnum } from '../types/editor-enums';
 import { LabelContentElementType } from '../types/editor-void-types';
 import { voidStyle } from './style';
 
-interface Props {
-  element: LabelContentElementType;
-}
-
-export const LabelElement = ({ element }: Props) => {
+export const LabelElement = ({ element, attributes, children }: RenderElementProps<LabelContentElementType>) => {
   const editor = useSlateStatic();
   const { data: oppgave } = useOppgave();
   const [result, setResult] = useState<string | null>(null);
+  const isSelected = useSelected();
 
   useEffect(() => {
     if (result === null) {
@@ -47,9 +45,12 @@ export const LabelElement = ({ element }: Props) => {
   }
 
   return (
-    <VoidParagraphStyle textAlign={TextAlignEnum.TEXT_ALIGN_LEFT} contentEditable={false}>
-      {result}
-    </VoidParagraphStyle>
+    <div {...attributes} contentEditable={false}>
+      <VoidParagraphStyle $isFocused={isSelected} textAlign={TextAlignEnum.TEXT_ALIGN_LEFT}>
+        {result}
+      </VoidParagraphStyle>
+      {children}
+    </div>
   );
 };
 
@@ -65,6 +66,10 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string => {
   return 'Verdi mangler';
 };
 
-const VoidParagraphStyle = styled(ParagraphStyle)`
+const VoidParagraphStyle = styled(ParagraphStyle)<{ $isFocused: boolean }>`
   ${voidStyle}
+  border-radius: 2px;
+  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
+  outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;

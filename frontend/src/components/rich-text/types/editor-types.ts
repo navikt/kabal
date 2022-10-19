@@ -1,7 +1,6 @@
 import { BaseRange, Descendant } from 'slate';
 import { TemplateSections, TextMetadata } from '../../../types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
-import { FlettefeltElementType } from './deletable-void-types';
 import {
   ContentTypeEnum,
   DeletableVoidElementsEnum,
@@ -10,6 +9,7 @@ import {
   ListTypesEnum,
   RedigerbarMaltekstEnum,
   TextAlignEnum,
+  UndeletableContentEnum,
   UndeletableVoidElementsEnum,
 } from './editor-enums';
 import { IMarks, MarkKeys } from './marks';
@@ -36,14 +36,20 @@ interface BlockquoteElementType {
   textAlign: TextAlignEnum;
 }
 
-export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType;
+export interface PlaceholderElementType {
+  type: ContentTypeEnum.PLACEHOLDER;
+  placeholder: string;
+  content: string;
+  children: CustomTextType[];
+}
 
-export type MarkableElementTypes =
-  | ParagraphElementType
-  | IndentElementType
-  | BlockquoteElementType
-  | ListItemContainerElementType
-  | FlettefeltElementType;
+export interface MaltekstElementType {
+  type: UndeletableContentEnum.MALTEKST;
+  section: TemplateSections;
+  children: Descendant[];
+}
+
+export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType;
 
 export type NonVoidElementTypes =
   | ParagraphElementType
@@ -51,7 +57,9 @@ export type NonVoidElementTypes =
   | BlockquoteElementType
   | HeadingsType
   | ListsType
-  | RedigerbareMalteksterElementType;
+  | RedigerbareMalteksterElementType
+  | PlaceholderElementType
+  | MaltekstElementType;
 
 export interface RedigerbareMalteksterElementType extends Partial<TextMetadata> {
   type: RedigerbarMaltekstEnum;

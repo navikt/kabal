@@ -12,7 +12,7 @@ interface ToolbarTextButtonProps extends ToolbarButtonProps {
 interface ToolbarButtonProps extends ToolbarButtonStyleProps {
   label: string;
   disabled?: boolean;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 interface ToolbarButtonStyleProps {
@@ -29,7 +29,7 @@ export const ToolbarIconButton = ({ label, icon, onClick, active, disabled = fal
     active={active}
     onMouseDown={(event) => {
       event.preventDefault();
-      onClick();
+      onClick(event);
     }}
   >
     {icon}
@@ -53,7 +53,7 @@ export const ToolbarTextButton = ({
     fontWeight={fontWeight}
     onMouseDown={(event) => {
       event.preventDefault();
-      onClick();
+      onClick(event);
     }}
   >
     {text}
@@ -69,13 +69,14 @@ const ToolbarButtonStyle = styled.button<ToolbarButtonStyleProps>`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: ${({ active }) => (active ? '#CCE1FF' : 'transparent')};
+  background-color: ${({ active }) => (active ? 'var(--navds-global-color-blue-100)' : 'transparent')};
   opacity: ${({ active }) => (active ? 1 : 0.5)};
   font-family: Source Sans Pro;
   color: black;
   font-size: 16px;
   font-weight: ${({ fontWeight }) => fontWeight ?? 'normal'};
-  min-width: 32px;
+  width: 32px;
+  height: 32px;
 
   :hover {
     opacity: 1;

@@ -1,12 +1,11 @@
 import React from 'react';
 import { TextTypes } from '../../../types/texts/texts';
-import { CommentWrapper } from '../../smart-editor/comments/comment-wrapper';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';
 import { HeaderFooterElement } from '../slate-void-elements/header-footer';
 import { LabelElement } from '../slate-void-elements/label';
-import { MaltekstElement } from '../slate-void-elements/maltekst/maltekst';
+import { PageBreak } from '../slate-void-elements/page-break';
 import { Signature } from '../slate-void-elements/signature/signature';
 import {
   ContentTypeEnum,
@@ -15,10 +14,12 @@ import {
   ListContentEnum,
   ListTypesEnum,
   RedigerbarMaltekstEnum,
+  UndeletableContentEnum,
   UndeletableVoidElementsEnum,
 } from '../types/editor-enums';
-import { PageBreak } from './page-break';
-import { RedigerbareMalteskterElement } from './redigerbare-maltekster';
+import { MaltekstElement } from './maltekst/maltekst';
+import { PlaceholderElement } from './placeholder';
+import { RedigerbareMalteskterElement as RedigerbareMalteksterElement } from './redigerbare-maltekster';
 import { RenderElementProps } from './render-props';
 import {
   BlockQuoteElement,
@@ -65,23 +66,19 @@ export const renderElement = (props: RenderElementProps) => {
     case ContentTypeEnum.BLOCKQUOTE:
       return <BlockQuoteElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.SIGNATURE:
-      return <CommentWrapper {...props} element={props.element} content={<Signature element={props.element} />} />;
-    case UndeletableVoidElementsEnum.MALTEKST:
-      return (
-        <CommentWrapper {...props} element={props.element} content={<MaltekstElement element={props.element} />} />
-      );
+      return <Signature {...props} element={props.element} />;
+    case UndeletableContentEnum.MALTEKST:
+      return <MaltekstElement {...props} element={props.element} />;
     case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST:
       return (
-        <RedigerbareMalteskterElement {...props} element={props.element} textType={TextTypes.REDIGERBAR_MALTEKST} />
+        <RedigerbareMalteksterElement {...props} element={props.element} textType={TextTypes.REDIGERBAR_MALTEKST} />
       );
     case RedigerbarMaltekstEnum.REGELVERKTEKST:
-      return <RedigerbareMalteskterElement {...props} element={props.element} textType={TextTypes.REGELVERK} />;
+      return <RedigerbareMalteksterElement {...props} element={props.element} textType={TextTypes.REGELVERK} />;
     case UndeletableVoidElementsEnum.LABEL_CONTENT:
-      return <CommentWrapper {...props} element={props.element} content={<LabelElement element={props.element} />} />;
+      return <LabelElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.DOCUMENT_LIST:
-      return (
-        <CommentWrapper {...props} element={props.element} content={<DocumentListElement element={props.element} />} />
-      );
+      return <DocumentListElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.CURRENT_DATE:
       return <CurrentDate {...props} />;
     case UndeletableVoidElementsEnum.PAGE_BREAK:
@@ -90,13 +87,9 @@ export const renderElement = (props: RenderElementProps) => {
       return <FlettefeltElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.HEADER:
     case UndeletableVoidElementsEnum.FOOTER:
-      return (
-        <CommentWrapper
-          {...props}
-          element={props.element}
-          content={<HeaderFooterElement {...props} element={props.element} />}
-        />
-      );
+      return <HeaderFooterElement {...props} element={props.element} />;
+    case ContentTypeEnum.PLACEHOLDER:
+      return <PlaceholderElement {...props} element={props.element} />;
     default:
       return <ParagraphElement {...props} element={props.element} />;
   }

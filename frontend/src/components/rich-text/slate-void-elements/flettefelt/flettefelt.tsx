@@ -3,7 +3,7 @@ import { Range, Transforms } from 'slate';
 import { useFocused, useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { FLETTEFELT_NAMES } from '../../../smart-editor/constants';
-import { moveRight } from '../../functions/flettefelt-arrows';
+import { moveRight } from '../../functions/arrows';
 import { StyledLeaf } from '../../rich-text-editor/leaf/styled';
 import { RenderElementProps } from '../../slate-elements/render-props';
 import { Flettefelt, FlettefeltElementType } from '../../types/editor-void-types';
@@ -87,7 +87,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
   return (
     <span {...attributes} contentEditable={false} title={getFlettefeltName(element.field)}>
       <Span $isFocused={isSelected && isFocused}>
-        <StyledLeaf {...element} selected={isSelected} commentIds={element.threadIds}>
+        <StyledLeaf {...element} selected={isSelected} commentIds={element.threadIds} hasText>
           {renderValue(value, element.field)}
         </StyledLeaf>
         <Dropdown options={OPTIONS} field={element.field} focused={focused} isOpen={isOpen} setField={setField} />

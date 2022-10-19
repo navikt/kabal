@@ -10,4 +10,4 @@ export interface RichText_V1 {
 
 export interface RichText_V1_Text extends RichText_V1, ITextMetadata {}
 
-export interface RichText_V1_SmartEditor extends RichText_V1, ISmartEditorMetadata {}
+export interface RichText_V1_SmartEditor extends RichText_V1, Omit<ISmartEditorMetadata, 'version'> {}

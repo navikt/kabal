@@ -14,6 +14,7 @@ enum Flettefelt {
   ENHET_NAME = 'enhet-name',
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export interface FlettefeltElementType extends IBaseVoid, IMarks, IWithThreads {
   type: DeletableVoidElementsEnum.FLETTEFELT;
   content: string | null;

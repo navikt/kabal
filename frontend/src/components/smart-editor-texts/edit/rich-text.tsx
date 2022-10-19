@@ -7,7 +7,6 @@ import { useDebounced } from '../../../hooks/use-debounce';
 import { useUpdateTextPropertyMutation } from '../../../redux-api/texts';
 import { RichTextEditorElement } from '../../rich-text/rich-text-editor/rich-text-editor';
 import { ErrorComponent } from '../error-component';
-// import { NEW_TEXT } from '../functions/new-text';
 import { useTextQuery } from '../hooks/use-text-query';
 
 interface Props {
@@ -38,7 +37,14 @@ export const RichTextEditor = ({ textId, savedContent }: Props) => {
         size: 'small',
       }}
     >
-      <StyledRichTextEditorElement key={textId} id={textId} savedContent={savedContent} onChange={setContent} canEdit />
+      <StyledRichTextEditorElement
+        showPlaceholderButton
+        key={textId}
+        id={textId}
+        savedContent={savedContent}
+        onChange={setContent}
+        canEdit
+      />
     </ErrorBoundary>
   );
 };

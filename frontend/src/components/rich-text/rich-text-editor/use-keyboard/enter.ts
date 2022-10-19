@@ -8,27 +8,27 @@ import { ListItemContainerElementType } from '../../types/editor-types';
 import { HandlerFn } from './types';
 
 export const enter: HandlerFn = ({ editor, event }) => {
-  if (event.key === 'Enter' && containsVoid(editor, editor.selection)) {
+  if (containsVoid(editor, editor.selection)) {
     event.preventDefault();
 
     return;
   }
 
-  if (event.shiftKey && event.key === 'Enter') {
+  if (event.shiftKey) {
     event.preventDefault();
     Transforms.insertText(editor, '\n');
 
     return;
   }
 
-  if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+  if (event.ctrlKey || event.metaKey) {
     event.preventDefault();
     insertPageBreak(editor);
 
     return;
   }
 
-  if (!event.shiftKey && event.key === 'Enter') {
+  if (!event.shiftKey) {
     event.preventDefault();
 
     if (

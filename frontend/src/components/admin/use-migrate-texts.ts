@@ -3,6 +3,7 @@ import { RichText_Latest_Text } from '../../types/rich-text/latest';
 import { VersionedText } from '../../types/rich-text/versions';
 import { IUpdateText } from '../../types/texts/texts';
 import { migrateFromV0ToV1 } from '../rich-text/migrations/v0';
+import { migrateFromV1ToV2 } from '../rich-text/migrations/v1';
 import { VERSION } from '../rich-text/version';
 import { ApiHook } from './types';
 
@@ -35,12 +36,23 @@ const migrate = (text: VersionedText): RichText_Latest_Text => {
     return text;
   }
 
-  if ((text.version ?? 0) === 0) {
+  if (text.version === undefined || text.version === 0) {
     return {
       ...text,
-      ...migrateFromV0ToV1(text),
+      ...migrateFromV1ToV2({
+        ...text,
+        ...migrateFromV0ToV1(text),
+      }),
     };
   }
 
+  if (text.version === 1) {
+    return {
+      ...text,
+      ...migrateFromV1ToV2(text),
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   throw new Error(`Unable to migrate from version ${text.version ?? 0} to version ${VERSION}`);
 };

@@ -8,38 +8,36 @@ import { addTabs, removeTabs } from '../slate-event-handlers/tabs/expanded-selec
 import { HandlerFn } from './types';
 
 export const tab: HandlerFn = ({ editor, event }) => {
-  if (event.key === 'Tab') {
-    event.preventDefault();
+  event.preventDefault();
 
-    if (
-      getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
-      getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
-    ) {
-      if (event.shiftKey) {
-        unindentList(editor);
-
-        return;
-      }
-
-      indentList(editor);
+  if (
+    getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
+    getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
+  ) {
+    if (event.shiftKey) {
+      unindentList(editor);
 
       return;
     }
 
-    if (isBlockActive(editor, ContentTypeEnum.PARAGRAPH)) {
-      if (Range.isCollapsed(editor.selection)) {
-        if (event.shiftKey) {
-          return removeTab(editor);
-        }
+    indentList(editor);
 
-        return addTab(editor);
-      }
+    return;
+  }
 
+  if (isBlockActive(editor, ContentTypeEnum.PARAGRAPH)) {
+    if (Range.isCollapsed(editor.selection)) {
       if (event.shiftKey) {
-        return removeTabs(editor);
+        return removeTab(editor);
       }
 
-      return addTabs(editor);
+      return addTab(editor);
     }
+
+    if (event.shiftKey) {
+      return removeTabs(editor);
+    }
+
+    return addTabs(editor);
   }
 };

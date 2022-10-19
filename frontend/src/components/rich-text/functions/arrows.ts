@@ -1,27 +1,15 @@
-import { Editor, Path, Text, Transforms } from 'slate';
-import { DeletableVoidElementsEnum } from '../types/editor-enums';
-import { isOfElementTypeFn } from '../types/editor-type-guards';
-import { FlettefeltElementType } from '../types/editor-void-types';
-
-const getFlettefeltPath = (editor: Editor): Path | null => {
-  const [flettefeltEntry] = Editor.nodes<FlettefeltElementType>(editor, {
-    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
-    voids: true,
-  });
-
-  if (flettefeltEntry === undefined) {
-    return null;
-  }
-
-  const [, flettefeltPath] = flettefeltEntry;
-
-  return flettefeltPath;
-};
+import { Editor, Path, Range, Text, Transforms } from 'slate';
+import { getFlettefeltPath } from './flettefelt';
 
 export const moveRight = (editor: Editor, event?: React.KeyboardEvent) => {
   const flettefeltPath = getFlettefeltPath(editor);
 
   if (flettefeltPath === null) {
+    if (editor.selection !== null && Range.isCollapsed(editor.selection)) {
+      event?.preventDefault();
+      Transforms.move(editor, { unit: 'offset', reverse: false });
+    }
+
     return;
   }
 
@@ -46,6 +34,11 @@ export const moveLeft = (editor: Editor, event?: React.KeyboardEvent) => {
   const flettefeltPath = getFlettefeltPath(editor);
 
   if (flettefeltPath === null) {
+    if (editor.selection !== null && Range.isCollapsed(editor.selection)) {
+      event?.preventDefault();
+      Transforms.move(editor, { unit: 'offset', reverse: true });
+    }
+
     return;
   }
 

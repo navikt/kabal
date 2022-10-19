@@ -2,8 +2,6 @@ import React, { useCallback, useContext, useState } from 'react';
 import { Editor, Element, Range, Selection } from 'slate';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { IRichTextContext, RichTextContext, RichTextContextComponent } from '../../rich-text/context/context';
-import { isCommentableVoid } from '../../rich-text/types/editor-type-guards';
-import { CommentableVoidElementTypes } from '../../rich-text/types/editor-void-types';
 import { getFocusedThreadIdFromText } from './get-focused-thread-id';
 
 export interface ISmartEditorContext extends IRichTextContext {
@@ -11,8 +9,6 @@ export interface ISmartEditorContext extends IRichTextContext {
   readonly documentId: null | string;
   readonly focusedThreadId: string | null;
   readonly setFocusedThreadId: (threadId: string | null) => void;
-  readonly activeElement: CommentableVoidElementTypes | null;
-  readonly setActiveElement: (activeElement: CommentableVoidElementTypes | null) => void;
   readonly showNewComment: boolean;
   readonly setShowNewComment: (showNewComment: boolean) => void;
   readonly showMaltekstTags: boolean;
@@ -41,7 +37,6 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
   const { editor, setEditor } = useContext(RichTextContext);
   const [selection, setSelection] = useState<Selection>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(getFocusedThreadIdFromText(editor, selection));
-  const [activeElement, setActiveElement] = useState<CommentableVoidElementTypes | null>(null);
   const [showNewComment, setShowNewComment] = useState<boolean>(false);
   const [showGodeFormuleringer, setShowGodeFormuleringer] = useState<boolean>(false);
   const [showMaltekstTags, setShowMaltekstTags] = useState<boolean>(false);
@@ -50,7 +45,6 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
     (newSelection: Selection) => {
       if (editor === null || newSelection === null) {
         setFocusedThreadId(null);
-        setActiveElement(null);
         setSelection(null);
         setShowNewComment(false);
 
@@ -60,30 +54,12 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
       if (Range.isCollapsed(newSelection)) {
         const [selectedEntry] = Editor.nodes(editor, {
           at: newSelection,
-          voids: true,
+          voids: false,
           match: Element.isElement,
         });
 
         if (typeof selectedEntry === 'undefined') {
           setFocusedThreadId(null);
-          setActiveElement(null);
-          setShowNewComment(false);
-          setSelection(newSelection);
-
-          return;
-        }
-
-        const [selectedNode] = selectedEntry;
-
-        const isVoid = isCommentableVoid(selectedNode);
-
-        if (isVoid) {
-          const [threadId] = selectedNode.threadIds;
-
-          if (threadId !== undefined) {
-            setFocusedThreadId(threadId);
-          }
-
           setShowNewComment(false);
           setSelection(newSelection);
 
@@ -92,7 +68,6 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
 
         const threadId = getFocusedThreadIdFromText(editor, newSelection);
         setFocusedThreadId(threadId);
-        setActiveElement(null);
         setShowNewComment(false);
         setSelection(newSelection);
 
@@ -100,7 +75,6 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
       }
 
       setFocusedThreadId(null);
-      setActiveElement(null);
       setShowNewComment(false);
       setSelection(newSelection);
     },
@@ -118,8 +92,6 @@ const InternalSmartEditorContextComponent = ({ children, documentId, templateId 
         setFocusedThreadId,
         selection,
         setSelection: interalSetSelection,
-        activeElement,
-        setActiveElement,
         showNewComment,
         setShowNewComment,
         showMaltekstTags,
@@ -141,8 +113,6 @@ export const SmartEditorContext = React.createContext<ISmartEditorContext>({
   setFocusedThreadId: () => {},
   selection: null,
   setSelection: () => {},
-  activeElement: null,
-  setActiveElement: () => {},
   showNewComment: false,
   setShowNewComment: () => {},
   showMaltekstTags: false,

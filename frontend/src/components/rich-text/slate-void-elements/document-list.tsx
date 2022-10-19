@@ -7,18 +7,15 @@ import styled from 'styled-components';
 import { isNotNull } from '../../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery, useGetTilknyttedeDokumenterQuery } from '../../../redux-api/oppgaver/queries/documents';
+import { RenderElementProps } from '../slate-elements/render-props';
 import { BulletListStyle, ListItemStyle } from '../styled-elements/lists';
 import { DocumentListElementType } from '../types/editor-void-types';
 import { voidStyle } from './style';
 
 type Documents = DocumentListElementType['documents'];
 
-interface Props {
-  element: DocumentListElementType;
-}
-
 export const DocumentListElement = React.memo(
-  ({ element }: Props) => {
+  ({ element, attributes, children }: RenderElementProps<DocumentListElementType>) => {
     const editor = useSlateStatic();
     const oppgaveId = useOppgaveId();
     const { data: newDocuments, isLoading: newIsLoading } = useGetDocumentsQuery(
@@ -61,7 +58,7 @@ export const DocumentListElement = React.memo(
     }
 
     return (
-      <StyledBulletList>
+      <StyledBulletList {...attributes} contentEditable={false}>
         {sourceDocuments.map((d) => (
           <ListItemStyle key={d.id}>
             <Checkbox
@@ -79,6 +76,7 @@ export const DocumentListElement = React.memo(
             </Checkbox>
           </ListItemStyle>
         ))}
+        {children}
       </StyledBulletList>
     );
   },

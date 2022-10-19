@@ -1,8 +1,8 @@
 import React from 'react';
 import { Descendant, Text } from 'slate';
 import { omit } from '../../../../functions/omit';
-import { StyledLeaf } from '../../../rich-text/rich-text-editor/leaf/styled';
-import { BlockQuoteStyle, ParagraphStyle } from '../../../rich-text/styled-elements/content';
+import { StyledLeaf } from '../../rich-text-editor/leaf/styled';
+import { BlockQuoteStyle, ParagraphStyle, PlaceholderStyle } from '../../styled-elements/content';
 import {
   HeadingFiveStyle,
   HeadingFourStyle,
@@ -10,16 +10,10 @@ import {
   HeadingSixStyle,
   HeadingThreeStyle,
   HeadingTwoStyle,
-} from '../../../rich-text/styled-elements/headings';
-import { BulletListStyle, ListItemStyle, NumberedListStyle } from '../../../rich-text/styled-elements/lists';
+} from '../../styled-elements/headings';
 import { IndentStyle } from '../../styled-elements/indent';
-import {
-  ContentTypeEnum,
-  HeadingTypesEnum,
-  ListContentEnum,
-  ListTypesEnum,
-  RedigerbarMaltekstEnum,
-} from '../../types/editor-enums';
+import { BulletListStyle, ListItemStyle, NumberedListStyle } from '../../styled-elements/lists';
+import { ContentTypeEnum, HeadingTypesEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
 import { isVoid } from '../../types/editor-type-guards';
 import { CustomTextType, NonVoidElementTypes } from '../../types/editor-types';
 
@@ -128,10 +122,10 @@ export const renderElement = (element: Descendant, key: string) => {
         </BlockQuoteStyle>
       );
     }
-    case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST: {
-      return null;
+    case ContentTypeEnum.PLACEHOLDER: {
+      return <PlaceholderStyle>{element.placeholder}</PlaceholderStyle>;
     }
-    case RedigerbarMaltekstEnum.REGELVERKTEKST: {
+    default: {
       return null;
     }
   }
@@ -140,7 +134,7 @@ export const renderElement = (element: Descendant, key: string) => {
 const getAttributes = <T extends NonVoidElementTypes>(element: T) => omit(element, 'children', 'type');
 
 const renderLeaf = ({ text, ...attributes }: CustomTextType, key: string) => (
-  <StyledLeaf {...attributes} commentIds={[]} key={key}>
+  <StyledLeaf {...attributes} commentIds={[]} key={key} hasText={text.length !== 0}>
     {text}
   </StyledLeaf>
 );
