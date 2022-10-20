@@ -44,7 +44,7 @@ export const useTypeNameFromId = (type?: OppgaveType): string => {
   return 'Mangler';
 };
 
-export const useHjemmelFromId = (hjemmelId?: string | null): string => {
+export const useRegistreringshjemmelFromId = (hjemmelId?: string | null): string => {
   const hjemmel = useRegistreringshjemmelName(hjemmelId);
 
   return typeof hjemmel === 'undefined' ? 'Laster...' : hjemmel;
@@ -59,6 +59,20 @@ export const useEnhetNameFromId = (enhetId?: string | null): string => {
 
   if (typeof enhetId === 'string') {
     return data.enheter.find(({ id }) => id === enhetId)?.navn ?? enhetId;
+  }
+
+  return 'Mangler';
+};
+
+export const useInnsendingshjemmelFromId = (hjemmelId?: string | null): string => {
+  const { data, isLoading } = useKodeverk();
+
+  if (isLoading || typeof data === 'undefined') {
+    return 'Laster...';
+  }
+
+  if (typeof hjemmelId === 'string') {
+    return data.hjemler.find(({ id }) => id === hjemmelId)?.navn ?? hjemmelId;
   }
 
   return 'Mangler';

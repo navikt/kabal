@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useFullYtelseNameFromId, useHjemmelFromId } from '../../hooks/use-kodeverk-ids';
+import { useFullYtelseNameFromId, useInnsendingshjemmelFromId } from '../../hooks/use-kodeverk-ids';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
@@ -29,7 +29,7 @@ export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: 
         <LabelTema>{useFullYtelseNameFromId(ytelse)}</LabelTema>
       </Table.DataCell>
       <Table.DataCell>
-        <LabelMain>{useHjemmelFromId(hjemmel)}</LabelMain>
+        <LabelMain>{useInnsendingshjemmelFromId(hjemmel)}</LabelMain>
       </Table.DataCell>
       <Table.DataCell>{person?.navn}</Table.DataCell>
       <Table.DataCell>
