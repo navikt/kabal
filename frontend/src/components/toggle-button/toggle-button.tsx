@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-interface ToggleButtonTheme {
-  open: boolean;
-  minHeight: string | undefined;
+interface Props {
+  $open: boolean;
+  $minHeight?: string;
+  $error?: boolean;
 }
 
-export const ToggleButton = styled.button<{ error?: boolean }>`
-  border: 1px solid ${({ error }) => (error === true ? '#ba3a26' : '#78706a')};
-  box-shadow: ${({ error }) => (error === true ? '0 0 0 1px #ba3a26' : 'none')};
+export const ToggleButton = styled.button<Props>`
+  border: 1px solid ${({ $error }) => ($error === true ? '#ba3a26' : '#78706a')};
+  box-shadow: ${({ $error }) => ($error === true ? '0 0 0 1px #ba3a26' : 'none')};
   padding: 0 1.75rem 0 0.5rem;
-  min-height: ${({ theme }: { theme: ToggleButtonTheme }) =>
-    typeof theme.minHeight === 'undefined' ? '2rem' : theme.minHeight};
+  min-height: ${({ $minHeight }) => (typeof $minHeight === 'undefined' ? '2rem' : $minHeight)};
   width: 100%;
   white-space: nowrap;
   border-radius: 0.25rem;
@@ -38,17 +38,13 @@ export const ToggleButton = styled.button<{ error?: boolean }>`
   }
 
   ::before {
-    transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
-      theme.open
-        ? 'translateX(-31%) translateY(-50%) rotate(-45deg)'
-        : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
+    transform: ${({ $open }) =>
+      $open ? 'translateX(-31%) translateY(-50%) rotate(-45deg)' : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
   }
 
   ::after {
-    transform: ${({ theme }: { theme: ToggleButtonTheme }) =>
-      theme.open
-        ? 'translateX(31%) translateY(-50%) rotate(45deg)'
-        : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
+    transform: ${({ $open }) =>
+      $open ? 'translateX(31%) translateY(-50%) rotate(45deg)' : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
   }
 
   &:active,
