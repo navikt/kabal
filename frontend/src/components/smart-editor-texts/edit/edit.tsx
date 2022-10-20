@@ -11,6 +11,7 @@ import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { TEMPLATES } from '../../smart-editor/templates/templates';
 import { ResolvedTags } from '../../tags/resolved-tag';
+import { HjemlerSelect } from '../hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
 import { SavedStatus } from '../saved-status';
 import { KodeverkSelect, SectionSelect, TemplateSelect } from '../select';
@@ -68,9 +69,8 @@ export const EditSmartEditorText = (savedText: IText) => {
 
           <FilterDivider />
 
-          <KodeverkSelect kodeverkKey="hjemler" selected={hjemler} onChange={immediateUpdate}>
-            Hjemler
-          </KodeverkSelect>
+          <HjemlerSelect selected={hjemler} onChange={(value: Value) => immediateUpdate(value, 'hjemler')} />
+
           <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={immediateUpdate}>
             Ytelser
           </KodeverkSelect>

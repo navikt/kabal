@@ -1,5 +1,6 @@
 import { useKodeverk } from '../simple-api-state/use-kodeverk';
 import { OppgaveType } from '../types/kodeverk';
+import { useRegistreringshjemmelName } from './use-registreringshjemler';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
   const { data, isLoading } = useKodeverk();
@@ -44,17 +45,9 @@ export const useTypeNameFromId = (type?: OppgaveType): string => {
 };
 
 export const useHjemmelFromId = (hjemmelId?: string | null): string => {
-  const { data, isLoading } = useKodeverk();
+  const hjemmel = useRegistreringshjemmelName(hjemmelId);
 
-  if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
-  }
-
-  if (typeof hjemmelId === 'string') {
-    return data.hjemler.find(({ id }) => id === hjemmelId)?.navn ?? hjemmelId;
-  }
-
-  return 'Mangler';
+  return typeof hjemmel === 'undefined' ? 'Laster...' : hjemmel;
 };
 
 export const useEnhetNameFromId = (enhetId?: string | null): string => {
