@@ -2,7 +2,11 @@ import { TextField } from '@navikt/ds-react';
 import React, { Fragment, useCallback } from 'react';
 import styled from 'styled-components';
 import { useDebounced } from '../../../hooks/use-debounce';
-import { useEnhetNameFromId, useFullYtelseNameFromId, useHjemmelFromId } from '../../../hooks/use-kodeverk-ids';
+import {
+  useEnhetNameFromId,
+  useFullYtelseNameFromId,
+  useRegistreringshjemmelFromId,
+} from '../../../hooks/use-kodeverk-ids';
 import { useUtfallName } from '../../../hooks/use-utfall-name';
 import { useUpdateTextPropertyMutation } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
@@ -91,7 +95,7 @@ export const EditSmartEditorText = (savedText: IText) => {
 
           <ResolvedTags ids={sections} useName={(sectionId) => MALTEKST_SECTION_NAMES[sectionId]} variant="sections" />
 
-          <ResolvedTags ids={hjemler} useName={useHjemmelFromId} variant="hjemler" />
+          <ResolvedTags ids={hjemler} useName={useRegistreringshjemmelFromId} variant="hjemler" />
 
           <ResolvedTags ids={ytelser} useName={useFullYtelseNameFromId} variant="ytelser" />
 
