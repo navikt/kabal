@@ -1,11 +1,11 @@
 import { Close, ExternalLink, Refresh, ZoomIn, ZoomOut } from '@navikt/ds-icons';
 import styled, { css, keyframes } from 'styled-components';
 
-interface BeholderProps {
+interface ContainerProps {
   width: number;
 }
 
-export const Container = styled.section<BeholderProps>`
+export const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   min-width: ${(props) => props.width}px;
