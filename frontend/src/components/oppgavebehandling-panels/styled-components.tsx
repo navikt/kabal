@@ -13,7 +13,6 @@ export const PanelContainer = styled.section`
   overflow-x: hidden;
   white-space: nowrap;
   flex-direction: column;
-  scroll-snap-align: start;
 `;
 
 export const PageContainer = styled.main`
@@ -27,7 +26,4 @@ export const PageContainer = styled.main`
   padding-left: 8px;
   padding-right: 8px;
   background-color: #e5e5e5;
-  scroll-snap-type: x proximity;
-  scroll-padding-left: 8px;
-  scroll-padding-right: 8px;
 `;
