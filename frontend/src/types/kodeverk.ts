@@ -26,6 +26,8 @@ export enum Utfall {
   AVVIST = '8',
   INNSTILLING_STADFESTELSE = '9',
   INNSTILLING_AVVIST = '10',
+  HEVET = '11',
+  HENVIST = '12',
 }
 
 export enum Brevmottakertype {
