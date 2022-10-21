@@ -16,9 +16,11 @@ export const migrateFromV1ToV2 = (response: RichText_V1): RichText_V2 => ({
   version: 2,
   content: response.content.map((node) => {
     if (isOldMaltekst(node)) {
+      const children = node.content.flatMap((c) => c.content);
+
       const maltekst: MaltekstElementType = {
         ...node,
-        children: node.content.flatMap((c) => c.content),
+        children: children.length !== 0 ? children : [{ text: '' }],
       };
 
       return maltekst;
