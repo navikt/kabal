@@ -24,7 +24,6 @@ export const StyledDocumentTitle = styled.h1`
   font-weight: normal;
   margin: 0;
   color: #0067c5;
-  grid-area: title;
   overflow: hidden;
   text-overflow: ellipsis;
   height: 100%;

@@ -4,9 +4,11 @@ import React, { useContext, useState } from 'react';
 import { useOppgave } from '../../../../../../hooks/oppgavebehandling/use-oppgave';
 import { IBrevmottaker, useBrevmottakere } from '../../../../../../hooks/use-brevmottakere';
 import { useFinishDocumentMutation } from '../../../../../../redux-api/oppgaver/mutations/documents';
+import { useLazyValidateDocumentQuery } from '../../../../../../redux-api/oppgaver/queries/documents';
 import { Brevmottakertype } from '../../../../../../types/kodeverk';
 import { DocumentTypeEnum } from '../../../../../show-document/types';
 import { ShownDocumentContext } from '../../../../context';
+import { ERROR_MESSAGES } from './error-messages';
 import {
   StyledBrevmottaker,
   StyledBrevmottakerList,
@@ -23,14 +25,23 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const [brevmottakertypeIds, setBrevmottakertypeIds] = useState<Brevmottakertype[]>([]);
   const brevmottakere = useBrevmottakere();
-  const [error, setError] = useState<string>();
+  const [errors, setErrors] = useState<string[]>([]);
+  const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
 
   if (oppgaveIsLoading || typeof data === 'undefined') {
     return null;
   }
 
-  const onClick = () => {
+  const onClick = async () => {
     if (typeof data?.id !== 'string') {
+      return;
+    }
+
+    const validation = await validate({ dokumentId, oppgaveId: data.id }).unwrap();
+
+    if (validation?.errors?.length !== 0) {
+      setErrors(validation.errors.map((e) => ERROR_MESSAGES[e.type]));
+
       return;
     }
 
@@ -48,16 +59,16 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
         : [...new Set(brevmottakertypeIds.flat())];
 
     if (types.length === 0) {
-      setError('Minst én mottaker må velges');
+      setErrors(['Minst én mottaker må velges']);
 
       return;
     }
 
-    setError(undefined);
+    setErrors([]);
     finish({ dokumentId, oppgaveId: data.id, brevmottakertypeIds: types });
   };
 
-  const Error = () => (typeof error === 'string' ? <ErrorMessage>{error}</ErrorMessage> : null);
+  const errorMessages = errors.length !== 0 ? errors.map((e) => <ErrorMessage key={e}>{e}</ErrorMessage>) : null;
 
   return (
     <StyledFinishDocument>
@@ -69,7 +80,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
         setSelectedBrevmottakertypeIds={setBrevmottakertypeIds}
       />
 
-      <Error />
+      {errorMessages}
 
       <StyledButtons>
         <Button
@@ -77,7 +88,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           size="small"
           variant="primary"
           onClick={onClick}
-          loading={isFinishing}
+          loading={isFinishing || isValidating}
           data-testid="document-finish-confirm"
           icon={<Send aria-hidden />}
         >
@@ -89,7 +100,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           variant="secondary"
           onClick={close}
           data-testid="document-finish-cancel"
-          disabled={isFinishing}
+          disabled={isFinishing || isValidating}
           icon={<Close aria-hidden />}
         >
           Avbryt

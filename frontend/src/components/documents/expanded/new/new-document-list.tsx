@@ -2,6 +2,7 @@ import { Warning } from '@navikt/ds-icons';
 import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
+import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
 import { useValidationError } from '../../../../hooks/use-validation-error';
@@ -43,7 +44,7 @@ interface ListHeaderProps {
 }
 
 const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
-  const errorMessage = useValidationError('dokument');
+  const errorMessage = useValidationError('underArbeid');
 
   if (isFullfoert) {
     return null;
@@ -52,10 +53,10 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
   if (typeof errorMessage === 'string') {
     return (
       <StyledListHeader>
-        <Heading size="xsmall" level="2">
+        <StyledHeading size="xsmall" level="2">
           Dokumenter under arbeid
           <Warning title={errorMessage} color="#ba3a26" />
-        </Heading>
+        </StyledHeading>
       </StyledListHeader>
     );
   }
@@ -68,3 +69,9 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
     </StyledListHeader>
   );
 };
+
+const StyledHeading = styled(Heading)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;

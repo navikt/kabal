@@ -42,7 +42,7 @@ export const NewDocumentList = () => {
 };
 
 const ListHeader = () => {
-  const errorMessage = useValidationError('dokument');
+  const errorMessage = useValidationError('underArbeid');
 
   if (typeof errorMessage === 'string') {
     return (

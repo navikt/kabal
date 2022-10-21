@@ -1,9 +1,12 @@
 import { EllipsisV, Sandglass } from '@navikt/ds-icons';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { isoDateTimeToPrettyDate } from '../../../../domain/date';
+import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
+import { useLazyValidateDocumentQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
 import { StyledDate, StyledDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
@@ -51,9 +54,11 @@ interface ToggleExpandButtonProps {
 }
 
 const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => {
+  const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const [validate] = useLazyValidateDocumentQuery();
 
   useOnClickOutside(() => setOpen(false), ref);
 
@@ -61,9 +66,17 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
     return null;
   }
 
+  const onClick = async () => {
+    if (oppgaveId === skipToken) {
+      return;
+    }
+    setOpen(!open);
+    validate({ dokumentId: document.id, oppgaveId });
+  };
+
   return (
     <DropdownContainer ref={ref}>
-      <StyledToggleExpandButton onClick={() => setOpen(!open)} data-testid="document-actions-button">
+      <StyledToggleExpandButton onClick={onClick} data-testid="document-actions-button">
         <EllipsisV />
       </StyledToggleExpandButton>
       {open ? children : null}

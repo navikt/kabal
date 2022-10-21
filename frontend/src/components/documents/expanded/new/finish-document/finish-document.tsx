@@ -30,8 +30,14 @@ export const FinishDocument = ({ document }: Props) => {
 
   return (
     <StyledSendDocument ref={ref}>
-      <StyledSendButton onClick={toggleOpen} size="small" variant="primary" data-testid="document-finish-button">
-        <Send /> {buttonText}
+      <StyledSendButton
+        onClick={toggleOpen}
+        size="small"
+        variant="primary"
+        data-testid="document-finish-button"
+        icon={<Send aria-hidden />}
+      >
+        {buttonText}
       </StyledSendButton>
       <ConfirmFinishDocument isOpen={isOpen} close={() => setIsOpen(false)} document={document} />
     </StyledSendDocument>
