@@ -1,5 +1,6 @@
 import { FileContent, Notes } from '@navikt/ds-icons';
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { IMainDocument } from '../../../../types/documents/documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
@@ -47,15 +48,28 @@ export const DocumentTitle = ({ document }: Props) => {
       documentId: document.id,
     });
 
-  const Icon = document.isSmartDokument ? Notes : FileContent;
+  const Icon = document.isSmartDokument ? StyledNotes : StyledFileContent;
 
   return (
     <StyledDocumentTitle>
       <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
         <Icon />
-        {document.tittel}
+        <EllipsisTitle>{document.tittel}</EllipsisTitle>
       </StyledDocumentButton>
       <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />
     </StyledDocumentTitle>
   );
 };
+
+const StyledNotes = styled(Notes)`
+  flex-shrink: 0;
+`;
+
+const StyledFileContent = styled(FileContent)`
+  flex-shrink: 0;
+`;
+
+const EllipsisTitle = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;

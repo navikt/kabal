@@ -11,7 +11,7 @@ type Field =
   | keyof Pick<ITrygderettsankebehandling, 'sendtTilTrygderetten'>
   | 'utfall'
   | 'hjemmel'
-  | 'dokument';
+  | 'underArbeid';
 
 export const useValidationError = (field: Field): string | undefined => {
   const context = useContext(ValidationErrorContext);

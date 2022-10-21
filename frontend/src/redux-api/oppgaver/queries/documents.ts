@@ -1,5 +1,6 @@
 import { queryStringify } from '../../../functions/query-string';
 import { IArkiverteDocumentsResponse } from '../../../types/arkiverte-documents';
+import { IDocumentParams, IValidateDocumentResponse } from '../../../types/documents/common-params';
 import { IMainDocument } from '../../../types/documents/documents';
 import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '../../common';
@@ -58,8 +59,15 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
       query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/dokumenttilknytninger`,
       providesTags: ['tilknyttedeDokumenter'],
     }),
+    validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
+      query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,
+    }),
   }),
 });
 
-export const { useGetDocumentsQuery, useGetArkiverteDokumenterQuery, useGetTilknyttedeDokumenterQuery } =
-  documentsQuerySlice;
+export const {
+  useGetDocumentsQuery,
+  useGetArkiverteDokumenterQuery,
+  useGetTilknyttedeDokumenterQuery,
+  useLazyValidateDocumentQuery,
+} = documentsQuerySlice;

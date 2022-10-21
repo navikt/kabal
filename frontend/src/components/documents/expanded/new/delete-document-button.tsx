@@ -59,8 +59,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           variant="secondary"
           onClick={() => setShowConfirm(false)}
           data-testid="document-delete-cancel"
+          icon={<Cancel aria-hidden />}
         >
-          <Cancel />
           Avbryt
         </StyledButton>
         <StyledButton
@@ -69,8 +69,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           disabled={isLoading}
           onClick={onDelete}
           data-testid="document-delete-confirm"
+          icon={<Delete aria-hidden />}
         >
-          <Delete />
           Slett
         </StyledButton>
       </>
@@ -83,8 +83,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
       size="small"
       onClick={() => setShowConfirm(true)}
       data-testid="document-delete-button"
+      icon={<Delete aria-hidden />}
     >
-      <Delete />
       Slett
     </StyledButton>
   );
