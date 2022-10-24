@@ -1,6 +1,6 @@
-import { useKodeverk } from '../simple-api-state/use-kodeverk';
+import { useInnsendingshjemlerMap, useKodeverk } from '../simple-api-state/use-kodeverk';
 import { OppgaveType } from '../types/kodeverk';
-import { useRegistreringshjemmelName } from './use-registreringshjemler';
+import { useShortRegistreringshjemmelName } from './use-registreringshjemler-name';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
   const { data, isLoading } = useKodeverk();
@@ -45,7 +45,7 @@ export const useTypeNameFromId = (type?: OppgaveType): string => {
 };
 
 export const useRegistreringshjemmelFromId = (hjemmelId?: string | null): string => {
-  const hjemmel = useRegistreringshjemmelName(hjemmelId);
+  const hjemmel = useShortRegistreringshjemmelName(hjemmelId);
 
   return typeof hjemmel === 'undefined' ? 'Laster...' : hjemmel;
 };
@@ -65,14 +65,14 @@ export const useEnhetNameFromId = (enhetId?: string | null): string => {
 };
 
 export const useInnsendingshjemmelFromId = (hjemmelId?: string | null): string => {
-  const { data, isLoading } = useKodeverk();
+  const { data, isLoading } = useInnsendingshjemlerMap();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
   }
 
   if (typeof hjemmelId === 'string') {
-    return data.hjemler.find(({ id }) => id === hjemmelId)?.navn ?? hjemmelId;
+    return data[hjemmelId] ?? hjemmelId;
   }
 
   return 'Mangler';
