@@ -50,7 +50,7 @@ export const JournalfoerteDocumentList = () => {
           <Heading
             size="xsmall"
             level="2"
-            title={`Viser ${slicedFilteredDocuments.length} av ${totalFilteredDocuments.length} filtrerte av totalt ${totaltAntall} dokumenter`}
+            title={`Viser ${slicedFilteredDocuments.length} av ${totalFilteredDocuments.length} filtrerte dokumenter. Totalt ${totaltAntall} dokumenter`}
           >
             Journalførte dokumenter ({totalFilteredDocuments.length})
           </Heading>
