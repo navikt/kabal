@@ -62,7 +62,7 @@ export const Document = ({ document }: Props) => {
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
           title={tittel ?? ''}
           oppgavebehandlingId={oppgaveId}
-          valgt={valgt}
+          checked={valgt}
         />
       </StyledDocument>
       <AttachmentList document={document} oppgaveId={oppgaveId} />

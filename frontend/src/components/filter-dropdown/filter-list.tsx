@@ -36,12 +36,12 @@ const StyledFilterList = styled.ul`
   list-style: none;
   overflow-y: auto;
   overflow-x: hidden;
-  text-overflow: ellipsis;
   flex: 1;
 `;
 
 const StyledListItem = styled.li`
   margin: 0;
   padding: 0;
+  padding-left: 8px;
   width: 100%;
 `;

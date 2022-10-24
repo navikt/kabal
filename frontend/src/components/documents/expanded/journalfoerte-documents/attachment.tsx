@@ -55,7 +55,7 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
         harTilgangTilArkivvariant={harTilgangTilArkivvariant}
         title={tittel ?? ''}
         oppgavebehandlingId={oppgavebehandlingId}
-        valgt={vedlegg.valgt}
+        checked={vedlegg.valgt}
       />
     </StyledDocument>
   );

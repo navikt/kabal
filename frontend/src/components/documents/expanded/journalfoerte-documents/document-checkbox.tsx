@@ -10,7 +10,7 @@ interface Props {
   dokumentInfoId: string;
   journalpostId: string;
   harTilgangTilArkivvariant: boolean;
-  valgt: boolean;
+  checked: boolean;
 }
 
 export const DocumentCheckbox = ({
@@ -19,22 +19,24 @@ export const DocumentCheckbox = ({
   journalpostId,
   title,
   harTilgangTilArkivvariant,
-  valgt,
+  checked,
 }: Props): JSX.Element | null => {
   const [setDocument, isUpdating] = useCheckDocument(oppgavebehandlingId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit();
 
-  if (!canEdit) {
-    return null;
-  }
+  const disabled = !canEdit || !harTilgangTilArkivvariant || isUpdating || oppgavebehandlingId === skipToken;
 
   return (
     <StyledDocumentCheckbox
+      checked={checked}
       title={title}
-      disabled={!harTilgangTilArkivvariant || isUpdating || oppgavebehandlingId === skipToken}
-      checked={valgt}
+      hideLabel
+      size="small"
+      disabled={disabled}
       onChange={(e) => setDocument(e.currentTarget.checked)}
       data-testid="journalfoert-document-checkbox"
-    />
+    >
+      {title}
+    </StyledDocumentCheckbox>
   );
 };
