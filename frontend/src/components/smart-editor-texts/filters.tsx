@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../types/smart-editor/template-enums';
 import { AppQuery } from '../../types/texts/texts';
+import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from './select';
 import { FilterDivider } from './styled-components';
@@ -37,9 +38,7 @@ export const Filters = () => {
 
       <FilterDivider />
 
-      <KodeverkSelect selected={hjemler ?? []} onChange={(value) => setFilter('hjemler', value)} kodeverkKey="hjemler">
-        Hjemler
-      </KodeverkSelect>
+      <HjemlerSelect selected={hjemler} onChange={(value: string[]) => setFilter('hjemler', value)} />
 
       <KodeverkSelect selected={ytelser ?? []} onChange={(value) => setFilter('ytelser', value)} kodeverkKey="ytelser">
         Ytelser
