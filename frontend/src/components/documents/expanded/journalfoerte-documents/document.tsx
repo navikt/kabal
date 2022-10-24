@@ -48,6 +48,8 @@ export const Document = ({ document }: Props) => {
             isActive={isActive}
             onClick={onClick}
             data-testid="oppgavebehandling-documents-open-document-button"
+            disabled={!harTilgangTilArkivvariant}
+            title={harTilgangTilArkivvariant ? undefined : 'Du har ikke tilgang til å se dette dokumentet.'}
           >
             {tittel}
           </StyledDocumentButton>
