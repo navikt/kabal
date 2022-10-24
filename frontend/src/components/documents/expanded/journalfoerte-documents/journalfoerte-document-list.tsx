@@ -8,7 +8,7 @@ import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgaver/q
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
 import { StyledJournalfoerteDocumentsContainer } from '../styled-components/container';
-import { StyledDocumentList, StyledDocumentListItem } from '../styled-components/document-list';
+import { StyledDocumentListItem, StyledJournalfoerteDocumentList } from '../styled-components/document-list';
 import { StyledFilterDropdown, StyledListHeader } from '../styled-components/list-header';
 import { Document } from './document';
 import { LoadMore } from './load-more';
@@ -62,7 +62,7 @@ export const JournalfoerteDocumentList = () => {
             Tema
           </StyledFilterDropdown>
         </StyledListHeader>
-        <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
+        <StyledJournalfoerteDocumentList data-testid="oppgavebehandling-documents-all-list">
           <DocumentsSpinner hasDocuments={!isLoading} />
           {slicedFilteredDocuments.map((document) => (
             <StyledDocumentListItem
@@ -73,7 +73,7 @@ export const JournalfoerteDocumentList = () => {
               <Document document={document} />
             </StyledDocumentListItem>
           ))}
-        </StyledDocumentList>
+        </StyledJournalfoerteDocumentList>
         <LoadMore
           loadedDocuments={endIndex}
           totalDocuments={totalFilteredDocuments.length}
