@@ -20,8 +20,14 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
   color: #0067c5;
   height: 100%;
+  user-select: text;
 
-  &:hover {
+  :hover {
     color: #262626;
+  }
+
+  :disabled {
+    color: var(--navds-semantic-color-text-muted);
+    cursor: text;
   }
 `;
