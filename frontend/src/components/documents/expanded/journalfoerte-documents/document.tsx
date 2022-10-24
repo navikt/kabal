@@ -13,11 +13,9 @@ import { DocumentTema } from './styled-components';
 
 interface Props {
   document: IArkivertDocument;
-  pageReferences: (string | null)[];
-  temaer: string[];
 }
 
-export const Document = ({ document, pageReferences, temaer }: Props) => {
+export const Document = ({ document }: Props) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
 
@@ -63,11 +61,9 @@ export const Document = ({ document, pageReferences, temaer }: Props) => {
           title={tittel ?? ''}
           oppgavebehandlingId={oppgaveId}
           valgt={valgt}
-          pageReferences={pageReferences}
-          temaer={temaer}
         />
       </StyledDocument>
-      <AttachmentList document={document} oppgaveId={oppgaveId} pageReferences={pageReferences} temaer={temaer} />
+      <AttachmentList document={document} oppgaveId={oppgaveId} />
     </>
   );
 };

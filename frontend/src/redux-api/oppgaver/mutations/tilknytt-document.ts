@@ -18,40 +18,31 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         validateStatus: ({ ok }) => ok,
       }),
       invalidatesTags: ['tilknyttedeDokumenter'],
-      onQueryStarted: async (
-        { oppgaveId, journalpostId, dokumentInfoId, pageReferences, temaer },
-        { dispatch, queryFulfilled }
-      ) => {
-        const patchResults = pageReferences.map((pageReference) =>
-          dispatch(
-            documentsQuerySlice.util.updateQueryData(
-              'getArkiverteDokumenter',
-              { oppgaveId, pageReference, temaer },
-              (draft) => ({
-                ...draft,
-                dokumenter: draft.dokumenter.map((d) => {
-                  if (d.journalpostId === journalpostId) {
-                    if (d.dokumentInfoId === dokumentInfoId) {
-                      return { ...d, valgt: true };
+      onQueryStarted: async ({ oppgaveId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+        const archiveResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => ({
+            ...draft,
+            dokumenter: draft.dokumenter.map((d) => {
+              if (d.journalpostId === journalpostId) {
+                if (d.dokumentInfoId === dokumentInfoId) {
+                  return { ...d, valgt: true };
+                }
+
+                return {
+                  ...d,
+                  vedlegg: d.vedlegg.map((v) => {
+                    if (v.dokumentInfoId === dokumentInfoId) {
+                      return { ...v, valgt: true };
                     }
 
-                    return {
-                      ...d,
-                      vedlegg: d.vedlegg.map((v) => {
-                        if (v.dokumentInfoId === dokumentInfoId) {
-                          return { ...v, valgt: true };
-                        }
+                    return v;
+                  }),
+                };
+              }
 
-                        return v;
-                      }),
-                    };
-                  }
-
-                  return d;
-                }),
-              })
-            )
-          )
+              return d;
+            }),
+          }))
         );
 
         const patchResult = dispatch(
@@ -82,7 +73,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
         } catch {
-          patchResults.forEach(({ undo }) => undo());
+          archiveResult.undo();
           patchResult.undo();
         }
       },

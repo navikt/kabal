@@ -7,11 +7,9 @@ import { Attachment } from './attachment';
 interface Props {
   oppgaveId: string | typeof skipToken;
   document: IArkivertDocument;
-  pageReferences: (string | null)[];
-  temaer: string[];
 }
 
-export const AttachmentList = ({ oppgaveId, document, pageReferences, temaer }: Props) => {
+export const AttachmentList = ({ oppgaveId, document }: Props) => {
   if (document.vedlegg.length === 0 || typeof oppgaveId !== 'string') {
     return null;
   }
@@ -24,13 +22,7 @@ export const AttachmentList = ({ oppgaveId, document, pageReferences, temaer }: 
           data-testid="oppgavebehandling-documents-all-list-item"
           data-documentname={vedlegg.tittel}
         >
-          <Attachment
-            oppgavebehandlingId={oppgaveId}
-            vedlegg={vedlegg}
-            document={document}
-            pageReferences={pageReferences}
-            temaer={temaer}
-          />
+          <Attachment oppgavebehandlingId={oppgaveId} vedlegg={vedlegg} document={document} />
         </StyledAttachmentListItem>
       ))}
     </StyledAttachmentList>

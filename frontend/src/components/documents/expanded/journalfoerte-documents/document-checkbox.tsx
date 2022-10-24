@@ -11,8 +11,6 @@ interface Props {
   journalpostId: string;
   harTilgangTilArkivvariant: boolean;
   valgt: boolean;
-  pageReferences: (string | null)[];
-  temaer: string[];
 }
 
 export const DocumentCheckbox = ({
@@ -22,16 +20,8 @@ export const DocumentCheckbox = ({
   title,
   harTilgangTilArkivvariant,
   valgt,
-  pageReferences,
-  temaer,
 }: Props): JSX.Element | null => {
-  const [setDocument, isUpdating] = useCheckDocument(
-    oppgavebehandlingId,
-    dokumentInfoId,
-    journalpostId,
-    pageReferences,
-    temaer
-  );
+  const [setDocument, isUpdating] = useCheckDocument(oppgavebehandlingId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit();
 
   if (!canEdit) {

@@ -4,12 +4,11 @@ import React from 'react';
 interface Props {
   loadedDocuments: number;
   totalDocuments: number;
-  pageReference: string | null;
   loading: boolean;
-  setPage: (pageReference: string) => void;
+  onNextPage: () => void;
 }
 
-export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loading, setPage }: Props) => {
+export const LoadMore = ({ totalDocuments, loadedDocuments, loading, onNextPage }: Props) => {
   if (totalDocuments === 0) {
     return null;
   }
@@ -29,12 +28,8 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, pageReference, loadi
     return null;
   }
 
-  if (pageReference === null) {
-    return null;
-  }
-
   return (
-    <Button type="button" variant="secondary" onClick={() => setPage(pageReference)}>
+    <Button type="button" variant="secondary" onClick={onNextPage}>
       Last flere ({remaining})
     </Button>
   );

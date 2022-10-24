@@ -39,11 +39,7 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
   type: OppgaveType.ANKE_I_TRYGDERETTEN;
 }
 
-export type ICheckDocumentParams = IDocumentReference &
-  IOppgavebehandlingBaseParams & {
-    pageReferences: (string | null)[];
-    temaer: string[];
-  };
+export type ICheckDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
 
 export interface IMedunderskrivereParams {
   navIdent: string;
@@ -54,11 +50,6 @@ export interface IMedunderskrivereParams {
 
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
   medunderskriver: ISaksbehandler | null;
-}
-
-export interface IGetDokumenterParams extends IOppgavebehandlingBaseParams {
-  pageReference: string | null;
-  temaer: string[];
 }
 
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
