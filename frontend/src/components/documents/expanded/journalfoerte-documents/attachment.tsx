@@ -10,11 +10,9 @@ interface Props {
   oppgavebehandlingId: string;
   document: IArkivertDocument;
   vedlegg: IArkivertDocumentVedlegg;
-  pageReferences: (string | null)[];
-  temaer: string[];
 }
 
-export const Attachment = ({ oppgavebehandlingId, vedlegg, document, pageReferences, temaer }: Props) => {
+export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
   const { journalpostId } = document;
@@ -58,8 +56,6 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document, pageReferen
         title={tittel ?? ''}
         oppgavebehandlingId={oppgavebehandlingId}
         valgt={vedlegg.valgt}
-        pageReferences={pageReferences}
-        temaer={temaer}
       />
     </StyledDocument>
   );

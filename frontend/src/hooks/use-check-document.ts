@@ -6,9 +6,7 @@ import { useTilknyttDocumentMutation } from '../redux-api/oppgaver/mutations/til
 export const useCheckDocument = (
   oppgaveId: string | typeof skipToken,
   dokumentInfoId: string,
-  journalpostId: string,
-  pageReferences: (string | null)[],
-  temaer: string[]
+  journalpostId: string
 ): [(checked: boolean) => void, boolean] => {
   const [tilknyttDocument, tilknyttLoader] = useTilknyttDocumentMutation();
   const [removeDocument, removeLoader] = useRemoveTilknyttetDocumentMutation();
@@ -23,11 +21,9 @@ export const useCheckDocument = (
         dokumentInfoId,
         journalpostId,
         oppgaveId,
-        pageReferences,
-        temaer,
       });
     },
-    [oppgaveId, dokumentInfoId, journalpostId, pageReferences, temaer, tilknyttDocument, removeDocument]
+    [oppgaveId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument]
   );
 
   const isLoading = tilknyttLoader.isLoading || removeLoader.isLoading;
