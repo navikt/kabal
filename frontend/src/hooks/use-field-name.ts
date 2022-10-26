@@ -10,6 +10,8 @@ export const FIELD_NAMES = {
   underArbeid: 'Under arbeid',
   mottattKlageinstans: 'Mottatt klageinstans',
   mottattVedtaksinstans: 'Mottatt vedtaksinstans',
+  kjennelseMottatt: 'Kjennelse mottatt',
+  sendtTilTrygderetten: 'Sendt til Trygderetten',
 };
 
 export const useFieldName = (field: keyof typeof FIELD_NAMES): string => FIELD_NAMES[field] ?? field;
