@@ -95,11 +95,11 @@ const OppgavebehandlingText = () => {
   const { utfall } = oppgave.resultat;
 
   if (
-    utfall === Utfall.STADFESTELSE ||
-    utfall === Utfall.AVVIST ||
-    utfall === Utfall.DELVIS_MEDHOLD ||
-    utfall === Utfall.INNSTILLING_AVVIST ||
-    utfall === Utfall.INNSTILLING_STADFESTELSE
+    oppgave.type === OppgaveType.ANKE_I_TRYGDERETTEN &&
+    (utfall === Utfall.STADFESTELSE ||
+      utfall === Utfall.MEDHOLD ||
+      utfall === Utfall.DELVIS_MEDHOLD ||
+      utfall === Utfall.AVVIST)
   ) {
     return (
       <StyledFinishOppgaveText>
