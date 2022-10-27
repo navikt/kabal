@@ -5,7 +5,8 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useSetMottattKlageinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType } from '../../../types/kodeverk';
-import { DatepickerWithError } from '../../date-picker-with-error/date-picker-with-error';
+import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
+import { DatePicker } from '../../date-picker/date-picker';
 
 export const AnkeMottattDato = () => {
   const canEdit = useCanEdit();
@@ -19,24 +20,19 @@ export const AnkeMottattDato = () => {
 
   return (
     <StyledAnkeMottattDato>
-      <DatepickerWithError
-        label="Anke mottatt dato:"
+      <DatePicker
+        label="Anke mottatt dato"
         disabled={!canEdit}
         onChange={(mottattKlageinstans) => {
-          if (data?.type === OppgaveType.ANKE) {
+          if (mottattKlageinstans !== null) {
             setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans, type: data.type });
           }
         }}
-        limitations={{
-          maxDate: new Date().toISOString(),
-        }}
-        value={data?.mottattKlageinstans ?? undefined}
-        locale="nb"
-        showYearSelector
+        value={data?.mottattKlageinstans ?? null}
         error={error}
-        data-testid="anke-mottatt-dato"
-        inputName="anke-mottatt-dato"
+        id="anke-mottatt-dato"
         size="small"
+        centuryThreshold={CURRENT_YEAR_IN_CENTURY}
       />
     </StyledAnkeMottattDato>
   );
