@@ -5,7 +5,8 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useSetKjennelseMottattMutation } from '../../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType } from '../../../types/kodeverk';
-import { DatepickerWithError } from '../../date-picker-with-error/date-picker-with-error';
+import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
+import { DatePicker } from '../../date-picker/date-picker';
 
 export const KjennelseMottatt = () => {
   const canEdit = useCanEdit();
@@ -19,24 +20,15 @@ export const KjennelseMottatt = () => {
 
   return (
     <StyledKjennelseMottatt>
-      <DatepickerWithError
-        label="Kjennelse mottatt:"
+      <DatePicker
+        label="Kjennelse mottatt"
         disabled={!canEdit}
-        onChange={(kjennelseMottatt) => {
-          if (data?.type === OppgaveType.ANKE_I_TRYGDERETTEN) {
-            setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, type: data.type });
-          }
-        }}
-        limitations={{
-          maxDate: new Date().toISOString(),
-        }}
-        value={data.kjennelseMottatt?.split('T')[0] ?? undefined}
-        locale="nb"
-        showYearSelector
+        onChange={(kjennelseMottatt) => setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, type: data.type })}
+        value={data.kjennelseMottatt?.split('T')[0] ?? null}
         error={error}
-        data-testid="kjennelse-mottatt"
-        inputName="kjennelse-mottatt"
+        id="kjennelse-mottatt"
         size="small"
+        centuryThreshold={CURRENT_YEAR_IN_CENTURY}
       />
     </StyledKjennelseMottatt>
   );

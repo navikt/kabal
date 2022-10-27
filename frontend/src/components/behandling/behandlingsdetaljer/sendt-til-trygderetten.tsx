@@ -5,7 +5,8 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '../../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType } from '../../../types/kodeverk';
-import { DatepickerWithError } from '../../date-picker-with-error/date-picker-with-error';
+import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
+import { DatePicker } from '../../date-picker/date-picker';
 
 export const SendtTilTrygderetten = () => {
   const canEdit = useCanEdit();
@@ -19,24 +20,19 @@ export const SendtTilTrygderetten = () => {
 
   return (
     <StyledSendtTilTrygderetten>
-      <DatepickerWithError
-        label="Sendt til Trygderetten:"
+      <DatePicker
+        label="Sendt til Trygderetten"
         disabled={!canEdit}
         onChange={(sendtTilTrygderetten) => {
-          if (data?.type === OppgaveType.ANKE_I_TRYGDERETTEN) {
+          if (sendtTilTrygderetten !== null) {
             setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, type: data.type });
           }
         }}
-        limitations={{
-          maxDate: new Date().toISOString(),
-        }}
-        value={data.sendtTilTrygderetten?.split('T')[0] ?? undefined}
-        locale="nb"
-        showYearSelector
+        value={data.sendtTilTrygderetten?.split('T')[0] ?? null}
         error={error}
-        data-testid="sendt-til-trygderetten"
-        inputName="sendt-til-trygderetten"
+        id="sendt-til-trygderetten"
         size="small"
+        centuryThreshold={CURRENT_YEAR_IN_CENTURY}
       />
     </StyledSendtTilTrygderetten>
   );

@@ -5,7 +5,8 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useSetMottattVedtaksinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType } from '../../../types/kodeverk';
-import { DatepickerWithError } from '../../date-picker-with-error/date-picker-with-error';
+import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
+import { DatePicker } from '../../date-picker/date-picker';
 
 export const MottattVedtaksinstans = () => {
   const canEdit = useCanEdit();
@@ -13,30 +14,25 @@ export const MottattVedtaksinstans = () => {
   const error = useValidationError('mottattVedtaksinstans');
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
-  if (data?.type === OppgaveType.ANKE_I_TRYGDERETTEN) {
+  if (data?.type !== OppgaveType.KLAGE) {
     return null;
   }
 
   return (
     <StyledMottattVedtaksinstans>
-      <DatepickerWithError
-        label="Mottatt vedtaksinstans:"
+      <DatePicker
+        label="Mottatt vedtaksinstans"
         disabled={!canEdit}
         onChange={(mottattVedtaksinstans) => {
-          if (data?.type === OppgaveType.KLAGE) {
+          if (mottattVedtaksinstans !== null) {
             setMottattVedtaksinstans({ oppgaveId: data.id, mottattVedtaksinstans, type: data.type });
           }
         }}
-        limitations={{
-          maxDate: new Date().toISOString(),
-        }}
-        value={data?.mottattVedtaksinstans ?? undefined}
-        locale="nb"
-        showYearSelector
+        value={data?.mottattVedtaksinstans ?? null}
         error={error}
-        data-testid="mottatt-vedtaksinstans"
-        inputName="mottatt-vedtaksinstans"
+        id="mottatt-vedtaksinstans"
         size="small"
+        centuryThreshold={CURRENT_YEAR_IN_CENTURY}
       />
     </StyledMottattVedtaksinstans>
   );

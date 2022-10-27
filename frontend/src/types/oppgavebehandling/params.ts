@@ -30,7 +30,7 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
 }
 
 export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
-  kjennelseMottatt: string; // LocalDate
+  kjennelseMottatt: string | null; // LocalDate
   type: OppgaveType.ANKE_I_TRYGDERETTEN;
 }
 
