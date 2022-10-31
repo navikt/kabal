@@ -60,7 +60,7 @@ export const Placeholder = ({ show }: Props) => {
   return (
     <StyledPlaceholder ref={ref}>
       <ToolbarIconButton
-        label="Sett inn plassholder (Ctrl/⌘ + P)"
+        label="Sett inn innfyllingsfelt (Ctrl/⌘ + P)"
         onClick={onClick}
         icon={<Parking width={24} />}
         active={isPlaceholderActive(editor)}
@@ -105,8 +105,8 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
       <TextField
         autoFocus
         size="small"
-        label="Plassholder"
-        placeholder="Plassholder"
+        label="Innfyllingsfelt"
+        placeholder="Innfyllingsfelt"
         hideLabel
         value={placeholder}
         onChange={({ target }) => setPlaceholder(target.value)}
