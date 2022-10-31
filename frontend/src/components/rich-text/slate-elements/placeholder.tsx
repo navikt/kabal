@@ -71,9 +71,10 @@ interface WrapperProps {
 }
 
 const Wrapper = styled.span<WrapperProps>`
-  background-color: ${({ $focused, $hasText }) => getBackgroundColor($focused, $hasText)};
+  background-color: ${({ $focused }) => getBackgroundColor($focused)};
   border-radius: 4px;
   outline: none;
+  color: #000;
 
   ::after {
     cursor: text;
@@ -82,13 +83,8 @@ const Wrapper = styled.span<WrapperProps>`
   }
 `;
 
-const getBackgroundColor = (focused: boolean, hasText: boolean) => {
-  if (focused) {
-    return 'var(--navds-global-color-blue-100)';
-  }
-
-  return hasText ? 'none' : 'var(--navds-global-color-gray-200)';
-};
+const getBackgroundColor = (focused: boolean) =>
+  focused ? 'var(--navds-global-color-blue-100)' : 'var(--navds-global-color-gray-200)';
 
 const Anchor = styled.span`
   font-size: 0;
