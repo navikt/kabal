@@ -1,7 +1,8 @@
 import { queryStringify } from '../../../functions/query-string';
 import { IArkiverteDocumentsResponse } from '../../../types/arkiverte-documents';
-import { IDocumentParams, IValidateDocumentResponse } from '../../../types/documents/common-params';
+import { IDocumentParams } from '../../../types/documents/common-params';
 import { IMainDocument } from '../../../types/documents/documents';
+import { IValidateDocumentResponse } from '../../../types/documents/validation';
 import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '../../common';
 import { ServerSentEventManager, ServerSentEventType } from '../../server-sent-events';

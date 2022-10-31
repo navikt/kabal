@@ -1,14 +1,19 @@
 import { Close, Send } from '@navikt/ds-icons';
-import { Button, Checkbox, CheckboxGroup, ErrorMessage } from '@navikt/ds-react';
+import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useState } from 'react';
 import { useOppgave } from '../../../../../../hooks/oppgavebehandling/use-oppgave';
 import { IBrevmottaker, useBrevmottakere } from '../../../../../../hooks/use-brevmottakere';
 import { useFinishDocumentMutation } from '../../../../../../redux-api/oppgaver/mutations/documents';
-import { useLazyValidateDocumentQuery } from '../../../../../../redux-api/oppgaver/queries/documents';
+import {
+  useGetDocumentsQuery,
+  useLazyValidateDocumentQuery,
+} from '../../../../../../redux-api/oppgaver/queries/documents';
 import { Brevmottakertype } from '../../../../../../types/kodeverk';
 import { DocumentTypeEnum } from '../../../../../show-document/types';
 import { ShownDocumentContext } from '../../../../context';
 import { ERROR_MESSAGES } from './error-messages';
+import { Errors, ValidationError } from './errors';
 import {
   StyledBrevmottaker,
   StyledBrevmottakerList,
@@ -25,8 +30,11 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const [brevmottakertypeIds, setBrevmottakertypeIds] = useState<Brevmottakertype[]>([]);
   const brevmottakere = useBrevmottakere();
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
+  const { data: documents = [] } = useGetDocumentsQuery(
+    typeof data !== 'undefined' ? { oppgaveId: data.id } : skipToken
+  );
 
   if (oppgaveIsLoading || typeof data === 'undefined') {
     return null;
@@ -39,8 +47,14 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
 
     const validation = await validate({ dokumentId, oppgaveId: data.id }).unwrap();
 
-    if (validation?.errors?.length !== 0) {
-      setErrors(validation.errors.map((e) => ERROR_MESSAGES[e.type]));
+    if (validation?.length !== 0 && validation.some((v) => v.errors.length !== 0)) {
+      const validationErrors = validation.map((v) => ({
+        dokumentId: v.dokumentId,
+        title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,
+        errors: v.errors.map((e) => ERROR_MESSAGES[e.type]),
+      }));
+
+      setErrors(validationErrors);
 
       return;
     }
@@ -59,7 +73,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
         : [...new Set(brevmottakertypeIds.flat())];
 
     if (types.length === 0) {
-      setErrors(['Minst én mottaker må velges']);
+      setErrors([{ dokumentId, title: documentTitle, errors: ['Minst én mottaker må velges'] }]);
 
       return;
     }
@@ -67,8 +81,6 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
     setErrors([]);
     finish({ dokumentId, oppgaveId: data.id, brevmottakertypeIds: types });
   };
-
-  const errorMessages = errors.length !== 0 ? errors.map((e) => <ErrorMessage key={e}>{e}</ErrorMessage>) : null;
 
   return (
     <StyledFinishDocument>
@@ -80,7 +92,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
         setSelectedBrevmottakertypeIds={setBrevmottakertypeIds}
       />
 
-      {errorMessages}
+      <Errors errors={errors} />
 
       <StyledButtons>
         <Button

@@ -6,7 +6,6 @@ import { isoDateTimeToPrettyDate } from '../../../../domain/date';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { useLazyValidateDocumentQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
 import { StyledDate, StyledDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
@@ -58,7 +57,6 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
   const canEdit = useCanEdit();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const [validate] = useLazyValidateDocumentQuery();
 
   useOnClickOutside(() => setOpen(false), ref);
 
@@ -71,7 +69,6 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
       return;
     }
     setOpen(!open);
-    validate({ dokumentId: document.id, oppgaveId });
   };
 
   return (
