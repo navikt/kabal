@@ -1,5 +1,5 @@
 import { UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
-import { clamp, format, isAfter, isBefore, isValid, parse, subDays } from 'date-fns';
+import { addYears, clamp, format, isAfter, isBefore, isValid, parse, subDays, subYears } from 'date-fns';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { isoDateToPretty } from '../../domain/date';
 
@@ -68,7 +68,7 @@ export const DatePicker = ({
       const validRange = isAfter(date, subDays(fromDate, 1)) && isBefore(date, toDate);
 
       if (!validFormat) {
-        setInputError('Dato må være på formen DD.MM.ÅÅÅÅ');
+        setInputError('Ugyldig dato');
 
         return;
       }
@@ -91,7 +91,6 @@ export const DatePicker = ({
     // Prefix with reasonable century, e.g. 20 for 2022 and 19 for 1999.
     if (isDateParts(parts)) {
       const [dd, mm, yy] = parts;
-
       const date = `${dd.padStart(2, '0')}.${mm.padStart(2, '0')}.${getFullYear(yy, centuryThreshold)}`;
       setInput(date);
       requestAnimationFrame(() => validateInput(date));
@@ -99,8 +98,65 @@ export const DatePicker = ({
       return;
     }
 
+    const chars = input.split('');
+
+    // 211220 -> 21.12.2020
+    if (isSixChars(chars)) {
+      const [d1, d2, m1, m2, y1, y2] = chars;
+      const date = `${d1}${d2}.${m1}${m2}.${getFullYear(`${y1}${y2}`, centuryThreshold)}`;
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    // 31122020 -> 31.12.2020
+    if (isEightChars(chars)) {
+      const [d1, d2, m1, m2, y1, y2, y3, y4] = chars;
+      const date = `${d1}${d2}.${m1}${m2}.${y1}${y2}${y3}${y4}`;
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    // Current year if the date is in the past, otherwise previous year.
+    // 3112 -> 31.12.2021
+    if (isFourChars(chars)) {
+      const [d1, d2, m1, m2] = chars;
+      const dateObject = parse(`${d1}${d2}.${m1}${m2}`, 'dd.MM', new Date());
+
+      if (!isValid(dateObject)) {
+        validateInput(input);
+
+        return;
+      }
+
+      if (isAfter(dateObject, toDate)) {
+        const date = format(subYears(dateObject, 1), PRETTY_FORMAT);
+        setInput(date);
+        requestAnimationFrame(() => validateInput(date));
+
+        return;
+      }
+
+      if (isBefore(dateObject, fromDate)) {
+        const date = format(addYears(dateObject, 1), PRETTY_FORMAT);
+        setInput(date);
+        requestAnimationFrame(() => validateInput(date));
+
+        return;
+      }
+
+      const date = format(dateObject, PRETTY_FORMAT);
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
     validateInput(input);
-  }, [centuryThreshold, input, validateInput]);
+  }, [centuryThreshold, fromDate, input, toDate, validateInput]);
 
   return (
     <Datepicker
@@ -142,3 +198,8 @@ const getFullYear = (year: string, centuryThreshold: number): string => {
 };
 
 const isDateParts = (parts: string[]): parts is [string, string, string] => parts.length === 3;
+
+const isFourChars = (parts: string[]): parts is [string, string, string, string] => parts.length === 4;
+const isSixChars = (parts: string[]): parts is [string, string, string, string, string, string] => parts.length === 6;
+const isEightChars = (parts: string[]): parts is [string, string, string, string, string, string, string, string] =>
+  parts.length === 8;
