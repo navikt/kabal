@@ -57,6 +57,7 @@ const Header = styled.header`
 const Content = styled.div`
   display: grid;
   grid-template-columns: 650px 1fr;
+  grid-template-rows: 100%;
   column-gap: 16px;
   padding-bottom: 16px;
   padding-top: 8px;

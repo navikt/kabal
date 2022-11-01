@@ -58,7 +58,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
   }
 
   return (
-    <>
+    <Container>
       <StyledHeaders>
         <SortableHeader label="Tittel" sortKey={SortKey.TITLE} querySortKey={sort} querySortOrder={order} />
         <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
@@ -84,17 +84,11 @@ export const TextList = ({ textType, filter }: TextListProps) => {
           </ListItem>
         ))}
       </StyledList>
-    </>
+    </Container>
   );
 };
 
 const getTitle = (title: string) => (title.trim().length === 0 ? '<Ingen tittel>' : title);
-
-const StyledHeaders = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 200px;
-  gap: 0;
-`;
 
 const LoaderOverlay = styled.div`
   display: flex;
@@ -102,6 +96,25 @@ const LoaderOverlay = styled.div`
   align-items: center;
   height: 100%;
   background-color: #fafafa;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+`;
+
+const StyledHeaders = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, 20%);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 `;
 
 const StyledList = styled.ul`

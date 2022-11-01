@@ -33,20 +33,18 @@ export const FilteredTextList = ({ textType }: Props) => {
 };
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  row-gap: 8px;
   height: 100%;
-  overflow-y: auto;
+  z-index: 10;
+  overflow: visible;
 `;
 
 const Header = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  position: sticky;
-  top: 0;
+  position: relative;
   background-color: #fff;
-  box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, 20%);
-  border-radius: 4px;
 `;
