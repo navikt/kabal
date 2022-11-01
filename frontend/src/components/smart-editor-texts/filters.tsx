@@ -49,7 +49,11 @@ export const Filters = () => {
         Utfall
       </KodeverkSelect>
 
-      <KodeverkSelect selected={enheter ?? []} onChange={(value) => setFilter('enheter', value)} kodeverkKey="enheter">
+      <KodeverkSelect
+        selected={enheter ?? []}
+        onChange={(value) => setFilter('enheter', value)}
+        kodeverkKey="klageenheter"
+      >
         Enheter
       </KodeverkSelect>
     </Container>

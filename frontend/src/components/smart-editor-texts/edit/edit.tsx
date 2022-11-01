@@ -81,7 +81,11 @@ export const EditSmartEditorText = (savedText: IText) => {
           <KodeverkSelect kodeverkKey="utfall" selected={utfall} onChange={immediateUpdate}>
             Utfall
           </KodeverkSelect>
-          <KodeverkSelect kodeverkKey="enheter" selected={enheter} onChange={immediateUpdate}>
+          <KodeverkSelect
+            kodeverkKey="klageenheter"
+            selected={enheter}
+            onChange={(value: Value) => immediateUpdate(value, 'enheter')}
+          >
             Enheter
           </KodeverkSelect>
         </LineContainer>
