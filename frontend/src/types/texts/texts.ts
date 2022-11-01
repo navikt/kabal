@@ -76,6 +76,6 @@ export interface IUpdateTextPropertyParams<K extends keyof IUpdatable = keyof IU
 
 export interface IText extends INewTextParams {
   id: string; // UUID
-  modified: string | null; // Datetime
+  modified: string; // Datetime
   created: string; // Datetime
 }
