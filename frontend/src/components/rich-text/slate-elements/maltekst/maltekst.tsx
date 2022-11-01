@@ -11,10 +11,13 @@ import { ApiQuery, TextTypes } from '../../../../types/texts/texts';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
-import { ContentTypeEnum } from '../../types/editor-enums';
+import { ContentTypeEnum, UndeletableVoidElementsEnum } from '../../types/editor-enums';
 import { isOfElementType } from '../../types/editor-type-guards';
 import { MaltekstElementType, PlaceholderElementType } from '../../types/editor-types';
+import { EmptyVoidElement } from '../../types/editor-void-types';
 import { RenderElementProps } from '../render-props';
+
+const EMPTY_VOID: EmptyVoidElement = { type: UndeletableVoidElementsEnum.EMPTY_VOID, children: [{ text: '' }] };
 
 export const MaltekstElement = ({ element, children, attributes }: RenderElementProps<MaltekstElementType>) => {
   const editor = useSlateStatic();
@@ -24,7 +27,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
     requiredSection: element.section,
     templateId: templateId ?? undefined,
   });
-  const [getTexts] = useLazyGetTextsQuery();
+  const [getTexts, { data }] = useLazyGetTextsQuery();
 
   const loadMaltekst = useCallback(
     async (q: ApiQuery | typeof skipToken) => {
@@ -43,7 +46,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
 
         const [node, path] = nodeEntry;
 
-        const nodes = maltekster.length === 0 ? [createSimpleParagraph()] : maltekster.flatMap((m) => m.content);
+        const nodes: Descendant[] = maltekster.length === 0 ? [EMPTY_VOID] : maltekster.flatMap((m) => m.content);
 
         if (Node.isNodeList(node.children) && nodesEquals(node.children, nodes)) {
           return;
@@ -56,6 +59,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
               voids: false,
               at: path,
             });
+
             Transforms.insertNodes<MaltekstElementType>(
               editor,
               { ...element, children: nodes },
@@ -86,10 +90,17 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
     Transforms.select(editor, at);
   };
 
+  const contentEditable = data?.length !== 0;
+
   return (
-    <Container {...attributes} onDragStart={(e) => e.preventDefault()}>
+    <Container
+      {...attributes}
+      onDragStart={(e) => e.preventDefault()}
+      contentEditable={contentEditable}
+      suppressContentEditableWarning={contentEditable}
+    >
       {children}
-      <StyleButton
+      <StyledButton
         contentEditable={false}
         onClick={addParagraph}
         title="Legg til nytt avsnitt under"
@@ -103,7 +114,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
 
 MaltekstElement.displayName = 'MaltekstElement';
 
-const StyleButton = styled(Button)`
+const StyledButton = styled(Button)`
   position: absolute;
   right: 0;
   bottom: 0;
@@ -120,7 +131,7 @@ const Container = styled.div`
   color: #666;
 
   &:hover {
-    ${StyleButton} {
+    ${StyledButton} {
       opacity: 1;
     }
   }

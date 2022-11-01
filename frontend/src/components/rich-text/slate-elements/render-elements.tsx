@@ -88,6 +88,12 @@ export const renderElement = (props: RenderElementProps) => {
     case UndeletableVoidElementsEnum.HEADER:
     case UndeletableVoidElementsEnum.FOOTER:
       return <HeaderFooterElement {...props} element={props.element} />;
+    case UndeletableVoidElementsEnum.EMPTY_VOID:
+      return (
+        <div {...props.attributes} key={props.key} contentEditable={false}>
+          {props.children}
+        </div>
+      );
     case ContentTypeEnum.PLACEHOLDER:
       return <PlaceholderElement {...props} element={props.element} />;
     default:

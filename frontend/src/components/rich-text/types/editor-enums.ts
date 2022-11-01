@@ -43,6 +43,7 @@ export enum UndeletableVoidElementsEnum {
   PAGE_BREAK = 'page-break', // Undeletable with conventional methods (backspace etc.), but has special delete button
   HEADER = 'header',
   FOOTER = 'footer',
+  EMPTY_VOID = 'empty-void',
 }
 
 export enum DeletableVoidElementsEnum {
