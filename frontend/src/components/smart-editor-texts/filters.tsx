@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../types/smart-editor/template-enums';
 import { AppQuery } from '../../types/texts/texts';
 import { useTextQuery } from './hooks/use-text-query';
-import { KodeverkSelect, SectionSelect, TemplateSelect } from './select';
+import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from './select';
 import { FilterDivider } from './styled-components';
 
 export const Filters = () => {
@@ -45,9 +45,9 @@ export const Filters = () => {
         Ytelser
       </KodeverkSelect>
 
-      <KodeverkSelect selected={utfall ?? []} onChange={(value) => setFilter('utfall', value)} kodeverkKey="utfall">
+      <UtfallSelect selected={utfall ?? []} onChange={(value) => setFilter('utfall', value)}>
         Utfall
-      </KodeverkSelect>
+      </UtfallSelect>
 
       <KodeverkSelect
         selected={enheter ?? []}
