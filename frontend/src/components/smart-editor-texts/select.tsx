@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
-import { IKodeverk } from '../../types/kodeverk';
+import { IKodeverk, Utfall } from '../../types/kodeverk';
 import { TemplateIdEnum } from '../../types/smart-editor/template-enums';
 import { TemplateSections } from '../../types/texts/texts';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
@@ -60,3 +60,27 @@ export const TemplateSelect = ({ selected, children, onChange }: TemplateSelectP
     {children}
   </FilterDropdown>
 );
+
+interface UtfallSelectProps {
+  children: string;
+  selected: Utfall[];
+  onChange: (value: Utfall[]) => void;
+}
+
+export const UtfallSelect = ({ children, selected, onChange }: UtfallSelectProps) => {
+  const values = useKodeverkValue('utfall');
+
+  const options = useMemo(
+    () =>
+      (values ?? [])
+        .filter(({ id }) => id !== Utfall.HENVIST && id !== Utfall.HEVET)
+        .map(({ id, navn }) => ({ value: id, label: navn })),
+    [values]
+  );
+
+  return (
+    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+      {children}
+    </FilterDropdown>
+  );
+};

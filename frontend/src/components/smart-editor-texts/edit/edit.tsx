@@ -18,7 +18,7 @@ import { ResolvedTags } from '../../tags/resolved-tag';
 import { HjemlerSelect } from '../hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
 import { SavedStatus } from '../saved-status';
-import { KodeverkSelect, SectionSelect, TemplateSelect } from '../select';
+import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from '../select';
 import { DeleteTextButton } from '../smart-editor-texts-delete';
 import { FilterDivider } from '../styled-components';
 import { HeaderFooterEditor } from './header-footer';
@@ -78,9 +78,11 @@ export const EditSmartEditorText = (savedText: IText) => {
           <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={immediateUpdate}>
             Ytelser
           </KodeverkSelect>
-          <KodeverkSelect kodeverkKey="utfall" selected={utfall} onChange={immediateUpdate}>
+
+          <UtfallSelect selected={utfall} onChange={(value) => immediateUpdate(value, 'utfall')}>
             Utfall
-          </KodeverkSelect>
+          </UtfallSelect>
+
           <KodeverkSelect
             kodeverkKey="klageenheter"
             selected={enheter}
