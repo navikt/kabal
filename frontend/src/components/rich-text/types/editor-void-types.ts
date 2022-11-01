@@ -69,6 +69,10 @@ export interface FlettefeltElementType extends IBaseVoid, IMarks, IWithThreads {
   field: Flettefelt | null;
 }
 
+export interface EmptyVoidElement extends IBaseVoid {
+  type: UndeletableVoidElementsEnum.EMPTY_VOID;
+}
+
 type DeletableVoidTypes = FlettefeltElementType;
 
 type VoidTypes =
@@ -78,6 +82,7 @@ type VoidTypes =
   | CurrentDateType
   | PageBreakElementType
   | HeaderElementType
-  | FooterElementType;
+  | FooterElementType
+  | EmptyVoidElement;
 
 export type VoidElementTypes = VoidTypes | DeletableVoidTypes;
