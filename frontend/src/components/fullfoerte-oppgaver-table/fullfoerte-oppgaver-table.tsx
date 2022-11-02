@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledCaption, StyledMineOppgaverTable } from '../../styled-components/table';
@@ -26,21 +26,16 @@ export const FullfoerteOppgaverTable = () => {
           ferdigstiltDaysAgo: 7,
         };
 
-  const { data: doneOppgaver, refetch } = useGetMineFerdigstilteOppgaverQuery(queryParams, {
+  const { data: doneOppgaver, isLoading } = useGetMineFerdigstilteOppgaverQuery(queryParams, {
     pollingInterval: 180 * 1000,
+    refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   return (
     <StyledMineOppgaverTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table" zebraStripes>
       <StyledCaption>Fullførte oppgaver siste 7 dager</StyledCaption>
       <TableHeader headers={TABLE_HEADERS} />
-      <OppgaveRows oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} />
+      <OppgaveRows oppgaver={doneOppgaver?.behandlinger} columnCount={TABLE_HEADERS.length} isLoading={isLoading} />
     </StyledMineOppgaverTable>
   );
 };

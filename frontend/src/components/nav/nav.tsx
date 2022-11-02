@@ -1,7 +1,7 @@
 import { Facilitet, FileContent, Law, LightBulb, List, Office1, Search, Task } from '@navikt/ds-icons';
 import { Header } from '@navikt/ds-react-internal';
-import { VerticalAlignBottom } from '@styled-icons/material/VerticalAlignBottom';
-import { VerticalAlignTop } from '@styled-icons/material/VerticalAlignTop';
+import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
+import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -50,11 +50,11 @@ export const Nav = () => (
       </NavItem>
 
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/topptekster" testId="topptekster-nav-link">
-        <VerticalAlignTop size={22} color="#fff" /> Topptekster
+        <DocumentHeader size={22} color="#fff" /> Topptekster
       </NavItem>
 
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/bunntekster" testId="bunntekster-nav-link">
-        <VerticalAlignBottom size={22} color="#fff" /> Bunntekster
+        <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
     </StyledNavLinkList>
   </Header.Title>

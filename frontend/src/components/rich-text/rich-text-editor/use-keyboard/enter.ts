@@ -1,10 +1,18 @@
 import { Editor, Transforms } from 'slate';
-import { createNewParagraph, getSelectedListTypes } from '../../functions/blocks';
+import { createNewParagraph, getSelectedListTypes, isBlockActive } from '../../functions/blocks';
 import { containsVoid } from '../../functions/contains-void';
 import { insertPageBreak } from '../../functions/insert-page-break';
-import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
+import { insertColumn } from '../../functions/table/insert-column';
+import { insertRowBelow } from '../../functions/table/rows';
+import {
+  ContentTypeEnum,
+  ListContentEnum,
+  ListTypesEnum,
+  TableContentEnum,
+  TableTypeEnum,
+} from '../../types/editor-enums';
 import { isOfElementTypeFn } from '../../types/editor-type-guards';
-import { ListItemContainerElementType } from '../../types/editor-types';
+import { ListItemContainerElementType, TableCellElementType } from '../../types/editor-types';
 import { HandlerFn } from './types';
 
 export const enter: HandlerFn = ({ editor, event }) => {
@@ -17,6 +25,24 @@ export const enter: HandlerFn = ({ editor, event }) => {
   if (event.shiftKey) {
     event.preventDefault();
     Transforms.insertText(editor, '\n');
+
+    return;
+  }
+
+  if (isBlockActive(editor, TableTypeEnum.TABLE)) {
+    event.preventDefault();
+
+    const [cellEntry] = Editor.nodes<TableCellElementType>(editor, { match: isOfElementTypeFn(TableContentEnum.TD) });
+
+    if (cellEntry === undefined) {
+      return;
+    }
+
+    const [cell, path] = cellEntry;
+
+    const selection =
+      event.ctrlKey || event.metaKey ? insertColumn(editor, cell, path) : insertRowBelow(editor, cell, path);
+    Transforms.select(editor, selection);
 
     return;
   }

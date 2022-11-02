@@ -1,6 +1,6 @@
 import { Pagination, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useGetSettingsQuery } from '../../redux-api/bruker';
 import {
@@ -57,22 +57,15 @@ export const OppgaveTable = (): JSX.Element => {
           hjemler,
         };
 
-  const {
-    data: oppgaver,
-    refetch,
-    isFetching,
-  } = useGetMineLedigeOppgaverQuery(queryParams, { pollingInterval: 30 * 1000 });
+  const { data: oppgaver, isFetching } = useGetMineLedigeOppgaverQuery(queryParams, {
+    pollingInterval: 30 * 1000,
+    refetchOnMountOrArgChange: true,
+  });
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
     queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
     { pollingInterval: 300 * 1000 }
   );
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   if (parsedPage === null) {
     return <Navigate to="../1" />;

@@ -1,5 +1,14 @@
-import { Editor, Path, Range, Transforms } from 'slate';
+import { Editor, Path, Point, Range, Text, Transforms } from 'slate';
 import { moveLeft, moveRight } from '../../functions/arrows';
+import { isBlockActive } from '../../functions/blocks';
+import {
+  getCellColumnOffset,
+  getCurrentCell,
+  getCurrentRow,
+  getNextRow,
+  getPreviousRow,
+} from '../../functions/table/helpers';
+import { TableTypeEnum } from '../../types/editor-enums';
 import { getLeadingCharacters, getLeadingSpaces, getTrailingCharacters, getTrailingSpaces } from './helpers';
 import { HandlerFn } from './types';
 
@@ -79,4 +88,84 @@ export const arrowRight: HandlerFn = ({ event, editor }) => {
   }
 
   moveRight(editor, event);
+};
+
+export const arrowUp: HandlerFn = ({ event, editor }) => {
+  if (isBlockActive(editor, TableTypeEnum.TABLE)) {
+    event.preventDefault();
+    moveToTargetRow(editor, Direction.UP);
+  }
+};
+
+export const arrowDown: HandlerFn = ({ event, editor }) => {
+  if (isBlockActive(editor, TableTypeEnum.TABLE)) {
+    event.preventDefault();
+    moveToTargetRow(editor, Direction.DOWN);
+  }
+};
+
+enum Direction {
+  UP = 'up',
+  DOWN = 'down',
+}
+
+const moveToTargetRow = (editor: Editor, direction: Direction): void => {
+  const currentCellEntry = getCurrentCell(editor);
+
+  if (currentCellEntry === undefined) {
+    return;
+  }
+  const [currentCell, currentCellPath] = currentCellEntry;
+  const currentRowEntry = getCurrentRow(editor, currentCell, currentCellPath);
+
+  if (currentRowEntry === undefined) {
+    return;
+  }
+  const [currentRow, currentRowPath] = currentRowEntry;
+  const targetRowEntry = (direction === Direction.UP ? getPreviousRow : getNextRow)(editor, currentRowPath);
+
+  // If at edge of table, go to previous/next text.
+  if (targetRowEntry === undefined) {
+    const target = (direction === Direction.UP ? Editor.previous : Editor.next)(editor, {
+      match: Text.isText,
+      at: currentRowPath,
+      mode: 'lowest',
+      voids: false,
+    });
+
+    if (target === undefined) {
+      return;
+    }
+
+    const [, targetPath] = target;
+
+    Transforms.select(editor, {
+      path: targetPath,
+      offset: 0,
+    });
+
+    return;
+  }
+
+  const columns = getCellColumnOffset(editor, currentCell, currentRow);
+
+  const [targetRow, targetRowPath] = targetRowEntry;
+  // Find cell with same distance from left edge.
+  let distance = 0;
+
+  for (const cell of targetRow.children) {
+    distance += cell.colSpan;
+
+    if (distance < columns) {
+      continue;
+    }
+
+    const offset = distance > columns ? 0 : 1;
+    const path: Path = [...targetRowPath, targetRow.children.indexOf(cell) + offset, 0];
+    const point: Point = { path, offset: 0 };
+    const range: Range = { anchor: point, focus: point };
+    Transforms.select(editor, range);
+
+    return;
+  }
 };

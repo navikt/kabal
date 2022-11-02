@@ -1,4 +1,5 @@
 import { Editor } from 'slate';
+import { isBlockActive } from '../functions/blocks';
 import { containsUndeletableVoid, containsVoid } from '../functions/contains-void';
 import { isPlaceholderSelectedInMaltekstWithOverlap } from '../functions/insert-placeholder';
 import {
@@ -7,7 +8,7 @@ import {
   isInMaltekstAndNotPlaceholder,
   isInPlaceholder,
 } from '../functions/maltekst';
-import { ContentTypeEnum, DeletableVoidElementsEnum } from '../types/editor-enums';
+import { ContentTypeEnum, DeletableVoidElementsEnum, TableTypeEnum } from '../types/editor-enums';
 import { isVoid as isVoidElement } from '../types/editor-type-guards';
 
 const INLINE_TYPES = [DeletableVoidElementsEnum.FLETTEFELT, ContentTypeEnum.PLACEHOLDER];
@@ -98,6 +99,10 @@ export const withEditableVoids = (editor: Editor) => {
   editor.insertData = (node) => {
     if (isInPlaceholder(editor)) {
       return insertText(node.getData('text/plain').replaceAll('\n', ' '));
+    }
+
+    if (isBlockActive(editor, TableTypeEnum.TABLE)) {
+      return insertText(node.getData('text/plain'));
     }
 
     if (isInMaltekst(editor)) {

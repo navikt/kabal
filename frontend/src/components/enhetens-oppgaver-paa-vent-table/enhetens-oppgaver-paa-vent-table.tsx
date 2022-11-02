@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useGetEnhetensVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
@@ -29,18 +29,12 @@ export const EnhetensOppgaverPaaVentTable = () => {
 
   const {
     data: oppgaver,
-    refetch,
     isError,
     isLoading,
   } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
+    refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   return (
     <StyledTable zebraStripes data-testid="enhetens-oppgaver-paa-vent-table">

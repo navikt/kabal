@@ -8,6 +8,8 @@ import {
   ListContentEnum,
   ListTypesEnum,
   RedigerbarMaltekstEnum,
+  TableContentEnum,
+  TableTypeEnum,
   TextAlignEnum,
   UndeletableContentEnum,
   UndeletableVoidElementsEnum,
@@ -59,7 +61,8 @@ export type NonVoidElementTypes =
   | ListsType
   | RedigerbareMalteksterElementType
   | PlaceholderElementType
-  | MaltekstElementType;
+  | MaltekstElementType
+  | TableType;
 
 export interface RedigerbareMalteksterElementType extends Partial<TextMetadata> {
   type: RedigerbarMaltekstEnum;
@@ -122,6 +125,29 @@ export interface ListItemContainerElementType {
 }
 
 type ListsType = BulletListElementType | NumberedListElementType | ListItemElementType | ListItemContainerElementType;
+
+export interface TableCellElementType {
+  type: TableContentEnum.TD;
+  children: CustomTextType[];
+  colSpan: number;
+}
+
+export interface TableRowElementType {
+  type: TableContentEnum.TR;
+  children: TableCellElementType[];
+}
+
+export interface TableBodyElementType {
+  type: TableContentEnum.TBODY;
+  children: TableRowElementType[];
+}
+
+export interface TableElementType {
+  type: TableTypeEnum.TABLE;
+  children: [TableBodyElementType];
+}
+
+type TableType = TableElementType | TableBodyElementType | TableRowElementType | TableCellElementType;
 
 export interface CustomTextType extends IMarks {
   text: string;

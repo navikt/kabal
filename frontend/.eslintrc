@@ -32,7 +32,7 @@
   ],
   "settings": {
     "react": {
-      "version": "17"
+      "version": "18"
     }
   },
   "root": true,
@@ -86,7 +86,7 @@
     "complexity": [
       "error",
       {
-        "max": 20
+        "max": 23
       }
     ],
     "curly": [

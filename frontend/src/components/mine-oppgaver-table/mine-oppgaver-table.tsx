@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useGetMineUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledMineOppgaverTable } from '../../styled-components/table';
@@ -29,19 +29,10 @@ export const MineOppgaverTable = () => {
           navIdent: bruker.navIdent,
         };
 
-  const {
-    data: oppgaver,
-    refetch,
-    isFetching,
-  } = useGetMineUferdigeOppgaverQuery(queryParams, {
+  const { data: oppgaver, isFetching } = useGetMineUferdigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
+    refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   return (
     <StyledMineOppgaverTable
