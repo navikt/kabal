@@ -1,4 +1,4 @@
-import { Editor, Element, Path, Range, Text, Transforms } from 'slate';
+import { Editor, Element, NodeEntry, Path, Range, Text, Transforms } from 'slate';
 import {
   ContentTypeEnum,
   ElementTypesEnum,
@@ -9,6 +9,15 @@ import {
 import { isOfElementType, isOfElementTypeFn, isOfElementTypesFn } from '../types/editor-type-guards';
 import { BulletListElementType, NumberedListElementType } from '../types/editor-types';
 import { pruneSelection } from './prune-selection';
+
+export const getCurrentElement = <T extends Element>(
+  editor: Editor,
+  type: NonVoidElementsEnum
+): NodeEntry<T> | undefined => {
+  const [element] = Editor.nodes<T>(editor, { match: isOfElementTypeFn<T>(type) });
+
+  return element;
+};
 
 export const isBlockActive = (editor: Editor, block: ElementTypesEnum) => {
   const [match] = Editor.nodes(editor, { match: isOfElementTypeFn(block), reverse: true, universal: true });
@@ -121,13 +130,7 @@ export const toggleBlock = (editor: Editor, block: NonVoidElementsEnum) => {
 
     const isActive = isBlockActive(editor, block);
 
-    Transforms.setNodes(
-      editor,
-      {
-        type: isActive ? ContentTypeEnum.PARAGRAPH : block,
-      },
-      { match: Element.isElement }
-    );
+    Transforms.setNodes(editor, { type: isActive ? ContentTypeEnum.PARAGRAPH : block }, { match: Element.isElement });
   });
 };
 

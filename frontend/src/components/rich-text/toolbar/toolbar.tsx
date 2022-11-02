@@ -1,5 +1,6 @@
 import { Cancel } from '@navikt/ds-icons';
-import { FormatClear } from '@styled-icons/material/FormatClear';
+import { ClearFormatting } from '@styled-icons/fluentui-system-regular/ClearFormatting';
+import { DocumentPageBreak } from '@styled-icons/fluentui-system-regular/DocumentPageBreak';
 import React from 'react';
 import { useSlate } from 'slate-react';
 import styled from 'styled-components';
@@ -11,11 +12,11 @@ import { isMarkingAvailable } from '../functions/marks';
 import { isTextAlignAvailable } from '../functions/text-align';
 import { Content } from './content';
 import { Headings } from './headings';
-import { PageBreakIcon } from './icons/page-break';
 import { Lists } from './lists';
 import { Marks } from './marks';
 import { ToolbarSeparator } from './separator';
 import { SmartEditorButtons, SmartEditorButtonsProps } from './smart-editor-buttons';
+import { TableButton } from './table';
 import { TextAligns } from './text-aligns';
 import { ToolbarIconButton } from './toolbarbutton';
 
@@ -44,14 +45,14 @@ export const Toolbar = ({
       <Content iconSize={ICON_SIZE} />
       <ToolbarIconButton
         label="Fjern formatering"
-        icon={<FormatClear width={ICON_SIZE} />}
+        icon={<ClearFormatting width={ICON_SIZE} />}
         active={false}
         onClick={() => clearFormatting(editor)}
       />
       <ToolbarIconButton
         label="Sett inn sideskift (Ctrl/⌘ + Enter)"
         onClick={() => insertPageBreak(editor)}
-        icon={<PageBreakIcon height={ICON_SIZE} />}
+        icon={<DocumentPageBreak height={ICON_SIZE} />}
         active={false}
         disabled={!insertPageBreakIsAvailable(editor)}
       />
@@ -63,6 +64,9 @@ export const Toolbar = ({
       <ToolbarSeparator />
 
       <Lists iconSize={ICON_SIZE} />
+
+      <TableButton />
+
       <TextAligns iconSize={ICON_SIZE} disabled={!textAlignAvailable || notEditable} />
 
       <ToolbarSeparator />

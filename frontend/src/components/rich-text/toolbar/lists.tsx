@@ -1,5 +1,5 @@
-import { FormatListBulleted } from '@styled-icons/material/FormatListBulleted';
-import { FormatListNumbered } from '@styled-icons/material/FormatListNumbered';
+import { TextBulletListLtr } from '@styled-icons/fluentui-system-regular/TextBulletListLtr';
+import { TextNumberListLtr } from '@styled-icons/fluentui-system-regular/TextNumberListLtr';
 import React from 'react';
 import { Editor, Path, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
@@ -25,7 +25,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
     <>
       <ToolbarIconButton
         label="Punktliste"
-        icon={<FormatListBulleted width={iconSize} />}
+        icon={<TextBulletListLtr width={iconSize} />}
         disabled={notEditable}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {
@@ -69,7 +69,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
       />
       <ToolbarIconButton
         label="Nummerliste"
-        icon={<FormatListNumbered width={iconSize} />}
+        icon={<TextNumberListLtr width={iconSize} />}
         disabled={notEditable}
         onClick={() => {
           Editor.withoutNormalizing(editor, () => {

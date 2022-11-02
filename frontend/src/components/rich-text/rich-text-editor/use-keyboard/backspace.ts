@@ -1,9 +1,9 @@
 import { Editor, Path, Point, Range, Transforms } from 'slate';
-import { isBlockActive } from '../../functions/blocks';
+import { getCurrentElement, isBlockActive } from '../../functions/blocks';
 import { isPlaceholderSelectedInMaltekstWithOverlap } from '../../functions/insert-placeholder';
-import { ListContentEnum } from '../../types/editor-enums';
-import { isOfElementTypeFn } from '../../types/editor-type-guards';
-import { ListItemContainerElementType } from '../../types/editor-types';
+import { ContentTypeEnum, ListContentEnum, TableContentEnum, TableTypeEnum } from '../../types/editor-enums';
+import { isOfElementType, isOfElementTypeFn } from '../../types/editor-type-guards';
+import { ListItemContainerElementType, ParagraphElementType } from '../../types/editor-types';
 import { unindentList } from '../slate-event-handlers/list/unindent';
 import { getTrailingCharacters, getTrailingSpaces } from './helpers';
 import { HandlerFn } from './types';
@@ -80,6 +80,45 @@ export const backspace: HandlerFn = ({ editor, event }) => {
     if (isCollapsed && Point.equals(editor.selection.focus, start)) {
       event.preventDefault();
       unindentList(editor);
+    }
+  }
+
+  if (isCollapsed) {
+    const isInTableCell = isBlockActive(editor, TableContentEnum.TD);
+
+    if (isInTableCell && editor.selection.focus.offset === 0) {
+      event.preventDefault();
+
+      return;
+    }
+
+    if (!isInTableCell) {
+      const previousNode = Editor.previous(editor, {
+        at: editor.selection,
+        mode: 'highest',
+        match: (n) => !Editor.isEditor(n),
+      });
+
+      if (previousNode === undefined) {
+        return;
+      }
+
+      if (isOfElementType(previousNode[0], TableTypeEnum.TABLE)) {
+        event.preventDefault();
+
+        const currentElementEntry = getCurrentElement<ParagraphElementType>(editor, ContentTypeEnum.PARAGRAPH);
+
+        if (currentElementEntry === undefined) {
+          return;
+        }
+
+        const [currentElement] = currentElementEntry;
+
+        if (isOfElementType(currentElement, ContentTypeEnum.PARAGRAPH) && Editor.isEmpty(editor, currentElement)) {
+          Transforms.removeNodes(editor, { match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH) });
+          Transforms.move(editor, { distance: 1, reverse: true });
+        }
+      }
     }
   }
 };

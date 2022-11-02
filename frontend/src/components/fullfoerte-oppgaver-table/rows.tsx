@@ -6,10 +6,11 @@ import { Row } from './row';
 interface OppgaveRowsProps {
   oppgaver?: IOppgaveList;
   columnCount: number;
+  isLoading: boolean;
 }
 
-export const OppgaveRows = ({ oppgaver, columnCount }: OppgaveRowsProps): JSX.Element => {
-  if (typeof oppgaver === 'undefined') {
+export const OppgaveRows = ({ oppgaver, isLoading, columnCount }: OppgaveRowsProps): JSX.Element => {
+  if (isLoading || typeof oppgaver === 'undefined') {
     return (
       <Table.Body>
         <Table.Row>

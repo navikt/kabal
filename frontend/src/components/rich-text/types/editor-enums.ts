@@ -9,6 +9,16 @@ export enum UndeletableContentEnum {
   MALTEKST = 'maltekst',
 }
 
+export enum TableTypeEnum {
+  TABLE = 'table',
+}
+
+export enum TableContentEnum {
+  TBODY = 'tbody',
+  TR = 'tr',
+  TD = 'td',
+}
+
 export enum ListTypesEnum {
   BULLET_LIST = 'bullet-list',
   NUMBERED_LIST = 'numbered-list',
@@ -63,7 +73,9 @@ export type NonVoidElementsEnum =
   | HeadingTypesEnum
   | ListTypesEnum
   | ListContentEnum
-  | RedigerbarMaltekstEnum;
+  | RedigerbarMaltekstEnum
+  | TableTypeEnum
+  | TableContentEnum;
 
 export type ElementTypesEnum = NonVoidElementsEnum | VoidElementsEnum;
 

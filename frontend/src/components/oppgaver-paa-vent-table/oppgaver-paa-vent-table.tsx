@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGetMineVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledCaption, StyledMineOppgaverTable } from '../../styled-components/table';
@@ -27,18 +27,12 @@ export const OppgaverPaaVentTable = () => {
 
   const {
     data: oppgaver,
-    refetch,
     isError,
     isLoading,
   } = useGetMineVentendeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
+    refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   return (
     <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>

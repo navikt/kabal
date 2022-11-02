@@ -1,5 +1,5 @@
-import { FormatAlignLeft } from '@styled-icons/material/FormatAlignLeft';
-import { FormatAlignRight } from '@styled-icons/material/FormatAlignRight';
+import { TextAlignLeft } from '@styled-icons/fluentui-system-regular/TextAlignLeft';
+import { TextAlignRight } from '@styled-icons/fluentui-system-regular/TextAlignRight';
 import React from 'react';
 import { useSlate } from 'slate-react';
 import { isTextAlignActive, setTextAlign } from '../functions/text-align';
@@ -18,14 +18,14 @@ export const TextAligns = ({ iconSize, disabled = true }: TextAlignsProps) => {
     <>
       <ToolbarIconButton
         label="Venstrejuster"
-        icon={<FormatAlignLeft width={iconSize} />}
+        icon={<TextAlignLeft width={iconSize} />}
         onClick={() => setTextAlign(editor, TextAlignEnum.TEXT_ALIGN_LEFT)}
         active={isTextAlignActive(editor, TextAlignEnum.TEXT_ALIGN_LEFT)}
         disabled={disabled}
       />
       <ToolbarIconButton
         label="Høyrejuster"
-        icon={<FormatAlignRight width={iconSize} />}
+        icon={<TextAlignRight width={iconSize} />}
         onClick={() => setTextAlign(editor, TextAlignEnum.TEXT_ALIGN_RIGHT)}
         active={isTextAlignActive(editor, TextAlignEnum.TEXT_ALIGN_RIGHT)}
         disabled={disabled}

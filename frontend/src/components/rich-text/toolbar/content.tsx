@@ -1,5 +1,5 @@
-import { FormatIndentDecrease } from '@styled-icons/material/FormatIndentDecrease';
-import { FormatIndentIncrease } from '@styled-icons/material/FormatIndentIncrease';
+import { TextIndentDecreaseLtr } from '@styled-icons/fluentui-system-regular/TextIndentDecreaseLtr';
+import { TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular/TextIndentIncreaseLtr';
 import React from 'react';
 import { useSlate } from 'slate-react';
 import { isBlockActive } from '../functions/blocks';
@@ -28,14 +28,14 @@ export const Content = ({ iconSize, display = true }: ContentProps) => {
         onClick={() => increaseIndent(editor)}
         active={isBlockActive(editor, ContentTypeEnum.INDENT)}
         disabled={notEditable}
-        icon={<FormatIndentIncrease height={iconSize} />}
+        icon={<TextIndentIncreaseLtr height={iconSize} />}
       />
 
       <ToolbarIconButton
         label="Fjern innrykk"
         onClick={() => decreaseIndent(editor)}
         disabled={!isBlockActive(editor, ContentTypeEnum.INDENT) || notEditable}
-        icon={<FormatIndentDecrease height={iconSize} />}
+        icon={<TextIndentDecreaseLtr height={iconSize} />}
         active={false}
       />
     </>

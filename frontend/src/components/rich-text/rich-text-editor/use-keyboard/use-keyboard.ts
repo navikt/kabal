@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import { Editor } from 'slate';
 import { FeatureToggles, useFeatureToggle } from '../../../../hooks/use-feature-toggle';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
-import { arrowLeft, arrowRight } from './arrows';
+import { arrowDown, arrowLeft, arrowRight, arrowUp } from './arrows';
 import { backspace } from './backspace';
 import { deleteHandler } from './delete';
 import { enter } from './enter';
@@ -21,6 +21,8 @@ const HANDLERS: Map<Key, HandlerFn> = new Map([
   [Key.SPACE, space],
   [Key.ARROW_RIGHT, arrowRight],
   [Key.ARROW_LEFT, arrowLeft],
+  [Key.ARROW_UP, arrowUp],
+  [Key.ARROW_DOWN, arrowDown],
 ]);
 
 const HOTKEY_HANDLERS: HandlerFn[] = [placeholder, maltekst, hotkeys];

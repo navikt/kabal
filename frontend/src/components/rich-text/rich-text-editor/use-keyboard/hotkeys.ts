@@ -5,6 +5,7 @@ import {
   removePlaceholder,
 } from '../../functions/insert-placeholder';
 import { toggleMark } from '../../functions/marks';
+import { insertTable } from '../../functions/table/insert-table';
 import { MarkKeys } from '../../types/marks';
 import { selectAll } from './select-all';
 import { HandlerFn } from './types';
@@ -59,6 +60,12 @@ export const hotkeys: HandlerFn = ({ editor, event, context }) => {
       case 'a': {
         event.preventDefault();
         selectAll(event, editor);
+
+        return;
+      }
+      case 'm': {
+        event.preventDefault();
+        insertTable(editor);
 
         return;
       }

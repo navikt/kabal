@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { PlaylistAdd } from '@styled-icons/material';
+import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAddSpaceBefore';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { Descendant, Editor, Node, Path, Text, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
@@ -104,7 +104,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
         contentEditable={false}
         onClick={addParagraph}
         title="Legg til nytt avsnitt under"
-        icon={<PlaylistAdd size={24} />}
+        icon={<TextAddSpaceBefore size={24} />}
         variant="tertiary"
         size="xsmall"
       />

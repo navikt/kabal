@@ -2,11 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface ToolbarIconButtonProps extends ToolbarButtonProps {
-  icon: React.ReactChild;
-}
-interface ToolbarTextButtonProps extends ToolbarButtonProps {
-  text: React.ReactChild;
-  fontWeight?: number;
+  icon: React.ReactNode;
 }
 
 interface ToolbarButtonProps extends ToolbarButtonStyleProps {
@@ -33,30 +29,6 @@ export const ToolbarIconButton = ({ label, icon, onClick, active, disabled = fal
     }}
   >
     {icon}
-  </ToolbarButtonStyle>
-);
-
-export const ToolbarTextButton = ({
-  label,
-  text,
-  fontWeight = 400,
-  onClick,
-  active,
-  disabled = false,
-}: ToolbarTextButtonProps) => (
-  <ToolbarButtonStyle
-    title={label}
-    aria-label={label}
-    aria-pressed={active}
-    disabled={disabled}
-    active={active}
-    fontWeight={fontWeight}
-    onMouseDown={(event) => {
-      event.preventDefault();
-      onClick(event);
-    }}
-  >
-    {text}
   </ToolbarButtonStyle>
 );
 

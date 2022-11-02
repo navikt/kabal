@@ -14,6 +14,8 @@ import {
   ListContentEnum,
   ListTypesEnum,
   RedigerbarMaltekstEnum,
+  TableContentEnum,
+  TableTypeEnum,
   UndeletableContentEnum,
   UndeletableVoidElementsEnum,
 } from '../types/editor-enums';
@@ -35,6 +37,10 @@ import {
   NumberedListElement,
   ParagraphElement,
 } from './slate-elements';
+import { TableElement } from './table/table';
+import { TableBodyElement } from './table/tbody';
+import { TableCellElement } from './table/td';
+import { TableRowElement } from './table/tr';
 
 // eslint-disable-next-line complexity
 export const renderElement = (props: RenderElementProps) => {
@@ -96,6 +102,14 @@ export const renderElement = (props: RenderElementProps) => {
       );
     case ContentTypeEnum.PLACEHOLDER:
       return <PlaceholderElement {...props} element={props.element} />;
+    case TableTypeEnum.TABLE:
+      return <TableElement {...props} element={props.element} />;
+    case TableContentEnum.TBODY:
+      return <TableBodyElement {...props} element={props.element} />;
+    case TableContentEnum.TR:
+      return <TableRowElement {...props} element={props.element} />;
+    case TableContentEnum.TD:
+      return <TableCellElement {...props} element={props.element} />;
     default:
       return <ParagraphElement {...props} element={props.element} />;
   }

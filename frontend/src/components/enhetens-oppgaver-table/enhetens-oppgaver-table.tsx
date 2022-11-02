@@ -1,6 +1,6 @@
 import { Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
 import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
@@ -50,15 +50,10 @@ export const EnhetensOppgaverTable = () => {
           tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
-  const { data: oppgaver, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
+  const { data: oppgaver, isLoading } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
+    refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    refetch();
-
-    return refetch;
-  }, [refetch]);
 
   return (
     <StyledTable
@@ -83,7 +78,7 @@ export const EnhetensOppgaverTable = () => {
     >
       <StyledCaption>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledCaption>
       <TableHeaderFilters filters={filters} onChange={setFilters} />
-      <OppgaveRader oppgaver={oppgaver?.behandlinger} />
+      <OppgaveRader oppgaver={oppgaver?.behandlinger} isLoading={isLoading} />
     </StyledTable>
   );
 };
@@ -93,10 +88,11 @@ const invertSort = (order: SortOrderEnum) =>
 
 interface OppgaveRaderProps {
   oppgaver?: IOppgaveList;
+  isLoading: boolean;
 }
 
-const OppgaveRader = ({ oppgaver }: OppgaveRaderProps): JSX.Element => {
-  if (typeof oppgaver === 'undefined') {
+const OppgaveRader = ({ oppgaver, isLoading }: OppgaveRaderProps): JSX.Element => {
+  if (isLoading || typeof oppgaver === 'undefined') {
     return (
       <Table.Body>
         <Table.Row>
