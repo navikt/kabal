@@ -94,13 +94,7 @@ const OppgavebehandlingText = () => {
 
   const { utfall } = oppgave.resultat;
 
-  if (
-    oppgave.type === OppgaveType.ANKE_I_TRYGDERETTEN &&
-    (utfall === Utfall.STADFESTELSE ||
-      utfall === Utfall.MEDHOLD ||
-      utfall === Utfall.DELVIS_MEDHOLD ||
-      utfall === Utfall.AVVIST)
-  ) {
+  if (oppgave.type === OppgaveType.ANKE && utfall !== Utfall.RETUR) {
     return (
       <StyledFinishOppgaveText>
         Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
