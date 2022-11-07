@@ -36,12 +36,17 @@ export const getCurrentRow = (
   currentCell: TableCellElementType | undefined = getCurrentCell(editor)?.[0],
   currentCellPath = findPath(editor, currentCell)
 ): NodeEntry<TableRowElementType> | undefined => {
-  const [currentRowEntry] = Editor.nodes<TableRowElementType>(editor, {
-    at: currentCellPath,
-    match: isOfElementTypeFn<TableRowElementType>(TableContentEnum.TR),
-  });
+  if (currentCellPath === undefined) {
+    return undefined;
+  }
 
-  return currentRowEntry;
+  const [currentRow, currentRowPath] = Editor.parent(editor, currentCellPath);
+
+  if (!isOfElementType<TableRowElementType>(currentRow, TableContentEnum.TR)) {
+    return undefined;
+  }
+
+  return [currentRow, currentRowPath];
 };
 
 export const getNextRow = (
