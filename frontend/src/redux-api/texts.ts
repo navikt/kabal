@@ -2,7 +2,14 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { VERSION } from '../components/rich-text/version';
 import { queryStringify } from '../functions/query-string';
 import { VersionedText } from '../types/rich-text/versions';
-import { IGetTextsParams, INewTextParams, IText, IUpdateText, IUpdateTextPropertyParams } from '../types/texts/texts';
+import {
+  IGetTextsParams,
+  INewTextParams,
+  IText,
+  IUpdateText,
+  IUpdateTextParams,
+  IUpdateTextPropertyParams,
+} from '../types/texts/texts';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from './common';
 
 const versionGuard = (t: VersionedText): t is IText => t.version === VERSION;
@@ -40,6 +47,34 @@ export const textsApi = createApi({
         const { data } = await queryFulfilled;
         dispatch(textsApi.util.updateQueryData('getTexts', query, (draft) => [...draft, data]));
         dispatch(textsApi.util.updateQueryData('getTextById', data.id, () => data));
+      },
+    }),
+    updateText: builder.mutation<IText, IUpdateTextParams>({
+      query: ({ text }) => ({
+        method: 'PUT',
+        url: `/texts/${text.id}`,
+        body: text,
+      }),
+      onQueryStarted: async ({ text, query }, { queryFulfilled, dispatch }) => {
+        const idPatchResult = dispatch(textsApi.util.updateQueryData('getTextById', text.id, () => text));
+        const queryPatchResult = dispatch(
+          textsApi.util.updateQueryData('getTexts', query, (draft) => draft.map((t) => (t.id === text.id ? text : t)))
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+          const { modified } = data;
+
+          dispatch(textsApi.util.updateQueryData('getTextById', text.id, (t) => ({ ...t, modified })));
+          dispatch(
+            textsApi.util.updateQueryData('getTexts', query, (draft) =>
+              draft.map((t) => (t.id === text.id ? { ...t, modified } : t))
+            )
+          );
+        } catch {
+          idPatchResult.undo();
+          queryPatchResult.undo();
+        }
       },
     }),
     updateTextProperty: builder.mutation<IText, IUpdateTextPropertyParams>({
@@ -136,7 +171,8 @@ export const {
   useLazyGetTextsQuery,
   useAddTextMutation,
   useDeleteTextMutation,
-  useUpdateTextPropertyMutation,
+  // useUpdateTextPropertyMutation,
   useLazyMigrateGetAllTextsQuery,
   useMigrateUpdateTextsMutation,
+  useUpdateTextMutation,
 } = textsApi;

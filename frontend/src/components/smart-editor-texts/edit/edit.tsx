@@ -1,14 +1,14 @@
-import { TextField } from '@navikt/ds-react';
-import React, { Fragment, useCallback } from 'react';
+import { SuccessStroke } from '@navikt/ds-icons';
+import { Button, TextField } from '@navikt/ds-react';
+import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
-import { useDebounced } from '../../../hooks/use-debounce';
 import {
   useEnhetNameFromId,
   useFullYtelseNameFromId,
   useRegistreringshjemmelFromId,
 } from '../../../hooks/use-kodeverk-ids';
 import { useUtfallName } from '../../../hooks/use-utfall-name';
-import { useUpdateTextPropertyMutation } from '../../../redux-api/texts';
+import { useUpdateTextMutation } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { IText, IUpdateTextPropertyParams, TextTypes } from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
@@ -28,25 +28,19 @@ type Value = IUpdateTextPropertyParams['value'];
 type Key = IUpdateTextPropertyParams['key'];
 
 export const EditSmartEditorText = (savedText: IText) => {
-  const [update, { isLoading, isUninitialized }] = useUpdateTextPropertyMutation({ fixedCacheKey: savedText.id });
+  const [update, { isLoading, isUninitialized }] = useUpdateTextMutation({ fixedCacheKey: savedText.id });
   const query = useTextQuery();
+  const [text, setText] = useState<IText>(savedText);
 
-  const { id, modified, created, hjemler, ytelser, utfall, enheter, sections, templates, textType } = savedText;
+  const { id, modified, created, hjemler, ytelser, utfall, enheter, sections, templates, textType, title } = text;
 
-  const [title, setTitle] = useDebounced(
-    savedText.title,
-    useCallback((value) => update({ key: 'title', value, query, id }), [query, update, id]),
-    500
-  );
+  const updateUnsavedText = (value: Value, key: Key) => setText({ ...text, [key]: value });
 
-  const immediateUpdate = useCallback(
-    (value: Value, key: Key) => update({ key, value, query, id }),
-    [query, update, id]
-  );
+  const save = () => update({ text, query });
 
   const sectionSelect =
     textType === TextTypes.HEADER || textType === TextTypes.FOOTER ? null : (
-      <SectionSelect selected={sections} onChange={(value) => immediateUpdate(value, 'sections')}>
+      <SectionSelect selected={sections} onChange={(value) => updateUnsavedText(value, 'sections')}>
         Seksjoner
       </SectionSelect>
     );
@@ -54,7 +48,12 @@ export const EditSmartEditorText = (savedText: IText) => {
   return (
     <Fragment key={id}>
       <Header>
-        <TextField label="Tittel" size="small" value={title} onChange={(event) => setTitle(event.target.value)} />
+        <TextField
+          label="Tittel"
+          size="small"
+          value={title}
+          onChange={({ target }) => updateUnsavedText(target.value, 'title')}
+        />
 
         <LineContainer>
           <strong>Sist endret:</strong>
@@ -65,7 +64,7 @@ export const EditSmartEditorText = (savedText: IText) => {
         <LineContainer>
           <TemplateSelect
             selected={templates.filter((t): t is TemplateIdEnum => t !== NoTemplateIdEnum.NONE)}
-            onChange={(value) => immediateUpdate(value, 'templates')}
+            onChange={(value) => updateUnsavedText(value, 'templates')}
           >
             Maler
           </TemplateSelect>
@@ -73,20 +72,20 @@ export const EditSmartEditorText = (savedText: IText) => {
 
           <FilterDivider />
 
-          <HjemlerSelect selected={hjemler} onChange={(value: Value) => immediateUpdate(value, 'hjemler')} />
+          <HjemlerSelect selected={hjemler} onChange={(value: Value) => updateUnsavedText(value, 'hjemler')} />
 
-          <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={immediateUpdate}>
+          <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={updateUnsavedText}>
             Ytelser
           </KodeverkSelect>
 
-          <UtfallSelect selected={utfall} onChange={(value) => immediateUpdate(value, 'utfall')}>
+          <UtfallSelect selected={utfall} onChange={(value) => updateUnsavedText(value, 'utfall')}>
             Utfall
           </UtfallSelect>
 
           <KodeverkSelect
             kodeverkKey="klageenheter"
             selected={enheter}
-            onChange={(value: Value) => immediateUpdate(value, 'enheter')}
+            onChange={(value: Value) => updateUnsavedText(value, 'enheter')}
           >
             Enheter
           </KodeverkSelect>
@@ -110,19 +109,51 @@ export const EditSmartEditorText = (savedText: IText) => {
           <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
         </TagContainer>
       </Header>
-      <Editor {...savedText} />
-      <DeleteTextButton id={id} />
+      <Editor text={text} update={updateUnsavedText} />
+
+      <Buttons>
+        <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small">
+          Lagre
+        </Button>
+        <DeleteTextButton id={id} />
+      </Buttons>
     </Fragment>
   );
 };
 
-const Editor = (text: IText) => {
+interface EditorProps {
+  text: IText;
+  update: (value: Value, key: Key) => void;
+}
+
+const Editor = ({ text, update }: EditorProps) => {
   if (text.textType === TextTypes.HEADER || text.textType === TextTypes.FOOTER) {
-    return <HeaderFooterEditor key={text.id} textId={text.id} savedPlainText={text.plainText} type={text.textType} />;
+    return (
+      <HeaderFooterEditor
+        key={text.id}
+        textId={text.id}
+        savedPlainText={text.plainText}
+        type={text.textType}
+        setContent={(content) => update(content, 'plainText')}
+      />
+    );
   }
 
-  return <RichTextEditor key={text.id} textId={text.id} savedContent={text.content} />;
+  return (
+    <RichTextEditor
+      key={text.id}
+      textId={text.id}
+      savedContent={text.content}
+      setContent={(content) => update(content, 'content')}
+    />
+  );
 };
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+`;
 
 const Header = styled.div`
   display: flex;
