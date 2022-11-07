@@ -13,7 +13,7 @@ import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { mergeCells, splitCell } from '../../functions/table/cells';
-import { insertColumn } from '../../functions/table/insert-column';
+import { insertColumnLeft, insertColumnRight } from '../../functions/table/insert-column';
 import { removeColumn } from '../../functions/table/remove-column';
 import { insertRowAbove, insertRowBelow, removeRow } from '../../functions/table/rows';
 import { TableTypeEnum } from '../../types/editor-enums';
@@ -60,10 +60,16 @@ export const Menu = ({ show, close, x, y, element }: MenuProps) => {
         Legg til rad under
       </MenuButton>
       <MenuButton
-        onClick={() => onClick(() => insertColumn(editor, element))}
+        onClick={() => onClick(() => insertColumnRight(editor, element))}
         icon={<TableInsertColumn width={16} aria-hidden />}
       >
         Legg til kolonne til høyre
+      </MenuButton>
+      <MenuButton
+        onClick={() => onClick(() => insertColumnLeft(editor, element))}
+        icon={<TableInsertColumn width={16} aria-hidden />}
+      >
+        Legg til kolonne til venstre
       </MenuButton>
       <MenuButton
         onClick={() => onClick(() => removeRow(editor, element))}

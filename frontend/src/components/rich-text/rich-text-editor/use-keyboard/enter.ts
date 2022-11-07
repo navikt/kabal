@@ -2,7 +2,7 @@ import { Editor, Transforms } from 'slate';
 import { createNewParagraph, getSelectedListTypes, isBlockActive } from '../../functions/blocks';
 import { containsVoid } from '../../functions/contains-void';
 import { insertPageBreak } from '../../functions/insert-page-break';
-import { insertColumn } from '../../functions/table/insert-column';
+import { insertColumnRight } from '../../functions/table/insert-column';
 import { insertRowBelow } from '../../functions/table/rows';
 import {
   ContentTypeEnum,
@@ -41,7 +41,7 @@ export const enter: HandlerFn = ({ editor, event }) => {
     const [cell, path] = cellEntry;
 
     const selection =
-      event.ctrlKey || event.metaKey ? insertColumn(editor, cell, path) : insertRowBelow(editor, cell, path);
+      event.ctrlKey || event.metaKey ? insertColumnRight(editor, cell, path) : insertRowBelow(editor, cell, path);
     Transforms.select(editor, selection);
 
     return;
