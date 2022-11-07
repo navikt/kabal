@@ -79,3 +79,8 @@ export interface IText extends INewTextParams {
   modified: string; // Datetime
   created: string; // Datetime
 }
+
+export interface IUpdateTextParams {
+  text: IText;
+  query: IGetTextsParams;
+}

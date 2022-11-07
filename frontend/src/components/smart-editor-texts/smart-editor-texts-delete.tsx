@@ -1,7 +1,6 @@
 import { Close, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useDeleteTextMutation } from '../../redux-api/texts';
 import { useTextNavigate } from './hooks/use-text-navigate';
 import { useTextQuery } from './hooks/use-text-query';
@@ -16,7 +15,7 @@ export const DeleteTextButton = ({ id }: Props) => {
 
   if (isOpen) {
     return (
-      <Container>
+      <>
         <Button
           size="small"
           variant="secondary"
@@ -27,16 +26,14 @@ export const DeleteTextButton = ({ id }: Props) => {
           Avbryt
         </Button>
         <ConfirmDeleleTextButton id={id} />
-      </Container>
+      </>
     );
   }
 
   return (
-    <Container>
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<Delete aria-hidden />}>
-        Slett
-      </Button>
-    </Container>
+    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<Delete aria-hidden />}>
+      Slett
+    </Button>
   );
 };
 
@@ -56,10 +53,3 @@ const ConfirmDeleleTextButton = ({ id }: Props) => {
     </Button>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  padding: 16px;
-`;
