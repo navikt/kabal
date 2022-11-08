@@ -2,32 +2,42 @@ import { Editor, Path, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { TableContentEnum } from '../../types/editor-enums';
 import { isOfElementType, isOfElementTypeFn } from '../../types/editor-type-guards';
-import { TableRowElementType } from '../../types/editor-types';
+import { TableCellElementType, TableRowElementType } from '../../types/editor-types';
+import { getCurrentRow } from './helpers';
 import { TableFn } from './types';
 
-export const mergeCells: TableFn = (editor, element) => {
-  const cellPath = ReactEditor.findPath(editor, element);
-  const [row] = Editor.parent(editor, cellPath);
+export const mergeCells: TableFn = (editor, cellNode, cellPath = ReactEditor.findPath(editor, cellNode)) => {
+  const rowEntry = getCurrentRow(editor, cellNode, cellPath);
+
+  if (rowEntry === undefined) {
+    return cellPath;
+  }
+
+  const [row] = rowEntry;
 
   if (!isOfElementType<TableRowElementType>(row, TableContentEnum.TR)) {
     return cellPath;
   }
 
   // If it is the last cell in the row, do nothing.
-  if (element === row.children[row.children.length - 1]) {
+  if (cellNode === row.children[row.children.length - 1]) {
     return cellPath;
   }
 
-  const nextPath = Path.next(cellPath);
-  const nextCell = row.children[row.children.indexOf(element) + 1];
+  const nextEntry = Editor.next(editor, {
+    at: cellPath,
+    match: isOfElementTypeFn<TableCellElementType>(TableContentEnum.TD),
+  });
 
-  if (nextCell === undefined) {
+  if (nextEntry === undefined) {
     return cellPath;
   }
+
+  const [nextCell, nextPath] = nextEntry;
 
   Editor.withoutNormalizing(editor, () => {
     Transforms.mergeNodes(editor, { at: nextPath });
-    Transforms.setNodes(editor, { colSpan: element.colSpan + nextCell.colSpan }, { at: cellPath });
+    Transforms.setNodes(editor, { colSpan: cellNode.colSpan + nextCell.colSpan }, { at: cellPath });
   });
 
   return cellPath;
