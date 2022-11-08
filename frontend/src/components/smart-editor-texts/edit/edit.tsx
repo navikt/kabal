@@ -14,8 +14,8 @@ import {
   IText,
   IUpdatePlainTextProperty,
   IUpdateRichTextProperty,
-  PlainTextTypes,
   isPlainText,
+  isPlainTextType,
 } from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
@@ -34,7 +34,9 @@ type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
 
 export const EditSmartEditorText = (savedText: IText) => {
-  const [update, { isLoading, isUninitialized }] = useUpdateTextMutation({ fixedCacheKey: savedText.id });
+  const [update, { isLoading, isSuccess, isError }] = useUpdateTextMutation({
+    fixedCacheKey: savedText.id,
+  });
   const query = useTextQuery();
   const [text, setText] = useState<IText>(savedText);
 
@@ -44,16 +46,22 @@ export const EditSmartEditorText = (savedText: IText) => {
 
   const save = () => update({ text, query });
 
-  const sectionSelect =
-    textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER ? null : (
-      <SectionSelect selected={sections} onChange={(value) => updateUnsavedText(value, 'sections')}>
-        Seksjoner
-      </SectionSelect>
-    );
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 's' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      save();
+    }
+  };
+
+  const sectionSelect = isPlainTextType(textType) ? null : (
+    <SectionSelect selected={sections} onChange={(value) => updateUnsavedText(value, 'sections')}>
+      Seksjoner
+    </SectionSelect>
+  );
 
   return (
     <Fragment key={id}>
-      <Header>
+      <Header onKeyDown={onKeyDown}>
         <TextField
           label="Tittel"
           size="small"
@@ -64,7 +72,7 @@ export const EditSmartEditorText = (savedText: IText) => {
         <LineContainer>
           <strong>Sist endret:</strong>
           <DateTime modified={modified} created={created} />
-          <SavedStatus isSaved={!isLoading || isUninitialized} />
+          <SavedStatus isError={isError} isSuccess={isSuccess} isLoading={isLoading} />
         </LineContainer>
 
         <LineContainer>
@@ -74,6 +82,7 @@ export const EditSmartEditorText = (savedText: IText) => {
           >
             Maler
           </TemplateSelect>
+
           {sectionSelect}
 
           <FilterDivider />
@@ -115,11 +124,11 @@ export const EditSmartEditorText = (savedText: IText) => {
           <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
         </TagContainer>
       </Header>
-      <Editor text={text} update={updateUnsavedText} />
+      <Editor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
 
-      <Buttons>
-        <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small">
-          Lagre
+      <Buttons onKeyDown={onKeyDown}>
+        <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small" loading={isLoading}>
+          Lagre og publisér
         </Button>
         <DeleteTextButton id={id} />
       </Buttons>
@@ -130,9 +139,10 @@ export const EditSmartEditorText = (savedText: IText) => {
 interface EditorProps {
   text: IText;
   update: (value: Value, key: Key) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
 }
 
-const Editor = ({ text, update }: EditorProps) => {
+const Editor = ({ text, update, onKeyDown }: EditorProps) => {
   if (isPlainText(text)) {
     return (
       <HeaderFooterEditor
@@ -141,6 +151,7 @@ const Editor = ({ text, update }: EditorProps) => {
         savedPlainText={text.plainText}
         type={text.textType}
         setContent={(content) => update(content, 'plainText')}
+        onKeyDown={onKeyDown}
       />
     );
   }
@@ -151,6 +162,7 @@ const Editor = ({ text, update }: EditorProps) => {
       textId={text.id}
       savedContent={text.content}
       setContent={(content) => update(content, 'content')}
+      onKeyDown={onKeyDown}
     />
   );
 };
