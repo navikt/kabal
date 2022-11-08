@@ -5,14 +5,16 @@ import { VersionedText } from '../types/rich-text/versions';
 import {
   IGetTextsParams,
   INewTextParams,
+  IRichText,
   IText,
+  IUpdatePlainTextPropertyParams,
+  IUpdateRichTextPropertyParams,
   IUpdateText,
   IUpdateTextParams,
-  IUpdateTextPropertyParams,
 } from '../types/texts/texts';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from './common';
 
-const versionGuard = (t: VersionedText): t is IText => t.version === VERSION;
+const versionGuard = (t: VersionedText): t is IRichText => t.version === VERSION;
 
 const transformResponse = (t: VersionedText): IText => {
   if (!versionGuard(t)) {
@@ -77,7 +79,7 @@ export const textsApi = createApi({
         }
       },
     }),
-    updateTextProperty: builder.mutation<IText, IUpdateTextPropertyParams>({
+    updateTextProperty: builder.mutation<IText, IUpdatePlainTextPropertyParams | IUpdateRichTextPropertyParams>({
       query: ({ id, key, value }) => {
         const url = `/texts/${id}/${key.toLowerCase()}`;
 

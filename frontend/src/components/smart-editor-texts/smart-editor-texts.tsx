@@ -3,10 +3,10 @@ import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useAddTextMutation } from '../../redux-api/texts';
-import { TextTypes } from '../../types/texts/texts';
+import { TextTypes, isPlainTextType } from '../../types/texts/texts';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
-import { getNewText } from './functions/new-text';
+import { getNewPlainText, getNewRichText } from './functions/new-text';
 import { useTextNavigate } from './hooks/use-text-navigate';
 
 interface Props {
@@ -18,7 +18,8 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   const [addText, { isLoading }] = useAddTextMutation();
 
   const onClick = async () => {
-    const { id } = await addText({ text: getNewText(textType), query: { textType } }).unwrap();
+    const text = isPlainTextType(textType) ? getNewPlainText(textType) : getNewRichText(textType);
+    const { id } = await addText({ text, query: { textType } }).unwrap();
     navigate(id);
   };
 

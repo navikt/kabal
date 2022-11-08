@@ -10,7 +10,13 @@ import {
 import { useUtfallName } from '../../../hooks/use-utfall-name';
 import { useUpdateTextMutation } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { IText, IUpdateTextPropertyParams, TextTypes } from '../../../types/texts/texts';
+import {
+  IText,
+  IUpdatePlainTextProperty,
+  IUpdateRichTextProperty,
+  PlainTextTypes,
+  isPlainText,
+} from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { TEMPLATES } from '../../smart-editor/templates/templates';
@@ -24,8 +30,8 @@ import { FilterDivider } from '../styled-components';
 import { HeaderFooterEditor } from './header-footer';
 import { RichTextEditor } from './rich-text';
 
-type Value = IUpdateTextPropertyParams['value'];
-type Key = IUpdateTextPropertyParams['key'];
+type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
+type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
 
 export const EditSmartEditorText = (savedText: IText) => {
   const [update, { isLoading, isUninitialized }] = useUpdateTextMutation({ fixedCacheKey: savedText.id });
@@ -39,7 +45,7 @@ export const EditSmartEditorText = (savedText: IText) => {
   const save = () => update({ text, query });
 
   const sectionSelect =
-    textType === TextTypes.HEADER || textType === TextTypes.FOOTER ? null : (
+    textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER ? null : (
       <SectionSelect selected={sections} onChange={(value) => updateUnsavedText(value, 'sections')}>
         Seksjoner
       </SectionSelect>
@@ -127,7 +133,7 @@ interface EditorProps {
 }
 
 const Editor = ({ text, update }: EditorProps) => {
-  if (text.textType === TextTypes.HEADER || text.textType === TextTypes.FOOTER) {
+  if (isPlainText(text)) {
     return (
       <HeaderFooterEditor
         key={text.id}

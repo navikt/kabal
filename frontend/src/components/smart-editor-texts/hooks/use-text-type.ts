@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router';
-import { TextTypes } from '../../../types/texts/texts';
+import { PlainTextTypes, RichTextTypes, TextTypes } from '../../../types/texts/texts';
 
 export const useTextType = (): TextTypes | undefined => {
   const maltekstMatch = useMatch({ path: '/maltekster', end: false });
@@ -12,27 +12,27 @@ export const useTextType = (): TextTypes | undefined => {
 
   return useMemo(() => {
     if (maltekstMatch !== null) {
-      return TextTypes.MALTEKST;
+      return RichTextTypes.MALTEKST;
     }
 
     if (redigerbarMaltekstMatch !== null) {
-      return TextTypes.REDIGERBAR_MALTEKST;
+      return RichTextTypes.REDIGERBAR_MALTEKST;
     }
 
     if (godeFormuleringerMatch !== null) {
-      return TextTypes.GOD_FORMULERING;
+      return RichTextTypes.GOD_FORMULERING;
     }
 
     if (regelverkMatch !== null) {
-      return TextTypes.REGELVERK;
+      return RichTextTypes.REGELVERK;
     }
 
     if (topptekstMatch !== null) {
-      return TextTypes.HEADER;
+      return PlainTextTypes.HEADER;
     }
 
     if (bunntekstMatch !== null) {
-      return TextTypes.FOOTER;
+      return PlainTextTypes.FOOTER;
     }
 
     return undefined;

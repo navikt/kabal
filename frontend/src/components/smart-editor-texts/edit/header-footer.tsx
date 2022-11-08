@@ -1,9 +1,9 @@
 import { Textarea } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { TextTypes } from '../../../types/texts/texts';
+import { PlainTextTypes } from '../../../types/texts/texts';
 
-type HeaderFooter = TextTypes.HEADER | TextTypes.FOOTER;
+type HeaderFooter = PlainTextTypes.HEADER | PlainTextTypes.FOOTER;
 
 interface Props {
   textId: string;
@@ -23,7 +23,8 @@ export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent }:
   />
 );
 
-const getLabel = (type: TextTypes.HEADER | TextTypes.FOOTER) => (type === TextTypes.HEADER ? 'Topptekst' : 'Bunntekst');
+const getLabel = (type: PlainTextTypes.HEADER | PlainTextTypes.FOOTER) =>
+  type === PlainTextTypes.HEADER ? 'Topptekst' : 'Bunntekst';
 
 const StyledTextarea = styled(Textarea)`
   margin: 16px;

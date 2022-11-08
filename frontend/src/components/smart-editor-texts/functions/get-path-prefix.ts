@@ -1,18 +1,18 @@
-import { TextTypes } from '../../../types/texts/texts';
+import { PlainTextTypes, RichTextTypes, TextTypes } from '../../../types/texts/texts';
 
 export const getPathPrefix = (textType: TextTypes): string => {
   switch (textType) {
-    case TextTypes.MALTEKST:
+    case RichTextTypes.MALTEKST:
       return '/maltekster';
-    case TextTypes.REDIGERBAR_MALTEKST:
+    case RichTextTypes.REDIGERBAR_MALTEKST:
       return '/redigerbare-maltekster';
-    case TextTypes.GOD_FORMULERING:
+    case RichTextTypes.GOD_FORMULERING:
       return '/gode-formuleringer';
-    case TextTypes.REGELVERK:
+    case RichTextTypes.REGELVERK:
       return '/regelverk';
-    case TextTypes.HEADER:
+    case PlainTextTypes.HEADER:
       return '/topptekster';
-    case TextTypes.FOOTER:
+    case PlainTextTypes.FOOTER:
       return '/bunntekster';
   }
 };
