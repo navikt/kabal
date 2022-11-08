@@ -10,9 +10,10 @@ interface Props {
   textId: string;
   savedContent: Descendant[];
   setContent: (content: Descendant[]) => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export const RichTextEditor = ({ textId, savedContent, setContent }: Props) => (
+export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: Props) => (
   <ErrorBoundary
     errorComponent={() => <ErrorComponent textId={textId} />}
     actionButton={{
@@ -30,6 +31,7 @@ export const RichTextEditor = ({ textId, savedContent, setContent }: Props) => (
       savedContent={savedContent}
       onChange={setContent}
       canEdit
+      onKeyDown={onKeyDown}
     />
   </ErrorBoundary>
 );

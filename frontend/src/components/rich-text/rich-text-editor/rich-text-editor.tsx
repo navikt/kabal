@@ -20,6 +20,7 @@ interface RichTextElementProps extends SmartEditorButtonsProps {
   className?: string;
   focusedThreadId?: string | null;
   onSelect?: (selection: Selection) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
 }
 
 export const RichTextEditorElement = React.memo(
@@ -34,6 +35,7 @@ export const RichTextEditorElement = React.memo(
     className,
     focusedThreadId,
     onSelect,
+    onKeyDown,
   }: RichTextElementProps) => {
     const editor = useMemo(() => withEditableVoids(withHistory(withNormalization(withReact(createEditor())))), []);
     const keyboard = useKeyboard(editor);
@@ -109,7 +111,7 @@ export const RichTextEditorElement = React.memo(
           }
         }}
       >
-        <EditorContainer ref={containerRef} className={className}>
+        <EditorContainer ref={containerRef} className={className} onKeyDown={onKeyDown}>
           <Toolbar
             visible
             showAnnotationsButton={showAnnotationsButton}

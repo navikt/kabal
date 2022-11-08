@@ -1,27 +1,25 @@
-import { SaveFile, Success } from '@navikt/ds-icons';
+import { ErrorColored, SuccessColored } from '@navikt/ds-icons';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
 
 interface Props {
-  isSaved: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  isLoading: boolean;
 }
 
-export const SavedStatus = ({ isSaved }: Props) =>
-  isSaved ? (
-    <StyledSuccess title="Lagret!" />
-  ) : (
-    <TextContainer>
-      <SaveFile />
-      Lagrer...
-    </TextContainer>
-  );
+export const SavedStatus = ({ isLoading, isSuccess, isError }: Props) => {
+  if (isLoading) {
+    return <Loader size="xsmall" title="Lagrer..." />;
+  }
 
-const StyledSuccess = styled(Success)`
-  color: var(--navds-global-color-green-600);
-`;
+  if (isSuccess) {
+    return <SuccessColored title="Lagret!" />;
+  }
 
-const TextContainer = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
+  if (isError) {
+    return <ErrorColored title="Feil ved lagring" />;
+  }
+
+  return null;
+};

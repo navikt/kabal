@@ -10,9 +10,10 @@ interface Props {
   savedPlainText?: string;
   type: HeaderFooter;
   setContent: (content: string) => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
 }
 
-export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent }: Props) => (
+export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent, onKeyDown }: Props) => (
   <StyledTextarea
     minRows={4}
     label={getLabel(type)}
@@ -20,6 +21,7 @@ export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent }:
     id={textId}
     value={savedPlainText}
     onChange={({ target }) => setContent(target.value)}
+    onKeyDown={onKeyDown}
   />
 );
 
