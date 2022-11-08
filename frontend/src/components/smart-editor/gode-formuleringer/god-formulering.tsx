@@ -3,12 +3,12 @@ import { Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from 'slate';
 import styled from 'styled-components';
-import { IText } from '../../../types/texts/texts';
+import { IRichText } from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { renderElement } from '../../rich-text/slate-elements/maltekst/render';
 import { AddButton } from './add-button';
 
-interface Props extends IText {
+interface Props extends IRichText {
   editor: Editor;
   isFocused: boolean;
   onClick: () => void;

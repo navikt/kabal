@@ -1,14 +1,14 @@
 import { Descendant } from 'slate';
 import { RichText_V1 } from '../../../types/rich-text/v1';
 import { RichText_V2 } from '../../../types/rich-text/v2';
-import { IText, TemplateSections } from '../../../types/texts/texts';
+import { IRichText, TemplateSections } from '../../../types/texts/texts';
 import { UndeletableContentEnum } from '../types/editor-enums';
 import { MaltekstElementType } from '../types/editor-types';
 
 interface MaltekstV1 {
   type: UndeletableContentEnum.MALTEKST;
   section: TemplateSections;
-  content: IText[];
+  content: IRichText[];
 }
 
 export const migrateFromV1ToV2 = (response: RichText_V1): RichText_V2 => ({

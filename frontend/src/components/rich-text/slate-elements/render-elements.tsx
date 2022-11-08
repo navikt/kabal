@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextTypes } from '../../../types/texts/texts';
+import { RichTextTypes } from '../../../types/texts/texts';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';
@@ -77,10 +77,10 @@ export const renderElement = (props: RenderElementProps) => {
       return <MaltekstElement {...props} element={props.element} />;
     case RedigerbarMaltekstEnum.REDIGERBAR_MALTEKST:
       return (
-        <RedigerbareMalteksterElement {...props} element={props.element} textType={TextTypes.REDIGERBAR_MALTEKST} />
+        <RedigerbareMalteksterElement {...props} element={props.element} textType={RichTextTypes.REDIGERBAR_MALTEKST} />
       );
     case RedigerbarMaltekstEnum.REGELVERKTEKST:
-      return <RedigerbareMalteksterElement {...props} element={props.element} textType={TextTypes.REGELVERK} />;
+      return <RedigerbareMalteksterElement {...props} element={props.element} textType={RichTextTypes.REGELVERK} />;
     case UndeletableVoidElementsEnum.LABEL_CONTENT:
       return <LabelElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.DOCUMENT_LIST:

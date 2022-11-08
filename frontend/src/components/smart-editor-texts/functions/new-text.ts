@@ -1,8 +1,14 @@
-import { INewTextParams, TextTypes } from '../../../types/texts/texts';
+import {
+  INewPlainTextParams,
+  INewRichTextParams,
+  ITextBaseMetadata,
+  PlainTextTypes,
+  RichTextTypes,
+} from '../../../types/texts/texts';
 import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
 import { VERSION } from '../../rich-text/version';
 
-const NEW_TEXT: INewTextParams['content'] = [
+const NEW_TEXT: INewRichTextParams['content'] = [
   {
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
@@ -10,10 +16,7 @@ const NEW_TEXT: INewTextParams['content'] = [
   },
 ];
 
-export const getNewText = (textType: TextTypes): INewTextParams => ({
-  textType,
-  content: NEW_TEXT,
-  plainText: '',
+const getMetadata = (): ITextBaseMetadata => ({
   hjemler: [],
   enheter: [],
   ytelser: [],
@@ -21,5 +24,18 @@ export const getNewText = (textType: TextTypes): INewTextParams => ({
   sections: [],
   templates: [],
   title: '',
+});
+
+export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({
+  content: NEW_TEXT,
   version: VERSION,
+  textType,
+  ...getMetadata(),
+});
+
+export const getNewPlainText = (textType: PlainTextTypes): INewPlainTextParams => ({
+  plainText: '',
+  version: VERSION,
+  textType,
+  ...getMetadata(),
 });

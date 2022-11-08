@@ -5,8 +5,9 @@ import { Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
+import { isNotNull } from '../../../functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '../../../redux-api/texts';
-import { ApiQuery, IText, TextTypes } from '../../../types/texts/texts';
+import { ApiQuery, IPlainText, PlainTextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../smart-editor/hooks/use-query';
 import { ShowTags } from '../slate-elements/maltekst/show-tags';
@@ -21,10 +22,10 @@ export const HeaderFooterElement = ({ element, attributes, children }: RenderEle
   const { templateId } = useContext(SmartEditorContext);
   const isSelected = useSelected();
 
-  const textType = element.type === UndeletableVoidElementsEnum.HEADER ? TextTypes.HEADER : TextTypes.FOOTER;
+  const textType = element.type === UndeletableVoidElementsEnum.HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
   const query = useQuery({ textType, templateId: templateId ?? undefined });
-  const [text, setText] = useState<IText>();
+  const [text, setText] = useState<IPlainText>();
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetTextsQuery();
 
@@ -37,7 +38,9 @@ export const HeaderFooterElement = ({ element, attributes, children }: RenderEle
       }
 
       try {
-        const content = await getTexts(q).unwrap();
+        const content = (await getTexts(q).unwrap())
+          .map((t) => (t.textType !== PlainTextTypes.HEADER && t.textType !== PlainTextTypes.FOOTER ? null : t))
+          .filter(isNotNull);
 
         if (content.length === 0) {
           return;
@@ -48,7 +51,7 @@ export const HeaderFooterElement = ({ element, attributes, children }: RenderEle
         HistoryEditor.withoutSaving(editor, () => {
           Transforms.setNodes<ElementTypes>(
             editor,
-            { content: content[0]?.plainText ?? '' },
+            { content: content[0]?.plainText },
             { match: (n) => n === e, voids: true, at: [] }
           );
         });
@@ -84,7 +87,7 @@ const Container = styled.div<{ $isFocused: boolean }>`
 `;
 
 interface HeaderFooterContentProps {
-  text?: IText;
+  text?: IPlainText;
   query: ApiQuery | typeof skipToken;
   isLoading: boolean;
   type: UndeletableVoidElementsEnum.HEADER | UndeletableVoidElementsEnum.FOOTER;

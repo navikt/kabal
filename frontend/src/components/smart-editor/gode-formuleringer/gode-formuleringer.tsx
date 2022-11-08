@@ -2,10 +2,11 @@ import { Back, Law } from '@navikt/ds-icons';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import styled from 'styled-components';
+import { isNotNull } from '../../../functions/is-not-type-guards';
 import { stringToRegExp } from '../../../functions/string-to-regex';
 import { useGetTextsQuery } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { TextTypes } from '../../../types/texts/texts';
+import { IRichText, RichTextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
@@ -22,8 +23,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { showGodeFormuleringer, setShowGodeFormuleringer, editor } = useContext(SmartEditorContext);
-  const query = useQuery({ textType: TextTypes.GOD_FORMULERING, templateId });
-  const { data, isLoading } = useGetTextsQuery(query);
+  const query = useQuery({ textType: RichTextTypes.GOD_FORMULERING, templateId });
+  const { data = [], isLoading } = useGetTextsQuery(query);
 
   useEffect(() => {
     if (focused === -1 && containerRef.current !== null) {
@@ -31,10 +32,13 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
   }, [focused]);
 
-  const texts = useMemo(() => {
+  const texts: IRichText[] = useMemo(() => {
     const filterRegexp = stringToRegExp(filter);
 
-    return data?.filter(({ title }) => filterRegexp.test(title)) ?? [];
+    return data
+      .filter(({ title }) => filterRegexp.test(title))
+      .map((t) => (t.textType !== RichTextTypes.GOD_FORMULERING ? null : t))
+      .filter(isNotNull);
   }, [data, filter]);
 
   const onKeyDown = useCallback(

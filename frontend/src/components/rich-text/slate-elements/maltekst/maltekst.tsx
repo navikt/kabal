@@ -6,8 +6,9 @@ import { Descendant, Editor, Node, Path, Text, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
+import { isNotNull } from '../../../../functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '../../../../redux-api/texts';
-import { ApiQuery, TextTypes } from '../../../../types/texts/texts';
+import { ApiQuery, RichTextTypes } from '../../../../types/texts/texts';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
@@ -23,7 +24,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
   const editor = useSlateStatic();
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({
-    textType: TextTypes.MALTEKST,
+    textType: RichTextTypes.MALTEKST,
     requiredSection: element.section,
     templateId: templateId ?? undefined,
   });
@@ -36,7 +37,9 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
       }
 
       try {
-        const maltekster = await getTexts(q).unwrap();
+        const maltekster = (await getTexts(q).unwrap())
+          .map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null))
+          .filter(isNotNull);
 
         const [nodeEntry] = Editor.nodes(editor, { match: (n) => n === element, voids: false, at: [] });
 
