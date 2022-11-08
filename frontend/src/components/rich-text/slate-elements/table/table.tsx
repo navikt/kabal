@@ -1,17 +1,42 @@
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter } from '@styled-icons/fluentui-system-regular/TextAddSpaceAfter';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAddSpaceBefore';
-import React from 'react';
-import { Path, Transforms } from 'slate';
+import React, { useMemo } from 'react';
+import { Editor, Path, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
+import { UndeletableContentEnum } from '../../types/editor-enums';
+import { isOfElementType } from '../../types/editor-type-guards';
 import { TableElementType } from '../../types/editor-types';
 import { RenderElementProps } from '../render-props';
 import { BORDER_WIDTH } from './td';
 
-export const TableElement = ({ attributes, children, element }: RenderElementProps<TableElementType>) => {
+export const TableElement = ({ attributes, children, element }: RenderElementProps<TableElementType>) => (
+  <Container>
+    <TableTooltip element={element}>
+      <StyledTable {...attributes}>{children}</StyledTable>
+    </TableTooltip>
+  </Container>
+);
+
+interface TableTooltipProps {
+  children: React.ReactElement;
+  element: TableElementType;
+}
+
+const TableTooltip = ({ children, element }: TableTooltipProps) => {
   const editor = useSlateStatic();
+  const nonEditable = useMemo<boolean>(() => {
+    const path = ReactEditor.findPath(editor, element);
+    const [parentNode] = Editor.parent(editor, path);
+
+    return isOfElementType(parentNode, UndeletableContentEnum.MALTEKST);
+  }, [editor, element]);
+
+  if (nonEditable) {
+    return <>{children}</>;
+  }
 
   const addParagraphBelow = () => {
     const path = ReactEditor.findPath(editor, element);
@@ -29,9 +54,9 @@ export const TableElement = ({ attributes, children, element }: RenderElementPro
   };
 
   return (
-    <Container>
+    <>
       <Tooltip content="Høyreklikk for å endre tabellen" placement="top">
-        <StyledTable {...attributes}>{children}</StyledTable>
+        {children}
       </Tooltip>
       <StyledAboveButton
         contentEditable={false}
@@ -49,7 +74,7 @@ export const TableElement = ({ attributes, children, element }: RenderElementPro
         variant="tertiary"
         size="xsmall"
       />
-    </Container>
+    </>
   );
 };
 

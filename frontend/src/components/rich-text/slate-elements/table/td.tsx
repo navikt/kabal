@@ -1,23 +1,67 @@
-import React, { useState } from 'react';
-import { useSelected } from 'slate-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Editor } from 'slate';
+import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { TableCellElementType } from '../../types/editor-types';
+import { UndeletableContentEnum } from '../../types/editor-enums';
+import { isOfElementType } from '../../types/editor-type-guards';
+import { MaltekstElementType, TableCellElementType } from '../../types/editor-types';
 import { RenderElementProps } from '../render-props';
 import { Menu } from './menu';
 
-export const TableCellElement = ({ element, attributes, children }: RenderElementProps<TableCellElementType>) => {
+export const TableCellElement = (props: RenderElementProps<TableCellElementType>) => {
+  const editor = useSlateStatic();
+  const nonEditable = useMemo<boolean>(() => {
+    const path = ReactEditor.findPath(editor, props.element);
+    const [maltekstEntry] = Editor.nodes(editor, {
+      at: path,
+      match: (n) => isOfElementType<MaltekstElementType>(n, UndeletableContentEnum.MALTEKST),
+    });
+
+    return maltekstEntry !== undefined;
+  }, [editor, props.element]);
+
+  if (nonEditable) {
+    return <NonEditableTableCellElement {...props} />;
+  }
+
+  return <EditableTableCellElement {...props} />;
+};
+
+const NonEditableTableCellElement = ({ element, attributes, children }: RenderElementProps<TableCellElementType>) => (
+  <StyledTableCell
+    {...attributes}
+    colSpan={element.colSpan}
+    $isSelected={false}
+    onDragStart={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
+    onDrop={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
+    onPaste={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }}
+  >
+    <CellContent>{children}</CellContent>
+  </StyledTableCell>
+);
+
+const EditableTableCellElement = ({ element, attributes, children }: RenderElementProps<TableCellElementType>) => {
   const isSelected = useSelected();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [[x, y], setCoordinates] = useState<[number, number]>([0, 0]);
 
-  const onContextMenu = (e: React.MouseEvent) => {
+  const onContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsMenuOpen(true);
     const { left, top } = e.currentTarget.getBoundingClientRect();
     const xx = Math.round(e.clientX - left);
     const yy = Math.round(e.clientY - top);
     setCoordinates([xx, yy]);
-  };
+  }, []);
 
   const onClick = () => setIsMenuOpen(false);
 
@@ -28,11 +72,16 @@ export const TableCellElement = ({ element, attributes, children }: RenderElemen
       $isSelected={isSelected || isMenuOpen}
       onContextMenu={onContextMenu}
       onClick={onClick}
-      onDragStart={(e) => e.preventDefault()}
+      onDragStart={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
-      <CellContent onClick={onClick} $isSelected={isSelected || isMenuOpen}>
-        {children}
-      </CellContent>
+      <CellContent onClick={onClick}>{children}</CellContent>
       <Menu show={isMenuOpen} x={x} y={y} close={() => setIsMenuOpen(false)} element={element} />
     </StyledTableCell>
   );
@@ -63,7 +112,7 @@ const StyledTableCell = styled.td<{ $isSelected: boolean }>`
   }
 `;
 
-const CellContent = styled.div<{ $isSelected: boolean }>`
+const CellContent = styled.div`
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 8px;
