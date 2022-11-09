@@ -10,13 +10,7 @@ import {
 import { useUtfallName } from '../../../hooks/use-utfall-name';
 import { useUpdateTextMutation } from '../../../redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import {
-  IText,
-  IUpdatePlainTextProperty,
-  IUpdateRichTextProperty,
-  isPlainText,
-  isPlainTextType,
-} from '../../../types/texts/texts';
+import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '../../../types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { TEMPLATES } from '../../smart-editor/templates/templates';
@@ -27,8 +21,7 @@ import { SavedStatus } from '../saved-status';
 import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from '../select';
 import { DeleteTextButton } from '../smart-editor-texts-delete';
 import { FilterDivider } from '../styled-components';
-import { HeaderFooterEditor } from './header-footer';
-import { RichTextEditor } from './rich-text';
+import { ContentEditor } from './content-editor';
 
 type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
@@ -130,7 +123,7 @@ export const EditSmartEditorText = (savedText: IText) => {
           <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
         </TagContainer>
       </Header>
-      <Editor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
+      <ContentEditor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
 
       <Buttons onKeyDown={onKeyDown}>
         <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small" loading={isLoading}>
@@ -139,37 +132,6 @@ export const EditSmartEditorText = (savedText: IText) => {
         <DeleteTextButton id={id} />
       </Buttons>
     </Fragment>
-  );
-};
-
-interface EditorProps {
-  text: IText;
-  update: (value: Value, key: Key) => void;
-  onKeyDown: (e: React.KeyboardEvent) => void;
-}
-
-const Editor = ({ text, update, onKeyDown }: EditorProps) => {
-  if (isPlainText(text)) {
-    return (
-      <HeaderFooterEditor
-        key={text.id}
-        textId={text.id}
-        savedPlainText={text.plainText}
-        type={text.textType}
-        setContent={(content) => update(content, 'plainText')}
-        onKeyDown={onKeyDown}
-      />
-    );
-  }
-
-  return (
-    <RichTextEditor
-      key={text.id}
-      textId={text.id}
-      savedContent={text.content}
-      setContent={(content) => update(content, 'content')}
-      onKeyDown={onKeyDown}
-    />
   );
 };
 
