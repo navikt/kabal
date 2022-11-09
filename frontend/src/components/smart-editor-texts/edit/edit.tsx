@@ -1,6 +1,6 @@
 import { SuccessStroke } from '@navikt/ds-icons';
 import { Button, TextField } from '@navikt/ds-react';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   useEnhetNameFromId,
@@ -39,6 +39,12 @@ export const EditSmartEditorText = (savedText: IText) => {
   });
   const query = useTextQuery();
   const [text, setText] = useState<IText>(savedText);
+
+  useEffect(() => {
+    if (savedText.id !== text.id) {
+      setText(savedText);
+    }
+  }, [savedText, text.id]);
 
   const { id, modified, created, hjemler, ytelser, utfall, enheter, sections, templates, textType, title } = text;
 
