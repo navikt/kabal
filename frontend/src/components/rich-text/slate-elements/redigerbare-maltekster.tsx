@@ -4,7 +4,7 @@ import { Editor, Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import { isNotNull } from '../../../functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '../../../redux-api/texts';
-import { ApiQuery, RichTextTypes, TextTypes } from '../../../types/texts/texts';
+import { ApiQuery, RichTextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../smart-editor/templates/helpers';
@@ -15,7 +15,7 @@ export const RedigerbareMalteskterElement = ({
   element,
   children,
   textType,
-}: RenderElementProps<RedigerbareMalteksterElementType> & { textType: TextTypes }) => {
+}: RenderElementProps<RedigerbareMalteksterElementType> & { textType: RichTextTypes }) => {
   const editor = useSlateStatic();
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({
@@ -33,7 +33,7 @@ export const RedigerbareMalteskterElement = ({
 
       try {
         const redigerbareMaltekster = (await getTexts(q).unwrap())
-          .map((t) => (t.textType === RichTextTypes.REDIGERBAR_MALTEKST ? t : null))
+          .map((t) => (t.textType === textType ? t : null))
           .filter(isNotNull);
 
         const [nodeEntry] = Editor.nodes(editor, { match: (n) => n === e, voids: false, at: [] });
@@ -63,7 +63,7 @@ export const RedigerbareMalteskterElement = ({
 
       Transforms.removeNodes(editor, { match: (n) => n === e, voids: false, at: [] });
     },
-    [editor, getTexts]
+    [editor, getTexts, textType]
   );
 
   useEffect(() => {
