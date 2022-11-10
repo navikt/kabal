@@ -101,7 +101,7 @@ export const indentList = (editor: Editor) =>
           return;
         }
 
-        Transforms.wrapNodes(editor, { type: parentListNode.type, children: [] }, { at, match });
+        Transforms.wrapNodes(editor, { type: parentListNode.type, children: [], indent: 0 }, { at, match });
         Transforms.moveNodes(editor, { to: [...previousSiblingPath, 1], at: firstLiPath });
       });
   });

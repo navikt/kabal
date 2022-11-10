@@ -4,6 +4,7 @@ import { VersionedText } from '../../types/rich-text/versions';
 import { IUpdateText } from '../../types/texts/texts';
 import { migrateFromV0ToV1 } from '../rich-text/migrations/v0';
 import { migrateFromV1ToV2 } from '../rich-text/migrations/v1';
+import { migrateFromV2ToV3 } from '../rich-text/migrations/v2';
 import { VERSION } from '../rich-text/version';
 import { ApiHook } from './types';
 
@@ -37,20 +38,15 @@ const migrate = (text: VersionedText): RichText_Latest_Text => {
   }
 
   if (text.version === undefined || text.version === 0) {
-    return {
-      ...text,
-      ...migrateFromV1ToV2({
-        ...text,
-        ...migrateFromV0ToV1(text),
-      }),
-    };
+    return migrate({ ...text, ...migrateFromV0ToV1(text) });
   }
 
   if (text.version === 1) {
-    return {
-      ...text,
-      ...migrateFromV1ToV2(text),
-    };
+    return migrate({ ...text, ...migrateFromV1ToV2(text) });
+  }
+
+  if (text.version === 2) {
+    return migrate({ ...text, ...migrateFromV2ToV3(text) });
   }
 
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

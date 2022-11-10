@@ -1,14 +1,15 @@
 import styled, { css } from 'styled-components';
 import { TextAlignEnum } from '../types/editor-enums';
 import { getTextAlign } from './getTextAlign';
-import { AlignableStyleProps } from './types';
+import { AlignableStyleProps, IndentableStyleProps } from './types';
 
-export const ParagraphStyle = styled.p<AlignableStyleProps>`
+export const ParagraphStyle = styled.p<AlignableStyleProps & IndentableStyleProps>`
   font-size: 12pt;
   text-align: ${({ textAlign }) => getTextAlign(textAlign)};
   white-space: pre-wrap;
-  margin-top: 1em;
+  margin-top: 0;
   margin-bottom: 0;
+  padding-left: ${({ indent = 0 }) => indent * 24}pt;
 `;
 
 export const BlockQuoteStyle = styled.blockquote<AlignableStyleProps>`

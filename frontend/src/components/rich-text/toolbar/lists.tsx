@@ -39,7 +39,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
                 const [parent, at] = Editor.parent(editor, Path.parent(licPath));
 
                 if (isOfElementType<BulletListElementType>(parent, ListTypesEnum.BULLET_LIST)) {
-                  Transforms.setNodes(editor, { type: ListTypesEnum.NUMBERED_LIST }, { at });
+                  Transforms.setNodes(editor, { type: ListTypesEnum.NUMBERED_LIST, indent: 0 }, { at });
                 }
               }
 
@@ -61,7 +61,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
             }
 
             Transforms.setNodes(editor, { type: ListContentEnum.LIST_ITEM_CONTAINER });
-            Transforms.wrapNodes(editor, { type: ListTypesEnum.BULLET_LIST, children: [] });
+            Transforms.wrapNodes(editor, { type: ListTypesEnum.BULLET_LIST, children: [], indent: 0 });
             Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });
           });
         }}
@@ -105,7 +105,7 @@ export const Lists = ({ iconSize }: ListsProps) => {
             }
 
             Transforms.setNodes(editor, { type: ListContentEnum.LIST_ITEM_CONTAINER });
-            Transforms.wrapNodes(editor, { type: ListTypesEnum.NUMBERED_LIST, children: [] });
+            Transforms.wrapNodes(editor, { type: ListTypesEnum.NUMBERED_LIST, children: [], indent: 0 });
             Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });
           });
         }}

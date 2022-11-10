@@ -11,6 +11,9 @@ export const EditorContainer = styled.section`
 `;
 
 export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean; readOnly: boolean }>`
+  display: flex;
+  flex-direction: column;
+  row-gap: 12pt;
   min-height: 64px;
   width: 100%;
   position: relative;

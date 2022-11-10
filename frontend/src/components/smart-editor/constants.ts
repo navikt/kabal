@@ -22,3 +22,5 @@ export const FLETTEFELT_NAMES: Record<Flettefelt, string> = {
   [Flettefelt.FNR]: 'Fødselsnummer',
   [Flettefelt.ENHET_NAME]: 'Enhetsnavn',
 };
+
+export const MAX_INDENT = 15;

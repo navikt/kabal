@@ -79,11 +79,9 @@ const TableTooltip = ({ children, element }: TableTooltipProps) => {
 };
 
 const StyledTable = styled.table`
-  border-spacing: 1;
   border-collapse: collapse;
   max-width: 100%;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin: 0;
 `;
 
 const StyledAboveButton = styled(Button)`

@@ -5,7 +5,6 @@ import { VersionedText } from '../types/rich-text/versions';
 import {
   IGetTextsParams,
   INewTextParams,
-  IRichText,
   IText,
   IUpdatePlainTextPropertyParams,
   IUpdateRichTextPropertyParams,
@@ -14,7 +13,7 @@ import {
 } from '../types/texts/texts';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from './common';
 
-const versionGuard = (t: VersionedText): t is IRichText => t.version === VERSION;
+const versionGuard = (t: VersionedText): t is IText => t.version === VERSION;
 
 const transformResponse = (t: VersionedText): IText => {
   if (!versionGuard(t)) {

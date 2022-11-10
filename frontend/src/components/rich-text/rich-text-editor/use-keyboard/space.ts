@@ -77,7 +77,7 @@ const makeList = (
         at: Path.parent(focus.path),
       }
     );
-    Transforms.wrapNodes(editor, { type: listType, children: [] });
+    Transforms.wrapNodes(editor, { type: listType, children: [], indent: 0 });
     Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });
   });
 };

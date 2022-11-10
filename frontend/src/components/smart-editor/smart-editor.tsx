@@ -1,18 +1,16 @@
-import '../rich-text/types/slate-global-types';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Descendant } from 'slate';
 import styled from 'styled-components';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateSmartEditorMutation } from '../../redux-api/oppgaver/mutations/smart-editor';
 import { useGetSmartEditorQuery } from '../../redux-api/oppgaver/queries/smart-editor';
-import { useUser } from '../../simple-api-state/use-user';
 import { IDocumentParams } from '../../types/documents/common-params';
-import { MedunderskriverFlyt } from '../../types/kodeverk';
 import { RichTextEditorElement } from '../rich-text/rich-text-editor/rich-text-editor';
+import '../rich-text/types/slate-global-types';
 import { SmartEditorContext } from './context/smart-editor-context';
+import { useCanEditDocument } from './hooks/use-can-edit-document';
 
 export const SmartEditor = (): JSX.Element | null => {
   const oppgaveId = useOppgaveId();
@@ -77,24 +75,3 @@ const ElementsSection = styled.article`
     margin-top: 0;
   }
 `;
-
-const useCanEditDocument = (): boolean => {
-  const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
-  const { data: user, isLoading: userIsLoading } = useUser();
-
-  return useMemo<boolean>(() => {
-    if (oppgaveIsLoading || userIsLoading || oppgaveIsFetching) {
-      return false;
-    }
-
-    if (typeof oppgave === 'undefined' || typeof user === 'undefined' || oppgave.isAvsluttetAvSaksbehandler) {
-      return false;
-    }
-
-    if (oppgave.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-      return oppgave.medunderskriver?.navIdent === user.navIdent;
-    }
-
-    return oppgave.tildeltSaksbehandler?.navIdent === user.navIdent;
-  }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, user, userIsLoading]);
-};
