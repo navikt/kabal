@@ -72,14 +72,6 @@ const EditableTableCellElement = ({ element, attributes, children }: RenderEleme
       $isSelected={isSelected || isMenuOpen}
       onContextMenu={onContextMenu}
       onClick={onClick}
-      onDragStart={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
     >
       <CellContent onClick={onClick}>{children}</CellContent>
       <Menu show={isMenuOpen} x={x} y={y} close={() => setIsMenuOpen(false)} element={element} />

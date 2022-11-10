@@ -13,6 +13,7 @@ const NEW_TEXT: INewRichTextParams['content'] = [
     type: ContentTypeEnum.PARAGRAPH,
     textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
     children: [{ text: '' }],
+    indent: 0,
   },
 ];
 

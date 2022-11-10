@@ -1,11 +1,14 @@
 import { TextIndentDecreaseLtr } from '@styled-icons/fluentui-system-regular/TextIndentDecreaseLtr';
 import { TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular/TextIndentIncreaseLtr';
 import React from 'react';
+import { Editor } from 'slate';
 import { useSlate } from 'slate-react';
-import { isBlockActive } from '../functions/blocks';
+import { MAX_INDENT } from '../../smart-editor/constants';
 import { decreaseIndent, increaseIndent } from '../functions/indent';
-import { isInPlaceholderInMaltekst } from '../functions/maltekst';
-import { ContentTypeEnum } from '../types/editor-enums';
+import { isInMaltekst } from '../functions/maltekst';
+import { ContentTypeEnum, ListTypesEnum } from '../types/editor-enums';
+import { isOfElementTypesFn } from '../types/editor-type-guards';
+import { BulletListElementType, NumberedListElementType, ParagraphElementType } from '../types/editor-types';
 import { ToolbarIconButton } from './toolbarbutton';
 
 interface ContentProps {
@@ -15,26 +18,41 @@ interface ContentProps {
 
 export const Content = ({ iconSize, display = true }: ContentProps) => {
   const editor = useSlate();
-  const notEditable = isInPlaceholderInMaltekst(editor);
 
   if (!display) {
     return null;
   }
+
+  const notEditable = isInMaltekst(editor);
+
+  const elementEntries = Editor.nodes(editor, {
+    match: isOfElementTypesFn<ParagraphElementType | BulletListElementType | NumberedListElementType>([
+      ContentTypeEnum.PARAGRAPH,
+      ListTypesEnum.BULLET_LIST,
+      ListTypesEnum.NUMBERED_LIST,
+    ]),
+    mode: 'highest',
+  });
+
+  const elements = Array.from(elementEntries);
+
+  const isIndentable = elements.some(([node]) => (node.indent ?? 0) < MAX_INDENT);
+  const isUnindentable = elements.some(([node]) => (node.indent ?? 0) > 0);
 
   return (
     <>
       <ToolbarIconButton
         label="Innrykk"
         onClick={() => increaseIndent(editor)}
-        active={isBlockActive(editor, ContentTypeEnum.INDENT)}
-        disabled={notEditable}
+        active={isUnindentable}
+        disabled={notEditable || !isIndentable}
         icon={<TextIndentIncreaseLtr height={iconSize} />}
       />
 
       <ToolbarIconButton
         label="Fjern innrykk"
         onClick={() => decreaseIndent(editor)}
-        disabled={!isBlockActive(editor, ContentTypeEnum.INDENT) || notEditable}
+        disabled={notEditable || !isUnindentable}
         icon={<TextIndentDecreaseLtr height={iconSize} />}
         active={false}
       />

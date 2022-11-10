@@ -41,4 +41,5 @@ const NEW_PARAGRAPH: ParagraphElementType = {
   type: ContentTypeEnum.PARAGRAPH,
   children: [{ text: '' }],
   textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+  indent: 0,
 };

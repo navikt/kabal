@@ -68,6 +68,7 @@ export const createSimpleParagraph = (text = ''): ParagraphElementType => ({
   type: ContentTypeEnum.PARAGRAPH,
   children: [{ text }],
   textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+  indent: 0,
 });
 
 // eslint-disable-next-line import/no-unused-modules
@@ -77,6 +78,7 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
     type: ListContentEnum.LIST_ITEM,
     children: [{ type: ListContentEnum.LIST_ITEM_CONTAINER, children: [{ text }] }],
   })),
+  indent: 0,
 });
 
 export const createSignature = (): SignatureElementType => ({

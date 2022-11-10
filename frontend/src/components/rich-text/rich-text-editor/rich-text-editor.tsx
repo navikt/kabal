@@ -9,6 +9,7 @@ import { SmartEditorButtonsProps } from '../toolbar/smart-editor-buttons';
 import { Toolbar } from '../toolbar/toolbar';
 import { renderLeaf } from './leaf/render';
 import { useKeyboard } from './use-keyboard/use-keyboard';
+import { withCopy } from './with-copy';
 import { withNormalization } from './with-normalization';
 import { withEditableVoids } from './with-voids';
 
@@ -37,7 +38,10 @@ export const RichTextEditorElement = React.memo(
     onSelect,
     onKeyDown,
   }: RichTextElementProps) => {
-    const editor = useMemo(() => withEditableVoids(withHistory(withNormalization(withReact(createEditor())))), []);
+    const editor = useMemo(
+      () => withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor()))))),
+      []
+    );
     const keyboard = useKeyboard(editor);
     const [isFocused, setIsFocused] = useState<boolean>(ReactEditor.isFocused(editor));
     const { setEditor } = useContext(RichTextContext);

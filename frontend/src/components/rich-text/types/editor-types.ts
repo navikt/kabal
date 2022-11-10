@@ -1,4 +1,4 @@
-import { BaseRange, Descendant } from 'slate';
+import { BaseRange, Descendant, Element } from 'slate';
 import { TemplateSections, TextMetadata } from '../../../types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import {
@@ -25,14 +25,15 @@ export interface ParagraphElementType {
   type: ContentTypeEnum.PARAGRAPH;
   children: CustomTextType[];
   textAlign: TextAlignEnum;
+  indent: number;
 }
 
 export interface IndentElementType {
   type: ContentTypeEnum.INDENT;
-  children: CustomTextType[];
+  children: Element[];
 }
 
-interface BlockquoteElementType {
+export interface BlockquoteElementType {
   type: ContentTypeEnum.BLOCKQUOTE;
   children: CustomTextType[];
   textAlign: TextAlignEnum;
@@ -106,10 +107,12 @@ type HeadingsType =
 export interface BulletListElementType {
   type: ListTypesEnum.BULLET_LIST;
   children: ListItemElementType[];
+  indent: number;
 }
 export interface NumberedListElementType {
   type: ListTypesEnum.NUMBERED_LIST;
   children: ListItemElementType[];
+  indent: number;
 }
 export interface ListItemElementType {
   type: ListContentEnum.LIST_ITEM;
@@ -128,7 +131,7 @@ type ListsType = BulletListElementType | NumberedListElementType | ListItemEleme
 
 export interface TableCellElementType {
   type: TableContentEnum.TD;
-  children: CustomTextType[];
+  children: Descendant[];
   colSpan: number;
 }
 
@@ -144,7 +147,7 @@ export interface TableBodyElementType {
 
 export interface TableElementType {
   type: TableTypeEnum.TABLE;
-  children: [TableBodyElementType];
+  children: TableBodyElementType[];
 }
 
 type TableType = TableElementType | TableBodyElementType | TableRowElementType | TableCellElementType;

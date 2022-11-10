@@ -60,9 +60,9 @@ export const renderElement = (props: RenderElementProps) => {
     case HeadingTypesEnum.HEADING_SIX:
       return <HeadingSixElement {...props} />;
     case ListTypesEnum.BULLET_LIST:
-      return <BulletListElement {...props} />;
+      return <BulletListElement {...props} element={props.element} />;
     case ListTypesEnum.NUMBERED_LIST:
-      return <NumberedListElement {...props} />;
+      return <NumberedListElement {...props} element={props.element} />;
     case ListContentEnum.LIST_ITEM:
       return <ListItemElement {...props} />;
     case ListContentEnum.LIST_ITEM_CONTAINER:

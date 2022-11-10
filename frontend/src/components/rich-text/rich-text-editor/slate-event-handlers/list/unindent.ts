@@ -92,7 +92,7 @@ export const unindentList = (editor: Editor) =>
             // Wrap all following siblings in a new sublist.
             Transforms.wrapNodes(
               editor,
-              { type: parentListNode.type, children: [] },
+              { type: parentListNode.type, children: [], indent: parentListNode.indent },
               {
                 at: parentListPath,
                 match: (n, p) =>

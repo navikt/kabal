@@ -119,7 +119,7 @@ MaltekstElement.displayName = 'MaltekstElement';
 
 const StyledButton = styled(Button)`
   position: absolute;
-  right: 0;
+  left: -36pt;
   bottom: 0;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -130,12 +130,30 @@ const StyledButton = styled(Button)`
 `;
 
 const Container = styled.div`
+  display: inherit;
+  flex-direction: inherit;
+  row-gap: inherit;
   position: relative;
   color: #666;
 
-  &:hover {
+  ::before {
+    content: '';
+    position: absolute;
+    left: -12pt;
+    width: 6pt;
+    height: 0;
+    top: 0;
+    background-color: var(--navds-semantic-color-canvas-background);
+    transition: height 0.4s ease-in-out;
+  }
+
+  :hover {
     ${StyledButton} {
       opacity: 1;
+    }
+
+    ::before {
+      height: 100%;
     }
   }
 `;
