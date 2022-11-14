@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { accessRightsApi } from '../redux-api/access-rights';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
@@ -38,6 +39,7 @@ export const reduxStore = configureStore({
       kabalInternalApi.middleware,
       smartEditorCommentsApi.middleware,
       textsApi.middleware,
+      accessRightsApi.middleware,
     ]),
 });
 

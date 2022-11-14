@@ -17,6 +17,7 @@ const RegelverkPage = lazy(() => import('../../pages/regelverk/regelverk'));
 const SearchPage = lazy(() => import('../../pages/search/search'));
 const SettingsPage = lazy(() => import('../../pages/settings/settings'));
 const ToppteksterPage = lazy(() => import('../../pages/topptekster/topptekster'));
+const AccessRightsPage = lazy(() => import('../../pages/access-rights/access-rights'));
 
 export const Router = () => (
   <Suspense fallback={<RouterLoader />}>
@@ -52,6 +53,7 @@ export const Router = () => (
       <Route path="bunntekster/:id" element={<BunnteksterPage />} />
 
       <Route path="innstillinger" element={<SettingsPage />} />
+      <Route path="tilgangsstyring" element={<AccessRightsPage />} />
       <Route path="admin" element={<AdminPage />} />
     </Switch>
   </Suspense>
