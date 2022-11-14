@@ -1,4 +1,4 @@
-import { Facilitet, FileContent, Law, LightBulb, List, Office1, Search, Task } from '@navikt/ds-icons';
+import { Facilitet, FileContent, Law, LightBulb, List, Locked, Office1, Search, Task } from '@navikt/ds-icons';
 import { Header } from '@navikt/ds-react-internal';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
@@ -55,6 +55,10 @@ export const Nav = () => (
 
       <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/bunntekster" testId="bunntekster-nav-link">
         <DocumentFooter size={22} color="#fff" /> Bunntekster
+      </NavItem>
+
+      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.ROLE_KLAGE_LEDER]}>
+        <Locked /> Tilgangsstyring
       </NavItem>
     </StyledNavLinkList>
   </Header.Title>

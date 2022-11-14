@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { accessRightsApi } from '../redux-api/access-rights';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
@@ -17,6 +18,7 @@ export const rootReducer = combineReducers({
   [kabalInternalApi.reducerPath]: kabalInternalApi.reducer,
   [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
   [textsApi.reducerPath]: textsApi.reducer,
+  [accessRightsApi.reducerPath]: accessRightsApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
