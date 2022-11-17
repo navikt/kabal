@@ -66,7 +66,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
       <StyledList>
         {texts.map(({ id, title, modified, created, hjemler, ytelser, utfall, enheter, sections, templates }) => (
           <ListItem key={id} active={query.id === id}>
-            <StyledLink to={`${getPathPrefix(textType)}/${id}`}>
+            <StyledLink to={`${getPathPrefix(textType)}/${id}${window.location.search}`}>
               <StyledTitle>
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
