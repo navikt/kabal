@@ -6,6 +6,7 @@ import {
   ListTypesEnum,
   TableContentEnum,
   TableTypeEnum,
+  TextAlignEnum,
   UndeletableContentEnum,
 } from '../types/editor-enums';
 import { isOfElementType, isOfElementTypes } from '../types/editor-type-guards';
@@ -106,7 +107,14 @@ const normalizedTable = (node: TableElementType): TableElementType => {
       const cells: TableCellElementType[] = Array.from({ length: diff }, () => ({
         type: TableContentEnum.TD,
         colSpan: 1,
-        children: [{ text: '' }],
+        children: [
+          {
+            type: ContentTypeEnum.PARAGRAPH,
+            children: [{ text: '' }],
+            indent: 0,
+            textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+          },
+        ],
       }));
 
       const isFirstRow = i === 0 && ii === 0;
@@ -140,7 +148,14 @@ const nodesToTableContent = (nodes: Descendant[]): Descendant[] =>
       return {
         type: TableContentEnum.TD,
         colSpan: 1,
-        children: [n],
+        children: [
+          {
+            type: ContentTypeEnum.PARAGRAPH,
+            children: [n],
+            indent: 0,
+            textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+          },
+        ],
       };
     }
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useMemo } from 'react';
-import { Editor } from 'slate';
+import { Editor, Element, Range } from 'slate';
 import { FeatureToggles, useFeatureToggle } from '../../../../hooks/use-feature-toggle';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
-import { arrowDown, arrowLeft, arrowRight, arrowUp } from './arrows';
+import { arrowDown, arrowLeft, arrowRight, arrowUp } from './arrows/arrows';
 import { backspace } from './backspace';
 import { deleteHandler } from './delete';
 import { enter } from './enter';
@@ -55,7 +55,23 @@ export const useKeyboard = (editor: Editor) => {
         return;
       }
 
-      const args: HandlerFnArg = { editor, context, event, featureFlags };
+      const [currentElement] = Editor.nodes(editor, {
+        match: Element.isElement,
+        mode: 'lowest',
+      });
+
+      if (typeof currentElement === 'undefined') {
+        return;
+      }
+
+      const args: HandlerFnArg = {
+        editor,
+        context,
+        event,
+        featureFlags,
+        isCollapsed: Range.isCollapsed(editor.selection),
+        currentElementEntry: currentElement,
+      };
 
       HOTKEY_HANDLERS.forEach((handler) => {
         if (!event.defaultPrevented) {
@@ -70,7 +86,7 @@ export const useKeyboard = (editor: Editor) => {
       const { key } = event;
 
       if (isKey<Key>(key)) {
-        HANDLERS.get(key)?.({ editor, context, event, featureFlags });
+        HANDLERS.get(key)?.(args);
       }
     },
     [context, editor, featureFlags]

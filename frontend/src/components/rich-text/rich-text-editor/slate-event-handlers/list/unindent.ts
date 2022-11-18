@@ -1,7 +1,12 @@
 import { Editor, Path, Transforms } from 'slate';
 import { pruneSelection } from '../../../functions/prune-selection';
 import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../../types/editor-enums';
-import { isOfElementType, isOfElementTypeFn, isOfElementTypes } from '../../../types/editor-type-guards';
+import {
+  isOfElementType,
+  isOfElementTypeFn,
+  isOfElementTypes,
+  isOfElementTypesFn,
+} from '../../../types/editor-type-guards';
 import {
   BulletListElementType,
   ListItemContainerElementType,
@@ -35,12 +40,24 @@ export const unindentList = (editor: Editor) =>
       .forEach(([, licPath]) => {
         const [liNode, liPath] = Editor.parent(editor, licPath);
         const [parentListNode, parentListPath] = Editor.parent(editor, liPath);
+        const [topListEntry] = Editor.nodes(editor, {
+          match: isOfElementTypesFn([ListTypesEnum.BULLET_LIST, ListTypesEnum.NUMBERED_LIST]),
+          at: licPath,
+          mode: 'highest',
+        });
+
+        if (topListEntry === undefined) {
+          return;
+        }
+
+        const [topListNode] = topListEntry;
+
+        const isTopList = topListNode === parentListNode;
 
         const isFirstListItem = liPath[liPath.length - 1] === 0;
-        const isGlobalTop = liPath.length <= 2;
 
         // If list item is on top level.
-        if (isGlobalTop) {
+        if (isTopList) {
           // If root list item has a sublist.
           if (liNode.children.length === 2) {
             // Lift sublist up two levels.
@@ -52,11 +69,9 @@ export const unindentList = (editor: Editor) =>
           Transforms.liftNodes(editor, { at: licPath });
           Transforms.liftNodes(editor, { at: liPath });
 
-          Transforms.setNodes(
-            editor,
-            { type: ContentTypeEnum.PARAGRAPH },
-            { at: isFirstListItem ? parentListPath : Path.next(parentListPath) }
-          );
+          const at = isFirstListItem ? parentListPath : Path.next(parentListPath);
+
+          Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH }, { at });
 
           return;
         }

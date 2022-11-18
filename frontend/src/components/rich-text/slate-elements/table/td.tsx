@@ -113,4 +113,7 @@ const CellContent = styled.div`
   height: 100%;
   position: relative;
   z-index: 1;
+  display: flex;
+  row-gap: 6pt;
+  flex-direction: column;
 `;

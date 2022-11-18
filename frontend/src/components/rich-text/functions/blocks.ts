@@ -5,10 +5,25 @@ import {
   ListContentEnum,
   ListTypesEnum,
   NonVoidElementsEnum,
+  TableContentEnum,
+  TableTypeEnum,
 } from '../types/editor-enums';
 import { isOfElementType, isOfElementTypeFn, isOfElementTypesFn } from '../types/editor-type-guards';
 import { BulletListElementType, NumberedListElementType } from '../types/editor-types';
 import { pruneSelection } from './prune-selection';
+
+const ALLOWED_TABLE_ELEMENTS: NonVoidElementsEnum[] = [
+  ContentTypeEnum.PLACEHOLDER,
+
+  TableContentEnum.TBODY,
+  TableContentEnum.TR,
+  TableContentEnum.TD,
+
+  ListTypesEnum.BULLET_LIST,
+  ListTypesEnum.NUMBERED_LIST,
+  ListContentEnum.LIST_ITEM,
+  ListContentEnum.LIST_ITEM_CONTAINER,
+];
 
 export const getCurrentElement = <T extends Element>(
   editor: Editor,
@@ -107,6 +122,12 @@ export const getSelectedListTypes = (
 //   Editor.nodes<Element>(editor, { match: Element.isElement, mode: 'lowest', reverse: true });
 
 export const toggleBlock = (editor: Editor, block: NonVoidElementsEnum) => {
+  const [table] = Editor.nodes(editor, { match: isOfElementTypeFn(TableTypeEnum.TABLE) });
+
+  if (typeof table !== 'undefined' && !ALLOWED_TABLE_ELEMENTS.includes(block)) {
+    return;
+  }
+
   const matches = Editor.nodes(editor, { mode: 'lowest', match: Element.isElement, universal: true });
 
   const matchesArray = Array.from(matches);
