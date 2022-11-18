@@ -1,18 +1,8 @@
 import { Editor, Path, Transforms } from 'slate';
 import { ContentTypeEnum, TableContentEnum, TableTypeEnum } from '../../types/editor-enums';
 import { isOfElementTypeFn } from '../../types/editor-type-guards';
-import { TableCellElementType, TableRowElementType } from '../../types/editor-types';
-
-const createCell = (text = ''): TableCellElementType => ({
-  type: TableContentEnum.TD,
-  children: [{ text }],
-  colSpan: 1,
-});
-
-const createRow = (columns: number): TableRowElementType => ({
-  type: TableContentEnum.TR,
-  children: Array.from({ length: columns }, () => createCell()),
-});
+import { TableCellElementType } from '../../types/editor-types';
+import { createCell, createRow } from './create-helpers';
 
 export const canInsertTable = (editor: Editor) => {
   const [match] = Editor.nodes(editor, { match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH) });
@@ -28,9 +18,9 @@ export const insertTable = (editor: Editor) =>
 
     const at = Path.parent(editor.selection.focus.path);
 
-    Transforms.setNodes<TableCellElementType>(
+    Transforms.wrapNodes<TableCellElementType>(
       editor,
-      { type: TableContentEnum.TD, colSpan: 1 },
+      { type: TableContentEnum.TD, colSpan: 1, children: [] },
       {
         match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH),
         split: false,

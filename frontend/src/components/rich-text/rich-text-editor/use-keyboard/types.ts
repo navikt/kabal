@@ -1,4 +1,4 @@
-import { Editor, Range } from 'slate';
+import { Editor, Element, NodeEntry, Range } from 'slate';
 import { FeatureToggles } from '../../../../hooks/use-feature-toggle';
 import { ISmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 
@@ -28,6 +28,8 @@ export interface HandlerFnArg {
   event: React.KeyboardEvent<HTMLDivElement>;
   context: ISmartEditorContext;
   featureFlags: FeatureFlags;
+  isCollapsed: boolean;
+  currentElementEntry: NodeEntry<Element>;
 }
 
 export type HandlerFn = (arg: HandlerFnArg) => void;

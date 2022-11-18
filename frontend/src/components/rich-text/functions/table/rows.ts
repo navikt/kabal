@@ -3,6 +3,7 @@ import { ReactEditor } from 'slate-react';
 import { TableContentEnum } from '../../types/editor-enums';
 import { isOfElementType, isOfElementTypeFn } from '../../types/editor-type-guards';
 import { TableCellElementType, TableRowElementType } from '../../types/editor-types';
+import { createCellContent } from './create-helpers';
 import { TableFn } from './types';
 
 enum Direction {
@@ -29,7 +30,7 @@ const insertRow = (
 
   const newRow: TableRowElementType = {
     type: TableContentEnum.TR,
-    children: rowNode.children.map((c) => ({ ...c, children: [{ text: '' }] })),
+    children: rowNode.children.map((c) => ({ ...c, children: createCellContent() })),
   };
 
   const at = direction === Direction.UP ? rowPath : Path.next(rowPath);

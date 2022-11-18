@@ -1,18 +1,10 @@
-import { Editor, Transforms } from 'slate';
-import { createNewParagraph, getSelectedListTypes, isBlockActive } from '../../functions/blocks';
+import { Editor, Path, Transforms } from 'slate';
+import { createNewParagraph, getSelectedListTypes } from '../../functions/blocks';
 import { containsVoid } from '../../functions/contains-void';
 import { insertPageBreak } from '../../functions/insert-page-break';
-import { insertColumnRight } from '../../functions/table/insert-column';
-import { insertRowBelow } from '../../functions/table/rows';
-import {
-  ContentTypeEnum,
-  ListContentEnum,
-  ListTypesEnum,
-  TableContentEnum,
-  TableTypeEnum,
-} from '../../types/editor-enums';
-import { isOfElementTypeFn } from '../../types/editor-type-guards';
-import { ListItemContainerElementType, TableCellElementType } from '../../types/editor-types';
+import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
+import { isOfElementTypeFn, isOfElementTypesFn } from '../../types/editor-type-guards';
+import { BulletListElementType, ListItemContainerElementType, NumberedListElementType } from '../../types/editor-types';
 import { HandlerFn } from './types';
 
 export const enter: HandlerFn = ({ editor, event }) => {
@@ -29,20 +21,61 @@ export const enter: HandlerFn = ({ editor, event }) => {
     return;
   }
 
-  if (isBlockActive(editor, TableTypeEnum.TABLE)) {
+  if (
+    getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
+    getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
+  ) {
     event.preventDefault();
 
-    const [cellEntry] = Editor.nodes<TableCellElementType>(editor, { match: isOfElementTypeFn(TableContentEnum.TD) });
+    const [firstEntry] = Editor.nodes<ListItemContainerElementType>(editor, {
+      mode: 'lowest',
+      reverse: true,
+      match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
+    });
 
-    if (cellEntry === undefined) {
+    if (firstEntry === undefined) {
       return;
     }
 
-    const [cell, path] = cellEntry;
+    const [element, path] = firstEntry;
 
-    const selection =
-      event.ctrlKey || event.metaKey ? insertColumnRight(editor, cell, path) : insertRowBelow(editor, cell, path);
-    Transforms.select(editor, selection);
+    if (Editor.isEmpty(editor, element)) {
+      const [topListEntry] = Editor.nodes(editor, {
+        match: isOfElementTypesFn<BulletListElementType | NumberedListElementType>([
+          ListTypesEnum.BULLET_LIST,
+          ListTypesEnum.NUMBERED_LIST,
+        ]),
+        mode: 'highest',
+      });
+
+      if (typeof topListEntry === 'undefined') {
+        return;
+      }
+
+      const [topListNode, topListPath] = topListEntry;
+
+      Editor.withoutNormalizing(editor, () => {
+        const marks = Editor.marks(editor);
+
+        const relativeDepth = path.length - topListPath.length;
+
+        for (let i = 0; i < relativeDepth; i++) {
+          Transforms.liftNodes(editor, { at: topListPath, match: (n) => n === element });
+        }
+
+        Transforms.setNodes(
+          editor,
+          { type: ContentTypeEnum.PARAGRAPH, indent: topListNode.indent },
+          { at: Path.parent(topListPath), match: (n) => n === element }
+        );
+
+        editor.marks = marks;
+      });
+
+      return;
+    }
+
+    Transforms.splitNodes(editor, { always: true, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM) });
 
     return;
   }
@@ -50,46 +83,8 @@ export const enter: HandlerFn = ({ editor, event }) => {
   if (event.ctrlKey || event.metaKey) {
     event.preventDefault();
     insertPageBreak(editor);
-
-    return;
   }
 
-  if (!event.shiftKey) {
-    event.preventDefault();
-
-    if (
-      getSelectedListTypes(editor)[ListTypesEnum.BULLET_LIST] ||
-      getSelectedListTypes(editor)[ListTypesEnum.NUMBERED_LIST]
-    ) {
-      const [firstEntry] = Editor.nodes<ListItemContainerElementType>(editor, {
-        mode: 'lowest',
-        reverse: true,
-        match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER),
-      });
-
-      if (firstEntry === undefined) {
-        return;
-      }
-
-      const [element, path] = firstEntry;
-
-      if (Editor.isEmpty(editor, element)) {
-        Editor.withoutNormalizing(editor, () => {
-          for (let i = 1; i < path.length; i++) {
-            Transforms.liftNodes(editor);
-          }
-
-          Transforms.setNodes(editor, { type: ContentTypeEnum.PARAGRAPH });
-        });
-
-        return;
-      }
-
-      Transforms.splitNodes(editor, { always: true, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM) });
-
-      return;
-    }
-
-    createNewParagraph(editor);
-  }
+  event.preventDefault();
+  createNewParagraph(editor);
 };

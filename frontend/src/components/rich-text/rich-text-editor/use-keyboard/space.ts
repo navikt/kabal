@@ -1,6 +1,6 @@
 import { BasePoint, Editor, Path, Range, Text, Transforms } from 'slate';
-import { isBlockActive } from '../../functions/blocks';
-import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../../types/editor-enums';
+import { areBlocksActive, isBlockActive } from '../../functions/blocks';
+import { ContentTypeEnum, ListContentEnum, ListTypesEnum, TableContentEnum } from '../../types/editor-enums';
 import { isOfElementTypeFn } from '../../types/editor-type-guards';
 import { HandlerFn, HandlerFnArg } from './types';
 
@@ -14,17 +14,21 @@ export const space: HandlerFn = ({ editor, event }) => {
 
   // Focus must be [paragraph, text].
   // Focus must be at the first text node.
-  if (focus.path.length !== 2 || focus.path[1] !== 0) {
-    return;
-  }
+  // if (focus.path.length !== 2 || focus.path[1] !== 0) {
+  //   return;
+  // }
 
   // Selection must be collapsed.
   if (Range.isExpanded(editor.selection)) {
     return;
   }
 
-  // Selection must be in a paragraph.
-  if (!isBlockActive(editor, ContentTypeEnum.PARAGRAPH)) {
+  // Selection must be in a paragraph or table cell.
+  const canMakeLists =
+    areBlocksActive(editor, [ContentTypeEnum.PARAGRAPH, TableContentEnum.TD]) &&
+    !isBlockActive(editor, ListContentEnum.LIST_ITEM_CONTAINER);
+
+  if (!canMakeLists) {
     return;
   }
 

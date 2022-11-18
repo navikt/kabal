@@ -3,6 +3,7 @@ import { ReactEditor } from 'slate-react';
 import { TableContentEnum } from '../../types/editor-enums';
 import { isOfElementTypeFn } from '../../types/editor-type-guards';
 import { TableRowElementType } from '../../types/editor-types';
+import { createCell } from './create-helpers';
 import { getCellColumnOffset, getCurrentRow } from './helpers';
 import { TableFn } from './types';
 
@@ -61,13 +62,9 @@ export const insertColumnRight: TableFn = (editor, cellNode, cellPath = ReactEdi
 
         if (currentColumn === columns) {
           // Insert a new cell after the current cell.
-          Transforms.insertNodes(
-            editor,
-            { type: cell.type, colSpan: 1, children: [{ text: '' }] },
-            {
-              at: [...rowPath, i + 1],
-            }
-          );
+          Transforms.insertNodes(editor, createCell(), {
+            at: [...rowPath, i + 1],
+          });
           shouldFocusNewColumn = shouldFocusNewColumn || cell === cellNode;
           break;
         }
@@ -128,13 +125,9 @@ export const insertColumnLeft: TableFn = (editor, cellNode, cellPath = ReactEdit
 
         if (currentColumn === columnOffset) {
           // Insert a new cell before the current cell.
-          Transforms.insertNodes(
-            editor,
-            { type: cell.type, colSpan: 1, children: [{ text: '' }] },
-            {
-              at: [...rowPath, children.length - 1 - i], // Because we have reversed the children array.
-            }
-          );
+          Transforms.insertNodes(editor, createCell(), {
+            at: [...rowPath, children.length - 1 - i], // Because we have reversed the children array.
+          });
           break;
         }
       }

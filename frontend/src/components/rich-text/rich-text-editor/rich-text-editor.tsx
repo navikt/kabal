@@ -11,6 +11,7 @@ import { renderLeaf } from './leaf/render';
 import { useKeyboard } from './use-keyboard/use-keyboard';
 import { withCopy } from './with-copy';
 import { withNormalization } from './with-normalization';
+import { withTables } from './with-tables';
 import { withEditableVoids } from './with-voids';
 
 interface RichTextElementProps extends SmartEditorButtonsProps {
@@ -39,7 +40,7 @@ export const RichTextEditorElement = React.memo(
     onKeyDown,
   }: RichTextElementProps) => {
     const editor = useMemo(
-      () => withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor()))))),
+      () => withTables(withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor())))))),
       []
     );
     const keyboard = useKeyboard(editor);

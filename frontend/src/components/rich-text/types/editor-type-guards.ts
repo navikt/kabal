@@ -1,5 +1,11 @@
 import { Editor, Element, Node, Text } from 'slate';
-import { AlignableTypeEnum, ContentTypeEnum, ElementTypesEnum, HeadingTypesEnum } from './editor-enums';
+import {
+  AlignableTypeEnum,
+  ContentTypeEnum,
+  ElementTypesEnum,
+  HeadingTypesEnum,
+  UndeletableContentEnum,
+} from './editor-enums';
 import { AlignableElementTypes, MarkKeyList, VOID_ELEMENT_TYPES } from './editor-types';
 import { VoidElementTypes } from './editor-void-types';
 import { MarkKeys } from './marks';
@@ -16,6 +22,11 @@ export const isNodeAlignableElementType = (n: Node): n is AlignableElementTypes 
 
   return isTypeAlignable(n.type);
 };
+
+const UNDELETEABLE_TYPES = Object.values(UndeletableContentEnum);
+
+export const isUndeletableElement = (element: Element): boolean =>
+  UNDELETEABLE_TYPES.some((t) => t === element.type) || Editor.isEditor(element);
 
 const NON_MARKABLE_TYPES = Object.values(HeadingTypesEnum);
 

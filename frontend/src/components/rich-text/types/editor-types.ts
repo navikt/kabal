@@ -131,7 +131,7 @@ type ListsType = BulletListElementType | NumberedListElementType | ListItemEleme
 
 export interface TableCellElementType {
   type: TableContentEnum.TD;
-  children: Descendant[];
+  children: (ParagraphElementType | BulletListElementType | NumberedListElementType)[];
   colSpan: number;
 }
 
