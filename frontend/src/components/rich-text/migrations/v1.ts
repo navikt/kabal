@@ -1,6 +1,5 @@
-import { Descendant } from 'slate';
 import { RichText_V1 } from '../../../types/rich-text/v1';
-import { RichText_V2 } from '../../../types/rich-text/v2';
+import { RichText_Content_V2, RichText_V2 } from '../../../types/rich-text/v2';
 import { IRichText, TemplateSections } from '../../../types/texts/texts';
 import { UndeletableContentEnum } from '../types/editor-enums';
 import { MaltekstElementType } from '../types/editor-types';
@@ -30,5 +29,5 @@ export const migrateFromV1ToV2 = (response: RichText_V1): RichText_V2 => ({
   }),
 });
 
-const isOldMaltekst = (node: Descendant | MaltekstV1): node is MaltekstV1 =>
+const isOldMaltekst = (node: RichText_Content_V2 | MaltekstV1): node is MaltekstV1 =>
   node.type === UndeletableContentEnum.MALTEKST && 'content' in node;

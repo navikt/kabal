@@ -5,6 +5,7 @@ import { IUpdateText } from '../../types/texts/texts';
 import { migrateFromV0ToV1 } from '../rich-text/migrations/v0';
 import { migrateFromV1ToV2 } from '../rich-text/migrations/v1';
 import { migrateFromV2ToV3 } from '../rich-text/migrations/v2';
+import { migrateFromV3ToV4 } from '../rich-text/migrations/v3';
 import { VERSION } from '../rich-text/version';
 import { ApiHook } from './types';
 
@@ -47,6 +48,10 @@ const migrate = (text: VersionedText): RichText_Latest_Text => {
 
   if (text.version === 2) {
     return migrate({ ...text, ...migrateFromV2ToV3(text) });
+  }
+
+  if (text.version === 3) {
+    return migrate({ ...text, ...migrateFromV3ToV4(text) });
   }
 
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
