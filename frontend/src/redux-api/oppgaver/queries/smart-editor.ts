@@ -1,6 +1,7 @@
 import { migrateFromV0ToV1 } from '../../../components/rich-text/migrations/v0';
 import { migrateFromV1ToV2 } from '../../../components/rich-text/migrations/v1';
 import { migrateRichTextV2ToV3 } from '../../../components/rich-text/migrations/v2';
+import { migrateRichTextV3ToV4 } from '../../../components/rich-text/migrations/v3';
 import { VERSION } from '../../../components/rich-text/version';
 import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
 import { RichText_Latest_SmartEditor } from '../../../types/rich-text/latest';
@@ -52,6 +53,13 @@ const migrate = (smartEditor: VersionedSmartEditor): RichText_Latest_SmartEditor
     return migrate({
       ...smartEditor,
       ...migrateRichTextV2ToV3(smartEditor),
+    });
+  }
+
+  if (smartEditor.version === 3) {
+    return migrate({
+      ...smartEditor,
+      ...migrateRichTextV3ToV4(smartEditor),
     });
   }
 

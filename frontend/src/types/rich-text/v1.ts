@@ -1,10 +1,10 @@
-import { Descendant } from 'slate';
 import { ISmartEditorMetadata } from '../smart-editor/metadata';
 import { ITextMetadata, RichTextTypes } from '../texts/texts';
+import { RichText_Content_V2 } from './v2';
 
 export interface RichText_V1 {
   id: string;
-  content: Descendant[];
+  content: RichText_Content_V2[];
   version: 1;
   textType: RichTextTypes;
 }

@@ -1,4 +1,4 @@
-import { Descendant, Element } from 'slate';
+import { Element } from 'slate';
 import {
   INDENT_TYPE,
   IndentElementType,
@@ -6,7 +6,7 @@ import {
   RichText_Content_V2,
   RichText_V2,
 } from '../../../types/rich-text/v2';
-import { PlainText_V3, RichText_V3 } from '../../../types/rich-text/v3';
+import { PlainText_V3, RichText_Content_V3, RichText_V3 } from '../../../types/rich-text/v3';
 import { isPlainTextType } from '../../../types/texts/texts';
 import { ContentTypeEnum, ListTypesEnum } from '../types/editor-enums';
 import { BulletListElementType, NumberedListElementType, ParagraphElementType } from '../types/editor-types';
@@ -25,10 +25,10 @@ export const migrateRichTextV2ToV3 = (response: RichText_V2): RichText_V3 => ({
   content: response.content.flatMap(unwrapIndent),
 });
 
-const unwrapIndent = (node: RichText_Content_V2): Descendant[] | Descendant => {
+const unwrapIndent = (node: RichText_Content_V2): RichText_Content_V3[] | RichText_Content_V3 => {
   if (!isIndent(node)) {
     if (isIndentable(node)) {
-      return { ...node, indent: 0 };
+      return { ...node, indent: node.indent ?? 0 };
     }
 
     return node;
