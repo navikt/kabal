@@ -1,9 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { FEATURE_TOGGLE_BASE_QUERY } from './common';
 
-export enum FeatureToggles {
-  MALTEKSTER = 'klage.maltekster', // TODO: Replace this toggle with roles
-}
+export enum FeatureToggles {}
 
 export const featureTogglingApi = createApi({
   reducerPath: 'featureTogglingApi',

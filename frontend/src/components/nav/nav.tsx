@@ -12,52 +12,60 @@ import { Role } from '../../types/bruker';
 export const Nav = () => (
   <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
-      <NavItem to="/oppgaver/1" testId="oppgaver-nav-link">
+      <NavItem to="/oppgaver/1" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
         <List /> Oppgaver
       </NavItem>
-      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link">
+      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
         <Task /> Mine Oppgaver
       </NavItem>
-      <NavItem to="/sok" testId="search-nav-link">
+      <NavItem
+        to="/sok"
+        testId="search-nav-link"
+        roles={[
+          Role.KABAL_SAKSBEHANDLING,
+          Role.KABAL_OPPGAVESTYRING_EGEN_ENHET,
+          Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER,
+        ]}
+      >
         <Search /> Søk på person
       </NavItem>
       <NavItem
         to="/enhetensoppgaver"
         testId="enhetens-oppgaver-nav-link"
-        roles={[Role.ROLE_KLAGE_LEDER, Role.ROLE_KLAGE_FAGANSVARLIG, Role.ROLE_KLAGE_MERKANTIL, Role.ROLE_ADMIN]}
+        roles={[Role.KABAL_OPPGAVESTYRING_EGEN_ENHET]}
       >
         <Office1 /> Enhetens oppgaver
       </NavItem>
-      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/maltekster" testId="maltekster-nav-link">
+
+      <NavItem to="/maltekster" testId="maltekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <Facilitet /> Maltekster
       </NavItem>
+
       <NavItem
-        requiredFeature={FeatureToggles.MALTEKSTER}
         to="/redigerbare-maltekster"
         testId="redigerbare-maltekster-nav-link"
+        roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
         <FileContent /> Redigerbare maltekster
       </NavItem>
-      <NavItem
-        requiredFeature={FeatureToggles.MALTEKSTER}
-        to="/gode-formuleringer"
-        testId="gode-formuleringer-nav-link"
-      >
+
+      <NavItem to="/gode-formuleringer" testId="gode-formuleringer-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
         <LightBulb /> Gode formuleringer
       </NavItem>
-      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/regelverk" testId="regelverk-nav-link">
+
+      <NavItem to="/regelverk" testId="regelverk-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
         <Law /> Regelverk
       </NavItem>
 
-      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/topptekster" testId="topptekster-nav-link">
+      <NavItem to="/topptekster" testId="topptekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <DocumentHeader size={22} color="#fff" /> Topptekster
       </NavItem>
 
-      <NavItem requiredFeature={FeatureToggles.MALTEKSTER} to="/bunntekster" testId="bunntekster-nav-link">
+      <NavItem to="/bunntekster" testId="bunntekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
 
-      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.ROLE_KLAGE_LEDER]}>
+      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_OPPGAVESTYRING_EGEN_ENHET]}>
         <Locked /> Tilgangsstyring
       </NavItem>
     </StyledNavLinkList>

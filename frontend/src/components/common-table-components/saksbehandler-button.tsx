@@ -9,6 +9,7 @@ type ButtonProps = TildelProps & FradelProps;
 
 interface Props extends ButtonProps {
   name: string | null;
+  tildeltSaksbehandlerident: string | null;
 }
 
 export const SaksbehandlerButton = ({
@@ -33,7 +34,6 @@ export const SaksbehandlerButton = ({
       <FradelKlagebehandlingButton
         klagebehandlingId={klagebehandlingId}
         isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
-        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
       />
     );
   }
