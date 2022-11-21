@@ -124,8 +124,8 @@ const StyledPlaceholderText = styled.div`
   position: absolute;
   display: flex;
   gap: 4px;
-  background: var(--navds-semantic-color-component-background-alternate);
+  background: var(--a-surface-subtle);
   padding: 8px;
-  border: 1px solid var(--navds-semantic-color-border);
+  border: 1px solid var(--a-border-strong);
   border-radius: 4px;
 `;

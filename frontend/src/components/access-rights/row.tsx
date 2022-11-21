@@ -78,24 +78,23 @@ const StyledHeaderText = styled.span`
   :hover {
     overflow: visible;
     text-overflow: unset;
-    background-color: var(--navds-global-color-blue-200);
-    box-shadow: 2px 2px 5px 0px var(--navds-semantic-color-border-inverted);
+    background-color: var(--a-blue-200);
+    box-shadow: 2px 2px 5px 0px var(--a-border-on-inverted);
     width: fit-content;
   }
 `;
 
 const StyledHeader = styled.th<{ $isHighlighted: boolean }>`
   height: 32px;
-  border-right: 1px solid var(--navds-semantic-color-border-inverted);
-  border-left: 1px solid var(--navds-semantic-color-border-inverted);
-  border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
+  border-right: 1px solid var(--a-border-on-inverted);
+  border-left: 1px solid var(--a-border-on-inverted);
+  border-bottom: 1px solid var(--a-border-on-inverted);
   padding: 0;
   margin: 0;
   max-width: 256px;
   position: relative;
   z-index: 1;
-  background-color: ${({ $isHighlighted }) =>
-    $isHighlighted ? 'var(--navds-global-color-blue-200)' : 'rgb(247, 247, 247)'};
+  background-color: ${({ $isHighlighted }) => ($isHighlighted ? 'var(--a-blue-200)' : 'rgb(247, 247, 247)')};
 
   :hover {
     overflow: visible;

@@ -18,5 +18,5 @@ export const LimitWarning = (limits: TextMetadata) => {
 };
 
 const StyledWarning = styled(Warning)`
-  color: var(--navds-button-color-danger-background);
+  color: var(--a-surface-danger);
 `;

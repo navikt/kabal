@@ -43,14 +43,14 @@ const getColor = (
 ) => {
   if ($isFocused || $isCurrentColumn || $isCurrentRow) {
     if ($isChecked) {
-      return 'var(--navds-global-color-purple-200)';
+      return 'var(--a-purple-200)';
     }
 
-    return 'var(--navds-global-color-blue-200)';
+    return 'var(--a-blue-200)';
   }
 
   if ($isChecked) {
-    return 'var(--navds-global-color-green-200)';
+    return 'var(--a-green-200)';
   }
 
   return defaultColor;
@@ -58,8 +58,8 @@ const getColor = (
 
 const StyledCell = styled.td<StyledCellProps>`
   padding: 0;
-  border-right: 1px solid var(--navds-semantic-color-border-inverted);
-  border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
+  border-right: 1px solid var(--a-border-on-inverted);
+  border-bottom: 1px solid var(--a-border-on-inverted);
 
   :nth-child(even) {
     background-color: ${getColor};

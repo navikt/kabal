@@ -63,7 +63,7 @@ const Thead = styled.thead`
   z-index: 2;
   background-color: white;
 
-  box-shadow: var(--navds-semantic-color-border-inverted) 0 1px 0 0, black 0px 5px 5px -5px;
+  box-shadow: var(--a-border-on-inverted) 0 1px 0 0, black 0px 5px 5px -5px;
 `;
 
 const NON_ANGLED_HEADER_HEIGHT = 32;
@@ -80,7 +80,7 @@ const StyledHeader = styled.th`
 
 const getBackgroundColor = (props: StyledAngledHeaderDivProps) => {
   if (props.$focused) {
-    return 'var(--navds-global-color-blue-200)';
+    return 'var(--a-blue-200)';
   }
 
   if (props.$grey) {
@@ -104,8 +104,8 @@ const StyledAngledHeader = styled(StyledHeader)<StyledAngledHeaderDivProps>`
   position: relative;
 
   transform: skew(-45deg);
-  border-right: 1px solid var(--navds-semantic-color-border-inverted);
-  border-left: ${({ $first }) => ($first ? '1px solid var(--navds-semantic-color-border-inverted)' : 'none')};
+  border-right: 1px solid var(--a-border-on-inverted);
+  border-left: ${({ $first }) => ($first ? '1px solid var(--a-border-on-inverted)' : 'none')};
 
   height: ${CONTAINER_HEIGHT}px;
   background-color: ${getBackgroundColor};

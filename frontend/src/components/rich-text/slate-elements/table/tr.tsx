@@ -9,7 +9,7 @@ export const TableRowElement = ({ attributes, children }: RenderElementProps<Tab
 
 const StyledTableRow = styled.tr`
   :nth-child(odd) {
-    background-color: var(--navds-table-row-color-background-zebra);
+    background-color: var(--a-surface-subtle);
   }
   :nth-child(even) {
     background-color: #fff;

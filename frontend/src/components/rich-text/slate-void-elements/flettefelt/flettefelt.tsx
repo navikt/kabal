@@ -111,8 +111,8 @@ const renderValue = (value: string | null, field: Flettefelt | null) => {
 
 const Span = styled.span<{ $isFocused: boolean }>`
   position: relative;
-  background-color: var(--navds-global-color-gray-200);
-  outline: ${({ $isFocused }) => ($isFocused ? '2px solid var(--navds-semantic-color-interaction-primary)' : 'none')};
+  background-color: var(--a-gray-200);
+  outline: ${({ $isFocused }) => ($isFocused ? '2px solid var(--a-surface-action)' : 'none')};
   padding: 2px;
   margin-left: 1px;
   margin-right: 1px;

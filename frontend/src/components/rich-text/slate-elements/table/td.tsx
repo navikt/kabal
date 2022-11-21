@@ -83,7 +83,7 @@ export const BORDER_WIDTH = 1;
 
 const StyledTableCell = styled.td<{ $isSelected: boolean }>`
   position: relative;
-  border: ${BORDER_WIDTH}px solid var(--navds-table-cell-color-border);
+  border: ${BORDER_WIDTH}px solid var(--a-border-default);
   min-width: 32px;
   word-break: normal;
   white-space: pre-wrap;
@@ -100,7 +100,7 @@ const StyledTableCell = styled.td<{ $isSelected: boolean }>`
     top: 0;
     left: 0;
     z-index: 0;
-    background-color: ${({ $isSelected }) => ($isSelected ? 'var(--navds-global-color-blue-100)' : 'transparent')};
+    background-color: ${({ $isSelected }) => ($isSelected ? 'var(--a-blue-100)' : 'transparent')};
   }
 `;
 

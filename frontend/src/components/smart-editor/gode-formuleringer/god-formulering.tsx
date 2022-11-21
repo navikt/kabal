@@ -88,7 +88,7 @@ const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
   border-radius: 4px;
   width: 100%;
   background-color: #f5f5f5;
-  outline: 3px solid ${({ $isFocused }) => ($isFocused ? 'var(--navds-semantic-color-focus)' : 'transparent')};
+  outline: 3px solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
   transition: outline 0.2s ease-in-out;
   white-space: normal;
 `;

@@ -110,5 +110,5 @@ const StyledStatusText = styled.span`
 `;
 
 const StyledError = styled(Error)`
-  color: var(--navds-semantic-color-interaction-danger);
+  color: var(--a-surface-danger);
 `;

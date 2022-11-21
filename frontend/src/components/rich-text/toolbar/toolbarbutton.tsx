@@ -41,7 +41,7 @@ const ToolbarButtonStyle = styled.button<ToolbarButtonStyleProps>`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: ${({ active }) => (active ? 'var(--navds-global-color-blue-100)' : 'transparent')};
+  background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : 'transparent')};
   opacity: ${({ active }) => (active ? 1 : 0.5)};
   font-family: Source Sans Pro;
   color: black;

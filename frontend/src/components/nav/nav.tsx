@@ -116,18 +116,18 @@ const StyledNavLink = styled(NavLink)`
   white-space: nowrap;
   border-left: none;
   text-decoration: none;
-  color: var(--navds-semantic-color-text-inverted);
+  color: var(--a-text-on-inverted);
   padding: 0;
   padding-left: 4px;
   padding-right: 4px;
   transition: border-bottom-color 0.2s ease-in-out;
 
   &.active {
-    border-bottom: 4px solid var(--navds-global-color-blue-300);
+    border-bottom: 4px solid var(--a-blue-300);
   }
 
   &:hover {
-    /* border-bottom: 4px solid var(--navds-semantic-color-link); */
+    /* border-bottom: 4px solid var(--a-text-action); */
     border-bottom: 4px solid #666;
   }
 `;
