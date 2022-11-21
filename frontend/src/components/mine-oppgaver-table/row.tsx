@@ -22,7 +22,6 @@ export const Row = ({
   erMedunderskriver,
   harMedunderskriver,
   isAvsluttetAvSaksbehandler,
-  tildeltSaksbehandlerident,
   ytelse,
 }: IOppgave): JSX.Element => (
   <Table.Row data-testid="mine-oppgaver-row" data-klagebehandlingid={id}>
@@ -57,11 +56,7 @@ export const Row = ({
       <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
     </Table.DataCell>
     <Table.DataCell>
-      <FradelKlagebehandlingButton
-        klagebehandlingId={id}
-        isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
-        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
-      />
+      <FradelKlagebehandlingButton klagebehandlingId={id} isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler} />
     </Table.DataCell>
   </Table.Row>
 );

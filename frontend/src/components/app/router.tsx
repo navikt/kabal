@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
+import { LandingPage } from '../../pages/landing-page/landing-page';
 import TrygderettsankebehandlingPage from '../../pages/trygderettsankebehandling/trygderettsankebehandling';
 import { RouterLoader } from './loader';
 
@@ -22,7 +23,7 @@ const AccessRightsPage = lazy(() => import('../../pages/access-rights/access-rig
 export const Router = () => (
   <Suspense fallback={<RouterLoader />}>
     <Switch>
-      <Route path="/" element={<Navigate to="oppgaver/1" />} />
+      <Route path="/" element={<LandingPage />} />
 
       <Route path="oppgaver">
         <Route path="" element={<Navigate to="1" />} />
@@ -33,7 +34,9 @@ export const Router = () => (
 
       <Route path="mineoppgaver" element={<MineOppgaverPage />} />
       <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
+
       <Route path="sok" element={<SearchPage />} />
+
       <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
       <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
       <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
@@ -48,7 +51,6 @@ export const Router = () => (
       <Route path="regelverk/" element={<RegelverkPage />} />
       <Route path="topptekster/" element={<ToppteksterPage />} />
       <Route path="topptekster/:id" element={<ToppteksterPage />} />
-
       <Route path="bunntekster/" element={<BunnteksterPage />} />
       <Route path="bunntekster/:id" element={<BunnteksterPage />} />
 

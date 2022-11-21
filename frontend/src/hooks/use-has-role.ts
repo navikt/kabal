@@ -20,13 +20,3 @@ export const useHasAnyOfRoles = (roles?: Role[]) => {
 
   return roles.some((role) => userRoles.includes(role));
 };
-
-export const useIsLeader = (): boolean => {
-  const userRoles = useUserRoles();
-
-  if (userRoles.length === 0) {
-    return false;
-  }
-
-  return userRoles.includes(Role.ROLE_KLAGE_LEDER) || userRoles.includes(Role.ROLE_KLAGE_FAGANSVARLIG);
-};

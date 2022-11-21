@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Editor, Element, Range } from 'slate';
-import { FeatureToggles, useFeatureToggle } from '../../../../hooks/use-feature-toggle';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { arrowDown, arrowLeft, arrowRight, arrowUp } from './arrows/arrows';
 import { backspace } from './backspace';
@@ -29,6 +28,8 @@ const HOTKEY_HANDLERS: HandlerFn[] = [placeholder, maltekst, hotkeys];
 
 const keys = Object.values(Key);
 
+const EMPTY_FEATURE_FLAGS: FeatureFlags = {};
+
 const isSafeEditor = (editor: Editor): editor is SafeEditor => {
   if (editor.selection === null) {
     return false;
@@ -39,15 +40,6 @@ const isSafeEditor = (editor: Editor): editor is SafeEditor => {
 
 export const useKeyboard = (editor: Editor) => {
   const context = useContext(SmartEditorContext);
-
-  const malteksterEnabled = useFeatureToggle(FeatureToggles.MALTEKSTER);
-
-  const featureFlags: FeatureFlags = useMemo(
-    () => ({
-      [FeatureToggles.MALTEKSTER]: malteksterEnabled,
-    }),
-    [malteksterEnabled]
-  );
 
   return useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -68,7 +60,7 @@ export const useKeyboard = (editor: Editor) => {
         editor,
         context,
         event,
-        featureFlags,
+        featureFlags: EMPTY_FEATURE_FLAGS,
         isCollapsed: Range.isCollapsed(editor.selection),
         currentElementEntry: currentElement,
       };
@@ -89,7 +81,7 @@ export const useKeyboard = (editor: Editor) => {
         HANDLERS.get(key)?.(args);
       }
     },
-    [context, editor, featureFlags]
+    [context, editor]
   );
 };
 
