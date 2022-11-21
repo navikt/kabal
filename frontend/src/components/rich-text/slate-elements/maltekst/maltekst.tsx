@@ -143,7 +143,7 @@ const Container = styled.div`
     width: 6pt;
     height: 0;
     top: 0;
-    background-color: var(--navds-semantic-color-canvas-background);
+    background-color: var(--a-bg-subtle);
     transition: height 0.4s ease-in-out;
   }
 

@@ -40,7 +40,7 @@ const getStyles = (textAlign: TextAlignEnum) => {
 };
 
 export const PlaceholderStyle = styled.span`
-  background-color: var(--navds-global-color-gray-200);
+  background-color: var(--a-gray-200);
   border-radius: 4px;
-  color: var(--navds-semantic-color-text-muted);
+  color: var(--a-text-subtle);
 `;

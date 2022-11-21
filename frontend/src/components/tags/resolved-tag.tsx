@@ -41,28 +41,28 @@ const BaseTagStyle = styled(Tag)`
 `;
 
 const HjemmelTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-purple-100);
-  border: 1px solid var(--navds-global-color-purple-300);
+  background-color: var(--a-purple-100);
+  border: 1px solid var(--a-purple-300);
 `;
 const YtelseTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-blue-100);
-  border: 1px solid var(--navds-global-color-blue-300);
+  background-color: var(--a-blue-100);
+  border: 1px solid var(--a-blue-300);
 `;
 const UtfallTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-limegreen-100);
-  border: 1px solid var(--navds-global-color-limegreen-300);
+  background-color: var(--a-limegreen-100);
+  border: 1px solid var(--a-limegreen-300);
 `;
 const SectionTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-deepblue-100);
-  border: 1px solid var(--navds-global-color-deepblue-300);
+  background-color: var(--a-deepblue-100);
+  border: 1px solid var(--a-deepblue-300);
 `;
 const EnhetTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-orange-100);
-  border: 1px solid var(--navds-global-color-orange-300);
+  background-color: var(--a-orange-100);
+  border: 1px solid var(--a-orange-300);
 `;
 const TemplateTag = styled(BaseTagStyle)`
-  background-color: var(--navds-global-color-red-100);
-  border: 1px solid var(--navds-global-color-red-300);
+  background-color: var(--a-red-100);
+  border: 1px solid var(--a-red-300);
 `;
 
 export const VARIANTS: Record<keyof AppQuery, typeof Tag> = {

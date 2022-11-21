@@ -78,13 +78,13 @@ const Wrapper = styled.span<WrapperProps>`
 
   ::after {
     cursor: text;
-    color: var(--navds-semantic-color-text-muted);
+    color: var(--a-text-subtle);
     content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
   }
 `;
 
 const getBackgroundColor = (focused: boolean) =>
-  focused ? 'var(--navds-global-color-blue-100)' : 'var(--navds-global-color-gray-200)';
+  focused ? 'var(--a-blue-100)' : 'var(--a-gray-200)';
 
 const Anchor = styled.span`
   font-size: 0;

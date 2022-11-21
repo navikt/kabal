@@ -128,15 +128,14 @@ const StyledList = styled.ul`
 `;
 
 const ListItem = styled.li<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? 'var(--navds-global-color-blue-100)' : '#fff')};
+  background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : '#fff')};
   transition-property: background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   border-radius: 4px;
 
   :hover {
-    background-color: ${({ active }) =>
-      active ? 'var(--navds-global-color-blue-100)' : 'var(--navds-global-color-blue-50)'};
+    background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : 'var(--a-blue-50)')};
   }
 `;
 
