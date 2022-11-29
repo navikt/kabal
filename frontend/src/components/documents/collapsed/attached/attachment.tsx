@@ -15,6 +15,7 @@ export const Attachment = ({ journalpostId, vedlegg }: Props) => (
       dokumentInfoId={vedlegg.dokumentInfoId}
       journalpostId={journalpostId}
       valgt={vedlegg.valgt}
+      harTilgangTilArkivvariant={vedlegg.harTilgangTilArkivvariant}
       data-testid="oppgavebehandling-documents-open-document-button"
     />
   </AttachmentListItem>

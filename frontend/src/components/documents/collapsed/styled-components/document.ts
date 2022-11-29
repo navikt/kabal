@@ -20,4 +20,9 @@ export const ViewDocumentButton = styled.button<{ tilknyttet: boolean; isActive:
   width: 100%;
   text-decoration: ${(props) => (props.tilknyttet ? 'none' : 'line-through')};
   font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
+
+  :disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
 `;

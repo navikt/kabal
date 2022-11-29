@@ -27,7 +27,7 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   }
 
   :disabled {
-    color: var(--navds-semantic-color-text-muted);
-    cursor: text;
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 `;
