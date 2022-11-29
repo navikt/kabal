@@ -18,7 +18,7 @@ export const TableHeader = (): JSX.Element => (
       </Table.ColumnHeader>
       <Table.ColumnHeader scope="col" />
       <Table.ColumnHeader scope="col" />
-      <Table.ColumnHeader scope="col" />
+      <Table.ColumnHeader scope="col">Tildeling</Table.ColumnHeader>
     </Table.Row>
   </Table.Header>
 );

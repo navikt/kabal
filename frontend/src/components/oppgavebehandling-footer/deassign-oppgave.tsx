@@ -6,14 +6,14 @@ import styled from 'styled-components';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '../../hooks/use-kodeverk-value';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useFradelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/ansatte';
 import { useUpdateInnsendingshjemlerMutation } from '../../redux-api/oppgaver/mutations/behandling';
+import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/tildeling';
 import { useUser } from '../../simple-api-state/use-user';
 import { FilterList } from '../filter-dropdown/filter-list';
 
 export const DeassignOppgave = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [, { isLoading }] = useFradelSaksbehandlerMutation();
+  const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(() => setIsOpen(false), ref, true);
 
@@ -52,8 +52,8 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   const navigate = useNavigate();
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const [setHjemler] = useUpdateInnsendingshjemlerMutation();
-  const [fradel, { isLoading }] = useFradelSaksbehandlerMutation();
   const { data: bruker, isLoading: userIsLoading } = useUser();
+  const [tildel, { isLoading }] = useTildelSaksbehandlerMutation();
   const ytelse = useKodeverkYtelse(oppgave?.ytelse);
 
   const options = useMemo(
@@ -68,10 +68,7 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   const setSelected = (hjemler: string[]) => setHjemler({ hjemler, oppgaveId: oppgave.id });
 
   const onClick = async () => {
-    await fradel({
-      oppgaveId: oppgave.id,
-      navIdent: bruker.navIdent,
-    });
+    await tildel({ oppgaveId: oppgave.id, navIdent: null });
 
     navigate('/mineoppgaver');
   };

@@ -1,4 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { toast } from '../components/toast/store';
+import { ToastType } from '../components/toast/types';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export interface SaksbehandlerAccessRights {
@@ -35,6 +37,10 @@ export const accessRightsApi = createApi({
         url: '/ansatte/setytelser',
         body,
       }),
+      onQueryStarted: async (_, { queryFulfilled }) => {
+        await queryFulfilled;
+        toast({ type: ToastType.SUCCESS, message: 'Tilgangsstyring er lagret' });
+      },
     }),
   }),
 });

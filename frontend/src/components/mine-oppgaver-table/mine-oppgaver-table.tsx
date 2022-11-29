@@ -5,7 +5,7 @@ import { useUser } from '../../simple-api-state/use-user';
 import { StyledMineOppgaverTable } from '../../styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeader } from './header';
-import { OppgaveRader } from './rows';
+import { Oppgaverader } from './rows';
 import { Filters } from './types';
 
 const MAX_OPPGAVER = 100;
@@ -55,7 +55,7 @@ export const MineOppgaverTable = () => {
       }}
     >
       <TableHeader />
-      <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
+      <Oppgaverader oppgaver={oppgaver?.behandlinger} columnCount={10} isFetching={isFetching} />
     </StyledMineOppgaverTable>
   );
 };

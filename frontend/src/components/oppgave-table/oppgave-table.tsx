@@ -2,16 +2,17 @@ import { Pagination, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { useGetSettingsQuery } from '../../redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
-  useGetMineLedigeOppgaverQuery,
+  useGetLedigeOppgaverQuery,
 } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledFooterContent } from '../../styled-components/table';
-import { MineLedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { LedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
-import { OppgaveRader } from './rows';
+import { Oppgaverader } from './rows';
 import { Filters } from './types';
 
 const PAGE_SIZE = 10;
@@ -43,7 +44,7 @@ export const OppgaveTable = (): JSX.Element => {
 
   const [sortering, rekkefoelge] = filters.sorting;
 
-  const queryParams: typeof skipToken | MineLedigeOppgaverParams =
+  const queryParams: typeof skipToken | LedigeOppgaverParams =
     typeof bruker === 'undefined' || typeof settingsData === 'undefined'
       ? skipToken
       : {
@@ -57,7 +58,7 @@ export const OppgaveTable = (): JSX.Element => {
           hjemler,
         };
 
-  const { data: oppgaver, isFetching } = useGetMineLedigeOppgaverQuery(queryParams, {
+  const { data: oppgaver, isFetching } = useGetLedigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
     refetchOnMountOrArgChange: true,
   });
@@ -84,7 +85,7 @@ export const OppgaveTable = (): JSX.Element => {
 
   return (
     <>
-      <Table
+      <OppgaverTable
         data-testid="oppgave-table"
         zebraStripes
         sort={{
@@ -105,7 +106,7 @@ export const OppgaveTable = (): JSX.Element => {
         }}
       >
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <OppgaveRader oppgaver={oppgaver?.behandlinger} columnCount={7} isFetching={isFetching} />
+        <Oppgaverader oppgaver={oppgaver?.behandlinger} columnCount={7} isFetching={isFetching} />
         <tfoot>
           <Table.Row>
             <Table.DataCell colSpan={6}>
@@ -121,12 +122,17 @@ export const OppgaveTable = (): JSX.Element => {
             </Table.DataCell>
           </Table.Row>
         </tfoot>
-      </Table>
+      </OppgaverTable>
 
       <div>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</div>
     </>
   );
 };
+
+const OppgaverTable = styled(Table)`
+  max-width: 2048px;
+  width: 100%;
+`;
 
 interface PageInfoProps {
   total: number;
@@ -134,9 +140,9 @@ interface PageInfoProps {
   toNumber: number;
 }
 
-const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element => {
+const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element | null => {
   if (total === 0) {
-    return <span>Ingen klagebehandlinger å vise</span>;
+    return null;
   }
 
   return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;

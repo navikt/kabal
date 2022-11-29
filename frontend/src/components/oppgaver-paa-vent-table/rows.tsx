@@ -37,7 +37,7 @@ export const OppgaveRows = ({ oppgaver, columnCount, isLoading, isError }: Oppga
     return (
       <Table.Body data-testid="mine-oppgaver-table-none">
         <Table.Row>
-          <Table.DataCell colSpan={columnCount}>Ingen oppgaver i liste</Table.DataCell>
+          <Table.DataCell colSpan={columnCount}>Ingen oppgaver</Table.DataCell>
         </Table.Row>
       </Table.Body>
     );

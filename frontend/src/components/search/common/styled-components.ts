@@ -18,7 +18,7 @@ export const StyledResult = styled.li`
   padding: 16px;
   padding-right: 32px;
   border-top: 1px solid #c6c2bf;
-  max-width: 900px;
+  max-width: 2047px;
 `;
 
 export const StyledName = styled.span`

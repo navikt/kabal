@@ -11,7 +11,8 @@ import {
 } from '../../../types/oppgavebehandling/params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { ListTagTypes } from '../../tag-types';
+import { OppgaveListTagTypes, OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
@@ -22,25 +23,21 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer`,
         method: 'POST',
       }),
-      extraOptions: {
-        maxRetries: 0,
-      },
+      extraOptions: { maxRetries: 0 },
       onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
         const { data } = await queryFulfilled;
         update(oppgaveId, [
           ['modified', data.modified],
           ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
         ]);
-        oppgaverApi.util.invalidateTags(['oppgavebehandling']);
+        oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]);
       },
     }),
     setMottattKlageinstans: builder.mutation<IModifiedResponse, IMottattKlageinstansParams>({
       query: ({ oppgaveId, mottattKlageinstans }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/mottattklageinstans`,
         method: 'PUT',
-        body: {
-          date: mottattKlageinstans,
-        },
+        body: { date: mottattKlageinstans },
       }),
       onQueryStarted: async ({ oppgaveId, mottattKlageinstans, type }, { dispatch, queryFulfilled }) => {
         if (type === OppgaveType.ANKE) {
@@ -49,7 +46,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           try {
             const { data } = await queryFulfilled;
             update(oppgaveId, [['modified', data.modified]]);
-            dispatch(oppgaverApi.util.invalidateTags(['tildelte-oppgaver', 'enhetens-tildelte-oppgaver']));
+            dispatch(getInvalidateAction(oppgaveId));
           } catch {
             undo();
           }
@@ -60,9 +57,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, mottattVedtaksinstans }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/mottattvedtaksinstans`,
         method: 'PUT',
-        body: {
-          date: mottattVedtaksinstans,
-        },
+        body: { date: mottattVedtaksinstans },
       }),
       onQueryStarted: async ({ oppgaveId, mottattVedtaksinstans, type }, { dispatch, queryFulfilled }) => {
         if (type === OppgaveType.KLAGE) {
@@ -71,7 +66,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           try {
             const { data } = await queryFulfilled;
             update(oppgaveId, [['modified', data.modified]]);
-            dispatch(oppgaverApi.util.invalidateTags(['tildelte-oppgaver', 'enhetens-tildelte-oppgaver']));
+            dispatch(getInvalidateAction(oppgaveId));
           } catch {
             undo();
           }
@@ -145,9 +140,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, fullmektig: { person, virksomhet } }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
         method: 'PUT',
-        body: {
-          identifikator: person?.foedselsnummer ?? virksomhet?.virksomhetsnummer ?? null,
-        },
+        body: { identifikator: person?.foedselsnummer ?? virksomhet?.virksomhetsnummer ?? null },
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
         const undo = update(oppgaveId, [['prosessfullmektig', fullmektig]]);
@@ -169,6 +162,14 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
     }),
   }),
 });
+
+const getInvalidateAction = (oppgaveId: string) =>
+  oppgaverApi.util.invalidateTags([
+    { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: oppgaveId },
+    { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+    { type: OppgaveListTagTypes.ENHETENS_TILDELTE_OPPGAVER, id: oppgaveId },
+    { type: OppgaveListTagTypes.ENHETENS_TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+  ]);
 
 const update = <K extends keyof IOppgavebehandling>(oppgaveId: string, values: [K, IOppgavebehandling[K]][]) => {
   const patchResult = reduxStore.dispatch(

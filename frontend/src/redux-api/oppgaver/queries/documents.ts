@@ -6,7 +6,15 @@ import { IValidateDocumentResponse } from '../../../types/documents/validation';
 import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '../../common';
 import { ServerSentEventManager, ServerSentEventType } from '../../server-sent-events';
-import { oppgaverApi } from '../oppgaver';
+import { ListTagTypes } from '../../tag-types';
+import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
+
+const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverteDocumentsResponse | undefined) =>
+  typeof result === 'undefined'
+    ? [{ type, id: ListTagTypes.PARTIAL_LIST }]
+    : result.dokumenter
+        .map(({ journalpostId, dokumentInfoId }) => ({ id: `${journalpostId}-${dokumentInfoId}`, type }))
+        .concat({ type, id: ListTagTypes.PARTIAL_LIST });
 
 export const documentsQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -29,7 +37,12 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
                 const filteredList = draft.filter(({ id, parent }) => !(id === event.data || parent === event.data)); // Remove finished document from list.
 
                 if (filteredList.length !== draft.length) {
-                  dispatch(oppgaverApi.util.invalidateTags(['dokumenter', 'tilknyttedeDokumenter']));
+                  dispatch(
+                    oppgaverApi.util.invalidateTags([
+                      { type: DokumenterListTagTypes.DOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
+                      { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
+                    ])
+                  );
                 }
 
                 return filteredList;
@@ -54,11 +67,11 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-api/klagebehandlinger/${oppgaveId}/arkivertedokumenter${query}`;
       },
-      providesTags: ['dokumenter'],
+      providesTags: dokumenterListTags(DokumenterListTagTypes.DOKUMENTER),
     }),
     getTilknyttedeDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
       query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/dokumenttilknytninger`,
-      providesTags: ['tilknyttedeDokumenter'],
+      providesTags: dokumenterListTags(DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER),
     }),
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,

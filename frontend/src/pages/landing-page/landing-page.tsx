@@ -12,16 +12,20 @@ export const LandingPage = () => {
     return <Loader size="xlarge" />;
   }
 
-  if (data.roller.includes(Role.KABAL_SAKSBEHANDLING)) {
-    return <Navigate replace to="/oppgaver/1" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_OPPGAVESTYRING_EGEN_ENHET)) {
+  if (data.roller.includes(Role.KABAL_INNSYN_EGEN_ENHET)) {
     return <Navigate replace to="enhetensoppgaver" />;
   }
 
   if (data.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {
     return <Navigate replace to="sok" />;
+  }
+
+  if (data.roller.includes(Role.KABAL_SAKSBEHANDLING)) {
+    return <Navigate replace to="/mineoppgaver" />;
+  }
+
+  if (data.roller.includes(Role.KABAL_TILGANGSSTYRING_EGEN_ENHET)) {
+    return <Navigate replace to="tilgangsstyring" />;
   }
 
   if (data.roller.includes(Role.KABAL_FAGTEKSTREDIGERING)) {

@@ -1,6 +1,7 @@
 import { IModifiedResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { ListTagTypes } from '../../tag-types';
+import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
 const ventMutationSlice = oppgaverApi.injectEndpoints({
@@ -20,7 +21,14 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-          dispatch(oppgaverApi.util.invalidateTags(['ventende-oppgaver', 'tildelte-oppgaver']));
+          dispatch(
+            oppgaverApi.util.invalidateTags([
+              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: oppgaveId },
+              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: oppgaveId },
+              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+            ])
+          );
         } catch {
           patchResult.undo();
         }
@@ -40,7 +48,14 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-          dispatch(oppgaverApi.util.invalidateTags(['ventende-oppgaver', 'tildelte-oppgaver']));
+          dispatch(
+            oppgaverApi.util.invalidateTags([
+              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: oppgaveId },
+              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: oppgaveId },
+              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
+            ])
+          );
         } catch {
           patchResult.undo();
         }

@@ -26,7 +26,7 @@ export const OppgaveRows = ({ oppgaver, isLoading, columnCount }: OppgaveRowsPro
     return (
       <Table.Body>
         <Table.Row>
-          <Table.DataCell colSpan={columnCount}>Ingen oppgaver i liste</Table.DataCell>
+          <Table.DataCell colSpan={columnCount}>Ingen oppgaver</Table.DataCell>
         </Table.Row>
       </Table.Body>
     );

@@ -11,7 +11,7 @@ import { OppgaveRows } from './rows';
 
 const MAX_OPPGAVER = 100;
 
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'På vent til', 'Utfall', 'Saksbehandler', null];
+const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'På vent til', 'Utfall', 'Tildeling', null];
 
 export const EnhetensOppgaverPaaVentTable = () => {
   const { data: bruker } = useUser();

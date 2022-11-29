@@ -57,7 +57,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         <Table.ColumnHeader sortKey={SortFieldEnum.FRIST} sortable scope="col">
           Frist
         </Table.ColumnHeader>
-        <Table.HeaderCell></Table.HeaderCell>
+        <Table.HeaderCell>Tildeling</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
   );

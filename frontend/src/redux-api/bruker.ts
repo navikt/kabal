@@ -1,7 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { ISetCustomInfoParams, ISettings, ISignatureResponse } from '../types/bruker';
-import { IMedunderskrivereParams } from '../types/oppgavebehandling/params';
-import { IMedunderskrivereResponse } from '../types/oppgavebehandling/response';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export const brukerApi = createApi({
@@ -62,13 +60,6 @@ export const brukerApi = createApi({
         }
       },
     }),
-    searchMedunderskrivere: builder.query<IMedunderskrivereResponse, IMedunderskrivereParams>({
-      query: (body) => ({
-        method: 'POST',
-        url: '/search/medunderskrivere',
-        body,
-      }),
-    }),
   }),
 });
 
@@ -90,7 +81,6 @@ export const {
   useGetMySignatureQuery,
   useGetSettingsQuery,
   useGetSignatureQuery,
-  useSearchMedunderskrivereQuery,
   useUpdateSettingsMutation,
   useSetCustomInfoMutation,
 } = brukerApi;

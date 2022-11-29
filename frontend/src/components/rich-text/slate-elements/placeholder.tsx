@@ -83,8 +83,7 @@ const Wrapper = styled.span<WrapperProps>`
   }
 `;
 
-const getBackgroundColor = (focused: boolean) =>
-  focused ? 'var(--a-blue-100)' : 'var(--a-gray-200)';
+const getBackgroundColor = (focused: boolean) => (focused ? 'var(--a-blue-100)' : 'var(--a-gray-200)');
 
 const Anchor = styled.span`
   font-size: 0;

@@ -7,9 +7,10 @@ import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
   id: string;
+  title: string;
 }
 
-export const DeleteTextButton = ({ id }: Props) => {
+export const DeleteTextButton = ({ id, title }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [, { isLoading }] = useDeleteTextMutation({ fixedCacheKey: id });
 
@@ -25,7 +26,7 @@ export const DeleteTextButton = ({ id }: Props) => {
         >
           Avbryt
         </Button>
-        <ConfirmDeleleTextButton id={id} />
+        <ConfirmDeleleTextButton id={id} title={title} />
       </>
     );
   }
@@ -37,13 +38,13 @@ export const DeleteTextButton = ({ id }: Props) => {
   );
 };
 
-const ConfirmDeleleTextButton = ({ id }: Props) => {
+const ConfirmDeleleTextButton = ({ id, title }: Props) => {
   const [deleteText, { isLoading }] = useDeleteTextMutation({ fixedCacheKey: id });
   const navigate = useTextNavigate();
   const query = useTextQuery();
 
   const onClick = async () => {
-    await deleteText({ id, query });
+    await deleteText({ id, title, query });
     navigate();
   };
 

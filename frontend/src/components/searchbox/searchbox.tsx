@@ -13,8 +13,8 @@ export const SearchBox = ({ setQuery }: SearchBoxProps): JSX.Element => (
       variant="simple"
       onChange={(value) => setTimeout(() => setQuery(value), 0)}
       data-testid="search-input"
-      placeholder="Søk på navn eller personnummer"
-      label="Søk på navn eller personnummer"
+      placeholder="Søk på navn eller fødselsnummer"
+      label="Søk på navn eller fødselsnummer"
     />
   </StyledContainer>
 );

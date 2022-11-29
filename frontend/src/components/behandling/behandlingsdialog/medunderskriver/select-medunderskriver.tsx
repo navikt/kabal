@@ -1,37 +1,20 @@
 import { Loader, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useSearchMedunderskrivereQuery } from '../../../../redux-api/bruker';
 import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
-import { useUser } from '../../../../simple-api-state/use-user';
+import { useGetPotentialMedunderskrivereQuery } from '../../../../redux-api/oppgaver/queries/behandling';
 import { ISaksbehandler } from '../../../../types/oppgave-common';
 import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
-import { IMedunderskrivereParams } from '../../../../types/oppgavebehandling/params';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, type }: SelectMedunderskriverProps) => {
-  const { data: oppgave } = useOppgave();
-  const { data: bruker } = useUser();
+export const SelectMedunderskriver = ({ id, medunderskriver, type }: SelectMedunderskriverProps) => {
   const canEdit = useCanEdit();
-  const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: oppgaveId });
-
-  const medunderskrivereQuery: IMedunderskrivereParams | typeof skipToken =
-    typeof bruker === 'undefined' || typeof oppgave === 'undefined' || oppgave.tildeltSaksbehandlerEnhet === null
-      ? skipToken
-      : {
-          navIdent: bruker.navIdent,
-          enhet: oppgave.tildeltSaksbehandlerEnhet,
-          ytelseId: ytelse,
-          fnr: oppgave.sakenGjelder.person?.foedselsnummer ?? null,
-        };
-
-  const { data } = useSearchMedunderskrivereQuery(medunderskrivereQuery);
+  const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: id });
+  const { data } = useGetPotentialMedunderskrivereQuery(id);
 
   if (!canEdit) {
     return null;
@@ -49,7 +32,7 @@ export const SelectMedunderskriver = ({ ytelse, id: oppgaveId, medunderskriver, 
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
     updateChosenMedunderskriver({
-      oppgaveId,
+      oppgaveId: id,
       medunderskriver:
         medunderskriverident === null
           ? null

@@ -21,9 +21,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
     setType: builder.mutation<IMainDocument, ISetTypeParams>({
       query: ({ oppgaveId, dokumentId, dokumentTypeId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/dokumenttype`,
-        body: {
-          dokumentTypeId,
-        },
+        body: { dokumentTypeId },
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, dokumentTypeId, oppgaveId }, { queryFulfilled }) => {
@@ -39,9 +37,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
     setTitle: builder.mutation<void, ISetNameParams>({
       query: ({ oppgaveId, dokumentId, title }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/tittel`,
-        body: {
-          title,
-        },
+        body: { title },
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, title, oppgaveId }, { queryFulfilled }) => {
@@ -57,9 +53,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
     setParent: builder.mutation<IMainDocument, ISetParentParams>({
       query: ({ oppgaveId, dokumentId, parentId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/parent`,
-        body: {
-          dokumentId: parentId,
-        },
+        body: { dokumentId: parentId },
         method: 'PUT',
       }),
       onQueryStarted: async ({ parentId, dokumentId, oppgaveId }, { queryFulfilled }) => {
@@ -181,10 +175,7 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
   const smartEditorPatchResult = reduxStore.dispatch(
     smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, (draft) => {
       if (draft !== null) {
-        return {
-          ...draft,
-          [key]: value,
-        };
+        return { ...draft, [key]: value };
       }
 
       return draft;

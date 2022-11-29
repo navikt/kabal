@@ -61,18 +61,17 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
         <Table.ColumnHeader sortKey={SortFieldEnum.FRIST} sortable scope="col">
           Frist
         </Table.ColumnHeader>
+        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
+        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
         <Table.HeaderCell>
           <FilterDropdown
             selected={filters.tildeltSaksbehandler}
             onChange={(tildeltSaksbehandler) => onChange({ ...filters, tildeltSaksbehandler })}
             options={kodeverkSimpleValuesToDropdownOptions(saksbehandlerOptions)}
           >
-            Saksbehandler
+            Tildeling
           </FilterDropdown>
         </Table.HeaderCell>
-        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
-        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
-        <Table.HeaderCell role="columnheader"></Table.HeaderCell>
       </Table.Row>
     </Table.Header>
   );

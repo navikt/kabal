@@ -1,4 +1,5 @@
 import { formatFoedselsnummer } from '../functions/format-id';
+import { ISakspart } from '../types/oppgavebehandling/oppgavebehandling';
 import { Name } from './types';
 
 export const getFullName = (name?: Name | null): string => {
@@ -16,7 +17,7 @@ export const getFullName = (name?: Name | null): string => {
   return navnListe.join(' ');
 };
 
-export const getFullNameWithFnr = (name: Name | null, fnr: string | null) => {
+export const getFullNameWithFnr = (name?: Name | null, fnr?: string | null) => {
   const fulltNavn = getFullName(name);
 
   if (typeof fnr === 'string' && fnr.length === 11) {
@@ -27,3 +28,19 @@ export const getFullNameWithFnr = (name: Name | null, fnr: string | null) => {
 };
 
 export const getOrgName = (navn: string | null): string => (navn !== null ? navn : '-');
+
+export const getSakspartName = (sakspart: ISakspart) => {
+  const { person, virksomhet } = sakspart;
+
+  if (person !== null) {
+    return getFullName(person.navn);
+  }
+
+  if (virksomhet !== null) {
+    return `${virksomhet.navn ?? ''} ${
+      virksomhet.virksomhetsnummer === null ? '' : `(${virksomhet.virksomhetsnummer})`
+    }`;
+  }
+
+  return null;
+};

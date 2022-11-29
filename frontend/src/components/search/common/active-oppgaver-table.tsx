@@ -6,8 +6,8 @@ import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../../common-table-components/open';
-import { SaksbehandlerButton } from '../../common-table-components/saksbehandler-button';
 import { Ytelse } from '../../common-table-components/ytelse';
+import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
 
 interface Props {
@@ -28,7 +28,7 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
           <Table.ColumnHeader>Ytelse</Table.ColumnHeader>
           <Table.ColumnHeader>Hjemmel</Table.ColumnHeader>
           <Table.ColumnHeader>Frist</Table.ColumnHeader>
-          <Table.ColumnHeader>Saksbehandler</Table.ColumnHeader>
+          <Table.ColumnHeader>Tildeling</Table.ColumnHeader>
           <Table.ColumnHeader></Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
@@ -41,41 +41,25 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
   );
 };
 
-const Row = ({
-  id,
-  type,
-  ytelse,
-  hjemmel,
-  frist,
-  ageKA,
-  tildeltSaksbehandlerident,
-  tildeltSaksbehandlerNavn,
-  isAvsluttetAvSaksbehandler,
-}: IOppgave) => (
-  <Table.Row data-testid="search-result-active-oppgave">
+const Row = (oppgave: IOppgave) => (
+  <Table.Row data-testid="search-result-active-oppgave" data-klagebehandlingid={oppgave.id}>
     <Table.DataCell>
-      <Type type={type} />
+      <Type type={oppgave.type} />
     </Table.DataCell>
     <Table.DataCell>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={oppgave.ytelse} />
     </Table.DataCell>
     <Table.DataCell>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={oppgave.hjemmel} />
     </Table.DataCell>
     <Table.DataCell>
-      <Deadline age={ageKA} frist={frist} />
+      <Deadline age={oppgave.ageKA} frist={oppgave.frist} />
     </Table.DataCell>
     <Table.DataCell>
-      <SaksbehandlerButton
-        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
-        name={tildeltSaksbehandlerNavn}
-        klagebehandlingId={id}
-        ytelse={ytelse}
-        isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler}
-      />
+      <Oppgavestyring {...oppgave} />
     </Table.DataCell>
     <Table.DataCell align="right">
-      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
+      <OpenOppgavebehandling oppgavebehandlingId={oppgave.id} ytelse={oppgave.ytelse} type={oppgave.type} />
     </Table.DataCell>
   </Table.Row>
 );

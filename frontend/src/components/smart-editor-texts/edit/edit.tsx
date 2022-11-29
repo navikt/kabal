@@ -129,7 +129,7 @@ export const EditSmartEditorText = (savedText: IText) => {
         <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small" loading={isLoading}>
           Lagre og publisér
         </Button>
-        <DeleteTextButton id={id} />
+        <DeleteTextButton id={id} title={savedText.title} />
       </Buttons>
     </Fragment>
   );
