@@ -113,7 +113,7 @@ const ToolbarStyle = styled.section<{ visible: boolean }>`
   top: 0;
   left: 0;
   background-color: white;
-  z-index: 1;
+  z-index: 2;
   padding: 2px;
   margin-left: 16px;
   margin-right: 16px;
