@@ -8,9 +8,16 @@ interface Props {
   journalpostId: string;
   dokumentInfoId: string;
   valgt: boolean;
+  harTilgangTilArkivvariant: boolean;
 }
 
-export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, valgt }: Props) => {
+export const OpenDocumentButton = ({
+  dokumentInfoId,
+  journalpostId,
+  title,
+  valgt,
+  harTilgangTilArkivvariant,
+}: Props) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
 
   const onClick = () =>
@@ -28,7 +35,13 @@ export const OpenDocumentButton = ({ dokumentInfoId, journalpostId, title, valgt
     shownDocument.journalpostId === journalpostId;
 
   return (
-    <ViewDocumentButton isActive={isActive} tilknyttet={valgt} onClick={onClick}>
+    <ViewDocumentButton
+      isActive={isActive}
+      tilknyttet={valgt}
+      onClick={onClick}
+      disabled={!harTilgangTilArkivvariant}
+      title={harTilgangTilArkivvariant ? undefined : 'Du har ikke tilgang til å se dette dokumentet.'}
+    >
       {title}
     </ViewDocumentButton>
   );

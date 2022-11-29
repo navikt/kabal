@@ -45,6 +45,8 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
           onClick={onClick}
           isActive={isActive}
           data-testid="oppgavebehandling-documents-open-document-button"
+          disabled={!harTilgangTilArkivvariant}
+          title={harTilgangTilArkivvariant ? undefined : 'Du har ikke tilgang til å se dette dokumentet.'}
         >
           {tittel}
         </StyledDocumentButton>
