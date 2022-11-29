@@ -41,13 +41,6 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
 
 export type ICheckDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
 
-export interface IMedunderskrivereParams {
-  navIdent: string;
-  ytelseId: string;
-  enhet: string;
-  fnr: string | null;
-}
-
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
   medunderskriver: ISaksbehandler | null;
 }

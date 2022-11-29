@@ -38,6 +38,7 @@ export interface IOppgave {
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
+  medunderskriverNavn: string | null;
   mottatt: Date;
   person: Person | null;
   saksbehandlerHarTilgang: boolean;
@@ -94,7 +95,7 @@ export type MineUferdigeOppgaverParams = CommonOppgaverParams & NavidentParam;
 
 export type MineFerdigstilteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
 
-export type MineLedigeOppgaverParams = CommonOppgaverParams & NavidentParam;
+export type LedigeOppgaverParams = CommonOppgaverParams & NavidentParam;
 
 export type UtgaatteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
 
@@ -112,19 +113,8 @@ export interface INameSearchParams {
 }
 
 export interface TildelSaksbehandlerParams {
-  navIdent: string;
-  enhetId: string;
+  navIdent: string | null;
   oppgaveId: string;
-}
-
-export interface FradelSaksbehandlerParams {
-  navIdent: string;
-  oppgaveId: string;
-}
-
-export interface ISaksbehandlerResponse {
-  modified: string;
-  tildelt: string;
 }
 
 export interface INameSearchParams {
@@ -141,7 +131,7 @@ export interface ISearchPerson {
 export interface INameSearchResponse {
   people: ISearchPerson[];
 }
-export interface IGetSaksbehandlereInEnhetResponse {
+export interface ISaksbehandlere {
   saksbehandlere: ISaksbehandler[];
 }
 
@@ -149,4 +139,9 @@ export interface IPersonAndOppgaverResponse extends ISearchPerson {
   aapneBehandlinger: IOppgave[];
   avsluttedeBehandlinger: IOppgave[];
   behandlinger: IOppgave[];
+}
+
+export interface ITildelingResponse {
+  saksbehandler: ISaksbehandler | null;
+  modified: Date;
 }

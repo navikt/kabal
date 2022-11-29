@@ -108,7 +108,7 @@ const OppgaveRader = ({ oppgaver, isLoading }: OppgaveRaderProps): JSX.Element =
     return (
       <Table.Body data-testid="enhetens-oppgaver-table-none">
         <Table.Row>
-          <Table.DataCell colSpan={5}>Ingen oppgaver i liste</Table.DataCell>
+          <Table.DataCell colSpan={5}>Ingen oppgaver</Table.DataCell>
         </Table.Row>
       </Table.Body>
     );

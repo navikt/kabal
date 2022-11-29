@@ -7,13 +7,14 @@ interface LabelProps {
 
 const Label = styled.div<LabelProps>`
   display: inline-block;
-  padding: 4px 9px;
+  padding: 2px 8px;
   border-radius: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   max-width: 13em;
   width: ${({ fixedWidth }) => (fixedWidth === true ? '13em' : 'auto')};
+  vertical-align: middle;
 `;
 
 export const LabelMain = styled(Label)`

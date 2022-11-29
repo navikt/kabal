@@ -3,56 +3,43 @@ import React from 'react';
 import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
-import { FradelKlagebehandlingButton } from '../common-table-components/fradel-button';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { MedudunderskriverflytLabel } from '../common-table-components/medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { Ytelse } from '../common-table-components/ytelse';
+import { Oppgavestyring } from '../oppgavestyring/oppgavestyring';
 import { Type } from '../type/type';
 
-export const Row = ({
-  id,
-  type,
-  ytelse,
-  hjemmel,
-  frist,
-  ageKA,
-  tildeltSaksbehandlerNavn,
-  harMedunderskriver,
-  isAvsluttetAvSaksbehandler,
-  erMedunderskriver,
-  medunderskriverFlyt,
-}: IOppgave): JSX.Element => (
-  <Table.Row data-testid="enhetens-oppgaver-table-row" data-klagebehandlingid={id}>
+export const Row = (oppgave: IOppgave): JSX.Element => (
+  <Table.Row data-testid="enhetens-oppgaver-table-row" data-klagebehandlingid={oppgave.id}>
     <Table.DataCell>
-      <Type type={type} />
+      <Type type={oppgave.type} />
     </Table.DataCell>
     <Table.DataCell>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={oppgave.ytelse} />
     </Table.DataCell>
     <Table.DataCell>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={oppgave.hjemmel} />
     </Table.DataCell>
     <Table.DataCell>
-      <Age age={ageKA} />
+      <Age age={oppgave.ageKA} />
     </Table.DataCell>
     <Table.DataCell>
-      <Deadline age={ageKA} frist={frist} />
+      <Deadline age={oppgave.ageKA} frist={oppgave.frist} />
     </Table.DataCell>
-    <Table.DataCell>{tildeltSaksbehandlerNavn}</Table.DataCell>
     <Table.DataCell>
       <MedudunderskriverflytLabel
-        type={type}
-        erMedunderskriver={erMedunderskriver}
-        harMedunderskriver={harMedunderskriver}
-        medunderskriverFlyt={medunderskriverFlyt}
+        type={oppgave.type}
+        erMedunderskriver={oppgave.erMedunderskriver}
+        harMedunderskriver={oppgave.harMedunderskriver}
+        medunderskriverFlyt={oppgave.medunderskriverFlyt}
       />
     </Table.DataCell>
     <Table.DataCell>
-      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
+      <OpenOppgavebehandling oppgavebehandlingId={oppgave.id} ytelse={oppgave.ytelse} type={oppgave.type} />
     </Table.DataCell>
     <Table.DataCell>
-      <FradelKlagebehandlingButton klagebehandlingId={id} isAvsluttetAvSaksbehandler={isAvsluttetAvSaksbehandler} />
+      <Oppgavestyring {...oppgave} />
     </Table.DataCell>
   </Table.Row>
 );

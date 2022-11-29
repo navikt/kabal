@@ -20,6 +20,10 @@ export interface IMedunderskriverResponse {
   medunderskriver: ISaksbehandler | null;
 }
 
+export interface ISaksbehandlerResponse {
+  saksbehandler: ISaksbehandler | null;
+}
+
 export interface IMedunderskriverflytResponse {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
@@ -41,4 +45,13 @@ export interface ISwitchMedunderskriverflytParams {
 
 export interface IModifiedResponse {
   modified: string;
+}
+
+export interface ISakenGjelderResponse {
+  sakenGjelder: IPerson;
+}
+
+export interface IPerson {
+  navn: string;
+  fnr: string;
 }

@@ -4,29 +4,29 @@ import { IOppgave } from '../../types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { Hjemmel } from '../common-table-components/hjemmel';
-import { TildelKlagebehandlingButton } from '../common-table-components/tildel-button';
 import { Ytelse } from '../common-table-components/ytelse';
+import { Oppgavestyring } from '../oppgavestyring/oppgavestyring';
 import { Type } from '../type/type';
 
-export const Row = ({ id, type, ytelse, hjemmel, frist, ageKA }: IOppgave): JSX.Element => (
-  <Table.Row data-testid="oppgave-table-row" data-klagebehandlingid={id}>
+export const Row = (oppgave: IOppgave): JSX.Element => (
+  <Table.Row data-testid="oppgave-table-row" data-klagebehandlingid={oppgave.id}>
     <Table.DataCell>
-      <Type type={type} />
+      <Type type={oppgave.type} />
     </Table.DataCell>
     <Table.DataCell>
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={oppgave.ytelse} />
     </Table.DataCell>
     <Table.DataCell>
-      <Hjemmel hjemmel={hjemmel} />
+      <Hjemmel hjemmel={oppgave.hjemmel} />
     </Table.DataCell>
     <Table.DataCell>
-      <Age age={ageKA} />
+      <Age age={oppgave.ageKA} />
     </Table.DataCell>
     <Table.DataCell>
-      <Deadline age={ageKA} frist={frist} />
+      <Deadline age={oppgave.ageKA} frist={oppgave.frist} />
     </Table.DataCell>
     <Table.DataCell>
-      <TildelKlagebehandlingButton klagebehandlingId={id} ytelse={ytelse} />
+      <Oppgavestyring {...oppgave} />
     </Table.DataCell>
   </Table.Row>
 );

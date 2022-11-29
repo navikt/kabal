@@ -1,7 +1,8 @@
 import { ICheckDocumentParams } from '../../../types/oppgavebehandling/params';
 import { ITilknyttDocumentResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { ListTagTypes } from '../../tag-types';
+import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
@@ -17,7 +18,10 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         },
         validateStatus: ({ ok }) => ok,
       }),
-      invalidatesTags: ['tilknyttedeDokumenter'],
+      invalidatesTags: (_, __, { journalpostId, dokumentInfoId }) => [
+        { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: `${journalpostId}-${dokumentInfoId}` },
+        { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
+      ],
       onQueryStarted: async ({ oppgaveId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
         const archiveResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => ({

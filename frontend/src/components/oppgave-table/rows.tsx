@@ -3,13 +3,13 @@ import React from 'react';
 import { IOppgaveList } from '../../types/oppgaver';
 import { Row } from './row';
 
-interface OppgaveRaderProps {
+interface OppgaveraderProps {
   oppgaver?: IOppgaveList;
   columnCount: number;
   isFetching: boolean;
 }
 
-export const OppgaveRader = ({ oppgaver, columnCount, isFetching }: OppgaveRaderProps): JSX.Element => {
+export const Oppgaverader = ({ oppgaver, columnCount, isFetching }: OppgaveraderProps): JSX.Element => {
   if (typeof oppgaver === 'undefined') {
     return (
       <Table.Body data-testid="oppgave-table-loading" data-isfetching="false">

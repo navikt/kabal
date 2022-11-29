@@ -3,18 +3,25 @@ import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
   EnhetensUferdigeOppgaverParams,
-  IGetSaksbehandlereInEnhetResponse,
   INameSearchParams,
   INameSearchResponse,
   IPersonAndOppgaverResponse,
+  ISaksbehandlere,
+  LedigeOppgaverParams,
   MineFerdigstilteOppgaverParams,
-  MineLedigeOppgaverParams,
   MineUferdigeOppgaverParams,
   UtgaatteApiResponse,
   UtgaatteOppgaverParams,
 } from '../../../types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { ListTagTypes } from '../../tag-types';
+import { OppgaveListTagTypes, UtgaatteFristerTagTypes, oppgaverApi } from '../oppgaver';
+import { getMiniGetActions } from './get-mini-get-actions';
+
+const oppgaveListTags = (type: OppgaveListTagTypes) => (result: ApiResponse | undefined) =>
+  typeof result === 'undefined'
+    ? [{ type, id: ListTagTypes.PARTIAL_LIST }]
+    : result.behandlinger.map(({ id }) => ({ type, id })).concat({ type, id: ListTagTypes.PARTIAL_LIST });
 
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -25,6 +32,10 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-search/ansatte/${navIdent}/oppgaver/ferdigstilte${query}`;
       },
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
+      },
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -32,7 +43,11 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-search/ansatte/${navIdent}/oppgaver/uferdige${query}`;
       },
-      providesTags: ['tildelte-oppgaver'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
+      },
+      providesTags: oppgaveListTags(OppgaveListTagTypes.TILDELTE_OPPGAVER),
     }),
     getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
@@ -40,20 +55,33 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-search/ansatte/${navIdent}/oppgaver/paavent${query}`;
       },
-      providesTags: ['ventende-oppgaver'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
+      },
+      providesTags: oppgaveListTags(OppgaveListTagTypes.VENTENDE_OPPGAVER),
     }),
-    getMineLedigeOppgaver: builder.query<ApiResponse, MineLedigeOppgaverParams>({
+    getLedigeOppgaver: builder.query<ApiResponse, LedigeOppgaverParams>({
       query: ({ navIdent, ...queryParams }) => {
         const query = queryStringify(queryParams);
 
         return `/kabal-search/ansatte/${navIdent}/oppgaver/ledige${query}`;
       },
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
+      },
+      providesTags: oppgaveListTags(OppgaveListTagTypes.LEDIGE_OPPGAVER),
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
         const query = queryStringify(queryParams);
 
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${query}`;
+      },
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
       },
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
@@ -62,13 +90,21 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${query}`;
       },
-      providesTags: ['enhetens-tildelte-oppgaver'],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
+      },
+      providesTags: oppgaveListTags(OppgaveListTagTypes.ENHETENS_TILDELTE_OPPGAVER),
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       query: ({ enhetId, ...queryParams }) => {
         const query = queryStringify(queryParams);
 
         return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${query}`;
+      },
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        getMiniGetActions(data.behandlinger).forEach(dispatch);
       },
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
@@ -77,7 +113,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 
         return `/kabal-search/ansatte/${navIdent}/antalloppgavermedutgaattefrister${query}`;
       },
-      providesTags: ['ledige-medutgaattefrister'],
+      providesTags: [UtgaatteFristerTagTypes.ANTALL_LEDIGE_MEDUTGAATTEFRISTER],
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
       query: (body) => ({
@@ -106,7 +142,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         navn,
       }),
     }),
-    getSaksbehandlereInEnhet: builder.query<IGetSaksbehandlereInEnhetResponse, string>({
+    getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,
     }),
   }),
@@ -118,7 +154,7 @@ export const {
   useGetMineFerdigstilteOppgaverQuery,
   useGetMineUferdigeOppgaverQuery,
   useGetMineVentendeOppgaverQuery,
-  useGetMineLedigeOppgaverQuery,
+  useGetLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   usePersonAndOppgaverQuery,
   useNameSearchQuery,

@@ -21,19 +21,11 @@ export const Nav = () => (
       <NavItem
         to="/sok"
         testId="search-nav-link"
-        roles={[
-          Role.KABAL_SAKSBEHANDLING,
-          Role.KABAL_OPPGAVESTYRING_EGEN_ENHET,
-          Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER,
-        ]}
+        roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]}
       >
         <Search /> Søk på person
       </NavItem>
-      <NavItem
-        to="/enhetensoppgaver"
-        testId="enhetens-oppgaver-nav-link"
-        roles={[Role.KABAL_OPPGAVESTYRING_EGEN_ENHET]}
-      >
+      <NavItem to="/enhetensoppgaver" testId="enhetens-oppgaver-nav-link" roles={[Role.KABAL_INNSYN_EGEN_ENHET]}>
         <Office1 /> Enhetens oppgaver
       </NavItem>
 
@@ -65,7 +57,7 @@ export const Nav = () => (
         <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
 
-      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_OPPGAVESTYRING_EGEN_ENHET]}>
+      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
         <Locked /> Tilgangsstyring
       </NavItem>
     </StyledNavLinkList>

@@ -1,35 +1,43 @@
-import { Button } from '@navikt/ds-react';
+import { Button, ButtonProps } from '@navikt/ds-react';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAvailableEnheterForYtelse } from '../../hooks/use-available-enheter-for-ytelse';
+import { Link } from 'react-router-dom';
+import { useHasYtelseAccess } from '../../hooks/use-has-ytelse-access';
 import { OppgaveType } from '../../types/kodeverk';
 
-interface Props {
+interface Props extends Pick<ButtonProps, 'variant' | 'size'> {
   oppgavebehandlingId: string;
   ytelse: string;
   type: OppgaveType;
+  children?: string;
 }
 
-export const OpenOppgavebehandling = ({ oppgavebehandlingId, ytelse, type }: Props) => {
-  const enheter = useAvailableEnheterForYtelse(ytelse);
-  const hasAccess = enheter.length !== 0;
+export const OpenOppgavebehandling = ({
+  oppgavebehandlingId,
+  ytelse,
+  type,
+  children = 'Åpne',
+  variant = 'primary',
+  size = 'small',
+}: Props) => {
+  const [canOpen, isLoading] = useHasYtelseAccess(ytelse);
 
-  if (!hasAccess) {
+  if (!canOpen) {
     return null;
   }
 
   if (type === OppgaveType.KLAGE) {
     return (
       <Button
-        as={NavLink}
-        variant="primary"
-        size="medium"
+        as={Link}
+        variant={variant}
+        size={size}
         to={`/klagebehandling/${oppgavebehandlingId}`}
+        loading={isLoading}
         data-testid="klagebehandling-open-link"
         data-klagebehandlingid={oppgavebehandlingId}
         data-oppgavebehandlingid={oppgavebehandlingId}
       >
-        Åpne
+        {children}
       </Button>
     );
   }
@@ -37,30 +45,32 @@ export const OpenOppgavebehandling = ({ oppgavebehandlingId, ytelse, type }: Pro
   if (type === OppgaveType.ANKE) {
     return (
       <Button
-        as={NavLink}
-        variant="primary"
-        size="medium"
+        as={Link}
+        variant={variant}
+        size={size}
         to={`/ankebehandling/${oppgavebehandlingId}`}
+        loading={isLoading}
         data-testid="ankebehandling-open-link"
         data-ankebehandlingid={oppgavebehandlingId}
         data-oppgavebehandlingid={oppgavebehandlingId}
       >
-        Åpne
+        {children}
       </Button>
     );
   }
 
   return (
     <Button
-      as={NavLink}
-      variant="primary"
-      size="medium"
+      as={Link}
+      variant={variant}
+      size={size}
       to={`/trygderettsankebehandling/${oppgavebehandlingId}`}
+      loading={isLoading}
       data-testid="trygderettsankebehandling-open-link"
       data-trygderettsankebehandlingid={oppgavebehandlingId}
       data-oppgavebehandlingid={oppgavebehandlingId}
     >
-      Åpne
+      {children}
     </Button>
   );
 };

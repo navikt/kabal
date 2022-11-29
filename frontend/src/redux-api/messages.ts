@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
 import { IOppgavebehandlingBaseParams } from '../types/oppgavebehandling/params';
 import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
+import { ListTagTypes } from './tag-types';
 
 export interface IMessage {
   author: IAuthor;
@@ -20,17 +21,28 @@ interface IPostMessage {
   author: IAuthor;
 }
 
+enum MessageListTagTypes {
+  MESSAGES = 'messages',
+}
+
+const messagesListTags = (messages: IMessage[] | undefined) =>
+  typeof messages === 'undefined'
+    ? [{ type: MessageListTagTypes.MESSAGES, id: ListTagTypes.PARTIAL_LIST }]
+    : messages
+        .map(({ id }) => ({ type: MessageListTagTypes.MESSAGES, id }))
+        .concat({ type: MessageListTagTypes.MESSAGES, id: ListTagTypes.PARTIAL_LIST });
+
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
   baseQuery: KABAL_OPPGAVEBEHANDLING_BASE_QUERY,
-  tagTypes: ['messages'],
+  tagTypes: [MessageListTagTypes.MESSAGES],
   endpoints: (builder) => ({
     getMessages: builder.query<IMessage[], string>({
       query: (oppgaveId) => `/${oppgaveId}/meldinger`,
-      providesTags: ['messages'],
+      providesTags: messagesListTags,
     }),
     postMessage: builder.mutation<IMessage, IPostMessage & IOppgavebehandlingBaseParams>({
-      invalidatesTags: ['messages'],
+      invalidatesTags: [MessageListTagTypes.MESSAGES],
       query: ({ oppgaveId, ...body }) => ({
         method: 'POST',
         url: `/${oppgaveId}/meldinger`,
