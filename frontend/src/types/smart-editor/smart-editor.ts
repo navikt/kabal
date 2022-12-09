@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { OppgaveType } from '../kodeverk';
+import { SaksTypeEnum } from '../kodeverk';
 import { Immutable } from '../types';
 import { INewSmartEditorMetadata, ISmartEditorMetadata } from './metadata';
 
@@ -14,7 +14,7 @@ export enum TemplateTypeEnum {
 }
 
 interface IMutableSmartEditorTemplate extends INewSmartEditor {
-  type: OppgaveType | TemplateTypeEnum;
+  type: SaksTypeEnum | TemplateTypeEnum;
 }
 
 export type ISmartEditorTemplate = Immutable<IMutableSmartEditorTemplate>;

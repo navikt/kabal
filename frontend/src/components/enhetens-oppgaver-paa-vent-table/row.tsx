@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
+import { useUtfall } from '../../simple-api-state/use-kodeverk';
 import { IOppgave } from '../../types/oppgaver';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../common-table-components/open';
@@ -17,7 +17,7 @@ export const Row = ({
   sattPaaVent,
   tildeltSaksbehandlerNavn,
 }: IOppgave): JSX.Element => {
-  const utfallList = useKodeverkValue('utfall');
+  const { data: utfallList } = useUtfall();
 
   const utfallName = useMemo(() => {
     if (typeof utfallList === 'undefined') {

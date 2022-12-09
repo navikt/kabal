@@ -2,21 +2,21 @@ import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useFieldName } from '../../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering';
-import { RadioValg } from '../../../types/kaka-kvalitetsvurdering';
-import { OppgaveType } from '../../../types/kodeverk';
+import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering/v1';
+import { Radiovalg } from '../../../types/kaka-kvalitetsvurdering/radio';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
+import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const Klageforberedelsen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useCanEdit();
   const validationError = useValidationError('klageforberedelsenRadioValg');
-  const header = useFieldName('klageforberedelsenRadioValg');
+  const header = useKvalitetsvurderingV1FieldName('klageforberedelsenRadioValg');
   const { data: oppgave, isLoading: isOppgavebehandlingLoading } = useOppgave();
 
   if (
@@ -28,7 +28,7 @@ export const Klageforberedelsen = () => {
     return <Loader size="xlarge" />;
   }
 
-  if (oppgave.type === OppgaveType.ANKE) {
+  if (oppgave.type === SaksTypeEnum.ANKE) {
     return null;
   }
 
@@ -93,21 +93,21 @@ export const Klageforberedelsen = () => {
       >
         <RadioButtonsRow>
           <Radio
-            value={RadioValg.BRA}
-            onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.BRA })}
+            value={Radiovalg.BRA}
+            onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: Radiovalg.BRA })}
           >
             Bra/godt nok
           </Radio>
           <Radio
-            value={RadioValg.MANGELFULLT}
-            onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: RadioValg.MANGELFULLT })}
+            value={Radiovalg.MANGELFULLT}
+            onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: Radiovalg.MANGELFULLT })}
           >
             Mangelfullt
           </Radio>
         </RadioButtonsRow>
       </RadioGroup>
       <Reasons
-        show={klageforberedelsenRadioValg === RadioValg.MANGELFULLT}
+        show={klageforberedelsenRadioValg === Radiovalg.MANGELFULLT}
         legendText="Hva er mangelfullt?"
         reasons={reasons}
         error={validationError}

@@ -1,6 +1,13 @@
 import { Name } from '../../domain/types';
-import { Gender, MedunderskriverFlyt, OppgaveType, Utfall } from '../kodeverk';
+import { Gender, MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
 import { ISaksbehandler, IVedlegg } from '../oppgave-common';
+
+type UUID = string;
+
+export enum KvalitetsvurderingVersion {
+  V1 = 1,
+  V2 = 2,
+}
 
 export interface IOppgavebehandlingBase {
   avsluttetAvSaksbehandlerDate: string | null; // LocalDate
@@ -20,6 +27,10 @@ export interface IOppgavebehandlingBase {
   klager: ISakspart;
   kommentarFraVedtaksinstans: string | null;
   kvalitetsvurderingId: string;
+  kvalitetsvurderingReference: {
+    id: UUID;
+    version: KvalitetsvurderingVersion;
+  };
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
@@ -42,15 +53,15 @@ export interface IOppgavebehandlingBase {
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {
-  type: OppgaveType.KLAGE;
+  type: SaksTypeEnum.KLAGE;
 }
 
 interface IAnkebehandling extends IOppgavebehandlingBase {
-  type: OppgaveType.ANKE;
+  type: SaksTypeEnum.ANKE;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
-  type: OppgaveType.ANKE_I_TRYGDERETTEN;
+  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
 }
@@ -66,7 +77,7 @@ interface Resultat {
   file: IVedlegg | null;
   hjemler: string[];
   id: string;
-  utfall: Utfall | null;
+  utfall: UtfallEnum | null;
 }
 
 interface IKlagerPerson {

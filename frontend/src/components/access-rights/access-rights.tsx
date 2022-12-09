@@ -3,12 +3,12 @@ import { Button, Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import {
   SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
 } from '../../redux-api/access-rights';
+import { useVersionedYtelser } from '../../simple-api-state/use-kodeverk';
 import { useUser } from '../../simple-api-state/use-user';
 import { IYtelse } from '../../types/kodeverk';
 import { toast } from '../toast/store';
@@ -16,9 +16,11 @@ import { ToastType } from '../toast/types';
 import { Body } from './body';
 import { Head } from './head';
 
+const EMPTY_ARRAY: [] = [];
+
 export const AccessRights = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
-  const ytelser = useKodeverkValue('ytelser');
+  const { data: ytelser = EMPTY_ARRAY } = useVersionedYtelser();
   const enhet = userIsLoading || typeof user === 'undefined' ? skipToken : user.ansattEnhet.id;
   const { data, isLoading } = useGetAccessRightsQuery(enhet);
 

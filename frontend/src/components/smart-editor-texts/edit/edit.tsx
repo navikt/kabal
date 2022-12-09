@@ -18,7 +18,7 @@ import { ResolvedTags } from '../../tags/resolved-tag';
 import { HjemlerSelect } from '../hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
 import { SavedStatus } from '../saved-status';
-import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from '../select';
+import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from '../select';
 import { DeleteTextButton } from '../smart-editor-texts-delete';
 import { FilterDivider } from '../styled-components';
 import { ContentEditor } from './content-editor';
@@ -88,21 +88,17 @@ export const EditSmartEditorText = (savedText: IText) => {
 
           <HjemlerSelect selected={hjemler} onChange={(value: Value) => updateUnsavedText(value, 'hjemler')} />
 
-          <KodeverkSelect kodeverkKey="ytelser" selected={ytelser} onChange={updateUnsavedText}>
+          <YtelseSelect selected={ytelser ?? []} onChange={(value) => updateUnsavedText(value, 'ytelser')}>
             Ytelser
-          </KodeverkSelect>
+          </YtelseSelect>
 
           <UtfallSelect selected={utfall} onChange={(value) => updateUnsavedText(value, 'utfall')}>
             Utfall
           </UtfallSelect>
 
-          <KodeverkSelect
-            kodeverkKey="klageenheter"
-            selected={enheter}
-            onChange={(value: Value) => updateUnsavedText(value, 'enheter')}
-          >
+          <KlageenhetSelect selected={enheter ?? []} onChange={(value) => updateUnsavedText(value, 'enheter')}>
             Enheter
-          </KodeverkSelect>
+          </KlageenhetSelect>
         </LineContainer>
 
         <TagContainer>

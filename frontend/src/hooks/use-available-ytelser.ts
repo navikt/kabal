@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { isNotUndefined } from '../functions/is-not-type-guards';
+import { useYtelser } from '../simple-api-state/use-kodeverk';
 import { useUser } from '../simple-api-state/use-user';
 import { IYtelse } from '../types/kodeverk';
-import { useKodeverkValue } from './use-kodeverk-value';
 
 export const useAvailableYtelser = (): IYtelse[] => {
-  const ytelser = useKodeverkValue('ytelser');
+  const { data: ytelser } = useYtelser();
   const { data: userData } = useUser();
 
   return useMemo<IYtelse[]>(() => {

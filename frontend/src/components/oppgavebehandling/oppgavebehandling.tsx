@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { OppgaveType, Utfall } from '../../types/kodeverk';
-import { ValidationErrorProvider } from '../kvalitetsvurdering/v1/validation-error-context';
+import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
+import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
 import { Footer } from '../oppgavebehandling-footer/footer';
 import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';
@@ -14,10 +14,10 @@ export const Oppgavebehandling = () => {
   const type = oppgave?.type;
 
   const hideKvalitetsvurdering =
-    type === OppgaveType.ANKE_I_TRYGDERETTEN ||
-    utfall === Utfall.TRUKKET ||
-    utfall === Utfall.RETUR ||
-    utfall === Utfall.UGUNST;
+    type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    utfall === UtfallEnum.TRUKKET ||
+    utfall === UtfallEnum.RETUR ||
+    utfall === UtfallEnum.UGUNST;
 
   const switches: PanelToggles = {
     documents: true,

@@ -1,7 +1,7 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '../../../functions/deep-freeze';
 import { DocumentType } from '../../../types/documents/documents';
-import { OppgaveType } from '../../../types/kodeverk';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { TemplateSections } from '../../../types/texts/texts';
@@ -46,7 +46,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: TemplateIdEnum.KLAGEVEDTAK,
-  type: OppgaveType.KLAGE,
+  type: SaksTypeEnum.KLAGE,
   tittel: 'Vedtak/beslutning',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,

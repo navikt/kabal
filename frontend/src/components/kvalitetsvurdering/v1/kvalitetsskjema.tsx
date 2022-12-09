@@ -8,7 +8,7 @@ import { Klageforberedelsen } from './klageforberedelsen';
 import { Utredningen } from './utredningen';
 import { Vedtaket } from './vedtaket';
 
-export const Kvalitetsskjema = () => {
+export const KvalitetsskjemaV1 = () => {
   const { data: oppgave } = useOppgave();
   const [kvalitetsvurdering] = useKvalitetsvurdering();
 

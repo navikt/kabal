@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useCreateSmartDocumentMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
-import { OppgaveType } from '../../../types/kodeverk';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
 import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
 import { AvslagBrevIcon } from './avslag-brev-icon';
@@ -42,7 +42,7 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
       .finally(() => setLoadingTemplate(null));
   };
 
-  const templates = oppgave.type === OppgaveType.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
+  const templates = oppgave.type === SaksTypeEnum.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
 
   return (
     <StyledNewDocument>

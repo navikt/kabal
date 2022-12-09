@@ -1,6 +1,6 @@
 import { Descendant } from 'slate';
 import { VERSION } from '../../components/rich-text/version';
-import { Utfall } from '../kodeverk';
+import { UtfallEnum } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
 // No specific order.
@@ -22,7 +22,7 @@ export enum TemplateSections {
 export interface AppQuery {
   hjemler: string[];
   ytelser: string[];
-  utfall: Utfall[];
+  utfall: UtfallEnum[];
   enheter: string[];
   sections: TemplateSections[];
   templates: (TemplateIdEnum | NoTemplateIdEnum)[];

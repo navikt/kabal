@@ -1,5 +1,5 @@
-import { useInnsendingshjemlerMap, useKodeverk } from '../simple-api-state/use-kodeverk';
-import { OppgaveType } from '../types/kodeverk';
+import { useInnsendingshjemlerMap, useKodeverk, useVersionedYtelser } from '../simple-api-state/use-kodeverk';
+import { SaksTypeEnum } from '../types/kodeverk';
 import { useShortRegistreringshjemmelName } from './use-registreringshjemler-name';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {
@@ -17,20 +17,20 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
 };
 
 export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
-  const { data, isLoading } = useKodeverk();
+  const { data, isLoading } = useVersionedYtelser();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
   }
 
-  if (typeof data.ytelser !== 'undefined' && typeof ytelseId === 'string') {
-    return data.ytelser.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
+  if (typeof data !== 'undefined' && typeof ytelseId === 'string') {
+    return data.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
   }
 
   return 'Mangler';
 };
 
-export const useTypeNameFromId = (type?: OppgaveType): string => {
+export const useTypeNameFromId = (type?: SaksTypeEnum): string => {
   const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {

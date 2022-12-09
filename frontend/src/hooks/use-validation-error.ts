@@ -1,10 +1,10 @@
 import { useContext, useMemo } from 'react';
-import { ValidationErrorContext } from '../components/kvalitetsvurdering/v1/validation-error-context';
-import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
+import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
+import { IKvalitetsvurderingV1 } from '../types/kaka-kvalitetsvurdering/v1';
 import { IOppgavebehandlingBase, ITrygderettsankebehandling } from '../types/oppgavebehandling/oppgavebehandling';
 
 type Field =
-  | keyof IKakaKvalitetsvurdering
+  | keyof IKvalitetsvurderingV1
   | keyof Pick<IOppgavebehandlingBase, 'mottattKlageinstans'>
   | keyof Pick<IOppgavebehandlingBase, 'mottattVedtaksinstans'>
   | keyof Pick<ITrygderettsankebehandling, 'kjennelseMottatt'>

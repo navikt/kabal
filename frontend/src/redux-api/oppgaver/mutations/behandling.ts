@@ -1,7 +1,8 @@
 import { reduxStore } from '../../../redux/configure-store';
-import { OppgaveType } from '../../../types/kodeverk';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { IOppgavebehandling, ISakspart } from '../../../types/oppgavebehandling/oppgavebehandling';
 import {
+  IFinishOppgavebehandlingParams,
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
@@ -11,6 +12,8 @@ import {
 } from '../../../types/oppgavebehandling/params';
 import { IModifiedResponse, IVedtakFullfoertResponse } from '../../../types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
+import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
 import { ListTagTypes } from '../../tag-types';
 import { OppgaveListTagTypes, OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
@@ -18,19 +21,21 @@ import { behandlingerQuerySlice } from '../queries/behandling';
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, string>({
-      query: (oppgaveId) => ({
+    finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishOppgavebehandlingParams>({
+      query: ({ oppgaveId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer`,
         method: 'POST',
       }),
       extraOptions: { maxRetries: 0 },
-      onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
         update(oppgaveId, [
           ['modified', data.modified],
           ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
         ]);
-        oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]);
+        dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+        dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+        dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
       },
     }),
     setMottattKlageinstans: builder.mutation<IModifiedResponse, IMottattKlageinstansParams>({
@@ -40,7 +45,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: { date: mottattKlageinstans },
       }),
       onQueryStarted: async ({ oppgaveId, mottattKlageinstans, type }, { dispatch, queryFulfilled }) => {
-        if (type === OppgaveType.ANKE) {
+        if (type === SaksTypeEnum.ANKE) {
           const undo = update(oppgaveId, [['mottattKlageinstans', mottattKlageinstans]]);
 
           try {
@@ -60,7 +65,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: { date: mottattVedtaksinstans },
       }),
       onQueryStarted: async ({ oppgaveId, mottattVedtaksinstans, type }, { dispatch, queryFulfilled }) => {
-        if (type === OppgaveType.KLAGE) {
+        if (type === SaksTypeEnum.KLAGE) {
           const undo = update(oppgaveId, [['mottattVedtaksinstans', mottattVedtaksinstans]]);
 
           try {

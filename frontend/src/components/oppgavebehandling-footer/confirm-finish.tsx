@@ -1,13 +1,11 @@
 import { Close, SuccessStroke } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgaver/mutations/behandling';
-import { OppgaveType, Utfall } from '../../types/kodeverk';
-import { ValidationErrorContext } from '../kvalitetsvurdering/v1/validation-error-context';
+import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
+import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
 
 interface FinishProps {
@@ -15,7 +13,7 @@ interface FinishProps {
 }
 
 export const ConfirmFinish = ({ cancel }: FinishProps) => {
-  const oppgaveId = useOppgaveId();
+  const { data: oppgave } = useOppgave();
   const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
   const [ref, setRef] = useState<HTMLElement | null>(null);
   const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
@@ -28,11 +26,11 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   }, [ref]);
 
   const finish = async () => {
-    if (oppgaveId === skipToken) {
+    if (typeof oppgave === 'undefined') {
       return;
     }
 
-    finishOppgavebehandling(oppgaveId)
+    finishOppgavebehandling({ oppgaveId: oppgave.id, kvalitetsvurderingId: oppgave.kvalitetsvurderingReference.id })
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
@@ -83,7 +81,7 @@ const OppgavebehandlingText = () => {
     return null;
   }
 
-  if (oppgave.type === OppgaveType.KLAGE) {
+  if (oppgave.type === SaksTypeEnum.KLAGE) {
     return (
       <StyledFinishOppgaveText>
         Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du
@@ -94,7 +92,7 @@ const OppgavebehandlingText = () => {
 
   const { utfall } = oppgave.resultat;
 
-  if (oppgave.type === OppgaveType.ANKE && utfall !== Utfall.RETUR) {
+  if (oppgave.type === SaksTypeEnum.ANKE && utfall !== UtfallEnum.RETUR) {
     return (
       <StyledFinishOppgaveText>
         Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.

@@ -2,7 +2,7 @@ import { Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering/v1';
 import { StyledCommentField } from './styled-components';
 
 interface CommentFieldProps {

@@ -26,6 +26,7 @@ export const StyledDocumentTitle = styled.h1`
   color: #0067c5;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   height: 100%;
 `;
 

@@ -1,9 +1,9 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetSettingsQuery } from '../redux-api/bruker';
-import { IKodeverkSimpleValue, OppgaveType } from '../types/kodeverk';
+import { IKodeverkSimpleValue, SaksTypeEnum } from '../types/kodeverk';
 import { useSakstyper } from './use-kodeverk-value';
 
-export const useSettingsTypes = (): IKodeverkSimpleValue<OppgaveType>[] => {
+export const useSettingsTypes = (): IKodeverkSimpleValue<SaksTypeEnum>[] => {
   const types = useSakstyper();
   const { data } = useGetSettingsQuery();
 

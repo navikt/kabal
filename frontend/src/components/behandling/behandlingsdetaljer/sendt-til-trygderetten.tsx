@@ -4,7 +4,7 @@ import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '../../../redux-api/oppgaver/mutations/behandling';
-import { OppgaveType } from '../../../types/kodeverk';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
 
@@ -14,7 +14,7 @@ export const SendtTilTrygderetten = () => {
   const error = useValidationError('sendtTilTrygderetten');
   const [setSendtTilTrygderetten] = useSetSendtTilTrygderettenMutation();
 
-  if (data?.type !== OppgaveType.ANKE_I_TRYGDERETTEN) {
+  if (data?.type !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
   }
 

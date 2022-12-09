@@ -5,7 +5,7 @@ import { NoTemplateIdEnum, TemplateIdEnum } from '../../types/smart-editor/templ
 import { AppQuery } from '../../types/texts/texts';
 import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
-import { KodeverkSelect, SectionSelect, TemplateSelect, UtfallSelect } from './select';
+import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from './select';
 import { FilterDivider } from './styled-components';
 
 export const Filters = () => {
@@ -40,21 +40,17 @@ export const Filters = () => {
 
       <HjemlerSelect selected={hjemler} onChange={(value: string[]) => setFilter('hjemler', value)} />
 
-      <KodeverkSelect selected={ytelser ?? []} onChange={(value) => setFilter('ytelser', value)} kodeverkKey="ytelser">
+      <YtelseSelect selected={ytelser ?? []} onChange={(value) => setFilter('ytelser', value)}>
         Ytelser
-      </KodeverkSelect>
+      </YtelseSelect>
 
       <UtfallSelect selected={utfall ?? []} onChange={(value) => setFilter('utfall', value)}>
         Utfall
       </UtfallSelect>
 
-      <KodeverkSelect
-        selected={enheter ?? []}
-        onChange={(value) => setFilter('enheter', value)}
-        kodeverkKey="klageenheter"
-      >
+      <KlageenhetSelect selected={enheter ?? []} onChange={(value) => setFilter('enheter', value)}>
         Enheter
-      </KodeverkSelect>
+      </KlageenhetSelect>
     </Container>
   );
 };

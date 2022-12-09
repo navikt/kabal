@@ -50,13 +50,12 @@ export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
 
 export const KABAL_OPPGAVEBEHANDLING_PATH = '/api/kabal-api/klagebehandlinger';
 export const KABAL_BEHANDLINGER_BASE_PATH = '/api/kabal-api/behandlinger';
-export const KODEVERK_BASE_PATH = '/api/klage-kodeverk-api';
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 
 export const KABAL_BEHANDLINGER_BASE_QUERY = staggeredBaseQuery(KABAL_BEHANDLINGER_BASE_PATH);
 export const KABAL_INTERNAL_BASE_QUERY = staggeredBaseQuery('/api');
 export const KABAL_OPPGAVEBEHANDLING_BASE_QUERY = staggeredBaseQuery(KABAL_OPPGAVEBEHANDLING_PATH);
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PATH);
-export const KAKA_KVALITETSVURDERING_BASE_QUERY = staggeredBaseQuery('/api/kaka-api/kvalitetsvurdering');
+export const KAKA_KVALITETSVURDERING_BASE_QUERY = staggeredBaseQuery('/api/kaka-api/kvalitetsvurderinger');
 export const FEATURE_TOGGLE_BASE_QUERY = staggeredBaseQuery('/api/kabal-api/featuretoggle');
 export const KABAL_TEXT_TEMPLATES_BASE_QUERY = staggeredBaseQuery('/api/kabal-text-templates');

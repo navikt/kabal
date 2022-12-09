@@ -1,5 +1,5 @@
 import { Name } from '../domain/types';
-import { MedunderskriverFlyt, OppgaveType } from './kodeverk';
+import { MedunderskriverFlyt, SaksTypeEnum } from './kodeverk';
 import { ISaksbehandler } from './oppgave-common';
 
 type Date = string; // LocalDate
@@ -46,7 +46,7 @@ export interface IOppgave {
   tema: string;
   tildeltSaksbehandlerident: string | null;
   tildeltSaksbehandlerNavn: string | null;
-  type: OppgaveType;
+  type: SaksTypeEnum;
   ytelse: string;
   utfall: string | null;
   sattPaaVent: IVenteperiode | null;

@@ -1,14 +1,16 @@
-export type IKakaKvalitetsvurdering = IKvalitetsvurderingBase &
+import { IKvalitetsvurderingBase } from './common';
+import { Radiovalg, RadiovalgExtended } from './radio';
+
+interface Version {
+  version: 1;
+}
+
+export type IKvalitetsvurderingV1 = Version &
+  IKvalitetsvurderingBase &
   IKvalitetsvurderingBooleans &
   IKvalitetsvurderingTexts &
   IKvalitetsvurderingRadio &
   IKvalitetsvurderingRadioExtended;
-
-interface IKvalitetsvurderingBase {
-  readonly created: string; // LocalDateTime;
-  readonly id: string;
-  modified: string; // LocalDateTime;
-}
 
 export interface IKvalitetsvurderingBooleans {
   arbeidsrettetBrukeroppfoelging: boolean;
@@ -53,22 +55,11 @@ export interface IKvalitetsvurderingTexts {
 }
 
 export interface IKvalitetsvurderingRadio {
-  klageforberedelsenRadioValg: RadioValg | null;
-  utredningenRadioValg: RadioValg | null;
-  vedtaketRadioValg: RadioValg | null;
+  klageforberedelsenRadioValg: Radiovalg | null;
+  utredningenRadioValg: Radiovalg | null;
+  vedtaketRadioValg: Radiovalg | null;
 }
 
 export interface IKvalitetsvurderingRadioExtended {
-  brukAvRaadgivendeLegeRadioValg: RadioValgExtended | null;
-}
-
-export enum RadioValg {
-  BRA = 'BRA',
-  MANGELFULLT = 'MANGELFULLT',
-}
-
-export enum RadioValgExtended {
-  IKKE_AKTUELT = 'IKKE_AKTUELT',
-  BRA = 'BRA',
-  MANGELFULLT = 'MANGELFULLT',
+  brukAvRaadgivendeLegeRadioValg: RadiovalgExtended | null;
 }

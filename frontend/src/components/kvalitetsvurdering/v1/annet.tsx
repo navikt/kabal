@@ -2,8 +2,8 @@ import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
-import { RadioValg } from '../../../types/kaka-kvalitetsvurdering';
-import { OppgaveType } from '../../../types/kodeverk';
+import { Radiovalg } from '../../../types/kaka-kvalitetsvurdering/radio';
+import { SaksTypeEnum } from '../../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection } from './styled-components';
 
@@ -15,13 +15,13 @@ export const Annet = () => {
     return <Loader size="xlarge" />;
   }
 
-  const showNyeOpplysningerMottattReason = kvalitetsvurdering.utredningenRadioValg === RadioValg.BRA;
+  const showNyeOpplysningerMottattReason = kvalitetsvurdering.utredningenRadioValg === Radiovalg.BRA;
 
   const showBetydeligAvvikReason =
-    kvalitetsvurdering.vedtaketRadioValg === RadioValg.MANGELFULLT ||
-    kvalitetsvurdering.utredningenRadioValg === RadioValg.MANGELFULLT;
+    kvalitetsvurdering.vedtaketRadioValg === Radiovalg.MANGELFULLT ||
+    kvalitetsvurdering.utredningenRadioValg === Radiovalg.MANGELFULLT;
 
-  const showBrukIOpplaeringReason = kvalitetsvurdering.vedtaketRadioValg === RadioValg.BRA;
+  const showBrukIOpplaeringReason = kvalitetsvurdering.vedtaketRadioValg === Radiovalg.BRA;
 
   const showForm = showNyeOpplysningerMottattReason || showBetydeligAvvikReason || showBrukIOpplaeringReason;
 
@@ -58,7 +58,7 @@ export const Annet = () => {
     },
   ];
 
-  const reasons = oppgave.type === OppgaveType.ANKE ? baseReasons : [...baseReasons, ...klageReasons];
+  const reasons = oppgave.type === SaksTypeEnum.ANKE ? baseReasons : [...baseReasons, ...klageReasons];
 
   return (
     <FormSection>

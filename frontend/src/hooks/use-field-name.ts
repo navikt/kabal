@@ -1,8 +1,9 @@
+import { KVALITETSVURDERING_V1_FIELD_NAMES } from '../components/kvalitetsvurdering/v1/use-field-name';
+import { KVALITETSVURDERING_V2_FIELD_NAMES } from '../components/kvalitetsvurdering/v2/common/use-field-name';
+
 export const FIELD_NAMES = {
-  klageforberedelsenRadioValg: 'Klageforberedelsen',
-  utredningenRadioValg: 'Utredningen',
-  vedtaketRadioValg: 'Vedtaket',
-  brukAvRaadgivendeLegeRadioValg: 'Bruk av rådgivende lege',
+  ...KVALITETSVURDERING_V1_FIELD_NAMES,
+  ...KVALITETSVURDERING_V2_FIELD_NAMES,
   vedtaksdokument: 'Vedtaksdokument',
   utfall: 'Utfall/resultat',
   hjemmel: 'Lovhjemmel',
@@ -14,4 +15,6 @@ export const FIELD_NAMES = {
   sendtTilTrygderetten: 'Sendt til Trygderetten',
 };
 
-export const useFieldName = (field: keyof typeof FIELD_NAMES): string => FIELD_NAMES[field] ?? field;
+type Field = keyof typeof FIELD_NAMES;
+
+export const useFieldName = (field: Field): string => FIELD_NAMES[field] ?? field;
