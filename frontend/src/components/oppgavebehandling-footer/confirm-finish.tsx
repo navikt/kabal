@@ -7,7 +7,7 @@ import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgaver/mutations/behandling';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
-import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
+import { ValidationErrorContext } from '../kvalitetsvurdering/v1/validation-error-context';
 import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
 
 interface FinishProps {

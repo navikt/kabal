@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { OppgaveType, Utfall } from '../../types/kodeverk';
-import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
+import { ValidationErrorProvider } from '../kvalitetsvurdering/v1/validation-error-context';
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
 import { Footer } from '../oppgavebehandling-footer/footer';
 import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';

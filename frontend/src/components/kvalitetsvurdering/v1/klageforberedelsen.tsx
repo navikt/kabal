@@ -1,13 +1,13 @@
 import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../hooks/use-can-edit';
-import { useFieldName } from '../../hooks/use-field-name';
-import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
-import { useValidationError } from '../../hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '../../redux-api/kaka-kvalitetsvurdering';
-import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
-import { OppgaveType } from '../../types/kodeverk';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useFieldName } from '../../../hooks/use-field-name';
+import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
+import { useValidationError } from '../../../hooks/use-validation-error';
+import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering';
+import { RadioValg } from '../../../types/kaka-kvalitetsvurdering';
+import { OppgaveType } from '../../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
 

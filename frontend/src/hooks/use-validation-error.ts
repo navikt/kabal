@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { ValidationErrorContext } from '../components/kvalitetsvurdering/validation-error-context';
+import { ValidationErrorContext } from '../components/kvalitetsvurdering/v1/validation-error-context';
 import { IKakaKvalitetsvurdering } from '../types/kaka-kvalitetsvurdering';
 import { IOppgavebehandlingBase, ITrygderettsankebehandling } from '../types/oppgavebehandling/oppgavebehandling';
 
