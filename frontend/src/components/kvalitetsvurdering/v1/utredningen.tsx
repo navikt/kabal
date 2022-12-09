@@ -1,20 +1,20 @@
 import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import React from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useFieldName } from '../../../hooks/use-field-name';
 import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering';
-import { RadioValg } from '../../../types/kaka-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering/v1';
+import { Radiovalg } from '../../../types/kaka-kvalitetsvurdering/radio';
 import { Reason, Reasons } from './reasons';
 import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
+import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const Utredningen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useCanEdit();
   const validationError = useValidationError('utredningenRadioValg');
-  const header = useFieldName('utredningenRadioValg');
+  const header = useKvalitetsvurderingV1FieldName('utredningenRadioValg');
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return <Loader size="xlarge" />;
@@ -91,14 +91,14 @@ export const Utredningen = () => {
       >
         <RadioButtonsRow>
           <Radio
-            value={RadioValg.BRA}
-            onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: RadioValg.BRA })}
+            value={Radiovalg.BRA}
+            onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: Radiovalg.BRA })}
           >
             Bra/godt nok
           </Radio>
           <Radio
-            value={RadioValg.MANGELFULLT}
-            onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: RadioValg.MANGELFULLT })}
+            value={Radiovalg.MANGELFULLT}
+            onChange={() => updateKvalitetsvurdering({ id, utredningenRadioValg: Radiovalg.MANGELFULLT })}
           >
             Mangelfullt
           </Radio>
@@ -106,7 +106,7 @@ export const Utredningen = () => {
       </RadioGroup>
       <Reasons
         error={validationError}
-        show={utredningenRadioValg === RadioValg.MANGELFULLT}
+        show={utredningenRadioValg === Radiovalg.MANGELFULLT}
         legendText="Hva er mangelfullt?"
         reasons={reasons}
       />

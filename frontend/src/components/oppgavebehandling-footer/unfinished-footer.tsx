@@ -5,8 +5,8 @@ import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useLazyValidateQuery } from '../../redux-api/oppgaver/queries/behandling';
-import { OppgaveType } from '../../types/kodeverk';
-import { ValidationErrorContext } from '../kvalitetsvurdering/v1/validation-error-context';
+import { SaksTypeEnum } from '../../types/kodeverk';
+import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
 import { DeassignOppgave } from './deassign-oppgave';
@@ -84,8 +84,8 @@ const ConfirmFinishDisplay = ({ show, cancel }: ConfirmFinishProps) => {
   return null;
 };
 
-const Deassign = ({ type }: { type?: OppgaveType }) => {
-  if (type === OppgaveType.ANKE || type === OppgaveType.KLAGE) {
+const Deassign = ({ type }: { type?: SaksTypeEnum }) => {
+  if (type === SaksTypeEnum.ANKE || type === SaksTypeEnum.KLAGE) {
     return <DeassignOppgave />;
   }
 

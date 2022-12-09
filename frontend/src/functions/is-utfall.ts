@@ -1,8 +1,8 @@
-import { Utfall } from '../types/kodeverk';
+import { UtfallEnum } from '../types/kodeverk';
 
-export const isUtfall = (s?: string): s is Utfall => {
+export const isUtfall = (s?: string): s is UtfallEnum => {
   if (typeof s === 'string') {
-    return Object.values(Utfall).some((u) => u === s);
+    return Object.values(UtfallEnum).some((u) => u === s);
   }
 
   return false;

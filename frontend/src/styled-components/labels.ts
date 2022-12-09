@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { OppgaveType } from '../types/kodeverk';
+import { SaksTypeEnum } from '../types/kodeverk';
 
 interface LabelProps {
   fixedWidth?: boolean;
@@ -22,9 +22,9 @@ export const LabelMain = styled(Label)`
   border: 1px solid #634689;
 `;
 
-export const LabelType = styled(Label)<{ type: OppgaveType }>`
-  background-color: ${({ type }) => (type === OppgaveType.KLAGE ? 'white' : 'black')};
-  color: ${({ type }) => (type === OppgaveType.KLAGE ? '#262626' : 'white')};
+export const LabelType = styled(Label)<{ type: SaksTypeEnum }>`
+  background-color: ${({ type }) => (type === SaksTypeEnum.KLAGE ? 'white' : 'black')};
+  color: ${({ type }) => (type === SaksTypeEnum.KLAGE ? '#262626' : 'white')};
   border: 1px solid #ba3a26;
 `;
 

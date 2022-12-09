@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { OppgaveType } from '../../types/kodeverk';
+import { SaksTypeEnum } from '../../types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';
@@ -34,11 +34,11 @@ const Behandlingsdetaljer = () => {
     return null;
   }
 
-  if (oppgave.type === OppgaveType.KLAGE) {
+  if (oppgave.type === SaksTypeEnum.KLAGE) {
     return <Klagebehandlingsdetaljer />;
   }
 
-  if (oppgave.type === OppgaveType.ANKE) {
+  if (oppgave.type === SaksTypeEnum.ANKE) {
     return <Ankebehandlingsdetaljer />;
   }
 

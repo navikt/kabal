@@ -1,5 +1,6 @@
 import { Close, Collapse, FileFolder } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -54,7 +55,7 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   const [setHjemler] = useUpdateInnsendingshjemlerMutation();
   const { data: bruker, isLoading: userIsLoading } = useUser();
   const [tildel, { isLoading }] = useTildelSaksbehandlerMutation();
-  const ytelse = useKodeverkYtelse(oppgave?.ytelse);
+  const ytelse = useKodeverkYtelse(oppgave?.ytelse ?? skipToken);
 
   const options = useMemo(
     () => ytelse?.innsendingshjemler.map(({ id, navn }) => ({ value: id, label: navn })) ?? [],

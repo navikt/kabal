@@ -9,13 +9,13 @@ export enum MedunderskriverFlyt {
   RETURNERT_TIL_SAKSBEHANDLER = 'RETURNERT_TIL_SAKSBEHANDLER',
 }
 
-export enum OppgaveType {
+export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
   ANKE_I_TRYGDERETTEN = '3',
 }
 
-export enum Utfall {
+export enum UtfallEnum {
   TRUKKET = '1',
   RETUR = '2',
   OPPHEVET = '3',
@@ -55,23 +55,23 @@ export interface IYtelse extends IKodeverkSimpleValue {
   innsendingshjemler: IKodeverkValue[];
 }
 
-interface IKlageEnhet extends IKodeverkSimpleValue {
+export interface IKlageenhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }
 
-interface ISakstyperToUtfall extends IKodeverkSimpleValue<OppgaveType> {
-  utfall: IKodeverkSimpleValue<Utfall>[];
+export interface ISakstyperToUtfall extends IKodeverkSimpleValue<SaksTypeEnum> {
+  utfall: IKodeverkSimpleValue<UtfallEnum>[];
 }
 
 export interface IKodeverk {
   enheter: IKodeverkSimpleValue[];
   hjemler: IKodeverkValue[];
-  klageenheter: IKlageEnhet[];
-  sakstyper: IKodeverkSimpleValue<OppgaveType>[];
+  klageenheter: IKlageenhet[];
+  sakstyper: IKodeverkSimpleValue<SaksTypeEnum>[];
   sources: IKodeverkSimpleValue[];
   styringsenheter: IKodeverkSimpleValue[];
   tema: IKodeverkValue[];
-  utfall: IKodeverkSimpleValue<Utfall>[];
+  utfall: IKodeverkSimpleValue<UtfallEnum>[];
   vedtaksenheter: IKodeverkSimpleValue[];
   ytelser: IYtelse[];
   sakstyperToUtfall: ISakstyperToUtfall[];

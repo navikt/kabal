@@ -5,7 +5,7 @@ import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
 import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
 import { useUser } from '../../simple-api-state/use-user';
-import { OppgaveType } from '../../types/kodeverk';
+import { SaksTypeEnum } from '../../types/kodeverk';
 import { SortFieldEnum } from '../../types/oppgaver';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
@@ -29,7 +29,7 @@ export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProp
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell role="columnheader">
-          <FilterDropdown<OppgaveType>
+          <FilterDropdown<SaksTypeEnum>
             selected={filters.types}
             onChange={(types) => onChange({ ...filters, types })}
             options={kodeverkSimpleValuesToDropdownOptions(sakstyper)}

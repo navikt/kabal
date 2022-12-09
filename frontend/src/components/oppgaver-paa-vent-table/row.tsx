@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useFullYtelseNameFromId, useInnsendingshjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
+import { useUtfall } from '../../simple-api-state/use-kodeverk';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
@@ -10,7 +10,7 @@ import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';
 
 export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: IOppgave): JSX.Element => {
-  const utfallList = useKodeverkValue('utfall');
+  const { data: utfallList } = useUtfall();
 
   const utfallName = useMemo(() => {
     if (typeof utfallList === 'undefined') {

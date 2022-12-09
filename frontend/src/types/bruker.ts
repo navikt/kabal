@@ -1,4 +1,4 @@
-import { OppgaveType } from './kodeverk';
+import { SaksTypeEnum } from './kodeverk';
 
 interface IEnhet {
   id: string;
@@ -9,7 +9,7 @@ interface IEnhet {
 export interface ISettings {
   hjemler: string[];
   ytelser: string[];
-  typer: OppgaveType[];
+  typer: SaksTypeEnum[];
 }
 
 export interface IUserData {

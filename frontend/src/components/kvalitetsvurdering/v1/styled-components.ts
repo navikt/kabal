@@ -1,11 +1,6 @@
 import { Checkbox, HelpText } from '@navikt/ds-react';
 import styled from 'styled-components';
 
-export const KvalitetsVurderingContainer = styled.div`
-  padding: 16px;
-  width: 400px;
-`;
-
 export const FormSection = styled.section`
   margin-bottom: 32px;
 `;

@@ -2,12 +2,12 @@ import { Button, ButtonProps } from '@navikt/ds-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useHasYtelseAccess } from '../../hooks/use-has-ytelse-access';
-import { OppgaveType } from '../../types/kodeverk';
+import { SaksTypeEnum } from '../../types/kodeverk';
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size'> {
   oppgavebehandlingId: string;
   ytelse: string;
-  type: OppgaveType;
+  type: SaksTypeEnum;
   children?: string;
 }
 
@@ -25,7 +25,7 @@ export const OpenOppgavebehandling = ({
     return null;
   }
 
-  if (type === OppgaveType.KLAGE) {
+  if (type === SaksTypeEnum.KLAGE) {
     return (
       <Button
         as={Link}
@@ -42,7 +42,7 @@ export const OpenOppgavebehandling = ({
     );
   }
 
-  if (type === OppgaveType.ANKE) {
+  if (type === SaksTypeEnum.ANKE) {
     return (
       <Button
         as={Link}

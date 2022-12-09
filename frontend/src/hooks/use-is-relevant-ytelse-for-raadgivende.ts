@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useKodeverkValue } from './use-kodeverk-value';
+import { useVersionedYtelser } from '../simple-api-state/use-kodeverk';
 
 enum Ytelser {
   Omsorgspenger = '1',
@@ -40,13 +40,13 @@ const RELEVANTE_YTELSE_IDS: string[] = [
 ];
 
 export const useIsRelevantYtelseForRaadgivende = (ytelseId: string | null): boolean => {
-  const ytelseData = useKodeverkValue('ytelser');
+  const { data } = useVersionedYtelser();
 
   return useMemo<boolean>(() => {
-    if (typeof ytelseData === 'undefined' || ytelseId === null) {
+    if (typeof data === 'undefined' || ytelseId === null) {
       return false;
     }
 
-    return ytelseData.some(({ id }) => id === ytelseId && RELEVANTE_YTELSE_IDS.includes(ytelseId));
-  }, [ytelseData, ytelseId]);
+    return data.some(({ id }) => id === ytelseId && RELEVANTE_YTELSE_IDS.includes(ytelseId));
+  }, [data, ytelseId]);
 };

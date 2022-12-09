@@ -1,8 +1,8 @@
-import { OppgaveType } from '../../types/kodeverk';
+import { SaksTypeEnum } from '../../types/kodeverk';
 import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
 
 export interface Filters {
-  types: OppgaveType[];
+  types: SaksTypeEnum[];
   ytelser: string[];
   hjemler: string[];
   sorting: [SortFieldEnum, SortOrderEnum];

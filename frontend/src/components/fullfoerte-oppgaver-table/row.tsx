@@ -2,7 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { isoDateToPretty } from '../../domain/date';
 import { useFullYtelseNameFromId, useInnsendingshjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
+import { useUtfall } from '../../simple-api-state/use-kodeverk';
 import { LabelMain, LabelTema } from '../../styled-components/labels';
 import { IOppgave } from '../../types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
@@ -18,7 +18,7 @@ export const Row = ({
   person,
   ytelse,
 }: IOppgave): JSX.Element => {
-  const utfallList = useKodeverkValue('utfall');
+  const { data: utfallList } = useUtfall();
 
   const utfallName = useMemo(() => {
     if (typeof utfallList === 'undefined') {

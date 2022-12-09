@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useKodeverkValue } from '../../hooks/use-kodeverk-value';
 import { SaksbehandlerAccessRights } from '../../redux-api/access-rights';
+import { useVersionedYtelser } from '../../simple-api-state/use-kodeverk';
 import { IYtelse } from '../../types/kodeverk';
 import { Cell } from './cell';
 
@@ -107,7 +107,7 @@ const HeaderEllipsis = styled.span`
 `;
 
 const useNumberOfSaksbehandlerePerYtelse = (ytelseId: string, accessRights: SaksbehandlerAccessRights[]): number => {
-  const ytelser = useKodeverkValue('ytelser') ?? [];
+  const { data: ytelser = [] } = useVersionedYtelser();
 
   const ytelse = ytelser.find((y) => y.id === ytelseId);
 

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { IKodeverkSimpleValue, OppgaveType, Utfall } from '../types/kodeverk';
-import { useKodeverkValue } from './use-kodeverk-value';
+import { useSakstyperToUtfall } from '../simple-api-state/use-kodeverk';
+import { IKodeverkSimpleValue, SaksTypeEnum, UtfallEnum } from '../types/kodeverk';
 
-export const useUtfall = (type?: OppgaveType): [IKodeverkSimpleValue<Utfall>[], boolean] => {
-  const sakstyperToUtfall = useKodeverkValue('sakstyperToUtfall');
+export const useUtfall = (type?: SaksTypeEnum): [IKodeverkSimpleValue<UtfallEnum>[], boolean] => {
+  const { data: sakstyperToUtfall } = useSakstyperToUtfall();
 
   return useMemo(() => {
     if (typeof sakstyperToUtfall === 'undefined' || typeof type === 'undefined') {

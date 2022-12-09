@@ -1,15 +1,15 @@
 import { isNotUndefined } from '../functions/is-not-type-guards';
 import { useGetSettingsQuery } from '../redux-api/bruker';
+import { useHjemler } from '../simple-api-state/use-kodeverk';
 import { IKodeverkValue } from '../types/kodeverk';
-import { useKodeverkValue } from './use-kodeverk-value';
 
 export const useSettingsHjemler = (): IKodeverkValue[] => {
-  const hjemler = useKodeverkValue('hjemler');
-  const { data } = useGetSettingsQuery();
+  const { data: hjemler } = useHjemler();
+  const { data: settings } = useGetSettingsQuery();
 
-  if (typeof data === 'undefined' || typeof hjemler === 'undefined') {
+  if (typeof settings === 'undefined' || typeof hjemler === 'undefined') {
     return [];
   }
 
-  return data.hjemler.map((hjemmelId) => hjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
+  return settings.hjemler.map((hjemmelId) => hjemler.find(({ id }) => id === hjemmelId)).filter(isNotUndefined);
 };

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/tildeling';
 import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '../../redux-api/oppgaver/queries/behandling';
-import { OppgaveType } from '../../types/kodeverk';
+import { SaksTypeEnum } from '../../types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '../../types/oppgavebehandling/response';
 import { ITildelingResponse } from '../../types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
@@ -12,7 +12,7 @@ import { ToastType } from '../toast/types';
 
 interface Props {
   oppgaveId: string;
-  oppgaveType: OppgaveType;
+  oppgaveType: SaksTypeEnum;
   ytelse: string;
   fromSaksbehandler: ISaksbehandlerResponse['saksbehandler'];
   toSaksbehandler: ITildelingResponse['saksbehandler'];
@@ -21,7 +21,7 @@ interface Props {
 
 export const useTildel = (
   oppgaveId: string,
-  oppgaveType: OppgaveType,
+  oppgaveType: SaksTypeEnum,
   ytelse: string
 ): [(navIdent: string) => Promise<void>, { isLoading: boolean }] => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
@@ -48,7 +48,7 @@ export const useTildel = (
 
 export const useFradel = (
   oppgaveId: string,
-  oppgaveType: OppgaveType,
+  oppgaveType: SaksTypeEnum,
   ytelse: string
 ): [() => Promise<void>, { isLoading: boolean }] => {
   const [getSakenGjelder] = useLazyGetSakenGjelderQuery();
@@ -133,7 +133,7 @@ const Fradelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
 
 interface CancelProps {
   oppgaveId: string;
-  oppgaveType: OppgaveType;
+  oppgaveType: SaksTypeEnum;
   ytelse: string;
   fromSaksbehandler: ITildelingResponse['saksbehandler'];
   toSaksbehandler: ITildelingResponse['saksbehandler'];

@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useKodeverk } from '../simple-api-state/use-kodeverk';
-import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, OppgaveType } from '../types/kodeverk';
+import { useKodeverk, useSakstyperToUtfall, useVersionedYtelser } from '../simple-api-state/use-kodeverk';
+import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '../types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
   key: K | typeof skipToken = skipToken
@@ -14,14 +14,16 @@ export const useKodeverkValue = <K extends keyof IKodeverk>(
   return data[key];
 };
 
-export const useSakstyper = () => {
-  const sakstyper = useKodeverkValue('sakstyper') ?? [];
+const EMPTY_ARRAY: [] = [];
 
-  return sakstyper.filter(({ id }) => id !== OppgaveType.ANKE_I_TRYGDERETTEN);
+export const useSakstyper = () => {
+  const { data: sakstyper = EMPTY_ARRAY } = useSakstyperToUtfall();
+
+  return sakstyper.filter(({ id }) => id !== SaksTypeEnum.ANKE_I_TRYGDERETTEN);
 };
 
-export const useKodeverkYtelse = (ytelseId: string | typeof skipToken = skipToken): IYtelse | undefined => {
-  const data = useKodeverkValue(ytelseId === skipToken ? skipToken : 'ytelser');
+export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): IYtelse | undefined => {
+  const { data } = useVersionedYtelser();
 
   if (ytelseId === skipToken || typeof data === 'undefined') {
     return undefined;
@@ -32,4 +34,4 @@ export const useKodeverkYtelse = (ytelseId: string | typeof skipToken = skipToke
 
 export const useLovkildeToRegistreringshjemmelForYtelse = (
   ytelseId: string | typeof skipToken = skipToken
-): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? [];
+): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;
