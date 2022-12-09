@@ -1,9 +1,9 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useKvalitetsvurdering } from '../../hooks/use-kvalitetsvurdering';
-import { RadioValg } from '../../types/kaka-kvalitetsvurdering';
-import { OppgaveType } from '../../types/kodeverk';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
+import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
+import { RadioValg } from '../../../types/kaka-kvalitetsvurdering';
+import { OppgaveType } from '../../../types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection } from './styled-components';
 

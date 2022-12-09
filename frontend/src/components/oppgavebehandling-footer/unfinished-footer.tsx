@@ -6,7 +6,7 @@ import { useCanEdit } from '../../hooks/use-can-edit';
 import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
 import { useLazyValidateQuery } from '../../redux-api/oppgaver/queries/behandling';
 import { OppgaveType } from '../../types/kodeverk';
-import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
+import { ValidationErrorContext } from '../kvalitetsvurdering/v1/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
 import { DeassignOppgave } from './deassign-oppgave';
