@@ -7,7 +7,7 @@ import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
 import { useUploadFileDocumentMutation } from '../../../redux-api/oppgaver/mutations/documents';
 
-const MAX_SIZE_BYTES = 8388608;
+const MAX_SIZE_BYTES = 268435456;
 const MEBI = 1024 * 1024;
 const MAX_SIZE_MIB = MAX_SIZE_BYTES / MEBI;
 
