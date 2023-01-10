@@ -25,7 +25,7 @@ export const VersionCheckerStatus = () => {
   return (
     <Header.Button
       as={UpdateButton}
-      title="Det finnes en ny versjon av KABAL. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
+      title="Det finnes en ny versjon av Kabal. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
       onClick={() => window.location.reload()}
       size="small"
       data-testid="update-kabal-button"
@@ -49,7 +49,7 @@ const Version = () => {
   return (
     <Header.Title as="div">
       <IconText>
-        <Success /> KABAL er klar til bruk!
+        <Success /> Kabal er klar til bruk!
       </IconText>
     </Header.Title>
   );

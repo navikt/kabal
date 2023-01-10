@@ -24,7 +24,7 @@ export const Signature = () => {
     <SettingsSection>
       <SectionHeader>Signatur</SectionHeader>
       <p>
-        <strong>NB: Endringer gjort her påvirker kun KABAL.</strong>
+        <strong>NB: Endringer gjort her påvirker kun Kabal.</strong>
       </p>
       <p>Her kan du endre navn og stillingstittel til det du selv ønsker.</p>
       <p>Navn og tittel du skriver inn her er det andre vil se om deg og det som blir brukt som signatur.</p>

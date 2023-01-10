@@ -1,7 +1,7 @@
 {
   "name": "kabal",
   "version": "0.0.1",
-  "description": "KABAL - Klage- og ankebehandling",
+  "description": "Kabal - Klage- og ankebehandling",
   "scripts": {
     "build:js": "webpack --mode production",
     "build:static": "copyfiles -f ./public/index.html dist && copyfiles -u 1 ./assets/* dist/assets",

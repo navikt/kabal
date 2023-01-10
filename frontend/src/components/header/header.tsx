@@ -8,7 +8,7 @@ import { User } from './user-menu/user';
 export const NavHeader = () => (
   <Header>
     <Header.Title as={NavLink} to="/">
-      KABAL
+      Kabal
     </Header.Title>
     <Nav />
     <VersionCheckerStatus />
