@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useKlageenheter, useUtfall, useVersionedYtelser } from '../../simple-api-state/use-kodeverk';
+import { useKlageenheter, useLatestYtelser, useUtfall } from '../../simple-api-state/use-kodeverk';
 import { UtfallEnum } from '../../types/kodeverk';
 import { TemplateIdEnum } from '../../types/smart-editor/template-enums';
 import { TemplateSections } from '../../types/texts/texts';
@@ -89,7 +89,7 @@ interface YtelseSelectProps {
 }
 
 export const YtelseSelect = ({ children, selected, onChange }: YtelseSelectProps) => {
-  const { data: values = [] } = useVersionedYtelser();
+  const { data: values = [] } = useLatestYtelser();
 
   const options = useMemo(() => values?.map(({ id, navn }) => ({ value: id, label: navn })) ?? [], [values]);
 

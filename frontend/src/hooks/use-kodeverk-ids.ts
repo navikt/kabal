@@ -1,4 +1,4 @@
-import { useInnsendingshjemlerMap, useKodeverk, useVersionedYtelser } from '../simple-api-state/use-kodeverk';
+import { useAllYtelser, useInnsendingshjemlerMap, useKodeverk } from '../simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '../types/kodeverk';
 import { useShortRegistreringshjemmelName } from './use-registreringshjemler-name';
 
@@ -17,7 +17,7 @@ export const useFullTemaNameFromId = (temaId?: string | null): string => {
 };
 
 export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
-  const { data, isLoading } = useVersionedYtelser();
+  const { data, isLoading } = useAllYtelser();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
