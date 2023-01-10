@@ -19,7 +19,7 @@ export const UserDropdown = (): JSX.Element | null => {
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
           <VersionIcon />
-          KABAL-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
+          Kabal-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
         </Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>

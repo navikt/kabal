@@ -3,7 +3,7 @@ Finn en testbruker som du kan logge inn i Kabal med
 Husk å skru på naisdevice.
 
 Gå til dev-miljøet kabal.dev.nav.no
-Logg inn i KABAL.
+Logg inn i Kabal.
 
 Når du har logget inn i dev-miljøet kan du gå inn i `/frontend`-mappa og kjøre:
 
