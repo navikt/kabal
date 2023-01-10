@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useKodeverk, useSakstyperToUtfall, useVersionedYtelser } from '../simple-api-state/use-kodeverk';
+import { useAllYtelser, useKodeverk, useSakstyperToUtfall } from '../simple-api-state/use-kodeverk';
 import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '../types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
@@ -23,7 +23,7 @@ export const useSakstyper = () => {
 };
 
 export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): IYtelse | undefined => {
-  const { data } = useVersionedYtelser();
+  const { data } = useAllYtelser();
 
   if (ytelseId === skipToken || typeof data === 'undefined') {
     return undefined;

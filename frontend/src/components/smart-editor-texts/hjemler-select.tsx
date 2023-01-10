@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useLovkildeToRegistreringshjemler } from '../../simple-api-state/use-kodeverk';
+import { useLovkildeToRegistreringshjemlerLatest } from '../../simple-api-state/use-kodeverk';
 import { GroupedFilterList, OptionGroup } from '../filter-dropdown/grouped-filter-list';
 import { ToggleButton } from '../toggle-button/toggle-button';
 
@@ -12,7 +12,7 @@ interface Props {
 
 export const HjemlerSelect = ({ selected = [], onChange }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data = [] } = useLovkildeToRegistreringshjemler();
+  const { data = [] } = useLovkildeToRegistreringshjemlerLatest();
 
   const options = useMemo<OptionGroup<string>[]>(
     () =>
@@ -79,7 +79,7 @@ const StyledPopup = styled.div`
   max-height: 400px;
   max-width: 275px;
   scroll-margin-bottom: 16px;
-  z-index: 2;
+  z-index: 3;
 
   background-color: white;
   border-radius: 4px;

@@ -1,7 +1,7 @@
 import { Radio } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useVersionedYtelser } from '../../../simple-api-state/use-kodeverk';
+import { useAllYtelser } from '../../../simple-api-state/use-kodeverk';
 import { RadiovalgExtended } from '../../../types/kaka-kvalitetsvurdering/radio';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
@@ -50,7 +50,7 @@ const YTELSER_RELEVANT_FOR_RAADGIVENDE_LEGE: string[] = [
 ];
 
 const useIsRelevantYtelse = (ytelseId: string | null | undefined): boolean => {
-  const { data: ytelser } = useVersionedYtelser();
+  const { data: ytelser } = useAllYtelser();
 
   return useMemo<boolean>(() => {
     if (typeof ytelser === 'undefined' || typeof ytelseId !== 'string') {

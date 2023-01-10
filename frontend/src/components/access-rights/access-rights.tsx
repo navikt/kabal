@@ -8,7 +8,7 @@ import {
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
 } from '../../redux-api/access-rights';
-import { useVersionedYtelser } from '../../simple-api-state/use-kodeverk';
+import { useLatestYtelser } from '../../simple-api-state/use-kodeverk';
 import { useUser } from '../../simple-api-state/use-user';
 import { IYtelse } from '../../types/kodeverk';
 import { toast } from '../toast/store';
@@ -20,7 +20,7 @@ const EMPTY_ARRAY: [] = [];
 
 export const AccessRights = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
-  const { data: ytelser = EMPTY_ARRAY } = useVersionedYtelser();
+  const { data: ytelser = EMPTY_ARRAY } = useLatestYtelser();
   const enhet = userIsLoading || typeof user === 'undefined' ? skipToken : user.ansattEnhet.id;
   const { data, isLoading } = useGetAccessRightsQuery(enhet);
 
