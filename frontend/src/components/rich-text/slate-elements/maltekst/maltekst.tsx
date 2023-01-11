@@ -17,6 +17,7 @@ import { isOfElementType } from '../../types/editor-type-guards';
 import { MaltekstElementType, PlaceholderElementType } from '../../types/editor-types';
 import { EmptyVoidElement } from '../../types/editor-void-types';
 import { RenderElementProps } from '../render-props';
+import { lexSpecialis } from './lex-specialis';
 
 const EMPTY_VOID: EmptyVoidElement = { type: UndeletableVoidElementsEnum.EMPTY_VOID, children: [{ text: '' }] };
 
@@ -37,9 +38,9 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
       }
 
       try {
-        const maltekster = (await getTexts(q).unwrap())
-          .map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null))
-          .filter(isNotNull);
+        const maltekst = lexSpecialis(
+          (await getTexts(q).unwrap()).map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null)).filter(isNotNull)
+        );
 
         const [nodeEntry] = Editor.nodes(editor, { match: (n) => n === element, voids: false, at: [] });
 
@@ -49,7 +50,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
 
         const [node, path] = nodeEntry;
 
-        const nodes: Descendant[] = maltekster.length === 0 ? [EMPTY_VOID] : maltekster.flatMap((m) => m.content);
+        const nodes: Descendant[] = maltekst === null ? [EMPTY_VOID] : maltekst.content;
 
         if (Node.isNodeList(node.children) && nodesEquals(node.children, nodes)) {
           return;
