@@ -1,8 +1,9 @@
 import { Close, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useDeleteCommentOrThreadMutation } from '../../../redux-api/smart-editor-comments';
+import { useUser } from '../../../simple-api-state/use-user';
 import { disconnectCommentThread } from '../../rich-text/rich-text-editor/connect-thread';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { useIsCommentAuthor } from './use-is-comment-author';
@@ -15,17 +16,24 @@ interface DeleteButtonProps {
 
 export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
-  const oppgaveId = useOppgaveId();
+  const { data: oppgave } = useOppgave();
+  const { data: user } = useUser();
   const { documentId, editor } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
   const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
 
-  if (!isFocused || !isCommentAuthor || typeof oppgaveId !== 'string' || typeof documentId !== 'string') {
+  if (!isFocused || typeof oppgave === 'undefined' || typeof user === 'undefined' || typeof documentId !== 'string') {
+    return null;
+  }
+
+  const canDelete = isCommentAuthor || oppgave.tildeltSaksbehandler?.navIdent === user.navIdent;
+
+  if (!canDelete) {
     return null;
   }
 
   const onDelete = () => {
-    deleteComment({ commentId: id, dokumentId: documentId, oppgaveId }).then(() => {
+    deleteComment({ commentId: id, dokumentId: documentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
       }
