@@ -1,10 +1,9 @@
-import { Editor, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Range, Transforms } from 'slate';
 import { getCurrentElement, isBlockActive } from '../../functions/blocks';
 import { isPlaceholderSelectedInMaltekstWithOverlap } from '../../functions/insert-placeholder';
 import { ContentTypeEnum, TableContentEnum, TableTypeEnum } from '../../types/editor-enums';
-import { isOfElementType, isOfElementTypeFn } from '../../types/editor-type-guards';
+import { isOfElementType, isOfElementTypeFn, isUndeletableElement } from '../../types/editor-type-guards';
 import { ParagraphElementType } from '../../types/editor-types';
-import { getLeadingCharacters, getLeadingSpaces } from './helpers';
 import { HandlerFn } from './types';
 
 export const deleteHandler: HandlerFn = ({ editor, event }) => {
@@ -15,45 +14,6 @@ export const deleteHandler: HandlerFn = ({ editor, event }) => {
   }
 
   const isCollapsed = Range.isCollapsed(editor.selection);
-
-  if ((event.altKey || event.ctrlKey || event.metaKey) && isCollapsed) {
-    const parentPath = Path.parent(editor.selection.focus.path);
-
-    // If at end of element, use default behavior.
-    if (Editor.isEnd(editor, editor.selection.focus, parentPath)) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const at: Range = {
-      anchor: editor.selection.anchor,
-      focus: Editor.end(editor, [...parentPath, 0]),
-    };
-
-    // Delete line.
-    if (event.metaKey) {
-      Transforms.delete(editor, {
-        unit: 'character',
-        at,
-        reverse: false,
-      });
-
-      return;
-    }
-
-    // Delete word.
-    const string = Editor.string(editor, at);
-    const spaces = getLeadingSpaces(string);
-    const distance = spaces === 0 ? getLeadingCharacters(string) : spaces;
-
-    Transforms.delete(editor, {
-      unit: 'character',
-      distance,
-      at: editor.selection,
-      reverse: false,
-    });
-  }
 
   if (isCollapsed) {
     const isInTableCell = isBlockActive(editor, TableContentEnum.TD);
@@ -72,6 +32,12 @@ export const deleteHandler: HandlerFn = ({ editor, event }) => {
       });
 
       if (nextNode === undefined) {
+        return;
+      }
+
+      if (Element.isElement(nextNode[0]) && isUndeletableElement(nextNode[0])) {
+        event.preventDefault();
+
         return;
       }
 
