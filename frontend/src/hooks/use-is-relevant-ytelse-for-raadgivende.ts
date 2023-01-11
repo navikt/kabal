@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAllYtelser } from '../simple-api-state/use-kodeverk';
+import { useSimpleYtelser } from '../simple-api-state/use-kodeverk';
 
 enum Ytelser {
   Omsorgspenger = '1',
@@ -40,7 +40,7 @@ const RELEVANTE_YTELSE_IDS: string[] = [
 ];
 
 export const useIsRelevantYtelseForRaadgivende = (ytelseId: string | null): boolean => {
-  const { data } = useAllYtelser();
+  const { data } = useSimpleYtelser();
 
   return useMemo<boolean>(() => {
     if (typeof data === 'undefined' || ytelseId === null) {

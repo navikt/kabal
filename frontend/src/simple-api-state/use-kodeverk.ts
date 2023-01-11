@@ -29,7 +29,7 @@ const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${A
 const lovkildeToRegistreringshjemlerLatest = new SimpleApiState<AllLovKilderToRegistreringshjemmel[]>(
   `${API_PREFIX}/lovkildetoregistreringshjemler/latest`
 );
-const ytelserAll = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser`);
+const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelserLatest = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser/latest`);
 const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenheter`);
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
@@ -40,7 +40,7 @@ export const useKodeverk = () => useSimpleApiState(kodeverk);
 export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
 
 export const useLatestYtelser = () => useSimpleApiState(ytelserLatest);
-export const useAllYtelser = () => useSimpleApiState(ytelserAll);
+export const useSimpleYtelser = () => useSimpleApiState(ytelserSimple);
 
 export const useLovkildeToRegistreringshjemlerLatest = () => useSimpleApiState(lovkildeToRegistreringshjemlerLatest);
 export const useRegistreringshjemlerMap = () => useSimpleApiState(registreringshjemlerMap);
