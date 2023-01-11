@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
-import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
+import { useAvailableYtelserForEnhet } from '../../hooks/use-available-ytelser';
 import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
@@ -25,7 +25,7 @@ export const EnhetensOppgaverTable = () => {
   });
 
   const types = useSakstyper();
-  const availableYtelser = useAvailableYtelser();
+  const availableYtelser = useAvailableYtelserForEnhet();
   const availableHjemler = useAvailableHjemler();
 
   const typer = filters.types.length === 0 ? types?.map(({ id }) => id) : filters.types;

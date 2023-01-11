@@ -17,6 +17,7 @@ export interface IUserData {
   roller: Role[];
   enheter: IEnhet[];
   ansattEnhet: IEnhet;
+  tildelteYtelser: string[];
 }
 
 interface ICustomUserInfo {
