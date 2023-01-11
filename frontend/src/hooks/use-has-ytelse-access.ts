@@ -11,6 +11,6 @@ export const useHasYtelseAccess = (ytelse: string): ReturnType => {
       return [false, true];
     }
 
-    return [user.ansattEnhet.lovligeYtelser.some((y) => y === ytelse), false];
+    return [user.tildelteYtelser.some((y) => y === ytelse), false];
   }, [isLoading, user, ytelse]);
 };
