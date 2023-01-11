@@ -34,14 +34,15 @@ const staggeredBaseQuery = (baseUrl: string) => {
         result.error.status === 400 ||
         result.error.status === 403 ||
         result.error.status === 404 ||
-        result.error.status === 405
+        result.error.status === 405 ||
+        result.error.status === 500
       ) {
         retry.fail(result.error);
       }
 
       return result;
     },
-    { maxRetries: 3 }
+    { maxRetries: 3, backoff: () => new Promise((resolve) => setTimeout(resolve, 60000)) }
   );
 };
 
