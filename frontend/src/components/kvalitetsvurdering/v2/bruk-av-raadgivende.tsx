@@ -1,7 +1,7 @@
 import { Radio } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useAllYtelser } from '../../../simple-api-state/use-kodeverk';
+import { useIsRelevantYtelseForRaadgivende } from '../../../hooks/use-is-relevant-ytelse-for-raadgivende';
 import { RadiovalgExtended } from '../../../types/kaka-kvalitetsvurdering/radio';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
@@ -11,59 +11,9 @@ import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
 
-enum Ytelser {
-  Omsorgspenger = '1',
-  Opplæringspenger = '2',
-  Pleiepenger_sykt_barn = '3',
-  Pleiepenger_i_livets_sluttfase = '4',
-  Sykepenger = '5',
-  Foreldrepenger = '6',
-  Svangerskapspenger = '8',
-  Arbeidsavklaringspenger = '9',
-  Hjelpestønad = '20',
-  Grunnstønad = '21',
-  Hjelpemidler = '22',
-  Uføretrygd = '35',
-  Yrkesskade = '36',
-  Menerstatning = '37',
-  Yrkessykdom = '38',
-  Tvungen_forvaltning = '39',
-}
-
-const YTELSER_RELEVANT_FOR_RAADGIVENDE_LEGE: string[] = [
-  Ytelser.Omsorgspenger,
-  Ytelser.Opplæringspenger,
-  Ytelser.Pleiepenger_sykt_barn,
-  Ytelser.Pleiepenger_i_livets_sluttfase,
-  Ytelser.Sykepenger,
-  Ytelser.Foreldrepenger,
-  Ytelser.Svangerskapspenger,
-  Ytelser.Arbeidsavklaringspenger,
-  Ytelser.Hjelpestønad,
-  Ytelser.Grunnstønad,
-  Ytelser.Hjelpemidler,
-  Ytelser.Uføretrygd,
-  Ytelser.Yrkesskade,
-  Ytelser.Menerstatning,
-  Ytelser.Yrkessykdom,
-  Ytelser.Tvungen_forvaltning,
-];
-
-const useIsRelevantYtelse = (ytelseId: string | null | undefined): boolean => {
-  const { data: ytelser } = useAllYtelser();
-
-  return useMemo<boolean>(() => {
-    if (typeof ytelser === 'undefined' || typeof ytelseId !== 'string') {
-      return false;
-    }
-
-    return ytelser.some(({ id }) => id === ytelseId && YTELSER_RELEVANT_FOR_RAADGIVENDE_LEGE.includes(ytelseId));
-  }, [ytelser, ytelseId]);
-};
-
 export const BrukAvRaadgivendeLege = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
-  const show = useIsRelevantYtelse(oppgave?.ytelse);
+  const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelse ?? null);
 
   const canEdit = useCanEdit();
   const validationError = useValidationError('brukAvRaadgivendeLege');

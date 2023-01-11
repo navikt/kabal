@@ -28,7 +28,7 @@ export const KvalitetsskjemaV1 = () => {
 };
 
 interface BrukAvRaadgivendeLegeDisplayProps {
-  ytelse: string | null;
+  ytelse: string;
 }
 
 const BrukAvRaadgivendeLegeDisplay = ({ ytelse }: BrukAvRaadgivendeLegeDisplayProps) => {
