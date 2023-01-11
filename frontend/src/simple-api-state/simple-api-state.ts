@@ -45,7 +45,10 @@ export class SimpleApiState<T> {
       const response = await fetch(this.url, { method: 'GET' });
 
       if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
+        const error = new Error(`${response.status} ${response.statusText}`);
+        this.isError = true;
+        this.error = error;
+        throw error;
       }
 
       this.data = (await response.json()) as T;
@@ -58,6 +61,9 @@ export class SimpleApiState<T> {
       } else {
         this.error = new Error('Unknown error');
       }
+
+      // Retry after 1 minute.
+      setTimeout(this.fetchData, 60000);
     }
 
     this.isLoading = false;
@@ -86,7 +92,7 @@ export class SimpleApiState<T> {
       listener(this.getState());
     }
 
-    if (!this.options.prefetch && !this.isLoading && typeof this.data === 'undefined') {
+    if (!this.isLoading && !this.isError && typeof this.data === 'undefined') {
       this.fetchData();
     }
   };
@@ -108,6 +114,9 @@ export class SimpleApiState<T> {
   private clear = (): void => {
     console.info('Clearing cached data for', this.url);
     this.data = undefined;
+    this.error = undefined;
+    this.isError = false;
+    this.onChange();
   };
 }
 
