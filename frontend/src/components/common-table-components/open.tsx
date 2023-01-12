@@ -2,24 +2,38 @@ import { Button, ButtonProps } from '@navikt/ds-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useHasYtelseAccess } from '../../hooks/use-has-ytelse-access';
+import { useUser } from '../../simple-api-state/use-user';
 import { SaksTypeEnum } from '../../types/kodeverk';
+import { IOppgave } from '../../types/oppgaver';
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size'> {
-  oppgavebehandlingId: string;
-  ytelse: string;
-  type: SaksTypeEnum;
+  oppgavebehandlingId: IOppgave['id'];
+  tildeltSaksbehandlerident: IOppgave['tildeltSaksbehandlerident'];
+  medunderskriverident: IOppgave['medunderskriverident'];
+  ytelse: IOppgave['ytelse'];
+  type: IOppgave['type'];
   children?: string;
 }
 
 export const OpenOppgavebehandling = ({
   oppgavebehandlingId,
+  tildeltSaksbehandlerident,
+  medunderskriverident,
   ytelse,
   type,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
 }: Props) => {
-  const [canOpen, isLoading] = useHasYtelseAccess(ytelse);
+  const [hasYtelseAccess, isLoading] = useHasYtelseAccess(ytelse);
+  const { data: user, isLoading: userIsLoading } = useUser();
+
+  if (userIsLoading || typeof user === 'undefined') {
+    return null;
+  }
+
+  const canOpen =
+    hasYtelseAccess || user?.navIdent === tildeltSaksbehandlerident || user?.navIdent === medunderskriverident;
 
   if (!canOpen) {
     return null;

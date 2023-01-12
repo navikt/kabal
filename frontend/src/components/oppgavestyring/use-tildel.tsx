@@ -95,6 +95,8 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
           oppgavebehandlingId={oppgaveId}
           type={oppgaveType}
           ytelse={ytelse}
+          tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
+          medunderskriverident={null}
         >
           Åpne
         </OpenOppgavebehandling>

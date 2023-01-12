@@ -17,6 +17,8 @@ export const Row = ({
   avsluttetAvSaksbehandlerDate,
   person,
   ytelse,
+  tildeltSaksbehandlerident,
+  medunderskriverident,
 }: IOppgave): JSX.Element => {
   const { data: utfallList } = useUtfall();
 
@@ -46,7 +48,13 @@ export const Row = ({
       <Table.DataCell>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</Table.DataCell>
       <Table.DataCell>{utfallName}</Table.DataCell>
       <Table.DataCell>
-        <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
+        <OpenOppgavebehandling
+          oppgavebehandlingId={id}
+          ytelse={ytelse}
+          type={type}
+          tildeltSaksbehandlerident={tildeltSaksbehandlerident}
+          medunderskriverident={medunderskriverident}
+        />
       </Table.DataCell>
     </Table.Row>
   );

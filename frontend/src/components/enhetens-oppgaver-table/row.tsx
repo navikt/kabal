@@ -36,7 +36,13 @@ export const Row = (oppgave: IOppgave): JSX.Element => (
       />
     </Table.DataCell>
     <Table.DataCell>
-      <OpenOppgavebehandling oppgavebehandlingId={oppgave.id} ytelse={oppgave.ytelse} type={oppgave.type} />
+      <OpenOppgavebehandling
+        oppgavebehandlingId={oppgave.id}
+        ytelse={oppgave.ytelse}
+        type={oppgave.type}
+        tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+        medunderskriverident={oppgave.medunderskriverident}
+      />
     </Table.DataCell>
     <Table.DataCell>
       <Oppgavestyring {...oppgave} />

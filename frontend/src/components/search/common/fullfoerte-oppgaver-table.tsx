@@ -39,7 +39,16 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
   );
 };
 
-const Row = ({ id, type, hjemmel, ytelse, avsluttetAvSaksbehandlerDate, tildeltSaksbehandlerNavn }: IOppgave) => (
+const Row = ({
+  id,
+  type,
+  hjemmel,
+  ytelse,
+  avsluttetAvSaksbehandlerDate,
+  tildeltSaksbehandlerNavn,
+  tildeltSaksbehandlerident,
+  medunderskriverident,
+}: IOppgave) => (
   <Table.Row data-testid="search-result-fullfoert-oppgave">
     <Table.DataCell>
       <Type type={type} />
@@ -53,7 +62,13 @@ const Row = ({ id, type, hjemmel, ytelse, avsluttetAvSaksbehandlerDate, tildeltS
     <Table.DataCell>{isoDateToPretty(avsluttetAvSaksbehandlerDate)}</Table.DataCell>
     <Table.DataCell>{tildeltSaksbehandlerNavn}</Table.DataCell>
     <Table.DataCell align="right">
-      <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
+      <OpenOppgavebehandling
+        oppgavebehandlingId={id}
+        ytelse={ytelse}
+        type={type}
+        tildeltSaksbehandlerident={tildeltSaksbehandlerident}
+        medunderskriverident={medunderskriverident}
+      />
     </Table.DataCell>
   </Table.Row>
 );

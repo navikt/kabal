@@ -59,7 +59,13 @@ const Row = (oppgave: IOppgave) => (
       <Oppgavestyring {...oppgave} />
     </Table.DataCell>
     <Table.DataCell align="right">
-      <OpenOppgavebehandling oppgavebehandlingId={oppgave.id} ytelse={oppgave.ytelse} type={oppgave.type} />
+      <OpenOppgavebehandling
+        oppgavebehandlingId={oppgave.id}
+        ytelse={oppgave.ytelse}
+        type={oppgave.type}
+        tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+        medunderskriverident={oppgave.medunderskriverident}
+      />
     </Table.DataCell>
   </Table.Row>
 );
