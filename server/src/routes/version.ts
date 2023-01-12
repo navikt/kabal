@@ -11,6 +11,11 @@ const HEADERS = {
 
 export const setupVersionRoute = () => {
   router.get('/version', (req, res) => {
+    if (req.headers.accept !== 'text/event-stream') {
+      res.status(307).redirect('/');
+
+      return;
+    }
     res.writeHead(200, HEADERS);
     res.write('retry: 0\n');
     res.write(`data: ${VERSION}\n\n`);
