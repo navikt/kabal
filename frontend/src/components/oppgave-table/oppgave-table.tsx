@@ -145,7 +145,7 @@ const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element |
     return null;
   }
 
-  return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} klagebehandlinger`}</span>;
+  return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} oppgaver`}</span>;
 };
 
 const parsePage = (page = '1'): number | null => {

@@ -9,7 +9,17 @@ import { PaaVent } from '../common-table-components/paa-vent';
 import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';
 
-export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: IOppgave): JSX.Element => {
+export const Row = ({
+  id,
+  type,
+  utfall,
+  hjemmel,
+  person,
+  ytelse,
+  sattPaaVent,
+  tildeltSaksbehandlerident,
+  medunderskriverident,
+}: IOppgave): JSX.Element => {
   const { data: utfallList } = useUtfall();
 
   const utfallName = useMemo(() => {
@@ -40,7 +50,13 @@ export const Row = ({ id, type, utfall, hjemmel, person, ytelse, sattPaaVent }: 
       </Table.DataCell>
       <Table.DataCell>{utfallName}</Table.DataCell>
       <Table.DataCell>
-        <OpenOppgavebehandling oppgavebehandlingId={id} ytelse={ytelse} type={type} />
+        <OpenOppgavebehandling
+          oppgavebehandlingId={id}
+          ytelse={ytelse}
+          type={type}
+          tildeltSaksbehandlerident={tildeltSaksbehandlerident}
+          medunderskriverident={medunderskriverident}
+        />
       </Table.DataCell>
     </Table.Row>
   );
