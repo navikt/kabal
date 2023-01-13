@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { IKodeverkValue } from '../types/kodeverk';
-import { useAvailableYtelser } from './use-available-ytelser';
+import { useAvailableYtelserForEnhet } from './use-available-ytelser';
 
 export const useAvailableHjemler = () => {
-  const ytelser = useAvailableYtelser();
+  const ytelser = useAvailableYtelserForEnhet();
 
   const availableHjemler = useMemo(
     () =>

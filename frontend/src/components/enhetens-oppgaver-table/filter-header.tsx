@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
-import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
+import { useAvailableYtelserForEnhet } from '../../hooks/use-available-ytelser';
 import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useSaksbehandlereInEnhet } from '../../hooks/use-saksbehandlere-in-enhet';
 import { useUser } from '../../simple-api-state/use-user';
@@ -18,7 +18,7 @@ interface TableHeaderFiltersProps {
 
 export const TableHeaderFilters = ({ onChange, filters }: TableHeaderFiltersProps) => {
   const sakstyper = useSakstyper();
-  const ytelseOptions = useAvailableYtelser();
+  const ytelseOptions = useAvailableYtelserForEnhet();
   const hjemlerOptions = useAvailableHjemler();
 
   const { data: bruker } = useUser();

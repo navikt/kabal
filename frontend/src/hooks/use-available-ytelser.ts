@@ -1,8 +1,12 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
 import { isNotUndefined } from '../functions/is-not-type-guards';
+import { useEnhetYtelser } from '../simple-api-state/use-enhet-ytelser';
 import { useLatestYtelser } from '../simple-api-state/use-kodeverk';
 import { useUser } from '../simple-api-state/use-user';
 import { IYtelse } from '../types/kodeverk';
+
+const EMPTY_ARRAY: IYtelse[] = [];
 
 export const useAvailableYtelser = (): IYtelse[] => {
   const { data: ytelser } = useLatestYtelser();
@@ -10,7 +14,7 @@ export const useAvailableYtelser = (): IYtelse[] => {
 
   return useMemo<IYtelse[]>(() => {
     if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
-      return [];
+      return EMPTY_ARRAY;
     }
 
     return userData.tildelteYtelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
@@ -18,16 +22,13 @@ export const useAvailableYtelser = (): IYtelse[] => {
 };
 
 export const useAvailableYtelserForEnhet = (): IYtelse[] => {
-  const { data: ytelser } = useLatestYtelser();
   const { data: userData } = useUser();
+  const { data: ytelser = [] } = useLatestYtelser();
+  const { data: ytelseIds = [] } = useEnhetYtelser(userData?.ansattEnhet.id ?? skipToken);
 
-  return useMemo<IYtelse[]>(() => {
-    if (typeof userData === 'undefined' || typeof ytelser === 'undefined') {
-      return [];
-    }
+  if (ytelseIds.length === 0 || ytelser.length === 0) {
+    return EMPTY_ARRAY;
+  }
 
-    return userData.ansattEnhet.lovligeYtelser
-      .map((ytelseId) => ytelser.find(({ id }) => id === ytelseId))
-      .filter(isNotUndefined);
-  }, [userData, ytelser]);
+  return ytelseIds.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
 };
