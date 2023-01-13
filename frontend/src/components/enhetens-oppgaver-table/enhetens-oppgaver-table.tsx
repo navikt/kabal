@@ -2,8 +2,6 @@ import { Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAvailableHjemler } from '../../hooks/use-available-hjemler';
-import { useAvailableYtelserForEnhet } from '../../hooks/use-available-ytelser';
 import { useSakstyper } from '../../hooks/use-kodeverk-value';
 import { useGetEnhetensUferdigeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '../../simple-api-state/use-user';
@@ -25,12 +23,9 @@ export const EnhetensOppgaverTable = () => {
   });
 
   const types = useSakstyper();
-  const availableYtelser = useAvailableYtelserForEnhet();
-  const availableHjemler = useAvailableHjemler();
 
   const typer = filters.types.length === 0 ? types?.map(({ id }) => id) : filters.types;
-  const ytelser = filters.ytelser.length === 0 ? availableYtelser.map(({ id }) => id) : filters.ytelser;
-  const hjemler = filters.hjemler.length === 0 ? availableHjemler.map(({ id }) => id) : filters.hjemler;
+  const { ytelser, hjemler } = filters;
   const [sortering, rekkefoelge] = filters.sorting;
 
   const { data: bruker } = useUser();
