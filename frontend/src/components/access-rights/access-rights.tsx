@@ -11,8 +11,6 @@ import {
 import { useLatestYtelser } from '../../simple-api-state/use-kodeverk';
 import { useUser } from '../../simple-api-state/use-user';
 import { IYtelse } from '../../types/kodeverk';
-import { toast } from '../toast/store';
-import { ToastType } from '../toast/types';
 import { Body } from './body';
 import { Head } from './head';
 
@@ -67,7 +65,7 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
         saksbehandlerIdent,
         ytelseIdList,
       })),
-    }).then(() => toast({ type: ToastType.SUCCESS, message: 'Tilgangsstyring er lagret' }));
+    });
 
   return (
     <>
