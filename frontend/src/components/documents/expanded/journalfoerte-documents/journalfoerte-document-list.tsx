@@ -9,7 +9,7 @@ import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
 import { StyledJournalfoerteDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentListItem, StyledJournalfoerteDocumentList } from '../styled-components/document-list';
-import { StyledFilterDropdown, StyledListHeader } from '../styled-components/list-header';
+import { JournalfoerteDocumentsStyledListHeader, StyledFilterDropdown } from '../styled-components/list-header';
 import { Document } from './document';
 import { LoadMore } from './load-more';
 
@@ -46,7 +46,7 @@ export const JournalfoerteDocumentList = () => {
   return (
     <StyledJournalfoerteDocumentsContainer data-testid="oppgavebehandling-documents-all">
       <Wrapper>
-        <StyledListHeader>
+        <JournalfoerteDocumentsStyledListHeader>
           <Heading
             size="xsmall"
             level="2"
@@ -61,7 +61,20 @@ export const JournalfoerteDocumentList = () => {
           >
             Tema
           </StyledFilterDropdown>
-        </StyledListHeader>
+
+          <Heading size="xsmall" level="2">
+            Sendt
+          </Heading>
+          <Heading size="xsmall" level="2">
+            Avsender/Mottaker
+          </Heading>
+          <Heading size="xsmall" level="2">
+            Saks-ID
+          </Heading>
+          <Heading size="xsmall" level="2">
+            Type
+          </Heading>
+        </JournalfoerteDocumentsStyledListHeader>
         <StyledJournalfoerteDocumentList data-testid="oppgavebehandling-documents-all-list">
           <DocumentsSpinner hasDocuments={!isLoading} />
           {slicedFilteredDocuments.map((document) => (
@@ -74,6 +87,7 @@ export const JournalfoerteDocumentList = () => {
             </StyledDocumentListItem>
           ))}
         </StyledJournalfoerteDocumentList>
+
         <LoadMore
           loadedDocuments={endIndex}
           totalDocuments={totalFilteredDocuments.length}
