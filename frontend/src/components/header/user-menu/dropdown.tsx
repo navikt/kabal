@@ -43,18 +43,16 @@ const VersionNumber = styled.code`
 `;
 
 const linkStyle = css`
-  & {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    text-decoration: none;
-    cursor: pointer;
-    background: transparent;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 `;
 
 const StyledLink = styled.a`

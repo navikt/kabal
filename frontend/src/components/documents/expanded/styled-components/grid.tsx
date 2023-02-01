@@ -39,10 +39,8 @@ const getFieldSizes = (fields: Fields[]): string => fields.map((field) => SIZES[
 const NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.Meta, Fields.Date, Fields.Action];
 export const newDocumentsGridCSS = css`
   ${documentsGridCSS}
-  & {
-    grid-template-columns: ${getFieldSizes(NEW_DOCUMENT_FIELDS)};
-    grid-template-areas: '${getFieldNames(NEW_DOCUMENT_FIELDS)}';
-  }
+  grid-template-columns: ${getFieldSizes(NEW_DOCUMENT_FIELDS)};
+  grid-template-areas: '${getFieldNames(NEW_DOCUMENT_FIELDS)}';
 `;
 
 const JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
@@ -56,31 +54,22 @@ const JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
 ];
 export const journalfoerteDocumentsHeaderGridCSS = css`
   ${documentsGridCSS}
-
-  & {
-    grid-template-columns: ${getFieldSizes(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)};
-    grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)}';
-  }
+  grid-template-columns: ${getFieldSizes(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)};
+  grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)}';
 `;
 
 const JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.Expand, ...JOURNALFOERTE_DOCUMENT_HEADER_FIELDS];
 export const journalfoerteDocumentsGridCSS = css`
   ${documentsGridCSS}
-
-  & {
-    grid-template-columns: ${getFieldSizes(JOURNALFOERTE_DOCUMENT_FIELDS)};
-    grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_FIELDS)}';
-  }
+  grid-template-columns: ${getFieldSizes(JOURNALFOERTE_DOCUMENT_FIELDS)};
+  grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_FIELDS)}';
 `;
 
 const VEDLEGG_FIELDS = [Fields.Title, Fields.Action];
 export const vedleggGridCSS = css`
   ${documentsGridCSS}
-
-  & {
-    grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
-    grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
-  }
+  grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
+  grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
 `;
 
 interface StyledSimpleFieldProps {

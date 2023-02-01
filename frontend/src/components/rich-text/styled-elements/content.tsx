@@ -24,18 +24,14 @@ export const BlockQuoteStyle = styled.blockquote<AlignableStyleProps>`
 const getStyles = (textAlign: TextAlignEnum) => {
   if (textAlign === TextAlignEnum.TEXT_ALIGN_RIGHT) {
     return css`
-      & {
-        border-right: 2px solid #ddd;
-        padding-right: 8px;
-      }
+      border-right: 2px solid #ddd;
+      padding-right: 8px;
     `;
   }
 
   return css`
-    & {
-      border-left: 2px solid #ddd;
-      padding-left: 8px;
-    }
+    border-left: 2px solid #ddd;
+    padding-left: 8px;
   `;
 };
 

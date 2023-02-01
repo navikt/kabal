@@ -81,16 +81,14 @@ export const HeaderSubContainer = styled.div`
 `;
 
 const iconStyle = css`
-  & {
-    color: black;
-    transform: scale(1);
-    transition: transform 0.15s ease-in-out;
-    width: 16px;
-    height: 16px;
+  color: black;
+  transform: scale(1);
+  transition: transform 0.15s ease-in-out;
+  width: 16px;
+  height: 16px;
 
-    :hover {
-      transform: scale(1.25);
-    }
+  :hover {
+    transform: scale(1.25);
   }
 `;
 
