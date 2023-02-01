@@ -56,12 +56,10 @@ const Version = () => {
 };
 
 const iconText = css`
-  & {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    white-space: nowrap;
-  }
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
 `;
 
 const IconText = styled.span`

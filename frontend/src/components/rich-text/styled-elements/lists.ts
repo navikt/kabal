@@ -2,10 +2,8 @@ import styled, { css } from 'styled-components';
 import { IndentableStyleProps } from './types';
 
 const listStyle = css`
-  & {
-    margin-bottom: 0;
-    margin-top: 0;
-  }
+  margin-bottom: 0;
+  margin-top: 0;
 `;
 
 export const BulletListStyle = styled.ul<IndentableStyleProps>`
