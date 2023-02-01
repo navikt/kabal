@@ -1,8 +1,7 @@
-import styled from 'styled-components';
-import { documentsGridCSS } from './grid';
+import styled, { css } from 'styled-components';
+import { journalfoerteDocumentsGridCSS, newDocumentsGridCSS, vedleggGridCSS } from './grid';
 
-export const StyledDocument = styled.article`
-  ${documentsGridCSS}
+const documentCSS = css`
   position: relative;
   width: 100%;
   padding-right: 0;
@@ -16,7 +15,24 @@ export const StyledDocument = styled.article`
   }
 `;
 
+export const StyledNewDocument = styled.article`
+  ${documentCSS}
+  ${newDocumentsGridCSS}
+`;
+
+export const StyledVedlegg = styled.article`
+  ${documentCSS}
+  ${vedleggGridCSS}
+`;
+
+export const StyledJournalfoertDocument = styled.article<{ $expanded: boolean }>`
+  ${documentCSS}
+  ${journalfoerteDocumentsGridCSS}
+  background-color: ${({ $expanded }) => ($expanded ? 'var(--a-surface-subtle)' : 'tranparent')};
+`;
+
 export const StyledDocumentTitle = styled.h1`
+  grid-area: title;
   display: flex;
   flex-direction: row;
   gap: 0;
@@ -32,8 +48,6 @@ export const StyledDocumentTitle = styled.h1`
 
 export const StyledDate = styled.time`
   grid-area: date;
-  font-size: 12px;
-  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 `;

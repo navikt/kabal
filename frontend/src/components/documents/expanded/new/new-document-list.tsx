@@ -9,7 +9,7 @@ import { useValidationError } from '../../../../hooks/use-validation-error';
 import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { StyledDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentList } from '../styled-components/document-list';
-import { StyledListHeader } from '../styled-components/list-header';
+import { NewDocumentsStyledListHeader } from '../styled-components/list-header';
 import { NewParentDocument } from './new-parent-document';
 
 export const NewDocumentList = () => {
@@ -52,21 +52,21 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
 
   if (typeof errorMessage === 'string') {
     return (
-      <StyledListHeader>
+      <NewDocumentsStyledListHeader>
         <StyledHeading size="xsmall" level="2">
           Dokumenter under arbeid
           <Warning title={errorMessage} color="#ba3a26" />
         </StyledHeading>
-      </StyledListHeader>
+      </NewDocumentsStyledListHeader>
     );
   }
 
   return (
-    <StyledListHeader>
+    <NewDocumentsStyledListHeader>
       <Heading size="xsmall" level="2">
         Dokumenter under arbeid
       </Heading>
-    </StyledListHeader>
+    </NewDocumentsStyledListHeader>
   );
 };
 

@@ -3,7 +3,7 @@ import { IArkivertDocument, IArkivertDocumentVedlegg } from '../../../../types/a
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
 import { StyledDocumentButton } from '../../styled-components/document-button';
-import { StyledDocument, StyledDocumentTitle } from '../styled-components/document';
+import { StyledDocumentTitle, StyledVedlegg } from '../styled-components/document';
 import { DocumentCheckbox } from './document-checkbox';
 
 interface Props {
@@ -33,7 +33,7 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
     shownDocument.journalpostId === journalpostId;
 
   return (
-    <StyledDocument
+    <StyledVedlegg
       key={journalpostId + dokumentInfoId}
       data-testid="oppgavebehandling-documents-all-list-item"
       data-journalpostid={journalpostId}
@@ -59,6 +59,6 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
         oppgavebehandlingId={oppgavebehandlingId}
         checked={vedlegg.valgt}
       />
-    </StyledDocument>
+    </StyledVedlegg>
   );
 };

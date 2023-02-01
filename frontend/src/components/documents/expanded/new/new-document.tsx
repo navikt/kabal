@@ -7,7 +7,7 @@ import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id
 import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
-import { StyledDate, StyledDocument } from '../styled-components/document';
+import { StyledDate, StyledNewDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
 import { DocumentTitle } from './document-title';
 import { SetDocumentType } from './document-type';
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const NewDocument = ({ document }: Props) => (
-  <StyledDocument
+  <StyledNewDocument
     data-documentname={document.tittel}
     data-documentid={document.id}
     data-testid="new-document-list-item-content"
@@ -28,7 +28,7 @@ export const NewDocument = ({ document }: Props) => (
     <SetDocumentType document={document} />
     <StyledDate data-testid="new-document-date">{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
     <ActionContent document={document} />
-  </StyledDocument>
+  </StyledNewDocument>
 );
 
 const ActionContent = ({ document }: Props) => {

@@ -10,7 +10,7 @@ export const StyledAttachmentList = styled.ul`
   position: relative;
   padding: 0;
   margin: 0;
-  margin-left: 4px;
+  margin-left: 40px;
   list-style-type: none;
 
   &::before {
