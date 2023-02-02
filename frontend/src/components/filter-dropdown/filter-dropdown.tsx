@@ -8,6 +8,7 @@ import { BaseProps } from './props';
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   children: string;
   testId?: string;
+  direction?: PopupProps['direction'];
 }
 
 export const FilterDropdown = <T extends string>({
@@ -16,6 +17,7 @@ export const FilterDropdown = <T extends string>({
   onChange,
   children,
   testId,
+  direction,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -33,7 +35,7 @@ export const FilterDropdown = <T extends string>({
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length})
       </ToggleButton>
-      <Popup isOpen={open}>
+      <Popup isOpen={open} direction={direction}>
         <Dropdown selected={selected} options={options} open={open} onChange={onChange} close={close} />
       </Popup>
     </Container>
@@ -46,22 +48,28 @@ const Container = styled.section`
 
 interface PopupProps {
   isOpen: boolean;
+  direction: StyledPopupProps['$direction'];
   children: React.ReactNode;
 }
 
-const Popup = ({ isOpen, children }: PopupProps) => {
+const Popup = ({ isOpen, direction, children }: PopupProps) => {
   if (!isOpen) {
     return null;
   }
 
-  return <StyledPopup>{children}</StyledPopup>;
+  return <StyledPopup $direction={direction}>{children}</StyledPopup>;
 };
 
-const StyledPopup = styled.div`
+interface StyledPopupProps {
+  $direction?: 'left' | 'right';
+}
+
+const StyledPopup = styled.div<StyledPopupProps>`
   display: flex;
   position: absolute;
   top: 100%;
-  left: 0;
+  left: ${({ $direction }) => ($direction === 'left' ? 'auto' : '0')};
+  right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
   width: 275px;
   max-height: 256px;
   z-index: 3;

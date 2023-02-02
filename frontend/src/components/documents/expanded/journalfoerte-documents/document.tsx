@@ -13,7 +13,9 @@ import { StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDate, StyledDocumentTitle, StyledJournalfoertDocument } from '../styled-components/document';
 import { Fields, SimpleField } from '../styled-components/grid';
 import { AttachmentList } from './attachment-list';
+import { formatAvsenderMottaker } from './avsender-mottaker';
 import { DocumentCheckbox } from './document-checkbox';
+import { JournalposttypeTag } from './journalposttype';
 import { DocumentTema } from './styled-components';
 
 interface Props {
@@ -40,6 +42,8 @@ export const Document = ({ document }: Props) => {
     opprettetAvNavn,
     journalstatus,
   } = document;
+
+  const temaName = useFullTemaNameFromId(tema);
 
   const onClick = () =>
     setShownDocument({
@@ -79,11 +83,11 @@ export const Document = ({ document }: Props) => {
             {tittel}
           </StyledDocumentButton>
         </StyledDocumentTitle>
-        <DocumentTema>{useFullTemaNameFromId(tema)}</DocumentTema>
+        <DocumentTema title={temaName}>{temaName}</DocumentTema>
         <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
-        <SimpleField $area={Fields.AvsenderMottaker}>{avsenderMottaker?.navn ?? 'Ingen'}</SimpleField>
+        <SimpleField $area={Fields.AvsenderMottaker}>{formatAvsenderMottaker(avsenderMottaker)}</SimpleField>
         <SimpleField $area={Fields.SaksId}>{sak?.fagsakId ?? 'Ingen'}</SimpleField>
-        <SimpleField $area={Fields.Type}>{journalposttype ?? 'Ingen'}</SimpleField>
+        <JournalposttypeTag type={journalposttype} />
         <DocumentCheckbox
           dokumentInfoId={dokumentInfoId}
           journalpostId={journalpostId}

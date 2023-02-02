@@ -25,11 +25,11 @@ export enum Fields {
 const SIZES: Record<Fields, string> = {
   [Fields.Expand]: '20px',
   [Fields.Title]: 'auto',
-  [Fields.Meta]: '165px',
+  [Fields.Meta]: '150px',
   [Fields.Date]: '85px',
   [Fields.AvsenderMottaker]: '200px',
   [Fields.SaksId]: '75px',
-  [Fields.Type]: '40px',
+  [Fields.Type]: '90px',
   [Fields.Action]: '32px',
 };
 
