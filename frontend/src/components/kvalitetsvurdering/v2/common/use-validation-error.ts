@@ -5,13 +5,14 @@ import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 
 type Field = keyof IKvalitetsvurderingData | keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;
 
-export const useValidationError = (field: Field): string | undefined => {
+export const useValidationError = (field?: Field): string | undefined => {
   const context = useContext(ValidationErrorContext);
 
-  const allProperties = useMemo(
-    () => context?.validationSectionErrors?.flatMap(({ properties }) => properties),
-    [context]
-  );
+  return useMemo(() => {
+    if (typeof field === 'undefined') {
+      return undefined;
+    }
 
-  return useMemo(() => allProperties?.find((p) => p.field === field)?.reason, [allProperties, field]);
+    return context?.validationSectionErrors?.flatMap((e) => e.properties)?.find((p) => p.field === field)?.reason;
+  }, [context, field]);
 };

@@ -55,7 +55,7 @@ export const Klageforberedelsen = () => {
         update={update}
         checkboxes={CHECKBOXES}
         show={klageforberedelsen === Radiovalg.MANGELFULLT}
-        errorField="klageforberedelsenGroup"
+        groupErrorField="klageforberedelsenGroup"
         label="Hva er mangelfullt?"
       />
     </section>
@@ -68,6 +68,7 @@ const CHECKBOXES: ICheckboxParams[] = [
     helpText:
       'Dokumentene er ikke fullstendige; f.eks. feil eller mangelfull journalføring av relevante opplysninger i klagebehandlingen.',
     label: 'Sakens dokumenter.',
+    groupErrorField: 'klageforberedelsenSakensDokumenterGroup',
     checkboxes: [
       {
         field: 'klageforberedelsenSakensDokumenterRelevanteOpplysningerFraAndreFagsystemerErIkkeJournalfoert',

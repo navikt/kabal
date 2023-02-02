@@ -54,7 +54,7 @@ export const Utredningen = () => {
         checkboxes={CHECKBOXES}
         update={update}
         show={utredningen === Radiovalg.MANGELFULLT}
-        errorField="utredningenGroup"
+        groupErrorField="utredningenGroup"
         label="Hva er mangelfullt?"
       />
     </section>
