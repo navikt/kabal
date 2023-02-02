@@ -1,6 +1,6 @@
-import { Heading, Loader } from '@navikt/ds-react';
+import { Filter2 } from '@navikt/ds-icons';
+import { Button, Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { isWithinInterval, parseISO } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
@@ -9,13 +9,13 @@ import { useAllTemaer } from '../../../../hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { IArkivertDocument, Journalposttype } from '../../../../types/arkiverte-documents';
 import { kodeverkValuesToDropdownOptions } from '../../../filter-dropdown/functions';
-import { IOption } from '../../../filter-dropdown/props';
 import { StyledJournalfoerteDocumentsContainer } from '../styled-components/container';
 import { StyledDocumentListItem, StyledJournalfoerteDocumentList } from '../styled-components/document-list';
 import { Fields } from '../styled-components/grid';
 import { JournalfoerteDocumentsStyledListHeader, StyledFilterDropdown } from '../styled-components/list-header';
 import { DateFilter } from './date-filter';
 import { Document } from './document';
+import { filterDocuments, getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
 import { LoadMore } from './load-more';
 
 const PAGE_SIZE = 50;
@@ -32,55 +32,30 @@ export const JournalfoerteDocumentList = () => {
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
+  const [selectedSaksIds, setSelectedSaksIds] = useState<string[]>([]);
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(undefined);
   const [page, setPage] = useState(1);
   const { data, isLoading } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
 
   const documents = data?.dokumenter ?? EMPTY_ARRAY;
 
-  const endIndex = PAGE_SIZE * page;
-
-  const avsenderMottakerOptions = useMemo(
-    () =>
-      documents.reduce<IOption<string>[]>((acc, { avsenderMottaker }) => {
-        if (avsenderMottaker === null) {
-          if (acc.every((am) => am.value !== 'NONE')) {
-            acc.push({ label: 'Ingen', value: 'NONE' });
-          }
-
-          return acc;
-        }
-
-        const { navn, id } = avsenderMottaker;
-
-        const label = navn ?? id ?? 'Ukjent';
-        const value = id ?? 'UNKNOWN';
-
-        if (acc.some((am) => am.value === value)) {
-          return acc;
-        }
-
-        acc.push({ label, value });
-
-        return acc;
-      }, []),
-    [documents]
-  );
+  const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
+  const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
 
   const totalFilteredDocuments = useMemo(
     () =>
-      documents.filter(
-        ({ tema, journalposttype, avsenderMottaker, registrert }) =>
-          (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-          (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-          (selectedAvsenderMottakere.length === 0 ||
-            selectedAvsenderMottakere.includes(
-              avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
-            )) &&
-          (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange))
+      filterDocuments(
+        documents,
+        selectedAvsenderMottakere,
+        selectedDateRange,
+        selectedSaksIds,
+        selectedTemaer,
+        selectedTypes
       ),
-    [documents, selectedAvsenderMottakere, selectedDateRange, selectedTemaer, selectedTypes]
+    [documents, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]
   );
+
+  const endIndex = PAGE_SIZE * page;
 
   const slicedFilteredDocuments = useMemo(
     () => totalFilteredDocuments.slice(0, endIndex),
@@ -89,12 +64,44 @@ export const JournalfoerteDocumentList = () => {
 
   const allTemaer = useAllTemaer();
 
+  const resetFiltes = () => {
+    setSelectedTemaer([]);
+    setSelectedTypes([]);
+    setSelectedAvsenderMottakere([]);
+    setSelectedSaksIds([]);
+    setSelectedDateRange(undefined);
+  };
+
+  const resetFiltersDisabled = useMemo(
+    () =>
+      selectedTemaer.length === 0 &&
+      selectedTypes.length === 0 &&
+      selectedAvsenderMottakere.length === 0 &&
+      selectedSaksIds.length === 0 &&
+      selectedDateRange === undefined,
+    [
+      selectedAvsenderMottakere.length,
+      selectedDateRange,
+      selectedSaksIds.length,
+      selectedTemaer.length,
+      selectedTypes.length,
+    ]
+  );
+
   const totaltAntall = data?.totaltAntall ?? 0;
 
   return (
     <StyledJournalfoerteDocumentsContainer data-testid="oppgavebehandling-documents-all">
       <Wrapper>
         <JournalfoerteDocumentsStyledListHeader>
+          <Button
+            disabled={resetFiltersDisabled}
+            size="small"
+            variant="danger"
+            onClick={resetFiltes}
+            icon={<Filter2 aria-hidden />}
+            title="Fjern filtere"
+          />
           <Heading
             size="xsmall"
             level="2"
@@ -110,7 +117,6 @@ export const JournalfoerteDocumentList = () => {
           >
             Tema
           </StyledFilterDropdown>
-
           <DateFilter onChange={setSelectedDateRange} selected={selectedDateRange}>
             Sendt
           </DateFilter>
@@ -124,9 +130,17 @@ export const JournalfoerteDocumentList = () => {
           >
             Avsender/mottaker
           </StyledFilterDropdown>
-          <Heading size="xsmall" level="2">
+
+          <StyledFilterDropdown
+            options={saksIdOptions}
+            onChange={setSelectedSaksIds}
+            selected={selectedSaksIds}
+            direction="left"
+            $area={Fields.SaksId}
+          >
             Saks-ID
-          </Heading>
+          </StyledFilterDropdown>
+
           <StyledFilterDropdown
             options={JOURNALPOSTTYPE_OPTIONS}
             onChange={setSelectedTypes}
@@ -145,7 +159,12 @@ export const JournalfoerteDocumentList = () => {
               data-testid="oppgavebehandling-documents-all-list-item"
               data-documentname={document.tittel}
             >
-              <Document document={document} />
+              <Document
+                document={document}
+                setAvsenderMottaker={(id) => setSelectedAvsenderMottakere([id])}
+                setTema={(tema) => setSelectedTemaer([tema])}
+                setSaksId={(saksId) => setSelectedSaksIds([saksId])}
+              />
             </StyledDocumentListItem>
           ))}
         </StyledJournalfoerteDocumentList>
@@ -160,8 +179,6 @@ export const JournalfoerteDocumentList = () => {
     </StyledJournalfoerteDocumentsContainer>
   );
 };
-
-JournalfoerteDocumentList.displayName = 'JournalfoerteDocuments';
 
 const Wrapper = styled.div`
   display: flex;
@@ -179,12 +196,4 @@ const DocumentsSpinner = ({ hasDocuments }: DocumentsSpinnerProps): JSX.Element 
   }
 
   return <Loader size="xlarge" />;
-};
-
-const checkDateInterval = (date: string, { from, to }: DateRange) => {
-  if (from !== undefined && to !== undefined) {
-    return isWithinInterval(parseISO(date), { start: from, end: to });
-  }
-
-  return true;
 };

@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
+  display: flex;
+  gap: 8px;
+  align-items: center;
   cursor: pointer;
   border: none;
   padding: 0;
@@ -27,4 +30,9 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
     opacity: 0.3;
     cursor: not-allowed;
   }
+`;
+
+export const EllipsisTitle = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
