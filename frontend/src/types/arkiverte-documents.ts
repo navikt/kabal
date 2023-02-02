@@ -6,16 +6,25 @@ export interface IArkiverteDocumentsResponse {
 }
 
 /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */
-enum Journalposttype {
+export enum Journalposttype {
   INNGAAENDE = 'I',
   UTGAAENDE = 'U',
   NOTAT = 'N',
 }
 
+enum AvsenderMottakerIdType {
+  FNR = 'FNR',
+  ORGNR = 'ORGNR',
+  HPRNR = 'HPRNR',
+  UTL_ORG = 'UTL_ORG',
+  UKJENT = 'UKJENT',
+  NULL = 'NULL',
+}
+
 /** Personen eller organisasjonen som er avsender eller mottaker av dokumentene i journalposten. */
-interface AvsenderMottaker {
+export interface AvsenderMottaker {
   id: string | null;
-  type: string | null;
+  type: AvsenderMottakerIdType | null;
   navn: string | null;
   land: string | null;
   erLikBruker: boolean;

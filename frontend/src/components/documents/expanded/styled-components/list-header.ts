@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { FilterDropdown } from '../../../filter-dropdown/filter-dropdown';
-import { journalfoerteDocumentsHeaderGridCSS, newDocumentsGridCSS } from './grid';
+import { Fields, journalfoerteDocumentsHeaderGridCSS, newDocumentsGridCSS } from './grid';
 
 const listHeaderCSS = css`
   padding-bottom: 16px;
@@ -17,6 +17,6 @@ export const JournalfoerteDocumentsStyledListHeader = styled.div`
   ${journalfoerteDocumentsHeaderGridCSS}
 `;
 
-export const StyledFilterDropdown = styled(FilterDropdown)`
-  grid-area: meta;
+export const StyledFilterDropdown = styled(FilterDropdown)<{ $area: Fields }>`
+  grid-area: ${({ $area }) => $area};
 `;
