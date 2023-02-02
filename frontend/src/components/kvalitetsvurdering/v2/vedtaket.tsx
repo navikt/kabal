@@ -73,7 +73,7 @@ export const Vedtaket = () => {
         update={update}
         checkboxes={CHECKBOXES}
         show={vedtaket === Radiovalg.MANGELFULLT}
-        errorField="vedtaketGroup"
+        groupErrorField="vedtaketGroup"
         label="Hva er mangelfullt?"
       />
     </section>
@@ -116,6 +116,7 @@ const CHECKBOXES: ICheckboxParams[] = [
   {
     field: 'vedtaketIkkeKonkretIndividuellBegrunnelse',
     label: 'Begrunnelsen er ikke konkret og individuell nok.',
+    groupErrorField: 'vedtaketIkkeKonkretIndividuellBegrunnelseGroup',
     checkboxes: [
       {
         field: 'vedtaketIkkeKonkretIndividuellBegrunnelseIkkeGodtNokFremFaktum',

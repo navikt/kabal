@@ -1,9 +1,13 @@
 import { KVALITETSVURDERING_V1_FIELD_NAMES } from '../components/kvalitetsvurdering/v1/use-field-name';
-import { KVALITETSVURDERING_V2_FIELD_NAMES } from '../components/kvalitetsvurdering/v2/common/use-field-name';
+import {
+  KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES,
+  KVALITETSVURDERING_V2_FIELD_NAMES,
+} from '../components/kvalitetsvurdering/v2/common/use-field-name';
 
 export const FIELD_NAMES = {
   ...KVALITETSVURDERING_V1_FIELD_NAMES,
   ...KVALITETSVURDERING_V2_FIELD_NAMES,
+  ...KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES,
   vedtaksdokument: 'Vedtaksdokument',
   utfall: 'Utfall/resultat',
   hjemmel: 'Lovhjemmel',
