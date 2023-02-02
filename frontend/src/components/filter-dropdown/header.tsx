@@ -86,16 +86,15 @@ export const Header = ({
         data-testid="header-filter"
       />
       {showFjernAlle && (
-        <StyledKnapp size="xsmall" variant="danger" onClick={onReset}>
-          <Delete />
-          <span>Fjern alle</span>
-        </StyledKnapp>
+        <StyledButton size="xsmall" variant="danger" onClick={onReset} icon={<Delete aria-hidden />}>
+          Fjern alle
+        </StyledButton>
       )}
     </StyledHeader>
   );
 };
 
-const StyledKnapp = styled(Button)`
+const StyledButton = styled(Button)`
   margin-left: 0.5em;
   flex-shrink: 0;
 `;

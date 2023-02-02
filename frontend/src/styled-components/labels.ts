@@ -15,6 +15,8 @@ const Label = styled.div<LabelProps>`
   max-width: 13em;
   width: ${({ fixedWidth }) => (fixedWidth === true ? '13em' : 'auto')};
   vertical-align: middle;
+  color: var(--a-text-default);
+  font-weight: normal;
 `;
 
 export const LabelMain = styled(Label)`

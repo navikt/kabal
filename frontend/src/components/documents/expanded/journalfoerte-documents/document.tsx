@@ -9,9 +9,9 @@ import { useFullTemaNameFromId } from '../../../../hooks/use-kodeverk-ids';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
-import { StyledDocumentButton } from '../../styled-components/document-button';
+import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDate, StyledDocumentTitle, StyledJournalfoertDocument } from '../styled-components/document';
-import { Fields, SimpleField } from '../styled-components/grid';
+import { ClickableField, Fields, StyledClickableField } from '../styled-components/grid';
 import { AttachmentList } from './attachment-list';
 import { formatAvsenderMottaker } from './avsender-mottaker';
 import { DocumentCheckbox } from './document-checkbox';
@@ -20,9 +20,12 @@ import { DocumentTema } from './styled-components';
 
 interface Props {
   document: IArkivertDocument;
+  setAvsenderMottaker: (avsenderMottaker: string) => void;
+  setSaksId: (saksId: string) => void;
+  setTema: (tema: string) => void;
 }
 
-export const Document = ({ document }: Props) => {
+export const Document = ({ document, setAvsenderMottaker, setTema, setSaksId }: Props) => {
   const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
   const oppgaveId = useOppgaveId();
   const [expanded, setExpanded] = useState(false);
@@ -80,13 +83,29 @@ export const Document = ({ document }: Props) => {
             disabled={!harTilgangTilArkivvariant}
             title={harTilgangTilArkivvariant ? undefined : 'Du har ikke tilgang til å se dette dokumentet.'}
           >
-            {tittel}
+            <EllipsisTitle>{tittel}</EllipsisTitle>
           </StyledDocumentButton>
         </StyledDocumentTitle>
-        <DocumentTema title={temaName}>{temaName}</DocumentTema>
+        <DocumentTema
+          as={StyledClickableField}
+          $area={Fields.Meta}
+          size="small"
+          variant="tertiary"
+          onClick={() => setTema(tema ?? 'UNKNOWN')}
+          title={temaName}
+        >
+          {temaName}
+        </DocumentTema>
         <StyledDate dateTime={registrert}>{isoDateToPretty(registrert)}</StyledDate>
-        <SimpleField $area={Fields.AvsenderMottaker}>{formatAvsenderMottaker(avsenderMottaker)}</SimpleField>
-        <SimpleField $area={Fields.SaksId}>{sak?.fagsakId ?? 'Ingen'}</SimpleField>
+        <ClickableField
+          $area={Fields.AvsenderMottaker}
+          onClick={() => setAvsenderMottaker(avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN')}
+        >
+          {formatAvsenderMottaker(avsenderMottaker)}
+        </ClickableField>
+        <ClickableField $area={Fields.SaksId} onClick={() => setSaksId(sak?.fagsakId ?? 'NONE')}>
+          {sak?.fagsakId ?? 'Ingen'}
+        </ClickableField>
         <JournalposttypeTag type={journalposttype} />
         <DocumentCheckbox
           dokumentInfoId={dokumentInfoId}

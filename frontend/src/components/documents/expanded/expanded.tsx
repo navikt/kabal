@@ -27,7 +27,7 @@ export const ExpandedDocuments = ({ toggleExpanded }: Props) => (
 const StyledExpandedDocumentsContainer = styled.section`
   display: flex;
   flex-direction: column;
-  width: 1000px;
+  width: 1024px;
   height: 100%;
   overflow-y: hidden;
 `;

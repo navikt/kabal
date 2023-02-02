@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { IMainDocument } from '../../../../types/documents/documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ShownDocumentContext } from '../../context';
-import { StyledDocumentButton } from '../../styled-components/document-button';
+import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';
 import { EditButton } from './document-title-edit-button';
 import { SetFilename } from './set-filename';
@@ -67,9 +67,4 @@ const StyledNotes = styled(Notes)`
 
 const StyledFileContent = styled(FileContent)`
   flex-shrink: 0;
-`;
-
-const EllipsisTitle = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
