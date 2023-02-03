@@ -10,6 +10,7 @@ interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
   onFocus?: () => void;
   onSubmit: (value: string) => Promise<void>;
   text?: string;
+  autoFocus?: boolean;
 }
 
 export const WriteComment = ({
@@ -20,6 +21,7 @@ export const WriteComment = ({
   onSubmit,
   primaryButtonLabel,
   text = '',
+  autoFocus = false,
 }: Props) => {
   const [value, setValue] = useState(text);
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -48,7 +50,7 @@ export const WriteComment = ({
   return (
     <>
       <Textarea
-        autoFocus
+        autoFocus={autoFocus}
         disabled={isLoading}
         hideLabel
         label={label}

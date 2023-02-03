@@ -134,7 +134,7 @@ export const renderElement = (element: Descendant, key: string) => {
 const getAttributes = <T extends NonVoidElementTypes>(element: T) => omit(element, 'children', 'type');
 
 const renderLeaf = ({ text, ...attributes }: CustomTextType, key: string) => (
-  <StyledLeaf {...attributes} commentIds={[]} key={key} hasText={text.length !== 0}>
+  <StyledLeaf {...attributes} commentIds={[]} key={key} hasText={text.length !== 0} isExpanded={false}>
     {text}
   </StyledLeaf>
 );

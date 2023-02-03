@@ -16,7 +16,7 @@ export const StyledLeaf = styled.span<LeafStyleProps>`
   vertical-align: ${getScriptDecoration};
   background-color: ${({ commentIds, selected = false, focused = false }) =>
     getColor(commentIds.length, selected, focused)};
-  box-shadow: 0 0 0 0.66px ${({ selected = false }) => getCaretColor(selected)};
+  box-shadow: 0 0 0 0.66px ${({ selected = false, isExpanded }) => getCaretColor(selected, isExpanded)};
   // The following is a workaround for a Chromium bug where,
   // if you have an inline at the end of a block,
   // clicking the end of a block puts the cursor inside the inline

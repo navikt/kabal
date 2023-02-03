@@ -119,6 +119,7 @@ export const EditSmartEditorText = (savedText: IText) => {
           <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
         </TagContainer>
       </Header>
+
       <ContentEditor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
 
       <Buttons onKeyDown={onKeyDown}>

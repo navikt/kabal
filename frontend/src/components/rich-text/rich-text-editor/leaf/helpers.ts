@@ -2,6 +2,7 @@ import { IMarks } from '../../types/marks';
 
 export interface LeafStyleProps extends IMarks {
   selected?: boolean;
+  isExpanded: boolean;
   focused?: boolean;
   commentIds: string[];
   children: React.ReactNode;
@@ -56,4 +57,5 @@ export const getColor = (comments: number, selected: boolean, focused: boolean) 
   return `hsla(${hue}, ${saturation}%, ${lightness}%, 1)`;
 };
 
-export const getCaretColor = (selected: boolean) => (selected ? 'red' : 'transparent');
+export const getCaretColor = (selected: boolean, isExpanded: boolean) =>
+  selected && !isExpanded ? 'var(--a-text-default)' : 'transparent';

@@ -1,6 +1,7 @@
-import { DialogDots, Information, Law } from '@navikt/ds-icons';
+import { DialogDots, Information, LightBulb } from '@navikt/ds-icons';
 import React, { useContext } from 'react';
 import { Range } from 'slate';
+import { useSlate } from 'slate-react';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { Placeholder } from './placeholder';
 import { ToolbarIconButton } from './toolbarbutton';
@@ -39,7 +40,8 @@ interface Props {
 }
 
 const CommentsButton = ({ show }: Props) => {
-  const { selection, setShowNewComment, showNewComment } = useContext(SmartEditorContext);
+  const { setShowNewComment, showNewComment } = useContext(SmartEditorContext);
+  const { selection } = useSlate();
 
   if (!show) {
     return null;
@@ -89,7 +91,7 @@ const GodeFormuleringerButton = ({ show }: Props) => {
   return (
     <ToolbarIconButton
       label={`${prefix} gode formuleringer (Ctrl/⌘ + Shift + F)`}
-      icon={<Law width={ICON_SIZE} />}
+      icon={<LightBulb width={ICON_SIZE} />}
       active={showGodeFormuleringer}
       onClick={() => setShowGodeFormuleringer(!showGodeFormuleringer)}
     />

@@ -1,6 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useContext, useMemo } from 'react';
 import { Descendant, Text } from 'slate';
+import { useSlateStatic } from 'slate-react';
 import { isNotUndefined } from '../../../functions/is-not-type-guards';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetCommentsQuery } from '../../../redux-api/smart-editor-comments';
@@ -26,7 +27,8 @@ const LOADING: Threads = {
 
 export const useThreads = (): Threads => {
   const oppgaveId = useOppgaveId();
-  const { focusedThreadId, documentId, editor } = useContext(SmartEditorContext);
+  const editor = useSlateStatic();
+  const { focusedThreadId, documentId } = useContext(SmartEditorContext);
 
   const query = useMemo(() => {
     if (documentId === null || oppgaveId === skipToken) {
