@@ -1,4 +1,4 @@
-import { Editor, Location } from 'slate';
+import { Editor, Element, Location } from 'slate';
 import { DeletableVoidElementsEnum } from '../types/editor-enums';
 
 export const containsVoid = (editor: Editor, at: Location | null | undefined) => {
@@ -9,7 +9,7 @@ export const containsVoid = (editor: Editor, at: Location | null | undefined) =>
   const [nodeEntry] = Editor.nodes(editor, {
     at,
     voids: true,
-    match: (n) => Editor.isVoid(editor, n),
+    match: (n) => Element.isElement(n) && Editor.isVoid(editor, n),
   });
 
   return typeof nodeEntry !== 'undefined';
@@ -25,7 +25,7 @@ export const containsUndeletableVoid = (editor: Editor, at: Location | null | un
   const [nodeEntry] = Editor.nodes(editor, {
     at,
     voids: true,
-    match: (n) => Editor.isVoid(editor, n) && !deletableVoidType.some((t) => t === n.type),
+    match: (n) => Element.isElement(n) && Editor.isVoid(editor, n) && !deletableVoidType.some((t) => t === n.type),
   });
 
   return typeof nodeEntry !== 'undefined';

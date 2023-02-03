@@ -3,15 +3,16 @@ import { RenderLeafProps } from 'slate-react';
 import { COMMENT_PREFIX } from '../../../smart-editor/constants';
 import { StyledLeaf } from './styled';
 
-export const renderLeaf = (props: RenderLeafProps, focusedThreadId: string | null = null) => (
-  <Leaf {...props} focusedThreadId={focusedThreadId} />
+export const renderLeaf = (props: RenderLeafProps, focusedThreadId: string | null = null, isExpanded: boolean) => (
+  <Leaf {...props} focusedThreadId={focusedThreadId} isExpanded={isExpanded} />
 );
 
 interface LeafProps extends RenderLeafProps {
   focusedThreadId: string | null;
+  isExpanded: boolean;
 }
 
-const Leaf = ({ attributes, leaf, children, focusedThreadId }: LeafProps) => {
+const Leaf = ({ attributes, leaf, children, focusedThreadId, isExpanded }: LeafProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const { bold, italic, underline, strikethrough, subscript, superscript, selected, placeholder, ...rest } = leaf;
 
@@ -37,6 +38,7 @@ const Leaf = ({ attributes, leaf, children, focusedThreadId }: LeafProps) => {
       commentIds={commentThreadIds}
       selected={selected}
       focused={isFocused}
+      isExpanded={isExpanded}
       hasText={leaf.text.length !== 0}
       ref={ref}
     >

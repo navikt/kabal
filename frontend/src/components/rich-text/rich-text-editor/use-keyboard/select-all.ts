@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Path, Range, Transforms } from 'slate';
 import { isPlaceholderActive } from '../../functions/insert-placeholder';
 import { getCurrentCell } from '../../functions/table/helpers';
 import { ContentTypeEnum } from '../../types/editor-enums';
@@ -51,13 +51,13 @@ export const selectAll = (event: React.KeyboardEvent, editor: Editor) => {
   const previousVoidEntry = Editor.previous(editor, {
     at: editor.selection,
     voids: true,
-    match: (n) => Editor.isVoid(editor, n),
+    match: (n) => Element.isElement(n) && Editor.isVoid(editor, n),
   });
 
   const nextVoidEntry = Editor.next(editor, {
     at: editor.selection,
     voids: true,
-    match: (n) => Editor.isVoid(editor, n),
+    match: (n) => Element.isElement(n) && Editor.isVoid(editor, n),
   });
 
   const at: Range = {

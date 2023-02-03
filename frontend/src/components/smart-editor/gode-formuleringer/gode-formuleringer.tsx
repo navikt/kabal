@@ -1,6 +1,6 @@
-import { Back, Law } from '@navikt/ds-icons';
+import { Back, LightBulb } from '@navikt/ds-icons';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ReactEditor } from 'slate-react';
+import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { isNotNull } from '../../../functions/is-not-type-guards';
 import { stringToRegExp } from '../../../functions/string-to-regex';
@@ -22,7 +22,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { showGodeFormuleringer, setShowGodeFormuleringer, editor } = useContext(SmartEditorContext);
+  const editor = useSlateStatic();
+  const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.GOD_FORMULERING, templateId });
   const { data = [], isLoading } = useGetTextsQuery(query);
 
@@ -113,7 +114,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
       <Header>
         <GodeFormuleringerTitle>
-          <Law />
+          <LightBulb />
           Gode formuleringer ({texts.length})
         </GodeFormuleringerTitle>
 

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Range } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { ReactEditor, useSlate, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { NewCommentThread } from './new-thread';
@@ -9,7 +9,9 @@ import { useThreads } from './use-threads';
 
 export const CommentSection = () => {
   const { attached, orphans } = useThreads();
-  const { selection, showNewComment, setShowNewComment, editor } = useContext(SmartEditorContext);
+  const { showNewComment, setShowNewComment } = useContext(SmartEditorContext);
+  const { selection } = useSlate();
+  const editor = useSlateStatic();
 
   const isValidSelection = Range.isRange(selection) && Range.isExpanded(selection);
 

@@ -1,6 +1,7 @@
 import { Close, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
+import { useSlateStatic } from 'slate-react';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useDeleteCommentOrThreadMutation } from '../../../redux-api/smart-editor-comments';
 import { useUser } from '../../../simple-api-state/use-user';
@@ -18,9 +19,10 @@ export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) 
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
   const { data: user } = useUser();
-  const { documentId, editor } = useContext(SmartEditorContext);
+  const { documentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
   const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
+  const editor = useSlateStatic();
 
   if (!isFocused || typeof oppgave === 'undefined' || typeof user === 'undefined' || typeof documentId !== 'string') {
     return null;

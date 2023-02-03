@@ -22,6 +22,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
   const editor = useSlateStatic();
   const [focused, setFocused] = useState(0);
 
+  const isExpanded = editor.selection !== null && Range.isExpanded(editor.selection);
   const isOpen = isFocused && isSelected && editor.selection !== null && Range.isCollapsed(editor.selection);
 
   const close = useCallback(() => {
@@ -87,7 +88,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
   return (
     <span {...attributes} contentEditable={false} title={getFlettefeltName(element.field)}>
       <Span $isFocused={isSelected && isFocused}>
-        <StyledLeaf {...element} selected={isSelected} commentIds={element.threadIds} hasText>
+        <StyledLeaf {...element} selected={isSelected} commentIds={element.threadIds} isExpanded={isExpanded} hasText>
           {renderValue(value, element.field)}
         </StyledLeaf>
         <Dropdown options={OPTIONS} field={element.field} focused={focused} isOpen={isOpen} setField={setField} />

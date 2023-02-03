@@ -2,6 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useCallback, useContext } from 'react';
 import { Range } from 'slate';
+import { useSlateStatic } from 'slate-react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetMySignatureQuery } from '../../../redux-api/bruker';
 import { usePostCommentMutation } from '../../../redux-api/smart-editor-comments';
@@ -19,8 +20,11 @@ export const NewComment = ({ close }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const [postComment, { isLoading }] = usePostCommentMutation();
-  const { documentId, setFocusedThreadId, editor, selection } = useContext(SmartEditorContext);
+  const { documentId, setFocusedThreadId } = useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
+  const editor = useSlateStatic();
+
+  const { selection } = editor;
 
   const onNewThread = useCallback(
     (threadId: string) => {
@@ -75,6 +79,7 @@ export const NewComment = ({ close }: Props) => {
         label="Ny kommentar"
         close={close}
         primaryButtonLabel="Legg til"
+        autoFocus
       />
     </StyledNewComment>
   );
