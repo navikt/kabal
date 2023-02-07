@@ -5,22 +5,25 @@ import { useCanEdit } from '../../../../hooks/use-can-edit';
 import { StyledDocumentTitle } from '../styled-components/document';
 
 interface Props {
-  isMarkertAvsluttet: boolean;
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
 }
 
-export const EditButton = ({ setEditMode, editMode, isMarkertAvsluttet }: Props) => {
+export const EditButton = ({ setEditMode, editMode }: Props) => {
   const canEdit = useCanEdit();
 
-  if (!canEdit || isMarkertAvsluttet) {
+  if (!canEdit) {
     return null;
   }
 
   const Icon = editMode ? StyledSuccessIcon : StyledEditIcon;
 
   return (
-    <StyledEditButton onClick={() => setEditMode(!editMode)} data-testid="document-title-edit-save-button">
+    <StyledEditButton
+      onClick={() => setEditMode(!editMode)}
+      data-testid="document-title-edit-save-button"
+      title="Endre"
+    >
       <Icon />
     </StyledEditButton>
   );
@@ -49,7 +52,6 @@ const StyledEditButton = styled.button`
   align-self: center;
   will-change: transform;
   transition: transform 250ms;
-  transform: scale(1);
 
   display: none;
 
@@ -58,7 +60,6 @@ const StyledEditButton = styled.button`
   }
 
   :hover {
-    color: #0067c5;
-    transform: scale(1.25);
+    color: var(--a-gray-900);
   }
 `;

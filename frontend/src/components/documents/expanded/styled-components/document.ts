@@ -36,12 +36,11 @@ export const StyledDocumentTitle = styled.h1`
   display: flex;
   flex-direction: row;
   gap: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: normal;
   margin: 0;
   color: #0067c5;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   height: 100%;
 `;

@@ -1,4 +1,4 @@
-import { KABAL_BEHANDLINGER_BASE_PATH, KABAL_OPPGAVEBEHANDLING_PATH } from '../../redux-api/common';
+import { KABAL_API_BASE_PATH, KABAL_BEHANDLINGER_BASE_PATH } from '../../redux-api/common';
 import { DocumentTypeEnum, IShownDocument } from './types';
 
 export const getDocumentUrl = (oppgaveId: string, document: IShownDocument) => {
@@ -6,7 +6,7 @@ export const getDocumentUrl = (oppgaveId: string, document: IShownDocument) => {
     case DocumentTypeEnum.ARCHIVED: {
       const { dokumentInfoId, journalpostId } = document;
 
-      return `${KABAL_OPPGAVEBEHANDLING_PATH}/${oppgaveId}/arkivertedokumenter/${journalpostId}/${dokumentInfoId}/pdf`;
+      return `${KABAL_API_BASE_PATH}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
     }
     case DocumentTypeEnum.SMART:
     case DocumentTypeEnum.FILE:

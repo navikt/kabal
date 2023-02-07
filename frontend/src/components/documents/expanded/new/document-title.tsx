@@ -54,7 +54,7 @@ export const DocumentTitle = ({ document }: Props) => {
     <StyledDocumentTitle>
       <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
         <Icon />
-        <EllipsisTitle>{document.tittel}</EllipsisTitle>
+        <EllipsisTitle title={document.tittel}>{document.tittel}</EllipsisTitle>
       </StyledDocumentButton>
       <EditButton isMarkertAvsluttet={document.isMarkertAvsluttet} editMode={editMode} setEditMode={setEditMode} />
     </StyledDocumentTitle>

@@ -47,7 +47,6 @@ export const newDocumentsGridCSS = css`
 `;
 
 const JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
-  Fields.ResetFilters,
   Fields.Title,
   Fields.Meta,
   Fields.Date,
