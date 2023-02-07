@@ -1,5 +1,5 @@
 import React from 'react';
-import { EXTERNAL_URL_GOSYS } from '../../domain/eksterne-lenker';
+import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '../../domain/eksterne-lenker';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
 import { ISakspart } from '../../types/oppgavebehandling/oppgavebehandling';
 import { PanelToggles } from '../oppgavebehandling/types';
@@ -31,16 +31,17 @@ export const OppgavebehandlingControls = ({ toggles, setPanel, switches }: Oppga
       </OppgavebehandlingTools>
       <OppgavebehandlingInformation>
         <GosysLink sakenGjelder={sakenGjelder} />
+        <ModiaLink sakenGjelder={sakenGjelder} />
       </OppgavebehandlingInformation>
     </ControlPanel>
   );
 };
 
-interface GosysLinkProps {
+interface LinkProps {
   sakenGjelder: ISakspart;
 }
 
-const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
+const GosysLink = ({ sakenGjelder }: LinkProps) => {
   if (typeof sakenGjelder.person?.foedselsnummer !== 'string') {
     return null;
   }
@@ -54,6 +55,24 @@ const GosysLink = ({ sakenGjelder }: GosysLinkProps) => {
       rel="noreferrer"
     >
       <span>Gosys</span> <StyledExtLinkIcon title="Ekstern lenke" />
+    </ExternalLink>
+  );
+};
+
+const ModiaLink = ({ sakenGjelder }: LinkProps) => {
+  if (typeof sakenGjelder.person?.foedselsnummer !== 'string') {
+    return null;
+  }
+
+  return (
+    <ExternalLink
+      href={`${EXTERNAL_URL_MODIA}/person/${sakenGjelder.person.foedselsnummer}`}
+      target="_blank"
+      aria-label="Ekstern lenke til Modia for denne personen"
+      title="Åpne i ny fane"
+      rel="noreferrer"
+    >
+      <span>Modia</span> <StyledExtLinkIcon title="Ekstern lenke" />
     </ExternalLink>
   );
 };
