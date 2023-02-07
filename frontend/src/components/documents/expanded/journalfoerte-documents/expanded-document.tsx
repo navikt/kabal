@@ -4,7 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { IArkivertDocument, Journalstatus } from '../../../../types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
-import { Varsler } from './varsler';
 
 interface ExpandedDocumentProps {
   show: boolean;
@@ -45,9 +44,6 @@ export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
       </TopRow>
       <MetadataRow>
         <Timeline {...document} />
-      </MetadataRow>
-      <MetadataRow>
-        <Varsler {...document} />
       </MetadataRow>
     </StyledExpandedDocument>
   );
