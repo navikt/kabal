@@ -1,18 +1,26 @@
+import fs from 'fs';
 import express from 'express';
-import { frontendDistDirectoryPath } from '../config/config';
+import { VERSION, frontendDistDirectoryPath } from '../config/config';
+import { ENVIRONMENT } from '../config/env';
 
 const router = express.Router();
 
+const indexFile = fs
+  .readFileSync(`${frontendDistDirectoryPath}/index.html`, 'utf8')
+  .replace('{{ENVIRONMENT}}', ENVIRONMENT)
+  .replace('{{VERSION}}', VERSION);
+
+const sendIndexFile = (req: express.Request, res: express.Response) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.status(200).send(indexFile);
+};
+
 export const setupStaticRoutes = () => {
-  router.get('/', (req, res) => {
-    res.status(200).sendFile('index.html', { root: frontendDistDirectoryPath });
-  });
+  router.get('/', sendIndexFile);
 
   router.use(express.static(frontendDistDirectoryPath, { index: false }));
 
-  router.get('*', (req, res) => {
-    res.status(200).sendFile('index.html', { root: frontendDistDirectoryPath });
-  });
+  router.get('*', sendIndexFile);
 
   return router;
 };

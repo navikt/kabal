@@ -1,9 +1,9 @@
-export const EXTERNAL_URL_GOSYS =
-  process.env.NODE_ENV === 'development'
-    ? 'https://gosys.dev.intern.nav.no/gosys'
-    : 'https://gosys.intern.nav.no/gosys';
+import { ENVIRONMENT } from '../environment';
 
-export const EXTERNAL_URL_MODIA =
-  process.env.NODE_ENV === 'development'
-    ? 'https://app-q1.adeo.no/modiapersonoversikt'
-    : 'https://app.adeo.no/modiapersonoversikt';
+export const EXTERNAL_URL_GOSYS = ENVIRONMENT.isProduction
+  ? 'https://gosys.intern.nav.no/gosys'
+  : 'https://gosys.dev.intern.nav.no/gosys';
+
+export const EXTERNAL_URL_MODIA = ENVIRONMENT.isProduction
+  ? 'https://app.adeo.no/modiapersonoversikt'
+  : 'https://app-q1.adeo.no/modiapersonoversikt';
