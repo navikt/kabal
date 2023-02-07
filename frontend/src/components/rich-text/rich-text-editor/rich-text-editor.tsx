@@ -82,10 +82,14 @@ export const RichTextEditorElement = React.memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.showAnnotationsButton === nextProps.showAnnotationsButton &&
     prevProps.showCommentsButton === nextProps.showCommentsButton &&
+    prevProps.showAnnotationsButton === nextProps.showAnnotationsButton &&
     prevProps.showGodeFormuleringerButton === nextProps.showGodeFormuleringerButton &&
-    prevProps.showPlaceholderButton === nextProps.showPlaceholderButton
+    prevProps.showPlaceholderButton === nextProps.showPlaceholderButton &&
+    prevProps.className === nextProps.className &&
+    prevProps.onKeyDown === nextProps.onKeyDown &&
+    prevProps.focusedThreadId === nextProps.focusedThreadId &&
+    prevProps.canEdit === nextProps.canEdit
 );
 
 RichTextEditorElement.displayName = 'RichTextEditorElement';
