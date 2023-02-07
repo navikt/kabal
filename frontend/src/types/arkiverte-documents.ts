@@ -12,6 +12,21 @@ export enum Journalposttype {
   NOTAT = 'N',
 }
 
+export enum Journalstatus {
+  MOTTATT = 'MOTTATT',
+  JOURNALFOERT = 'JOURNALFOERT',
+  FERDIGSTILT = 'FERDIGSTILT',
+  EKSPEDERT = 'EKSPEDERT',
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  FEILREGISTRERT = 'FEILREGISTRERT',
+  UTGAAR = 'UTGAAR',
+  AVBRUTT = 'AVBRUTT',
+  UKJENT_BRUKER = 'UKJENT_BRUKER',
+  RESERVERT = 'RESERVERT',
+  OPPLASTING_DOKUMENT = 'OPPLASTING_DOKUMENT',
+  UKJENT = 'UKJENT',
+}
+
 enum AvsenderMottakerIdType {
   FNR = 'FNR',
   ORGNR = 'ORGNR',
@@ -38,27 +53,37 @@ interface Sak {
 }
 
 /** Utsendingsinfo tilknyttet journalposten. Beskriver hvor forsendelsen er distribuert, eller hvor varsel er sendt. Settes kun for utgående journalposter. */
-interface Utsendingsinfo {
+export interface Utsendingsinfo {
   epostVarselSendt: {
     tittel: string;
     adresse: string;
     varslingstekst: string;
-  };
+  } | null;
   smsVarselSendt: {
     adresse: string;
     varslingstekst: string;
-  };
+  } | null;
   fysiskpostSendt: {
     adressetekstKonvolutt: string;
-  };
+  } | null;
   digitalpostSendt: {
     adresse: string;
-  };
+  } | null;
 }
 
-interface RelevantDate {
+export enum RelevantDatotype {
+  DATO_SENDT_PRINT = 'DATO_SENDT_PRINT',
+  DATO_EKSPEDERT = 'DATO_EKSPEDERT',
+  DATO_JOURNALFOERT = 'DATO_JOURNALFOERT',
+  DATO_REGISTRERT = 'DATO_REGISTRERT',
+  DATO_AVS_RETUR = 'DATO_AVS_RETUR',
+  DATO_DOKUMENT = 'DATO_DOKUMENT',
+  DATO_LEST = 'DATO_LEST',
+}
+
+interface RelevantDato {
   dato: string; // LocalDate
-  datoType: string;
+  datotype: RelevantDatotype;
 }
 
 /** Liste over fagspesifikke metadata som er tilknyttet journalpost. */
@@ -67,7 +92,7 @@ interface Tilleggsopplysninger {
   value: string;
 }
 
-enum Kanal {
+export enum Kanal {
   ALTINN = 'ALTINN',
   EIA = 'EIA',
   NAV_NO = 'NAV_NO',
@@ -107,7 +132,7 @@ interface DocumentMetadata {
    * Status på journalposten i joark, f.eks. MOTTATT eller JOURNALFØRT. Journalstatusen gir et indikasjon på hvor i journalførings- eller dokumentproduksjonsprosessen journalposten befinner seg.
    * Journalposter som er resultat av en feilsituasjon og ikke skal hensyntas for saksbehandling har egne koder, som UTGAAR eller AVBRUTT.
    */
-  journalstatus: string | null;
+  journalstatus: Journalstatus | null;
   /** Detaljering av tema på journalpost og tilhørende sak, f.eks. "ab0072". */
   behandlingstema: string | null;
   /** Dekode av behandlingstema, f.eks "Foreldrepenger ved adopsjon" */
@@ -130,7 +155,7 @@ interface DocumentMetadata {
   /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder. */
   datoOpprettet: string; // DateTime
   /** Liste over datoer som kan være relevante for denne journalposten, f.eks. DATO_EKSPEDERT. Hvilke relevante datoer som returneres, avhenger av journalposttypen. */
-  relevanteDatoer: RelevantDate[];
+  relevanteDatoer: RelevantDato[];
   /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til NAV. Vil kun være satt for utgående forsendelser. */
   antallRetur: number | null;
   /** Liste over fagspesifikke metadata som er tilknyttet journalpost. */

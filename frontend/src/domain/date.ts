@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/; // 2020-10-29
-const isoTimeRegex = /^\d{2}:\d{2}:\d{2}\.\d+$/; // 14:25:19.734593
-const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z?$/; // 2020-10-29T14:25:19.734593Z
+const isoTimeRegex = /^\d{2}:\d{2}:\d{2}\.?\d*$/; // 14:25:19.734593
+const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d*Z?$/; // 2020-10-29T14:25:19.734593Z
 
 export type ISODate = string;
 export type ISODateTime = string;

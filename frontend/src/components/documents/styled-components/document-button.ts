@@ -12,9 +12,8 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   padding-top: 0;
   padding-bottom: 0;
   line-height: 1.25;
-  font-size: 1rem;
+  font-size: 1em;
   overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
   text-decoration: none;
   font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};

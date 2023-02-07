@@ -5,6 +5,7 @@ import { accessRightsApi } from '../redux-api/access-rights';
 import { brukerApi } from '../redux-api/bruker';
 import { featureTogglingApi } from '../redux-api/feature-toggling';
 import { kabalInternalApi } from '../redux-api/internal';
+import { journalposterApi } from '../redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '../redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../redux-api/kaka-kvalitetsvurdering/v2';
 import { messagesApi } from '../redux-api/messages';
@@ -42,6 +43,7 @@ export const reduxStore = configureStore({
       smartEditorCommentsApi.middleware,
       textsApi.middleware,
       accessRightsApi.middleware,
+      journalposterApi.middleware,
     ]),
 });
 

@@ -1,5 +1,4 @@
-import { Filter2 } from '@navikt/ds-icons';
-import { Button, Heading, Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -16,6 +15,7 @@ import { JournalfoerteDocumentsStyledListHeader, StyledFilterDropdown } from '..
 import { DateFilter } from './date-filter';
 import { Document } from './document';
 import { filterDocuments, getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
+import { Header } from './header';
 import { LoadMore } from './load-more';
 
 const PAGE_SIZE = 50;
@@ -64,7 +64,7 @@ export const JournalfoerteDocumentList = () => {
 
   const allTemaer = useAllTemaer();
 
-  const resetFiltes = () => {
+  const resetFilters = () => {
     setSelectedTemaer([]);
     setSelectedTypes([]);
     setSelectedAvsenderMottakere([]);
@@ -88,26 +88,19 @@ export const JournalfoerteDocumentList = () => {
     ]
   );
 
-  const totaltAntall = data?.totaltAntall ?? 0;
-
   return (
     <StyledJournalfoerteDocumentsContainer data-testid="oppgavebehandling-documents-all">
+      <Header
+        filteredLength={totalFilteredDocuments.length}
+        totalLength={data?.totaltAntall}
+        resetFiltersDisabled={resetFiltersDisabled}
+        resetFilters={resetFilters}
+        slicedFilteredLength={slicedFilteredDocuments.length}
+      />
       <Wrapper>
         <JournalfoerteDocumentsStyledListHeader>
-          <Button
-            disabled={resetFiltersDisabled}
-            size="small"
-            variant="danger"
-            onClick={resetFiltes}
-            icon={<Filter2 aria-hidden />}
-            title="Fjern filtere"
-          />
-          <Heading
-            size="xsmall"
-            level="2"
-            title={`Viser ${slicedFilteredDocuments.length} av ${totalFilteredDocuments.length} filtrerte dokumenter. Totalt ${totaltAntall} dokumenter`}
-          >
-            Journalførte dokumenter ({totalFilteredDocuments.length})
+          <Heading size="xsmall" level="2">
+            Tittel
           </Heading>
           <StyledFilterDropdown
             options={kodeverkValuesToDropdownOptions(allTemaer)}
@@ -118,7 +111,7 @@ export const JournalfoerteDocumentList = () => {
             Tema
           </StyledFilterDropdown>
           <DateFilter onChange={setSelectedDateRange} selected={selectedDateRange}>
-            Sendt
+            Dato
           </DateFilter>
 
           <StyledFilterDropdown

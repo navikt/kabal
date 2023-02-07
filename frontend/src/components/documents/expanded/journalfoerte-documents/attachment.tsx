@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { IArkivertDocument, IArkivertDocumentVedlegg } from '../../../../types/arkiverte-documents';
-import { DocumentTypeEnum } from '../../../show-document/types';
-import { ShownDocumentContext } from '../../context';
-import { StyledDocumentButton } from '../../styled-components/document-button';
-import { StyledDocumentTitle, StyledVedlegg } from '../styled-components/document';
+import { StyledVedlegg } from '../styled-components/document';
 import { DocumentCheckbox } from './document-checkbox';
+import { DocumentTitle } from './document-title';
 
 interface Props {
   oppgavebehandlingId: string;
@@ -13,24 +11,8 @@ interface Props {
 }
 
 export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) => {
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
-
   const { journalpostId } = document;
   const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
-
-  const onClick = () =>
-    setShownDocument({
-      title: document.tittel ?? 'Ingen tittel',
-      dokumentInfoId,
-      journalpostId,
-      type: DocumentTypeEnum.ARCHIVED,
-    });
-
-  const isActive =
-    shownDocument !== null &&
-    shownDocument.type === DocumentTypeEnum.ARCHIVED &&
-    shownDocument.dokumentInfoId === dokumentInfoId &&
-    shownDocument.journalpostId === journalpostId;
 
   return (
     <StyledVedlegg
@@ -40,17 +22,7 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
       data-dokumentinfoid={dokumentInfoId}
       data-documentname={tittel}
     >
-      <StyledDocumentTitle>
-        <StyledDocumentButton
-          onClick={onClick}
-          isActive={isActive}
-          data-testid="oppgavebehandling-documents-open-document-button"
-          disabled={!harTilgangTilArkivvariant}
-          title={harTilgangTilArkivvariant ? undefined : 'Du har ikke tilgang til å se dette dokumentet.'}
-        >
-          {tittel}
-        </StyledDocumentButton>
-      </StyledDocumentTitle>
+      <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
       <DocumentCheckbox
         dokumentInfoId={dokumentInfoId}
         journalpostId={journalpostId}
