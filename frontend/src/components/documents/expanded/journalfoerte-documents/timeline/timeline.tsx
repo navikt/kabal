@@ -58,11 +58,7 @@ export const Timeline = ({ relevanteDatoer, kanal, journalposttype, utsendingsin
                     <StyledLabel size="small">
                       <Email aria-hidden /> {utsendingsinfo.epostVarselSendt?.adresse}
                     </StyledLabel>
-                    <StyledEmailContent
-                      dangerouslySetInnerHTML={{
-                        __html: getEmailContent(utsendingsinfo.epostVarselSendt?.varslingstekst),
-                      }}
-                    />
+                    <EmailContent varslingstekst={utsendingsinfo.epostVarselSendt?.varslingstekst} />
                   </>
                 }
                 hideNext={isLast && !isSmsSendt}
@@ -167,10 +163,16 @@ const getTitleAndIcon = (
 
 const BODY_REGEX = /<body>((?:.|\n|\r)*)<\/body>/i;
 
-const getEmailContent = (varslingstekst: string | undefined): string => {
+const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }): JSX.Element | null => {
   if (varslingstekst === undefined) {
-    return '';
+    return null;
   }
 
-  return varslingstekst.match(BODY_REGEX)?.[1] ?? '';
+  const __html = varslingstekst.match(BODY_REGEX)?.[1];
+
+  if (__html === undefined) {
+    return null;
+  }
+
+  return <StyledEmailContent dangerouslySetInnerHTML={{ __html }} />;
 };
