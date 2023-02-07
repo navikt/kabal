@@ -1,14 +1,16 @@
+import { ENVIRONMENT } from '../../environment';
+
 type OnVersionFn = (isDifferent: boolean) => void;
 
 export class VersionChecker {
   private events: EventSource | undefined;
   private onVersion: OnVersionFn;
-  private version: string | undefined = process.env.VERSION;
+  private version: string = ENVIRONMENT.version;
 
   constructor(onVersion: OnVersionFn) {
     this.onVersion = onVersion;
 
-    console.info('CURRENT VERSION', this.version ?? 'UNKNOWN');
+    console.info('CURRENT VERSION', this.version);
 
     this.getEventSource();
   }
