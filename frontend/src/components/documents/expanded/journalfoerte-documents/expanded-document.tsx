@@ -3,7 +3,7 @@ import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled from 'styled-components';
 import { IArkivertDocument, Journalstatus } from '../../../../types/arkiverte-documents';
-import { Timeline } from './timeline';
+import { Timeline } from './timeline/timeline';
 import { Varsler } from './varsler';
 
 interface ExpandedDocumentProps {
@@ -20,20 +20,15 @@ export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
 
   return (
     <StyledExpandedDocument>
-      <MetadataRow>
+      <TopRow>
         <section>
           <Label size="small">Status</Label>
           <Detail>{journalstatus === null ? 'Ingen' : JOURNALSTATUS_NAME[journalstatus]}</Detail>
         </section>
 
         <section>
-          <Label size="small">Utsendingskanal</Label>
+          <Label size="small">Kanal</Label>
           <Detail>{kanalnavn}</Detail>
-        </section>
-
-        <section>
-          <Label size="small">Journalpost opprettet av</Label>
-          <Detail>{opprettetAvNavn}</Detail>
         </section>
 
         <section>
@@ -42,7 +37,12 @@ export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
             <Detail>{journalpostId}</Detail>
           </CopyToClipboard>
         </section>
-      </MetadataRow>
+
+        <section>
+          <Label size="small">Journalpost opprettet av</Label>
+          <Detail>{opprettetAvNavn}</Detail>
+        </section>
+      </TopRow>
       <MetadataRow>
         <Timeline {...document} />
       </MetadataRow>
@@ -62,6 +62,12 @@ const StyledExpandedDocument = styled.div`
   background-color: var(--a-surface-subtle);
 `;
 
+const TopRow = styled.div`
+  display: grid;
+  grid-template-columns: 150px 210px 110px auto;
+  grid-column-gap: 16px;
+`;
+
 const MetadataRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -70,7 +76,7 @@ const MetadataRow = styled.div`
 
 const JOURNALSTATUS_NAME: Record<Journalstatus, string> = {
   [Journalstatus.MOTTATT]: 'Mottatt',
-  [Journalstatus.JOURNALFOERT]: 'Journalfoert',
+  [Journalstatus.JOURNALFOERT]: 'Journalført',
   [Journalstatus.FERDIGSTILT]: 'Ferdigstilt',
   [Journalstatus.EKSPEDERT]: 'Ekspedert',
   [Journalstatus.UNDER_ARBEID]: 'Under arbeid',
