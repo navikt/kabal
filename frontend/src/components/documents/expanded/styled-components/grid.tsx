@@ -1,6 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { DOCUMENT_ROW_WIDTH } from './constants';
 
 const documentsGridCSS = css`
   display: grid;
@@ -30,7 +31,7 @@ const SIZES: Record<Fields, string> = {
   [Fields.Meta]: '140px',
   [Fields.Date]: '85px',
   [Fields.AvsenderMottaker]: '200px',
-  [Fields.SaksId]: '98px',
+  [Fields.SaksId]: '100px',
   [Fields.Type]: '82px',
   [Fields.Action]: '32px',
   [Fields.ResetFilters]: '32px',
@@ -59,6 +60,7 @@ export const journalfoerteDocumentsHeaderGridCSS = css`
   ${documentsGridCSS}
   grid-template-columns: ${getFieldSizes(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)};
   grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)}';
+  max-width: ${DOCUMENT_ROW_WIDTH}px;
 `;
 
 const JOURNALFOERTE_DOCUMENT_FIELDS = [

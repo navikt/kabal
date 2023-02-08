@@ -1,5 +1,5 @@
 import { Cancel, Email, FileFolder, FileSuccess, Glasses, Print, SaveFile } from '@navikt/ds-icons';
-import { Kanal, RelevantDatotype } from '../../../../../types/arkiverte-documents';
+import { RelevantDatotype } from '../../../../../types/arkiverte-documents';
 
 export const DATOTYPE_NAME: Record<RelevantDatotype, string> = {
   [RelevantDatotype.DATO_SENDT_PRINT]: 'Sendt print',
@@ -9,29 +9,6 @@ export const DATOTYPE_NAME: Record<RelevantDatotype, string> = {
   [RelevantDatotype.DATO_AVS_RETUR]: 'Avsender retur',
   [RelevantDatotype.DATO_DOKUMENT]: 'Opprettet',
   [RelevantDatotype.DATO_LEST]: 'Lest',
-};
-
-export const KANAL_NAME: Record<Kanal, [string, string] | [string]> = {
-  ALTINN: ['Altinn'],
-  EIA: ['EIA'],
-  NAV_NO: ['nav.no'],
-  NAV_NO_UINNLOGGET: ['nav.no (uinnlogget)'],
-  NAV_NO_CHAT: ['Innlogget chat'],
-  SKAN_NETS: ['Skanning', 'Skanning Nets'],
-  SKAN_PEN: ['Skanning', 'Skanning Pensjon'],
-  SKAN_IM: ['Skanning', 'Skanning Iron Mountain'],
-  INNSENDT_NAV_ANSATT: ['Innsendt av NAV-ansatt'],
-  EESSI: ['EESSI'],
-  EKST_OPPS: ['Eksternt oppslag'],
-  SENTRAL_UTSKRIFT: ['Sentral utskrift'],
-  LOKAL_UTSKRIFT: ['Lokal utskrift'],
-  SDP: ['SDP', 'Digital postkasse til innbyggere'],
-  TRYGDERETTEN: ['Trygderetten'],
-  HELSENETTET: ['Helsenettet'],
-  INGEN_DISTRIBUSJON: ['Ingen distribusjon'],
-  DPV: ['DPV', 'Digital Post til Virksomhet'],
-  DPVS: ['DPVS', 'Digital Post til Virksomhet (sensitiv)'],
-  UKJENT: ['Ukjent'],
 };
 
 export const BACKGROUND_COLOR: Record<RelevantDatotype, string> = {
