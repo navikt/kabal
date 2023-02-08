@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { DOCUMENT_ROW_WIDTH } from './constants';
 
 const commonStyles = css`
   display: flex;
@@ -26,4 +27,5 @@ export const StyledJournalfoerteDocumentList = styled(StyledDocumentList)`
 export const StyledDocumentListItem = styled.li`
   display: block;
   position: relative;
+  max-width: ${DOCUMENT_ROW_WIDTH}px;
 `;

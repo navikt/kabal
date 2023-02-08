@@ -53,7 +53,7 @@ interface Sak {
 }
 
 /** Utsendingsinfo tilknyttet journalposten. Beskriver hvor forsendelsen er distribuert, eller hvor varsel er sendt. Settes kun for utgående journalposter. */
-interface Utsendingsinfo {
+export interface Utsendingsinfo {
   epostVarselSendt: {
     tittel: string;
     adresse: string;
