@@ -176,7 +176,8 @@ export const JournalfoerteDocumentList = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  overflow: hidden;
+  flex-grow: 1;
 `;
 
 interface DocumentsSpinnerProps {
