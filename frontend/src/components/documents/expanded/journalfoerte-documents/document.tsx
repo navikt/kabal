@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { isoDateToPretty } from '../../../../domain/date';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useFullTemaNameFromId } from '../../../../hooks/use-kodeverk-ids';
-import { IArkivertDocument, Journalposttype, Kanal, RelevantDatotype } from '../../../../types/arkiverte-documents';
+import { IArkivertDocument, Journalposttype } from '../../../../types/arkiverte-documents';
 import { StyledDate, StyledJournalfoertDocument } from '../styled-components/document';
 import { ClickableField, Fields, StyledClickableField } from '../styled-components/grid';
 import { AttachmentList } from './attachment-list';
@@ -85,19 +85,7 @@ export const Document = ({ document, setAvsenderMottaker, setTema, setSaksId }: 
           checked={valgt}
         />
       </StyledJournalfoertDocument>
-      <ExpandedDocument
-        show={expanded}
-        document={{
-          ...document,
-          kanal: Kanal.SDP,
-          kanalnavn: 'Digital postkasse til innbyggere',
-          relevanteDatoer: [
-            { dato: '2022-11-10T14:49:36', datotype: RelevantDatotype.DATO_DOKUMENT },
-            { dato: '2022-11-10T14:49:36', datotype: RelevantDatotype.DATO_JOURNALFOERT },
-            { dato: '2022-11-10T14:49:37', datotype: RelevantDatotype.DATO_EKSPEDERT },
-          ],
-        }}
-      />
+      <ExpandedDocument show={expanded} document={document} />
       <AttachmentList document={document} oppgaveId={oppgaveId} />
     </>
   );
