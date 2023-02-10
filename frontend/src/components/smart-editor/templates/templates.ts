@@ -1,10 +1,10 @@
 import { SaksTypeEnum } from '../../../types/kodeverk';
 import { TemplateTypeEnum } from '../../../types/smart-editor/smart-editor';
 import { ANKEVEDTAK_TEMPLATE } from './ankevedtak';
-import { EMPTY_TEMPLATE } from './empty';
+import { GENERELT_BREV_TEMPLATE } from './generelt-brev';
 import { KLAGEVEDTAK_TEMPLATE } from './klagevedtak';
 
-export const TEMPLATES = [EMPTY_TEMPLATE, KLAGEVEDTAK_TEMPLATE, ANKEVEDTAK_TEMPLATE];
+export const TEMPLATES = [GENERELT_BREV_TEMPLATE, KLAGEVEDTAK_TEMPLATE, ANKEVEDTAK_TEMPLATE];
 
 export const KLAGE_TEMPLATES = TEMPLATES.filter(
   ({ type }) => type === SaksTypeEnum.KLAGE || type === TemplateTypeEnum.GENERELL
