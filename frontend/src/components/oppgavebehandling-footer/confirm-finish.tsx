@@ -92,16 +92,24 @@ const OppgavebehandlingText = () => {
 
   const { utfall } = oppgave.resultat;
 
-  if (
-    oppgave.type === SaksTypeEnum.ANKE &&
-    (utfall === UtfallEnum.INNSTILLING_STADFESTELSE || utfall === UtfallEnum.INNSTILLING_AVVIST)
-  ) {
-    return (
-      <StyledFinishOppgaveText>
-        Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
-        Ankebehandlingen kan ikke redigeres når den er fullført.
-      </StyledFinishOppgaveText>
-    );
+  if (oppgave.type === SaksTypeEnum.ANKE) {
+    if (utfall === UtfallEnum.INNSTILLING_STADFESTELSE || utfall === UtfallEnum.INNSTILLING_AVVIST) {
+      return (
+        <StyledFinishOppgaveText>
+          Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
+          Ankebehandlingen kan ikke redigeres når den er fullført.
+        </StyledFinishOppgaveText>
+      );
+    }
+
+    if (utfall === UtfallEnum.DELVIS_MEDHOLD) {
+      return (
+        <StyledFinishOppgaveText>
+          Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort,
+          før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.
+        </StyledFinishOppgaveText>
+      );
+    }
   }
 
   return (
