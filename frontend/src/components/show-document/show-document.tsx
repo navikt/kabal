@@ -6,8 +6,8 @@ import { getDocumentUrl } from './document-url';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {
   Container,
+  Ellipsis,
   Header,
-  HeaderSubContainer,
   StyledCancelIcon,
   StyledDocumentTitle,
   StyledExtLinkIcon,
@@ -57,24 +57,22 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
   return (
     <Container width={pdfWidth} data-testid="show-document">
       <Header>
-        <HeaderSubContainer>
-          <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
-            <StyledCancelIcon title="Lukk forhåndsvisning" />
-          </StyledHeaderButton>
-          <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
-            <StyledExtLinkIcon title="Ekstern lenke" />
-          </StyledHeaderLink>
-          <StyledDocumentTitle>{title}</StyledDocumentTitle>
-        </HeaderSubContainer>
-        <HeaderSubContainer>
-          <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
-            <StyledZoomOutIcon title="Zoom ut på PDF" />
-          </StyledHeaderButton>
-          <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
-            <StyledZoomInIcon title="Zoom inn på PDF" />
-          </StyledHeaderButton>
-          <ReloadButton document={shownDocument} isLoading={isLoading} onClick={onClick} />
-        </HeaderSubContainer>
+        <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
+          <StyledCancelIcon title="Lukk forhåndsvisning" />
+        </StyledHeaderButton>
+        <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
+          <StyledExtLinkIcon title="Ekstern lenke" />
+        </StyledHeaderLink>
+        <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
+          <StyledZoomOutIcon title="Zoom ut på PDF" />
+        </StyledHeaderButton>
+        <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
+          <StyledZoomInIcon title="Zoom inn på PDF" />
+        </StyledHeaderButton>
+        <ReloadButton document={shownDocument} isLoading={isLoading} onClick={onClick} />
+        <StyledDocumentTitle>
+          <Ellipsis>{title}</Ellipsis>
+        </StyledDocumentTitle>
       </Header>
       <NoFlickerReloadPdf
         url={url}

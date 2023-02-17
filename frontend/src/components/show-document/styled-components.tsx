@@ -24,11 +24,13 @@ export const StyledDocumentTitle = styled.h1`
   align-items: center;
   font-size: 16px;
   font-weight: normal;
-  margin: 0;
-  padding: 0;
+  overflow: hidden;
+  flex-grow: 1;
+`;
+
+export const Ellipsis = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 100%;
   white-space: nowrap;
 `;
 
@@ -72,11 +74,7 @@ export const Header = styled.div`
   height: 32px;
   z-index: 1;
   justify-content: space-between;
-`;
-
-export const HeaderSubContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  align-items: center;
   gap: 16px;
 `;
 
