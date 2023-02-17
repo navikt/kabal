@@ -5,17 +5,7 @@ import { HeadingWithHelpText } from './common/heading-with-helptext';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
 
-export const Annet = () => (
-  <section>
-    <HeadingWithHelpText helpText="Det du skriver her er kun for klageinstansens interne bruk. Har saken andre avvik som ikke passer med noen av de andre registreringsmulighetene i Kaka, kan du skrive dette her. Husk å skrive kort/med stikkord. Ikke skriv personopplysninger eller detaljer om saken. Du kan også skrive stikkord dersom saken gjelder et typetilfelle.">
-      Annet (valgfri)
-    </HeadingWithHelpText>
-
-    <CommentLoader />
-  </section>
-);
-
-const CommentLoader = () => {
+export const Annet = () => {
   const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2();
   const validationError = useValidationError('annetFritekst');
 
@@ -50,8 +40,12 @@ const Comment = ({ onChange, value, error }: CommentProps) => {
 
   return (
     <Textarea
-      label="Annet"
-      hideLabel
+      label={
+        <HeadingWithHelpText helpText="Det du skriver her er kun for klageinstansens interne bruk og blir ikke synlig for vedtaksinstansen. Har saken andre avvik som ikke passer med noen av de andre registreringsmulighetene i Kaka, kan du skrive dette her. Husk å skrive kort / med stikkord. Ikke skriv personopplysninger eller detaljer om saken. Du kan også skrive stikkord dersom saken gjelder et typetilfelle.">
+          Annet (valgfri)
+        </HeadingWithHelpText>
+      }
+      description="Det du skriver her er kun synlig for klageinstansen og ikke for vedtaksinstansen. Husk å ikke skrive personopplysninger."
       onChange={({ target }) => setText(target.value)}
       disabled={!canEdit}
       value={text}
