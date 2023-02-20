@@ -19,11 +19,10 @@ const OPTIONS = [
     label: 'Brev',
     value: DocumentType.BREV,
   },
-  // TODO: Put back when BE implements
-  // {
-  //   label: 'Notat',
-  //   value: DocumentType.NOTAT,
-  // },
+  {
+    label: 'Notat',
+    value: DocumentType.NOTAT,
+  },
 ];
 
 interface Props {
