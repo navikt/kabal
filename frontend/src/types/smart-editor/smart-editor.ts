@@ -10,6 +10,7 @@ interface INewSmartEditor extends INewSmartEditorMetadata {
 export interface ISmartEditor extends Omit<INewSmartEditor, 'templateId'>, ISmartEditorMetadata {}
 
 export enum TemplateTypeEnum {
+  NOTAT = 'NOTAT',
   GENERELL = 'GENERELL',
 }
 
