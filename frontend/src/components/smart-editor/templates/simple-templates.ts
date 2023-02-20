@@ -14,10 +14,18 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
 ];
 
 export const GENERELT_BREV_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
-  templateId: TemplateIdEnum.EMPTY,
+  templateId: TemplateIdEnum.GENERELT_BREV,
   type: TemplateTypeEnum.GENERELL,
   tittel: 'Generelt brev',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,
   dokumentTypeId: DocumentType.BREV,
+});
+
+export const NOTAT_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
+  ...GENERELT_BREV_TEMPLATE,
+  templateId: TemplateIdEnum.NOTAT,
+  type: TemplateTypeEnum.NOTAT,
+  tittel: 'Notat',
+  dokumentTypeId: DocumentType.NOTAT,
 });

@@ -8,6 +8,7 @@ import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateSmartEditorMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
 import { useGetSmartEditorQuery } from '../../../redux-api/oppgaver/queries/smart-editor';
 import { IDocumentParams } from '../../../types/documents/common-params';
+import { DocumentType } from '../../../types/documents/documents';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
 import { withCopy } from '../../rich-text/rich-text-editor/with-copy';
 import { withNormalization } from '../../rich-text/rich-text-editor/with-normalization';
@@ -26,15 +27,16 @@ export interface ISmartEditorContext {
   readonly setShowMaltekstTags: (showMaltekstTags: boolean) => void;
   readonly showGodeFormuleringer: boolean;
   readonly setShowGodeFormuleringer: (showGodeFormuleringer: boolean) => void;
+  readonly dokumentTypeId: DocumentType;
 }
-
 interface Props {
   readonly children: React.ReactNode;
   readonly documentId: string | null;
   readonly templateId: TemplateIdEnum | NoTemplateIdEnum;
+  readonly dokumentTypeId: DocumentType;
 }
 
-export const SmartEditorContextComponent = ({ children, documentId, templateId }: Props) => {
+export const SmartEditorContextComponent = ({ children, documentId, templateId, dokumentTypeId }: Props) => {
   const editor = useMemo(
     () => withTables(withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor())))))),
     []
@@ -112,6 +114,7 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId }
         setShowMaltekstTags,
         showGodeFormuleringer,
         setShowGodeFormuleringer,
+        dokumentTypeId,
       }}
     >
       <Slate
@@ -153,4 +156,5 @@ export const SmartEditorContext = React.createContext<ISmartEditorContext>({
   showGodeFormuleringer: true,
   setShowGodeFormuleringer: () => {},
   templateId: null,
+  dokumentTypeId: DocumentType.BREV,
 });

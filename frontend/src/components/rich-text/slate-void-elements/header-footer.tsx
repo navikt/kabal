@@ -7,6 +7,7 @@ import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { isNotNull } from '../../../functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '../../../redux-api/texts';
+import { DocumentType } from '../../../types/documents/documents';
 import { ApiQuery, IPlainText, PlainTextTypes } from '../../../types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../smart-editor/hooks/use-query';
@@ -18,7 +19,17 @@ import { FooterElementType, HeaderElementType } from '../types/editor-void-types
 
 type ElementTypes = HeaderElementType | FooterElementType;
 
-export const HeaderFooterElement = ({ element, attributes, children }: RenderElementProps<ElementTypes>) => {
+export const HeaderFooterElement = (props: RenderElementProps<ElementTypes>) => {
+  const { dokumentTypeId } = useContext(SmartEditorContext);
+
+  if (dokumentTypeId === DocumentType.NOTAT) {
+    return null;
+  }
+
+  return <RenderHeaderFooterElement {...props} />;
+};
+
+const RenderHeaderFooterElement = ({ element, attributes, children }: RenderElementProps<ElementTypes>) => {
   const { templateId } = useContext(SmartEditorContext);
   const isSelected = useSelected();
 

@@ -110,7 +110,12 @@ const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
     const isActive = editor.id === activeEditorId;
 
     return (
-      <SmartEditorContextComponent key={editor.id} documentId={editor.id} templateId={editor.templateId}>
+      <SmartEditorContextComponent
+        key={editor.id}
+        documentId={editor.id}
+        templateId={editor.templateId}
+        dokumentTypeId={editor.dokumentTypeId}
+      >
         <CommentsClickBoundary isActive={isActive}>
           <ErrorBoundary
             errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}

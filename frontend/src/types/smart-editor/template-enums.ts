@@ -4,7 +4,8 @@ export enum NoTemplateIdEnum {
 }
 
 export enum TemplateIdEnum {
-  EMPTY = 'empty',
+  NOTAT = 'notat',
+  GENERELT_BREV = 'generelt_brev',
   ANKEVEDTAK = 'ankevedtak',
   KLAGEVEDTAK = 'klagevedtak',
   KLAGEVEDTAK_LEGACY = 'klagevedtak-legacy',
