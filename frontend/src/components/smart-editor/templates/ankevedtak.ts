@@ -11,7 +11,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [];
 export const ANKEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   templateId: TemplateIdEnum.ANKEVEDTAK,
   type: SaksTypeEnum.ANKE,
-  tittel: 'Ankevedtak (test)',
+  tittel: 'Ankevedtak',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,
   dokumentTypeId: DocumentType.VEDTAKSBREV,
