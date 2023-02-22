@@ -89,7 +89,7 @@ export const UploadFileButton = () => {
       <input
         data-testid="upload-document-input"
         type="file"
-        accept=".pdf"
+        accept="application/pdf, image/jpeg, image/png"
         ref={fileInput}
         onChange={uploadVedlegg}
         style={{ display: 'none' }}
