@@ -58,7 +58,7 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(() => setOpen(false), ref);
+  useOnClickOutside(ref, () => setOpen(false));
 
   if (!canEdit || document.isMarkertAvsluttet) {
     return null;

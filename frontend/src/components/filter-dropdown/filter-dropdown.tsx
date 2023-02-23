@@ -23,7 +23,7 @@ export const FilterDropdown = <T extends string>({
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useOnClickOutside(() => setOpen(false), ref, true);
+  useOnClickOutside(ref, () => setOpen(false), true);
 
   const close = () => {
     buttonRef.current?.focus();

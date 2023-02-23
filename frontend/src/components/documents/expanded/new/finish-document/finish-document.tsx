@@ -18,7 +18,7 @@ export const FinishDocument = ({ document }: Props) => {
 
   const close = () => setIsOpen(false);
 
-  useOnClickOutside(close, ref, false);
+  useOnClickOutside(ref, close, false);
 
   if (!canEdit || document.isMarkertAvsluttet || document.parent !== null) {
     return null;

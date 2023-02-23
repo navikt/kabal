@@ -31,7 +31,7 @@ export interface IOppgave {
   erMedunderskriver: boolean;
   erTildelt: boolean;
   fortrolig: boolean;
-  frist: Date;
+  frist: Date | null;
   harMedunderskriver: boolean;
   hjemmel: string;
   id: string;

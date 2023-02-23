@@ -32,7 +32,7 @@ export const Placeholder = ({ show }: Props) => {
     setIsOpen(false);
   };
 
-  useOnClickOutside(resetAndClose, ref, true);
+  useOnClickOutside(ref, resetAndClose, true);
 
   if (!show) {
     return null;

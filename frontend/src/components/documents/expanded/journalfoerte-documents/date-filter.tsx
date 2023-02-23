@@ -17,7 +17,7 @@ export const DateFilter = ({ children, onChange, selected, ...datePickerProps }:
   const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
   const ref = useRef(null);
 
-  useOnClickOutside(() => setIsOpen(false), ref);
+  useOnClickOutside(ref, () => setIsOpen(false));
 
   const Icon = selected === undefined ? Filter2 : Filter2Filled;
 

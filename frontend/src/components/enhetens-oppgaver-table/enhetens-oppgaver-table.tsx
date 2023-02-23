@@ -119,6 +119,6 @@ const OppgaveRader = ({ oppgaver, isLoading }: OppgaveRaderProps): JSX.Element =
 };
 
 const StyledTable = styled(Table)`
-  max-width: 2048px;
+  max-width: 2500px;
   width: 100%;
 `;

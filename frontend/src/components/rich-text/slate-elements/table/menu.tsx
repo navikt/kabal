@@ -32,7 +32,7 @@ export const Menu = ({ show, close, x, y, element }: MenuProps) => {
   const editor = useSlateStatic();
   const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(close, ref);
+  useOnClickOutside(ref, close);
 
   if (!show) {
     return null;

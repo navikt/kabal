@@ -107,7 +107,7 @@ const ErrorInfo = ({ error }: ErrorInfoProps) => {
   const [open, setOpen] = useState(true);
   const [ref, setRef] = useState<HTMLButtonElement | null>(null);
 
-  useOnClickOutside(() => setOpen(false), { current: ref }, true);
+  useOnClickOutside({ current: ref }, () => setOpen(false), true);
 
   if (error === null) {
     return null;
