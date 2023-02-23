@@ -17,6 +17,6 @@ export const StyledFooterContent = styled.div`
 `;
 
 export const StyledMineOppgaverTable = styled(Table)`
-  max-width: 2048px;
+  max-width: 2500px;
   width: 100%;
 `;

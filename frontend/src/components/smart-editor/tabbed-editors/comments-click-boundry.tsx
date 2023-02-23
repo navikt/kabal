@@ -12,9 +12,9 @@ export const CommentsClickBoundary = ({ children, isActive }: CommentsClickBound
   const { setFocusedThreadId } = useContext(SmartEditorContext);
   const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(() => {
+  useOnClickOutside(ref, () => {
     setFocusedThreadId(null);
-  }, ref);
+  });
 
   return (
     <EditorContainer isActive={isActive} ref={ref}>

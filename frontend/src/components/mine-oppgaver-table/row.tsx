@@ -27,10 +27,10 @@ export const Row = (oppgave: IOppgave): JSX.Element => (
       <CopyFnrButton fnr={oppgave.person?.fnr} />
     </Table.DataCell>
     <Table.DataCell>
-      <Age age={oppgave.ageKA} />
+      <Age age={oppgave.ageKA} mottattDate={oppgave.mottatt} oppgaveId={oppgave.id} />
     </Table.DataCell>
     <Table.DataCell>
-      <Deadline age={oppgave.ageKA} frist={oppgave.frist} />
+      <Deadline age={oppgave.ageKA} frist={oppgave.frist} oppgaveId={oppgave.id} />
     </Table.DataCell>
     <Table.DataCell>
       <MedudunderskriverflytLabel

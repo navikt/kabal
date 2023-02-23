@@ -29,7 +29,7 @@ export const LovhjemmelSelect = <T extends string>({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(() => setOpen(false), ref, true);
+  useOnClickOutside(ref, () => setOpen(false), true);
 
   if (!show) {
     return null;

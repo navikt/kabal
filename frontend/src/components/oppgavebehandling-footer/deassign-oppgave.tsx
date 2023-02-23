@@ -16,7 +16,7 @@ export const DeassignOppgave = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(() => setIsOpen(false), ref, true);
+  useOnClickOutside(ref, () => setIsOpen(false), true);
 
   const Icon = isOpen ? Collapse : FileFolder;
 

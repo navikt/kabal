@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useSetMottattKlageinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling';
+import { useSetMottattKlageinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '../../../types/kodeverk';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
@@ -18,17 +18,19 @@ export const AnkeMottattDato = () => {
     return null;
   }
 
+  const value = data?.mottattKlageinstans ?? null;
+
   return (
     <StyledAnkeMottattDato>
       <DatePicker
-        label="Anke mottatt dato"
+        label="Anke mottatt dato:"
         disabled={!canEdit}
         onChange={(mottattKlageinstans) => {
-          if (mottattKlageinstans !== null) {
-            setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans, type: data.type });
+          if (mottattKlageinstans !== null && mottattKlageinstans !== value) {
+            setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans });
           }
         }}
-        value={data?.mottattKlageinstans ?? null}
+        value={value}
         error={error}
         id="anke-mottatt-dato"
         size="small"

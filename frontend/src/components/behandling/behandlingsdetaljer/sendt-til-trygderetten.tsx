@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useSetSendtTilTrygderettenMutation } from '../../../redux-api/oppgaver/mutations/behandling';
+import { useSetSendtTilTrygderettenMutation } from '../../../redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '../../../types/kodeverk';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
@@ -18,17 +18,19 @@ export const SendtTilTrygderetten = () => {
     return null;
   }
 
+  const value = data.sendtTilTrygderetten?.split('T')[0] ?? null;
+
   return (
     <StyledSendtTilTrygderetten>
       <DatePicker
         label="Sendt til Trygderetten"
         disabled={!canEdit}
         onChange={(sendtTilTrygderetten) => {
-          if (sendtTilTrygderetten !== null) {
+          if (sendtTilTrygderetten !== null && sendtTilTrygderetten !== value) {
             setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, type: data.type });
           }
         }}
-        value={data.sendtTilTrygderetten?.split('T')[0] ?? null}
+        value={value}
         error={error}
         id="sendt-til-trygderetten"
         size="small"

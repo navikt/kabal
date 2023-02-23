@@ -130,7 +130,7 @@ export const OppgaveTable = (): JSX.Element => {
 };
 
 const OppgaverTable = styled(Table)`
-  max-width: 2048px;
+  max-width: 2500px;
   width: 100%;
 `;
 

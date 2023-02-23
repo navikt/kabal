@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useValidationError } from '../../../hooks/use-validation-error';
-import { useSetMottattVedtaksinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling';
+import { useSetMottattVedtaksinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '../../../types/kodeverk';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
@@ -18,17 +18,19 @@ export const MottattVedtaksinstans = () => {
     return null;
   }
 
+  const value = data?.mottattVedtaksinstans ?? null;
+
   return (
     <StyledMottattVedtaksinstans>
       <DatePicker
-        label="Mottatt vedtaksinstans"
+        label="Mottatt vedtaksinstans:"
         disabled={!canEdit}
         onChange={(mottattVedtaksinstans) => {
-          if (mottattVedtaksinstans !== null) {
+          if (mottattVedtaksinstans !== null && mottattVedtaksinstans !== value) {
             setMottattVedtaksinstans({ oppgaveId: data.id, mottattVedtaksinstans, type: data.type });
           }
         }}
-        value={data?.mottattVedtaksinstans ?? null}
+        value={value}
         error={error}
         id="mottatt-vedtaksinstans"
         size="small"

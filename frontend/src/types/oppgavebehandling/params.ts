@@ -11,9 +11,12 @@ export interface IMigrateSmartEditorsParams extends IOppgavebehandlingBaseParams
   body: ISmartEditor[];
 }
 
+export interface IFristParams extends IOppgavebehandlingBaseParams {
+  date: string; // LocalDate
+}
+
 export interface IMottattKlageinstansParams extends IOppgavebehandlingBaseParams {
   mottattKlageinstans: string; // LocalDate
-  type: SaksTypeEnum.ANKE;
 }
 
 export interface IMottattVedtaksinstansParams extends IOppgavebehandlingBaseParams {

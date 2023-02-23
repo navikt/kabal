@@ -1,5 +1,5 @@
-export const formatSakenGjelder = (id: string | undefined): string => {
-  if (typeof id === 'undefined') {
+export const formatIdNumber = (id: string | undefined | null): string => {
+  if (typeof id === 'undefined' || id === null) {
     return '';
   }
 

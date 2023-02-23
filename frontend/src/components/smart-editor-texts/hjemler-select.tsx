@@ -56,7 +56,7 @@ interface PopupProps {
 
 const Popup = ({ isOpen, close, children }: PopupProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(close, ref);
+  useOnClickOutside(ref, close);
 
   useEffect(() => {
     if (isOpen) {

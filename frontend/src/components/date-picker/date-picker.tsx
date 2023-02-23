@@ -1,26 +1,29 @@
-import { UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
-import { addYears, clamp, format, isAfter, isBefore, isValid, parse, subDays, subYears } from 'date-fns';
+import { DateInputProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
+import { clamp, format, parse } from 'date-fns';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { isoDateToPretty } from '../../domain/date';
-
-const FORMAT = 'yyyy-MM-dd';
-const PRETTY_FORMAT = 'dd.MM.yyyy';
+import { isoDateToPretty, prettyDateToISO } from '../../domain/date';
+import { ISO_FORMAT, PRETTY_FORMAT } from './constants';
+import { parseUserInput } from './parse-user-input';
+import { validateDateString } from './validate';
 
 interface Props {
   disabled?: boolean;
+  hideLabel?: boolean;
   error?: string;
   fromDate?: Date;
   id: string;
   label: React.ReactNode;
   toDate?: Date;
   value: string | null;
-  size: 'small' | 'medium';
+  size: DateInputProps['size'];
   centuryThreshold?: number;
   onChange: (date: string | null) => void;
+  autoFocus?: boolean;
 }
 
 export const DatePicker = ({
   disabled,
+  hideLabel = false,
   error,
   id,
   label,
@@ -30,7 +33,9 @@ export const DatePicker = ({
   value,
   size,
   centuryThreshold = 50,
+  autoFocus = false,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [inputError, setInputError] = useState<string>();
   const [input, setInput] = useState<string>(value === null ? '' : isoDateToPretty(value) ?? '');
 
@@ -42,164 +47,116 @@ export const DatePicker = ({
   }, [value]);
 
   const selected = useMemo(
-    () => (value === null ? undefined : parse(value, FORMAT, defaultDate)),
+    () => (value === null ? undefined : parse(value, ISO_FORMAT, defaultDate)),
     [defaultDate, value]
   );
-
-  const onDateChange = (date?: Date) => {
-    setInputError(undefined);
-
-    const dateToSet = date === undefined ? format(selected ?? defaultDate, FORMAT) : format(date, FORMAT);
-    requestAnimationFrame(() => onChange(dateToSet));
-  };
 
   const [month, setMonth] = useState(selected);
 
   const validateInput = useCallback(
-    (fullInput: string) => {
-      if (fullInput.length === 0) {
-        setInputError('Dato må være satt');
+    (dateString: string) => {
+      const validationError = validateDateString({ dateString, fromDate, toDate, defaultDate });
+      setInputError(validationError);
 
-        return;
-      }
-
-      const date = parse(fullInput, PRETTY_FORMAT, defaultDate);
-      const validFormat = isValid(date);
-      const validRange = isAfter(date, subDays(fromDate, 1)) && isBefore(date, toDate);
-
-      if (!validFormat) {
-        setInputError('Ugyldig dato');
-
-        return;
-      }
-
-      if (!validRange) {
-        setInputError(`Dato må være mellom ${format(fromDate, PRETTY_FORMAT)} og ${format(toDate, PRETTY_FORMAT)}`);
-
-        return;
-      }
-
-      setInputError(undefined);
-      onChange(format(date, FORMAT));
+      return validationError === undefined;
     },
-    [defaultDate, fromDate, onChange, toDate]
+    [defaultDate, fromDate, toDate]
   );
 
-  const onInputChange = useCallback(() => {
-    const parts = input.split('.');
+  const onToggle = useCallback(() => setIsOpen((o) => !o), []);
+  const onClose = useCallback(() => setIsOpen(false), []);
 
-    // Prefix with reasonable century, e.g. 20 for 2022 and 19 for 1999.
-    if (isDateParts(parts)) {
-      const [dd, mm, yy] = parts;
-      const date = `${dd.padStart(2, '0')}.${mm.padStart(2, '0')}.${getFullYear(yy, centuryThreshold)}`;
-      setInput(date);
-      requestAnimationFrame(() => validateInput(date));
+  const validateAndCommit = useCallback(
+    (userInput: string) => {
+      setInputError(undefined);
 
-      return;
-    }
+      const prettyDate = parseUserInput({ userInput, centuryThreshold, fromDate, toDate });
+      const isoDate = prettyDateToISO(prettyDate);
 
-    const chars = input.split('');
+      if (validateInput(prettyDate) && isoDate !== value) {
+        setIsOpen(false);
+        setTimeout(() => {
+          onChange(isoDate);
+        });
+      }
+    },
+    [centuryThreshold, fromDate, value, onChange, toDate, validateInput]
+  );
 
-    // 211220 -> 21.12.2020
-    if (isSixChars(chars)) {
-      const [d1, d2, m1, m2, y1, y2] = chars;
-      const date = `${d1}${d2}.${m1}${m2}.${getFullYear(`${y1}${y2}`, centuryThreshold)}`;
-      setInput(date);
-      requestAnimationFrame(() => validateInput(date));
+  const onBlur: React.FocusEventHandler<HTMLInputElement> = useCallback(
+    ({ target }) => validateAndCommit(target.value),
+    [validateAndCommit]
+  );
 
-      return;
-    }
+  const onDateChange = useCallback(
+    (dateObject?: Date) => {
+      setIsOpen(false);
+      setInputError(undefined);
+      const prettyDate =
+        dateObject === undefined ? format(selected ?? defaultDate, PRETTY_FORMAT) : format(dateObject, PRETTY_FORMAT);
+      setInput(prettyDate);
 
-    // 31122020 -> 31.12.2020
-    if (isEightChars(chars)) {
-      const [d1, d2, m1, m2, y1, y2, y3, y4] = chars;
-      const date = `${d1}${d2}.${m1}${m2}.${y1}${y2}${y3}${y4}`;
-      setInput(date);
-      requestAnimationFrame(() => validateInput(date));
+      setTimeout(() => {
+        if (validateInput(prettyDate)) {
+          const isoDate = prettyDateToISO(prettyDate) ?? '';
+          onChange(isoDate);
+        }
+      });
+    },
+    [defaultDate, onChange, selected, validateInput]
+  );
 
-      return;
-    }
-
-    // Current year if the date is in the past, otherwise previous year.
-    // 3112 -> 31.12.2021
-    if (isFourChars(chars)) {
-      const [d1, d2, m1, m2] = chars;
-      const dateObject = parse(`${d1}${d2}.${m1}${m2}`, 'dd.MM', new Date());
-
-      if (!isValid(dateObject)) {
-        validateInput(input);
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        validateAndCommit(event.currentTarget.value);
 
         return;
       }
 
-      if (isAfter(dateObject, toDate)) {
-        const date = format(subYears(dateObject, 1), PRETTY_FORMAT);
-        setInput(date);
-        requestAnimationFrame(() => validateInput(date));
-
-        return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        setInput(value === null ? '' : isoDateToPretty(value) ?? '');
       }
+    },
+    [validateAndCommit, value]
+  );
 
-      if (isBefore(dateObject, fromDate)) {
-        const date = format(addYears(dateObject, 1), PRETTY_FORMAT);
-        setInput(date);
-        requestAnimationFrame(() => validateInput(date));
-
-        return;
-      }
-
-      const date = format(dateObject, PRETTY_FORMAT);
-      setInput(date);
-      requestAnimationFrame(() => validateInput(date));
-
-      return;
-    }
-
-    validateInput(input);
-  }, [centuryThreshold, fromDate, input, toDate, validateInput]);
+  const parsedInput = useMemo(() => parse(input, PRETTY_FORMAT, defaultDate), [defaultDate, input]);
 
   return (
     <Datepicker
       mode="single"
       data-testid={id}
-      id={id}
       fromDate={fromDate}
       toDate={toDate}
       defaultSelected={selected}
-      selected={selected}
+      selected={parsedInput}
       onSelect={onDateChange}
       locale="nb"
       dropdownCaption
       month={month}
       onMonthChange={setMonth}
-      onOpenToggle={() => setMonth(selected)}
+      onOpenToggle={onToggle}
+      onClose={onClose}
+      open={isOpen}
     >
       <Datepicker.Input
-        error={error ?? inputError}
+        id={id}
         label={label}
-        disabled={disabled}
+        hideLabel={hideLabel}
         value={input}
         onChange={({ target }) => setInput(target.value)}
-        onBlur={onInputChange}
+        error={error ?? inputError}
         size={size}
+        onBlur={onBlur}
+        onFocus={() => setIsOpen(true)}
+        onKeyDown={onKeyDown}
+        disabled={disabled}
+        autoFocus={autoFocus}
       />
     </Datepicker>
   );
 };
-
-const getFullYear = (year: string, centuryThreshold: number): string => {
-  if (year.length === 2) {
-    const century = Number.parseInt(year, 10) <= centuryThreshold ? '20' : '19';
-
-    return `${century}${year}`;
-  }
-
-  return year;
-};
-
-const isDateParts = (parts: string[]): parts is [string, string, string] => parts.length === 3;
-
-const isFourChars = (parts: string[]): parts is [string, string, string, string] => parts.length === 4;
-const isSixChars = (parts: string[]): parts is [string, string, string, string, string, string] => parts.length === 6;
-const isEightChars = (parts: string[]): parts is [string, string, string, string, string, string, string, string] =>
-  parts.length === 8;

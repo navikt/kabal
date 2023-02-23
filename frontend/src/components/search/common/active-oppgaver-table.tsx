@@ -53,7 +53,7 @@ const Row = (oppgave: IOppgave) => (
       <Hjemmel hjemmel={oppgave.hjemmel} />
     </Table.DataCell>
     <Table.DataCell>
-      <Deadline age={oppgave.ageKA} frist={oppgave.frist} />
+      <Deadline age={oppgave.ageKA} frist={oppgave.frist} oppgaveId={oppgave.id} />
     </Table.DataCell>
     <Table.DataCell>
       <Oppgavestyring {...oppgave} />
@@ -71,6 +71,6 @@ const Row = (oppgave: IOppgave) => (
 );
 
 const StyledTable = styled(Table)`
-  max-width: 2048px;
+  max-width: 2500px;
   width: 100%;
 `;
