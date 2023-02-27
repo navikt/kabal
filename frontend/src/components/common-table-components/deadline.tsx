@@ -1,5 +1,6 @@
 import { Edit } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
+import { addYears } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '../../domain/date';
@@ -96,7 +97,18 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
     closeCalendar();
   };
 
-  return <DatePicker id="" label="Frist" hideLabel value={frist} size="small" onChange={onChange} autoFocus />;
+  return (
+    <DatePicker
+      id=""
+      label="Frist"
+      hideLabel
+      value={frist}
+      size="small"
+      onChange={onChange}
+      autoFocus
+      toDate={addYears(new Date(), 2)}
+    />
+  );
 };
 
 interface StyledDeadlineProps {
