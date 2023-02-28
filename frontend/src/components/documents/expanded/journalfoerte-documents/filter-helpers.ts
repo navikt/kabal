@@ -1,5 +1,9 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { isWithinInterval, parseISO } from 'date-fns';
+import { useMemo } from 'react';
 import { DateRange } from 'react-day-picker';
+import { isNotNull } from '../../../../functions/is-not-type-guards';
+import { stringToRegExp } from '../../../../functions/string-to-regex';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
 import { IOption } from '../../../filter-dropdown/props';
 
@@ -51,23 +55,35 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
     return acc;
   }, []);
 
-export const filterDocuments = (
+export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
   selectedDateRange: DateRange | undefined,
   selectedSaksIds: string[],
   selectedTemaer: string[],
-  selectedTypes: string[]
-) =>
-  documents.filter(
-    ({ tema, journalposttype, avsenderMottaker, registrert, sak }) =>
-      (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-      (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-      (selectedAvsenderMottakere.length === 0 ||
-        selectedAvsenderMottakere.includes(avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN')) &&
-      (selectedSaksIds.length === 0 || selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
-      (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange))
+  selectedTypes: string[],
+  search: string
+): IArkivertDocument[] => {
+  const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
+
+  return useMemo(
+    () =>
+      documents.filter(
+        ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg }) =>
+          (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
+          (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
+          (selectedAvsenderMottakere.length === 0 ||
+            selectedAvsenderMottakere.includes(
+              avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
+            )) &&
+          (selectedSaksIds.length === 0 ||
+            selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+          (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
+          (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
+      ),
+    [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]
   );
+};
 
 const checkDateInterval = (date: string, { from, to }: DateRange) => {
   if (from !== undefined && to !== undefined) {
@@ -75,4 +91,17 @@ const checkDateInterval = (date: string, { from, to }: DateRange) => {
   }
 
   return true;
+};
+
+interface FilterDocument {
+  tittel: string | null;
+  journalpostId: string;
+  vedlegg: { tittel: string | null }[];
+}
+
+const filterDocumentsBySearch = (regex: RegExp, { tittel, journalpostId, vedlegg }: FilterDocument) => {
+  const vedleggTitler = vedlegg.map((v) => v.tittel).join(' ');
+  const searchIn = [tittel, journalpostId, vedleggTitler].filter(isNotNull).join(' ');
+
+  return regex.test(searchIn);
 };
