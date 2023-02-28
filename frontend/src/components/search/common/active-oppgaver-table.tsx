@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { StyledCaption } from '../../../styled-components/table';
 import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
+import { Age } from '../../common-table-components/age';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../../common-table-components/open';
@@ -27,6 +28,7 @@ export const ActiveOppgaverTable = ({ activeOppgaver }: Props) => {
           <Table.ColumnHeader>Type</Table.ColumnHeader>
           <Table.ColumnHeader>Ytelse</Table.ColumnHeader>
           <Table.ColumnHeader>Hjemmel</Table.ColumnHeader>
+          <Table.ColumnHeader>Alder</Table.ColumnHeader>
           <Table.ColumnHeader>Frist</Table.ColumnHeader>
           <Table.ColumnHeader>Tildeling</Table.ColumnHeader>
           <Table.ColumnHeader></Table.ColumnHeader>
@@ -51,6 +53,9 @@ const Row = (oppgave: IOppgave) => (
     </Table.DataCell>
     <Table.DataCell>
       <Hjemmel hjemmel={oppgave.hjemmel} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <Age age={oppgave.ageKA} oppgaveId={oppgave.id} mottattDate={oppgave.mottatt} />
     </Table.DataCell>
     <Table.DataCell>
       <Deadline age={oppgave.ageKA} frist={oppgave.frist} oppgaveId={oppgave.id} type={oppgave.type} />
