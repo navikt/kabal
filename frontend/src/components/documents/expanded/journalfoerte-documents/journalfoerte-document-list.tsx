@@ -1,4 +1,4 @@
-import { Heading, Loader } from '@navikt/ds-react';
+import { Loader, Search } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -14,7 +14,7 @@ import { Fields } from '../styled-components/grid';
 import { JournalfoerteDocumentsStyledListHeader, StyledFilterDropdown } from '../styled-components/list-header';
 import { DateFilter } from './date-filter';
 import { Document } from './document';
-import { filterDocuments, getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
+import { getAvsenderMottakerOptions, getSaksIdOptions, useFilteredDocuments } from './filter-helpers';
 import { Header } from './header';
 import { LoadMore } from './load-more';
 
@@ -29,6 +29,7 @@ const JOURNALPOSTTYPE_OPTIONS = [
 
 export const JournalfoerteDocumentList = () => {
   const oppgaveId = useOppgaveId();
+  const [search, setSearch] = useState<string>('');
   const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
@@ -41,18 +42,16 @@ export const JournalfoerteDocumentList = () => {
 
   const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
   const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
+  const allTemaer = useAllTemaer();
 
-  const totalFilteredDocuments = useMemo(
-    () =>
-      filterDocuments(
-        documents,
-        selectedAvsenderMottakere,
-        selectedDateRange,
-        selectedSaksIds,
-        selectedTemaer,
-        selectedTypes
-      ),
-    [documents, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]
+  const totalFilteredDocuments = useFilteredDocuments(
+    documents,
+    selectedAvsenderMottakere,
+    selectedDateRange,
+    selectedSaksIds,
+    selectedTemaer,
+    selectedTypes,
+    search
   );
 
   const endIndex = PAGE_SIZE * page;
@@ -62,14 +61,13 @@ export const JournalfoerteDocumentList = () => {
     [endIndex, totalFilteredDocuments]
   );
 
-  const allTemaer = useAllTemaer();
-
   const resetFilters = () => {
     setSelectedTemaer([]);
     setSelectedTypes([]);
     setSelectedAvsenderMottakere([]);
     setSelectedSaksIds([]);
     setSelectedDateRange(undefined);
+    setSearch('');
   };
 
   const resetFiltersDisabled = useMemo(
@@ -78,8 +76,11 @@ export const JournalfoerteDocumentList = () => {
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
-      selectedDateRange === undefined,
+      selectedDateRange === undefined &&
+      search === '',
+
     [
+      search,
       selectedAvsenderMottakere.length,
       selectedDateRange,
       selectedSaksIds.length,
@@ -99,9 +100,15 @@ export const JournalfoerteDocumentList = () => {
       />
       <Wrapper>
         <JournalfoerteDocumentsStyledListHeader>
-          <Heading size="xsmall" level="2">
-            Tittel
-          </Heading>
+          <Search
+            label="Tittel/journalpost-ID"
+            hideLabel
+            size="small"
+            variant="simple"
+            placeholder="Tittel/journalpost-ID"
+            onChange={setSearch}
+            value={search}
+          />
           <StyledFilterDropdown
             options={kodeverkValuesToDropdownOptions(allTemaer)}
             onChange={setSelectedTemaer}
