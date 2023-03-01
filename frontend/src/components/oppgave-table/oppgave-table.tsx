@@ -11,6 +11,7 @@ import {
 import { useUser } from '../../simple-api-state/use-user';
 import { StyledFooterContent } from '../../styled-components/table';
 import { LedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { PageInfo } from '../common-table-components/page-info';
 import { TableHeaderFilters } from './filter-header';
 import { Oppgaverader } from './rows';
 import { Filters } from './types';
@@ -18,7 +19,7 @@ import { Filters } from './types';
 const PAGE_SIZE = 10;
 
 export const OppgaveTable = (): JSX.Element => {
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
@@ -114,7 +115,7 @@ export const OppgaveTable = (): JSX.Element => {
                 <PageInfo total={total} fromNumber={fromNumber} toNumber={toNumber} />
                 <Pagination
                   page={currentPage}
-                  onPageChange={(p) => naviagte(`../${p}`)}
+                  onPageChange={(p) => navigate(`../${p}`)}
                   count={Math.max(Math.ceil(total / PAGE_SIZE), 1)}
                   prevNextTexts
                 />
@@ -133,20 +134,6 @@ const OppgaverTable = styled(Table)`
   max-width: 2500px;
   width: 100%;
 `;
-
-interface PageInfoProps {
-  total: number;
-  fromNumber: number;
-  toNumber: number;
-}
-
-const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element | null => {
-  if (total === 0) {
-    return null;
-  }
-
-  return <span>{`Viser ${fromNumber} til ${toNumber} av ${total} oppgaver`}</span>;
-};
 
 const parsePage = (page = '1'): number | null => {
   const parsed = Number.parseInt(page, 10);
