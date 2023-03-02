@@ -31,7 +31,6 @@ export const FinishDocument = ({ document }: Props) => {
   return (
     <StyledSendDocument ref={ref}>
       <StyledSendButton
-        disabled={true}
         onClick={toggleOpen}
         size="small"
         variant="primary"
