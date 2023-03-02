@@ -61,9 +61,9 @@
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
     "redux": "^4.2.1",
-    "slate": "^0.91.3",
+    "slate": "0.90.0",
     "slate-history": "^0.86.0",
-    "slate-react": "^0.91.3",
+    "slate-react": "0.90.0",
     "styled-components": "^5.3.6",
     "uuid": "^9.0.0"
   }
