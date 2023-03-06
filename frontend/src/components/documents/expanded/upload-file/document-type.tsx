@@ -17,6 +17,7 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId, error }: Do
     size="small"
     title="Dokumenttype for opplastet dokument"
     error={error}
+    data-testid="upload-document-type-select"
   >
     <NoneSelected dokumentTypeId={dokumentTypeId} />
     <option value={DocumentType.NOTAT.toString()}>Notat</option>
