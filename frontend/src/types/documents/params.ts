@@ -17,6 +17,7 @@ export interface ISetNameParams extends IDocumentParams {
 
 export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams {
   file: File;
+  dokumentTypeId: DocumentType;
 }
 
 export interface IFinishDocumentParams extends IDocumentParams {

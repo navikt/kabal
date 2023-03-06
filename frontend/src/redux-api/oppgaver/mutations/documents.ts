@@ -136,9 +136,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
     uploadFileDocument: builder.mutation<IFileDocument, ICreateFileDocumentParams>({
-      query: ({ oppgaveId, file }) => {
+      query: ({ oppgaveId, file, dokumentTypeId }) => {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('dokumentTypeId', dokumentTypeId);
 
         return {
           url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/fil`,

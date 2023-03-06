@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { DocumentsHeader, DocumentsTitle, ExpandCollapseButton } from '../styled-components/header';
 import { JournalfoerteDocumentList } from './journalfoerte-documents/journalfoerte-document-list';
 import { NewDocumentList } from './new/new-document-list';
-import { UploadFileButton } from './upload-file-button';
+import { UploadFileButton } from './upload-file/upload-file';
 
 interface Props {
   toggleExpanded: () => void;
