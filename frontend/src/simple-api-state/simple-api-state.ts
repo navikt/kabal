@@ -51,7 +51,11 @@ export class SimpleApiState<T> {
         throw error;
       }
 
-      this.data = (await response.json()) as T;
+      const contentType = response.headers.get('content-type');
+
+      if (contentType !== null && contentType.includes('application/json')) {
+        this.data = (await response.json()) as T;
+      }
     } catch (e) {
       this.data = undefined;
       this.isError = true;

@@ -1,5 +1,6 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 import { apiErrorToast } from '../components/toast/toast-content/fetch-error-toast';
+import { ENVIRONMENT } from '../environment';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
 
@@ -20,7 +21,9 @@ const staggeredBaseQuery = (baseUrl: string) => {
         return result;
       }
 
-      apiErrorToast(result.error, args);
+      if (!ENVIRONMENT.isProduction) {
+        apiErrorToast(result.error, args);
+      }
 
       if (result.error.status === 401) {
         if (!IS_LOCALHOST) {
