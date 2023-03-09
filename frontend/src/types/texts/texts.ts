@@ -15,7 +15,6 @@ export enum TemplateSections {
   GENERELL_INFO = 'section-sel',
   AVGJOERELSE = 'section-mår',
   REGELVERK = 'section-gnu',
-  VI_VEKTLAGT = 'section-oter',
   SAKSKOSTNADER = 'section-gris',
 }
 
