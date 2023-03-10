@@ -72,7 +72,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
           <StyledPDF
             key={v}
             aria-hidden={!current}
-            data={`${url}?version=${v}#toolbar=0&view=fitH&zoom=page-width`}
+            data={`${url}?version=${v}#toolbar=1&view=fitH&zoom=page-width`}
             role="document"
             type="application/pdf"
             name={name}
