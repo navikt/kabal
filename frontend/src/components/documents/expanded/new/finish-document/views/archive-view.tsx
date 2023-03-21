@@ -1,15 +1,15 @@
 import { Close, FileFolder } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useOppgaveId } from '../../../../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfViewed } from '../../../../../../hooks/settings/use-setting';
+import { useRemoveDocument } from '../../../../../../hooks/use-remove-document';
 import { useFinishDocumentMutation } from '../../../../../../redux-api/oppgaver/mutations/documents';
 import {
   useGetDocumentsQuery,
   useLazyValidateDocumentQuery,
 } from '../../../../../../redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '../../../../../show-document/types';
-import { ShownDocumentContext } from '../../../../context';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';
 import { StyledButtons, StyledFinishDocument, StyledHeader, StyledMainText } from './styled-components';
@@ -17,11 +17,12 @@ import { FinishProps } from './types';
 
 export const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) => {
   const [finish, { isLoading }] = useFinishDocumentMutation();
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const { value: shownDocument, remove: removeShownDocument } = useDocumentsPdfViewed();
   const oppgaveId = useOppgaveId();
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
-  const { data: documents = [] } = useGetDocumentsQuery(typeof oppgaveId === 'string' ? { oppgaveId } : skipToken);
+  const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
+  const remove = useRemoveDocument();
 
   const onClick = async () => {
     if (typeof oppgaveId !== 'string') {
@@ -43,15 +44,16 @@ export const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) =
     }
 
     if (
-      shownDocument !== null &&
+      shownDocument !== undefined &&
       shownDocument.type !== DocumentTypeEnum.ARCHIVED &&
       shownDocument.documentId === dokumentId
     ) {
-      setShownDocument(null);
+      removeShownDocument();
     }
 
     setErrors([]);
-    finish({ dokumentId, oppgaveId, brevmottakertypeIds: null });
+    await finish({ dokumentId, oppgaveId, brevmottakertypeIds: null });
+    remove(dokumentId);
   };
 
   return (

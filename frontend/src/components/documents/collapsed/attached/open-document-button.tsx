@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
 import { DocumentTypeEnum } from '../../../show-document/types';
-import { ShownDocumentContext } from '../../context';
 import { ViewDocumentButton } from '../styled-components/document';
 
 interface Props {
@@ -18,21 +18,20 @@ export const OpenDocumentButton = ({
   valgt,
   harTilgangTilArkivvariant,
 }: Props) => {
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const { value, setValue } = useDocumentsPdfViewed();
 
   const onClick = () =>
-    setShownDocument({
-      title,
+    setValue({
       dokumentInfoId,
       journalpostId,
       type: DocumentTypeEnum.ARCHIVED,
     });
 
   const isActive =
-    shownDocument !== null &&
-    shownDocument.type === DocumentTypeEnum.ARCHIVED &&
-    shownDocument.dokumentInfoId === dokumentInfoId &&
-    shownDocument.journalpostId === journalpostId;
+    value !== undefined &&
+    value.type === DocumentTypeEnum.ARCHIVED &&
+    value.dokumentInfoId === dokumentInfoId &&
+    value.journalpostId === journalpostId;
 
   return (
     <ViewDocumentButton

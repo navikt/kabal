@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { isWithinInterval, parseISO } from 'date-fns';
+import { isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import { DateRange } from 'react-day-picker';
 import { isNotNull } from '../../../../functions/is-not-type-guards';
 import { stringToRegExp } from '../../../../functions/string-to-regex';
 import { IArkivertDocument } from '../../../../types/arkiverte-documents';
@@ -58,7 +57,7 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
-  selectedDateRange: DateRange | undefined,
+  selectedDateRange: [string, string] | undefined,
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
@@ -85,12 +84,15 @@ export const useFilteredDocuments = (
   );
 };
 
-const checkDateInterval = (date: string, { from, to }: DateRange) => {
-  if (from !== undefined && to !== undefined) {
-    return isWithinInterval(parseISO(date), { start: from, end: to });
+const checkDateInterval = (date: string, [from, to]: [string, string]) => {
+  const start = new Date(from);
+  const end = new Date(to);
+
+  if (!isValid(start) || !isValid(end)) {
+    return true;
   }
 
-  return true;
+  return isWithinInterval(parseISO(date), { start, end });
 };
 
 interface FilterDocument {

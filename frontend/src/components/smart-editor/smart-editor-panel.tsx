@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSmartEditorEnabled } from '../../hooks/settings/use-setting';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 
-interface Props {
-  shown: boolean;
-}
+export const SmartEditorPanel = () => {
+  const { value: shown = true, isLoading } = useSmartEditorEnabled();
 
-export const SmartEditorPanel = ({ shown }: Props) => {
-  if (!shown) {
+  if (!shown || isLoading) {
     return null;
   }
 

@@ -1,6 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
 import { DocumentTypeEnum } from '../../../show-document/types';
-import { ShownDocumentContext } from '../../context';
 import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';
 import { EditButton } from './document-title-edit-button';
@@ -13,16 +13,17 @@ interface Props {
 }
 
 export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel }: Props) => {
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const { value, setValue } = useDocumentsPdfViewed();
+
   const [editMode, setEditMode] = useState(false);
 
   const isActive = useMemo(
     () =>
-      shownDocument !== null &&
-      shownDocument.type === DocumentTypeEnum.ARCHIVED &&
-      shownDocument.dokumentInfoId === dokumentInfoId &&
-      shownDocument.journalpostId === journalpostId,
-    [dokumentInfoId, journalpostId, shownDocument]
+      typeof value !== 'undefined' &&
+      value.type === DocumentTypeEnum.ARCHIVED &&
+      value.dokumentInfoId === dokumentInfoId &&
+      value.journalpostId === journalpostId,
+    [dokumentInfoId, journalpostId, value]
   );
 
   if (editMode) {
@@ -40,8 +41,7 @@ export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel }: Props) 
   }
 
   const onClick = () =>
-    setShownDocument({
-      title: tittel ?? 'Ukjent dokumentnavn',
+    setValue({
       type: DocumentTypeEnum.ARCHIVED,
       dokumentInfoId,
       journalpostId,

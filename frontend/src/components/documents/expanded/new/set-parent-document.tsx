@@ -1,5 +1,4 @@
 import { Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo } from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
@@ -14,9 +13,7 @@ interface Props {
 
 export const SetParentDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(
-    oppgaveId === skipToken ? skipToken : { oppgaveId }
-  );
+  const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(oppgaveId);
   const [setParent, { isLoading: isSettingParent }] = useSetParentMutation();
 
   const hasAttachments = useMemo(() => {

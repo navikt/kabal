@@ -3,7 +3,6 @@ import { IArkiverteDocumentsResponse } from '../../../types/arkiverte-documents'
 import { IDocumentParams } from '../../../types/documents/common-params';
 import { IMainDocument } from '../../../types/documents/documents';
 import { IValidateDocumentResponse } from '../../../types/documents/validation';
-import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '../../common';
 import { ServerSentEventManager, ServerSentEventType } from '../../server-sent-events';
 import { ListTagTypes } from '../../tag-types';
@@ -19,9 +18,9 @@ const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverte
 export const documentsQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getDocuments: builder.query<IMainDocument[], IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter`,
-      onCacheEntryAdded: async ({ oppgaveId }, { updateCachedData, dispatch, cacheEntryRemoved, cacheDataLoaded }) => {
+    getDocuments: builder.query<IMainDocument[], string>({
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter`,
+      onCacheEntryAdded: async (oppgaveId, { updateCachedData, dispatch, cacheEntryRemoved, cacheDataLoaded }) => {
         try {
           await cacheDataLoaded;
 

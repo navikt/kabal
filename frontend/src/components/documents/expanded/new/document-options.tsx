@@ -1,5 +1,4 @@
 import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
@@ -15,7 +14,7 @@ interface Props {
 
 export const DocumentOptions = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetDocumentsQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
+  const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return (

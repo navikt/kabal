@@ -5,6 +5,7 @@ import { Editor, Element, Range, Selection, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorGodeFormuleringerOpen } from '../../../hooks/settings/use-setting';
 import { useUpdateSmartEditorMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
 import { useGetSmartEditorQuery } from '../../../redux-api/oppgaver/queries/smart-editor';
 import { IDocumentParams } from '../../../types/documents/common-params';
@@ -46,7 +47,8 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId, 
     getFocusedThreadIdFromText(editor, editor.selection)
   );
   const [showNewComment, setShowNewComment] = useState<boolean>(false);
-  const [showGodeFormuleringer, setShowGodeFormuleringer] = useState<boolean>(false);
+  const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
+    useSmartEditorGodeFormuleringerOpen();
   const [showMaltekstTags, setShowMaltekstTags] = useState<boolean>(false);
 
   const onSelect = useCallback(

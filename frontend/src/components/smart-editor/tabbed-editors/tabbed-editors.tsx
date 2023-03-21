@@ -1,12 +1,13 @@
 import { Historic, NewTab, Notes } from '@navikt/ds-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ErrorBoundary,
   StyledDescriptionTerm,
   StyledPreDescriptionDetails,
 } from '../../../error-boundary/error-boundary';
 import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorActiveDocument } from '../../../hooks/settings/use-setting';
 import { useIsMedunderskriver } from '../../../hooks/use-is-medunderskriver';
 import { useSmartEditors } from '../../../hooks/use-smart-editors';
 import { useLazyGetSmartEditorQuery } from '../../../redux-api/oppgaver/queries/smart-editor';
@@ -36,14 +37,23 @@ interface TabbedProps {
 }
 
 const Tabbed = ({ oppgaveId, editors }: TabbedProps) => {
-  const [firstEditor] = editors;
-  const [editorId, setEditorId] = useState<string | null>(firstEditor?.id ?? null);
+  const { value: editorId = null, setValue: setEditorId, remove } = useSmartEditorActiveDocument();
 
   const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : null;
 
   return (
     <>
-      <Tabs editors={editors} activeTab={activeEditorId} setActiveTab={setEditorId} />
+      <Tabs
+        editors={editors}
+        activeTab={activeEditorId}
+        setActiveTab={(id) => {
+          if (id === null) {
+            remove();
+          } else {
+            setEditorId(id);
+          }
+        }}
+      />
       <ShowTab editors={editors} activeEditorId={activeEditorId} oppgaveId={oppgaveId} onCreate={setEditorId} />
     </>
   );

@@ -1,7 +1,6 @@
 import { Loader, Search } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useState } from 'react';
-import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '../../../../hooks/use-all-temaer';
@@ -14,8 +13,9 @@ import { Fields } from '../styled-components/grid';
 import { JournalfoerteDocumentsStyledListHeader, StyledFilterDropdown } from '../styled-components/list-header';
 import { DateFilter } from './date-filter';
 import { Document } from './document';
-import { getAvsenderMottakerOptions, getSaksIdOptions, useFilteredDocuments } from './filter-helpers';
+import { getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
 import { Header } from './header';
+import { useFilters } from './hooks/use-filters';
 import { LoadMore } from './load-more';
 
 const PAGE_SIZE = 50;
@@ -29,64 +29,36 @@ const JOURNALPOSTTYPE_OPTIONS = [
 
 export const JournalfoerteDocumentList = () => {
   const oppgaveId = useOppgaveId();
-  const [search, setSearch] = useState<string>('');
-  const [selectedTemaer, setSelectedTemaer] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedAvsenderMottakere, setSelectedAvsenderMottakere] = useState<string[]>([]);
-  const [selectedSaksIds, setSelectedSaksIds] = useState<string[]>([]);
-  const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(undefined);
-  const [page, setPage] = useState(1);
   const { data, isLoading } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
-
   const documents = data?.dokumenter ?? EMPTY_ARRAY;
+
+  const {
+    resetFilters,
+    resetFiltersDisabled,
+    totalFilteredDocuments,
+    search,
+    setSearch,
+    selectedTypes,
+    setSelectedTypes,
+    selectedTemaer,
+    setSelectedTemaer,
+    selectedAvsenderMottakere,
+    setSelectedAvsenderMottakere,
+    selectedSaksIds,
+    setSelectedSaksIds,
+  } = useFilters(documents);
+
+  const [page, setPage] = useState(1);
 
   const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
   const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
   const allTemaer = useAllTemaer();
-
-  const totalFilteredDocuments = useFilteredDocuments(
-    documents,
-    selectedAvsenderMottakere,
-    selectedDateRange,
-    selectedSaksIds,
-    selectedTemaer,
-    selectedTypes,
-    search
-  );
 
   const endIndex = PAGE_SIZE * page;
 
   const slicedFilteredDocuments = useMemo(
     () => totalFilteredDocuments.slice(0, endIndex),
     [endIndex, totalFilteredDocuments]
-  );
-
-  const resetFilters = () => {
-    setSelectedTemaer([]);
-    setSelectedTypes([]);
-    setSelectedAvsenderMottakere([]);
-    setSelectedSaksIds([]);
-    setSelectedDateRange(undefined);
-    setSearch('');
-  };
-
-  const resetFiltersDisabled = useMemo(
-    () =>
-      selectedTemaer.length === 0 &&
-      selectedTypes.length === 0 &&
-      selectedAvsenderMottakere.length === 0 &&
-      selectedSaksIds.length === 0 &&
-      selectedDateRange === undefined &&
-      search === '',
-
-    [
-      search,
-      selectedAvsenderMottakere.length,
-      selectedDateRange,
-      selectedSaksIds.length,
-      selectedTemaer.length,
-      selectedTypes.length,
-    ]
   );
 
   return (
@@ -117,9 +89,7 @@ export const JournalfoerteDocumentList = () => {
           >
             Tema
           </StyledFilterDropdown>
-          <DateFilter onChange={setSelectedDateRange} selected={selectedDateRange}>
-            Dato
-          </DateFilter>
+          <DateFilter />
 
           <StyledFilterDropdown
             options={avsenderMottakerOptions}
@@ -143,7 +113,7 @@ export const JournalfoerteDocumentList = () => {
 
           <StyledFilterDropdown
             options={JOURNALPOSTTYPE_OPTIONS}
-            onChange={setSelectedTypes}
+            onChange={(types) => setSelectedTypes(types.filter(isJournalpostType))}
             selected={selectedTypes}
             direction="left"
             $area={Fields.Type}
@@ -198,3 +168,6 @@ const DocumentsSpinner = ({ hasDocuments }: DocumentsSpinnerProps): JSX.Element 
 
   return <Loader size="xlarge" />;
 };
+
+const isJournalpostType = (type: Journalposttype | string): type is Journalposttype =>
+  Object.values(Journalposttype).some((value) => value === type);
