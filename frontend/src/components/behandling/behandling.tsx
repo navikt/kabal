@@ -1,5 +1,6 @@
 import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useBehandlingEnabled } from '../../hooks/settings/use-setting';
 import { SaksTypeEnum } from '../../types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
@@ -8,12 +9,10 @@ import { Trygderettsankebehandlingsdetaljer } from './behandlingsdetaljer/trygde
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledContainer } from './styled-components';
 
-interface BehandlingProps {
-  shown: boolean;
-}
+export const Behandling = () => {
+  const { value: shown = true, isLoading } = useBehandlingEnabled();
 
-export const Behandling = ({ shown }: BehandlingProps) => {
-  if (!shown) {
+  if (!shown || isLoading) {
     return null;
   }
 

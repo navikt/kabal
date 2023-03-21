@@ -1,6 +1,5 @@
 import { Warning } from '@navikt/ds-icons';
 import { Heading, Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useValidationError } from '../../../../hooks/use-validation-error';
@@ -12,7 +11,7 @@ import { NewDocument } from './new-document';
 
 export const NewDocumentList = () => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading, isFetching } = useGetDocumentsQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
+  const { data, isLoading, isFetching } = useGetDocumentsQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return <Loader size="xlarge" />;

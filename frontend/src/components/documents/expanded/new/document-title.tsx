@@ -1,9 +1,9 @@
 import { FileContent, Notes } from '@navikt/ds-icons';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
 import { IMainDocument } from '../../../../types/documents/documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
-import { ShownDocumentContext } from '../../context';
 import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';
 import { EditButton } from './document-title-edit-button';
@@ -14,23 +14,20 @@ interface Props {
 }
 
 export const DocumentTitle = ({ document }: Props) => {
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const { value, setValue } = useDocumentsPdfViewed();
   const [editMode, setEditMode] = useState(false);
 
   const isActive =
-    shownDocument !== null &&
-    shownDocument.type !== DocumentTypeEnum.ARCHIVED &&
-    shownDocument.documentId === document.id;
+    typeof value !== 'undefined' && value.type !== DocumentTypeEnum.ARCHIVED && value.documentId === document.id;
 
   useEffect(() => {
     if (isActive) {
-      setShownDocument({
-        title: document.tittel,
+      setValue({
         type: document.isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.FILE,
         documentId: document.id,
       });
     }
-  }, [isActive, document.tittel, document.id, setShownDocument, document.isSmartDokument]);
+  }, [isActive, document.tittel, document.id, setValue, document.isSmartDokument]);
 
   if (editMode) {
     return (
@@ -42,8 +39,7 @@ export const DocumentTitle = ({ document }: Props) => {
   }
 
   const onClick = () =>
-    setShownDocument({
-      title: document.tittel,
+    setValue({
       type: document.isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.FILE,
       documentId: document.id,
     });

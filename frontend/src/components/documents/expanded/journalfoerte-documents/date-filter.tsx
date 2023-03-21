@@ -1,30 +1,36 @@
 import { Filter2, Filter2Filled } from '@navikt/ds-icons';
-import { BodyShort, Button, DatePickerProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
+import { BodyShort, Button, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
+import { useDocumentsFilterDato } from '../../../../hooks/settings/use-setting';
 import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
 
-interface Props extends Pick<DatePickerProps, 'fromDate' | 'toDate'> {
-  children: React.ReactNode;
-  onChange: (value?: DateRange | undefined) => void;
-  selected?: DateRange;
-}
-
-export const DateFilter = ({ children, onChange, selected, ...datePickerProps }: Props) => {
+export const DateFilter = () => {
+  const { value, setValue, remove } = useDocumentsFilterDato();
   const [isOpen, setIsOpen] = useState(false);
   const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
   const ref = useRef(null);
 
   useOnClickOutside(ref, () => setIsOpen(false));
 
-  const Icon = selected === undefined ? Filter2 : Filter2Filled;
+  const Icon = value === undefined ? Filter2 : Filter2Filled;
+
+  const selected = value === undefined ? undefined : { from: new Date(value[0]), to: new Date(value[1]) };
+
+  const onChange = (range: DateRange | undefined) => {
+    if (range === undefined || range.from === undefined || range.to === undefined) {
+      remove();
+    } else {
+      setValue([formatISO(range.from, { representation: 'date' }), formatISO(range.to, { representation: 'date' })]);
+    }
+  };
 
   return (
     <Container ref={ref}>
       <Button onClick={onClick} size="small" variant="tertiary" icon={<Icon aria-hidden />}>
-        {children}
+        Dato
       </Button>
       {isOpen ? (
         <DatepickerContainer>
@@ -44,7 +50,7 @@ export const DateFilter = ({ children, onChange, selected, ...datePickerProps }:
             </Button>
           </StyledButtons>
           <StyledDateRange>{formatDateRange(selected)}</StyledDateRange>
-          <Datepicker.Standalone {...datePickerProps} selected={selected} mode="range" onSelect={onChange} />
+          <Datepicker.Standalone selected={selected} mode="range" onSelect={onChange} />
         </DatepickerContainer>
       ) : null}
     </Container>

@@ -1,4 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
@@ -11,7 +10,7 @@ interface Props {
 
 export const AttachmentList = ({ parentId }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetDocumentsQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
+  const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return null;

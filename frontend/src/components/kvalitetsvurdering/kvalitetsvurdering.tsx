@@ -3,20 +3,30 @@ import React from 'react';
 import styled from 'styled-components';
 import { SECTION_KEY } from '../../functions/error-type-guard';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useKvalitetsvurderingEnabled } from '../../hooks/settings/use-setting';
 import { useSectionTitle } from '../../hooks/use-section-title';
+import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
 import { KvalitetsvurderingVersion } from '../../types/oppgavebehandling/oppgavebehandling';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 
-interface KvalitetsvurderingProps {
-  shown: boolean;
-}
-
-export const Kvalitetsvurdering = ({ shown }: KvalitetsvurderingProps): JSX.Element | null => {
+export const Kvalitetsvurdering = (): JSX.Element | null => {
   const header = useSectionTitle(SECTION_KEY.KVALITETSVURDERING);
+  const { data: oppgave } = useOppgave();
 
-  if (!shown) {
+  const utfall = oppgave?.resultat.utfall;
+  const type = oppgave?.type;
+
+  const { value: shown = true, isLoading } = useKvalitetsvurderingEnabled();
+
+  const hideKvalitetsvurdering =
+    type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    utfall === UtfallEnum.TRUKKET ||
+    utfall === UtfallEnum.RETUR ||
+    utfall === UtfallEnum.UGUNST;
+
+  if (hideKvalitetsvurdering || !shown || isLoading) {
     return null;
   }
 

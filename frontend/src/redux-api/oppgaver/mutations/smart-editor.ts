@@ -17,7 +17,7 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', { oppgaveId }, (draft) => [
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [
             {
               id: data.id,
               dokumentTypeId: data.dokumentTypeId,

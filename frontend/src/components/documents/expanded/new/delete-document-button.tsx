@@ -1,15 +1,13 @@
 import { Cancel, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '../../../../hooks/use-can-edit';
+import { useRemoveDocument } from '../../../../hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
 import { IMainDocument } from '../../../../types/documents/documents';
-import { DocumentTypeEnum } from '../../../show-document/types';
-import { ShownDocumentContext } from '../../context';
 
 interface Props {
   document: IMainDocument;
@@ -18,26 +16,17 @@ interface Props {
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
-  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(
-    oppgaveId === skipToken ? skipToken : { oppgaveId }
-  );
+  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(oppgaveId);
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
-  const { shownDocument, setShownDocument } = useContext(ShownDocumentContext);
+  const remove = useRemoveDocument();
 
   const onDelete = () => {
     if (typeof oppgaveId !== 'string') {
       return;
     }
 
-    if (
-      shownDocument !== null &&
-      shownDocument.type !== DocumentTypeEnum.ARCHIVED &&
-      shownDocument.documentId === document.id
-    ) {
-      setShownDocument(null);
-    }
-
+    remove(document.id);
     deleteDocument({ dokumentId: document.id, oppgaveId });
   };
 

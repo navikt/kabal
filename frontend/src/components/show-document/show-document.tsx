@@ -1,7 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { ShownDocumentContext } from '../documents/context';
+import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '../../hooks/settings/use-setting';
+import { useShownDocument } from '../../hooks/use-shown-document';
 import { getDocumentUrl } from './document-url';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {
@@ -23,31 +24,26 @@ const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
-interface ShowDokumentProps {
-  close: () => void;
-}
+export const ShowDocument = () => {
+  const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
+  const { remove: close } = useDocumentsPdfViewed();
+  const document = useShownDocument();
 
-const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
+  const title = document?.tittel ?? 'Ukjent dokument';
 
-export const ShowDocument = ({ close }: ShowDokumentProps) => {
-  const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
-
-  useEffect(() => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()), [pdfWidth]);
 
   const [version, setVersion] = useState<number>(Date.now());
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const oppgaveId = useOppgaveId();
-  const { shownDocument } = useContext(ShownDocumentContext);
 
-  if (shownDocument === null || oppgaveId === skipToken) {
+  if (document === undefined || oppgaveId === skipToken) {
     return null;
   }
 
-  const url = getDocumentUrl(oppgaveId, shownDocument);
-  const { title } = shownDocument;
+  const url = getDocumentUrl(oppgaveId, document);
 
   const onClick = () => {
     setIsLoading(true);
@@ -69,7 +65,7 @@ export const ShowDocument = ({ close }: ShowDokumentProps) => {
         <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
           <StyledZoomInIcon title="Zoom inn på PDF" />
         </StyledHeaderButton>
-        <ReloadButton document={shownDocument} isLoading={isLoading} onClick={onClick} />
+        <ReloadButton document={document} isLoading={isLoading} onClick={onClick} />
         <StyledDocumentTitle>
           <Ellipsis>{title}</Ellipsis>
         </StyledDocumentTitle>
@@ -100,16 +96,4 @@ const ReloadButton = ({ document, isLoading, onClick }: ReloadButtonProps) => {
       <StyledRefreshIcon title="Oppdater" $isLoading={isLoading} />
     </StyledHeaderButton>
   );
-};
-
-const getSavedPdfWidth = () => {
-  const localStorageValue = localStorage.getItem(PDF_WITH_LOCAL_STORAGE_KEY);
-
-  if (localStorageValue === null) {
-    return MIN_PDF_WIDTH;
-  }
-
-  const parsed = Number.parseInt(localStorageValue, 10);
-
-  return Number.isNaN(parsed) ? MIN_PDF_WIDTH : parsed;
 };

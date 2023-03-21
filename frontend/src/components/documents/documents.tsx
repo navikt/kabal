@@ -1,22 +1,17 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { IOppgavebehandling } from '../../types/oppgavebehandling/oppgavebehandling';
+import { useDocumentsEnabled, useDocumentsExpanded } from '../../hooks/settings/use-setting';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { ShowDocument } from '../show-document/show-document';
-import { IShownDocument } from '../show-document/types';
 import { CollapsedDocuments } from './collapsed/collapsed';
-import { ShownDocumentContext } from './context';
 import { ExpandedDocuments } from './expanded/expanded';
 
-interface Props {
-  shown: boolean;
-}
-
-export const Documents = ({ shown }: Props) => {
+export const Documents = () => {
+  const { value: shown = true, isLoading: isSettingLoading } = useDocumentsEnabled();
   const { data, isLoading } = useOppgave();
 
-  if (!shown) {
+  if (!shown || isSettingLoading) {
     return null;
   }
 
@@ -28,25 +23,20 @@ export const Documents = ({ shown }: Props) => {
     );
   }
 
-  return <DocumentsView oppgave={data} />;
+  return <DocumentsView />;
 };
 
-interface DocumentsViewProps {
-  oppgave: IOppgavebehandling;
-}
-
-const DocumentsView = ({ oppgave }: DocumentsViewProps) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(!oppgave.isAvsluttetAvSaksbehandler);
-  const [shownDocument, setShownDocument] = useState<IShownDocument | null>(null);
+const DocumentsView = () => {
+  const { value: isExpanded = true } = useDocumentsExpanded();
 
   const DocumentList = isExpanded ? ExpandedDocuments : CollapsedDocuments;
 
   return (
-    <ShownDocumentContext.Provider value={{ shownDocument, setShownDocument }}>
+    <>
       <PanelContainer data-testid="documents-panel">
-        <DocumentList toggleExpanded={() => setIsExpanded(!isExpanded)} />
+        <DocumentList />
       </PanelContainer>
-      <ShowDocument close={() => setShownDocument(null)} />
-    </ShownDocumentContext.Provider>
+      <ShowDocument />
+    </>
   );
 };

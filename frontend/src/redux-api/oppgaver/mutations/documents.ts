@@ -74,7 +74,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const documentsPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', { oppgaveId }, (draft) =>
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId || doc.parent === dokumentId ? { ...doc, isMarkertAvsluttet: true } : doc
             )
@@ -105,23 +105,23 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}`,
         method: 'DELETE',
       }),
-      onQueryStarted: async ({ dokumentId, ...baseParams }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const documentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData(
             'getDocuments',
-            baseParams,
+            oppgaveId,
             (draft) => draft.filter(({ id, parent }) => id !== dokumentId || parent === dokumentId) // Remove deleted document from list.
           )
         );
 
         const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { ...baseParams, dokumentId }, () => null)
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null)
         );
 
         const smartEditorsPatchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData(
             'getSmartEditors',
-            baseParams,
+            { oppgaveId },
             (draft) => draft.filter(({ id, parent }) => id !== dokumentId || parent === dokumentId) // Remove deleted document from list.
           )
         );
@@ -149,7 +149,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       },
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
-        dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', { oppgaveId }, (draft) => [data, ...draft]));
+        dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [data, ...draft]));
       },
     }),
   }),
@@ -162,7 +162,7 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
   value: (ISmartEditor & IMainDocument)[K]
 ) => {
   const documentsPatchResult = reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', { oppgaveId }, (draft) =>
+    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
       draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc))
     )
   );

@@ -1,5 +1,4 @@
 import { Checkbox } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useEffect, useMemo } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
@@ -18,9 +17,7 @@ export const DocumentListElement = React.memo(
   ({ element, attributes, children }: RenderElementProps<DocumentListElementType>) => {
     const editor = useSlateStatic();
     const oppgaveId = useOppgaveId();
-    const { data: newDocuments, isLoading: newIsLoading } = useGetDocumentsQuery(
-      oppgaveId === skipToken ? skipToken : { oppgaveId }
-    );
+    const { data: newDocuments, isLoading: newIsLoading } = useGetDocumentsQuery(oppgaveId);
     const { data: attachedDocuments, isLoading: attachedIsLoading } = useGetTilknyttedeDokumenterQuery(oppgaveId);
 
     const isLoading =

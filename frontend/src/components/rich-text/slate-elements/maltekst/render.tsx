@@ -123,7 +123,7 @@ export const renderElement = (element: Descendant, key: string) => {
       );
     }
     case ContentTypeEnum.PLACEHOLDER: {
-      return <PlaceholderStyle>{element.placeholder}</PlaceholderStyle>;
+      return <PlaceholderStyle key={key}>{element.placeholder}</PlaceholderStyle>;
     }
     default: {
       return null;

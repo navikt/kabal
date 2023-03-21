@@ -6,14 +6,12 @@ export enum DocumentTypeEnum {
 
 interface IShownNewDocument {
   documentId: string;
-  title: string;
   type: DocumentTypeEnum.SMART | DocumentTypeEnum.FILE;
 }
 
 interface IShownArchivedDocument {
   dokumentInfoId: string;
   journalpostId: string;
-  title: string;
   type: DocumentTypeEnum.ARCHIVED;
 }
 
