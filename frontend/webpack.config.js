@@ -52,7 +52,7 @@ module.exports = (_env, { mode }) => ({
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: 'https://kabal.dev.nav.no',
+        target: 'https://kabal.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,
         withCredentials: true,
