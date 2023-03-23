@@ -22,7 +22,12 @@ export const Attachment = ({ oppgavebehandlingId, vedlegg, document }: Props) =>
       data-dokumentinfoid={dokumentInfoId}
       data-documentname={tittel}
     >
-      <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
+      <DocumentTitle
+        journalpostId={journalpostId}
+        dokumentInfoId={dokumentInfoId}
+        tittel={tittel ?? ''}
+        harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+      />
       <DocumentCheckbox
         dokumentInfoId={dokumentInfoId}
         journalpostId={journalpostId}
