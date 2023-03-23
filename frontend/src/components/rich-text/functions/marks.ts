@@ -47,17 +47,6 @@ const getEditorMarkStatus = (editor: Editor, mark: keyof IMarks) => {
     }
   }
 
-  const flettefeltGenerator = Editor.nodes(editor, {
-    match: isOfElementTypeFn(DeletableVoidElementsEnum.FLETTEFELT),
-    voids: true,
-  });
-
-  for (const [node] of flettefeltGenerator) {
-    if (node[mark] === true) {
-      return true;
-    }
-  }
-
   return false;
 };
 

@@ -30,4 +30,4 @@ export const migrateFromV1ToV2 = (response: RichText_V1): RichText_V2 => ({
 });
 
 const isOldMaltekst = (node: RichText_Content_V2 | MaltekstV1): node is MaltekstV1 =>
-  node.type === UndeletableContentEnum.MALTEKST && 'content' in node;
+  node.type === UndeletableContentEnum.MALTEKST && Object.hasOwn(node, 'content');

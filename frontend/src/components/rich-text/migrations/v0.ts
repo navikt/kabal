@@ -9,4 +9,4 @@ export const migrateFromV0ToV1 = (response: RichText_V0): RichText_V1 => ({
 });
 
 const isMaltekstV0 = (content: RichText_Content_V2 | Maltekst_V0): content is Maltekst_V0 =>
-  content.type === 'maltekst' && 'source' in content && 'maltekst' in content;
+  content.type === 'maltekst' && Object.hasOwn(content, 'source') && Object.hasOwn(content, 'maltekst');

@@ -1,10 +1,7 @@
+import { GenericObject } from '../types/types';
 import { isNotNull } from './is-not-type-guards';
 
-export const queryStringify = (query: unknown): string => {
-  if (query === null || typeof query !== 'object') {
-    return '';
-  }
-
+export const queryStringify = (query: GenericObject): string => {
   const keys = Object.keys(query);
 
   if (keys.length === 0) {

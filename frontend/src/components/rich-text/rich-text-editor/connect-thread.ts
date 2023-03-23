@@ -16,8 +16,10 @@ export const connectCommentThread = (editor: Editor, selection: Selection, threa
 };
 
 export const disconnectCommentThread = (editor: Editor, threadId: string) => {
-  Transforms.unsetNodes(editor, COMMENT_PREFIX + threadId, {
-    match: (node) => typeof node[COMMENT_PREFIX + threadId] !== 'undefined',
+  const key = COMMENT_PREFIX + threadId;
+
+  Transforms.unsetNodes(editor, key, {
+    match: (node) => Object.hasOwn(node, key),
     split: true,
     at: [],
   });

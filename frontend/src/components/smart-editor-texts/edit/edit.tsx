@@ -108,7 +108,7 @@ export const EditSmartEditorText = (savedText: IText) => {
             variant="templates"
           />
 
-          <ResolvedTags ids={sections} useName={(sectionId) => MALTEKST_SECTION_NAMES[sectionId]} variant="sections" />
+          <ResolvedTags ids={sections} useName={useMaltekstSectionName} variant="sections" />
 
           <ResolvedTags ids={hjemler} useName={useRegistreringshjemmelFromId} variant="hjemler" />
 
@@ -131,6 +131,12 @@ export const EditSmartEditorText = (savedText: IText) => {
     </Fragment>
   );
 };
+
+const isMaltekstSectionName = (sectionId: string): sectionId is keyof typeof MALTEKST_SECTION_NAMES =>
+  Object.keys(MALTEKST_SECTION_NAMES).includes(sectionId);
+
+const useMaltekstSectionName = (sectionId: string) =>
+  isMaltekstSectionName(sectionId) ? MALTEKST_SECTION_NAMES[sectionId] : sectionId;
 
 const Buttons = styled.div`
   display: flex;

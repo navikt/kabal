@@ -1,6 +1,6 @@
-import { Immutable } from '../types/types';
+import { GenericObject, Immutable, isGenericObject } from '../types/types';
 
-export const deepFreeze = <T>(toFreeze: T): Immutable<T> => {
+export const deepFreeze = <T extends GenericObject>(toFreeze: T): Immutable<T> => {
   // Retrieve the property names defined on object.
   const propNames = Object.getOwnPropertyNames(toFreeze);
 
@@ -8,7 +8,7 @@ export const deepFreeze = <T>(toFreeze: T): Immutable<T> => {
   for (const name of propNames) {
     const value: unknown = toFreeze[name];
 
-    if (value !== null && typeof value === 'object') {
+    if (isGenericObject(value)) {
       deepFreeze(value);
     }
   }
