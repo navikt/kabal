@@ -15,15 +15,21 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react",
     "sourceMap": true,
-    "noUncheckedIndexedAccess": true
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": [
+        "*"
+      ]
+    }
   },
   "outDir": "./dist",
   "include": [
-    "./src/**/*"
+    "./src"
   ],
   "exclude": [
     "./dist/**"
