@@ -1,7 +1,7 @@
 import { Warning } from '@navikt/ds-icons';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { TextMetadata } from '../../types/texts/texts';
+import { TextMetadata } from '@app/types/texts/texts';
 
 export const LimitWarning = (limits: TextMetadata) => {
   const isLimited = useMemo(

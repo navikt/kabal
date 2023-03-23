@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SaksTypeEnum } from '../types/kodeverk';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 
 interface LabelProps {
   fixedWidth?: boolean;

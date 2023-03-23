@@ -1,7 +1,7 @@
 import { Alert, Checkbox, Radio } from '@navikt/ds-react';
 import React from 'react';
-import { useCanEdit } from '../../../hooks/use-can-edit';
-import { Radiovalg } from '../../../types/kaka-kvalitetsvurdering/radio';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
 import { RadioButtonsRow, StyledHeading, StyledRadioGroup } from './common/styled-components';

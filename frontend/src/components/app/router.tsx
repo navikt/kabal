@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes as Switch } from 'react-router-dom';
-import { LandingPage } from '../../pages/landing-page/landing-page';
-import TrygderettsankebehandlingPage from '../../pages/trygderettsankebehandling/trygderettsankebehandling';
+import { LandingPage } from '@app/pages/landing-page/landing-page';
+import TrygderettsankebehandlingPage from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { RouterLoader } from './loader';
 
 const AdminPage = lazy(() => import('../../pages/admin/admin'));

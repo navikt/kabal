@@ -1,9 +1,9 @@
 import { Descendant } from 'slate';
-import { deepFreeze } from '../../../functions/deep-freeze';
-import { DocumentType } from '../../../types/documents/documents';
-import { SaksTypeEnum } from '../../../types/kodeverk';
-import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
+import { deepFreeze } from '@app/functions/deep-freeze';
+import { DocumentType } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { VERSION } from '../../rich-text/version';
 
 const INITIAL_SLATE_VALUE: Descendant[] = [];

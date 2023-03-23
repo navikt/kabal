@@ -1,4 +1,4 @@
-import { useGetOppgavebehandlingQuery } from '../../redux-api/oppgaver/queries/behandling';
+import { useGetOppgavebehandlingQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { useOppgaveId } from './use-oppgave-id';
 
 export const useOppgave = () => {

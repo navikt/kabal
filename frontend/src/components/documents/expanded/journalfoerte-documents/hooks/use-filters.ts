@@ -6,8 +6,8 @@ import {
   useDocumentsFilterTema,
   useDocumentsFilterTitle,
   useDocumentsFilterType,
-} from '../../../../../hooks/settings/use-setting';
-import { IArkivertDocument } from '../../../../../types/arkiverte-documents';
+} from '@app/hooks/settings/use-setting';
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useFilteredDocuments } from '../filter-helpers';
 
 const EMPTY_FILTER: string[] = [];

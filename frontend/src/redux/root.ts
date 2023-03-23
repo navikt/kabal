@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
-import { accessRightsApi } from '../redux-api/access-rights';
-import { brukerApi } from '../redux-api/bruker';
-import { featureTogglingApi } from '../redux-api/feature-toggling';
-import { kabalInternalApi } from '../redux-api/internal';
-import { journalposterApi } from '../redux-api/journalposter';
-import { kvalitetsvurderingV1Api } from '../redux-api/kaka-kvalitetsvurdering/v1';
-import { kvalitetsvurderingV2Api } from '../redux-api/kaka-kvalitetsvurdering/v2';
-import { messagesApi } from '../redux-api/messages';
-import { oppgaverApi } from '../redux-api/oppgaver/oppgaver';
-import { smartEditorCommentsApi } from '../redux-api/smart-editor-comments';
-import { textsApi } from '../redux-api/texts';
+import { accessRightsApi } from '@app/redux-api/access-rights';
+import { brukerApi } from '@app/redux-api/bruker';
+import { featureTogglingApi } from '@app/redux-api/feature-toggling';
+import { kabalInternalApi } from '@app/redux-api/internal';
+import { journalposterApi } from '@app/redux-api/journalposter';
+import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
+import { messagesApi } from '@app/redux-api/messages';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
+import { textsApi } from '@app/redux-api/texts';
 
 export const rootReducer = combineReducers({
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,

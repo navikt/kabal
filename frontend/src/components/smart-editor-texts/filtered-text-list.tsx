@@ -1,8 +1,8 @@
 import { Search } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { stringToRegExp } from '../../functions/string-to-regex';
-import { TextTypes } from '../../types/texts/texts';
+import { stringToRegExp } from '@app/functions/string-to-regex';
+import { TextTypes } from '@app/types/texts/texts';
 import { Filters } from './filters';
 import { TextList } from './smart-editor-texts-list';
 

@@ -1,9 +1,9 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useMemo } from 'react';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
-import { ILovKildeToRegistreringshjemmel } from '../../../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
+import { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';
 import {
   StyledListItem,
   StyledNoneSelected,

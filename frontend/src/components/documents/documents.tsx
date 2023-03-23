@@ -1,9 +1,9 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useDocumentsEnabled, useDocumentsExpanded } from '../../hooks/settings/use-setting';
-import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
-import { ShowDocument } from '../show-document/show-document';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
+import { ShowDocument } from '@app/components/show-document/show-document';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useDocumentsEnabled, useDocumentsExpanded } from '@app/hooks/settings/use-setting';
 import { CollapsedDocuments } from './collapsed/collapsed';
 import { ExpandedDocuments } from './expanded/expanded';
 

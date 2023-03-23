@@ -4,8 +4,8 @@ import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import styled from 'styled-components';
-import { useDocumentsFilterDato } from '../../../../hooks/settings/use-setting';
-import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
+import { useDocumentsFilterDato } from '@app/hooks/settings/use-setting';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 export const DateFilter = () => {
   const { value, setValue, remove } = useDocumentsFilterDato();

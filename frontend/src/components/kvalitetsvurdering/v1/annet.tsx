@@ -1,9 +1,9 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
-import { Radiovalg } from '../../../types/kaka-kvalitetsvurdering/radio';
-import { SaksTypeEnum } from '../../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
+import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Reason, Reasons } from './reasons';
 import { FormSection } from './styled-components';
 

@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useCheckDocument } from '../../../../hooks/use-check-document';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCheckDocument } from '@app/hooks/use-check-document';
 import { StyledDocumentCheckbox } from './styled-components';
 
 interface Props {

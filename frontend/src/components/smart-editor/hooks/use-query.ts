@@ -1,9 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '../../../simple-api-state/use-user';
-import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections, TextTypes } from '../../../types/texts/texts';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useUser } from '@app/simple-api-state/use-user';
+import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { ApiQuery, TemplateSections, TextTypes } from '@app/types/texts/texts';
 
 interface Params {
   textType: TextTypes;

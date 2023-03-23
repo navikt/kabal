@@ -1,12 +1,12 @@
-import { useLazyMigrateGetAllTextsQuery, useMigrateUpdateTextsMutation } from '../../redux-api/texts';
-import { RichText_Latest_Text } from '../../types/rich-text/latest';
-import { VersionedText } from '../../types/rich-text/versions';
-import { IUpdateText } from '../../types/texts/texts';
-import { migrateFromV0ToV1 } from '../rich-text/migrations/v0';
-import { migrateFromV1ToV2 } from '../rich-text/migrations/v1';
-import { migrateFromV2ToV3 } from '../rich-text/migrations/v2';
-import { migrateFromV3ToV4 } from '../rich-text/migrations/v3';
-import { VERSION } from '../rich-text/version';
+import { migrateFromV0ToV1 } from '@app/components/rich-text/migrations/v0';
+import { migrateFromV1ToV2 } from '@app/components/rich-text/migrations/v1';
+import { migrateFromV2ToV3 } from '@app/components/rich-text/migrations/v2';
+import { migrateFromV3ToV4 } from '@app/components/rich-text/migrations/v3';
+import { VERSION } from '@app/components/rich-text/version';
+import { useLazyMigrateGetAllTextsQuery, useMigrateUpdateTextsMutation } from '@app/redux-api/texts';
+import { RichText_Latest_Text } from '@app/types/rich-text/latest';
+import { VersionedText } from '@app/types/rich-text/versions';
+import { IUpdateText } from '@app/types/texts/texts';
 import { ApiHook } from './types';
 
 export const useMigrateTexts: ApiHook = () => {

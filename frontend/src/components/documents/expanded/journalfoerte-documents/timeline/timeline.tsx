@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { IArkivertDocument, Journalposttype, RelevantDatotype } from '../../../../../types/arkiverte-documents';
+import { IArkivertDocument, Journalposttype, RelevantDatotype } from '@app/types/arkiverte-documents';
 import { EkspedertItems } from './ekspedert-items';
 import { TimelineContainer } from './styled-components';
 import { RelevantDateTimelineItem } from './timeline-item';

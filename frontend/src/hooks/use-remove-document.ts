@@ -1,4 +1,4 @@
-import { DocumentTypeEnum } from '../components/show-document/types';
+import { DocumentTypeEnum } from '@app/components/show-document/types';
 import { useDocumentsPdfViewed, useSmartEditorActiveDocument } from './settings/use-setting';
 
 export const useRemoveDocument = () => {

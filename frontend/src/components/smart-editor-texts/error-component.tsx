@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledDescriptionTerm, StyledPreDescriptionDetails } from '../../error-boundary/error-boundary';
+import { StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
 
 export const ErrorComponent = ({ textId }: { textId: string }) => (
   <dl>

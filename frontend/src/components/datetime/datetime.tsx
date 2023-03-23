@@ -1,8 +1,8 @@
 import { Calender, Clock } from '@navikt/ds-icons';
 import React from 'react';
 import styled from 'styled-components';
-import { isoDateTimeToPretty } from '../../domain/date';
-import { IText } from '../../types/texts/texts';
+import { isoDateTimeToPretty } from '@app/domain/date';
+import { IText } from '@app/types/texts/texts';
 
 type Props = Pick<IText, 'created' | 'modified'>;
 

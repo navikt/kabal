@@ -1,4 +1,4 @@
-import { queryStringify } from '../../../functions/query-string';
+import { queryStringify } from '@app/functions/query-string';
 import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
@@ -12,7 +12,7 @@ import {
   MineUferdigeOppgaverParams,
   UtgaatteApiResponse,
   UtgaatteOppgaverParams,
-} from '../../../types/oppgaver';
+} from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { OppgaveListTagTypes, UtgaatteFristerTagTypes, oppgaverApi } from '../oppgaver';

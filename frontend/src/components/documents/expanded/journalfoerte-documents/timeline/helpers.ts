@@ -1,5 +1,5 @@
 import { Cancel, Email, FileFolder, FileSuccess, Glasses, Print, SaveFile } from '@navikt/ds-icons';
-import { RelevantDatotype } from '../../../../../types/arkiverte-documents';
+import { RelevantDatotype } from '@app/types/arkiverte-documents';
 
 export const DATOTYPE_NAME: Record<RelevantDatotype, string> = {
   [RelevantDatotype.DATO_SENDT_PRINT]: 'Sendt print',

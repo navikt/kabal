@@ -7,10 +7,10 @@ import {
   SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
-} from '../../redux-api/access-rights';
-import { useLatestYtelser } from '../../simple-api-state/use-kodeverk';
-import { useUser } from '../../simple-api-state/use-user';
-import { IYtelse } from '../../types/kodeverk';
+} from '@app/redux-api/access-rights';
+import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
+import { useUser } from '@app/simple-api-state/use-user';
+import { IYtelse } from '@app/types/kodeverk';
 import { Body } from './body';
 import { Head } from './head';
 

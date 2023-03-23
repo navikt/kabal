@@ -1,7 +1,7 @@
 import { DateInputProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
 import { clamp, format, parse } from 'date-fns';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { isoDateToPretty, prettyDateToISO } from '../../domain/date';
+import { isoDateToPretty, prettyDateToISO } from '@app/domain/date';
 import { ISO_FORMAT, PRETTY_FORMAT } from './constants';
 import { parseUserInput } from './parse-user-input';
 import { validateDateString } from './validate';

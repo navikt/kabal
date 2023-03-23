@@ -2,7 +2,7 @@ import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
 import { Alert } from '@navikt/ds-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IValidationSection } from '../../functions/error-type-guard';
+import { IValidationSection } from '@app/functions/error-type-guard';
 import { StyledButton, StyledIconButton, StyledPopup } from './styled-components';
 import { ValidationSummary } from './validation-summary';
 

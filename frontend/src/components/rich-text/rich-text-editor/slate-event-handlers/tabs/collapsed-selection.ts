@@ -1,5 +1,5 @@
 import { Editor, Text, Transforms } from 'slate';
-import { isNotUndefined } from '../../../../../functions/is-not-type-guards';
+import { isNotUndefined } from '@app/functions/is-not-type-guards';
 
 export const removeTab = (editor: Editor) => {
   const textNodeEntries = Editor.nodes(editor, {

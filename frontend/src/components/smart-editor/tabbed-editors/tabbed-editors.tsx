@@ -1,17 +1,13 @@
 import { Historic, NewTab, Notes } from '@navikt/ds-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import {
-  ErrorBoundary,
-  StyledDescriptionTerm,
-  StyledPreDescriptionDetails,
-} from '../../../error-boundary/error-boundary';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorActiveDocument } from '../../../hooks/settings/use-setting';
-import { useIsMedunderskriver } from '../../../hooks/use-is-medunderskriver';
-import { useSmartEditors } from '../../../hooks/use-smart-editors';
-import { useLazyGetSmartEditorQuery } from '../../../redux-api/oppgaver/queries/smart-editor';
-import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
+import { ErrorBoundary, StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
+import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useSmartEditors } from '@app/hooks/use-smart-editors';
+import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
+import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { CommentSection } from '../comments/comment-section';
 import { SmartEditorContextComponent } from '../context/smart-editor-context';
 import { GodeFormuleringer } from '../gode-formuleringer/gode-formuleringer';

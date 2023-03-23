@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useKodeverk, useLatestYtelser, useSakstyperToUtfall } from '../simple-api-state/use-kodeverk';
-import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '../types/kodeverk';
+import { useKodeverk, useLatestYtelser, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
+import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
   key: K | typeof skipToken = skipToken

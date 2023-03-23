@@ -4,12 +4,12 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useKodeverkYtelse } from '../../hooks/use-kodeverk-value';
-import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useUpdateInnsendingshjemlerMutation } from '../../redux-api/oppgaver/mutations/behandling';
-import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/tildeling';
-import { useUser } from '../../simple-api-state/use-user';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { useUpdateInnsendingshjemlerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { useUser } from '@app/simple-api-state/use-user';
 import { FilterList } from '../filter-dropdown/filter-list';
 
 export const DeassignOppgave = () => {

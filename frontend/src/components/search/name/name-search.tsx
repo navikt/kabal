@@ -1,8 +1,8 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
-import { useNameSearchQuery } from '../../../redux-api/oppgaver/queries/oppgaver';
-import { INameSearchParams } from '../../../types/oppgaver';
+import { useNameSearchQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { INameSearchParams } from '@app/types/oppgaver';
 import { SearchResults } from './searchresults';
 
 interface NameSearchProps {

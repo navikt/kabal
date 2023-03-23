@@ -1,14 +1,14 @@
-import { migrateFromV0ToV1 } from '../../../components/rich-text/migrations/v0';
-import { migrateFromV1ToV2 } from '../../../components/rich-text/migrations/v1';
-import { migrateRichTextV2ToV3 } from '../../../components/rich-text/migrations/v2';
-import { migrateRichTextV3ToV4 } from '../../../components/rich-text/migrations/v3';
-import { VERSION } from '../../../components/rich-text/version';
-import { IOppgavebehandlingBaseParams } from '../../../types/oppgavebehandling/params';
-import { RichText_Latest_SmartEditor } from '../../../types/rich-text/latest';
-import { VersionedSmartEditor } from '../../../types/rich-text/versions';
-import { IGetSmartEditorParams } from '../../../types/smart-editor/params';
-import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
-import { NoTemplateIdEnum } from '../../../types/smart-editor/template-enums';
+import { migrateFromV0ToV1 } from '@app/components/rich-text/migrations/v0';
+import { migrateFromV1ToV2 } from '@app/components/rich-text/migrations/v1';
+import { migrateRichTextV2ToV3 } from '@app/components/rich-text/migrations/v2';
+import { migrateRichTextV3ToV4 } from '@app/components/rich-text/migrations/v3';
+import { VERSION } from '@app/components/rich-text/version';
+import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
+import { RichText_Latest_SmartEditor } from '@app/types/rich-text/latest';
+import { VersionedSmartEditor } from '@app/types/rich-text/versions';
+import { IGetSmartEditorParams } from '@app/types/smart-editor/params';
+import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
+import { NoTemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 

@@ -1,4 +1,4 @@
-import { ISignatureResponse } from '../../../../types/bruker';
+import { ISignatureResponse } from '@app/types/bruker';
 
 const getShortName = ({ customShortName, generatedShortName }: ISignatureResponse): string =>
   customShortName ?? generatedShortName;

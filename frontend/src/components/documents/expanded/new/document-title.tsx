@@ -1,8 +1,8 @@
 import { FileContent, Notes } from '@navikt/ds-icons';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
-import { IMainDocument } from '../../../../types/documents/documents';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { IMainDocument } from '@app/types/documents/documents';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';

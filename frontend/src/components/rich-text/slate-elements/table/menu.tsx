@@ -11,7 +11,7 @@ import React, { useRef, useState } from 'react';
 import { Path, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { mergeCells, splitCell } from '../../functions/table/cells';
 import { insertColumnLeft, insertColumnRight } from '../../functions/table/insert-column';
 import { removeColumn } from '../../functions/table/remove-column';

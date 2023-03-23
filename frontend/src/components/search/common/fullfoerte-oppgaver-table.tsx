@@ -1,8 +1,8 @@
 import { Alert, Table } from '@navikt/ds-react';
 import React from 'react';
-import { isoDateToPretty } from '../../../domain/date';
-import { StyledCaption } from '../../../styled-components/table';
-import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
+import { isoDateToPretty } from '@app/domain/date';
+import { StyledCaption } from '@app/styled-components/table';
+import { IOppgave, IOppgaveList } from '@app/types/oppgaver';
 import { Hjemmel } from '../../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../../common-table-components/open';
 import { Ytelse } from '../../common-table-components/ytelse';

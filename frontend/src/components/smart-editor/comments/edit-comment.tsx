@@ -1,8 +1,8 @@
 import { Edit } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateCommentOrReplyMutation } from '../../../redux-api/smart-editor-comments';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { useIsCommentAuthor } from './use-is-comment-author';
 import { WriteComment } from './write-comment/write-comment';

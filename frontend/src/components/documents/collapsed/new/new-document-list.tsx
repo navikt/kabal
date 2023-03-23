@@ -1,9 +1,9 @@
 import { Warning } from '@navikt/ds-icons';
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useValidationError } from '../../../../hooks/use-validation-error';
-import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useValidationError } from '@app/hooks/use-validation-error';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Loading } from '../../loading';
 import { ListContainer } from '../styled-components/container';
 import { DocumentList } from '../styled-components/document-list';

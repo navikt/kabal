@@ -1,5 +1,5 @@
-import { INNSTILLINGER_BASE_PATH } from '../redux-api/common';
-import { IUserData } from '../types/bruker';
+import { INNSTILLINGER_BASE_PATH } from '@app/redux-api/common';
+import { IUserData } from '@app/types/bruker';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 
 const userApi = new SimpleApiState<IUserData>(`${INNSTILLINGER_BASE_PATH}/me/brukerdata`);

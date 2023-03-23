@@ -1,11 +1,11 @@
 import { SuccessStroke } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../hooks/use-can-edit';
-import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
-import { useLazyValidateQuery } from '../../redux-api/oppgaver/queries/behandling';
-import { SaksTypeEnum } from '../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';

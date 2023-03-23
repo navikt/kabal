@@ -2,12 +2,12 @@ import { HelpText, Label } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '../../../../hooks/use-kodeverk-value';
-import { useValidationError } from '../../../../hooks/use-validation-error';
-import { useUpdateRegistreringshjemlerMutation } from '../../../../redux-api/oppgaver/mutations/set-registreringshjemler';
-import { useUser } from '../../../../simple-api-state/use-user';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
+import { useValidationError } from '@app/hooks/use-validation-error';
+import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
+import { useUser } from '@app/simple-api-state/use-user';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 

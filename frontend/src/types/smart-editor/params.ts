@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { VERSION } from '../../components/rich-text/version';
+import { VERSION } from '@app/components/rich-text/version';
 import { IDocumentParams } from '../documents/common-params';
 import { DocumentType } from '../documents/documents';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';

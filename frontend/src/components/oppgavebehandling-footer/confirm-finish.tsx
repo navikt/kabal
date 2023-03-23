@@ -1,10 +1,10 @@
 import { Close, SuccessStroke } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { isReduxValidationResponse } from '../../functions/error-type-guard';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useFinishOppgavebehandlingMutation } from '../../redux-api/oppgaver/mutations/behandling';
-import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
+import { isReduxValidationResponse } from '@app/functions/error-type-guard';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
 

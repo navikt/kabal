@@ -1,4 +1,4 @@
-import { VERSION } from '../../components/rich-text/version';
+import { VERSION } from '@app/components/rich-text/version';
 import { DocumentType, UUID } from '../documents/documents';
 import { NoTemplateIdEnum, TemplateIdEnum } from './template-enums';
 

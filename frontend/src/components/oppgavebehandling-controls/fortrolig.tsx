@@ -1,6 +1,6 @@
 import React from 'react';
-import { LabelMain } from '../../styled-components/labels';
-import { IOppgavebehandlingBase } from '../../types/oppgavebehandling/oppgavebehandling';
+import { LabelMain } from '@app/styled-components/labels';
+import { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { UserItem } from './styled-components';
 
 export const Fortrolig = ({ fortrolig }: Pick<IOppgavebehandlingBase, 'fortrolig'>) =>

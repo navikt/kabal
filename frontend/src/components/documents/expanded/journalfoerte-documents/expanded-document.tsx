@@ -2,7 +2,7 @@ import { Detail, Label } from '@navikt/ds-react';
 import { CopyToClipboard } from '@navikt/ds-react-internal';
 import React from 'react';
 import styled from 'styled-components';
-import { IArkivertDocument, Journalstatus } from '../../../../types/arkiverte-documents';
+import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {

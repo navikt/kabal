@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
-import { IOppgave } from '../../types/oppgaver';
+import { IOppgave } from '@app/types/oppgaver';
 import { Age } from '../common-table-components/age';
 import { Deadline } from '../common-table-components/deadline';
 import { Hjemmel } from '../common-table-components/hjemmel';

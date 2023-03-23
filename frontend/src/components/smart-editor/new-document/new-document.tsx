@@ -1,10 +1,10 @@
 import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useCreateSmartDocumentMutation } from '../../../redux-api/oppgaver/mutations/smart-editor';
-import { SaksTypeEnum } from '../../../types/kodeverk';
-import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';

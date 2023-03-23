@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
-import { SortFieldEnum } from '../../types/oppgaver';
+import { SortFieldEnum } from '@app/types/oppgaver';
 
 export const TableHeader = (): JSX.Element => (
   <Table.Header>

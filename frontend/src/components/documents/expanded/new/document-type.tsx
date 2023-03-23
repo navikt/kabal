@@ -1,10 +1,10 @@
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useSetTypeMutation } from '../../../../redux-api/oppgaver/mutations/documents';
-import { DocumentType, IMainDocument } from '../../../../types/documents/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { DocumentType, IMainDocument } from '@app/types/documents/documents';
 
 const OPTIONS = [
   {

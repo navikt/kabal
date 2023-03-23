@@ -1,10 +1,10 @@
 import { Descendant } from 'slate';
-import { deepFreeze } from '../../../functions/deep-freeze';
-import { DocumentType } from '../../../types/documents/documents';
-import { SaksTypeEnum } from '../../../types/kodeverk';
-import { ISmartEditorTemplate } from '../../../types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { TemplateSections } from '../../../types/texts/texts';
+import { deepFreeze } from '@app/functions/deep-freeze';
+import { DocumentType } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { TemplateSections } from '@app/types/texts/texts';
 import { VERSION } from '../../rich-text/version';
 import {
   createCurrentDate,

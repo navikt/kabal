@@ -1,5 +1,5 @@
-import { ICheckDocumentParams } from '../../../types/oppgavebehandling/params';
-import { ITilknyttDocumentResponse } from '../../../types/oppgavebehandling/response';
+import { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
+import { ITilknyttDocumentResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';

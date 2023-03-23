@@ -2,10 +2,10 @@ import { Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
 import styled from 'styled-components';
-import { useGetEnhetensVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '../../simple-api-state/use-user';
-import { StyledCaption } from '../../styled-components/table';
-import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '@app/simple-api-state/use-user';
+import { StyledCaption } from '@app/styled-components/table';
+import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
 import { OppgaveRows } from './rows';
 

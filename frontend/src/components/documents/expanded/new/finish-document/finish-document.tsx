@@ -2,9 +2,9 @@ import { Send } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../../hooks/use-can-edit';
-import { useOnClickOutside } from '../../../../../hooks/use-on-click-outside';
-import { DocumentType, IMainDocument } from '../../../../../types/documents/documents';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { DocumentType, IMainDocument } from '@app/types/documents/documents';
 import { ConfirmFinishDocument } from './confirm-finish-document';
 
 interface Props {

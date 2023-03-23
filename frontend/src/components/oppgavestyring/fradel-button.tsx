@@ -1,8 +1,8 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveActions } from '../../hooks/use-oppgave-actions';
-import { IOppgave } from '../../types/oppgaver';
+import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
+import { IOppgave } from '@app/types/oppgaver';
 import { useFradel } from './use-tildel';
 
 interface Props extends IOppgave {

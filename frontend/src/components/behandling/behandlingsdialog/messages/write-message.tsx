@@ -1,11 +1,11 @@
 import { Send } from '@navikt/ds-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useGetMySignatureQuery } from '../../../../redux-api/bruker';
-import { usePostMessageMutation } from '../../../../redux-api/messages';
-import { useUser } from '../../../../simple-api-state/use-user';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useGetMySignatureQuery } from '@app/redux-api/bruker';
+import { usePostMessageMutation } from '@app/redux-api/messages';
+import { useUser } from '@app/simple-api-state/use-user';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {

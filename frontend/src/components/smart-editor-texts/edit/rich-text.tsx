@@ -4,7 +4,7 @@ import { Descendant, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
 import styled from 'styled-components';
-import { ErrorBoundary } from '../../../error-boundary/error-boundary';
+import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { RichTextEditorElement } from '../../rich-text/rich-text-editor/rich-text-editor';
 import { withCopy } from '../../rich-text/rich-text-editor/with-copy';
 import { withNormalization } from '../../rich-text/rich-text-editor/with-normalization';

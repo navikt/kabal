@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { getFullName } from '../domain/name';
-import { isNotNull } from '../functions/is-not-type-guards';
-import { Brevmottakertype } from '../types/kodeverk';
-import { ISakspart } from '../types/oppgavebehandling/oppgavebehandling';
+import { getFullName } from '@app/domain/name';
+import { isNotNull } from '@app/functions/is-not-type-guards';
+import { Brevmottakertype } from '@app/types/kodeverk';
+import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker {

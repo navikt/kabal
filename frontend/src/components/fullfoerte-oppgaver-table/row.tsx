@@ -1,10 +1,10 @@
 import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { isoDateToPretty } from '../../domain/date';
-import { useFullYtelseNameFromId, useInnsendingshjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { useUtfall } from '../../simple-api-state/use-kodeverk';
-import { LabelMain, LabelTema } from '../../styled-components/labels';
-import { IOppgave } from '../../types/oppgaver';
+import { isoDateToPretty } from '@app/domain/date';
+import { useFullYtelseNameFromId, useInnsendingshjemmelFromId } from '@app/hooks/use-kodeverk-ids';
+import { useUtfall } from '@app/simple-api-state/use-kodeverk';
+import { LabelMain, LabelTema } from '@app/styled-components/labels';
+import { IOppgave } from '@app/types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { CopyFnrButton } from '../copy-button/copy-fnr-button';
 import { Type } from '../type/type';

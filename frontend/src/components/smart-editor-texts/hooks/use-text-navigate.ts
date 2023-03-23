@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
-import { queryStringify } from '../../../functions/query-string';
+import { queryStringify } from '@app/functions/query-string';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from './use-text-query';
 import { useTextType } from './use-text-type';

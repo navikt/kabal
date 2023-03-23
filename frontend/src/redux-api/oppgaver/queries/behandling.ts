@@ -1,13 +1,13 @@
-import { IApiValidationResponse } from '../../../functions/error-type-guard';
-import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
+import { IApiValidationResponse } from '@app/functions/error-type-guard';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
   IMedunderskriverflytResponse,
   ISakenGjelderResponse,
   ISaksbehandlerResponse,
-} from '../../../types/oppgavebehandling/response';
-import { ISaksbehandlere } from '../../../types/oppgaver';
+} from '@app/types/oppgavebehandling/response';
+import { ISaksbehandlere } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 

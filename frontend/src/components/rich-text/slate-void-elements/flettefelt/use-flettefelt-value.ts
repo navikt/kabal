@@ -1,6 +1,6 @@
-import { formatFoedselsnummer } from '../../../../functions/format-id';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '../../../../simple-api-state/use-user';
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useUser } from '@app/simple-api-state/use-user';
 import { Flettefelt } from '../../types/editor-void-types';
 
 export const useFlettefeltValue = (flettefelt: Flettefelt | null): string | null => {

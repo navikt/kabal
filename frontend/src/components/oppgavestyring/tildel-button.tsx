@@ -1,10 +1,10 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveActions } from '../../hooks/use-oppgave-actions';
-import { useUser } from '../../simple-api-state/use-user';
-import { Role } from '../../types/bruker';
-import { IOppgave } from '../../types/oppgaver';
+import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
+import { IOppgave } from '@app/types/oppgaver';
 import { useFradel, useTildel } from './use-tildel';
 
 interface Props extends IOppgave {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '../../../simple-api-state/use-user';
-import { MedunderskriverFlyt } from '../../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useUser } from '@app/simple-api-state/use-user';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
 
 export const useCanEditDocument = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();

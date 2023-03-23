@@ -1,4 +1,4 @@
-import { Name } from '../domain/types';
+import { Name } from '@app/domain/types';
 import { MedunderskriverFlyt, SaksTypeEnum } from './kodeverk';
 import { ISaksbehandler } from './oppgave-common';
 

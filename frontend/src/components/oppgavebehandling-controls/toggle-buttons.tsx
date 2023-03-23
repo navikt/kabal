@@ -1,13 +1,13 @@
 import { Switch } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useBehandlingEnabled,
   useDocumentsEnabled,
   useKvalitetsvurderingEnabled,
   useSmartEditorEnabled,
-} from '../../hooks/settings/use-setting';
-import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
+} from '@app/hooks/settings/use-setting';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { ToggleButtonsContainer } from './styled-components';
 
 export const PanelToggleButtons = () => {

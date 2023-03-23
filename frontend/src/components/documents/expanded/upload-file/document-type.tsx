@@ -1,6 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import React from 'react';
-import { DocumentType } from '../../../../types/documents/documents';
+import { DocumentType } from '@app/types/documents/documents';
 
 interface DocumentTypeProps {
   setDokumentTypeId: (event: React.ChangeEvent<HTMLSelectElement>) => void;

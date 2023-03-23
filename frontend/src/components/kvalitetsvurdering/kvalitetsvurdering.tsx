@@ -1,12 +1,12 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { SECTION_KEY } from '../../functions/error-type-guard';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useKvalitetsvurderingEnabled } from '../../hooks/settings/use-setting';
-import { useSectionTitle } from '../../hooks/use-section-title';
-import { SaksTypeEnum, UtfallEnum } from '../../types/kodeverk';
-import { KvalitetsvurderingVersion } from '../../types/oppgavebehandling/oppgavebehandling';
+import { SECTION_KEY } from '@app/functions/error-type-guard';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useKvalitetsvurderingEnabled } from '@app/hooks/settings/use-setting';
+import { useSectionTitle } from '@app/hooks/use-section-title';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { KvalitetsvurderingVersion } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';

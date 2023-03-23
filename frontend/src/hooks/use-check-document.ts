@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useCallback } from 'react';
-import { useRemoveTilknyttetDocumentMutation } from '../redux-api/oppgaver/mutations/remove-tilknytt-document';
-import { useTilknyttDocumentMutation } from '../redux-api/oppgaver/mutations/tilknytt-document';
+import { useRemoveTilknyttetDocumentMutation } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
+import { useTilknyttDocumentMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
 
 export const useCheckDocument = (
   oppgaveId: string | typeof skipToken,

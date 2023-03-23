@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTypeNameFromId } from '../../hooks/use-kodeverk-ids';
-import { LabelType } from '../../styled-components/labels';
-import { SaksTypeEnum } from '../../types/kodeverk';
+import { useTypeNameFromId } from '@app/hooks/use-kodeverk-ids';
+import { LabelType } from '@app/styled-components/labels';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 
 interface Props {
   type: SaksTypeEnum;

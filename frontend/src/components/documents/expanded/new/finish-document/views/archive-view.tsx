@@ -1,14 +1,11 @@
 import { Close, FileFolder } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useOppgaveId } from '../../../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed } from '../../../../../../hooks/settings/use-setting';
-import { useRemoveDocument } from '../../../../../../hooks/use-remove-document';
-import { useFinishDocumentMutation } from '../../../../../../redux-api/oppgaver/mutations/documents';
-import {
-  useGetDocumentsQuery,
-  useLazyValidateDocumentQuery,
-} from '../../../../../../redux-api/oppgaver/queries/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { useRemoveDocument } from '@app/hooks/use-remove-document';
+import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '../../../../../show-document/types';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';

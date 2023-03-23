@@ -1,5 +1,5 @@
-import { useInnsendingshjemlerMap, useKodeverk, useSimpleYtelser } from '../simple-api-state/use-kodeverk';
-import { SaksTypeEnum } from '../types/kodeverk';
+import { useInnsendingshjemlerMap, useKodeverk, useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { useShortRegistreringshjemmelName } from './use-registreringshjemler-name';
 
 export const useFullTemaNameFromId = (temaId?: string | null): string => {

@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { Journalposttype } from '../../../../types/arkiverte-documents';
+import { Journalposttype } from '@app/types/arkiverte-documents';
 import { Fields } from '../styled-components/grid';
 
 export const JournalposttypeTag = ({ type }: { type: Journalposttype | null }) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DocumentType, IMainDocument } from '../../../../../types/documents/documents';
+import { DocumentType, IMainDocument } from '@app/types/documents/documents';
 import { ArchiveView } from './views/archive-view';
 import { SendView } from './views/send-view';
 

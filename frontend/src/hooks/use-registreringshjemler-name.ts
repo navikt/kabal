@@ -1,4 +1,4 @@
-import { useRegistreringshjemlerMap } from '../simple-api-state/use-kodeverk';
+import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 
 export const useShortRegistreringshjemmelName = (hjemmelId?: string | null): string => {
   const { data = {} } = useRegistreringshjemlerMap();

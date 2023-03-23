@@ -1,4 +1,4 @@
-import { IRichText } from '../../../../types/texts/texts';
+import { IRichText } from '@app/types/texts/texts';
 
 export const lexSpecialis = (maltekster: IRichText[]): IRichText | null => {
   if (maltekster.length === 0) {

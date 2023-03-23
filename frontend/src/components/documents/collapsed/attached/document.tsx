@@ -1,6 +1,6 @@
 import React from 'react';
-import { isoDateToPretty } from '../../../../domain/date';
-import { IArkivertDocument } from '../../../../types/arkiverte-documents';
+import { isoDateToPretty } from '@app/domain/date';
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { DocumentDate } from '../styled-components/document';
 import { DocumentListItem } from '../styled-components/document-list';
 import { AttachmentList } from './attachment-list';

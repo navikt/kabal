@@ -2,8 +2,8 @@
 import { BaseOperation, Editor, PathRef, PointRef, RangeRef, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { v4 } from 'uuid';
-import { KABAL_BEHANDLINGER_BASE_PATH } from '../../../redux-api/common';
-import { ServerSentEventManager, ServerSentEventType } from '../../../redux-api/server-sent-events';
+import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
+import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events';
 
 export interface ISyncOptions {
   oppgaveId: string;

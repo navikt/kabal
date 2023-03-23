@@ -1,10 +1,10 @@
 import { Pagination, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
-import { useGetMineFerdigstilteOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '../../simple-api-state/use-user';
-import { StyledCaption, StyledFooterContent, StyledMineOppgaverTable } from '../../styled-components/table';
-import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { useGetMineFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '@app/simple-api-state/use-user';
+import { StyledCaption, StyledFooterContent, StyledMineOppgaverTable } from '@app/styled-components/table';
+import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
 import { PageInfo } from '../common-table-components/page-info';
 import { OppgaveRows } from './rows';

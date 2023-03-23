@@ -1,5 +1,5 @@
-import { IMigrateSmartEditorsParams } from '../../../types/oppgavebehandling/params';
-import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
+import { IMigrateSmartEditorsParams } from '@app/types/oppgavebehandling/params';
+import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { smartEditorQuerySlice } from '../queries/smart-editor';

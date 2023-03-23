@@ -1,5 +1,5 @@
 import React from 'react';
-import { Oppgavebehandling } from '../../components/oppgavebehandling/oppgavebehandling';
+import { Oppgavebehandling } from '@app/components/oppgavebehandling/oppgavebehandling';
 
 export const KlagebehandlingPage = () => <Oppgavebehandling />;
 

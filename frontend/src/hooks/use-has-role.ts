@@ -1,5 +1,5 @@
-import { useUser } from '../simple-api-state/use-user';
-import { Role } from '../types/bruker';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 
 const useUserRoles = () => {
   const { data } = useUser();

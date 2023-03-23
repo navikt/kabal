@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSmartEditorEnabled } from '../../hooks/settings/use-setting';
+import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 

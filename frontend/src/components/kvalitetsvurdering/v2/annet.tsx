@@ -1,6 +1,6 @@
 import { Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { useCanEdit } from '../../../hooks/use-can-edit';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { HeadingWithHelpText } from './common/heading-with-helptext';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';

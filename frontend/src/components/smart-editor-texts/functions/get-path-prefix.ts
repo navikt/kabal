@@ -1,4 +1,4 @@
-import { PlainTextTypes, RichTextTypes, TextTypes } from '../../../types/texts/texts';
+import { PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/texts/texts';
 
 export const getPathPrefix = (textType: TextTypes): string => {
   switch (textType) {

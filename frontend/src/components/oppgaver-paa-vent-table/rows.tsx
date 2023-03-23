@@ -1,6 +1,6 @@
 import { Loader, Table } from '@navikt/ds-react';
 import React from 'react';
-import { IOppgaveList } from '../../types/oppgaver';
+import { IOppgaveList } from '@app/types/oppgaver';
 import { Row } from './row';
 
 interface OppgaveRowsProps {

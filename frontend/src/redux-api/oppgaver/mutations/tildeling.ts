@@ -1,5 +1,5 @@
-import { ISaksbehandler } from '../../../types/oppgave-common';
-import { ITildelingResponse, TildelSaksbehandlerParams } from '../../../types/oppgaver';
+import { ISaksbehandler } from '@app/types/oppgave-common';
+import { ITildelingResponse, TildelSaksbehandlerParams } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { OppgaveListTagTypes, UtgaatteFristerTagTypes, oppgaverApi } from '../oppgaver';

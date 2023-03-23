@@ -1,4 +1,4 @@
-import { FIELD_NAMES } from '../hooks/use-field-name';
+import { FIELD_NAMES } from '@app/hooks/use-field-name';
 import { GenericObject, isGenericObject } from './../types/types';
 
 export interface IValidationError {

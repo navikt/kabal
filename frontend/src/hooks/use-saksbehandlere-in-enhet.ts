@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useMemo } from 'react';
-import { useGetSaksbehandlereInEnhetQuery } from '../redux-api/oppgaver/queries/oppgaver';
-import { IKodeverkSimpleValue } from '../types/kodeverk';
+import { useGetSaksbehandlereInEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 
 export const useSaksbehandlereInEnhet = (enhetId: string | typeof skipToken = skipToken): IKodeverkSimpleValue[] => {
   const { data } = useGetSaksbehandlereInEnhetQuery(enhetId);

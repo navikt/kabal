@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import styled from 'styled-components';
-import { isoDateTimeToPretty } from '../../../domain/date';
-import { ISmartEditorComment } from '../../../types/smart-editor/comments';
+import { isoDateTimeToPretty } from '@app/domain/date';
+import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { DeleteButton } from './delete-button';
 import { EditButton, EditComment } from './edit-comment';
 

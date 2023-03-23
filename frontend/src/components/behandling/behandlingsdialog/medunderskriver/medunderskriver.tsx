@@ -1,16 +1,13 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useIsAssignee } from '../../../../hooks/use-is-assignee';
-import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
-import {
-  useGetMedunderskriverQuery,
-  useGetMedunderskriverflytQuery,
-} from '../../../../redux-api/oppgaver/queries/behandling';
-import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsAssignee } from '@app/hooks/use-is-assignee';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useGetMedunderskriverQuery, useGetMedunderskriverflytQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { MedunderskriverInfo } from './medunderskriver-info';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendTilMedunderskriver } from './send-til-medunderskriver';

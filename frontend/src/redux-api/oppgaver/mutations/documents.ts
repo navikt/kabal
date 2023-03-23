@@ -1,15 +1,15 @@
 /* eslint-disable max-lines */
-import { reduxStore } from '../../../redux/configure-store';
-import { IDocumentParams } from '../../../types/documents/common-params';
-import { IFileDocument, IMainDocument } from '../../../types/documents/documents';
+import { reduxStore } from '@app/redux/configure-store';
+import { IDocumentParams } from '@app/types/documents/common-params';
+import { IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
   IFinishDocumentParams,
   ISetNameParams,
   ISetParentParams,
   ISetTypeParams,
-} from '../../../types/documents/params';
-import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
+} from '@app/types/documents/params';
+import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';

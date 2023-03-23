@@ -3,11 +3,11 @@ import { Button } from '@navikt/ds-react';
 import { addYears } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { useHasAnyOfRoles } from '../../hooks/use-has-role';
-import { useSetFristMutation } from '../../redux-api/oppgaver/mutations/behandling-dates';
-import { Role } from '../../types/bruker';
-import { SaksTypeEnum } from '../../types/kodeverk';
+import { isoDateToPretty } from '@app/domain/date';
+import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
+import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
+import { Role } from '@app/types/bruker';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { DatePicker } from '../date-picker/date-picker';
 
 interface Props extends EditableDeadlineProps {

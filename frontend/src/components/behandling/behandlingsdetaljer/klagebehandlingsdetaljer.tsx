@@ -1,9 +1,9 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { isoDateToPretty } from '../../../domain/date';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useSakspartName } from '../../../hooks/use-klager-name';
-import { Type } from '../../type/type';
+import { Type } from '@app/components/type/type';
+import { isoDateToPretty } from '@app/domain/date';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSakspartName } from '@app/hooks/use-klager-name';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Fullmektig } from './fullmektig/fullmektig';

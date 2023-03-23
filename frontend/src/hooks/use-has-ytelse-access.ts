@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useUser } from '../simple-api-state/use-user';
+import { useUser } from '@app/simple-api-state/use-user';
 
 type ReturnType = [false, true] | [boolean, false];
 

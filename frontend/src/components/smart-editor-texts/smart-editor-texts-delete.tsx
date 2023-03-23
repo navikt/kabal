@@ -1,7 +1,7 @@
 import { Close, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useDeleteTextMutation } from '../../redux-api/texts';
+import { useDeleteTextMutation } from '@app/redux-api/texts';
 import { useTextNavigate } from './hooks/use-text-navigate';
 import { useTextQuery } from './hooks/use-text-query';
 

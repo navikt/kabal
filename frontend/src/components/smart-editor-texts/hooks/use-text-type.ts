@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router';
-import { PlainTextTypes, RichTextTypes, TextTypes } from '../../../types/texts/texts';
+import { PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/texts/texts';
 
 export const useTextType = (): TextTypes | undefined => {
   const maltekstMatch = useMatch({ path: '/maltekster', end: false });

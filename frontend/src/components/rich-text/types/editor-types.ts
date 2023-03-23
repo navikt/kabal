@@ -1,5 +1,5 @@
 import { BaseRange, Descendant, Element } from 'slate';
-import { TemplateSections, TextMetadata } from '../../../types/texts/texts';
+import { TemplateSections, TextMetadata } from '@app/types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import {
   ContentTypeEnum,

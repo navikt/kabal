@@ -1,14 +1,14 @@
-import { toast } from '../../../components/toast/store';
-import { ToastType } from '../../../components/toast/types';
-import { formatIdNumber } from '../../../functions/format-id';
-import { reduxStore } from '../../../redux/configure-store';
-import { IOppgavebehandling, ISakspart } from '../../../types/oppgavebehandling/oppgavebehandling';
+import { toast } from '@app/components/toast/store';
+import { ToastType } from '@app/components/toast/types';
+import { formatIdNumber } from '@app/functions/format-id';
+import { reduxStore } from '@app/redux/configure-store';
+import { IOppgavebehandling, ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
   IOppgavebehandlingHjemlerUpdateParams,
   ISetFullmektigParams,
-} from '../../../types/oppgavebehandling/params';
-import { IModifiedResponse, IVedtakFullfoertResponse } from '../../../types/oppgavebehandling/response';
+} from '@app/types/oppgavebehandling/params';
+import { IModifiedResponse, IVedtakFullfoertResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';

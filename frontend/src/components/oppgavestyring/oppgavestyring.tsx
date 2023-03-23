@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IOppgave } from '../../types/oppgaver';
+import { IOppgave } from '@app/types/oppgaver';
 import { FradelButton } from './fradel-button';
 import { Saksbehandler } from './saksbehandler';
 import { TildelButton } from './tildel-button';

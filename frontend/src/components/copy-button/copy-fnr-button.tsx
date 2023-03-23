@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatIdNumber } from '../../functions/format-id';
+import { formatIdNumber } from '@app/functions/format-id';
 import { CopyButton } from './copy-button';
 
 interface Props {

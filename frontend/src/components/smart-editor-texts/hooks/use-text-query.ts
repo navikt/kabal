@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { isUtfall } from '../../../functions/is-utfall';
-import { TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections } from '../../../types/texts/texts';
+import { isUtfall } from '@app/functions/is-utfall';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { ApiQuery, TemplateSections } from '@app/types/texts/texts';
 import { TEMPLATE_IDS } from '../../smart-editor/templates/templates';
 import { useTextType } from './use-text-type';
 

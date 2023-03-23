@@ -1,4 +1,4 @@
-import { TemplateSections } from '../../types/texts/texts';
+import { TemplateSections } from '@app/types/texts/texts';
 import { Flettefelt } from '../rich-text/types/editor-void-types';
 
 export const COMMENT_PREFIX = 'commentThreadId_';

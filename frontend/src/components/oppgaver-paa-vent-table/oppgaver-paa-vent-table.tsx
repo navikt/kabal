@@ -1,9 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
-import { useGetMineVentendeOppgaverQuery } from '../../redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '../../simple-api-state/use-user';
-import { StyledCaption, StyledMineOppgaverTable } from '../../styled-components/table';
-import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '@app/simple-api-state/use-user';
+import { StyledCaption, StyledMineOppgaverTable } from '@app/styled-components/table';
+import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
 import { OppgaveRows } from './rows';
 

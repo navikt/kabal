@@ -2,7 +2,7 @@ import { Detail, Label } from '@navikt/ds-react';
 import { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import React from 'react';
 import styled from 'styled-components';
-import { isApiError } from '../../../types/errors';
+import { isApiError } from '@app/types/errors';
 import { toast } from '../store';
 import { ToastType } from '../types';
 

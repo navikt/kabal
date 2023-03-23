@@ -1,9 +1,9 @@
 import { Select } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useSetParentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '../../../../types/documents/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 

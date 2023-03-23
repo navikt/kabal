@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useUtfall } from '../../simple-api-state/use-kodeverk';
-import { IOppgave } from '../../types/oppgaver';
+import { useUtfall } from '@app/simple-api-state/use-kodeverk';
+import { IOppgave } from '@app/types/oppgaver';
 import { Hjemmel } from '../common-table-components/hjemmel';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { PaaVent } from '../common-table-components/paa-vent';

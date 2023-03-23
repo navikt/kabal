@@ -1,7 +1,7 @@
 import { Text } from 'slate';
-import { PlainText_V3, RichText_Content_V3, RichText_V3, TableCellElementType_V3 } from '../../../types/rich-text/v3';
-import { PlainText_V4, RichText_Content_V4, RichText_V4 } from '../../../types/rich-text/v4';
-import { isPlainTextType } from '../../../types/texts/texts';
+import { PlainText_V3, RichText_Content_V3, RichText_V3, TableCellElementType_V3 } from '@app/types/rich-text/v3';
+import { PlainText_V4, RichText_Content_V4, RichText_V4 } from '@app/types/rich-text/v4';
+import { isPlainTextType } from '@app/types/texts/texts';
 import { ContentTypeEnum, TextAlignEnum } from '../types/editor-enums';
 import {
   TableBodyElementType,

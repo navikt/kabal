@@ -1,5 +1,5 @@
 import { Editor, Element, NodeEntry, Range } from 'slate';
-import { FeatureToggles } from '../../../../hooks/use-feature-toggle';
+import { FeatureToggles } from '@app/hooks/use-feature-toggle';
 import { ISmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 
 export interface SafeEditor extends Editor {

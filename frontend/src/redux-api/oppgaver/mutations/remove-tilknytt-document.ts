@@ -1,4 +1,4 @@
-import { ICheckDocumentParams } from '../../../types/oppgavebehandling/params';
+import { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';

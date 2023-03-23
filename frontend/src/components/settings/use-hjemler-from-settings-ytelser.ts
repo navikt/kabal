@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useGetSettingsQuery } from '../../redux-api/bruker';
-import { IKodeverkValue } from '../../types/kodeverk';
+import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
+import { useGetSettingsQuery } from '@app/redux-api/bruker';
+import { IKodeverkValue } from '@app/types/kodeverk';
 
 export const useHjemlerFromSettingsYtelser = () => {
   const { data } = useGetSettingsQuery();

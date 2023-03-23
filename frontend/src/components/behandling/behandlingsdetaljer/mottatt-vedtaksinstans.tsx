@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useValidationError } from '../../../hooks/use-validation-error';
-import { useSetMottattVedtaksinstansMutation } from '../../../redux-api/oppgaver/mutations/behandling-dates';
-import { SaksTypeEnum } from '../../../types/kodeverk';
-import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
-import { DatePicker } from '../../date-picker/date-picker';
+import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
+import { DatePicker } from '@app/components/date-picker/date-picker';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useValidationError } from '@app/hooks/use-validation-error';
+import { useSetMottattVedtaksinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export const MottattVedtaksinstans = () => {
   const canEdit = useCanEdit();

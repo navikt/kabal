@@ -1,9 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { VERSION } from '../components/rich-text/version';
-import { toast } from '../components/toast/store';
-import { ToastType } from '../components/toast/types';
-import { queryStringify } from '../functions/query-string';
-import { VersionedText } from '../types/rich-text/versions';
+import { VERSION } from '@app/components/rich-text/version';
+import { toast } from '@app/components/toast/store';
+import { ToastType } from '@app/components/toast/types';
+import { queryStringify } from '@app/functions/query-string';
+import { VersionedText } from '@app/types/rich-text/versions';
 import {
   IGetTextsParams,
   INewTextParams,
@@ -12,7 +12,7 @@ import {
   IUpdateRichTextPropertyParams,
   IUpdateText,
   IUpdateTextParams,
-} from '../types/texts/texts';
+} from '@app/types/texts/texts';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 
