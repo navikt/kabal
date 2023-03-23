@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import styled from 'styled-components';
 import { isoDateTimeToPretty } from '../../../domain/date';
 import { ISmartEditorComment } from '../../../types/smart-editor/comments';
@@ -9,7 +9,7 @@ interface Props extends ISmartEditorComment {
   isFocused: boolean;
 }
 
-export const Comment = React.memo(
+export const Comment = memo(
   ({ author, created, text, id, isFocused }: Props) => {
     const [isEditing, setIsEditing] = useState(false);
 

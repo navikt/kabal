@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { memo, useCallback, useRef } from 'react';
 import { Node, NodeEntry, Range, Text } from 'slate';
 import { RenderLeafProps, useFocused, useSlate, useSlateSelection } from 'slate-react';
 import { renderElement } from '../slate-elements/render-elements';
@@ -15,7 +15,7 @@ interface RichTextElementProps extends SmartEditorButtonsProps {
   canEdit?: boolean;
 }
 
-export const RichTextEditorElement = React.memo(
+export const RichTextEditorElement = memo(
   ({
     showCommentsButton,
     showAnnotationsButton,

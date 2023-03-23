@@ -1,5 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 interface FilterProps<T extends string> {
@@ -17,7 +17,7 @@ export const Filter = <T extends string>({
   onChange,
   focused,
 }: FilterProps<T>): JSX.Element => {
-  const ref = React.useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (focused && ref.current) {

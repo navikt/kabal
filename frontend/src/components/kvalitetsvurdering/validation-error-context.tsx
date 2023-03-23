@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { IValidationSection } from '../../functions/error-type-guard';
 
 interface IValidationErrorContext {
@@ -6,7 +6,7 @@ interface IValidationErrorContext {
   setValidationSectionErrors: (errors: IValidationSection[]) => void;
 }
 
-export const ValidationErrorContext = React.createContext<IValidationErrorContext | undefined>(undefined);
+export const ValidationErrorContext = createContext<IValidationErrorContext | undefined>(undefined);
 
 interface Props {
   children: React.ReactNode;

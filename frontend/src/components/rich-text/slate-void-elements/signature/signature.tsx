@@ -1,6 +1,6 @@
 import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Transforms } from 'slate';
 import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
@@ -84,7 +84,7 @@ const useSignatureData = (element: SignatureElementType) => {
   }, [editor, element, medunderskriverSignature, saksbehandlerSignature]);
 };
 
-export const Signature = React.memo(
+export const Signature = memo(
   ({ element, attributes, children }: RenderElementProps<SignatureElementType>) => {
     const editor = useSlateStatic();
     const isSelected = useSelected();
