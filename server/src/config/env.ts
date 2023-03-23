@@ -27,7 +27,7 @@ export const ENVIRONMENT = getEnvironmentVersion('local', 'test', 'development',
 export const DOMAIN: string = getEnvironmentVersion(
   `http://localhost:${serverConfig.port}`,
   `http://localhost:${serverConfig.port}`,
-  'https://kabal.dev.nav.no',
+  'https://kabal.intern.dev.nav.no',
   'https://kabal.intern.nav.no'
 );
 
