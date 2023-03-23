@@ -1,9 +1,9 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { getAzureADClient } from '../auth/get-auth-client';
-import { getOnBehalfOfAccessToken } from '../auth/on-behalf-of';
-import { API_CLIENT_IDS } from '../config/config';
-import { getLogger } from '../logger';
+import { getAzureADClient } from '@app/auth/get-auth-client';
+import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
+import { API_CLIENT_IDS } from '@app/config/config';
+import { getLogger } from '@app/logger';
 
 const log = getLogger('proxy');
 

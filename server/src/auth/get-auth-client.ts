@@ -1,6 +1,6 @@
 import { Issuer } from 'openid-client';
-import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '../config/config';
-import { getLogger } from '../logger';
+import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@app/config/config';
+import { getLogger } from '@app/logger';
 
 const log = getLogger('auth');
 

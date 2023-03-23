@@ -1,7 +1,7 @@
 import fs from 'fs';
 import express from 'express';
-import { VERSION, frontendDistDirectoryPath } from '../config/config';
-import { ENVIRONMENT } from '../config/env';
+import { VERSION, frontendDistDirectoryPath } from '@app/config/config';
+import { ENVIRONMENT } from '@app/config/env';
 
 const router = express.Router();
 
