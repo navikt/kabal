@@ -1,4 +1,4 @@
-import { GenericObject } from '../types/types';
+import { GenericObject } from '@app/types/types';
 import { isNotNull } from './is-not-type-guards';
 
 export const queryStringify = (query: GenericObject): string => {

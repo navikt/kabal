@@ -1,5 +1,5 @@
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AaRegisteret, Ainntekt, Gosys, Modia } from './external-links';
 import { ControlPanel, OppgavebehandlingInformation, OppgavebehandlingTools } from './styled-components';
 import { PanelToggleButtons } from './toggle-buttons';

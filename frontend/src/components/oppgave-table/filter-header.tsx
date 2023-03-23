@@ -1,9 +1,9 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
-import { useSettingsHjemler } from '../../hooks/use-settings-hjemler';
-import { useSettingsTypes } from '../../hooks/use-settings-types';
-import { useSettingsYtelser } from '../../hooks/use-settings-ytelser';
-import { SortFieldEnum } from '../../types/oppgaver';
+import { useSettingsHjemler } from '@app/hooks/use-settings-hjemler';
+import { useSettingsTypes } from '@app/hooks/use-settings-types';
+import { useSettingsYtelser } from '@app/hooks/use-settings-ytelser';
+import { SortFieldEnum } from '@app/types/oppgaver';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { kodeverkSimpleValuesToDropdownOptions, kodeverkValuesToDropdownOptions } from '../filter-dropdown/functions';
 import { Filters } from './types';

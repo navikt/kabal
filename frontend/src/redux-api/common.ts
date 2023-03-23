@@ -1,6 +1,6 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-import { apiErrorToast } from '../components/toast/toast-content/fetch-error-toast';
-import { ENVIRONMENT } from '../environment';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
 

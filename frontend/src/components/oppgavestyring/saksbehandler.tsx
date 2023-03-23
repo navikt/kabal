@@ -1,10 +1,10 @@
 import { ErrorMessage, Loader, Select } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveActions } from '../../hooks/use-oppgave-actions';
-import { useGetPotentialSaksbehandlereQuery } from '../../redux-api/oppgaver/queries/behandling';
-import { useUser } from '../../simple-api-state/use-user';
-import { IOppgave } from '../../types/oppgaver';
+import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
+import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useUser } from '@app/simple-api-state/use-user';
+import { IOppgave } from '@app/types/oppgaver';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';

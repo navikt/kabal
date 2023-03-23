@@ -1,4 +1,4 @@
-import { ENVIRONMENT } from '../environment';
+import { ENVIRONMENT } from '@app/environment';
 
 export const EXTERNAL_URL_GOSYS = ENVIRONMENT.isProduction
   ? 'https://gosys.intern.nav.no/gosys'

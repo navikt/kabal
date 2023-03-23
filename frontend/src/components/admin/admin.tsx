@@ -4,7 +4,7 @@ import {
   useRebuildElasticAdminMutation,
   useRefillElasticAdminMutation,
   useResendDvhMutation,
-} from '../../redux-api/internal';
+} from '@app/redux-api/internal';
 import { ApiButton } from './api-button';
 import { useMigrateTexts } from './use-migrate-texts';
 

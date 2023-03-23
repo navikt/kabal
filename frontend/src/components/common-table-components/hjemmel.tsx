@@ -1,6 +1,6 @@
 import React from 'react';
-import { useInnsendingshjemmelFromId } from '../../hooks/use-kodeverk-ids';
-import { LabelMain } from '../../styled-components/labels';
+import { useInnsendingshjemmelFromId } from '@app/hooks/use-kodeverk-ids';
+import { LabelMain } from '@app/styled-components/labels';
 
 interface Props {
   hjemmel: string;

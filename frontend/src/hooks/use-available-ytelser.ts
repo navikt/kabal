@@ -1,10 +1,10 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
-import { isNotUndefined } from '../functions/is-not-type-guards';
-import { useEnhetYtelser } from '../simple-api-state/use-enhet-ytelser';
-import { useLatestYtelser } from '../simple-api-state/use-kodeverk';
-import { useUser } from '../simple-api-state/use-user';
-import { IYtelse } from '../types/kodeverk';
+import { isNotUndefined } from '@app/functions/is-not-type-guards';
+import { useEnhetYtelser } from '@app/simple-api-state/use-enhet-ytelser';
+import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
+import { useUser } from '@app/simple-api-state/use-user';
+import { IYtelse } from '@app/types/kodeverk';
 
 const EMPTY_ARRAY: IYtelse[] = [];
 

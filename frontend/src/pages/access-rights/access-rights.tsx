@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { AccessRights } from '../../components/access-rights/access-rights';
+import { AccessRights } from '@app/components/access-rights/access-rights';
 import { PageWrapper, StyledArticle } from '../page-wrapper';
 
 export const AccessRightsPage = () => (

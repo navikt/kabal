@@ -1,9 +1,9 @@
 import { Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering/v1';
-import { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '../../../types/kaka-kvalitetsvurdering/v1';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
+import { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { StyledCommentField } from './styled-components';
 
 interface Props {

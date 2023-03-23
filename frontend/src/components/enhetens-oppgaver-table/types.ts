@@ -1,5 +1,5 @@
-import { SaksTypeEnum } from '../../types/kodeverk';
-import { SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 export interface Filters {
   types: SaksTypeEnum[];

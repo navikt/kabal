@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { ViewDocumentButton } from '../styled-components/document';
 

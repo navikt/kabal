@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
 import styled from 'styled-components';
-import { formatLongDate, zeroPad } from '../../../domain/date';
+import { formatLongDate, zeroPad } from '@app/domain/date';
 
 interface DateParts {
   year: number;

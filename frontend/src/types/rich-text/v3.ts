@@ -1,12 +1,12 @@
 import { Descendant } from 'slate';
-import { TableContentEnum, TableTypeEnum } from '../../components/rich-text/types/editor-enums';
+import { TableContentEnum, TableTypeEnum } from '@app/components/rich-text/types/editor-enums';
 import {
   CustomTextType,
   TableBodyElementType,
   TableCellElementType,
   TableElementType,
   TableRowElementType,
-} from '../../components/rich-text/types/editor-types';
+} from '@app/components/rich-text/types/editor-types';
 import { ISmartEditorMetadata } from '../smart-editor/metadata';
 import { ITextMetadata, PlainTextTypes, RichTextTypes } from '../texts/texts';
 

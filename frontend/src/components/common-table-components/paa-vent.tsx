@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { isoDateToPretty } from '../../domain/date';
-import { IOppgave } from '../../types/oppgaver';
+import { isoDateToPretty } from '@app/domain/date';
+import { IOppgave } from '@app/types/oppgaver';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 

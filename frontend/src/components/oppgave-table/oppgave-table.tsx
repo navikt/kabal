@@ -3,14 +3,14 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useGetSettingsQuery } from '../../redux-api/bruker';
+import { useGetSettingsQuery } from '@app/redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetLedigeOppgaverQuery,
-} from '../../redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '../../simple-api-state/use-user';
-import { StyledFooterContent } from '../../styled-components/table';
-import { LedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '../../types/oppgaver';
+} from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '@app/simple-api-state/use-user';
+import { StyledFooterContent } from '@app/styled-components/table';
+import { LedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { PageInfo } from '../common-table-components/page-info';
 import { TableHeaderFilters } from './filter-header';
 import { Oppgaverader } from './rows';

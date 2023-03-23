@@ -1,5 +1,5 @@
 import React from 'react';
-import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainText } from '../../../types/texts/texts';
+import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainText } from '@app/types/texts/texts';
 import { HeaderFooterEditor } from './header-footer';
 import { RichTextEditor } from './rich-text';
 

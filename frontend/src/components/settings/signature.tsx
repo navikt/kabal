@@ -2,9 +2,9 @@ import { Error, Success } from '@navikt/ds-icons';
 import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useGetMySignatureQuery, useSetCustomInfoMutation } from '../../redux-api/bruker';
-import { useUser } from '../../simple-api-state/use-user';
-import { ISetCustomInfoParams, ISignatureResponse } from '../../types/bruker';
+import { useGetMySignatureQuery, useSetCustomInfoMutation } from '@app/redux-api/bruker';
+import { useUser } from '@app/simple-api-state/use-user';
+import { ISetCustomInfoParams, ISignatureResponse } from '@app/types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {

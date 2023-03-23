@@ -1,7 +1,7 @@
 import { Checkbox } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { IKvalitetsvurderingBooleans } from '../../../../types/kaka-kvalitetsvurdering/v2';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { ContainerWithHelpText } from './container-with-helptext';
 
 interface Props {

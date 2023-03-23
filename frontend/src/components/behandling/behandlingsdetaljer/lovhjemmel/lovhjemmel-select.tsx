@@ -2,9 +2,9 @@ import { Search } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../../../hooks/use-on-click-outside';
-import { GroupedFilterList, OptionGroup } from '../../../filter-dropdown/grouped-filter-list';
-import { InputError } from '../../../input-error/input-error';
+import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
+import { InputError } from '@app/components/input-error/input-error';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { StyledLovhjemmelSelect } from './styled-components';
 
 interface LovhjemmelSelectProps<T extends string> {

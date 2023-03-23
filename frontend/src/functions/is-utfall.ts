@@ -1,4 +1,4 @@
-import { UtfallEnum } from '../types/kodeverk';
+import { UtfallEnum } from '@app/types/kodeverk';
 
 export const isUtfall = (s?: string): s is UtfallEnum => {
   if (typeof s === 'string') {

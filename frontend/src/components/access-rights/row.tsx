@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SaksbehandlerAccessRights } from '../../redux-api/access-rights';
-import { useLatestYtelser } from '../../simple-api-state/use-kodeverk';
-import { IYtelse } from '../../types/kodeverk';
+import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
+import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
+import { IYtelse } from '@app/types/kodeverk';
 import { Cell } from './cell';
 
 interface Props {

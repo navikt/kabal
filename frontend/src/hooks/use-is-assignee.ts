@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useUser } from '../simple-api-state/use-user';
-import { MedunderskriverFlyt } from '../types/kodeverk';
+import { useUser } from '@app/simple-api-state/use-user';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsAssignee = () => {

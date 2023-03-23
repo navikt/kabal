@@ -1,9 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { NavHeader } from '../../components/header/header';
-import { reduxStore } from '../../redux/configure-store';
-import { Toasts } from '../toast/toasts';
+import { NavHeader } from '@app/components/header/header';
+import { Toasts } from '@app/components/toast/toasts';
+import { reduxStore } from '@app/redux/configure-store';
 import { GlobalStyles } from './global-styles';
 import { Router } from './router';
 

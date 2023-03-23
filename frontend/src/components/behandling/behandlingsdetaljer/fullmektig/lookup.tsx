@@ -1,10 +1,10 @@
 import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { getFullName, getOrgName } from '../../../../domain/name';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateFullmektigMutation } from '../../../../redux-api/oppgaver/mutations/behandling';
-import { ISakspart } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { getFullName, getOrgName } from '@app/domain/name';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 interface LookupProps {
   close: () => void;

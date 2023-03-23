@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gender } from '../../types/kodeverk';
+import { Gender } from '@app/types/kodeverk';
 import { FemaleGenderIcon } from './icons/female-gender';
 import { MaleGenderIcon } from './icons/male-gender';
 import { NeutralGenderIcon } from './icons/neutral-gender';

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum } from '../../../show-document/types';
 import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';

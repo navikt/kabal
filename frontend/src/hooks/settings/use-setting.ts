@@ -1,8 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { IShownDocument } from '../../components/show-document/types';
-import { useUser } from '../../simple-api-state/use-user';
-import { Journalposttype } from '../../types/arkiverte-documents';
+import { IShownDocument } from '@app/components/show-document/types';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Journalposttype } from '@app/types/arkiverte-documents';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 

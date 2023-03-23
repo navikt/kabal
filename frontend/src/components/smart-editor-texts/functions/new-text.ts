@@ -4,7 +4,7 @@ import {
   ITextBaseMetadata,
   PlainTextTypes,
   RichTextTypes,
-} from '../../../types/texts/texts';
+} from '@app/types/texts/texts';
 import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
 import { VERSION } from '../../rich-text/version';
 

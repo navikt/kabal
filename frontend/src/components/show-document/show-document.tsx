@@ -1,8 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
-import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '../../hooks/settings/use-setting';
-import { useShownDocument } from '../../hooks/use-shown-document';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
+import { useShownDocument } from '@app/hooks/use-shown-document';
 import { getDocumentUrl } from './document-url';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {

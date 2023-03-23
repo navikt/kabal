@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { IKvalitetsvurderingData } from '../../../../types/kaka-kvalitetsvurdering/v2';
+import { IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { ValidationErrorContext } from '../../validation-error-context';
 import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 

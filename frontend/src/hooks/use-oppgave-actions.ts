@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useUser } from '../simple-api-state/use-user';
-import { Role } from '../types/bruker';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 import { useHasYtelseAccess } from './use-has-ytelse-access';
 
 interface Actions {

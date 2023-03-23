@@ -1,7 +1,7 @@
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useBehandlingEnabled } from '../../hooks/settings/use-setting';
-import { SaksTypeEnum } from '../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';

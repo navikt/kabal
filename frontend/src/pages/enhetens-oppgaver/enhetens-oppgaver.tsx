@@ -1,6 +1,6 @@
 import React from 'react';
-import { EnhetensOppgaverPaaVentTable } from '../../components/enhetens-oppgaver-paa-vent-table/enhetens-oppgaver-paa-vent-table';
-import { EnhetensOppgaverTable } from '../../components/enhetens-oppgaver-table/enhetens-oppgaver-table';
+import { EnhetensOppgaverPaaVentTable } from '@app/components/enhetens-oppgaver-paa-vent-table/enhetens-oppgaver-paa-vent-table';
+import { EnhetensOppgaverTable } from '@app/components/enhetens-oppgaver-table/enhetens-oppgaver-table';
 import { OppgaverPageWrapper } from '../page-wrapper';
 
 export const EnhetensOppgaverPage = () => (

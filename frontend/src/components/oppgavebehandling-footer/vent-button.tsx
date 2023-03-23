@@ -1,8 +1,8 @@
 import { Close, Sandglass } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../hooks/oppgavebehandling/use-oppgave';
-import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '../../redux-api/oppgaver/mutations/vent';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 
 export const VentButton = () => {
   const { data, isLoading: oppgaveIsloading } = useOppgave();

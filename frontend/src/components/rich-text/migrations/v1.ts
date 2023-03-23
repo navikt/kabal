@@ -1,6 +1,6 @@
-import { RichText_V1 } from '../../../types/rich-text/v1';
-import { RichText_Content_V2, RichText_V2 } from '../../../types/rich-text/v2';
-import { IRichText, TemplateSections } from '../../../types/texts/texts';
+import { RichText_V1 } from '@app/types/rich-text/v1';
+import { RichText_Content_V2, RichText_V2 } from '@app/types/rich-text/v2';
+import { IRichText, TemplateSections } from '@app/types/texts/texts';
 import { UndeletableContentEnum } from '../types/editor-enums';
 import { MaltekstElementType } from '../types/editor-types';
 

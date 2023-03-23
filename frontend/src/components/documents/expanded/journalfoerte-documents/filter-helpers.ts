@@ -1,9 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import { isNotNull } from '../../../../functions/is-not-type-guards';
-import { stringToRegExp } from '../../../../functions/string-to-regex';
-import { IArkivertDocument } from '../../../../types/arkiverte-documents';
+import { isNotNull } from '@app/functions/is-not-type-guards';
+import { stringToRegExp } from '@app/functions/string-to-regex';
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { IOption } from '../../../filter-dropdown/props';
 
 export const getAvsenderMottakerOptions = (documents: IArkivertDocument[]): IOption<string>[] =>

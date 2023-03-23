@@ -1,6 +1,6 @@
 import React from 'react';
-import { getFullName } from '../../../domain/name';
-import { IPersonAndOppgaverResponse } from '../../../types/oppgaver';
+import { getFullName } from '@app/domain/name';
+import { IPersonAndOppgaverResponse } from '@app/types/oppgaver';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';

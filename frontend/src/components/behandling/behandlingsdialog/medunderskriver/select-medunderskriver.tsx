@@ -1,10 +1,10 @@
 import { Loader, Select } from '@navikt/ds-react';
 import React from 'react';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
-import { useGetPotentialMedunderskrivereQuery } from '../../../../redux-api/oppgaver/queries/behandling';
-import { ISaksbehandler } from '../../../../types/oppgave-common';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useUpdateChosenMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { ISaksbehandler } from '@app/types/oppgave-common';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
 type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;

@@ -1,10 +1,10 @@
 import { BodyShort, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { usePrevious } from '../../../../hooks/use-previous';
-import { useRegistreringshjemlerMap } from '../../../../simple-api-state/use-kodeverk';
-import { IKvalitetsvurdering } from '../../../../types/kaka-kvalitetsvurdering/v2';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { usePrevious } from '@app/hooks/use-previous';
+import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import { IKvalitetsvurdering } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { SubSection } from './styled-components';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';

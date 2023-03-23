@@ -1,9 +1,9 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '../../../../types/documents/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 import { DeleteDocumentButton } from './delete-document-button';
 import { FinishDocument } from './finish-document/finish-document';
 import { SetParentDocument } from './set-parent-document';

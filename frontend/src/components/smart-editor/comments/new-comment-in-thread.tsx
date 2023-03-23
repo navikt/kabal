@@ -1,10 +1,10 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetMySignatureQuery } from '../../../redux-api/bruker';
-import { usePostReplyMutation } from '../../../redux-api/smart-editor-comments';
-import { useUser } from '../../../simple-api-state/use-user';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetMySignatureQuery } from '@app/redux-api/bruker';
+import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
+import { useUser } from '@app/simple-api-state/use-user';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { StyledNewCommentInThread } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';

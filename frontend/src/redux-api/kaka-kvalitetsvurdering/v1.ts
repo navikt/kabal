@@ -5,7 +5,7 @@ import {
   IKvalitetsvurderingRadioExtended,
   IKvalitetsvurderingTexts,
   IKvalitetsvurderingV1,
-} from '../../types/kaka-kvalitetsvurdering/v1';
+} from '@app/types/kaka-kvalitetsvurdering/v1';
 import { KAKA_KVALITETSVURDERING_BASE_QUERY } from '../common';
 
 type WithId = Pick<IKvalitetsvurderingV1, 'id'>;

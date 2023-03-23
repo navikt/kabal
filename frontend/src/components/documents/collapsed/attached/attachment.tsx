@@ -1,5 +1,5 @@
 import React from 'react';
-import { IArkivertDocumentVedlegg } from '../../../../types/arkiverte-documents';
+import { IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { AttachmentListItem } from '../styled-components/attachment-list';
 import { OpenDocumentButton } from './open-document-button';
 

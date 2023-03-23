@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDocumentsPdfViewed } from '../../../../hooks/settings/use-setting';
-import { DocumentTypeEnum } from '../../../show-document/types';
+import { DocumentTypeEnum } from '@app/components/show-document/types';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { ViewDocumentButton } from '../styled-components/document';
 
 interface Props {

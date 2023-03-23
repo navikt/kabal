@@ -1,12 +1,12 @@
 import { Delete, SuccessStroke } from '@navikt/ds-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { useAvailableYtelser } from '../../hooks/use-available-ytelser';
-import { useSakstyper } from '../../hooks/use-kodeverk-value';
-import { useGetSettingsQuery, useUpdateSettingsMutation } from '../../redux-api/bruker';
-import { useKodeverk } from '../../simple-api-state/use-kodeverk';
-import { ISettings } from '../../types/bruker';
-import { IKodeverkSimpleValue } from '../../types/kodeverk';
+import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
+import { useSakstyper } from '@app/hooks/use-kodeverk-value';
+import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';
+import { useKodeverk } from '@app/simple-api-state/use-kodeverk';
+import { ISettings } from '@app/types/bruker';
+import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import {
   ButtonContainer,
   SectionHeader,

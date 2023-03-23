@@ -1,6 +1,6 @@
-import { ISaksbehandler } from '../../../types/oppgave-common';
-import { IPerson } from '../../../types/oppgavebehandling/response';
-import { IOppgave } from '../../../types/oppgaver';
+import { ISaksbehandler } from '@app/types/oppgave-common';
+import { IPerson } from '@app/types/oppgavebehandling/response';
+import { IOppgave } from '@app/types/oppgaver';
 import { behandlingerQuerySlice } from './behandling';
 
 export const getMiniGetActions = (oppgaver: IOppgave[]) =>

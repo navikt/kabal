@@ -1,10 +1,10 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useHasYtelseAccess } from '../../hooks/use-has-ytelse-access';
-import { useUser } from '../../simple-api-state/use-user';
-import { SaksTypeEnum } from '../../types/kodeverk';
-import { IOppgave } from '../../types/oppgaver';
+import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
+import { useUser } from '@app/simple-api-state/use-user';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { IOppgave } from '@app/types/oppgaver';
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size'> {
   oppgavebehandlingId: IOppgave['id'];

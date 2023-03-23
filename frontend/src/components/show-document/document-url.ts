@@ -1,4 +1,4 @@
-import { KABAL_API_BASE_PATH, KABAL_BEHANDLINGER_BASE_PATH } from '../../redux-api/common';
+import { KABAL_API_BASE_PATH, KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { DocumentTypeEnum, IShownDocument } from './types';
 
 export const getDocumentUrl = (oppgaveId: string, document: IShownDocument) => {

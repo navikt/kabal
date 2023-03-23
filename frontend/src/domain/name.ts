@@ -1,5 +1,5 @@
-import { formatFoedselsnummer } from '../functions/format-id';
-import { ISakspart } from '../types/oppgavebehandling/oppgavebehandling';
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Name } from './types';
 
 export const getFullName = (name?: Name | null): string => {

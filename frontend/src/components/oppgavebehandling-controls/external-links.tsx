@@ -1,8 +1,8 @@
 import React from 'react';
-import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '../../domain/eksterne-lenker';
-import { useOppgaveId } from '../../hooks/oppgavebehandling/use-oppgave-id';
-import { KABAL_BEHANDLINGER_BASE_PATH } from '../../redux-api/common';
-import { ISakspart } from '../../types/oppgavebehandling/oppgavebehandling';
+import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
+import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { StyledExtLinkIcon } from '../show-document/styled-components';
 import { ExternalLink } from './styled-components';
 

@@ -1,11 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useGetKvalitetsvurderingQuery,
   useUpdateKvalitetsvurderingMutation,
-} from '../../../../redux-api/kaka-kvalitetsvurdering/v2';
-import { IKvalitetsvurdering, IKvalitetsvurderingData } from '../../../../types/kaka-kvalitetsvurdering/v2';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+} from '@app/redux-api/kaka-kvalitetsvurdering/v2';
+import { IKvalitetsvurdering, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 interface Loading {
   oppgave: undefined;

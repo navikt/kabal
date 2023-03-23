@@ -1,7 +1,7 @@
 import { Edit, SuccessStroke } from '@navikt/ds-icons';
 import React from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { StyledDocumentTitle } from '../styled-components/document';
 
 interface Props {

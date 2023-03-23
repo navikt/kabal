@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
-import { IMedunderskriverResponse } from '../../../../types/oppgavebehandling/response';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
 import { getTitleCapitalized } from './getTitle';
 
 type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler' | 'type'> &

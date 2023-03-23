@@ -1,5 +1,5 @@
-import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '../../../types/smart-editor/params';
-import { ISmartEditor } from '../../../types/smart-editor/smart-editor';
+import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
+import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';

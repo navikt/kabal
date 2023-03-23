@@ -1,5 +1,5 @@
-import { getSakspartName } from '../domain/name';
-import { IOppgavebehandlingBase } from '../types/oppgavebehandling/oppgavebehandling';
+import { getSakspartName } from '@app/domain/name';
+import { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 type Key = keyof Pick<IOppgavebehandlingBase, 'klager' | 'sakenGjelder'>;

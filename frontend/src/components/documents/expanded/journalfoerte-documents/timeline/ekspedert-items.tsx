@@ -1,6 +1,6 @@
 import { Bell, Email, Mobile, Print, SelfServiceMobile, Warning } from '@navikt/ds-icons';
 import React from 'react';
-import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '../../../../../types/arkiverte-documents';
+import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { StyledAlert, StyledEmailContent, StyledHeading, StyledLabel, StyledSmsContent } from './styled-components';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 

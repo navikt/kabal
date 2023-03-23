@@ -1,4 +1,4 @@
-import { VERSION } from '../../components/rich-text/version';
+import { VERSION } from '@app/components/rich-text/version';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
 export type UUID = string;

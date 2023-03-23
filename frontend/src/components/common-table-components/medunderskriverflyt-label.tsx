@@ -1,8 +1,11 @@
 import React from 'react';
-import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '../../styled-components/labels';
-import { MedunderskriverFlyt } from '../../types/kodeverk';
-import { IOppgave } from '../../types/oppgaver';
-import { getTitleCapitalized, getTitleLowercase } from '../behandling/behandlingsdialog/medunderskriver/getTitle';
+import {
+  getTitleCapitalized,
+  getTitleLowercase,
+} from '@app/components/behandling/behandlingsdialog/medunderskriver/getTitle';
+import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '@app/styled-components/labels';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { IOppgave } from '@app/types/oppgaver';
 
 type MedudunderskriverflytLabelProps = Pick<
   IOppgave,

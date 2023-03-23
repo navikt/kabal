@@ -1,6 +1,6 @@
 import React from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { StyledAttachmentList, StyledAttachmentListItem } from '../styled-components/attachment-list';
 import { NewDocument } from './new-document';
 

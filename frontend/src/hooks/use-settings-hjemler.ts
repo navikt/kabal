@@ -1,7 +1,7 @@
-import { isNotUndefined } from '../functions/is-not-type-guards';
-import { useGetSettingsQuery } from '../redux-api/bruker';
-import { useHjemler } from '../simple-api-state/use-kodeverk';
-import { IKodeverkValue } from '../types/kodeverk';
+import { isNotUndefined } from '@app/functions/is-not-type-guards';
+import { useGetSettingsQuery } from '@app/redux-api/bruker';
+import { useHjemler } from '@app/simple-api-state/use-kodeverk';
+import { IKodeverkValue } from '@app/types/kodeverk';
 
 export const useSettingsHjemler = (): IKodeverkValue[] => {
   const { data: hjemler } = useHjemler();

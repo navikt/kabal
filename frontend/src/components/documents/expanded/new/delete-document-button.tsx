@@ -2,12 +2,12 @@ import { Cancel, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useRemoveDocument } from '../../../../hooks/use-remove-document';
-import { useDeleteDocumentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '../../../../redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '../../../../types/documents/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useRemoveDocument } from '@app/hooks/use-remove-document';
+import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
   document: IMainDocument;

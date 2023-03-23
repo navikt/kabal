@@ -1,4 +1,4 @@
-import { SECTION_KEY } from '../functions/error-type-guard';
+import { SECTION_KEY } from '@app/functions/error-type-guard';
 
 export const useSectionTitle = (sectionKey: SECTION_KEY): string => {
   switch (sectionKey) {

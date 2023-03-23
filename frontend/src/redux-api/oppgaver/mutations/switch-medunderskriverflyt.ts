@@ -1,8 +1,8 @@
-import { MedunderskriverFlyt } from '../../../types/kodeverk';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import {
   ISwitchMedunderskriverflytParams,
   ISwitchMedunderskriverflytResponse,
-} from '../../../types/oppgavebehandling/response';
+} from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';

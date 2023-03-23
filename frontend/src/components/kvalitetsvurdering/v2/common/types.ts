@@ -1,4 +1,4 @@
-import { IKvalitetsvurderingBooleans } from '../../../../types/kaka-kvalitetsvurdering/v2';
+import { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { Hjemler } from './hjemler';
 import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 

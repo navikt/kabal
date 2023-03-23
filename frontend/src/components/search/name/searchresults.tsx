@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ISearchPerson } from '../../../types/oppgaver';
+import { ISearchPerson } from '@app/types/oppgaver';
 import { Result } from './result';
 
 interface SearchResultsProps {

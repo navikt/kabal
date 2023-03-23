@@ -2,12 +2,12 @@ import { Send } from '@navikt/ds-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useIsSaksbehandler } from '../../../../hooks/use-is-saksbehandler';
-import { useUpdateChosenMedunderskriverMutation } from '../../../../redux-api/oppgaver/mutations/set-medunderskriver';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
-import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useUpdateChosenMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSwitchMedunderskriverflytMutation } from '@app/redux-api/oppgaver/mutations/switch-medunderskriverflyt';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleLowercase } from './getTitle';
 
 type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;

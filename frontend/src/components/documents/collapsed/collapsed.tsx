@@ -1,7 +1,7 @@
 import { Next } from '@navikt/ds-icons';
 import React from 'react';
 import styled from 'styled-components';
-import { useDocumentsExpanded } from '../../../hooks/settings/use-setting';
+import { useDocumentsExpanded } from '@app/hooks/settings/use-setting';
 import { DocumentsHeader, DocumentsTitle, ExpandCollapseButton } from '../styled-components/header';
 import { AttachedDocumentList } from './attached/document-list';
 import { NewDocumentList } from './new/new-document-list';

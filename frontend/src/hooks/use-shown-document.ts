@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { DocumentTypeEnum, IShownDocument } from '../components/show-document/types';
-import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '../redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum, IShownDocument } from '@app/components/show-document/types';
+import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from './settings/use-setting';
 

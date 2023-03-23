@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIsFullfoert } from '../../hooks/use-is-fullfoert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { FinishedFooter } from './finished-footer';
 import { UnfinishedFooter } from './unfinished-footer';
 

@@ -1,4 +1,4 @@
-import { useUser } from '../../../simple-api-state/use-user';
+import { useUser } from '@app/simple-api-state/use-user';
 
 export const useIsCommentAuthor = (commentId: string, authorIdent: string): boolean => {
   const { data: user, isLoading: userIsLoading } = useUser();

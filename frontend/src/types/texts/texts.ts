@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { VERSION } from '../../components/rich-text/version';
+import { VERSION } from '@app/components/rich-text/version';
 import { UtfallEnum } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 

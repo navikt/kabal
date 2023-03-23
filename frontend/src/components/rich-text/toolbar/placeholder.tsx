@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import { Range } from 'slate';
 import { useSlate } from 'slate-react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../../hooks/use-on-click-outside';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import {
   insertPlaceholder,
   insertPlaceholderFromSelection,

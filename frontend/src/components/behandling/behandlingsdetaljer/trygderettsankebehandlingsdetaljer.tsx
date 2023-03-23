@@ -1,7 +1,7 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useSakspartName } from '../../../hooks/use-klager-name';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSakspartName } from '@app/hooks/use-klager-name';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';

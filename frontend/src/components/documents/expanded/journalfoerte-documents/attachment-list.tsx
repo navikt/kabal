@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import { IArkivertDocument } from '../../../../types/arkiverte-documents';
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { StyledAttachmentList, StyledAttachmentListItem } from '../styled-components/attachment-list';
 import { Attachment } from './attachment';
 

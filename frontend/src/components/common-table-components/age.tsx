@@ -3,11 +3,11 @@ import { Button } from '@navikt/ds-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useHasAnyOfRoles } from '../../hooks/use-has-role';
-import { useSetMottattKlageinstansMutation } from '../../redux-api/oppgaver/mutations/behandling-dates';
-import { Role } from '../../types/bruker';
-import { CURRENT_YEAR_IN_CENTURY } from '../date-picker/constants';
-import { DatePicker } from '../date-picker/date-picker';
+import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
+import { DatePicker } from '@app/components/date-picker/date-picker';
+import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
+import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
+import { Role } from '@app/types/bruker';
 
 interface Props {
   age: number;

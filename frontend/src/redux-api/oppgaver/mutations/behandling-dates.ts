@@ -1,15 +1,15 @@
-import { ToastType } from '../../../components/toast/types';
-import { reduxStore } from '../../../redux/configure-store';
-import { isApiError } from '../../../types/errors';
-import { IOppgavebehandling } from '../../../types/oppgavebehandling/oppgavebehandling';
+import { ToastType } from '@app/components/toast/types';
+import { reduxStore } from '@app/redux/configure-store';
+import { isApiError } from '@app/types/errors';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFristParams,
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
   ISendtTilTrygderettenParams,
-} from '../../../types/oppgavebehandling/params';
-import { IModifiedResponse } from '../../../types/oppgavebehandling/response';
+} from '@app/types/oppgavebehandling/params';
+import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';

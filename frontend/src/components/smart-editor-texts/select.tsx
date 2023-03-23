@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { useKlageenheter, useLatestYtelser, useUtfall } from '../../simple-api-state/use-kodeverk';
-import { UtfallEnum } from '../../types/kodeverk';
-import { TemplateIdEnum } from '../../types/smart-editor/template-enums';
-import { TemplateSections } from '../../types/texts/texts';
+import { useKlageenheter, useLatestYtelser, useUtfall } from '@app/simple-api-state/use-kodeverk';
+import { UtfallEnum } from '@app/types/kodeverk';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { TemplateSections } from '@app/types/texts/texts';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { MALTEKST_SECTION_NAMES } from '../smart-editor/constants';
 import { TEMPLATES } from '../smart-editor/templates/templates';

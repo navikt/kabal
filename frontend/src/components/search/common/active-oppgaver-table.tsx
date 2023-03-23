@@ -1,8 +1,8 @@
 import { Alert, Table } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { StyledCaption } from '../../../styled-components/table';
-import { IOppgave, IOppgaveList } from '../../../types/oppgaver';
+import { StyledCaption } from '@app/styled-components/table';
+import { IOppgave, IOppgaveList } from '@app/types/oppgaver';
 import { Age } from '../../common-table-components/age';
 import { Deadline } from '../../common-table-components/deadline';
 import { Hjemmel } from '../../common-table-components/hjemmel';

@@ -1,4 +1,4 @@
-import { SaksTypeEnum } from '../../../../types/kodeverk';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export const getTitleLowercase = (type: SaksTypeEnum) =>
   type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'medunderskriver';

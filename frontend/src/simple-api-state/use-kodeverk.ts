@@ -6,7 +6,7 @@ import {
   ISakstyperToUtfall,
   IYtelse,
   UtfallEnum,
-} from '../types/kodeverk';
+} from '@app/types/kodeverk';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 
 interface AllLovKilderToRegistreringshjemmel extends IKodeverkSimpleValue {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor, Node, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { isGenericObject } from '../../../types/types';
+import { isGenericObject } from '@app/types/types';
 import { PlaceholderElementType } from '../types/editor-types';
 import { RenderElementProps } from './render-props';
 

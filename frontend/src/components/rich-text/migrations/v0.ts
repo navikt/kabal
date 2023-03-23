@@ -1,6 +1,6 @@
-import { Maltekst_V0, RichText_V0 } from '../../../types/rich-text/v0';
-import { RichText_V1 } from '../../../types/rich-text/v1';
-import { RichText_Content_V2 } from '../../../types/rich-text/v2';
+import { Maltekst_V0, RichText_V0 } from '@app/types/rich-text/v0';
+import { RichText_V1 } from '@app/types/rich-text/v1';
+import { RichText_Content_V2 } from '@app/types/rich-text/v2';
 
 export const migrateFromV0ToV1 = (response: RichText_V0): RichText_V1 => ({
   ...response,

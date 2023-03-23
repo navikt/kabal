@@ -1,8 +1,8 @@
 import { TextField } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useSetTitleMutation } from '../../../../redux-api/oppgaver/mutations/documents';
-import { IMainDocument } from '../../../../types/documents/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
   document: IMainDocument;

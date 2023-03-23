@@ -1,4 +1,4 @@
-import { ENVIRONMENT } from '../../environment';
+import { ENVIRONMENT } from '@app/environment';
 
 type OnVersionFn = (isDifferent: boolean) => void;
 

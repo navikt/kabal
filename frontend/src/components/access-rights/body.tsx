@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { SaksbehandlerAccessRights } from '../../redux-api/access-rights';
-import { IYtelse } from '../../types/kodeverk';
+import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
+import { IYtelse } from '@app/types/kodeverk';
 import { Row } from './row';
 
 interface Props {

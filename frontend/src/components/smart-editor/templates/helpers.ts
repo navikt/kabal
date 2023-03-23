@@ -1,4 +1,4 @@
-import { TemplateSections } from '../../../types/texts/texts';
+import { TemplateSections } from '@app/types/texts/texts';
 import {
   ContentTypeEnum,
   HeadingTypesEnum,

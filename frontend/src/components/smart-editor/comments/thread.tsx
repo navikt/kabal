@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { ISmartEditorComment } from '../../../types/smart-editor/comments';
+import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';

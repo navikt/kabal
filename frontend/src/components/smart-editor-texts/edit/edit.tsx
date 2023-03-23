@@ -6,11 +6,11 @@ import {
   useEnhetNameFromId,
   useFullYtelseNameFromId,
   useRegistreringshjemmelFromId,
-} from '../../../hooks/use-kodeverk-ids';
-import { useUtfallName } from '../../../hooks/use-utfall-name';
-import { useUpdateTextMutation } from '../../../redux-api/texts';
-import { NoTemplateIdEnum, TemplateIdEnum } from '../../../types/smart-editor/template-enums';
-import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '../../../types/texts/texts';
+} from '@app/hooks/use-kodeverk-ids';
+import { useUtfallName } from '@app/hooks/use-utfall-name';
+import { useUpdateTextMutation } from '@app/redux-api/texts';
+import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { TEMPLATES } from '../../smart-editor/templates/templates';

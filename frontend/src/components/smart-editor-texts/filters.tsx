@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { NoTemplateIdEnum, TemplateIdEnum } from '../../types/smart-editor/template-enums';
-import { AppQuery } from '../../types/texts/texts';
+import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { AppQuery } from '@app/types/texts/texts';
 import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from './select';

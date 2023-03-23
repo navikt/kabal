@@ -1,8 +1,8 @@
 import { Cancel, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateFullmektigMutation } from '../../../../redux-api/oppgaver/mutations/behandling';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 
 interface Props {
   close: () => void;

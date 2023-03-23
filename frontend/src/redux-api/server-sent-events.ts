@@ -1,4 +1,4 @@
-import { parseJSON } from '../functions/parse-json';
+import { parseJSON } from '@app/functions/parse-json';
 import { IS_LOCALHOST } from './common';
 
 export enum ServerSentEventType {

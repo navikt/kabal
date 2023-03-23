@@ -1,6 +1,6 @@
 import React from 'react';
 import { Descendant, Text } from 'slate';
-import { omit } from '../../../../functions/omit';
+import { omit } from '@app/functions/omit';
 import { StyledLeaf } from '../../rich-text-editor/leaf/styled';
 import { BlockQuoteStyle, ParagraphStyle, PlaceholderStyle } from '../../styled-elements/content';
 import {

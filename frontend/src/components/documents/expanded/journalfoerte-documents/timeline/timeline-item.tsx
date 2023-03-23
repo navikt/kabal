@@ -2,8 +2,8 @@ import { Error } from '@navikt/ds-icons';
 import { Button, Detail, Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { isoDateTimeToPretty } from '../../../../../domain/date';
-import { RelevantDatotype } from '../../../../../types/arkiverte-documents';
+import { isoDateTimeToPretty } from '@app/domain/date';
+import { RelevantDatotype } from '@app/types/arkiverte-documents';
 import { BACKGROUND_COLOR, DATOTYPE_NAME, ICON } from './helpers';
 import { NextArrow, StyledLabel, StyledTimelineItem } from './styled-components';
 

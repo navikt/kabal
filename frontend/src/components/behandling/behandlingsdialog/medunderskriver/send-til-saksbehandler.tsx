@@ -2,11 +2,11 @@ import { Send } from '@navikt/ds-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useIsMedunderskriver } from '../../../../hooks/use-is-medunderskriver';
-import { useSwitchMedunderskriverflytMutation } from '../../../../redux-api/oppgaver/mutations/switch-medunderskriverflyt';
-import { MedunderskriverFlyt } from '../../../../types/kodeverk';
-import { IOppgavebehandling } from '../../../../types/oppgavebehandling/oppgavebehandling';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useSwitchMedunderskriverflytMutation } from '@app/redux-api/oppgaver/mutations/switch-medunderskriverflyt';
+import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 export const SendTilSaksbehandler = ({
   id: oppgaveId,

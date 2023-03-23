@@ -5,9 +5,9 @@ import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHe
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import styled from 'styled-components';
-import { FeatureToggles, useFeatureToggle } from '../../hooks/use-feature-toggle';
-import { useHasAnyOfRoles } from '../../hooks/use-has-role';
-import { Role } from '../../types/bruker';
+import { FeatureToggles, useFeatureToggle } from '@app/hooks/use-feature-toggle';
+import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
+import { Role } from '@app/types/bruker';
 
 export const Nav = () => (
   <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">

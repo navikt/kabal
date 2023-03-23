@@ -1,8 +1,8 @@
 import { ErrorMessage, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUser } from '../../simple-api-state/use-user';
-import { Role } from '../../types/bruker';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 import { PageWrapper } from '../page-wrapper';
 
 export const LandingPage = () => {

@@ -1,7 +1,7 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useGetTilknyttedeDokumenterQuery } from '../../../../redux-api/oppgaver/queries/documents';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetTilknyttedeDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Loading } from '../../loading';
 import { ListContainer } from '../styled-components/container';
 import { DocumentList } from '../styled-components/document-list';

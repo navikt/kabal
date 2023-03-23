@@ -1,4 +1,4 @@
-import { IModifiedResponse } from '../../../types/oppgavebehandling/response';
+import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';

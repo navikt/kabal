@@ -2,15 +2,12 @@ import { Close, Send } from '@navikt/ds-icons';
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
-import { useOppgave } from '../../../../../../hooks/oppgavebehandling/use-oppgave';
-import { IBrevmottaker, useBrevmottakere } from '../../../../../../hooks/use-brevmottakere';
-import { useRemoveDocument } from '../../../../../../hooks/use-remove-document';
-import { useFinishDocumentMutation } from '../../../../../../redux-api/oppgaver/mutations/documents';
-import {
-  useGetDocumentsQuery,
-  useLazyValidateDocumentQuery,
-} from '../../../../../../redux-api/oppgaver/queries/documents';
-import { Brevmottakertype } from '../../../../../../types/kodeverk';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { IBrevmottaker, useBrevmottakere } from '@app/hooks/use-brevmottakere';
+import { useRemoveDocument } from '@app/hooks/use-remove-document';
+import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { Brevmottakertype } from '@app/types/kodeverk';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';
 import {

@@ -1,13 +1,13 @@
 import { Select } from '@navikt/ds-react';
 import React from 'react';
-import { isUtfall } from '../../../functions/is-utfall';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '../../../hooks/use-can-edit';
-import { useFieldName } from '../../../hooks/use-field-name';
-import { useUtfall } from '../../../hooks/use-utfall';
-import { useValidationError } from '../../../hooks/use-validation-error';
-import { useUpdateUtfallMutation } from '../../../redux-api/oppgaver/mutations/set-utfall';
+import { isUtfall } from '@app/functions/is-utfall';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useFieldName } from '@app/hooks/use-field-name';
+import { useUtfall } from '@app/hooks/use-utfall';
+import { useValidationError } from '@app/hooks/use-validation-error';
+import { useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useOppgave } from '../../../hooks/oppgavebehandling/use-oppgave';
-import { useIsRelevantYtelseForRaadgivende } from '../../../hooks/use-is-relevant-ytelse-for-raadgivende';
-import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
+import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { Annet } from './annet';
 import { BrukAvRaadgivendeLege } from './bruk-av-raadgivende-lege';
 import { Klageforberedelsen } from './klageforberedelsen';

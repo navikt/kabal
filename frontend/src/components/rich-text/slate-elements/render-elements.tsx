@@ -1,5 +1,5 @@
 import React from 'react';
-import { RichTextTypes } from '../../../types/texts/texts';
+import { RichTextTypes } from '@app/types/texts/texts';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';

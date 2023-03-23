@@ -1,8 +1,8 @@
 import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { getFullName } from '../../../domain/name';
-import { ISearchPerson } from '../../../types/oppgaver';
+import { getFullName } from '@app/domain/name';
+import { ISearchPerson } from '@app/types/oppgaver';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
 import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';

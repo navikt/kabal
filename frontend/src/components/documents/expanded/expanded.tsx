@@ -1,7 +1,7 @@
 import { Back } from '@navikt/ds-icons';
 import React from 'react';
 import styled from 'styled-components';
-import { useDocumentsExpanded } from '../../../hooks/settings/use-setting';
+import { useDocumentsExpanded } from '@app/hooks/settings/use-setting';
 import { DocumentsHeader, DocumentsTitle, ExpandCollapseButton } from '../styled-components/header';
 import { JournalfoerteDocumentList } from './journalfoerte-documents/journalfoerte-document-list';
 import { NewDocumentList } from './new/new-document-list';

@@ -2,10 +2,10 @@ import { Upload } from '@navikt/ds-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '../../../../hooks/use-can-edit';
-import { useUploadFileDocumentMutation } from '../../../../redux-api/oppgaver/mutations/documents';
-import { DocumentType } from '../../../../types/documents/documents';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { DocumentType } from '@app/types/documents/documents';
 import { SetDocumentType } from './document-type';
 
 const MAX_SIZE_BYTES = 8388608;

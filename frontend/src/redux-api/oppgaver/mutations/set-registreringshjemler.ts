@@ -1,4 +1,4 @@
-import { IOppgavebehandlingHjemlerUpdateParams } from '../../../types/oppgavebehandling/params';
+import { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';

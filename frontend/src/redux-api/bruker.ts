@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { ISetCustomInfoParams, ISettings, ISignatureResponse } from '../types/bruker';
+import { ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export const brukerApi = createApi({

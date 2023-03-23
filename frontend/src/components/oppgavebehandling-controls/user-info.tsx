@@ -1,10 +1,10 @@
 import { Copy } from '@navikt/ds-icons';
 import { Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
-import { getFullNameWithFnr } from '../../domain/name';
-import { formatOrgNum } from '../../functions/format-id';
-import { Gender } from '../../types/kodeverk';
-import { IOppgavebehandlingBase, IVirksomhet } from '../../types/oppgavebehandling/oppgavebehandling';
+import { getFullNameWithFnr } from '@app/domain/name';
+import { formatOrgNum } from '@app/functions/format-id';
+import { Gender } from '@app/types/kodeverk';
+import { IOppgavebehandlingBase, IVirksomhet } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Fortrolig, StrengtFortrolig } from './fortrolig';
 import { CopyFnrButton, User, UserItem } from './styled-components';
 import { UserGender } from './user-gender';

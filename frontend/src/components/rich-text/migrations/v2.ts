@@ -5,9 +5,9 @@ import {
   PlainText_V2,
   RichText_Content_V2,
   RichText_V2,
-} from '../../../types/rich-text/v2';
-import { PlainText_V3, RichText_Content_V3, RichText_V3 } from '../../../types/rich-text/v3';
-import { isPlainTextType } from '../../../types/texts/texts';
+} from '@app/types/rich-text/v2';
+import { PlainText_V3, RichText_Content_V3, RichText_V3 } from '@app/types/rich-text/v3';
+import { isPlainTextType } from '@app/types/texts/texts';
 import { ContentTypeEnum, ListTypesEnum } from '../types/editor-enums';
 import { BulletListElementType, NumberedListElementType, ParagraphElementType } from '../types/editor-types';
 

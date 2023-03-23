@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useOnClickOutside } from '../../hooks/use-on-click-outside';
-import { useLovkildeToRegistreringshjemlerLatest } from '../../simple-api-state/use-kodeverk';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { useLovkildeToRegistreringshjemlerLatest } from '@app/simple-api-state/use-kodeverk';
 import { GroupedFilterList, OptionGroup } from '../filter-dropdown/grouped-filter-list';
 import { ToggleButton } from '../toggle-button/toggle-button';
 

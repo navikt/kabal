@@ -1,11 +1,11 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import { isoDateTimeToPretty } from '../../../../domain/date';
-import { useOppgave } from '../../../../hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '../../../../hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFullfoert } from '../../../../hooks/use-is-fullfoert';
-import { useGetSignatureQuery } from '../../../../redux-api/bruker';
-import { IMessage, useGetMessagesQuery } from '../../../../redux-api/messages';
+import { isoDateTimeToPretty } from '@app/domain/date';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
 import {
   StyledAuthor,
   StyledMessage,

@@ -4,7 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
-import { useGetTextByIdQuery } from '../../../redux-api/texts';
+import { useGetTextByIdQuery } from '@app/redux-api/texts';
 import { EditSmartEditorText } from './edit';
 
 export const LoadText = () => {

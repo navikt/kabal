@@ -1,5 +1,5 @@
 import React from 'react';
-import { IArkivertDocument, IArkivertDocumentVedlegg } from '../../../../types/arkiverte-documents';
+import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { StyledVedlegg } from '../styled-components/document';
 import { DocumentCheckbox } from './document-checkbox';
 import { DocumentTitle } from './document-title';

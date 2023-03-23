@@ -1,11 +1,11 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useTildelSaksbehandlerMutation } from '../../redux-api/oppgaver/mutations/tildeling';
-import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '../../redux-api/oppgaver/queries/behandling';
-import { SaksTypeEnum } from '../../types/kodeverk';
-import { ISakenGjelderResponse, ISaksbehandlerResponse } from '../../types/oppgavebehandling/response';
-import { ITildelingResponse } from '../../types/oppgaver';
+import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
+import { ITildelingResponse } from '@app/types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { toast } from '../toast/store';
 import { ToastType } from '../toast/types';
