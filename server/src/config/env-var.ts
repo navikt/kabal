@@ -72,9 +72,10 @@ export const requiredEnvNumber = (name: string, defaultValue?: number): number =
     return defaultValue;
   }
 
+  const env = envString ?? 'undefined';
+
   log.error({
-    msg: `Could not parse environment variable '${name}' as integer/number. Parsed value: '${envString ?? 'undefined'
-      }'.`,
+    msg: `Could not parse environment variable '${name}' as integer/number. Parsed value: '${env}'.`,
   });
   process.exit(1);
 };

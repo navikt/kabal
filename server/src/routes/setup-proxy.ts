@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { getAzureADClient } from '@app/auth/get-auth-client';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
@@ -9,7 +9,7 @@ const log = getLogger('proxy');
 
 export const setupProxy = async () => {
   const authClient = await getAzureADClient();
-  const router = express.Router();
+  const router = Router();
 
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
