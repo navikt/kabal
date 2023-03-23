@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
 import styled from 'styled-components';
 import { formatLongDate, zeroPad } from '../../../domain/date';
@@ -33,7 +33,7 @@ export const CurrentDate = (props: RenderElementProps) => {
 
 interface Props extends RenderElementProps, DateParts {}
 
-const RenderCurrentDate = React.memo<Props>(
+const RenderCurrentDate = memo<Props>(
   ({ year, month, day, children, attributes }) => {
     const isSelected = useSelected();
 

@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useRef, useState } from 'react';
 import { Editor, Element, Range, Selection, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
@@ -147,7 +147,7 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId, 
   );
 };
 
-export const SmartEditorContext = React.createContext<ISmartEditorContext>({
+export const SmartEditorContext = createContext<ISmartEditorContext>({
   documentId: null,
   focusedThreadId: null,
   setFocusedThreadId: () => {},

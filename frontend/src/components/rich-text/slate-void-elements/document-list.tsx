@@ -1,5 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
@@ -13,7 +13,7 @@ import { voidStyle } from './style';
 
 type Documents = DocumentListElementType['documents'];
 
-export const DocumentListElement = React.memo(
+export const DocumentListElement = memo(
   ({ element, attributes, children }: RenderElementProps<DocumentListElementType>) => {
     const editor = useSlateStatic();
     const oppgaveId = useOppgaveId();

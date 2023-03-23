@@ -1,12 +1,12 @@
 import { Close, ErrorColored, InformationColored, SuccessColored, WarningColored } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
 import { Message } from './store';
 import { ToastType } from './types';
 
-export const Toast = React.memo(
+export const Toast = memo(
   ({ type, message, close, setExpiresAt, expiresAt }: Message) => {
     const ref = useRef<HTMLDivElement>(null);
     const [remaining, setRemaining] = useState<number | null>(null);
