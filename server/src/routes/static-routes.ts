@@ -1,9 +1,9 @@
 import fs from 'fs';
-import express from 'express';
+import express, { Router, static as expressStatic } from 'express';
 import { VERSION, frontendDistDirectoryPath } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
 
-const router = express.Router();
+const router = Router();
 
 const indexFile = fs
   .readFileSync(`${frontendDistDirectoryPath}/index.html`, 'utf8')
@@ -18,7 +18,7 @@ const sendIndexFile = (req: express.Request, res: express.Response) => {
 export const setupStaticRoutes = () => {
   router.get('/', sendIndexFile);
 
-  router.use(express.static(frontendDistDirectoryPath, { index: false }));
+  router.use(expressStatic(frontendDistDirectoryPath, { index: false }));
 
   router.get('*', sendIndexFile);
 
