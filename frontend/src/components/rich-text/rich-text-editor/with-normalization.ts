@@ -128,10 +128,10 @@ export const withNormalization = (editor: Editor) => {
       }
     }
 
-    // If the node is not alignable and has a the text align property set.
-    if (!isNodeAlignableElementType(node) && typeof node['textAlign'] === 'string') {
+    // If the node is not alignable and has the text align property set.
+    if (Object.hasOwn(node, 'textAlign') && !isNodeAlignableElementType(node)) {
       // Remove text align property.
-      Transforms.unsetNodes(editor, 'textAlign', { match: Element.isElement });
+      Transforms.unsetNodes(editor, 'textAlign', { match: (n) => n === node });
 
       return;
     }

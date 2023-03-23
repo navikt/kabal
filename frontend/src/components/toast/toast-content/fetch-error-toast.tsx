@@ -2,6 +2,7 @@ import { Detail, Label } from '@navikt/ds-react';
 import { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import React from 'react';
 import styled from 'styled-components';
+import { isApiError } from '../../../types/errors';
 import { toast } from '../store';
 import { ToastType } from '../types';
 
@@ -74,22 +75,6 @@ const getErrorData = (error: FetchBaseQueryError): ErrorMessage => {
 
   return { title: 'Unknown error' };
 };
-
-interface ApiError {
-  title: string;
-  detail: string;
-  status: number;
-}
-
-const isApiError = (data: unknown): data is ApiError =>
-  data !== null &&
-  typeof data === 'object' &&
-  'title' in data &&
-  'detail' in data &&
-  'status' in data &&
-  typeof data.title === 'string' &&
-  typeof data.detail === 'string' &&
-  typeof data.status === 'number';
 
 const getCustomErrorMessage = (data?: unknown): string | undefined => {
   if (typeof data === 'string') {

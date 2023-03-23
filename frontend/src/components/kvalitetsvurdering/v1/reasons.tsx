@@ -3,14 +3,14 @@ import React, { Fragment } from 'react';
 import { useCanEdit } from '../../../hooks/use-can-edit';
 import { useKvalitetsvurdering } from '../../../hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '../../../redux-api/kaka-kvalitetsvurdering/v1';
-import { IKvalitetsvurderingBooleans } from '../../../types/kaka-kvalitetsvurdering/v1';
+import { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '../../../types/kaka-kvalitetsvurdering/v1';
 import { CommentField } from './comment-field';
 import { StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
   label: string;
-  textareaId?: string;
+  textareaId?: keyof IKvalitetsvurderingTexts;
   helpText?: string;
   show?: boolean;
   checked: boolean;
@@ -73,7 +73,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
 };
 
 interface CommentFieldDisplayProps {
-  textareaId: string | undefined;
+  textareaId: keyof IKvalitetsvurderingTexts | undefined;
   show: boolean;
 }
 

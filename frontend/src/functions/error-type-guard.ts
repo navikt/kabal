@@ -1,4 +1,5 @@
 import { FIELD_NAMES } from '../hooks/use-field-name';
+import { GenericObject, isGenericObject } from './../types/types';
 
 export interface IValidationError {
   reason: string;
@@ -11,7 +12,7 @@ export enum SECTION_KEY {
   DOKUMENTER = 'dokumenter',
 }
 
-export interface IValidationSection {
+export interface IValidationSection extends GenericObject {
   section: SECTION_KEY;
   properties: IValidationError[];
 }
@@ -36,11 +37,8 @@ export const isReduxValidationResponse = (error: unknown): error is IReduxError<
   return Array.isArray(data.sections) && data.sections.every(isValidationSection);
 };
 
-const isValidationSection = (error: unknown): error is IValidationSection =>
-  typeof error === 'object' &&
-  error !== null &&
-  typeof error['section'] === 'string' &&
-  Array.isArray(error['properties']);
+const isValidationSection = (error: GenericObject): error is IValidationSection =>
+  typeof error['section'] === 'string' && Array.isArray(error['properties']);
 
 interface IReduxError<T = unknown> {
   status: number;
@@ -48,4 +46,4 @@ interface IReduxError<T = unknown> {
 }
 
 const isReduxError = <T>(error: unknown): error is IReduxError<T> =>
-  typeof error === 'object' && error !== null && typeof error['status'] === 'number';
+  isGenericObject(error) && typeof error['status'] === 'number';
