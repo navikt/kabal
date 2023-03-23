@@ -55,7 +55,12 @@ export const Document = ({ document, setAvsenderMottaker, setTema, setSaksId }: 
         data-documentname={tittel}
       >
         <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
-        <DocumentTitle journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} tittel={tittel ?? ''} />
+        <DocumentTitle
+          journalpostId={journalpostId}
+          dokumentInfoId={dokumentInfoId}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          tittel={tittel ?? ''}
+        />
         <DocumentTema
           as={StyledClickableField}
           $area={Fields.Meta}

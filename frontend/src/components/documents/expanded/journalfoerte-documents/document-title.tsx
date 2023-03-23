@@ -10,9 +10,10 @@ interface Props {
   journalpostId: string;
   dokumentInfoId: string;
   tittel: string;
+  harTilgangTilArkivvariant: boolean;
 }
 
-export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel }: Props) => {
+export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: Props) => {
   const { value, setValue } = useDocumentsPdfViewed();
 
   const [editMode, setEditMode] = useState(false);
@@ -35,7 +36,11 @@ export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel }: Props) 
           tittel={tittel}
           onDone={() => setEditMode(false)}
         />
-        <EditButton editMode={editMode} setEditMode={setEditMode} />
+        <EditButton
+          editMode={editMode}
+          setEditMode={setEditMode}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+        />
       </StyledDocumentTitle>
     );
   }
@@ -49,10 +54,15 @@ export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel }: Props) 
 
   return (
     <StyledDocumentTitle>
-      <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
+      <StyledDocumentButton
+        isActive={isActive}
+        onClick={onClick}
+        disabled={!harTilgangTilArkivvariant}
+        data-testid="document-open-button"
+      >
         <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
       </StyledDocumentButton>
-      <EditButton editMode={editMode} setEditMode={setEditMode} />
+      <EditButton editMode={editMode} setEditMode={setEditMode} harTilgangTilArkivvariant={harTilgangTilArkivvariant} />
     </StyledDocumentTitle>
   );
 };

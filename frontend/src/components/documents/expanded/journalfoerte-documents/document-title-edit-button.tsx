@@ -7,12 +7,13 @@ import { StyledDocumentTitle } from '../styled-components/document';
 interface Props {
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
+  harTilgangTilArkivvariant: boolean;
 }
 
-export const EditButton = ({ setEditMode, editMode }: Props) => {
+export const EditButton = ({ setEditMode, editMode, harTilgangTilArkivvariant }: Props) => {
   const canEdit = useCanEdit();
 
-  if (!canEdit) {
+  if (!canEdit || !harTilgangTilArkivvariant) {
     return null;
   }
 
