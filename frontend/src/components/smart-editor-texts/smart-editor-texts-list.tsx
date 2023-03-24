@@ -1,4 +1,4 @@
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
@@ -159,7 +159,7 @@ const StyledTitle = styled.span`
   white-space: nowrap;
 `;
 
-const StyledTitleIcon = styled(FileContent)`
+const StyledTitleIcon = styled(FileTextIcon)`
   flex-shrink: 0;
 `;
 

@@ -1,4 +1,4 @@
-import { Send } from '@navikt/ds-icons';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -35,7 +35,7 @@ export const FinishDocument = ({ document }: Props) => {
         size="small"
         variant="primary"
         data-testid="document-finish-button"
-        icon={<Send aria-hidden />}
+        icon={<PaperplaneIcon aria-hidden />}
       >
         {buttonText}
       </StyledSendButton>

@@ -1,4 +1,4 @@
-import { SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -123,7 +123,7 @@ export const EditSmartEditorText = (savedText: IText) => {
       <ContentEditor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
 
       <Buttons onKeyDown={onKeyDown}>
-        <Button onClick={save} icon={<SuccessStroke aria-hidden />} size="small" loading={isLoading}>
+        <Button onClick={save} icon={<CheckmarkIcon aria-hidden />} size="small" loading={isLoading}>
           Lagre og publisér
         </Button>
         <DeleteTextButton id={id} title={savedText.title} />

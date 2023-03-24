@@ -1,7 +1,13 @@
-import { Close, ErrorColored, InformationColored, SuccessColored, WarningColored } from '@navikt/ds-icons';
+import { XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import {
+  CheckmarkCircleFillIconColored,
+  ExclamationmarkTriangleFillIconColored,
+  InformationSquareFillIconColored,
+  XMarkOctagonFillIconColored,
+} from '@app/components/colored-icons/colored-icons';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
 import { Message } from './store';
 import { ToastType } from './types';
@@ -47,7 +53,7 @@ export const Toast = memo(
 
     return (
       <StyledToast $type={type} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} $paused={paused} ref={ref}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={close} icon={<Close aria-hidden />} />
+        <StyledCloseButton variant="tertiary" size="xsmall" onClick={close} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>
@@ -67,13 +73,13 @@ interface IconProps {
 const Icon = ({ type }: IconProps) => {
   switch (type) {
     case ToastType.SUCCESS:
-      return <SuccessColored aria-hidden />;
+      return <CheckmarkCircleFillIconColored aria-hidden />;
     case ToastType.ERROR:
-      return <ErrorColored aria-hidden />;
+      return <XMarkOctagonFillIconColored aria-hidden />;
     case ToastType.INFO:
-      return <InformationColored aria-hidden />;
+      return <InformationSquareFillIconColored aria-hidden />;
     case ToastType.WARNING:
-      return <WarningColored aria-hidden />;
+      return <ExclamationmarkTriangleFillIconColored aria-hidden />;
   }
 };
 

@@ -1,4 +1,4 @@
-import { Warning } from '@navikt/ds-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useMemo } from 'react';
@@ -38,9 +38,9 @@ export const ShowTags = ({ created, modified, title, limits, query }: Props) => 
     return (
       <TagsContainer title={`${title} - ${dateTime}`}>
         <StyledTag size="small" variant="error">
-          <Warning />
+          <ExclamationmarkTriangleIcon />
           <span>Global</span>
-          <Warning />
+          <ExclamationmarkTriangleIcon />
         </StyledTag>
       </TagsContainer>
     );

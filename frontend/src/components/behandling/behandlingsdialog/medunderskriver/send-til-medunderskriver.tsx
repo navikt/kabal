@@ -1,4 +1,4 @@
-import { Send } from '@navikt/ds-icons';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -59,7 +59,7 @@ export const SendTilMedunderskriver = ({
         disabled={sendToMedunderskriverDisabled}
         loading={loader.isLoading || medunderskriverLoader.isLoading}
         data-testid="send-to-medunderskriver"
-        icon={<Send aria-hidden />}
+        icon={<PaperplaneIcon aria-hidden />}
       >
         Send til {getTitleLowercase(type)}
       </StyledButton>

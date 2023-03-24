@@ -1,4 +1,4 @@
-import { SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { BackLink } from './back-link';
@@ -13,7 +13,7 @@ export const FinishedFooter = () => (
         size="small"
         disabled
         data-testid="complete-button"
-        icon={<SuccessStroke aria-hidden />}
+        icon={<CheckmarkIcon aria-hidden />}
       >
         Fullfør
       </Button>

@@ -1,4 +1,4 @@
-import { Add, Close, Parking } from '@navikt/ds-icons';
+import { ParkingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import { Range } from 'slate';
@@ -62,7 +62,7 @@ export const Placeholder = ({ show }: Props) => {
       <ToolbarIconButton
         label="Sett inn innfyllingsfelt (Ctrl/⌘ + P)"
         onClick={onClick}
-        icon={<Parking width={24} />}
+        icon={<ParkingIcon width={24} />}
         active={isPlaceholderActive(editor)}
         disabled={disabled}
       />
@@ -112,8 +112,14 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
         onChange={({ target }) => setPlaceholder(target.value)}
         onKeyDown={onKeyDown}
       />
-      <Button size="small" onClick={addPlaceholder} icon={<Add aria-hidden />} variant="primary" title="Sett inn" />
-      <Button size="small" onClick={close} icon={<Close aria-hidden />} variant="danger" title="Avbryt" />
+      <Button
+        size="small"
+        onClick={addPlaceholder}
+        icon={<PlusIcon aria-hidden />}
+        variant="primary"
+        title="Sett inn"
+      />
+      <Button size="small" onClick={close} icon={<XMarkIcon aria-hidden />} variant="danger" title="Avbryt" />
     </StyledPlaceholderText>
   );
 };

@@ -1,4 +1,4 @@
-import { Error, Success } from '@navikt/ds-icons';
+import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -154,11 +154,11 @@ const StyledSignature = styled.div`
   width: 100%;
 `;
 
-const StyledSuccess = styled(Success)`
+const StyledSuccess = styled(CheckmarkCircleIcon)`
   color: #006a23;
 `;
 
-const StyledError = styled(Error)`
+const StyledError = styled(XMarkOctagonIcon)`
   color: #ba3a26;
 `;
 

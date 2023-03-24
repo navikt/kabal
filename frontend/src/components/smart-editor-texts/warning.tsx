@@ -1,4 +1,4 @@
-import { Warning } from '@navikt/ds-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { TextMetadata } from '@app/types/texts/texts';
@@ -17,6 +17,6 @@ export const LimitWarning = (limits: TextMetadata) => {
   return <StyledWarning title="Denne teksten har ingen begrensninger!" />;
 };
 
-const StyledWarning = styled(Warning)`
+const StyledWarning = styled(ExclamationmarkTriangleIcon)`
   color: var(--a-surface-danger);
 `;

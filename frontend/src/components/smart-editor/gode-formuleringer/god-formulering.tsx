@@ -1,4 +1,4 @@
-import { Collapse, Expand } from '@navikt/ds-icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from 'slate';
@@ -59,7 +59,7 @@ const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
     size="xsmall"
     variant="tertiary"
     iconPosition="right"
-    icon={isExpanded ? <Collapse aria-hidden /> : <Expand aria-hidden />}
+    icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
   >
     {isExpanded ? 'Vis mindre' : 'Vis mer'}
   </Button>

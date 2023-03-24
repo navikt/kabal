@@ -1,4 +1,4 @@
-import { Filter2, Filter2Filled } from '@navikt/ds-icons';
+import { FunnelFillIcon, FunnelIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
@@ -15,7 +15,7 @@ export const DateFilter = () => {
 
   useOnClickOutside(ref, () => setIsOpen(false));
 
-  const Icon = value === undefined ? Filter2 : Filter2Filled;
+  const Icon = value === undefined ? FunnelIcon : FunnelFillIcon;
 
   const selected = value === undefined ? undefined : { from: new Date(value[0]), to: new Date(value[1]) };
 

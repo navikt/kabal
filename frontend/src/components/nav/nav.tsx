@@ -1,4 +1,14 @@
-import { Facilitet, FileContent, Law, LightBulb, List, Locked, Office1, Search, Task } from '@navikt/ds-icons';
+import {
+  Buldings3Icon,
+  FileTextIcon,
+  GavelSoundBlockIcon,
+  LightBulbIcon,
+  ListIcon,
+  MagnifyingGlassIcon,
+  PadlockLockedIcon,
+  PuzzlePieceIcon,
+  TasklistIcon,
+} from '@navikt/aksel-icons';
 import { Header } from '@navikt/ds-react-internal';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
@@ -13,24 +23,24 @@ export const Nav = () => (
   <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
       <NavItem to="/oppgaver/1" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
-        <List /> Oppgaver
+        <ListIcon /> Oppgaver
       </NavItem>
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
-        <Task /> Mine Oppgaver
+        <TasklistIcon /> Mine Oppgaver
       </NavItem>
       <NavItem
         to="/sok"
         testId="search-nav-link"
         roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]}
       >
-        <Search /> Søk på person
+        <MagnifyingGlassIcon /> Søk på person
       </NavItem>
       <NavItem to="/enhetensoppgaver" testId="enhetens-oppgaver-nav-link" roles={[Role.KABAL_INNSYN_EGEN_ENHET]}>
-        <Office1 /> Enhetens oppgaver
+        <Buldings3Icon /> Enhetens oppgaver
       </NavItem>
 
       <NavItem to="/maltekster" testId="maltekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
-        <Facilitet /> Maltekster
+        <PuzzlePieceIcon /> Maltekster
       </NavItem>
 
       <NavItem
@@ -38,15 +48,15 @@ export const Nav = () => (
         testId="redigerbare-maltekster-nav-link"
         roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
-        <FileContent /> Redigerbare maltekster
+        <FileTextIcon /> Redigerbare maltekster
       </NavItem>
 
       <NavItem to="/gode-formuleringer" testId="gode-formuleringer-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
-        <LightBulb /> Gode formuleringer
+        <LightBulbIcon /> Gode formuleringer
       </NavItem>
 
       <NavItem to="/regelverk" testId="regelverk-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
-        <Law /> Regelverk
+        <GavelSoundBlockIcon /> Regelverk
       </NavItem>
 
       <NavItem to="/topptekster" testId="topptekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
@@ -58,7 +68,7 @@ export const Nav = () => (
       </NavItem>
 
       <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
-        <Locked /> Tilgangsstyring
+        <PadlockLockedIcon /> Tilgangsstyring
       </NavItem>
     </StyledNavLinkList>
   </Header.Title>

@@ -1,4 +1,4 @@
-import { Edit } from '@navikt/ds-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -24,7 +24,7 @@ export const EditButton = ({ id, authorIdent, isEditing, setIsEditing, isFocused
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  return <Button size="xsmall" icon={<Edit aria-hidden />} variant="secondary" onClick={toggleEdit} />;
+  return <Button size="xsmall" icon={<PencilIcon aria-hidden />} variant="secondary" onClick={toggleEdit} />;
 };
 
 interface EditCommentProps {

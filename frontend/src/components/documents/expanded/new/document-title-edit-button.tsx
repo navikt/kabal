@@ -1,4 +1,4 @@
-import { Edit, SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -26,11 +26,11 @@ export const EditButton = ({ setEditMode, editMode, isMarkertAvsluttet }: Props)
   );
 };
 
-const StyledEditIcon = styled(Edit)`
+const StyledEditIcon = styled(PencilIcon)`
   font-size: 14px;
 `;
 
-const StyledSuccessIcon = styled(SuccessStroke)`
+const StyledSuccessIcon = styled(CheckmarkIcon)`
   font-size: 18px;
 `;
 

@@ -1,4 +1,4 @@
-import { Warning } from '@navikt/ds-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -54,7 +54,7 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
       <NewDocumentsStyledListHeader>
         <StyledHeading size="xsmall" level="2">
           Dokumenter under arbeid
-          <Warning title={errorMessage} color="#ba3a26" />
+          <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" />
         </StyledHeading>
       </NewDocumentsStyledListHeader>
     );

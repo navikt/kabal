@@ -1,4 +1,4 @@
-import { Back, LightBulb } from '@navikt/ds-icons';
+import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
@@ -114,12 +114,12 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
       <Header>
         <GodeFormuleringerTitle>
-          <LightBulb />
+          <LightBulbIcon />
           Gode formuleringer ({texts.length})
         </GodeFormuleringerTitle>
 
         <StyledCloseButton title="Skjul gode formuleringer" onClick={() => setShowGodeFormuleringer(false)}>
-          <Back />
+          <ChevronLeftIcon />
         </StyledCloseButton>
       </Header>
       <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />

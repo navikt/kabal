@@ -1,4 +1,4 @@
-import { Close, Delete } from '@navikt/ds-icons';
+import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { useSlateStatic } from 'slate-react';
@@ -48,7 +48,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) 
     return (
       <Button
         size="xsmall"
-        icon={<Delete aria-hidden />}
+        icon={<TrashIcon aria-hidden />}
         variant="danger"
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
@@ -62,14 +62,14 @@ export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) 
       <Button
         variant="danger"
         title="Bekreft sletting"
-        icon={<Delete aria-hidden />}
+        icon={<TrashIcon aria-hidden />}
         loading={isDeleting}
         onClick={onDelete}
         size="xsmall"
       />
       <Button
         size="xsmall"
-        icon={<Close aria-hidden />}
+        icon={<XMarkIcon aria-hidden />}
         variant="secondary"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}

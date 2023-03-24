@@ -1,4 +1,4 @@
-import { Send } from '@navikt/ds-icons';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -84,7 +84,7 @@ export const WriteMessage = () => {
           onClick={post}
           loading={messageIsLoading}
           data-testid="send-message-button"
-          icon={<Send aria-hidden />}
+          icon={<PaperplaneIcon aria-hidden />}
         >
           Legg til melding
         </Button>

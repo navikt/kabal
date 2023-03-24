@@ -1,4 +1,4 @@
-import { Back } from '@navikt/ds-icons';
+import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styled from 'styled-components';
 import { useDocumentsExpanded } from '@app/hooks/settings/use-setting';
@@ -16,7 +16,7 @@ export const ExpandedDocuments = () => {
         <DocumentsTitle>Dokumenter</DocumentsTitle>
         <UploadFileButton />
         <ExpandCollapseButton onClick={() => setValue(!value)} data-testid="documents-collapse-view-button">
-          <Back />
+          <ChevronLeftIcon />
         </ExpandCollapseButton>
       </DocumentsHeader>
       <NewDocumentList />

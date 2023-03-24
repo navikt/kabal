@@ -1,4 +1,4 @@
-import { Close, Sandglass } from '@navikt/ds-icons';
+import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -23,7 +23,7 @@ export const VentButton = () => {
         size="small"
         onClick={() => deleteSettPaavent(data.id)}
         loading={isLoading}
-        icon={<Close aria-hidden />}
+        icon={<XMarkIcon aria-hidden />}
       >
         Avslutt venteperiode
       </Button>
@@ -37,7 +37,7 @@ export const VentButton = () => {
       size="small"
       onClick={() => settPaavent(data.id)}
       loading={isLoading}
-      icon={<Sandglass aria-hidden />}
+      icon={<HourglassIcon aria-hidden />}
     >
       Sett på vent
     </Button>

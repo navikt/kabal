@@ -1,4 +1,4 @@
-import { Cancel, Delete } from '@navikt/ds-icons';
+import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -48,7 +48,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           variant="secondary"
           onClick={() => setShowConfirm(false)}
           data-testid="document-delete-cancel"
-          icon={<Cancel aria-hidden />}
+          icon={<ArrowUndoIcon aria-hidden />}
         >
           Avbryt
         </StyledButton>
@@ -58,7 +58,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           disabled={isLoading}
           onClick={onDelete}
           data-testid="document-delete-confirm"
-          icon={<Delete aria-hidden />}
+          icon={<TrashIcon aria-hidden />}
         >
           Slett
         </StyledButton>
@@ -72,7 +72,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
       size="small"
       onClick={() => setShowConfirm(true)}
       data-testid="document-delete-button"
-      icon={<Delete aria-hidden />}
+      icon={<TrashIcon aria-hidden />}
     >
       Slett
     </StyledButton>

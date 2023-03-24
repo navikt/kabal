@@ -1,4 +1,4 @@
-import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { getFullName } from '@app/domain/name';
@@ -10,7 +10,7 @@ import { Oppgaver } from './oppgaver';
 export const Result = ({ fnr, navn }: ISearchPerson) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const Chevron = open ? CollapseFilled : ExpandFilled;
+  const Chevron = open ? ChevronUpIcon : ChevronDownIcon;
 
   return (
     <StyledResult data-testid="search-result">

@@ -1,4 +1,4 @@
-import { Edit } from '@navikt/ds-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Search, Tag, TagProps } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
 import React, { useState } from 'react';
@@ -51,7 +51,7 @@ const EditButton = ({ show, onClick }: EditButtonProps) => {
     return null;
   }
 
-  return <Button variant="tertiary" icon={<Edit aria-hidden />} onClick={onClick} size="small" />;
+  return <Button variant="tertiary" icon={<PencilIcon aria-hidden />} onClick={onClick} size="small" />;
 };
 
 const getFullmektig = (sakspart: ISakspart | null): string => {

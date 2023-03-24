@@ -1,4 +1,4 @@
-import { Next } from '@navikt/ds-icons';
+import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Label } from '@navikt/ds-react';
 import styled from 'styled-components';
 
@@ -83,7 +83,7 @@ export const StyledTimelineItem = styled.li<TimelineItemStyleProps>`
   white-space: nowrap;
 `;
 
-export const NextArrow = styled(Next)`
+export const NextArrow = styled(ChevronRightIcon)`
   position: absolute;
   top: 50%;
   left: 100%;

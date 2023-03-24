@@ -1,4 +1,4 @@
-import { Close, ExternalLink, Refresh, ZoomIn, ZoomOut } from '@navikt/ds-icons';
+import { ArrowsCirclepathIcon, ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import styled, { css, keyframes } from 'styled-components';
 
 interface ContainerProps {
@@ -90,19 +90,19 @@ const iconStyle = css`
   }
 `;
 
-export const StyledZoomInIcon = styled(ZoomIn)`
+export const StyledZoomInIcon = styled(ZoomPlusIcon)`
   ${iconStyle}
 `;
 
-export const StyledZoomOutIcon = styled(ZoomOut)`
+export const StyledZoomOutIcon = styled(ZoomMinusIcon)`
   ${iconStyle}
 `;
 
-export const StyledCancelIcon = styled(Close)`
+export const StyledCancelIcon = styled(XMarkIcon)`
   ${iconStyle}
 `;
 
-export const StyledExtLinkIcon = styled(ExternalLink)`
+export const StyledExtLinkIcon = styled(ExternalLinkIcon)`
   ${iconStyle}
 `;
 
@@ -116,7 +116,7 @@ const rotate = keyframes`
   }
 `;
 
-export const StyledRefreshIcon = styled(Refresh)<{ $isLoading: boolean }>`
+export const StyledRefreshIcon = styled(ArrowsCirclepathIcon)<{ $isLoading: boolean }>`
   ${iconStyle}
   animation-duration: 2s;
   animation-iteration-count: infinite;

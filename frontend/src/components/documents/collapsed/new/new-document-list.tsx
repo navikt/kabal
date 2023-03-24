@@ -1,4 +1,4 @@
-import { Warning } from '@navikt/ds-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -47,7 +47,7 @@ const ListHeader = () => {
     return (
       <Heading size="xsmall" level="2">
         Nye dokumenter
-        <Warning title={errorMessage} color="#ba3a26" />
+        <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" />
       </Heading>
     );
   }

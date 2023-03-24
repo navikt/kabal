@@ -1,4 +1,12 @@
-import { Cancel, Email, FileFolder, FileSuccess, Glasses, Print, SaveFile } from '@navikt/ds-icons';
+import {
+  ArrowUndoIcon,
+  EnvelopeClosedIcon,
+  FileCheckmarkIcon,
+  FolderFileIcon,
+  GlassesIcon,
+  HddUpIcon,
+  PrinterSmallIcon,
+} from '@navikt/aksel-icons';
 import { RelevantDatotype } from '@app/types/arkiverte-documents';
 
 export const DATOTYPE_NAME: Record<RelevantDatotype, string> = {
@@ -22,11 +30,11 @@ export const BACKGROUND_COLOR: Record<RelevantDatotype, string> = {
 };
 
 export const ICON: Record<RelevantDatotype, React.FC> = {
-  [RelevantDatotype.DATO_SENDT_PRINT]: Print,
-  [RelevantDatotype.DATO_EKSPEDERT]: Email,
-  [RelevantDatotype.DATO_JOURNALFOERT]: FileFolder,
-  [RelevantDatotype.DATO_REGISTRERT]: SaveFile,
-  [RelevantDatotype.DATO_AVS_RETUR]: Cancel,
-  [RelevantDatotype.DATO_DOKUMENT]: FileSuccess,
-  [RelevantDatotype.DATO_LEST]: Glasses,
+  [RelevantDatotype.DATO_SENDT_PRINT]: PrinterSmallIcon,
+  [RelevantDatotype.DATO_EKSPEDERT]: EnvelopeClosedIcon,
+  [RelevantDatotype.DATO_JOURNALFOERT]: FolderFileIcon,
+  [RelevantDatotype.DATO_REGISTRERT]: HddUpIcon,
+  [RelevantDatotype.DATO_AVS_RETUR]: ArrowUndoIcon,
+  [RelevantDatotype.DATO_DOKUMENT]: FileCheckmarkIcon,
+  [RelevantDatotype.DATO_LEST]: GlassesIcon,
 };

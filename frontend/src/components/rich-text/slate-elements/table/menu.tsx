@@ -1,4 +1,4 @@
-import { Close, Delete } from '@navikt/ds-icons';
+import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { TableCellsMerge } from '@styled-icons/fluentui-system-regular/TableCellsMerge';
 import { TableCellsSplit } from '@styled-icons/fluentui-system-regular/TableCellsSplit';
@@ -98,7 +98,7 @@ export const Menu = ({ show, close, x, y, element }: MenuProps) => {
       </MenuButton>
       <DeleteTable close={close} />
       <StyledHr />
-      <MenuButton onClick={close} icon={<Close aria-hidden />}>
+      <MenuButton onClick={close} icon={<XMarkIcon aria-hidden />}>
         Lukk
       </MenuButton>
     </StyledMenu>
@@ -129,7 +129,7 @@ const DeleteTable = ({ close }: DeleteTableProps) => {
         <BaseButton
           size="xsmall"
           variant="danger"
-          icon={<Delete aria-hidden />}
+          icon={<TrashIcon aria-hidden />}
           onClick={removeTable}
           title="Slett tabell"
         />

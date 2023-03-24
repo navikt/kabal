@@ -1,4 +1,4 @@
-import { Reset } from '@navikt/ds-icons';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ export const Header = ({
       size="small"
       variant="secondary"
       onClick={resetFilters}
-      icon={<Reset aria-hidden />}
+      icon={<ArrowCirclepathIcon aria-hidden />}
     >
       Fjern filtere
     </Button>
