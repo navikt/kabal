@@ -1,4 +1,4 @@
-import { Delete, SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
@@ -107,7 +107,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={removeAll}
           data-testid={`${settingKey}-remove-all`}
-          icon={<Delete aria-hidden />}
+          icon={<TrashIcon aria-hidden />}
         >
           Fjern alle
         </Button>
@@ -117,7 +117,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           size="small"
           onClick={selectAll}
           data-testid={`${settingKey}-select-all`}
-          icon={<SuccessStroke aria-hidden />}
+          icon={<CheckmarkIcon aria-hidden />}
         >
           Velg alle
         </Button>

@@ -1,4 +1,4 @@
-import { Close, Delete } from '@navikt/ds-icons';
+import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useDeleteTextMutation } from '@app/redux-api/texts';
@@ -22,7 +22,7 @@ export const DeleteTextButton = ({ id, title }: Props) => {
           variant="secondary"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
-          icon={<Close aria-hidden />}
+          icon={<XMarkIcon aria-hidden />}
         >
           Avbryt
         </Button>
@@ -32,7 +32,7 @@ export const DeleteTextButton = ({ id, title }: Props) => {
   }
 
   return (
-    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<Delete aria-hidden />}>
+    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
       Slett
     </Button>
   );
@@ -49,7 +49,7 @@ const ConfirmDeleleTextButton = ({ id, title }: Props) => {
   };
 
   return (
-    <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<Delete aria-hidden />}>
+    <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>
       Slett
     </Button>
   );

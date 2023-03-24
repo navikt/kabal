@@ -1,4 +1,4 @@
-import { DialogDots, Information, LightBulb } from '@navikt/ds-icons';
+import { ChatElipsisIcon, InformationSquareIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { Range } from 'slate';
 import { useSlate } from 'slate-react';
@@ -52,7 +52,7 @@ const CommentsButton = ({ show }: Props) => {
   return (
     <ToolbarIconButton
       label="Legg til kommentar (Ctrl/⌘ + K)"
-      icon={<DialogDots width={ICON_SIZE} />}
+      icon={<ChatElipsisIcon width={ICON_SIZE} />}
       active={showNewComment}
       onClick={() => setShowNewComment(true)}
       disabled={!addCommentEnabled}
@@ -72,7 +72,7 @@ const AnnotationsButton = ({ show }: Props) => {
   return (
     <ToolbarIconButton
       label={`${prefix} tilknytning til hjemler/ytelse/utfall/enhet (Ctrl/⌘ + D)`}
-      icon={<Information width={ICON_SIZE} />}
+      icon={<InformationSquareIcon width={ICON_SIZE} />}
       active={showMaltekstTags}
       onClick={() => setShowMaltekstTags(!showMaltekstTags)}
     />
@@ -91,7 +91,7 @@ const GodeFormuleringerButton = ({ show }: Props) => {
   return (
     <ToolbarIconButton
       label={`${prefix} gode formuleringer (Ctrl/⌘ + Shift + F)`}
-      icon={<LightBulb width={ICON_SIZE} />}
+      icon={<LightBulbIcon width={ICON_SIZE} />}
       active={showGodeFormuleringer}
       onClick={() => setShowGodeFormuleringer(!showGodeFormuleringer)}
     />

@@ -1,4 +1,4 @@
-import { Close, FileFolder } from '@navikt/ds-icons';
+import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -68,7 +68,7 @@ export const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) =
           onClick={onClick}
           loading={isLoading || isValidating}
           data-testid="document-finish-confirm"
-          icon={<FileFolder aria-hidden />}
+          icon={<FolderFileIcon aria-hidden />}
         >
           Arkiver
         </Button>
@@ -79,7 +79,7 @@ export const ArchiveView = ({ dokumentId, documentTitle, close }: FinishProps) =
           onClick={close}
           data-testid="document-finish-cancel"
           disabled={isLoading || isValidating}
-          icon={<Close aria-hidden />}
+          icon={<XMarkIcon aria-hidden />}
         >
           Avbryt
         </Button>

@@ -1,4 +1,4 @@
-import { Collapse, Expand } from '@navikt/ds-icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -43,7 +43,7 @@ export const Document = ({ document, setAvsenderMottaker, setTema, setSaksId }: 
   const temaName = useFullTemaNameFromId(tema);
 
   const toggleExpanded = () => setExpanded(!expanded);
-  const Icon = expanded ? Collapse : Expand;
+  const Icon = expanded ? ChevronUpIcon : ChevronDownIcon;
 
   return (
     <>

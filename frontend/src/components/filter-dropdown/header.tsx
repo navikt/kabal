@@ -1,4 +1,4 @@
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
 import React, { KeyboardEventHandler, useRef } from 'react';
 import styled from 'styled-components';
@@ -86,7 +86,7 @@ export const Header = ({
         data-testid="header-filter"
       />
       {showFjernAlle && (
-        <StyledButton size="xsmall" variant="danger" onClick={onReset} icon={<Delete aria-hidden />}>
+        <StyledButton size="xsmall" variant="danger" onClick={onReset} icon={<TrashIcon aria-hidden />}>
           Fjern alle
         </StyledButton>
       )}

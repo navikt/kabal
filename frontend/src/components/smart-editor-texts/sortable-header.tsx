@@ -1,10 +1,10 @@
-import { Down, Up, UpDown } from '@navikt/ds-icons';
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-type Icon = typeof Up | typeof Down | typeof UpDown;
+type Icon = typeof ArrowUpIcon | typeof ArrowDownIcon | typeof ArrowsUpDownIcon;
 
 export enum SortKey {
   TITLE = 'title',
@@ -52,11 +52,11 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder }:
 const getIcon = (order: SortOrder | null): Icon => {
   switch (order) {
     case SortOrder.ASC:
-      return Up;
+      return ArrowUpIcon;
     case SortOrder.DESC:
-      return Down;
+      return ArrowDownIcon;
     case null:
-      return UpDown;
+      return ArrowsUpDownIcon;
   }
 };
 

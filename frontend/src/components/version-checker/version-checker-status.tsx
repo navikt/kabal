@@ -1,4 +1,4 @@
-import { AutomaticSystem, Success } from '@navikt/ds-icons';
+import { CheckmarkCircleIcon, CogRotationIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { Header } from '@navikt/ds-react-internal';
 import React, { useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ export const VersionCheckerStatus = () => {
       size="small"
       data-testid="update-kabal-button"
     >
-      <AutomaticSystem /> Oppdater til siste versjon
+      <CogRotationIcon /> Oppdater til siste versjon
     </Header.Button>
   );
 };
@@ -49,7 +49,7 @@ const Version = () => {
   return (
     <Header.Title as="div">
       <IconText>
-        <Success /> Kabal er klar til bruk!
+        <CheckmarkCircleIcon /> Kabal er klar til bruk!
       </IconText>
     </Header.Title>
   );

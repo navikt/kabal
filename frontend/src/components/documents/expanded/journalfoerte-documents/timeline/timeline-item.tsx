@@ -1,4 +1,4 @@
-import { Error } from '@navikt/ds-icons';
+import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -14,7 +14,7 @@ interface RelevantDateTimelineItemProps {
 }
 
 export const RelevantDateTimelineItem = ({ datotype, ...rest }: RelevantDateTimelineItemProps) => {
-  const Icon = ICON[datotype] ?? Error;
+  const Icon = ICON[datotype] ?? XMarkOctagonIcon;
 
   return (
     <TimelineItem

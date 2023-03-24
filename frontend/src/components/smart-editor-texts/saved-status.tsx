@@ -1,6 +1,6 @@
-import { ErrorColored, SuccessColored } from '@navikt/ds-icons';
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
+import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 interface Props {
   isSuccess: boolean;
@@ -14,11 +14,11 @@ export const SavedStatus = ({ isLoading, isSuccess, isError }: Props) => {
   }
 
   if (isSuccess) {
-    return <SuccessColored title="Lagret!" />;
+    return <CheckmarkCircleFillIconColored title="Lagret!" />;
   }
 
   if (isError) {
-    return <ErrorColored title="Feil ved lagring" />;
+    return <XMarkOctagonFillIconColored title="Feil ved lagring" />;
   }
 
   return null;

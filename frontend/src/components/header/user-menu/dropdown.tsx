@@ -1,4 +1,4 @@
-import { AutomaticSystem, Logout, Settings } from '@navikt/ds-icons';
+import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react-internal';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -12,10 +12,10 @@ export const UserDropdown = (): JSX.Element | null => {
     <Menu>
       <Dropdown.Menu.List>
         <Dropdown.Menu.List.Item as={StyledNavLink} to="/innstillinger" data-testid="innstillinger-link">
-          <Settings /> Innstillinger
+          <CogIcon /> Innstillinger
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
-          <Logout /> Logg ut
+          <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
           <VersionIcon />
@@ -72,7 +72,7 @@ const StyledCopyButton = styled(CopyButton)`
   white-space: nowrap;
 `;
 
-const VersionIcon = styled(AutomaticSystem)`
+const VersionIcon = styled(CogRotationIcon)`
   margin-right: 8px;
 `;
 

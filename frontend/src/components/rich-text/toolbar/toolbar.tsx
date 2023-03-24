@@ -1,4 +1,4 @@
-import { Cancel } from '@navikt/ds-icons';
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { ClearFormatting } from '@styled-icons/fluentui-system-regular/ClearFormatting';
 import { DocumentPageBreak } from '@styled-icons/fluentui-system-regular/DocumentPageBreak';
 import React from 'react';
@@ -89,7 +89,7 @@ export const Toolbar = ({
 
       <ToolbarIconButton
         label="Angre (Ctrl/⌘ + Z)"
-        icon={<Cancel width={ICON_SIZE} />}
+        icon={<ArrowUndoIcon width={ICON_SIZE} />}
         active={false}
         onClick={editor.undo}
       />
@@ -125,6 +125,6 @@ const ToolbarStyle = styled.section<{ visible: boolean }>`
   visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
 `;
 
-const Redo = styled(Cancel)`
+const Redo = styled(ArrowUndoIcon)`
   transform: scaleX(-1);
 `;

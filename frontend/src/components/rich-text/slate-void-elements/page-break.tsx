@@ -1,4 +1,4 @@
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
 import { Transforms } from 'slate';
@@ -17,7 +17,7 @@ export const PageBreak = ({ element, children, attributes }: RenderElementProps)
   return (
     <StyledPageBreak {...attributes} contentEditable={false}>
       <StyledDeleteButton onClick={onClick} title="Fjern sideskift" variant="danger" size="small">
-        <Delete /> Fjern sideskift
+        <TrashIcon /> Fjern sideskift
       </StyledDeleteButton>
       {children}
     </StyledPageBreak>

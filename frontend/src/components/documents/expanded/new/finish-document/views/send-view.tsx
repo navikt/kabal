@@ -1,4 +1,4 @@
-import { Close, Send } from '@navikt/ds-icons';
+import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
@@ -89,7 +89,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={onClick}
           loading={isFinishing || isValidating}
           data-testid="document-finish-confirm"
-          icon={<Send aria-hidden />}
+          icon={<PaperplaneIcon aria-hidden />}
         >
           Send ut
         </Button>
@@ -100,7 +100,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
           onClick={close}
           data-testid="document-finish-cancel"
           disabled={isFinishing || isValidating}
-          icon={<Close aria-hidden />}
+          icon={<XMarkIcon aria-hidden />}
         >
           Avbryt
         </Button>

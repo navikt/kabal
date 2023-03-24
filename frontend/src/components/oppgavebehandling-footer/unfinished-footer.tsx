@@ -1,4 +1,4 @@
-import { SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -57,7 +57,7 @@ export const UnfinishedFooter = () => {
           }}
           data-testid="complete-button"
           loading={isFetching}
-          icon={<SuccessStroke aria-hidden />}
+          icon={<CheckmarkIcon aria-hidden />}
         >
           Fullfør
         </Button>

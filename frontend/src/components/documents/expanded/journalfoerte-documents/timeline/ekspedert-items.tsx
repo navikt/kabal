@@ -1,4 +1,11 @@
-import { Bell, Email, Mobile, Print, SelfServiceMobile, Warning } from '@navikt/ds-icons';
+import {
+  BellIcon,
+  EnvelopeClosedIcon,
+  ExclamationmarkTriangleIcon,
+  FingerMobileIcon,
+  MobileSmallIcon,
+  PrinterSmallIcon,
+} from '@navikt/aksel-icons';
 import React from 'react';
 import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { StyledAlert, StyledEmailContent, StyledHeading, StyledLabel, StyledSmsContent } from './styled-components';
@@ -28,7 +35,7 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
           key={i}
           dato={dato}
           title={title}
-          icon={<Bell aria-hidden />}
+          icon={<BellIcon aria-hidden />}
           color="var(--a-lightblue-50)"
           popover={{ buttonText: 'Vis varsel', content }}
           hideNext={isLast && i === lastIndex}
@@ -70,7 +77,7 @@ const getSmsPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => ({
   content: (
     <>
       <StyledLabel size="small">
-        <Mobile aria-hidden /> {utsendingsinfo.smsVarselSendt?.adresse}
+        <MobileSmallIcon aria-hidden /> {utsendingsinfo.smsVarselSendt?.adresse}
       </StyledLabel>
       <StyledSmsContent>{utsendingsinfo.smsVarselSendt?.varslingstekst}</StyledSmsContent>
     </>
@@ -82,7 +89,7 @@ const getEmailPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => (
   content: (
     <>
       <StyledLabel size="small">
-        <Email aria-hidden /> {utsendingsinfo.epostVarselSendt?.adresse}
+        <EnvelopeClosedIcon aria-hidden /> {utsendingsinfo.epostVarselSendt?.adresse}
       </StyledLabel>
       <EmailContent varslingstekst={utsendingsinfo.epostVarselSendt?.varslingstekst} />
     </>
@@ -103,7 +110,7 @@ const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) =>
     <TimelineItem
       dato={dato}
       title={title}
-      icon={<Bell aria-hidden />}
+      icon={<BellIcon aria-hidden />}
       color={color}
       popover={{
         buttonText: 'Vis forklaring',
@@ -125,28 +132,28 @@ const getOtherVarselData = (kanal: Kanal) => {
   switch (kanal) {
     case Kanal.SENTRAL_UTSKRIFT:
       return {
-        icon: Email,
+        icon: EnvelopeClosedIcon,
         title: 'Ingen varsling',
         info: 'Dokumentet er sendt til brukerens fysiske postkasse.',
         color: 'var(--a-gray-50)',
       };
     case Kanal.LOKAL_UTSKRIFT:
       return {
-        icon: Print,
+        icon: PrinterSmallIcon,
         title: 'Ingen varsling',
         info: 'Dokumentet er skrevet ut lokalt.',
         color: 'var(--a-gray-50)',
       };
     case Kanal.NAV_NO:
       return {
-        icon: Warning,
+        icon: ExclamationmarkTriangleIcon,
         title: 'Varsling feilet!',
         info: 'NAV har ikke sendt varsler for dette dokumentet.',
         color: 'var(--a-red-50)',
       };
     default:
       return {
-        icon: SelfServiceMobile,
+        icon: FingerMobileIcon,
         title: 'Ekstern varsling',
         info: 'Dokumentet er sendt til brukeren via en ekstern tjeneste.',
         color: 'var(--a-gray-50)',

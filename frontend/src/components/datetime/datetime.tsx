@@ -1,4 +1,4 @@
-import { Calender, Clock } from '@navikt/ds-icons';
+import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styled from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -8,7 +8,7 @@ type Props = Pick<IText, 'created' | 'modified'>;
 
 export const DateTime = ({ modified, created }: Props) => {
   const isModified = modified !== null;
-  const Icon = isModified ? Calender : Clock;
+  const Icon = isModified ? CalendarIcon : ClockIcon;
 
   const dateTime = isModified ? modified : created;
   const title = isModified ? 'Sist endret' : 'Opprettet';

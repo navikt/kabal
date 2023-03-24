@@ -1,4 +1,4 @@
-import { Close, Collapse, FileFolder } from '@navikt/ds-icons';
+import { ChevronUpIcon, FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useRef, useState } from 'react';
@@ -18,7 +18,7 @@ export const DeassignOppgave = () => {
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setIsOpen(false), true);
 
-  const Icon = isOpen ? Collapse : FileFolder;
+  const Icon = isOpen ? ChevronUpIcon : FolderFileIcon;
 
   return (
     <Container ref={ref}>
@@ -79,10 +79,16 @@ const Popup = ({ isOpen, close }: PopupProps) => {
       <StyledTitle>Endre hjemmel?</StyledTitle>
       <FilterList options={options} selected={oppgave.hjemler} onChange={setSelected} />
       <ButtonContainer>
-        <Button variant="secondary" size="small" disabled={isLoading} onClick={close} icon={<Close aria-hidden />}>
+        <Button variant="secondary" size="small" disabled={isLoading} onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
-        <Button variant="primary" size="small" loading={isLoading} onClick={onClick} icon={<FileFolder aria-hidden />}>
+        <Button
+          variant="primary"
+          size="small"
+          loading={isLoading}
+          onClick={onClick}
+          icon={<FolderFileIcon aria-hidden />}
+        >
           Legg tilbake
         </Button>
       </ButtonContainer>

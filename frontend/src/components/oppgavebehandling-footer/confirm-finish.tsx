@@ -1,4 +1,4 @@
-import { Close, SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
@@ -55,7 +55,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
           loading={hasBeenFinished || loader.isLoading}
           disabled={hasBeenFinished || loader.isLoading}
           data-testid="confirm-finish-klagebehandling-button"
-          icon={<SuccessStroke aria-hidden />}
+          icon={<CheckmarkIcon aria-hidden />}
         >
           Fullfør
         </Button>
@@ -65,7 +65,7 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
           size="small"
           onClick={cancel}
           data-testid="cancel-finish-klagebehandling-button"
-          icon={<Close aria-hidden />}
+          icon={<XMarkIcon aria-hidden />}
         >
           Avbryt
         </Button>

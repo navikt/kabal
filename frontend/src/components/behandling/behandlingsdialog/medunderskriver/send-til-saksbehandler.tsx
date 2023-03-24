@@ -1,4 +1,4 @@
-import { Send } from '@navikt/ds-icons';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -42,9 +42,9 @@ export const SendTilSaksbehandler = ({
           disabled={loader.isLoading}
           loading={loader.isLoading}
           data-testid="send-to-saksbehandler"
-          icon={<Send aria-hidden />}
+          icon={<PaperplaneIcon aria-hidden />}
         >
-          Send til saksbehandler
+          PaperplaneIcon til saksbehandler
         </Button>
       </StyledFormSection>
     );

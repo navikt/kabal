@@ -1,4 +1,4 @@
-import { Historic } from '@navikt/ds-icons';
+import { ClockDashedIcon } from '@navikt/aksel-icons';
 import React, { useMemo } from 'react';
 import { Descendant, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
@@ -31,7 +31,7 @@ export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: 
       actionButton={{
         onClick: async () => setContent(savedContent),
         buttonText: 'Gjenopprett tekst',
-        buttonIcon: <Historic aria-hidden />,
+        buttonIcon: <ClockDashedIcon aria-hidden />,
         variant: 'primary',
         size: 'small',
       }}

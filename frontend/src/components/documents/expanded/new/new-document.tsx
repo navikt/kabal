@@ -1,4 +1,4 @@
-import { EllipsisV, Sandglass } from '@navikt/ds-icons';
+import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -74,7 +74,7 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
   return (
     <DropdownContainer ref={ref}>
       <StyledToggleExpandButton onClick={onClick} data-testid="document-actions-button">
-        <EllipsisV />
+        <MenuElipsisVerticalIcon />
       </StyledToggleExpandButton>
       {open ? children : null}
     </DropdownContainer>
@@ -87,7 +87,7 @@ const DropdownContainer = styled.div`
   grid-area: action;
 `;
 
-const StyledIcon = styled(Sandglass)`
+const StyledIcon = styled(HourglassIcon)`
   grid-area: action;
   justify-self: center;
 `;

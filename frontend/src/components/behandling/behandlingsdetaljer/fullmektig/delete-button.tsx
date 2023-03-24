@@ -1,4 +1,4 @@
-import { Cancel, Delete } from '@navikt/ds-icons';
+import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -25,11 +25,16 @@ export const DeleteButton = ({ show, close }: Props) => {
   if (showConfirm) {
     return (
       <>
-        <Button variant="danger" icon={<Delete aria-hidden />} onClick={onClick} size="small" loading={isLoading} />
-        <Button variant="secondary" icon={<Cancel aria-hidden />} onClick={() => setShowConfirm(false)} size="small" />
+        <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={onClick} size="small" loading={isLoading} />
+        <Button
+          variant="secondary"
+          icon={<ArrowUndoIcon aria-hidden />}
+          onClick={() => setShowConfirm(false)}
+          size="small"
+        />
       </>
     );
   }
 
-  return <Button variant="danger" icon={<Delete aria-hidden />} onClick={toggleConfirm} size="small" />;
+  return <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={toggleConfirm} size="small" />;
 };

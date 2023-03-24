@@ -1,4 +1,4 @@
-import { Close, SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
@@ -83,10 +83,10 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
         </StyledTable>
       </TableWrapper>
       <ButtonContainer>
-        <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<SuccessStroke aria-hidden />}>
+        <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<CheckmarkIcon aria-hidden />}>
           Lagre
         </Button>
-        <Button variant="danger" size="small" onClick={reset} icon={<Close aria-hidden />}>
+        <Button variant="danger" size="small" onClick={reset} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
       </ButtonContainer>

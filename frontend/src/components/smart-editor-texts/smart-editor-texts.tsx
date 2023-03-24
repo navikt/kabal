@@ -1,4 +1,4 @@
-import { Add } from '@navikt/ds-icons';
+import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -26,7 +26,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   return (
     <Container>
       <Header>
-        <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<Add aria-hidden />}>
+        <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>
       </Header>

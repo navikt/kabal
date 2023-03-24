@@ -1,4 +1,4 @@
-import { Edit } from '@navikt/ds-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { addYears } from 'date-fns';
 import React, { useEffect, useState } from 'react';
@@ -68,7 +68,7 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
   return (
     <Button
       size="small"
-      icon={<Edit aria-hidden />}
+      icon={<PencilIcon aria-hidden />}
       title="Endre frist for behandling i klageinstans"
       variant="tertiary"
       onClick={toggleOpen}

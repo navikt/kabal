@@ -1,4 +1,4 @@
-import { Error, MinusCircle, Sandglass, Success } from '@navikt/ds-icons';
+import { CheckmarkCircleIcon, HourglassIcon, MinusCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import React from 'react';
 
 interface StatusIconProps {
@@ -9,12 +9,12 @@ interface StatusIconProps {
 
 export const StatusIcon = ({ success, init, isLoading }: StatusIconProps) => {
   if (!init) {
-    return <MinusCircle aria-hidden />;
+    return <MinusCircleIcon aria-hidden />;
   }
 
   if (isLoading) {
-    return <Sandglass aria-hidden />;
+    return <HourglassIcon aria-hidden />;
   }
 
-  return success ? <Success aria-hidden /> : <Error aria-hidden />;
+  return success ? <CheckmarkCircleIcon aria-hidden /> : <XMarkOctagonIcon aria-hidden />;
 };

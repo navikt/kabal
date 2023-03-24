@@ -1,4 +1,4 @@
-import { SuccessStroke } from '@navikt/ds-icons';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styled from 'styled-components';
 import { Flettefelt } from '../../types/editor-void-types';
@@ -55,7 +55,7 @@ const StyledDropdownButton = styled.button<{ $isFocused: boolean }>`
   }
 `;
 
-const StyledSelectedIcon = styled(SuccessStroke)`
+const StyledSelectedIcon = styled(CheckmarkIcon)`
   position: absolute;
   top: 4px;
   left: 4px;

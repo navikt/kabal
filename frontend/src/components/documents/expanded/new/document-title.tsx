@@ -1,4 +1,4 @@
-import { FileContent, Notes } from '@navikt/ds-icons';
+import { DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
@@ -57,10 +57,10 @@ export const DocumentTitle = ({ document }: Props) => {
   );
 };
 
-const StyledNotes = styled(Notes)`
+const StyledNotes = styled(DocPencilIcon)`
   flex-shrink: 0;
 `;
 
-const StyledFileContent = styled(FileContent)`
+const StyledFileContent = styled(FileTextIcon)`
   flex-shrink: 0;
 `;

@@ -1,4 +1,4 @@
-import { Close, Send } from '@navikt/ds-icons';
+import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Textarea } from '@navikt/ds-react';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { StyledCommentButtonContainer } from '../styled-components';
@@ -87,7 +87,7 @@ const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: B
   <StyledCommentButtonContainer>
     <Button
       disabled={disabled}
-      icon={<Send aria-hidden />}
+      icon={<PaperplaneIcon aria-hidden />}
       loading={isLoading}
       onClick={onSubmit}
       size="small"
@@ -99,7 +99,7 @@ const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: B
     </Button>
     <Button
       disabled={isLoading}
-      icon={<Close aria-hidden />}
+      icon={<XMarkIcon aria-hidden />}
       onClick={close}
       size="small"
       title="Escape"

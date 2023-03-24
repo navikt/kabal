@@ -1,4 +1,4 @@
-import { Search } from '@navikt/ds-icons';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -47,7 +47,7 @@ export const LovhjemmelSelect = <T extends string>({
           onClick={toggleOpen}
           disabled={disabled}
           data-testid="lovhjemmel-button"
-          icon={<Search aria-hidden />}
+          icon={<MagnifyingGlassIcon aria-hidden />}
         >
           Hjemmel
         </StyledButton>

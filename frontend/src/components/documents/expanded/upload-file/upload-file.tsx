@@ -1,4 +1,4 @@
-import { Upload } from '@navikt/ds-icons';
+import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -99,7 +99,7 @@ export const UploadFileButton = () => {
           loading={isLoading}
           data-testid="upload-document-button"
         >
-          <Upload /> Last opp dokument
+          <UploadIcon /> Last opp dokument
         </StyledUploadButton>
 
         <input

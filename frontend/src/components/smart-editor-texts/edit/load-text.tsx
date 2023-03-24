@@ -1,4 +1,4 @@
-import { Error, FileContent, Left, SelfService } from '@navikt/ds-icons';
+import { ArrowLeftIcon, FileTextIcon, FingerButtonIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
@@ -26,9 +26,9 @@ export const LoadText = () => {
     return (
       <EmptyContainer data-textid={id}>
         <div style={{ display: 'flex', gap: '16px' }}>
-          <Left width={96} height={96} />
-          <SelfService width={96} height={96} />
-          <FileContent width={96} height={96} />
+          <ArrowLeftIcon width={96} height={96} />
+          <FingerButtonIcon width={96} height={96} />
+          <FileTextIcon width={96} height={96} />
         </div>
         <StyledStatusText>Ingen tekst valgt</StyledStatusText>
       </EmptyContainer>
@@ -109,6 +109,6 @@ const StyledStatusText = styled.span`
   padding: 16px;
 `;
 
-const StyledError = styled(Error)`
+const StyledError = styled(XMarkOctagonIcon)`
   color: var(--a-surface-danger);
 `;

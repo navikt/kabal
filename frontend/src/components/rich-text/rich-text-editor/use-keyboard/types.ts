@@ -10,7 +10,7 @@ export type FeatureFlags = Record<FeatureToggles, boolean>;
 
 export enum Key {
   BACKSPACE = 'Backspace',
-  DELETE = 'Delete',
+  DELETE = 'TrashIcon',
   ENTER = 'Enter',
   SPACE = ' ',
   TAB = 'Tab',

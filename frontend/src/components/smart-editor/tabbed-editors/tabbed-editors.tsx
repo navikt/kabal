@@ -1,4 +1,4 @@
-import { Historic, NewTab, Notes } from '@navikt/ds-icons';
+import { ClockDashedIcon, DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { ErrorBoundary, StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
@@ -67,7 +67,7 @@ const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
 
     return (
       <Button type="button" key={id} onClick={() => setActiveTab(id)}>
-        <Notes aria-hidden />
+        <DocPencilIcon aria-hidden />
         {tittel}
       </Button>
     );
@@ -97,7 +97,7 @@ const ShowNewTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
 
   return (
     <NewTabButton onClick={onClick} title="Nytt dokument">
-      <NewTab />
+      <TabsAddIcon />
     </NewTabButton>
   );
 };
@@ -130,7 +130,7 @@ const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
               loading: isLoading,
               disabled: isLoading,
               buttonText: 'Gjenopprett dokument',
-              buttonIcon: <Historic aria-hidden />,
+              buttonIcon: <ClockDashedIcon aria-hidden />,
               variant: 'primary',
               size: 'small',
             }}

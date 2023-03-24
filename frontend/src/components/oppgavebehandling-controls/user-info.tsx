@@ -1,4 +1,4 @@
-import { Copy } from '@navikt/ds-icons';
+import { FilesIcon } from '@navikt/aksel-icons';
 import { Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import { getFullNameWithFnr } from '@app/domain/name';
@@ -69,7 +69,7 @@ const SakenGjelder = ({ id, name, gender, fortrolig, strengtFortrolig }: SakenGj
         <UserItem>{name}</UserItem>
         <UserItem>
           <CopyFnrButton ref={button} onClick={() => copyToClipboard(id)}>
-            <Copy title="Kopier" />
+            <FilesIcon title="Kopier" />
           </CopyFnrButton>
         </UserItem>
         <Fortrolig fortrolig={fortrolig} />
