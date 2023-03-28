@@ -1,0 +1,33 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "dev": "NODE_ENV=development playwright test --headed --retries 0 --workers 1",
+    "lint": "eslint . --color",
+    "lint-fix": "eslint . --color --fix"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.32.1",
+    "@slack/bolt": "^3.12.2",
+    "node-fetch": "^2.6.9",
+    "playwright": "^1.32.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "@types/node-fetch": "^2.6.2",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.2"
+  }
+}

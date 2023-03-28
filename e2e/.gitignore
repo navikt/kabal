@@ -1,0 +1,7 @@
+.idea
+node_modules/
+screenshots/
+test-results/
+dist/
+state.json
+.env
