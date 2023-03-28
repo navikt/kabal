@@ -3,11 +3,11 @@ name: Manual deploy
 on:
   workflow_call:
     inputs:
-      env:
-        description: "Environment to deploy to"
+      deploy_to_prod:
+        description: "Deploy to prod?"
         required: true
-        type: string
-        default: dev
+        type: boolean
+        default: false
     secrets:
       NAIS_DEPLOY_APIKEY:
         description: "API key for nais/deploy"
@@ -17,32 +17,31 @@ on:
         required: true
   workflow_dispatch:
     inputs:
-      env:
-        description: "Environment to deploy to"
+      deploy_to_prod:
+        description: "Deploy to prod?"
         required: true
-        type: choice
-        default: dev
-        options:
-          - dev
-          - prod
+        type: boolean
+        default: false
 
-run-name: Deploy ${{ github.ref_name }} to ${{ inputs.env }}
+run-name: ${{ github.ref_name }}
 
 jobs:
-  deploy:
-    name: ${{ github.ref_name }} to ${{ inputs.env }}
+  build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
       id-token: "write"
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build and test
+      - name: Build & test
         uses: ./.github/actions/build-and-test
 
-      - name: Build and publish Docker image
+      - name: Docker
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
@@ -58,23 +57,34 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
           build_args: |
             VERSION=${CI}
-
-      - name: Deploy to ${{ inputs.env }}
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: ${{ inputs.env }}-gcp
-          TEAM: klage
-          VAR: image=${{ steps.docker-build-push.outputs.image }}
-          VARS: nais/${{ inputs.env }}.yaml
-          RESOURCE: nais/nais.yaml
-          IMAGE: ${{ steps.docker-build-push.outputs.image }}
+  
+  deploy_to_dev:
+    name: Dev
+    needs: build
+    uses: ./.github/workflows/deploy-image.yaml
+    with:
+      env: dev
+      image: ${{ needs.build.outputs.image }}
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
 
   e2e_test:
     name: E2E
     uses: ./.github/workflows/e2e.yaml
-    if: ${{ inputs.env == 'dev' }}
-    needs: deploy
+    needs: deploy_to_dev
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+
+  deploy_to_prod:
+    name: Prod
+    if: ${{ inputs.deploy_to_prod }}
+    uses: ./.github/workflows/deploy-image.yaml
+    needs: [e2e_test, build]
+    with:
+      env: prod
+      image: ${{ needs.build.outputs.image }}
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
       NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}

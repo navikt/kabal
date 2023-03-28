@@ -1,0 +1,39 @@
+name: Deploy image
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: "Environment to deploy to"
+        required: true
+        type: string
+        default: dev
+      image:
+        description: "Docker image to deploy"
+        required: true
+        type: string
+    secrets:
+      NAIS_DEPLOY_APIKEY:
+        description: "API key for nais/deploy"
+        required: true
+
+run-name: ${{ github.ref_name }} to ${{ inputs.env }}
+
+jobs:
+  deploy:
+    name: ${{ github.ref_name }} to ${{ inputs.env }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Deploy to ${{ inputs.env }}
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: ${{ inputs.env }}-gcp
+          TEAM: klage
+          VAR: image=${{ inputs.image }}
+          VARS: nais/${{ inputs.env }}.yaml
+          RESOURCE: nais/nais.yaml
+          IMAGE: ${{ inputs.image }}

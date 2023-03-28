@@ -6,21 +6,11 @@ on:
       - main
 
 jobs:
-  deploy_to_dev:
-    name: Deploy to dev
+  deploy:
+    name: Deploy
     uses: ./.github/workflows/deploy.yaml
     with:
-      env: dev
-    secrets:
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-      NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-  
-  deploy_to_prod:
-    name: Deploy to prod
-    needs: deploy_to_dev
-    uses: ./.github/workflows/deploy.yaml
-    with:
-      env: prod
+      deploy_to_prod: true
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
       NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
