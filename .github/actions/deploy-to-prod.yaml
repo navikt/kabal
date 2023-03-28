@@ -1,0 +1,30 @@
+name: 'Deploy to prod'
+description: 'Deploy to prod'
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Deploy to prod
+      uses: nais/deploy/actions/deploy@v1
+      env:
+        APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+        CLUSTER: prod-gcp
+        TEAM: klage
+        VAR: image=${{ steps.docker-push.outputs.image }}
+        VARS: nais/prod.yaml
+        RESOURCE: nais/nais.yaml
+        IMAGE: ${{ steps.docker-push.outputs.image }}
+      timeout-minutes: 5
+    - name: Generate release version
+      run: |
+        TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+        COMMIT=$(git rev-parse --short=7 HEAD)
+        VERSION=$TIME-$COMMIT
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+    - uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: ${{ env.VERSION }}

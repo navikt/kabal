@@ -2,23 +2,53 @@ name: E2E tests
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
-  build:
+  build-and-push:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    name: Build and run E2E tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          repository: navikt/kabal
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'e2e/package-lock.json'
+      - name: Install dependencies
+        run: |
+          cd e2e
+          npm ci
+      - name: Build and publish Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: klage # required
+          tags: latest # optional
+          push_image: true # optional, default true
+          pull: true # optional, default true
+          dockerfile: e2e/Dockerfile # optional, default Dockerfile
+          docker_context: e2e # optional, default .
+          image_suffix: e2e # optional, default empty
+          cache_from: type=gha # optional, default type=gha
+          cache_to: type=gha,mode=max # optional, default type=gha,mode=max
+          build_args: |
+            CI=${CI}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
       - name: Set UUID
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1.1
       - name: Run E2E tests
-        uses: nais/deploy/actions/deploy@master
+        uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          VAR: app=kabal-e2e-tests,jobname=kabal-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
+          VAR: jobid=${{ steps.generate-uuid.outputs.uuid }},image=${{ steps.docker-push.outputs.image }}
           TEAM: klage
           RESOURCE: nais/e2ejob.yaml
-        timeout-minutes: 5

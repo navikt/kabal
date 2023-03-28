@@ -3,31 +3,16 @@ name: Manual deploy to production
 on:
   workflow_dispatch:
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}/kabal-frontend:${{ github.sha }}
-
 jobs:
   deployprod:
     name: Deploy to prod-gcp
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-        name: Checkout code
-      - uses: nais/deploy/actions/deploy@master
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
-          RESOURCE: nais/nais.yaml
-          VARS: nais/prod.yaml
-      - name: Generate release version
-        run: |
-          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
-          COMMIT=$(git rev-parse --short=7 HEAD)
-          VERSION=$TIME-$COMMIT
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-      - uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.VERSION }}
-          release_name: ${{ env.VERSION }}
+      - name: Build and test
+        uses: actions/build-and-test
+
+      - name: Build and publish Docker image
+        uses: actions/docker
+
+      - name: Deploy to prod
+        uses: actions/deploy-to-prod

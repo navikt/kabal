@@ -3,82 +3,19 @@ name: Manual deploy to dev
 on:
   workflow_dispatch:
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}/kabal-frontend:${{ github.sha }}
-
 jobs:
   deploytodev:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
-      - name: Build frontend
-        env:
-          VERSION: ${{ github.sha }}
-        run: |
-          cd frontend
-          npm run build
-      - name: Test frontend
-        run: |
-          cd frontend
-          npm test
-      - name: Install server dependencies
-        run: |
-          cd server
-          npm ci
-      - name: Build server
-        run: |
-          cd server
-          npm run build
-      - name: Test server
-        run: |
-          cd server
-          npm test
+      - name: Build and test
+        uses: actions/build-and-test
+
       - name: Build and publish Docker image
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.sha }}
-        run: |
-          cat Dockerfile
-          docker build --build-arg VERSION --tag ${IMAGE} .
-          docker login ghcr.io -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push ${IMAGE}
-      - uses: actions/checkout@v2
-        name: Checkout code
-      - uses: nais/deploy/actions/deploy@master
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: nais/nais.yaml
-          VARS: nais/dev.yaml
+        uses: actions/docker
+
+      - name: Deploy to dev
+        uses: actions/deploy-to-dev
   e2etest:
     name: E2E-test av deploy
+    uses: ./.github/workflows/e2e.yaml
     needs: deploytodev
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set UUID
-        id: generate-uuid
-        uses: filipstefansson/uuid-action@v1.1
-      - name: Run E2E tests
-        uses: nais/deploy/actions/deploy@master
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          VAR: app=kabal-e2e-tests,jobname=kabal-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
-          TEAM: klage
-          RESOURCE: nais/e2ejob.yaml
-        timeout-minutes: 5

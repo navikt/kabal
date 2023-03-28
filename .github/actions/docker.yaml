@@ -1,0 +1,21 @@
+name: 'Build and test'
+description: 'Build and test'
+runs:
+  using: "composite"
+  steps:
+    - name: Build and publish Docker image
+      uses: nais/docker-build-push@v0
+      id: docker-push
+      with:
+        team: klage # required
+        tags: ${{ github.sha }} # optional
+        push_image: true # optional, default true
+        dockerfile: Dockerfile # optional, default Dockerfile
+        docker_context: . # optional, default .
+        image_suffix: frontend # optional, default empty
+        cache_from: type=gha # optional, default type=gha
+        cache_to: type=gha,mode=max # optional, default type=gha,mode=max
+        build_args: |
+          VERSION=${CI}
+        project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
+        identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret

@@ -1,7 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{jobname}}
+  labels:
+    team: klage
+    app: kabal-e2e-tests
+  name: kabal-e2e-tests-{{jobid}}
   namespace: klage
 spec:
   backoffLimit: 0
@@ -10,8 +13,8 @@ spec:
   template:
     metadata:
       labels:
-        job-name: {{jobname}}
-        app: {{app}}
+        team: klage
+        app: kabal-e2e-tests
       annotations:
         linkerd.io/inject: "false"
     spec:
@@ -20,7 +23,7 @@ spec:
       serviceAccount: default
       serviceAccountName: default
       containers:
-        - image: ghcr.io/navikt/kabal-e2e-tests:latest
+        - image: {{image}}
           name: kabal-e2e-tests
           securityContext:
             allowPrivilegeEscalation: false
