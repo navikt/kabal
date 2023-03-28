@@ -1,24 +1,69 @@
-name: E2E tests
+name: Manual E2E
 
 on:
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      NAIS_DEPLOY_APIKEY:
+        description: "API key for nais/deploy"
+        required: true
+      NAIS_WORKLOAD_IDENTITY_PROVIDER:
+        description: "Identity provider for nais/docker-build-push"
+        required: true
+
+run-name: E2E (${{ github.ref_name }})
 
 jobs:
-  build:
+  e2e_tests:
+    name: E2E
+    permissions:
+      contents: "read"
+      id-token: "write"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          repository: navikt/kabal
-      - name: Set UUID
-        id: generate-uuid
-        uses: filipstefansson/uuid-action@v1.1
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'e2e/package-lock.json'
+      
+      - name: Install dependencies
+        run: |
+          cd e2e
+          npm ci
+      
+      - name: Build and publish Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: klage # required
+          tag: latest # optional
+          push_image: true # optional, default true
+          pull: true # optional, default true
+          dockerfile: e2e/Dockerfile # optional, default Dockerfile
+          docker_context: e2e # optional, default .
+          image_suffix: e2e # optional, default empty
+          cache_from: type=gha # optional, default type=gha
+          cache_to: type=gha,mode=max # optional, default type=gha,mode=max
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
+          build_args: |
+            CI=${CI}
+      
+      - name: UUID
+        id: uuid
+        shell: bash
+        run: echo "uuid=$(uuidgen)" >> $GITHUB_OUTPUT
+      
       - name: Run E2E tests
-        uses: nais/deploy/actions/deploy@master
+        uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          VAR: app=kabal-e2e-tests,jobname=kabal-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
+          VAR: jobid=${{ steps.uuid.outputs.uuid }},image=${{ steps.docker-build-push.outputs.image }}
           TEAM: klage
           RESOURCE: nais/e2ejob.yaml
-        timeout-minutes: 5

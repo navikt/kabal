@@ -30,6 +30,9 @@ spec:
   prometheus:
     enabled: true
   accessPolicy:
+    inbound:
+      rules:
+        - application: kabal-e2e-tests
     outbound:
       rules:
         - application: klage-redis-fe

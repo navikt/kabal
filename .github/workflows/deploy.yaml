@@ -1,0 +1,80 @@
+name: Manual deploy
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: "Environment to deploy to"
+        required: true
+        type: string
+        default: dev
+    secrets:
+      NAIS_DEPLOY_APIKEY:
+        description: "API key for nais/deploy"
+        required: true
+      NAIS_WORKLOAD_IDENTITY_PROVIDER:
+        description: "Identity provider for nais/docker-build-push"
+        required: true
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment to deploy to"
+        required: true
+        type: choice
+        default: dev
+        options:
+          - dev
+          - prod
+
+run-name: Deploy ${{ github.ref_name }} to ${{ inputs.env }}
+
+jobs:
+  deploy:
+    name: ${{ github.ref_name }} to ${{ inputs.env }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build and test
+        uses: ./.github/actions/build-and-test
+
+      - name: Build and publish Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: klage # required
+          tag: ${{ github.sha }} # optional
+          push_image: true # optional, default true
+          dockerfile: Dockerfile # optional, default Dockerfile
+          docker_context: . # optional, default .
+          image_suffix: frontend # optional, default empty
+          cache_from: type=gha # optional, default type=gha
+          cache_to: type=gha,mode=max # optional, default type=gha,mode=max
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
+          build_args: |
+            VERSION=${CI}
+
+      - name: Deploy to ${{ inputs.env }}
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: ${{ inputs.env }}-gcp
+          TEAM: klage
+          VAR: image=${{ steps.docker-build-push.outputs.image }}
+          VARS: nais/${{ inputs.env }}.yaml
+          RESOURCE: nais/nais.yaml
+          IMAGE: ${{ steps.docker-build-push.outputs.image }}
+
+  e2e_test:
+    name: E2E
+    uses: ./.github/workflows/e2e.yaml
+    if: ${{ inputs.env == 'dev' }}
+    needs: deploy
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}

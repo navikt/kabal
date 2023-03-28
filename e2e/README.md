@@ -33,3 +33,8 @@ kubectl create secret generic kabal-e2e-test-users \
 --from-literal=SAKSBEHANDLER_USERNAME=<email> \
 --from=literal=SAKSBEHANDLER_PASSWORD=<password>
 ```
+
+As a one-time job, before the tests can run, we must apply the network policy (nais/e2e-network-policy.yaml)
+```
+kubectl apply -f e2e-network-policy.yaml -n klage
+```
