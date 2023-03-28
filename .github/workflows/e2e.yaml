@@ -54,7 +54,7 @@ jobs:
           build_args: |
             CI=${CI}
       
-      - name: UUID
+      - name: Generate UUID
         id: uuid
         shell: bash
         run: echo "uuid=$(uuidgen)" >> $GITHUB_OUTPUT
@@ -67,3 +67,4 @@ jobs:
           VAR: jobid=${{ steps.uuid.outputs.uuid }},image=${{ steps.docker-build-push.outputs.image }}
           TEAM: klage
           RESOURCE: nais/e2ejob.yaml
+          IMAGE: ${{ steps.docker-build-push.outputs.image }}
