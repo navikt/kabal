@@ -44,7 +44,7 @@ export const SendTilSaksbehandler = ({
           data-testid="send-to-saksbehandler"
           icon={<PaperplaneIcon aria-hidden />}
         >
-          PaperplaneIcon til saksbehandler
+          Send til saksbehandler
         </Button>
       </StyledFormSection>
     );
