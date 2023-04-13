@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useLovkildeToRegistreringshjemlerLatest } from '@app/simple-api-state/use-kodeverk';
 import { GroupedFilterList, OptionGroup } from '../filter-dropdown/grouped-filter-list';
@@ -8,20 +9,25 @@ import { ToggleButton } from '../toggle-button/toggle-button';
 interface Props {
   selected: string[] | undefined;
   onChange: (selected: string[]) => void;
+  includeNoneOption?: boolean;
 }
 
-export const HjemlerSelect = ({ selected = [], onChange }: Props) => {
+export const HjemlerSelect = ({ selected = [], onChange, includeNoneOption = false }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data = [] } = useLovkildeToRegistreringshjemlerLatest();
 
-  const options = useMemo<OptionGroup<string>[]>(
-    () =>
-      data.map(({ id, navn, registreringshjemler }) => ({
-        sectionHeader: { id, name: navn },
-        sectionOptions: registreringshjemler.map((h) => ({ value: h.id, label: h.navn })),
-      })),
-    [data]
-  );
+  const options = useMemo<OptionGroup<string>[]>(() => {
+    const hjemler = data.map(({ id, navn, registreringshjemler }) => ({
+      sectionHeader: { id, name: navn },
+      sectionOptions: registreringshjemler.map((h) => ({ value: h.id, label: h.navn })),
+    }));
+
+    if (!includeNoneOption) {
+      return hjemler;
+    }
+
+    return [{ sectionHeader: { id: 'NONE' }, sectionOptions: [NONE_OPTION] }, ...hjemler];
+  }, [data, includeNoneOption]);
 
   const toggleOpen = () => setIsOpen(!isOpen);
 

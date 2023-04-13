@@ -1,9 +1,18 @@
 import { Descendant } from 'slate';
 import { VERSION } from '@app/components/rich-text/version';
+import { NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { UtfallEnum } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
-// No specific order.
+/* 
+  Why animals?
+  
+  Short, non-sortable.
+  No need for UUIDs.
+  Many to choose from.
+
+  https://en.wikipedia.org/wiki/Haiku
+*/
 export enum TemplateSections {
   TITLE = 'section-esel',
   INTRODUCTION = 'section-rev',
@@ -19,6 +28,15 @@ export enum TemplateSections {
 }
 
 export interface AppQuery {
+  hjemler: (string | NONE_TYPE)[];
+  ytelser: (string | NONE_TYPE)[];
+  utfall: (UtfallEnum | NONE_TYPE)[];
+  enheter: (string | NONE_TYPE)[];
+  sections: (TemplateSections | NONE_TYPE)[];
+  templates: (TemplateIdEnum | NoTemplateIdEnum | NONE_TYPE)[];
+}
+
+export interface TextMetadata {
   hjemler: string[];
   ytelser: string[];
   utfall: UtfallEnum[];
@@ -34,8 +52,6 @@ interface BaseQuery extends AppQuery {
 export interface ApiQuery extends BaseQuery {
   requiredSection?: TemplateSections;
 }
-
-export type TextMetadata = AppQuery;
 
 export enum RichTextTypes {
   GOD_FORMULERING = 'GOD_FORMULERING',
@@ -60,7 +76,7 @@ export const isPlainText = (text: IText): text is IPlainText => isPlainTextType(
 
 export type IGetTextsParams = Partial<ApiQuery>;
 
-export interface ITextBaseMetadata extends AppQuery {
+export interface ITextBaseMetadata extends TextMetadata {
   title: string;
 }
 
