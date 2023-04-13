@@ -5,7 +5,7 @@ import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/templa
 import { AppQuery } from '@app/types/texts/texts';
 import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
-import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from './select';
+import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from './query-filter-selects';
 import { FilterDivider } from './styled-components';
 
 export const Filters = () => {
@@ -38,7 +38,7 @@ export const Filters = () => {
 
       <FilterDivider />
 
-      <HjemlerSelect selected={hjemler} onChange={(value: string[]) => setFilter('hjemler', value)} />
+      <HjemlerSelect selected={hjemler} onChange={(value: string[]) => setFilter('hjemler', value)} includeNoneOption />
 
       <YtelseSelect selected={ytelser ?? []} onChange={(value) => setFilter('ytelser', value)}>
         Ytelser

@@ -1,9 +1,9 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { TextMetadata } from '@app/types/texts/texts';
+import { AppQuery } from '@app/types/texts/texts';
 
-export const LimitWarning = (limits: TextMetadata) => {
+export const LimitWarning = (limits: AppQuery) => {
   const isLimited = useMemo(
     () =>
       Object.entries(limits).some(([key, limit]) => key !== 'templates' && Array.isArray(limit) && limit.length !== 0),

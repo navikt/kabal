@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useKodeverkValue } from '@app/hooks/use-kodeverk-value';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
-import { ApiQuery, IText, TemplateSections, TextMetadata } from '@app/types/texts/texts';
+import { ApiQuery, AppQuery, IText, TemplateSections, TextMetadata } from '@app/types/texts/texts';
 import { MALTEKST_SECTION_NAMES } from '../../../smart-editor/constants';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { TEMPLATES } from '../../../smart-editor/templates/templates';
@@ -66,9 +66,9 @@ const TagsContainer = styled.div`
 `;
 
 interface TagIdsProps {
-  query: TextMetadata;
-  limits: TextMetadata;
-  type: keyof TextMetadata;
+  query: AppQuery;
+  limits: AppQuery;
+  type: keyof AppQuery;
 }
 
 const RenderTags = ({ query, limits, type }: TagIdsProps) => {
@@ -110,7 +110,7 @@ const getTypeName = (type: keyof TextMetadata): string => {
   return type;
 };
 
-const getIds = (query: TextMetadata, limits: TextMetadata, key: keyof TextMetadata): string[] => {
+const getIds = (query: AppQuery, limits: AppQuery, key: keyof AppQuery): string[] => {
   const ids = query[key];
 
   return limits[key].filter((limit) => ids.some((id) => id === limit));
