@@ -1,3 +1,4 @@
+import { Descendant } from 'slate';
 import { TemplateSections } from '@app/types/texts/texts';
 import {
   ContentTypeEnum,
@@ -16,6 +17,8 @@ import {
   MaltekstElementType,
   ParagraphElementType,
   RedigerbareMalteksterElementType,
+  RegelverkContainerType,
+  RegelverkElementType,
 } from '../../rich-text/types/editor-types';
 import {
   CurrentDateType,
@@ -46,10 +49,16 @@ export const createRedigerbarMaltekst = (section: TemplateSections): Redigerbare
   children: [createSimpleParagraph()],
 });
 
-export const createRegelverktekst = (section: TemplateSections): RedigerbareMalteksterElementType => ({
-  type: RedigerbarMaltekstEnum.REGELVERKTEKST,
-  section,
-  children: [createSimpleParagraph()],
+export const createRegelverkContainer = (
+  children: Descendant[] = [createSimpleParagraph()]
+): RegelverkContainerType => ({
+  type: UndeletableContentEnum.REGELVERK_CONTAINER,
+  children,
+});
+
+export const createRegelverk = (): RegelverkElementType => ({
+  type: UndeletableContentEnum.REGELVERK,
+  children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK), createRegelverkContainer()],
 });
 
 // eslint-disable-next-line import/no-unused-modules
@@ -88,6 +97,7 @@ export const createSignature = (): SignatureElementType => ({
   threadIds: [],
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const createPageBreak = (): PageBreakElementType => ({
   type: UndeletableVoidElementsEnum.PAGE_BREAK,
   children: [{ text: '' }],

@@ -1,10 +1,18 @@
-import { Editor, Location, Text, Transforms } from 'slate';
+import { Editor, Location, Range, Text, Transforms } from 'slate';
 import { ContentTypeEnum, HeadingTypesEnum, UndeletableVoidElementsEnum } from '../types/editor-enums';
 import { PageBreakElementType } from '../types/editor-void-types';
 import { areBlocksActive } from './blocks';
 import { containsVoid } from './contains-void';
 
 export const insertPageBreakIsAvailable = (editor: Editor) => {
+  if (editor.selection === null || Range.isExpanded(editor.selection)) {
+    return false;
+  }
+
+  if (editor.selection.focus.path.length !== 2) {
+    return false;
+  }
+
   if (containsVoid(editor, editor.selection)) {
     return false;
   }

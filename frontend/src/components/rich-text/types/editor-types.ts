@@ -1,4 +1,5 @@
 import { BaseRange, Descendant, Element } from 'slate';
+import { PageBreakElementType } from '@app/components/rich-text/types/editor-void-types';
 import { TemplateSections, TextMetadata } from '@app/types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import {
@@ -52,6 +53,16 @@ export interface MaltekstElementType {
   children: Descendant[];
 }
 
+export interface RegelverkElementType {
+  type: UndeletableContentEnum.REGELVERK;
+  children: [PageBreakElementType, MaltekstElementType, RegelverkContainerType];
+}
+
+export interface RegelverkContainerType {
+  type: UndeletableContentEnum.REGELVERK_CONTAINER;
+  children: Descendant[];
+}
+
 export type AlignableElementTypes = ParagraphElementType | BlockquoteElementType;
 
 export type NonVoidElementTypes =
@@ -63,7 +74,9 @@ export type NonVoidElementTypes =
   | RedigerbareMalteksterElementType
   | PlaceholderElementType
   | MaltekstElementType
-  | TableType;
+  | TableType
+  | RegelverkElementType
+  | RegelverkContainerType;
 
 export interface RedigerbareMalteksterElementType extends Partial<TextMetadata> {
   type: RedigerbarMaltekstEnum;

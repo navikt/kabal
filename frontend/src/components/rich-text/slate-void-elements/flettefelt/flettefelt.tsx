@@ -88,7 +88,14 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
   return (
     <span {...attributes} contentEditable={false} title={getFlettefeltName(element.field)}>
       <Span $isFocused={isSelected && isFocused}>
-        <StyledLeaf {...element} selected={isSelected} commentIds={element.threadIds} isExpanded={isExpanded} hasText>
+        <StyledLeaf
+          {...element}
+          selected={isSelected}
+          commentIds={element.threadIds}
+          isExpanded={isExpanded}
+          hasText
+          content={element.content ?? undefined}
+        >
           {renderValue(value, element.field)}
         </StyledLeaf>
         <Dropdown options={OPTIONS} field={element.field} focused={focused} isOpen={isOpen} setField={setField} />

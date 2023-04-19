@@ -16,8 +16,14 @@ export const PageBreak = ({ element, children, attributes }: RenderElementProps)
 
   return (
     <StyledPageBreak {...attributes} contentEditable={false}>
-      <StyledDeleteButton onClick={onClick} title="Fjern sideskift" variant="danger" size="small">
-        <TrashIcon /> Fjern sideskift
+      <StyledDeleteButton
+        onClick={onClick}
+        title="Fjern sideskift"
+        variant="danger"
+        size="small"
+        icon={<TrashIcon aria-hidden />}
+      >
+        Fjern sideskift
       </StyledDeleteButton>
       {children}
     </StyledPageBreak>

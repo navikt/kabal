@@ -1,4 +1,5 @@
 import React from 'react';
+import { RegelverkContainerElement } from '@app/components/rich-text/slate-elements/regelverk';
 import { RichTextTypes } from '@app/types/texts/texts';
 import { CurrentDate } from '../slate-void-elements/current-date';
 import { DocumentListElement } from '../slate-void-elements/document-list';
@@ -110,6 +111,14 @@ export const renderElement = (props: RenderElementProps) => {
       return <TableRowElement {...props} element={props.element} />;
     case TableContentEnum.TD:
       return <TableCellElement {...props} element={props.element} />;
+    case UndeletableContentEnum.REGELVERK:
+      return props.children;
+    case UndeletableContentEnum.REGELVERK_CONTAINER:
+      return (
+        <RegelverkContainerElement {...props} element={props.element}>
+          {props.children}
+        </RegelverkContainerElement>
+      );
     default:
       return <ParagraphElement {...props} element={props.element} />;
   }

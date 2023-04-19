@@ -8,7 +8,12 @@ import {
   TableContentEnum,
   TableTypeEnum,
 } from '../types/editor-enums';
-import { isOfElementType, isOfElementTypeFn, isOfElementTypesFn } from '../types/editor-type-guards';
+import {
+  isOfElementType,
+  isOfElementTypeFn,
+  isOfElementTypesFn,
+  isUndeletableElement,
+} from '../types/editor-type-guards';
 import { BulletListElementType, NumberedListElementType } from '../types/editor-types';
 import { pruneSelection } from './prune-selection';
 
@@ -136,7 +141,7 @@ export const toggleBlock = (editor: Editor, block: NonVoidElementsEnum) => {
     return;
   }
 
-  const [first] = matchesArray;
+  const [first, second] = matchesArray;
 
   if (first === undefined) {
     return;
@@ -145,7 +150,7 @@ export const toggleBlock = (editor: Editor, block: NonVoidElementsEnum) => {
   const [, path] = first;
 
   Editor.withoutNormalizing(editor, () => {
-    if (path.length !== 1) {
+    if (Element.isElement(second) && !isUndeletableElement(second)) {
       Transforms.liftNodes(editor, { at: path });
     }
 
