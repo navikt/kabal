@@ -1,4 +1,4 @@
-import { Editor, Element, Range, Transforms } from 'slate';
+import { Editor, Element, Transforms } from 'slate';
 import { getCurrentElement, isBlockActive } from '../../functions/blocks';
 import { isPlaceholderSelectedInMaltekstWithOverlap } from '../../functions/insert-placeholder';
 import { ContentTypeEnum, TableContentEnum, TableTypeEnum } from '../../types/editor-enums';
@@ -6,14 +6,12 @@ import { isOfElementType, isOfElementTypeFn, isUndeletableElement } from '../../
 import { ParagraphElementType } from '../../types/editor-types';
 import { HandlerFn } from './types';
 
-export const deleteHandler: HandlerFn = ({ editor, event }) => {
+export const deleteHandler: HandlerFn = ({ editor, event, isCollapsed }) => {
   if (isPlaceholderSelectedInMaltekstWithOverlap(editor)) {
     event.preventDefault();
 
     return;
   }
-
-  const isCollapsed = Range.isCollapsed(editor.selection);
 
   if (isCollapsed) {
     const isInTableCell = isBlockActive(editor, TableContentEnum.TD);

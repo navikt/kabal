@@ -10,10 +10,12 @@ export const EditorContainer = styled.section`
   flex-direction: column;
 `;
 
+export const RICH_TEXT_ROW_GAP = '12pt';
+
 export const StyledEditable = styled(Editable)<{ 'data-is-focused': boolean; readOnly: boolean }>`
   display: flex;
   flex-direction: column;
-  row-gap: 12pt;
+  row-gap: ${RICH_TEXT_ROW_GAP};
   min-height: 64px;
   width: 100%;
   position: relative;

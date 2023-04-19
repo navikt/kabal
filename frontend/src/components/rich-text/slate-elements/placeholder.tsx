@@ -31,11 +31,11 @@ export const PlaceholderElement = ({ element, children, attributes }: RenderElem
         onClick={onClick}
       >
         <Anchor contentEditable={false} role="presentation">
-          ${String.fromCodePoint(160)}
+          {String.fromCodePoint(160)}
         </Anchor>
         {children}
         <Anchor contentEditable={false} role="presentation">
-          ${String.fromCodePoint(160)}
+          {String.fromCodePoint(160)}
         </Anchor>
       </Wrapper>
     );

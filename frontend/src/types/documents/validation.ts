@@ -2,6 +2,7 @@ import { Path } from 'slate';
 
 export enum DocumentValidationErrorType {
   EMPTY_PLACEHOLDERS = 'EMPTY_PLACEHOLDERS',
+  EMPTY_REGELVERK = 'EMPTY_REGELVERK',
 }
 
 interface IValidationError {

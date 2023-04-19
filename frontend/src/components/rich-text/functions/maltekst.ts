@@ -1,4 +1,5 @@
 import { Editor, Range } from 'slate';
+import { pruneSelection } from '@app/components/rich-text/functions/prune-selection';
 import { ContentTypeEnum, UndeletableContentEnum } from '../types/editor-enums';
 import { isOfElementTypeFn } from '../types/editor-type-guards';
 import { MaltekstElementType, PlaceholderElementType } from '../types/editor-types';
@@ -8,7 +9,14 @@ export const isInPlaceholderInMaltekst = (editor: Editor) => isInPlaceholder(edi
 export const isInMaltekstAndNotPlaceholder = (editor: Editor) => isInMaltekst(editor) && !isInPlaceholder(editor);
 
 export const isInMaltekst = (editor: Editor) => {
+  const at = pruneSelection(editor);
+
+  if (at === null) {
+    return false;
+  }
+
   const [maltekstEntry] = Editor.nodes(editor, {
+    at,
     match: isOfElementTypeFn<MaltekstElementType>(UndeletableContentEnum.MALTEKST),
   });
 

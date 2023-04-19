@@ -58,10 +58,7 @@ export const hotkeys: HandlerFn = ({ editor, event, context }) => {
         return;
       }
       case 'a': {
-        event.preventDefault();
-        selectAll(event, editor);
-
-        return;
+        return selectAll(event, editor);
       }
       case 'm': {
         event.preventDefault();

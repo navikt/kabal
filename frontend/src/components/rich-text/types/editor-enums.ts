@@ -7,6 +7,8 @@ export enum ContentTypeEnum {
 
 export enum UndeletableContentEnum {
   MALTEKST = 'maltekst',
+  REGELVERK = 'regelverk',
+  REGELVERK_CONTAINER = 'regelverk-container',
 }
 
 export enum TableTypeEnum {

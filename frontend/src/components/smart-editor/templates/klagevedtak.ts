@@ -12,9 +12,8 @@ import {
   createHeader,
   createLabelContent,
   createMaltekst,
-  createPageBreak,
   createRedigerbarMaltekst,
-  createRegelverktekst,
+  createRegelverk,
   createSignature,
 } from './helpers';
 
@@ -39,9 +38,7 @@ const INITIAL_SLATE_VALUE: Descendant[] = [
   createMaltekst(TemplateSections.GENERELL_INFO),
   createSignature(),
   createFooter(),
-  createPageBreak(),
-  createMaltekst(TemplateSections.REGELVERK),
-  createRegelverktekst(TemplateSections.REGELVERK),
+  createRegelverk(),
 ];
 
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({

@@ -1,7 +1,6 @@
 import { Editor, Element, Transforms } from 'slate';
 import { getCurrentElement } from '../../../functions/blocks';
 import { ContentTypeEnum } from '../../../types/editor-enums';
-import { isUndeletableElement } from '../../../types/editor-type-guards';
 import { ParagraphElementType } from '../../../types/editor-types';
 import { HandlerFn } from '../types';
 
@@ -31,10 +30,10 @@ export const handleParagraph: HandlerFn = ({ editor, event, isCollapsed }) => {
     at: paragraphPath,
     match: Element.isElement,
     voids: true,
-    mode: 'highest',
+    mode: 'lowest',
   });
 
-  if (typeof previousEntry === 'undefined' || isUndeletableElement(previousEntry[0])) {
+  if (typeof previousEntry === 'undefined') {
     event.preventDefault();
 
     return;
