@@ -35,7 +35,7 @@ const RenderHeaderFooterElement = ({ element, attributes, children }: RenderElem
 
   const textType = element.type === UndeletableVoidElementsEnum.HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
-  const query = useQuery({ textType, templateId: templateId ?? undefined });
+  const query = useQuery({ textType, templateId });
   const [text, setText] = useState<IPlainText>();
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetTextsQuery();

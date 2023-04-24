@@ -45,12 +45,8 @@ export interface TextMetadata {
   templates: (TemplateIdEnum | NoTemplateIdEnum)[];
 }
 
-interface BaseQuery extends AppQuery {
+export interface ApiQuery extends AppQuery {
   textType: RichTextTypes | PlainTextTypes;
-}
-
-export interface ApiQuery extends BaseQuery {
-  requiredSection?: TemplateSections;
 }
 
 export enum RichTextTypes {

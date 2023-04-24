@@ -8,15 +8,13 @@ import { ApiQuery, TemplateSections, TextTypes } from '@app/types/texts/texts';
 
 interface Params {
   textType: TextTypes;
-  section?: TemplateSections;
-  requiredSection?: TemplateSections;
-  templateId?: TemplateIdEnum | NoTemplateIdEnum;
+  templateId?: TemplateIdEnum | NoTemplateIdEnum | null;
+  sections?: (TemplateSections | NONE_TYPE)[];
 }
 
-const NONE_QUERY: [NONE_TYPE] = [NONE];
 const EMPTY_QUERY: NONE_TYPE[] = [];
 
-export const useQuery = ({ textType, templateId, section, requiredSection }: Params) => {
+export const useQuery = ({ textType, templateId = null, sections = EMPTY_QUERY }: Params) => {
   const { data, isLoading } = useOppgave();
   const { data: bruker, isLoading: brukerIsLoading } = useUser();
 
@@ -28,35 +26,15 @@ export const useQuery = ({ textType, templateId, section, requiredSection }: Par
     const { utfall } = data.resultat;
 
     const query: ApiQuery = {
-      sections: getSections(requiredSection, section),
+      sections,
       hjemler: [...data.resultat.hjemler, NONE],
       ytelser: [data.ytelse, NONE],
-      utfall: getQuery(utfall),
+      utfall: utfall === null ? EMPTY_QUERY : [utfall, NONE],
       enheter: [bruker.ansattEnhet.id, NONE],
-      templates: getQuery(templateId),
+      templates: templateId === null ? EMPTY_QUERY : [templateId, NONE],
       textType,
-      requiredSection,
     };
 
     return query;
-  }, [bruker, brukerIsLoading, data, isLoading, requiredSection, section, templateId, textType]);
-};
-
-const getSections = (
-  requiredSection: TemplateSections | undefined,
-  section: TemplateSections | undefined
-): (TemplateSections | NONE_TYPE)[] => {
-  if (typeof requiredSection === 'undefined') {
-    return section === undefined ? NONE_QUERY : [section, NONE];
-  }
-
-  return EMPTY_QUERY;
-};
-
-const getQuery = <T>(query: T | null | undefined): (T | NONE_TYPE)[] => {
-  if (query === null || query === undefined) {
-    return NONE_QUERY;
-  }
-
-  return [query, NONE];
+  }, [bruker, brukerIsLoading, data, isLoading, sections, templateId, textType]);
 };
