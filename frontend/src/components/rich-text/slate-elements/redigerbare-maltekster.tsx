@@ -1,10 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Editor, Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
+import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { ApiQuery, RichTextTypes } from '@app/types/texts/texts';
+import { ApiQuery, RichTextTypes, TemplateSections } from '@app/types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../smart-editor/templates/helpers';
@@ -18,11 +19,8 @@ export const RedigerbareMalteskterElement = ({
 }: RenderElementProps<RedigerbareMalteksterElementType> & { textType: RichTextTypes }) => {
   const editor = useSlateStatic();
   const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({
-    textType,
-    requiredSection: element.section,
-    templateId: templateId ?? undefined,
-  });
+  const sections = useMemo<(TemplateSections | NONE_TYPE)[]>(() => [element.section, NONE], [element.section]);
+  const query = useQuery({ textType, sections, templateId });
   const [getTexts] = useLazyGetTextsQuery();
 
   const load = useCallback(

@@ -1,14 +1,15 @@
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAddSpaceBefore';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Descendant, Editor, Node, Path, Text, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
+import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { ApiQuery, RichTextTypes } from '@app/types/texts/texts';
+import { ApiQuery, RichTextTypes, TemplateSections } from '@app/types/texts/texts';
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
@@ -24,11 +25,8 @@ const EMPTY_VOID: EmptyVoidElement = { type: UndeletableVoidElementsEnum.EMPTY_V
 export const MaltekstElement = ({ element, children, attributes }: RenderElementProps<MaltekstElementType>) => {
   const editor = useSlateStatic();
   const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({
-    textType: RichTextTypes.MALTEKST,
-    requiredSection: element.section,
-    templateId: templateId ?? undefined,
-  });
+  const sections = useMemo<(TemplateSections | NONE_TYPE)[]>(() => [element.section, NONE], [element.section]);
+  const query = useQuery({ textType: RichTextTypes.MALTEKST, sections, templateId });
   const [getTexts, { data }] = useLazyGetTextsQuery();
 
   const loadMaltekst = useCallback(
