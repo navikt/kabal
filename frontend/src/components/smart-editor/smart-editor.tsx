@@ -4,6 +4,7 @@ import { RichTextEditorElement } from '../rich-text/rich-text-editor/rich-text-e
 import '../rich-text/types/slate-global-types';
 import { SmartEditorContext } from './context/smart-editor-context';
 import { useCanEditDocument } from './hooks/use-can-edit-document';
+import { PlateEditor } from '@app/components/plate-editor/editor';
 
 export const SmartEditor = (): JSX.Element | null => {
   const { focusedThreadId } = useContext(SmartEditorContext);
@@ -11,13 +12,14 @@ export const SmartEditor = (): JSX.Element | null => {
 
   return (
     <ElementsSection>
-      <RichTextEditorElement
+      <PlateEditor />
+      {/* <RichTextEditorElement
         showCommentsButton
         showAnnotationsButton
         showGodeFormuleringerButton
         focusedThreadId={focusedThreadId}
         canEdit={canEdit}
-      />
+      /> */}
     </ElementsSection>
   );
 };

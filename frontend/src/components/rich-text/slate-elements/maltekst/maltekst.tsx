@@ -1,7 +1,7 @@
-import { Button } from '@navikt/ds-react';
+import { Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAddSpaceBefore';
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Descendant, Editor, Node, Path, Text, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor, useSlateStatic } from 'slate-react';
@@ -28,6 +28,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
   const sections = useMemo<(TemplateSections | NONE_TYPE)[]>(() => [element.section, NONE], [element.section]);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, sections, templateId });
   const [getTexts, { data }] = useLazyGetTextsQuery();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const loadMaltekst = useCallback(
     async (q: ApiQuery | typeof skipToken) => {
@@ -73,6 +74,8 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
             );
           });
         });
+
+        setIsLoaded(true);
       } catch (err) {
         console.error('Failed to get maltekster.', err);
       }
@@ -101,6 +104,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
       contentEditable={contentEditable}
       suppressContentEditableWarning={contentEditable}
     >
+      {isLoaded ? <Loader size="xsmall" /> : null}
       {children}
       <StyledButton
         contentEditable={false}
