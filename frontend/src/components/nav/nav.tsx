@@ -1,9 +1,9 @@
 import {
   Buldings3Icon,
+  BulletListIcon,
   FileTextIcon,
   GavelSoundBlockIcon,
   LightBulbIcon,
-  ListIcon,
   MagnifyingGlassIcon,
   PadlockLockedIcon,
   PuzzlePieceIcon,
@@ -23,7 +23,7 @@ export const Nav = () => (
   <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
       <NavItem to="/oppgaver/1" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
-        <ListIcon /> Oppgaver
+        <BulletListIcon /> Oppgaver
       </NavItem>
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
         <TasklistIcon /> Mine Oppgaver
