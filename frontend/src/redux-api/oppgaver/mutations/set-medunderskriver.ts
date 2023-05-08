@@ -1,3 +1,4 @@
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
 import { ISettMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
@@ -49,6 +50,14 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            })
+          );
+
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.medunderskriverFlyt = data.medunderskriverFlyt;
+              draft.medunderskriverident = update.medunderskriver?.navIdent ?? null;
+              draft.medunderskriverNavn = update.medunderskriver?.navn ?? null;
             })
           );
         } catch {

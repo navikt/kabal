@@ -1,7 +1,7 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React from 'react';
-import { useNameSearchQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import React, { useEffect, useMemo } from 'react';
+import { useLazyNameSearchQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { INameSearchParams } from '@app/types/oppgaver';
 import { SearchResults } from './searchresults';
 
@@ -14,7 +14,21 @@ const containsNumber = (query: string) => NUMBER_REGEX.test(query);
 
 export const NameSearch = ({ queryString }: NameSearchProps) => {
   const query = useGetQuery(queryString);
-  const { data, isFetching } = useNameSearchQuery(query);
+  // const { data, isFetching } = useNameSearchQuery(query);
+
+  const [search, { data, isFetching }] = useLazyNameSearchQuery();
+
+  useEffect(() => {
+    if (query === skipToken) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      search(query);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [query, search]);
 
   if (query === skipToken) {
     return null;
@@ -35,14 +49,15 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
   return <SearchResults people={data.people} />;
 };
 
-const useGetQuery = (queryString: string): INameSearchParams | typeof skipToken => {
-  if (queryString.length === 0) {
-    return skipToken;
-  }
+const useGetQuery = (queryString: string): INameSearchParams | typeof skipToken =>
+  useMemo(() => {
+    if (queryString.length === 0) {
+      return skipToken;
+    }
 
-  if (containsNumber(queryString)) {
-    return skipToken;
-  }
+    if (containsNumber(queryString)) {
+      return skipToken;
+    }
 
-  return { query: queryString, antall: 200, start: 0 };
-};
+    return { query: queryString, antall: 200, start: 0 };
+  }, [queryString]);

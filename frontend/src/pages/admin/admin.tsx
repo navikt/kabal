@@ -1,11 +1,11 @@
 import React from 'react';
 import { Admin } from '@app/components/admin/admin';
-import { StyledArticle } from '../page-wrapper';
+import { PageWrapper } from '../page-wrapper';
 
 export const AdminPage = () => (
-  <StyledArticle>
+  <PageWrapper>
     <Admin />
-  </StyledArticle>
+  </PageWrapper>
 );
 
 // eslint-disable-next-line import/no-default-export

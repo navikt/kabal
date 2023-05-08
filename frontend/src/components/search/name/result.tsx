@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { getFullName } from '@app/domain/name';
 import { ISearchPerson } from '@app/types/oppgaver';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
-import { StyledFnr, StyledName, StyledResult } from '../common/styled-components';
+import { StyledFnr, StyledName, StyledNameResult } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';
 
 export const Result = ({ fnr, navn }: ISearchPerson) => {
@@ -13,7 +13,7 @@ export const Result = ({ fnr, navn }: ISearchPerson) => {
   const Chevron = open ? ChevronUpIcon : ChevronDownIcon;
 
   return (
-    <StyledResult data-testid="search-result">
+    <StyledNameResult data-testid="search-result">
       <StyledName>{getFullName(navn)}</StyledName>
       <StyledFnr>
         <CopyFnrButton fnr={fnr} />
@@ -30,7 +30,7 @@ export const Result = ({ fnr, navn }: ISearchPerson) => {
         {getOpenText(open)}
       </Button>
       <Oppgaver open={open} fnr={fnr} />
-    </StyledResult>
+    </StyledNameResult>
   );
 };
 

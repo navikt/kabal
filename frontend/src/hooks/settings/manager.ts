@@ -7,6 +7,36 @@ class SettingsManager {
   private listeners: ListenerMap = {};
   private settings: Record<string, string> = {};
 
+  constructor() {
+    addEventListener('storage', (event) => {
+      if (event.storageArea !== window.localStorage) {
+        return;
+      }
+
+      const { key, newValue } = event;
+
+      if (key === null) {
+        return;
+      }
+
+      const existing = this.get(key);
+
+      if (newValue === null) {
+        if (typeof existing === 'string') {
+          this.remove(key);
+        }
+
+        return;
+      }
+
+      if (existing === newValue) {
+        return;
+      }
+
+      this.set(key, newValue);
+    });
+  }
+
   private notify = (key: string, value: string | undefined): void => {
     const listeners = this.listeners[key];
 

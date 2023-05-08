@@ -1,11 +1,11 @@
 import React from 'react';
 import { Settings } from '@app/components/settings/settings';
-import { StyledArticle } from '../page-wrapper';
+import { PageWrapper } from '../page-wrapper';
 
 export const SettingsPage = () => (
-  <StyledArticle>
+  <PageWrapper>
     <Settings />
-  </StyledArticle>
+  </PageWrapper>
 );
 
 // eslint-disable-next-line import/no-default-export

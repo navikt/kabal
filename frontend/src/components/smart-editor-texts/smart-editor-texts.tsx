@@ -52,7 +52,6 @@ const Header = styled.header`
   flex-direction: row;
   justify-content: space-between;
   padding-bottom: 16px;
-  padding-top: 16px;
 `;
 
 const Content = styled.div`

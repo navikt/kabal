@@ -1,8 +1,8 @@
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { ISaksbehandler } from '@app/types/oppgave-common';
 import { ITildelingResponse, TildelSaksbehandlerParams } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
-import { ListTagTypes } from '../../tag-types';
-import { OppgaveListTagTypes, UtgaatteFristerTagTypes, oppgaverApi } from '../oppgaver';
+import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
@@ -44,23 +44,19 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               }
             })
           );
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
+              draft.tildeltSaksbehandlerNavn = data.saksbehandler?.navn ?? null;
+            })
+          );
         } catch {
           optimisticBehandling.undo();
           optimiticSaksbehandler.undo();
         }
-
-        dispatch(getInvalidateAction(OppgaveListTagTypes.TILDELTE_OPPGAVER, oppgaveId));
-        dispatch(getInvalidateAction(OppgaveListTagTypes.LEDIGE_OPPGAVER, oppgaveId));
-        dispatch(oppgaverApi.util.invalidateTags([UtgaatteFristerTagTypes.ANTALL_LEDIGE_MEDUTGAATTEFRISTER]));
       },
     }),
   }),
 });
-
-const getInvalidateAction = (type: OppgaveListTagTypes, id: string) =>
-  oppgaverApi.util.invalidateTags([
-    { type, id },
-    { type, id: ListTagTypes.PARTIAL_LIST },
-  ]);
 
 export const { useTildelSaksbehandlerMutation } = tildelMutationSlice;

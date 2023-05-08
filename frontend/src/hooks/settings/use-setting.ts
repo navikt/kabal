@@ -42,26 +42,28 @@ const useSetting = (property: string): Setting => {
     }
   };
 
-  const remove = () => {
+  const remove = useCallback(() => {
     if (key !== null) {
       SETTINGS_MANAGER.remove(key);
     }
-  };
+  }, [key]);
 
   return { value, setValue, remove, isLoading };
 };
+
+const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
 
 const useBooleanSetting = (property: string): Setting<boolean> => {
   const { value, setValue, ...rest } = useSetting(property);
 
   return {
     value: value === undefined ? undefined : value === 'true',
-    setValue: (newValue: boolean) => setValue(newValue ? 'true' : 'false'),
+    setValue: (newValue: boolean) => setValue(booleanToString(newValue)),
     ...rest,
   };
 };
 
-const useNumberSetting = (property: string): Setting<number> => {
+export const useNumberSetting = (property: string): Setting<number> => {
   const { value, setValue, ...rest } = useSetting(property);
 
   const parsedValue = useMemo(() => {
@@ -146,3 +148,14 @@ export const useDocumentsFilterSaksId = () => useJsonSetting<string[]>(useOppgav
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
+
+export enum OppgaveTableRowsPerPage {
+  LEDIGE = 'oppgaver/ledige/rows_per_page',
+  MINE_UFERDIGE = 'oppgaver/mine_uferdige/rows_per_page',
+  MINE_FERDIGE = 'oppgaver/mine_ferdige/rows_per_page',
+  MINE_VENTENDE = 'oppgaver/mine_ventende/rows_per_page',
+  ENHETENS_UFERDIGE = 'oppgaver/enhetens_uferdige/rows_per_page',
+  ENHETENS_VENTENDE = 'oppgaver/enhetens_ventende/rows_per_page',
+  SEARCH_ACTIVE = 'oppgaver/search_active/rows_per_page',
+  SEARCH_DONE = 'oppgaver/search_done/rows_per_page',
+}

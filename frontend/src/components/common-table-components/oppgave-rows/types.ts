@@ -1,0 +1,16 @@
+export enum ColumnKeyEnum {
+  Type,
+  Ytelse,
+  Hjemmel,
+  Navn,
+  Fnr,
+  Age,
+  Deadline,
+  Medunderskriverflyt,
+  Open,
+  Tildeling,
+  Oppgavestyring,
+  Utfall,
+  PaaVentTil,
+  Finished,
+}

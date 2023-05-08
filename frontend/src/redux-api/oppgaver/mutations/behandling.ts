@@ -30,6 +30,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
         dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
         dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+        // TODO: Remove oppgave from ledige oppgaver list.
       },
     }),
 
@@ -55,6 +56,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
       query: ({ oppgaveId, fullmektig: { person, virksomhet } }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
@@ -73,9 +75,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
             message:
               fullmektig.person === null && fullmektig.virksomhet === null
                 ? 'Fullmektig fjernet'
-                : `Fullmektig endret til ${formatIdNumber(
-                    fullmektig.person?.foedselsnummer ?? fullmektig.virksomhet?.virksomhetsnummer
-                  )}`,
+                : `Fullmektig endret til ${formatFullmekig(fullmektig)}`,
           });
         } catch {
           toast({ type: ToastType.ERROR, message: 'Feil ved endring av fullmektig' });
@@ -89,6 +89,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
     }),
   }),
 });
+
+const formatFullmekig = (fullmektig: ISakspart) =>
+  formatIdNumber(fullmektig.person?.foedselsnummer ?? fullmektig.virksomhet?.virksomhetsnummer);
 
 const update = <K extends keyof IOppgavebehandling>(oppgaveId: string, values: [K, IOppgavebehandling[K]][]) => {
   const patchResult = reduxStore.dispatch(

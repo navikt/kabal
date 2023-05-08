@@ -1,13 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledOppgaverContainer = styled.section`
   grid-area: oppgaver;
   border-top: 1px solid #c6c2bf;
   margin-top: 16px;
   padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 75px;
 `;
 
-export const StyledResult = styled.li`
+const resultCSS = css`
   display: grid;
   grid-template-areas:
     'result-name result-fnr result-open'
@@ -19,6 +22,14 @@ export const StyledResult = styled.li`
   padding-right: 32px;
   border-top: 1px solid #c6c2bf;
   max-width: 2047px;
+`;
+
+export const StyledNameResult = styled.li`
+  ${resultCSS}
+`;
+
+export const StyledFnrResult = styled.div`
+  ${resultCSS}
 `;
 
 export const StyledName = styled.span`

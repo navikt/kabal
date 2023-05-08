@@ -22,7 +22,7 @@ import { Role } from '@app/types/bruker';
 export const Nav = () => (
   <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
-      <NavItem to="/oppgaver/1" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
+      <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
         <BulletListIcon /> Oppgaver
       </NavItem>
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>

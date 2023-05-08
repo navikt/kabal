@@ -51,7 +51,7 @@ export interface ISakenGjelderResponse {
   sakenGjelder: IPerson;
 }
 
-export interface IPerson {
+interface IPerson {
   navn: string;
   fnr: string;
 }

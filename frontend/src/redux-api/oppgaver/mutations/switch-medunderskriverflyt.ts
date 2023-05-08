@@ -1,3 +1,4 @@
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import {
   ISwitchMedunderskriverflytParams,
@@ -39,6 +40,12 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
+              draft.medunderskriverFlyt = data.medunderskriverFlyt;
+            })
+          );
+
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );

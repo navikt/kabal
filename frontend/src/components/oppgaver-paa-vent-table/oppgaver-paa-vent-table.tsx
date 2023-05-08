@@ -1,49 +1,79 @@
+import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
+import { TableFooter } from '@app/components/common-table-components/footer';
+import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
-import { StyledCaption, StyledMineOppgaverTable } from '@app/styled-components/table';
+import { StyledMineOppgaverTable } from '@app/styled-components/table';
 import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
-import { OppgaveRows } from './rows';
+import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-rows';
 
-const MAX_OPPGAVER = 100;
+const TABLE_HEADERS: (string | null)[] = [
+  'Type',
+  'Ytelse',
+  'Hjemmel',
+  'Navn',
+  'Fnr.',
+  'Alder',
+  'Frist',
+  'På vent til',
+  'Utfall',
+  null,
+];
 
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Navn', 'Fnr.', 'På vent til', 'Utfall', null];
+const COLUMNS: ColumnKeyEnum[] = [
+  ColumnKeyEnum.Type,
+  ColumnKeyEnum.Ytelse,
+  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Navn,
+  ColumnKeyEnum.Fnr,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.PaaVentTil,
+  ColumnKeyEnum.Utfall,
+  ColumnKeyEnum.Open,
+];
 
 export const OppgaverPaaVentTable = () => {
   const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
-    typeof bruker === 'undefined'
-      ? skipToken
-      : {
-          start: 0,
-          antall: MAX_OPPGAVER,
-          sortering: SortFieldEnum.FRIST,
-          rekkefoelge: SortOrderEnum.STIGENDE,
-          navIdent: bruker.navIdent,
-        };
+    typeof bruker === 'undefined' ? skipToken : { sortering: SortFieldEnum.FRIST, rekkefoelge: SortOrderEnum.STIGENDE };
 
-  const {
-    data: oppgaver,
-    isError,
-    isLoading,
-  } = useGetMineVentendeOppgaverQuery(queryParams, {
+  const { data, isError, isFetching, isLoading } = useGetMineVentendeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
     refetchOnMountOrArgChange: true,
   });
 
+  const { oppgaver, ...footerProps } = useOppgavePagination(
+    OppgaveTableRowsPerPage.MINE_VENTENDE,
+    data?.behandlinger ?? []
+  );
+
   return (
-    <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>
-      <StyledCaption>Oppgaver på vent</StyledCaption>
-      <TableHeader headers={TABLE_HEADERS} />
-      <OppgaveRows
-        oppgaver={oppgaver?.behandlinger}
-        columnCount={TABLE_HEADERS.length}
-        isLoading={isLoading}
-        isError={isError}
-      />
-    </StyledMineOppgaverTable>
+    <div>
+      <Heading size="medium">Oppgaver på vent</Heading>
+      <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>
+        <TableHeader headers={TABLE_HEADERS} />
+        <OppgaveRows
+          testId="oppgaver-paa-vent-table"
+          oppgaver={oppgaver}
+          columns={COLUMNS}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          isError={isError}
+          pageSize={footerProps.pageSize}
+        />
+        <TableFooter
+          {...footerProps}
+          columnCount={TABLE_HEADERS.length}
+          settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
+        />
+      </StyledMineOppgaverTable>
+    </div>
   );
 };

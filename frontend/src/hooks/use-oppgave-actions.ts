@@ -12,7 +12,6 @@ interface Actions {
 
 type ReturnType = [Actions, false] | [undefined, true];
 
-// eslint-disable-next-line import/no-unused-modules
 export const useOppgaveActions = (ytelse: string, tildeltSaksbehandler: string | null): ReturnType => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const [hasYtelseAccess, isYtesleLoading] = useHasYtelseAccess(ytelse);
