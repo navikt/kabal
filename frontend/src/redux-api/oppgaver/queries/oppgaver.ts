@@ -52,18 +52,18 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte_new${queryStringify(queryParams)}`,
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${queryStringify(queryParams)}`,
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige_new${queryStringify(queryParams)}`,
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_UFERDIGE],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent_new${queryStringify(queryParams)}`,
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
