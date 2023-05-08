@@ -6,9 +6,10 @@ import { OppgaveTableRowsPerPage, useNumberSetting } from '@app/hooks/settings/u
 interface Props {
   settingKey: OppgaveTableRowsPerPage;
   pageSize: number;
+  testId: string;
 }
 
-export const RowsPerPage = ({ settingKey, pageSize }: Props) => {
+export const RowsPerPage = ({ settingKey, pageSize, testId }: Props) => {
   const id = useId();
   const { value = pageSize, setValue } = useNumberSetting(settingKey);
 
@@ -23,12 +24,23 @@ export const RowsPerPage = ({ settingKey, pageSize }: Props) => {
         size="small"
         variant="neutral"
         aria-describedby={id}
+        data-testid={testId}
       >
-        <ToggleGroup.Item value="10">10</ToggleGroup.Item>
-        <ToggleGroup.Item value="20">20</ToggleGroup.Item>
-        <ToggleGroup.Item value="50">50</ToggleGroup.Item>
-        <ToggleGroup.Item value="100">100</ToggleGroup.Item>
-        <ToggleGroup.Item value="-1">Alle</ToggleGroup.Item>
+        <ToggleGroup.Item value="10" data-value="10">
+          10
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="20" data-value="20">
+          20
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="50" data-value="50">
+          50
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="100" data-value="100">
+          100
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="-1" data-value="-1">
+          Alle
+        </ToggleGroup.Item>
       </ToggleGroup>
     </StyledRowsPerPage>
   );

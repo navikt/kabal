@@ -95,7 +95,12 @@ export const EnhetensOppgaverTable = () => {
           isLoading={isLoading}
           pageSize={footerProps.pageSize}
         />
-        <TableFooter {...footerProps} columnCount={8} settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE} />
+        <TableFooter
+          {...footerProps}
+          columnCount={8}
+          settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
+          testId="enhetens-oppgaver-table-footer"
+        />
       </StyledTable>
     </div>
   );

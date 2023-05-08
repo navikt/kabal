@@ -45,7 +45,12 @@ export const ActiveOppgaverTable = ({ oppgaveIds }: Props) => {
             <Row oppgaveId={id} columnCount={7} key={id} />
           ))}
         </Table.Body>
-        <TableFooter {...footerProps} columnCount={8} settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE} />
+        <TableFooter
+          {...footerProps}
+          columnCount={8}
+          settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE}
+          testId="search-result-active-oppgaver-footer"
+        />
       </StyledTable>
     </div>
   );
