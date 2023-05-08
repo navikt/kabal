@@ -24,7 +24,7 @@ export const Admin = () => (
   </StyledPageContent>
 );
 
-const StyledPageContent = styled.div`
+const StyledPageContent = styled.article`
   display: flex;
   flex-direction: column;
   gap: 16px;

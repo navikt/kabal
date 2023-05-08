@@ -9,22 +9,21 @@ export const PageWrapper = ({ children }: Props) => <StyledMain>{children}</Styl
 
 const StyledMain = styled.main`
   overflow: auto;
-  flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
+  flex-grow: 1;
+  padding: 16px;
 `;
 
 export const OppgaverPageWrapper = ({ children }: Props): JSX.Element => (
   <PageWrapper>
-    <StyledArticle>{children}</StyledArticle>
+    <OppgaverContainer>{children}</OppgaverContainer>
   </PageWrapper>
 );
 
-export const StyledArticle = styled.article`
+const OppgaverContainer = styled.article`
   display: flex;
   flex-direction: column;
-  row-gap: 32px;
+  row-gap: 75px;
   overflow: auto;
   min-height: 100%;
-  padding-bottom: 32px;
+  padding: 16px;
 `;

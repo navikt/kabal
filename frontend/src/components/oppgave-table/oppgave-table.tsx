@@ -1,39 +1,43 @@
-import { Pagination, Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { TableFooter } from '@app/components/common-table-components/footer';
+import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
+import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetSettingsQuery } from '@app/redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetLedigeOppgaverQuery,
 } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
-import { StyledFooterContent } from '@app/styled-components/table';
 import { LedigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { PageInfo } from '../common-table-components/page-info';
 import { TableHeaderFilters } from './filter-header';
-import { Oppgaverader } from './rows';
 import { Filters } from './types';
 
-const PAGE_SIZE = 10;
+const COLUMNS: ColumnKeyEnum[] = [
+  ColumnKeyEnum.Type,
+  ColumnKeyEnum.Ytelse,
+  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.Oppgavestyring,
+];
 
 export const OppgaveTable = (): JSX.Element => {
-  const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>({
     types: [],
     ytelser: [],
     hjemler: [],
     sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
   });
-  const { data: bruker } = useUser();
-  const { data: settingsData } = useGetSettingsQuery();
-
-  const { page } = useParams();
-  const parsedPage = parsePage(page);
-
-  const currentPage = parsedPage === null ? 1 : parsedPage;
-  const from = (currentPage - 1) * PAGE_SIZE;
+  const {
+    data: settingsData,
+    isLoading: isLoadingSettings,
+    isError: isErrorSettings,
+    isFetching: isFetchingSettings,
+  } = useGetSettingsQuery();
 
   const settingsTyper = settingsData?.typer ?? [];
   const settingsYtelser = settingsData?.ytelser ?? [];
@@ -46,20 +50,9 @@ export const OppgaveTable = (): JSX.Element => {
   const [sortering, rekkefoelge] = filters.sorting;
 
   const queryParams: typeof skipToken | LedigeOppgaverParams =
-    typeof bruker === 'undefined' || typeof settingsData === 'undefined'
-      ? skipToken
-      : {
-          start: from,
-          antall: PAGE_SIZE,
-          sortering,
-          rekkefoelge,
-          navIdent: bruker.navIdent,
-          ytelser,
-          typer,
-          hjemler,
-        };
+    typeof settingsData === 'undefined' ? skipToken : { sortering, rekkefoelge, ytelser, typer, hjemler };
 
-  const { data: oppgaver, isFetching } = useGetLedigeOppgaverQuery(queryParams, {
+  const { data, isFetching, isLoading, isError } = useGetLedigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
     refetchOnMountOrArgChange: true,
   });
@@ -69,20 +62,7 @@ export const OppgaveTable = (): JSX.Element => {
     { pollingInterval: 300 * 1000 }
   );
 
-  if (parsedPage === null) {
-    return <Navigate to="../1" />;
-  }
-
-  const total = oppgaver?.antallTreffTotalt ?? 0;
-
-  if (!isFetching && typeof oppgaver !== 'undefined' && total < from) {
-    const lastPage = Math.ceil(total / PAGE_SIZE);
-
-    return <Navigate to={`../${lastPage.toString()}`} />;
-  }
-
-  const fromNumber = from + 1;
-  const toNumber = Math.min(total, from + PAGE_SIZE);
+  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.LEDIGE, data?.behandlinger);
 
   return (
     <>
@@ -99,33 +79,24 @@ export const OppgaveTable = (): JSX.Element => {
 
             const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
 
-            setFilters((f) => ({
-              ...f,
-              sorting: [field, order],
-            }));
+            setFilters((f) => ({ ...f, sorting: [field, order] }));
           }
         }}
       >
         <TableHeaderFilters filters={filters} onChange={setFilters} />
-        <Oppgaverader oppgaver={oppgaver?.behandlinger} columnCount={7} isFetching={isFetching} />
-        <tfoot>
-          <Table.Row>
-            <Table.DataCell colSpan={6}>
-              <StyledFooterContent>
-                <PageInfo total={total} fromNumber={fromNumber} toNumber={toNumber} />
-                <Pagination
-                  page={currentPage}
-                  onPageChange={(p) => navigate(`../${p}`)}
-                  count={Math.max(Math.ceil(total / PAGE_SIZE), 1)}
-                  prevNextTexts
-                />
-              </StyledFooterContent>
-            </Table.DataCell>
-          </Table.Row>
-        </tfoot>
+        <OppgaveRows
+          testId="oppgave-table"
+          oppgaver={oppgaver}
+          columns={COLUMNS}
+          isLoading={isLoading || isLoadingSettings}
+          isFetching={isFetching || isFetchingSettings}
+          isError={isError || isErrorSettings}
+          pageSize={footerProps.pageSize}
+        />
+        <TableFooter {...footerProps} columnCount={7} settingsKey={OppgaveTableRowsPerPage.LEDIGE} />
       </OppgaverTable>
 
-      <div>Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</div>
+      <BodyShort size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</BodyShort>
     </>
   );
 };
@@ -134,12 +105,6 @@ const OppgaverTable = styled(Table)`
   max-width: 2500px;
   width: 100%;
 `;
-
-const parsePage = (page = '1'): number | null => {
-  const parsed = Number.parseInt(page, 10);
-
-  return Number.isNaN(parsed) ? null : parsed;
-};
 
 const invertSort = (order: SortOrderEnum) =>
   order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;

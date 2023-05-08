@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AccessRights } from '@app/components/access-rights/access-rights';
-import { PageWrapper, StyledArticle } from '../page-wrapper';
+import { PageWrapper } from '../page-wrapper';
 
 export const AccessRightsPage = () => (
   <PageWrapper>
@@ -11,10 +11,12 @@ export const AccessRightsPage = () => (
   </PageWrapper>
 );
 
-const AccessRightsArticle = styled(StyledArticle)`
+const AccessRightsArticle = styled.article`
   max-height: 100%;
-  height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
 `;
 
 // eslint-disable-next-line import/no-default-export

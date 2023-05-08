@@ -1,17 +1,29 @@
-import { Loader, Table } from '@navikt/ds-react';
+import { Heading, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { TableFooter } from '@app/components/common-table-components/footer';
+import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
+import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useSakstyper } from '@app/hooks/use-kodeverk-value';
+import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetEnhetensUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
-import { StyledCaption } from '@app/styled-components/table';
-import { EnhetensUferdigeOppgaverParams, IOppgaveList, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeaderFilters } from './filter-header';
-import { Row } from './row';
 import { Filters } from './types';
 
-const MAX_OPPGAVER = 100;
+const COLUMNS: ColumnKeyEnum[] = [
+  ColumnKeyEnum.Type,
+  ColumnKeyEnum.Ytelse,
+  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.Medunderskriverflyt,
+  ColumnKeyEnum.Open,
+  ColumnKeyEnum.Oppgavestyring,
+];
 
 export const EnhetensOppgaverTable = () => {
   const [filters, setFilters] = useState<Filters>({
@@ -34,8 +46,6 @@ export const EnhetensOppgaverTable = () => {
     typeof bruker === 'undefined' || typeof types === 'undefined'
       ? skipToken
       : {
-          start: 0,
-          antall: MAX_OPPGAVER,
           sortering,
           rekkefoelge,
           ytelser,
@@ -45,78 +55,54 @@ export const EnhetensOppgaverTable = () => {
           tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
-  const { data: oppgaver, isLoading } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
+  const { data, isLoading, isFetching, isError } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
     pollingInterval: 30 * 1000,
     refetchOnMountOrArgChange: true,
   });
 
+  const { oppgaver, ...footerProps } = useOppgavePagination(
+    OppgaveTableRowsPerPage.ENHETENS_UFERDIGE,
+    data?.behandlinger ?? []
+  );
+
   return (
-    <StyledTable
-      data-testid="enhetens-oppgaver-table"
-      zebraStripes
-      sort={{
-        orderBy: filters.sorting[0],
-        direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
-      }}
-      onSortChange={(field?: string) => {
-        if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
-          const [currentField, currentOrder] = filters.sorting;
+    <div>
+      <Heading size="medium">Tildelte oppgaver - {bruker?.ansattEnhet.navn}</Heading>
+      <StyledTable
+        data-testid="enhetens-oppgaver-table"
+        zebraStripes
+        sort={{
+          orderBy: filters.sorting[0],
+          direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
+        }}
+        onSortChange={(field?: string) => {
+          if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
+            const [currentField, currentOrder] = filters.sorting;
 
-          const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
+            const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
 
-          setFilters((f) => ({
-            ...f,
-            sorting: [field, order],
-          }));
-        }
-      }}
-    >
-      <StyledCaption>Tildelte oppgaver - {bruker?.ansattEnhet.navn}</StyledCaption>
-      <TableHeaderFilters filters={filters} onChange={setFilters} />
-      <OppgaveRader oppgaver={oppgaver?.behandlinger} isLoading={isLoading} />
-    </StyledTable>
+            setFilters((f) => ({ ...f, sorting: [field, order] }));
+          }
+        }}
+      >
+        <TableHeaderFilters filters={filters} onChange={setFilters} />
+        <OppgaveRows
+          testId="enhetens-oppgaver-table"
+          oppgaver={oppgaver}
+          columns={COLUMNS}
+          isError={isError}
+          isFetching={isFetching}
+          isLoading={isLoading}
+          pageSize={footerProps.pageSize}
+        />
+        <TableFooter {...footerProps} columnCount={8} settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE} />
+      </StyledTable>
+    </div>
   );
 };
 
 const invertSort = (order: SortOrderEnum) =>
   order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;
-
-interface OppgaveRaderProps {
-  oppgaver?: IOppgaveList;
-  isLoading: boolean;
-}
-
-const OppgaveRader = ({ oppgaver, isLoading }: OppgaveRaderProps): JSX.Element => {
-  if (isLoading || typeof oppgaver === 'undefined') {
-    return (
-      <Table.Body>
-        <Table.Row>
-          <Table.DataCell colSpan={100}>
-            <Loader size="xlarge" title="Laster oppgaver..." />
-          </Table.DataCell>
-        </Table.Row>
-      </Table.Body>
-    );
-  }
-
-  if (oppgaver.length === 0) {
-    return (
-      <Table.Body data-testid="enhetens-oppgaver-table-none">
-        <Table.Row>
-          <Table.DataCell colSpan={5}>Ingen oppgaver</Table.DataCell>
-        </Table.Row>
-      </Table.Body>
-    );
-  }
-
-  return (
-    <Table.Body data-testid="enhetens-oppgaver-table-rows">
-      {oppgaver.map((k) => (
-        <Row {...k} key={k.id} />
-      ))}
-    </Table.Body>
-  );
-};
 
 const StyledTable = styled(Table)`
   max-width: 2500px;

@@ -24,7 +24,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   if (userIsLoading || isLoading || typeof user === 'undefined') {
     return (
       <Container>
-        <StyledLoader size="small" />
+        <Loader size="small" />
       </Container>
     );
   }
@@ -67,7 +67,7 @@ const SelectSaksbehandler = ({ id, type, ytelse, tildeltSaksbehandlerident, tild
   }
 
   if (potentialSaksbehandlereIsLoading || typeof data === 'undefined') {
-    return <StyledLoader size="small" />;
+    return <Loader size="small" />;
   }
 
   const options = data.saksbehandlere.map(({ navIdent, navn }) => (
@@ -127,8 +127,4 @@ const StyledErrorMessage = styled(ErrorMessage)`
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const StyledLoader = styled(Loader)`
-  width: 34px;
 `;

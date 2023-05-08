@@ -34,7 +34,7 @@ export const Oppgaver = ({ open, fnr }: Props) => {
 
   return (
     <StyledOppgaverContainer data-testid="search-result-expanded-container">
-      <ActiveOppgaverTable activeOppgaver={aapneKlagebehandlinger} />
+      <ActiveOppgaverTable oppgaveIds={aapneKlagebehandlinger} />
       <FullfoerteOppgaverTable finishedOppgaver={avsluttedeKlagebehandlinger} />
     </StyledOppgaverContainer>
   );

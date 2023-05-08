@@ -1,7 +1,8 @@
+import { getVenteperiode } from '@app/functions/get-venteperiode';
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
-import { ListTagTypes } from '../../tag-types';
-import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
+import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
 const ventMutationSlice = oppgaverApi.injectEndpoints({
@@ -13,24 +14,23 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         method: 'POST',
       }),
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
+        const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.sattPaaVent = new Date().toISOString();
           })
         );
 
+        const oppgavePathResult = dispatch(
+          oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+            draft.sattPaaVent = getVenteperiode();
+          })
+        );
+
         try {
           await queryFulfilled;
-          dispatch(
-            oppgaverApi.util.invalidateTags([
-              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: oppgaveId },
-              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
-              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: oppgaveId },
-              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
-            ])
-          );
         } catch {
-          patchResult.undo();
+          behandlingPatchResult.undo();
+          oppgavePathResult.undo();
         }
       },
     }),
@@ -49,12 +49,9 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           dispatch(
-            oppgaverApi.util.invalidateTags([
-              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: oppgaveId },
-              { type: OppgaveListTagTypes.VENTENDE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
-              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: oppgaveId },
-              { type: OppgaveListTagTypes.TILDELTE_OPPGAVER, id: ListTagTypes.PARTIAL_LIST },
-            ])
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.sattPaaVent = null;
+            })
           );
         } catch {
           patchResult.undo();

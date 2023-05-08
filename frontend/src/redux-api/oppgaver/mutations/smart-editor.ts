@@ -42,6 +42,7 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
         method: 'PATCH',
         body,
+        timeout: 10000,
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(

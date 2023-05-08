@@ -6,6 +6,7 @@ import {
   INameSearchParams,
   INameSearchResponse,
   IPersonAndOppgaverResponse,
+  IPersonAndOppgaverResponseOld,
   ISaksbehandlere,
   LedigeOppgaverParams,
   MineFerdigstilteOppgaverParams,
@@ -14,113 +15,57 @@ import {
   UtgaatteOppgaverParams,
 } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
-import { ListTagTypes } from '../../tag-types';
-import { OppgaveListTagTypes, UtgaatteFristerTagTypes, oppgaverApi } from '../oppgaver';
-import { getMiniGetActions } from './get-mini-get-actions';
+import { oppgaverApi } from '../oppgaver';
 
-const oppgaveListTags = (type: OppgaveListTagTypes) => (result: ApiResponse | undefined) =>
-  typeof result === 'undefined'
-    ? [{ type, id: ListTagTypes.PARTIAL_LIST }]
-    : result.behandlinger.map(({ id }) => ({ type, id })).concat({ type, id: ListTagTypes.PARTIAL_LIST });
+interface OldApiResponse {
+  behandlinger: { id: string }[];
+  antallTreffTotalt: number;
+}
+
+const transformResponse = ({ behandlinger, ...rest }: OldApiResponse) => ({
+  behandlinger: behandlinger.map(({ id }) => id),
+  ...rest,
+});
 
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/ansatte/${navIdent}/oppgaver/ferdigstilte${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
+      transformResponse,
+      query: (queryParams) => `/kabal-search/oppgaver/ferdigstilte${queryStringify(queryParams)}`,
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/ansatte/${navIdent}/oppgaver/uferdige${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
-      providesTags: oppgaveListTags(OppgaveListTagTypes.TILDELTE_OPPGAVER),
+      transformResponse,
+      query: (queryParams) => `/kabal-search/oppgaver/uferdige${queryStringify(queryParams)}`,
     }),
     getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/ansatte/${navIdent}/oppgaver/paavent${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
-      providesTags: oppgaveListTags(OppgaveListTagTypes.VENTENDE_OPPGAVER),
+      transformResponse,
+      query: (queryParams) => `/kabal-search/oppgaver/paavent${queryStringify(queryParams)}`,
     }),
     getLedigeOppgaver: builder.query<ApiResponse, LedigeOppgaverParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/ansatte/${navIdent}/oppgaver/ledige${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
-      providesTags: oppgaveListTags(OppgaveListTagTypes.LEDIGE_OPPGAVER),
+      transformResponse,
+      query: (queryParams) => `/kabal-search/oppgaver/ledige${queryStringify(queryParams)}`,
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
+      transformResponse,
+      query: ({ enhetId, ...queryParams }) =>
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte_new${queryStringify(queryParams)}`,
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
-      providesTags: oppgaveListTags(OppgaveListTagTypes.ENHETENS_TILDELTE_OPPGAVER),
+      transformResponse,
+      query: ({ enhetId, ...queryParams }) =>
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige_new${queryStringify(queryParams)}`,
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${query}`;
-      },
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        getMiniGetActions(data.behandlinger).forEach(dispatch);
-      },
+      transformResponse,
+      query: ({ enhetId, ...queryParams }) =>
+        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent_new${queryStringify(queryParams)}`,
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
-      query: ({ navIdent, ...queryParams }) => {
-        const query = queryStringify(queryParams);
-
-        return `/kabal-search/ansatte/${navIdent}/antalloppgavermedutgaattefrister${query}`;
-      },
-      providesTags: [UtgaatteFristerTagTypes.ANTALL_LEDIGE_MEDUTGAATTEFRISTER],
+      query: (queryParams) => `/kabal-search/antalloppgavermedutgaattefrister${queryStringify(queryParams)}`,
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
-      query: (body) => ({
-        url: `/kabal-search/search/name`,
-        method: 'POST',
-        body,
-      }),
+      query: (body) => ({ url: `/kabal-search/search/name`, method: 'POST', body }),
     }),
     personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
       query: (query) => ({
@@ -128,16 +73,9 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
       }),
-      transformResponse: ({
-        aapneBehandlinger,
-        avsluttedeBehandlinger,
-        behandlinger,
-        fnr,
-        navn,
-      }: IPersonAndOppgaverResponse) => ({
-        aapneBehandlinger,
-        avsluttedeBehandlinger,
-        behandlinger,
+      transformResponse: ({ aapneBehandlinger, avsluttedeBehandlinger, fnr, navn }: IPersonAndOppgaverResponseOld) => ({
+        aapneBehandlinger: aapneBehandlinger.map(({ id }) => id),
+        avsluttedeBehandlinger: avsluttedeBehandlinger.map(({ id }) => id),
         fnr,
         navn,
       }),
@@ -157,6 +95,6 @@ export const {
   useGetLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   usePersonAndOppgaverQuery,
-  useNameSearchQuery,
+  useLazyNameSearchQuery,
   useGetSaksbehandlereInEnhetQuery,
 } = oppgaverQuerySlice;

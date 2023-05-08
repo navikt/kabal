@@ -2,9 +2,13 @@ import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 
-export const RouterLoader = () => (
+interface Props {
+  text: string;
+}
+
+export const AppLoader = ({ text }: Props) => (
   <LoaderWrapper>
-    <Loader size="2xlarge" variant="interaction" transparent title="Laster siden..." />
+    <Loader size="2xlarge" variant="interaction" transparent title={text} />
   </LoaderWrapper>
 );
 

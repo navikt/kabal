@@ -1,3 +1,4 @@
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { IOppgavebehandlingUtfallUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -21,9 +22,16 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
+
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
+            })
+          );
+
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.utfall = utfall;
             })
           );
         } catch {

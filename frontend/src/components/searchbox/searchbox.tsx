@@ -24,8 +24,5 @@ const StyledSearch = styled(Search)`
 `;
 
 const StyledContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   padding-bottom: 16px;
-  margin-top: 16px;
 `;

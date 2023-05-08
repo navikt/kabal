@@ -1,24 +1,25 @@
 import { Name } from '@app/domain/types';
-import { MedunderskriverFlyt, SaksTypeEnum } from './kodeverk';
+import { GenericObject } from '@app/types/types';
+import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
 import { ISaksbehandler } from './oppgave-common';
 
 type Date = string; // LocalDate
 
 export interface ApiResponse {
   antallTreffTotalt: number;
-  behandlinger: IOppgave[];
+  behandlinger: string[];
 }
 
 export interface UtgaatteApiResponse {
   antall: number;
 }
 
-interface Person {
+export interface IPerson {
   navn: string;
   fnr: string;
 }
 
-interface IVenteperiode {
+export interface IVenteperiode {
   from: Date;
   to: Date;
   isExpired: boolean;
@@ -40,7 +41,6 @@ export interface IOppgave {
   medunderskriverident: string | null;
   medunderskriverNavn: string | null;
   mottatt: Date;
-  person: Person | null;
   saksbehandlerHarTilgang: boolean;
   strengtFortrolig: boolean;
   tema: string;
@@ -48,11 +48,9 @@ export interface IOppgave {
   tildeltSaksbehandlerNavn: string | null;
   type: SaksTypeEnum;
   ytelse: string;
-  utfall: string | null;
+  utfall: UtfallEnum | null;
   sattPaaVent: IVenteperiode | null;
 }
-
-export type IOppgaveList = IOppgave[];
 
 export enum SortFieldEnum {
   FRIST = 'FRIST',
@@ -65,14 +63,12 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-interface CommonOppgaverParams {
+interface CommonOppgaverParams extends GenericObject {
   typer?: string[];
   ytelser?: string[];
   hjemler?: string[];
   sortering: 'FRIST' | 'MOTTATT' | 'ALDER';
   rekkefoelge: 'STIGENDE' | 'SYNKENDE';
-  start: number;
-  antall: number;
 }
 
 interface EnhetParam {
@@ -83,21 +79,17 @@ interface FerdigstiltParam extends CommonOppgaverParams {
   ferdigstiltDaysAgo: number;
 }
 
-interface NavidentParam {
-  navIdent: string;
-}
-
 interface TildelteSaksbehandlereParam {
   tildelteSaksbehandlere?: string[];
 }
 
-export type MineUferdigeOppgaverParams = CommonOppgaverParams & NavidentParam;
+export type MineUferdigeOppgaverParams = CommonOppgaverParams;
 
-export type MineFerdigstilteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
+export type MineFerdigstilteOppgaverParams = CommonOppgaverParams & FerdigstiltParam;
 
-export type LedigeOppgaverParams = CommonOppgaverParams & NavidentParam;
+export type LedigeOppgaverParams = CommonOppgaverParams;
 
-export type UtgaatteOppgaverParams = CommonOppgaverParams & FerdigstiltParam & NavidentParam;
+export type UtgaatteOppgaverParams = CommonOppgaverParams & FerdigstiltParam;
 
 export type EnhetensFerdigstilteOppgaverParams = CommonOppgaverParams &
   FerdigstiltParam &
@@ -135,10 +127,14 @@ export interface ISaksbehandlere {
   saksbehandlere: ISaksbehandler[];
 }
 
-export interface IPersonAndOppgaverResponse extends ISearchPerson {
+export interface IPersonAndOppgaverResponseOld extends ISearchPerson {
   aapneBehandlinger: IOppgave[];
   avsluttedeBehandlinger: IOppgave[];
-  behandlinger: IOppgave[];
+}
+
+export interface IPersonAndOppgaverResponse extends ISearchPerson {
+  aapneBehandlinger: string[];
+  avsluttedeBehandlinger: string[];
 }
 
 export interface ITildelingResponse {

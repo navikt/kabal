@@ -10,11 +10,9 @@ export const Settings = () => (
   </StyledSettings>
 );
 
-const StyledSettings = styled.div`
+const StyledSettings = styled.article`
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
   gap: 16px;
-  padding-top: 16px;
-  padding-bottom: 16px;
 `;

@@ -1,8 +1,9 @@
 import React, { Suspense, lazy } from 'react';
-import { Navigate, Route, Routes as Switch } from 'react-router-dom';
+import { Route, Routes as Switch } from 'react-router-dom';
 import { LandingPage } from '@app/pages/landing-page/landing-page';
 import TrygderettsankebehandlingPage from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
-import { RouterLoader } from './loader';
+import { useUser } from '@app/simple-api-state/use-user';
+import { AppLoader } from './loader';
 
 const AdminPage = lazy(() => import('../../pages/admin/admin'));
 const AnkebehandlingPage = lazy(() => import('../../pages/ankebehandling/ankebehandling'));
@@ -20,43 +21,46 @@ const SettingsPage = lazy(() => import('../../pages/settings/settings'));
 const ToppteksterPage = lazy(() => import('../../pages/topptekster/topptekster'));
 const AccessRightsPage = lazy(() => import('../../pages/access-rights/access-rights'));
 
-export const Router = () => (
-  <Suspense fallback={<RouterLoader />}>
-    <Switch>
-      <Route path="/" element={<LandingPage />} />
+export const Router = () => {
+  const { isLoading } = useUser();
 
-      <Route path="oppgaver">
-        <Route path="" element={<Navigate to="1" />} />
-        <Route path="0" element={<Navigate to="../1" />} />
+  if (isLoading) {
+    return <AppLoader text="Laster bruker..." />;
+  }
 
-        <Route path=":page" element={<OppgaverPage />} />
-      </Route>
+  return (
+    <Suspense fallback={<AppLoader text="Laster siden..." />}>
+      <Switch>
+        <Route path="/" element={<LandingPage />} />
 
-      <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-      <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
+        <Route path="oppgaver" element={<OppgaverPage />} />
 
-      <Route path="sok" element={<SearchPage />} />
+        <Route path="mineoppgaver" element={<MineOppgaverPage />} />
+        <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
 
-      <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
-      <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
-      <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
+        <Route path="sok" element={<SearchPage />} />
 
-      <Route path="maltekster/:id" element={<MalteksterPage />} />
-      <Route path="maltekster/" element={<MalteksterPage />} />
-      <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
-      <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
-      <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
-      <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
-      <Route path="regelverk/:id" element={<RegelverkPage />} />
-      <Route path="regelverk/" element={<RegelverkPage />} />
-      <Route path="topptekster/" element={<ToppteksterPage />} />
-      <Route path="topptekster/:id" element={<ToppteksterPage />} />
-      <Route path="bunntekster/" element={<BunnteksterPage />} />
-      <Route path="bunntekster/:id" element={<BunnteksterPage />} />
+        <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
+        <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
+        <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
 
-      <Route path="innstillinger" element={<SettingsPage />} />
-      <Route path="tilgangsstyring" element={<AccessRightsPage />} />
-      <Route path="admin" element={<AdminPage />} />
-    </Switch>
-  </Suspense>
-);
+        <Route path="maltekster/:id" element={<MalteksterPage />} />
+        <Route path="maltekster/" element={<MalteksterPage />} />
+        <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
+        <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
+        <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
+        <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
+        <Route path="regelverk/:id" element={<RegelverkPage />} />
+        <Route path="regelverk/" element={<RegelverkPage />} />
+        <Route path="topptekster/" element={<ToppteksterPage />} />
+        <Route path="topptekster/:id" element={<ToppteksterPage />} />
+        <Route path="bunntekster/" element={<BunnteksterPage />} />
+        <Route path="bunntekster/:id" element={<BunnteksterPage />} />
+
+        <Route path="innstillinger" element={<SettingsPage />} />
+        <Route path="tilgangsstyring" element={<AccessRightsPage />} />
+        <Route path="admin" element={<AdminPage />} />
+      </Switch>
+    </Suspense>
+  );
+};
