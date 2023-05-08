@@ -15,7 +15,7 @@ import {
   UtgaatteOppgaverParams,
 } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 
 interface OldApiResponse {
   behandlinger: { id: string }[];
@@ -37,14 +37,17 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       transformResponse,
       query: (queryParams) => `/kabal-search/oppgaver/uferdige${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.MINE_UFERDIGE],
     }),
     getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       transformResponse,
       query: (queryParams) => `/kabal-search/oppgaver/paavent${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.MINE_VENTENDE],
     }),
     getLedigeOppgaver: builder.query<ApiResponse, LedigeOppgaverParams>({
       transformResponse,
       query: (queryParams) => `/kabal-search/oppgaver/ledige${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.LEDIGE],
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
       transformResponse,
@@ -55,11 +58,13 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige_new${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.ENHETENS_UFERDIGE],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent_new${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: (queryParams) => `/kabal-search/antalloppgavermedutgaattefrister${queryStringify(queryParams)}`,

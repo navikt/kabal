@@ -2,7 +2,7 @@ import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-d
 import { ISaksbehandler } from '@app/types/oppgave-common';
 import { ITildelingResponse, TildelSaksbehandlerParams } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
-import { oppgaverApi } from '../oppgaver';
+import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
@@ -31,6 +31,9 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
+
+          oppgaverApi.util.invalidateTags(Object.values(OppgaveListTagTypes));
+
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
               saksbehandler: data.saksbehandler,
