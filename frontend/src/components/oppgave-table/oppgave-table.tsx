@@ -93,7 +93,12 @@ export const OppgaveTable = (): JSX.Element => {
           isError={isError || isErrorSettings}
           pageSize={footerProps.pageSize}
         />
-        <TableFooter {...footerProps} columnCount={7} settingsKey={OppgaveTableRowsPerPage.LEDIGE} />
+        <TableFooter
+          {...footerProps}
+          columnCount={7}
+          settingsKey={OppgaveTableRowsPerPage.LEDIGE}
+          testId="oppgave-table-footer"
+        />
       </OppgaverTable>
 
       <BodyShort size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</BodyShort>

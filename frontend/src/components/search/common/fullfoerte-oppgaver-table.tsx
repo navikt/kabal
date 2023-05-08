@@ -41,7 +41,12 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
             <Row oppgaveId={id} columnCount={7} key={id} />
           ))}
         </Table.Body>
-        <TableFooter {...footerProps} columnCount={8} settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE} />
+        <TableFooter
+          {...footerProps}
+          columnCount={8}
+          settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
+          testId="search-result-fullfoerte-oppgaver-footer"
+        />
       </Table>
     </div>
   );

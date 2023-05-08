@@ -59,7 +59,12 @@ export const EnhetensOppgaverPaaVentTable = () => {
           isError={isError}
           pageSize={footerProps.pageSize}
         />
-        <TableFooter {...footerProps} columnCount={7} settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE} />
+        <TableFooter
+          {...footerProps}
+          columnCount={7}
+          settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
+          testId="enhetens-oppgaver-paa-vent-footer"
+        />
       </StyledTable>
     </div>
   );

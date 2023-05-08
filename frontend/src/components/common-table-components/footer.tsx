@@ -14,9 +14,10 @@ interface Props {
   settingsKey: OppgaveTableRowsPerPage;
   columnCount: number;
   setPage: (page: number) => void;
+  testId: string;
 }
 
-export const TableFooter = ({ columnCount, from, to, total, page, pageSize, settingsKey, setPage }: Props) => (
+export const TableFooter = ({ columnCount, from, to, total, page, pageSize, settingsKey, setPage, testId }: Props) => (
   <tfoot>
     <Table.Row>
       <Table.DataCell colSpan={columnCount}>
@@ -30,7 +31,7 @@ export const TableFooter = ({ columnCount, from, to, total, page, pageSize, sett
               onPageChange={setPage}
             />
           )}
-          <RowsPerPage settingKey={settingsKey} pageSize={pageSize} />
+          <RowsPerPage settingKey={settingsKey} pageSize={pageSize} testId={`${testId}-rows-per-page`} />
         </StyledFooterContent>
       </Table.DataCell>
     </Table.Row>

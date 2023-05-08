@@ -58,6 +58,7 @@ export const FullfoerteOppgaverTable = () => {
           {...footerProps}
           columnCount={TABLE_HEADERS.length}
           settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
+          testId="fullfoerte-oppgaver-table-footer"
         />
       </StyledMineOppgaverTable>
     </div>

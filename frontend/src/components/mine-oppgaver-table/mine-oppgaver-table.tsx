@@ -74,7 +74,12 @@ export const MineOppgaverTable = () => {
         isLoading={isLoading || isLoadingUser}
         isFetching={isFetching}
       />
-      <TableFooter {...footerProps} columnCount={10} settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE} />
+      <TableFooter
+        {...footerProps}
+        columnCount={10}
+        settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
+        testId="mine-oppgaver-table-footer"
+      />
     </StyledMineOppgaverTable>
   );
 };

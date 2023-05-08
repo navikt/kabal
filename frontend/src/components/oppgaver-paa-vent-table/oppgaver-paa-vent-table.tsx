@@ -72,6 +72,7 @@ export const OppgaverPaaVentTable = () => {
           {...footerProps}
           columnCount={TABLE_HEADERS.length}
           settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
+          testId="oppgaver-paa-vent-table-footer"
         />
       </StyledMineOppgaverTable>
     </div>
