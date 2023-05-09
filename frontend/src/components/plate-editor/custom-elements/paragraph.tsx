@@ -8,5 +8,5 @@ export const Paragraph = styled.p<ParagraphElement>`
   margin-top: 0;
   margin-bottom: 0;
   padding-left: ${({ indent = 0 }) => indent * 24}pt;
-  text-align: ${({ textAlign }) => getTextAlign(textAlign)};
+  text-align: ${({ align: textAlign }) => getTextAlign(textAlign)};
 `;

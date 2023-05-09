@@ -36,9 +36,9 @@ import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugin
 import { TemplateSections } from '@app/types/texts/texts';
 import { ELEMENT_PAGE_BREAK } from './plugins/page-break';
 
-export enum TextAlignEnum {
-  TEXT_ALIGN_LEFT = 'text-align-left',
-  TEXT_ALIGN_RIGHT = 'text-align-right',
+export enum TextAlign {
+  LEFT = 'left',
+  RIGHT = 'right',
 }
 
 export interface RichText extends TText, TCommentText {
@@ -55,7 +55,7 @@ export interface Leaf extends TText {
  * Block props
  */
 interface AlignableStyleProps {
-  textAlign: TextAlignEnum;
+  align: TextAlign;
 }
 
 export interface IndentableStyleProps {
@@ -141,7 +141,7 @@ export interface PageBreakElement extends TElement {
   type: typeof ELEMENT_PAGE_BREAK;
 }
 
-type TopLevelElements =
+export type TopLevelElements =
   | ParagraphElement
   | H1Element
   | H2Element
@@ -151,7 +151,7 @@ type TopLevelElements =
   | TableElement
   | PageBreakElement;
 
-type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
+export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
 
 export type EditorValue = RootBlock[];
 

@@ -26,6 +26,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
+  KEY_ALIGN,
   ListToolbarButton,
   MARK_BOLD,
   MARK_ITALIC,
@@ -33,17 +34,21 @@ import {
   MarkToolbarButton,
   TableToolbarButton,
   ToolbarButton,
+  findDescendant,
   focusEditor,
   getPluginType,
   indent,
   insertTable,
+  isCollapsed,
   outdent,
+  setAlign,
+  someNode,
 } from '@udecode/plate';
 import React from 'react';
 import styled from 'styled-components';
 import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
 import { ToolbarSeparator } from '@app/components/plate-editor/toolbar/separator';
-import { useMyPlateEditorRef } from '@app/components/plate-editor/types';
+import { RichTextEditor, TextAlign, useMyPlateEditorRef } from '@app/components/plate-editor/types';
 import { ToolbarIconButton } from '@app/components/rich-text/toolbar/toolbarbutton';
 
 const tooltip = (content: string) => ({
@@ -185,26 +190,38 @@ export const DefaultToolbarButtons = () => {
         styles={{ active: activeStyle }}
       />
 
-      <AlignToolbarButton
-        tooltip={tooltip('Venstrejuster')}
-        value="left"
+      <ToolbarIconButton
+        label="Venstrejuster"
         icon={<TextAlignLeft />}
-        styles={{ active: activeStyle }}
+        onClick={() => setAlign(editor, { value: TextAlign.LEFT })}
+        active={getActiveAlignment(editor, TextAlign.LEFT)}
       />
 
-      <AlignToolbarButton
-        tooltip={tooltip('Høyrejuster')}
-        value="right"
+      <ToolbarIconButton
+        label="Høyrejuster"
         icon={<TextAlignRight />}
-        styles={{ active: activeStyle }}
+        onClick={() => setAlign(editor, { value: TextAlign.RIGHT })}
+        active={false}
       />
 
       <ToolbarSeparator />
     </>
   );
 };
+
 const ICON_SIZE = 24;
 
 const Redo = styled(ArrowUndoIcon)`
   transform: scaleX(-1);
 `;
+
+const getActiveAlignment = (editor: RichTextEditor, textAlign: TextAlign) => {
+  console.log('getActiveAlignment', textAlign);
+  console.log('isCollapsed(editor.selection)', isCollapsed(editor.selection));
+  console.log(
+    'someNode(editor, { match: { [KEY_ALIGN]: textAlign } })',
+    someNode(editor, { match: { [KEY_ALIGN]: textAlign } })
+  );
+
+  return isCollapsed(editor.selection) && someNode(editor, { match: { [KEY_ALIGN]: textAlign } });
+};

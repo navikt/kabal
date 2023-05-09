@@ -1,15 +1,32 @@
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate';
+import {
+  PlateRenderElementProps,
+  findDescendant,
+  insertElements,
+  isElement,
+  replaceNodeChildren,
+  someNode,
+} from '@udecode/plate';
 import React, { useCallback, useEffect } from 'react';
+import { hasTexts } from 'slate';
 import styled from 'styled-components';
+import { createEmtpyPlateParagraph } from '@app/components/plate-editor/helpers';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { useLazyGetTextsQuery } from '@app/redux-api/texts';
+import { useLazyGetPlateTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
 import { EditorValue, RedigerbarMaltekstElement } from '../types';
+
+// Ensures a next-path even though original path is at end
+const nextPath = (path: number[]) => {
+  const last = path[path.length - 1];
+
+  return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
+};
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -22,65 +39,79 @@ export const RedigerbarMaltekst = ({
     sections: [element.section],
     templateId: TemplateIdEnum.KLAGEVEDTAK,
   });
-  const [getTexts, { data }] = useLazyGetTextsQuery();
+
+  const [getTexts] = useLazyGetPlateTextsQuery();
+
+  const entry = findDescendant(editor, { at: [], match: (n) => n === element });
 
   const load = useCallback(async () => {
     if (query === skipToken) {
       return;
     }
 
-    const maltekster = (await getTexts(query).unwrap())
-      .map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null))
-      .filter(isNotNull)
-      .flatMap(({ content }) => content);
-
-    const entry = findDescendant(editor, { at: [], match: (n) => n === element });
-
     if (entry === undefined) {
       return;
     }
 
-    const [, path] = entry;
+    const [node, path] = entry;
 
-    replaceNodeChildren(editor, {
-      at: path,
-      nodes: [
-        {
-          type: 'p',
-          children: [{ text: `test ${Math.random()}` }],
-        },
-      ],
-    });
-  }, [editor, element, getTexts, query]);
+    // const hasTexts = isElement(node) && editor.hasTexts(node);
+    // console.log('hasTexts', hasTexts);
 
+    const maltekster = (await getTexts(query).unwrap())
+      .map((t) => (t.textType === RichTextTypes.REDIGERBAR_MALTEKST ? t : null))
+      .filter(isNotNull)
+      .flatMap(({ content }) => content);
+
+    replaceNodeChildren(editor, { at: path, nodes: maltekster });
+  }, [editor, entry, getTexts, query]);
+
+  // TODO: Fix infinite loop with populated dependency array
   useEffect(() => {
     load();
   }, []);
 
+  const insertParagraph = () => {
+    if (entry === undefined) {
+      return;
+    }
+
+    insertElements(editor, createEmtpyPlateParagraph(), { at: nextPath(entry[1]) });
+  };
+
   return (
     <Container {...attributes}>
       {children}
-      <StyledButton
-        contentEditable={false}
-        onClick={() => {
-          load();
-          console.log('Add new paragraph below maltekst');
-        }}
-        title="Legg til nytt avsnitt under"
-        icon={<TextAddSpaceBefore size={24} />}
-        variant="tertiary"
-        size="xsmall"
-      />
+      <Buttons>
+        <Button
+          title="Legg til nytt avsnitt under"
+          icon={<TextAddSpaceBefore size={24} />}
+          onClick={insertParagraph}
+          variant="tertiary"
+          size="xsmall"
+          contentEditable={false}
+        />
+        <Button
+          title="Tilbakestill tekst"
+          icon={<ArrowCirclepathIcon aria-hidden />}
+          onClick={load}
+          variant="tertiary"
+          size="small"
+          contentEditable={false}
+        />
+      </Buttons>
     </Container>
   );
 };
 
-const StyledButton = styled(Button)`
+const Buttons = styled.div`
   position: absolute;
   left: -36pt;
   bottom: 0;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
 
   :focus {
     opacity: 1;
@@ -106,7 +137,7 @@ const Container = styled.div`
   }
 
   :hover {
-    ${StyledButton} {
+    ${Buttons} {
       opacity: 1;
     }
 

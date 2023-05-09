@@ -15,6 +15,7 @@ import {
   createTablePlugin,
   createUnderlinePlugin,
 } from '@udecode/plate';
+import { alignPlugin } from '@app/components/plate-editor/plugins/align';
 import { createPageBreakPlugin } from '@app/components/plate-editor/plugins/page-break';
 import { components } from '../components';
 import { EditorValue, RichTextEditor } from '../types';
@@ -36,7 +37,7 @@ export const plugins = createPlugins<EditorValue>(
     createIndentPlugin(),
     createSoftBreakPlugin(),
     createCommentsPlugin(),
-    createAlignPlugin(),
+    createAlignPlugin(alignPlugin),
 
     createMaltekstPlugin(),
     createRedigerbarMaltekstPlugin(),

@@ -1,10 +1,10 @@
-import { TextAlignEnum } from '@app/components/plate-editor/types';
+import { TextAlign } from '@app/components/plate-editor/types';
 
-export const getTextAlign = (textAlign: TextAlignEnum) => {
+export const getTextAlign = (textAlign: TextAlign) => {
   switch (textAlign) {
-    case TextAlignEnum.TEXT_ALIGN_LEFT:
+    case TextAlign.LEFT:
       return 'left';
-    case TextAlignEnum.TEXT_ALIGN_RIGHT:
+    case TextAlign.RIGHT:
       return 'right';
   }
 };

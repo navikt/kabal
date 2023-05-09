@@ -3,13 +3,13 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
 import { ELEMENT_PLACEHOLDER } from '@app/components/plate-editor/plugins/placeholder';
 import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
-import { EditorValue, TextAlignEnum } from '@app/components/plate-editor/types';
+import { EditorValue, TextAlign } from '@app/components/plate-editor/types';
 import { TemplateSections } from '@app/types/texts/texts';
 
 export const INITIAL_VALUE: EditorValue = [
   {
     type: 'p',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
     children: [
       {
         text: 'All the Slate examples are written in TypeScript. However, ',
@@ -24,32 +24,20 @@ export const INITIAL_VALUE: EditorValue = [
   },
   {
     type: 'p',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-
-    children: [
-      { text: 'This example is written with ' },
-      { text: 'explicit', bold: true },
-      {
-        text: ' typings in all places, so you can see what a more realistic TypeScript usage would look like.',
-      },
-    ],
-  },
-  {
-    type: 'p',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
 
     indent: 2,
     children: [{ text: 'This text is indented' }],
   },
   {
     type: 'p',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
 
     children: [{ text: 'Normal text' }, { type: 'leaf', text: 'Leaf text' }],
   },
   {
     type: 'table',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
     children: [
       {
         type: 'tr',
@@ -58,12 +46,12 @@ export const INITIAL_VALUE: EditorValue = [
           {
             type: 'td',
 
-            children: [{ type: 'p', textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, children: [{ text: 'Cell 1' }] }],
+            children: [{ type: 'p', align: TextAlign.LEFT, children: [{ text: 'Cell 1' }] }],
           },
           {
             type: 'td',
 
-            children: [{ type: 'p', textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, children: [{ text: 'Cell 2' }] }],
+            children: [{ type: 'p', align: TextAlign.LEFT, children: [{ text: 'Cell 2' }] }],
           },
         ],
       },
@@ -74,7 +62,7 @@ export const INITIAL_VALUE: EditorValue = [
           {
             type: 'td',
 
-            children: [{ type: 'p', textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, children: [{ text: 'Cell 3' }] }],
+            children: [{ type: 'p', align: TextAlign.LEFT, children: [{ text: 'Cell 3' }] }],
           },
           {
             type: 'td',
@@ -136,7 +124,6 @@ export const INITIAL_VALUE: EditorValue = [
       },
     ],
   },
-
   {
     type: 'maltekst',
     section: TemplateSections.TITLE,
@@ -265,7 +252,7 @@ export const INITIAL_VALUE: EditorValue = [
   },
   {
     type: 'p',
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
     children: [
       { text: 'This example is written with ' },
       { text: 'explicit', bold: true },
@@ -277,11 +264,11 @@ export const INITIAL_VALUE: EditorValue = [
   {
     type: ELEMENT_REDIGERBAR_MALTEKST,
     section: TemplateSections.GENERELL_INFO,
-    children: [{ type: 'p', textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, children: [{ text: '' }] }],
+    children: [{ type: 'p', align: TextAlign.LEFT, children: [{ text: '' }] }],
   },
   {
     type: ELEMENT_PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
 
     children: [
       { text: 'Before comment. ' },
@@ -291,7 +278,7 @@ export const INITIAL_VALUE: EditorValue = [
   },
   {
     type: ELEMENT_PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
 
     children: [
       { text: 'Before placeholder. ' },
@@ -309,12 +296,17 @@ export const INITIAL_VALUE: EditorValue = [
   },
   {
     type: ELEMENT_PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+    align: TextAlign.LEFT,
     children: [{ text: 'Page 2' }],
   },
   {
     type: ELEMENT_PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_RIGHT,
+    align: TextAlign.RIGHT,
     children: [{ text: 'Right-aligned' }],
+  },
+  {
+    type: ELEMENT_REDIGERBAR_MALTEKST,
+    section: TemplateSections.INTRODUCTION,
+    children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] }],
   },
 ];
