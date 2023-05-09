@@ -25,7 +25,7 @@ export const OppgaveRows = ({
 }: OppgaveRowsProps): JSX.Element => {
   if (isError) {
     return (
-      <Table.Body data-testid={`${testId}-rows`} data-state="error">
+      <Table.Body data-testid={`${testId}-rows`} data-state="error" data-empty="true">
         <Table.Row>
           <Table.DataCell colSpan={columns.length}>Kunne ikke laste oppgaver.</Table.DataCell>
         </Table.Row>
@@ -35,7 +35,7 @@ export const OppgaveRows = ({
 
   if (isLoading) {
     return (
-      <Table.Body data-testid={`${testId}-rows`} data-state="loading">
+      <Table.Body data-testid={`${testId}-rows`} data-state="loading" data-empty="true">
         {new Array(pageSize).fill(0).map((_, i) => (
           <LoadingRow columnCount={columns.length} testId={testId} key={i} />
         ))}
@@ -43,9 +43,11 @@ export const OppgaveRows = ({
     );
   }
 
+  const state = isFetching ? 'updating' : 'ready';
+
   if (oppgaver.length === 0) {
     return (
-      <Table.Body data-testid={`${testId}-rows`} data-state="empty">
+      <Table.Body data-testid={`${testId}-rows`} data-state={state} data-empty="true">
         <Table.Row>
           <Table.DataCell colSpan={columns.length}>Ingen oppgaver</Table.DataCell>
         </Table.Row>
@@ -54,7 +56,7 @@ export const OppgaveRows = ({
   }
 
   return (
-    <Table.Body data-testid={`${testId}-rows`} data-state={isFetching ? 'updating' : 'ready'}>
+    <Table.Body data-testid={`${testId}-rows`} data-state={state} data-empty="false">
       {oppgaver.map((id) => (
         <OppgaveRow columns={columns} oppgaveId={id} testId={testId} key={id} />
       ))}
