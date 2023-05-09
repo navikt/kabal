@@ -73,6 +73,7 @@ export const PlateEditor = () => {
 const Container = styled.div`
   padding-left: 48px;
   padding-right: 48px;
+  width: 100%;
 `;
 
 const StyledToolbar = styled.section`
@@ -82,6 +83,7 @@ const StyledToolbar = styled.section`
   position: sticky;
   top: 0;
   left: 0;
+  width: 100%;
   background-color: white;
   z-index: 2;
   padding: 2px;

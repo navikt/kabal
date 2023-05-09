@@ -151,7 +151,8 @@ export type TopLevelElements =
   | TableElement
   | PageBreakElement;
 
-type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
+export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
+export type RichTextEditorElements = RootBlock | ListItemElement | TableCellElement | TElement | TText;
 
 export type EditorValue = RootBlock[];
 

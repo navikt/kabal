@@ -192,7 +192,7 @@ export const DefaultToolbarButtons = () => {
         label="Venstrejuster"
         icon={<TextAlignLeft />}
         onClick={() => setAlign(editor, { value: TextAlign.LEFT })}
-        active={getActiveAlignment(editor, TextAlign.LEFT)}
+        active={false}
       />
 
       <ToolbarIconButton
@@ -212,14 +212,3 @@ const ICON_SIZE = 24;
 const Redo = styled(ArrowUndoIcon)`
   transform: scaleX(-1);
 `;
-
-const getActiveAlignment = (editor: RichTextEditor, textAlign: TextAlign) => {
-  console.log('getActiveAlignment', textAlign);
-  console.log('isCollapsed(editor.selection)', isCollapsed(editor.selection));
-  console.log(
-    'someNode(editor, { match: { [KEY_ALIGN]: textAlign } })',
-    someNode(editor, { match: { [KEY_ALIGN]: textAlign } })
-  );
-
-  return isCollapsed(editor.selection) && someNode(editor, { match: { [KEY_ALIGN]: textAlign } });
-};

@@ -3,27 +3,57 @@ import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import {
+  ELEMENT_PARAGRAPH,
+  PlateEditor,
   PlateRenderElementProps,
   findDescendant,
   insertElements,
   isElement,
+  isElementEmpty,
   replaceNodeChildren,
 } from '@udecode/plate';
 import React, { useCallback, useEffect } from 'react';
+import { hasTexts } from 'slate';
 import styled from 'styled-components';
+import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
 import { createSimpleParagraph } from '@app/components/plate-editor/templates/helpers';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetPlateTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
-import { EditorValue, RedigerbarMaltekstElement } from '../types';
+import { EditorValue, RedigerbarMaltekstElement, RichTextEditorElements, RootBlock } from '../types';
 
 // Ensures a next-path even though original path is at end
 const nextPath = (path: number[]) => {
   const last = path[path.length - 1];
 
   return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
+};
+
+const nodeIsRedigerbarMaltekst = (node: RichTextEditorElements): node is RedigerbarMaltekstElement =>
+  isElement(node) && node.type === ELEMENT_REDIGERBAR_MALTEKST;
+
+const isEmpty = (editor: PlateEditor<EditorValue>, node: RichTextEditorElements) => {
+  if (!nodeIsRedigerbarMaltekst(node)) {
+    return false;
+  }
+
+  if (node.children.length === 0) {
+    return true;
+  }
+
+  if (node.children.length > 1) {
+    return false;
+  }
+
+  const [child] = node.children;
+
+  if (typeof child === 'undefined') {
+    return false;
+  }
+
+  return isElementEmpty(editor, child);
 };
 
 export const RedigerbarMaltekst = ({
@@ -53,8 +83,9 @@ export const RedigerbarMaltekst = ({
 
     const [node, path] = entry;
 
-    const hasTexts = isElement(node) && editor.hasTexts(node);
-    console.log('hasTexts', hasTexts);
+    if (isEmpty(editor, node)) {
+      return;
+    }
 
     const maltekster = (await getTexts(query).unwrap())
       .map((t) => (t.textType === RichTextTypes.REDIGERBAR_MALTEKST ? t : null))
