@@ -1,14 +1,9 @@
-import { migrateFromV0ToV1 } from '@app/components/rich-text/migrations/v0';
-import { migrateFromV1ToV2 } from '@app/components/rich-text/migrations/v1';
-import { migrateRichTextV2ToV3 } from '@app/components/rich-text/migrations/v2';
-import { migrateRichTextV3ToV4 } from '@app/components/rich-text/migrations/v3';
 import { VERSION } from '@app/components/rich-text/version';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { RichText_Latest_SmartEditor } from '@app/types/rich-text/latest';
 import { VersionedSmartEditor } from '@app/types/rich-text/versions';
 import { IGetSmartEditorParams } from '@app/types/smart-editor/params';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
-import { NoTemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 
@@ -34,34 +29,34 @@ const migrate = (smartEditor: VersionedSmartEditor): RichText_Latest_SmartEditor
     return smartEditor;
   }
 
-  if (smartEditor.version === undefined || smartEditor.version === 0) {
-    return migrate({
-      ...smartEditor,
-      ...migrateFromV0ToV1(smartEditor),
-      templateId: smartEditor.templateId ?? NoTemplateIdEnum.NONE,
-    });
-  }
+  // if (smartEditor.version === undefined || smartEditor.version === 0) {
+  //   return migrate({
+  //     ...smartEditor,
+  //     ...migrateFromV0ToV1(smartEditor),
+  //     templateId: smartEditor.templateId ?? NoTemplateIdEnum.NONE,
+  //   });
+  // }
 
-  if (smartEditor.version === 1) {
-    return migrate({
-      ...smartEditor,
-      ...migrateFromV1ToV2(smartEditor),
-    });
-  }
+  // if (smartEditor.version === 1) {
+  //   return migrate({
+  //     ...smartEditor,
+  //     ...migrateFromV1ToV2(smartEditor),
+  //   });
+  // }
 
-  if (smartEditor.version === 2) {
-    return migrate({
-      ...smartEditor,
-      ...migrateRichTextV2ToV3(smartEditor),
-    });
-  }
+  // if (smartEditor.version === 2) {
+  //   return migrate({
+  //     ...smartEditor,
+  //     ...migrateRichTextV2ToV3(smartEditor),
+  //   });
+  // }
 
-  if (smartEditor.version === 3) {
-    return migrate({
-      ...smartEditor,
-      ...migrateRichTextV3ToV4(smartEditor),
-    });
-  }
+  // if (smartEditor.version === 3) {
+  //   return migrate({
+  //     ...smartEditor,
+  //     ...migrateRichTextV3ToV4(smartEditor),
+  //   });
+  // }
 
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   throw new Error(`Unsupported version ${smartEditor.version ?? 0}`);

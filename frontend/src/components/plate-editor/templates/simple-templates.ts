@@ -1,16 +1,15 @@
-import { Descendant } from 'slate';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { DocumentType } from '@app/types/documents/documents';
 import { ISmartEditorTemplate, TemplateTypeEnum } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { VERSION } from '../../rich-text/version';
-import { createCurrentDate, createFooter, createHeader, createSimpleParagraph } from './helpers';
+import { createSimpleParagraph } from './helpers';
 
-const INITIAL_SLATE_VALUE: Descendant[] = [
-  createCurrentDate(),
-  createHeader(),
+const INITIAL_SLATE_VALUE = [
+  // createCurrentDate(),
+  // createHeader(),
   createSimpleParagraph(),
-  createFooter(),
+  // createFooter(),
 ];
 
 export const GENERELT_BREV_TEMPLATE = deepFreeze<ISmartEditorTemplate>({

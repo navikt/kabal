@@ -2,6 +2,7 @@ import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { TEMPLATES } from '@app/components/plate-editor/templates/templates';
 import {
   useEnhetNameFromId,
   useFullYtelseNameFromId,
@@ -13,7 +14,6 @@ import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/templa
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
-import { TEMPLATES } from '../../smart-editor/templates/templates';
 import { ResolvedTags } from '../../tags/resolved-tag';
 import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from '../edit-text-selects';
 import { HjemlerSelect } from '../hjemler-select';

@@ -18,7 +18,6 @@ import { TextIndentDecreaseLtr } from '@styled-icons/fluentui-system-regular/Tex
 import { TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular/TextIndentIncreaseLtr';
 import { TextNumberListLtr } from '@styled-icons/fluentui-system-regular/TextNumberListLtr';
 import {
-  AlignToolbarButton,
   BlockToolbarButton,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -34,7 +33,6 @@ import {
   MarkToolbarButton,
   TableToolbarButton,
   ToolbarButton,
-  findDescendant,
   focusEditor,
   getPluginType,
   indent,
@@ -48,8 +46,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
 import { ToolbarSeparator } from '@app/components/plate-editor/toolbar/separator';
+import { ToolbarIconButton } from '@app/components/plate-editor/toolbar/toolbarbutton';
 import { RichTextEditor, TextAlign, useMyPlateEditorRef } from '@app/components/plate-editor/types';
-import { ToolbarIconButton } from '@app/components/rich-text/toolbar/toolbarbutton';
 
 const tooltip = (content: string) => ({
   content,

@@ -70,27 +70,27 @@ interface BlockElement extends TElement {
  * Blocks
  */
 
-interface H1Element extends BlockElement {
+export interface H1Element extends BlockElement {
   type: typeof ELEMENT_H1;
   children: RichText[];
 }
 
-interface H2Element extends BlockElement {
+export interface H2Element extends BlockElement {
   type: typeof ELEMENT_H2;
   children: RichText[];
 }
 
-interface H3Element extends BlockElement {
+export interface H3Element extends BlockElement {
   type: typeof ELEMENT_H3;
   children: RichText[];
 }
 
-interface BulletListElement extends TElement, BlockElement {
+export interface BulletListElement extends TElement, BlockElement {
   type: typeof ELEMENT_UL;
   children: ListItemElement[];
 }
 
-interface NumberedListElement extends TElement, BlockElement {
+export interface NumberedListElement extends TElement, BlockElement {
   type: typeof ELEMENT_OL;
   children: ListItemElement[];
 }
@@ -100,12 +100,12 @@ export interface ListItemElement extends TElement, BlockElement {
   children: RichText[];
 }
 
-interface TableElement extends TTableElement, BlockElement {
+export interface TableElement extends TTableElement, BlockElement {
   type: typeof ELEMENT_TABLE;
   children: TableRowElement[];
 }
 
-interface TableRowElement extends TElement {
+export interface TableRowElement extends TElement {
   type: typeof ELEMENT_TR;
   children: TableCellElement[];
 }
@@ -151,7 +151,7 @@ export type TopLevelElements =
   | TableElement
   | PageBreakElement;
 
-export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
+type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
 
 export type EditorValue = RootBlock[];
 

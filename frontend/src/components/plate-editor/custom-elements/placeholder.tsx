@@ -38,7 +38,7 @@ export const Placeholder = ({
     }
 
     e.preventDefault();
-    editor.select({ path: [...path, 0], offset: 0, selected: true });
+    editor.select({ path: [...path, 0], offset: 0 });
   };
 
   const isFocused = getIsFocused(editor, element);

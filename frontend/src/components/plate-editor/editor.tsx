@@ -30,11 +30,7 @@ export const PlateEditor = () => {
       <PlateProvider<EditorValue, RichTextEditor>
         initialValue={INITIAL_VALUE}
         plugins={plugins}
-        onChange={(value) => {
-          console.log(value[15]);
-
-          // console.log(value);
-        }}
+        onChange={(value) => console.log(value)}
         renderLeaf={renderLeaf}
         id="main"
       >

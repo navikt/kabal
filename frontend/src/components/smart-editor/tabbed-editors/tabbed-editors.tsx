@@ -1,19 +1,16 @@
-import { ClockDashedIcon, DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
+import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import { ErrorBoundary, StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
+import { PlateEditor } from '@app/components/plate-editor/editor';
+import { StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSmartEditors } from '@app/hooks/use-smart-editors';
 import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
-import { CommentSection } from '../comments/comment-section';
-import { SmartEditorContextComponent } from '../context/smart-editor-context';
-import { GodeFormuleringer } from '../gode-formuleringer/gode-formuleringer';
 import { NewDocument } from '../new-document/new-document';
 import { SmartEditor } from '../smart-editor';
-import { CommentsClickBoundary } from './comments-click-boundry';
 import { ActiveTabButton, TabButton, TabsContainer } from './styled-components';
 
 export const TabbedEditors = () => {
@@ -112,46 +109,46 @@ interface Props {
 const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
   const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
 
-  const editorComponents = editors.map((editor) => {
-    const isActive = editor.id === activeEditorId;
+  return <SmartEditor />;
+  // const editorComponents = editors.map((editor) => {
+  // const isActive = editor.id === activeEditorId;
 
-    return (
-      <SmartEditorContextComponent
-        key={editor.id}
-        documentId={editor.id}
-        templateId={editor.templateId}
-        dokumentTypeId={editor.dokumentTypeId}
-      >
-        <CommentsClickBoundary isActive={isActive}>
-          <ErrorBoundary
-            errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}
-            actionButton={{
-              onClick: () => getSmartEditor({ dokumentId: editor.id, oppgaveId }, false).unwrap(),
-              loading: isLoading,
-              disabled: isLoading,
-              buttonText: 'Gjenopprett dokument',
-              buttonIcon: <ClockDashedIcon aria-hidden />,
-              variant: 'primary',
-              size: 'small',
-            }}
-          >
-            <GodeFormuleringer templateId={editor.templateId} />
-            <SmartEditor />
-            <CommentSection />
-          </ErrorBoundary>
-        </CommentsClickBoundary>
-      </SmartEditorContextComponent>
-    );
-  });
+  // return (
+  //   <SmartEditorContextComponent
+  //     key={editor.id}
+  //     documentId={editor.id}
+  //     templateId={editor.templateId}
+  //     dokumentTypeId={editor.dokumentTypeId}
+  //   >
+  //     <CommentsClickBoundary isActive={isActive}>
+  //       <ErrorBoundary
+  //         errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}
+  //         actionButton={{
+  //           onClick: () => getSmartEditor({ dokumentId: editor.id, oppgaveId }, false).unwrap(),
+  //           loading: isLoading,
+  //           disabled: isLoading,
+  //           buttonText: 'Gjenopprett dokument',
+  //           buttonIcon: <ClockDashedIcon aria-hidden />,
+  //           variant: 'primary',
+  //           size: 'small',
+  //         }}
+  //       >
+  //         <GodeFormuleringer templateId={editor.templateId} />
+  //         <CommentSection />
+  //       </ErrorBoundary>
+  //     </CommentsClickBoundary>
+  //   </SmartEditorContextComponent>
+  // );
+  // });
 
-  const newTab = activeEditorId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
+  // const newTab = activeEditorId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
 
-  return (
-    <>
-      {editorComponents}
-      {newTab}
-    </>
-  );
+  // return (
+  //   <>
+  //     {editorComponents}
+  //     {newTab}
+  //   </>
+  // );
 };
 
 interface DocumentErrorComponentProps {

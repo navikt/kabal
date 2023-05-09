@@ -8,12 +8,10 @@ import {
   insertElements,
   isElement,
   replaceNodeChildren,
-  someNode,
 } from '@udecode/plate';
 import React, { useCallback, useEffect } from 'react';
-import { hasTexts } from 'slate';
 import styled from 'styled-components';
-import { createEmtpyPlateParagraph } from '@app/components/plate-editor/helpers';
+import { createSimpleParagraph } from '@app/components/plate-editor/templates/helpers';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetPlateTextsQuery } from '@app/redux-api/texts';
@@ -55,8 +53,8 @@ export const RedigerbarMaltekst = ({
 
     const [node, path] = entry;
 
-    // const hasTexts = isElement(node) && editor.hasTexts(node);
-    // console.log('hasTexts', hasTexts);
+    const hasTexts = isElement(node) && editor.hasTexts(node);
+    console.log('hasTexts', hasTexts);
 
     const maltekster = (await getTexts(query).unwrap())
       .map((t) => (t.textType === RichTextTypes.REDIGERBAR_MALTEKST ? t : null))
@@ -76,7 +74,7 @@ export const RedigerbarMaltekst = ({
       return;
     }
 
-    insertElements(editor, createEmtpyPlateParagraph(), { at: nextPath(entry[1]) });
+    insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]) });
   };
 
   return (

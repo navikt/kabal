@@ -1,7 +1,7 @@
-import React from 'react';
+import { PlateEditor } from '@app/components/plate-editor/editor';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainText } from '@app/types/texts/texts';
+import React from 'react';
 import { HeaderFooterEditor } from './header-footer';
-import { RichTextEditor } from './rich-text';
 
 type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
@@ -27,12 +27,13 @@ export const ContentEditor = ({ text, update, onKeyDown }: Props) => {
   }
 
   return (
-    <RichTextEditor
-      key={text.id}
-      textId={text.id}
-      savedContent={text.content}
-      setContent={(content) => update(content, 'content')}
-      onKeyDown={onKeyDown}
-    />
+    <PlateEditor />
+    // <RichTextEditor
+    //   key={text.id}
+    //   textId={text.id}
+    //   savedContent={text.content}
+    //   setContent={(content) => update(content, 'content')}
+    //   onKeyDown={onKeyDown}
+    // />
   );
 };

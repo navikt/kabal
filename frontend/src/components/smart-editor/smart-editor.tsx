@@ -1,28 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { RichTextEditorElement } from '../rich-text/rich-text-editor/rich-text-editor';
-import '../rich-text/types/slate-global-types';
-import { SmartEditorContext } from './context/smart-editor-context';
-import { useCanEditDocument } from './hooks/use-can-edit-document';
 import { PlateEditor } from '@app/components/plate-editor/editor';
 
-export const SmartEditor = (): JSX.Element | null => {
-  const { focusedThreadId } = useContext(SmartEditorContext);
-  const canEdit = useCanEditDocument();
+export const SmartEditor = (): JSX.Element | null => (
+  // const { focusedThreadId } = useContext(SmartEditorContext);
+  // const canEdit = useCanEditDocument();
 
-  return (
-    <ElementsSection>
-      <PlateEditor />
-      {/* <RichTextEditorElement
+  <ElementsSection>
+    <PlateEditor />
+    {/* <RichTextEditorElement
         showCommentsButton
         showAnnotationsButton
         showGodeFormuleringerButton
         focusedThreadId={focusedThreadId}
         canEdit={canEdit}
       /> */}
-    </ElementsSection>
-  );
-};
+  </ElementsSection>
+);
 
 const ElementsSection = styled.article`
   flex-grow: 1;

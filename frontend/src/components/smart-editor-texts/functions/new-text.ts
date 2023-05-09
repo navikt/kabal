@@ -1,3 +1,5 @@
+import { ELEMENT_PARAGRAPH } from '@udecode/plate';
+import { TextAlign } from '@app/components/plate-editor/types';
 import {
   INewPlainTextParams,
   INewRichTextParams,
@@ -5,17 +7,7 @@ import {
   PlainTextTypes,
   RichTextTypes,
 } from '@app/types/texts/texts';
-import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
 import { VERSION } from '../../rich-text/version';
-
-const NEW_TEXT: INewRichTextParams['content'] = [
-  {
-    type: ContentTypeEnum.PARAGRAPH,
-    textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-    children: [{ text: '' }],
-    indent: 0,
-  },
-];
 
 const getMetadata = (): ITextBaseMetadata => ({
   hjemler: [],
@@ -28,7 +20,14 @@ const getMetadata = (): ITextBaseMetadata => ({
 });
 
 export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({
-  content: NEW_TEXT,
+  content: [
+    {
+      type: ELEMENT_PARAGRAPH,
+      align: TextAlign.LEFT,
+      children: [{ text: '' }],
+      indent: 0,
+    },
+  ],
   version: VERSION,
   textType,
   ...getMetadata(),

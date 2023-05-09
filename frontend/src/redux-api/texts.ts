@@ -7,7 +7,6 @@ import { VersionedText } from '@app/types/rich-text/versions';
 import {
   IGetTextsParams,
   INewTextParams,
-  IPlateText,
   IText,
   IUpdatePlainTextPropertyParams,
   IUpdateRichTextPropertyParams,
@@ -48,7 +47,7 @@ export const textsApi = createApi({
       transformResponse: (t: VersionedText[]) => t.map(transformResponse),
       providesTags: textsListTags,
     }),
-    getPlateTexts: builder.query<IPlateText[], IGetTextsParams>({
+    getPlateTexts: builder.query<IText[], IGetTextsParams>({
       query: (query) => `/texts/${queryStringify(query)}`,
     }),
     getTextById: builder.query<IText, string>({
