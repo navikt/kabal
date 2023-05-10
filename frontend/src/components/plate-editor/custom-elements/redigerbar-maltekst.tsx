@@ -1,60 +1,17 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import {
-  ELEMENT_PARAGRAPH,
-  PlateEditor,
-  PlateRenderElementProps,
-  findDescendant,
-  insertElements,
-  isElement,
-  isElementEmpty,
-  replaceNodeChildren,
-} from '@udecode/plate';
-import React, { useCallback, useEffect } from 'react';
-import { hasTexts } from 'slate';
-import styled from 'styled-components';
-import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
-import { createSimpleParagraph } from '@app/components/plate-editor/templates/helpers';
+import { PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AddNewParagraphButton } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-button';
+import { MaltekstContainer, SideButtons } from '@app/components/plate-editor/custom-elements/styled-components';
+import { isNodeEmpty } from '@app/components/plate-editor/utils/queries';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { useLazyGetPlateTextsQuery } from '@app/redux-api/texts';
+import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
-import { EditorValue, RedigerbarMaltekstElement, RichTextEditorElements, RootBlock } from '../types';
-
-// Ensures a next-path even though original path is at end
-const nextPath = (path: number[]) => {
-  const last = path[path.length - 1];
-
-  return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
-};
-
-const nodeIsRedigerbarMaltekst = (node: RichTextEditorElements): node is RedigerbarMaltekstElement =>
-  isElement(node) && node.type === ELEMENT_REDIGERBAR_MALTEKST;
-
-const isEmpty = (editor: PlateEditor<EditorValue>, node: RichTextEditorElements) => {
-  if (!nodeIsRedigerbarMaltekst(node)) {
-    return false;
-  }
-
-  if (node.children.length === 0) {
-    return true;
-  }
-
-  if (node.children.length > 1) {
-    return false;
-  }
-
-  const [child] = node.children;
-
-  if (typeof child === 'undefined') {
-    return false;
-  }
-
-  return isElementEmpty(editor, child);
-};
+import { EditorValue, RedigerbarMaltekstElement } from '../types';
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -62,28 +19,20 @@ export const RedigerbarMaltekst = ({
   element,
   editor,
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
+  const [initialized, setInitialized] = useState(false);
+
   const query = useQuery({
     textType: RichTextTypes.REDIGERBAR_MALTEKST,
     sections: [element.section],
     templateId: TemplateIdEnum.KLAGEVEDTAK,
   });
 
-  const [getTexts] = useLazyGetPlateTextsQuery();
+  const [getTexts] = useLazyGetTextsQuery();
 
   const entry = findDescendant(editor, { at: [], match: (n) => n === element });
 
-  const load = useCallback(async () => {
-    if (query === skipToken) {
-      return;
-    }
-
-    if (entry === undefined) {
-      return;
-    }
-
-    const [node, path] = entry;
-
-    if (isEmpty(editor, node)) {
+  const insertRedigerbarMaltekst = useCallback(async () => {
+    if (query === skipToken || entry === undefined) {
       return;
     }
 
@@ -92,86 +41,42 @@ export const RedigerbarMaltekst = ({
       .filter(isNotNull)
       .flatMap(({ content }) => content);
 
-    replaceNodeChildren(editor, { at: path, nodes: maltekster });
+    console.log(maltekster);
+
+    replaceNodeChildren(editor, { at: entry[1], nodes: maltekster });
+    setInitialized(true);
   }, [editor, entry, getTexts, query]);
 
-  // TODO: Fix infinite loop with populated dependency array
-  useEffect(() => {
-    load();
-  }, []);
-
-  const insertParagraph = () => {
+  const insertIfEmpty = useCallback(() => {
     if (entry === undefined) {
       return;
     }
 
-    insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]) });
-  };
+    if (isNodeEmpty(editor, entry[0])) {
+      insertRedigerbarMaltekst();
+    }
+  }, [editor, entry, insertRedigerbarMaltekst]);
+
+  useEffect(() => {
+    if (!initialized) {
+      insertIfEmpty();
+    }
+  }, [initialized, insertIfEmpty]);
 
   return (
-    <Container {...attributes}>
+    <MaltekstContainer {...attributes}>
       {children}
-      <Buttons>
-        <Button
-          title="Legg til nytt avsnitt under"
-          icon={<TextAddSpaceBefore size={24} />}
-          onClick={insertParagraph}
-          variant="tertiary"
-          size="xsmall"
-          contentEditable={false}
-        />
+      <SideButtons>
+        <AddNewParagraphButton editor={editor} element={element} />
         <Button
           title="Tilbakestill tekst"
           icon={<ArrowCirclepathIcon aria-hidden />}
-          onClick={load}
+          onClick={insertRedigerbarMaltekst}
           variant="tertiary"
           size="small"
           contentEditable={false}
         />
-      </Buttons>
-    </Container>
+      </SideButtons>
+    </MaltekstContainer>
   );
 };
-
-const Buttons = styled.div`
-  position: absolute;
-  left: -36pt;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  display: flex;
-  flex-direction: column;
-
-  :focus {
-    opacity: 1;
-  }
-`;
-
-const Container = styled.div`
-  display: inherit;
-  flex-direction: inherit;
-  row-gap: inherit;
-  position: relative;
-  color: #333;
-
-  ::before {
-    content: '';
-    position: absolute;
-    left: -12pt;
-    width: 6pt;
-    height: 0;
-    top: 0;
-    background-color: var(--a-bg-subtle);
-    transition: height 0.4s ease-in-out;
-  }
-
-  :hover {
-    ${Buttons} {
-      opacity: 1;
-    }
-
-    ::before {
-      height: 100%;
-    }
-  }
-`;

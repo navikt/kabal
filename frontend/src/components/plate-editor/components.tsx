@@ -14,8 +14,12 @@ import {
   PlatePluginComponent,
 } from '@udecode/plate';
 import React from 'react';
+import { CurrentDate } from '@app/components/plate-editor/custom-elements/current-date';
 import { PageBreak } from '@app/components/plate-editor/custom-elements/page-break';
+import { Regelverk } from '@app/components/plate-editor/custom-elements/regelverk';
+import { ELEMENT_CURRENT_DATE } from '@app/components/plate-editor/plugins/current-date';
 import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
+import { ELEMENT_REGELVERK } from '@app/components/plate-editor/plugins/regelverk';
 import { HeadingOne, HeadingThree, HeadingTwo } from './custom-elements/headings';
 import { BulletListStyle, ListItemStyle, NumberedListStyle } from './custom-elements/lists';
 import { Maltekst } from './custom-elements/maltekst';
@@ -52,4 +56,6 @@ export const components: Record<string, PlatePluginComponent> = {
   [ELEMENT_REDIGERBAR_MALTEKST]: RedigerbarMaltekst,
   [ELEMENT_PLACEHOLDER]: Placeholder,
   [ELEMENT_PAGE_BREAK]: PageBreak,
+  [ELEMENT_CURRENT_DATE]: CurrentDate,
+  [ELEMENT_REGELVERK]: Regelverk,
 };

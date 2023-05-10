@@ -18,17 +18,19 @@ import { ListTagTypes } from './tag-types';
 
 const versionGuard = (t: VersionedText): t is IText => t.version === VERSION;
 
-const transformResponse = (t: VersionedText): IText => {
-  if (!versionGuard(t)) {
-    throw new Error('Version mismatch');
-  }
+// const transformResponse = (t: VersionedText): IText => {
+//   if (!versionGuard(t)) {
+//     throw new Error('Version mismatch');
+//   }
 
-  return t;
-};
+//   return t;
+// };
 
 enum TextListTagTypes {
   TEXTS = 'texts',
 }
+
+// type IText = SimpleContent;
 
 const textsListTags = (messages: IText[] | undefined) =>
   typeof messages === 'undefined'
@@ -37,6 +39,36 @@ const textsListTags = (messages: IText[] | undefined) =>
         .map(({ id }) => ({ type: TextListTagTypes.TEXTS, id }))
         .concat({ type: TextListTagTypes.TEXTS, id: ListTagTypes.PARTIAL_LIST });
 
+const transformResponse = <T>(res: unknown): T => {
+  let json = JSON.stringify(res);
+
+  const types: [string, string][] = [
+    ['paragraph', 'p'],
+    ['heading-one', 'h1'],
+    ['heading-two', 'h2'],
+    ['heading-three', 'h3'],
+    ['heading-four', 'h4'],
+    ['heading-five', 'h5'],
+    ['heading-six', 'h6'],
+    ['list-item', 'li'],
+    ['list-item-container', 'lic'],
+    ['numbered-list', 'ol'],
+    ['bullet-list', 'ul'],
+  ];
+
+  for (const [from, to] of types) {
+    json = json.replaceAll(`"type":"${from}"`, `"type":"${to}"`);
+  }
+
+  json = json.replaceAll(`"textAlign":"text-align-`, `"align":"`);
+
+  const transformed = JSON.parse(json) as T;
+
+  console.log('transformResponse', transformed);
+
+  return transformed;
+};
+
 export const textsApi = createApi({
   reducerPath: 'textsApi',
   baseQuery: KABAL_TEXT_TEMPLATES_BASE_QUERY,
@@ -44,11 +76,8 @@ export const textsApi = createApi({
   endpoints: (builder) => ({
     getTexts: builder.query<IText[], IGetTextsParams>({
       query: (query) => `/texts/${queryStringify(query)}`,
-      transformResponse: (t: VersionedText[]) => t.map(transformResponse),
+      transformResponse,
       providesTags: textsListTags,
-    }),
-    getPlateTexts: builder.query<IText[], IGetTextsParams>({
-      query: (query) => `/texts/${queryStringify(query)}`,
     }),
     getTextById: builder.query<IText, string>({
       query: (id) => `/texts/${id}`,
@@ -199,5 +228,4 @@ export const {
   useLazyMigrateGetAllTextsQuery,
   useMigrateUpdateTextsMutation,
   useUpdateTextMutation,
-  useLazyGetPlateTextsQuery,
 } = textsApi;

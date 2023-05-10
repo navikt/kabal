@@ -1,9 +1,10 @@
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { Plate, PlateProvider, PlateRenderElementProps, TEditableProps } from '@udecode/plate';
-import React, { memo, useCallback, useEffect, useId, useState } from 'react';
-import styled from 'styled-components';
+import { Plate, PlateProvider, PlateRenderElementProps, TEditableProps, findDescendant } from '@udecode/plate';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { AddNewParagraphButton } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-button';
+import { MaltekstContainer, SideButtons } from '@app/components/plate-editor/custom-elements/styled-components';
 import { renderLeaf } from '@app/components/plate-editor/leaf/render-leaf';
 import { plugins } from '@app/components/plate-editor/plugins/plugins';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
@@ -11,25 +12,32 @@ import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
-import { EditorValue, ListItemElement, MaltekstElement, RichTextEditor } from '../types';
+import { EditorValue, MaltekstElement, RichTextEditor } from '../types';
 
 const editableProps: TEditableProps<EditorValue> = {
   spellCheck: false,
   autoFocus: false,
 };
 
-export const Maltekst = ({ attributes, children, element }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
-  const id = useId();
+export const Maltekst = ({
+  editor,
+  attributes,
+  children,
+  element,
+}: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const query = useQuery({
     textType: RichTextTypes.MALTEKST,
     sections: [element.section],
     templateId: TemplateIdEnum.KLAGEVEDTAK,
   });
-  const [getTexts, { data }] = useLazyGetTextsQuery();
+  const [getTexts] = useLazyGetTextsQuery();
   const [maltekst, setMaltekst] = useState<EditorValue>([]);
+  const [initialized, setInitialized] = useState(false);
 
   const load = useCallback(async () => {
-    if (query === skipToken) {
+    const entry = findDescendant(editor, { at: [], match: (n) => n === element });
+
+    if (query === skipToken || entry === undefined) {
       return;
     }
 
@@ -38,39 +46,34 @@ export const Maltekst = ({ attributes, children, element }: PlateRenderElementPr
       .filter(isNotNull)
       .flatMap(({ content }) => content);
 
-    const items: ListItemElement[] = [];
-
-    const number = Math.random() * 9 + 1;
-
-    for (let i = 0; i < number; i++) {
-      items.push({
-        type: 'li',
-        children: [{ text: `List item ${i}` }],
-      });
-    }
-
-    setMaltekst([{ type: 'ul', children: items }]);
-  }, [getTexts, query]);
+    setMaltekst(maltekster);
+    setInitialized(true);
+  }, [editor, element, getTexts, query]);
 
   useEffect(() => {
-    load();
-  }, []);
+    if (!initialized) {
+      load();
+    }
+  }, [initialized, load]);
 
   return (
-    <Container {...attributes} contentEditable={false}>
+    <MaltekstContainer {...attributes} contentEditable={false}>
       {children}
 
       <MaltekstContent value={maltekst} />
 
-      <StyledButton
-        contentEditable={false}
-        onClick={() => console.log('Add new paragraph below maltekst')}
-        title="Legg til nytt avsnitt under"
-        icon={<TextAddSpaceBefore size={24} />}
-        variant="tertiary"
-        size="xsmall"
-      />
-    </Container>
+      <SideButtons>
+        <AddNewParagraphButton editor={editor} element={element} />
+        <Button
+          title="Oppdater til siste versjon"
+          icon={<ArrowCirclepathIcon aria-hidden />}
+          onClick={load}
+          variant="tertiary"
+          size="small"
+          contentEditable={false}
+        />
+      </SideButtons>
+    </MaltekstContainer>
   );
 };
 
@@ -94,44 +97,3 @@ const MaltekstContent = memo(
 );
 
 MaltekstContent.displayName = 'MaltekstContent';
-
-const StyledButton = styled(Button)`
-  position: absolute;
-  left: -36pt;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-
-  :focus {
-    opacity: 1;
-  }
-`;
-
-const Container = styled.div`
-  display: inherit;
-  flex-direction: inherit;
-  row-gap: inherit;
-  position: relative;
-  color: var(--a-text-subtle);
-
-  ::before {
-    content: '';
-    position: absolute;
-    left: -12pt;
-    width: 6pt;
-    height: 0;
-    top: 0;
-    background-color: var(--a-bg-subtle);
-    transition: height 0.4s ease-in-out;
-  }
-
-  :hover {
-    ${StyledButton} {
-      opacity: 1;
-    }
-
-    ::before {
-      height: 100%;
-    }
-  }
-`;

@@ -1,4 +1,4 @@
-import { TopLevelElements } from '@app/components/plate-editor/types';
+import { EditorValue, RichTextEditorElements, TopLevelElements } from '@app/components/plate-editor/types';
 import { VERSION } from '@app/components/rich-text/version';
 import { NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { UtfallEnum } from '../kodeverk';
@@ -82,7 +82,7 @@ export interface ITextMetadata extends ITextBaseMetadata {
 
 export interface INewRichTextParams extends ITextBaseMetadata {
   textType: RichTextTypes;
-  content: TopLevelElements[];
+  content: EditorValue;
   version: typeof VERSION;
 }
 

@@ -33,7 +33,9 @@ import {
 import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/maltekst';
 import { ELEMENT_PLACEHOLDER } from '@app/components/plate-editor/plugins/placeholder';
 import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
+import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/components/plate-editor/plugins/regelverk';
 import { TemplateSections } from '@app/types/texts/texts';
+import { ELEMENT_CURRENT_DATE } from './plugins/current-date';
 import { ELEMENT_PAGE_BREAK } from './plugins/page-break';
 
 export enum TextAlign {
@@ -141,6 +143,22 @@ export interface PageBreakElement extends TElement {
   type: typeof ELEMENT_PAGE_BREAK;
 }
 
+export interface CurrentDateElement extends TElement {
+  type: typeof ELEMENT_CURRENT_DATE;
+  children: Leaf[];
+}
+
+export interface RegelverkContainerElement extends TElement {
+  type: typeof ELEMENT_REGELVERK_CONTAINER;
+  children: TopLevelElements[];
+}
+
+export interface RegelverkElement extends TElement {
+  type: typeof ELEMENT_REGELVERK;
+  section: TemplateSections.REGELVERK;
+  children: [PageBreakElement, MaltekstElement, RegelverkContainerElement];
+}
+
 export type TopLevelElements =
   | ParagraphElement
   | H1Element
@@ -149,9 +167,11 @@ export type TopLevelElements =
   | BulletListElement
   | NumberedListElement
   | TableElement
-  | PageBreakElement;
+  | PageBreakElement
+  | CurrentDateElement;
 
-export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement;
+export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement | RegelverkElement;
+
 export type RichTextEditorElements = RootBlock | ListItemElement | TableCellElement | TElement | TText;
 
 export type EditorValue = RootBlock[];

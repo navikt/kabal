@@ -1,5 +1,6 @@
-import { BaseRange, Descendant, Element } from 'slate';
-import { PageBreakElementType } from '@app/components/rich-text/types/editor-void-types';
+/* eslint-disable import/no-unused-modules */
+import { BaseRange, Element } from 'slate';
+import { PageBreakElementType, VoidElementTypes } from '@app/components/rich-text/types/editor-void-types';
 import { TemplateSections, TextMetadata } from '@app/types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import {
@@ -16,6 +17,8 @@ import {
   UndeletableVoidElementsEnum,
 } from './editor-enums';
 import { IMarks, MarkKeys } from './marks';
+
+export type Descendant = NonVoidElementTypes | VoidElementTypes | CustomTextType;
 
 export const VOID_ELEMENT_TYPES = [
   ...Object.values(UndeletableVoidElementsEnum),

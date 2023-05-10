@@ -5,7 +5,6 @@ import {
   PlateFloatingComments,
   PlateProvider,
   TEditableProps,
-  Toolbar,
 } from '@udecode/plate';
 import React from 'react';
 import styled from 'styled-components';

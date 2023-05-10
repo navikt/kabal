@@ -1,16 +1,22 @@
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_LI, ELEMENT_PARAGRAPH, ELEMENT_UL } from '@udecode/plate';
+import { ELEMENT_CURRENT_DATE } from '@app/components/plate-editor/plugins/current-date';
 import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/maltekst';
 import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
 import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
+import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/components/plate-editor/plugins/regelverk';
 import {
   BulletListElement,
+  CurrentDateElement,
   H1Element,
   H2Element,
   MaltekstElement,
   PageBreakElement,
   ParagraphElement,
   RedigerbarMaltekstElement,
+  RegelverkContainerElement,
+  RegelverkElement,
   TextAlign,
+  TopLevelElements,
 } from '@app/components/plate-editor/types';
 import { TemplateSections } from '@app/types/texts/texts';
 
@@ -25,7 +31,7 @@ import { TemplateSections } from '@app/types/texts/texts';
 export const createMaltekst = (section: TemplateSections): MaltekstElement => ({
   type: ELEMENT_MALTEKST,
   section,
-  children: [{ text: '' }],
+  children: [createSimpleParagraph()],
 });
 
 export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbarMaltekstElement => ({
@@ -34,17 +40,18 @@ export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbarM
   children: [createSimpleParagraph()],
 });
 
-// export const createRegelverkContainer = (
-//   children: Descendant[] = [createSimpleParagraph()]
-// ): RegelverkContainerType => ({
-//   type: UndeletableContentEnum.REGELVERK_CONTAINER,
-//   children,
-// });
+const createRegelverkContainer = (
+  children: TopLevelElements[] = [createSimpleParagraph()]
+): RegelverkContainerElement => ({
+  type: ELEMENT_REGELVERK_CONTAINER,
+  children,
+});
 
-// export const createRegelverk = (): RegelverkElementType => ({
-//   type: UndeletableContentEnum.REGELVERK,
-//   children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK), createRegelverkContainer()],
-// });
+export const createRegelverk = (): RegelverkElement => ({
+  type: ELEMENT_REGELVERK,
+  section: TemplateSections.REGELVERK,
+  children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK), createRegelverkContainer()],
+});
 
 // eslint-disable-next-line import/no-unused-modules
 export const createHeadingOne = (text: string): H1Element => ({
@@ -86,10 +93,10 @@ export const createPageBreak = (): PageBreakElement => ({
   children: [{ text: '' }],
 });
 
-// export const createCurrentDate = (): CurrentDateType => ({
-//   type: UndeletableVoidElementsEnum.CURRENT_DATE,
-//   children: [{ text: '' }],
-// });
+export const createCurrentDate = (): CurrentDateElement => ({
+  type: ELEMENT_CURRENT_DATE,
+  children: [{ text: '' }],
+});
 
 // export const createHeader = (): HeaderElementType => ({
 //   type: UndeletableVoidElementsEnum.HEADER,
