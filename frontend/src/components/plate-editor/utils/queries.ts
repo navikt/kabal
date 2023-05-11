@@ -1,11 +1,13 @@
-import { TDescendant, isElement, isElementEmpty, isText } from '@udecode/plate';
+import { TDescendant, TElement, TText, isElement, isText } from '@udecode/plate';
 import { PlateEditor } from '@udecode/plate-core';
-import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
+import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/element-types';
 import {
+  ChildElement,
+  EditorDescendant,
   EditorValue,
+  ParentOrChildElement,
   RedigerbarMaltekstElement,
-  RichTextEditorElements,
-  TopLevelElements,
+  RichText,
 } from '@app/components/plate-editor/types';
 
 // Ensures a next-path even though original path is at end
@@ -15,18 +17,21 @@ export const nextPath = (path: number[]) => {
   return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
 };
 
-const nodeIsRedigerbarMaltekst = (node: RichTextEditorElements): node is RedigerbarMaltekstElement =>
+const nodeIsRedigerbarMaltekst = (node: EditorDescendant): node is RedigerbarMaltekstElement =>
   isElement(node) && node.type === ELEMENT_REDIGERBAR_MALTEKST;
 
-const isChildEmpty = (editor: PlateEditor<EditorValue>, child: TopLevelElements | TDescendant): boolean => {
+const isChildEmpty = (
+  editor: PlateEditor<EditorValue>,
+  child: ParentOrChildElement | TElement | TText | RichText
+): boolean => {
   if (isText(child)) {
-    return child.text === '';
+    return child.text.length === 0;
   }
 
-  return isElementEmpty(editor, child) || child.children.every((c) => isChildEmpty(editor, c));
+  return child.children.every((c) => isChildEmpty(editor, c));
 };
 
-export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: RichTextEditorElements) => {
+export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: EditorDescendant) => {
   if (!nodeIsRedigerbarMaltekst(node)) {
     return false;
   }

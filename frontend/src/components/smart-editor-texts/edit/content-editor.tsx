@@ -1,6 +1,6 @@
+import React from 'react';
 import { PlateEditor } from '@app/components/plate-editor/editor';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainText } from '@app/types/texts/texts';
-import React from 'react';
 import { HeaderFooterEditor } from './header-footer';
 
 type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];

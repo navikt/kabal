@@ -1,6 +1,5 @@
 import { createPluginFactory } from '@udecode/plate';
-
-export const ELEMENT_REDIGERBAR_MALTEKST = 'redigerbar-maltekst';
+import { ELEMENT_REDIGERBAR_MALTEKST } from './element-types';
 
 export const createRedigerbarMaltekstPlugin = createPluginFactory({
   key: ELEMENT_REDIGERBAR_MALTEKST,

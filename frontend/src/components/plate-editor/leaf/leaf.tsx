@@ -7,9 +7,13 @@ import {
 } from '@udecode/plate';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { EditorValue, RichText, TextAlign } from '../types';
+import { EditorValue, RichText } from '../types';
 
-export const CustomLeaf = ({ attributes, children, leaf }: Omit<PlateRenderLeafProps<EditorValue>, 'editor'>) => {
+export const CustomLeaf = ({
+  attributes,
+  children,
+  leaf,
+}: Omit<PlateRenderLeafProps<EditorValue, RichText>, 'editor'>) => {
   const [commentIds, setCommentIds] = useState<string[]>([]);
   const activeCommentId = useCommentsSelectors().activeCommentId();
   const setActiveCommentId = useCommentsActions().activeCommentId();

@@ -1,11 +1,16 @@
 import { AnyObject, PlateEditor, createPluginFactory, someNode } from '@udecode/plate';
 import { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 import { TextDeleteOptions } from 'slate/dist/interfaces/transforms/text';
+import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/element-types';
 import { EditorValue, RichTextEditor } from '@app/components/plate-editor/types';
 
-export const ELEMENT_MALTEKST = 'maltekst';
+const maltekstInSelection = (editor: RichTextEditor): boolean => {
+  if (editor.selection === null) {
+    return false;
+  }
 
-const maltekstInSelection = (editor: RichTextEditor) => someNode(editor, { match: { type: ELEMENT_MALTEKST } });
+  return someNode(editor, { match: { type: ELEMENT_MALTEKST, at: editor.selection } });
+};
 
 const withOverrides = (editor: PlateEditor<EditorValue>) => {
   const { deleteBackward, deleteForward, deleteFragment, delete: deleteFn } = editor;

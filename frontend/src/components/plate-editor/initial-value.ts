@@ -2,19 +2,27 @@
 import {
   ELEMENT_H1,
   ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TR,
+  ELEMENT_UL,
 } from '@udecode/plate';
-import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/maltekst';
-import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
-import { ELEMENT_PLACEHOLDER } from '@app/components/plate-editor/plugins/placeholder';
-import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
-import { createCurrentDate, createRegelverk } from '@app/components/plate-editor/templates/helpers';
+import {
+  ELEMENT_MALTEKST,
+  ELEMENT_PAGE_BREAK,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REDIGERBAR_MALTEKST,
+} from '@app/components/plate-editor/plugins/element-types';
+import {
+  createCurrentDate,
+  createRegelverk,
+  createSimpleParagraph,
+} from '@app/components/plate-editor/templates/helpers';
 import { EditorValue, TextAlign } from '@app/components/plate-editor/types';
-import { TemplateSections } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
 
 export const INITIAL_VALUE: EditorValue = [
   createCurrentDate(),
@@ -54,11 +62,15 @@ export const INITIAL_VALUE: EditorValue = [
         children: [
           {
             type: ELEMENT_TD,
-            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '1a' }] }],
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '1a sddasda' }] }],
           },
           {
             type: ELEMENT_TD,
-            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '1b' }] }],
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '1b asdad' }] }],
+          },
+          {
+            type: ELEMENT_TD,
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '1c adsadwd' }] }],
           },
         ],
       },
@@ -67,11 +79,32 @@ export const INITIAL_VALUE: EditorValue = [
         children: [
           {
             type: ELEMENT_TD,
-            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '2a' }] }],
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '2a sddasda' }] }],
           },
           {
             type: ELEMENT_TD,
-            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '2b' }] }],
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '2b asdad' }] }],
+          },
+          {
+            type: ELEMENT_TD,
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '2c adsadwd' }] }],
+          },
+        ],
+      },
+      {
+        type: ELEMENT_TR,
+        children: [
+          {
+            type: ELEMENT_TD,
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '3a sddasda' }] }],
+          },
+          {
+            type: ELEMENT_TD,
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '3b asdad' }] }],
+          },
+          {
+            type: ELEMENT_TD,
+            children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '3c adsadwd' }] }],
           },
         ],
       },
@@ -82,15 +115,26 @@ export const INITIAL_VALUE: EditorValue = [
     children: [{ text: 'Numbered list' }],
   },
   {
-    type: 'ol',
+    type: ELEMENT_OL,
     children: [
       {
-        type: 'li',
-        children: [{ text: 'List item 1' }],
+        type: ELEMENT_LI,
+        children: [
+          { type: ELEMENT_LIC, children: [{ text: 'List item 1' }] },
+          {
+            type: ELEMENT_OL,
+            children: [
+              {
+                type: ELEMENT_LI,
+                children: [{ type: ELEMENT_LIC, children: [{ text: 'Sublist item 1.1' }] }],
+              },
+            ],
+          },
+        ],
       },
       {
-        type: 'li',
-        children: [{ text: 'List item 2' }],
+        type: ELEMENT_LI,
+        children: [{ type: ELEMENT_LIC, children: [{ text: 'List item 2' }] }],
       },
     ],
   },
@@ -99,15 +143,11 @@ export const INITIAL_VALUE: EditorValue = [
     children: [{ text: 'Bullet list' }],
   },
   {
-    type: 'ul',
+    type: ELEMENT_UL,
     children: [
       {
-        type: 'li',
-        children: [{ text: 'List item 1' }],
-      },
-      {
-        type: 'li',
-        children: [{ text: 'List item 2' }],
+        type: ELEMENT_LI,
+        children: [{ type: ELEMENT_LIC, children: [{ text: 'List item 1' }, { text: 'List item 2' }] }],
       },
     ],
   },
@@ -172,58 +212,7 @@ export const INITIAL_VALUE: EditorValue = [
   {
     type: ELEMENT_REDIGERBAR_MALTEKST,
     section: TemplateSections.GENERELL_INFO,
-    children: [
-      { type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] },
-      { type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] },
-      { type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] },
-      { type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] },
-      {
-        type: ELEMENT_OL,
-        children: [
-          {
-            type: ELEMENT_LI,
-            children: [{ text: '' }],
-          },
-        ],
-      },
-      {
-        type: ELEMENT_TABLE,
-        children: [
-          {
-            type: ELEMENT_TR,
-            children: [
-              {
-                type: ELEMENT_TD,
-                children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] }],
-              },
-              {
-                type: ELEMENT_TD,
-                children: [{ type: ELEMENT_PARAGRAPH, align: TextAlign.LEFT, children: [{ text: '' }] }],
-              },
-            ],
-          },
-          {
-            type: ELEMENT_TR,
-            children: [
-              {
-                type: ELEMENT_TD,
-                children: [
-                  {
-                    type: ELEMENT_OL,
-                    children: [
-                      {
-                        type: ELEMENT_LI,
-                        children: [{ text: '' }],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    children: [createSimpleParagraph()],
   },
   createRegelverk(),
 ];

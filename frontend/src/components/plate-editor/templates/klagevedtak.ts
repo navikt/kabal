@@ -3,7 +3,7 @@ import { DocumentType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { TemplateSections } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
 import { VERSION } from '../../rich-text/version';
 import {
   // createCurrentDate,

@@ -1,5 +1,5 @@
 import { AutoformatPlugin } from '@udecode/plate';
-import { RichTextEditor, EditorPlatePlugin, EditorValue } from '../../types';
+import { EditorPlatePlugin, EditorValue, RichTextEditor } from '../../types';
 import { autoformatRules } from './rules';
 
 export const autoformatPlugin: Partial<EditorPlatePlugin<AutoformatPlugin<EditorValue, RichTextEditor>>> = {
@@ -8,4 +8,3 @@ export const autoformatPlugin: Partial<EditorPlatePlugin<AutoformatPlugin<Editor
     enableUndoOnDelete: true,
   },
 };
-

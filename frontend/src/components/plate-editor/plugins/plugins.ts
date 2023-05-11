@@ -1,5 +1,6 @@
 import {
   AutoformatPlugin,
+  ELEMENT_PARAGRAPH,
   createAlignPlugin,
   createAutoformatPlugin,
   createBlockquotePlugin,
@@ -15,13 +16,12 @@ import {
   createTablePlugin,
   createUnderlinePlugin,
 } from '@udecode/plate';
-import { alignPlugin } from '@app/components/plate-editor/plugins/align';
-import { createCurrentDatePlugin } from '@app/components/plate-editor/plugins/current-date';
-import { createPageBreakPlugin } from '@app/components/plate-editor/plugins/page-break';
 import { components } from '../components';
 import { EditorValue, RichTextEditor } from '../types';
 import { autoformatPlugin } from './autoformat/plugin';
+import { createCurrentDatePlugin } from './current-date';
 import { createMaltekstPlugin } from './maltekst';
+import { createPageBreakPlugin } from './page-break';
 import { createPlaceholderPlugin } from './placeholder';
 import { createRedigerbarMaltekstPlugin } from './redigerbar-maltekst';
 import { createRegelverkPlugin } from './regelverk';
@@ -39,7 +39,9 @@ export const plugins = createPlugins<EditorValue>(
     createIndentPlugin(),
     createSoftBreakPlugin(),
     createCommentsPlugin(),
-    createAlignPlugin(alignPlugin),
+    createAlignPlugin({
+      inject: { props: { validTypes: [ELEMENT_PARAGRAPH] } },
+    }),
 
     createMaltekstPlugin(),
     createRedigerbarMaltekstPlugin(),

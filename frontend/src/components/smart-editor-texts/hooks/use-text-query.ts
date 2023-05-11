@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { TEMPLATE_IDS } from '@app/components/plate-editor/templates/templates';
 import { isUtfallOrNone } from '@app/functions/is-utfall';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
+import { ApiQuery } from '@app/types/texts/texts';
 import { useTextType } from './use-text-type';
 
 type Query = Partial<ApiQuery>;

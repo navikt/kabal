@@ -14,7 +14,7 @@ export const SideButtons = styled.div`
   }
 `;
 
-export const MaltekstContainer = styled.div`
+export const SideButtonsContainer = styled.div`
   display: inherit;
   flex-direction: inherit;
   row-gap: inherit;

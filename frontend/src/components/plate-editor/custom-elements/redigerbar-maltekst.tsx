@@ -3,15 +3,15 @@ import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AddNewParagraphButton } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-button';
-import { MaltekstContainer, SideButtons } from '@app/components/plate-editor/custom-elements/styled-components';
+import { AddNewParagraphBelow } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-buttons';
+import { SideButtons, SideButtonsContainer } from '@app/components/plate-editor/custom-elements/styled-components';
 import { isNodeEmpty } from '@app/components/plate-editor/utils/queries';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
-import { EditorValue, RedigerbarMaltekstElement } from '../types';
+import { EditorDescendant, EditorValue, RedigerbarMaltekstElement, RootElement } from '../types';
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -29,7 +29,7 @@ export const RedigerbarMaltekst = ({
 
   const [getTexts] = useLazyGetTextsQuery();
 
-  const entry = findDescendant(editor, { at: [], match: (n) => n === element });
+  const entry = findDescendant<EditorDescendant>(editor, { at: [], match: (n) => n === element });
 
   const insertRedigerbarMaltekst = useCallback(async () => {
     if (query === skipToken || entry === undefined) {
@@ -43,7 +43,7 @@ export const RedigerbarMaltekst = ({
 
     console.log(maltekster);
 
-    replaceNodeChildren(editor, { at: entry[1], nodes: maltekster });
+    replaceNodeChildren<RootElement>(editor, { at: entry[1], nodes: maltekster });
     setInitialized(true);
   }, [editor, entry, getTexts, query]);
 
@@ -52,7 +52,9 @@ export const RedigerbarMaltekst = ({
       return;
     }
 
-    if (isNodeEmpty(editor, entry[0])) {
+    const [node] = entry;
+
+    if (isNodeEmpty(editor, node)) {
       insertRedigerbarMaltekst();
     }
   }, [editor, entry, insertRedigerbarMaltekst]);
@@ -64,10 +66,10 @@ export const RedigerbarMaltekst = ({
   }, [initialized, insertIfEmpty]);
 
   return (
-    <MaltekstContainer {...attributes}>
+    <SideButtonsContainer {...attributes}>
       {children}
       <SideButtons>
-        <AddNewParagraphButton editor={editor} element={element} />
+        <AddNewParagraphBelow editor={editor} element={element} />
         <Button
           title="Tilbakestill tekst"
           icon={<ArrowCirclepathIcon aria-hidden />}
@@ -77,6 +79,6 @@ export const RedigerbarMaltekst = ({
           contentEditable={false}
         />
       </SideButtons>
-    </MaltekstContainer>
+    </SideButtonsContainer>
   );
 };

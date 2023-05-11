@@ -1,23 +1,17 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { Plate, PlateProvider, PlateRenderElementProps, TEditableProps, findDescendant } from '@udecode/plate';
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { AddNewParagraphButton } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-button';
-import { MaltekstContainer, SideButtons } from '@app/components/plate-editor/custom-elements/styled-components';
-import { renderLeaf } from '@app/components/plate-editor/leaf/render-leaf';
-import { plugins } from '@app/components/plate-editor/plugins/plugins';
+import { PlateRenderElementProps, findDescendant } from '@udecode/plate';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AddNewParagraphBelow } from '@app/components/plate-editor/custom-elements/common/add-new-paragraph-buttons';
+import { SideButtons, SideButtonsContainer } from '@app/components/plate-editor/custom-elements/styled-components';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { RichTextTypes } from '@app/types/texts/texts';
-import { EditorValue, MaltekstElement, RichTextEditor } from '../types';
-
-const editableProps: TEditableProps<EditorValue> = {
-  spellCheck: false,
-  autoFocus: false,
-};
+import { EditorValue, MaltekstElement } from '../types';
+import { MaltekstContent } from './maltekst-content';
 
 export const Maltekst = ({
   editor,
@@ -35,7 +29,7 @@ export const Maltekst = ({
   const [initialized, setInitialized] = useState(false);
 
   const load = useCallback(async () => {
-    const entry = findDescendant(editor, { at: [], match: (n) => n === element });
+    const entry = findDescendant<MaltekstElement>(editor, { at: [], match: (n) => n === element });
 
     if (query === skipToken || entry === undefined) {
       return;
@@ -57,13 +51,13 @@ export const Maltekst = ({
   }, [initialized, load]);
 
   return (
-    <MaltekstContainer {...attributes} contentEditable={false}>
+    <SideButtonsContainer {...attributes} contentEditable={false}>
       {children}
 
       <MaltekstContent value={maltekst} />
 
       <SideButtons>
-        <AddNewParagraphButton editor={editor} element={element} />
+        <AddNewParagraphBelow editor={editor} element={element} />
         <Button
           title="Oppdater til siste versjon"
           icon={<ArrowCirclepathIcon aria-hidden />}
@@ -73,27 +67,6 @@ export const Maltekst = ({
           contentEditable={false}
         />
       </SideButtons>
-    </MaltekstContainer>
+    </SideButtonsContainer>
   );
 };
-
-const MaltekstContent = memo(
-  ({ value }: { value: EditorValue }) => {
-    const id = Math.random();
-
-    return (
-      <PlateProvider<EditorValue, RichTextEditor>
-        initialValue={value}
-        plugins={plugins}
-        renderLeaf={renderLeaf}
-        id={id}
-        readOnly
-      >
-        <Plate<EditorValue, RichTextEditor> editableProps={editableProps} id={id} value={value} />
-      </PlateProvider>
-    );
-  },
-  (prevProps, nextProps) => prevProps === nextProps
-);
-
-MaltekstContent.displayName = 'MaltekstContent';

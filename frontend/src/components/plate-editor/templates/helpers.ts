@@ -1,9 +1,12 @@
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_LI, ELEMENT_PARAGRAPH, ELEMENT_UL } from '@udecode/plate';
-import { ELEMENT_CURRENT_DATE } from '@app/components/plate-editor/plugins/current-date';
-import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/maltekst';
-import { ELEMENT_PAGE_BREAK } from '@app/components/plate-editor/plugins/page-break';
-import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
-import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/components/plate-editor/plugins/regelverk';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_LI, ELEMENT_LIC, ELEMENT_PARAGRAPH, ELEMENT_UL } from '@udecode/plate';
+import {
+  ELEMENT_CURRENT_DATE,
+  ELEMENT_MALTEKST,
+  ELEMENT_PAGE_BREAK,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+  ELEMENT_REGELVERK_CONTAINER,
+} from '@app/components/plate-editor/plugins/element-types';
 import {
   BulletListElement,
   CurrentDateElement,
@@ -12,13 +15,13 @@ import {
   MaltekstElement,
   PageBreakElement,
   ParagraphElement,
+  ParentOrChildElement,
   RedigerbarMaltekstElement,
   RegelverkContainerElement,
   RegelverkElement,
   TextAlign,
-  TopLevelElements,
 } from '@app/components/plate-editor/types';
-import { TemplateSections } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
 
 // export const createLabelContent = (source: string, label: string): LabelContentElementType => ({
 //   type: UndeletableVoidElementsEnum.LABEL_CONTENT,
@@ -41,7 +44,7 @@ export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbarM
 });
 
 const createRegelverkContainer = (
-  children: TopLevelElements[] = [createSimpleParagraph()]
+  children: ParentOrChildElement[] = [createSimpleParagraph()]
 ): RegelverkContainerElement => ({
   type: ELEMENT_REGELVERK_CONTAINER,
   children,
@@ -76,7 +79,12 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
   type: ELEMENT_UL,
   children: textItems.map((text) => ({
     type: ELEMENT_LI,
-    children: [{ text }],
+    children: [
+      {
+        type: ELEMENT_LIC,
+        children: [{ text }],
+      },
+    ],
   })),
 });
 

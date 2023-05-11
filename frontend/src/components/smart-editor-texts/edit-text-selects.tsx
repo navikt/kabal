@@ -3,7 +3,7 @@ import { TEMPLATES } from '@app/components/plate-editor/templates/templates';
 import { useKlageenheter, useLatestYtelser, useUtfall } from '@app/simple-api-state/use-kodeverk';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { TemplateSections } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { MALTEKST_SECTION_NAMES } from '../smart-editor/constants';
 

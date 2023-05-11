@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unused-modules */
 export enum ContentTypeEnum {
   PARAGRAPH = 'paragraph',
   INDENT = 'indent',

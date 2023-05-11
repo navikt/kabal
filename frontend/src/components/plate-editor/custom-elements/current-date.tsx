@@ -3,9 +3,9 @@ import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import styled from 'styled-components';
 import { formatLongDate, zeroPad } from '@app/domain/date';
-import { EditorValue, PlaceholderElement } from '../types';
+import { CurrentDateElement, EditorValue } from '../types';
 
-type Props = PlateRenderElementProps<EditorValue, PlaceholderElement>;
+type Props = PlateRenderElementProps<EditorValue, CurrentDateElement>;
 
 interface DateParts {
   year: number;

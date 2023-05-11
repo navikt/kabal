@@ -1,7 +1,8 @@
 /* eslint-disable import/no-unused-modules */
 import { BaseRange, Element } from 'slate';
 import { PageBreakElementType, VoidElementTypes } from '@app/components/rich-text/types/editor-void-types';
-import { TemplateSections, TextMetadata } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
+import { TextMetadata } from '@app/types/texts/texts';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 import {
   ContentTypeEnum,
@@ -18,7 +19,8 @@ import {
 } from './editor-enums';
 import { IMarks, MarkKeys } from './marks';
 
-export type Descendant = NonVoidElementTypes | VoidElementTypes | CustomTextType;
+export type EditorElement = NonVoidElementTypes | VoidElementTypes;
+export type Descendant = EditorElement | CustomTextType;
 
 export const VOID_ELEMENT_TYPES = [
   ...Object.values(UndeletableVoidElementsEnum),
@@ -95,19 +97,19 @@ export interface HeadingTwoElementType {
   type: HeadingTypesEnum.HEADING_TWO;
   children: CustomTextType[];
 }
-interface HeadingThreeElementType {
+export interface HeadingThreeElementType {
   type: HeadingTypesEnum.HEADING_THREE;
   children: CustomTextType[];
 }
-interface HeadingFourElementType {
+export interface HeadingFourElementType {
   type: HeadingTypesEnum.HEADING_FOUR;
   children: CustomTextType[];
 }
-interface HeadingFiveElementType {
+export interface HeadingFiveElementType {
   type: HeadingTypesEnum.HEADING_FIVE;
   children: CustomTextType[];
 }
-interface HeadingSixElementType {
+export interface HeadingSixElementType {
   type: HeadingTypesEnum.HEADING_SIX;
   children: CustomTextType[];
 }

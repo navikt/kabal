@@ -12,7 +12,7 @@ import { PlateRenderElementProps } from '@udecode/plate-core';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { isGenericObject } from '@app/types/types';
-import { EditorValue, Leaf, PlaceholderElement, RichText, RichTextEditor } from '../types';
+import { EditorValue, PlaceholderElement, RichText, RichTextEditor } from '../types';
 
 const isChromium = isGenericObject(window) && typeof window['chrome'] !== 'undefined';
 
@@ -69,7 +69,7 @@ export const Placeholder = ({
       withoutSavingHistory(editor, () => {
         withoutNormalizing(editor, () => {
           deleteText(editor, { at });
-          insertNodes(editor, cleanText, { at, select: true });
+          insertNodes<RichText>(editor, cleanText, { at, select: true });
         });
       });
     }
@@ -110,19 +110,19 @@ export const Placeholder = ({
   );
 };
 
-const hasNoVisibleText = (texts: (RichText | Leaf)[]): boolean =>
+const hasNoVisibleText = (texts: RichText[]): boolean =>
   texts.every((t) => t.text.length === 0 || t.text.includes(EMPTY_CHAR));
 
-const hasNoText = (texts: (RichText | Leaf)[]): boolean => texts.every((t) => t.text.length === 0);
+const hasNoText = (texts: RichText[]): boolean => texts.every((t) => t.text.length === 0);
 
-const containsEmptyChar = (texts: (RichText | Leaf)[]): boolean => texts.some((t) => t.text.includes(EMPTY_CHAR));
+const containsEmptyChar = (texts: RichText[]): boolean => texts.some((t) => t.text.includes(EMPTY_CHAR));
 
 const getIsFocused = (editor: RichTextEditor, element: PlaceholderElement): boolean => {
   if (editor.selection === null) {
     return false;
   }
 
-  const node = findNode(editor, { at: editor.selection, match: (n) => n === element });
+  const node = findNode<PlaceholderElement>(editor, { at: editor.selection, match: (n) => n === element });
 
   return node !== undefined;
 };

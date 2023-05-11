@@ -4,16 +4,16 @@ import { findDescendant, removeNodes } from '@udecode/plate';
 import { PlateRenderElementProps } from '@udecode/plate-core';
 import React from 'react';
 import styled from 'styled-components';
-import { EditorValue, PlaceholderElement } from '../types';
+import { EditorValue, PageBreakElement } from '../types';
 
 export const PageBreak = ({
   element,
   children,
   attributes,
   editor,
-}: PlateRenderElementProps<EditorValue, PlaceholderElement>) => {
+}: PlateRenderElementProps<EditorValue, PageBreakElement>) => {
   const onClick = () => {
-    const entry = findDescendant(editor, { at: [], match: (n) => n === element });
+    const entry = findDescendant<PageBreakElement>(editor, { at: [], match: (n) => n === element });
 
     if (entry === undefined) {
       return;

@@ -1,10 +1,12 @@
 import {
   AutoformatRule,
   DOMHandler,
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -30,13 +32,16 @@ import {
   WithOverride,
   usePlateEditorRef,
 } from '@udecode/plate';
-import { ELEMENT_MALTEKST } from '@app/components/plate-editor/plugins/maltekst';
-import { ELEMENT_PLACEHOLDER } from '@app/components/plate-editor/plugins/placeholder';
-import { ELEMENT_REDIGERBAR_MALTEKST } from '@app/components/plate-editor/plugins/redigerbar-maltekst';
-import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/components/plate-editor/plugins/regelverk';
-import { TemplateSections } from '@app/types/texts/texts';
-import { ELEMENT_CURRENT_DATE } from './plugins/current-date';
-import { ELEMENT_PAGE_BREAK } from './plugins/page-break';
+import {
+  ELEMENT_CURRENT_DATE,
+  ELEMENT_MALTEKST,
+  ELEMENT_PAGE_BREAK,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+  ELEMENT_REGELVERK_CONTAINER,
+} from '@app/components/plate-editor/plugins/element-types';
+import { TemplateSections } from '@app/types/texts/template-sections';
 
 export enum TextAlign {
   LEFT = 'left',
@@ -47,10 +52,6 @@ export interface RichText extends TText, TCommentText {
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
-}
-
-export interface Leaf extends TText {
-  text: string;
 }
 
 /**
@@ -87,19 +88,24 @@ export interface H3Element extends BlockElement {
   children: RichText[];
 }
 
-export interface BulletListElement extends TElement, BlockElement {
+export interface BulletListElement extends BlockElement {
   type: typeof ELEMENT_UL;
   children: ListItemElement[];
 }
 
-export interface NumberedListElement extends TElement, BlockElement {
+export interface NumberedListElement extends BlockElement {
   type: typeof ELEMENT_OL;
   children: ListItemElement[];
 }
 
-export interface ListItemElement extends TElement, BlockElement {
-  type: typeof ELEMENT_LI;
+export interface ListItemContainerElement extends BlockElement {
+  type: typeof ELEMENT_LIC;
   children: RichText[];
+}
+
+export interface ListItemElement extends BlockElement {
+  type: typeof ELEMENT_LI;
+  children: [ListItemContainerElement, BulletListElement | NumberedListElement] | [ListItemContainerElement];
 }
 
 export interface TableElement extends TTableElement, BlockElement {
@@ -107,74 +113,98 @@ export interface TableElement extends TTableElement, BlockElement {
   children: TableRowElement[];
 }
 
-export interface TableRowElement extends TElement {
+export interface TableRowElement extends BlockElement {
   type: typeof ELEMENT_TR;
   children: TableCellElement[];
 }
 
-interface TableCellElement extends TElement {
+export interface TableCellElement extends BlockElement {
   type: typeof ELEMENT_TD;
   children: (ParagraphElement | BulletListElement | NumberedListElement)[];
 }
 
 export interface ParagraphElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
   type: typeof ELEMENT_PARAGRAPH;
-  children: (RichText | Leaf | PlaceholderElement)[];
+  children: (RichText | PlaceholderElement)[];
 }
 
-export interface MaltekstElement extends TElement {
+interface BlockquoteElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
+  type: typeof ELEMENT_BLOCKQUOTE;
+  children: RichText[];
+}
+
+export interface MaltekstElement extends BlockElement {
   type: typeof ELEMENT_MALTEKST;
   section: TemplateSections;
+  children: ParentOrChildElement[];
 }
 
-export interface RedigerbarMaltekstElement extends TElement {
+export interface RedigerbarMaltekstElement extends BlockElement {
   type: typeof ELEMENT_REDIGERBAR_MALTEKST;
   section: TemplateSections;
-  children: TopLevelElements[];
+  children: ParentOrChildElement[];
 }
 
-export interface PlaceholderElement extends TElement {
+export interface PlaceholderElement extends BlockElement {
   type: typeof ELEMENT_PLACEHOLDER;
   placeholder: string;
-  children: (RichText | Leaf)[];
+  // content: string; // TODO: Implement so BE can receive user input?
+  children: RichText[];
 }
 
-export interface PageBreakElement extends TElement {
+export interface PageBreakElement extends BlockElement {
   type: typeof ELEMENT_PAGE_BREAK;
+  children: [{ text: '' }];
 }
 
-export interface CurrentDateElement extends TElement {
+export interface CurrentDateElement extends BlockElement {
   type: typeof ELEMENT_CURRENT_DATE;
-  children: Leaf[];
+  children: [{ text: '' }];
 }
 
-export interface RegelverkContainerElement extends TElement {
+export interface RegelverkContainerElement extends BlockElement {
   type: typeof ELEMENT_REGELVERK_CONTAINER;
-  children: TopLevelElements[];
+  children: ParentOrChildElement[];
 }
 
-export interface RegelverkElement extends TElement {
+export interface RegelverkElement extends BlockElement {
   type: typeof ELEMENT_REGELVERK;
   section: TemplateSections.REGELVERK;
   children: [PageBreakElement, MaltekstElement, RegelverkContainerElement];
 }
 
-export type TopLevelElements =
+export type ParentOrChildElement =
   | ParagraphElement
+  | BlockquoteElement
   | H1Element
   | H2Element
   | H3Element
   | BulletListElement
   | NumberedListElement
-  | TableElement
-  | PageBreakElement
-  | CurrentDateElement;
+  | TableElement;
 
-export type RootBlock = TopLevelElements | MaltekstElement | RedigerbarMaltekstElement | RegelverkElement;
+type ParentOnlyElement =
+  | MaltekstElement
+  | RedigerbarMaltekstElement
+  | RegelverkElement
+  | CurrentDateElement
+  | PageBreakElement;
 
-export type RichTextEditorElements = RootBlock | ListItemElement | TableCellElement | TElement | TText;
+export type RootElement = ParentOrChildElement | ParentOnlyElement;
 
-export type EditorValue = RootBlock[];
+export type ChildElement =
+  | ListItemElement
+  | ListItemContainerElement
+  | TableRowElement
+  | TableCellElement
+  | RegelverkContainerElement
+  | PlaceholderElement;
+
+export type RichTextEditorElement = RootElement | ChildElement;
+
+export type EditorDescendant = RichTextEditorElement | RichText;
+
+export type EditorValue = RootElement[];
 
 /**
  * Editor types

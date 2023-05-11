@@ -1,7 +1,5 @@
 import { createPluginFactory } from '@udecode/plate';
-
-export const ELEMENT_REGELVERK = 'regelverk';
-export const ELEMENT_REGELVERK_CONTAINER = 'regelverk-container';
+import { ELEMENT_REGELVERK } from './element-types';
 
 export const createRegelverkPlugin = createPluginFactory({
   key: ELEMENT_REGELVERK,

@@ -4,7 +4,8 @@ import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useUser } from '@app/simple-api-state/use-user';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections, TextTypes } from '@app/types/texts/texts';
+import { TemplateSections } from '@app/types/texts/template-sections';
+import { ApiQuery, TextTypes } from '@app/types/texts/texts';
 
 interface Params {
   textType: TextTypes;

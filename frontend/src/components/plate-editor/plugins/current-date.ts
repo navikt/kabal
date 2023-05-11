@@ -1,6 +1,5 @@
 import { createPluginFactory } from '@udecode/plate';
-
-export const ELEMENT_CURRENT_DATE = 'current-date';
+import { ELEMENT_CURRENT_DATE } from './element-types';
 
 export const createCurrentDatePlugin = createPluginFactory({
   key: ELEMENT_CURRENT_DATE,

@@ -1,31 +1,9 @@
-import { EditorValue, RichTextEditorElements, TopLevelElements } from '@app/components/plate-editor/types';
+import { EditorValue } from '@app/components/plate-editor/types';
 import { VERSION } from '@app/components/rich-text/version';
 import { NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { UtfallEnum } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
-
-/* 
-  Why animals?
-  
-  Short, non-sortable.
-  No need for UUIDs.
-  Many to choose from.
-
-  https://en.wikipedia.org/wiki/Haiku
-*/
-export enum TemplateSections {
-  TITLE = 'section-esel',
-  INTRODUCTION = 'section-rev',
-  KONKLUSJON = 'section-elg',
-  ANKEINFO = 'section-ape',
-  KLAGER_VEKTLAGT = 'section-ulv',
-  VURDERINGEN = 'section-mus',
-  OPPLYSNINGER = 'section-sau',
-  GENERELL_INFO = 'section-sel',
-  AVGJOERELSE = 'section-mår',
-  REGELVERK = 'section-gnu',
-  SAKSKOSTNADER = 'section-gris',
-}
+import { TemplateSections } from './template-sections';
 
 export interface AppQuery {
   hjemler: (string | NONE_TYPE)[];

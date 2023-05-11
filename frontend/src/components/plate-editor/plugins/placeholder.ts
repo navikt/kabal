@@ -1,6 +1,5 @@
 import { createPluginFactory } from '@udecode/plate';
-
-export const ELEMENT_PLACEHOLDER = 'placeholder';
+import { ELEMENT_PLACEHOLDER } from './element-types';
 
 export const createPlaceholderPlugin = createPluginFactory({
   key: ELEMENT_PLACEHOLDER,

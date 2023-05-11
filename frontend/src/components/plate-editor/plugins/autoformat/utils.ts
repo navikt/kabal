@@ -12,7 +12,7 @@ import { EditorValue, RichTextEditor } from '../../types';
 
 export const preFormat: AutoformatBlockRule<EditorValue, RichTextEditor>['preFormat'] = (editor) => unwrapList(editor);
 
-export const format = (editor: RichTextEditor, customFormatting: any) => {
+const format = (editor: RichTextEditor, customFormatting: () => void) => {
   if (editor.selection) {
     const parentEntry = getParentNode(editor, editor.selection);
 
@@ -35,6 +35,6 @@ export const formatList = (editor: RichTextEditor, elementType: string) => {
   );
 };
 
-export const formatText = (editor: RichTextEditor, text: string) => {
-  format(editor, () => editor.insertText(text));
-};
+// export const formatText = (editor: RichTextEditor, text: string) => {
+//   format(editor, () => editor.insertText(text));
+// };
