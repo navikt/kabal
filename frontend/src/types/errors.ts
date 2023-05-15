@@ -1,3 +1,4 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { isGenericObject } from './types';
 
 interface ApiError {
@@ -20,3 +21,16 @@ export const isApiError = (error: unknown): error is ApiError =>
   typeof error.detail === 'string' &&
   typeof error.status === 'number' &&
   typeof error.instance === 'string';
+
+interface IApiRejectionError {
+  error: FetchBaseQueryError;
+  isUnhandledError: true;
+  meta: unknown;
+}
+
+export const isApiRejectionError = (error: unknown): error is IApiRejectionError =>
+  isGenericObject(error) &&
+  'error' in error &&
+  isGenericObject(error.error) &&
+  'isUnhandledError' in error &&
+  typeof error.isUnhandledError === 'boolean';

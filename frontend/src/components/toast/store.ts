@@ -1,5 +1,6 @@
+import React from 'react';
 import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
-import { NewMessage } from './types';
+import { NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
 export interface Message extends NewMessage {
@@ -14,10 +15,6 @@ class Store {
   private messages: Message[] = [];
   private listeners: ListenerFn[] = [];
 
-  private notify() {
-    this.listeners.forEach((listener) => listener(this.messages));
-  }
-
   public subscribe(listener: ListenerFn) {
     if (!this.listeners.includes(listener)) {
       this.listeners.push(listener);
@@ -29,10 +26,19 @@ class Store {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  public addMessage(message: NewMessage) {
+  public success = (message: React.ReactNode) => this.addMessage(ToastType.SUCCESS, message);
+  public error = (message: React.ReactNode) => this.addMessage(ToastType.ERROR, message);
+  public warning = (message: React.ReactNode) => this.addMessage(ToastType.WARNING, message);
+  public info = (message: React.ReactNode) => this.addMessage(ToastType.INFO, message);
+
+  private notify() {
+    this.listeners.forEach((listener) => listener(this.messages));
+  }
+
+  private addMessage(type: ToastType, message: React.ReactNode) {
     const createdAt = Date.now();
     const expiresAt = createdAt + TOAST_TIMEOUT;
-    const id = `${message.type}-${createdAt}-${Math.random()}`;
+    const id = `${type}-${createdAt}-${Math.random()}`;
 
     const timeout = setTimeout(() => this.removeMessage(id), TOAST_TIMEOUT);
     const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
@@ -42,7 +48,8 @@ class Store {
     this.messages = [
       ...this.messages,
       {
-        ...message,
+        type,
+        message,
         id,
         createdAt,
         expiresAt,
@@ -91,8 +98,4 @@ class Store {
   }
 }
 
-const toastStore = new Store();
-
-export const toast = toastStore.addMessage.bind(toastStore);
-export const subscribe = toastStore.subscribe.bind(toastStore);
-export const unsubscribe = toastStore.unsubscribe.bind(toastStore);
+export const toast = new Store();

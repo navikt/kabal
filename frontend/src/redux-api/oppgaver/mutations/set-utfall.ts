@@ -1,4 +1,7 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiRejectionError } from '@app/types/errors';
 import { IOppgavebehandlingUtfallUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -34,8 +37,16 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
               draft.utfall = utfall;
             })
           );
-        } catch {
+        } catch (e) {
           patchResult.undo();
+
+          const message = 'Kunne ikke oppdatere utfall.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

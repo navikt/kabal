@@ -1,3 +1,6 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { isApiRejectionError } from '@app/types/errors';
 import { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
@@ -58,9 +61,17 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
           archiveResult.undo();
           patchResult.undo();
+
+          const message = 'Kunne ikke fjerne dokument.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

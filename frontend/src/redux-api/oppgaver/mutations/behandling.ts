@@ -1,7 +1,8 @@
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
+import { isApiRejectionError } from '@app/types/errors';
 import { IOppgavebehandling, ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
@@ -22,15 +23,25 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId }) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer`, method: 'POST' }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {
-        const { data } = await queryFulfilled;
-        update(oppgaveId, [
-          ['modified', data.modified],
-          ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
-        ]);
-        dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
-        dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-        dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-        // TODO: Remove oppgave from ledige oppgaver list.
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, [
+            ['modified', data.modified],
+            ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
+          ]);
+          dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+          dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+          dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+          // TODO: Remove oppgave from ledige oppgaver list.
+        } catch (e) {
+          const message = 'Kunne ikke fullføre behandling.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
       },
     }),
 
@@ -46,13 +57,17 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           update(oppgaveId, [['modified', data.modified]]);
-          toast({
-            type: ToastType.SUCCESS,
-            message: hjemler.length === 0 ? 'Hjemler fjernet' : 'Hjemler endret',
-          });
-        } catch {
-          toast({ type: ToastType.ERROR, message: 'Feil ved endring av hjemler' });
+          toast.success(hjemler.length === 0 ? 'Hjemler fjernet' : 'Hjemler endret');
+        } catch (e) {
           undo();
+
+          const message = 'Kunne ikke endre hjemler.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),
@@ -70,17 +85,21 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, [['modified', data.modified]]);
 
-          toast({
-            type: ToastType.SUCCESS,
-            message:
-              fullmektig.person === null && fullmektig.virksomhet === null
-                ? 'Fullmektig fjernet'
-                : `Fullmektig endret til ${formatFullmekig(fullmektig)}`,
-          });
-        } catch {
-          toast({ type: ToastType.ERROR, message: 'Feil ved endring av fullmektig' });
-
+          toast.success(
+            fullmektig.person === null && fullmektig.virksomhet === null
+              ? 'Fullmektig fjernet'
+              : `Fullmektig endret til ${formatFullmekig(fullmektig)}`
+          );
+        } catch (e) {
           undo();
+
+          const message = 'Kunne ikke endre fullmektig.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

@@ -1,4 +1,3 @@
-import { ToastType } from '@app/components/toast/types';
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiError } from '@app/types/errors';
@@ -164,21 +163,21 @@ const updateOppgaveData = <K extends keyof IOppgave>(oppgaveId: string, values: 
 
 const successToast = (name: string, dateString: string | null) => {
   const formattedName = name.includes(' ') ? `"${name}"` : name;
-  const message =
+
+  toast.success(
     dateString === null
       ? `${formattedName} fjernet`
-      : `${formattedName} oppdatert til ${isoDateToPretty(dateString) ?? dateString}`;
-
-  toast({ type: ToastType.SUCCESS, message });
+      : `${formattedName} oppdatert til ${isoDateToPretty(dateString) ?? dateString}`
+  );
 };
 
 const errorToast = (e: unknown, name: string) => {
   const formattedName = name.includes(' ') ? `"${name}"` : name;
 
   if (isApiError(e)) {
-    toast({ type: ToastType.ERROR, message: `Feil ved oppdatering av ${formattedName}: ${e.detail}` });
+    toast.error(`Feil ved oppdatering av ${formattedName}: ${e.detail}`);
   } else {
-    toast({ type: ToastType.ERROR, message: `Feil ved oppdatering av ${formattedName}` });
+    toast.error(`Feil ved oppdatering av ${formattedName}`);
   }
 };
 

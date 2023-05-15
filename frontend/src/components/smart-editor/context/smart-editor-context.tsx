@@ -134,7 +134,8 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId, 
               oppgaveId,
               dokumentId: documentId,
               content,
-              version: data?.version,
+              version: data.version,
+              title: data.tittel,
             });
           }, 1000);
 

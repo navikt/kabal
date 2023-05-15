@@ -1,4 +1,7 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiRejectionError } from '@app/types/errors';
 import { ISaksbehandler } from '@app/types/oppgave-common';
 import { ITildelingResponse, TildelSaksbehandlerParams } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
@@ -53,9 +56,16 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               draft.tildeltSaksbehandlerNavn = data.saksbehandler?.navn ?? null;
             })
           );
-        } catch {
+        } catch (e) {
           optimisticBehandling.undo();
           optimiticSaksbehandler.undo();
+          const message = navIdent === null ? 'Kunne ikke fradele oppgave.' : 'Kunne ikke tildele oppgave.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

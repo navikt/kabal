@@ -1,3 +1,7 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { omit } from '@app/functions/omit';
+import { isApiRejectionError } from '@app/types/errors';
 import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
@@ -15,25 +19,35 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [
-            {
-              id: data.id,
-              dokumentTypeId: data.dokumentTypeId,
-              isMarkertAvsluttet: false,
-              isSmartDokument: true,
-              opplastet: data.created,
-              parent: data.parent,
-              templateId: data.templateId,
-              tittel: data.tittel,
-            },
-            ...draft,
-          ])
-        );
-        dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) => [...draft, data])
-        );
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [
+              {
+                id: data.id,
+                dokumentTypeId: data.dokumentTypeId,
+                isMarkertAvsluttet: false,
+                isSmartDokument: true,
+                opplastet: data.created,
+                parent: data.parent,
+                templateId: data.templateId,
+                tittel: data.tittel,
+              },
+              ...draft,
+            ])
+          );
+          dispatch(
+            smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) => [...draft, data])
+          );
+        } catch (e) {
+          const message = 'Kunne ikke opprette dokument.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
       },
     }),
 
@@ -41,10 +55,10 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
         method: 'PATCH',
-        body,
+        body: omit(body, 'title'),
         timeout: 10000,
       }),
-      onQueryStarted: async ({ dokumentId, oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId, title, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { dokumentId, oppgaveId }, (draft) => {
             if (draft !== null) {
@@ -76,9 +90,17 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
               return data;
             })
           );
-        } catch {
+        } catch (e: unknown) {
           patchResult.undo();
           listPatchResult.undo();
+
+          const message = `Kunne ikke lagre "${title}".`;
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

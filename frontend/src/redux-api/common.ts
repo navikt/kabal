@@ -22,7 +22,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
       }
 
       if (!ENVIRONMENT.isProduction) {
-        apiErrorToast(result.error, args);
+        apiErrorToast('API-kall feilet', result.error, args);
       }
 
       if (result.error.status === 401) {
@@ -44,7 +44,10 @@ const staggeredBaseQuery = (baseUrl: string) => {
 
       return result;
     },
-    { maxRetries: 3, backoff: () => new Promise((resolve) => setTimeout(resolve, 60000)) }
+    {
+      maxRetries: 10,
+      backoff: (attempt) => new Promise((resolve) => setTimeout(resolve, 1000 * attempt)),
+    }
   );
 };
 
