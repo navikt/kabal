@@ -1,4 +1,28 @@
+/* eslint-disable max-lines */
+import { format } from 'date-fns';
 import { Descendant, Editor, Element, Text, Transforms } from 'slate';
+import { PRETTY_FORMAT } from '@app/components/date-picker/constants';
+import { isOfElementType, isOfElementTypes } from '@app/components/rich-text/types/editor-type-guards';
+import {
+  BulletListElementType,
+  MaltekstElementType,
+  NumberedListElementType,
+  ParagraphElementType,
+  RegelverkContainerType,
+  RegelverkElementType,
+  TableBodyElementType,
+  TableCellElementType,
+  TableElementType,
+} from '@app/components/rich-text/types/editor-types';
+import {
+  CurrentDateType,
+  FooterElementType,
+  HeaderElementType,
+  LabelContentElementType,
+  PageBreakElementType,
+  SignatureElementType,
+} from '@app/components/rich-text/types/editor-void-types';
+import { createSimpleParagraph } from '@app/components/smart-editor/templates/helpers';
 import { isBlockActive } from '../functions/blocks';
 import { isInMaltekst, isInPlaceholder } from '../functions/maltekst';
 import {
@@ -8,16 +32,8 @@ import {
   TableTypeEnum,
   TextAlignEnum,
   UndeletableContentEnum,
+  UndeletableVoidElementsEnum,
 } from '../types/editor-enums';
-import { isOfElementType, isOfElementTypes } from '../types/editor-type-guards';
-import {
-  BulletListElementType,
-  NumberedListElementType,
-  ParagraphElementType,
-  TableBodyElementType,
-  TableCellElementType,
-  TableElementType,
-} from '../types/editor-types';
 
 export const withCopy = (editor: Editor) => {
   const { insertData, insertText } = editor;
@@ -57,6 +73,10 @@ export const withCopy = (editor: Editor) => {
 
 const cleanNodes = (nodes: Descendant[]): Descendant[] =>
   nodes.flatMap((node) => {
+    if (isOfElementType<PageBreakElementType>(node, UndeletableVoidElementsEnum.PAGE_BREAK)) {
+      return [];
+    }
+
     if (
       isOfElementTypes<ParagraphElementType | BulletListElementType | NumberedListElementType>(node, [
         ContentTypeEnum.PARAGRAPH,
@@ -80,7 +100,47 @@ const cleanNodes = (nodes: Descendant[]): Descendant[] =>
       return normalizedTable(node);
     }
 
-    if (isOfElementType(node, UndeletableContentEnum.MALTEKST)) {
+    if (
+      isOfElementTypes<HeaderElementType | FooterElementType>(node, [
+        UndeletableVoidElementsEnum.HEADER,
+        UndeletableVoidElementsEnum.FOOTER,
+      ])
+    ) {
+      return { text: node.content ?? '' };
+    }
+
+    if (isOfElementType<LabelContentElementType>(node, UndeletableVoidElementsEnum.LABEL_CONTENT)) {
+      return { text: node.result ?? '' };
+    }
+
+    if (isOfElementType<SignatureElementType>(node, UndeletableVoidElementsEnum.SIGNATURE)) {
+      if (typeof node.medunderskriver !== 'undefined' && typeof node.saksbehandler !== 'undefined') {
+        return [
+          createSimpleParagraph(`${node.medunderskriver.name} / ${node.medunderskriver.title}`),
+          createSimpleParagraph(`${node.saksbehandler.name} / ${node.saksbehandler.title}`),
+        ];
+      }
+
+      if (typeof node.medunderskriver !== 'undefined') {
+        return createSimpleParagraph(`${node.medunderskriver.name} / ${node.medunderskriver.title}`);
+      }
+
+      if (typeof node.saksbehandler !== 'undefined') {
+        return createSimpleParagraph(`${node.saksbehandler.name} / ${node.saksbehandler.title}`);
+      }
+
+      return [];
+    }
+
+    if (isOfElementType<CurrentDateType>(node, UndeletableVoidElementsEnum.CURRENT_DATE)) {
+      return { text: format(new Date(), PRETTY_FORMAT) };
+    }
+
+    if (
+      isOfElementType<MaltekstElementType>(node, UndeletableContentEnum.MALTEKST) ||
+      isOfElementType<RegelverkElementType>(node, UndeletableContentEnum.REGELVERK) ||
+      isOfElementType<RegelverkContainerType>(node, UndeletableContentEnum.REGELVERK_CONTAINER)
+    ) {
       return cleanNodes(node.children);
     }
 
