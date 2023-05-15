@@ -4,7 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { isApiError } from '@app/types/errors';
 import { toast } from '../store';
-import { ToastType } from '../types';
 
 interface ErrorMessage {
   title: string;
@@ -12,19 +11,18 @@ interface ErrorMessage {
   status?: number | string;
 }
 
-export const apiErrorToast = (error: FetchBaseQueryError, args: string | FetchArgs) => {
+export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?: string | FetchArgs) => {
   const { title, detail, status } = getErrorData(error);
 
-  const message = (
+  toast.error(
     <>
-      <Label size="small">Uventet feil: {title}</Label>
-      <Details label="URL">{typeof args === 'string' ? args : args.url}</Details>
+      <Label size="small">{message}</Label>
+      <Details label="Uventet feil">{title}</Details>
+      {typeof args === 'undefined' ? null : <Details label="URL">{typeof args === 'string' ? args : args.url}</Details>}
       <Details label="Statuskode">{status}</Details>
       <Details label="Detaljer">{detail}</Details>
     </>
   );
-
-  toast({ type: ToastType.ERROR, message });
 };
 
 interface DetailProps {
@@ -73,7 +71,7 @@ const getErrorData = (error: FetchBaseQueryError): ErrorMessage => {
     return { title: error.error, status: error.status, detail: getCustomErrorMessage(error.data) };
   }
 
-  return { title: 'Unknown error' };
+  return { title: 'Ukjent feil' };
 };
 
 const getCustomErrorMessage = (data?: unknown): string | undefined => {

@@ -1,4 +1,7 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiRejectionError } from '@app/types/errors';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
 import { ISettMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
@@ -60,10 +63,18 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.medunderskriverNavn = update.medunderskriver?.navn ?? null;
             })
           );
-        } catch {
+        } catch (e) {
           patchResult.undo();
           medunderskriverPatchResult.undo();
           flytPatchresult.undo();
+
+          const message = 'Kunne ikke oppdatere medunderskriver.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

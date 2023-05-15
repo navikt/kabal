@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { VERSION } from '@app/components/rich-text/version';
 import { toast } from '@app/components/toast/store';
-import { ToastType } from '@app/components/toast/types';
 import { queryStringify } from '@app/functions/query-string';
 import { VersionedText } from '@app/types/rich-text/versions';
 import {
@@ -60,7 +59,7 @@ export const textsApi = createApi({
       transformResponse,
       onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
-        toast({ type: ToastType.SUCCESS, message: 'Ny tekst opprettet.' });
+        toast.success('Ny tekst opprettet.');
         dispatch(textsApi.util.updateQueryData('getTexts', query, (draft) => [...draft, data]));
         dispatch(textsApi.util.updateQueryData('getTextById', data.id, () => data));
       },
@@ -81,7 +80,7 @@ export const textsApi = createApi({
           const { data } = await queryFulfilled;
           const { modified } = data;
 
-          toast({ type: ToastType.SUCCESS, message: `Teksten "${text.title}" ble oppdatert.` });
+          toast.success(`Teksten "${text.title}" ble oppdatert.`);
 
           dispatch(textsApi.util.updateQueryData('getTextById', text.id, (t) => ({ ...t, modified })));
           dispatch(
@@ -150,7 +149,7 @@ export const textsApi = createApi({
 
         try {
           await queryFulfilled;
-          toast({ type: ToastType.SUCCESS, message: `Teksten "${title}" ble slettet.` });
+          toast.success(`Teksten "${title}" ble slettet.`);
         } catch {
           idPatchResult.undo();
           listPatchResult.undo();
@@ -172,7 +171,7 @@ export const textsApi = createApi({
       onQueryStarted: async (texts, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
 
-        toast({ type: ToastType.SUCCESS, message: `${texts.length} tekster migrert.` });
+        toast.success(`${texts.length} tekster migrert.`);
 
         data.forEach((t) => {
           dispatch(textsApi.util.updateQueryData('getTextById', t.id, () => t));

@@ -1,5 +1,8 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { getVenteperiode } from '@app/functions/get-venteperiode';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiRejectionError } from '@app/types/errors';
 import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -31,6 +34,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         } catch {
           behandlingPatchResult.undo();
           oppgavePathResult.undo();
+          toast.error('Kunne ikke sette på vent.');
         }
       },
     }),
@@ -53,8 +57,16 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
               draft.sattPaaVent = null;
             })
           );
-        } catch {
+        } catch (e) {
           patchResult.undo();
+
+          const message = 'Kunne ikke fjerne satt på vent.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

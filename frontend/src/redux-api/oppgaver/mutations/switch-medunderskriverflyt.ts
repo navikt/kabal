@@ -1,4 +1,7 @@
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiRejectionError } from '@app/types/errors';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import {
   ISwitchMedunderskriverflytParams,
@@ -49,9 +52,19 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
             })
           );
-        } catch {
+        } catch (e) {
           oppgavePatchResult.undo();
           flytPatchresult.undo();
+
+          const message = isSaksbehandler
+            ? 'Kunne ikke sende til medunderskriver.'
+            : 'Kunne ikke returnere til saksbehandler.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),

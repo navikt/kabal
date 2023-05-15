@@ -8,7 +8,6 @@ import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgav
 import { ITildelingResponse } from '@app/types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { toast } from '../toast/store';
-import { ToastType } from '../toast/types';
 
 interface Props {
   oppgaveId: string;
@@ -38,7 +37,7 @@ export const useTildel = (
       const { sakenGjelder } = await getSakenGjelder(oppgaveId, true).unwrap();
       createTildeltToast({ toSaksbehandler, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelse });
     } catch {
-      toast({ type: ToastType.ERROR, message: 'Kunne ikke tildele saksbehandler' });
+      toast.error('Kunne ikke tildele saksbehandler');
     }
     setIsLoading(false);
   };
@@ -67,7 +66,7 @@ export const useFradel = (
       const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent: null }).unwrap();
       createFradeltToast({ toSaksbehandler, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelse });
     } catch {
-      toast({ type: ToastType.ERROR, message: 'Kunne ikke fradele saksbehandler.' });
+      toast.error('Kunne ikke fradele saksbehandler.');
     }
     setIsLoading(false);
   };
@@ -166,13 +165,13 @@ const CancelButton = ({ oppgaveId, oppgaveType, ytelse, fromSaksbehandler, toSak
 
 const createTildeltToast = (props: Props) => {
   if (props.fromSaksbehandler?.navIdent !== props.toSaksbehandler?.navIdent) {
-    toast({ type: ToastType.SUCCESS, message: <Tildelt {...props} /> });
+    toast.success(<Tildelt {...props} />);
   }
 };
 
 const createFradeltToast = (props: Props) => {
   if (props.fromSaksbehandler !== null) {
-    toast({ type: ToastType.SUCCESS, message: <Fradelt {...props} /> });
+    toast.success(<Fradelt {...props} />);
   }
 };
 

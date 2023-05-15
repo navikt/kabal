@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
 import { IDocumentParams } from '@app/types/documents/common-params';
 import { IFileDocument, IMainDocument } from '@app/types/documents/documents';
@@ -9,6 +11,7 @@ import {
   ISetParentParams,
   ISetTypeParams,
 } from '@app/types/documents/params';
+import { isApiRejectionError } from '@app/types/errors';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -31,6 +34,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           await queryFulfilled;
         } catch {
           undo();
+          toast.error('Kunne ikke endre dokumenttype.');
         }
       },
     }),
@@ -45,8 +49,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
           undo();
+
+          const message = 'Kunne ikke endre tittel.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),
@@ -61,7 +73,14 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
+          const message = 'Kunne ikke endre hoveddokument.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
           undo();
         }
       },
@@ -93,10 +112,18 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
           documentsPatchResult.undo();
           smartEditorPatchResult.undo();
           smartEditorsPatchResult.undo();
+
+          const message = 'Kunne ikke avslutte dokumentet.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),
@@ -128,10 +155,18 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
           documentsPatchResult.undo();
           smartEditorPatchResult.undo();
           smartEditorsPatchResult.undo();
+
+          const message = 'Kunne ikke slette dokumentet.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
         }
       },
     }),
@@ -148,8 +183,18 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         };
       },
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [data, ...draft]));
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [data, ...draft]));
+        } catch (e) {
+          const message = 'Kunne ikke laste opp dokument.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
       },
     }),
   }),

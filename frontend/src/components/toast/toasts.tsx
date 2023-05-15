@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Message, subscribe, unsubscribe } from './store';
+import { Message, toast } from './store';
 import { Toast } from './toast';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
 
   useEffect(() => {
-    subscribe(setToasts);
+    toast.subscribe(setToasts);
 
-    return () => unsubscribe(setToasts);
+    return () => toast.unsubscribe(setToasts);
   }, []);
 
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
