@@ -60,3 +60,7 @@ export interface IFinishOppgavebehandlingParams {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;
 }
+
+export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {
+  reason: string;
+}

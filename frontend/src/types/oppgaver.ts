@@ -28,7 +28,7 @@ export interface IOppgave {
   fortrolig: boolean;
   frist: Date | null;
   harMedunderskriver: boolean;
-  hjemmel: string;
+  hjemmel: string | null;
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
@@ -44,6 +44,7 @@ export interface IOppgave {
   ytelse: string;
   utfall: UtfallEnum | null;
   sattPaaVent: IVenteperiode | null;
+  feilregistrert: Date | null;
   access: AccessEnum;
 }
 
