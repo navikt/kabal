@@ -33,6 +33,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
       transformResponse,
       query: (queryParams) => `/kabal-search/oppgaver/ferdigstilte${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.MINE_FERDIGE],
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
       transformResponse,
@@ -53,6 +54,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       transformResponse,
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${queryStringify(queryParams)}`,
+      providesTags: [OppgaveListTagTypes.ENHETENS_FERDIGE],
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
       transformResponse,
@@ -79,8 +81,10 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         body: { query },
       }),
       transformResponse: ({ aapneBehandlinger, avsluttedeBehandlinger, fnr, navn }: IPersonAndOppgaverResponseOld) => ({
-        aapneBehandlinger: aapneBehandlinger.map(({ id }) => id),
-        avsluttedeBehandlinger: avsluttedeBehandlinger.map(({ id }) => id),
+        aapneBehandlinger: isStringArray(aapneBehandlinger) ? aapneBehandlinger : aapneBehandlinger.map(({ id }) => id),
+        avsluttedeBehandlinger: isStringArray(avsluttedeBehandlinger)
+          ? avsluttedeBehandlinger
+          : avsluttedeBehandlinger.map(({ id }) => id),
         fnr,
         navn,
       }),
@@ -90,6 +94,8 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     }),
   }),
 });
+
+const isStringArray = (array: unknown[]): array is string[] => array.some((item) => typeof item === 'string');
 
 export const {
   useGetEnhetensUferdigeOppgaverQuery,
