@@ -75,7 +75,7 @@ export const useFradel = (
 };
 
 const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
-  const sakenGjelderText = `${sakenGjelder.navn ?? '<Navn mangler>'} (${sakenGjelder.fnr})`;
+  const sakenGjelderText = `${sakenGjelder.navn ?? 'Navn mangler'} (${sakenGjelder.fnr})`;
   const toSaksbehandlerText =
     toSaksbehandler === null ? 'ukjent saksbehandler' : `${toSaksbehandler.navn} (${toSaksbehandler.navIdent})`;
   const fromSaksbehandlerText =
@@ -112,7 +112,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
 };
 
 const Fradelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
-  const sakenGjelderText = `${sakenGjelder.navn ?? '<Navn mangler>'} (${sakenGjelder.fnr})`;
+  const sakenGjelderText = `${sakenGjelder.navn ?? 'Navn mangler'} (${sakenGjelder.fnr})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
 
