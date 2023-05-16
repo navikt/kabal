@@ -48,6 +48,11 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
   medunderskriver: ISaksbehandler | null;
 }
 
+export interface ISwitchMedunderskriverflytParams {
+  oppgaveId: string;
+  isSaksbehandler: boolean;
+}
+
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
   fullmektig: ISakspart;
 }

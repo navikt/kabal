@@ -14,11 +14,6 @@ export interface UtgaatteApiResponse {
   antall: number;
 }
 
-export interface IPerson {
-  navn: string;
-  fnr: string;
-}
-
 export interface IVenteperiode {
   from: Date;
   to: Date;
