@@ -45,6 +45,14 @@ export interface IOppgave {
   ytelse: string;
   utfall: UtfallEnum | null;
   sattPaaVent: IVenteperiode | null;
+  access: AccessEnum;
+}
+
+enum AccessEnum {
+  READ = 'READ',
+  WRITE = 'WRITE',
+  ASSIGN = 'ASSIGN',
+  NONE = 'NONE',
 }
 
 export enum SortFieldEnum {
