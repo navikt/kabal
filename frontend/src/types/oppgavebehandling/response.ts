@@ -1,5 +1,5 @@
 import { MedunderskriverFlyt } from '../kodeverk';
-import { IMedunderskriver, ISaksbehandler, IVedlegg } from '../oppgave-common';
+import { IMedunderskriver, IPerson, ISaksbehandler, IVedlegg } from '../oppgave-common';
 
 export interface ITilknyttDocumentResponse {
   modified: string;
@@ -38,20 +38,10 @@ export interface ISwitchMedunderskriverflytResponse {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
-export interface ISwitchMedunderskriverflytParams {
-  oppgaveId: string;
-  isSaksbehandler: boolean;
-}
-
 export interface IModifiedResponse {
   modified: string;
 }
 
 export interface ISakenGjelderResponse {
   sakenGjelder: IPerson;
-}
-
-interface IPerson {
-  navn: string;
-  fnr: string;
 }

@@ -1,6 +1,6 @@
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling';
-import { ISaksbehandler } from '@app/types/oppgave-common';
-import { IOppgave, IPerson } from '@app/types/oppgaver';
+import { IPerson, ISaksbehandler } from '@app/types/oppgave-common';
+import { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 

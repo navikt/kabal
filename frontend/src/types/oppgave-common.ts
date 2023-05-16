@@ -18,3 +18,8 @@ export interface IVedlegg {
   size: number;
   opplastet: string | null; // LocalDateTime
 }
+
+export interface IPerson {
+  navn: string | null;
+  fnr: string;
+}

@@ -16,7 +16,7 @@ export const Name = ({ oppgaveId }: Props) => {
     return <Loading />;
   }
 
-  return <>{data.navn}</>;
+  return <>{data.navn ?? 'Navn mangler'}</>;
 };
 
 export const Fnr = ({ oppgaveId }: Props) => {
