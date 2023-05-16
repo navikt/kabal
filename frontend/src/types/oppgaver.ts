@@ -128,8 +128,8 @@ export interface ISaksbehandlere {
 }
 
 export interface IPersonAndOppgaverResponseOld extends ISearchPerson {
-  aapneBehandlinger: IOppgave[];
-  avsluttedeBehandlinger: IOppgave[];
+  aapneBehandlinger: IOppgave[] | string[];
+  avsluttedeBehandlinger: IOppgave[] | string[];
 }
 
 export interface IPersonAndOppgaverResponse extends ISearchPerson {

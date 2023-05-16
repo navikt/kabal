@@ -4,9 +4,11 @@ import { ListTagTypes } from '../tag-types';
 
 export enum OppgaveListTagTypes {
   MINE_UFERDIGE = 'mine-uferdige',
+  MINE_FERDIGE = 'mine-ferdige',
   MINE_VENTENDE = 'mine-ventende',
   LEDIGE = 'ledige',
   ENHETENS_UFERDIGE = 'enhetens-uferdige',
+  ENHETENS_FERDIGE = 'enhetens-ferdige',
   ENHETENS_VENTENDE = 'enhetens-ventende',
   PERSON_AND_OPPGAVER = 'person-and-oppgaver',
 }
