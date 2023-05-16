@@ -2,15 +2,21 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { IPart } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
   IOppgavebehandlingHjemlerUpdateParams,
+  ISetFeilregistrertParams,
   ISetFullmektigParams,
 } from '@app/types/oppgavebehandling/params';
-import { IModifiedResponse, IVedtakFullfoertResponse } from '@app/types/oppgavebehandling/response';
+import {
+  IModifiedResponse,
+  ISetFeilregistrertResponse,
+  IVedtakFullfoertResponse,
+} from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
@@ -26,10 +32,17 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {
         try {
           const { data } = await queryFulfilled;
-          update(oppgaveId, [
-            ['modified', data.modified],
-            ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
-          ]);
+          update(oppgaveId, data);
+
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.isAvsluttetAvSaksbehandler = true;
+              draft.avsluttetAvSaksbehandlerDate = data.modified;
+
+              return draft;
+            })
+          );
+
           dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
 
           if (id !== null) {
@@ -54,13 +67,23 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
         body: { hjemler },
       }),
-      onQueryStarted: async ({ oppgaveId, hjemler }, { queryFulfilled }) => {
-        const undo = update(oppgaveId, [['hjemmelIdList', hjemler]]);
+      onQueryStarted: async ({ oppgaveId, hjemler }, { queryFulfilled, dispatch }) => {
+        const undo = update(oppgaveId, { hjemmelIdList: hjemler });
 
         try {
           const { data } = await queryFulfilled;
-          update(oppgaveId, [['modified', data.modified]]);
+          update(oppgaveId, data);
+
           toast.success(hjemler.length === 0 ? 'Hjemler fjernet' : 'Hjemler endret');
+
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              const [hjemmel = null] = hjemler;
+              draft.hjemmel = hjemmel;
+
+              return draft;
+            })
+          );
         } catch (e) {
           undo();
 
@@ -82,11 +105,11 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: { identifikator: fullmektig?.id ?? null },
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
-        const undo = update(oppgaveId, [['prosessfullmektig', fullmektig]]);
+        const undo = update(oppgaveId, { prosessfullmektig: fullmektig });
 
         try {
           const { data } = await queryFulfilled;
-          update(oppgaveId, [['modified', data.modified]]);
+          update(oppgaveId, data);
 
           toast.success(
             fullmektig === null ? 'Fullmektig fjernet' : `Fullmektig endret til ${formatIdNumber(fullmektig.id)}`
@@ -104,19 +127,46 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+
+    setFeilregistrert: builder.mutation<ISetFeilregistrertResponse, ISetFeilregistrertParams>({
+      query: ({ oppgaveId, ...body }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/feilregistrer`,
+        method: 'POST',
+        body,
+      }),
+      onQueryStarted: async ({ oppgaveId }, { queryFulfilled, dispatch }) => {
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, data);
+          dispatch(
+            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              draft.feilregistrert = data.feilregistrering.registered;
+
+              return draft;
+            })
+          );
+          toast.success('Oppgave feilregistrert');
+        } catch (e) {
+          const message = 'Kunne ikke feilregistrere.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
+
     searchFullmektig: builder.query<IPart, string>({
       query: (identifikator) => ({ url: `/kabal-api/searchfullmektig`, method: 'POST', body: { identifikator } }),
     }),
   }),
 });
 
-const update = <K extends keyof IOppgavebehandling>(oppgaveId: string, values: [K, IOppgavebehandling[K]][]) => {
+const update = (oppgaveId: string, upd: Partial<IOppgavebehandling>) => {
   const patchResult = reduxStore.dispatch(
-    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-      values.forEach(([key, value]) => {
-        draft[key] = value;
-      });
-    })
+    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => Object.assign(draft, upd))
   );
 
   return patchResult.undo;

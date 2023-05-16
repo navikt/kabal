@@ -47,6 +47,7 @@ export interface IOppgavebehandlingBase {
   tildeltSaksbehandler: ISaksbehandler | null;
   tildeltSaksbehandlerEnhet: string | null;
   ytelseId: string;
+  feilregistrering: IFeilregistrering | null;
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {
@@ -70,4 +71,11 @@ interface Resultat {
   hjemmelIdSet: string[];
   id: string;
   utfallId: UtfallEnum | null;
+}
+
+export interface IFeilregistrering {
+  navIdent: string;
+  registered: string;
+  reason: string;
+  fagsystemId: string;
 }
