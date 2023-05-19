@@ -1,6 +1,4 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { ENVIRONMENT } from '@app/environment';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
 
@@ -19,10 +17,6 @@ const staggeredBaseQuery = (baseUrl: string) => {
 
       if (typeof result.error === 'undefined') {
         return result;
-      }
-
-      if (!ENVIRONMENT.isProduction) {
-        apiErrorToast('API-kall feilet', result.error, args);
       }
 
       if (result.error.status === 401) {
