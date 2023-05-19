@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconProps } from './props';
 
-export const NeutralGenderIcon = ({ alt = '' }: IconProps): JSX.Element => (
+export const NeutralIcon = ({ alt = '' }: IconProps): JSX.Element => (
   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 40 40">
     <title>{alt}</title>
 

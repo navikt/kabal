@@ -1,6 +1,5 @@
-import { Name } from '@app/domain/types';
-import { Gender, MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { ISaksbehandler, IVedlegg } from '../oppgave-common';
+import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
+import { IPart, ISakenGjelder, ISaksbehandler, IVedlegg } from '../oppgave-common';
 
 type UUID = string;
 
@@ -24,7 +23,7 @@ export interface IOppgavebehandlingBase {
   id: string;
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
-  klager: ISakspart;
+  klager: IPart;
   kommentarFraVedtaksinstans: string | null;
   kvalitetsvurderingId: string;
   kvalitetsvurderingReference: {
@@ -37,10 +36,10 @@ export interface IOppgavebehandlingBase {
   mottatt: string | null; // LocalDate
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
-  prosessfullmektig: ISakspart | null;
+  prosessfullmektig: IPart | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
-  sakenGjelder: ISakspart;
+  sakenGjelder: ISakenGjelder;
   sattPaaVent: string | null; // LocalDateTime
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
@@ -52,11 +51,11 @@ export interface IOppgavebehandlingBase {
   ytelse: string;
 }
 
-interface IKlagebehandling extends IOppgavebehandlingBase {
+export interface IKlagebehandling extends IOppgavebehandlingBase {
   type: SaksTypeEnum.KLAGE;
 }
 
-interface IAnkebehandling extends IOppgavebehandlingBase {
+export interface IAnkebehandling extends IOppgavebehandlingBase {
   type: SaksTypeEnum.ANKE;
 }
 
@@ -68,25 +67,9 @@ export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
 
 export type IOppgavebehandling = IKlagebehandling | IAnkebehandling | ITrygderettsankebehandling;
 
-export interface ISakspart {
-  person: IKlagerPerson | null;
-  virksomhet: IVirksomhet | null;
-}
-
 interface Resultat {
   file: IVedlegg | null;
   hjemler: string[];
   id: string;
   utfall: UtfallEnum | null;
-}
-
-interface IKlagerPerson {
-  navn: Name;
-  foedselsnummer: string | null;
-  kjoenn: Gender | null;
-}
-
-export interface IVirksomhet {
-  virksomhetsnummer: string | null;
-  navn: string | null;
 }

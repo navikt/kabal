@@ -34,7 +34,7 @@ export const useTildel = (
     try {
       const { saksbehandler: fromSaksbehandler } = await getSaksbehandler(oppgaveId, true).unwrap();
       const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent }).unwrap();
-      const { sakenGjelder } = await getSakenGjelder(oppgaveId, true).unwrap();
+      const sakenGjelder = await getSakenGjelder(oppgaveId, true).unwrap();
       createTildeltToast({ toSaksbehandler, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelse });
     } catch {
       toast.error('Kunne ikke tildele saksbehandler');
@@ -59,7 +59,7 @@ export const useFradel = (
     setIsLoading(true);
 
     try {
-      const [{ saksbehandler: fromSaksbehandler }, { sakenGjelder }] = await Promise.all([
+      const [{ saksbehandler: fromSaksbehandler }, sakenGjelder] = await Promise.all([
         getSaksbehandler(oppgaveId, true).unwrap(),
         getSakenGjelder(oppgaveId, true).unwrap(),
       ]);
@@ -75,7 +75,7 @@ export const useFradel = (
 };
 
 const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
-  const sakenGjelderText = `${sakenGjelder.navn ?? 'Navn mangler'} (${sakenGjelder.fnr})`;
+  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const toSaksbehandlerText =
     toSaksbehandler === null ? 'ukjent saksbehandler' : `${toSaksbehandler.navn} (${toSaksbehandler.navIdent})`;
   const fromSaksbehandlerText =
@@ -112,7 +112,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
 };
 
 const Fradelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
-  const sakenGjelderText = `${sakenGjelder.navn ?? 'Navn mangler'} (${sakenGjelder.fnr})`;
+  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
 

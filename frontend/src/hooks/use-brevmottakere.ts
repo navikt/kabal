@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
-import { getFullName } from '@app/domain/name';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IPartBase } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker {
@@ -19,9 +18,9 @@ export const useBrevmottakere = (): IBrevmottaker[] => {
       const { klager, sakenGjelder, prosessfullmektig } = data;
 
       return [
-        sakspartToBrevmottaker(klager, Brevmottakertype.KLAGER),
-        sakspartToBrevmottaker(sakenGjelder, Brevmottakertype.SAKEN_GJELDER),
-        sakspartToBrevmottaker(prosessfullmektig, Brevmottakertype.PROSESSFULLMEKTIG),
+        partToBrevmottaker(klager, Brevmottakertype.KLAGER),
+        partToBrevmottaker(sakenGjelder, Brevmottakertype.SAKEN_GJELDER),
+        partToBrevmottaker(prosessfullmektig, Brevmottakertype.PROSESSFULLMEKTIG),
       ]
         .filter(isNotNull)
         .reduce<IBrevmottaker[]>((acc, curr) => {
@@ -43,31 +42,14 @@ export const useBrevmottakere = (): IBrevmottaker[] => {
   }, [data, isLoading]);
 };
 
-const sakspartToBrevmottaker = (
-  sakspart: ISakspart | null,
-  brevmottakerType: Brevmottakertype
-): IBrevmottaker | null => {
-  if (sakspart === null) {
+const partToBrevmottaker = (part: IPartBase | null, brevmottakerType: Brevmottakertype): IBrevmottaker | null => {
+  if (part === null) {
     return null;
   }
 
-  const { person, virksomhet } = sakspart;
-
-  if (person !== null) {
-    return {
-      id: person.foedselsnummer ?? 'MANGLER',
-      navn: getFullName(person.navn),
-      brevmottakertyper: [brevmottakerType],
-    };
-  }
-
-  if (virksomhet !== null) {
-    return {
-      id: virksomhet.virksomhetsnummer ?? 'MANGLER',
-      navn: virksomhet.navn ?? 'MANGLER',
-      brevmottakertyper: [brevmottakerType],
-    };
-  }
-
-  return null;
+  return {
+    id: part.id,
+    navn: part.name ?? 'MANGLER',
+    brevmottakertyper: [brevmottakerType],
+  };
 };

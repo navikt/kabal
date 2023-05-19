@@ -1,22 +1,21 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { getFullName } from '@app/domain/name';
-import { ISearchPerson } from '@app/types/oppgaver';
+import { IPartBase } from '@app/types/oppgave-common';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
 import { StyledFnr, StyledName, StyledNameResult } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';
 
-export const Result = ({ fnr, navn }: ISearchPerson) => {
+export const Result = ({ id, name }: IPartBase) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const Chevron = open ? ChevronUpIcon : ChevronDownIcon;
 
   return (
     <StyledNameResult data-testid="search-result">
-      <StyledName>{getFullName(navn)}</StyledName>
+      <StyledName>{name}</StyledName>
       <StyledFnr>
-        <CopyFnrButton fnr={fnr} />
+        <CopyFnrButton fnr={id} />
       </StyledFnr>
       <Button
         type="button"
@@ -29,7 +28,7 @@ export const Result = ({ fnr, navn }: ISearchPerson) => {
       >
         {getOpenText(open)}
       </Button>
-      <Oppgaver open={open} fnr={fnr} />
+      <Oppgaver open={open} fnr={id} />
     </StyledNameResult>
   );
 };

@@ -3,13 +3,12 @@ import { BodyShort, Button, Search, Tag, TagProps } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { getFullName } from '@app/domain/name';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useLazySearchFullmektigQuery } from '@app/redux-api/oppgaver/mutations/behandling';
-import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IPart, IdType } from '@app/types/oppgave-common';
 import { BehandlingSection } from '../behandling-section';
 import { DeleteButton } from './delete-button';
 import { Lookup } from './lookup';
@@ -54,22 +53,12 @@ const EditButton = ({ show, onClick }: EditButtonProps) => {
   return <Button variant="tertiary" icon={<PencilIcon aria-hidden />} onClick={onClick} size="small" />;
 };
 
-const getFullmektig = (sakspart: ISakspart | null): string => {
-  if (sakspart === null) {
+const getFullmektig = (part: IPart | null): string => {
+  if (part === null) {
     return 'Ikke satt';
   }
 
-  const { person, virksomhet } = sakspart;
-
-  if (person !== null) {
-    return getFullName(person.navn);
-  }
-
-  if (virksomhet !== null) {
-    return virksomhet.navn ?? '-';
-  }
-
-  return 'Ikke satt';
+  return part.name ?? '-';
 };
 
 interface EditFullmektigProps {
@@ -120,24 +109,27 @@ const EditFullmektig = ({ close, show }: EditFullmektigProps) => {
       <Search label="Søk" size="small" value={rawValue} onChange={setValue} error={error} onKeyDown={onKeyDown}>
         <Search.Button onClick={onClick} />
       </Search>
-      <Label foedselsnummer={data?.person?.foedselsnummer} orgnr={data?.virksomhet?.virksomhetsnummer} />
+      <Label part={data} />
       <Lookup close={close} isSearching={isLoading} data={data} />
     </StyledEditFullmektig>
   );
 };
 
 interface LabelProps {
-  foedselsnummer?: string | null;
-  orgnr?: string | null;
+  part: IPart | undefined;
 }
 
-const Label = ({ foedselsnummer = null, orgnr = null }: LabelProps) => {
-  if (foedselsnummer !== null) {
-    return <LabelWrapper variant="info">{formatFoedselsnummer(foedselsnummer)}</LabelWrapper>;
+const Label = ({ part }: LabelProps) => {
+  if (typeof part === 'undefined') {
+    return null;
   }
 
-  if (orgnr !== null) {
-    return <LabelWrapper variant="warning">{formatOrgNum(orgnr)}</LabelWrapper>;
+  if (part.type === IdType.FNR) {
+    return <LabelWrapper variant="info">{formatFoedselsnummer(part.id)}</LabelWrapper>;
+  }
+
+  if (part.type === IdType.ORGNR) {
+    return <LabelWrapper variant="warning">{formatOrgNum(part.id)}</LabelWrapper>;
   }
 
   return null;

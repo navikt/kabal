@@ -1,7 +1,6 @@
-import { Name } from '@app/domain/types';
 import { GenericObject } from '@app/types/types';
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { ISaksbehandler } from './oppgave-common';
+import { IPartBase, ISaksbehandler } from './oppgave-common';
 
 type Date = string; // LocalDate
 
@@ -118,24 +117,15 @@ export interface INameSearchParams {
   start: number;
 }
 
-export interface ISearchPerson {
-  fnr: string;
-  navn: Name;
+export interface INameSearchResponse {
+  people: IPartBase[];
 }
 
-export interface INameSearchResponse {
-  people: ISearchPerson[];
-}
 export interface ISaksbehandlere {
   saksbehandlere: ISaksbehandler[];
 }
 
-export interface IPersonAndOppgaverResponseOld extends ISearchPerson {
-  aapneBehandlinger: IOppgave[] | string[];
-  avsluttedeBehandlinger: IOppgave[] | string[];
-}
-
-export interface IPersonAndOppgaverResponse extends ISearchPerson {
+export interface IPersonAndOppgaverResponse extends IPartBase {
   aapneBehandlinger: string[];
   avsluttedeBehandlinger: string[];
 }

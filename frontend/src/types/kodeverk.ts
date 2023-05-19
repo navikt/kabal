@@ -1,6 +1,7 @@
-export enum Gender {
+export enum SexEnum {
   MALE = 'MANN',
   FEMALE = 'KVINNE',
+  UNKNOWN = 'UKJENT',
 }
 
 export enum MedunderskriverFlyt {
