@@ -1,5 +1,5 @@
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling';
-import { IPerson, ISaksbehandler } from '@app/types/oppgave-common';
+import { ISaksbehandler } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -49,16 +49,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
         );
       },
     }),
-    getPerson: builder.query<IPerson, string>({
-      query: (oppgaveId) => `/kabal-search/oppgaver/${oppgaveId}/person`,
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getSakenGjelder', oppgaveId, () => ({ sakenGjelder: data }))
-        );
-      },
-    }),
   }),
 });
 
-export const { useGetOppgaveQuery, useGetPersonQuery } = oppgaveDataQuerySlice;
+export const { useGetOppgaveQuery } = oppgaveDataQuerySlice;

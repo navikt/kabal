@@ -1,14 +1,13 @@
 import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { getFullName, getOrgName } from '@app/domain/name';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IPart, IdType } from '@app/types/oppgave-common';
 
 interface LookupProps {
   close: () => void;
-  data: ISakspart | undefined;
+  data: IPart | undefined;
   isSearching: boolean;
 }
 
@@ -21,32 +20,15 @@ export const Lookup = ({ close, data, isSearching }: LookupProps) => {
     return null;
   }
 
-  if (data.person !== null) {
-    return <Result close={close} name={getFullName(data.person.navn)} fullmektig={data} type={FullmaktType.PERSON} />;
-  }
-
-  if (data.virksomhet !== null) {
-    return (
-      <Result close={close} name={getOrgName(data.virksomhet.navn)} fullmektig={data} type={FullmaktType.VIRKSOMHET} />
-    );
-  }
-
-  return <span>Ingen treff</span>;
+  return <Result fullmektig={data} close={close} />;
 };
 
-enum FullmaktType {
-  PERSON = 'PERSON',
-  VIRKSOMHET = 'VIRKSOMHET',
-}
-
 interface ResultProps {
-  name: string;
-  fullmektig: ISakspart;
   close: () => void;
-  type: FullmaktType;
+  fullmektig: IPart;
 }
 
-const Result = ({ name, fullmektig, close, type }: ResultProps) => {
+const Result = ({ fullmektig, close }: ResultProps) => {
   const oppgaveId = useOppgaveId();
   const [setFullmektig, { isLoading }] = useUpdateFullmektigMutation();
 
@@ -57,8 +39,8 @@ const Result = ({ name, fullmektig, close, type }: ResultProps) => {
   const onClick = () => setFullmektig({ fullmektig, oppgaveId }).then(close);
 
   return (
-    <StyledResult variant={type === FullmaktType.PERSON ? 'info' : 'warning'}>
-      <BodyShort>{name}</BodyShort>
+    <StyledResult variant={fullmektig.type === IdType.FNR ? 'info' : 'warning'}>
+      <BodyShort>{fullmektig.name}</BodyShort>
       <Button onClick={onClick} loading={isLoading} size="small" variant="tertiary">
         Bruk
       </Button>

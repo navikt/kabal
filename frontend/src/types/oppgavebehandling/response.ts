@@ -1,5 +1,5 @@
 import { MedunderskriverFlyt } from '../kodeverk';
-import { IMedunderskriver, IPerson, ISaksbehandler, IVedlegg } from '../oppgave-common';
+import { ISakenGjelder, ISaksbehandler, IVedlegg } from '../oppgave-common';
 
 export interface ITilknyttDocumentResponse {
   modified: string;
@@ -13,7 +13,7 @@ export interface IVedtakFullfoertResponse {
 
 export interface IMedunderskrivereResponse {
   tema: string;
-  medunderskrivere: IMedunderskriver[];
+  medunderskrivere: ISaksbehandler[];
 }
 
 export interface IMedunderskriverResponse {
@@ -43,5 +43,5 @@ export interface IModifiedResponse {
 }
 
 export interface ISakenGjelderResponse {
-  sakenGjelder: IPerson;
+  sakenGjelder: ISakenGjelder;
 }

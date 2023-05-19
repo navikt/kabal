@@ -18,7 +18,7 @@ export const DeleteButton = ({ show, close }: Props) => {
     return null;
   }
 
-  const onClick = () => setFullmektig({ fullmektig: { person: null, virksomhet: null }, oppgaveId }).then(close);
+  const onClick = () => setFullmektig({ fullmektig: null, oppgaveId }).then(close);
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
 

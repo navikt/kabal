@@ -1,7 +1,6 @@
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IDocumentReference, ISaksbehandler } from '../oppgave-common';
+import { IDocumentReference, IPart, ISaksbehandler } from '../oppgave-common';
 import { ISmartEditor } from '../smart-editor/smart-editor';
-import { ISakspart } from './oppgavebehandling';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
@@ -54,7 +53,7 @@ export interface ISwitchMedunderskriverflytParams {
 }
 
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
-  fullmektig: ISakspart;
+  fullmektig: IPart | null;
 }
 
 export interface IFinishOppgavebehandlingParams {

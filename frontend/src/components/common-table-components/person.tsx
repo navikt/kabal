@@ -1,7 +1,7 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { CopyFnrButton } from '@app/components/copy-button/copy-fnr-button';
-import { useGetPersonQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling';
 
 interface Props {
   oppgaveId: string;
@@ -10,21 +10,21 @@ interface Props {
 const Loading = () => <Loader size="small" title="Laster..." />;
 
 export const Name = ({ oppgaveId }: Props) => {
-  const { data, isLoading } = useGetPersonQuery(oppgaveId);
+  const { data, isLoading } = useGetSakenGjelderQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return <Loading />;
   }
 
-  return <>{data.navn ?? 'Navn mangler'}</>;
+  return <>{data.name ?? 'Navn mangler'}</>;
 };
 
 export const Fnr = ({ oppgaveId }: Props) => {
-  const { data, isLoading } = useGetPersonQuery(oppgaveId);
+  const { data, isLoading } = useGetSakenGjelderQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return <Loading />;
   }
 
-  return <CopyFnrButton fnr={data.fnr} />;
+  return <CopyFnrButton fnr={data.id} />;
 };

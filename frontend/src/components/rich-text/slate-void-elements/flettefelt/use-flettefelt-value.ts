@@ -13,9 +13,7 @@ export const useFlettefeltValue = (flettefelt: Flettefelt | null): string | null
 
   switch (flettefelt) {
     case Flettefelt.FNR:
-      return oppgave.sakenGjelder.person !== null
-        ? formatFoedselsnummer(oppgave.sakenGjelder.person.foedselsnummer)
-        : '<Ikke funnet>';
+      return formatFoedselsnummer(oppgave.sakenGjelder.id);
     case Flettefelt.ENHET_NAME:
       return bruker.ansattEnhet.navn;
     default:

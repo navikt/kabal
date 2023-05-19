@@ -1,4 +1,6 @@
+import { getFullName } from '@app/domain/name';
 import { queryStringify } from '@app/functions/query-string';
+import { LegacyNameSearchResponse, LegacyPersonAndOppgaverResponse } from '@app/types/legacy';
 import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
@@ -6,7 +8,6 @@ import {
   INameSearchParams,
   INameSearchResponse,
   IPersonAndOppgaverResponse,
-  IPersonAndOppgaverResponseOld,
   ISaksbehandlere,
   LedigeOppgaverParams,
   MineFerdigstilteOppgaverParams,
@@ -73,6 +74,12 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     }),
     nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
       query: (body) => ({ url: `/kabal-search/search/name`, method: 'POST', body }),
+      transformResponse: (res: LegacyNameSearchResponse | INameSearchResponse): INameSearchResponse => ({
+        people: res.people.map((person) => ({
+          id: 'id' in person ? person.id : person.fnr,
+          name: 'name' in person ? person.name : getFullName(person.navn),
+        })),
+      }),
     }),
     personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
       query: (query) => ({
@@ -80,14 +87,23 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
       }),
-      transformResponse: ({ aapneBehandlinger, avsluttedeBehandlinger, fnr, navn }: IPersonAndOppgaverResponseOld) => ({
-        aapneBehandlinger: isStringArray(aapneBehandlinger) ? aapneBehandlinger : aapneBehandlinger.map(({ id }) => id),
-        avsluttedeBehandlinger: isStringArray(avsluttedeBehandlinger)
-          ? avsluttedeBehandlinger
-          : avsluttedeBehandlinger.map(({ id }) => id),
-        fnr,
-        navn,
-      }),
+      transformResponse: ({
+        aapneBehandlinger,
+        avsluttedeBehandlinger,
+        ...rest
+      }: LegacyPersonAndOppgaverResponse | IPersonAndOppgaverResponse) => {
+        const id = 'id' in rest ? rest.id : rest.fnr;
+        const name = 'name' in rest ? rest.name : getFullName(rest.navn);
+
+        return {
+          aapneBehandlinger: isStringArray(aapneBehandlinger) ? aapneBehandlinger : aapneBehandlinger.map((b) => b.id),
+          avsluttedeBehandlinger: isStringArray(avsluttedeBehandlinger)
+            ? avsluttedeBehandlinger
+            : avsluttedeBehandlinger.map((b) => b.id),
+          id,
+          name,
+        };
+      },
     }),
     getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,

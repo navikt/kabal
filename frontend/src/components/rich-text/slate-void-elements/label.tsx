@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
-import { getFullName } from '@app/domain/name';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -56,11 +55,11 @@ export const LabelElement = ({ element, attributes, children }: RenderElementPro
 
 const getContent = (oppgave: IOppgavebehandling, source: string): string => {
   if (source === 'sakenGjelder.name') {
-    return getFullName(oppgave.sakenGjelder.person?.navn);
+    return oppgave.sakenGjelder.name ?? '-';
   }
 
   if (source === 'sakenGjelder.fnr') {
-    return formatFoedselsnummer(oppgave.sakenGjelder.person?.foedselsnummer);
+    return formatFoedselsnummer(oppgave.sakenGjelder.id);
   }
 
   return 'Verdi mangler';

@@ -3,7 +3,8 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
-import { IOppgavebehandling, ISakspart } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IPart } from '@app/types/oppgave-common';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
   IOppgavebehandlingHjemlerUpdateParams,
@@ -73,10 +74,10 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
     }),
 
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
-      query: ({ oppgaveId, fullmektig: { person, virksomhet } }) => ({
+      query: ({ oppgaveId, fullmektig }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
         method: 'PUT',
-        body: { identifikator: person?.foedselsnummer ?? virksomhet?.virksomhetsnummer ?? null },
+        body: { identifikator: fullmektig?.id ?? null },
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
         const undo = update(oppgaveId, [['prosessfullmektig', fullmektig]]);
@@ -86,9 +87,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           update(oppgaveId, [['modified', data.modified]]);
 
           toast.success(
-            fullmektig.person === null && fullmektig.virksomhet === null
-              ? 'Fullmektig fjernet'
-              : `Fullmektig endret til ${formatFullmekig(fullmektig)}`
+            fullmektig === null ? 'Fullmektig fjernet' : `Fullmektig endret til ${formatIdNumber(fullmektig.id)}`
           );
         } catch (e) {
           undo();
@@ -103,14 +102,11 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    searchFullmektig: builder.query<ISakspart, string>({
+    searchFullmektig: builder.query<IPart, string>({
       query: (identifikator) => ({ url: `/kabal-api/searchfullmektig`, method: 'POST', body: { identifikator } }),
     }),
   }),
 });
-
-const formatFullmekig = (fullmektig: ISakspart) =>
-  formatIdNumber(fullmektig.person?.foedselsnummer ?? fullmektig.virksomhet?.virksomhetsnummer);
 
 const update = <K extends keyof IOppgavebehandling>(oppgaveId: string, values: [K, IOppgavebehandling[K]][]) => {
   const patchResult = reduxStore.dispatch(

@@ -3,7 +3,7 @@ import React from 'react';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSakspartName } from '@app/hooks/use-klager-name';
+import { useKlagerName } from '@app/hooks/use-klager-name';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Fullmektig } from './fullmektig/fullmektig';
@@ -15,7 +15,7 @@ import { Ytelse } from './ytelse';
 
 export const Klagebehandlingsdetaljer = () => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
-  const klagerName = useSakspartName('klager');
+  const klagerName = useKlagerName();
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <Loader size="xlarge" />;

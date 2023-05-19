@@ -1,7 +1,7 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSakspartName } from '@app/hooks/use-klager-name';
+import { useKlagerName } from '@app/hooks/use-klager-name';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
@@ -14,7 +14,7 @@ import { Ytelse } from './ytelse';
 
 export const Trygderettsankebehandlingsdetaljer = () => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
-  const klagerName = useSakspartName('klager');
+  const klagerName = useKlagerName();
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <Loader />;
