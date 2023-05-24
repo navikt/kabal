@@ -35,10 +35,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
           enhetId: bruker.ansattEnhet.id,
         };
 
-  const { data, isError, isFetching, isLoading } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
-    pollingInterval: 30 * 1000,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isError, isFetching, isLoading } = useGetEnhetensVentendeOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.ENHETENS_VENTENDE,

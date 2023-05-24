@@ -44,10 +44,7 @@ export const OppgaverPaaVentTable = () => {
   const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
     typeof bruker === 'undefined' ? skipToken : { sortering: SortFieldEnum.FRIST, rekkefoelge: SortOrderEnum.STIGENDE };
 
-  const { data, isError, isFetching, isLoading } = useGetMineVentendeOppgaverQuery(queryParams, {
-    pollingInterval: 30 * 1000,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isError, isFetching, isLoading } = useGetMineVentendeOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.MINE_VENTENDE,
