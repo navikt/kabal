@@ -1,6 +1,6 @@
 name: Sanity Build
 
-on: [pull_request, merge_group]
+on: [pull_request]
 
 jobs:
   sanity-build:
