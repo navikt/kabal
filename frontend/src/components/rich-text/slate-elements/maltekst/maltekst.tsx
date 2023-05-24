@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAddSpaceBefore';
@@ -13,7 +14,7 @@ import { ApiQuery, RichTextTypes, TemplateSections } from '@app/types/texts/text
 import { SmartEditorContext } from '../../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../../smart-editor/hooks/use-query';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
-import { ContentTypeEnum, UndeletableVoidElementsEnum } from '../../types/editor-enums';
+import { ContentTypeEnum, UndeletableContentEnum, UndeletableVoidElementsEnum } from '../../types/editor-enums';
 import { isOfElementType } from '../../types/editor-type-guards';
 import { MaltekstElementType, PlaceholderElementType } from '../../types/editor-types';
 import { EmptyVoidElement } from '../../types/editor-void-types';
@@ -85,14 +86,21 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
     loadMaltekst(query);
   }, [loadMaltekst, query]);
 
-  const addParagraph = () => {
-    const path = ReactEditor.findPath(editor, element);
-    const at = Path.next(path);
-    Transforms.insertNodes(editor, createSimpleParagraph(), { at });
-    Transforms.select(editor, at);
-  };
-
   const contentEditable = data?.length !== 0;
+
+  const isInRegelverk = useMemo(() => {
+    const [nodeEntry] = Editor.nodes(editor, { match: (n) => n === element, voids: false, at: [] });
+
+    if (typeof nodeEntry === 'undefined') {
+      return false;
+    }
+
+    const [, path] = nodeEntry;
+
+    const parentEntry = Editor.parent(editor, path);
+
+    return parentEntry !== undefined && isOfElementType(parentEntry[0], UndeletableContentEnum.REGELVERK);
+  }, [editor, element]);
 
   return (
     <Container
@@ -102,19 +110,36 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
       suppressContentEditableWarning={contentEditable}
     >
       {children}
-      <StyledButton
-        contentEditable={false}
-        onClick={addParagraph}
-        title="Legg til nytt avsnitt under"
-        icon={<TextAddSpaceBefore size={24} />}
-        variant="tertiary"
-        size="xsmall"
-      />
+      {isInRegelverk ? null : <AddParagraphButton element={element} />}
     </Container>
   );
 };
 
 MaltekstElement.displayName = 'MaltekstElement';
+
+type AddParagraphButtonProps = Pick<RenderElementProps<MaltekstElementType>, 'element'>;
+
+const AddParagraphButton = ({ element }: AddParagraphButtonProps) => {
+  const editor = useSlateStatic();
+
+  const addParagraph = useCallback(() => {
+    const path = ReactEditor.findPath(editor, element);
+    const at = Path.next(path);
+    Transforms.insertNodes(editor, createSimpleParagraph(), { at });
+    Transforms.select(editor, at);
+  }, [editor, element]);
+
+  return (
+    <StyledButton
+      contentEditable={false}
+      onClick={addParagraph}
+      title="Legg til nytt avsnitt under"
+      icon={<TextAddSpaceBefore size={24} />}
+      variant="tertiary"
+      size="xsmall"
+    />
+  );
+};
 
 const StyledButton = styled(Button)`
   position: absolute;

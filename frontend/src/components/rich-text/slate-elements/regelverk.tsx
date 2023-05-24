@@ -95,6 +95,23 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: ${RICH_TEXT_ROW_GAP};
   position: relative;
+  outline: 2px dashed var(--a-border-action);
+  border-radius: 4px;
+  border-top-right-radius: 0;
+
+  ::after {
+    content: 'Regelverk';
+    position: absolute;
+    bottom: 100%;
+    right: -2px;
+    background-color: var(--a-border-action);
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 2px 4px;
+  }
 
   ::before {
     content: '';
