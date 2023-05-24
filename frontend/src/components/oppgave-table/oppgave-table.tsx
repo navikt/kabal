@@ -52,14 +52,10 @@ export const OppgaveTable = (): JSX.Element => {
   const queryParams: typeof skipToken | LedigeOppgaverParams =
     typeof settingsData === 'undefined' ? skipToken : { sortering, rekkefoelge, ytelser, typer, hjemler };
 
-  const { data, isFetching, isLoading, isError } = useGetLedigeOppgaverQuery(queryParams, {
-    pollingInterval: 30 * 1000,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isFetching, isLoading, isError } = useGetLedigeOppgaverQuery(queryParams);
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
-    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
-    { pollingInterval: 300 * 1000 }
+    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 }
   );
 
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.LEDIGE, data?.behandlinger);

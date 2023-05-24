@@ -32,10 +32,7 @@ export const FullfoerteOppgaverTable = () => {
     ferdigstiltDaysAgo: HUNDRED_YEARS,
   };
 
-  const { data, isLoading, isFetching, isError } = useGetMineFerdigstilteOppgaverQuery(queryParams, {
-    pollingInterval: 180 * 1000,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading, isFetching, isError } = useGetMineFerdigstilteOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.MINE_FERDIGE, data?.behandlinger);
 
