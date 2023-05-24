@@ -1,6 +1,13 @@
+/* eslint-disable max-lines */
 import { Editor, Element, Node, Path, Text, Transforms } from 'slate';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
-import { ContentTypeEnum, ListContentEnum, ListTypesEnum } from '../types/editor-enums';
+import {
+  ContentTypeEnum,
+  ListContentEnum,
+  ListTypesEnum,
+  TextAlignEnum,
+  UndeletableContentEnum,
+} from '../types/editor-enums';
 import {
   isMarkKey,
   isNodeAlignableElementType,
@@ -17,6 +24,7 @@ import {
   ListItemElementType,
   MarkKeyList,
   NumberedListElementType,
+  RegelverkContainerType,
   hasAnyComments,
   hasAnyMark,
 } from '../types/editor-types';
@@ -153,6 +161,35 @@ export const withNormalization = (editor: Editor) => {
           at: path,
           match: Text.isText,
         });
+
+        return;
+      }
+    }
+
+    if (isOfElementType<RegelverkContainerType>(node, UndeletableContentEnum.REGELVERK_CONTAINER)) {
+      if (node.children.length === 0) {
+        Transforms.insertNodes(
+          editor,
+          {
+            type: ContentTypeEnum.PARAGRAPH,
+            textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
+            indent: 0,
+            children: [{ text: '' }],
+          },
+          { at: [...path, 0] }
+        );
+
+        return;
+      }
+
+      const allText = node.children.every((child) => Text.isText(child));
+
+      if (allText) {
+        Transforms.wrapNodes(
+          editor,
+          { type: ContentTypeEnum.PARAGRAPH, textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, indent: 0, children: [] },
+          { at: path, match: Text.isText, mode: 'highest' }
+        );
 
         return;
       }
