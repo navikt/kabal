@@ -13,14 +13,19 @@ import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 
 export const Kvalitetsvurdering = (): JSX.Element | null => {
   const header = useSectionTitle(SECTION_KEY.KVALITETSVURDERING);
-  const { data: oppgave } = useOppgave();
-
-  const utfall = oppgave?.resultat.utfall;
-  const type = oppgave?.type;
+  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
 
   const { value: shown = true, isLoading } = useKvalitetsvurderingEnabled();
 
+  if (oppgaveIsLoading || typeof oppgave === 'undefined') {
+    return null;
+  }
+
+  const { utfall } = oppgave.resultat;
+  const { type } = oppgave;
+
   const hideKvalitetsvurdering =
+    oppgave.kvalitetsvurderingReference === null ||
     type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     utfall === UtfallEnum.TRUKKET ||
     utfall === UtfallEnum.RETUR ||
@@ -46,7 +51,7 @@ export const Kvalitetsvurdering = (): JSX.Element | null => {
 const Kvalitetsskjema = () => {
   const { data, isLoading } = useOppgave();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || typeof data === 'undefined' || data.kvalitetsvurderingReference === null) {
     return null;
   }
 

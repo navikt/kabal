@@ -58,5 +58,5 @@ export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
 
 export interface IFinishOppgavebehandlingParams {
   oppgaveId: string;
-  kvalitetsvurderingId: string;
+  kvalitetsvurderingId: string | null;
 }

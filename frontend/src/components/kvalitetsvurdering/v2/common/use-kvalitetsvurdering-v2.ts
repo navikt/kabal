@@ -29,15 +29,21 @@ const EMPTY_ARRAY: string[] = [];
 
 export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const param = typeof oppgave === 'undefined' ? skipToken : oppgave.kvalitetsvurderingReference.id;
+  const param =
+    typeof oppgave === 'undefined' || oppgave.kvalitetsvurderingReference === null
+      ? skipToken
+      : oppgave.kvalitetsvurderingReference.id;
   const { data: kvalitetsvurdering, isLoading: kvalitetsvurderingIsLoading } = useGetKvalitetsvurderingQuery(param);
   const [update, { isLoading: updateIsLoading }] = useUpdateKvalitetsvurderingMutation();
+
+  const id = oppgave?.kvalitetsvurderingReference?.id;
 
   if (
     oppgaveIsLoading ||
     kvalitetsvurderingIsLoading ||
     typeof oppgave === 'undefined' ||
-    typeof kvalitetsvurdering === 'undefined'
+    typeof kvalitetsvurdering === 'undefined' ||
+    typeof id !== 'string'
   ) {
     return {
       oppgave: undefined,
@@ -53,7 +59,7 @@ export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
     oppgave,
     hjemler: oppgave.resultat.hjemler,
     kvalitetsvurdering,
-    update: (patch) => update({ ...patch, id: oppgave.kvalitetsvurderingReference.id }).unwrap(),
+    update: (patch) => update({ ...patch, id }).unwrap(),
     isLoading: false,
     isUpdating: updateIsLoading,
   };

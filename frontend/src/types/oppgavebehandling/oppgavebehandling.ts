@@ -25,11 +25,10 @@ export interface IOppgavebehandlingBase {
   isAvsluttetAvSaksbehandler: boolean;
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
-  kvalitetsvurderingId: string;
   kvalitetsvurderingReference: {
     id: UUID;
     version: KvalitetsvurderingVersion;
-  };
+  } | null;
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
