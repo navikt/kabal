@@ -5,7 +5,7 @@ import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useKvalitetsvurdering = (): [IKvalitetsvurderingV1 | undefined, boolean] => {
   const { data: oppgave } = useOppgave();
-  const { data, isLoading } = useGetKvalitetsvurderingQuery(oppgave?.kvalitetsvurderingId ?? skipToken);
+  const { data, isLoading } = useGetKvalitetsvurderingQuery(oppgave?.kvalitetsvurderingReference?.id ?? skipToken);
 
   return [data, isLoading];
 };

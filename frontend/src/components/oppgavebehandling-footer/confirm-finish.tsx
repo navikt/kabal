@@ -30,7 +30,10 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
       return;
     }
 
-    finishOppgavebehandling({ oppgaveId: oppgave.id, kvalitetsvurderingId: oppgave.kvalitetsvurderingReference.id })
+    finishOppgavebehandling({
+      oppgaveId: oppgave.id,
+      kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
+    })
       .unwrap()
       .then((res) => {
         setHasBeenFinished(res.isAvsluttetAvSaksbehandler);

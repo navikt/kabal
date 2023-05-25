@@ -31,9 +31,11 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
             ['isAvsluttetAvSaksbehandler', data.isAvsluttetAvSaksbehandler],
           ]);
           dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
-          dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-          dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-          // TODO: Remove oppgave from ledige oppgaver list.
+
+          if (id !== null) {
+            dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+            dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+          }
         } catch (e) {
           const message = 'Kunne ikke fullføre behandling.';
 

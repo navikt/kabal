@@ -72,6 +72,7 @@ const Kvalitetsvurdering = () => {
   const { type, resultat } = oppgave;
 
   const hideKvalitetsvurdering =
+    oppgave.kvalitetsvurderingReference === null ||
     type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     resultat.utfall === UtfallEnum.TRUKKET ||
     resultat.utfall === UtfallEnum.RETUR ||
