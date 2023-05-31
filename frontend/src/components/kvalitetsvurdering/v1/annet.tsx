@@ -58,7 +58,7 @@ export const Annet = () => {
     },
   ];
 
-  const reasons = oppgave.type === SaksTypeEnum.ANKE ? baseReasons : [...baseReasons, ...klageReasons];
+  const reasons = oppgave.typeId === SaksTypeEnum.ANKE ? baseReasons : [...baseReasons, ...klageReasons];
 
   return (
     <FormSection>

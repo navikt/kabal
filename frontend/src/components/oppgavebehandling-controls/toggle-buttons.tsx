@@ -69,14 +69,14 @@ const Kvalitetsvurdering = () => {
     return null;
   }
 
-  const { type, resultat } = oppgave;
+  const { typeId, resultat } = oppgave;
 
   const hideKvalitetsvurdering =
     oppgave.kvalitetsvurderingReference === null ||
-    type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    resultat.utfall === UtfallEnum.TRUKKET ||
-    resultat.utfall === UtfallEnum.RETUR ||
-    resultat.utfall === UtfallEnum.UGUNST;
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    resultat.utfallId === UtfallEnum.TRUKKET ||
+    resultat.utfallId === UtfallEnum.RETUR ||
+    resultat.utfallId === UtfallEnum.UGUNST;
 
   if (hideKvalitetsvurdering) {
     return null;

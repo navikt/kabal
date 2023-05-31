@@ -87,10 +87,10 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
         body: { date: kjennelseMottatt },
       }),
-      onQueryStarted: async ({ oppgaveId, kjennelseMottatt, type }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ oppgaveId, kjennelseMottatt, typeId }, { queryFulfilled, dispatch }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === type) {
+            if (draft.typeId === typeId) {
               draft.kjennelseMottatt = kjennelseMottatt;
             }
           })
@@ -112,10 +112,10 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
         body: { date: sendtTilTrygderetten },
       }),
-      onQueryStarted: async ({ oppgaveId, sendtTilTrygderetten, type }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ oppgaveId, sendtTilTrygderetten, typeId }, { queryFulfilled, dispatch }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.type === type) {
+            if (draft.typeId === typeId) {
               draft.sendtTilTrygderetten = sendtTilTrygderetten;
             }
           })

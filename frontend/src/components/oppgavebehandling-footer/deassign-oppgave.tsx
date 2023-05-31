@@ -55,7 +55,7 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   const [setHjemler] = useUpdateInnsendingshjemlerMutation();
   const { data: bruker, isLoading: userIsLoading } = useUser();
   const [tildel, { isLoading }] = useTildelSaksbehandlerMutation();
-  const ytelse = useKodeverkYtelse(oppgave?.ytelse ?? skipToken);
+  const ytelse = useKodeverkYtelse(oppgave?.ytelseId ?? skipToken);
 
   const options = useMemo(
     () => ytelse?.innsendingshjemler.map(({ id, navn }) => ({ value: id, label: navn })) ?? [],
@@ -77,7 +77,7 @@ const Popup = ({ isOpen, close }: PopupProps) => {
   return (
     <StyledPopup>
       <StyledTitle>Endre hjemmel?</StyledTitle>
-      <FilterList options={options} selected={oppgave.hjemler} onChange={setSelected} />
+      <FilterList options={options} selected={oppgave.hjemmelIdList} onChange={setSelected} />
       <ButtonContainer>
         <Button variant="secondary" size="small" disabled={isLoading} onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt

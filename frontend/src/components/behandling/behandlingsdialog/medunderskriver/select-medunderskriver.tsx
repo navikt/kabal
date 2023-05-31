@@ -7,11 +7,11 @@ import { ISaksbehandler } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
-type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelse' | 'medunderskriver' | 'type'>;
+type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelseId' | 'medunderskriver' | 'typeId'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
-export const SelectMedunderskriver = ({ id, medunderskriver, type }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMedunderskriverProps) => {
   const canEdit = useCanEdit();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: id });
   const { data } = useGetPotentialMedunderskrivereQuery(id);
@@ -27,7 +27,7 @@ export const SelectMedunderskriver = ({ id, medunderskriver, type }: SelectMedun
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <p>Fant ingen {getTitlePlural(type)}</p>;
+    return <p>Fant ingen {getTitlePlural(typeId)}</p>;
   }
 
   const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
@@ -45,12 +45,12 @@ export const SelectMedunderskriver = ({ id, medunderskriver, type }: SelectMedun
     <Select
       size="small"
       disabled={!canEdit}
-      label={`${getTitleCapitalized(type)}:`}
+      label={`${getTitleCapitalized(typeId)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
       value={medunderskriver?.navIdent ?? NONE_SELECTED}
       data-testid="select-medunderskriver"
     >
-      <option value={NONE_SELECTED}>Ingen {getTitleLowercase(type)}</option>
+      <option value={NONE_SELECTED}>Ingen {getTitleLowercase(typeId)}</option>
       {medunderskrivere.map(({ navn, navIdent }) => (
         <option key={navIdent} value={navIdent}>
           {navn}

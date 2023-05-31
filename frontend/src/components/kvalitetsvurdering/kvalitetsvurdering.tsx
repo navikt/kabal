@@ -21,15 +21,15 @@ export const Kvalitetsvurdering = (): JSX.Element | null => {
     return null;
   }
 
-  const { utfall } = oppgave.resultat;
-  const { type } = oppgave;
+  const { utfallId } = oppgave.resultat;
+  const { typeId } = oppgave;
 
   const hideKvalitetsvurdering =
     oppgave.kvalitetsvurderingReference === null ||
-    type === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    utfall === UtfallEnum.TRUKKET ||
-    utfall === UtfallEnum.RETUR ||
-    utfall === UtfallEnum.UGUNST;
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    utfallId === UtfallEnum.TRUKKET ||
+    utfallId === UtfallEnum.RETUR ||
+    utfallId === UtfallEnum.UGUNST;
 
   if (hideKvalitetsvurdering || !shown || isLoading) {
     return null;

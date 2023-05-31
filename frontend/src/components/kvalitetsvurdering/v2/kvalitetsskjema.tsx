@@ -20,9 +20,9 @@ export const KvalitetsskjemaV2 = () => {
 
   if (
     typeof oppgave === 'undefined' ||
-    oppgave.resultat.utfall === UtfallEnum.TRUKKET ||
-    oppgave.resultat.utfall === UtfallEnum.RETUR ||
-    oppgave.resultat.utfall === UtfallEnum.UGUNST ||
+    oppgave.resultat.utfallId === UtfallEnum.TRUKKET ||
+    oppgave.resultat.utfallId === UtfallEnum.RETUR ||
+    oppgave.resultat.utfallId === UtfallEnum.UGUNST ||
     isError
   ) {
     return null;

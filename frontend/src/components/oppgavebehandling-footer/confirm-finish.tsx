@@ -84,7 +84,7 @@ const OppgavebehandlingText = () => {
     return null;
   }
 
-  if (oppgave.type === SaksTypeEnum.KLAGE) {
+  if (oppgave.typeId === SaksTypeEnum.KLAGE) {
     return (
       <StyledFinishOppgaveText>
         Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du
@@ -93,10 +93,10 @@ const OppgavebehandlingText = () => {
     );
   }
 
-  const { utfall } = oppgave.resultat;
+  const { utfallId } = oppgave.resultat;
 
-  if (oppgave.type === SaksTypeEnum.ANKE) {
-    if (utfall === UtfallEnum.INNSTILLING_STADFESTELSE || utfall === UtfallEnum.INNSTILLING_AVVIST) {
+  if (oppgave.typeId === SaksTypeEnum.ANKE) {
+    if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
       return (
         <StyledFinishOppgaveText>
           Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
@@ -105,7 +105,7 @@ const OppgavebehandlingText = () => {
       );
     }
 
-    if (utfall === UtfallEnum.DELVIS_MEDHOLD) {
+    if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
       return (
         <StyledFinishOppgaveText>
           Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort,

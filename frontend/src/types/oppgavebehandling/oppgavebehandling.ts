@@ -19,7 +19,7 @@ export interface IOppgavebehandlingBase {
   fraNAVEnhetNavn: string | null;
   fraSaksbehandlerident: string | null;
   frist: string | null;
-  hjemler: string[];
+  hjemmelIdList: string[];
   id: string;
   internVurdering: string;
   isAvsluttetAvSaksbehandler: boolean;
@@ -32,7 +32,6 @@ export interface IOppgavebehandlingBase {
   medunderskriver: ISaksbehandler | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
-  mottatt: string | null; // LocalDate
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
   prosessfullmektig: IPart | null;
@@ -42,24 +41,24 @@ export interface IOppgavebehandlingBase {
   sattPaaVent: string | null; // LocalDateTime
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
-  tema: string;
+  temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
   tildeltSaksbehandler: ISaksbehandler | null;
   tildeltSaksbehandlerEnhet: string | null;
-  ytelse: string;
+  ytelseId: string;
 }
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {
-  type: SaksTypeEnum.KLAGE;
+  typeId: SaksTypeEnum.KLAGE;
 }
 
 export interface IAnkebehandling extends IOppgavebehandlingBase {
-  type: SaksTypeEnum.ANKE;
+  typeId: SaksTypeEnum.ANKE;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
   kjennelseMottatt: string | null; // LocalDate
   sendtTilTrygderetten: string | null; // LocalDate
 }
@@ -68,7 +67,7 @@ export type IOppgavebehandling = IKlagebehandling | IAnkebehandling | ITrygderet
 
 interface Resultat {
   file: IVedlegg | null;
-  hjemler: string[];
+  hjemmelIdSet: string[];
   id: string;
-  utfall: UtfallEnum | null;
+  utfallId: UtfallEnum | null;
 }

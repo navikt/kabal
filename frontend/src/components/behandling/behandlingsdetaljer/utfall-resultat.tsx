@@ -24,7 +24,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const utfallLabel = useFieldName('utfall');
   const { data: oppgave } = useOppgave();
 
-  const [utfallKodeverk, isLoading] = useUtfall(oppgave?.type);
+  const [utfallKodeverk, isLoading] = useUtfall(oppgave?.typeId);
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;

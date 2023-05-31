@@ -23,13 +23,13 @@ export const useQuery = ({ textType, templateId = null, sections = EMPTY_QUERY }
       return skipToken;
     }
 
-    const { utfall } = data.resultat;
+    const { utfallId } = data.resultat;
 
     const query: ApiQuery = {
       sections,
-      hjemler: [...data.resultat.hjemler, NONE],
-      ytelser: [data.ytelse, NONE],
-      utfall: utfall === null ? EMPTY_QUERY : [utfall, NONE],
+      hjemler: [...data.resultat.hjemmelIdSet, NONE],
+      ytelser: [data.ytelseId, NONE],
+      utfall: utfallId === null ? EMPTY_QUERY : [utfallId, NONE],
       enheter: [bruker.ansattEnhet.id, NONE],
       templates: templateId === null ? EMPTY_QUERY : [templateId, NONE],
       textType,

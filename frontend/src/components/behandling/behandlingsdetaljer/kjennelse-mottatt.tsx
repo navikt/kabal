@@ -14,7 +14,7 @@ export const KjennelseMottatt = () => {
   const error = useValidationError('kjennelseMottatt');
   const [setKjennelseMottatt] = useSetKjennelseMottattMutation();
 
-  if (data?.type !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
   }
 
@@ -27,7 +27,7 @@ export const KjennelseMottatt = () => {
         disabled={!canEdit}
         onChange={(kjennelseMottatt) => {
           if (kjennelseMottatt !== value) {
-            setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, type: data.type });
+            setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, typeId: data.typeId });
           }
         }}
         value={value}

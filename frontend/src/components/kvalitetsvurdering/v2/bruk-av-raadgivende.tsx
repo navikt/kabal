@@ -13,7 +13,7 @@ import { useValidationError } from './common/use-validation-error';
 
 export const BrukAvRaadgivendeLege = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
-  const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelse ?? null);
+  const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useCanEdit();
   const validationError = useValidationError('brukAvRaadgivendeLege');

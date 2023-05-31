@@ -19,7 +19,7 @@ export const Ankebehandlingsdetaljer = () => {
     return <Loader />;
   }
 
-  const { type, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelse } = oppgavebehandling;
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -32,10 +32,10 @@ export const Ankebehandlingsdetaljer = () => {
       <Fullmektig />
 
       <BehandlingSection label="Type">
-        <Type type={type}></Type>
+        <Type type={typeId}></Type>
       </BehandlingSection>
 
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelseId} />
 
       <BehandlingSection label="Behandlet av">
         {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
@@ -43,7 +43,7 @@ export const Ankebehandlingsdetaljer = () => {
 
       <AnkeMottattDato />
 
-      <UtfallResultat utfall={resultat.utfall} />
+      <UtfallResultat utfall={resultat.utfallId} />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

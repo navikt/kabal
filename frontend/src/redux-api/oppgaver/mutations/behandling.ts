@@ -55,7 +55,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: { hjemler },
       }),
       onQueryStarted: async ({ oppgaveId, hjemler }, { queryFulfilled }) => {
-        const undo = update(oppgaveId, [['hjemler', hjemler]]);
+        const undo = update(oppgaveId, [['hjemmelIdList', hjemler]]);
 
         try {
           const { data } = await queryFulfilled;
