@@ -19,7 +19,7 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, utfall }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.resultat.utfall = utfall;
+            draft.resultat.utfallId = utfall;
           })
         );
 

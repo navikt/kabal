@@ -20,7 +20,7 @@ export const KvalitetsskjemaV1 = () => {
     <>
       <Klageforberedelsen />
       <Utredningen />
-      <BrukAvRaadgivendeLegeDisplay ytelse={oppgave.ytelse} />
+      <BrukAvRaadgivendeLegeDisplay ytelse={oppgave.ytelseId} />
       <Vedtaket />
       <Annet />
     </>

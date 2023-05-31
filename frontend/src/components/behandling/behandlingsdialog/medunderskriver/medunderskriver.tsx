@@ -39,7 +39,7 @@ export const Medunderskriver = () => {
   if (isFullfoert) {
     return (
       <MedunderskriverInfo
-        type={oppgave.type}
+        typeId={oppgave.typeId}
         tildeltSaksbehandler={oppgave.tildeltSaksbehandler}
         medunderskriver={medunderskriver.medunderskriver}
       />
@@ -49,19 +49,19 @@ export const Medunderskriver = () => {
   return (
     <>
       <MedunderskriverInfo
-        type={oppgave.type}
+        typeId={oppgave.typeId}
         tildeltSaksbehandler={oppgave.tildeltSaksbehandler}
         medunderskriver={medunderskriver.medunderskriver}
       />
       <SelectMedunderskriver
-        ytelse={oppgave.ytelse}
-        type={oppgave.type}
+        ytelseId={oppgave.ytelseId}
+        typeId={oppgave.typeId}
         id={oppgave.id}
         medunderskriver={medunderskriver.medunderskriver}
       />
       <SendTilMedunderskriver
         id={oppgave.id}
-        type={oppgave.type}
+        typeId={oppgave.typeId}
         medunderskriver={medunderskriver.medunderskriver}
         medunderskriverFlyt={medunderskriverflyt.medunderskriverFlyt}
       />

@@ -57,7 +57,7 @@ export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
 
   return {
     oppgave,
-    hjemler: oppgave.resultat.hjemler,
+    hjemler: oppgave.resultat.hjemmelIdSet,
     kvalitetsvurdering,
     update: (patch) => update({ ...patch, id }).unwrap(),
     isLoading: false,

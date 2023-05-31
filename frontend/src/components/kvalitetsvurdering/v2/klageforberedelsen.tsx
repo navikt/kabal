@@ -18,7 +18,7 @@ export const Klageforberedelsen = () => {
   const validationError = useValidationError('klageforberedelsen');
   const header = useKvalitetsvurderingV2FieldName('klageforberedelsen');
 
-  if (isLoading || oppgave.type === SaksTypeEnum.ANKE || oppgave.type === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (isLoading || oppgave.typeId === SaksTypeEnum.ANKE || oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
   }
 

@@ -17,7 +17,7 @@ export const Lovhjemmel = () => {
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
   const validationError = useValidationError('hjemmel');
-  const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelse ?? skipToken);
+  const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
   const options = useMemo(
     () =>
@@ -63,7 +63,7 @@ export const Lovhjemmel = () => {
       <LovhjemmelSelect
         disabled={!canEdit || noHjemler}
         options={options}
-        selected={oppgave.resultat.hjemler}
+        selected={oppgave.resultat.hjemmelIdSet}
         onChange={onLovhjemmelChange}
         error={validationError}
         showFjernAlle={false}

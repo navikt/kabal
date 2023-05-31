@@ -20,7 +20,7 @@ export interface IMottattKlageinstansParams extends IOppgavebehandlingBaseParams
 
 export interface IMottattVedtaksinstansParams extends IOppgavebehandlingBaseParams {
   mottattVedtaksinstans: string; // LocalDate
-  type: SaksTypeEnum.KLAGE;
+  typeId: SaksTypeEnum.KLAGE;
 }
 
 export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandlingBaseParams {
@@ -33,12 +33,12 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
 
 export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
   kjennelseMottatt: string | null; // LocalDate
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
 }
 
 export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParams {
   sendtTilTrygderetten: string; // LocalDate
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
 }
 
 export type ICheckDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;

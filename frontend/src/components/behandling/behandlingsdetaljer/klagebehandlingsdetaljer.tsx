@@ -21,7 +21,7 @@ export const Klagebehandlingsdetaljer = () => {
     return <Loader size="xlarge" />;
   }
 
-  const { type, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, kommentarFraVedtaksinstans, resultat, ytelse } =
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, kommentarFraVedtaksinstans, resultat, ytelseId } =
     oppgavebehandling;
 
   return (
@@ -35,10 +35,10 @@ export const Klagebehandlingsdetaljer = () => {
       <Fullmektig />
 
       <BehandlingSection label="Type">
-        <Type type={type}></Type>
+        <Type type={typeId}></Type>
       </BehandlingSection>
 
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelseId} />
 
       <MottattVedtaksinstans />
 
@@ -50,7 +50,7 @@ export const Klagebehandlingsdetaljer = () => {
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-      <UtfallResultat utfall={resultat.utfall} />
+      <UtfallResultat utfall={resultat.utfallId} />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

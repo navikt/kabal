@@ -14,7 +14,7 @@ export const MottattVedtaksinstans = () => {
   const error = useValidationError('mottattVedtaksinstans');
   const [setMottattVedtaksinstans] = useSetMottattVedtaksinstansMutation();
 
-  if (data?.type !== SaksTypeEnum.KLAGE) {
+  if (data?.typeId !== SaksTypeEnum.KLAGE) {
     return null;
   }
 
@@ -27,7 +27,7 @@ export const MottattVedtaksinstans = () => {
         disabled={!canEdit}
         onChange={(mottattVedtaksinstans) => {
           if (mottattVedtaksinstans !== null && mottattVedtaksinstans !== value) {
-            setMottattVedtaksinstans({ oppgaveId: data.id, mottattVedtaksinstans, type: data.type });
+            setMottattVedtaksinstans({ oppgaveId: data.id, mottattVedtaksinstans, typeId: data.typeId });
           }
         }}
         value={value}

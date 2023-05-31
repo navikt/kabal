@@ -5,14 +5,14 @@ import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandli
 import { IMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
 import { getTitleCapitalized } from './getTitle';
 
-type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler' | 'type'> &
+type MedunderskriverInfoProps = Pick<IOppgavebehandling, 'tildeltSaksbehandler' | 'typeId'> &
   Pick<IMedunderskriverResponse, 'medunderskriver'>;
 
-export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver, type }: MedunderskriverInfoProps) => {
+export const MedunderskriverInfo = ({ tildeltSaksbehandler, medunderskriver, typeId }: MedunderskriverInfoProps) => {
   const canEdit = useCanEdit();
 
   if (!canEdit) {
-    const title = getTitleCapitalized(type);
+    const title = getTitleCapitalized(typeId);
 
     return (
       <div data-testid="medunderskriver-info">

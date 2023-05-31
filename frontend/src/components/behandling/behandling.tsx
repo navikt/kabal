@@ -33,11 +33,11 @@ const Behandlingsdetaljer = () => {
     return null;
   }
 
-  if (oppgave.type === SaksTypeEnum.KLAGE) {
+  if (oppgave.typeId === SaksTypeEnum.KLAGE) {
     return <Klagebehandlingsdetaljer />;
   }
 
-  if (oppgave.type === SaksTypeEnum.ANKE) {
+  if (oppgave.typeId === SaksTypeEnum.ANKE) {
     return <Ankebehandlingsdetaljer />;
   }
 

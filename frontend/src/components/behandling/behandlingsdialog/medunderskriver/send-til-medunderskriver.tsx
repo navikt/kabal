@@ -10,10 +10,13 @@ import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleLowercase } from './getTitle';
 
-type SendTilMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'type' | 'medunderskriver' | 'medunderskriverFlyt'>;
+type SendTilMedunderskriverProps = Pick<
+  IOppgavebehandling,
+  'id' | 'typeId' | 'medunderskriver' | 'medunderskriverFlyt'
+>;
 
 export const SendTilMedunderskriver = ({
-  type,
+  typeId,
   id: oppgaveId,
   medunderskriver,
   medunderskriverFlyt,
@@ -36,7 +39,7 @@ export const SendTilMedunderskriver = ({
   const SentToMedunderskriver = () => (
     <StyledFormSection>
       <Alert variant="info" size="small">
-        Sendt til {getTitleLowercase(type)}
+        Sendt til {getTitleLowercase(typeId)}
       </Alert>
     </StyledFormSection>
   );
@@ -44,7 +47,7 @@ export const SendTilMedunderskriver = ({
   const SentBackToMedunderskriver = () => (
     <StyledFormSection>
       <Alert variant="info" size="small">
-        Sendt tilbake av {getTitleLowercase(type)}
+        Sendt tilbake av {getTitleLowercase(typeId)}
       </Alert>
     </StyledFormSection>
   );
@@ -61,7 +64,7 @@ export const SendTilMedunderskriver = ({
         data-testid="send-to-medunderskriver"
         icon={<PaperplaneIcon aria-hidden />}
       >
-        Send til {getTitleLowercase(type)}
+        Send til {getTitleLowercase(typeId)}
       </StyledButton>
     </StyledFormSection>
   );

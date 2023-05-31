@@ -42,7 +42,7 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
       .finally(() => setLoadingTemplate(null));
   };
 
-  const templates = oppgave.type === SaksTypeEnum.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
+  const templates = oppgave.typeId === SaksTypeEnum.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
 
   return (
     <StyledNewDocument>

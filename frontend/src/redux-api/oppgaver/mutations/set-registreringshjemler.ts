@@ -18,7 +18,7 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, hjemler }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.resultat.hjemler = hjemler;
+            draft.resultat.hjemmelIdSet = hjemler;
           })
         );
 

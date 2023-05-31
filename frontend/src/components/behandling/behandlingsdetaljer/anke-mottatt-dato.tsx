@@ -14,7 +14,7 @@ export const AnkeMottattDato = () => {
   const error = useValidationError('mottattKlageinstans');
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
 
-  if (data?.type !== SaksTypeEnum.ANKE) {
+  if (data?.typeId !== SaksTypeEnum.ANKE) {
     return null;
   }
 

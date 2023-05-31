@@ -64,7 +64,7 @@ export const UnfinishedFooter = () => {
         <ConfirmFinishDisplay show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
         <VentButton />
         <BackLink />
-        <Deassign type={oppgave?.type} />
+        <Deassign type={oppgave?.typeId} />
       </StyledButtons>
       <ValidationSummaryPopup sections={data?.sections ?? []} hasErrors={hasErrors} />
     </Wrapper>

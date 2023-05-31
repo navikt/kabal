@@ -28,7 +28,7 @@ export const Klageforberedelsen = () => {
     return <Loader size="xlarge" />;
   }
 
-  if (oppgave.type === SaksTypeEnum.ANKE) {
+  if (oppgave.typeId === SaksTypeEnum.ANKE) {
     return null;
   }
 

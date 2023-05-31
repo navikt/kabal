@@ -14,7 +14,7 @@ export const SendtTilTrygderetten = () => {
   const error = useValidationError('sendtTilTrygderetten');
   const [setSendtTilTrygderetten] = useSetSendtTilTrygderettenMutation();
 
-  if (data?.type !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
   }
 
@@ -27,7 +27,7 @@ export const SendtTilTrygderetten = () => {
         disabled={!canEdit}
         onChange={(sendtTilTrygderetten) => {
           if (sendtTilTrygderetten !== null && sendtTilTrygderetten !== value) {
-            setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, type: data.type });
+            setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, typeId: data.typeId });
           }
         }}
         value={value}

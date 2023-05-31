@@ -20,7 +20,7 @@ export const Trygderettsankebehandlingsdetaljer = () => {
     return <Loader />;
   }
 
-  const { type, resultat, ytelse } = oppgavebehandling;
+  const { typeId, resultat, ytelseId } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -33,16 +33,16 @@ export const Trygderettsankebehandlingsdetaljer = () => {
       <Fullmektig />
 
       <BehandlingSection label="Type">
-        <Type type={type}></Type>
+        <Type type={typeId}></Type>
       </BehandlingSection>
 
-      <Ytelse ytelseId={ytelse} />
+      <Ytelse ytelseId={ytelseId} />
 
       <SendtTilTrygderetten />
 
       <KjennelseMottatt />
 
-      <UtfallResultat utfall={resultat.utfall} />
+      <UtfallResultat utfall={resultat.utfallId} />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

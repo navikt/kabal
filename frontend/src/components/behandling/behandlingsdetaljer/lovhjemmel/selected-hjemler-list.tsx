@@ -19,9 +19,9 @@ const EMPTY_LIST: string[] = [];
 export const SelectedHjemlerList = () => {
   const { data: oppgave } = useOppgave();
 
-  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelse ?? skipToken);
+  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
-  const hjemmelIdList = oppgave?.resultat.hjemler ?? EMPTY_LIST;
+  const hjemmelIdList = oppgave?.resultat.hjemmelIdSet ?? EMPTY_LIST;
 
   const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
     () =>
