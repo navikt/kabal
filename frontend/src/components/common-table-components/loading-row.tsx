@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const LoadingRow = ({ testId, columnCount, behandlingid }: Props) => (
-  <Table.Row data-testid={testId} data-behandlingid={behandlingid}>
+  <Table.Row data-testid={testId} data-behandlingid={behandlingid} data-state="loading">
     {new Array(columnCount).fill(null).map((_, index) => (
       <Table.DataCell key={index}>
         <Container>
