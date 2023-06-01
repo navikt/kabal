@@ -18,12 +18,6 @@ export const PanelToggleButtons = () => {
   } = useDocumentsEnabled();
 
   const {
-    value: smartEditorEnabled = true,
-    setValue: setSmartEditorEnabled,
-    isLoading: smartEditorLoading,
-  } = useSmartEditorEnabled();
-
-  const {
     value: behandlingEnabled = true,
     setValue: setBehandlingEnabled,
     isLoading: behandlingLoading,
@@ -39,14 +33,7 @@ export const PanelToggleButtons = () => {
       >
         Dokumenter
       </TogglePanelButton>
-      <TogglePanelButton
-        checked={smartEditorEnabled}
-        loading={smartEditorLoading}
-        togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
-        testId="klagebehandling-control-panel-toggle-smart-editor"
-      >
-        Brevutforming
-      </TogglePanelButton>
+      <Brevutforming />
       <TogglePanelButton
         checked={behandlingEnabled}
         loading={behandlingLoading}
@@ -57,6 +44,31 @@ export const PanelToggleButtons = () => {
       </TogglePanelButton>
       <Kvalitetsvurdering />
     </ToggleButtonsContainer>
+  );
+};
+
+const Brevutforming = () => {
+  const {
+    value: smartEditorEnabled = true,
+    setValue: setSmartEditorEnabled,
+    isLoading: smartEditorLoading,
+  } = useSmartEditorEnabled();
+
+  const { data: oppgave, isLoading } = useOppgave();
+
+  if (isLoading || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null) {
+    return null;
+  }
+
+  return (
+    <TogglePanelButton
+      checked={smartEditorEnabled}
+      loading={smartEditorLoading}
+      togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
+      testId="klagebehandling-control-panel-toggle-smart-editor"
+    >
+      Brevutforming
+    </TogglePanelButton>
   );
 };
 
@@ -76,7 +88,8 @@ const Kvalitetsvurdering = () => {
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     resultat.utfallId === UtfallEnum.TRUKKET ||
     resultat.utfallId === UtfallEnum.RETUR ||
-    resultat.utfallId === UtfallEnum.UGUNST;
+    resultat.utfallId === UtfallEnum.UGUNST ||
+    oppgave?.feilregistrering !== null;
 
   if (hideKvalitetsvurdering) {
     return null;

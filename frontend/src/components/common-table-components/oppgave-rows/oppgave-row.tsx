@@ -1,6 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { IOppgave } from '@app/types/oppgaver';
@@ -130,6 +131,18 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.Finished:
         return <Table.DataCell key={key}>{isoDateToPretty(oppgave.avsluttetAvSaksbehandlerDate)}</Table.DataCell>;
+      case ColumnKeyEnum.Feilregistrering:
+        return (
+          <Table.DataCell key={key}>
+            <Feilregistrering
+              oppgaveId={oppgave.id}
+              feilregistrert={oppgave.feilregistrert}
+              fagsystemId={oppgave.fagsystemId}
+              variant="secondary-neutral"
+              $position="below"
+            />
+          </Table.DataCell>
+        );
       default:
         return <Table.DataCell key={key} />;
     }

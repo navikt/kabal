@@ -29,7 +29,8 @@ export const Kvalitetsvurdering = (): JSX.Element | null => {
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     utfallId === UtfallEnum.TRUKKET ||
     utfallId === UtfallEnum.RETUR ||
-    utfallId === UtfallEnum.UGUNST;
+    utfallId === UtfallEnum.UGUNST ||
+    oppgave?.feilregistrering !== null;
 
   if (hideKvalitetsvurdering || !shown || isLoading) {
     return null;

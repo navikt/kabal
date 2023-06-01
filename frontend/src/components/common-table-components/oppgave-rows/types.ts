@@ -13,4 +13,5 @@ export enum ColumnKeyEnum {
   Utfall,
   PaaVentTil,
   Finished,
+  Feilregistrering,
 }

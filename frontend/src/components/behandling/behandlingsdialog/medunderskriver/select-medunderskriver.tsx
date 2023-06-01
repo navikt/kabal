@@ -3,7 +3,7 @@ import React from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useUpdateChosenMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
-import { ISaksbehandler } from '@app/types/oppgave-common';
+import { INavEmployee } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
@@ -37,7 +37,7 @@ export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMed
         medunderskriverident === null
           ? null
           : medunderskrivere
-              .map<ISaksbehandler>(({ navIdent, navn }) => ({ navIdent, navn }))
+              .map<INavEmployee>(({ navIdent, navn }) => ({ navIdent, navn }))
               .find(({ navIdent }) => navIdent === medunderskriverident) ?? null,
     });
 

@@ -1,43 +1,18 @@
 import { ErrorMessage, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUser } from '@app/simple-api-state/use-user';
-import { Role } from '@app/types/bruker';
+import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
 import { PageWrapper } from '../page-wrapper';
 
 export const LandingPage = () => {
-  const { data, isLoading } = useUser();
+  const [isLoading, path] = useLandingPagePath();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading) {
     return <Loader size="xlarge" />;
   }
 
-  if (data.roller.includes(Role.KABAL_INNSYN_EGEN_ENHET)) {
-    return <Navigate replace to="enhetensoppgaver" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {
-    return <Navigate replace to="sok" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_SAKSBEHANDLING)) {
-    return <Navigate replace to="/mineoppgaver" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_TILGANGSSTYRING_EGEN_ENHET)) {
-    return <Navigate replace to="tilgangsstyring" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_FAGTEKSTREDIGERING)) {
-    return <Navigate replace to="gode-formuleringer" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_MALTEKSTREDIGERING)) {
-    return <Navigate replace to="maltekster" />;
-  }
-
-  if (data.roller.includes(Role.KABAL_ADMIN)) {
-    return <Navigate replace to="admin" />;
+  if (path !== null) {
+    return <Navigate replace to={path} />;
   }
 
   return (

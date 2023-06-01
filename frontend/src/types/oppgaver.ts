@@ -1,6 +1,6 @@
 import { GenericObject } from '@app/types/types';
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { IPartBase, ISaksbehandler } from './oppgave-common';
+import { INavEmployee, IPartBase } from './oppgave-common';
 
 type Date = string; // LocalDate
 
@@ -25,6 +25,7 @@ export interface IOppgave {
   egenAnsatt: boolean;
   erMedunderskriver: boolean;
   erTildelt: boolean;
+  fagsystemId: string;
   fortrolig: boolean;
   frist: Date | null;
   harMedunderskriver: boolean;
@@ -123,15 +124,16 @@ export interface INameSearchResponse {
 }
 
 export interface ISaksbehandlere {
-  saksbehandlere: ISaksbehandler[];
+  saksbehandlere: INavEmployee[];
 }
 
 export interface IOppgaverResponse {
   aapneBehandlinger: string[];
   avsluttedeBehandlinger: string[];
+  feilregistrerteBehandlinger: string[];
 }
 
 export interface ITildelingResponse {
-  saksbehandler: ISaksbehandler | null;
+  saksbehandler: INavEmployee | null;
   modified: Date;
 }

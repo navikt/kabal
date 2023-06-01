@@ -23,6 +23,7 @@ const TABLE_HEADERS: (string | null)[] = [
   'På vent til',
   'Utfall',
   null,
+  'Feilregistrering',
 ];
 
 const COLUMNS: ColumnKeyEnum[] = [
@@ -36,6 +37,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
+  ColumnKeyEnum.Feilregistrering,
 ];
 
 export const OppgaverPaaVentTable = () => {

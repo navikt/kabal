@@ -1,6 +1,6 @@
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { MedunderskriverFlyt } from '../kodeverk';
-import { ISakenGjelder, ISaksbehandler, IVedlegg } from '../oppgave-common';
+import { INavEmployee, ISakenGjelder, IVedlegg } from '../oppgave-common';
 
 export interface ITilknyttDocumentResponse extends IModifiedResponse {
   file: IVedlegg;
@@ -12,15 +12,15 @@ export interface IVedtakFullfoertResponse extends IModifiedResponse {
 
 export interface IMedunderskrivereResponse {
   tema: string;
-  medunderskrivere: ISaksbehandler[];
+  medunderskrivere: INavEmployee[];
 }
 
 export interface IMedunderskriverResponse {
-  medunderskriver: ISaksbehandler | null;
+  medunderskriver: INavEmployee | null;
 }
 
 export interface ISaksbehandlerResponse {
-  saksbehandler: ISaksbehandler | null;
+  saksbehandler: INavEmployee | null;
 }
 
 export interface IMedunderskriverflytResponse {

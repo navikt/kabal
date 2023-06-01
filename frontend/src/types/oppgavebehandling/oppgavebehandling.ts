@@ -1,5 +1,5 @@
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IPart, ISakenGjelder, ISaksbehandler, IVedlegg } from '../oppgave-common';
+import { INavEmployee, IPart, ISakenGjelder, IVedlegg } from '../oppgave-common';
 
 type UUID = string;
 
@@ -29,7 +29,7 @@ export interface IOppgavebehandlingBase {
     id: UUID;
     version: KvalitetsvurderingVersion;
   } | null;
-  medunderskriver: ISaksbehandler | null;
+  medunderskriver: INavEmployee | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
   mottattVedtaksinstans: string | null; // LocalDate
@@ -44,10 +44,11 @@ export interface IOppgavebehandlingBase {
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
-  tildeltSaksbehandler: ISaksbehandler | null;
+  tildeltSaksbehandler: INavEmployee | null;
   tildeltSaksbehandlerEnhet: string | null;
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
+  fagsystemId: string;
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {
@@ -74,8 +75,8 @@ interface Resultat {
 }
 
 export interface IFeilregistrering {
-  navIdent: string;
   registered: string;
   reason: string;
   fagsystemId: string;
+  feilregistrertAv: INavEmployee;
 }

@@ -1,5 +1,5 @@
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling';
-import { ISaksbehandler } from '@app/types/oppgave-common';
+import { INavEmployee } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -20,12 +20,12 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
           medunderskriverFlyt,
         } = data;
 
-        const saksbehandler: ISaksbehandler | null =
+        const saksbehandler: INavEmployee | null =
           tildeltSaksbehandlerident === null || tildeltSaksbehandlerNavn === null
             ? null
             : { navIdent: tildeltSaksbehandlerident, navn: tildeltSaksbehandlerNavn };
 
-        const medunderskriver: ISaksbehandler | null =
+        const medunderskriver: INavEmployee | null =
           medunderskriverident === null || medunderskriverNavn === null
             ? null
             : { navIdent: medunderskriverident, navn: medunderskriverNavn };

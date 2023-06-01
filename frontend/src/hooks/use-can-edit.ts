@@ -18,7 +18,8 @@ export const useCanEdit = () => {
 
     return (
       !oppgavebehandling.isAvsluttetAvSaksbehandler &&
-      oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent
+      oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent &&
+      oppgavebehandling.feilregistrering === null
     );
   }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
 };

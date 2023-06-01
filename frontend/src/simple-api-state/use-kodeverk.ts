@@ -21,6 +21,10 @@ interface IHjemmelNameWithLovkilde {
 type Hjemler = Record<string, string>;
 type RegistreringshjemlerMap = Record<string, IHjemmelNameWithLovkilde>;
 
+interface IFagsystem extends IKodeverkValue {
+  modernized: boolean;
+}
+
 const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 
 const kodeverk = new SimpleApiState<IKodeverk>(API_PREFIX);
@@ -35,6 +39,7 @@ const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenhet
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
 const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX}/sakstypertoutfall`);
 const hjemler = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/hjemler`);
+const fagsystemer = new SimpleApiState<IFagsystem[]>(`${API_PREFIX}/fagsystemer`);
 
 export const useKodeverk = () => useSimpleApiState(kodeverk);
 export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
@@ -48,3 +53,4 @@ export const useKlageenheter = () => useSimpleApiState(klageenheter);
 export const useUtfall = () => useSimpleApiState(utfall);
 export const useSakstyperToUtfall = () => useSimpleApiState(sakstyperToUtfall);
 export const useHjemler = () => useSimpleApiState(hjemler);
+export const useFagsystemer = () => useSimpleApiState(fagsystemer);
