@@ -24,7 +24,7 @@ export const DeassignOppgave = () => {
   return (
     <Container ref={ref}>
       <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <Button
+      <StyledButton
         variant="secondary"
         size="small"
         onClick={() => setIsOpen(!isOpen)}
@@ -32,7 +32,7 @@ export const DeassignOppgave = () => {
         icon={<Icon aria-hidden />}
       >
         Legg tilbake med ny hjemmel
-      </Button>
+      </StyledButton>
     </Container>
   );
 };
@@ -41,7 +41,9 @@ const Container = styled.section`
   display: flex;
   flex-direction: row;
   position: relative;
-  gap: 16px;
+`;
+
+const StyledButton = styled(Button)`
   min-width: 275px;
 `;
 

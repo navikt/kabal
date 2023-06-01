@@ -12,30 +12,30 @@ interface Props {
   onRefresh: () => void;
   isLoading: boolean;
 }
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Fullført', 'Saksbehandler', null];
+
+const TABLE_HEADERS: (string | null)[] = ['Tidspunkt for feilregistrering', 'Type', 'Ytelse', 'Hjemmel', null];
 const COLUMNS: ColumnKeyEnum[] = [
+  ColumnKeyEnum.Feilregistrering,
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
-  ColumnKeyEnum.Finished,
-  ColumnKeyEnum.Tildeling,
   ColumnKeyEnum.Open,
 ];
 
-export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
+export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
 
   if (oppgaveIds.length === 0) {
-    return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
+    return <Alert variant="info">Ingen feilregistrerte oppgaver</Alert>;
   }
 
   return (
     <div>
-      <Heading size="medium">Fullførte oppgaver siste 12 måneder</Heading>
-      <Table data-testid="search-result-fullfoerte-oppgaver" zebraStripes>
+      <Heading size="medium">Feilregistrerte oppgaver</Heading>
+      <Table data-testid="search-result-feilregistrerte-oppgaver" zebraStripes>
         <TableHeader headers={TABLE_HEADERS} />
         <OppgaveRows
-          testId="search-result-fullfoerte-oppgaver"
+          testId="search-result-feilregistrerte-oppgaver"
           oppgaver={oppgaver}
           columns={COLUMNS}
           isLoading={false}
@@ -46,10 +46,10 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
         <TableFooter
           {...footerProps}
           columnCount={COLUMNS.length}
+          settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
           onRefresh={onRefresh}
           isLoading={isLoading}
-          settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
-          testId="search-result-fullfoerte-oppgaver-footer"
+          testId="search-result-feilregistrerte-oppgaver-footer"
         />
       </Table>
     </div>

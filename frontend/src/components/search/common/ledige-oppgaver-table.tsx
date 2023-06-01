@@ -1,5 +1,6 @@
 import { Alert, Heading, Table } from '@navikt/ds-react';
 import React from 'react';
+import styled from 'styled-components';
 import { TableFooter } from '@app/components/common-table-components/footer';
 import { TableHeader } from '@app/components/common-table-components/header';
 import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
@@ -12,30 +13,43 @@ interface Props {
   onRefresh: () => void;
   isLoading: boolean;
 }
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Fullført', 'Saksbehandler', null];
+
+const TABLE_HEADERS: (string | null)[] = [
+  'Type',
+  'Ytelse',
+  'Hjemmel',
+  'Alder',
+  'Frist',
+  'Tildeling',
+  null,
+  'Feilregistrering',
+];
+
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
-  ColumnKeyEnum.Finished,
-  ColumnKeyEnum.Tildeling,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.Oppgavestyring,
   ColumnKeyEnum.Open,
+  ColumnKeyEnum.Feilregistrering,
 ];
 
-export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
+export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
+  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_ACTIVE, oppgaveIds);
 
   if (oppgaveIds.length === 0) {
-    return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
+    return <Alert variant="info">Ingen oppgaver</Alert>;
   }
 
   return (
     <div>
-      <Heading size="medium">Fullførte oppgaver siste 12 måneder</Heading>
-      <Table data-testid="search-result-fullfoerte-oppgaver" zebraStripes>
+      <Heading size="medium">Oppgaver</Heading>
+      <StyledTable data-testid="search-result-active-oppgaver" zebraStripes>
         <TableHeader headers={TABLE_HEADERS} />
         <OppgaveRows
-          testId="search-result-fullfoerte-oppgaver"
+          testId="search-result-active-oppgaver"
           oppgaver={oppgaver}
           columns={COLUMNS}
           isLoading={false}
@@ -43,15 +57,21 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
           isError={false}
           pageSize={footerProps.pageSize}
         />
+
         <TableFooter
           {...footerProps}
           columnCount={COLUMNS.length}
           onRefresh={onRefresh}
           isLoading={isLoading}
-          settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
-          testId="search-result-fullfoerte-oppgaver-footer"
+          settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE}
+          testId="search-result-active-oppgaver-footer"
         />
-      </Table>
+      </StyledTable>
     </div>
   );
 };
+
+const StyledTable = styled(Table)`
+  max-width: 2500px;
+  width: 100%;
+`;

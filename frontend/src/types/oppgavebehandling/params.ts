@@ -1,5 +1,5 @@
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IDocumentReference, IPart, ISaksbehandler } from '../oppgave-common';
+import { IDocumentReference, INavEmployee, IPart } from '../oppgave-common';
 import { ISmartEditor } from '../smart-editor/smart-editor';
 
 export interface IOppgavebehandlingBaseParams {
@@ -44,7 +44,7 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
 export type ICheckDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
 
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
-  medunderskriver: ISaksbehandler | null;
+  medunderskriver: INavEmployee | null;
 }
 
 export interface ISwitchMedunderskriverflytParams {

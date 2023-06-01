@@ -2,8 +2,8 @@ import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
 import { useSearchOppgaverByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
+import { LedigeOppgaverTable } from '../common/ledige-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/styled-components';
 
 interface Props {
@@ -37,7 +37,7 @@ export const Oppgaver = ({ open, fnr }: Props) => {
 
   return (
     <StyledOppgaverContainer data-testid="search-result-expanded-container">
-      <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} onRefresh={refetch} isLoading={isFetching} />
+      <LedigeOppgaverTable oppgaveIds={aapneBehandlinger} onRefresh={refetch} isLoading={isFetching} />
       <FullfoerteOppgaverTable oppgaveIds={avsluttedeBehandlinger} onRefresh={refetch} isLoading={isFetching} />
     </StyledOppgaverContainer>
   );

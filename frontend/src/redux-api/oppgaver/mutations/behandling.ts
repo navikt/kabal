@@ -176,5 +176,6 @@ export const {
   useFinishOppgavebehandlingMutation,
   useUpdateInnsendingshjemlerMutation,
   useUpdateFullmektigMutation,
+  useSetFeilregistrertMutation,
   useLazySearchFullmektigQuery,
 } = behandlingerMutationSlice;

@@ -23,6 +23,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Medunderskriverflyt,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.Oppgavestyring,
+  ColumnKeyEnum.Feilregistrering,
 ];
 
 export const MineOppgaverTable = () => {
@@ -77,7 +78,7 @@ export const MineOppgaverTable = () => {
         />
         <TableFooter
           {...footerProps}
-          columnCount={10}
+          columnCount={COLUMNS.length}
           settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
           onRefresh={refetch}
           isLoading={isLoading || isFetching}

@@ -9,7 +9,7 @@ export const VentButton = () => {
   const [settPaavent, { isLoading: sattPaaVentIsLoading }] = useSattPaaVentMutation();
   const [deleteSettPaavent, { isLoading: deleteSattPaaVentIsLoading }] = useDeleteSattPaaVentMutation();
 
-  if (oppgaveIsloading || typeof data === 'undefined') {
+  if (oppgaveIsloading || typeof data === 'undefined' || data.feilregistrering !== null) {
     return null;
   }
 
