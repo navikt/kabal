@@ -35,7 +35,10 @@ export const EnhetensOppgaverPaaVentTable = () => {
           enhetId: bruker.ansattEnhet.id,
         };
 
-  const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams);
+  const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.ENHETENS_VENTENDE,

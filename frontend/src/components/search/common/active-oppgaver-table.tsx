@@ -66,7 +66,10 @@ interface RowProps {
 }
 
 const Row = ({ oppgaveId, columnCount }: RowProps) => {
-  const { data: oppgave, isLoading } = useGetOppgaveQuery(oppgaveId);
+  const { data: oppgave, isLoading } = useGetOppgaveQuery(oppgaveId, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   if (isLoading || typeof oppgave === 'undefined') {
     return <LoadingRow columnCount={columnCount} testId="search-result-active-oppgave" behandlingid={oppgaveId} />;

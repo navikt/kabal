@@ -36,7 +36,10 @@ export const MineOppgaverTable = () => {
   const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
     typeof bruker === 'undefined' ? skipToken : { sortering, rekkefoelge };
 
-  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(queryParams);
+  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(queryParams, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.MINE_UFERDIGE,

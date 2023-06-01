@@ -12,15 +12,15 @@ import { Ytelse } from '../../common-table-components/ytelse';
 import { Type } from '../../type/type';
 
 interface Props {
-  finishedOppgaver: string[];
+  oppgaveIds: string[];
   onRefresh: () => void;
   isLoading: boolean;
 }
 
-export const FullfoerteOppgaverTable = ({ finishedOppgaver, onRefresh, isLoading }: Props) => {
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, finishedOppgaver);
+export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
+  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
 
-  if (finishedOppgaver.length === 0) {
+  if (oppgaveIds.length === 0) {
     return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
   }
 

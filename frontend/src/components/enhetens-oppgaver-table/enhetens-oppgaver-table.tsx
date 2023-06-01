@@ -55,7 +55,10 @@ export const EnhetensOppgaverTable = () => {
           tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams);
+  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.ENHETENS_UFERDIGE,
