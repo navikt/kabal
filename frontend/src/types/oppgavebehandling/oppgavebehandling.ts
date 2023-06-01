@@ -49,11 +49,11 @@ export interface IOppgavebehandlingBase {
   ytelseId: string;
 }
 
-export interface IKlagebehandling extends IOppgavebehandlingBase {
+interface IKlagebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.KLAGE;
 }
 
-export interface IAnkebehandling extends IOppgavebehandlingBase {
+interface IAnkebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE;
 }
 
