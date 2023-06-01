@@ -33,7 +33,7 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
   }
 
   return (
-    <Table.Row data-testid={rowTestId} data-behandlingid={oppgaveId}>
+    <Table.Row data-testid={rowTestId} data-behandlingid={oppgaveId} data-state="ready">
       {getColumns(columns, oppgave)}
     </Table.Row>
   );
