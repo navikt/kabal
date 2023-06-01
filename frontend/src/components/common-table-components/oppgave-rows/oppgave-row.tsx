@@ -24,7 +24,10 @@ interface Props {
 }
 
 export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element => {
-  const { data: oppgave, isLoading } = useGetOppgaveQuery(oppgaveId);
+  const { data: oppgave, isLoading } = useGetOppgaveQuery(oppgaveId, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const rowTestId = `${testId}-row`;
 

@@ -20,7 +20,7 @@ export const Result = ({ person, aapneBehandlinger, avsluttedeBehandlinger, ...f
     </StyledFnr>
     <StyledOppgaverContainer>
       <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} {...footerProps} />
-      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeBehandlinger} {...footerProps} />
+      <FullfoerteOppgaverTable oppgaveIds={avsluttedeBehandlinger} {...footerProps} />
     </StyledOppgaverContainer>
   </StyledFnrResult>
 );

@@ -52,7 +52,10 @@ export const OppgaveTable = (): JSX.Element => {
   const queryParams: typeof skipToken | LedigeOppgaverParams =
     typeof settingsData === 'undefined' ? skipToken : { sortering, rekkefoelge, ytelser, typer, hjemler };
 
-  const { data, isFetching, isLoading, isError, refetch } = useGetLedigeOppgaverQuery(queryParams);
+  const { data, isFetching, isLoading, isError, refetch } = useGetLedigeOppgaverQuery(queryParams, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
     queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 }

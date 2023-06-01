@@ -12,7 +12,10 @@ interface Props {
 }
 
 export const Oppgaver = ({ open, fnr }: Props) => {
-  const { data, isFetching, isUninitialized, refetch } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken);
+  const { data, isFetching, isUninitialized, refetch } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   if (!open) {
     return null;
@@ -30,16 +33,12 @@ export const Oppgaver = ({ open, fnr }: Props) => {
     return <Alert variant="info">Ingen registrerte oppgaver på denne personen i Kabal</Alert>;
   }
 
-  const { aapneBehandlinger: aapneKlagebehandlinger, avsluttedeBehandlinger: avsluttedeKlagebehandlinger } = data;
+  const { aapneBehandlinger, avsluttedeBehandlinger } = data;
 
   return (
     <StyledOppgaverContainer data-testid="search-result-expanded-container">
-      <ActiveOppgaverTable oppgaveIds={aapneKlagebehandlinger} onRefresh={refetch} isLoading={isFetching} />
-      <FullfoerteOppgaverTable
-        finishedOppgaver={avsluttedeKlagebehandlinger}
-        onRefresh={refetch}
-        isLoading={isFetching}
-      />
+      <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} onRefresh={refetch} isLoading={isFetching} />
+      <FullfoerteOppgaverTable oppgaveIds={avsluttedeBehandlinger} onRefresh={refetch} isLoading={isFetching} />
     </StyledOppgaverContainer>
   );
 };
