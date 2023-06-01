@@ -1,11 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { migrateLegacyPart } from '@app/domain/legacy-part-migration';
-import { getFullName } from '@app/domain/name';
 import { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { isApiRejectionError } from '@app/types/errors';
-import { SexEnum } from '@app/types/kodeverk';
-import { LegacyOppgavebehandling, LegacySakenGjelderResponse } from '@app/types/legacy';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
@@ -46,24 +42,6 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
             toast.error(message);
           }
         }
-      },
-      transformResponse: (behandling: LegacyOppgavebehandling | IOppgavebehandling): IOppgavebehandling => {
-        if ('id' in behandling.klager && 'id' in behandling.sakenGjelder) {
-          return behandling as IOppgavebehandling;
-        }
-
-        const { klager, prosessfullmektig, sakenGjelder } = behandling as LegacyOppgavebehandling;
-
-        return {
-          ...behandling,
-          klager: migrateLegacyPart(klager),
-          prosessfullmektig: prosessfullmektig === null ? null : migrateLegacyPart(prosessfullmektig),
-          sakenGjelder: {
-            id: sakenGjelder.person?.foedselsnummer ?? sakenGjelder.virksomhet?.virksomhetsnummer ?? '',
-            name: getFullName(sakenGjelder.person?.navn) ?? sakenGjelder.virksomhet?.navn,
-            sex: sakenGjelder.person?.kjoenn ?? SexEnum.UNKNOWN,
-          },
-        };
       },
       providesTags: (result) =>
         typeof result === 'undefined'
@@ -156,17 +134,6 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
             toast.error(message);
           }
         }
-      },
-      transformResponse: (response: LegacySakenGjelderResponse | ISakenGjelder) => {
-        if ('id' in response && 'name' in response && 'sex' in response) {
-          return response;
-        }
-
-        return {
-          id: response.sakenGjelder.fnr,
-          name: response.sakenGjelder.navn,
-          sex: SexEnum.UNKNOWN, // Old API response is missing this field.
-        };
       },
     }),
     validate: builder.query<IApiValidationResponse, string>({
