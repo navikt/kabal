@@ -1,15 +1,20 @@
 import React from 'react';
-import { IPersonAndOppgaverResponse } from '@app/types/oppgaver';
+import { IPartBase } from '@app/types/oppgave-common';
+import { IOppgaverResponse } from '@app/types/oppgaver';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledFnr, StyledFnrResult, StyledName, StyledOppgaverContainer } from '../common/styled-components';
 
-export const Result = ({ id, name, aapneBehandlinger, avsluttedeBehandlinger }: IPersonAndOppgaverResponse) => (
-  <StyledFnrResult key={id} data-testid="search-result">
-    <StyledName>{name}</StyledName>
+interface Props extends IOppgaverResponse {
+  person: IPartBase;
+}
+
+export const Result = ({ person, aapneBehandlinger, avsluttedeBehandlinger }: Props) => (
+  <StyledFnrResult key={person.id} data-testid="search-result">
+    <StyledName>{person.name}</StyledName>
     <StyledFnr>
-      <CopyFnrButton fnr={id} />
+      <CopyFnrButton fnr={person.id} />
     </StyledFnr>
     <StyledOppgaverContainer>
       <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} />

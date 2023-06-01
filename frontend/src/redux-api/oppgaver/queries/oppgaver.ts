@@ -1,13 +1,14 @@
 import { getFullName } from '@app/domain/name';
 import { queryStringify } from '@app/functions/query-string';
-import { LegacyNameSearchResponse, LegacyPersonAndOppgaverResponse } from '@app/types/legacy';
+import { LegacyNameSearchResponse } from '@app/types/legacy';
+import { IPartBase } from '@app/types/oppgave-common';
 import {
   ApiResponse,
   EnhetensFerdigstilteOppgaverParams,
   EnhetensUferdigeOppgaverParams,
   INameSearchParams,
   INameSearchResponse,
-  IPersonAndOppgaverResponse,
+  IOppgaverResponse,
   ISaksbehandlere,
   LedigeOppgaverParams,
   MineFerdigstilteOppgaverParams,
@@ -18,15 +19,30 @@ import {
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 
+interface IdObject {
+  id: string;
+}
+
 interface OldApiResponse {
-  behandlinger: { id: string }[];
+  behandlinger: IdObject[];
   antallTreffTotalt: number;
 }
 
-const transformResponse = ({ behandlinger, ...rest }: OldApiResponse) => ({
-  behandlinger: behandlinger.map(({ id }) => id),
-  ...rest,
-});
+interface OldSearchResponse {
+  aapneBehandlinger: IdObject[];
+  avsluttedeBehandlinger: IdObject[];
+}
+
+const transformResponse = ({ behandlinger, ...rest }: OldApiResponse | ApiResponse) => {
+  if (isStringArray(behandlinger)) {
+    return { behandlinger, ...rest };
+  }
+
+  return {
+    behandlinger: behandlinger.map(({ id }) => id),
+    ...rest,
+  };
+};
 
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -72,7 +88,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
       query: (queryParams) => `/kabal-search/antalloppgavermedutgaattefrister${queryStringify(queryParams)}`,
     }),
-    nameSearch: builder.query<INameSearchResponse, INameSearchParams>({
+    searchPeopleByName: builder.query<INameSearchResponse, INameSearchParams>({
       query: (body) => ({ url: `/kabal-search/search/name`, method: 'POST', body }),
       transformResponse: (res: LegacyNameSearchResponse | INameSearchResponse): INameSearchResponse => ({
         people: res.people.map((person) => ({
@@ -81,29 +97,26 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         })),
       }),
     }),
-    personAndOppgaver: builder.query<IPersonAndOppgaverResponse, string>({
+    searchOppgaverByFnr: builder.query<IOppgaverResponse, string>({
       query: (query) => ({
-        url: `/kabal-search/search/personogoppgaver`,
+        url: `/kabal-search/search/oppgaver`,
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
         body: { query },
       }),
       transformResponse: ({
-        aapneBehandlinger,
-        avsluttedeBehandlinger,
-        ...rest
-      }: LegacyPersonAndOppgaverResponse | IPersonAndOppgaverResponse) => {
-        const id = 'id' in rest ? rest.id : rest.fnr;
-        const name = 'name' in rest ? rest.name : getFullName(rest.navn);
-
-        return {
-          aapneBehandlinger: isStringArray(aapneBehandlinger) ? aapneBehandlinger : aapneBehandlinger.map((b) => b.id),
-          avsluttedeBehandlinger: isStringArray(avsluttedeBehandlinger)
-            ? avsluttedeBehandlinger
-            : avsluttedeBehandlinger.map((b) => b.id),
-          id,
-          name,
-        };
-      },
+        aapneBehandlinger: aapne,
+        avsluttedeBehandlinger: avsluttede,
+      }: OldSearchResponse | IOppgaverResponse): IOppgaverResponse => ({
+        aapneBehandlinger: isStringArray(aapne) ? aapne : aapne.map(({ id }) => id),
+        avsluttedeBehandlinger: isStringArray(avsluttede) ? avsluttede : avsluttede.map(({ id }) => id),
+      }),
+    }),
+    searchPersonByFnr: builder.query<IPartBase, string>({
+      query: (identifikator) => ({
+        url: `/kabal-api/searchperson`,
+        method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
+        body: { identifikator },
+      }),
     }),
     getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,
@@ -121,7 +134,8 @@ export const {
   useGetMineVentendeOppgaverQuery,
   useGetLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
-  usePersonAndOppgaverQuery,
-  useLazyNameSearchQuery,
+  useSearchOppgaverByFnrQuery,
+  useLazySearchPeopleByNameQuery,
   useGetSaksbehandlereInEnhetQuery,
+  useSearchPersonByFnrQuery,
 } = oppgaverQuerySlice;

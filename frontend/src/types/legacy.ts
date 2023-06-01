@@ -4,7 +4,6 @@ import {
   IKlagebehandling,
   ITrygderettsankebehandling,
 } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { IOppgave } from '@app/types/oppgaver';
 
 interface LegacyKlagebehandling extends Omit<IKlagebehandling, 'klager' | 'sakenGjelder' | 'prosessfullmektig'> {
   klager: LegacyPartView;
@@ -54,13 +53,6 @@ interface LegacyVirksomhetView {
 export interface LegacyPartView {
   person: LegacyPersonView | null;
   virksomhet: LegacyVirksomhetView | null;
-}
-
-export interface LegacyPersonAndOppgaverResponse {
-  fnr: string;
-  navn: LegacyNavn;
-  aapneBehandlinger: IOppgave[] | string[];
-  avsluttedeBehandlinger: IOppgave[] | string[];
 }
 
 export interface LegacyNameSearchResponse {

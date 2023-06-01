@@ -125,7 +125,7 @@ export interface ISaksbehandlere {
   saksbehandlere: ISaksbehandler[];
 }
 
-export interface IPersonAndOppgaverResponse extends IPartBase {
+export interface IOppgaverResponse {
   aapneBehandlinger: string[];
   avsluttedeBehandlinger: string[];
 }
