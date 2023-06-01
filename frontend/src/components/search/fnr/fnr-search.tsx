@@ -1,7 +1,8 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
-import { usePersonAndOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { useSearchOppgaverByFnrQuery, useSearchPersonByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Result } from './result';
 
 const FNR_REGEX = /^\s*\d{6}\s*\d{5}\s*$/;
@@ -14,25 +15,34 @@ interface Props {
 
 export const FnrSearch = ({ queryString }: Props) => {
   const query = useCleanQuery(queryString);
-  const { data, isFetching } = usePersonAndOppgaverQuery(query);
+  const { data: oppgaver, isFetching: oppgaverIsFetching } = useSearchOppgaverByFnrQuery(query);
+  const { data: person, isFetching: personIsFetching } = useSearchPersonByFnrQuery(query);
 
   if (query === skipToken) {
     return null;
   }
 
-  if (isFetching) {
+  if (oppgaverIsFetching || personIsFetching) {
     return <Loader size="xlarge" />;
   }
 
-  if (typeof data === 'undefined') {
+  if (typeof oppgaver === 'undefined') {
     return (
       <Alert variant="info" data-testid="search-result-none">
-        Ingen registrerte klager på denne personen i Kabal
+        Ingen registrerte oppgaver på denne personen i Kabal.
       </Alert>
     );
   }
 
-  return <Result {...data} />;
+  if (typeof person === 'undefined') {
+    return (
+      <Alert variant="info" data-testid="search-result-none">
+        Fant ingen person med ID-nummer {formatFoedselsnummer(query)}.
+      </Alert>
+    );
+  }
+
+  return <Result {...oppgaver} person={person} />;
 };
 
 const useCleanQuery = (queryString: string): string | typeof skipToken => {

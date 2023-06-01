@@ -1,7 +1,7 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
-import { usePersonAndOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useSearchOppgaverByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { ActiveOppgaverTable } from '../common/active-oppgaver-table';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/styled-components';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Oppgaver = ({ open, fnr }: Props) => {
-  const { data, isFetching, isUninitialized } = usePersonAndOppgaverQuery(open ? fnr : skipToken);
+  const { data, isFetching, isUninitialized } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken);
 
   if (!open) {
     return null;
@@ -27,7 +27,7 @@ export const Oppgaver = ({ open, fnr }: Props) => {
       return null;
     }
 
-    return <Alert variant="info">Ingen registrerte klager på denne personen i Kabal</Alert>;
+    return <Alert variant="info">Ingen registrerte oppgaver på denne personen i Kabal</Alert>;
   }
 
   const { aapneBehandlinger: aapneKlagebehandlinger, avsluttedeBehandlinger: avsluttedeKlagebehandlinger } = data;

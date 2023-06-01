@@ -1,7 +1,7 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useMemo } from 'react';
-import { useLazyNameSearchQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useLazySearchPeopleByNameQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { INameSearchParams } from '@app/types/oppgaver';
 import { SearchResults } from './searchresults';
 
@@ -14,9 +14,7 @@ const containsNumber = (query: string) => NUMBER_REGEX.test(query);
 
 export const NameSearch = ({ queryString }: NameSearchProps) => {
   const query = useGetQuery(queryString);
-  // const { data, isFetching } = useNameSearchQuery(query);
-
-  const [search, { data, isFetching }] = useLazyNameSearchQuery();
+  const [search, { data, isFetching }] = useLazySearchPeopleByNameQuery();
 
   useEffect(() => {
     if (query === skipToken) {
