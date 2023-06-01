@@ -55,7 +55,7 @@ export const EnhetensOppgaverTable = () => {
           tildelteSaksbehandlere: filters.tildeltSaksbehandler,
         };
 
-  const { data, isLoading, isFetching, isError } = useGetEnhetensUferdigeOppgaverQuery(queryParams);
+  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.ENHETENS_UFERDIGE,
@@ -95,6 +95,8 @@ export const EnhetensOppgaverTable = () => {
         <TableFooter
           {...footerProps}
           columnCount={8}
+          onRefresh={refetch}
+          isLoading={isLoading || isFetching}
           settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
           testId="enhetens-oppgaver-table-footer"
         />

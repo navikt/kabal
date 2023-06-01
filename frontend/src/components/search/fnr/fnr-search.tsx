@@ -15,7 +15,7 @@ interface Props {
 
 export const FnrSearch = ({ queryString }: Props) => {
   const query = useCleanQuery(queryString);
-  const { data: oppgaver, isFetching: oppgaverIsFetching } = useSearchOppgaverByFnrQuery(query);
+  const { data: oppgaver, isFetching: oppgaverIsFetching, refetch } = useSearchOppgaverByFnrQuery(query);
   const { data: person, isFetching: personIsFetching } = useSearchPersonByFnrQuery(query);
 
   if (query === skipToken) {
@@ -42,7 +42,7 @@ export const FnrSearch = ({ queryString }: Props) => {
     );
   }
 
-  return <Result {...oppgaver} person={person} />;
+  return <Result {...oppgaver} person={person} onRefresh={refetch} isLoading={oppgaverIsFetching} />;
 };
 
 const useCleanQuery = (queryString: string): string | typeof skipToken => {

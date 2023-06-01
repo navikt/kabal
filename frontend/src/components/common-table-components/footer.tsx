@@ -1,5 +1,7 @@
-import { Pagination, Table } from '@navikt/ds-react';
+import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
+import { Button, Pagination, Table } from '@navikt/ds-react';
 import React from 'react';
+import styled from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
@@ -15,14 +17,39 @@ interface Props {
   columnCount: number;
   setPage: (page: number) => void;
   testId: string;
+  onRefresh: () => void;
+  isLoading: boolean;
 }
 
-export const TableFooter = ({ columnCount, from, to, total, page, pageSize, settingsKey, setPage, testId }: Props) => (
+export const TableFooter = ({
+  columnCount,
+  from,
+  to,
+  total,
+  page,
+  pageSize,
+  settingsKey,
+  setPage,
+  testId,
+  onRefresh,
+  isLoading,
+}: Props) => (
   <tfoot>
     <Table.Row>
       <Table.DataCell colSpan={columnCount}>
         <StyledFooterContent>
-          <PageInfo total={total} fromNumber={from} toNumber={to} />
+          <Left>
+            <Button
+              size="small"
+              variant="tertiary-neutral"
+              onClick={onRefresh}
+              loading={isLoading}
+              icon={<ArrowsCirclepathIcon aria-hidden />}
+              title="Oppdater"
+              data-testid={`${testId}-refresh-button`}
+            />
+            <PageInfo total={total} fromNumber={from} toNumber={to} />
+          </Left>
           {pageSize >= total ? null : (
             <Pagination
               page={page}
@@ -37,3 +64,9 @@ export const TableFooter = ({ columnCount, from, to, total, page, pageSize, sett
     </Table.Row>
   </tfoot>
 );
+
+const Left = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;

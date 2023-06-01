@@ -36,7 +36,7 @@ export const MineOppgaverTable = () => {
   const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
     typeof bruker === 'undefined' ? skipToken : { sortering, rekkefoelge };
 
-  const { data, isError, isLoading, isFetching } = useGetMineUferdigeOppgaverQuery(queryParams);
+  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.MINE_UFERDIGE,
@@ -44,40 +44,44 @@ export const MineOppgaverTable = () => {
   );
 
   return (
-    <StyledMineOppgaverTable
-      data-testid="mine-oppgaver-table"
-      zebraStripes
-      sort={{
-        orderBy: filters.sorting[0],
-        direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
-      }}
-      onSortChange={(field?: string) => {
-        if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
-          const [currentField, currentOrder] = filters.sorting;
+    <>
+      <StyledMineOppgaverTable
+        data-testid="mine-oppgaver-table"
+        zebraStripes
+        sort={{
+          orderBy: filters.sorting[0],
+          direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
+        }}
+        onSortChange={(field?: string) => {
+          if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
+            const [currentField, currentOrder] = filters.sorting;
 
-          const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
+            const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
 
-          setFilters({ sorting: [field, order] });
-        }
-      }}
-    >
-      <TableHeader />
-      <OppgaveRows
-        testId="mine-oppgaver-table"
-        oppgaver={oppgaver}
-        columns={COLUMNS}
-        pageSize={footerProps.pageSize}
-        isError={isError || isErrorUser}
-        isLoading={isLoading || isLoadingUser}
-        isFetching={isFetching}
-      />
-      <TableFooter
-        {...footerProps}
-        columnCount={10}
-        settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
-        testId="mine-oppgaver-table-footer"
-      />
-    </StyledMineOppgaverTable>
+            setFilters({ sorting: [field, order] });
+          }
+        }}
+      >
+        <TableHeader />
+        <OppgaveRows
+          testId="mine-oppgaver-table"
+          oppgaver={oppgaver}
+          columns={COLUMNS}
+          pageSize={footerProps.pageSize}
+          isError={isError || isErrorUser}
+          isLoading={isLoading || isLoadingUser}
+          isFetching={isFetching}
+        />
+        <TableFooter
+          {...footerProps}
+          columnCount={10}
+          settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
+          onRefresh={refetch}
+          isLoading={isLoading || isFetching}
+          testId="mine-oppgaver-table-footer"
+        />
+      </StyledMineOppgaverTable>
+    </>
   );
 };
 

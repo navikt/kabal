@@ -13,9 +13,11 @@ import { Type } from '../../type/type';
 
 interface Props {
   finishedOppgaver: string[];
+  onRefresh: () => void;
+  isLoading: boolean;
 }
 
-export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
+export const FullfoerteOppgaverTable = ({ finishedOppgaver, onRefresh, isLoading }: Props) => {
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, finishedOppgaver);
 
   if (finishedOppgaver.length === 0) {
@@ -44,6 +46,8 @@ export const FullfoerteOppgaverTable = ({ finishedOppgaver }: Props) => {
         <TableFooter
           {...footerProps}
           columnCount={8}
+          onRefresh={onRefresh}
+          isLoading={isLoading}
           settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
           testId="search-result-fullfoerte-oppgaver-footer"
         />
