@@ -32,7 +32,7 @@ export const FullfoerteOppgaverTable = () => {
     ferdigstiltDaysAgo: HUNDRED_YEARS,
   };
 
-  const { data, isLoading, isFetching, isError } = useGetMineFerdigstilteOppgaverQuery(queryParams);
+  const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.MINE_FERDIGE, data?.behandlinger);
 
@@ -54,6 +54,8 @@ export const FullfoerteOppgaverTable = () => {
         <TableFooter
           {...footerProps}
           columnCount={TABLE_HEADERS.length}
+          onRefresh={refetch}
+          isLoading={isLoading || isFetching}
           settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
           testId="fullfoerte-oppgaver-table-footer"
         />

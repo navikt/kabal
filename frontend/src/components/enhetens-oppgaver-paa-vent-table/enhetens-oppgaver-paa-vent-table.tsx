@@ -35,7 +35,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
           enhetId: bruker.ansattEnhet.id,
         };
 
-  const { data, isError, isFetching, isLoading } = useGetEnhetensVentendeOppgaverQuery(queryParams);
+  const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams);
 
   const { oppgaver, ...footerProps } = useOppgavePagination(
     OppgaveTableRowsPerPage.ENHETENS_VENTENDE,
@@ -59,6 +59,8 @@ export const EnhetensOppgaverPaaVentTable = () => {
         <TableFooter
           {...footerProps}
           columnCount={7}
+          onRefresh={refetch}
+          isLoading={isLoading || isFetching}
           settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
           testId="enhetens-oppgaver-paa-vent-footer"
         />

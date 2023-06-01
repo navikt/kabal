@@ -8,17 +8,19 @@ import { StyledFnr, StyledFnrResult, StyledName, StyledOppgaverContainer } from 
 
 interface Props extends IOppgaverResponse {
   person: IPartBase;
+  onRefresh: () => void;
+  isLoading: boolean;
 }
 
-export const Result = ({ person, aapneBehandlinger, avsluttedeBehandlinger }: Props) => (
+export const Result = ({ person, aapneBehandlinger, avsluttedeBehandlinger, ...footerProps }: Props) => (
   <StyledFnrResult key={person.id} data-testid="search-result">
     <StyledName>{person.name}</StyledName>
     <StyledFnr>
       <CopyFnrButton fnr={person.id} />
     </StyledFnr>
     <StyledOppgaverContainer>
-      <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} />
-      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeBehandlinger} />
+      <ActiveOppgaverTable oppgaveIds={aapneBehandlinger} {...footerProps} />
+      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeBehandlinger} {...footerProps} />
     </StyledOppgaverContainer>
   </StyledFnrResult>
 );

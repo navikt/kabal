@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Oppgaver = ({ open, fnr }: Props) => {
-  const { data, isFetching, isUninitialized } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken);
+  const { data, isFetching, isUninitialized, refetch } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken);
 
   if (!open) {
     return null;
@@ -34,8 +34,12 @@ export const Oppgaver = ({ open, fnr }: Props) => {
 
   return (
     <StyledOppgaverContainer data-testid="search-result-expanded-container">
-      <ActiveOppgaverTable oppgaveIds={aapneKlagebehandlinger} />
-      <FullfoerteOppgaverTable finishedOppgaver={avsluttedeKlagebehandlinger} />
+      <ActiveOppgaverTable oppgaveIds={aapneKlagebehandlinger} onRefresh={refetch} isLoading={isFetching} />
+      <FullfoerteOppgaverTable
+        finishedOppgaver={avsluttedeKlagebehandlinger}
+        onRefresh={refetch}
+        isLoading={isFetching}
+      />
     </StyledOppgaverContainer>
   );
 };

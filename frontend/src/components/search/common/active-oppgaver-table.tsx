@@ -16,9 +16,11 @@ import { Type } from '../../type/type';
 
 interface Props {
   oppgaveIds: string[];
+  onRefresh: () => void;
+  isLoading: boolean;
 }
 
-export const ActiveOppgaverTable = ({ oppgaveIds }: Props) => {
+export const ActiveOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
   const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_ACTIVE, oppgaveIds);
 
   if (oppgaveIds.length === 0) {
@@ -48,6 +50,8 @@ export const ActiveOppgaverTable = ({ oppgaveIds }: Props) => {
         <TableFooter
           {...footerProps}
           columnCount={8}
+          onRefresh={onRefresh}
+          isLoading={isLoading}
           settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE}
           testId="search-result-active-oppgaver-footer"
         />
