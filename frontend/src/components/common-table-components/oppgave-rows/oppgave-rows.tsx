@@ -37,7 +37,7 @@ export const OppgaveRows = ({
     return (
       <Table.Body data-testid={`${testId}-rows`} data-state="loading" data-empty="true">
         {new Array(pageSize).fill(0).map((_, i) => (
-          <LoadingRow columnCount={columns.length} testId={testId} key={i} />
+          <LoadingRow columnCount={columns.length} testId={`${testId}-row`} key={i} />
         ))}
       </Table.Body>
     );
@@ -58,7 +58,7 @@ export const OppgaveRows = ({
   return (
     <Table.Body data-testid={`${testId}-rows`} data-state={state} data-empty="false">
       {oppgaver.map((id) => (
-        <OppgaveRow columns={columns} oppgaveId={id} testId={testId} key={id} />
+        <OppgaveRow columns={columns} oppgaveId={id} testId={`${testId}-row`} key={id} />
       ))}
     </Table.Body>
   );
