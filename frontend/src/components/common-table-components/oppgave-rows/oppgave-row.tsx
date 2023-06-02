@@ -29,14 +29,12 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
     refetchOnMountOrArgChange: true,
   });
 
-  const rowTestId = `${testId}-row`;
-
   if (isLoading || typeof oppgave === 'undefined') {
-    return <LoadingRow columnCount={columns.length} testId={rowTestId} behandlingid={oppgaveId} />;
+    return <LoadingRow columnCount={columns.length} testId={testId} behandlingid={oppgaveId} />;
   }
 
   return (
-    <Table.Row data-testid={rowTestId} data-behandlingid={oppgaveId} data-state="ready">
+    <Table.Row data-testid={testId} data-behandlingid={oppgaveId} data-state="ready">
       {getColumns(columns, oppgave)}
     </Table.Row>
   );
