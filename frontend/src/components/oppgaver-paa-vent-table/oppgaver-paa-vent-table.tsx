@@ -12,20 +12,6 @@ import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/t
 import { TableHeader } from '../common-table-components/header';
 import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-rows';
 
-const TABLE_HEADERS: (string | null)[] = [
-  'Type',
-  'Ytelse',
-  'Hjemmel',
-  'Navn',
-  'Fnr.',
-  'Alder',
-  'Frist',
-  'På vent til',
-  'Utfall',
-  null,
-  'Feilregistrering',
-];
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
@@ -35,6 +21,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.PaaVentTil,
+  ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.Feilregistrering,
@@ -60,7 +47,7 @@ export const OppgaverPaaVentTable = () => {
     <div>
       <Heading size="medium">Oppgaver på vent</Heading>
       <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>
-        <TableHeader headers={TABLE_HEADERS} />
+        <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
           testId="oppgaver-paa-vent-table"
           oppgaver={oppgaver}
@@ -72,7 +59,7 @@ export const OppgaverPaaVentTable = () => {
         />
         <TableFooter
           {...footerProps}
-          columnCount={TABLE_HEADERS.length}
+          columnCount={COLUMNS.length}
           onRefresh={refetch}
           isLoading={isLoading || isFetching}
           settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}

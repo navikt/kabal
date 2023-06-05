@@ -13,7 +13,6 @@ import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-row
 
 const HUNDRED_YEARS = 100 * 365;
 
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Navn', 'Fnr.', 'Fullført', 'Utfall', null];
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
@@ -44,7 +43,7 @@ export const FullfoerteOppgaverTable = () => {
       <Heading size="medium">Fullførte oppgaver</Heading>
 
       <StyledMineOppgaverTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table" zebraStripes>
-        <TableHeader headers={TABLE_HEADERS} />
+        <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
           testId="fullfoerte-oppgaver-table"
           oppgaver={oppgaver}
@@ -56,7 +55,7 @@ export const FullfoerteOppgaverTable = () => {
         />
         <TableFooter
           {...footerProps}
-          columnCount={TABLE_HEADERS.length}
+          columnCount={COLUMNS.length}
           onRefresh={refetch}
           isLoading={isLoading || isFetching}
           settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
+import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
 import { IPartBase } from '@app/types/oppgave-common';
 import { IOppgaverResponse } from '@app/types/oppgaver';
 import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
@@ -18,6 +19,7 @@ export const Result = ({
   aapneBehandlinger,
   avsluttedeBehandlinger,
   feilregistrerteBehandlinger,
+  paaVentBehandlinger,
   ...footerProps
 }: Props) => (
   <StyledFnrResult key={person.id} data-testid="search-result">
@@ -27,6 +29,7 @@ export const Result = ({
     </StyledFnr>
     <StyledOppgaverContainer>
       <LedigeOppgaverTable oppgaveIds={aapneBehandlinger} {...footerProps} />
+      <OppgaverPaaVentTable oppgaveIds={paaVentBehandlinger} {...footerProps} />
       <FullfoerteOppgaverTable oppgaveIds={avsluttedeBehandlinger} {...footerProps} />
       <FeilregistrerteOppgaverTable oppgaveIds={feilregistrerteBehandlinger} {...footerProps} />
     </StyledOppgaverContainer>

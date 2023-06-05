@@ -12,7 +12,7 @@ interface Props {
   onRefresh: () => void;
   isLoading: boolean;
 }
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'Fullført', 'Saksbehandler', null];
+
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
@@ -33,7 +33,7 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
     <div>
       <Heading size="medium">Fullførte oppgaver siste 12 måneder</Heading>
       <Table data-testid="search-result-fullfoerte-oppgaver" zebraStripes>
-        <TableHeader headers={TABLE_HEADERS} />
+        <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
           testId="search-result-fullfoerte-oppgaver"
           oppgaver={oppgaver}

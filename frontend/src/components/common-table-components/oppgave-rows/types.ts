@@ -12,6 +12,28 @@ export enum ColumnKeyEnum {
   Oppgavestyring,
   Utfall,
   PaaVentTil,
+  PaaVentReason,
   Finished,
   Feilregistrering,
+  Feilregistrert,
 }
+
+export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
+  [ColumnKeyEnum.Type]: 'Type',
+  [ColumnKeyEnum.Ytelse]: 'Ytelse',
+  [ColumnKeyEnum.Hjemmel]: 'Hjemmel',
+  [ColumnKeyEnum.Navn]: 'Navn',
+  [ColumnKeyEnum.Fnr]: 'Fnr.',
+  [ColumnKeyEnum.Age]: 'Alder',
+  [ColumnKeyEnum.Deadline]: 'Frist',
+  [ColumnKeyEnum.Medunderskriverflyt]: 'Medunderskriverflyt',
+  [ColumnKeyEnum.Open]: null,
+  [ColumnKeyEnum.Tildeling]: 'Tildeling',
+  [ColumnKeyEnum.Oppgavestyring]: 'Oppgavestyring',
+  [ColumnKeyEnum.Utfall]: 'Utfall',
+  [ColumnKeyEnum.PaaVentTil]: 'På vent til',
+  [ColumnKeyEnum.PaaVentReason]: 'Årsak',
+  [ColumnKeyEnum.Finished]: 'Fullført',
+  [ColumnKeyEnum.Feilregistrering]: 'Feilregistrering',
+  [ColumnKeyEnum.Feilregistrert]: 'Tidspunkt for feilregistrering',
+};

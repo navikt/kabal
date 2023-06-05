@@ -13,7 +13,7 @@ import { Hjemmel } from '../hjemmel';
 import { LoadingRow } from '../loading-row';
 import { MedudunderskriverflytLabel } from '../medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../open';
-import { PaaVent } from '../paa-vent';
+import { PaaVentReason, PaaVentTil } from '../paa-vent';
 import { Fnr, Name } from '../person';
 import { Utfall } from '../utfall';
 import { Ytelse } from '../ytelse';
@@ -126,12 +126,19 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.PaaVentTil:
         return (
           <Table.DataCell key={key}>
-            <PaaVent sattPaaVent={oppgave.sattPaaVent} />
+            <PaaVentTil sattPaaVent={oppgave.sattPaaVent} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.PaaVentReason:
+        return (
+          <Table.DataCell key={key}>
+            <PaaVentReason sattPaaVent={oppgave.sattPaaVent} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Finished:
         return <Table.DataCell key={key}>{isoDateToPretty(oppgave.avsluttetAvSaksbehandlerDate)}</Table.DataCell>;
       case ColumnKeyEnum.Feilregistrering:
+      case ColumnKeyEnum.Feilregistrert:
         return (
           <Table.DataCell key={key}>
             <Feilregistrering

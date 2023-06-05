@@ -159,4 +159,5 @@ export enum OppgaveTableRowsPerPage {
   SEARCH_ACTIVE = 'oppgaver/search_active/rows_per_page',
   SEARCH_DONE = 'oppgaver/search_done/rows_per_page',
   SEARCH_FEILREGISTRERTE = 'oppgaver/search_feilregistrerte/rows_per_page',
+  SEARCH_PAA_VENT = 'oppgaver/search_paa_vent/rows_per_page',
 }
