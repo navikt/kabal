@@ -20,7 +20,7 @@ export const VentButton = () => {
 
   const isLoading = deleteSattPaaVentIsLoading;
 
-  if (typeof data.sattPaaVent === 'string') {
+  if (data.sattPaaVent !== null) {
     return (
       <Button
         type="button"
