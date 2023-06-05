@@ -20,7 +20,7 @@ export const mergeCells: TableFn = (editor, cellNode, cellPath = ReactEditor.fin
   }
 
   // If it is the last cell in the row, do nothing.
-  if (cellNode === row.children[row.children.length - 1]) {
+  if (cellNode === row.children.at(-1)) {
     return cellPath;
   }
 

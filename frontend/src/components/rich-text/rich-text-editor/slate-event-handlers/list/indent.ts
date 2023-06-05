@@ -65,7 +65,7 @@ export const indentList = (editor: Editor) =>
 
         const parentListPath = Path.parent(firstLiPath);
 
-        const parentPath = firstLiPath[firstLiPath.length - 1];
+        const parentPath = firstLiPath.at(-1);
 
         if (parentPath === undefined) {
           return;
