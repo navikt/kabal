@@ -38,8 +38,7 @@ export interface IOppgavebehandlingBase {
   raadfoertMedLege: string | null;
   resultat: Resultat;
   sakenGjelder: ISakenGjelder;
-  sattPaaVent: string | null; // LocalDateTime
-  sattPaaVentView: null | IVenteperiode;
+  sattPaaVent: IVenteperiode | null;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
   temaId: string;

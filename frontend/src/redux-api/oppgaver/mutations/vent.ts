@@ -21,13 +21,11 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ oppgaveId, ...rest }, { dispatch, queryFulfilled }) => {
         const now = new Date();
-
         const venteperiode = { from: format(now, ISO_FORMAT), ...rest };
 
         const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.sattPaaVent = now.toISOString();
-            draft.sattPaaVentView = venteperiode;
+            draft.sattPaaVent = venteperiode;
           })
         );
 
@@ -56,7 +54,6 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.sattPaaVent = null;
-            draft.sattPaaVentView = null;
           })
         );
 
