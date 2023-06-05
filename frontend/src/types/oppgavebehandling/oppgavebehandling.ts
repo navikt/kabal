@@ -1,5 +1,5 @@
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { INavEmployee, IPart, ISakenGjelder, IVedlegg } from '../oppgave-common';
+import { INavEmployee, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
 
 type UUID = string;
 
@@ -39,6 +39,7 @@ export interface IOppgavebehandlingBase {
   resultat: Resultat;
   sakenGjelder: ISakenGjelder;
   sattPaaVent: string | null; // LocalDateTime
+  sattPaaVentView: null | IVenteperiode;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
   temaId: string;

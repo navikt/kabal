@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -30,7 +31,7 @@ export const SendtTilTrygderetten = () => {
             setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, typeId: data.typeId });
           }
         }}
-        value={value}
+        value={value === null ? undefined : parseISO(value)}
         error={error}
         id="sendt-til-trygderetten"
         size="small"

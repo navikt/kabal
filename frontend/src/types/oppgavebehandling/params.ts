@@ -64,3 +64,8 @@ export interface IFinishOppgavebehandlingParams {
 export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {
   reason: string;
 }
+
+export interface ISettPaaVentParams extends IOppgavebehandlingBaseParams {
+  to: string; // string($date)
+  reason: string;
+}

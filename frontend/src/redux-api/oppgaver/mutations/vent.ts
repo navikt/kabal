@@ -1,8 +1,10 @@
+import { format } from 'date-fns';
+import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { getVenteperiode } from '@app/functions/get-venteperiode';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
+import { ISettPaaVentParams } from '@app/types/oppgavebehandling/params';
 import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -11,29 +13,36 @@ import { behandlingerQuerySlice } from '../queries/behandling';
 const ventMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    sattPaaVent: builder.mutation<IModifiedResponse, string>({
-      query: (oppgaveId) => ({
+    sattPaaVent: builder.mutation<IModifiedResponse, ISettPaaVentParams>({
+      query: ({ oppgaveId, ...body }) => ({
         url: `/kabal-api/klagebehandlinger/${oppgaveId}/sattpaavent`,
         method: 'POST',
+        body,
       }),
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, ...rest }, { dispatch, queryFulfilled }) => {
+        const now = new Date();
+
+        const venteperiode = { from: format(now, ISO_FORMAT), ...rest };
+
         const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.sattPaaVent = new Date().toISOString();
+            draft.sattPaaVent = now.toISOString();
+            draft.sattPaaVentView = venteperiode;
           })
         );
 
-        const oppgavePathResult = dispatch(
+        const oppgavePatchResult = dispatch(
           oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-            draft.sattPaaVent = getVenteperiode();
+            draft.sattPaaVent = { ...venteperiode, isExpired: false };
           })
         );
 
         try {
           await queryFulfilled;
+          toast.success('Oppgaven er satt på vent');
         } catch {
           behandlingPatchResult.undo();
-          oppgavePathResult.undo();
+          oppgavePatchResult.undo();
           toast.error('Kunne ikke sette på vent.');
         }
       },
@@ -47,6 +56,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.sattPaaVent = null;
+            draft.sattPaaVentView = null;
           })
         );
 
@@ -57,6 +67,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
               draft.sattPaaVent = null;
             })
           );
+          toast.success('Venteperiode avsluttet.');
         } catch (e) {
           patchResult.undo();
 

@@ -12,9 +12,9 @@ import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-c
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
 import { DeassignOppgave } from './deassign-oppgave';
+import { VentButton } from './sett-paa-vent/vent-button';
 import { StyledButtons, StyledUnfinishedErrorFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
-import { VentButton } from './vent-button';
 
 export const UnfinishedFooter = () => {
   const canEdit = useCanEdit();

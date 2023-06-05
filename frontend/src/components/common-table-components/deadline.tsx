@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { addYears } from 'date-fns';
+import { addYears, parseISO } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
@@ -102,7 +102,7 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
       id=""
       label="Frist"
       hideLabel
-      value={frist}
+      value={frist === null ? undefined : parseISO(frist)}
       size="small"
       onChange={onChange}
       autoFocus
