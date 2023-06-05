@@ -17,7 +17,7 @@ export const handleParagraph: HandlerFn = ({ editor, event, isCollapsed }) => {
     return;
   }
 
-  const isFirstElementInParent = paragraphPath[paragraphPath.length - 1] === 0;
+  const isFirstElementInParent = paragraphPath.at(-1) === 0;
 
   // If the paragraph is the first element in its parent, we don't want to delete it.
   if (isFirstElementInParent) {

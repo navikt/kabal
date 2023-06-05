@@ -36,7 +36,7 @@ const insertRow = (
   const at = direction === Direction.UP ? rowPath : Path.next(rowPath);
   Transforms.insertNodes(editor, newRow, { at });
 
-  return [...at, cellPath[cellPath.length - 1] ?? 0];
+  return [...at, cellPath.at(-1) ?? 0];
 };
 
 export const removeRow: TableFn = (editor, element) => {
@@ -47,8 +47,8 @@ export const removeRow: TableFn = (editor, element) => {
   Transforms.removeNodes(editor, { at: rowPath, match: isOfElementTypeFn(TableContentEnum.TR) });
 
   if (!Path.hasPrevious(rowPath)) {
-    return [...rowPath, cellPath[cellPath.length - 1] ?? 0];
+    return [...rowPath, cellPath.at(-1) ?? 0];
   }
 
-  return [...Path.previous(rowPath), cellPath[cellPath.length - 1] ?? 0];
+  return [...Path.previous(rowPath), cellPath.at(-1) ?? 0];
 };

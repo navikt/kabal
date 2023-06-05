@@ -54,7 +54,7 @@ export const unindentList = (editor: Editor) =>
 
         const isTopList = topListNode === parentListNode;
 
-        const isFirstListItem = liPath[liPath.length - 1] === 0;
+        const isFirstListItem = liPath.at(-1) === 0;
 
         // If list item is on top level.
         if (isTopList) {

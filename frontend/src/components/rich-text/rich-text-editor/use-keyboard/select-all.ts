@@ -34,7 +34,7 @@ export const selectAll = (event: React.KeyboardEvent, editor: Editor) => {
       },
       focus: {
         path: [...path, node.children.length - 1],
-        offset: node.children[node.children.length - 1]?.text.length ?? 0,
+        offset: node.children.at(-1)?.text.length ?? 0,
       },
     });
 
