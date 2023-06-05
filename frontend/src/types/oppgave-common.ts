@@ -34,3 +34,9 @@ export interface IPart extends IPartBase {
 export interface ISakenGjelder extends IPartBase {
   sex: SexEnum;
 }
+
+export interface IVenteperiode {
+  from: string; // LocalDate;
+  to: string; // LocalDate;
+  reason: string;
+}

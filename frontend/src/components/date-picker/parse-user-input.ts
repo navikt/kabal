@@ -1,38 +1,57 @@
 import { addYears, format, isAfter, isBefore, isValid, parse, subYears } from 'date-fns';
-import { PRETTY_FORMAT } from './constants';
+import { PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { isDateParts, isEightChars, isFourChars, isSixChars } from './guards';
 
-interface Options {
-  userInput: string;
-  fromDate: Date;
-  toDate: Date;
-  centuryThreshold: number;
-}
+const DELIMITERS = ['.', '-', '/'];
 
-export const parseUserInput = ({ userInput, fromDate, toDate, centuryThreshold }: Options): string => {
-  const parts = userInput.split('.');
+export const parseUserInput = (input: string, fromDate: Date, toDate: Date, centuryThreshold: number): string => {
+  for (const delimiter of DELIMITERS) {
+    const parsed = customParse(input, fromDate, toDate, centuryThreshold, delimiter);
+
+    if (parsed !== null) {
+      return parsed;
+    }
+  }
+
+  return input;
+};
+
+const customParse = (
+  input: string,
+  fromDate: Date,
+  toDate: Date,
+  centuryThreshold: number,
+  delimiter: string
+): string | null => {
+  const parts = input.split(delimiter);
 
   // Prefix with reasonable century, e.g. 20 for 2022 and 19 for 1999.
   if (isDateParts(parts)) {
-    const [dd, mm, yy] = parts;
+    const [first, second, third] = parts;
 
-    return `${dd.padStart(2, '0')}.${mm.padStart(2, '0')}.${getFullYear(yy, centuryThreshold)}`;
+    if (first.length === 4) {
+      return `${third.padStart(2, '0')}.${second.padStart(2, '0')}.${first}`;
+    }
+
+    return `${first.padStart(2, '0')}.${second.padStart(2, '0')}.${getFullYear(third, centuryThreshold)}`;
   }
 
-  const chars = userInput.split('');
+  const chars = input.split('');
 
   // 211220 -> 21.12.2020
   if (isSixChars(chars)) {
     const [d1, d2, m1, m2, y1, y2] = chars;
+    const dateString = `${d1}${d2}.${m1}${m2}.${getFullYear(`${y1}${y2}`, centuryThreshold)}`;
 
-    return `${d1}${d2}.${m1}${m2}.${getFullYear(`${y1}${y2}`, centuryThreshold)}`;
+    return dateString;
   }
 
   // 31122020 -> 31.12.2020
   if (isEightChars(chars)) {
     const [d1, d2, m1, m2, y1, y2, y3, y4] = chars;
+    const dateString = `${d1}${d2}.${m1}${m2}.${y1}${y2}${y3}${y4}`;
 
-    return `${d1}${d2}.${m1}${m2}.${y1}${y2}${y3}${y4}`;
+    return dateString;
   }
 
   // Current year if the date is in the past, otherwise previous year.
@@ -42,21 +61,25 @@ export const parseUserInput = ({ userInput, fromDate, toDate, centuryThreshold }
     const dateObject = parse(`${d1}${d2}.${m1}${m2}`, 'dd.MM', new Date());
 
     if (!isValid(dateObject)) {
-      return userInput;
+      return input;
     }
 
     if (isAfter(dateObject, toDate)) {
-      return format(subYears(dateObject, 1), PRETTY_FORMAT);
+      const afterDate = format(subYears(dateObject, 1), PRETTY_FORMAT);
+
+      return afterDate;
     }
 
     if (isBefore(dateObject, fromDate)) {
-      return format(addYears(dateObject, 1), PRETTY_FORMAT);
+      const beforeDate = format(addYears(dateObject, 1), PRETTY_FORMAT);
+
+      return beforeDate;
     }
 
     return format(dateObject, PRETTY_FORMAT);
   }
 
-  return userInput;
+  return null;
 };
 
 const getFullYear = (year: string, centuryThreshold: number): string => {

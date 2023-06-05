@@ -1,6 +1,6 @@
 import { GenericObject } from '@app/types/types';
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { INavEmployee, IPartBase } from './oppgave-common';
+import { INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
 
 type Date = string; // LocalDate
 
@@ -13,9 +13,7 @@ export interface UtgaatteApiResponse {
   antall: number;
 }
 
-export interface IVenteperiode {
-  from: Date;
-  to: Date;
+interface IOppgaveRowVenteperiode extends IVenteperiode {
   isExpired: boolean;
 }
 
@@ -44,7 +42,7 @@ export interface IOppgave {
   type: SaksTypeEnum;
   ytelse: string;
   utfall: UtfallEnum | null;
-  sattPaaVent: IVenteperiode | null;
+  sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: Date | null;
   access: AccessEnum;
 }
@@ -131,6 +129,7 @@ export interface IOppgaverResponse {
   aapneBehandlinger: string[];
   avsluttedeBehandlinger: string[];
   feilregistrerteBehandlinger: string[];
+  paaVentBehandlinger: string[];
 }
 
 export interface ITildelingResponse {

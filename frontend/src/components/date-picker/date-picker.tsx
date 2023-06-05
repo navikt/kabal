@@ -1,162 +1,111 @@
-import { DateInputProps, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
-import { clamp, format, parse } from 'date-fns';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { isoDateToPretty, prettyDateToISO } from '@app/domain/date';
-import { ISO_FORMAT, PRETTY_FORMAT } from './constants';
+import { DateInputProps, UNSAFE_DatePicker } from '@navikt/ds-react';
+import { format } from 'date-fns';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
+import { prettyDateToISO } from '@app/domain/date';
 import { parseUserInput } from './parse-user-input';
-import { validateDateString } from './validate';
 
 interface Props {
+  centuryThreshold?: number;
   disabled?: boolean;
-  hideLabel?: boolean;
   error?: string;
   fromDate?: Date;
-  id: string;
+  id?: string;
   label: React.ReactNode;
-  toDate?: Date;
-  value: string | null;
-  size: DateInputProps['size'];
-  centuryThreshold?: number;
   onChange: (date: string | null) => void;
+  size?: DateInputProps['size'];
+  toDate?: Date;
+  value?: Date;
+  warningThreshhold?: Date;
+  className?: string;
+  hideLabel?: boolean;
   autoFocus?: boolean;
 }
 
+const DEFAULT_FROM_DATE = new Date(1970);
+
 export const DatePicker = ({
   disabled,
-  hideLabel = false,
   error,
+  fromDate = DEFAULT_FROM_DATE,
   id,
   label,
   onChange,
-  fromDate = new Date(1970),
   toDate = new Date(),
-  value,
+  value = undefined,
   size,
   centuryThreshold = 50,
-  autoFocus = false,
+  className,
+  hideLabel,
+  autoFocus,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputError, setInputError] = useState<string>();
-  const [input, setInput] = useState<string>(value === null ? '' : isoDateToPretty(value) ?? '');
-
-  const defaultDate = useMemo(() => clamp(new Date(), { start: fromDate, end: toDate }), [fromDate, toDate]);
+  const [input, setInput] = useState<string>(value === undefined ? '' : format(value, PRETTY_FORMAT));
 
   useEffect(() => {
-    setInput(value === null ? '' : isoDateToPretty(value) ?? '');
-    setInputError(undefined);
+    setInput(value === undefined ? '' : format(value, PRETTY_FORMAT));
   }, [value]);
-
-  const selected = useMemo(
-    () => (value === null ? undefined : parse(value, ISO_FORMAT, defaultDate)),
-    [defaultDate, value]
-  );
-
-  const [month, setMonth] = useState(selected);
-
-  const validateInput = useCallback(
-    (dateString: string) => {
-      const validationError = validateDateString({ dateString, fromDate, toDate, defaultDate });
-      setInputError(validationError);
-
-      return validationError === undefined;
-    },
-    [defaultDate, fromDate, toDate]
-  );
-
-  const onToggle = useCallback(() => setIsOpen((o) => !o), []);
-  const onClose = useCallback(() => setIsOpen(false), []);
-
-  const validateAndCommit = useCallback(
-    (userInput: string) => {
-      setInputError(undefined);
-
-      const prettyDate = parseUserInput({ userInput, centuryThreshold, fromDate, toDate });
-      const isoDate = prettyDateToISO(prettyDate);
-
-      if (validateInput(prettyDate) && isoDate !== value) {
-        setIsOpen(false);
-        setTimeout(() => {
-          onChange(isoDate);
-        });
-      }
-    },
-    [centuryThreshold, fromDate, value, onChange, toDate, validateInput]
-  );
-
-  const onBlur: React.FocusEventHandler<HTMLInputElement> = useCallback(
-    ({ target }) => validateAndCommit(target.value),
-    [validateAndCommit]
-  );
 
   const onDateChange = useCallback(
     (dateObject?: Date) => {
-      setIsOpen(false);
-      setInputError(undefined);
-      const prettyDate =
-        dateObject === undefined ? format(selected ?? defaultDate, PRETTY_FORMAT) : format(dateObject, PRETTY_FORMAT);
-      setInput(prettyDate);
-
-      setTimeout(() => {
-        if (validateInput(prettyDate)) {
-          const isoDate = prettyDateToISO(prettyDate) ?? '';
-          onChange(isoDate);
-        }
-      });
-    },
-    [defaultDate, onChange, selected, validateInput]
-  );
-
-  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        validateAndCommit(event.currentTarget.value);
-
-        return;
+      if (dateObject === undefined) {
+        return onChange(null);
       }
 
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        setIsOpen(false);
-        setInput(value === null ? '' : isoDateToPretty(value) ?? '');
+      const prettyFormatted = format(dateObject, PRETTY_FORMAT);
+
+      if (prettyFormatted !== input) {
+        const isoFormatted = format(dateObject, ISO_FORMAT);
+        onChange(isoFormatted);
       }
     },
-    [validateAndCommit, value]
+    [input, onChange]
   );
 
-  const parsedInput = useMemo(() => parse(input, PRETTY_FORMAT, defaultDate), [defaultDate, input]);
+  const [month, setMonth] = useState(value);
+
+  const onBlur = useCallback(() => {
+    if (input === '') {
+      onChange(null);
+
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      const dateString = parseUserInput(input, fromDate, toDate, centuryThreshold);
+
+      onChange(dateString === null ? null : prettyDateToISO(dateString));
+      setInput(dateString);
+    });
+  }, [centuryThreshold, fromDate, input, onChange, toDate]);
 
   return (
-    <Datepicker
+    <UNSAFE_DatePicker
       mode="single"
       data-testid={id}
       fromDate={fromDate}
       toDate={toDate}
-      defaultSelected={selected}
-      selected={parsedInput}
+      defaultSelected={value}
+      selected={value}
       onSelect={onDateChange}
       locale="nb"
       dropdownCaption
       month={month}
       onMonthChange={setMonth}
-      onOpenToggle={onToggle}
-      onClose={onClose}
-      open={isOpen}
+      onOpenToggle={() => setMonth(value)}
+      className={className}
     >
-      <Datepicker.Input
+      <UNSAFE_DatePicker.Input
         id={id}
+        error={error}
         label={label}
-        hideLabel={hideLabel}
+        disabled={disabled}
         value={input}
         onChange={({ target }) => setInput(target.value)}
-        error={error ?? inputError}
-        size={size}
         onBlur={onBlur}
-        onFocus={() => setIsOpen(true)}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
+        size={size}
         autoFocus={autoFocus}
+        hideLabel={hideLabel}
       />
-    </Datepicker>
+    </UNSAFE_DatePicker>
   );
 };

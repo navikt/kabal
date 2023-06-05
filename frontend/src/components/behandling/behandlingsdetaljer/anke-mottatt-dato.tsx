@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import React from 'react';
 import styled from 'styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
@@ -30,7 +31,7 @@ export const AnkeMottattDato = () => {
             setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans });
           }
         }}
-        value={value}
+        value={value === null ? undefined : parseISO(value)}
         error={error}
         id="anke-mottatt-dato"
         size="small"
