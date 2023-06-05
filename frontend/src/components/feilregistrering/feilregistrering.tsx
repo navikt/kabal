@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Confirm } from '@app/components/feilregistrering/confirm';
 import { Register } from '@app/components/feilregistrering/register';
+import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-feilregistrere';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -12,11 +13,25 @@ import { Children, FagsystemId, OppgaveId, Position, Variant } from './types';
 
 interface Props extends OppgaveId, Variant, Position, FagsystemId {
   feilregistrert: string | null;
+  tildeltSaksbehandlerident: string | null;
 }
 
-export const Feilregistrering = ({ $position, oppgaveId, variant, feilregistrert, fagsystemId }: Props) => {
+export const Feilregistrering = ({
+  $position,
+  oppgaveId,
+  variant,
+  feilregistrert,
+  fagsystemId,
+  tildeltSaksbehandlerident,
+}: Props) => {
+  const canFeilregistrere = useCanFeilregistrere(tildeltSaksbehandlerident);
+
   if (feilregistrert !== null) {
     return <time dateTime={feilregistrert}>{isoDateTimeToPretty(feilregistrert)}</time>;
+  }
+
+  if (!canFeilregistrere) {
+    return null;
   }
 
   return (
