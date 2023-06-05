@@ -151,7 +151,7 @@ const StyledPopup = styled.div`
   background-color: white;
   border-radius: 4px;
   border: 1px solid #c6c2bf;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
 `;
 
 const ButtonContainer = styled.div`

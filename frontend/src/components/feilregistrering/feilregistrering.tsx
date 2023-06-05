@@ -87,5 +87,5 @@ const FloatingPanel = styled(Panel)<Position>`
   z-index: 1;
   border-radius: 4px;
   min-width: 400px;
-  box-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25);
+  box-shadow: 0px 0 4px rgb(0, 0, 0, 0.25);
 `;
