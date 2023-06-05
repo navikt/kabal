@@ -14,27 +14,31 @@ interface Props {
 }
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Feilregistrert,
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.PaaVentTil,
+  ColumnKeyEnum.PaaVentReason,
+  ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
 ];
 
-export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
+export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
+  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_PAA_VENT, oppgaveIds);
 
   if (oppgaveIds.length === 0) {
-    return <Alert variant="info">Ingen feilregistrerte oppgaver</Alert>;
+    return <Alert variant="info">Ingen oppgaver på vent</Alert>;
   }
 
   return (
     <div>
-      <Heading size="medium">Feilregistrerte oppgaver</Heading>
-      <Table data-testid="search-result-feilregistrerte-oppgaver" zebraStripes>
+      <Heading size="medium">Oppgaver på vent</Heading>
+      <Table data-testid="search-result-oppgaver-paa-vent" zebraStripes>
         <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
-          testId="search-result-feilregistrerte-oppgaver"
+          testId="search-result-oppgaver-paa-vent"
           oppgaver={oppgaver}
           columns={COLUMNS}
           isLoading={false}
@@ -45,10 +49,10 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
         <TableFooter
           {...footerProps}
           columnCount={COLUMNS.length}
-          settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
           onRefresh={onRefresh}
           isLoading={isLoading}
-          testId="search-result-feilregistrerte-oppgaver-footer"
+          settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
+          testId="search-result-oppgaver-paa-vent-footer"
         />
       </Table>
     </div>

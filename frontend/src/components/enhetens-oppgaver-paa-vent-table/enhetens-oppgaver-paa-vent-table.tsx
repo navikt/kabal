@@ -12,12 +12,12 @@ import { useUser } from '@app/simple-api-state/use-user';
 import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { TableHeader } from '../common-table-components/header';
 
-const TABLE_HEADERS: (string | null)[] = ['Type', 'Ytelse', 'Hjemmel', 'På vent til', 'Utfall', 'Tildeling', null];
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.PaaVentTil,
+  ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Tildeling,
   ColumnKeyEnum.Open,
@@ -49,7 +49,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
     <div>
       <Heading size="medium">Oppgaver på vent</Heading>
       <StyledTable zebraStripes data-testid="enhetens-oppgaver-paa-vent-table">
-        <TableHeader headers={TABLE_HEADERS} />
+        <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
           testId="enhetens-oppgaver-paa-vent-table"
           oppgaver={oppgaver}

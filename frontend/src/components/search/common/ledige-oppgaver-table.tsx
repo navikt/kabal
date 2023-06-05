@@ -14,17 +14,6 @@ interface Props {
   isLoading: boolean;
 }
 
-const TABLE_HEADERS: (string | null)[] = [
-  'Type',
-  'Ytelse',
-  'Hjemmel',
-  'Alder',
-  'Frist',
-  'Tildeling',
-  null,
-  'Feilregistrering',
-];
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
@@ -47,7 +36,7 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
     <div>
       <Heading size="medium">Oppgaver</Heading>
       <StyledTable data-testid="search-result-active-oppgaver" zebraStripes>
-        <TableHeader headers={TABLE_HEADERS} />
+        <TableHeader columnKeys={COLUMNS} />
         <OppgaveRows
           testId="search-result-active-oppgaver"
           oppgaver={oppgaver}

@@ -4,6 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { PaaVentWarning } from '@app/components/oppgavebehandling-footer/paa-vent-warning';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
@@ -14,23 +15,45 @@ import { useUser } from '@app/simple-api-state/use-user';
 import { FilterList } from '../filter-dropdown/filter-list';
 
 export const DeassignOppgave = () => {
+  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const [isOpen, setIsOpen] = useState(false);
+  const [warningIsOpen, setWarningIsOpen] = useState(false);
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setIsOpen(false), true);
 
+  if (oppgaveIsLoading || typeof oppgave === 'undefined') {
+    return (
+      <Container>
+        <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>
+          Legg tilbake med ny hjemmel
+        </StyledButton>
+      </Container>
+    );
+  }
+
   const Icon = isOpen ? ChevronUpIcon : FolderFileIcon;
+
+  const onClick = () => {
+    if (oppgave.sattPaaVent !== null) {
+      setWarningIsOpen(!warningIsOpen);
+      setIsOpen(false);
+    } else {
+      setIsOpen(!isOpen);
+      setWarningIsOpen(false);
+    }
+  };
+
+  const onConfirm = () => {
+    setWarningIsOpen(false);
+    setIsOpen(true);
+  };
 
   return (
     <Container ref={ref}>
       <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <StyledButton
-        variant="secondary"
-        size="small"
-        onClick={() => setIsOpen(!isOpen)}
-        loading={isLoading}
-        icon={<Icon aria-hidden />}
-      >
+      <PaaVentWarning isOpen={warningIsOpen} close={() => setWarningIsOpen(false)} onConfirm={onConfirm} />
+      <StyledButton variant="secondary" size="small" onClick={onClick} loading={isLoading} icon={<Icon aria-hidden />}>
         Legg tilbake med ny hjemmel
       </StyledButton>
     </Container>
