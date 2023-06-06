@@ -5,20 +5,16 @@ import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { IOppgave } from '@app/types/oppgaver';
 import { useFradel } from './use-tildel';
 
-interface Props extends IOppgave {
-  children?: string;
-}
-
 export const FradelButton = ({
   id,
   type,
   ytelse,
   isAvsluttetAvSaksbehandler,
-  children = 'Legg tilbake',
   tildeltSaksbehandlerident,
-}: Props): JSX.Element | null => {
+  medunderskriverident,
+}: IOppgave): JSX.Element | null => {
   const [fradel, { isLoading }] = useFradel(id, type, ytelse);
-  const [access, isAccessLoading] = useOppgaveActions(ytelse, tildeltSaksbehandlerident);
+  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriverident !== null, ytelse);
 
   if (isAccessLoading || !access.deassign || isAvsluttetAvSaksbehandler) {
     return null;
@@ -35,7 +31,7 @@ export const FradelButton = ({
       data-testid="behandling-fradel-button"
       data-klagebehandlingid={id}
     >
-      {children}
+      Legg tilbake
     </StyledButton>
   );
 };

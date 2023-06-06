@@ -11,7 +11,7 @@ import { Feilregistrering } from '../feilregistrering/feilregistrering';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { ConfirmFinish } from './confirm-finish';
-import { DeassignOppgave } from './deassign-oppgave';
+import { DeassignOppgave } from './deassign/deassign-oppgave';
 import { VentButton } from './sett-paa-vent/vent-button';
 import { StyledButtons, StyledUnfinishedErrorFooter, StyledUnfinishedNoErrorFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';

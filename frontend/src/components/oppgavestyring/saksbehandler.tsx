@@ -11,7 +11,11 @@ const NOT_SELECTED = 'NOT_SELECTED';
 
 export const Saksbehandler = (oppgave: IOppgave) => {
   const { data: user, isLoading: userIsLoading, isError: userIsError } = useUser();
-  const [access, isLoading] = useOppgaveActions(oppgave.ytelse, oppgave.tildeltSaksbehandlerident);
+  const [access, isLoading] = useOppgaveActions(
+    oppgave.tildeltSaksbehandlerident,
+    oppgave.medunderskriverident !== null,
+    oppgave.ytelse
+  );
 
   if (userIsError) {
     return (

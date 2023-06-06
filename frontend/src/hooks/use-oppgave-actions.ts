@@ -12,11 +12,15 @@ interface Actions {
 
 type ReturnType = [Actions, false] | [undefined, true];
 
-export const useOppgaveActions = (ytelse: string, tildeltSaksbehandler: string | null): ReturnType => {
+export const useOppgaveActions = (
+  tildeltSaksbehandler: string | null,
+  hasMedunderskriver: boolean,
+  ytelse?: string
+): ReturnType => {
   const { data: user, isLoading: isUserLoading } = useUser();
-  const [hasYtelseAccess, isYtesleLoading] = useHasYtelseAccess(ytelse);
+  const [hasYtelseAccess, isYtelseLoading] = useHasYtelseAccess(ytelse);
 
-  const isLoading = isUserLoading || isYtesleLoading;
+  const isLoading = isUserLoading || isYtelseLoading;
 
   return useMemo<ReturnType>(() => {
     if (isLoading || typeof user === 'undefined') {
@@ -24,8 +28,7 @@ export const useOppgaveActions = (ytelse: string, tildeltSaksbehandler: string |
     }
 
     const isAssigned = tildeltSaksbehandler !== null;
-    const isAssignedToSelf = user.navIdent === tildeltSaksbehandler;
-    const isAssignedToOther = isAssigned && !isAssignedToSelf;
+    const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
 
     const access: Values = {
       hasYtelseAccess,
@@ -33,7 +36,6 @@ export const useOppgaveActions = (ytelse: string, tildeltSaksbehandler: string |
       hasSaksbehandlerAccess: user.roller.includes(Role.KABAL_SAKSBEHANDLING),
       isAssignedToSelf,
       isAssigned,
-      isAssignedToOther,
     };
 
     const assignOthers = canAssignOthers(access);
@@ -43,11 +45,11 @@ export const useOppgaveActions = (ytelse: string, tildeltSaksbehandler: string |
         open: hasYtelseAccess,
         assignSelf: canAssignSelf(access),
         assignOthers,
-        deassign: isAssignedToSelf || (assignOthers && isAssignedToOther),
+        deassign: !hasMedunderskriver && (isAssignedToSelf || (assignOthers && isAssigned)),
       },
       false,
     ];
-  }, [isLoading, user, tildeltSaksbehandler, hasYtelseAccess]);
+  }, [isLoading, user, tildeltSaksbehandler, hasYtelseAccess, hasMedunderskriver]);
 };
 
 interface Values {
@@ -56,7 +58,6 @@ interface Values {
   hasOppgavestyringAccess: boolean;
   isAssigned: boolean;
   isAssignedToSelf: boolean;
-  isAssignedToOther: boolean;
 }
 
 const canAssignSelf = ({ hasYtelseAccess, hasSaksbehandlerAccess, isAssigned }: Values): boolean => {
