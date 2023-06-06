@@ -16,13 +16,14 @@ export const TildelButton = ({
   type,
   ytelse,
   tildeltSaksbehandlerident,
+  medunderskriverident,
   erMedunderskriver,
   children = 'Tildel meg',
 }: Props) => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const [tildel, { isLoading: isTildeling }] = useTildel(id, type, ytelse);
   const [, { isLoading: isFradeling }] = useFradel(id, type, ytelse);
-  const [access, isAccessLoading] = useOppgaveActions(ytelse, tildeltSaksbehandlerident);
+  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriverident !== null, ytelse);
 
   if (isUserLoading || isAccessLoading || typeof user === 'undefined') {
     return null;

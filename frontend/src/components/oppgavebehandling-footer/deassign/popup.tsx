@@ -1,81 +1,23 @@
-import { ChevronUpIcon, FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { PaaVentWarning } from '@app/components/oppgavebehandling-footer/paa-vent-warning';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUpdateInnsendingshjemlerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useUser } from '@app/simple-api-state/use-user';
-import { FilterList } from '../filter-dropdown/filter-list';
+import { FilterList } from '../../filter-dropdown/filter-list';
 
-export const DeassignOppgave = () => {
-  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const [isOpen, setIsOpen] = useState(false);
-  const [warningIsOpen, setWarningIsOpen] = useState(false);
-  const [, { isLoading }] = useTildelSaksbehandlerMutation();
-  const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => setIsOpen(false), true);
-
-  if (oppgaveIsLoading || typeof oppgave === 'undefined') {
-    return (
-      <Container>
-        <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>
-          Legg tilbake med ny hjemmel
-        </StyledButton>
-      </Container>
-    );
-  }
-
-  const Icon = isOpen ? ChevronUpIcon : FolderFileIcon;
-
-  const onClick = () => {
-    if (oppgave.sattPaaVent !== null) {
-      setWarningIsOpen(!warningIsOpen);
-      setIsOpen(false);
-    } else {
-      setIsOpen(!isOpen);
-      setWarningIsOpen(false);
-    }
-  };
-
-  const onConfirm = () => {
-    setWarningIsOpen(false);
-    setIsOpen(true);
-  };
-
-  return (
-    <Container ref={ref}>
-      <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <PaaVentWarning isOpen={warningIsOpen} close={() => setWarningIsOpen(false)} onConfirm={onConfirm} />
-      <StyledButton variant="secondary" size="small" onClick={onClick} loading={isLoading} icon={<Icon aria-hidden />}>
-        Legg tilbake med ny hjemmel
-      </StyledButton>
-    </Container>
-  );
-};
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-`;
-
-const StyledButton = styled(Button)`
-  min-width: 275px;
-`;
-
-interface PopupProps {
+interface Props {
   isOpen: boolean;
   close: () => void;
 }
 
-const Popup = ({ isOpen, close }: PopupProps) => {
+export const Popup = ({ isOpen, close }: Props) => {
   const navigate = useNavigate();
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const [setHjemler] = useUpdateInnsendingshjemlerMutation();

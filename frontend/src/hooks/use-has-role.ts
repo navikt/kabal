@@ -20,3 +20,5 @@ export const useHasAnyOfRoles = (roles?: Role[]) => {
 
   return roles.some((role) => userRoles.includes(role));
 };
+
+export const useHasRole = (role: Role) => useHasAnyOfRoles([role]);

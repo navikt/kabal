@@ -1,8 +1,12 @@
 import { Loader, Select } from '@navikt/ds-react';
-import React from 'react';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import React, { useMemo } from 'react';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@app/hooks/use-has-role';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useUpdateChosenMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { Role } from '@app/types/bruker';
 import { INavEmployee } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
@@ -11,8 +15,24 @@ type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelseId' | '
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
+const useCanChangeMedunderskriver = () => {
+  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
+  const isSaksbehandler = useIsSaksbehandler();
+  const isFinished = useIsFullfoert();
+
+  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+
+  return useMemo(() => {
+    if (oppgavebehandlingIsLoading || typeof oppgavebehandling === 'undefined') {
+      return false;
+    }
+
+    return !isFinished && (isSaksbehandler || hasOppgavestyringRole) && oppgavebehandling.feilregistrering === null;
+  }, [oppgavebehandlingIsLoading, oppgavebehandling, isFinished, isSaksbehandler, hasOppgavestyringRole]);
+};
+
 export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMedunderskriverProps) => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanChangeMedunderskriver();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: id });
   const { data } = useGetPotentialMedunderskrivereQuery(id);
 
