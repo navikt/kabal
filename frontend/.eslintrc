@@ -133,7 +133,8 @@
           "./src"
         ],
         "ignoreExports": [
-          "./src/index.tsx"
+          "./src/index.tsx",
+          "./src/**/*.test.ts"
         ]
       }
     ],
