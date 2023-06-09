@@ -36,7 +36,7 @@ export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: 
         size: 'small',
       }}
     >
-      <Slate editor={editor} value={savedContent} onChange={setContent}>
+      <Slate editor={editor} initialValue={savedContent} onChange={setContent}>
         <StyledRichTextEditorElement key={textId} showPlaceholderButton onKeyDown={onKeyDown} />
       </Slate>
     </ErrorBoundary>

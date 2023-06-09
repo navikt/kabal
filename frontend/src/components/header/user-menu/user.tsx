@@ -1,4 +1,4 @@
-import { Dropdown, Header } from '@navikt/ds-react-internal';
+import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
@@ -18,7 +18,12 @@ export const User = () => {
 
   return (
     <Dropdown>
-      <Header.UserButton as={StyledToggle} data-testid="user-menu-button" name={name} description={`Enhet: ${enhet}`} />
+      <InternalHeader.UserButton
+        as={StyledToggle}
+        data-testid="user-menu-button"
+        name={name}
+        description={`Enhet: ${enhet}`}
+      />
       <UserDropdown />
     </Dropdown>
   );

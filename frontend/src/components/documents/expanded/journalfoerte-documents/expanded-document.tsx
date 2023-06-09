@@ -1,5 +1,4 @@
-import { Detail, Label } from '@navikt/ds-react';
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { CopyButton, Detail, Label } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
@@ -32,9 +31,7 @@ export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
 
         <section>
           <Label size="small">Journalpost-ID</Label>
-          <CopyToClipboard copyText={journalpostId} popoverText="Kopiert!" size="xsmall">
-            <Detail>{journalpostId}</Detail>
-          </CopyToClipboard>
+          <CopyButton copyText={journalpostId} activeText="Kopiert!" size="xsmall" text={journalpostId} />
         </section>
 
         <section>

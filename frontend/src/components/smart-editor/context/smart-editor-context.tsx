@@ -121,7 +121,7 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId, 
     >
       <Slate
         editor={editor}
-        value={data.content}
+        initialValue={data.content}
         onChange={(content) => {
           clearTimeout(timeout.current);
 

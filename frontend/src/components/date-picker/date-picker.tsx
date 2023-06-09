@@ -1,4 +1,4 @@
-import { DateInputProps, UNSAFE_DatePicker } from '@navikt/ds-react';
+import { DatePicker as DSDatePicker, DateInputProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
@@ -79,7 +79,7 @@ export const DatePicker = ({
   }, [centuryThreshold, fromDate, input, onChange, toDate]);
 
   return (
-    <UNSAFE_DatePicker
+    <DSDatePicker
       mode="single"
       data-testid={id}
       fromDate={fromDate}
@@ -94,7 +94,7 @@ export const DatePicker = ({
       onOpenToggle={() => setMonth(value)}
       className={className}
     >
-      <UNSAFE_DatePicker.Input
+      <DSDatePicker.Input
         id={id}
         error={error}
         label={label}
@@ -106,6 +106,6 @@ export const DatePicker = ({
         autoFocus={autoFocus}
         hideLabel={hideLabel}
       />
-    </UNSAFE_DatePicker>
+    </DSDatePicker>
   );
 };

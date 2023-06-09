@@ -1,5 +1,5 @@
 import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { Dropdown } from '@navikt/ds-react-internal';
+import { Dropdown } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -17,8 +17,12 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
           <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>
-        <Dropdown.Menu.List.Item as={StyledCopyButton} title="Klikk for å kopiere versjonsnummeret" text={version}>
-          <VersionIcon />
+        <Dropdown.Menu.List.Item
+          as={StyledCopyButton}
+          title="Klikk for å kopiere versjonsnummeret"
+          text={version}
+          icon={<VersionIcon aria-hidden />}
+        >
           Kabal-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
         </Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>

@@ -1,6 +1,5 @@
 import { CheckmarkCircleIcon, CogRotationIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { Header } from '@navikt/ds-react-internal';
+import { Button, InternalHeader } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { VersionChecker } from './version-checker';
@@ -23,7 +22,7 @@ export const VersionCheckerStatus = () => {
   }
 
   return (
-    <Header.Button
+    <InternalHeader.Button
       as={UpdateButton}
       title="Det finnes en ny versjon av Kabal. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
       onClick={() => window.location.reload()}
@@ -31,7 +30,7 @@ export const VersionCheckerStatus = () => {
       data-testid="update-kabal-button"
     >
       <CogRotationIcon /> Oppdater til siste versjon
-    </Header.Button>
+    </InternalHeader.Button>
   );
 };
 
@@ -47,11 +46,11 @@ const Version = () => {
   }
 
   return (
-    <Header.Title as="div">
+    <InternalHeader.Title as="div">
       <IconText>
         <CheckmarkCircleIcon /> Kabal er klar til bruk!
       </IconText>
-    </Header.Title>
+    </InternalHeader.Title>
   );
 };
 

@@ -1,28 +1,35 @@
-import { CopyToClipboard } from '@navikt/ds-react-internal';
+import { FilesIcon } from '@navikt/aksel-icons';
+import { CopyButton as InternalCopyBytton } from '@navikt/ds-react';
 import React from 'react';
 
 interface Props {
-  children: React.ReactNode;
+  children?: string;
   text?: string | null;
   title?: string;
   className?: string;
+  icon?: React.ReactNode;
 }
 
-export const CopyButton = ({ children, text, title = 'Klikk for å kopiere', className }: Props) => {
+export const CopyButton = ({
+  children,
+  text,
+  title = 'Klikk for å kopiere',
+  className,
+  icon = <FilesIcon aria-hidden />,
+}: Props) => {
   if (text === null || typeof text === 'undefined' || text.length === 0) {
     return null;
   }
 
   return (
-    <CopyToClipboard
+    <InternalCopyBytton
       className={className}
-      popoverText="Kopiert!"
+      activeText="Kopiert!"
       copyText={text}
-      iconPosition="right"
       title={title}
       size="small"
-    >
-      {children}
-    </CopyToClipboard>
+      text={children}
+      icon={icon}
+    />
   );
 };
