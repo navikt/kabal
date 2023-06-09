@@ -18,7 +18,17 @@ export const isValidOrgnr = (orgnr: string): boolean => {
 
   const controlNumber = 11 - (productsSum % 11);
 
-  if (controlNumber === parseInt(parts[8], 10)) {
+  if (controlNumber === 10) {
+    return false;
+  }
+
+  const last = parseInt(parts[8], 10);
+
+  if (controlNumber === 11) {
+    return last === 0;
+  }
+
+  if (controlNumber === last) {
     return true;
   }
 
