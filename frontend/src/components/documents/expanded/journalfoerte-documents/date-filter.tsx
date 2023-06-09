@@ -1,5 +1,5 @@
 import { FunnelFillIcon, FunnelIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, UNSAFE_DatePicker as Datepicker } from '@navikt/ds-react';
+import { BodyShort, Button, DatePicker } from '@navikt/ds-react';
 import { format, formatISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -50,7 +50,7 @@ export const DateFilter = () => {
             </Button>
           </StyledButtons>
           <StyledDateRange>{formatDateRange(selected)}</StyledDateRange>
-          <Datepicker.Standalone selected={selected} mode="range" onSelect={onChange} />
+          <DatePicker.Standalone selected={selected} mode="range" onSelect={onChange} />
         </DatepickerContainer>
       ) : null}
     </Container>

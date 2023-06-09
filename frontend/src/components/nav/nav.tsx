@@ -9,7 +9,7 @@ import {
   PuzzlePieceIcon,
   TasklistIcon,
 } from '@navikt/aksel-icons';
-import { Header } from '@navikt/ds-react-internal';
+import { InternalHeader } from '@navikt/ds-react';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import React from 'react';
@@ -20,7 +20,7 @@ import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 
 export const Nav = () => (
-  <Header.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
+  <InternalHeader.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
         <BulletListIcon /> Oppgaver
@@ -71,7 +71,7 @@ export const Nav = () => (
         <PadlockLockedIcon /> Tilgangsstyring
       </NavItem>
     </StyledNavLinkList>
-  </Header.Title>
+  </InternalHeader.Title>
 );
 
 interface NavItemProps extends NavLinkProps {
