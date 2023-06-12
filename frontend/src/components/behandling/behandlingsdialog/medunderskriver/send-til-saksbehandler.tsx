@@ -2,9 +2,10 @@ import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSwitchMedunderskriverflytMutation } from '@app/redux-api/oppgaver/mutations/switch-medunderskriverflyt';
+import { useUser } from '@app/simple-api-state/use-user';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
@@ -12,12 +13,27 @@ export const SendTilSaksbehandler = ({
   id: oppgaveId,
   medunderskriverFlyt,
 }: Pick<IOppgavebehandling, 'id' | 'medunderskriverFlyt'>) => {
-  const canEdit = useCanEdit();
   const isMedunderskriver = useIsMedunderskriver();
+  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
+  const { data: userData, isLoading: userIsLoading } = useUser();
 
   const [switchMedunderskriverflyt, loader] = useSwitchMedunderskriverflytMutation();
 
-  if (canEdit || !isMedunderskriver) {
+  if (
+    oppgavebehandlingIsLoading ||
+    userIsLoading ||
+    typeof oppgavebehandling === 'undefined' ||
+    typeof userData === 'undefined'
+  ) {
+    return null;
+  }
+
+  if (
+    oppgavebehandling.isAvsluttetAvSaksbehandler ||
+    oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent ||
+    oppgavebehandling.feilregistrering !== null ||
+    !isMedunderskriver
+  ) {
     return null;
   }
 

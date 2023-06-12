@@ -32,11 +32,11 @@ const useCanChangeMedunderskriver = () => {
 };
 
 export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMedunderskriverProps) => {
-  const canEdit = useCanChangeMedunderskriver();
+  const canChangeMedunderskriver = useCanChangeMedunderskriver();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: id });
   const { data } = useGetPotentialMedunderskrivereQuery(id);
 
-  if (!canEdit) {
+  if (!canChangeMedunderskriver) {
     return null;
   }
 
@@ -64,7 +64,6 @@ export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMed
   return (
     <Select
       size="small"
-      disabled={!canEdit}
       label={`${getTitleCapitalized(typeId)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
       value={medunderskriver?.navIdent ?? NONE_SELECTED}

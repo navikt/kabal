@@ -45,16 +45,6 @@ export const Medunderskriver = () => {
     return null;
   }
 
-  if (isFullfoert || !canChangeMedunderskriver) {
-    return (
-      <MedunderskriverInfo
-        typeId={oppgave.typeId}
-        tildeltSaksbehandler={oppgave.tildeltSaksbehandler}
-        medunderskriver={medunderskriver.medunderskriver}
-      />
-    );
-  }
-
   return (
     <>
       <MedunderskriverInfo
