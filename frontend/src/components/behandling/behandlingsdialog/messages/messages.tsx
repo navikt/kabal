@@ -1,4 +1,4 @@
-import { Heading, Loader } from '@navikt/ds-react';
+import { BodyShort, Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -28,12 +28,15 @@ export const Messages = () => {
     return <Loader size="xlarge" />;
   }
 
+  const isFeilregistrert = oppgave.feilregistrering !== null;
+
   return (
     <StyledMessagesContainer>
       <Heading level="1" size="xsmall" spacing>
         Meldinger
       </Heading>
       <WriteMessage />
+      {messages.length === 0 && (isFullfoert || isFeilregistrert) ? <BodyShort>Ingen meldinger</BodyShort> : null}
       <StyledMessages data-testid="messages-list">
         {messages.map((message) => (
           <Message {...message} key={message.id} />
