@@ -3,6 +3,7 @@ import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { DeleteDropArea } from '@app/components/documents/expanded/new/drop-delete-area';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useValidationError } from '@app/hooks/use-validation-error';
@@ -19,7 +20,8 @@ export const NewDocumentList = () => {
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
   const isFullfoert = useIsFullfoert();
   const [setParent] = useSetParentMutation();
-  const [isDragOver, setIsDragOver] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const dragEnterCount = useRef(0);
 
   const onDragEnter = useCallback(
@@ -34,12 +36,12 @@ export const NewDocumentList = () => {
 
         const isAlreadyParent = data?.some(({ id, parentId }) => id === dokumentId && parentId === null) ?? false;
 
-        setIsDragOver(!isAlreadyParent);
+        setIsActive(!isAlreadyParent);
 
         return;
       }
 
-      setIsDragOver(false);
+      setIsActive(false);
     },
     [data]
   );
@@ -51,18 +53,23 @@ export const NewDocumentList = () => {
     dragEnterCount.current -= 1;
 
     if (dragEnterCount.current === 0) {
-      setIsDragOver(false);
+      setIsActive(false);
     }
   }, []);
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
+      if (e.defaultPrevented) {
+        setIsDragging(false);
+
+        return;
+      }
+
       e.preventDefault();
-      e.stopPropagation();
 
       dragEnterCount.current = 0;
 
-      setIsDragOver(false);
+      setIsActive(false);
 
       if (oppgaveId === skipToken) {
         return;
@@ -103,13 +110,18 @@ export const NewDocumentList = () => {
       onDrop={onDrop}
       onDragOver={(e) => {
         e.preventDefault();
-        e.stopPropagation();
       }}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
+      onDragStart={() => {
+        setIsDragging(true);
+      }}
+      onDragEnd={() => {
+        setIsDragging(false);
+      }}
     >
-      <ListHeader isFullfoert={isFullfoert} />
-      <StyledDocumentList data-testid="new-documents-list" $dragOver={isDragOver}>
+      <ListHeader isFullfoert={isFullfoert} isDragOver={isDragging} />
+      <StyledDocumentList data-testid="new-documents-list" $isActive={isActive}>
         {documents.map((document) => (
           <NewParentDocument document={document} key={document.id} />
         ))}
@@ -120,9 +132,10 @@ export const NewDocumentList = () => {
 
 interface ListHeaderProps {
   isFullfoert: boolean;
+  isDragOver: boolean;
 }
 
-const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
+const ListHeader = ({ isFullfoert, isDragOver }: ListHeaderProps) => {
   const errorMessage = useValidationError('underArbeid');
 
   if (isFullfoert) {
@@ -136,15 +149,17 @@ const ListHeader = ({ isFullfoert }: ListHeaderProps) => {
           Dokumenter under arbeid
           <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" />
         </StyledHeading>
+        <DeleteDropArea isDragOver={isDragOver} />
       </NewDocumentsStyledListHeader>
     );
   }
 
   return (
     <NewDocumentsStyledListHeader>
-      <Heading size="xsmall" level="2">
+      <StyledHeading size="xsmall" level="2">
         Dokumenter under arbeid
-      </Heading>
+      </StyledHeading>
+      <DeleteDropArea isDragOver={isDragOver} />
     </NewDocumentsStyledListHeader>
   );
 };
@@ -153,4 +168,7 @@ const StyledHeading = styled(Heading)`
   display: flex;
   align-items: center;
   gap: 8px;
+  width: fit-content;
+  white-space: nowrap;
+  flex-shrink: 0;
 `;

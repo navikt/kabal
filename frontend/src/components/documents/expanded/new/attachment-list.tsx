@@ -27,7 +27,7 @@ export const AttachmentList = ({ parentId }: Props) => {
             data-documentname={attachment.tittel}
             data-documentid={attachment.id}
             data-documenttype="attachment"
-            $dragOver={false}
+            $isActive={false}
           >
             <NewDocument document={attachment} />
           </StyledAttachmentListItem>
