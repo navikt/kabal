@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { FilterDropdown } from '../../../filter-dropdown/filter-dropdown';
-import { Fields, journalfoerteDocumentsHeaderGridCSS, newDocumentsGridCSS } from './grid';
+import { Fields, journalfoerteDocumentsHeaderGridCSS } from './grid';
 
 const listHeaderCSS = css`
   padding-bottom: 16px;
@@ -8,8 +8,11 @@ const listHeaderCSS = css`
 `;
 
 export const NewDocumentsStyledListHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  column-gap: 16px;
   ${listHeaderCSS}
-  ${newDocumentsGridCSS}
 `;
 
 export const JournalfoerteDocumentsStyledListHeader = styled.div`

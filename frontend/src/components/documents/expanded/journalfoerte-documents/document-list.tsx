@@ -15,7 +15,7 @@ export const DocumentList = memo(
     const { isSelected } = useContext(SelectContext);
 
     return (
-      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" $dragOver={false}>
+      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" $isActive={false}>
         <DocumentsSpinner hasDocuments={!isLoading} />
         {documents.map((document) => (
           <DocumentListItem

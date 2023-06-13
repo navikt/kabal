@@ -13,7 +13,7 @@ export const DocumentListItem = memo(
     <StyledDocumentListItem
       data-testid="oppgavebehandling-documents-all-list-item"
       data-documentname={document.tittel}
-      $dragOver={false}
+      $isActive={false}
     >
       <Document document={document} isSelected={isSelected} />
     </StyledDocumentListItem>

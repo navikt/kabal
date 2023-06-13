@@ -17,8 +17,19 @@ export const DocumentTitle = ({ document }: Props) => {
   const [editMode, setEditMode] = useState(false);
 
   const isActive = useMemo(
-    () => value.some((v) => v.type !== DocumentTypeEnum.JOURNALFOERT && v.documentId === document.id),
-    [document.id, value]
+    () =>
+      value.some((v) => {
+        if (document.type === DocumentTypeEnum.JOURNALFOERT) {
+          return (
+            v.type === DocumentTypeEnum.JOURNALFOERT &&
+            v.journalpostId === document.journalfoertDokumentReference.journalpostId &&
+            v.dokumentInfoId === document.journalfoertDokumentReference.dokumentInfoId
+          );
+        }
+
+        return v.type === document.type && v.documentId === document.id;
+      }),
+    [document, value]
   );
 
   const setViewedDocument = useCallback(() => {

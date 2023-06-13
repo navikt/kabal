@@ -59,7 +59,7 @@ const AttachmentListItem = memo(
     <StyledAttachmentListItem
       data-testid="oppgavebehandling-documents-all-list-item"
       data-documentname={vedlegg.tittel}
-      $dragOver={false}
+      $isActive={false}
     >
       <Attachment
         oppgavebehandlingId={oppgaveId}

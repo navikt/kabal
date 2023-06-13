@@ -57,7 +57,6 @@ export const NewParentDocument = ({ document }: Props) => {
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLLIElement>) => {
       e.preventDefault();
-      e.stopPropagation();
 
       dragEnterCount.current = 0;
 
@@ -153,7 +152,7 @@ export const NewParentDocument = ({ document }: Props) => {
       }}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
-      $dragOver={isDragOver}
+      $isActive={isDragOver}
     >
       <NewDocument document={document} />
       <AttachmentList parentId={document.id} />

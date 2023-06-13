@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { DOCUMENT_ROW_WIDTH } from './constants';
 
 interface IDragOver {
-  $dragOver: boolean;
+  $isActive: boolean;
 }
 
 export const StyledDocumentList = styled.ul<IDragOver>`
@@ -17,15 +17,15 @@ export const StyledDocumentList = styled.ul<IDragOver>`
   flex-grow: 1;
   border-bottom: 1px solid #c6c2bf;
   overflow-y: auto;
-  background-color: ${({ $dragOver }) => ($dragOver ? 'var(--a-surface-action-subtle-hover)' : 'unset')};
+  background-color: ${({ $isActive }) => ($isActive ? 'var(--a-surface-action-subtle-hover)' : 'unset')};
 `;
 
 export const StyledDocumentListItem = styled.li<IDragOver>`
   display: block;
   position: relative;
   max-width: ${DOCUMENT_ROW_WIDTH}px;
-  outline: ${({ $dragOver }) => ($dragOver ? '2px dashed var(--a-border-subtle-hover)' : 'none')};
+  outline: ${({ $isActive }) => ($isActive ? '2px dashed var(--a-border-subtle-hover)' : 'none')};
   margin-left: 2px;
   border-radius: 4px;
-  background-color: ${({ $dragOver }) => ($dragOver ? 'var(--a-surface-action-subtle-hover)' : 'unset')};
+  background-color: ${({ $isActive }) => ($isActive ? 'var(--a-surface-action-subtle-hover)' : 'unset')};
 `;
