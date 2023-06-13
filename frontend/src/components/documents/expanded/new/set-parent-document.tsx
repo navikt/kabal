@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
@@ -21,7 +21,7 @@ export const SetParentDocument = ({ document }: Props) => {
       return true;
     }
 
-    return data.some(({ parent }) => parent === document.id);
+    return data.some(({ parentId }) => parentId === document.id);
   }, [data, document.id]);
 
   const potentialParents = useMemo(() => {
@@ -30,9 +30,9 @@ export const SetParentDocument = ({ document }: Props) => {
     }
 
     return data
-      .filter(({ id, parent }) => document.id !== id && document.parent !== id && parent === null)
+      .filter(({ id, parentId }) => document.id !== id && document.parentId !== id && parentId === null)
       .map(({ tittel, id }) => <option key={id} value={id} label={tittel} />);
-  }, [hasAttachments, data, document.id, document.parent]);
+  }, [hasAttachments, data, document.id, document.parentId]);
 
   if (hasAttachments || isLoadingDocuments || typeof data === 'undefined') {
     return null;
@@ -47,18 +47,22 @@ export const SetParentDocument = ({ document }: Props) => {
   };
 
   const currentOption =
-    document.parent === null ? null : (
+    document.parentId === null ? null : (
       <option
-        key={document.parent}
-        value={document.parent}
-        label={data.find(({ id }) => document.parent === id)?.tittel ?? 'Ukjent dokument'}
+        key={document.parentId}
+        value={document.parentId}
+        label={data.find(({ id }) => document.parentId === id)?.tittel ?? 'Ukjent dokument'}
       />
     );
+
+  if (currentOption === null && potentialParents.length === 0) {
+    return null;
+  }
 
   return (
     <Select
       size="small"
-      value={document.parent ?? NONE_SELECTED}
+      value={document.parentId ?? NONE_SELECTED}
       onChange={onChange}
       title="Gjør til vedlegg for"
       label="Gjør til vedlegg for"
@@ -66,7 +70,9 @@ export const SetParentDocument = ({ document }: Props) => {
       data-testid="document-set-parent-document"
       hideLabel
     >
-      <option key={NONE_SELECTED} value={NONE_SELECTED} label={getText(document)} />
+      {document.type === DocumentTypeEnum.JOURNALFOERT ? null : (
+        <option key={NONE_SELECTED} value={NONE_SELECTED} label={getText(document)} />
+      )}
       <optgroup label="Gjør til vedlegg for">
         {currentOption}
         {potentialParents}
@@ -75,4 +81,4 @@ export const SetParentDocument = ({ document }: Props) => {
   );
 };
 
-const getText = ({ parent }: IMainDocument) => (parent === null ? 'Hoveddokument' : 'Gjør til hoveddokument');
+const getText = ({ parentId }: IMainDocument) => (parentId === null ? 'Hoveddokument' : 'Gjør til hoveddokument');

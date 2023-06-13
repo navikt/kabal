@@ -19,6 +19,11 @@ export const Container = styled.section<ContainerProps>`
   scroll-snap-align: start;
 `;
 
+export const ErrorOrLoadingContainer = styled(Container)`
+  align-items: center;
+  justify-content: center;
+`;
+
 export const StyledDocumentTitle = styled.h1`
   display: flex;
   align-items: center;

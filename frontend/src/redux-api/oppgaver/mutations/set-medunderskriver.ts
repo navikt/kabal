@@ -14,10 +14,10 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISetMedunderskriverParams>({
       query: ({ oppgaveId, medunderskriver }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/medunderskriverident`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/medunderskriver`,
         method: 'PUT',
         body: {
-          medunderskriverident: medunderskriver === null ? null : medunderskriver.navIdent,
+          navIdent: medunderskriver === null ? null : medunderskriver.navIdent,
         },
       }),
       onQueryStarted: async ({ oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
@@ -47,6 +47,7 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
+              draft.medunderskriver = data.medunderskriver;
             })
           );
 

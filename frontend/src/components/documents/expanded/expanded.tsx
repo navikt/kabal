@@ -19,7 +19,9 @@ export const ExpandedDocuments = () => {
           <ChevronLeftIcon />
         </ExpandCollapseButton>
       </DocumentsHeader>
+
       <NewDocumentList />
+
       <JournalfoerteDocumentList />
     </StyledExpandedDocumentsContainer>
   );

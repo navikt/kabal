@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import React, { memo } from 'react';
 import styled, { css } from 'styled-components';
 import { DOCUMENT_ROW_WIDTH } from './constants';
 
@@ -9,17 +9,16 @@ const documentsGridCSS = css`
   align-items: center;
   padding-left: 4px;
   padding-right: 4px;
-  padding-top: 2px;
-  padding-bottom: 2px;
 `;
 
 export enum Fields {
-  ResetFilters = 'resetFilters',
+  SelectRow = 'select-row',
+  ResetFilters = 'reset-filters',
   Expand = 'expand',
   Title = 'title',
   Meta = 'meta',
   Date = 'date',
-  AvsenderMottaker = 'avsendermottaker',
+  AvsenderMottaker = 'avsender-mottaker',
   SaksId = 'saksid',
   Type = 'type',
   Action = 'action',
@@ -27,6 +26,7 @@ export enum Fields {
 
 const SIZES: Record<Fields, string> = {
   [Fields.Expand]: '20px',
+  [Fields.SelectRow]: '20px',
   [Fields.Title]: 'auto',
   [Fields.Meta]: '140px',
   [Fields.Date]: '85px',
@@ -48,6 +48,7 @@ export const newDocumentsGridCSS = css`
 `;
 
 const JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
+  Fields.SelectRow,
   Fields.Title,
   Fields.Meta,
   Fields.Date,
@@ -64,6 +65,7 @@ export const journalfoerteDocumentsHeaderGridCSS = css`
 `;
 
 const JOURNALFOERTE_DOCUMENT_FIELDS = [
+  Fields.SelectRow,
   Fields.Expand,
   Fields.Title,
   Fields.Meta,
@@ -79,7 +81,7 @@ export const journalfoerteDocumentsGridCSS = css`
   grid-template-areas: '${getFieldNames(JOURNALFOERTE_DOCUMENT_FIELDS)}';
 `;
 
-const VEDLEGG_FIELDS = [Fields.Title, Fields.Action];
+const VEDLEGG_FIELDS = [Fields.SelectRow, Fields.Title, Fields.Action];
 export const vedleggGridCSS = css`
   ${documentsGridCSS}
   grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
@@ -104,6 +106,11 @@ interface ClickableFieldProps extends StyledClickableFieldProps {
   onClick: () => void;
 }
 
-export const ClickableField = (props: ClickableFieldProps) => (
-  <StyledClickableField {...props} size="small" variant="tertiary" title={props.children} />
+export const ClickableField = memo(
+  (props: ClickableFieldProps) => (
+    <StyledClickableField {...props} size="small" variant="tertiary" title={props.children} />
+  ),
+  (prevProps, nextProps) => prevProps.children === nextProps.children && prevProps.onClick === nextProps.onClick
 );
+
+ClickableField.displayName = 'ClickableField';

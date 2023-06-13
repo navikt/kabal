@@ -1,13 +1,15 @@
+import { Alert, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocument } from '@app/hooks/use-shown-document';
-import { getDocumentUrl } from './document-url';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import {
   Container,
   Ellipsis,
+  ErrorOrLoadingContainer,
   Header,
   StyledCancelIcon,
   StyledDocumentTitle,
@@ -18,18 +20,17 @@ import {
   StyledZoomInIcon,
   StyledZoomOutIcon,
 } from './styled-components';
-import { DocumentTypeEnum, IShownDocument } from './types';
+import { IShownDocument } from './types';
+import { useDocumentUrl } from './use-document-url';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
-export const ShowDocument = () => {
+export const ViewPDF = () => {
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
-  const document = useShownDocument();
-
-  const title = document?.tittel ?? 'Ukjent dokument';
+  const { showDocumentList, title = 'Ukjent dokument' } = useShownDocument();
 
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
@@ -39,11 +40,29 @@ export const ShowDocument = () => {
 
   const oppgaveId = useOppgaveId();
 
-  if (document === undefined || oppgaveId === skipToken) {
+  const { data: url, isError, isLoading: urlIsLoading, isUninitialized } = useDocumentUrl(oppgaveId, showDocumentList);
+
+  if (showDocumentList.length === 0 || oppgaveId === skipToken || isUninitialized) {
     return null;
   }
 
-  const url = getDocumentUrl(oppgaveId, document);
+  if (isError) {
+    return (
+      <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
+        <Alert variant="error" size="small">
+          Kunne ikke vise dokument(er)
+        </Alert>
+      </ErrorOrLoadingContainer>
+    );
+  }
+
+  if (urlIsLoading || typeof url === 'undefined') {
+    return (
+      <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
+        <Loader title="Laster dokument" size="3xlarge" />
+      </ErrorOrLoadingContainer>
+    );
+  }
 
   const onClick = () => {
     setIsLoading(true);
@@ -65,7 +84,7 @@ export const ShowDocument = () => {
         <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
           <StyledZoomInIcon title="Zoom inn på PDF" />
         </StyledHeaderButton>
-        <ReloadButton document={document} isLoading={isLoading} onClick={onClick} />
+        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onClick} />
         <StyledDocumentTitle>
           <Ellipsis>{title}</Ellipsis>
         </StyledDocumentTitle>
@@ -81,13 +100,13 @@ export const ShowDocument = () => {
 };
 
 interface ReloadButtonProps {
-  document: IShownDocument;
+  showDocumentList: IShownDocument[];
   isLoading: boolean;
   onClick: () => void;
 }
 
-const ReloadButton = ({ document, isLoading, onClick }: ReloadButtonProps) => {
-  if (document.type !== DocumentTypeEnum.SMART) {
+const ReloadButton = ({ showDocumentList, isLoading, onClick }: ReloadButtonProps) => {
+  if (!showDocumentList.some((v) => v.type === DocumentTypeEnum.SMART)) {
     return null;
   }
 

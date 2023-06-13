@@ -1,13 +1,15 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDato,
+  useDocumentsFilterIncluded,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
   useDocumentsFilterTitle,
   useDocumentsFilterType,
 } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IncludedDocumentFilter } from '@app/types/documents/documents';
 import { useFilteredDocuments } from '../filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
@@ -16,6 +18,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
   const { value: search = '', setValue: setSearch, remove: resetTitle } = useDocumentsFilterTitle();
   const { value: selectedTypes = [], setValue: setSelectedTypes, remove: resetTypes } = useDocumentsFilterType();
   const { value: selectedDateRange, remove: resetDateRange } = useDocumentsFilterDato();
+  const { value: included = IncludedDocumentFilter.ALL, remove: resetIncluded } = useDocumentsFilterIncluded();
 
   const {
     value: selectedTemaer = EMPTY_FILTER,
@@ -42,28 +45,31 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     selectedSaksIds,
     selectedTemaer,
     selectedTypes,
+    included,
     search
   );
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     resetTitle();
     resetTemaer();
     resetTypes();
     resetAvsenderMottakere();
     resetSaksId();
     resetDateRange();
-  };
+    resetIncluded();
+  }, [resetAvsenderMottakere, resetDateRange, resetIncluded, resetSaksId, resetTemaer, resetTitle, resetTypes]);
 
-  const resetFiltersDisabled = useMemo(
+  const noFiltersActive = useMemo(
     () =>
       selectedTemaer.length === 0 &&
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
       selectedDateRange === undefined &&
+      included === IncludedDocumentFilter.ALL &&
       search === '',
-
     [
+      included,
       search,
       selectedAvsenderMottakere.length,
       selectedDateRange,
@@ -75,7 +81,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
 
   return {
     resetFilters,
-    resetFiltersDisabled,
+    noFiltersActive,
     totalFilteredDocuments,
     search,
     setSearch,

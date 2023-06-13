@@ -1,14 +1,20 @@
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Brevmottakertype } from '../kodeverk';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
-import { DocumentType, UUID } from './documents';
+import { DistribusjonsType, UUID } from './documents';
 
 export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;
 }
 
+export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebehandlingBaseParams {
+  parentId: UUID;
+  journalfoerteDokumenter: IArkivertDocument[];
+}
+
 export interface ISetTypeParams extends IDocumentParams {
-  dokumentTypeId: DocumentType;
+  dokumentTypeId: DistribusjonsType;
 }
 
 export interface ISetNameParams extends IDocumentParams {
@@ -17,7 +23,7 @@ export interface ISetNameParams extends IDocumentParams {
 
 export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams {
   file: File;
-  dokumentTypeId: DocumentType;
+  dokumentTypeId: DistribusjonsType;
 }
 
 export interface IFinishDocumentParams extends IDocumentParams {

@@ -3,7 +3,7 @@ import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '@app/domain/eksterne-len
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { ISakenGjelder } from '@app/types/oppgave-common';
-import { StyledExtLinkIcon } from '../show-document/styled-components';
+import { StyledExtLinkIcon } from '../view-pdf/styled-components';
 import { ExternalLink } from './styled-components';
 
 interface LinkProps {

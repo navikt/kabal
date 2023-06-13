@@ -10,7 +10,7 @@ type Props = {
   attachments: IMainDocument[];
 } & IMainDocument;
 
-export const NewDocument = ({ id, opplastet, tittel, attachments, isSmartDokument }: Props) => (
+export const NewDocument = ({ id, newOpplastet: opplastet, tittel, attachments, isSmartDokument }: Props) => (
   <DocumentListItem>
     <DocumentDate>{isoDateTimeToPretty(opplastet)}</DocumentDate>
     <OpenDocumentButton id={id} title={tittel} isSmartDokument={isSmartDokument} />

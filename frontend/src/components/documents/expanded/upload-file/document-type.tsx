@@ -1,10 +1,10 @@
 import { Select } from '@navikt/ds-react';
 import React from 'react';
-import { DocumentType } from '@app/types/documents/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 
 interface DocumentTypeProps {
   setDokumentTypeId: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  dokumentTypeId: DocumentType | null;
+  dokumentTypeId: DistribusjonsType | null;
   error: string | undefined;
 }
 
@@ -20,15 +20,15 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId, error }: Do
     data-testid="upload-document-type-select"
   >
     <NoneSelected dokumentTypeId={dokumentTypeId} />
-    <option value={DocumentType.NOTAT.toString()}>Notat</option>
-    <option value={DocumentType.BREV.toString()}>Brev</option>
-    <option value={DocumentType.VEDTAKSBREV.toString()}>Vedtaksbrev</option>
-    <option value={DocumentType.BESLUTNING.toString()}>Beslutningsbrev</option>
+    <option value={DistribusjonsType.NOTAT.toString()}>Notat</option>
+    <option value={DistribusjonsType.BREV.toString()}>Brev</option>
+    <option value={DistribusjonsType.VEDTAKSBREV.toString()}>Vedtaksbrev</option>
+    <option value={DistribusjonsType.BESLUTNING.toString()}>Beslutningsbrev</option>
   </Select>
 );
 
 interface NoneSelectedProps {
-  dokumentTypeId: DocumentType | null;
+  dokumentTypeId: DistribusjonsType | null;
 }
 
 const NoneSelected = ({ dokumentTypeId }: NoneSelectedProps) => {

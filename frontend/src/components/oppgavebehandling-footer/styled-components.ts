@@ -99,4 +99,5 @@ export const StyledFinishOppgaveBox = styled.div`
   padding: 1em;
   background-color: #fff;
   width: 400px;
+  z-index: 1;
 `;

@@ -12,7 +12,7 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     removeTilknyttetDocument: builder.mutation<{ modified: string }, ICheckDocumentParams>({
       query: ({ oppgaveId, journalpostId, dokumentInfoId }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
         method: 'DELETE',
       }),
       invalidatesTags: (_, __, { journalpostId, dokumentInfoId }) => [

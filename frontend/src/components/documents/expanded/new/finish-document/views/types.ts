@@ -1,5 +1,6 @@
+import { IMainDocument } from '@app/types/documents/documents';
+
 export interface FinishProps {
-  documentTitle: string;
-  dokumentId: string;
+  document: IMainDocument;
   close: () => void;
 }

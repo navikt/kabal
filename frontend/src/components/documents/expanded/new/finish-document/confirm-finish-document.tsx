@@ -1,5 +1,5 @@
 import React from 'react';
-import { DocumentType, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { ArchiveView } from './views/archive-view';
 import { SendView } from './views/send-view';
 
@@ -14,12 +14,11 @@ export const ConfirmFinishDocument = ({ isOpen, close, document }: Props) => {
     return null;
   }
 
-  const { tittel, id, dokumentTypeId } = document;
-  const willSend = dokumentTypeId !== DocumentType.NOTAT;
+  const willSend = document.dokumentTypeId !== DistribusjonsType.NOTAT;
 
   if (willSend) {
-    return <SendView dokumentId={id} documentTitle={tittel} close={close} />;
+    return <SendView document={document} close={close} />;
   }
 
-  return <ArchiveView dokumentId={id} documentTitle={tittel} close={close} />;
+  return <ArchiveView document={document} close={close} />;
 };

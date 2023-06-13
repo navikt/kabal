@@ -1,6 +1,6 @@
 import { Descendant } from 'slate';
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { DocumentType } from '@app/types/documents/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -47,5 +47,5 @@ export const KLAGEVEDTAK_TEMPLATE = deepFreeze<ISmartEditorTemplate>({
   tittel: 'Vedtak/beslutning',
   content: INITIAL_SLATE_VALUE,
   version: VERSION,
-  dokumentTypeId: DocumentType.VEDTAKSBREV,
+  dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
 });

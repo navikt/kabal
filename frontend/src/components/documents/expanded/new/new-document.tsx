@@ -1,12 +1,15 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { DocumentType, IMainDocument } from '@app/types/documents/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DragAndDropTypesEnum } from '@app/types/drag-and-drop';
 import { StyledDate, StyledNewDocument } from '../styled-components/document';
 import { DocumentOptions } from './document-options';
 import { DocumentTitle } from './document-title';
@@ -17,23 +20,69 @@ interface Props {
   document: IMainDocument;
 }
 
-export const NewDocument = ({ document }: Props) => (
-  <StyledNewDocument
-    data-documentname={document.tittel}
-    data-documentid={document.id}
-    data-testid="new-document-list-item-content"
-    data-documenttype={document.parent === null ? 'parent' : 'attachment'}
-  >
-    <DocumentTitle document={document} />
-    <SetDocumentType document={document} />
-    <StyledDate data-testid="new-document-date">{isoDateTimeToPrettyDate(document.opplastet)}</StyledDate>
-    <ActionContent document={document} />
-  </StyledNewDocument>
-);
+const EMPTY_LIST: IMainDocument[] = [];
+
+export const NewDocument = ({ document }: Props) => {
+  const oppgaveId = useOppgaveId();
+  const { data = EMPTY_LIST, isLoading } = useGetDocumentsQuery(oppgaveId);
+  const [isDragging, setIsDragging] = useState(false);
+  const cleanDragUI = useRef<() => void>(() => undefined);
+
+  const onDragStart = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      setIsDragging(true);
+      e.dataTransfer.clearData();
+
+      const format =
+        document.type === DocumentTypeEnum.JOURNALFOERT
+          ? DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT_REFERENCE
+          : DragAndDropTypesEnum.DOCUMENT;
+
+      if (document.parentId === null) {
+        const titles: string[] = [document.tittel];
+
+        for (const d of data) {
+          if (d.parentId === document.id) {
+            titles.push(d.tittel);
+          }
+        }
+
+        cleanDragUI.current = createDragUI(titles, e);
+      } else {
+        cleanDragUI.current = createDragUI([document.tittel], e);
+      }
+
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.dropEffect = 'move';
+      e.dataTransfer.setData(format, document.id);
+    },
+    [data, document.id, document.parentId, document.tittel, document.type]
+  );
+
+  return (
+    <StyledNewDocument
+      data-documentname={document.tittel}
+      data-documentid={document.id}
+      data-testid="new-document-list-item-content"
+      data-documenttype={document.parentId === null ? 'parent' : 'attachment'}
+      onDragStart={onDragStart}
+      onDragEnd={() => {
+        setIsDragging(false);
+        cleanDragUI.current();
+      }}
+      draggable={!document.isMarkertAvsluttet && !isLoading && !isDragging}
+    >
+      <DocumentTitle document={document} />
+      <SetDocumentType document={document} />
+      <StyledDate data-testid="new-document-date">{isoDateTimeToPrettyDate(document.newOpplastet)}</StyledDate>
+      <ActionContent document={document} />
+    </StyledNewDocument>
+  );
+};
 
 const ActionContent = ({ document }: Props) => {
   if (document.isMarkertAvsluttet) {
-    if (document.dokumentTypeId === DocumentType.NOTAT) {
+    if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
       return <StyledIcon title="Dokumentet er under journalføring." data-testid="document-archiving" />;
     }
 

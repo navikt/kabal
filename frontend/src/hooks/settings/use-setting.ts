@@ -1,8 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { IShownDocument } from '@app/components/show-document/types';
+import { IShownDocument } from '@app/components/view-pdf/types';
 import { useUser } from '@app/simple-api-state/use-user';
 import { Journalposttype } from '@app/types/arkiverte-documents';
+import { IncludedDocumentFilter } from '@app/types/documents/documents';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 
@@ -110,7 +111,15 @@ export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tab
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 
 // Oppgavebehandling documents
-export const useDocumentsPdfViewed = () => useJsonSetting<IShownDocument>(useOppgavePath('tabs/documents/pdf/viewed'));
+export const useDocumentsPdfViewed = () => {
+  const { value = [], ...rest } = useJsonSetting<IShownDocument | IShownDocument[]>(
+    useOppgavePath('tabs/documents/pdf/viewed')
+  );
+
+  const values = Array.isArray(value) ? value : [value];
+
+  return { value: values, ...rest };
+};
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
 
@@ -144,6 +153,8 @@ export const useDocumentsFilterTitle = () => useSetting(useOppgavePath('tabs/doc
 
 export const useDocumentsFilterSaksId = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/saksid'));
 
+export const useDocumentsFilterIncluded = () =>
+  useJsonSetting<IncludedDocumentFilter>(useOppgavePath('tabs/documents/filters/included'));
 // Oppgavebehandling smart editor
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>

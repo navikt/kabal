@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { DocumentType, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { ConfirmFinishDocument } from './confirm-finish-document';
 
 interface Props {
@@ -20,13 +20,13 @@ export const FinishDocument = ({ document }: Props) => {
 
   useOnClickOutside(ref, close, false);
 
-  if (!canEdit || document.isMarkertAvsluttet || document.parent !== null) {
+  if (!canEdit || document.isMarkertAvsluttet || document.parentId !== null) {
     return null;
   }
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
-  const buttonText = document.dokumentTypeId === DocumentType.NOTAT ? 'Arkiver' : 'Send ut';
+  const buttonText = document.dokumentTypeId === DistribusjonsType.NOTAT ? 'Arkiver' : 'Send ut';
 
   return (
     <StyledSendDocument ref={ref}>

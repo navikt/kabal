@@ -1,6 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { omit } from '@app/functions/omit';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
 import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
@@ -28,10 +29,11 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
                 dokumentTypeId: data.dokumentTypeId,
                 isMarkertAvsluttet: false,
                 isSmartDokument: true,
-                opplastet: data.created,
-                parent: data.parent,
+                newOpplastet: data.created,
+                parentId: data.parentId,
                 templateId: data.templateId,
                 tittel: data.tittel,
+                type: DocumentTypeEnum.SMART,
               },
               ...draft,
             ])

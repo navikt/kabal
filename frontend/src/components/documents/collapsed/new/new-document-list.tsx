@@ -17,7 +17,7 @@ export const NewDocumentList = () => {
     return <Loader size="xlarge" />;
   }
 
-  const documents = data.filter(({ parent }) => parent === null);
+  const documents = data.filter(({ parentId }) => parentId === null);
 
   if (documents.length === 0) {
     return null;
@@ -31,7 +31,7 @@ export const NewDocumentList = () => {
         {documents.map((document) => (
           <NewDocument
             {...document}
-            attachments={data.filter(({ parent }) => parent === document.id)}
+            attachments={data.filter(({ parentId }) => parentId === document.id)}
             key={document.id}
           />
         ))}

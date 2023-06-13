@@ -1,12 +1,17 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { Fields } from '../styled-components/grid';
 
-export const JournalposttypeTag = ({ type }: { type: Journalposttype | null }) => (
-  <StyledJournalposttype>{getJournalposttype(type)}</StyledJournalposttype>
+export const JournalposttypeTag = memo(
+  ({ type }: { type: Journalposttype | null }) => (
+    <StyledJournalposttype>{getJournalposttype(type)}</StyledJournalposttype>
+  ),
+  (prevProps, nextProps) => prevProps.type === nextProps.type
 );
+
+JournalposttypeTag.displayName = 'JournalposttypeTag';
 
 const StyledJournalposttype = styled.span`
   grid-area: ${Fields.Type};
@@ -15,30 +20,35 @@ const StyledJournalposttype = styled.span`
 const getJournalposttype = (type: Journalposttype | null) => {
   if (type === null) {
     return (
-      <Tag size="xsmall" variant="error" title="Journalposttype mangler">
+      <StyledTag size="xsmall" variant="error" title="Journalposttype mangler">
         Ingen
-      </Tag>
+      </StyledTag>
     );
   }
 
   switch (type) {
     case Journalposttype.INNGAAENDE:
       return (
-        <Tag size="xsmall" variant="alt2" title="Inngående">
+        <StyledTag size="xsmall" variant="alt2" title="Inngående">
           I
-        </Tag>
+        </StyledTag>
       );
     case Journalposttype.UTGAAENDE:
       return (
-        <Tag size="xsmall" variant="alt3" title="Utgående">
+        <StyledTag size="xsmall" variant="alt3" title="Utgående">
           U
-        </Tag>
+        </StyledTag>
       );
     case Journalposttype.NOTAT:
       return (
-        <Tag size="xsmall" variant="alt1" title="Notat">
+        <StyledTag size="xsmall" variant="alt1" title="Notat">
           N
-        </Tag>
+        </StyledTag>
       );
   }
 };
+
+const StyledTag = styled(Tag)`
+  width: 20px;
+  height: 20px;
+`;

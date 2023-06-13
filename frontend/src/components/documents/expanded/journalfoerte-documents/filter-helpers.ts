@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IncludedDocumentFilter } from '@app/types/documents/documents';
 import { IOption } from '../../../filter-dropdown/props';
 
 export const getAvsenderMottakerOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
@@ -61,26 +62,49 @@ export const useFilteredDocuments = (
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
+  included: IncludedDocumentFilter,
   search: string
 ): IArkivertDocument[] => {
   const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
 
   return useMemo(
     () =>
-      documents.filter(
-        ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg }) =>
-          (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-          (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-          (selectedAvsenderMottakere.length === 0 ||
-            selectedAvsenderMottakere.includes(
-              avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
-            )) &&
-          (selectedSaksIds.length === 0 ||
-            selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
-          (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
-          (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
-      ),
-    [documents, regex, selectedAvsenderMottakere, selectedDateRange, selectedSaksIds, selectedTemaer, selectedTypes]
+      documents
+        .filter(
+          ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg, valgt }) =>
+            (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
+            (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
+            (selectedAvsenderMottakere.length === 0 ||
+              selectedAvsenderMottakere.includes(
+                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
+              )) &&
+            (selectedSaksIds.length === 0 ||
+              selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+            (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
+            (included === IncludedDocumentFilter.ALL ||
+              (included === IncludedDocumentFilter.INCLUDED && valgt) ||
+              (included === IncludedDocumentFilter.EXCLUDED && !valgt)) &&
+            (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
+        )
+        .map(({ vedlegg, ...rest }) => ({
+          ...rest,
+          vedlegg: vedlegg.filter(
+            ({ valgt }) =>
+              included === IncludedDocumentFilter.ALL ||
+              (included === IncludedDocumentFilter.INCLUDED && valgt) ||
+              (included === IncludedDocumentFilter.EXCLUDED && !valgt)
+          ),
+        })),
+    [
+      documents,
+      included,
+      regex,
+      selectedAvsenderMottakere,
+      selectedDateRange,
+      selectedSaksIds,
+      selectedTemaer,
+      selectedTypes,
+    ]
   );
 };
 

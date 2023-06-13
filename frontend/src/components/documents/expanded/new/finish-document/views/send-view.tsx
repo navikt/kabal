@@ -20,7 +20,8 @@ import {
 } from './styled-components';
 import { FinishProps } from './types';
 
-export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
+export const SendView = ({ document, close }: FinishProps) => {
+  const { id: dokumentId, tittel: documentTitle } = document;
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
   const [brevmottakertypeIds, setBrevmottakertypeIds] = useState<Brevmottakertype[]>([]);
@@ -66,7 +67,7 @@ export const SendView = ({ dokumentId, documentTitle, close }: FinishProps) => {
 
     setErrors([]);
     await finish({ dokumentId, oppgaveId: data.id, brevmottakertypeIds: types });
-    remove(dokumentId);
+    remove(dokumentId, document);
   };
 
   return (

@@ -4,24 +4,24 @@ import React from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentType, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 
 const OPTIONS = [
   {
     label: 'Vedtaksbrev',
-    value: DocumentType.VEDTAKSBREV,
+    value: DistribusjonsType.VEDTAKSBREV,
   },
   {
     label: 'Beslutningsbrev',
-    value: DocumentType.BESLUTNING,
+    value: DistribusjonsType.BESLUTNING,
   },
   {
     label: 'Brev',
-    value: DocumentType.BREV,
+    value: DistribusjonsType.BREV,
   },
   {
     label: 'Notat',
-    value: DocumentType.NOTAT,
+    value: DistribusjonsType.NOTAT,
   },
 ];
 
@@ -34,7 +34,7 @@ export const SetDocumentType = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
 
-  if (document.parent !== null) {
+  if (document.parentId !== null) {
     return null;
   }
 
@@ -63,6 +63,6 @@ export const SetDocumentType = ({ document }: Props) => {
   );
 };
 
-const DOCUMENT_TYPES = Object.values(DocumentType);
+const DOCUMENT_TYPES = Object.values(DistribusjonsType);
 
-const isDocumentType = (type: string): type is DocumentType => DOCUMENT_TYPES.some((t) => t === type);
+const isDocumentType = (type: string): type is DistribusjonsType => DOCUMENT_TYPES.some((t) => t === type);
