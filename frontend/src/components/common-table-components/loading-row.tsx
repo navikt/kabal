@@ -1,7 +1,6 @@
-import { Table } from '@navikt/ds-react';
+import { Skeleton, Table } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { TextLoader } from '@app/components/text-loader/text-loader';
 
 interface Props {
   testId: string;
@@ -14,7 +13,7 @@ export const LoadingRow = ({ testId, columnCount, behandlingid }: Props) => (
     {new Array(columnCount).fill(null).map((_, index) => (
       <Table.DataCell key={index}>
         <Container>
-          <TextLoader />
+          <Skeleton variant="text" width="100%" height="100%" />
         </Container>
       </Table.DataCell>
     ))}
