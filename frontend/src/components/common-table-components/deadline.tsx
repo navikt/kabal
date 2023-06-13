@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { addYears, parseISO } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import { addDays, addYears, isPast, parseISO } from 'date-fns';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
@@ -23,12 +23,11 @@ export const Deadline = ({ type, ...props }: Props) => {
 };
 
 interface EditableDeadlineProps {
-  age?: number;
   frist: string | null;
   oppgaveId: string;
 }
 
-const EditableDeadline = ({ frist, age, oppgaveId }: EditableDeadlineProps) => {
+const EditableDeadline = ({ frist, oppgaveId }: EditableDeadlineProps) => {
   const [userFrist, setUserFrist] = useState(frist);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,10 +35,15 @@ const EditableDeadline = ({ frist, age, oppgaveId }: EditableDeadlineProps) => {
 
   const closeCalendar = () => setIsOpen(false);
 
+  const fristExceeded = useMemo(
+    () => (userFrist === null ? false : isPast(addDays(parseISO(userFrist), 1))),
+    [userFrist]
+  );
+
   const children = isOpen ? (
     <EditDeadline frist={frist} oppgaveId={oppgaveId} closeCalendar={closeCalendar} setUserFrist={setUserFrist} />
   ) : (
-    <StyledDeadline $age={age} dateTime={userFrist ?? ''}>
+    <StyledDeadline $fristExceeded={fristExceeded} dateTime={userFrist ?? ''}>
       {isoDateToPretty(userFrist) ?? 'Ikke satt'}
     </StyledDeadline>
   );
@@ -112,11 +116,11 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
 };
 
 interface StyledDeadlineProps {
-  $age?: number;
+  $fristExceeded: boolean;
 }
 
 const StyledDeadline = styled.time<StyledDeadlineProps>`
-  color: ${({ $age }) => (typeof $age === 'number' && $age >= 84 ? 'var(--a-text-danger)' : 'var(--a-text-default)')};
+  color: ${({ $fristExceeded }) => ($fristExceeded ? 'var(--a-text-danger)' : 'var(--a-text-default)')};
 `;
 
 const Container = styled.div`

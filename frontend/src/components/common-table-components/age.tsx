@@ -24,9 +24,9 @@ export const Age = ({ age, mottattDate, oppgaveId }: Props) => {
   const children = isOpen ? (
     <EditAge mottattDate={mottattDate} oppgaveId={oppgaveId} closeCalendar={closeCalendar} setUserAge={setUserAge} />
   ) : (
-    <StyledAge $age={userAge}>
+    <span>
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
-    </StyledAge>
+    </span>
   );
 
   return (
@@ -95,14 +95,6 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
     />
   );
 };
-
-interface StyledAgeProps {
-  $age: number;
-}
-
-const StyledAge = styled.div<StyledAgeProps>`
-  color: ${({ $age }) => ($age >= 84 ? 'var(--a-text-danger)' : 'var(--a-text-default)')};
-`;
 
 const Container = styled.div`
   display: flex;
