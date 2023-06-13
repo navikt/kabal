@@ -1,5 +1,5 @@
 import { DocPencilIcon, FilePdfIcon, FilesIcon } from '@navikt/aksel-icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
@@ -21,14 +21,27 @@ export const DocumentTitle = ({ document }: Props) => {
     [document.id, value]
   );
 
+  const setViewedDocument = useCallback(() => {
+    if (document.type === DocumentTypeEnum.JOURNALFOERT) {
+      setValue({
+        type: document.type,
+        ...document.journalfoertDokumentReference,
+      });
+
+      return;
+    }
+
+    setValue({
+      type: document.type,
+      documentId: document.id,
+    });
+  }, [document, setValue]);
+
   useEffect(() => {
     if (isActive) {
-      setValue({
-        type: document.isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.UPLOADED,
-        documentId: document.id,
-      });
+      setViewedDocument();
     }
-  }, [isActive, document.tittel, document.id, setValue, document.isSmartDokument]);
+  }, [isActive, setViewedDocument]);
 
   if (editMode) {
     return (
@@ -45,15 +58,9 @@ export const DocumentTitle = ({ document }: Props) => {
     );
   }
 
-  const onClick = () =>
-    setValue({
-      type: document.isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.UPLOADED,
-      documentId: document.id,
-    });
-
   return (
     <StyledDocumentTitle>
-      <StyledDocumentButton isActive={isActive} onClick={onClick} data-testid="document-open-button">
+      <StyledDocumentButton isActive={isActive} onClick={setViewedDocument} data-testid="document-open-button">
         <Icon type={document.type} />
         <EllipsisTitle title={document.tittel}>{document.tittel}</EllipsisTitle>
       </StyledDocumentButton>
