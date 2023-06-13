@@ -16,6 +16,8 @@ import { SmartEditor } from '../smart-editor';
 import { CommentsClickBoundary } from './comments-click-boundry';
 import { ActiveTabButton, TabButton, TabsContainer } from './styled-components';
 
+const NEW_TAB_ID = 'NEW_TAB_ID';
+
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
   const editors = useSmartEditors(oppgaveId);
@@ -33,23 +35,14 @@ interface TabbedProps {
 }
 
 const Tabbed = ({ oppgaveId, editors }: TabbedProps) => {
-  const { value: editorId = null, setValue: setEditorId, remove } = useSmartEditorActiveDocument();
+  const [firstEditor] = editors;
+  const { value: editorId = firstEditor?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
 
-  const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : null;
+  const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
   return (
     <>
-      <Tabs
-        editors={editors}
-        activeTab={activeEditorId}
-        setActiveTab={(id) => {
-          if (id === null) {
-            remove();
-          } else {
-            setEditorId(id);
-          }
-        }}
-      />
+      <Tabs editors={editors} activeTab={activeEditorId} setActiveTab={setEditorId} />
       <ShowTab editors={editors} activeEditorId={activeEditorId} oppgaveId={oppgaveId} onCreate={setEditorId} />
     </>
   );
@@ -57,8 +50,8 @@ const Tabbed = ({ oppgaveId, editors }: TabbedProps) => {
 
 interface TabsProps {
   editors: ISmartEditor[];
-  activeTab: string | null;
-  setActiveTab: (id: string | null) => void;
+  activeTab: string;
+  setActiveTab: (id: string) => void;
 }
 
 const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
@@ -76,7 +69,7 @@ const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
   return (
     <TabsContainer>
       {tabs}
-      <ShowNewTabButton onClick={() => setActiveTab(null)} isActive={activeTab === null} />
+      <ShowNewTabButton onClick={() => setActiveTab(NEW_TAB_ID)} isActive={activeTab === NEW_TAB_ID} />
     </TabsContainer>
   );
 };
@@ -104,7 +97,7 @@ const ShowNewTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
 
 interface Props {
   oppgaveId: string;
-  activeEditorId: string | null;
+  activeEditorId: string;
   editors: ISmartEditor[];
   onCreate: (documentId: string) => void;
 }
@@ -144,7 +137,7 @@ const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
     );
   });
 
-  const newTab = activeEditorId === null ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
+  const newTab = activeEditorId === NEW_TAB_ID ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
 
   return (
     <>
