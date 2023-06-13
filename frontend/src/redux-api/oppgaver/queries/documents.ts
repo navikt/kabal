@@ -38,14 +38,12 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
                   ({ id, parentId }) => !(id === event.data || parentId === event.data)
                 ); // Remove finished document from list.
 
-                if (filteredList.length !== draft.length) {
-                  dispatch(
-                    oppgaverApi.util.invalidateTags([
-                      { type: DokumenterListTagTypes.DOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
-                      { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
-                    ])
-                  );
-                }
+                dispatch(
+                  oppgaverApi.util.invalidateTags([
+                    { type: DokumenterListTagTypes.DOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
+                    { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
+                  ])
+                );
 
                 return filteredList;
               });
