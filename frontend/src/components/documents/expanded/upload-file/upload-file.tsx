@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentType } from '@app/types/documents/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { SetDocumentType } from './document-type';
 
 const MAX_SIZE_BYTES = 8388608;
@@ -16,7 +16,7 @@ export const UploadFileButton = () => {
   const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
-  const [dokumentTypeId, setDokumentTypeId] = useState<DocumentType | null>(null);
+  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType | null>(null);
   const [documentTypeError, setDocumentTypeError] = useState<string>();
   const [uploadError, setUploadError] = useState<string>();
 
@@ -140,4 +140,5 @@ const StyledUploadFile = styled.div`
   align-items: flex-end;
 `;
 
-const isDocumentType = (type: string): type is DocumentType => Object.values(DocumentType).some((t) => t === type);
+const isDocumentType = (type: string): type is DistribusjonsType =>
+  Object.values(DistribusjonsType).some((t) => t === type);

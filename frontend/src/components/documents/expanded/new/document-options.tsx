@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -15,6 +15,13 @@ interface Props {
 export const DocumentOptions = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    }
+  }, []);
 
   if (isLoading || typeof data === 'undefined') {
     return (
@@ -25,7 +32,7 @@ export const DocumentOptions = ({ document }: Props) => {
   }
 
   return (
-    <Container data-testid="document-actions-container">
+    <Container data-testid="document-actions-container" ref={ref}>
       <SetParentDocument document={document} />
       <FinishDocument document={document} />
       <DeleteDocumentButton document={document} />

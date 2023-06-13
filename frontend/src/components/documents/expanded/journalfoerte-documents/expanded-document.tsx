@@ -1,5 +1,5 @@
 import { CopyButton, Detail, Label } from '@navikt/ds-react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
@@ -10,6 +10,14 @@ interface ExpandedDocumentProps {
 }
 
 export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (show && ref.current !== null) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    }
+  }, [show]);
+
   if (!show) {
     return null;
   }
@@ -17,7 +25,7 @@ export const ExpandedDocument = ({ show, document }: ExpandedDocumentProps) => {
   const { journalstatus, kanalnavn, opprettetAvNavn, journalpostId } = document;
 
   return (
-    <StyledExpandedDocument>
+    <StyledExpandedDocument ref={ref}>
       <TopRow>
         <section>
           <Label size="small">Status</Label>

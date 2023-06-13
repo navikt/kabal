@@ -31,7 +31,9 @@ export const DocumentListElement = memo(
         isLoading
           ? []
           : [
-              ...newDocuments.filter(({ parent }) => parent === null).map(({ id, tittel }) => ({ id, title: tittel })),
+              ...newDocuments
+                .filter(({ parentId }) => parentId === null)
+                .map(({ id, tittel }) => ({ id, title: tittel })),
               ...attachedDocuments.dokumenter.filter(hasTitle).map(({ dokumentInfoId, journalpostId, tittel }) => ({
                 id: `${journalpostId}-${dokumentInfoId}`,
                 title: tittel,

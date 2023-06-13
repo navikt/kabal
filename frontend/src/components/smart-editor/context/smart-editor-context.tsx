@@ -9,7 +9,7 @@ import { useSmartEditorGodeFormuleringerOpen } from '@app/hooks/settings/use-set
 import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { DocumentType } from '@app/types/documents/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { withCopy } from '../../rich-text/rich-text-editor/with-copy';
 import { withNormalization } from '../../rich-text/rich-text-editor/with-normalization';
@@ -28,13 +28,13 @@ export interface ISmartEditorContext {
   readonly setShowMaltekstTags: (showMaltekstTags: boolean) => void;
   readonly showGodeFormuleringer: boolean;
   readonly setShowGodeFormuleringer: (showGodeFormuleringer: boolean) => void;
-  readonly dokumentTypeId: DocumentType;
+  readonly dokumentTypeId: DistribusjonsType;
 }
 interface Props {
   readonly children: React.ReactNode;
   readonly documentId: string | null;
   readonly templateId: TemplateIdEnum | NoTemplateIdEnum;
-  readonly dokumentTypeId: DocumentType;
+  readonly dokumentTypeId: DistribusjonsType;
 }
 
 export const SmartEditorContextComponent = ({ children, documentId, templateId, dokumentTypeId }: Props) => {
@@ -159,5 +159,5 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   showGodeFormuleringer: true,
   setShowGodeFormuleringer: () => {},
   templateId: null,
-  dokumentTypeId: DocumentType.BREV,
+  dokumentTypeId: DistribusjonsType.BREV,
 });

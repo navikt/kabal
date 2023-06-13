@@ -7,7 +7,7 @@ import { useSelected, useSlateStatic } from 'slate-react';
 import styled from 'styled-components';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { DocumentType } from '@app/types/documents/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { ApiQuery, IPlainText, PlainTextTypes } from '@app/types/texts/texts';
 import { SmartEditorContext } from '../../smart-editor/context/smart-editor-context';
 import { useQuery } from '../../smart-editor/hooks/use-query';
@@ -22,7 +22,7 @@ type ElementTypes = HeaderElementType | FooterElementType;
 export const HeaderFooterElement = (props: RenderElementProps<ElementTypes>) => {
   const { dokumentTypeId } = useContext(SmartEditorContext);
 
-  if (dokumentTypeId === DocumentType.NOTAT) {
+  if (dokumentTypeId === DistribusjonsType.NOTAT) {
     return null;
   }
 

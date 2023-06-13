@@ -26,7 +26,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
       return;
     }
 
-    remove(document.id);
+    remove(document.id, document);
     deleteDocument({ dokumentId: document.id, oppgaveId });
   };
 
@@ -34,7 +34,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     return null;
   }
 
-  const hasAttachments = data.some(({ parent }) => parent === document.id);
+  const hasAttachments = data.some(({ parentId }) => parentId === document.id);
 
   if (hasAttachments) {
     return null;

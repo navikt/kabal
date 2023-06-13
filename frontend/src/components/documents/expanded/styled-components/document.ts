@@ -6,36 +6,46 @@ const documentCSS = css`
   width: 100%;
   padding-right: 0;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: transparent;
   transition: background-color 0.2s ease-in-out;
   min-height: 34.5px;
-
-  :hover {
-    background-color: #f5f5f5;
-  }
 `;
 
 export const StyledNewDocument = styled.article`
   ${documentCSS}
   ${newDocumentsGridCSS}
+
+  :hover {
+    background-color: var(--a-surface-hover);
+  }
 `;
 
-export const StyledVedlegg = styled.article`
+export const StyledVedlegg = styled.article<{ $selected: boolean }>`
   ${documentCSS}
   ${vedleggGridCSS}
+
+  background-color: ${({ $selected }) => getBackgroundColor(false, $selected)};
+
+  :hover {
+    background-color: ${({ $selected }) => getHoverBackgroundColor(false, $selected)};
+  }
 `;
 
-export const StyledJournalfoertDocument = styled.article<{ $expanded: boolean }>`
+export const StyledJournalfoertDocument = styled.article<{ $expanded: boolean; $selected: boolean }>`
   ${documentCSS}
   ${journalfoerteDocumentsGridCSS}
-  background-color: ${({ $expanded }) => ($expanded ? 'var(--a-surface-subtle)' : 'tranparent')};
+  background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};
+
+  :hover {
+    background-color: ${({ $expanded, $selected }) => getHoverBackgroundColor($expanded, $selected)};
+  }
 `;
 
 export const StyledDocumentTitle = styled.h1`
   grid-area: title;
   display: flex;
   flex-direction: row;
-  gap: 0;
+  column-gap: 8px;
   font-size: 18px;
   font-weight: normal;
   margin: 0;
@@ -50,3 +60,27 @@ export const StyledDate = styled.time`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+const getBackgroundColor = (expanded: boolean, selected: boolean) => {
+  if (expanded) {
+    return 'var(--a-surface-subtle)';
+  }
+
+  if (selected) {
+    return 'var(--a-surface-selected)';
+  }
+
+  return 'transparent';
+};
+
+const getHoverBackgroundColor = (expanded: boolean, selected: boolean) => {
+  if (expanded) {
+    return 'var(--a-surface-subtle)';
+  }
+
+  if (selected) {
+    return 'var(--a-surface-action-subtle-hover)';
+  }
+
+  return 'var(--a-surface-hover)';
+};

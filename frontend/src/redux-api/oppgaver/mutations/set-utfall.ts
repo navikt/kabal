@@ -12,7 +12,7 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     updateUtfall: builder.mutation<{ modified: string }, IOppgavebehandlingUtfallUpdateParams>({
       query: ({ oppgaveId, utfall }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/resultat/utfall`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/resultat/utfall`,
         method: 'PUT',
         body: { utfall },
       }),

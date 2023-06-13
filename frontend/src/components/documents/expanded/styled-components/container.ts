@@ -11,6 +11,7 @@ const commonStyles = css`
 
 export const StyledDocumentsContainer = styled.section`
   ${commonStyles}
+  max-height: calc(50% - 100px);
 `;
 
 export const StyledJournalfoerteDocumentsContainer = styled.section`

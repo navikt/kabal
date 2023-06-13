@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { DocumentTypeEnum } from '../../../show-document/types';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ViewDocumentButton } from '../styled-components/document';
 
 interface Props {
@@ -14,11 +14,14 @@ export const OpenDocumentButton = ({ id, title, isSmartDokument }: Props) => {
 
   const onClick = () =>
     setValue({
-      type: isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.FILE,
+      type: isSmartDokument ? DocumentTypeEnum.SMART : DocumentTypeEnum.UPLOADED,
       documentId: id,
     });
 
-  const isActive = typeof value !== 'undefined' && value.type !== DocumentTypeEnum.ARCHIVED && value.documentId === id;
+  const isActive = useMemo(
+    () => value.some((v) => v.type !== DocumentTypeEnum.JOURNALFOERT && v.documentId === id),
+    [id, value]
+  );
 
   return (
     <ViewDocumentButton isActive={isActive} tilknyttet={true} onClick={onClick}>

@@ -18,7 +18,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getOppgavebehandling: builder.query<IOppgavebehandling, string>({
-      query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/detaljer`,
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/detaljer`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
@@ -49,7 +49,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           : [{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: result?.id }],
     }),
     getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
-      query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/medunderskriver`,
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/medunderskriver`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
@@ -73,7 +73,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       },
     }),
     getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, string>({
-      query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/medunderskriverflyt`,
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/medunderskriverflyt`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;

@@ -1,4 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { KABAL_API_BASE_QUERY } from './common';
 import { documentsQuerySlice } from './oppgaver/queries/documents';
 
@@ -23,36 +24,52 @@ export const journalposterApi = createApi({
         method: 'PUT',
         body: { tittel },
       }),
-      onQueryStarted: async ({ tittel, journalpostId, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
+      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
+        const journalfoertePatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            draft.dokumenter = draft.dokumenter.map((d) => {
-              if (d.journalpostId === journalpostId) {
-                if (d.dokumentInfoId === dokumentInfoId) {
-                  return { ...d, tittel };
-                }
+            for (let i = draft.dokumenter.length - 1; i >= 0; i--) {
+              const doc = draft.dokumenter[i];
 
-                return {
-                  ...d,
-                  vedlegg: d.vedlegg.map((v) => {
-                    if (v.dokumentInfoId === dokumentInfoId) {
-                      return { ...v, tittel };
-                    }
-
-                    return v;
-                  }),
-                };
+              if (doc === undefined) {
+                continue;
               }
 
-              return d;
-            });
+              if (doc.dokumentInfoId === dokumentInfoId) {
+                draft.dokumenter[i] = { ...doc, tittel };
+              }
+
+              for (let j = doc.vedlegg.length - 1; j >= 0; j--) {
+                const vedlegg = doc.vedlegg[j];
+
+                if (vedlegg !== undefined && vedlegg.dokumentInfoId === dokumentInfoId) {
+                  doc.vedlegg[j] = { ...vedlegg, tittel };
+                }
+              }
+            }
+          })
+        );
+
+        const underArbeidPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+            for (let i = draft.length - 1; i >= 0; i--) {
+              const doc = draft[i];
+
+              if (
+                doc !== undefined &&
+                doc.type === DocumentTypeEnum.JOURNALFOERT &&
+                doc.journalfoertDokumentReference.dokumentInfoId === dokumentInfoId
+              ) {
+                draft[i] = { ...doc, tittel };
+              }
+            }
           })
         );
 
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          journalfoertePatchResult.undo();
+          underArbeidPatchResult.undo();
         }
       },
     }),

@@ -11,7 +11,7 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     updateRegistreringshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
       query: ({ oppgaveId, hjemler }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/resultat/hjemler`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/resultat/hjemler`,
         method: 'PUT',
         body: { hjemler },
       }),

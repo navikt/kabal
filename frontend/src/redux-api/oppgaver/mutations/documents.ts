@@ -3,14 +3,16 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { IFileDocument, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
+  ICreateVedleggFromJournalfoertDocumentParams,
   IFinishDocumentParams,
   ISetNameParams,
   ISetParentParams,
   ISetTypeParams,
 } from '@app/types/documents/params';
+import { ICreateVedleggFromJournalfoertDocumentResponse, ISetParentResponse } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
@@ -62,17 +64,115 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    setParent: builder.mutation<IMainDocument, ISetParentParams>({
+    setParent: builder.mutation<ISetParentResponse, ISetParentParams>({
       query: ({ oppgaveId, dokumentId, parentId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/parent`,
         body: { dokumentId: parentId },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ parentId, dokumentId, oppgaveId }, { queryFulfilled }) => {
-        const undo = optimisticUpdate(oppgaveId, dokumentId, 'parent', parentId);
+      onQueryStarted: async ({ parentId, dokumentId, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const documentsPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+            const newDocuments: IMainDocument[] = [];
+
+            for (const existing of draft) {
+              if (existing.id === dokumentId || existing.parentId === dokumentId) {
+                if (existing.type === DocumentTypeEnum.JOURNALFOERT) {
+                  if (parentId === null) {
+                    newDocuments.push(existing);
+                    continue;
+                  }
+
+                  const isDuplicate = draft.some(
+                    (doc) =>
+                      doc.id !== existing.id &&
+                      doc.parentId === parentId &&
+                      doc.type === DocumentTypeEnum.JOURNALFOERT &&
+                      doc.journalfoertDokumentReference.dokumentInfoId ===
+                        existing.journalfoertDokumentReference.dokumentInfoId
+                  );
+
+                  if (isDuplicate) {
+                    continue;
+                  }
+
+                  newDocuments.push({ ...existing, parentId });
+                  continue;
+                }
+
+                newDocuments.push({ ...existing, parentId });
+                continue;
+              }
+
+              newDocuments.push(existing);
+            }
+
+            return newDocuments;
+          })
+        );
+
+        const smartEditorsPatchResult = dispatch(
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
+            draft.map((doc) => (doc.id === dokumentId ? { ...doc, parentId } : doc))
+          )
+        );
+
+        const smartEditorPatchResult = dispatch(
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, (draft) => {
+            if (draft !== null) {
+              return { ...draft, parentId };
+            }
+
+            return draft;
+          })
+        );
 
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+              const newDocuments: IMainDocument[] = [];
+
+              for (const oldDoc of draft) {
+                let altered = false;
+
+                // If document is altered, add it to the new list.
+                for (const alteredDoc of data.alteredDocuments) {
+                  if (oldDoc.id === alteredDoc.id) {
+                    altered = true;
+                    newDocuments.push(alteredDoc);
+                    break;
+                  }
+                }
+
+                // If it is altered, continue to next document.
+                if (altered) {
+                  continue;
+                }
+
+                // If it is not altered, check if it is a duplicate.
+                const isDuplicate = data.duplicateJournalfoerteDokumenter.some(
+                  (duplicate) => duplicate.id === oldDoc.id
+                );
+
+                // If it is a duplicate, continue to next document.
+                if (isDuplicate) {
+                  continue;
+                }
+
+                newDocuments.push(oldDoc);
+              }
+
+              return newDocuments;
+            })
+          );
+
+          if (data.duplicateJournalfoerteDokumenter.length !== 0) {
+            toast.info(
+              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`
+            );
+          }
         } catch (e) {
           const message = 'Kunne ikke endre hoveddokument.';
 
@@ -81,7 +181,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           } else {
             toast.error(message);
           }
-          undo();
+          documentsPatchResult.undo();
+          smartEditorsPatchResult.undo();
+          smartEditorPatchResult.undo();
         }
       },
     }),
@@ -95,7 +197,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         const documentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
-              doc.id === dokumentId || doc.parent === dokumentId ? { ...doc, isMarkertAvsluttet: true } : doc
+              doc.id === dokumentId || doc.parentId === dokumentId ? { ...doc, isMarkertAvsluttet: true } : doc
             )
           )
         );
@@ -137,7 +239,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           documentsQuerySlice.util.updateQueryData(
             'getDocuments',
             oppgaveId,
-            (draft) => draft.filter(({ id, parent }) => id !== dokumentId || parent === dokumentId) // Remove deleted document from list.
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId) // Remove deleted document from list.
           )
         );
 
@@ -149,7 +251,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           smartEditorQuerySlice.util.updateQueryData(
             'getSmartEditors',
             { oppgaveId },
-            (draft) => draft.filter(({ id, parent }) => id !== dokumentId || parent === dokumentId) // Remove deleted document from list.
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId) // Remove deleted document from list.
           )
         );
 
@@ -188,6 +290,98 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [data, ...draft]));
         } catch (e) {
           const message = 'Kunne ikke laste opp dokument.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
+    createVedleggFromJournalfoertDocument: builder.mutation<
+      ICreateVedleggFromJournalfoertDocumentResponse,
+      ICreateVedleggFromJournalfoertDocumentParams
+    >({
+      query: ({ oppgaveId, parentId, journalfoerteDokumenter }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/journalfoertedokumenter`,
+        method: 'POST',
+        body: {
+          parentId,
+          journalfoerteDokumenter: journalfoerteDokumenter.map(({ journalpostId, dokumentInfoId }) => ({
+            journalpostId,
+            dokumentInfoId,
+          })),
+        },
+      }),
+      onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+            const newDocuments: IMainDocument[] = journalfoerteDokumenter
+              .filter(
+                (doc) =>
+                  !draft.some(
+                    (d) =>
+                      d.type === DocumentTypeEnum.JOURNALFOERT &&
+                      d.parentId === parentId &&
+                      d.journalfoertDokumentReference?.journalpostId === doc.journalpostId &&
+                      d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId
+                  )
+              )
+              .map((doc) => ({
+                ...doc,
+                id: `${doc.journalpostId}-${doc.dokumentInfoId}`,
+                parentId,
+                isMarkertAvsluttet: false,
+                isSmartDokument: false,
+                dokumentTypeId: doc.journalposttype === 'N' ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
+                newOpplastet: doc.datoOpprettet,
+                tittel: doc.tittel ?? 'Ukjent',
+                type: DocumentTypeEnum.JOURNALFOERT,
+                journalfoertDokumentReference: {
+                  journalpostId: doc.journalpostId,
+                  dokumentInfoId: doc.dokumentInfoId,
+                },
+              }));
+
+            return [...draft, ...newDocuments];
+          })
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+              for (const newDoc of data.addedJournalfoerteDokumenter) {
+                for (let index = draft.length - 1; index >= 0; index--) {
+                  const oldDoc = draft[index];
+
+                  if (
+                    oldDoc !== undefined &&
+                    oldDoc.type === DocumentTypeEnum.JOURNALFOERT &&
+                    oldDoc.journalfoertDokumentReference.journalpostId ===
+                      newDoc.journalfoertDokumentReference.journalpostId &&
+                    oldDoc.journalfoertDokumentReference.dokumentInfoId ===
+                      newDoc.journalfoertDokumentReference.dokumentInfoId
+                  ) {
+                    draft[index] = newDoc;
+                    break;
+                  }
+                }
+              }
+            })
+          );
+
+          if (data.duplicateJournalfoerteDokumenter.length !== 0) {
+            toast.info(
+              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`
+            );
+          }
+        } catch (e) {
+          patchResult.undo();
+
+          const message = 'Kunne ikke sette journalpost(er) som vedlegg.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
@@ -242,4 +436,5 @@ export const {
   useSetTypeMutation,
   useUploadFileDocumentMutation,
   useSetParentMutation,
+  useCreateVedleggFromJournalfoertDocumentMutation,
 } = documentsMutationSlice;

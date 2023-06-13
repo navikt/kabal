@@ -15,7 +15,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     sattPaaVent: builder.mutation<IModifiedResponse, ISettPaaVentParams>({
       query: ({ oppgaveId, ...body }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/sattpaavent`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/sattpaavent`,
         method: 'POST',
         body,
       }),
@@ -47,7 +47,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
     }),
     deleteSattPaaVent: builder.mutation<IModifiedResponse, string>({
       query: (oppgaveId) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/sattpaavent`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/sattpaavent`,
         method: 'DELETE',
       }),
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {

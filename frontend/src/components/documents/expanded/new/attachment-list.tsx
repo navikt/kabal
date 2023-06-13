@@ -19,7 +19,7 @@ export const AttachmentList = ({ parentId }: Props) => {
   return (
     <StyledAttachmentList data-testid="new-attachments-list">
       {data
-        .filter(({ parent }) => parent === parentId)
+        .filter((d) => d.parentId === parentId)
         .map((attachment) => (
           <StyledAttachmentListItem
             key={attachment.id}
@@ -27,6 +27,7 @@ export const AttachmentList = ({ parentId }: Props) => {
             data-documentname={attachment.tittel}
             data-documentid={attachment.id}
             data-documenttype="attachment"
+            $dragOver={false}
           >
             <NewDocument document={attachment} />
           </StyledAttachmentListItem>

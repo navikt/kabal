@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { DocumentTypeEnum } from '../../../show-document/types';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
 import { StyledDocumentTitle } from '../styled-components/document';
 import { EditButton } from './document-title-edit-button';
@@ -13,56 +13,73 @@ interface Props {
   harTilgangTilArkivvariant: boolean;
 }
 
-export const DocumentTitle = ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: Props) => {
-  const { value, setValue } = useDocumentsPdfViewed();
+export const DocumentTitle = memo(
+  ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: Props) => {
+    const { value, setValue } = useDocumentsPdfViewed();
 
-  const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
-  const isActive = useMemo(
-    () =>
-      typeof value !== 'undefined' &&
-      value.type === DocumentTypeEnum.ARCHIVED &&
-      value.dokumentInfoId === dokumentInfoId &&
-      value.journalpostId === journalpostId,
-    [dokumentInfoId, journalpostId, value]
-  );
+    const isActive = useMemo(
+      () =>
+        value.some(
+          (v) =>
+            v.type === DocumentTypeEnum.JOURNALFOERT &&
+            v.dokumentInfoId === dokumentInfoId &&
+            v.journalpostId === journalpostId
+        ),
+      [dokumentInfoId, journalpostId, value]
+    );
 
-  if (editMode) {
+    if (editMode) {
+      return (
+        <StyledDocumentTitle>
+          <SetFilename
+            journalpostId={journalpostId}
+            dokumentInfoId={dokumentInfoId}
+            tittel={tittel}
+            onDone={() => setEditMode(false)}
+          />
+          <EditButton
+            editMode={editMode}
+            setEditMode={setEditMode}
+            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+            tittel={tittel}
+          />
+        </StyledDocumentTitle>
+      );
+    }
+
+    const onClick = () =>
+      setValue({
+        type: DocumentTypeEnum.JOURNALFOERT,
+        dokumentInfoId,
+        journalpostId,
+      });
+
     return (
       <StyledDocumentTitle>
-        <SetFilename
-          journalpostId={journalpostId}
-          dokumentInfoId={dokumentInfoId}
-          tittel={tittel}
-          onDone={() => setEditMode(false)}
-        />
+        <StyledDocumentButton
+          isActive={isActive}
+          onClick={onClick}
+          disabled={!harTilgangTilArkivvariant}
+          data-testid="document-open-button"
+        >
+          <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
+        </StyledDocumentButton>
         <EditButton
           editMode={editMode}
           setEditMode={setEditMode}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          tittel={tittel}
         />
       </StyledDocumentTitle>
     );
-  }
+  },
+  (prevProps, nextProps) =>
+    prevProps.tittel === nextProps.tittel &&
+    prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
+    prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
+    prevProps.journalpostId === nextProps.journalpostId
+);
 
-  const onClick = () =>
-    setValue({
-      type: DocumentTypeEnum.ARCHIVED,
-      dokumentInfoId,
-      journalpostId,
-    });
-
-  return (
-    <StyledDocumentTitle>
-      <StyledDocumentButton
-        isActive={isActive}
-        onClick={onClick}
-        disabled={!harTilgangTilArkivvariant}
-        data-testid="document-open-button"
-      >
-        <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
-      </StyledDocumentButton>
-      <EditButton editMode={editMode} setEditMode={setEditMode} harTilgangTilArkivvariant={harTilgangTilArkivvariant} />
-    </StyledDocumentTitle>
-  );
-};
+DocumentTitle.displayName = 'DocumentTitle';

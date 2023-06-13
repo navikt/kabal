@@ -1,7 +1,7 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
-import { ShowDocument } from '@app/components/show-document/show-document';
+import { ViewPDF } from '@app/components/view-pdf/view-pdf';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useDocumentsEnabled, useDocumentsExpanded } from '@app/hooks/settings/use-setting';
 import { CollapsedDocuments } from './collapsed/collapsed';
@@ -36,7 +36,7 @@ const DocumentsView = () => {
       <PanelContainer data-testid="documents-panel">
         <DocumentList />
       </PanelContainer>
-      <ShowDocument />
+      <ViewPDF />
     </>
   );
 };

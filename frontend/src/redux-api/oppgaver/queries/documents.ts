@@ -1,7 +1,8 @@
+import { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { queryStringify } from '@app/functions/query-string';
 import { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { IMainDocument } from '@app/types/documents/documents';
+import { IMainDocument, IMergedDocumentsResponse } from '@app/types/documents/documents';
 import { IValidateDocumentResponse } from '@app/types/documents/validation';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '../../common';
 import { ServerSentEventManager, ServerSentEventType } from '../../server-sent-events';
@@ -33,7 +34,9 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
                   return draft;
                 }
 
-                const filteredList = draft.filter(({ id, parent }) => !(id === event.data || parent === event.data)); // Remove finished document from list.
+                const filteredList = draft.filter(
+                  ({ id, parentId }) => !(id === event.data || parentId === event.data)
+                ); // Remove finished document from list.
 
                 if (filteredList.length !== draft.length) {
                   dispatch(
@@ -64,16 +67,23 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
           forrigeSide: null,
         });
 
-        return `/kabal-api/klagebehandlinger/${oppgaveId}/arkivertedokumenter${query}`;
+        return `/kabal-api/behandlinger/${oppgaveId}/arkivertedokumenter${query}`;
       },
       providesTags: dokumenterListTags(DokumenterListTagTypes.DOKUMENTER),
     }),
     getTilknyttedeDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
-      query: (oppgaveId) => `/kabal-api/klagebehandlinger/${oppgaveId}/dokumenttilknytninger`,
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger`,
       providesTags: dokumenterListTags(DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER),
     }),
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,
+    }),
+    mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IShownArchivedDocument[]>({
+      query: (body) => ({
+        url: `/kabal-api/journalposter/mergedocuments`,
+        method: 'POST',
+        body,
+      }),
     }),
   }),
 });
@@ -83,4 +93,5 @@ export const {
   useGetArkiverteDokumenterQuery,
   useGetTilknyttedeDokumenterQuery,
   useLazyValidateDocumentQuery,
+  useMergedDocumentsReferenceQuery,
 } = documentsQuerySlice;

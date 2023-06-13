@@ -13,7 +13,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     tilknyttDocument: builder.mutation<ITilknyttDocumentResponse, ICheckDocumentParams>({
       query: ({ oppgaveId, dokumentInfoId, journalpostId }) => ({
-        url: `/kabal-api/klagebehandlinger/${oppgaveId}/dokumenttilknytninger`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger`,
         method: 'POST',
         body: {
           journalpostId,

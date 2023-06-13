@@ -1,10 +1,8 @@
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { MedunderskriverFlyt } from '../kodeverk';
-import { INavEmployee, ISakenGjelder, IVedlegg } from '../oppgave-common';
+import { INavEmployee, ISakenGjelder } from '../oppgave-common';
 
-export interface ITilknyttDocumentResponse extends IModifiedResponse {
-  file: IVedlegg;
-}
+export type ITilknyttDocumentResponse = IModifiedResponse;
 
 export interface IVedtakFullfoertResponse extends IModifiedResponse {
   isAvsluttetAvSaksbehandler: boolean;
@@ -28,10 +26,11 @@ export interface IMedunderskriverflytResponse {
 }
 
 export interface ISettMedunderskriverResponse extends IModifiedResponse {
+  medunderskriver: INavEmployee | null;
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
-export interface ISwitchMedunderskriverflytResponse extends IModifiedResponse {
+export interface ISwitchMedunderskriverflytResponse extends IModifiedResponse, INavEmployee {
   medunderskriverFlyt: MedunderskriverFlyt;
 }
 
