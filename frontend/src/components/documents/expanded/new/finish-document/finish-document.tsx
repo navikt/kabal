@@ -1,11 +1,8 @@
-import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import { ArchiveView } from '@app/components/documents/expanded/new/finish-document/views/archive-view';
+import { SendView } from '@app/components/documents/expanded/new/finish-document/views/send-view';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
-import { ConfirmFinishDocument } from './confirm-finish-document';
 
 interface Props {
   document: IMainDocument;
@@ -13,44 +10,16 @@ interface Props {
 
 export const FinishDocument = ({ document }: Props) => {
   const canEdit = useCanEdit();
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const close = () => setIsOpen(false);
-
-  useOnClickOutside(ref, close, false);
 
   if (!canEdit || document.isMarkertAvsluttet || document.parentId !== null) {
     return null;
   }
 
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const willSend = document.dokumentTypeId !== DistribusjonsType.NOTAT;
 
-  const buttonText = document.dokumentTypeId === DistribusjonsType.NOTAT ? 'Arkiver' : 'Send ut';
+  if (willSend) {
+    return <SendView document={document} />;
+  }
 
-  return (
-    <StyledSendDocument ref={ref}>
-      <StyledSendButton
-        onClick={toggleOpen}
-        size="small"
-        variant="primary"
-        data-testid="document-finish-button"
-        icon={<PaperplaneIcon aria-hidden />}
-      >
-        {buttonText}
-      </StyledSendButton>
-      <ConfirmFinishDocument isOpen={isOpen} close={() => setIsOpen(false)} document={document} />
-    </StyledSendDocument>
-  );
+  return <ArchiveView document={document} />;
 };
-
-const StyledSendButton = styled(Button)`
-  display: flex;
-  gap: 8px;
-  width: 100%;
-`;
-
-const StyledSendDocument = styled.div`
-  position: relative;
-  width: 100%;
-`;

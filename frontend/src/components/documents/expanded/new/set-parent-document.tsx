@@ -64,19 +64,16 @@ export const SetParentDocument = ({ document }: Props) => {
       size="small"
       value={document.parentId ?? NONE_SELECTED}
       onChange={onChange}
-      title="Gjør til vedlegg for"
-      label="Gjør til vedlegg for"
+      title="Vedlegg til"
+      label="Vedlegg til"
       disabled={isSettingParent}
       data-testid="document-set-parent-document"
-      hideLabel
     >
       {document.type === DocumentTypeEnum.JOURNALFOERT ? null : (
         <option key={NONE_SELECTED} value={NONE_SELECTED} label={getText(document)} />
       )}
-      <optgroup label="Gjør til vedlegg for">
-        {currentOption}
-        {potentialParents}
-      </optgroup>
+      {currentOption}
+      {potentialParents}
     </Select>
   );
 };

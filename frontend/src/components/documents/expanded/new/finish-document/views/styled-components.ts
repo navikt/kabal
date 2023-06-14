@@ -1,19 +1,13 @@
 import styled from 'styled-components';
 
 export const StyledFinishDocument = styled.section`
-  position: absolute;
-  right: 0;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background: white;
-  padding: 16px;
-  max-width: 500px;
-  min-width: 300px;
-  z-index: 5;
+  position: relative;
 `;
 
 export const StyledButtons = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  column-gap: 16px;
   margin-top: 16px;
 `;
 

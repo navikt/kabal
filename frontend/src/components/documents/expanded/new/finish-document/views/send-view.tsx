@@ -1,5 +1,4 @@
-import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -8,19 +7,13 @@ import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
+import { Confirm } from './confirm';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';
-import {
-  StyledBrevmottaker,
-  StyledBrevmottakerList,
-  StyledButtons,
-  StyledFinishDocument,
-  StyledHeader,
-  StyledMainText,
-} from './styled-components';
+import { StyledBrevmottaker, StyledBrevmottakerList, StyledFinishDocument } from './styled-components';
 import { FinishProps } from './types';
 
-export const SendView = ({ document, close }: FinishProps) => {
+export const SendView = ({ document }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle } = document;
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation();
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
@@ -72,40 +65,16 @@ export const SendView = ({ document, close }: FinishProps) => {
 
   return (
     <StyledFinishDocument>
-      <StyledHeader>{documentTitle}</StyledHeader>
-      <StyledMainText>{`Send brevet "${documentTitle}" til`}</StyledMainText>
       <Recipients
         recipients={brevmottakere}
         selectedBrevmottakertypeIds={brevmottakertypeIds}
         setSelectedBrevmottakertypeIds={setBrevmottakertypeIds}
+        label={`Send brevet "${documentTitle}" til`}
       />
 
-      <Errors errors={errors} />
+      <Confirm actionText="Send ut" onClick={onClick} isValidating={isValidating} isFinishing={isFinishing} />
 
-      <StyledButtons>
-        <Button
-          type="button"
-          size="small"
-          variant="primary"
-          onClick={onClick}
-          loading={isFinishing || isValidating}
-          data-testid="document-finish-confirm"
-          icon={<PaperplaneIcon aria-hidden />}
-        >
-          Send ut
-        </Button>
-        <Button
-          type="button"
-          size="small"
-          variant="secondary"
-          onClick={close}
-          data-testid="document-finish-cancel"
-          disabled={isFinishing || isValidating}
-          icon={<XMarkIcon aria-hidden />}
-        >
-          Avbryt
-        </Button>
-      </StyledButtons>
+      <Errors errors={errors} />
     </StyledFinishDocument>
   );
 };
@@ -114,19 +83,25 @@ interface RecipientsProps {
   recipients: IBrevmottaker[];
   selectedBrevmottakertypeIds: Brevmottakertype[];
   setSelectedBrevmottakertypeIds: (recipients: Brevmottakertype[]) => void;
+  label: string;
 }
 
-const Recipients = ({ recipients, selectedBrevmottakertypeIds, setSelectedBrevmottakertypeIds }: RecipientsProps) => {
+const Recipients = ({
+  recipients,
+  selectedBrevmottakertypeIds,
+  setSelectedBrevmottakertypeIds,
+  label,
+}: RecipientsProps) => {
   if (recipients.length === 0) {
     return null;
   }
 
   if (recipients.length === 1 && typeof recipients[0] !== 'undefined') {
-    const [{ brevmottakertyper, navn }] = recipients;
+    const [{ brevmottakertyper, navn, id }] = recipients;
 
     return (
       <StyledBrevmottakerList>
-        <StyledBrevmottaker>
+        <StyledBrevmottaker data-testid="document-send-recipient" data-userid={id}>
           {navn} ({getTypeNames(brevmottakertyper)})
         </StyledBrevmottaker>
       </StyledBrevmottakerList>
@@ -135,13 +110,18 @@ const Recipients = ({ recipients, selectedBrevmottakertypeIds, setSelectedBrevmo
 
   return (
     <CheckboxGroup
-      legend="Brevmottakere"
-      hideLegend
+      legend={label}
       value={selectedBrevmottakertypeIds}
       onChange={setSelectedBrevmottakertypeIds}
+      data-testid="document-send-recipient-list"
     >
       {recipients.map(({ id, navn, brevmottakertyper }) => (
-        <Checkbox size="small" key={`${id}-${brevmottakertyper.join('-')}`} value={brevmottakertyper}>
+        <Checkbox
+          size="small"
+          key={`${id}-${brevmottakertyper.join('-')}`}
+          value={brevmottakertyper}
+          data-testid="document-send-recipient"
+        >
           {navn} ({getTypeNames(brevmottakertyper)})
         </Checkbox>
       ))}

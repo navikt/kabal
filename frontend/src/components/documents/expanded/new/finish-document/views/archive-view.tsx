@@ -1,16 +1,15 @@
-import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { Confirm } from './confirm';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';
-import { StyledButtons, StyledFinishDocument, StyledHeader, StyledMainText } from './styled-components';
+import { StyledFinishDocument, StyledHeader, StyledMainText } from './styled-components';
 import { FinishProps } from './types';
 
-export const ArchiveView = ({ document, close }: FinishProps) => {
+export const ArchiveView = ({ document }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle } = document;
   const [finish, { isLoading }] = useFinishDocumentMutation();
   const oppgaveId = useOppgaveId();
@@ -50,30 +49,7 @@ export const ArchiveView = ({ document, close }: FinishProps) => {
 
       <Errors errors={errors} />
 
-      <StyledButtons>
-        <Button
-          type="button"
-          size="small"
-          variant="primary"
-          onClick={onClick}
-          loading={isLoading || isValidating}
-          data-testid="document-finish-confirm"
-          icon={<FolderFileIcon aria-hidden />}
-        >
-          Arkiver
-        </Button>
-        <Button
-          type="button"
-          size="small"
-          variant="secondary"
-          onClick={close}
-          data-testid="document-finish-cancel"
-          disabled={isLoading || isValidating}
-          icon={<XMarkIcon aria-hidden />}
-        >
-          Avbryt
-        </Button>
-      </StyledButtons>
+      <Confirm actionText="Arkiver" onClick={onClick} isFinishing={isLoading} isValidating={isValidating} />
     </StyledFinishDocument>
   );
 };
