@@ -45,6 +45,7 @@ const InternalIncludeDocument = memo(
         data-testid="journalfoert-document-button"
         loading={isUpdating}
         className={className}
+        data-included={checked}
       />
     );
   },
