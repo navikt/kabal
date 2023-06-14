@@ -46,6 +46,7 @@ const InternalIncludeDocument = memo(
         loading={isUpdating}
         className={className}
         data-included={checked}
+        aria-pressed={checked}
       />
     );
   },
