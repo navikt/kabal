@@ -1,6 +1,6 @@
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -30,13 +30,21 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     deleteDocument({ dokumentId: document.id, oppgaveId });
   };
 
+  const text = useMemo(() => {
+    // If the document has a parent, it is an attachment.
+    if (document.parentId !== null) {
+      return 'Slett vedlegg';
+    }
+
+    // If the document has attatchments.
+    if (data !== undefined && data.some(({ parentId }) => parentId === document.id)) {
+      return 'Slett dokument og vedlegg';
+    }
+
+    return 'Slett dokument';
+  }, [data, document.id, document.parentId]);
+
   if (!canEdit || documentsIsLoading || typeof data === 'undefined') {
-    return null;
-  }
-
-  const hasAttachments = data.some(({ parentId }) => parentId === document.id);
-
-  if (hasAttachments) {
     return null;
   }
 
@@ -60,7 +68,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           data-testid="document-delete-confirm"
           icon={<TrashIcon aria-hidden />}
         >
-          Slett
+          {text}
         </StyledButton>
       </>
     );
@@ -74,7 +82,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
       data-testid="document-delete-button"
       icon={<TrashIcon aria-hidden />}
     >
-      Slett
+      {text}
     </StyledButton>
   );
 };
