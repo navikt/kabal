@@ -14,7 +14,6 @@ import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 
 const NONE_SELECTED = 'NONE_SELECTED';
-const ENABLE_MERGE_DOCUMENTS = false;
 
 export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +36,7 @@ export const Menu = () => {
       />
       {isOpen && (
         <Dropdown>
-          {ENABLE_MERGE_DOCUMENTS ? <ViewCombinedPDF /> : null}
+          <ViewCombinedPDF />
           <UseAsAttachments />
         </Dropdown>
       )}
