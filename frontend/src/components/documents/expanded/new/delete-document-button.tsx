@@ -50,16 +50,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
 
   if (showConfirm) {
     return (
-      <>
-        <StyledButton
-          size="small"
-          variant="secondary"
-          onClick={() => setShowConfirm(false)}
-          data-testid="document-delete-cancel"
-          icon={<ArrowUndoIcon aria-hidden />}
-        >
-          Avbryt
-        </StyledButton>
+      <Container>
         <StyledButton
           variant="danger"
           size="small"
@@ -70,25 +61,44 @@ export const DeleteDocumentButton = ({ document }: Props) => {
         >
           {text}
         </StyledButton>
-      </>
+        <StyledButton
+          size="small"
+          variant="secondary"
+          onClick={() => setShowConfirm(false)}
+          data-testid="document-delete-cancel"
+          icon={<ArrowUndoIcon aria-hidden />}
+        >
+          Avbryt
+        </StyledButton>
+      </Container>
     );
   }
 
   return (
-    <StyledButton
-      variant="danger"
-      size="small"
-      onClick={() => setShowConfirm(true)}
-      data-testid="document-delete-button"
-      icon={<TrashIcon aria-hidden />}
-    >
-      {text}
-    </StyledButton>
+    <Container>
+      <StyledButton
+        variant="danger"
+        size="small"
+        onClick={() => setShowConfirm(true)}
+        data-testid="document-delete-button"
+        icon={<TrashIcon aria-hidden />}
+      >
+        {text}
+      </StyledButton>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  column-gap: 16px;
+`;
 
 const StyledButton = styled(Button)`
   display: flex;
   gap: 8px;
-  width: 100%;
+  width: min-content;
+  white-space: nowrap;
 `;

@@ -1,12 +1,12 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Modal } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { DragAndDropTypesEnum } from '@app/types/drag-and-drop';
@@ -81,6 +81,8 @@ export const NewDocument = ({ document }: Props) => {
 };
 
 const ActionContent = ({ document }: Props) => {
+  const titleId = useId();
+
   if (document.isMarkertAvsluttet) {
     if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
       return <StyledIcon title="Dokumentet er under journalføring." data-testid="document-archiving" />;
@@ -90,8 +92,8 @@ const ActionContent = ({ document }: Props) => {
   }
 
   return (
-    <ToggleExpandButton document={document}>
-      <DocumentOptions document={document} />
+    <ToggleExpandButton document={document} titleId={titleId}>
+      <DocumentOptions document={document} titleId={titleId} />
     </ToggleExpandButton>
   );
 };
@@ -99,15 +101,17 @@ const ActionContent = ({ document }: Props) => {
 interface ToggleExpandButtonProps {
   document: IMainDocument;
   children: React.ReactNode;
+  titleId: string;
 }
 
-const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => {
+const ToggleExpandButton = ({ document, titleId, children }: ToggleExpandButtonProps) => {
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(ref, () => setOpen(false));
+  useEffect(() => {
+    Modal.setAppElement('#app');
+  }, []);
 
   if (!canEdit || document.isMarkertAvsluttet) {
     return null;
@@ -121,11 +125,14 @@ const ToggleExpandButton = ({ document, children }: ToggleExpandButtonProps) => 
   };
 
   return (
-    <DropdownContainer ref={ref}>
+    <DropdownContainer>
       <StyledToggleExpandButton onClick={onClick} data-testid="document-actions-button">
         <MenuElipsisVerticalIcon />
       </StyledToggleExpandButton>
-      {open ? children : null}
+
+      <Modal open={open} aria-modal aria-aria-labelledby={titleId} onClose={() => setOpen(false)}>
+        <Modal.Content data-testid="document-actions-modal">{children}</Modal.Content>
+      </Modal>
     </DropdownContainer>
   );
 };
