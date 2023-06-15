@@ -37,6 +37,7 @@ module.exports = (_env, { mode }) => ({
   },
   devtool: mode === 'production' ? 'source-map' : 'eval-source-map',
   devServer: {
+    compress: false,
     static: [
       {
         directory: path.join(__dirname, './assets'),
