@@ -1,11 +1,16 @@
-import { Loader } from '@navikt/ds-react';
+import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
+import styled from 'styled-components';
+import { DragAndDropContextElement } from '@app/components/documents/drag-context';
+import { ToggleExpandedButton } from '@app/components/documents/toggle-expand-button';
+import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { ViewPDF } from '@app/components/view-pdf/view-pdf';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useDocumentsEnabled, useDocumentsExpanded } from '@app/hooks/settings/use-setting';
-import { CollapsedDocuments } from './collapsed/collapsed';
-import { ExpandedDocuments } from './expanded/expanded';
+import { useDocumentsEnabled } from '@app/hooks/settings/use-setting';
+import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
+import { NewDocuments } from './new-documents/new-documents';
+import { UploadFileButton } from './upload-file/upload-file';
 
 export const Documents = () => {
   const { value: shown = true, isLoading: isSettingLoading } = useDocumentsEnabled();
@@ -23,20 +28,57 @@ export const Documents = () => {
     );
   }
 
-  return <DocumentsView />;
-};
-
-const DocumentsView = () => {
-  const { value: isExpanded = true } = useDocumentsExpanded();
-
-  const DocumentList = isExpanded ? ExpandedDocuments : CollapsedDocuments;
-
   return (
     <>
       <PanelContainer data-testid="documents-panel">
-        <DocumentList />
+        <ExpandedDocuments />
       </PanelContainer>
       <ViewPDF />
     </>
   );
 };
+
+const ExpandedDocuments = () => {
+  const [isExpanded] = useIsExpanded();
+
+  return (
+    <DragAndDropContextElement>
+      <Container $isExpanded={isExpanded}>
+        <DocumentsHeader>
+          <Heading size="medium" level="1">
+            Dokumenter
+          </Heading>
+          {isExpanded ? <UploadFileButton /> : null}
+          <ToggleExpandedButton />
+        </DocumentsHeader>
+
+        <NewDocuments />
+
+        <JournalfoerteDocuments />
+      </Container>
+    </DragAndDropContextElement>
+  );
+};
+
+const Container = styled.div<{ $isExpanded: boolean }>`
+  display: flex;
+  flex-direction: column;
+  width: ${({ $isExpanded }) => ($isExpanded ? '1024px' : '350px')};
+  height: 100%;
+  overflow-y: hidden;
+`;
+
+const DocumentsHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  column-gap: 8px;
+  position: relative;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  border-bottom: 1px solid #c6c2bf;
+  margin-bottom: 8px;
+`;

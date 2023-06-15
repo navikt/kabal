@@ -1,11 +1,11 @@
-import { IJournalfoertDokument, IJournalfoertDokumentReference, IMainDocument } from '@app/types/documents/documents';
+import { IJournalfoertDokumentId, IJournalfoertDokumentReference, IMainDocument } from '@app/types/documents/documents';
 
 export interface ICreateVedleggFromJournalfoertDocumentResponse {
-  addedJournalfoerteDokumenter: IJournalfoertDokument[];
-  duplicateJournalfoerteDokumenter: IJournalfoertDokumentReference[];
+  addedJournalfoerteDokumenter: IJournalfoertDokumentReference[];
+  duplicateJournalfoerteDokumenter: IJournalfoertDokumentId[];
 }
 
 export interface ISetParentResponse {
   alteredDocuments: IMainDocument[];
-  duplicateJournalfoerteDokumenter: IJournalfoertDokument[];
+  duplicateJournalfoerteDokumenter: IJournalfoertDokumentReference[];
 }

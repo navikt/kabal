@@ -337,6 +337,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 isSmartDokument: false,
                 dokumentTypeId:
                   doc.journalposttype === Journalposttype.NOTAT ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
+                created: doc.datoOpprettet,
                 newOpplastet: doc.datoOpprettet,
                 tittel: doc.tittel ?? 'Ukjent',
                 type: DocumentTypeEnum.JOURNALFOERT,

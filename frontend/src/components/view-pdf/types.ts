@@ -1,11 +1,11 @@
-import { DocumentTypeEnum, IJournalfoertDokumentReference } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IJournalfoertDokumentId } from '@app/types/documents/documents';
 
 interface IShownNewDocument {
   documentId: string;
   type: DocumentTypeEnum.SMART | DocumentTypeEnum.UPLOADED;
 }
 
-export interface IShownArchivedDocument extends IJournalfoertDokumentReference {
+export interface IShownArchivedDocument extends IJournalfoertDokumentId {
   type: DocumentTypeEnum.JOURNALFOERT;
 }
 
