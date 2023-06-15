@@ -1,3 +1,4 @@
+import { Heading } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
@@ -6,7 +7,7 @@ import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-a
 import { Confirm } from './confirm';
 import { ERROR_MESSAGES } from './error-messages';
 import { Errors, ValidationError } from './errors';
-import { StyledFinishDocument, StyledHeader, StyledMainText } from './styled-components';
+import { StyledFinishDocument } from './styled-components';
 import { FinishProps } from './types';
 
 export const ArchiveView = ({ document }: FinishProps) => {
@@ -44,8 +45,7 @@ export const ArchiveView = ({ document }: FinishProps) => {
 
   return (
     <StyledFinishDocument>
-      <StyledHeader>Arkiver dokument</StyledHeader>
-      <StyledMainText>{`Arkiver notatet "${documentTitle}".`}</StyledMainText>
+      <Heading size="xsmall" level="1">{`Arkiver notatet "${documentTitle}".`}</Heading>
 
       <Errors errors={errors} />
 
