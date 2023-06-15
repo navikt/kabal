@@ -30,15 +30,3 @@ export const StyledBrevmottaker = styled.li`
   gap: 8px;
   flex-shrink: 0;
 `;
-
-export const StyledHeader = styled.h1`
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0;
-  margin-bottom: 8px;
-`;
-
-export const StyledMainText = styled.p`
-  margin: 0;
-  white-space: normal;
-`;

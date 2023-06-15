@@ -1,6 +1,7 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { SetDocumentType } from '@app/components/documents/expanded/new/set-document-type/set-document-type';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IMainDocument } from '@app/types/documents/documents';
@@ -13,7 +14,7 @@ interface Props {
   titleId: string;
 }
 
-export const DocumentOptions = ({ document, titleId }: Props) => {
+export const DocumentModalContent = ({ document, titleId }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
   const ref = useRef<HTMLDivElement>(null);
@@ -37,6 +38,7 @@ export const DocumentOptions = ({ document, titleId }: Props) => {
       <StyledHeading level="1" size="medium" spacing id={titleId}>
         Valg for {document.tittel}
       </StyledHeading>
+      <SetDocumentType document={document} />
       <SetParentDocument document={document} />
       <FinishDocument document={document} />
       <DeleteDocumentButton document={document} />

@@ -11,7 +11,7 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { DragAndDropTypesEnum } from '@app/types/drag-and-drop';
 import { StyledDate, StyledNewDocument } from '../styled-components/document';
-import { DocumentOptions } from './document-options';
+import { DocumentModalContent } from './document-modal-content';
 import { DocumentTitle } from './document-title';
 import { SetDocumentType } from './document-type';
 import { StyledToggleExpandButton } from './styled-components';
@@ -93,7 +93,7 @@ const ActionContent = ({ document }: Props) => {
 
   return (
     <ToggleExpandButton document={document} titleId={titleId}>
-      <DocumentOptions document={document} titleId={titleId} />
+      <DocumentModalContent document={document} titleId={titleId} />
     </ToggleExpandButton>
   );
 };

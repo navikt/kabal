@@ -8,7 +8,7 @@ import {
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { DragAndDropTypesEnum } from '@app/types/drag-and-drop';
 import { StyledDocumentListItem } from '../styled-components/document-list';
 import { AttachmentList } from './attachment-list';
@@ -26,32 +26,40 @@ export const NewParentDocument = ({ document }: Props) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);
 
-  const isSelfOrVedlegg = useCallback(
+  const isAllowedToDrop = useCallback(
     (droppedId: string) => {
       if (document.id === droppedId) {
-        return true;
+        return false;
       }
 
       for (const d of documentList ?? []) {
-        if (d.id === droppedId && d.parentId === document.id) {
-          return true;
+        if (d.parentId === document.id && d.id === droppedId) {
+          return false;
+        }
+
+        if (
+          d.parentId === droppedId &&
+          document.dokumentTypeId === DistribusjonsType.NOTAT &&
+          d.type === DocumentTypeEnum.JOURNALFOERT
+        ) {
+          return false;
         }
       }
 
-      return false;
+      return true;
     },
-    [document.id, documentList]
+    [document.dokumentTypeId, document.id, documentList]
   );
 
   const onDropDocument = useCallback(
     (droppedId: string) => {
-      if (oppgaveId === skipToken || isSelfOrVedlegg(droppedId)) {
+      if (oppgaveId === skipToken || !isAllowedToDrop(droppedId)) {
         return;
       }
 
       setParent({ dokumentId: droppedId, oppgaveId, parentId: document.id });
     },
-    [document.id, isSelfOrVedlegg, oppgaveId, setParent]
+    [document.id, isAllowedToDrop, oppgaveId, setParent]
   );
 
   const onDrop = useCallback(
@@ -76,6 +84,13 @@ export const NewParentDocument = ({ document }: Props) => {
       }
 
       if (types.includes(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT_REFERENCE)) {
+        // Journalførte documents cannot be attached to notat.
+        if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
+          setIsDragOver(false);
+
+          return;
+        }
+
         const dokumentId = e.dataTransfer.getData(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT_REFERENCE);
         onDropDocument(dokumentId);
 
@@ -83,6 +98,13 @@ export const NewParentDocument = ({ document }: Props) => {
       }
 
       if (types.includes(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT)) {
+        // Journalførte documents cannot be attached to notat.
+        if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
+          setIsDragOver(false);
+
+          return;
+        }
+
         const json = e.dataTransfer.getData(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT);
         const journalfoerteDokumenter = parseJSON<IArkivertDocument[]>(json);
 
@@ -93,7 +115,7 @@ export const NewParentDocument = ({ document }: Props) => {
         createVedlegg({ oppgaveId, parentId: document.id, journalfoerteDokumenter });
       }
     },
-    [createVedlegg, document.id, onDropDocument, oppgaveId]
+    [createVedlegg, document.dokumentTypeId, document.id, onDropDocument, oppgaveId]
   );
 
   const onDragEnter = useCallback(
@@ -107,25 +129,39 @@ export const NewParentDocument = ({ document }: Props) => {
 
       if (types.includes(DragAndDropTypesEnum.DOCUMENT)) {
         const dokumentId = e.dataTransfer.getData(DragAndDropTypesEnum.DOCUMENT);
-        setIsDragOver(!isSelfOrVedlegg(dokumentId));
+        setIsDragOver(isAllowedToDrop(dokumentId));
 
         return;
       }
 
       if (types.includes(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT_REFERENCE)) {
+        // Journalførte documents cannot be attached to notat.
+        if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
+          setIsDragOver(false);
+
+          return;
+        }
+
         const dokumentId = e.dataTransfer.getData(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT_REFERENCE);
-        setIsDragOver(!isSelfOrVedlegg(dokumentId));
+        setIsDragOver(isAllowedToDrop(dokumentId));
 
         return;
       }
 
       if (types.includes(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT)) {
+        // Journalførte documents cannot be attached to notat.
+        if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
+          setIsDragOver(false);
+
+          return;
+        }
+
         const json = e.dataTransfer.getData(DragAndDropTypesEnum.JOURNALFOERT_DOCUMENT);
         const archivedDocuments = parseJSON<IArkivertDocument[]>(json);
         setIsDragOver(archivedDocuments !== null);
       }
     },
-    [isSelfOrVedlegg]
+    [document.dokumentTypeId, isAllowedToDrop]
   );
 
   const onDragLeave = useCallback((e: React.DragEvent<HTMLLIElement>) => {
