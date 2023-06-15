@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 
@@ -21,14 +21,8 @@ export const SetParentDocument = ({ document }: Props) => {
       return [];
     }
 
-    return data.filter(
-      ({ id, parentId, dokumentTypeId }) =>
-        document.id !== id &&
-        document.parentId !== id &&
-        parentId === null &&
-        (document.type !== DocumentTypeEnum.JOURNALFOERT || dokumentTypeId !== DistribusjonsType.NOTAT)
-    );
-  }, [data, document.id, document.parentId, document.type]);
+    return data.filter(({ id, parentId }) => document.id !== id && document.parentId !== id && parentId === null);
+  }, [data, document.id, document.parentId]);
 
   if (isLoadingDocuments || typeof data === 'undefined' || potentialParents.length === 0) {
     return null;

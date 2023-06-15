@@ -4,8 +4,7 @@ import React from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { OPTIONS_LIST } from './set-document-type/options';
 
 interface Props {
@@ -16,7 +15,6 @@ export const SetDocumentType = ({ document }: Props) => {
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEdit();
-  const { data = [] } = useGetDocumentsQuery(oppgaveId);
 
   if (document.parentId !== null) {
     return null;
@@ -28,10 +26,6 @@ export const SetDocumentType = ({ document }: Props) => {
     }
   };
 
-  const hasJournalfoertVedlegg = data.some(
-    (d) => d.parentId === document.id && d.type === DocumentTypeEnum.JOURNALFOERT
-  );
-
   return (
     <Select
       data-testid="document-type-select"
@@ -42,18 +36,11 @@ export const SetDocumentType = ({ document }: Props) => {
       value={document.dokumentTypeId}
       disabled={!canEdit || document.isMarkertAvsluttet}
     >
-      {OPTIONS_LIST.map(({ label, value }) => {
-        // Journalførte documents cannot be attached to notat.
-        if (value === DistribusjonsType.NOTAT && hasJournalfoertVedlegg) {
-          return null;
-        }
-
-        return (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        );
-      })}
+      {OPTIONS_LIST.map(({ label, value }) => (
+        <option key={value} value={value}>
+          {label}
+        </option>
+      ))}
     </Select>
   );
 };
