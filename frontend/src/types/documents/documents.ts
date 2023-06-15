@@ -9,6 +9,12 @@ export enum DocumentTypeEnum {
   JOURNALFOERT = 'JOURNALFOERT',
 }
 
+export const DOCUMENT_TYPE_NAMES: Record<DocumentTypeEnum, string> = {
+  [DocumentTypeEnum.SMART]: 'Smartdokument',
+  [DocumentTypeEnum.UPLOADED]: 'Opplastet dokument',
+  [DocumentTypeEnum.JOURNALFOERT]: 'Journalført dokument',
+};
+
 export enum DistribusjonsType {
   BREV = '1',
   NOTAT = '2',
@@ -21,6 +27,7 @@ interface IBaseDocument {
   id: UUID;
   tittel: string;
   dokumentTypeId: DistribusjonsType;
+  created: string; // LocalDateTime,
   newOpplastet: string; // LocalDateTime,
   isSmartDokument: boolean;
   isMarkertAvsluttet: boolean;
@@ -40,19 +47,19 @@ interface ISmartDocument extends IBaseDocument {
   version?: typeof VERSION;
 }
 
-export interface IJournalfoertDokumentReference {
+export interface IJournalfoertDokumentId {
   journalpostId: string;
   dokumentInfoId: string;
 }
 
-export interface IJournalfoertDokument extends IBaseDocument {
+export interface IJournalfoertDokumentReference extends IBaseDocument {
   type: DocumentTypeEnum.JOURNALFOERT;
-  journalfoertDokumentReference: IJournalfoertDokumentReference;
+  journalfoertDokumentReference: IJournalfoertDokumentId;
   isSmartDokument: false;
   parentId: UUID;
 }
 
-export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokument;
+export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokumentReference;
 
 export enum IncludedDocumentFilter {
   INCLUDED = 'included',
