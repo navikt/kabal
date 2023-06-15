@@ -12,7 +12,7 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId, error }: Do
   <Select
     onChange={setDokumentTypeId}
     label="Dokumenttype"
-    value={dokumentTypeId === null ? undefined : dokumentTypeId.toString()}
+    value={dokumentTypeId === null ? undefined : dokumentTypeId}
     hideLabel
     size="small"
     title="Dokumenttype for opplastet dokument"
@@ -20,10 +20,10 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId, error }: Do
     data-testid="upload-document-type-select"
   >
     <NoneSelected dokumentTypeId={dokumentTypeId} />
-    <option value={DistribusjonsType.NOTAT.toString()}>Notat</option>
-    <option value={DistribusjonsType.BREV.toString()}>Brev</option>
-    <option value={DistribusjonsType.VEDTAKSBREV.toString()}>Vedtaksbrev</option>
-    <option value={DistribusjonsType.BESLUTNING.toString()}>Beslutningsbrev</option>
+    <option value={DistribusjonsType.NOTAT}>Notat</option>
+    <option value={DistribusjonsType.BREV}>Brev</option>
+    <option value={DistribusjonsType.VEDTAKSBREV}>Vedtaksbrev</option>
+    <option value={DistribusjonsType.BESLUTNING}>Beslutningsbrev</option>
   </Select>
 );
 

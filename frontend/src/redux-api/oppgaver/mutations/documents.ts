@@ -2,6 +2,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
+import { Journalposttype } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
 import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import {
@@ -334,7 +335,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 parentId,
                 isMarkertAvsluttet: false,
                 isSmartDokument: false,
-                dokumentTypeId: doc.journalposttype === 'N' ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
+                dokumentTypeId:
+                  doc.journalposttype === Journalposttype.NOTAT ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
                 newOpplastet: doc.datoOpprettet,
                 tittel: doc.tittel ?? 'Ukjent',
                 type: DocumentTypeEnum.JOURNALFOERT,
