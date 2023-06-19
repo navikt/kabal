@@ -61,12 +61,6 @@ export interface IJournalfoertDokumentReference extends IBaseDocument {
 
 export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokumentReference;
 
-export enum IncludedDocumentFilter {
-  INCLUDED = 'included',
-  EXCLUDED = 'excluded',
-  ALL = 'all',
-}
-
 export interface IMergedDocumentsResponse {
   reference: string;
 }

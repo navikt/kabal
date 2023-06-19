@@ -2,16 +2,15 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { useDocumentsFilterIncluded } from '@app/hooks/settings/use-setting';
-import { IncludedDocumentFilter } from '@app/types/documents/documents';
+import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 
 export const ToggleExpandedButton = () => {
   const [isExpanded, setIsExpanded] = useIsExpanded();
-  const { setValue } = useDocumentsFilterIncluded();
+  const { setValue } = useDocumentsOnlyIncluded();
 
   const onToggle = useCallback(() => {
     setIsExpanded(!isExpanded);
-    setValue(isExpanded ? IncludedDocumentFilter.INCLUDED : IncludedDocumentFilter.ALL);
+    setValue(isExpanded);
   }, [isExpanded, setIsExpanded, setValue]);
 
   const Icon = isExpanded ? ChevronLeftIcon : ChevronRightIcon;
