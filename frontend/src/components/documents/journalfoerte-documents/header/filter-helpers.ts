@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IncludedDocumentFilter } from '@app/types/documents/documents';
 import { IOption } from '../../../filter-dropdown/props';
 
 export const getAvsenderMottakerOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
@@ -62,7 +61,7 @@ export const useFilteredDocuments = (
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
-  included: IncludedDocumentFilter,
+  onlyIncluded: boolean,
   search: string
 ): IArkivertDocument[] => {
   const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
@@ -81,23 +80,16 @@ export const useFilteredDocuments = (
             (selectedSaksIds.length === 0 ||
               selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
             (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
-            (included === IncludedDocumentFilter.ALL ||
-              (included === IncludedDocumentFilter.INCLUDED && valgt) ||
-              (included === IncludedDocumentFilter.EXCLUDED && !valgt)) &&
+            (onlyIncluded === false || valgt) &&
             (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
         )
         .map(({ vedlegg, ...rest }) => ({
           ...rest,
-          vedlegg: vedlegg.filter(
-            ({ valgt }) =>
-              included === IncludedDocumentFilter.ALL ||
-              (included === IncludedDocumentFilter.INCLUDED && valgt) ||
-              (included === IncludedDocumentFilter.EXCLUDED && !valgt)
-          ),
+          vedlegg: vedlegg.filter(({ valgt }) => onlyIncluded === false || valgt),
         })),
     [
       documents,
-      included,
+      onlyIncluded,
       regex,
       selectedAvsenderMottakere,
       selectedDateRange,

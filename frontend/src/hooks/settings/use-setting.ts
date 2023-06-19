@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { IShownDocument } from '@app/components/view-pdf/types';
 import { useUser } from '@app/simple-api-state/use-user';
 import { Journalposttype } from '@app/types/arkiverte-documents';
-import { IncludedDocumentFilter } from '@app/types/documents/documents';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 
@@ -153,8 +152,7 @@ export const useDocumentsFilterTitle = () => useSetting(useOppgavePath('tabs/doc
 
 export const useDocumentsFilterSaksId = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/saksid'));
 
-export const useDocumentsFilterIncluded = () =>
-  useJsonSetting<IncludedDocumentFilter>(useOppgavePath('tabs/documents/filters/included'));
+export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('tabs/documents/filters/included'));
 // Oppgavebehandling smart editor
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>

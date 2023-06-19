@@ -1,41 +1,24 @@
 import { Checkbox } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
-import { useDocumentsFilterIncluded } from '@app/hooks/settings/use-setting';
-import { IncludedDocumentFilter } from '@app/types/documents/documents';
+import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 
 export const IncludedFilter = () => {
-  const { value = IncludedDocumentFilter.ALL, setValue, isLoading } = useDocumentsFilterIncluded();
+  const { value = false, setValue, isLoading } = useDocumentsOnlyIncluded();
 
   if (isLoading) {
     return null;
   }
 
+  const title = value ? 'Viser kun inkluderte dokumenter.' : 'Viser alle dokumenter.';
+
   return (
     <Container>
-      <Checkbox
-        size="small"
-        indeterminate={value === IncludedDocumentFilter.ALL}
-        checked={value === IncludedDocumentFilter.INCLUDED}
-        hideLabel
-        onChange={() => setValue(nextFilter(value))}
-        title={getTitle(value)}
-      >
-        Filtrer på inkluderte dokumenter
+      <Checkbox size="small" checked={value} hideLabel onChange={() => setValue(!value)} title={title}>
+        {title}
       </Checkbox>
     </Container>
   );
-};
-
-const nextFilter = (filter: IncludedDocumentFilter): IncludedDocumentFilter => {
-  switch (filter) {
-    case IncludedDocumentFilter.INCLUDED:
-      return IncludedDocumentFilter.EXCLUDED;
-    case IncludedDocumentFilter.EXCLUDED:
-      return IncludedDocumentFilter.ALL;
-    case IncludedDocumentFilter.ALL:
-      return IncludedDocumentFilter.INCLUDED;
-  }
 };
 
 const Container = styled.div`
@@ -43,14 +26,3 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-const getTitle = (filter: IncludedDocumentFilter) => {
-  switch (filter) {
-    case IncludedDocumentFilter.INCLUDED:
-      return 'Viser kun inkluderte dokumenter.';
-    case IncludedDocumentFilter.EXCLUDED:
-      return 'Viser kun dokumenter som ikke er inkludert.';
-    case IncludedDocumentFilter.ALL:
-      return 'Viser alle dokumenter.';
-  }
-};
