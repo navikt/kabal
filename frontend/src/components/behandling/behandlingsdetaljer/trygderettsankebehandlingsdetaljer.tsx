@@ -1,11 +1,11 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useKlagerName } from '@app/hooks/use-klager-name';
+import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { Part } from '../../part/part';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
-import { Fullmektig } from './fullmektig/fullmektig';
 import { KjennelseMottatt } from './kjennelse-mottatt';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { SendtTilTrygderetten } from './sendt-til-trygderetten';
@@ -14,13 +14,13 @@ import { Ytelse } from './ytelse';
 
 export const Trygderettsankebehandlingsdetaljer = () => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
-  const klagerName = useKlagerName();
+  const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <Loader />;
   }
 
-  const { typeId, resultat, ytelseId } = oppgavebehandling;
+  const { typeId, resultat, ytelseId, prosessfullmektig } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -28,9 +28,15 @@ export const Trygderettsankebehandlingsdetaljer = () => {
         Behandling
       </Heading>
 
-      <BehandlingSection label="Anker">{klagerName ?? ''}</BehandlingSection>
+      <BehandlingSection label="Anker">{oppgavebehandling.klager.name ?? ''}</BehandlingSection>
 
-      <Fullmektig />
+      <Part
+        isDeletable
+        label="Fullmektig"
+        part={prosessfullmektig}
+        onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+        isLoading={fullmektigIsLoading}
+      />
 
       <BehandlingSection label="Type">
         <Type type={typeId}></Type>

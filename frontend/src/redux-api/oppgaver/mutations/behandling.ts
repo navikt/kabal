@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { formatIdNumber } from '@app/functions/format-id';
@@ -11,6 +12,7 @@ import {
   IOppgavebehandlingHjemlerUpdateParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
+  ISetKlagerParams,
 } from '@app/types/oppgavebehandling/params';
 import {
   IModifiedResponse,
@@ -128,6 +130,34 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
 
+    updateKlager: builder.mutation<IModifiedResponse, ISetKlagerParams>({
+      query: ({ oppgaveId, klager }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/klager`,
+        method: 'PUT',
+        body: { identifikator: klager?.id ?? null },
+      }),
+      onQueryStarted: async ({ oppgaveId, klager }, { queryFulfilled }) => {
+        const undo = update(oppgaveId, { klager });
+
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, data);
+
+          toast.success(`Klager endret til ${formatIdNumber(klager.id)}`);
+        } catch (e) {
+          undo();
+
+          const message = 'Kunne ikke endre fullmektig.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
+
     setFeilregistrert: builder.mutation<ISetFeilregistrertResponse, ISetFeilregistrertParams>({
       query: ({ oppgaveId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/feilregistrer`,
@@ -158,8 +188,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
 
-    searchFullmektig: builder.query<IPart, string>({
-      query: (identifikator) => ({ url: `/kabal-api/searchfullmektig`, method: 'POST', body: { identifikator } }),
+    searchPerson: builder.query<IPart, string>({
+      query: (identifikator) => ({ url: `/kabal-api/searchperson`, method: 'POST', body: { identifikator } }),
     }),
   }),
 });
@@ -176,6 +206,7 @@ export const {
   useFinishOppgavebehandlingMutation,
   useUpdateInnsendingshjemlerMutation,
   useUpdateFullmektigMutation,
+  useUpdateKlagerMutation,
   useSetFeilregistrertMutation,
-  useLazySearchFullmektigQuery,
+  useLazySearchPersonQuery,
 } = behandlingerMutationSlice;
