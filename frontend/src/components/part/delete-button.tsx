@@ -2,30 +2,25 @@ import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 
 interface Props {
-  close: () => void;
-  show: boolean;
+  onDelete: () => void;
 }
 
-export const DeleteButton = ({ show, close }: Props) => {
-  const [setFullmektig, { isLoading }] = useUpdateFullmektigMutation();
+export const DeleteButton = ({ onDelete }: Props) => {
   const oppgaveId = useOppgaveId();
   const [showConfirm, setShowConfirm] = useState(false);
 
-  if (!show || typeof oppgaveId !== 'string') {
+  if (typeof oppgaveId !== 'string') {
     return null;
   }
-
-  const onClick = () => setFullmektig({ fullmektig: null, oppgaveId }).then(close);
 
   const toggleConfirm = () => setShowConfirm(!showConfirm);
 
   if (showConfirm) {
     return (
       <>
-        <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={onClick} size="small" loading={isLoading} />
+        <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={onDelete} size="small" />
         <Button
           variant="secondary"
           icon={<ArrowUndoIcon aria-hidden />}

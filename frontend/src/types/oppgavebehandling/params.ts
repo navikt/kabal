@@ -56,6 +56,10 @@ export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
   fullmektig: IPart | null;
 }
 
+export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
+  klager: IPart;
+}
+
 export interface IFinishOppgavebehandlingParams {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;

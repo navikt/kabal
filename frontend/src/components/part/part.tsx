@@ -5,55 +5,74 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useLazySearchFullmektigQuery } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useLazySearchPersonQuery } from '@app/redux-api/oppgaver/mutations/behandling';
 import { IPart, IdType } from '@app/types/oppgave-common';
-import { BehandlingSection } from '../behandling-section';
+import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
 import { Lookup } from './lookup';
 
-export const Fullmektig = () => {
-  const { data: oppgave } = useOppgave();
+interface DeletableProps {
+  isDeletable: true;
+  label: string;
+  part: IPart | null;
+  onChange: (part: IPart | null) => void;
+  isLoading: boolean;
+}
+
+interface NonDeletabelProps {
+  isDeletable: false;
+  label: string;
+  part: IPart;
+  onChange: (part: IPart) => void;
+  isLoading: boolean;
+}
+
+export const Part = ({ part, isDeletable, label, onChange, isLoading }: DeletableProps | NonDeletabelProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const canEdit = useCanEdit();
 
-  if (typeof oppgave === 'undefined') {
-    return null;
-  }
-
   const toggleEditing = () => setIsEditing(!isEditing);
-  const close = () => setIsEditing(false);
 
   return (
-    <BehandlingSection label="Fullmektig">
-      <StyledFullmektig>
-        {getFullmektig(oppgave.prosessfullmektig)}
+    <BehandlingSection label={label}>
+      <StyledPart>
+        {getPart(part)}
         <div>
-          <DeleteButton show={isEditing} close={close} />
-          <EditButton show={canEdit} onClick={toggleEditing} />
+          {isDeletable && isEditing ? (
+            <DeleteButton
+              onDelete={() => {
+                onChange(null);
+                setIsEditing(false);
+              }}
+            />
+          ) : null}
+          {canEdit ? <EditButton onClick={toggleEditing} /> : null}
         </div>
-      </StyledFullmektig>
+      </StyledPart>
 
-      <EditFullmektig show={isEditing} close={close} />
+      {isEditing ? (
+        <EditPart
+          onChange={(newPart) => {
+            onChange(newPart);
+            setIsEditing(false);
+          }}
+          isLoading={isLoading}
+        />
+      ) : null}
     </BehandlingSection>
   );
 };
 
 interface EditButtonProps {
-  show: boolean;
   onClick: () => void;
 }
 
-const EditButton = ({ show, onClick }: EditButtonProps) => {
-  if (!show) {
-    return null;
-  }
+const EditButton = ({ onClick }: EditButtonProps) => (
+  <Button variant="tertiary" icon={<PencilIcon aria-hidden />} onClick={onClick} size="small" />
+);
 
-  return <Button variant="tertiary" icon={<PencilIcon aria-hidden />} onClick={onClick} size="small" />;
-};
-
-const getFullmektig = (part: IPart | null): string => {
+const getPart = (part: IPart | null): string => {
   if (part === null) {
     return 'Ikke satt';
   }
@@ -61,21 +80,17 @@ const getFullmektig = (part: IPart | null): string => {
   return part.name ?? '-';
 };
 
-interface EditFullmektigProps {
-  show: boolean;
-  close: () => void;
+interface EditPartProps {
+  onChange: (part: IPart) => void;
+  isLoading: boolean;
 }
 
 const NUMBER_REGEX = /([\d]{9}|[\d]{11})/;
 
-const EditFullmektig = ({ close, show }: EditFullmektigProps) => {
+const EditPart = ({ onChange, isLoading }: EditPartProps) => {
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
-  const [search, { data, isLoading }] = useLazySearchFullmektigQuery();
-
-  if (!show) {
-    return null;
-  }
+  const [search, { data, isLoading: isSearching }] = useLazySearchPersonQuery();
 
   const onClick = () => {
     const value = rawValue.replaceAll(' ', '');
@@ -105,13 +120,13 @@ const EditFullmektig = ({ close, show }: EditFullmektigProps) => {
   };
 
   return (
-    <StyledEditFullmektig>
+    <StyledEditPart>
       <Search label="Søk" size="small" value={rawValue} onChange={setValue} error={error} onKeyDown={onKeyDown}>
         <Search.Button onClick={onClick} />
       </Search>
       <Label part={data} />
-      <Lookup close={close} isSearching={isLoading} data={data} />
-    </StyledEditFullmektig>
+      <Lookup isSearching={isSearching} part={data} onChange={onChange} isLoading={isLoading} />
+    </StyledEditPart>
   );
 };
 
@@ -149,13 +164,13 @@ const LabelWrapper = ({ children, variant }: LabelWrapperProps) => (
   </BodyShort>
 );
 
-const StyledFullmektig = styled.div`
+const StyledPart = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const StyledEditFullmektig = styled.div`
+const StyledEditPart = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;

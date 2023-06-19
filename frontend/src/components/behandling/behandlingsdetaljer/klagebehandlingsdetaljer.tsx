@@ -3,10 +3,10 @@ import React from 'react';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useKlagerName } from '@app/hooks/use-klager-name';
+import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { Part } from '../../part/part';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
-import { Fullmektig } from './fullmektig/fullmektig';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
 import { MeldingFraVedtaksinstans } from './melding-fra-vedtaksinstans';
 import { MottattVedtaksinstans } from './mottatt-vedtaksinstans';
@@ -15,14 +15,23 @@ import { Ytelse } from './ytelse';
 
 export const Klagebehandlingsdetaljer = () => {
   const { data: oppgavebehandling, isLoading } = useOppgave();
-  const klagerName = useKlagerName();
+  const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
+  const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
   if (typeof oppgavebehandling === 'undefined' || isLoading) {
     return <Loader size="xlarge" />;
   }
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, mottattKlageinstans, kommentarFraVedtaksinstans, resultat, ytelseId } =
-    oppgavebehandling;
+  const {
+    typeId,
+    fraNAVEnhetNavn,
+    fraNAVEnhet,
+    mottattKlageinstans,
+    kommentarFraVedtaksinstans,
+    resultat,
+    ytelseId,
+    prosessfullmektig,
+  } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -30,9 +39,21 @@ export const Klagebehandlingsdetaljer = () => {
         Behandling
       </Heading>
 
-      <BehandlingSection label="Klager">{klagerName ?? ''}</BehandlingSection>
+      <Part
+        isDeletable={false}
+        label="Klager"
+        part={oppgavebehandling.klager}
+        onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
+        isLoading={klagerIsLoading}
+      />
 
-      <Fullmektig />
+      <Part
+        isDeletable
+        label="Fullmektig"
+        part={prosessfullmektig}
+        onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+        isLoading={fullmektigIsLoading}
+      />
 
       <BehandlingSection label="Type">
         <Type type={typeId}></Type>
