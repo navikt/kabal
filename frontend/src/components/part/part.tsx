@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useLazySearchPersonQuery } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useLazySearchFullmektigQuery } from '@app/redux-api/oppgaver/mutations/behandling';
 import { IPart, IdType } from '@app/types/oppgave-common';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
@@ -90,7 +90,7 @@ const NUMBER_REGEX = /([\d]{9}|[\d]{11})/;
 const EditPart = ({ onChange, isLoading }: EditPartProps) => {
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching }] = useLazySearchPersonQuery();
+  const [search, { data, isLoading: isSearching }] = useLazySearchFullmektigQuery();
 
   const onClick = () => {
     const value = rawValue.replaceAll(' ', '');
