@@ -69,6 +69,7 @@ export const TableFooter = ({
                 count={Math.max(Math.ceil(total / pageSize), 1)}
                 prevNextTexts
                 onPageChange={setPage}
+                data-testid={`${testId}-pagination`}
               />
             )}
             <RowsPerPage settingKey={settingsKey} pageSize={pageSize} testId={`${testId}-rows-per-page`} />
