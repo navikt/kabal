@@ -187,9 +187,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-
-    searchPerson: builder.query<IPart, string>({
-      query: (identifikator) => ({ url: `/kabal-api/searchperson`, method: 'POST', body: { identifikator } }),
+    // TODO: Rename endpoint to searchpart
+    searchFullmektig: builder.query<IPart, string>({
+      query: (identifikator) => ({ url: `/kabal-api/searchfullmektig`, method: 'POST', body: { identifikator } }),
     }),
   }),
 });
@@ -208,5 +208,5 @@ export const {
   useUpdateFullmektigMutation,
   useUpdateKlagerMutation,
   useSetFeilregistrertMutation,
-  useLazySearchPersonQuery,
+  useLazySearchFullmektigQuery,
 } = behandlingerMutationSlice;
