@@ -19,7 +19,13 @@ const staggeredBaseQuery = (baseUrl: string) => {
         return result;
       }
 
-      if (result.error.status === 401) {
+      const status = result.meta?.response?.status;
+
+      if (status === undefined) {
+        retry.fail(result.error);
+      }
+
+      if (status === 401) {
         if (!IS_LOCALHOST) {
           window.location.assign('/oauth2/login');
         }
@@ -27,12 +33,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
         retry.fail(result.error);
       }
 
-      if (
-        result.error.status === 400 ||
-        result.error.status === 403 ||
-        result.error.status === 404 ||
-        result.error.status === 405
-      ) {
+      if (status === 400 || status === 403 || status === 404 || status === 405) {
         retry.fail(result.error);
       }
 
