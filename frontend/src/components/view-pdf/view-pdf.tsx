@@ -1,26 +1,13 @@
-import { Alert, Loader } from '@navikt/ds-react';
+import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocument } from '@app/hooks/use-shown-document';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
-import {
-  Container,
-  Ellipsis,
-  ErrorOrLoadingContainer,
-  Header,
-  StyledCancelIcon,
-  StyledDocumentTitle,
-  StyledExtLinkIcon,
-  StyledHeaderButton,
-  StyledHeaderLink,
-  StyledRefreshIcon,
-  StyledZoomInIcon,
-  StyledZoomOutIcon,
-} from './styled-components';
-import { IShownDocument } from './types';
 import { useDocumentUrl } from './use-document-url';
 
 const MIN_PDF_WIDTH = 400;
@@ -72,22 +59,44 @@ export const ViewPDF = () => {
   return (
     <Container width={pdfWidth} data-testid="show-document">
       <Header>
-        <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
-          <StyledCancelIcon title="Lukk forhåndsvisning" />
-        </StyledHeaderButton>
-        <StyledHeaderLink href={url} target="_blank" title="Åpne i ny fane" rel="noreferrer">
-          <StyledExtLinkIcon title="Ekstern lenke" />
-        </StyledHeaderLink>
-        <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
-          <StyledZoomOutIcon title="Zoom ut på PDF" />
-        </StyledHeaderButton>
-        <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
-          <StyledZoomInIcon title="Zoom inn på PDF" />
-        </StyledHeaderButton>
+        <Button
+          onClick={close}
+          title="Lukk forhåndsvisning"
+          icon={<XMarkIcon aria-hidden />}
+          size="xsmall"
+          variant="tertiary-neutral"
+        />
+
+        <Button
+          onClick={decrease}
+          title="Smalere PDF"
+          icon={<ZoomMinusIcon aria-hidden />}
+          size="xsmall"
+          variant="tertiary-neutral"
+        />
+
+        <Button
+          onClick={increase}
+          title="Bredere PDF"
+          icon={<ZoomPlusIcon aria-hidden />}
+          size="xsmall"
+          variant="tertiary-neutral"
+        />
+
         <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onClick} />
-        <StyledDocumentTitle>
-          <Ellipsis>{title}</Ellipsis>
-        </StyledDocumentTitle>
+
+        <StyledDocumentTitle>{title}</StyledDocumentTitle>
+
+        <Button
+          as="a"
+          href={url}
+          target="_blank"
+          title="Åpne i ny fane"
+          rel="noreferrer"
+          icon={<ExternalLinkIcon aria-hidden />}
+          size="xsmall"
+          variant="tertiary-neutral"
+        />
       </Header>
       <NoFlickerReloadPdf
         url={url}
@@ -99,20 +108,49 @@ export const ViewPDF = () => {
   );
 };
 
-interface ReloadButtonProps {
-  showDocumentList: IShownDocument[];
-  isLoading: boolean;
-  onClick: () => void;
+interface ContainerProps {
+  width: number;
 }
 
-const ReloadButton = ({ showDocumentList, isLoading, onClick }: ReloadButtonProps) => {
-  if (!showDocumentList.some((v) => v.type === DocumentTypeEnum.SMART)) {
-    return null;
-  }
+const Container = styled.section<ContainerProps>`
+  display: flex;
+  flex-direction: column;
+  min-width: ${(props) => props.width}px;
+  margin: 4px 8px;
+  background: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  position: relative;
+  height: 100%;
+  scroll-snap-align: start;
+`;
 
-  return (
-    <StyledHeaderButton onClick={onClick} title="Oppdater" disabled={isLoading}>
-      <StyledRefreshIcon title="Oppdater" $isLoading={isLoading} />
-    </StyledHeaderButton>
-  );
-};
+const ErrorOrLoadingContainer = styled(Container)`
+  align-items: center;
+  justify-content: center;
+`;
+
+const Header = styled.div`
+  background: var(--a-green-100);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  position: relative;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  z-index: 1;
+  column-gap: 4px;
+`;
+
+const StyledDocumentTitle = styled.h1`
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;

@@ -1,37 +1,37 @@
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { Link } from '@navikt/ds-react';
 import React from 'react';
 import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { ISakenGjelder } from '@app/types/oppgave-common';
-import { StyledExtLinkIcon } from '../view-pdf/styled-components';
-import { ExternalLink } from './styled-components';
 
 interface LinkProps {
   sakenGjelder: ISakenGjelder;
 }
 
 export const Gosys = ({ sakenGjelder }: LinkProps) => (
-  <ExternalLink
+  <Link
     href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.id}`}
     target="_blank"
     aria-label="Ekstern lenke til Gosys for denne personen"
     title="Åpne i ny fane"
     rel="noreferrer"
   >
-    <span>Gosys</span> <StyledExtLinkIcon title="Ekstern lenke" />
-  </ExternalLink>
+    Gosys <ExternalLinkIcon title="Ekstern lenke" />
+  </Link>
 );
 
 export const Modia = ({ sakenGjelder }: LinkProps) => (
-  <ExternalLink
+  <Link
     href={`${EXTERNAL_URL_MODIA}/person/${sakenGjelder.id}`}
     target="_blank"
     aria-label="Ekstern lenke til Modia for denne personen"
     title="Åpne i ny fane"
     rel="noreferrer"
   >
-    <span>Modia</span> <StyledExtLinkIcon title="Ekstern lenke" />
-  </ExternalLink>
+    Modia <ExternalLinkIcon title="Ekstern lenke" />
+  </Link>
 );
 
 export const AaRegisteret = () => {
@@ -42,15 +42,15 @@ export const AaRegisteret = () => {
   }
 
   return (
-    <ExternalLink
+    <Link
       href={`${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/aaregister`}
       target="_blank"
       aria-label="Ekstern lenke til Aa-registeret for denne personen"
       title="Åpne i ny fane"
       rel="noreferrer"
     >
-      <span>Aa-registeret</span> <StyledExtLinkIcon title="Ekstern lenke" />
-    </ExternalLink>
+      Aa-registeret <ExternalLinkIcon title="Ekstern lenke" />
+    </Link>
   );
 };
 
@@ -62,14 +62,14 @@ export const Ainntekt = () => {
   }
 
   return (
-    <ExternalLink
+    <Link
       href={`${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/ainntekt`}
       target="_blank"
       aria-label="Ekstern lenke til A-inntekt for denne personen"
       title="Åpne i ny fane"
       rel="noreferrer"
     >
-      <span>A-inntekt</span> <StyledExtLinkIcon title="Ekstern lenke" />
-    </ExternalLink>
+      A-inntekt <ExternalLinkIcon title="Ekstern lenke" />
+    </Link>
   );
 };
