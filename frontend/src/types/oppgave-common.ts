@@ -29,6 +29,7 @@ export enum IdType {
 
 export interface IPart extends IPartBase {
   type: IdType;
+  available: boolean;
 }
 
 export interface ISakenGjelder extends IPartBase {

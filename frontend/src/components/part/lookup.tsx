@@ -27,11 +27,17 @@ interface ResultProps {
 }
 
 const Result = ({ part, isLoading, onChange }: ResultProps) => (
-  <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'}>
+  <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
     <BodyShort>{part.name}</BodyShort>
-    <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="tertiary">
-      Bruk
-    </Button>
+    {part.available ? (
+      <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="tertiary">
+        Bruk
+      </Button>
+    ) : (
+      <Tag variant="error" size="small">
+        Ikke tilgjengelig
+      </Tag>
+    )}
   </StyledResult>
 );
 
