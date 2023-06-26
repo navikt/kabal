@@ -6,9 +6,11 @@ import { Journalposttype } from '@app/types/arkiverte-documents';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 
+type SetterFn<T> = (oldValue: T | undefined) => T;
+
 interface Setting<T = string> {
   value: T | undefined;
-  setValue: (value: T) => void;
+  setValue: (value: T | SetterFn<T>) => void;
   remove: () => void;
   isLoading: boolean;
 }
@@ -36,9 +38,9 @@ const useSetting = (property: string): Setting => {
     return SETTINGS_MANAGER.subscribe(key, subscribe);
   }, [key, subscribe]);
 
-  const setValue = (newValue: string) => {
+  const setValue = (newValue: string | ((oldValue: string | undefined) => string)) => {
     if (key !== null) {
-      SETTINGS_MANAGER.set(key, newValue);
+      SETTINGS_MANAGER.set(key, typeof newValue === 'string' ? newValue : newValue(value));
     }
   };
 
@@ -56,9 +58,11 @@ const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
 const useBooleanSetting = (property: string): Setting<boolean> => {
   const { value, setValue, ...rest } = useSetting(property);
 
+  const parsedValue = value === undefined ? undefined : value === 'true';
+
   return {
-    value: value === undefined ? undefined : value === 'true',
-    setValue: (newValue: boolean) => setValue(booleanToString(newValue)),
+    value: parsedValue,
+    setValue: (newValue) => setValue(booleanToString(typeof newValue === 'boolean' ? newValue : newValue(parsedValue))),
     ...rest,
   };
 };
@@ -78,7 +82,8 @@ export const useNumberSetting = (property: string): Setting<number> => {
 
   return {
     value: parsedValue,
-    setValue: (newValue: number) => setValue(newValue.toString(10)),
+    setValue: (newValue) =>
+      setValue(typeof newValue === 'number' ? newValue.toString(10) : newValue(parsedValue).toString(10)),
     ...rest,
   };
 };
@@ -86,12 +91,16 @@ export const useNumberSetting = (property: string): Setting<number> => {
 const useJsonSetting = <T>(property: string): Setting<T> => {
   const { value, setValue, ...rest } = useSetting(property);
 
+  const parsedValue = useMemo(() => (value === undefined ? undefined : (JSON.parse(value) as T)), [value]);
+
   return {
-    value: value === undefined ? undefined : (JSON.parse(value) as T),
-    setValue: (newValue: T) => setValue(JSON.stringify(newValue)),
+    value: parsedValue,
+    setValue: (newValue) => setValue(JSON.stringify(isFunction(newValue) ? newValue(parsedValue) : newValue)),
     ...rest,
   };
 };
+
+const isFunction = <T>(value: T | SetterFn<T>): value is SetterFn<T> => typeof value === 'function';
 
 const useOppgavePath = (property: string): string => {
   const oppgaveId = useOppgaveId();
