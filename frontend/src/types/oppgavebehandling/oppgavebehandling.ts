@@ -41,6 +41,8 @@ export interface IOppgavebehandlingBase {
   sattPaaVent: IVenteperiode | null;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
+  vergemaalEllerFremtidsfullmakt: boolean;
+  dead: string | null; // LocalDate
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
