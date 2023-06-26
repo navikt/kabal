@@ -1,8 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AaRegisteret, Ainntekt, Gosys, Modia } from './external-links';
-import { ControlPanel, OppgavebehandlingInformation, OppgavebehandlingTools } from './styled-components';
-import { PanelToggleButtons } from './toggle-buttons';
+import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';
 
 export const OppgavebehandlingControls = () => {
@@ -12,14 +12,12 @@ export const OppgavebehandlingControls = () => {
     return <ControlPanel>Laster...</ControlPanel>;
   }
 
-  const { fortrolig, strengtFortrolig, sakenGjelder } = oppgave;
+  const { sakenGjelder } = oppgave;
 
   return (
-    <ControlPanel data-testid="klagebehandling-control-panel">
-      <OppgavebehandlingTools data-testid="klagebehandling-control-panel-tools">
-        <UserInfo sakenGjelder={sakenGjelder} fortrolig={fortrolig} strengtFortrolig={strengtFortrolig} />
-        <PanelToggleButtons />
-      </OppgavebehandlingTools>
+    <ControlPanel data-testid="behandling-control-panel">
+      <UserInfo {...oppgave} />
+      <PanelSwitches />
       <OppgavebehandlingInformation>
         <Gosys sakenGjelder={sakenGjelder} />
         <Modia sakenGjelder={sakenGjelder} />
@@ -29,3 +27,23 @@ export const OppgavebehandlingControls = () => {
     </ControlPanel>
   );
 };
+
+const ControlPanel = styled.header`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 8px;
+  padding: 0 16px;
+  background-color: #f8f8f8;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #c9c9c9;
+`;
+
+const OppgavebehandlingInformation = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: inherit;
+  margin-left: auto;
+`;

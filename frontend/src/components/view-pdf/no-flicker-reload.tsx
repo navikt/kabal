@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { PDF } from './styled-components';
 
 interface Props {
   url: string;
@@ -85,12 +84,13 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
   );
 };
 
-const StyledPDF = styled(PDF)<{ current: boolean }>`
+const StyledPDF = styled.object<{ current: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
+  flex-grow: 1;
   z-index: ${({ current }) => (current ? 0 : -1)};
 `;
 

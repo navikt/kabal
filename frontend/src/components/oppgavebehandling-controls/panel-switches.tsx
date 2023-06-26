@@ -1,5 +1,6 @@
 import { Switch } from '@navikt/ds-react';
 import React from 'react';
+import styled from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useBehandlingEnabled,
@@ -8,9 +9,8 @@ import {
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { ToggleButtonsContainer } from './styled-components';
 
-export const PanelToggleButtons = () => {
+export const PanelSwitches = () => {
   const {
     value: documentsEnabled = true,
     setValue: setDocumentsEnabled,
@@ -24,12 +24,12 @@ export const PanelToggleButtons = () => {
   } = useBehandlingEnabled();
 
   return (
-    <ToggleButtonsContainer data-testid="klagebehandling-control-panel-toggle-buttons">
+    <Container data-testid="behandling-panel-switches">
       <TogglePanelButton
         checked={documentsEnabled}
         loading={documentsLoading}
         togglePanel={() => setDocumentsEnabled(!documentsEnabled)}
-        testId="klagebehandling-control-panel-toggle-documents"
+        testId="panel-switch-documents"
       >
         Dokumenter
       </TogglePanelButton>
@@ -38,14 +38,20 @@ export const PanelToggleButtons = () => {
         checked={behandlingEnabled}
         loading={behandlingLoading}
         togglePanel={() => setBehandlingEnabled(!behandlingEnabled)}
-        testId="klagebehandling-control-panel-toggle-behandling"
+        testId="panel-switch-behandling"
       >
         Behandling
       </TogglePanelButton>
       <Kvalitetsvurdering />
-    </ToggleButtonsContainer>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: inherit;
+`;
 
 const Brevutforming = () => {
   const {
@@ -65,7 +71,7 @@ const Brevutforming = () => {
       checked={smartEditorEnabled}
       loading={smartEditorLoading}
       togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
-      testId="klagebehandling-control-panel-toggle-smart-editor"
+      testId="panel-switch-smart-editor"
     >
       Brevutforming
     </TogglePanelButton>
@@ -100,7 +106,7 @@ const Kvalitetsvurdering = () => {
       checked={value}
       loading={isLoading}
       togglePanel={() => setValue(!value)}
-      testId="klagebehandling-control-panel-toggle-kvalitetsvurdering"
+      testId="panel-switch-kvalitetsvurdering"
     >
       Kvalitetsvurdering
     </TogglePanelButton>
