@@ -40,3 +40,10 @@ export const Verge = ({
       Vergemål
     </Tag>
   ) : null;
+
+export const Fullmakt = ({ fullmakt }: Pick<IOppgavebehandlingBase, 'fullmakt'>) =>
+  fullmakt === true ? (
+    <Tag size="small" variant="success">
+      Fullmakt
+    </Tag>
+  ) : null;

@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Dead, EgenAnsatt, Fortrolig, StrengtFortrolig, Verge } from './status';
+import { Dead, EgenAnsatt, Fortrolig, Fullmakt, StrengtFortrolig, Verge } from './status';
 import { UserSex } from './user-sex';
 
 export const UserInfo = ({
@@ -13,6 +13,7 @@ export const UserInfo = ({
   dead,
   vergemaalEllerFremtidsfullmakt,
   egenansatt,
+  fullmakt,
 }: IOppgavebehandlingBase) => (
   <>
     <User>
@@ -24,6 +25,7 @@ export const UserInfo = ({
       <EgenAnsatt egenansatt={egenansatt} />
       <Dead dead={dead} />
       <Verge vergemaalEllerFremtidsfullmakt={vergemaalEllerFremtidsfullmakt} />
+      <Fullmakt fullmakt={fullmakt} />
     </User>
   </>
 );
