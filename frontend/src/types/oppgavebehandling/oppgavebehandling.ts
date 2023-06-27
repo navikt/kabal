@@ -43,6 +43,7 @@ export interface IOppgavebehandlingBase {
   strengtFortrolig: boolean;
   vergemaalEllerFremtidsfullmakt: boolean;
   dead: string | null; // LocalDate
+  fullmakt: boolean;
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
