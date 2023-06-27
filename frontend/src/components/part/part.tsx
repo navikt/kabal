@@ -1,16 +1,12 @@
-import { PencilIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Search, Tag, TagProps } from '@navikt/ds-react';
-import { dnr, fnr } from '@navikt/fnrvalidator';
+import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, Tag } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { isValidOrgnr } from '@app/domain/orgnr';
-import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
+import { EditPart } from '@app/components/part/edit-part';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useLazySearchPartQuery } from '@app/redux-api/oppgaver/mutations/behandling';
-import { IPart, IdType } from '@app/types/oppgave-common';
+import { IPart } from '@app/types/oppgave-common';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
-import { Lookup } from './lookup';
 
 interface DeletableProps {
   isDeletable: true;
@@ -34,10 +30,35 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
 
   const toggleEditing = () => setIsEditing(!isEditing);
 
+  if (part === null) {
+    return (
+      <BehandlingSection label={label}>
+        <StyledPart>
+          <span>Ikke satt</span>
+
+          <div>{canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}</div>
+        </StyledPart>
+
+        {isEditing ? (
+          <EditPart
+            onChange={(newPart) => {
+              onChange(newPart);
+              setIsEditing(false);
+            }}
+            isLoading={isLoading}
+          />
+        ) : null}
+      </BehandlingSection>
+    );
+  }
+
   return (
     <BehandlingSection label={label}>
       <StyledPart>
-        {getPart(part)}
+        <span>
+          {part.name} {part.available ? null : <Tag variant="error">Utilgjengelig</Tag>}
+        </span>
+
         <div>
           {isDeletable && isEditing ? (
             <DeleteButton
@@ -47,7 +68,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
               }}
             />
           ) : null}
-          {canEdit ? <EditButton onClick={toggleEditing} /> : null}
+          {canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}
         </div>
       </StyledPart>
 
@@ -66,113 +87,17 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
 
 interface EditButtonProps {
   onClick: () => void;
+  isEditing: boolean;
 }
 
-const EditButton = ({ onClick }: EditButtonProps) => (
-  <Button variant="tertiary" icon={<PencilIcon aria-hidden />} onClick={onClick} size="small" />
-);
+const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
+  const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-const getPart = (part: IPart | null): string => {
-  if (part === null) {
-    return 'Ikke satt';
-  }
-
-  return part.name ?? '-';
+  return <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
 };
-
-interface EditPartProps {
-  onChange: (part: IPart) => void;
-  isLoading: boolean;
-}
-
-const NUMBER_REGEX = /([\d]{9}|[\d]{11})/;
-
-const EditPart = ({ onChange, isLoading }: EditPartProps) => {
-  const [rawValue, setValue] = useState('');
-  const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching }] = useLazySearchPartQuery();
-
-  const onClick = () => {
-    const value = rawValue.replaceAll(' ', '');
-
-    const idNumError =
-      value.length === 11 && (fnr(value).status !== 'valid' || dnr(value).status !== 'valid')
-        ? 'Ugyldig fødselsnummer/D-nummer'
-        : undefined;
-
-    const orgNumError = value.length === 9 && !isValidOrgnr(value) ? 'Ugyldig organisasjonsnummer' : undefined;
-
-    const charError = NUMBER_REGEX.test(value) ? undefined : 'Ugyldig fødselsnummer/D-nummer eller organisasjonsnummer';
-
-    const inputError = charError ?? idNumError ?? orgNumError;
-
-    setError(inputError);
-
-    if (typeof inputError === 'undefined') {
-      search(value);
-    }
-  };
-
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      onClick();
-    }
-  };
-
-  return (
-    <StyledEditPart>
-      <Search label="Søk" size="small" value={rawValue} onChange={setValue} error={error} onKeyDown={onKeyDown}>
-        <Search.Button onClick={onClick} />
-      </Search>
-      <Label part={data} />
-      <Lookup isSearching={isSearching} part={data} onChange={onChange} isLoading={isLoading} />
-    </StyledEditPart>
-  );
-};
-
-interface LabelProps {
-  part: IPart | undefined;
-}
-
-const Label = ({ part }: LabelProps) => {
-  if (typeof part === 'undefined') {
-    return null;
-  }
-
-  if (part.type === IdType.FNR) {
-    return <LabelWrapper variant="info">{formatFoedselsnummer(part.id)}</LabelWrapper>;
-  }
-
-  if (part.type === IdType.ORGNR) {
-    return <LabelWrapper variant="warning">{formatOrgNum(part.id)}</LabelWrapper>;
-  }
-
-  return null;
-};
-
-interface LabelWrapperProps {
-  children: string;
-  variant: TagProps['variant'];
-}
-
-const LabelWrapper = ({ children, variant }: LabelWrapperProps) => (
-  <BodyShort>
-    Treff på:{' '}
-    <Tag variant={variant} size="small">
-      {children}
-    </Tag>
-  </BodyShort>
-);
 
 const StyledPart = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const StyledEditPart = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  margin-top: 16px;
 `;
