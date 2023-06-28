@@ -34,6 +34,7 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
   return (
     <StyledButtons>
       <Button
+        type="button"
         size="small"
         variant="secondary"
         onClick={() => setShowConfirm(false)}
@@ -44,6 +45,7 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
         Avbryt
       </Button>
       <Button
+        type="button"
         size="small"
         variant="primary"
         onClick={onClick}

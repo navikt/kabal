@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { IPartBase } from '@app/types/oppgave-common';
+import { IPart } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker {
   id: string;
   navn: string;
   brevmottakertyper: Brevmottakertype[];
+  statusList: IPart['statusList'];
 }
 
 export const useBrevmottakere = (): IBrevmottaker[] => {
@@ -42,7 +43,7 @@ export const useBrevmottakere = (): IBrevmottaker[] => {
   }, [data, isLoading]);
 };
 
-const partToBrevmottaker = (part: IPartBase | null, brevmottakerType: Brevmottakertype): IBrevmottaker | null => {
+const partToBrevmottaker = (part: IPart | null, brevmottakerType: Brevmottakertype): IBrevmottaker | null => {
   if (part === null) {
     return null;
   }
@@ -51,5 +52,6 @@ const partToBrevmottaker = (part: IPartBase | null, brevmottakerType: Brevmottak
     id: part.id,
     navn: part.name ?? 'MANGLER',
     brevmottakertyper: [brevmottakerType],
+    statusList: part.statusList,
   };
 };
