@@ -1,31 +1,18 @@
 import { CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Dead, EgenAnsatt, Fortrolig, Fullmakt, StrengtFortrolig, Verge } from './status';
 import { UserSex } from './user-sex';
 
-export const UserInfo = ({
-  sakenGjelder,
-  fortrolig,
-  strengtFortrolig,
-  dead,
-  vergemaalEllerFremtidsfullmakt,
-  egenansatt,
-  fullmakt,
-}: IOppgavebehandlingBase) => (
+export const UserInfo = ({ sakenGjelder }: IOppgavebehandlingBase) => (
   <>
     <User>
       <UserSex sex={sakenGjelder.sex} />
       <span>{sakenGjelder.name ?? '-'}</span>
       <CopyButton size="small" copyText={sakenGjelder.id} text={formatFoedselsnummer(sakenGjelder.id)} />
-      <Fortrolig fortrolig={fortrolig} />
-      <StrengtFortrolig strengtFortrolig={strengtFortrolig} />
-      <EgenAnsatt egenansatt={egenansatt} />
-      <Dead dead={dead} />
-      <Verge vergemaalEllerFremtidsfullmakt={vergemaalEllerFremtidsfullmakt} />
-      <Fullmakt fullmakt={fullmakt} />
+      <PartStatusList statusList={sakenGjelder.statusList} size="small" />
     </User>
   </>
 );

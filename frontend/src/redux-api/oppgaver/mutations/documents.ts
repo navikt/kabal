@@ -195,32 +195,24 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { brevmottakertypeIds },
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        const documentsPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-            draft.map((doc) =>
-              doc.id === dokumentId || doc.parentId === dokumentId ? { ...doc, isMarkertAvsluttet: true } : doc
-            )
-          )
-        );
-
-        const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null)
-        );
-
-        const smartEditorsPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-            draft.filter(({ id }) => id !== dokumentId)
-          )
-        );
-
         try {
-          await queryFulfilled;
-        } catch (e) {
-          documentsPatchResult.undo();
-          smartEditorPatchResult.undo();
-          smartEditorsPatchResult.undo();
+          const { data } = await queryFulfilled;
 
-          const message = 'Kunne ikke avslutte dokumentet.';
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+              draft.map((doc) => (doc.id === data.id ? data : doc))
+            )
+          );
+
+          dispatch(smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null));
+
+          dispatch(
+            smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
+              draft.filter(({ id }) => id !== dokumentId)
+            )
+          );
+        } catch (e) {
+          const message = 'Kunne ikke ferdigstille dokumentet.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
