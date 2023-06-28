@@ -38,7 +38,7 @@ const Result = ({ part, isLoading, onChange }: ResultProps) => (
       </Button>
     ) : (
       <Tag variant="error" size="small">
-        Ikke tilgjengelig
+        Utilgjengelig
       </Tag>
     )}
   </StyledResult>

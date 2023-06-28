@@ -34,7 +34,9 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
     return (
       <BehandlingSection label={label}>
         <StyledPart>
-          <span>Ikke satt</span>
+          <StyledName>
+            <span>Ikke satt</span>
+          </StyledName>
 
           <div>{canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}</div>
         </StyledPart>
@@ -55,9 +57,14 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
   return (
     <BehandlingSection label={label}>
       <StyledPart>
-        <span>
-          {part.name} {part.available ? null : <Tag variant="error">Utilgjengelig</Tag>}
-        </span>
+        <StyledName>
+          <span>{part.name}</span>
+          {part.available ? null : (
+            <Tag variant="error" size="xsmall">
+              Utilgjengelig
+            </Tag>
+          )}
+        </StyledName>
 
         <div>
           {isDeletable && isEditing ? (
@@ -100,4 +107,11 @@ const StyledPart = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const StyledName = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
 `;
