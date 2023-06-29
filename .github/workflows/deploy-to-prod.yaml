@@ -49,3 +49,15 @@ jobs:
           VAR: image=${{ steps.image.outputs.image }}
           IMAGE: ${{ steps.image.outputs.image }}
         timeout-minutes: 3
+
+      - name: Generate release version
+        id: version
+        run: |
+          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+          COMMIT=$(git rev-parse --short=7 HEAD)
+          VERSION=$TIME-$COMMIT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - uses: ncipollo/release-action@main
+        with:
+          tag: ${{ steps.version.outputs.version }}
