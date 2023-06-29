@@ -26,7 +26,7 @@ export const StyledAttachmentList = styled.ul`
     position: absolute;
     left: 0;
     top: 0;
-    bottom: 17px;
+    bottom: 16px;
     border-left: 1px solid #c6c2bf;
   }
 `;

@@ -1,5 +1,5 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -23,7 +23,7 @@ export const ToggleModalButton = ({ document, titleId, children }: Props) => {
     Modal.setAppElement('#app');
   }, []);
 
-  if (!canEdit || document.isMarkertAvsluttet) {
+  if (!canEdit) {
     return null;
   }
 
@@ -37,9 +37,13 @@ export const ToggleModalButton = ({ document, titleId, children }: Props) => {
 
   return (
     <DropdownContainer>
-      <StyledToggleExpandButton onClick={onClick} data-testid="document-actions-button">
-        <Icon {...document} />
-      </StyledToggleExpandButton>
+      <Button
+        onClick={onClick}
+        data-testid="document-actions-button"
+        variant="tertiary-neutral"
+        size="small"
+        icon={<Icon {...document} />}
+      />
 
       <Modal
         open={open}
@@ -58,32 +62,23 @@ export const ToggleModalButton = ({ document, titleId, children }: Props) => {
 const Icon = ({ isMarkertAvsluttet, dokumentTypeId }: IMainDocument) => {
   if (isMarkertAvsluttet) {
     if (dokumentTypeId === DistribusjonsType.NOTAT) {
-      return <HourglassIcon title="Dokumentet er under journalføring." data-testid="document-archiving" />;
+      return <HourglassIcon title="Dokumentet er under journalføring." data-testid="document-archiving" aria-hidden />;
     }
 
-    return <HourglassIcon title="Dokumentet er under journalføring og utsending." data-testid="document-archiving" />;
+    return (
+      <HourglassIcon
+        title="Dokumentet er under journalføring og utsending."
+        data-testid="document-archiving"
+        aria-hidden
+      />
+    );
   }
 
-  return <MenuElipsisVerticalIcon />;
+  return <MenuElipsisVerticalIcon aria-hidden />;
 };
 
 const DropdownContainer = styled.div`
   display: flex;
   align-items: center;
   grid-area: ${Fields.Action};
-`;
-
-const StyledToggleExpandButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  height: 100%;
-  line-height: 1;
-  font-size: 20px;
-  padding: 0;
-  width: 100%;
 `;

@@ -94,7 +94,12 @@ export const SendView = ({ document }: FinishProps) => {
         </Alert>
       )}
 
-      <Confirm actionText="Send ut" onClick={onClick} isValidating={isValidating} isFinishing={isFinishing} />
+      <Confirm
+        actionText="Send ut"
+        onClick={onClick}
+        isValidating={isValidating}
+        isFinishing={isFinishing || document.isMarkertAvsluttet}
+      />
 
       <Errors errors={validationErrors} />
     </StyledFinishDocument>

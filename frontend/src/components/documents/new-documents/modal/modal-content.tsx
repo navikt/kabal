@@ -1,6 +1,6 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Loader, Tag } from '@navikt/ds-react';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SetDocumentType } from '@app/components/documents/new-documents/modal/set-type/set-document-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
@@ -21,13 +21,6 @@ interface Props {
 export const DocumentModalContent = ({ document, titleId }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (ref.current !== null) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
-    }
-  }, []);
 
   if (isLoading || typeof data === 'undefined') {
     return (
@@ -40,7 +33,7 @@ export const DocumentModalContent = ({ document, titleId }: Props) => {
   const icon = <DocumentIcon type={document.type} />;
 
   return (
-    <Container data-testid="document-actions-container" ref={ref}>
+    <Container data-testid="document-actions-container">
       <StyledHeading level="1" size="medium" id={titleId}>
         {icon}
         Valg for &quot;{document.tittel}&quot;
@@ -93,7 +86,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: 640px;
+  width: 750px;
 `;
 
 const StyledHeading = styled(Heading)`

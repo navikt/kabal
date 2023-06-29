@@ -7,7 +7,6 @@ export const documentCSS = css`
   border-radius: 4px;
   background-color: transparent;
   transition: background-color 0.2s ease-in-out;
-  min-height: 34.5px;
 `;
 
 export const getBackgroundColor = (expanded: boolean, selected: boolean) => {
