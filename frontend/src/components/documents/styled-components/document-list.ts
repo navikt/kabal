@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledDocumentList = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 0;
+  row-gap: 4px;
   padding: 0;
   padding-top: 8px;
   padding-bottom: 8px;

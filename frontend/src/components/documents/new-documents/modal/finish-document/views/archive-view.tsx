@@ -49,7 +49,12 @@ export const ArchiveView = ({ document }: FinishProps) => {
 
       <Errors errors={errors} />
 
-      <Confirm actionText="Arkiver" onClick={onClick} isFinishing={isLoading} isValidating={isValidating} />
+      <Confirm
+        actionText="Arkiver"
+        onClick={onClick}
+        isFinishing={isLoading || document.isMarkertAvsluttet}
+        isValidating={isValidating}
+      />
     </StyledFinishDocument>
   );
 };

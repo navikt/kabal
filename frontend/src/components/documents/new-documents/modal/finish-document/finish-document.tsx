@@ -11,7 +11,7 @@ interface Props {
 export const FinishDocument = ({ document }: Props) => {
   const canEdit = useCanEdit();
 
-  if (!canEdit || document.isMarkertAvsluttet || document.parentId !== null) {
+  if (!canEdit || document.parentId !== null) {
     return null;
   }
 

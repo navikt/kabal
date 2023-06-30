@@ -1,6 +1,7 @@
 import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { IPart, IdType } from '@app/types/oppgave-common';
 
@@ -32,15 +33,12 @@ const Result = ({ part, isLoading, onChange }: ResultProps) => (
     <BodyShort>
       {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
     </BodyShort>
-    {part.available ? (
-      <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-        Bruk
-      </Button>
-    ) : (
-      <Tag variant="error" size="small">
-        Ikke tilgjengelig
-      </Tag>
-    )}
+
+    <PartStatusList statusList={part.statusList} />
+
+    <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
+      Bruk
+    </Button>
   </StyledResult>
 );
 

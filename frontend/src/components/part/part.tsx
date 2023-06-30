@@ -1,8 +1,9 @@
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Tag } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { EditPart } from '@app/components/part/edit-part';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { IPart } from '@app/types/oppgave-common';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
@@ -34,7 +35,9 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
     return (
       <BehandlingSection label={label}>
         <StyledPart>
-          <span>Ikke satt</span>
+          <StyledName>
+            <span>Ikke satt</span>
+          </StyledName>
 
           <div>{canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}</div>
         </StyledPart>
@@ -55,9 +58,10 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
   return (
     <BehandlingSection label={label}>
       <StyledPart>
-        <span>
-          {part.name} {part.available ? null : <Tag variant="error">Utilgjengelig</Tag>}
-        </span>
+        <StyledName>
+          <span>{part.name}</span>
+          <PartStatusList statusList={part.statusList} size="xsmall" />
+        </StyledName>
 
         <div>
           {isDeletable && isEditing ? (
@@ -100,4 +104,12 @@ const StyledPart = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const StyledName = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  row-gap: 0;
 `;

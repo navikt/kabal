@@ -27,12 +27,60 @@ export enum IdType {
   ORGNR = 'ORGNR',
 }
 
-export interface IPart extends IPartBase {
-  type: IdType;
-  available: boolean;
+export enum PartStatusEnum {
+  DEAD = 'DEAD',
+  DELETED = 'DELETED',
+  EGEN_ANSATT = 'EGEN_ANSATT',
+  VERGEMAAL = 'VERGEMAAL',
+  FULLMAKT = 'FULLMAKT',
+  FORTROLIG = 'FORTROLIG',
+  STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
 }
 
-export interface ISakenGjelder extends IPartBase {
+export type IPersonStatus =
+  | {
+      status: PartStatusEnum.DEAD;
+      date: string;
+    }
+  | {
+      status: PartStatusEnum.EGEN_ANSATT;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.VERGEMAAL;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.FULLMAKT;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.FORTROLIG;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.STRENGT_FORTROLIG;
+      date: null;
+    };
+
+export interface IOrganizationStatus {
+  status: PartStatusEnum.DELETED;
+  date: string;
+}
+
+interface IPersonPart extends IPartBase {
+  type: IdType.FNR;
+  statusList: IPersonStatus[];
+}
+
+interface IOrganizationPart extends IPartBase {
+  type: IdType.ORGNR;
+  statusList: IOrganizationStatus[];
+}
+
+export type IPart = IPersonPart | IOrganizationPart;
+
+export interface ISakenGjelder extends IPersonPart {
   sex: SexEnum;
 }
 

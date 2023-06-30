@@ -1,4 +1,3 @@
-import { HourglassIcon } from '@navikt/aksel-icons';
 import React, { useCallback, useContext, useId, useRef } from 'react';
 import styled from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
@@ -14,7 +13,7 @@ import { documentCSS } from '@app/components/documents/styled-components/documen
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { IMainDocument } from '@app/types/documents/documents';
 import { DocumentModalContent } from '../modal/modal-content';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
@@ -80,25 +79,12 @@ export const NewDocument = ({ document }: Props) => {
 const ActionContent = ({ document }: Props) => {
   const titleId = useId();
 
-  if (document.isMarkertAvsluttet) {
-    if (document.dokumentTypeId === DistribusjonsType.NOTAT) {
-      return <StyledIcon title="Dokumentet er under journalføring." data-testid="document-archiving" />;
-    }
-
-    return <StyledIcon title="Dokumentet er under journalføring og utsending." data-testid="document-archiving" />;
-  }
-
   return (
     <ToggleModalButton document={document} titleId={titleId}>
       <DocumentModalContent document={document} titleId={titleId} />
     </ToggleModalButton>
   );
 };
-
-const StyledIcon = styled(HourglassIcon)`
-  grid-area: ${Fields.Action};
-  justify-self: center;
-`;
 
 const StyledDate = styled(DocumentDate)`
   grid-area: ${Fields.Date};
