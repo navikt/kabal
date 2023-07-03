@@ -1,10 +1,10 @@
 import {
   BellIcon,
   EnvelopeClosedIcon,
-  ExclamationmarkTriangleIcon,
   FingerMobileIcon,
   MobileSmallIcon,
   PrinterSmallIcon,
+  InformationSquare,
 } from '@navikt/aksel-icons';
 import React from 'react';
 import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
@@ -41,7 +41,6 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
           hideNext={isLast && i === lastIndex}
         />
       ))}
-
       {hasVarsler ? null : <OtherVarselInfo dato={dato} kanal={kanal} kanalnavn={kanalnavn} isLast={isLast} />}
     </>
   );
@@ -146,10 +145,10 @@ const getOtherVarselData = (kanal: Kanal) => {
       };
     case Kanal.NAV_NO:
       return {
-        icon: ExclamationmarkTriangleIcon,
-        title: 'Varsling feilet!',
-        info: 'NAV har ikke sendt varsler for dette dokumentet.',
-        color: 'var(--a-red-50)',
+        icon: InformationSquare,
+        title: 'Info om varsling mangler',
+        info: 'NAV jobber med å utvide informasjon om varsel sendt.',
+        color: 'var(--a-gray-50)',
       };
     default:
       return {
