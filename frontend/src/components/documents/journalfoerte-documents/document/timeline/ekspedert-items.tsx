@@ -2,9 +2,9 @@ import {
   BellIcon,
   EnvelopeClosedIcon,
   FingerMobileIcon,
+  InformationSquareIcon,
   MobileSmallIcon,
   PrinterSmallIcon,
-  InformationSquareIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
 import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
