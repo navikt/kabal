@@ -4,7 +4,7 @@ import {
   FingerMobileIcon,
   MobileSmallIcon,
   PrinterSmallIcon,
-  InformationSquare,
+  InformationSquareIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
 import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
@@ -145,7 +145,7 @@ const getOtherVarselData = (kanal: Kanal) => {
       };
     case Kanal.NAV_NO:
       return {
-        icon: InformationSquare,
+        icon: InformationSquareIcon,
         title: 'Info om varsling mangler',
         info: 'NAV jobber med å utvide informasjon om varsel sendt.',
         color: 'var(--a-gray-50)',
