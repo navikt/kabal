@@ -94,6 +94,6 @@ const StyledDate = styled.time`
 const StyledText = styled.p`
   font-size: 16px;
   margin: 0;
-  white-space: normal;
-  word-wrap: break-word;
+  white-space: break-spaces;
+  overflow-wrap: break-word;
 `;
