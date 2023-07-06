@@ -98,12 +98,7 @@ export const ViewPDF = () => {
           variant="tertiary-neutral"
         />
       </Header>
-      <NoFlickerReloadPdf
-        url={url}
-        version={version}
-        name={title ?? undefined}
-        onVersionLoaded={() => setIsLoading(false)}
-      />
+      <NoFlickerReloadPdf url={url} version={version} onVersionLoaded={() => setIsLoading(false)} />
     </Container>
   );
 };
