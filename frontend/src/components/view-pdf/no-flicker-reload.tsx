@@ -4,11 +4,10 @@ import styled from 'styled-components';
 interface Props {
   url: string;
   version: number;
-  name?: string;
   onVersionLoaded: () => void;
 }
 
-export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Props) => {
+export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => {
   const [versionMap, setVersionMap] = useState<Map<string, { versions: number[]; readyIndex: number }>>(
     new Map([[url, { versions: [version], readyIndex: 0 }]])
   );
@@ -74,7 +73,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
             data={`${url}?version=${v}#toolbar=1&view=fitH&zoom=page-width`}
             role="document"
             type="application/pdf"
-            name={name}
+            name="pdf-viewer"
             onLoad={() => onLoad(index, url)}
             current={current}
           />
