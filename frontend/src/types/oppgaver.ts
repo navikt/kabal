@@ -2,7 +2,7 @@ import { GenericObject } from '@app/types/types';
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
 import { INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
 
-type Date = string; // LocalDate
+type DateString = string; // LocalDate
 
 export interface ApiResponse {
   antallTreffTotalt: number;
@@ -19,21 +19,21 @@ interface IOppgaveRowVenteperiode extends IVenteperiode {
 
 export interface IOppgave {
   ageKA: number; // Age in days.
-  avsluttetAvSaksbehandlerDate: Date | null;
+  avsluttetAvSaksbehandlerDate: DateString | null;
   fagsystemId: string;
-  frist: Date | null;
+  frist: DateString | null;
   hjemmelId: string | null;
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
-  mottatt: Date;
+  mottatt: DateString;
   tildeltSaksbehandlerident: string | null;
   typeId: SaksTypeEnum;
   ytelseId: string;
   utfallId: UtfallEnum | null;
   sattPaaVent: IOppgaveRowVenteperiode | null;
-  feilregistrert: Date | null;
+  feilregistrert: DateString | null;
 }
 
 export enum SortFieldEnum {
@@ -116,5 +116,5 @@ export interface IOppgaverResponse {
 
 export interface ITildelingResponse {
   saksbehandler: INavEmployee | null;
-  modified: Date;
+  modified: DateString;
 }

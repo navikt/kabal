@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
-export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
+export const StyledDocumentLink = styled.a<{ $isActive: boolean; $disabled?: boolean }>`
   display: flex;
   gap: 8px;
   align-items: center;
-  cursor: pointer;
+  cursor: ${({ $disabled }) => ($disabled === true ? 'not-allowed' : 'pointer')};
+  opacity: ${({ $disabled }) => ($disabled === true ? 0.5 : 1)};
+  pointer-events: ${({ $disabled }) => ($disabled === true ? 'none' : 'auto')};
+  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px #262626' : 'none')};
   border: none;
   padding: 0;
   font-size: inherit;
@@ -16,8 +19,7 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
   overflow: hidden;
   text-align: left;
   text-decoration: none;
-  font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
-  color: #0067c5;
+  color: var(--a-text-action);
   height: 100%;
   user-select: text;
 
@@ -25,9 +27,8 @@ export const StyledDocumentButton = styled.button<{ isActive: boolean }>`
     color: #262626;
   }
 
-  :disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+  :visited {
+    color: var(--a-text-visited);
   }
 `;
 

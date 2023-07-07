@@ -2,6 +2,7 @@ import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { DragAndDropContextElement } from '@app/components/documents/drag-context';
+import { TabContextElement } from '@app/components/documents/tab-context';
 import { ToggleExpandedButton } from '@app/components/documents/toggle-expand-button';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
@@ -29,12 +30,12 @@ export const Documents = () => {
   }
 
   return (
-    <>
+    <TabContextElement>
       <PanelContainer data-testid="documents-panel">
         <ExpandedDocuments />
       </PanelContainer>
       <ViewPDF />
-    </>
+    </TabContextElement>
   );
 };
 

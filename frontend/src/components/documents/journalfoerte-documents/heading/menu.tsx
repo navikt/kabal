@@ -1,19 +1,22 @@
 import { FilePdfIcon, MenuHamburgerIcon } from '@navikt/aksel-icons';
-import { Button, Select } from '@navikt/ds-react';
+import { Button, ButtonProps, LinkProps, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useRef, useState } from 'react';
+import React, { forwardRef, useContext, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
+import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { findDocument } from '@app/domain/find-document';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
+import { TabContext } from '@app/components/documents/tab-context';
+import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
+import { toast } from '@app/components/toast/store';
+import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-
-const NONE_SELECTED = 'NONE_SELECTED';
+import {
+  useGetArkiverteDokumenterQuery,
+  useMergedDocumentsReferenceQuery,
+} from '@app/redux-api/oppgaver/queries/documents';
 
 export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +58,7 @@ const Dropdown = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
-  z-index: 1;
+  z-index: 2;
   background-color: var(--a-bg-default);
   border-radius: 4px;
   box-shadow: var(--a-shadow-small);
@@ -67,55 +70,130 @@ const Dropdown = styled.div`
 `;
 
 const ViewCombinedPDF = () => {
-  const { setValue } = useDocumentsPdfViewed();
+  const { getTabRef, setTabRef } = useContext(TabContext);
+  const { value, setValue } = useDocumentsPdfViewed();
   const { selectedDocuments } = useContext(SelectContext);
+  const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
 
-  const onClick = () =>
-    setValue(Object.values(selectedDocuments).map((d) => ({ ...d, type: DocumentTypeEnum.JOURNALFOERT })));
+  const documents = useMemo(
+    () =>
+      archivedList === undefined ? undefined : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter),
+    [archivedList, selectedDocuments]
+  );
+
+  const isInlineOpen = useMemo(() => {
+    if (documents === undefined) {
+      return false;
+    }
+
+    if (value.length !== documents.length) {
+      return false;
+    }
+
+    return value.every((v, i) => {
+      const d = documents[i];
+
+      return d !== undefined && d.type === v.type && v.dokumentInfoId === d.dokumentInfoId;
+    });
+  }, [documents, value]);
+
+  const {
+    data: mergedDocumentRef,
+    isLoading,
+    isFetching,
+  } = useMergedDocumentsReferenceQuery(documents === undefined ? skipToken : documents);
+
+  const { tabUrl, documentId } = useMemo(() => {
+    if (mergedDocumentRef === undefined) {
+      return {
+        tabUrl: undefined,
+        documentId: undefined,
+      };
+    }
+
+    return {
+      tabUrl: getMergedDocumentTabUrl(mergedDocumentRef.reference),
+      documentId: getMergedDocumentTabId(mergedDocumentRef.reference),
+    };
+  }, [mergedDocumentRef]);
+
+  const isTabOpen = useIsTabOpen(documentId);
+
+  const onClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+
+    const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
+
+    if (!shouldOpenInNewTab) {
+      if (documents !== undefined) {
+        setValue(documents);
+      }
+
+      return;
+    }
+
+    if (documentId === undefined) {
+      toast.error('Kunne ikke generere kombinert dokument');
+
+      return;
+    }
+
+    const tabRef = getTabRef(documentId);
+
+    // There is a reference to the tab and it is open.
+    if (tabRef !== undefined && !tabRef.closed) {
+      tabRef.focus();
+
+      return;
+    }
+
+    if (isTabOpen) {
+      toast.warning('Dokumentet er allerede åpent i en annen fane');
+
+      return;
+    }
+
+    const newTabRef = window.open(tabUrl, documentId);
+
+    if (newTabRef === null) {
+      toast.error('Kunne ikke åpne ny fane');
+
+      return;
+    }
+
+    setTabRef(documentId, newTabRef);
+  };
 
   return (
-    <Button onClick={onClick} variant="secondary" size="small" icon={<FilePdfIcon />}>
-      Vis kombinert dokument
-    </Button>
+    <Tooltip content="Trykk med musehjulet/midterste knapp eller Ctrl/⌘ + klikk for å åpne i ny fane.">
+      <StyledOpenButton
+        onClick={onClick}
+        onAuxClick={onClick}
+        href={tabUrl}
+        loading={isLoading || isFetching || archivedIsLoading}
+        $isActive={isTabOpen || isInlineOpen}
+      >
+        Vis kombinert dokument
+      </StyledOpenButton>
+    </Tooltip>
   );
 };
 
-const UseAsAttachments = () => {
-  const { selectedDocuments } = useContext(SelectContext);
-  const oppgaveId = useOppgaveId();
-  const { data = [] } = useGetDocumentsQuery(oppgaveId);
-  const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
-  const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
+interface OpenButtonProps extends ButtonProps, Pick<LinkProps, 'href'> {
+  $isActive: boolean;
+}
 
-  if (oppgaveId === skipToken) {
-    return null;
+const OpenButton = forwardRef<HTMLAnchorElement, OpenButtonProps>((props, ref) => (
+  <Button {...props} as="a" variant="secondary" size="small" icon={<FilePdfIcon />} ref={ref} />
+));
+
+OpenButton.displayName = 'OpenButton';
+
+const StyledOpenButton = styled(OpenButton)`
+  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px #262626' : 'none')};
+
+  :visited {
+    color: var(--a-text-visited);
+    box-shadow: inset 0 0 0 2px var(--a-text-visited);
   }
-
-  const options = data
-    .filter(({ parentId }) => parentId === null)
-    .map(({ id, tittel }) => (
-      <option value={id} key={id}>
-        {tittel}
-      </option>
-    ));
-
-  return (
-    <Select
-      size="small"
-      label="Bruk som vedlegg for"
-      onChange={({ target }) => {
-        createVedlegg({
-          oppgaveId,
-          parentId: target.value,
-          journalfoerteDokumenter: Object.values(selectedDocuments)
-            .map((d) => findDocument(d.dokumentInfoId, arkiverteDokumenter?.dokumenter ?? []))
-            .filter(isNotUndefined),
-        });
-      }}
-      value={NONE_SELECTED}
-    >
-      <option key={NONE_SELECTED} value={NONE_SELECTED} label="Velg dokument" />
-      {options}
-    </Select>
-  );
-};
+`;

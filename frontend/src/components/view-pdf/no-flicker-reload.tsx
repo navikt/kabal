@@ -75,7 +75,7 @@ export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => 
             type="application/pdf"
             name="pdf-viewer"
             onLoad={() => onLoad(index, url)}
-            current={current}
+            $current={current}
           />
         );
       })}
@@ -83,14 +83,14 @@ export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => 
   );
 };
 
-const StyledPDF = styled.object<{ current: boolean }>`
+const StyledPDF = styled.object<{ $current: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   flex-grow: 1;
-  z-index: ${({ current }) => (current ? 0 : -1)};
+  z-index: ${({ $current }) => ($current ? 0 : -1)};
 `;
 
 const StyledSwitcher = styled.div`

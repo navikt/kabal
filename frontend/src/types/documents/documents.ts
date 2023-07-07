@@ -63,4 +63,5 @@ export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokume
 
 export interface IMergedDocumentsResponse {
   reference: string;
+  title: string;
 }
