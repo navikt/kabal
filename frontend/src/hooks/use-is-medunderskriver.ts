@@ -11,6 +11,6 @@ export const useIsMedunderskriver = () => {
       return false;
     }
 
-    return oppgave.medunderskriver?.navIdent === userData.navIdent;
+    return oppgave.medunderskriverident === userData.navIdent;
   }, [oppgave, userData, isLoading]);
 };

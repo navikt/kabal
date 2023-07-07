@@ -30,7 +30,7 @@ export const SendTilSaksbehandler = ({
 
   if (
     oppgavebehandling.isAvsluttetAvSaksbehandler ||
-    oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent ||
+    oppgavebehandling.tildeltSaksbehandlerident === userData.navIdent ||
     oppgavebehandling.feilregistrering !== null ||
     !isMedunderskriver
   ) {

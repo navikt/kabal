@@ -20,38 +20,20 @@ interface IOppgaveRowVenteperiode extends IVenteperiode {
 export interface IOppgave {
   ageKA: number; // Age in days.
   avsluttetAvSaksbehandlerDate: Date | null;
-  egenAnsatt: boolean;
-  erMedunderskriver: boolean;
-  erTildelt: boolean;
   fagsystemId: string;
-  fortrolig: boolean;
   frist: Date | null;
-  harMedunderskriver: boolean;
   hjemmel: string | null;
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
-  medunderskriverNavn: string | null;
   mottatt: Date;
-  saksbehandlerHarTilgang: boolean;
-  strengtFortrolig: boolean;
-  tema: string;
   tildeltSaksbehandlerident: string | null;
-  tildeltSaksbehandlerNavn: string | null;
   type: SaksTypeEnum;
   ytelse: string;
   utfall: UtfallEnum | null;
   sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: Date | null;
-  access: AccessEnum;
-}
-
-enum AccessEnum {
-  READ = 'READ',
-  WRITE = 'WRITE',
-  ASSIGN = 'ASSIGN',
-  NONE = 'NONE',
 }
 
 export enum SortFieldEnum {

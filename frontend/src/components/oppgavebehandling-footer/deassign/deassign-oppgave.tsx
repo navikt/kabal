@@ -16,8 +16,8 @@ export const DeassignOppgave = () => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
-    oppgave?.tildeltSaksbehandler?.navIdent ?? null,
-    typeof oppgave === 'undefined' || oppgave.medunderskriver !== null // Assume medunderskriver exists.
+    oppgave?.tildeltSaksbehandlerident ?? null,
+    typeof oppgave === 'undefined' || oppgave.medunderskriverident !== null // Assume medunderskriver exists.
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

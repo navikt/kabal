@@ -12,13 +12,13 @@ import { getTitleLowercase } from './getTitle';
 
 type SendTilMedunderskriverProps = Pick<
   IOppgavebehandling,
-  'id' | 'typeId' | 'medunderskriver' | 'medunderskriverFlyt'
+  'id' | 'typeId' | 'medunderskriverident' | 'medunderskriverFlyt'
 >;
 
 export const SendTilMedunderskriver = ({
   typeId,
   id: oppgaveId,
-  medunderskriver,
+  medunderskriverident,
   medunderskriverFlyt,
 }: SendTilMedunderskriverProps) => {
   const canEdit = useCanEdit();
@@ -32,7 +32,7 @@ export const SendTilMedunderskriver = ({
   }
 
   const sendToMedunderskriverDisabled =
-    !canEdit || medunderskriver === null || loader.isLoading || medunderskriverLoader.isLoading;
+    !canEdit || medunderskriverident === null || loader.isLoading || medunderskriverLoader.isLoading;
 
   const onClick = () => switchMedunderskriverflyt({ oppgaveId, isSaksbehandler });
 

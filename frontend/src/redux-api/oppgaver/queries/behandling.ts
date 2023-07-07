@@ -19,20 +19,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     getOppgavebehandling: builder.query<IOppgavebehandling, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/detaljer`,
-      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
         try {
-          const { data } = await queryFulfilled;
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
-              saksbehandler: data.tildeltSaksbehandler,
-            }))
-          );
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, () => ({
-              medunderskriver: data.medunderskriver,
-            }))
-          );
+          await queryFulfilled;
         } catch (e) {
           const message = 'Kunne ikke hente oppgavebehandling.';
 
@@ -57,7 +46,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.medunderskriver = data.medunderskriver;
+                draft.medunderskriverident = data.medunderskriver?.navIdent ?? null;
               }
             })
           );
@@ -105,7 +94,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.tildeltSaksbehandler = data.saksbehandler;
+                draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
               }
             })
           );

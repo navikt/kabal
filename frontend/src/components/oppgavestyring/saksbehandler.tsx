@@ -1,7 +1,9 @@
 import { ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
+import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { useUser } from '@app/simple-api-state/use-user';
 import { IOppgave } from '@app/types/oppgaver';
@@ -16,6 +18,9 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     oppgave.medunderskriverident !== null,
     oppgave.ytelse
   );
+  const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(
+    oppgave.tildeltSaksbehandlerident ?? skipToken
+  );
 
   if (userIsError) {
     return (
@@ -25,7 +30,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     );
   }
 
-  if (userIsLoading || isLoading || typeof user === 'undefined') {
+  if (userIsLoading || signatureIsLoading || isLoading || user === undefined) {
     return (
       <Container>
         <Loader size="small" />
@@ -33,10 +38,12 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     );
   }
 
+  const name = signature?.customLongName ?? signature?.longName ?? null;
+
   if (access.assignOthers) {
     return (
       <Container>
-        <SelectSaksbehandler {...oppgave} />
+        <SelectSaksbehandler {...oppgave} tildeltSaksbehandlerNavn={name} />
       </Container>
     );
   }
@@ -49,7 +56,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     );
   }
 
-  const saksbehandler = `${oppgave.tildeltSaksbehandlerNavn ?? 'Laster...'} (${oppgave.tildeltSaksbehandlerident})`;
+  const saksbehandler = `${name ?? 'Laster...'} (${oppgave.tildeltSaksbehandlerident})`;
 
   return (
     <Container>
@@ -58,7 +65,17 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   );
 };
 
-const SelectSaksbehandler = ({ id, type, ytelse, tildeltSaksbehandlerident, tildeltSaksbehandlerNavn }: IOppgave) => {
+interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'type' | 'ytelse' | 'tildeltSaksbehandlerident'> {
+  tildeltSaksbehandlerNavn: string | null;
+}
+
+const SelectSaksbehandler = ({
+  id,
+  type,
+  ytelse,
+  tildeltSaksbehandlerident,
+  tildeltSaksbehandlerNavn,
+}: ISelectSaksbehandlerProps) => {
   const {
     data,
     isLoading: potentialSaksbehandlereIsLoading,

@@ -75,7 +75,7 @@ export const UnfinishedFooter = () => {
           <Feilregistrering
             oppgaveId={oppgave.id}
             fagsystemId={oppgave.fagsystemId}
-            tildeltSaksbehandlerident={oppgave.tildeltSaksbehandler?.navIdent ?? null}
+            tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident ?? null}
             variant="secondary"
             $position="over"
             feilregistrert={null}

@@ -2,7 +2,6 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { INavEmployee } from '@app/types/oppgave-common';
 import { ITildelingResponse, TildelSaksbehandlerParams } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
@@ -18,18 +17,12 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
         body: { navIdent },
       }),
       onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
-        const saksbehandler: INavEmployee | null = navIdent === null ? null : { navIdent, navn: 'Laster...' };
-
         const optimisticBehandling = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             if (typeof draft !== 'undefined') {
-              draft.tildeltSaksbehandler = saksbehandler;
+              draft.tildeltSaksbehandlerident = navIdent;
             }
           })
-        );
-
-        const optimiticSaksbehandler = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({ saksbehandler }))
         );
 
         try {
@@ -45,20 +38,25 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.tildeltSaksbehandler = data.saksbehandler;
+                draft.tildeltSaksbehandlerident = navIdent;
                 draft.modified = data.modified;
               }
             })
           );
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
-              draft.tildeltSaksbehandlerNavn = data.saksbehandler?.navn ?? null;
+              draft.tildeltSaksbehandlerident = navIdent;
             })
+          );
+
+          dispatch(
+            behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
+              saksbehandler: data.saksbehandler,
+            }))
           );
         } catch (e) {
           optimisticBehandling.undo();
-          optimiticSaksbehandler.undo();
+
           const message = navIdent === null ? 'Kunne ikke fradele oppgave.' : 'Kunne ikke tildele oppgave.';
 
           if (isApiRejectionError(e)) {

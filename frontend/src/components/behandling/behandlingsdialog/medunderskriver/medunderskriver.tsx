@@ -27,18 +27,11 @@ export const Medunderskriver = () => {
 
   const options = isFullfoert ? undefined : getOptions(canChangeMedunderskriver, oppgave);
 
-  const { data: medunderskriver } = useGetMedunderskriverQuery(
-    oppgaveId,
-    canChangeMedunderskriver ? undefined : options
-  );
-  const { data: medunderskriverflyt } = useGetMedunderskriverflytQuery(oppgaveId, isAssignee ? undefined : options);
+  // Poll the medunderskriver endpoints, in case the medunderskriver is changed by another user.
+  useGetMedunderskriverQuery(oppgaveId, canChangeMedunderskriver ? undefined : options);
+  useGetMedunderskriverflytQuery(oppgaveId, isAssignee ? undefined : options);
 
-  if (
-    typeof oppgave === 'undefined' ||
-    typeof medunderskriver === 'undefined' ||
-    typeof medunderskriverflyt === 'undefined'
-  ) {
-    return <Loader size="xlarge" />;
+  if (oppgave === undefined) {
   }
 
   if (oppgave.strengtFortrolig === true) {
@@ -49,22 +42,22 @@ export const Medunderskriver = () => {
     <>
       <MedunderskriverInfo
         typeId={oppgave.typeId}
-        tildeltSaksbehandler={oppgave.tildeltSaksbehandler}
-        medunderskriver={medunderskriver.medunderskriver}
+        tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+        medunderskriverident={oppgave.medunderskriverident}
       />
       <SelectMedunderskriver
         ytelseId={oppgave.ytelseId}
         typeId={oppgave.typeId}
         id={oppgave.id}
-        medunderskriver={medunderskriver.medunderskriver}
+        medunderskriverident={oppgave.medunderskriverident}
       />
       <SendTilMedunderskriver
         id={oppgave.id}
         typeId={oppgave.typeId}
-        medunderskriver={medunderskriver.medunderskriver}
-        medunderskriverFlyt={medunderskriverflyt.medunderskriverFlyt}
+        medunderskriverident={oppgave.medunderskriverident}
+        medunderskriverFlyt={oppgave.medunderskriverFlyt}
       />
-      <SendTilSaksbehandler id={oppgave.id} medunderskriverFlyt={medunderskriverflyt.medunderskriverFlyt} />
+      <SendTilSaksbehandler id={oppgave.id} medunderskriverFlyt={oppgave.medunderskriverFlyt} />
     </>
   );
 };

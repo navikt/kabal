@@ -29,7 +29,7 @@ export interface IOppgavebehandlingBase {
     id: UUID;
     version: KvalitetsvurderingVersion;
   } | null;
-  medunderskriver: INavEmployee | null;
+  medunderskriverident: string | null;
   medunderskriverFlyt: MedunderskriverFlyt;
   modified: string; // LocalDateTime
   mottattVedtaksinstans: string | null; // LocalDate
@@ -47,7 +47,7 @@ export interface IOppgavebehandlingBase {
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
-  tildeltSaksbehandler: INavEmployee | null;
+  tildeltSaksbehandlerident: string | null;
   tildeltSaksbehandlerEnhet: string | null;
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
