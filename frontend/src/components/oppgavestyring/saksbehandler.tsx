@@ -1,7 +1,8 @@
-import { ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { ErrorMessage, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import styled from 'styled-components';
+import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling';
@@ -33,7 +34,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   if (userIsLoading || signatureIsLoading || isLoading || user === undefined) {
     return (
       <Container>
-        <Loader size="small" />
+        <LoadingCellContent />
       </Container>
     );
   }
@@ -88,7 +89,7 @@ const SelectSaksbehandler = ({
   }
 
   if (potentialSaksbehandlereIsLoading || typeof data === 'undefined') {
-    return <Loader size="small" />;
+    return <LoadingCellContent />;
   }
 
   const options = data.saksbehandlere.map(({ navIdent, navn }) => (
@@ -127,6 +128,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: left;
   height: 34px;
+  width: 100%;
 `;
 
 const StyledSelect = styled(Select)`

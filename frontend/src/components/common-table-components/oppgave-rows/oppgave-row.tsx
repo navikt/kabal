@@ -15,7 +15,7 @@ import { LoadingRow } from '../loading-row';
 import { MedudunderskriverflytLabel } from '../medunderskriverflyt-label';
 import { OpenOppgavebehandling } from '../open';
 import { PaaVentReason, PaaVentTil } from '../paa-vent';
-import { Fnr, Name } from '../person';
+import { SakenGjelderFnr, SakenGjelderName } from '../saken-gjelder';
 import { Utfall } from '../utfall';
 import { Ytelse } from '../ytelse';
 
@@ -66,13 +66,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Navn:
         return (
           <Table.DataCell key={key}>
-            <Name oppgaveId={oppgave.id} />
+            <SakenGjelderName oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Fnr:
         return (
           <Table.DataCell key={key}>
-            <Fnr oppgaveId={oppgave.id} />
+            <SakenGjelderFnr oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Age:

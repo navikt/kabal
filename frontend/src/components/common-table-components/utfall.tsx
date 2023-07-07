@@ -1,5 +1,5 @@
-import { Loader } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
+import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useUtfall } from '@app/simple-api-state/use-kodeverk';
 
 interface Props {
@@ -11,7 +11,7 @@ export const Utfall = ({ utfallId }: Props): JSX.Element => {
 
   const children = useMemo(() => {
     if (typeof utfallList === 'undefined') {
-      return <Loader size="small" />;
+      return <LoadingCellContent />;
     }
 
     return utfallList.find((u) => u.id === utfallId)?.navn;

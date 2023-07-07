@@ -49,10 +49,6 @@ export const TildelButton = ({
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
       onClick={() => {
-        if (typeof user === 'undefined') {
-          return;
-        }
-
         tildel(user.navIdent);
       }}
     >
@@ -64,6 +60,5 @@ export const TildelButton = ({
 const StyledButton = styled(Button)`
   grid-area: tildel;
   white-space: nowrap;
-  /* max-width: fit-content; */
   width: 100px;
 `;

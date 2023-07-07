@@ -1,5 +1,6 @@
-import { BodyShort, Heading, Loader } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
+import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -25,7 +26,7 @@ export const Messages = () => {
   const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId, options);
 
   if (typeof oppgave === 'undefined' || typeof messages === 'undefined' || isLoading) {
-    return <Loader size="xlarge" />;
+    return SKELETON;
   }
 
   const isFeilregistrert = oppgave.feilregistrering !== null;

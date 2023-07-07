@@ -7,7 +7,7 @@ import {
 import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsFilterSaksId, useDocumentsFilterTema } from '@app/hooks/settings/use-setting';
-import { useFullTemaNameFromId } from '@app/hooks/use-kodeverk-ids';
+import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { LabelTema } from '@app/styled-components/labels';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { AvsenderMottaker } from './avsender-mottaker';
@@ -23,7 +23,7 @@ export const ExpandedColumns = ({ document }: Props) => {
   const { setValue: setSaksId } = useDocumentsFilterSaksId();
   const { setValue: setTema } = useDocumentsFilterTema();
 
-  const temaName = useFullTemaNameFromId(tema);
+  const temaName = useFullTemaNameFromIdOrLoading(tema);
 
   return (
     <>

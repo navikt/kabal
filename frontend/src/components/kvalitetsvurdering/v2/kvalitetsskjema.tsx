@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Skeleton } from '@navikt/ds-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -15,7 +15,26 @@ export const KvalitetsskjemaV2 = () => {
   const { isLoading: kvalitetsvurderingIsLoading } = useKvalitetsvurderingV2();
 
   if (isLoading || kvalitetsvurderingIsLoading) {
-    return <Loader size="3xlarge" />;
+    return (
+      <StyledKvalitetsskjema data-testid="kvalitetsskjema">
+        <div>
+          <Skeleton variant="text" height={48} width="50%" />
+          <Skeleton variant="rounded" height={32} />
+        </div>
+        <div>
+          <Skeleton variant="text" height={48} width="50%" />
+          <Skeleton variant="rounded" height={64} />
+        </div>
+        <div>
+          <Skeleton variant="text" height={48} width="50%" />
+          <Skeleton variant="rounded" height={96} />
+        </div>
+        <div>
+          <Skeleton variant="text" height={48} width="50%" />
+          <Skeleton variant="rounded" height={132} />
+        </div>
+      </StyledKvalitetsskjema>
+    );
   }
 
   if (

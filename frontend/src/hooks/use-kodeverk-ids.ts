@@ -1,56 +1,71 @@
-import { useInnsendingshjemlerMap, useKodeverk, useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
+import {
+  useInnsendingshjemlerMap,
+  useKodeverk,
+  useRegistreringshjemlerMap,
+  useSimpleYtelser,
+} from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { useShortRegistreringshjemmelName } from './use-registreringshjemler-name';
 
-export const useFullTemaNameFromId = (temaId?: string | null): string => {
+const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
   const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
+    return undefined;
   }
 
-  if (typeof temaId === 'string') {
-    return data.tema.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
+  if (temaId === null) {
+    return 'Mangler';
   }
 
-  return 'Mangler';
+  return data.tema.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
 };
 
-export const useFullYtelseNameFromId = (ytelseId?: string | null): string => {
+export const useFullTemaNameFromIdOrLoading = (temaId: string | null): string =>
+  useFullTemaNameFromId(temaId) ?? 'Laster...';
+
+export const useFullYtelseNameFromId = (ytelseId: string): string | undefined => {
   const { data, isLoading } = useSimpleYtelser();
 
   if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
+    return undefined;
   }
 
-  if (typeof data !== 'undefined' && typeof ytelseId === 'string') {
-    return data.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
-  }
-
-  return 'Mangler';
+  return data.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
 };
 
-export const useTypeNameFromId = (type?: SaksTypeEnum): string => {
+export const useFullYtelseNameFromIdOrLoading = (ytelseId: string): string =>
+  useFullYtelseNameFromId(ytelseId) ?? 'Laster...';
+
+export const useTypeNameFromId = (type: SaksTypeEnum): string | undefined => {
   const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
+    return undefined;
   }
 
-  if (typeof type === 'string') {
-    return data.sakstyper.find(({ id }) => id === type)?.navn ?? type;
+  return data.sakstyper.find(({ id }) => id === type)?.navn ?? type;
+};
+
+const useRegistreringshjemmelFromId = (hjemmelId: string): string | undefined => {
+  const { data } = useRegistreringshjemlerMap();
+
+  if (data === undefined) {
+    return undefined;
   }
 
-  return 'Mangler';
+  const hjemmel = data[hjemmelId];
+
+  if (typeof hjemmel !== 'undefined') {
+    return `${hjemmel.lovkilde.beskrivelse} ${hjemmel.hjemmelnavn}`;
+  }
+
+  return hjemmelId;
 };
 
-export const useRegistreringshjemmelFromId = (hjemmelId?: string | null): string => {
-  const hjemmel = useShortRegistreringshjemmelName(hjemmelId);
+export const useRegistreringshjemmelFromIdOrLoading = (hjemmelId: string): string =>
+  useRegistreringshjemmelFromId(hjemmelId) ?? 'Laster...';
 
-  return typeof hjemmel === 'undefined' ? 'Laster...' : hjemmel;
-};
-
-export const useEnhetNameFromId = (enhetId?: string | null): string => {
+export const useEnhetNameFromIdOrLoading = (enhetId?: string | null): string => {
   const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
@@ -64,16 +79,12 @@ export const useEnhetNameFromId = (enhetId?: string | null): string => {
   return 'Mangler';
 };
 
-export const useInnsendingshjemmelFromId = (hjemmelId?: string | null): string => {
+export const useInnsendingshjemmelFromId = (hjemmelId: string): string | undefined => {
   const { data, isLoading } = useInnsendingshjemlerMap();
 
   if (isLoading || typeof data === 'undefined') {
-    return 'Laster...';
+    return undefined;
   }
 
-  if (typeof hjemmelId === 'string') {
-    return data[hjemmelId] ?? hjemmelId;
-  }
-
-  return 'Mangler';
+  return data[hjemmelId] ?? hjemmelId;
 };

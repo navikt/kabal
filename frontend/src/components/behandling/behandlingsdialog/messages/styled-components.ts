@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledMessagesContainer = styled.section`
-  padding-bottom: 1em;
+  margin-top: 16px;
+  padding-bottom: 16px;
 `;
 
 export const StyledAuthor = styled.p`
