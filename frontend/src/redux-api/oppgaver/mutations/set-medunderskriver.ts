@@ -13,24 +13,18 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISetMedunderskriverParams>({
-      query: ({ oppgaveId, medunderskriver }) => ({
+      query: ({ oppgaveId, navIdent }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/medunderskriver`,
         method: 'PUT',
         body: {
-          navIdent: medunderskriver === null ? null : medunderskriver.navIdent,
+          navIdent,
         },
       }),
-      onQueryStarted: async ({ oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.medunderskriver = update.medunderskriver;
+            draft.medunderskriverident = navIdent;
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
-          })
-        );
-
-        const medunderskriverPatchResult = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
-            draft.medunderskriver = update.medunderskriver;
           })
         );
 
@@ -47,7 +41,7 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
-              draft.medunderskriver = data.medunderskriver;
+              draft.medunderskriverident = navIdent;
             })
           );
 
@@ -60,13 +54,17 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
-              draft.medunderskriverident = update.medunderskriver?.navIdent ?? null;
-              draft.medunderskriverNavn = update.medunderskriver?.navn ?? null;
+              draft.medunderskriverident = navIdent;
+            })
+          );
+
+          dispatch(
+            behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
+              draft.medunderskriver = data.medunderskriver;
             })
           );
         } catch (e) {
           patchResult.undo();
-          medunderskriverPatchResult.undo();
           flytPatchresult.undo();
 
           const message = 'Kunne ikke oppdatere medunderskriver.';

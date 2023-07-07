@@ -40,17 +40,16 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              const { modified, medunderskriverFlyt, ...medunderskriver } = data;
+              const { modified, medunderskriverFlyt, navIdent } = data;
               draft.modified = modified;
               draft.medunderskriverFlyt = medunderskriverFlyt;
-              draft.medunderskriver = medunderskriver;
+              draft.medunderskriverident = navIdent;
             })
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
-              draft.medunderskriverNavn = data.navn;
               draft.medunderskriverident = data.navIdent;
             })
           );

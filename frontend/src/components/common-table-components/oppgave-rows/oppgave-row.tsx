@@ -1,5 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
+import { Name } from '@app/components/common-table-components/name';
 import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { isoDateToPretty } from '@app/domain/date';
@@ -92,8 +93,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <MedudunderskriverflytLabel
               type={oppgave.type}
               medunderskriverFlyt={oppgave.medunderskriverFlyt}
-              erMedunderskriver={oppgave.erMedunderskriver}
-              harMedunderskriver={oppgave.harMedunderskriver}
+              medunderskriverident={oppgave.medunderskriverident}
             />
           </Table.DataCell>
         );
@@ -116,7 +116,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Tildeling:
-        return <Table.DataCell key={key}>{oppgave.tildeltSaksbehandlerNavn}</Table.DataCell>;
+        return (
+          <Table.DataCell key={key}>
+            <Name navIdent={oppgave.tildeltSaksbehandlerident} />
+          </Table.DataCell>
+        );
       case ColumnKeyEnum.Utfall:
         return (
           <Table.DataCell key={key}>

@@ -17,9 +17,9 @@ export const useCanEditDocument = (): boolean => {
     }
 
     if (oppgave.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-      return oppgave.medunderskriver?.navIdent === user.navIdent;
+      return oppgave.medunderskriverident === user.navIdent;
     }
 
-    return oppgave.tildeltSaksbehandler?.navIdent === user.navIdent;
+    return oppgave.tildeltSaksbehandlerident === user.navIdent;
   }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, user, userIsLoading]);
 };

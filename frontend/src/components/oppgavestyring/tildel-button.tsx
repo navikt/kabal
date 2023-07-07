@@ -17,7 +17,6 @@ export const TildelButton = ({
   ytelse,
   tildeltSaksbehandlerident,
   medunderskriverident,
-  erMedunderskriver,
   children = 'Tildel meg',
 }: Props) => {
   const { data: user, isLoading: isUserLoading } = useUser();
@@ -32,7 +31,7 @@ export const TildelButton = ({
   if (
     !access.assignSelf ||
     !user.roller.includes(Role.KABAL_SAKSBEHANDLING) ||
-    erMedunderskriver ||
+    medunderskriverident === user.navIdent ||
     tildeltSaksbehandlerident === user.navIdent
   ) {
     return null;

@@ -3,24 +3,25 @@ import {
   getTitleCapitalized,
   getTitleLowercase,
 } from '@app/components/behandling/behandlingsdialog/medunderskriver/getTitle';
+import { useUser } from '@app/simple-api-state/use-user';
 import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '@app/styled-components/labels';
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { IOppgave } from '@app/types/oppgaver';
 
-type MedudunderskriverflytLabelProps = Pick<
-  IOppgave,
-  'medunderskriverFlyt' | 'erMedunderskriver' | 'harMedunderskriver' | 'type'
->;
+type MedudunderskriverflytLabelProps = Pick<IOppgave, 'medunderskriverFlyt' | 'medunderskriverident' | 'type'>;
 
 export const MedudunderskriverflytLabel = ({
   medunderskriverFlyt,
-  erMedunderskriver,
-  harMedunderskriver,
+  medunderskriverident,
   type,
 }: MedudunderskriverflytLabelProps) => {
-  if (!harMedunderskriver) {
+  const { data, isLoading } = useUser();
+
+  if (medunderskriverident === null || isLoading || data === undefined) {
     return null;
   }
+
+  const erMedunderskriver = medunderskriverident === data.navIdent;
 
   if (erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
     return <LabelMedunderskriver>{getTitleCapitalized(type)}</LabelMedunderskriver>;

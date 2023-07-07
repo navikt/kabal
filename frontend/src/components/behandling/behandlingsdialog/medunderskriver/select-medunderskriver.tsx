@@ -1,4 +1,4 @@
-import { Loader, Select } from '@navikt/ds-react';
+import { Select } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -7,11 +7,10 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useUpdateChosenMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { Role } from '@app/types/bruker';
-import { INavEmployee } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { getTitleCapitalized, getTitleLowercase, getTitlePlural } from './getTitle';
 
-type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelseId' | 'medunderskriver' | 'typeId'>;
+type SelectMedunderskriverProps = Pick<IOppgavebehandling, 'id' | 'ytelseId' | 'medunderskriverident' | 'typeId'>;
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
@@ -31,7 +30,7 @@ const useCanChangeMedunderskriver = () => {
   }, [oppgavebehandlingIsLoading, oppgavebehandling, isFinished, isSaksbehandler, hasOppgavestyringRole]);
 };
 
-export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMedunderskriverProps) => {
+export const SelectMedunderskriver = ({ id, medunderskriverident, typeId }: SelectMedunderskriverProps) => {
   const canChangeMedunderskriver = useCanChangeMedunderskriver();
   const [updateChosenMedunderskriver] = useUpdateChosenMedunderskriverMutation({ fixedCacheKey: id });
   const { data } = useGetPotentialMedunderskrivereQuery(id);
@@ -50,15 +49,10 @@ export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMed
     return <p>Fant ingen {getTitlePlural(typeId)}</p>;
   }
 
-  const onChangeChosenMedunderskriver = (medunderskriverident: string | null) =>
+  const onChangeChosenMedunderskriver = (navIdent: string | null) =>
     updateChosenMedunderskriver({
       oppgaveId: id,
-      medunderskriver:
-        medunderskriverident === null
-          ? null
-          : medunderskrivere
-              .map<INavEmployee>(({ navIdent, navn }) => ({ navIdent, navn }))
-              .find(({ navIdent }) => navIdent === medunderskriverident) ?? null,
+      navIdent,
     });
 
   return (
@@ -66,7 +60,7 @@ export const SelectMedunderskriver = ({ id, medunderskriver, typeId }: SelectMed
       size="small"
       label={`${getTitleCapitalized(typeId)}:`}
       onChange={({ target }) => onChangeChosenMedunderskriver(target.value === NONE_SELECTED ? null : target.value)}
-      value={medunderskriver?.navIdent ?? NONE_SELECTED}
+      value={medunderskriverident ?? NONE_SELECTED}
       data-testid="select-medunderskriver"
     >
       <option value={NONE_SELECTED}>Ingen {getTitleLowercase(typeId)}</option>

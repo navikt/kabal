@@ -16,18 +16,18 @@ import { MISSING_TITLE } from './title';
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
   const { data: medunderskriverSignature } = useGetSignatureQuery(
-    typeof oppgave?.medunderskriver?.navIdent === 'string' ? oppgave.medunderskriver.navIdent : skipToken
+    typeof oppgave?.medunderskriverident === 'string' ? oppgave.medunderskriverident : skipToken
   );
 
-  if (typeof oppgave === 'undefined') {
+  if (oppgave === undefined) {
     return undefined;
   }
 
-  if (typeof medunderskriverSignature === 'undefined') {
+  if (medunderskriverSignature === undefined) {
     return null;
   }
 
-  if (oppgave.medunderskriver === null) {
+  if (oppgave.medunderskriverident === null) {
     return null;
   }
 
@@ -39,11 +39,11 @@ const useSignatureData = (element: SignatureElementType) => {
   const medunderskriverSignature = useMedunderskriverSignature();
   const { data: oppgave } = useOppgave();
   const { data: saksbehandlerSignature } = useGetSignatureQuery(
-    typeof oppgave?.tildeltSaksbehandler?.navIdent === 'string' ? oppgave.tildeltSaksbehandler.navIdent : skipToken
+    typeof oppgave?.tildeltSaksbehandlerident === 'string' ? oppgave.tildeltSaksbehandlerident : skipToken
   );
 
   useEffect(() => {
-    if (typeof saksbehandlerSignature === 'undefined' || typeof medunderskriverSignature === 'undefined') {
+    if (saksbehandlerSignature === undefined || medunderskriverSignature === undefined) {
       return;
     }
 
