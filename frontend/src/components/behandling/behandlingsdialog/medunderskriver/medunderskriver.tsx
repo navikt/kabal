@@ -1,5 +1,5 @@
-import { Loader } from '@navikt/ds-react';
 import React from 'react';
+import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -32,6 +32,7 @@ export const Medunderskriver = () => {
   useGetMedunderskriverflytQuery(oppgaveId, isAssignee ? undefined : options);
 
   if (oppgave === undefined) {
+    return SKELETON;
   }
 
   if (oppgave.strengtFortrolig === true) {

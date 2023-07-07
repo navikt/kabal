@@ -38,7 +38,7 @@ export const SendTilMedunderskriver = ({
 
   const SentToMedunderskriver = () => (
     <StyledFormSection>
-      <Alert variant="info" size="small">
+      <Alert variant="info" size="small" inline>
         Sendt til {getTitleLowercase(typeId)}
       </Alert>
     </StyledFormSection>
@@ -46,7 +46,7 @@ export const SendTilMedunderskriver = ({
 
   const SentBackToMedunderskriver = () => (
     <StyledFormSection>
-      <Alert variant="info" size="small">
+      <Alert variant="info" size="small" inline>
         Sendt tilbake av {getTitleLowercase(typeId)}
       </Alert>
     </StyledFormSection>
@@ -86,7 +86,7 @@ export const SendTilMedunderskriver = ({
 };
 
 const StyledFormSection = styled.div`
-  margin-top: 20px;
+  margin-top: 16px;
   width: 100%;
 `;
 

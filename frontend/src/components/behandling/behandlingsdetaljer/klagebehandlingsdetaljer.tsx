@@ -1,9 +1,9 @@
-import { Heading, Loader } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Part } from '../../part/part';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
@@ -13,14 +13,13 @@ import { MottattVedtaksinstans } from './mottatt-vedtaksinstans';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
-export const Klagebehandlingsdetaljer = () => {
-  const { data: oppgavebehandling, isLoading } = useOppgave();
+interface Props {
+  oppgavebehandling: IOppgavebehandling;
+}
+
+export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
-
-  if (typeof oppgavebehandling === 'undefined' || isLoading) {
-    return <Loader size="xlarge" />;
-  }
 
   const {
     typeId,
@@ -59,7 +58,9 @@ export const Klagebehandlingsdetaljer = () => {
         <Type type={typeId}></Type>
       </BehandlingSection>
 
-      <Ytelse ytelseId={ytelseId} />
+      <BehandlingSection label="Ytelse">
+        <Ytelse ytelseId={ytelseId} />
+      </BehandlingSection>
 
       <MottattVedtaksinstans />
 

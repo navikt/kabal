@@ -16,6 +16,6 @@ export const Oppgavestyring = (oppgave: IOppgave) => (
 const Container = styled.div`
   display: grid;
   column-gap: 8px;
-  grid-template-columns: minmax(min-content, auto) 400px minmax(min-content, 110px);
+  grid-template-columns: minmax(min-content, auto) 400px 110px;
   grid-template-areas: 'tildel saksbehandler fradel';
 `;

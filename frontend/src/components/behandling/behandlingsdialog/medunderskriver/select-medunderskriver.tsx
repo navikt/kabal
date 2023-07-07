@@ -1,5 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
+import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
@@ -40,7 +41,7 @@ export const SelectMedunderskriver = ({ id, medunderskriverident, typeId }: Sele
   }
 
   if (typeof data === 'undefined') {
-    return <Loader size="xlarge" />;
+    return SKELETON;
   }
 
   const { medunderskrivere } = data;

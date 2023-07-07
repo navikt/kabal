@@ -3,11 +3,11 @@ import { Button, TextField } from '@navikt/ds-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-  useEnhetNameFromId,
-  useFullYtelseNameFromId,
-  useRegistreringshjemmelFromId,
+  useEnhetNameFromIdOrLoading,
+  useFullYtelseNameFromIdOrLoading,
+  useRegistreringshjemmelFromIdOrLoading,
 } from '@app/hooks/use-kodeverk-ids';
-import { useUtfallName } from '@app/hooks/use-utfall-name';
+import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useUpdateTextMutation } from '@app/redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '@app/types/texts/texts';
@@ -110,13 +110,13 @@ export const EditSmartEditorText = (savedText: IText) => {
 
           <ResolvedTags ids={sections} useName={useMaltekstSectionName} variant="sections" />
 
-          <ResolvedTags ids={hjemler} useName={useRegistreringshjemmelFromId} variant="hjemler" />
+          <ResolvedTags ids={hjemler} useName={useRegistreringshjemmelFromIdOrLoading} variant="hjemler" />
 
-          <ResolvedTags ids={ytelser} useName={useFullYtelseNameFromId} variant="ytelser" />
+          <ResolvedTags ids={ytelser} useName={useFullYtelseNameFromIdOrLoading} variant="ytelser" />
 
-          <ResolvedTags ids={utfall} useName={useUtfallName} variant="utfall" />
+          <ResolvedTags ids={utfall} useName={useUtfallNameOrLoading} variant="utfall" />
 
-          <ResolvedTags ids={enheter} useName={useEnhetNameFromId} variant="enheter" />
+          <ResolvedTags ids={enheter} useName={useEnhetNameFromIdOrLoading} variant="enheter" />
         </TagContainer>
       </Header>
 

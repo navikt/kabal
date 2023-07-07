@@ -39,5 +39,4 @@ export const FradelButton = ({
 const StyledButton = styled(Button)`
   grid-area: fradel;
   white-space: nowrap;
-  width: 110px;
 `;
