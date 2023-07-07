@@ -1,23 +1,44 @@
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { TabContext } from '@app/components/documents/tab-context';
+import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
+import { toast } from '@app/components/toast/store';
+import { Container } from '@app/components/view-pdf/container';
+import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
+import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
+import {
+  getJournalfoertDocumentInlineUrl,
+  getMergedDocumentInlineUrl,
+  getNewDocumentInlineUrl,
+} from '@app/domain/inline-document-url';
+import {
+  getJournalfoertDocumentTabId,
+  getJournalfoertDocumentTabUrl,
+  getMergedDocumentTabId,
+  getMergedDocumentTabUrl,
+  getNewDocumentTabId,
+  getNewDocumentTabUrl,
+} from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
-import { useShownDocument } from '@app/hooks/use-shown-document';
+import { useShownDocuments } from '@app/hooks/use-shown-documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
-import { useDocumentUrl } from './use-document-url';
+import { useMergedDocument } from './use-merged-document';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 export const ViewPDF = () => {
+  const { getTabRef, setTabRef } = useContext(TabContext);
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
-  const { showDocumentList, title = 'Ukjent dokument' } = useShownDocument();
+  const { showDocumentList, title } = useShownDocuments();
 
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
@@ -27,13 +48,51 @@ export const ViewPDF = () => {
 
   const oppgaveId = useOppgaveId();
 
-  const { data: url, isError, isLoading: urlIsLoading, isUninitialized } = useDocumentUrl(oppgaveId, showDocumentList);
+  const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
 
-  if (showDocumentList.length === 0 || oppgaveId === skipToken || isUninitialized) {
+  type DocumentData =
+    | { inlineUrl: string; tabUrl: string; documentId: string }
+    | { inlineUrl: undefined; tabUrl: undefined; documentId: undefined };
+
+  const { inlineUrl, tabUrl, documentId } = useMemo<DocumentData>(() => {
+    if (mergedDocument !== undefined) {
+      return {
+        tabUrl: getMergedDocumentTabUrl(mergedDocument.reference),
+        inlineUrl: getMergedDocumentInlineUrl(mergedDocument.reference),
+        documentId: getMergedDocumentTabId(mergedDocument.reference),
+      };
+    }
+
+    const [onlyDocument] = showDocumentList;
+
+    if (onlyDocument === undefined || oppgaveId === skipToken) {
+      return { tabUrl: undefined, inlineUrl: undefined, documentId: undefined };
+    }
+
+    if (onlyDocument.type === DocumentTypeEnum.JOURNALFOERT) {
+      return {
+        tabUrl: getJournalfoertDocumentTabUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
+        inlineUrl: getJournalfoertDocumentInlineUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
+        documentId: getJournalfoertDocumentTabId(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
+      };
+    }
+
+    return {
+      tabUrl: getNewDocumentTabUrl(oppgaveId, onlyDocument.documentId),
+      inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
+      documentId: getNewDocumentTabId(onlyDocument.documentId),
+    };
+  }, [mergedDocument, oppgaveId, showDocumentList]);
+
+  useMarkVisited(tabUrl);
+
+  const isTabOpen = useIsTabOpen(documentId);
+
+  if (showDocumentList.length === 0 || oppgaveId === skipToken) {
     return null;
   }
 
-  if (isError) {
+  if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
       <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
         <Alert variant="error" size="small">
@@ -43,7 +102,7 @@ export const ViewPDF = () => {
     );
   }
 
-  if (urlIsLoading || typeof url === 'undefined') {
+  if (mergedDocumentIsLoading) {
     return (
       <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
         <Loader title="Laster dokument" size="3xlarge" />
@@ -51,9 +110,41 @@ export const ViewPDF = () => {
     );
   }
 
-  const onClick = () => {
+  const onReloadClick = () => {
     setIsLoading(true);
     setVersion(Date.now());
+  };
+
+  const onNewTabClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (e.button !== 1 && e.button !== 0) {
+      return;
+    }
+
+    e.preventDefault();
+
+    const tabRef = getTabRef(documentId);
+
+    // There is a reference to the tab and it is open.
+    if (tabRef !== undefined && !tabRef.closed) {
+      tabRef.focus();
+
+      return;
+    }
+
+    if (isTabOpen) {
+      toast.warning('Dokumentet er allerede åpent i en annen fane');
+
+      return;
+    }
+
+    const ref = window.open(tabUrl, documentId);
+
+    if (ref === null) {
+      toast.error('Kunne ikke åpne dokumentet i ny fane');
+
+      return;
+    }
+    setTabRef(documentId, ref);
   };
 
   return (
@@ -83,69 +174,28 @@ export const ViewPDF = () => {
           variant="tertiary-neutral"
         />
 
-        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onClick} />
+        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReloadClick} />
 
-        <StyledDocumentTitle>{title}</StyledDocumentTitle>
+        <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
 
         <Button
           as="a"
-          href={url}
-          target="_blank"
+          href={tabUrl}
+          target={documentId}
           title="Åpne i ny fane"
-          rel="noreferrer"
           icon={<ExternalLinkIcon aria-hidden />}
           size="xsmall"
           variant="tertiary-neutral"
+          onClick={onNewTabClick}
+          onAuxClick={onNewTabClick}
         />
       </Header>
-      <NoFlickerReloadPdf url={url} version={version} onVersionLoaded={() => setIsLoading(false)} />
+      <NoFlickerReloadPdf url={inlineUrl} version={version} onVersionLoaded={() => setIsLoading(false)} />
     </Container>
   );
 };
 
-interface ContainerProps {
-  width: number;
-}
-
-const Container = styled.section<ContainerProps>`
-  display: flex;
-  flex-direction: column;
-  min-width: ${(props) => props.width}px;
-  margin: 4px 8px;
-  background: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-  position: relative;
-  height: 100%;
-  scroll-snap-align: start;
-`;
-
 const ErrorOrLoadingContainer = styled(Container)`
   align-items: center;
   justify-content: center;
-`;
-
-const Header = styled.div`
-  background: var(--a-green-100);
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  position: relative;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  z-index: 1;
-  column-gap: 4px;
-`;
-
-const StyledDocumentTitle = styled.h1`
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0;
-  padding-left: 8px;
-  padding-right: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;

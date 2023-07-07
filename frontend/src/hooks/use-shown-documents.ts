@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { IShownDocument } from '@app/components/view-pdf/types';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from './settings/use-setting';
 
@@ -10,27 +11,21 @@ interface ShowDocumentResult {
   title: string | null;
 }
 
-export const useShownDocument = (): ShowDocumentResult => {
+const EMPTY_SHOWN_LIST: IShownDocument[] = [];
+const EMPTY_MAIN_LIST: IMainDocument[] = [];
+const EMPTY_ARCHIVED_LIST: IArkivertDocument[] = [];
+
+export const useShownDocuments = (): ShowDocumentResult => {
   const oppgaveId = useOppgaveId();
-  const { value: shownDocument = [] } = useDocumentsPdfViewed();
-  const { data: documentsInProgressData } = useGetDocumentsQuery(oppgaveId);
+  const { value: showDocumentList = EMPTY_SHOWN_LIST } = useDocumentsPdfViewed();
+  const { data: documentsInProgress = EMPTY_MAIN_LIST } = useGetDocumentsQuery(oppgaveId);
   const { data: journalposter } = useGetArkiverteDokumenterQuery(oppgaveId);
 
-  const journalpostDocuments = useMemo(() => journalposter?.dokumenter ?? [], [journalposter]);
-  const documentsInProgress = useMemo(() => documentsInProgressData ?? [], [documentsInProgressData]);
-
-  const showDocumentList = useMemo(
-    () => (Array.isArray(shownDocument) ? shownDocument : [shownDocument]),
-    [shownDocument]
-  );
+  const journalpostDocuments = journalposter?.dokumenter ?? EMPTY_ARCHIVED_LIST;
 
   const title = useMemo(() => {
-    if (showDocumentList === undefined) {
-      return null;
-    }
-
     if (showDocumentList.length !== 1) {
-      return `${showDocumentList.length} sammenslåtte dokumenter`;
+      return null;
     }
 
     const [onlyDocument] = showDocumentList;

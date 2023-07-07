@@ -1,11 +1,24 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { Fields } from '@app/components/documents/new-documents/grid';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import {
+  StyledDocumentTitle,
+  StyledTitleAction,
+} from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
+import { TabContext } from '@app/components/documents/tab-context';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
+import { toast } from '@app/components/toast/store';
+import {
+  getJournalfoertDocumentTabId,
+  getJournalfoertDocumentTabUrl,
+  getNewDocumentTabId,
+  getNewDocumentTabUrl,
+} from '@app/domain/tabbed-document-url';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
-import { EllipsisTitle, StyledDocumentButton } from '../../styled-components/document-button';
+import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
 import { SetFilename } from '../shared/set-filename';
 import { TitleAction } from './title-action';
 
@@ -16,15 +29,16 @@ interface Props {
 export const DocumentTitle = ({ document }: Props) => {
   const { value, setValue } = useDocumentsPdfViewed();
   const [editMode, setEditMode] = useState(false);
+  const { getTabRef, setTabRef } = useContext(TabContext);
   const [isExpanded] = useIsExpanded();
+  const oppgaveId = useOppgaveId();
 
-  const isActive = useMemo(
+  const isInlineOpen = useMemo(
     () =>
       value.some((v) => {
         if (document.type === DocumentTypeEnum.JOURNALFOERT) {
           return (
             v.type === DocumentTypeEnum.JOURNALFOERT &&
-            v.journalpostId === document.journalfoertDokumentReference.journalpostId &&
             v.dokumentInfoId === document.journalfoertDokumentReference.dokumentInfoId
           );
         }
@@ -34,27 +48,98 @@ export const DocumentTitle = ({ document }: Props) => {
     [document, value]
   );
 
+  const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
+    if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
+      if (oppgaveId === skipToken) {
+        return [undefined, undefined];
+      }
+
+      return [getNewDocumentTabUrl(oppgaveId, document.id), getNewDocumentTabId(document.id)];
+    }
+
+    const { dokumentInfoId, journalpostId } = document.journalfoertDokumentReference;
+
+    return [
+      getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId),
+      getJournalfoertDocumentTabId(journalpostId, dokumentInfoId),
+    ];
+  }, [document, oppgaveId]);
+
+  const isTabOpen = useIsTabOpen(documentId);
+
+  const disabled = url === undefined;
+
   const setViewedDocument = useCallback(() => {
     if (document.type === DocumentTypeEnum.JOURNALFOERT) {
-      setValue({
-        type: document.type,
-        ...document.journalfoertDokumentReference,
-      });
+      setValue([
+        {
+          type: document.type,
+          ...document.journalfoertDokumentReference,
+        },
+      ]);
 
       return;
     }
 
-    setValue({
-      type: document.type,
-      documentId: document.id,
-    });
+    setValue([
+      {
+        type: document.type,
+        documentId: document.id,
+      },
+    ]);
   }, [document, setValue]);
 
-  useEffect(() => {
-    if (isActive) {
-      setViewedDocument();
-    }
-  }, [isActive, setViewedDocument]);
+  const onClick: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      if (disabled) {
+        return;
+      }
+
+      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
+
+      // Open in PDF-viewer panel.
+      if (!shouldOpenInNewTab) {
+        setViewedDocument();
+
+        return;
+      }
+
+      if (documentId === undefined) {
+        toast.error('Kunne ikke åpne dokument i ny fane');
+
+        return;
+      }
+
+      const tabRef = getTabRef(documentId);
+
+      // There is a reference to the tab and it is open.
+      if (tabRef !== undefined && !tabRef.closed) {
+        tabRef.focus();
+
+        return;
+      }
+
+      if (isTabOpen) {
+        toast.warning('Dokumentet er allerede åpent i en annen fane');
+
+        return;
+      }
+
+      // There is no reference to the tab or it is closed.
+      const newTabRef = window.open(url, documentId);
+
+      if (newTabRef === null) {
+        toast.error('Kunne ikke åpne dokument i ny fane');
+
+        return;
+      }
+
+      setTabRef(documentId, newTabRef);
+    },
+    [disabled, getTabRef, isTabOpen, setTabRef, setViewedDocument, documentId, url]
+  );
 
   if (editMode) {
     return (
@@ -73,10 +158,19 @@ export const DocumentTitle = ({ document }: Props) => {
 
   return (
     <StyledDocumentTitle>
-      <StyledDocumentButton isActive={isActive} onClick={setViewedDocument} data-testid="document-open-button">
+      <StyledDocumentLink
+        $disabled={disabled}
+        $isActive={isInlineOpen || isTabOpen}
+        aria-pressed={isInlineOpen || isTabOpen}
+        onClick={onClick}
+        onAuxClick={onClick}
+        data-testid="document-open-button"
+        href={url}
+        target={documentId}
+      >
         <DocumentIcon type={document.type} />
         <EllipsisTitle title={document.tittel}>{document.tittel}</EllipsisTitle>
-      </StyledDocumentButton>
+      </StyledDocumentLink>
       {isExpanded ? (
         <StyledTitleAction
           title={document.tittel}
@@ -89,27 +183,3 @@ export const DocumentTitle = ({ document }: Props) => {
     </StyledDocumentTitle>
   );
 };
-
-const StyledDocumentTitle = styled.h1`
-  grid-area: ${Fields.Title};
-  display: flex;
-  flex-direction: row;
-  column-gap: 8px;
-  font-size: 18px;
-  font-weight: normal;
-  margin: 0;
-  color: #0067c5;
-  overflow: hidden;
-  white-space: nowrap;
-  height: 100%;
-`;
-
-const StyledTitleAction = styled(TitleAction)`
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.2s ease-in-out;
-
-  ${StyledDocumentTitle}:hover & {
-    opacity: 1;
-  }
-`;
