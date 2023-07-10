@@ -17,7 +17,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriverident !== null,
-    oppgave.ytelse
+    oppgave.ytelseId
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(
     oppgave.tildeltSaksbehandlerident ?? skipToken
@@ -66,14 +66,14 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   );
 };
 
-interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'type' | 'ytelse' | 'tildeltSaksbehandlerident'> {
+interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'typeId' | 'ytelseId' | 'tildeltSaksbehandlerident'> {
   tildeltSaksbehandlerNavn: string | null;
 }
 
 const SelectSaksbehandler = ({
   id,
-  type,
-  ytelse,
+  typeId,
+  ytelseId,
   tildeltSaksbehandlerident,
   tildeltSaksbehandlerNavn,
 }: ISelectSaksbehandlerProps) => {
@@ -82,7 +82,7 @@ const SelectSaksbehandler = ({
     isLoading: potentialSaksbehandlereIsLoading,
     isError: saksbehandlereIsError,
   } = useGetPotentialSaksbehandlereQuery(id);
-  const [tildel, { isLoading }] = useTildel(id, type, ytelse);
+  const [tildel, { isLoading }] = useTildel(id, typeId, ytelseId);
 
   if (saksbehandlereIsError) {
     return <StyledErrorMessage>Feil ved lasting</StyledErrorMessage>;

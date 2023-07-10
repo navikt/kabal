@@ -19,7 +19,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
           isAvsluttetAvSaksbehandler,
           frist,
           sattPaaVent,
-          ytelse,
+          ytelseId,
         } = data;
 
         dispatch(
@@ -38,7 +38,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
             isAvsluttetAvSaksbehandler,
             frist,
             sattPaaVent,
-            ytelseId: ytelse,
+            ytelseId,
           }))
         );
       },

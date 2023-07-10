@@ -7,14 +7,18 @@ import { useFradel } from './use-tildel';
 
 export const FradelButton = ({
   id,
-  type,
-  ytelse,
+  typeId,
+  ytelseId,
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
   medunderskriverident,
 }: IOppgave): JSX.Element | null => {
-  const [fradel, { isLoading }] = useFradel(id, type, ytelse);
-  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriverident !== null, ytelse);
+  const [fradel, { isLoading }] = useFradel(id, typeId, ytelseId);
+  const [access, isAccessLoading] = useOppgaveActions(
+    tildeltSaksbehandlerident,
+    medunderskriverident !== null,
+    ytelseId
+  );
 
   if (isAccessLoading || !access.deassign || isAvsluttetAvSaksbehandler) {
     return null;

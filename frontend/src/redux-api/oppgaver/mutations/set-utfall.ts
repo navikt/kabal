@@ -34,7 +34,7 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.utfall = utfall;
+              draft.utfallId = utfall;
             })
           );
         } catch (e) {

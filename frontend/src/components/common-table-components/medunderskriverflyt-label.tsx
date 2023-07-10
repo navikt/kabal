@@ -8,12 +8,12 @@ import { LabelMedunderskriver, LabelReturnertTilSaksbehandler } from '@app/style
 import { MedunderskriverFlyt } from '@app/types/kodeverk';
 import { IOppgave } from '@app/types/oppgaver';
 
-type MedudunderskriverflytLabelProps = Pick<IOppgave, 'medunderskriverFlyt' | 'medunderskriverident' | 'type'>;
+type MedudunderskriverflytLabelProps = Pick<IOppgave, 'medunderskriverFlyt' | 'medunderskriverident' | 'typeId'>;
 
 export const MedudunderskriverflytLabel = ({
   medunderskriverFlyt,
   medunderskriverident,
-  type,
+  typeId,
 }: MedudunderskriverflytLabelProps) => {
   const { data, isLoading } = useUser();
 
@@ -24,15 +24,17 @@ export const MedudunderskriverflytLabel = ({
   const erMedunderskriver = medunderskriverident === data.navIdent;
 
   if (erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return <LabelMedunderskriver>{getTitleCapitalized(type)}</LabelMedunderskriver>;
+    return <LabelMedunderskriver>{getTitleCapitalized(typeId)}</LabelMedunderskriver>;
   }
 
   if (!erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return <LabelMedunderskriver>Sendt til {getTitleLowercase(type)}</LabelMedunderskriver>;
+    return <LabelMedunderskriver>Sendt til {getTitleLowercase(typeId)}</LabelMedunderskriver>;
   }
 
   if (!erMedunderskriver && medunderskriverFlyt === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER) {
-    return <LabelReturnertTilSaksbehandler>Sendt tilbake av {getTitleLowercase(type)}</LabelReturnertTilSaksbehandler>;
+    return (
+      <LabelReturnertTilSaksbehandler>Sendt tilbake av {getTitleLowercase(typeId)}</LabelReturnertTilSaksbehandler>
+    );
   }
 
   return null;
