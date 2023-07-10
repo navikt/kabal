@@ -1,5 +1,6 @@
-import { Alert, ToggleGroup } from '@navikt/ds-react';
+import { Alert, Radio, RadioGroup } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
+import styled from 'styled-components';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -41,27 +42,21 @@ export const SetParentDocument = ({ document }: Props) => {
 
   return (
     <>
-      <ToggleGroup
+      <RadioGroup
         size="small"
         value={document.parentId ?? IS_PARENT_DOCUMENT}
         onChange={onChange}
         title="Vedlegg til"
-        label="Vedlegg til"
+        legend="Vedlegg til"
         data-testid="document-set-parent-document"
       >
         {isJournalfoert ? null : (
-          <ToggleGroup.Item key={document.parentId} value={IS_PARENT_DOCUMENT}>
-            <DocumentIcon type={document.type} />
-            Hoveddokument
-          </ToggleGroup.Item>
+          <RadioOption key={document.parentId} value={IS_PARENT_DOCUMENT} type={document.type} text="Hoveddokument" />
         )}
         {potentialParents.map(({ tittel, id, type }) => (
-          <ToggleGroup.Item key={id} value={id}>
-            <DocumentIcon type={type} />
-            {tittel}
-          </ToggleGroup.Item>
+          <RadioOption key={id} value={id} type={type} text={tittel} />
         ))}
-      </ToggleGroup>
+      </RadioGroup>
       {isJournalfoert ? (
         <Alert variant="info" size="small" inline>
           Journalførte dokumenter kan kun være vedlegg.
@@ -70,3 +65,32 @@ export const SetParentDocument = ({ document }: Props) => {
     </>
   );
 };
+
+interface RadioOptionProps {
+  value: string;
+  type: DocumentTypeEnum;
+  text: string;
+}
+
+const RadioOption = ({ value, type, text }: RadioOptionProps) => (
+  <Radio key={value} value={value} title={text}>
+    <RadioContent>
+      <DocumentIcon type={type} />
+      <RadioText>{text}</RadioText>
+    </RadioContent>
+  </Radio>
+);
+
+const RadioContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 4px;
+`;
+
+const RadioText = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
