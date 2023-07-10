@@ -48,19 +48,19 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Type:
         return (
           <Table.DataCell key={key}>
-            <Type type={oppgave.type} />
+            <Type type={oppgave.typeId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Ytelse:
         return (
           <Table.DataCell key={key}>
-            <Ytelse ytelseId={oppgave.ytelse} />
+            <Ytelse ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Hjemmel:
         return (
           <Table.DataCell key={key}>
-            <Hjemmel hjemmel={oppgave.hjemmel} />
+            <Hjemmel hjemmel={oppgave.hjemmelId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:
@@ -84,14 +84,14 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Deadline:
         return (
           <Table.DataCell key={key}>
-            <Deadline frist={oppgave.frist} oppgaveId={oppgave.id} type={oppgave.type} />
+            <Deadline frist={oppgave.frist} oppgaveId={oppgave.id} type={oppgave.typeId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriverflyt:
         return (
           <Table.DataCell key={key}>
             <MedudunderskriverflytLabel
-              type={oppgave.type}
+              typeId={oppgave.typeId}
               medunderskriverFlyt={oppgave.medunderskriverFlyt}
               medunderskriverident={oppgave.medunderskriverident}
             />
@@ -101,9 +101,9 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <OpenOppgavebehandling
-              oppgavebehandlingId={oppgave.id}
-              ytelse={oppgave.ytelse}
-              type={oppgave.type}
+              id={oppgave.id}
+              ytelseId={oppgave.ytelseId}
+              typeId={oppgave.typeId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               medunderskriverident={oppgave.medunderskriverident}
             />
@@ -124,7 +124,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Utfall:
         return (
           <Table.DataCell key={key}>
-            <Utfall utfallId={oppgave.utfall} />
+            <Utfall utfallId={oppgave.utfallId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.PaaVentTil:

@@ -80,8 +80,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              const [hjemmel = null] = hjemler;
-              draft.hjemmel = hjemmel;
+              const [hjemmelId = null] = hjemler;
+              draft.hjemmelId = hjemmelId;
 
               return draft;
             })

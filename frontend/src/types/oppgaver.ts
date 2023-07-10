@@ -22,16 +22,16 @@ export interface IOppgave {
   avsluttetAvSaksbehandlerDate: Date | null;
   fagsystemId: string;
   frist: Date | null;
-  hjemmel: string | null;
+  hjemmelId: string | null;
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriverFlyt: MedunderskriverFlyt;
   medunderskriverident: string | null;
   mottatt: Date;
   tildeltSaksbehandlerident: string | null;
-  type: SaksTypeEnum;
-  ytelse: string;
-  utfall: UtfallEnum | null;
+  typeId: SaksTypeEnum;
+  ytelseId: string;
+  utfallId: UtfallEnum | null;
   sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: Date | null;
 }

@@ -6,26 +6,23 @@ import { useUser } from '@app/simple-api-state/use-user';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgave } from '@app/types/oppgaver';
 
-interface Props extends Pick<ButtonProps, 'variant' | 'size'> {
-  oppgavebehandlingId: IOppgave['id'];
-  tildeltSaksbehandlerident: IOppgave['tildeltSaksbehandlerident'];
-  medunderskriverident: IOppgave['medunderskriverident'];
-  ytelse: IOppgave['ytelse'];
-  type: IOppgave['type'];
+interface Props
+  extends Pick<ButtonProps, 'variant' | 'size'>,
+    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'medunderskriverident' | 'ytelseId' | 'typeId'> {
   children?: string;
 }
 
 export const OpenOppgavebehandling = ({
-  oppgavebehandlingId,
+  id,
   tildeltSaksbehandlerident,
   medunderskriverident,
-  ytelse,
-  type,
+  ytelseId,
+  typeId,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
 }: Props) => {
-  const [hasYtelseAccess, isLoading] = useHasYtelseAccess(ytelse);
+  const [hasYtelseAccess, isLoading] = useHasYtelseAccess(ytelseId);
   const { data: user, isLoading: userIsLoading } = useUser();
 
   if (userIsLoading || typeof user === 'undefined') {
@@ -39,34 +36,34 @@ export const OpenOppgavebehandling = ({
     return null;
   }
 
-  if (type === SaksTypeEnum.KLAGE) {
+  if (typeId === SaksTypeEnum.KLAGE) {
     return (
       <Button
         as={Link}
         variant={variant}
         size={size}
-        to={`/klagebehandling/${oppgavebehandlingId}`}
+        to={`/klagebehandling/${id}`}
         loading={isLoading}
         data-testid="klagebehandling-open-link"
-        data-klagebehandlingid={oppgavebehandlingId}
-        data-oppgavebehandlingid={oppgavebehandlingId}
+        data-klagebehandlingid={id}
+        data-oppgavebehandlingid={id}
       >
         {children}
       </Button>
     );
   }
 
-  if (type === SaksTypeEnum.ANKE) {
+  if (typeId === SaksTypeEnum.ANKE) {
     return (
       <Button
         as={Link}
         variant={variant}
         size={size}
-        to={`/ankebehandling/${oppgavebehandlingId}`}
+        to={`/ankebehandling/${id}`}
         loading={isLoading}
         data-testid="ankebehandling-open-link"
-        data-ankebehandlingid={oppgavebehandlingId}
-        data-oppgavebehandlingid={oppgavebehandlingId}
+        data-ankebehandlingid={id}
+        data-oppgavebehandlingid={id}
       >
         {children}
       </Button>
@@ -78,11 +75,11 @@ export const OpenOppgavebehandling = ({
       as={Link}
       variant={variant}
       size={size}
-      to={`/trygderettsankebehandling/${oppgavebehandlingId}`}
+      to={`/trygderettsankebehandling/${id}`}
       loading={isLoading}
       data-testid="trygderettsankebehandling-open-link"
-      data-trygderettsankebehandlingid={oppgavebehandlingId}
-      data-oppgavebehandlingid={oppgavebehandlingId}
+      data-trygderettsankebehandlingid={id}
+      data-oppgavebehandlingid={id}
     >
       {children}
     </Button>

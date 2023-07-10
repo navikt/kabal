@@ -12,17 +12,15 @@ import { toast } from '../toast/store';
 interface Props {
   oppgaveId: string;
   oppgaveType: SaksTypeEnum;
-  ytelse: string;
+  ytelseId: string;
   fromSaksbehandler: ISaksbehandlerResponse['saksbehandler'];
   toSaksbehandler: ITildelingResponse['saksbehandler'];
   sakenGjelder: ISakenGjelderResponse['sakenGjelder'];
 }
 
-export const useTildel = (
-  oppgaveId: string,
-  oppgaveType: SaksTypeEnum,
-  ytelse: string
-): [(navIdent: string) => Promise<void>, { isLoading: boolean }] => {
+type UseTildel = [(navIdent: string) => Promise<void>, { isLoading: boolean }];
+
+export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
   const [getSakenGjelder] = useLazyGetSakenGjelderQuery();
   const [tildel] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
@@ -35,7 +33,14 @@ export const useTildel = (
       const { saksbehandler: fromSaksbehandler } = await getSaksbehandler(oppgaveId, true).unwrap();
       const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent }).unwrap();
       const sakenGjelder = await getSakenGjelder(oppgaveId, true).unwrap();
-      createTildeltToast({ toSaksbehandler, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelse });
+      createTildeltToast({
+        toSaksbehandler,
+        fromSaksbehandler,
+        sakenGjelder,
+        oppgaveId,
+        oppgaveType,
+        ytelseId,
+      });
     } catch {
       toast.error('Kunne ikke tildele saksbehandler');
     }
@@ -45,11 +50,9 @@ export const useTildel = (
   return [onTildelSaksbehandler, { isLoading }];
 };
 
-export const useFradel = (
-  oppgaveId: string,
-  oppgaveType: SaksTypeEnum,
-  ytelse: string
-): [() => Promise<void>, { isLoading: boolean }] => {
+type UseFradel = [() => Promise<void>, { isLoading: boolean }];
+
+export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseFradel => {
   const [getSakenGjelder] = useLazyGetSakenGjelderQuery();
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
   const [tildel] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
@@ -64,7 +67,14 @@ export const useFradel = (
         getSakenGjelder(oppgaveId, true).unwrap(),
       ]);
       const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent: null }).unwrap();
-      createFradeltToast({ toSaksbehandler, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelse });
+      createFradeltToast({
+        toSaksbehandler,
+        fromSaksbehandler,
+        sakenGjelder,
+        oppgaveId,
+        oppgaveType,
+        ytelseId,
+      });
     } catch {
       toast.error('Kunne ikke fradele saksbehandler.');
     }
@@ -74,7 +84,7 @@ export const useFradel = (
   return [onFradelSaksbehandler, { isLoading }];
 };
 
-const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
+const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const toSaksbehandlerText =
     toSaksbehandler === null ? 'ukjent saksbehandler' : `${toSaksbehandler.navn} (${toSaksbehandler.navIdent})`;
@@ -91,9 +101,9 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
         <OpenOppgavebehandling
           size="small"
           variant="secondary"
-          oppgavebehandlingId={oppgaveId}
-          type={oppgaveType}
-          ytelse={ytelse}
+          id={oppgaveId}
+          typeId={oppgaveType}
+          ytelseId={ytelseId}
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
         >
@@ -102,7 +112,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
         <CancelButton
           oppgaveId={oppgaveId}
           oppgaveType={oppgaveType}
-          ytelse={ytelse}
+          ytelse={ytelseId}
           fromSaksbehandler={fromSaksbehandler}
           toSaksbehandler={toSaksbehandler}
         />
@@ -111,7 +121,14 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler
   );
 };
 
-const Fradelt = ({ oppgaveId, oppgaveType, ytelse, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
+const Fradelt = ({
+  oppgaveId,
+  oppgaveType,
+  ytelseId: ytelse,
+  sakenGjelder,
+  toSaksbehandler,
+  fromSaksbehandler,
+}: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;

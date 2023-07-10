@@ -13,16 +13,20 @@ interface Props extends IOppgave {
 
 export const TildelButton = ({
   id,
-  type,
-  ytelse,
+  typeId,
+  ytelseId,
   tildeltSaksbehandlerident,
   medunderskriverident,
   children = 'Tildel meg',
 }: Props) => {
   const { data: user, isLoading: isUserLoading } = useUser();
-  const [tildel, { isLoading: isTildeling }] = useTildel(id, type, ytelse);
-  const [, { isLoading: isFradeling }] = useFradel(id, type, ytelse);
-  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriverident !== null, ytelse);
+  const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
+  const [, { isLoading: isFradeling }] = useFradel(id, typeId, ytelseId);
+  const [access, isAccessLoading] = useOppgaveActions(
+    tildeltSaksbehandlerident,
+    medunderskriverident !== null,
+    ytelseId
+  );
 
   if (isUserLoading || isAccessLoading || typeof user === 'undefined') {
     return null;
