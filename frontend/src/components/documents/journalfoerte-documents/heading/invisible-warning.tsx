@@ -1,5 +1,5 @@
 import { EyeObfuscatedIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Tooltip } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
@@ -45,34 +45,35 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
 
       // Always show this alert when not expanded, to prevent jumping UI.
       return (
-        <Alert variant="info" size="small">
+        <Alert variant="info" size="small" inline>
           Ingen enkeltdokumenter valgt
         </Alert>
       );
     }
 
     return (
-      <Alert variant="info" size="small">
+      <Alert variant="info" size="small" inline>
         {numSelected}/{totalLengthWithVedlegg} enkeltdokumenter valgt
       </Alert>
     );
   }
 
   return (
-    <StyledAlert variant="warning" size="small">
+    <StyledAlert variant="warning" size="small" inline>
       <AlertContent>
         <span>
           {invisibleDocuments.length === 1
             ? '1 skjult dokument er valgt.'
             : `${invisibleDocuments.length} skjulte dokumenter er valgt.`}
         </span>
-        <Button
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => unselectMany(invisibleDocuments)}
-          icon={<EyeObfuscatedIcon aria-hidden />}
-          title="Fjern skjulte dokumenter fra utvalget"
-        />
+        <Tooltip content="Fjern skjulte dokumenter fra utvalget">
+          <Button
+            size="xsmall"
+            variant="tertiary"
+            onClick={() => unselectMany(invisibleDocuments)}
+            icon={<EyeObfuscatedIcon aria-hidden />}
+          />
+        </Tooltip>
       </AlertContent>
     </StyledAlert>
   );
