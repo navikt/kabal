@@ -34,7 +34,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   if (userIsLoading || signatureIsLoading || isLoading || user === undefined) {
     return (
       <Container>
-        <LoadingCellContent />
+        <LoadingCellContent variant="rectangle" />
       </Container>
     );
   }
@@ -89,7 +89,7 @@ const SelectSaksbehandler = ({
   }
 
   if (potentialSaksbehandlereIsLoading || typeof data === 'undefined') {
-    return <LoadingCellContent />;
+    return <LoadingCellContent variant="rectangle" />;
   }
 
   const options = data.saksbehandlere.map(({ navIdent, navn }) => (
