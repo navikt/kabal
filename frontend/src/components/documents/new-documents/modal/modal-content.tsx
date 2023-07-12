@@ -48,17 +48,19 @@ export const DocumentModalContent = ({ document, titleId }: Props) => {
           <DocumentDate document={document} />
         </Tag>
       </Row>
-      <BottomAlignedRow>
-        <StyledSetFilename document={document} />
-        <Button
-          size="small"
-          variant="secondary"
-          icon={<CheckmarkIcon aria-hidden />}
-          title="Endre dokumentnavn"
-          data-testid="document-title-edit-save-button"
-        />
-      </BottomAlignedRow>
-      {document.type === DocumentTypeEnum.JOURNALFOERT ? (
+      {document.isMarkertAvsluttet ? null : (
+        <BottomAlignedRow>
+          <StyledSetFilename document={document} />
+          <Button
+            size="small"
+            variant="secondary"
+            icon={<CheckmarkIcon aria-hidden />}
+            title="Endre dokumentnavn"
+            data-testid="document-title-edit-save-button"
+          />
+        </BottomAlignedRow>
+      )}
+      {document.type === DocumentTypeEnum.JOURNALFOERT && !document.isMarkertAvsluttet ? (
         <Alert variant="warning" size="small" inline>
           Merk at du endrer navn på det originale journalførte dokumentet.
         </Alert>
