@@ -26,6 +26,7 @@ server.use(httpLoggingMiddleware);
 
 server.set('trust proxy', true);
 server.disable('x-powered-by');
+server.set('query parser', 'simple');
 
 server.use(
   cors({

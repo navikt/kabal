@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+
+  <title>{{title}}</title>
+
+  <script type="application/json" id="document-id-list">{{document-id-list}}</script>
+
+  <script>
+    const DOCUMENT_ID_LIST = JSON.parse(document.getElementById('document-id-list')?.textContent ?? '[]');
+
+    if (DOCUMENT_ID_LIST.length === 0) {
+      throw new Error('Document ID list is empty.');
+    }
+
+    const channel = new BroadcastChannel('pdf-channel');
+
+    const UUID = window.crypto.randomUUID();
+
+    const postAllDocuments = (type) => channel.postMessage({ type, documentIdList: DOCUMENT_ID_LIST, tabInstanceId: UUID });
+
+    postAllDocuments('OPEN');
+
+    window.addEventListener('beforeunload', () => postAllDocuments('CLOSED'));
+
+    channel.addEventListener('message', (event) => {
+      if (event.data.type === 'PING') {
+        if (event.data.documentId === '*' || DOCUMENT_ID_LIST.includes(event.data.documentId)) {
+          postAllDocuments('OPEN');
+        }
+        return;
+      }
+    });
+  </script>
+</head>
+
+<body style="height: 100%; width: 100%; overflow: hidden; margin: 0; background-color: rgb(82, 86, 89);">
+  <object style="position:absolute; left: 0; top: 0;" width="100%" height="100%" type="application/pdf"
+    data="{{pdfUrl}}">
+  </object>
+</body>
+
+</html>
