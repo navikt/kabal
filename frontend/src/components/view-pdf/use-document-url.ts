@@ -62,7 +62,7 @@ export const useDocumentUrl = (oppgaveId: string | typeof skipToken, showDocumen
 
   return {
     ...mergedDocumentsReference,
-    data: `${KABAL_API_BASE_PATH}/journalposter/mergedocuments/${mergedDocumentsReference.data.reference}`,
+    data: `${KABAL_API_BASE_PATH}/journalposter/mergedocuments/${mergedDocumentsReference.data.reference}/pdf`,
   };
 };
 
