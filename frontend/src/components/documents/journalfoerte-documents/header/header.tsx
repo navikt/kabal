@@ -67,6 +67,7 @@ const ExpandedHeaders = ({
         onChange={setSelectedTemaer}
         selected={selectedTemaer}
         $area={Fields.Tema}
+        data-testid="filter-tema"
       >
         Tema
       </StyledFilterDropdown>
@@ -78,6 +79,7 @@ const ExpandedHeaders = ({
         selected={selectedAvsenderMottakere}
         direction="left"
         $area={Fields.AvsenderMottaker}
+        data-testid="filter-avsender-mottaker"
       >
         Avsender/mottaker
       </StyledFilterDropdown>
@@ -88,6 +90,7 @@ const ExpandedHeaders = ({
         selected={selectedSaksIds}
         direction="left"
         $area={Fields.SaksId}
+        data-testid="filter-saks-id"
       >
         Saks-ID
       </StyledFilterDropdown>
@@ -98,6 +101,7 @@ const ExpandedHeaders = ({
         selected={selectedTypes}
         direction="left"
         $area={Fields.Type}
+        data-testid="filter-type"
       >
         Type
       </StyledFilterDropdown>

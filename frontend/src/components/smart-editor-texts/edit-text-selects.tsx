@@ -19,7 +19,12 @@ const SELECT_OPTIONS = Object.values(TemplateSections).map((value) => ({
 }));
 
 export const SectionSelect = ({ selected, children, onChange }: SectionSelectProps) => (
-  <FilterDropdown<TemplateSections> options={SELECT_OPTIONS} selected={selected} onChange={onChange}>
+  <FilterDropdown<TemplateSections>
+    options={SELECT_OPTIONS}
+    selected={selected}
+    onChange={onChange}
+    data-testid="edit-text-section-select"
+  >
     {children}
   </FilterDropdown>
 );
@@ -33,7 +38,12 @@ interface TemplateSelectProps {
 const TEMPLATE_OPTIONS = TEMPLATES.map(({ templateId, tittel }) => ({ value: templateId, label: tittel }));
 
 export const TemplateSelect = ({ selected, children, onChange }: TemplateSelectProps) => (
-  <FilterDropdown<TemplateIdEnum> options={TEMPLATE_OPTIONS} selected={selected} onChange={onChange}>
+  <FilterDropdown<TemplateIdEnum>
+    options={TEMPLATE_OPTIONS}
+    selected={selected}
+    onChange={onChange}
+    data-testid="edit-text-template-select"
+  >
     {children}
   </FilterDropdown>
 );
@@ -58,7 +68,7 @@ export const UtfallSelect = ({ children, selected, onChange }: UtfallSelectProps
   );
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="edit-text-utfall-select">
       {children}
     </FilterDropdown>
   );
@@ -76,7 +86,7 @@ export const KlageenhetSelect = ({ children, selected, onChange }: KlageenhetSel
   const options = useMemo(() => values?.map(({ id, navn }) => ({ value: id, label: navn })) ?? [], [values]);
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="edit-text-klageenhet-select">
       {children}
     </FilterDropdown>
   );
@@ -94,7 +104,7 @@ export const YtelseSelect = ({ children, selected, onChange }: YtelseSelectProps
   const options = useMemo(() => values?.map(({ id, navn }) => ({ value: id, label: navn })) ?? [], [values]);
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="edit-text-ytelse-select">
       {children}
     </FilterDropdown>
   );

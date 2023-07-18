@@ -7,7 +7,7 @@ import { BaseProps } from './props';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   children: string | null;
-  testId?: string;
+  'data-testid': string;
   direction?: PopupProps['direction'];
 }
 
@@ -16,7 +16,7 @@ export const FilterDropdown = <T extends string>({
   selected,
   onChange,
   children,
-  testId,
+  'data-testid': testId,
   direction,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);

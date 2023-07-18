@@ -24,7 +24,7 @@ const SECTION_OPTIONS = [
 ];
 
 export const SectionSelect = ({ selected, children, onChange }: SectionSelectProps) => (
-  <FilterDropdown options={SECTION_OPTIONS} selected={selected} onChange={onChange}>
+  <FilterDropdown options={SECTION_OPTIONS} selected={selected} onChange={onChange} data-testid="filter-section">
     {children}
   </FilterDropdown>
 );
@@ -41,7 +41,7 @@ const TEMPLATE_OPTIONS = [
 ];
 
 export const TemplateSelect = ({ selected, children, onChange }: TemplateSelectProps) => (
-  <FilterDropdown options={TEMPLATE_OPTIONS} selected={selected} onChange={onChange}>
+  <FilterDropdown options={TEMPLATE_OPTIONS} selected={selected} onChange={onChange} data-testid="filter-template">
     {children}
   </FilterDropdown>
 );
@@ -68,7 +68,7 @@ export const UtfallSelect = ({ children, selected, onChange }: UtfallSelectProps
   );
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-utfall">
       {children}
     </FilterDropdown>
   );
@@ -89,7 +89,7 @@ export const KlageenhetSelect = ({ children, selected, onChange }: KlageenhetSel
   );
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
       {children}
     </FilterDropdown>
   );
@@ -110,7 +110,7 @@ export const YtelseSelect = ({ children, selected, onChange }: YtelseSelectProps
   );
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange}>
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-ytelse">
       {children}
     </FilterDropdown>
   );
