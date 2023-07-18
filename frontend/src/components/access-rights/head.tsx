@@ -1,6 +1,6 @@
 import { Label } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 
 interface Props {
@@ -63,7 +63,9 @@ const Thead = styled.thead`
   z-index: 2;
   background-color: white;
 
-  box-shadow: var(--a-border-on-inverted) 0 1px 0 0, black 0px 5px 5px -5px;
+  box-shadow:
+    var(--a-border-on-inverted) 0 1px 0 0,
+    black 0px 5px 5px -5px;
 `;
 
 const NON_ANGLED_HEADER_HEIGHT = 32;

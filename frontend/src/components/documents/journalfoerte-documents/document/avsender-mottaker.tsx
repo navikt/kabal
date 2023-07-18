@@ -31,7 +31,7 @@ export const AvsenderMottaker = memo(
         prevProps.avsenderMottaker?.id === nextProps.avsenderMottaker?.id);
 
     return propsAreEqual;
-  }
+  },
 );
 
 AvsenderMottaker.displayName = 'AvsenderMottaker';

@@ -1,6 +1,6 @@
 import { Search } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TextTypes } from '@app/types/texts/texts';
 import { Filters } from './filters';

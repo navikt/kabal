@@ -1,7 +1,7 @@
 import { HelpText, Label } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
@@ -31,7 +31,7 @@ export const Lovhjemmel = () => {
           label: navn,
         })),
       })),
-    [lovKildeToRegistreringshjemler]
+    [lovKildeToRegistreringshjemler],
   );
 
   if (typeof oppgave === 'undefined' || typeof user === 'undefined') {

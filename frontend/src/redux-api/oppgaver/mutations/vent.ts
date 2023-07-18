@@ -26,13 +26,13 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.sattPaaVent = venteperiode;
-          })
+          }),
         );
 
         const oppgavePatchResult = dispatch(
           oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
             draft.sattPaaVent = { ...venteperiode, isExpired: false };
-          })
+          }),
         );
 
         try {
@@ -54,7 +54,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.sattPaaVent = null;
-          })
+          }),
         );
 
         try {
@@ -62,7 +62,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.sattPaaVent = null;
-            })
+            }),
           );
           toast.success('Venteperiode avsluttet.');
         } catch (e) {

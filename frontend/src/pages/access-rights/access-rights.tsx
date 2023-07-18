@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { AccessRights } from '@app/components/access-rights/access-rights';
 import { PageWrapper } from '../page-wrapper';
 

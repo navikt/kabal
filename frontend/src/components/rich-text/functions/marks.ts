@@ -95,6 +95,6 @@ export const toggleMark = (editor: Editor, mark: keyof IMarks): void => {
   Transforms.setNodes(
     editor,
     { [mark]: value },
-    { match: Text.isText, mode: 'lowest', split: true, at: editor.selection }
+    { match: Text.isText, mode: 'lowest', split: true, at: editor.selection },
   );
 };

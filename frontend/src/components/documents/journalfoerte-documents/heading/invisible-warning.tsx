@@ -1,7 +1,7 @@
 import { EyeObfuscatedIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -30,9 +30,9 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
             }
 
             return false;
-          }) === undefined
+          }) === undefined,
       ),
-    [selectedDocuments, slicedFilteredDocuments]
+    [selectedDocuments, slicedFilteredDocuments],
   );
 
   if (invisibleDocuments.length === 0) {

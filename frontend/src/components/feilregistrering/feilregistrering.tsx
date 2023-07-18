@@ -1,7 +1,7 @@
 import { FileXMarkIcon } from '@navikt/aksel-icons';
 import { Button, Panel } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Confirm } from '@app/components/feilregistrering/confirm';
 import { Register } from '@app/components/feilregistrering/register';
 import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-feilregistrere';

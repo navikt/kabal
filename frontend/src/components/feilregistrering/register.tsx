@@ -1,7 +1,7 @@
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Textarea } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { Context } from './context';
 import { Row } from './styled-components';
@@ -25,7 +25,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
         setShowEmptyError(true);
       }
     },
-    [close, setFeilregistrert]
+    [close, setFeilregistrert],
   );
 
   return (

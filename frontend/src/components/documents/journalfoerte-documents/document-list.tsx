@@ -27,7 +27,7 @@ export const DocumentList = memo(
       </StyledDocumentList>
     );
   },
-  (prevProps, nextProps) => prevProps.documents === nextProps.documents
+  (prevProps, nextProps) => prevProps.documents === nextProps.documents,
 );
 
 DocumentList.displayName = 'DocumentList';

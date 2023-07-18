@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
 import { BaseProps, DropdownProps } from './props';

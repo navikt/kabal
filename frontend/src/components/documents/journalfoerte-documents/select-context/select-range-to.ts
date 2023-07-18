@@ -8,7 +8,7 @@ export const useSelectRangeTo: SelectRangeHook = (
   setSelectedDocuments,
   setLastSelectedDocument,
   documentList,
-  lastSelectedDocument
+  lastSelectedDocument,
 ) => {
   const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument);
 
@@ -20,7 +20,7 @@ export const useSelectRangeTo: SelectRangeHook = (
 
       selectMany(getSelectedDocuments(documentList, lastSelectedDocument, document));
     },
-    [documentList, lastSelectedDocument, selectMany]
+    [documentList, lastSelectedDocument, selectMany],
   );
 };
 
@@ -29,7 +29,7 @@ const FIRST_DOCUMENT_INDEX = 0;
 const getSelectedDocuments = (
   documentList: IArkivertDocument[],
   lastSelectedDocument: ISelectedDocument,
-  document: ISelectedDocument
+  document: ISelectedDocument,
 ): ISelectedDocument[] => {
   const lastSelectedPath = getDocumentPath(documentList, lastSelectedDocument);
   const selectedPath = getDocumentPath(documentList, document);

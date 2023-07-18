@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { ListHeader } from '@app/components/documents/new-documents/header/header';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';

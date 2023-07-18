@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface Props {
   url: string;
@@ -9,7 +9,7 @@ interface Props {
 
 export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => {
   const [versionMap, setVersionMap] = useState<Map<string, { versions: number[]; readyIndex: number }>>(
-    new Map([[url, { versions: [version], readyIndex: 0 }]])
+    new Map([[url, { versions: [version], readyIndex: 0 }]]),
   );
 
   useEffect(() => {
@@ -44,10 +44,10 @@ export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => 
             });
             onVersionLoaded();
           }),
-        3000
+        3000,
       );
     },
-    [onVersionLoaded]
+    [onVersionLoaded],
   );
 
   const data = versionMap.get(url);

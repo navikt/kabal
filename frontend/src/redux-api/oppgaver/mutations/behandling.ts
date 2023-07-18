@@ -42,7 +42,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
               draft.avsluttetAvSaksbehandlerDate = data.modified;
 
               return draft;
-            })
+            }),
           );
 
           dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
@@ -84,7 +84,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
               draft.hjemmelId = hjemmelId;
 
               return draft;
-            })
+            }),
           );
         } catch (e) {
           undo();
@@ -114,7 +114,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           update(oppgaveId, data);
 
           toast.success(
-            fullmektig === null ? 'Fullmektig fjernet' : `Fullmektig endret til ${formatIdNumber(fullmektig.id)}`
+            fullmektig === null ? 'Fullmektig fjernet' : `Fullmektig endret til ${formatIdNumber(fullmektig.id)}`,
           );
         } catch (e) {
           undo();
@@ -173,7 +173,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
               draft.feilregistrert = data.feilregistrering.registered;
 
               return draft;
-            })
+            }),
           );
           toast.success('Oppgave feilregistrert');
         } catch (e) {
@@ -195,7 +195,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
 
 const update = (oppgaveId: string, upd: Partial<IOppgavebehandling>) => {
   const patchResult = reduxStore.dispatch(
-    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => Object.assign(draft, upd))
+    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) =>
+      Object.assign(draft, upd),
+    ),
   );
 
   return patchResult.undo;

@@ -29,11 +29,11 @@ export const SelectedHjemlerList = () => {
         .map(({ lovkilde, registreringshjemler }) => ({
           lovkilde,
           registreringshjemler: registreringshjemler.filter((registreringshjemmel) =>
-            hjemmelIdList.includes(registreringshjemmel.id)
+            hjemmelIdList.includes(registreringshjemmel.id),
           ),
         }))
         .filter(({ registreringshjemler }) => registreringshjemler.length !== 0),
-    [hjemmelIdList, hjemler]
+    [hjemmelIdList, hjemler],
   );
 
   if (typeof oppgave === 'undefined') {

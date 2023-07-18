@@ -71,7 +71,7 @@ export const removeColumn: TableFn = (editor, element) => {
             {
               at: rowPath,
               match: (n) => n === cell,
-            }
+            },
           );
           break;
         }

@@ -2,7 +2,7 @@ import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import {
   SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
@@ -36,7 +36,7 @@ interface Props {
 
 const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
   const [accessRights, setAccessRights] = useState(
-    [...saksbehandlere].sort((a, b) => a.saksbehandlerName.localeCompare(b.saksbehandlerName))
+    [...saksbehandlere].sort((a, b) => a.saksbehandlerName.localeCompare(b.saksbehandlerName)),
   );
   const [focusedCell, setFocusedCell] = useState<[number, number]>([-1, -1]);
   const [updateAccessRights, { isLoading }] = useUpdateAccessRightsMutation();
@@ -54,7 +54,7 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
           ...rest,
           ytelseIdList: checked ? addIfNotExists(ytelseIdList, ytelseId) : ytelseIdList.filter((id) => id !== ytelseId),
         };
-      })
+      }),
     );
 
   const reset = () => setAccessRights(saksbehandlere);

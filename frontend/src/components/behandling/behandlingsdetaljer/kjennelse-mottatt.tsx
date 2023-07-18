@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

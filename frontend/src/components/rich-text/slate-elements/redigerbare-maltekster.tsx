@@ -61,7 +61,7 @@ export const RedigerbareMalteskterElement = ({
 
       Transforms.removeNodes(editor, { match: (n) => n === e, voids: false, at: [] });
     },
-    [editor, getTexts, textType]
+    [editor, getTexts, textType],
   );
 
   useEffect(() => {

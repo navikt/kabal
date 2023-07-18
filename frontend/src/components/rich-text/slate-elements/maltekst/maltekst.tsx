@@ -6,7 +6,7 @@ import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Descendant, Editor, Node, Path, Text, Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
@@ -38,7 +38,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
 
       try {
         const maltekst = lexSpecialis(
-          (await getTexts(q).unwrap()).map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null)).filter(isNotNull)
+          (await getTexts(q).unwrap()).map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null)).filter(isNotNull),
         );
 
         const [nodeEntry] = Editor.nodes(editor, { match: (n) => n === element, voids: false, at: [] });
@@ -70,7 +70,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
                 match: (n) => n === element,
                 voids: false,
                 at: path,
-              }
+              },
             );
           });
         });
@@ -79,7 +79,7 @@ export const MaltekstElement = ({ element, children, attributes }: RenderElement
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editor, getTexts]
+    [editor, getTexts],
   );
 
   useEffect(() => {
@@ -148,7 +148,7 @@ const StyledButton = styled(Button)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 
-  :focus {
+  &:focus {
     opacity: 1;
   }
 `;
@@ -160,7 +160,7 @@ const Container = styled.div`
   position: relative;
   color: #666;
 
-  ::before {
+  &::before {
     content: '';
     position: absolute;
     left: -12pt;
@@ -171,12 +171,12 @@ const Container = styled.div`
     transition: height 0.4s ease-in-out;
   }
 
-  :hover {
+  &:hover {
     ${StyledButton} {
       opacity: 1;
     }
 
-    ::before {
+    &::before {
       height: 100%;
     }
   }

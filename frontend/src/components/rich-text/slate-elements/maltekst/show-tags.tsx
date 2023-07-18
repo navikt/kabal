@@ -2,7 +2,7 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext, useMemo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { useKodeverkValue } from '@app/hooks/use-kodeverk-value';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
@@ -25,7 +25,7 @@ export const ShowTags = ({ created, modified, title, limits, query }: Props) => 
       Object.values(limits)
         .filter(Array.isArray)
         .every((limit) => limit.length === 0),
-    [limits]
+    [limits],
   );
 
   if (!showMaltekstTags || query === skipToken) {
@@ -92,7 +92,7 @@ const RenderTags = ({ query, limits, type }: TagIdsProps) => {
 
   const tags = renderTags(
     kodeverkValues.filter((kv) => ids.includes(kv.id)),
-    type
+    type,
   );
 
   return <>{tags}</>;

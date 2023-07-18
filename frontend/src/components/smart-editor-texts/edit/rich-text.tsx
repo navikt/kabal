@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Descendant, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, withReact } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { RichTextEditorElement } from '../../rich-text/rich-text-editor/rich-text-editor';
 import { withCopy } from '../../rich-text/rich-text-editor/with-copy';
@@ -22,7 +22,7 @@ interface Props {
 export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: Props) => {
   const editor = useMemo(
     () => withTables(withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor())))))),
-    []
+    [],
   );
 
   return (

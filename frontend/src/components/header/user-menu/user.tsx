@@ -1,6 +1,6 @@
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { useUser } from '@app/simple-api-state/use-user';
 import { UserDropdown } from './dropdown';

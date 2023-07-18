@@ -11,5 +11,5 @@ export const useSelectOne: SelectHook<SelectOne> = (setSelectedDocuments, setLas
         [getId(document)]: document,
       }));
     },
-    [setLastSelectedDocument, setSelectedDocuments]
+    [setLastSelectedDocument, setSelectedDocuments],
   );

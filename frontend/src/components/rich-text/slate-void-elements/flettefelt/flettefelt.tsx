@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Range, Transforms } from 'slate';
 import { useFocused, useSelected, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FLETTEFELT_NAMES } from '../../../smart-editor/constants';
 import { moveRight } from '../../functions/arrows';
 import { StyledLeaf } from '../../rich-text-editor/leaf/styled';
@@ -35,7 +35,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
       close();
       Transforms.setNodes(editor, { field }, { match: (n) => n === element, at: [] });
     },
-    [close, editor, element]
+    [close, editor, element],
   );
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export const FlettefeltElement = ({ element, children, attributes }: RenderEleme
         close();
       }
     },
-    [close, focused, setField]
+    [close, focused, setField],
   );
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular/TextAd
 import React, { useMemo } from 'react';
 import { Editor, Path, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { createSimpleParagraph } from '../../../smart-editor/templates/helpers';
 import { UndeletableContentEnum } from '../../types/editor-enums';
 import { isOfElementType } from '../../types/editor-type-guards';
@@ -91,7 +91,7 @@ const StyledAboveButton = styled(Button)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 
-  :focus {
+  &:focus {
     opacity: 1;
   }
 `;
@@ -103,7 +103,7 @@ const StyledBelowButton = styled(Button)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 
-  :focus {
+  &:focus {
     opacity: 1;
   }
 `;

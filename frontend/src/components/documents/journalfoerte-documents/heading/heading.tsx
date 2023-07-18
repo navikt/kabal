@@ -1,7 +1,7 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { memo, useMemo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { InvisibleWarning, InvisibleWarningProps } from './invisible-warning';
 import { Menu } from './menu';
@@ -28,7 +28,7 @@ export const JournalfoertHeading = memo(
     const [isExpanded] = useIsExpanded();
     const numberOfVedlegg = useMemo(
       () => allDocuments.reduce((count, d) => count + d.vedlegg.length, 0),
-      [allDocuments]
+      [allDocuments],
     );
 
     const totalCount = totalLengthOfMainDocuments + numberOfVedlegg;
@@ -58,7 +58,7 @@ export const JournalfoertHeading = memo(
     prevProps.noFiltersActive === nextProps.noFiltersActive &&
     prevProps.slicedFilteredDocuments === nextProps.slicedFilteredDocuments &&
     prevProps.filteredLength === nextProps.filteredLength &&
-    prevProps.totalLengthOfMainDocuments === nextProps.totalLengthOfMainDocuments
+    prevProps.totalLengthOfMainDocuments === nextProps.totalLengthOfMainDocuments,
 );
 
 JournalfoertHeading.displayName = 'Header';

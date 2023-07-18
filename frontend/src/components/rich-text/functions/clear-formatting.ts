@@ -13,6 +13,6 @@ export const clearFormatting = (editor: Editor) =>
     Transforms.setNodes(
       editor,
       { type: ContentTypeEnum.PARAGRAPH, textAlign: TextAlignEnum.TEXT_ALIGN_LEFT },
-      { match: (n) => isOfElementTypes(n, [ContentTypeEnum.INDENT, ...Object.values(HeadingTypesEnum)]) }
+      { match: (n) => isOfElementTypes(n, [ContentTypeEnum.INDENT, ...Object.values(HeadingTypesEnum)]) },
     );
   });

@@ -40,11 +40,11 @@ interface Props {
 export const SmartEditorContextComponent = ({ children, documentId, templateId, dokumentTypeId }: Props) => {
   const editor = useMemo(
     () => withTables(withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor())))))),
-    []
+    [],
   );
 
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(
-    getFocusedThreadIdFromText(editor, editor.selection)
+    getFocusedThreadIdFromText(editor, editor.selection),
   );
   const [showNewComment, setShowNewComment] = useState<boolean>(false);
   const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
@@ -84,7 +84,7 @@ export const SmartEditorContextComponent = ({ children, documentId, templateId, 
       setFocusedThreadId(null);
       setShowNewComment(false);
     },
-    [editor]
+    [editor],
   );
 
   const oppgaveId = useOppgaveId();

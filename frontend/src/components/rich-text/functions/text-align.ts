@@ -8,7 +8,7 @@ export const setTextAlign = (editor: Editor, textAlign: TextAlignEnum) => {
     { textAlign },
     {
       match: (n) => Element.isElement(n) && isNodeAlignableElementType(n),
-    }
+    },
   );
 };
 

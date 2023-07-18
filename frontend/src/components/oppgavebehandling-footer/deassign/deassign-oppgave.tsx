@@ -1,7 +1,7 @@
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { PaaVentWarning } from '@app/components/oppgavebehandling-footer/paa-vent-warning';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
@@ -17,7 +17,7 @@ export const DeassignOppgave = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
     oppgave?.tildeltSaksbehandlerident ?? null,
-    typeof oppgave === 'undefined' || oppgave.medunderskriverident !== null // Assume medunderskriver exists.
+    typeof oppgave === 'undefined' || oppgave.medunderskriverident !== null, // Assume medunderskriver exists.
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

@@ -35,14 +35,14 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
                 }
 
                 const filteredList = draft.filter(
-                  ({ id, parentId }) => !(id === event.data || parentId === event.data)
+                  ({ id, parentId }) => !(id === event.data || parentId === event.data),
                 ); // Remove finished document from list.
 
                 dispatch(
                   oppgaverApi.util.invalidateTags([
                     { type: DokumenterListTagTypes.DOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
                     { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
-                  ])
+                  ]),
                 );
 
                 return filteredList;

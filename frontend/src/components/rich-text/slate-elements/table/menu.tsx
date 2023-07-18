@@ -1,5 +1,5 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, ButtonProps } from '@navikt/ds-react';
 import { TableCellsMerge } from '@styled-icons/fluentui-system-regular/TableCellsMerge';
 import { TableCellsSplit } from '@styled-icons/fluentui-system-regular/TableCellsSplit';
 import { TableDeleteColumn } from '@styled-icons/fluentui-system-regular/TableDeleteColumn';
@@ -10,7 +10,7 @@ import { TableInsertRow } from '@styled-icons/fluentui-system-regular/TableInser
 import React, { useRef, useState } from 'react';
 import { Path, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { mergeCells, splitCell } from '../../functions/table/cells';
 import { insertColumnLeft, insertColumnRight } from '../../functions/table/insert-column';
@@ -143,7 +143,7 @@ interface MenuButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   icon: React.ReactNode;
-  variant?: string;
+  variant?: ButtonProps['variant'];
 }
 
 const MenuButton = ({ show = true, onClick, children, icon, variant = 'tertiary' }: MenuButtonProps) => {

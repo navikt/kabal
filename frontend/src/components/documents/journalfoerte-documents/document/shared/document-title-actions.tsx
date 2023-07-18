@@ -1,7 +1,7 @@
 import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 

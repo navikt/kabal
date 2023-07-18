@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface Props {
   children: ReactNode;

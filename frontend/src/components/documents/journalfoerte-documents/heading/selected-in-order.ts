@@ -6,7 +6,7 @@ import { DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const getSelectedDocumentsInOrder = (
   selectedDocuments: SelectedMap,
-  archivedDocuments: IArkivertDocument[]
+  archivedDocuments: IArkivertDocument[],
 ): IShownArchivedDocument[] => {
   const sortedList: IShownArchivedDocument[] = [];
 

@@ -45,7 +45,7 @@ export const DocumentTitle = ({ document }: Props) => {
 
         return v.type === document.type && v.documentId === document.id;
       }),
-    [document, value]
+    [document, value],
   );
 
   const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
@@ -138,7 +138,7 @@ export const DocumentTitle = ({ document }: Props) => {
 
       setTabRef(documentId, newTabRef);
     },
-    [disabled, getTabRef, isTabOpen, setTabRef, setViewedDocument, documentId, url]
+    [disabled, getTabRef, isTabOpen, setTabRef, setViewedDocument, documentId, url],
   );
 
   if (editMode) {

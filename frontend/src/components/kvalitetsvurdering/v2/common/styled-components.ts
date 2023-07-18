@@ -1,5 +1,5 @@
 import { Heading, RadioGroup } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const RadioButtonsRow = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
 import { Tag } from '@navikt/ds-react';
 import React, { memo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 
@@ -8,7 +8,7 @@ export const JournalposttypeTag = memo(
   ({ type }: { type: Journalposttype | null }) => (
     <StyledJournalposttype>{getJournalposttype(type)}</StyledJournalposttype>
   ),
-  (prevProps, nextProps) => prevProps.type === nextProps.type
+  (prevProps, nextProps) => prevProps.type === nextProps.type,
 );
 
 JournalposttypeTag.displayName = 'JournalposttypeTag';

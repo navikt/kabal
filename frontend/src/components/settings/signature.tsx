@@ -1,7 +1,7 @@
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useGetMySignatureQuery, useSetCustomInfoMutation } from '@app/redux-api/bruker';
 import { useUser } from '@app/simple-api-state/use-user';
 import { ISetCustomInfoParams, ISignatureResponse } from '@app/types/bruker';

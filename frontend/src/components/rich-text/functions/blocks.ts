@@ -32,7 +32,7 @@ const ALLOWED_TABLE_ELEMENTS: NonVoidElementsEnum[] = [
 
 export const getCurrentElement = <T extends Element>(
   editor: Editor,
-  type: NonVoidElementsEnum
+  type: NonVoidElementsEnum,
 ): NodeEntry<T> | undefined => {
   const [element] = Editor.nodes<T>(editor, { match: isOfElementTypeFn<T>(type) });
 
@@ -67,7 +67,7 @@ export const areBlocksActive = (editor: Editor, blocks: ElementTypesEnum[], univ
 // };
 
 export const getSelectedListTypes = (
-  editor: Editor
+  editor: Editor,
 ): {
   [key in ListTypesEnum]: boolean;
 } => {

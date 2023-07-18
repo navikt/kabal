@@ -12,7 +12,7 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId, error }: Do
   <Select
     onChange={setDokumentTypeId}
     label="Dokumenttype"
-    value={dokumentTypeId === null ? undefined : dokumentTypeId}
+    value={dokumentTypeId ?? undefined}
     hideLabel
     size="small"
     title="Dokumenttype for opplastet dokument"

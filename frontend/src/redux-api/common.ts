@@ -42,7 +42,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
     {
       maxRetries: 10,
       backoff: (attempt) => new Promise((resolve) => setTimeout(resolve, 1000 * attempt)),
-    }
+    },
   );
 };
 

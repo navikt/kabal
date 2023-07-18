@@ -10,7 +10,7 @@ export enum Direction {
 export const moveToTargetRow = (
   editor: Editor,
   currentCellEntry: NodeEntry<TableCellElementType>,
-  direction: Direction
+  direction: Direction,
 ): void => {
   const [currentCell, currentCellPath] = currentCellEntry;
   const currentRowEntry = getCurrentRow(editor, currentCell, currentCellPath);

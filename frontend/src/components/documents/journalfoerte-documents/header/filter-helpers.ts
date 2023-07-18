@@ -63,7 +63,7 @@ export const useFilteredDocuments = (
   selectedTemaer: string[],
   selectedTypes: string[],
   onlyIncluded: boolean,
-  search: string
+  search: string,
 ): IArkivertDocument[] => {
   const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
 
@@ -76,13 +76,13 @@ export const useFilteredDocuments = (
             (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
             (selectedAvsenderMottakere.length === 0 ||
               selectedAvsenderMottakere.includes(
-                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'
+                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
               )) &&
             (selectedSaksIds.length === 0 ||
               selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
             (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
             (onlyIncluded === false || valgt) &&
-            (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg }))
+            (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
         )
         .map(({ vedlegg, ...rest }) => ({
           ...rest,
@@ -97,7 +97,7 @@ export const useFilteredDocuments = (
       selectedSaksIds,
       selectedTemaer,
       selectedTypes,
-    ]
+    ],
   );
 };
 

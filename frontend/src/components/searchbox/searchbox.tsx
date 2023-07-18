@@ -1,6 +1,6 @@
 import { Search } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface SearchBoxProps {
   setQuery: (query: string) => void;

@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useGetTextsQuery } from '@app/redux-api/texts';
@@ -94,7 +94,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         }
       }
     },
-    [editor, filter.length, focused, setShowGodeFormuleringer, texts]
+    [editor, filter.length, focused, setShowGodeFormuleringer, texts],
   );
 
   if (!showGodeFormuleringer || isLoading || typeof data === 'undefined' || editor === null) {

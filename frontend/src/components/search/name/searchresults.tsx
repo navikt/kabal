@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IPartBase } from '@app/types/oppgave-common';
 import { Result } from './result';
 

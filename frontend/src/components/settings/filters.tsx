@@ -43,7 +43,7 @@ export const Filters = () => {
           innsendingshjemler,
         };
       }),
-    [settingsData?.hjemler, ytelser]
+    [settingsData?.hjemler, ytelser],
   );
 
   const settings = settingsData ?? EMPTY_SETTINGS;

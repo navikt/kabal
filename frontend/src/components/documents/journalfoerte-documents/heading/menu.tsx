@@ -2,7 +2,7 @@ import { FilePdfIcon, MenuHamburgerIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, LinkProps, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { forwardRef, useContext, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
@@ -78,7 +78,7 @@ const ViewCombinedPDF = () => {
   const documents = useMemo(
     () =>
       archivedList === undefined ? undefined : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter),
-    [archivedList, selectedDocuments]
+    [archivedList, selectedDocuments],
   );
 
   const isInlineOpen = useMemo(() => {
@@ -97,11 +97,7 @@ const ViewCombinedPDF = () => {
     });
   }, [documents, value]);
 
-  const {
-    data: mergedDocumentRef,
-    isLoading,
-    isFetching,
-  } = useMergedDocumentsReferenceQuery(documents === undefined ? skipToken : documents);
+  const { data: mergedDocumentRef, isLoading, isFetching } = useMergedDocumentsReferenceQuery(documents ?? skipToken);
 
   const { tabUrl, documentId } = useMemo(() => {
     if (mergedDocumentRef === undefined) {
@@ -192,7 +188,7 @@ OpenButton.displayName = 'OpenButton';
 const StyledOpenButton = styled(OpenButton)`
   text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px #262626' : 'none')};
 
-  :visited {
+  &:visited {
     color: var(--a-text-visited);
     box-shadow: inset 0 0 0 2px var(--a-text-visited);
   }

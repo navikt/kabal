@@ -4,7 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { RICH_TEXT_ROW_GAP } from '@app/components/rich-text/styled-components';
 import { RegelverkContainerType } from '@app/components/rich-text/types/editor-types';
 import { SmartEditorContext } from '@app/components/smart-editor/context/smart-editor-context';
@@ -99,7 +99,7 @@ const Wrapper = styled.div`
   border-radius: 4px;
   border-top-right-radius: 0;
 
-  ::after {
+  &::after {
     content: 'Regelverk';
     position: absolute;
     bottom: 100%;
@@ -113,7 +113,7 @@ const Wrapper = styled.div`
     padding: 2px 4px;
   }
 
-  ::before {
+  &::before {
     content: '';
     position: absolute;
     left: -12pt;
@@ -124,12 +124,12 @@ const Wrapper = styled.div`
     transition: height 0.4s ease-in-out;
   }
 
-  :hover {
+  &:hover {
     ${StyledButton} {
       opacity: 1;
     }
 
-    ::before {
+    &::before {
       height: 100%;
     }
   }

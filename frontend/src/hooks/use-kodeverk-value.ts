@@ -3,7 +3,7 @@ import { useKodeverk, useLatestYtelser, useSakstyperToUtfall } from '@app/simple
 import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
 
 export const useKodeverkValue = <K extends keyof IKodeverk>(
-  key: K | typeof skipToken = skipToken
+  key: K | typeof skipToken = skipToken,
 ): IKodeverk[K] | undefined => {
   const { data } = useKodeverk();
 
@@ -33,5 +33,5 @@ export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): IYtelse 
 };
 
 export const useLovkildeToRegistreringshjemmelForYtelse = (
-  ytelseId: string | typeof skipToken = skipToken
+  ytelseId: string | typeof skipToken = skipToken,
 ): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;

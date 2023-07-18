@@ -1,5 +1,5 @@
 import { Editable } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const EditorContainer = styled.section`
   position: relative;

@@ -15,7 +15,7 @@ type ReturnType = [Actions, false] | [undefined, true];
 export const useOppgaveActions = (
   tildeltSaksbehandler: string | null,
   hasMedunderskriver: boolean,
-  ytelse?: string
+  ytelse?: string,
 ): ReturnType => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const [hasYtelseAccess, isYtelseLoading] = useHasYtelseAccess(ytelse);

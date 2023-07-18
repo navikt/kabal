@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const StyledLovhjemmelSelect = styled.div`
   position: relative;
@@ -30,7 +30,7 @@ export const StyledSelectedList = styled.ul`
 export const StyledListItem = styled.li`
   margin-bottom: 0.5em;
 
-  :last-child {
+  &:last-child {
     margin-bottom: 0;
   }
 `;
@@ -45,7 +45,7 @@ export const StyledSelectedSectionHeader = styled.h3`
 export const StyledSelectedSection = styled.div`
   padding-top: 1em;
 
-  :first-of-type {
+  &:first-of-type {
     padding-top: 0;
   }
 `;

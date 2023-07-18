@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -31,12 +31,12 @@ export const NewParentDocument = ({ document }: Props) => {
 
       return true;
     },
-    [document.id]
+    [document.id],
   );
 
   const isDropTarget = useMemo(
     () => draggedJournalfoertDocuments.length !== 0 || isAllowedToDrop(draggedDocument),
-    [draggedDocument, isAllowedToDrop, draggedJournalfoertDocuments.length]
+    [draggedDocument, isAllowedToDrop, draggedJournalfoertDocuments.length],
   );
 
   const onDrop = useCallback(
@@ -66,7 +66,7 @@ export const NewParentDocument = ({ document }: Props) => {
       setParent,
       document.id,
       createVedlegg,
-    ]
+    ],
   );
 
   const onDragEnter = useCallback(
@@ -78,7 +78,7 @@ export const NewParentDocument = ({ document }: Props) => {
 
       setIsDragOver(isDropTarget);
     },
-    [isDropTarget]
+    [isDropTarget],
   );
 
   const onDragLeave = useCallback((e: React.DragEvent<HTMLLIElement>) => {
@@ -129,7 +129,7 @@ interface IDragOver {
 const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
   position: relative;
 
-  ::after {
+  &::after {
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;
@@ -148,7 +148,9 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     width: 100%;
     height: 100%;
     background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
-    text-shadow: 1px 1px white, -1px -1px white;
+    text-shadow:
+      1px 1px white,
+      -1px -1px white;
     backdrop-filter: blur(2px);
   }
 `;

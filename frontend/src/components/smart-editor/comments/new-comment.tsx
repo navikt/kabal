@@ -34,7 +34,7 @@ export const NewComment = ({ close }: Props) => {
 
       connectCommentThread(editor, selection, threadId);
     },
-    [editor, selection]
+    [editor, selection],
   );
 
   if (

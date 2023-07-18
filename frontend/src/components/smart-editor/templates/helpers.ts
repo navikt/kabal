@@ -50,7 +50,7 @@ export const createRedigerbarMaltekst = (section: TemplateSections): Redigerbare
 });
 
 export const createRegelverkContainer = (
-  children: Descendant[] = [createSimpleParagraph()]
+  children: Descendant[] = [createSimpleParagraph()],
 ): RegelverkContainerType => ({
   type: UndeletableContentEnum.REGELVERK_CONTAINER,
   children,

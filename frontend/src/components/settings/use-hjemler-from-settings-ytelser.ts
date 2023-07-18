@@ -22,7 +22,7 @@ export const useHjemlerFromSettingsYtelser = () => {
           return acc;
         }, [])
         .sort(({ navn: a }, { navn: b }) => a.localeCompare(b)),
-    [data?.ytelser, ytelser]
+    [data?.ytelser, ytelser],
   );
 
   return availableHjemler;

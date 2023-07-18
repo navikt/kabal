@@ -11,7 +11,7 @@ export const connectCommentThread = (editor: Editor, selection: Selection, threa
       split: true,
       hanging: true,
       at: selection ?? undefined,
-    }
+    },
   );
 };
 

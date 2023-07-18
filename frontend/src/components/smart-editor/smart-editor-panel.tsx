@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';

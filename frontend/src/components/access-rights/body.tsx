@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
 import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { IYtelse } from '@app/types/kodeverk';
 import { Row } from './row';
@@ -22,7 +21,7 @@ export const Body = ({
   const sortedYtelser = useMemo(() => ytelser.sort((a, b) => a.navn.localeCompare(b.navn)), [ytelser]);
 
   return (
-    <Tbody>
+    <tbody>
       {sortedYtelser.map((ytelse, rowIndex) => (
         <Row
           key={ytelse.id}
@@ -34,8 +33,6 @@ export const Body = ({
           setFocusedCell={setFocusedCell}
         />
       ))}
-    </Tbody>
+    </tbody>
   );
 };
-
-const Tbody = styled.tbody``;

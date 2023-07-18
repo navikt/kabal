@@ -20,7 +20,7 @@ const insertRow = (
   editor: Editor,
   element: TableCellElementType,
   cellPath = ReactEditor.findPath(editor, element),
-  direction: Direction = Direction.DOWN
+  direction: Direction = Direction.DOWN,
 ): Path => {
   const [rowNode, rowPath] = Editor.parent(editor, cellPath);
 

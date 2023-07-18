@@ -1,7 +1,7 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Loader, Tag } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SetDocumentType } from '@app/components/documents/new-documents/modal/set-type/set-document-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';

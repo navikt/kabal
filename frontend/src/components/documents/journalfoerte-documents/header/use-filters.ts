@@ -48,7 +48,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     selectedTemaer,
     selectedTypes,
     onlyIncluded,
-    search
+    search,
   );
 
   const resetFilters = useCallback(() => {
@@ -88,7 +88,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
       selectedSaksIds.length,
       selectedTemaer.length,
       selectedTypes.length,
-    ]
+    ],
   );
 
   return {

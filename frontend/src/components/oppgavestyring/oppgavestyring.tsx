@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IOppgave } from '@app/types/oppgaver';
 import { FradelButton } from './fradel-button';
 import { Saksbehandler } from './saksbehandler';

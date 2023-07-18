@@ -1,7 +1,7 @@
 import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
 import { Tag, TagProps } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { IOrganizationStatus, IPart, IPersonStatus, PartStatusEnum } from '@app/types/oppgave-common';
 

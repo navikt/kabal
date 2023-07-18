@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface ToolbarIconButtonProps extends ToolbarButtonProps {
   icon: React.ReactNode;
@@ -50,12 +50,12 @@ const ToolbarButtonStyle = styled.button<ToolbarButtonStyleProps>`
   width: 32px;
   height: 32px;
 
-  :hover {
+  &:hover {
     opacity: 1;
     background-color: #c9c9c9;
   }
 
-  :disabled {
+  &:disabled {
     cursor: not-allowed;
     opacity: 0.25;
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Thread } from './thread';
 import { useThreads } from './use-threads';
 

@@ -35,7 +35,7 @@ const unwrapIndent = (node: RichText_Content_V2): RichText_Content_V3[] | RichTe
   }
 
   return node.children.flatMap((child) =>
-    isIndentable(child) || isIndent(child) ? unwrapIndent({ ...child, indent: (child.indent ?? 0) + 1 }) : child
+    isIndentable(child) || isIndent(child) ? unwrapIndent({ ...child, indent: (child.indent ?? 0) + 1 }) : child,
   );
 };
 

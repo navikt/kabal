@@ -81,7 +81,7 @@ export const useKeyboard = (editor: Editor) => {
         HANDLERS.get(key)?.(args);
       }
     },
-    [context, editor]
+    [context, editor],
   );
 };
 

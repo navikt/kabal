@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface Props {
   text: string;

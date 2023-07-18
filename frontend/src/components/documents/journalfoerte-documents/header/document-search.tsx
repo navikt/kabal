@@ -18,7 +18,7 @@ export const DocumentSearch = memo(
       value={search}
     />
   ),
-  (prevProps, nextProps) => prevProps.search === nextProps.search && prevProps.setSearch === nextProps.setSearch
+  (prevProps, nextProps) => prevProps.search === nextProps.search && prevProps.setSearch === nextProps.setSearch,
 );
 
 DocumentSearch.displayName = 'DocumentSearch';

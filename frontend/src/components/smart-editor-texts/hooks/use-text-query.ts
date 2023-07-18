@@ -29,7 +29,7 @@ export const useTextQuery = (): Query => {
       templates: templates?.split(',')?.filter(isTemplateOrNone),
       textType,
     }),
-    [enheter, hjemler, sections, templates, textType, utfall, ytelser]
+    [enheter, hjemler, sections, templates, textType, utfall, ytelser],
   );
 
   return query;

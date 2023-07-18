@@ -14,7 +14,7 @@ interface OppgavePagination {
 export const useOppgavePagination = (
   settingsKey: OppgaveTableRowsPerPage,
   allOppgaver: string[] = [],
-  defaultPageSize = 10
+  defaultPageSize = 10,
 ): OppgavePagination => {
   const [page, setPage] = useState(1);
   const { value = defaultPageSize } = useNumberSetting(settingsKey);

@@ -2,7 +2,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
@@ -26,7 +26,7 @@ export const DeleteDropArea = () => {
 
       setIsDropOver(isDropTarget);
     },
-    [isDropTarget]
+    [isDropTarget],
   );
 
   const onDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -54,7 +54,7 @@ export const DeleteDropArea = () => {
 
       clearDragState();
     },
-    [clearDragState, deleteDocument, draggedDocument, oppgaveId, removeSmartDocument]
+    [clearDragState, deleteDocument, draggedDocument, oppgaveId, removeSmartDocument],
   );
 
   return (

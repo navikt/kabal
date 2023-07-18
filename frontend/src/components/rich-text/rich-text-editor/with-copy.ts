@@ -154,9 +154,9 @@ const normalizedTable = (node: TableElementType): TableElementType => {
       (max, row) =>
         Math.max(
           max,
-          row.children.reduce((acc, { colSpan }) => acc + colSpan, 0)
+          row.children.reduce((acc, { colSpan }) => acc + colSpan, 0),
         ),
-      0
+      0,
     );
 
   const tableBodies: TableBodyElementType[] = node.children.map((tbody, i) => {

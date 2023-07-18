@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AaRegisteret, Ainntekt, Gosys, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';

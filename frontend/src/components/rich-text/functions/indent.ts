@@ -32,7 +32,7 @@ const indent = (editor: Editor, indentDirection: IndentEnum) => {
     Transforms.setNodes(
       editor,
       { indent: clampInclusive((element.indent ?? 0) + indentAmount, 0, MAX_INDENT) },
-      { match: (n) => n === element, at }
+      { match: (n) => n === element, at },
     );
   }
 };

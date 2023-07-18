@@ -21,7 +21,7 @@ const customParse = (
   fromDate: Date,
   toDate: Date,
   centuryThreshold: number,
-  delimiter: string
+  delimiter: string,
 ): string | null => {
   const parts = input.split(delimiter);
 

@@ -31,7 +31,7 @@ const kodeverk = new SimpleApiState<IKodeverk>(API_PREFIX);
 const hjemlerMap = new SimpleApiState<Hjemler>(`${API_PREFIX}/hjemlermap`);
 const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${API_PREFIX}/registreringshjemlermap`);
 const lovkildeToRegistreringshjemlerLatest = new SimpleApiState<AllLovKilderToRegistreringshjemmel[]>(
-  `${API_PREFIX}/lovkildetoregistreringshjemler/latest`
+  `${API_PREFIX}/lovkildetoregistreringshjemler/latest`,
 );
 const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelserLatest = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser/latest`);

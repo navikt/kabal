@@ -1,6 +1,6 @@
 import { Search, Tag } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useLazySearchPartQuery } from '@app/redux-api/oppgaver/mutations/behandling';
 import { IPart } from '@app/types/oppgave-common';

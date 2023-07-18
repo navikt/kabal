@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const StyledDocumentLink = styled.a<{ $isActive: boolean; $disabled?: boolean }>`
   display: flex;
@@ -23,11 +23,11 @@ export const StyledDocumentLink = styled.a<{ $isActive: boolean; $disabled?: boo
   height: 100%;
   user-select: text;
 
-  :hover {
+  &:hover {
     color: #262626;
   }
 
-  :visited {
+  &:visited {
     color: var(--a-text-visited);
   }
 `;

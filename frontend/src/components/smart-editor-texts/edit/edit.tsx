@@ -1,7 +1,7 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import React, { Fragment, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import {
   useEnhetNameFromIdOrLoading,
   useFullYtelseNameFromIdOrLoading,

@@ -22,7 +22,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
             if (typeof draft !== 'undefined') {
               draft.tildeltSaksbehandlerident = navIdent;
             }
-          })
+          }),
         );
 
         try {
@@ -33,7 +33,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
               saksbehandler: data.saksbehandler,
-            }))
+            })),
           );
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
@@ -41,18 +41,18 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
                 draft.tildeltSaksbehandlerident = navIdent;
                 draft.modified = data.modified;
               }
-            })
+            }),
           );
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.tildeltSaksbehandlerident = navIdent;
-            })
+            }),
           );
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
               saksbehandler: data.saksbehandler,
-            }))
+            })),
           );
         } catch (e) {
           optimisticBehandling.undo();

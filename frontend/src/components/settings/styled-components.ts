@@ -1,5 +1,5 @@
 import { Fieldset } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const SettingsSection = styled.section`
   box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;

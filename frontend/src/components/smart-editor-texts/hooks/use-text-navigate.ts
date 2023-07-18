@@ -26,7 +26,7 @@ export const useTextNavigate = (): GoToTextFn => {
 
       return navigate(`${pathPrefix}/${id}${queryStringify(query)}`);
     },
-    [textType, navigate, query]
+    [textType, navigate, query],
   );
 
   return goToTextFn;

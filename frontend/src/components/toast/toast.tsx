@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { memo, useEffect, useRef, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import { keyframes, styled } from 'styled-components';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
@@ -61,7 +61,7 @@ export const Toast = memo(
       </StyledToast>
     );
   },
-  (prevProps, nextProps) => prevProps.id === nextProps.id && prevProps.expiresAt === nextProps.expiresAt
+  (prevProps, nextProps) => prevProps.id === nextProps.id && prevProps.expiresAt === nextProps.expiresAt,
 );
 
 Toast.displayName = 'Toast';
@@ -142,7 +142,7 @@ const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }>`
   animation-play-state: 'running';
   animation-fill-mode: forwards;
 
-  ::after {
+  &::after {
     content: '';
     position: absolute;
     bottom: 0;

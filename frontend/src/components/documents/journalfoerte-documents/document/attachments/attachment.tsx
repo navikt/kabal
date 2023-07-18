@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useContext, useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
@@ -52,7 +52,7 @@ export const Attachment = memo(
 
           cleanDragUI.current = createDragUI(
             docs.map((d) => d.tittel ?? 'Ukjent dokument'),
-            e
+            e,
           );
 
           e.dataTransfer.effectAllowed = 'link';
@@ -74,7 +74,7 @@ export const Attachment = memo(
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments([doc]);
       },
-      [documents, dokumentInfoId, isSelected, selectedDocuments, setDraggedJournalfoertDocuments]
+      [documents, dokumentInfoId, isSelected, selectedDocuments, setDraggedJournalfoertDocuments],
     );
 
     return (
@@ -113,7 +113,7 @@ export const Attachment = memo(
   (prevProps, nextProps) =>
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
-    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel
+    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
 );
 
 Attachment.displayName = 'Attachment';
@@ -128,7 +128,7 @@ const StyledVedlegg = styled.article<{ $selected: boolean }>`
 
   background-color: ${({ $selected }) => getBackgroundColor(false, $selected)};
 
-  :hover {
+  &:hover {
     background-color: ${({ $selected }) => getHoverBackgroundColor(false, $selected)};
   }
 `;

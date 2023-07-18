@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { IOppgave } from '@app/types/oppgaver';
 import { useFradel } from './use-tildel';
@@ -17,7 +17,7 @@ export const FradelButton = ({
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
     medunderskriverident !== null,
-    ytelseId
+    ytelseId,
   );
 
   if (isAccessLoading || !access.deassign || isAvsluttetAvSaksbehandler) {

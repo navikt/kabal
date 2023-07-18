@@ -48,7 +48,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
               if (typeof draft !== 'undefined') {
                 draft.medunderskriverident = data.medunderskriver?.navIdent ?? null;
               }
-            })
+            }),
           );
         } catch (e) {
           const message = 'Kunne ikke hente medunderskriver.';
@@ -72,7 +72,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
               if (typeof draft !== 'undefined') {
                 draft.medunderskriverFlyt = data.medunderskriverFlyt;
               }
-            })
+            }),
           );
         } catch (e) {
           const message = 'Kunne ikke hente medunderskriverflyt.';
@@ -96,7 +96,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
               if (typeof draft !== 'undefined') {
                 draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
               }
-            })
+            }),
           );
         } catch (e) {
           const message = 'Kunne ikke hente saksbehandler.';

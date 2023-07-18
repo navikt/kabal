@@ -3,7 +3,7 @@ import { Button, ButtonProps, Table, TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';

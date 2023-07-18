@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
 import { BaseProps, DropdownProps, IOption } from './props';
@@ -32,12 +32,12 @@ export const GroupedFilterList = <T extends string>({
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [flattenedFilteredOptions, setFlattenedFilteredOptions] = useState<IOption<T>[]>(
-    options.flatMap(({ sectionOptions }) => sectionOptions)
+    options.flatMap(({ sectionOptions }) => sectionOptions),
   );
 
   useEffect(() => {
     const filteredGroups = options.filter(({ sectionOptions }) =>
-      sectionOptions.some(({ label }) => filter.test(label))
+      sectionOptions.some(({ label }) => filter.test(label)),
     );
 
     const filtered = filteredGroups.map(({ sectionOptions, ...rest }) => ({

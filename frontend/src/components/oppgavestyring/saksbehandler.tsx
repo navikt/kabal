@@ -1,7 +1,7 @@
 import { ErrorMessage, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
@@ -17,10 +17,10 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriverident !== null,
-    oppgave.ytelseId
+    oppgave.ytelseId,
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(
-    oppgave.tildeltSaksbehandlerident ?? skipToken
+    oppgave.tildeltSaksbehandlerident ?? skipToken,
   );
 
   if (userIsError) {

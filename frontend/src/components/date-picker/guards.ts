@@ -6,5 +6,5 @@ export const isSixChars = (parts: string[]): parts is [string, string, string, s
   parts.length === 6;
 
 export const isEightChars = (
-  parts: string[]
+  parts: string[],
 ): parts is [string, string, string, string, string, string, string, string] => parts.length === 8;

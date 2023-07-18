@@ -24,7 +24,7 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
             draft.medunderskriverFlyt = isSaksbehandler
               ? MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER
               : MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
-          })
+          }),
         );
 
         const flytPatchresult = dispatch(
@@ -32,7 +32,7 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
             draft.medunderskriverFlyt = isSaksbehandler
               ? MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER
               : MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
-          })
+          }),
         );
 
         try {
@@ -44,14 +44,14 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = modified;
               draft.medunderskriverFlyt = medunderskriverFlyt;
               draft.medunderskriverident = navIdent;
-            })
+            }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
               draft.medunderskriverident = data.navIdent;
-            })
+            }),
           );
         } catch (e) {
           oppgavePatchResult.undo();

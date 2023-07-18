@@ -27,7 +27,7 @@ export const renderElement = (element: Descendant, key: string) => {
   }
 
   const renderedChildren = element.children.map((child, i) =>
-    Text.isText(child) ? renderLeaf(child, `${key}-${i}`) : renderElement(child, `${key}-${i}`)
+    Text.isText(child) ? renderLeaf(child, `${key}-${i}`) : renderElement(child, `${key}-${i}`),
   );
 
   switch (element.type) {

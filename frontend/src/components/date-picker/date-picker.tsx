@@ -58,7 +58,7 @@ export const DatePicker = ({
         onChange(isoFormatted);
       }
     },
-    [input, onChange]
+    [input, onChange],
   );
 
   const [month, setMonth] = useState(value);
