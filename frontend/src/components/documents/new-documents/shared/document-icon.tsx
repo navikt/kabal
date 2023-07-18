@@ -1,6 +1,6 @@
 import { DocPencilIcon, FilePdfIcon, FilesIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
 
 interface Props {

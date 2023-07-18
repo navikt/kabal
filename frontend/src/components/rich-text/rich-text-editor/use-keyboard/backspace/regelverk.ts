@@ -7,7 +7,7 @@ import { HandlerFn } from '../types';
 export const handleRegelverk: HandlerFn = ({ editor, event }) => {
   const regelverkContainerEntry = getCurrentElement<RegelverkContainerType>(
     editor,
-    UndeletableContentEnum.REGELVERK_CONTAINER
+    UndeletableContentEnum.REGELVERK_CONTAINER,
   );
 
   if (typeof regelverkContainerEntry === 'undefined') {

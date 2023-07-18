@@ -24,7 +24,7 @@ export const kvalitetsvurderingV2Api = createApi({
           kvalitetsvurderingV2Api.util.updateQueryData('getKvalitetsvurdering', id, (draft) => ({
             ...draft,
             ...update,
-          }))
+          })),
         );
 
         try {
@@ -32,7 +32,7 @@ export const kvalitetsvurderingV2Api = createApi({
           dispatch(
             kvalitetsvurderingV2Api.util.updateQueryData('getKvalitetsvurdering', id, (draft) => {
               draft.modified = data.modified;
-            })
+            }),
           );
         } catch {
           patchResult.undo();

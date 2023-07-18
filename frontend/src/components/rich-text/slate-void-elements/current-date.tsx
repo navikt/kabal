@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { RenderElementProps, useSelected } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { formatLongDate, zeroPad } from '@app/domain/date';
 
 interface DateParts {
@@ -25,7 +25,7 @@ export const CurrentDate = (props: RenderElementProps) => {
       month: now.getMonth(),
       day: now.getDate(),
     }),
-    [now]
+    [now],
   );
 
   return <RenderCurrentDate {...props} {...parts} />;
@@ -49,7 +49,7 @@ const RenderCurrentDate = memo<Props>(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.year === nextProps.year && prevProps.month === nextProps.month && prevProps.day === nextProps.day
+    prevProps.year === nextProps.year && prevProps.month === nextProps.month && prevProps.day === nextProps.day,
 );
 
 RenderCurrentDate.displayName = 'RenderCurrentDate';
@@ -59,7 +59,9 @@ const CurrentDateContainer = styled.time<{ $isFocused: boolean }>`
   text-align: right;
   width: 100%;
   border-radius: 2px;
-  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
   background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-style: solid;

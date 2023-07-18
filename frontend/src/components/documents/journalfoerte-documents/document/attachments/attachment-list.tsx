@@ -42,7 +42,7 @@ export const AttachmentList = memo(
       }
 
       return v.valgt === n.valgt && v.tittel === n.tittel && v.dokumentInfoId === n.dokumentInfoId;
-    })
+    }),
 );
 
 AttachmentList.displayName = 'AttachmentList';
@@ -71,7 +71,7 @@ const AttachmentListItem = memo(
   (prevProps, nextProps) =>
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
-    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel
+    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
 );
 
 AttachmentListItem.displayName = 'AttachmentListItem';

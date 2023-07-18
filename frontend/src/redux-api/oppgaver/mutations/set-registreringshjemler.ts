@@ -19,7 +19,7 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.hjemmelIdSet = hjemler;
-          })
+          }),
         );
 
         try {
@@ -27,7 +27,7 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
-            })
+            }),
           );
         } catch (e) {
           patchResult.undo();

@@ -1,6 +1,6 @@
 import { Switch } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useBehandlingEnabled,

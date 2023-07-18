@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Document } from './document/document';
 
@@ -27,7 +27,7 @@ export const DocumentListItem = memo(
       }
 
       return v.valgt === n.valgt && v.tittel === n.tittel && v.dokumentInfoId === n.dokumentInfoId;
-    })
+    }),
 );
 
 DocumentListItem.displayName = 'DocumentListItem';

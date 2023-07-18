@@ -49,7 +49,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
 
               return d;
             }),
-          }))
+          })),
         );
 
         const patchResult = dispatch(
@@ -74,7 +74,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
 
               return d;
             });
-          })
+          }),
         );
 
         try {

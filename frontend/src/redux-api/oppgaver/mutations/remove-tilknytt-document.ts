@@ -43,7 +43,7 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
 
               return d;
             }),
-          }))
+          })),
         );
 
         const patchResult = dispatch(
@@ -53,10 +53,10 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
               .map((d) => ({
                 ...d,
                 vedlegg: d.vedlegg.filter(
-                  (v) => !(v.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId)
+                  (v) => !(v.dokumentInfoId === dokumentInfoId && d.journalpostId === journalpostId),
                 ),
               }));
-          })
+          }),
         );
 
         try {

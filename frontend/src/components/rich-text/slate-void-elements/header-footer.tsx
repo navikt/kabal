@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { useSelected, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { DistribusjonsType } from '@app/types/documents/documents';
@@ -63,7 +63,7 @@ const RenderHeaderFooterElement = ({ element, attributes, children }: RenderElem
           Transforms.setNodes<ElementTypes>(
             editor,
             { content: content[0]?.plainText },
-            { match: (n) => n === e, voids: true, at: [] }
+            { match: (n) => n === e, voids: true, at: [] },
           );
         });
       } catch {
@@ -74,7 +74,7 @@ const RenderHeaderFooterElement = ({ element, attributes, children }: RenderElem
         }
       }
     },
-    [editor, getTexts]
+    [editor, getTexts],
   );
 
   useEffect(() => {
@@ -92,7 +92,9 @@ const RenderHeaderFooterElement = ({ element, attributes, children }: RenderElem
 const Container = styled.div<{ $isFocused: boolean }>`
   color: #666;
   border-radius: 2px;
-  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
   background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;

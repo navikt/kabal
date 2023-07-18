@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { IYtelse } from '@app/types/kodeverk';
@@ -75,7 +75,7 @@ const StyledHeaderText = styled.span`
   align-items: center;
   justify-content: left;
 
-  :hover {
+  &:hover {
     overflow: visible;
     text-overflow: unset;
     background-color: var(--a-blue-200);
@@ -96,7 +96,7 @@ const StyledHeader = styled.th<{ $isHighlighted: boolean }>`
   z-index: 1;
   background-color: ${({ $isHighlighted }) => ($isHighlighted ? 'var(--a-blue-200)' : 'rgb(247, 247, 247)')};
 
-  :hover {
+  &:hover {
     overflow: visible;
   }
 `;

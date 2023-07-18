@@ -8,7 +8,7 @@ export const SelectRow = (props: ISelectedDocument) => {
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => (e.target.checked ? selectOne(props) : unselectOne(props)),
-    [props, selectOne, unselectOne]
+    [props, selectOne, unselectOne],
   );
 
   const onClick: React.MouseEventHandler<HTMLInputElement> = useCallback(
@@ -17,7 +17,7 @@ export const SelectRow = (props: ISelectedDocument) => {
         selectRangeTo(props);
       }
     },
-    [props, selectRangeTo]
+    [props, selectRangeTo],
   );
 
   const selected = isSelected(props);

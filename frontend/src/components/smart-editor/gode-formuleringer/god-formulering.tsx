@@ -2,7 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from 'slate';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IRichText } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
 import { renderElement } from '../../rich-text/slate-elements/maltekst/render';
@@ -102,7 +102,7 @@ const StyledContent = styled.div<{ $isExpanded: boolean }>`
   overflow: hidden;
   position: relative;
 
-  :after {
+  &:after {
     display: ${({ $isExpanded }) => ($isExpanded ? 'none' : 'block')};
     content: '';
     position: absolute;

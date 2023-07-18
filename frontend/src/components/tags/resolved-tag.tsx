@@ -1,6 +1,6 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { AppQuery } from '@app/types/texts/texts';
 
 interface BaseProps {

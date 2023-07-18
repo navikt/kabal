@@ -93,7 +93,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
             if (draft.typeId === typeId) {
               draft.kjennelseMottatt = kjennelseMottatt;
             }
-          })
+          }),
         );
 
         try {
@@ -118,7 +118,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
             if (draft.typeId === typeId) {
               draft.sendtTilTrygderetten = sendtTilTrygderetten;
             }
-          })
+          }),
         );
 
         try {
@@ -136,14 +136,14 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
 
 const updateBehandling = <K extends keyof IOppgavebehandling>(
   oppgaveId: string,
-  values: [K, IOppgavebehandling[K]][]
+  values: [K, IOppgavebehandling[K]][],
 ) => {
   const patchResult = reduxStore.dispatch(
     behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
       values.forEach(([key, value]) => {
         draft[key] = value;
       });
-    })
+    }),
   );
 
   return patchResult.undo;
@@ -155,7 +155,7 @@ const updateOppgaveData = <K extends keyof IOppgave>(oppgaveId: string, values: 
       values.forEach(([key, value]) => {
         draft[key] = value;
       });
-    })
+    }),
   );
 
   return patchResult.undo;
@@ -167,7 +167,7 @@ const successToast = (name: string, dateString: string | null) => {
   toast.success(
     dateString === null
       ? `${formattedName} fjernet`
-      : `${formattedName} oppdatert til ${isoDateToPretty(dateString) ?? dateString}`
+      : `${formattedName} oppdatert til ${isoDateToPretty(dateString) ?? dateString}`,
   );
 };
 

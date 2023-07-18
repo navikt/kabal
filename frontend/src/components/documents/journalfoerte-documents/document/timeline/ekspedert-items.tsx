@@ -54,7 +54,7 @@ interface VarselData {
 const getVarselData = (
   isSmsSent: boolean,
   isEmailSent: boolean,
-  utsendingsinfo: Utsendingsinfo
+  utsendingsinfo: Utsendingsinfo,
 ): [VarselData, VarselData] | [VarselData] | [] => {
   if (isSmsSent && isEmailSent) {
     return [getSmsPopoverContent(utsendingsinfo), getEmailPopoverContent(utsendingsinfo)];

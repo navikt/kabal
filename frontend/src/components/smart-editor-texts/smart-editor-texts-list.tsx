@@ -2,7 +2,7 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useGetTextsQuery } from '@app/redux-api/texts';
 import { TextTypes } from '@app/types/texts/texts';
 import { DateTime } from '../datetime/datetime';
@@ -24,11 +24,11 @@ export const TextList = ({ textType, filter }: TextListProps) => {
 
   const sort = useMemo(
     () => (searchParams.get(QueryKey.SORT) === SortKey.MODIFIED ? SortKey.MODIFIED : SortKey.TITLE),
-    [searchParams]
+    [searchParams],
   );
   const order = useMemo(
     () => (searchParams.get(QueryKey.ORDER) !== SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC),
-    [searchParams]
+    [searchParams],
   );
 
   const texts = useMemo(
@@ -46,7 +46,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
               return isAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
           }
         }),
-    [order, data, filter, sort]
+    [order, data, filter, sort],
   );
 
   if (isLoading || typeof data === 'undefined') {
@@ -134,7 +134,7 @@ const ListItem = styled.li<{ active: boolean }>`
   transition-timing-function: ease-in-out;
   border-radius: 4px;
 
-  :hover {
+  &:hover {
     background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : 'var(--a-blue-50)')};
   }
 `;

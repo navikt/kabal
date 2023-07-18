@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFagsystemName } from '@app/hooks/use-fagsystem-name';

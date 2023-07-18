@@ -1,7 +1,7 @@
 import { Skeleton } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';

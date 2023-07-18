@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Transforms } from 'slate';
 import { useSelected, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -68,7 +68,9 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string => {
 const VoidParagraphStyle = styled(ParagraphStyle)<{ $isFocused: boolean }>`
   ${voidStyle}
   border-radius: 2px;
-  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
   background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;

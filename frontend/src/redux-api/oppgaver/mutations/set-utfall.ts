@@ -20,7 +20,7 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.utfallId = utfall;
-          })
+          }),
         );
 
         try {
@@ -29,13 +29,13 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
-            })
+            }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.utfallId = utfall;
-            })
+            }),
           );
         } catch (e) {
           patchResult.undo();

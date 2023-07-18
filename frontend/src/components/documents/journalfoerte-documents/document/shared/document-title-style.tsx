@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 
 export const StyledDocumentTitle = styled.h1`

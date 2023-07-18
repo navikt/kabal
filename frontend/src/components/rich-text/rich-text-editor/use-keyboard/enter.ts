@@ -66,7 +66,7 @@ export const enter: HandlerFn = ({ editor, event }) => {
         Transforms.setNodes(
           editor,
           { type: ContentTypeEnum.PARAGRAPH, indent: topListNode.indent },
-          { at: Path.parent(topListPath), match: (n) => n === element }
+          { at: Path.parent(topListPath), match: (n) => n === element },
         );
 
         editor.marks = marks;

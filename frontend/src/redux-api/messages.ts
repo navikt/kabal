@@ -55,7 +55,7 @@ export const messagesApi = createApi({
         const patchResult = dispatch(
           messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
             messages.push({ ...newMessage, created: now, modified: now, id: newMessageId });
-          })
+          }),
         );
 
         try {
@@ -68,8 +68,8 @@ export const messagesApi = createApi({
                 }
 
                 return m;
-              })
-            )
+              }),
+            ),
           );
         } catch {
           patchResult.undo();

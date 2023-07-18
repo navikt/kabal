@@ -28,7 +28,10 @@ export class SimpleApiState<T> {
     cacheTime: 60000,
   };
 
-  constructor(private url: string, options?: Partial<Options>) {
+  constructor(
+    private url: string,
+    options?: Partial<Options>,
+  ) {
     this.options = Object.assign(this.options, options);
 
     if (this.options.prefetch) {

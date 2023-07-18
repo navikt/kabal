@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const EditorContainer = styled.div<{ isActive: boolean }>`
   display: ${({ isActive }) => (isActive ? 'flex' : 'none')};
@@ -43,7 +43,7 @@ export const TabButton = styled.button`
   height: 40px;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     color: rgb(38, 38, 38);
     box-shadow: inset 0px -3px 0 0 rgb(155, 155, 155);
   }

@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { memo, useEffect } from 'react';
 import { Transforms } from 'slate';
 import { useSelected, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { RenderElementProps } from '../../slate-elements/render-props';
@@ -16,7 +16,7 @@ import { MISSING_TITLE } from './title';
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
   const { data: medunderskriverSignature } = useGetSignatureQuery(
-    typeof oppgave?.medunderskriverident === 'string' ? oppgave.medunderskriverident : skipToken
+    typeof oppgave?.medunderskriverident === 'string' ? oppgave.medunderskriverident : skipToken,
   );
 
   if (oppgave === undefined) {
@@ -39,7 +39,7 @@ const useSignatureData = (element: SignatureElementType) => {
   const medunderskriverSignature = useMedunderskriverSignature();
   const { data: oppgave } = useOppgave();
   const { data: saksbehandlerSignature } = useGetSignatureQuery(
-    typeof oppgave?.tildeltSaksbehandlerident === 'string' ? oppgave.tildeltSaksbehandlerident : skipToken
+    typeof oppgave?.tildeltSaksbehandlerident === 'string' ? oppgave.tildeltSaksbehandlerident : skipToken,
   );
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export const Signature = memo(
             Transforms.setNodes<SignatureElementType>(
               editor,
               { ...element, useShortName: target.checked },
-              { at: [], voids: true, mode: 'lowest', match: (n) => n === element }
+              { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
             );
           }}
         >
@@ -116,7 +116,7 @@ export const Signature = memo(
   (prevProps, nextProps) =>
     prevProps.element.useShortName === nextProps.element.useShortName &&
     areSignaturesEqual(prevProps.element.saksbehandler, nextProps.element.saksbehandler) &&
-    areSignaturesEqual(prevProps.element.medunderskriver, nextProps.element.medunderskriver)
+    areSignaturesEqual(prevProps.element.medunderskriver, nextProps.element.medunderskriver),
 );
 
 const areSignaturesEqual = (s1?: ISignature, s2?: ISignature): boolean => {
@@ -151,7 +151,9 @@ const SignaturesContainer = styled.div<{ $isFocused: boolean }>`
   margin-top: 32px;
   ${voidStyle}
   border-radius: 2px;
-  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
   background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;

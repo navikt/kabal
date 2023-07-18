@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { DeleteButton } from './delete-button';
@@ -44,7 +44,7 @@ export const Comment = memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isFocused === nextProps.isFocused
+    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isFocused === nextProps.isFocused,
 );
 
 Comment.displayName = 'Comment';

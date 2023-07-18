@@ -1,7 +1,7 @@
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Panel } from '@navikt/ds-react';
 import React, { useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 interface PaaVentWarningProps {

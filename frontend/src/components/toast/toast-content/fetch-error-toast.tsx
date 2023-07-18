@@ -1,7 +1,7 @@
 import { Detail, Label } from '@navikt/ds-react';
 import { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isApiError } from '@app/types/errors';
 import { toast } from '../store';
 
@@ -21,7 +21,7 @@ export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?
       {typeof args === 'undefined' ? null : <Details label="URL">{typeof args === 'string' ? args : args.url}</Details>}
       <Details label="Statuskode">{status}</Details>
       <Details label="Detaljer">{detail}</Details>
-    </>
+    </>,
   );
 };
 

@@ -90,7 +90,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                       doc.parentId === parentId &&
                       doc.type === DocumentTypeEnum.JOURNALFOERT &&
                       doc.journalfoertDokumentReference.dokumentInfoId ===
-                        existing.journalfoertDokumentReference.dokumentInfoId
+                        existing.journalfoertDokumentReference.dokumentInfoId,
                   );
 
                   if (isDuplicate) {
@@ -109,13 +109,13 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             }
 
             return newDocuments;
-          })
+          }),
         );
 
         const smartEditorsPatchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-            draft.map((doc) => (doc.id === dokumentId ? { ...doc, parentId } : doc))
-          )
+            draft.map((doc) => (doc.id === dokumentId ? { ...doc, parentId } : doc)),
+          ),
         );
 
         const smartEditorPatchResult = dispatch(
@@ -125,7 +125,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             }
 
             return draft;
-          })
+          }),
         );
 
         try {
@@ -154,7 +154,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
                 // If it is not altered, check if it is a duplicate.
                 const isDuplicate = data.duplicateJournalfoerteDokumenter.some(
-                  (duplicate) => duplicate.id === oldDoc.id
+                  (duplicate) => duplicate.id === oldDoc.id,
                 );
 
                 // If it is a duplicate, continue to next document.
@@ -166,12 +166,12 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               return newDocuments;
-            })
+            }),
           );
 
           if (data.duplicateJournalfoerteDokumenter.length !== 0) {
             toast.info(
-              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`
+              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
         } catch (e) {
@@ -203,8 +203,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               return doc;
-            })
-          )
+            }),
+          ),
         );
 
         try {
@@ -212,16 +212,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.map((doc) => (doc.id === data.id ? data : doc))
-            )
+              draft.map((doc) => (doc.id === data.id ? data : doc)),
+            ),
           );
 
           dispatch(smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null));
 
           dispatch(
             smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-              draft.filter(({ id }) => id !== dokumentId)
-            )
+              draft.filter(({ id }) => id !== dokumentId),
+            ),
           );
         } catch (e) {
           patch.undo();
@@ -246,20 +246,20 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           documentsQuerySlice.util.updateQueryData(
             'getDocuments',
             oppgaveId,
-            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId) // Remove deleted document from list.
-          )
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId), // Remove deleted document from list.
+          ),
         );
 
         const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null)
+          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null),
         );
 
         const smartEditorsPatchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData(
             'getSmartEditors',
             { oppgaveId },
-            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId) // Remove deleted document from list.
-          )
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId), // Remove deleted document from list.
+          ),
         );
 
         try {
@@ -332,8 +332,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                       d.type === DocumentTypeEnum.JOURNALFOERT &&
                       d.parentId === parentId &&
                       d.journalfoertDokumentReference?.journalpostId === doc.journalpostId &&
-                      d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId
-                  )
+                      d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId,
+                  ),
               )
               .map((doc) => ({
                 ...doc,
@@ -354,7 +354,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               }));
 
             return [...draft, ...newDocuments];
-          })
+          }),
         );
 
         try {
@@ -379,12 +379,12 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   }
                 }
               }
-            })
+            }),
           );
 
           if (data.duplicateJournalfoerteDokumenter.length !== 0) {
             toast.info(
-              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`
+              `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
         } catch (e) {
@@ -407,18 +407,18 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
   oppgaveId: string,
   dokumentId: string,
   key: K,
-  value: (ISmartEditor & IMainDocument)[K]
+  value: (ISmartEditor & IMainDocument)[K],
 ) => {
   const documentsPatchResult = reduxStore.dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-      draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc))
-    )
+      draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc)),
+    ),
   );
 
   const smartEditorsPatchResult = reduxStore.dispatch(
     smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-      draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc))
-    )
+      draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc)),
+    ),
   );
 
   const smartEditorPatchResult = reduxStore.dispatch(
@@ -428,7 +428,7 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
       }
 
       return draft;
-    })
+    }),
   );
 
   return () => {

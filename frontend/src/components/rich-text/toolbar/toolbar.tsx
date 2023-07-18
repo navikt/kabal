@@ -3,7 +3,7 @@ import { ClearFormatting } from '@styled-icons/fluentui-system-regular/ClearForm
 import { DocumentPageBreak } from '@styled-icons/fluentui-system-regular/DocumentPageBreak';
 import React from 'react';
 import { useSlate } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { clearFormatting } from '../functions/clear-formatting';
 import { insertPageBreak, insertPageBreakIsAvailable } from '../functions/insert-page-break';
 import { isInPlaceholderInMaltekst } from '../functions/maltekst';

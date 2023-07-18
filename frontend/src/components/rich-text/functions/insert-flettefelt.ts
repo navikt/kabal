@@ -12,6 +12,6 @@ export const insertFlettefelt = (editor: Editor) => {
       field: null,
       threadIds: [],
     },
-    { select: true }
+    { select: true },
   );
 };

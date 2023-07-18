@@ -1,7 +1,7 @@
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Pagination, Table } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';

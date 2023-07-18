@@ -25,7 +25,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
         dispatch(
           behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, () => ({
             medunderskriverFlyt,
-          }))
+          })),
         );
 
         dispatch(
@@ -39,7 +39,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
             frist,
             sattPaaVent,
             ytelseId,
-          }))
+          })),
         );
       },
     }),

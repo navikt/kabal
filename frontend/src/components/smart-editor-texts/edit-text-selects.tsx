@@ -54,7 +54,7 @@ export const UtfallSelect = ({ children, selected, onChange }: UtfallSelectProps
       values
         .filter(({ id }) => id !== UtfallEnum.HENVIST && id !== UtfallEnum.HEVET)
         .map(({ id, navn }) => ({ value: id, label: navn })),
-    [values]
+    [values],
   );
 
   return (

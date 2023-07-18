@@ -25,13 +25,13 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.medunderskriverident = navIdent;
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
-          })
+          }),
         );
 
         const flytPatchresult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
             draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
-          })
+          }),
         );
 
         try {
@@ -42,26 +42,26 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = data.modified;
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
               draft.medunderskriverident = navIdent;
-            })
+            }),
           );
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
-            })
+            }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
               draft.medunderskriverident = navIdent;
-            })
+            }),
           );
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
               draft.medunderskriver = data.medunderskriver;
-            })
+            }),
           );
         } catch (e) {
           patchResult.undo();

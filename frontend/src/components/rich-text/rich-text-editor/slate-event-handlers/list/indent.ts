@@ -27,7 +27,7 @@ export const indentList = (editor: Editor) =>
     const licArray = Array.from(listItemContainerEntries);
 
     const selectionTops = licArray.filter(([, licPath]) =>
-      licArray.every(([, topPath]) => !Path.isDescendant(Path.parent(licPath), Path.parent(topPath)))
+      licArray.every(([, topPath]) => !Path.isDescendant(Path.parent(licPath), Path.parent(topPath))),
     );
 
     selectionTops

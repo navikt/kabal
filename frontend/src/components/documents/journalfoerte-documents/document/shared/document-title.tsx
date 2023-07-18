@@ -32,7 +32,7 @@ export const DocumentTitle = memo(
 
     const isInlineOpen = useMemo(
       () => value.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
-      [dokumentInfoId, value]
+      [dokumentInfoId, value],
     );
 
     if (editMode) {
@@ -133,7 +133,7 @@ export const DocumentTitle = memo(
     prevProps.tittel === nextProps.tittel &&
     prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
-    prevProps.journalpostId === nextProps.journalpostId
+    prevProps.journalpostId === nextProps.journalpostId,
 );
 
 DocumentTitle.displayName = 'DocumentTitle';

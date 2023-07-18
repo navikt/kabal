@@ -43,7 +43,7 @@ export const LedigeOppgaverTable = (): JSX.Element => {
   });
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
-    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 }
+    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
   );
 
   return (

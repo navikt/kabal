@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Flettefelt } from '../../types/editor-void-types';
 import { getFlettefeltName } from './functions';
 import { useFlettefeltValue } from './use-flettefelt-value';
@@ -50,7 +50,7 @@ const StyledDropdownButton = styled.button<{ $isFocused: boolean }>`
   padding-left: 24px;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     background-color: #cce1ff;
   }
 `;

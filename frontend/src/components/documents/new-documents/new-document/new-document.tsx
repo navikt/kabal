@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useId, useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
@@ -51,7 +51,7 @@ export const NewDocument = ({ document }: Props) => {
       e.dataTransfer.dropEffect = 'move';
       setDraggedDocument(document);
     },
-    [data, document, setDraggedDocument]
+    [data, document, setDraggedDocument],
   );
 
   return (
@@ -96,7 +96,7 @@ const StyledNewDocument = styled.article<{ $isExpanded: boolean }>`
   ${documentCSS}
   ${({ $isExpanded }) => ($isExpanded ? expandedNewDocumentsGridCSS : collapsedNewDocumentsGridCSS)}
 
-  :hover {
+  &:hover {
     background-color: var(--a-surface-hover);
   }
 `;

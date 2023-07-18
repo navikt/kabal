@@ -64,7 +64,7 @@ export const UtfallSelect = ({ children, selected, onChange }: UtfallSelectProps
         .filter(({ id }) => id !== UtfallEnum.HENVIST && id !== UtfallEnum.HEVET)
         .map(({ id, navn }) => ({ value: id, label: navn })),
     ],
-    [values]
+    [values],
   );
 
   return (
@@ -85,7 +85,7 @@ export const KlageenhetSelect = ({ children, selected, onChange }: KlageenhetSel
 
   const options = useMemo(
     () => [NONE_OPTION, ...values.map(({ id, navn }) => ({ value: id, label: navn }))] ?? [],
-    [values]
+    [values],
   );
 
   return (
@@ -106,7 +106,7 @@ export const YtelseSelect = ({ children, selected, onChange }: YtelseSelectProps
 
   const options: IOption<string | NONE_TYPE>[] = useMemo(
     () => [NONE_OPTION, ...values.map(({ id, navn }) => ({ value: id, label: navn }))],
-    [values]
+    [values],
   );
 
   return (

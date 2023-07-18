@@ -43,13 +43,13 @@ export const brukerApi = createApi({
         const myPatchResult = dispatch(
           brukerApi.util.updateQueryData('getMySignature', undefined, (draft) => {
             draft[key] = cleanedValue;
-          })
+          }),
         );
 
         const ansattPatchResult = dispatch(
           brukerApi.util.updateQueryData('getSignature', navIdent, (draft) => {
             draft[key] = cleanedValue;
-          })
+          }),
         );
 
         try {

@@ -41,7 +41,7 @@ export const removeTabs = (editor: Editor) => {
             at: { path: textPath, offset: line.startOffset },
             unit: 'character',
             distance: 1,
-          })
+          }),
         );
     }
   });

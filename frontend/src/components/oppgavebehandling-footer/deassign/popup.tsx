@@ -3,7 +3,7 @@ import { Button, Search } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
@@ -29,12 +29,12 @@ export const Popup = ({ isOpen, close }: Props) => {
 
   const options = useMemo(
     () => ytelse?.innsendingshjemler.map(({ id, navn }) => ({ value: id, label: navn })) ?? [],
-    [ytelse?.innsendingshjemler]
+    [ytelse?.innsendingshjemler],
   );
 
   const filteredOptions = useMemo(
     () => options.filter((option) => filterRegex.test(option.label)),
-    [options, filterRegex]
+    [options, filterRegex],
   );
 
   if (!isOpen || oppgaveIsLoading || userIsLoading || typeof oppgave === 'undefined' || typeof bruker === 'undefined') {

@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React, { memo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 
 interface StyledClickableFieldProps {
@@ -25,7 +25,7 @@ export const ClickableField = memo(
   (props: ClickableFieldProps) => (
     <StyledClickableField {...props} size="small" variant="tertiary" title={props.children} />
   ),
-  (prevProps, nextProps) => prevProps.children === nextProps.children && prevProps.onClick === nextProps.onClick
+  (prevProps, nextProps) => prevProps.children === nextProps.children && prevProps.onClick === nextProps.onClick,
 );
 
 ClickableField.displayName = 'ClickableField';

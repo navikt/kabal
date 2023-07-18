@@ -14,7 +14,7 @@ import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFo
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FeatureToggles, useFeatureToggle } from '@app/hooks/use-feature-toggle';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';

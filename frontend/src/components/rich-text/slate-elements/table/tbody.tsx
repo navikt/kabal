@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { TableBodyElementType } from '../../types/editor-types';
 import { RenderElementProps } from '../render-props';
 

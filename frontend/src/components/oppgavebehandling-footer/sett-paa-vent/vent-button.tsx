@@ -1,7 +1,7 @@
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SettPaaVentPanel } from '@app/components/oppgavebehandling-footer/sett-paa-vent/panel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

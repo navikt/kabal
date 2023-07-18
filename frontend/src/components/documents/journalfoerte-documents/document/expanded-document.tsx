@@ -1,6 +1,6 @@
 import { CopyButton, Detail, Label } from '@navikt/ds-react';
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
 

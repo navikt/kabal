@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
@@ -25,7 +25,7 @@ export const TildelButton = ({
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
     medunderskriverident !== null,
-    ytelseId
+    ytelseId,
   );
 
   if (isUserLoading || isAccessLoading || typeof user === 'undefined') {

@@ -19,7 +19,7 @@ export const getCurrentCell = (editor: Editor): NodeEntry<TableCellElementType> 
 export const getCellColumnOffset = (
   editor: Editor,
   currentCell: TableCellElementType | undefined = getCurrentCell(editor)?.[0],
-  currentRow: TableRowElementType | undefined = getCurrentRow(editor, currentCell)?.[0]
+  currentRow: TableRowElementType | undefined = getCurrentRow(editor, currentCell)?.[0],
 ): number => {
   if (currentCell === undefined || currentRow === undefined) {
     return 0;
@@ -34,7 +34,7 @@ export const getCellColumnOffset = (
 export const getCurrentRow = (
   editor: Editor,
   currentCell: TableCellElementType | undefined = getCurrentCell(editor)?.[0],
-  currentCellPath = findPath(editor, currentCell)
+  currentCellPath = findPath(editor, currentCell),
 ): NodeEntry<TableRowElementType> | undefined => {
   if (currentCellPath === undefined) {
     return undefined;
@@ -51,7 +51,7 @@ export const getCurrentRow = (
 
 export const getNextRow = (
   editor: Editor,
-  currentRowPath: Path | undefined = getCurrentRow(editor)?.[1]
+  currentRowPath: Path | undefined = getCurrentRow(editor)?.[1],
 ): NodeEntry<TableRowElementType> | undefined => {
   if (currentRowPath === undefined) {
     return undefined;
@@ -80,7 +80,7 @@ export const getNextRow = (
 
 export const getPreviousRow = (
   editor: Editor,
-  currentRowPath: Path | undefined = getCurrentRow(editor)?.[1]
+  currentRowPath: Path | undefined = getCurrentRow(editor)?.[1],
 ): NodeEntry<TableRowElementType> | undefined => {
   if (currentRowPath === undefined) {
     return undefined;

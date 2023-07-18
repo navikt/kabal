@@ -1,6 +1,6 @@
 import { Alert, Radio, RadioGroup } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';

@@ -1,7 +1,7 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import React, { useCallback, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -31,7 +31,7 @@ export const UploadFileButton = () => {
       event.preventDefault();
       fileInput.current?.click();
     },
-    [dokumentTypeId]
+    [dokumentTypeId],
   );
 
   const uploadVedlegg = useCallback(
@@ -58,7 +58,7 @@ export const UploadFileButton = () => {
         return setUploadError(
           `Filstørrelsen (${(
             file.size / MEBI
-          ).toLocaleString()} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`
+          ).toLocaleString()} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
         );
       }
 
@@ -68,7 +68,7 @@ export const UploadFileButton = () => {
 
       event.currentTarget.value = '';
     },
-    [oppgave, uploadFile, dokumentTypeId]
+    [oppgave, uploadFile, dokumentTypeId],
   );
 
   const onChangeDocumentType = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {

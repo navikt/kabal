@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { TitleAction } from '@app/components/documents/new-documents/new-document/title-action';
 

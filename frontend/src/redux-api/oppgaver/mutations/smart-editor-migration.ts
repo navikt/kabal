@@ -18,7 +18,7 @@ const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
 
         data.forEach((s) => {
           dispatch(
-            smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId: s.id }, () => s)
+            smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId: s.id }, () => s),
           );
         });
 
@@ -27,9 +27,9 @@ const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
             draft.map((d) => {
               const updated = data.find(({ id }) => d.id === id);
 
-              return updated !== undefined ? updated : d;
+              return updated ?? d;
             });
-          })
+          }),
         );
       },
     }),

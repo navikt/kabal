@@ -95,7 +95,7 @@ export const withNormalization = (editor: Editor) => {
             type: ListContentEnum.LIST_ITEM_CONTAINER,
             children: [{ text: '' }],
           },
-          { at: [...path, 0] }
+          { at: [...path, 0] },
         );
 
         return;
@@ -116,7 +116,7 @@ export const withNormalization = (editor: Editor) => {
         Transforms.setNodes(
           editor,
           { type: ContentTypeEnum.PARAGRAPH },
-          { at: path, match: (n) => Element.isElement(n) && n.type === ListContentEnum.LIST_ITEM }
+          { at: path, match: (n) => Element.isElement(n) && n.type === ListContentEnum.LIST_ITEM },
         );
 
         return;
@@ -129,7 +129,7 @@ export const withNormalization = (editor: Editor) => {
         Transforms.setNodes(
           editor,
           { type: ContentTypeEnum.PARAGRAPH },
-          { at: path, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER) }
+          { at: path, match: isOfElementTypeFn(ListContentEnum.LIST_ITEM_CONTAINER) },
         );
 
         return;
@@ -176,7 +176,7 @@ export const withNormalization = (editor: Editor) => {
             indent: 0,
             children: [{ text: '' }],
           },
-          { at: [...path, 0] }
+          { at: [...path, 0] },
         );
 
         return;
@@ -188,7 +188,7 @@ export const withNormalization = (editor: Editor) => {
         Transforms.wrapNodes(
           editor,
           { type: ContentTypeEnum.PARAGRAPH, textAlign: TextAlignEnum.TEXT_ALIGN_LEFT, indent: 0, children: [] },
-          { at: path, match: Text.isText, mode: 'highest' }
+          { at: path, match: Text.isText, mode: 'highest' },
         );
 
         return;

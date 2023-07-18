@@ -55,7 +55,7 @@ export const insertColumnRight: TableFn = (editor, cellNode, cellPath = ReactEdi
             {
               at: rowPath,
               match: (n) => n === cell,
-            }
+            },
           );
           break;
         }
@@ -118,7 +118,7 @@ export const insertColumnLeft: TableFn = (editor, cellNode, cellPath = ReactEdit
             {
               at: rowPath,
               match: (n) => n === cell,
-            }
+            },
           );
           break;
         }

@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
@@ -30,7 +30,7 @@ export const JournalfoerteDocuments = () => {
 
   const slicedFilteredDocuments = useMemo(
     () => totalFilteredDocuments.slice(0, endIndex),
-    [endIndex, totalFilteredDocuments]
+    [endIndex, totalFilteredDocuments],
   );
 
   return (

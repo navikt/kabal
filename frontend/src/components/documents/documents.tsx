@@ -1,6 +1,6 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DragAndDropContextElement } from '@app/components/documents/drag-context';
 import { TabContextElement } from '@app/components/documents/tab-context';
 import { ToggleExpandedButton } from '@app/components/documents/toggle-expand-button';

@@ -1,6 +1,6 @@
 import { Checkbox } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 
 export const IncludedFilter = () => {

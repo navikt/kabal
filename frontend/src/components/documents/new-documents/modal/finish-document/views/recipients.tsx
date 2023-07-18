@@ -111,6 +111,6 @@ const getTypeNames = (types: Brevmottakertype[]): string => {
   }
 
   return `${getTypeName(first)}, ${getTypeName(second).toLocaleLowerCase()} og ${getTypeName(
-    third
+    third,
   ).toLocaleLowerCase()}`;
 };

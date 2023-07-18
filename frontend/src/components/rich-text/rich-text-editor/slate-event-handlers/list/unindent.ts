@@ -32,7 +32,7 @@ export const unindentList = (editor: Editor) =>
     const licArray = Array.from(listItemContainerEntries);
 
     const selectionTops = licArray.filter(([, licPath]) =>
-      licArray.every(([, topPath]) => !Path.isDescendant(Path.parent(licPath), Path.parent(topPath)))
+      licArray.every(([, topPath]) => !Path.isDescendant(Path.parent(licPath), Path.parent(topPath))),
     );
 
     selectionTops
@@ -112,7 +112,7 @@ export const unindentList = (editor: Editor) =>
                 at: parentListPath,
                 match: (n, p) =>
                   isOfElementType(n, ListContentEnum.LIST_ITEM) && Path.isSibling(p, liPath) && Path.isAfter(p, liPath),
-              }
+              },
             );
 
             Transforms.moveNodes(editor, {

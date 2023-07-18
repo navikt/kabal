@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { Descendant, Editor } from 'slate';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { insertGodFormulering, isAvailable } from './insert';
 
 interface AddButtonProps {

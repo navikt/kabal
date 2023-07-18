@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { RichTextEditorElement } from '../rich-text/rich-text-editor/rich-text-editor';
 import '../rich-text/types/slate-global-types';
 import { SmartEditorContext } from './context/smart-editor-context';

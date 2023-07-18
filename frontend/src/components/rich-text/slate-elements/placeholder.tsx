@@ -1,7 +1,7 @@
 import React from 'react';
 import { Editor, Node, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isGenericObject } from '@app/types/types';
 import { PlaceholderElementType } from '../types/editor-types';
 import { RenderElementProps } from './render-props';
@@ -77,7 +77,7 @@ const Wrapper = styled.span<WrapperProps>`
   outline: none;
   color: #000;
 
-  ::after {
+  &::after {
     cursor: text;
     color: var(--a-text-subtle);
     content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};

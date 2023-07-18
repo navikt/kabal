@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface Props {
   $open: boolean;
@@ -24,8 +24,8 @@ export const ToggleButton = styled.button<Props>`
   font-weight: 600;
   color: #3e3832;
 
-  ::before,
-  ::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     width: 0.5rem;
@@ -37,12 +37,12 @@ export const ToggleButton = styled.button<Props>`
     transition: transform 0.1s ease;
   }
 
-  ::before {
+  &::before {
     transform: ${({ $open }) =>
       $open ? 'translateX(-31%) translateY(-50%) rotate(-45deg)' : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
   }
 
-  ::after {
+  &::after {
     transform: ${({ $open }) =>
       $open ? 'translateX(31%) translateY(-50%) rotate(45deg)' : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
   }

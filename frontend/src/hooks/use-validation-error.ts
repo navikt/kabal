@@ -18,7 +18,7 @@ export const useValidationError = (field: Field): string | undefined => {
 
   const allProperties = useMemo(
     () => context?.validationSectionErrors?.flatMap(({ properties }) => properties),
-    [context]
+    [context],
   );
 
   return useMemo(() => allProperties?.find((p) => p.field === field)?.reason, [allProperties, field]);

@@ -3,7 +3,7 @@ import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { RenderElementProps } from '../slate-elements/render-props';
 
 export const PageBreak = ({ element, children, attributes }: RenderElementProps) => {
@@ -11,7 +11,7 @@ export const PageBreak = ({ element, children, attributes }: RenderElementProps)
 
   const onClick = useCallback(
     () => Transforms.removeNodes(editor, { match: (n) => n === element, at: [] }),
-    [editor, element]
+    [editor, element],
   );
 
   return (
@@ -37,7 +37,7 @@ const StyledDeleteButton = styled(Button)`
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 
-  :focus {
+  &:focus {
     opacity: 1;
   }
 `;
@@ -51,22 +51,22 @@ const StyledPageBreak = styled.div`
   background-color: rgba(0, 0, 0, 0.05);
   position: relative;
 
-  ::after,
-  ::before {
+  &::after,
+  &::before {
     content: '';
     width: 100%;
     height: 24px;
     background-color: #fff;
   }
 
-  ::before {
+  &::before {
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.25);
   }
-  ::after {
+  &::after {
     box-shadow: 0px -5px 5px 0px rgba(0, 0, 0, 0.25);
   }
 
-  :hover {
+  &:hover {
     > ${StyledDeleteButton} {
       opacity: 1;
     }

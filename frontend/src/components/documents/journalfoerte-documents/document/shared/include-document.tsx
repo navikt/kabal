@@ -2,7 +2,7 @@ import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { memo } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
@@ -50,7 +50,7 @@ const InternalIncludeDocument = memo(
       />
     );
   },
-  (prevProps, nextProps) => prevProps.checked === nextProps.checked && prevProps.name === nextProps.name
+  (prevProps, nextProps) => prevProps.checked === nextProps.checked && prevProps.name === nextProps.name,
 );
 
 export const IncludeDocument = styled(InternalIncludeDocument)`

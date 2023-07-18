@@ -12,7 +12,7 @@ export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
 
   const allSelected = useMemo(
     () => slicedFilteredDocuments.every((document) => isSelected(document)),
-    [isSelected, slicedFilteredDocuments]
+    [isSelected, slicedFilteredDocuments],
   );
 
   const onSelectAllChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -24,7 +24,7 @@ export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
         }));
 
         const attachments = slicedFilteredDocuments.flatMap(({ journalpostId, vedlegg }) =>
-          vedlegg.map(({ dokumentInfoId }) => ({ dokumentInfoId, journalpostId }))
+          vedlegg.map(({ dokumentInfoId }) => ({ dokumentInfoId, journalpostId })),
         );
 
         selectMany([...mainDocuments, ...attachments]);
@@ -32,7 +32,7 @@ export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
         unselectAll();
       }
     },
-    [selectMany, slicedFilteredDocuments, unselectAll]
+    [selectMany, slicedFilteredDocuments, unselectAll],
   );
 
   return (

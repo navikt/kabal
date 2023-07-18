@@ -46,7 +46,7 @@ export const journalposterApi = createApi({
                 }
               }
             }
-          })
+          }),
         );
 
         const underArbeidPatchResult = dispatch(
@@ -62,7 +62,7 @@ export const journalposterApi = createApi({
                 draft[i] = { ...doc, tittel };
               }
             }
-          })
+          }),
         );
 
         try {

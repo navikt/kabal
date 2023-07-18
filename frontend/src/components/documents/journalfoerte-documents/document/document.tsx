@@ -2,7 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { memo, useCallback, useContext, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
@@ -72,14 +72,14 @@ export const Document = memo(
 
         cleanDragUI.current = createDragUI(
           docs.map((d) => d.tittel ?? ''),
-          e
+          e,
         );
 
         e.dataTransfer.effectAllowed = 'link';
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments(docs);
       },
-      [document, documents, isSelected, selectedDocuments, setDraggedJournalfoertDocuments]
+      [document, documents, isSelected, selectedDocuments, setDraggedJournalfoertDocuments],
     );
 
     return (
@@ -143,7 +143,7 @@ export const Document = memo(
       });
 
     return propsAreEqual;
-  }
+  },
 );
 
 Document.displayName = 'Document';
@@ -161,7 +161,7 @@ const StyledJournalfoertDocument = styled.article<{
   ${({ $isExpanded }) => ($isExpanded ? expandedJournalfoerteDocumentsGridCSS : collapsedJournalfoerteDocumentsGridCSS)}
   background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};
 
-  :hover {
+  &:hover {
     background-color: ${({ $expanded, $selected }) => getHoverBackgroundColor($expanded, $selected)};
   }
 `;

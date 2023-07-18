@@ -19,7 +19,7 @@ export const KvalitetsskjemaCheckbox = ({ children, field, helpText }: Props) =>
         {children}
       </Checkbox>
     ),
-    [canEdit, children, field]
+    [canEdit, children, field],
   );
 
   if (typeof helpText === 'string') {

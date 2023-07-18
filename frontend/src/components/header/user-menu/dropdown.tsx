@@ -2,7 +2,7 @@ import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { CopyButton } from '../../copy-button/copy-button';
 
 export const UserDropdown = (): JSX.Element | null => {

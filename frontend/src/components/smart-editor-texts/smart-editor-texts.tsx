@@ -1,7 +1,7 @@
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useAddTextMutation } from '@app/redux-api/texts';
 import { TextTypes, isPlainTextType } from '@app/types/texts/texts';
 import { LoadText } from './edit/load-text';

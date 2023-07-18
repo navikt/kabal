@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Label } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 export const TimelineContainer = styled.ol`
   display: flex;

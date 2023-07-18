@@ -33,7 +33,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     setSelectedDocuments,
     setLastSelectedDocument,
     documentList,
-    lastSelectedDocument
+    lastSelectedDocument,
   );
 
   const unselectOne = useCallback((document: ISelectedDocument) => {
@@ -63,7 +63,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
 
   const isSelected = useCallback(
     (document: ISelectedDocument) => Object.hasOwn(selectedDocuments, getId(document)),
-    [selectedDocuments]
+    [selectedDocuments],
   );
 
   return (

@@ -12,7 +12,7 @@ export const insertGodFormulering = (editor: Editor, content: Descendant[]) => {
   Transforms.insertFragment(
     editor,
     content.concat(NEW_PARAGRAPH).map((c) => ({ ...c })),
-    { voids: false }
+    { voids: false },
   );
   ReactEditor.focus(editor);
 };

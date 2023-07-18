@@ -26,19 +26,19 @@ export const insertTable = (editor: Editor) =>
         split: false,
         mode: 'lowest',
         at,
-      }
+      },
     );
 
     Transforms.wrapNodes(
       editor,
       { type: TableContentEnum.TR, children: [] },
-      { match: isOfElementTypeFn(TableContentEnum.TD), at, split: false }
+      { match: isOfElementTypeFn(TableContentEnum.TD), at, split: false },
     );
 
     Transforms.wrapNodes(
       editor,
       { type: TableContentEnum.TBODY, children: [] },
-      { match: isOfElementTypeFn(TableContentEnum.TR), at, split: false }
+      { match: isOfElementTypeFn(TableContentEnum.TR), at, split: false },
     );
 
     Transforms.wrapNodes(
@@ -47,7 +47,7 @@ export const insertTable = (editor: Editor) =>
         type: TableTypeEnum.TABLE,
         children: [{ type: TableContentEnum.TBODY, children: [] }],
       },
-      { match: isOfElementTypeFn(TableContentEnum.TBODY), at, split: false }
+      { match: isOfElementTypeFn(TableContentEnum.TBODY), at, split: false },
     );
 
     Transforms.insertNodes(editor, createCell(), {

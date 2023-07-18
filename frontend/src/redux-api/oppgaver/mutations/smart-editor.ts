@@ -37,10 +37,10 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
                 type: DocumentTypeEnum.SMART,
               },
               ...draft,
-            ])
+            ]),
           );
           dispatch(
-            smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) => [...draft, data])
+            smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) => [...draft, data]),
           );
         } catch (e) {
           const message = 'Kunne ikke opprette dokument.';
@@ -70,13 +70,13 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
                 ...update,
               };
             }
-          })
+          }),
         );
 
         const listPatchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-            draft.map((e) => (e.id === dokumentId ? { ...e, ...update } : e))
-          )
+            draft.map((e) => (e.id === dokumentId ? { ...e, ...update } : e)),
+          ),
         );
 
         try {
@@ -91,7 +91,7 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               return data;
-            })
+            }),
           );
         } catch (e: unknown) {
           patchResult.undo();

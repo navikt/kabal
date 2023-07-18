@@ -1,7 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
 import React, { KeyboardEventHandler, useRef } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 
 interface HeaderProps {

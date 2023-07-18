@@ -2,7 +2,7 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
 import React, { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
@@ -37,7 +37,7 @@ const EditableDeadline = ({ frist, oppgaveId }: EditableDeadlineProps) => {
 
   const fristExceeded = useMemo(
     () => (userFrist === null ? false : isPast(addDays(parseISO(userFrist), 1))),
-    [userFrist]
+    [userFrist],
   );
 
   const children = isOpen ? (

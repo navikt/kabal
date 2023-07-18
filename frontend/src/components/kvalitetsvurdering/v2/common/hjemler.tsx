@@ -1,6 +1,6 @@
 import { BodyShort, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';

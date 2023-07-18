@@ -43,7 +43,7 @@ export const RichTextEditorElement = memo(
 
         return [];
       },
-      [isFocused, selection]
+      [isFocused, selection],
     );
 
     const onBlur = useCallback<React.FocusEventHandler<HTMLDivElement>>((event) => {
@@ -55,7 +55,7 @@ export const RichTextEditorElement = memo(
 
     const renderLeafCallback = useCallback(
       (props: RenderLeafProps) => renderLeaf(props, focusedThreadId, selection !== null && Range.isExpanded(selection)),
-      [selection, focusedThreadId]
+      [selection, focusedThreadId],
     );
 
     return (
@@ -89,7 +89,7 @@ export const RichTextEditorElement = memo(
     prevProps.className === nextProps.className &&
     prevProps.onKeyDown === nextProps.onKeyDown &&
     prevProps.focusedThreadId === nextProps.focusedThreadId &&
-    prevProps.canEdit === nextProps.canEdit
+    prevProps.canEdit === nextProps.canEdit,
 );
 
 RichTextEditorElement.displayName = 'RichTextEditorElement';

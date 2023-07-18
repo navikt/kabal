@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useSelected, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { UndeletableContentEnum } from '../../types/editor-enums';
 import { isOfElementType } from '../../types/editor-type-guards';
 import { MaltekstElementType, TableCellElementType } from '../../types/editor-types';
@@ -91,7 +91,7 @@ const StyledTableCell = styled.td<{ $isSelected: boolean }>`
   text-align: left;
   padding: 0;
 
-  ::before {
+  &::before {
     content: '';
     display: block;
     width: 100%;

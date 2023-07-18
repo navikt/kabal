@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useLovkildeToRegistreringshjemlerLatest } from '@app/simple-api-state/use-kodeverk';
@@ -54,6 +54,7 @@ export const HjemlerSelect = ({ selected = [], onChange, includeNoneOption = fal
 const Container = styled.div`
   position: relative;
 `;
+
 interface PopupProps {
   isOpen: boolean;
   children: React.ReactNode;

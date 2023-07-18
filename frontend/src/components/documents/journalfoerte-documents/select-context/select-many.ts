@@ -27,6 +27,6 @@ export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setL
         return { ...map };
       });
     },
-    [selectOne, setLastSelectedDocument, setSelectedDocuments]
+    [selectOne, setLastSelectedDocument, setSelectedDocuments],
   );
 };

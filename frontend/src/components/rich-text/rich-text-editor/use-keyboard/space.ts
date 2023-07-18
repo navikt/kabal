@@ -60,7 +60,7 @@ const makeList = (
   editor: HandlerFnArg['editor'],
   focus: BasePoint,
   listType: ListTypesEnum,
-  prefixLength: number
+  prefixLength: number,
 ) => {
   event.preventDefault();
   Editor.withoutNormalizing(editor, () => {
@@ -79,7 +79,7 @@ const makeList = (
         voids: false,
         mode: 'lowest',
         at: Path.parent(focus.path),
-      }
+      },
     );
     Transforms.wrapNodes(editor, { type: listType, children: [], indent: 0 });
     Transforms.wrapNodes(editor, { type: ListContentEnum.LIST_ITEM, children: [] });

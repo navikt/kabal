@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 interface Props {
   isChecked: boolean;
@@ -39,7 +39,7 @@ interface StyledCellProps {
 
 const getColor = (
   { $isChecked, $isFocused, $isCurrentColumn, $isCurrentRow }: StyledCellProps,
-  defaultColor = 'white'
+  defaultColor = 'white',
 ) => {
   if ($isFocused || $isCurrentColumn || $isCurrentRow) {
     if ($isChecked) {
@@ -61,11 +61,11 @@ const StyledCell = styled.td<StyledCellProps>`
   border-right: 1px solid var(--a-border-on-inverted);
   border-bottom: 1px solid var(--a-border-on-inverted);
 
-  :nth-child(even) {
+  &:nth-child(even) {
     background-color: ${getColor};
   }
 
-  :nth-child(odd) {
+  &:nth-child(odd) {
     background-color: ${(props) => getColor(props, 'rgb(247, 247, 247)')};
   }
 `;

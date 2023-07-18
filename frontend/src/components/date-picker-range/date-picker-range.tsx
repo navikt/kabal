@@ -3,7 +3,7 @@ import { Alert, Button, DatePicker } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import React, { useCallback, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 type DateStringISO = string;

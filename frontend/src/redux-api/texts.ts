@@ -73,7 +73,7 @@ export const textsApi = createApi({
       onQueryStarted: async ({ text, query }, { queryFulfilled, dispatch }) => {
         const idPatchResult = dispatch(textsApi.util.updateQueryData('getTextById', text.id, () => text));
         const queryPatchResult = dispatch(
-          textsApi.util.updateQueryData('getTexts', query, (draft) => draft.map((t) => (t.id === text.id ? text : t)))
+          textsApi.util.updateQueryData('getTexts', query, (draft) => draft.map((t) => (t.id === text.id ? text : t))),
         );
 
         try {
@@ -85,8 +85,8 @@ export const textsApi = createApi({
           dispatch(textsApi.util.updateQueryData('getTextById', text.id, (t) => ({ ...t, modified })));
           dispatch(
             textsApi.util.updateQueryData('getTexts', query, (draft) =>
-              draft.map((t) => (t.id === text.id ? { ...t, modified } : t))
-            )
+              draft.map((t) => (t.id === text.id ? { ...t, modified } : t)),
+            ),
           );
         } catch {
           idPatchResult.undo();
@@ -109,26 +109,26 @@ export const textsApi = createApi({
       transformResponse,
       onQueryStarted: async ({ id, key, value, query }, { queryFulfilled, dispatch }) => {
         const idPatchResult = dispatch(
-          textsApi.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, [key]: value }))
+          textsApi.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, [key]: value })),
         );
 
         const queryPatchResult = dispatch(
           textsApi.util.updateQueryData('getTexts', query, (draft) =>
-            draft.map((t) => (t.id === id ? { ...t, [key]: value } : t))
-          )
+            draft.map((t) => (t.id === id ? { ...t, [key]: value } : t)),
+          ),
         );
 
         try {
           const { data } = await queryFulfilled;
 
           dispatch(
-            textsApi.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified: data.modified }))
+            textsApi.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified: data.modified })),
           );
 
           dispatch(
             textsApi.util.updateQueryData('getTexts', query, (draft) =>
-              draft.map((t) => (t.id === id ? { ...t, modified: data.modified } : t))
-            )
+              draft.map((t) => (t.id === id ? { ...t, modified: data.modified } : t)),
+            ),
           );
         } catch {
           idPatchResult.undo();
@@ -143,7 +143,7 @@ export const textsApi = createApi({
       }),
       onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
         const listPatchResult = dispatch(
-          textsApi.util.updateQueryData('getTexts', query, (draft) => draft.filter((text) => text.id !== id))
+          textsApi.util.updateQueryData('getTexts', query, (draft) => draft.filter((text) => text.id !== id)),
         );
         const idPatchResult = dispatch(textsApi.util.updateQueryData('getTextById', id, () => undefined));
 

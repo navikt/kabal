@@ -1,7 +1,7 @@
 import { Heading, HeadingProps } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -29,7 +29,7 @@ export const DropHeading = ({ children }: Props) => {
 
       setIsDragOver(isDragTarget);
     },
-    [isDragTarget]
+    [isDragTarget],
   );
 
   const onDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -61,7 +61,7 @@ export const DropHeading = ({ children }: Props) => {
 
       clearDragState();
     },
-    [clearDragState, draggedDocument, isDragTarget, oppgaveId, setParent]
+    [clearDragState, draggedDocument, isDragTarget, oppgaveId, setParent],
   );
 
   return (
@@ -103,7 +103,7 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
   padding-left: 8px;
   position: relative;
 
-  ::after {
+  &::after {
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;
@@ -118,7 +118,9 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
     width: 100%;
     height: 100%;
     background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
-    text-shadow: 1px 1px white, -1px -1px white;
+    text-shadow:
+      1px 1px white,
+      -1px -1px white;
     backdrop-filter: blur(2px);
   }
 `;

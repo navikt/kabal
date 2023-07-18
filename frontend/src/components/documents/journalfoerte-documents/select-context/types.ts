@@ -27,12 +27,12 @@ type SetLastSelectedDocument = React.Dispatch<React.SetStateAction<ISelectedDocu
 
 export type SelectHook<T> = (
   setSelectedDocuments: SetSelectedDocuments,
-  setLastSelectedDocument: SetLastSelectedDocument
+  setLastSelectedDocument: SetLastSelectedDocument,
 ) => T;
 
 export type SelectRangeHook = (
   setSelectedDocuments: SetSelectedDocuments,
   setLastSelectedDocument: SetLastSelectedDocument,
   documentList: IArkivertDocument[],
-  lastSelectedDocument: ISelectedDocument | null
+  lastSelectedDocument: ISelectedDocument | null,
 ) => SelectOne;

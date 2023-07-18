@@ -2,7 +2,7 @@ import { Checkbox } from '@navikt/ds-react';
 import React, { memo, useEffect, useMemo } from 'react';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery, useGetTilknyttedeDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -39,12 +39,12 @@ export const DocumentListElement = memo(
                 title: tittel,
               })),
             ],
-      [newDocuments, attachedDocuments, isLoading]
+      [newDocuments, attachedDocuments, isLoading],
     );
 
     useEffect(() => {
       const documents = element.documents.filter(({ id }) =>
-        sourceDocuments.some(({ id: sourceId }) => sourceId === id)
+        sourceDocuments.some(({ id: sourceId }) => sourceId === id),
       );
 
       if (documents.length !== element.documents.length) {
@@ -80,7 +80,7 @@ export const DocumentListElement = memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.element.type === nextProps.element.type && prevProps.element.documents === nextProps.element.documents
+    prevProps.element.type === nextProps.element.type && prevProps.element.documents === nextProps.element.documents,
 );
 
 DocumentListElement.displayName = 'DocumentListElement';

@@ -29,7 +29,7 @@ export const smartEditorCommentsApi = createApi({
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) => [
             ...draft,
             data,
-          ])
+          ]),
         );
       },
     }),
@@ -45,8 +45,8 @@ export const smartEditorCommentsApi = createApi({
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
             draft
               .filter((thread) => thread.id !== commentId)
-              .map((thread) => ({ ...thread, comments: thread.comments.filter((c) => c.id !== commentId) }))
-          )
+              .map((thread) => ({ ...thread, comments: thread.comments.filter((c) => c.id !== commentId) })),
+          ),
         );
       },
     }),
@@ -62,9 +62,9 @@ export const smartEditorCommentsApi = createApi({
         dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
             draft.map((thread) =>
-              thread.id === commentId ? { ...thread, comments: [...thread.comments, data] } : thread
-            )
-          )
+              thread.id === commentId ? { ...thread, comments: [...thread.comments, data] } : thread,
+            ),
+          ),
         );
       },
     }),
@@ -82,9 +82,9 @@ export const smartEditorCommentsApi = createApi({
             draft.map((t) =>
               t.id === commentId
                 ? { ...t, ...data }
-                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) }
-            )
-          )
+                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) },
+            ),
+          ),
         );
       },
     }),

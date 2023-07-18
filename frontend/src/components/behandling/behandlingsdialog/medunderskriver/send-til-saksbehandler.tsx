@@ -1,7 +1,7 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSwitchMedunderskriverflytMutation } from '@app/redux-api/oppgaver/mutations/switch-medunderskriverflyt';

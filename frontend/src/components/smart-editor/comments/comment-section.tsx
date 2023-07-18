@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Range } from 'slate';
 import { ReactEditor, useSlate, useSlateStatic } from 'slate-react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { SmartEditorContext } from '../context/smart-editor-context';
 import { NewCommentThread } from './new-thread';
 import { ThreadList } from './thread-list';
