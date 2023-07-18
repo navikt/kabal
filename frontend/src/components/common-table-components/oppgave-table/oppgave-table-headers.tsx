@@ -52,6 +52,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
               selected={params.typer ?? []}
               onChange={(typer) => setParams({ ...params, typer })}
               options={kodeverkSimpleValuesToDropdownOptions(sakstyper)}
+              data-testid="filter-type"
             >
               {TABLE_HEADERS[key]}
             </FilterDropdown>
@@ -64,6 +65,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
               selected={params.ytelser ?? []}
               onChange={(ytelser) => setParams({ ...params, ytelser })}
               options={kodeverkSimpleValuesToDropdownOptions(ytelseOptions)}
+              data-testid="filter-ytelse"
             >
               {TABLE_HEADERS[key]}
             </FilterDropdown>
@@ -76,6 +78,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
               selected={params.hjemler ?? []}
               onChange={(hjemler) => setParams({ ...params, hjemler })}
               options={kodeverkValuesToDropdownOptions(hjemlerOptions)}
+              data-testid="filter-hjemler"
             >
               {TABLE_HEADERS[key]}
             </FilterDropdown>
@@ -88,6 +91,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
               selected={params.hjemler ?? []}
               onChange={(hjemler) => setParams({ ...params, hjemler })}
               options={kodeverkValuesToDropdownOptions(enhetHjemlerOptions)}
+              data-testid="filter-hjemler"
             >
               {TABLE_HEADERS[key]}
             </FilterDropdown>
@@ -112,6 +116,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
               selected={params.tildelteSaksbehandlere ?? []}
               onChange={(tildelteSaksbehandlere) => setParams({ ...params, tildelteSaksbehandlere })}
               options={kodeverkSimpleValuesToDropdownOptions(saksbehandlerOptions)}
+              data-testid="filter-saksbehandler"
             >
               {TABLE_HEADERS[key]}
             </FilterDropdown>
