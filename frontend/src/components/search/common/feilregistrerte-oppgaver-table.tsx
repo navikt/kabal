@@ -1,17 +1,16 @@
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import React from 'react';
-import { TableFooter } from '@app/components/common-table-components/footer';
-import { TableHeader } from '@app/components/common-table-components/header';
-import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
-import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 
 interface Props {
   oppgaveIds: string[];
   onRefresh: () => void;
   isLoading: boolean;
 }
+
+const TEST_ID = 'search-result-feilregistrerte-oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Feilregistrert,
@@ -22,8 +21,6 @@ const COLUMNS: ColumnKeyEnum[] = [
 ];
 
 export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
-
   if (oppgaveIds.length === 0) {
     return <Alert variant="info">Ingen feilregistrerte oppgaver</Alert>;
   }
@@ -31,26 +28,16 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
   return (
     <div>
       <Heading size="medium">Feilregistrerte oppgaver</Heading>
-      <Table data-testid="search-result-feilregistrerte-oppgaver" zebraStripes>
-        <TableHeader columnKeys={COLUMNS} />
-        <OppgaveRows
-          testId="search-result-feilregistrerte-oppgaver"
-          oppgaver={oppgaver}
-          columns={COLUMNS}
-          isLoading={false}
-          isFetching={false}
-          isError={false}
-          pageSize={footerProps.pageSize}
-        />
-        <TableFooter
-          {...footerProps}
-          columnCount={COLUMNS.length}
-          settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
-          onRefresh={onRefresh}
-          isLoading={isLoading}
-          testId="search-result-feilregistrerte-oppgaver-footer"
-        />
-      </Table>
+      <OppgaveTable
+        columns={COLUMNS}
+        data-testid={TEST_ID}
+        settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
+        isLoading={isLoading}
+        isFetching={false}
+        isError={false}
+        behandlinger={oppgaveIds}
+        refetch={onRefresh}
+      />
     </div>
   );
 };

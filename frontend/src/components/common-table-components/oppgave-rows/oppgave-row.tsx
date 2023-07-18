@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { Name } from '@app/components/common-table-components/name';
-import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
@@ -58,6 +58,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Hjemmel:
+      case ColumnKeyEnum.EnhetHjemmel:
         return (
           <Table.DataCell key={key}>
             <Hjemmel hjemmel={oppgave.hjemmelId} />
@@ -110,6 +111,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Oppgavestyring:
+      case ColumnKeyEnum.OppgavestyringNonFilterable:
         return (
           <Table.DataCell key={key}>
             <Oppgavestyring {...oppgave} />

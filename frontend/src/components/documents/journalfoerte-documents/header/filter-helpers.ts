@@ -1,8 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { isValid, isWithinInterval, parseISO } from 'date-fns';
+import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
+import { DateRangeSetting } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { IOption } from '../../../filter-dropdown/props';
 
@@ -57,7 +58,7 @@ export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
-  selectedDateRange: [string, string] | undefined,
+  selectedDateRange: DateRangeSetting,
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
@@ -100,15 +101,30 @@ export const useFilteredDocuments = (
   );
 };
 
-const checkDateInterval = (date: string, [from, to]: [string, string]) => {
-  const start = new Date(from);
-  const end = new Date(to);
+const checkDateInterval = (dateString: string, [from, to]: DateRangeSetting): boolean => {
+  const start = from === null ? null : parseISO(from);
+  const end = to === null ? null : parseISO(to);
 
-  if (!isValid(start) || !isValid(end)) {
+  const validStart = start !== null && isValid(start);
+  const validEnd = end !== null && isValid(end);
+
+  if (!validStart && !validEnd) {
     return true;
   }
 
-  return isWithinInterval(parseISO(date), { start, end });
+  if (validStart && validEnd) {
+    return isWithinInterval(parseISO(dateString), { start, end });
+  }
+
+  if (validEnd) {
+    return isBefore(parseISO(dateString), end);
+  }
+
+  if (validStart) {
+    return isAfter(parseISO(dateString), start);
+  }
+
+  return false;
 };
 
 interface FilterDocument {

@@ -16,9 +16,10 @@ interface Props {
   settingsKey: OppgaveTableRowsPerPage;
   columnCount: number;
   setPage: (page: number) => void;
-  testId: string;
+  'data-testid': string;
   onRefresh: () => void;
   isLoading: boolean;
+  isFetching: boolean;
 }
 
 export const TableFooter = ({
@@ -30,9 +31,10 @@ export const TableFooter = ({
   pageSize,
   settingsKey,
   setPage,
-  testId,
+  'data-testid': testId,
   onRefresh,
   isLoading,
+  isFetching,
 }: Props) => {
   useEffect(() => {
     if (pageSize === -1) {
@@ -47,7 +49,7 @@ export const TableFooter = ({
   }, [page, pageSize, setPage, total]);
 
   return (
-    <tfoot>
+    <tfoot data-testid={testId}>
       <Table.Row>
         <Table.DataCell colSpan={columnCount}>
           <StyledFooterContent>
@@ -56,7 +58,7 @@ export const TableFooter = ({
                 size="small"
                 variant="tertiary-neutral"
                 onClick={onRefresh}
-                loading={isLoading}
+                loading={isLoading || isFetching}
                 icon={<ArrowsCirclepathIcon aria-hidden />}
                 title="Oppdater"
                 data-testid={`${testId}-refresh-button`}
@@ -72,7 +74,7 @@ export const TableFooter = ({
                 data-testid={`${testId}-pagination`}
               />
             )}
-            <RowsPerPage settingKey={settingsKey} pageSize={pageSize} testId={`${testId}-rows-per-page`} />
+            <RowsPerPage settingKey={settingsKey} pageSize={pageSize} data-testid={`${testId}-rows-per-page`} />
           </StyledFooterContent>
         </Table.DataCell>
       </Table.Row>

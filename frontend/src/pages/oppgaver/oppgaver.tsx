@@ -1,10 +1,10 @@
 import React from 'react';
-import { OppgaveTable } from '@app/components/oppgave-table/oppgave-table';
+import { LedigeOppgaverTable } from '@app/components/ledige-oppgaver-table/ledige-oppgaver-table';
 import { OppgaverPageWrapper } from '../page-wrapper';
 
 export const OppgaverPage = () => (
   <OppgaverPageWrapper>
-    <OppgaveTable />
+    <LedigeOppgaverTable />
   </OppgaverPageWrapper>
 );
 

@@ -2,17 +2,14 @@ import { queryStringify } from '@app/functions/query-string';
 import { IPartBase } from '@app/types/oppgave-common';
 import {
   ApiResponse,
+  CommonOppgaverParams,
   EnhetensFerdigstilteOppgaverParams,
   EnhetensUferdigeOppgaverParams,
   INameSearchParams,
   INameSearchResponse,
   IOppgaverResponse,
   ISaksbehandlere,
-  LedigeOppgaverParams,
-  MineFerdigstilteOppgaverParams,
-  MineUferdigeOppgaverParams,
   UtgaatteApiResponse,
-  UtgaatteOppgaverParams,
 } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
@@ -20,19 +17,19 @@ import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getMineFerdigstilteOppgaver: builder.query<ApiResponse, MineFerdigstilteOppgaverParams>({
+    getMineFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (queryParams) => `/kabal-search/oppgaver/ferdigstilte${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.MINE_FERDIGE],
     }),
-    getMineUferdigeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
+    getMineUferdigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (queryParams) => `/kabal-search/oppgaver/uferdige${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.MINE_UFERDIGE],
     }),
-    getMineVentendeOppgaver: builder.query<ApiResponse, MineUferdigeOppgaverParams>({
+    getMineVentendeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (queryParams) => `/kabal-search/oppgaver/paavent${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.MINE_VENTENDE],
     }),
-    getLedigeOppgaver: builder.query<ApiResponse, LedigeOppgaverParams>({
+    getLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (queryParams) => `/kabal-search/oppgaver/ledige${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.LEDIGE],
     }),
@@ -51,7 +48,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
-    getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, UtgaatteOppgaverParams>({
+    getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (queryParams) => `/kabal-search/antalloppgavermedutgaattefrister${queryStringify(queryParams)}`,
     }),
     searchPeopleByName: builder.query<INameSearchResponse, INameSearchParams>({
