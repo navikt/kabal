@@ -6,10 +6,10 @@ import { OppgaveTableRowsPerPage, useNumberSetting } from '@app/hooks/settings/u
 interface Props {
   settingKey: OppgaveTableRowsPerPage;
   pageSize: number;
-  testId: string;
+  'data-testid': string;
 }
 
-export const RowsPerPage = ({ settingKey, pageSize, testId }: Props) => {
+export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Props) => {
   const id = useId();
   const { value = pageSize, setValue } = useNumberSetting(settingKey);
 

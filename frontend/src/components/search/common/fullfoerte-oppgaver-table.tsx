@@ -1,11 +1,8 @@
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { Alert, Heading } from '@navikt/ds-react';
 import React from 'react';
-import { TableFooter } from '@app/components/common-table-components/footer';
-import { TableHeader } from '@app/components/common-table-components/header';
-import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
-import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 
 interface Props {
   oppgaveIds: string[];
@@ -23,8 +20,6 @@ const COLUMNS: ColumnKeyEnum[] = [
 ];
 
 export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.SEARCH_DONE, oppgaveIds);
-
   if (oppgaveIds.length === 0) {
     return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
   }
@@ -32,26 +27,16 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
   return (
     <div>
       <Heading size="medium">Fullførte oppgaver siste 12 måneder</Heading>
-      <Table data-testid="search-result-fullfoerte-oppgaver" zebraStripes>
-        <TableHeader columnKeys={COLUMNS} />
-        <OppgaveRows
-          testId="search-result-fullfoerte-oppgaver"
-          oppgaver={oppgaver}
-          columns={COLUMNS}
-          isLoading={false}
-          isFetching={false}
-          isError={false}
-          pageSize={footerProps.pageSize}
-        />
-        <TableFooter
-          {...footerProps}
-          columnCount={COLUMNS.length}
-          onRefresh={onRefresh}
-          isLoading={isLoading}
-          settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
-          testId="search-result-fullfoerte-oppgaver-footer"
-        />
-      </Table>
+      <OppgaveTable
+        columns={COLUMNS}
+        isLoading={isLoading}
+        isFetching={false}
+        isError={false}
+        behandlinger={oppgaveIds}
+        refetch={onRefresh}
+        settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
+        data-testid="search-result-fullfoerte-oppgaver"
+      />
     </div>
   );
 };

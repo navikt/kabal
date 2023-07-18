@@ -1,16 +1,13 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
-import { TableFooter } from '@app/components/common-table-components/footer';
+import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetMineUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
-import { StyledMineOppgaverTable } from '@app/styled-components/table';
-import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-rows';
-import { ColumnKeyEnum } from '../common-table-components/oppgave-rows/types';
-import { TableHeader } from './header';
-import { Filters } from './types';
+import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+
+const TEST_ID = 'mine-oppgaver-table';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -22,72 +19,37 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.Medunderskriverflyt,
   ColumnKeyEnum.Open,
-  ColumnKeyEnum.Oppgavestyring,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Feilregistrering,
 ];
 
 export const MineOppgaverTable = () => {
-  const [filters, setFilters] = useState<Filters>({
-    sorting: [SortFieldEnum.FRIST, SortOrderEnum.STIGENDE],
+  const [params, setParams] = useState<CommonOppgaverParams>({
+    sortering: SortFieldEnum.FRIST,
+    rekkefoelge: SortOrderEnum.STIGENDE,
   });
+
   const { data: bruker, isLoading: isLoadingUser, isError: isErrorUser } = useUser();
 
-  const [sortering, rekkefoelge] = filters.sorting;
-
-  const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
-    typeof bruker === 'undefined' ? skipToken : { sortering, rekkefoelge };
+  const queryParams: typeof skipToken | CommonOppgaverParams = typeof bruker === 'undefined' ? skipToken : params;
 
   const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
-  const { oppgaver, ...footerProps } = useOppgavePagination(
-    OppgaveTableRowsPerPage.MINE_UFERDIGE,
-    data?.behandlinger ?? []
-  );
-
   return (
-    <>
-      <StyledMineOppgaverTable
-        data-testid="mine-oppgaver-table"
-        zebraStripes
-        sort={{
-          orderBy: filters.sorting[0],
-          direction: filters.sorting[1] === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
-        }}
-        onSortChange={(field?: string) => {
-          if (field === SortFieldEnum.FRIST || field === SortFieldEnum.ALDER || field === SortFieldEnum.MOTTATT) {
-            const [currentField, currentOrder] = filters.sorting;
-
-            const order = currentField === field ? invertSort(currentOrder) : SortOrderEnum.STIGENDE;
-
-            setFilters({ sorting: [field, order] });
-          }
-        }}
-      >
-        <TableHeader />
-        <OppgaveRows
-          testId="mine-oppgaver-table"
-          oppgaver={oppgaver}
-          columns={COLUMNS}
-          pageSize={footerProps.pageSize}
-          isError={isError || isErrorUser}
-          isLoading={isLoading || isLoadingUser}
-          isFetching={isFetching}
-        />
-        <TableFooter
-          {...footerProps}
-          columnCount={COLUMNS.length}
-          settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
-          onRefresh={refetch}
-          isLoading={isLoading || isFetching}
-          testId="mine-oppgaver-table-footer"
-        />
-      </StyledMineOppgaverTable>
-    </>
+    <OppgaveTable
+      columns={COLUMNS}
+      params={params}
+      setParams={setParams}
+      isError={isError || isErrorUser}
+      isLoading={isLoading || isLoadingUser}
+      isFetching={isFetching}
+      behandlinger={data?.behandlinger}
+      settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
+      refetch={refetch}
+      data-testid={TEST_ID}
+    />
   );
 };
-
-const invertSort = (order: SortOrderEnum) =>
-  order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;

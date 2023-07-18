@@ -6,7 +6,7 @@ import { Dropdown } from './dropdown';
 import { BaseProps } from './props';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
-  children: string;
+  children: string | null;
   testId?: string;
   direction?: PopupProps['direction'];
 }

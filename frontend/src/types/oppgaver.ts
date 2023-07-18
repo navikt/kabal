@@ -40,6 +40,7 @@ export enum SortFieldEnum {
   FRIST = 'FRIST',
   MOTTATT = 'MOTTATT',
   ALDER = 'ALDER',
+  AVSLUTTET_AV_SAKSBEHANDLER = 'AVSLUTTET_AV_SAKSBEHANDLER',
 }
 
 export enum SortOrderEnum {
@@ -47,40 +48,24 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-interface CommonOppgaverParams extends GenericObject {
-  typer?: string[];
+export interface CommonOppgaverParams extends GenericObject {
+  typer?: SaksTypeEnum[];
   ytelser?: string[];
   hjemler?: string[];
-  sortering: 'FRIST' | 'MOTTATT' | 'ALDER';
-  rekkefoelge: 'STIGENDE' | 'SYNKENDE';
+  ferdigstiltFrom?: string;
+  ferdigstiltTo?: string;
+  tildelteSaksbehandlere?: string[];
+  sortering: SortFieldEnum;
+  rekkefoelge: SortOrderEnum;
 }
 
 interface EnhetParam {
   enhetId: string;
 }
 
-interface FerdigstiltParam extends CommonOppgaverParams {
-  ferdigstiltDaysAgo: number;
-}
+export type EnhetensFerdigstilteOppgaverParams = CommonOppgaverParams & EnhetParam;
 
-interface TildelteSaksbehandlereParam {
-  tildelteSaksbehandlere?: string[];
-}
-
-export type MineUferdigeOppgaverParams = CommonOppgaverParams;
-
-export type MineFerdigstilteOppgaverParams = CommonOppgaverParams & FerdigstiltParam;
-
-export type LedigeOppgaverParams = CommonOppgaverParams;
-
-export type UtgaatteOppgaverParams = CommonOppgaverParams & FerdigstiltParam;
-
-export type EnhetensFerdigstilteOppgaverParams = CommonOppgaverParams &
-  FerdigstiltParam &
-  EnhetParam &
-  TildelteSaksbehandlereParam;
-
-export type EnhetensUferdigeOppgaverParams = CommonOppgaverParams & EnhetParam & TildelteSaksbehandlereParam;
+export type EnhetensUferdigeOppgaverParams = CommonOppgaverParams & EnhetParam;
 
 export interface INameSearchParams {
   antall: number;

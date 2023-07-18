@@ -1,17 +1,10 @@
 import { Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React from 'react';
-import { TableFooter } from '@app/components/common-table-components/footer';
-import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import React, { useState } from 'react';
+import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetMineFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { StyledMineOppgaverTable } from '@app/styled-components/table';
-import { MineFerdigstilteOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { TableHeader } from '../common-table-components/header';
-import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-rows';
-
-const HUNDRED_YEARS = 100 * 365;
+import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -24,44 +17,42 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Open,
 ];
 
-export const FullfoerteOppgaverTable = () => {
-  const queryParams: typeof skipToken | MineFerdigstilteOppgaverParams = {
-    sortering: SortFieldEnum.FRIST, // TODO: Bytt?
-    rekkefoelge: SortOrderEnum.SYNKENDE,
-    ferdigstiltDaysAgo: HUNDRED_YEARS,
-  };
+const TEST_ID = 'fullfoerte-oppgaver-table';
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(queryParams, {
+const EMPTY_ARRAY: string[] = [];
+
+export const FullfoerteOppgaverTable = () => {
+  const [params, setParams] = useState<CommonOppgaverParams>({
+    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
+    rekkefoelge: SortOrderEnum.SYNKENDE,
+    typer: [],
+    ytelser: EMPTY_ARRAY,
+    hjemler: EMPTY_ARRAY,
+    tildelteSaksbehandlere: EMPTY_ARRAY,
+  });
+
+  const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
-
-  const { oppgaver, ...footerProps } = useOppgavePagination(OppgaveTableRowsPerPage.MINE_FERDIGE, data?.behandlinger);
 
   return (
     <div>
       <Heading size="medium">Fullførte oppgaver</Heading>
 
-      <StyledMineOppgaverTable className="tabell tabell--stripet" data-testid="fullfoerte-oppgaver-table" zebraStripes>
-        <TableHeader columnKeys={COLUMNS} />
-        <OppgaveRows
-          testId="fullfoerte-oppgaver-table"
-          oppgaver={oppgaver}
-          columns={COLUMNS}
-          isLoading={isLoading}
-          isFetching={isFetching}
-          isError={isError}
-          pageSize={footerProps.pageSize}
-        />
-        <TableFooter
-          {...footerProps}
-          columnCount={COLUMNS.length}
-          onRefresh={refetch}
-          isLoading={isLoading || isFetching}
-          settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
-          testId="fullfoerte-oppgaver-table-footer"
-        />
-      </StyledMineOppgaverTable>
+      <OppgaveTable
+        columns={COLUMNS}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        refetch={refetch}
+        data-testid={TEST_ID}
+        settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
+        behandlinger={data?.behandlinger}
+        params={params}
+        setParams={setParams}
+        zebraStripes
+      />
     </div>
   );
 };

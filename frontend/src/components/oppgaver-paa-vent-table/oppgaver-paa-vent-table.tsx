@@ -1,16 +1,12 @@
 import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React from 'react';
-import { TableFooter } from '@app/components/common-table-components/footer';
-import { ColumnKeyEnum } from '@app/components/common-table-components/oppgave-rows/types';
+import React, { useState } from 'react';
+import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
-import { StyledMineOppgaverTable } from '@app/styled-components/table';
-import { MineUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { TableHeader } from '../common-table-components/header';
-import { OppgaveRows } from '../common-table-components/oppgave-rows/oppgave-rows';
+import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -30,42 +26,36 @@ const COLUMNS: ColumnKeyEnum[] = [
 export const OppgaverPaaVentTable = () => {
   const { data: bruker } = useUser();
 
-  const queryParams: typeof skipToken | MineUferdigeOppgaverParams =
-    typeof bruker === 'undefined' ? skipToken : { sortering: SortFieldEnum.FRIST, rekkefoelge: SortOrderEnum.STIGENDE };
+  const [params, setParams] = useState<CommonOppgaverParams>({
+    types: [],
+    ytelser: [],
+    hjemler: [],
+    sortering: SortFieldEnum.FRIST,
+    rekkefoelge: SortOrderEnum.STIGENDE,
+  });
+
+  const queryParams: typeof skipToken | CommonOppgaverParams = typeof bruker === 'undefined' ? skipToken : params;
 
   const { data, isError, isFetching, isLoading, refetch } = useGetMineVentendeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
-  const { oppgaver, ...footerProps } = useOppgavePagination(
-    OppgaveTableRowsPerPage.MINE_VENTENDE,
-    data?.behandlinger ?? []
-  );
-
   return (
     <div>
       <Heading size="medium">Oppgaver på vent</Heading>
-      <StyledMineOppgaverTable data-testid="oppgaver-paa-vent-table" zebraStripes>
-        <TableHeader columnKeys={COLUMNS} />
-        <OppgaveRows
-          testId="oppgaver-paa-vent-table"
-          oppgaver={oppgaver}
-          columns={COLUMNS}
-          isLoading={isLoading}
-          isFetching={isFetching}
-          isError={isError}
-          pageSize={footerProps.pageSize}
-        />
-        <TableFooter
-          {...footerProps}
-          columnCount={COLUMNS.length}
-          onRefresh={refetch}
-          isLoading={isLoading || isFetching}
-          settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
-          testId="oppgaver-paa-vent-table-footer"
-        />
-      </StyledMineOppgaverTable>
+      <OppgaveTable
+        columns={COLUMNS}
+        params={params}
+        setParams={setParams}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
+        refetch={refetch}
+        behandlinger={data?.behandlinger}
+        data-testid="oppgaver-paa-vent-table"
+      />
     </div>
   );
 };

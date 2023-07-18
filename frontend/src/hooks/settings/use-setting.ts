@@ -8,8 +8,8 @@ import { SETTINGS_MANAGER } from './manager';
 
 type SetterFn<T> = (oldValue: T | undefined) => T;
 
-interface Setting<T = string> {
-  value: T | undefined;
+interface Setting<T = string, D = undefined> {
+  value: T | D;
   setValue: (value: T | SetterFn<T>) => void;
   remove: () => void;
   isLoading: boolean;
@@ -132,14 +132,16 @@ export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs
 // Oppgavebehandling documents filters
 export const useDocumentsFilterTema = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/tema'));
 
-export const useDocumentsFilterDato = () => {
-  const { value, ...rest } = useJsonSetting<[string, string]>(useOppgavePath('tabs/documents/filters/dato'));
+export type DateRangeSetting = [string | null, string | null];
+const EMPTY_DATE_RANGE: [null, null] = [null, null];
 
-  return {
-    ...rest,
-    value: Array.isArray(value) && value.length === 2 && value.every((v) => typeof v === 'string') ? value : undefined,
-  };
+const useDateRangeSetting = (property: string): Setting<DateRangeSetting, DateRangeSetting> => {
+  const { value = EMPTY_DATE_RANGE, ...rest } = useJsonSetting<DateRangeSetting>(property);
+
+  return { ...rest, value };
 };
+
+export const useDocumentsFilterDato = () => useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato'));
 
 export const useDocumentsAvsenderMottaker = () =>
   useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/avsender_mottaker'));
