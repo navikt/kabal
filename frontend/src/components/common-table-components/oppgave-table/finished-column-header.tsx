@@ -87,6 +87,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+  margin: var(--a-spacing-4) var(--a-spacing-3);
 `;
 
 interface StyledSortButtonProps {
