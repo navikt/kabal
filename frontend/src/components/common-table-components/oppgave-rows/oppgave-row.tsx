@@ -79,13 +79,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Age:
         return (
           <Table.DataCell key={key}>
-            <Age age={oppgave.ageKA} mottattDate={oppgave.mottatt} oppgaveId={oppgave.id} />
+            <Age {...oppgave} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Deadline:
         return (
           <Table.DataCell key={key}>
-            <Deadline frist={oppgave.frist} oppgaveId={oppgave.id} type={oppgave.typeId} />
+            <Deadline {...oppgave} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriverflyt:

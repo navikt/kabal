@@ -8,26 +8,32 @@ import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { IOppgave } from '@app/types/oppgaver';
 import { DatePicker } from '../date-picker/date-picker';
 
-interface Props extends EditableDeadlineProps {
-  type: SaksTypeEnum;
-}
-
-export const Deadline = ({ type, ...props }: Props) => {
-  if (type === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+export const Deadline = (oppgave: IOppgave) => {
+  if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
   }
 
-  return <EditableDeadline {...props} />;
+  if (oppgave.isAvsluttetAvSaksbehandler) {
+    return <ReadOnlyDeadline {...oppgave} />;
+  }
+
+  return <EditableDeadline {...oppgave} />;
 };
 
-interface EditableDeadlineProps {
-  frist: string | null;
-  oppgaveId: string;
-}
+const ReadOnlyDeadline = ({ frist }: IOppgave) => {
+  const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
 
-const EditableDeadline = ({ frist, oppgaveId }: EditableDeadlineProps) => {
+  return (
+    <StyledDeadline $fristExceeded={fristExceeded} dateTime={frist ?? ''}>
+      {isoDateToPretty(frist) ?? 'Ikke satt'}
+    </StyledDeadline>
+  );
+};
+
+const EditableDeadline = ({ frist, id }: IOppgave) => {
   const [userFrist, setUserFrist] = useState(frist);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,7 +47,7 @@ const EditableDeadline = ({ frist, oppgaveId }: EditableDeadlineProps) => {
   );
 
   const children = isOpen ? (
-    <EditDeadline frist={frist} oppgaveId={oppgaveId} closeCalendar={closeCalendar} setUserFrist={setUserFrist} />
+    <EditDeadline frist={frist} oppgaveId={id} closeCalendar={closeCalendar} setUserFrist={setUserFrist} />
   ) : (
     <StyledDeadline $fristExceeded={fristExceeded} dateTime={userFrist ?? ''}>
       {isoDateToPretty(userFrist) ?? 'Ikke satt'}

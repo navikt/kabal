@@ -8,21 +8,28 @@ import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@app/types/bruker';
+import { IOppgave } from '@app/types/oppgaver';
 
-interface Props {
-  age: number;
-  mottattDate: string;
-  oppgaveId: string;
-}
+export const Age = (oppgave: IOppgave) => {
+  if (oppgave.isAvsluttetAvSaksbehandler) {
+    return (
+      <span>
+        {oppgave.ageKA} {oppgave.ageKA === 1 ? 'dag' : 'dager'}
+      </span>
+    );
+  }
 
-export const Age = ({ age, mottattDate, oppgaveId }: Props) => {
-  const [userAge, setUserAge] = useState(age);
+  return <EditableAge {...oppgave} />;
+};
+
+const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
+  const [userAge, setUserAge] = useState(ageKA);
   const [isOpen, setIsOpen] = useState(false);
 
   const closeCalendar = () => setIsOpen(false);
 
   const children = isOpen ? (
-    <EditAge mottattDate={mottattDate} oppgaveId={oppgaveId} closeCalendar={closeCalendar} setUserAge={setUserAge} />
+    <EditAge mottattDate={mottatt} oppgaveId={id} closeCalendar={closeCalendar} setUserAge={setUserAge} />
   ) : (
     <span>
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
