@@ -26,8 +26,8 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
   }
 
   return (
-    <div>
-      <Heading size="medium">Feilregistrerte oppgaver</Heading>
+    <section>
+      <Heading size="small">Feilregistrerte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         data-testid={TEST_ID}
@@ -38,6 +38,6 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
         behandlinger={oppgaveIds}
         refetch={onRefresh}
       />
-    </div>
+    </section>
   );
 };

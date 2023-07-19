@@ -5,7 +5,7 @@ import { OppgaveTable } from '@app/components/common-table-components/oppgave-ta
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useSakstyper } from '@app/hooks/use-kodeverk-value';
-import { useGetEnhetensUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useGetEnhetensFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -20,7 +20,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Oppgavestyring,
 ];
 
-export const EnhetensOppgaverTable = () => {
+export const EnhetensFerdigstilteOppgaverTable = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
@@ -39,21 +39,21 @@ export const EnhetensOppgaverTable = () => {
       ? skipToken
       : { ...params, enhetId: bruker.ansattEnhet.id };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensFerdigstilteOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
   return (
     <section>
-      <Heading size="small">Tildelte oppgaver</Heading>
+      <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         params={params}
         setParams={setParams}
-        data-testid="enhetens-oppgaver-table"
+        data-testid="enhetens-ferdigstilte-oppgaver-table"
         behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
+        settingsKey={OppgaveTableRowsPerPage.ENHETENS_FERDIGE}
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}

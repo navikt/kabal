@@ -1,7 +1,11 @@
-import { GenericObject } from '@app/types/types';
+import { isGenericObject } from '@app/types/types';
 import { isNotNull } from './is-not-type-guards';
 
-export const queryStringify = (query: GenericObject): string => {
+export const queryStringify = (query: object): string => {
+  if (!isGenericObject(query)) {
+    return '';
+  }
+
   const keys = Object.keys(query);
 
   if (keys.length === 0) {
@@ -10,7 +14,7 @@ export const queryStringify = (query: GenericObject): string => {
 
   const params = keys
     .map((key) => {
-      const value: unknown = query[key];
+      const value = query[key];
 
       if (value === null || value === undefined) {
         return null;

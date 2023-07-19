@@ -37,9 +37,8 @@ export const FullfoerteOppgaverTable = () => {
   });
 
   return (
-    <div>
-      <Heading size="medium">Fullførte oppgaver</Heading>
-
+    <section>
+      <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -53,6 +52,6 @@ export const FullfoerteOppgaverTable = () => {
         setParams={setParams}
         zebraStripes
       />
-    </div>
+    </section>
   );
 };

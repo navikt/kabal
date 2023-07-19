@@ -1,4 +1,3 @@
-import { GenericObject } from '@app/types/types';
 import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
 import { INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
 
@@ -48,7 +47,7 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-export interface CommonOppgaverParams extends GenericObject {
+export interface CommonOppgaverParams {
   typer?: SaksTypeEnum[];
   ytelser?: string[];
   hjemler?: string[];
@@ -63,9 +62,7 @@ interface EnhetParam {
   enhetId: string;
 }
 
-export type EnhetensFerdigstilteOppgaverParams = CommonOppgaverParams & EnhetParam;
-
-export type EnhetensUferdigeOppgaverParams = CommonOppgaverParams & EnhetParam;
+export type EnhetensOppgaverParams = CommonOppgaverParams & EnhetParam;
 
 export interface INameSearchParams {
   antall: number;

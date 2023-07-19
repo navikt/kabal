@@ -27,7 +27,7 @@ export const OppgaverPaaVentTable = () => {
   const { data: bruker } = useUser();
 
   const [params, setParams] = useState<CommonOppgaverParams>({
-    types: [],
+    typer: [],
     ytelser: [],
     hjemler: [],
     sortering: SortFieldEnum.FRIST,
@@ -42,8 +42,8 @@ export const OppgaverPaaVentTable = () => {
   });
 
   return (
-    <div>
-      <Heading size="medium">Oppgaver på vent</Heading>
+    <section>
+      <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
         columns={COLUMNS}
         params={params}
@@ -56,6 +56,6 @@ export const OppgaverPaaVentTable = () => {
         behandlinger={data?.behandlinger}
         data-testid="oppgaver-paa-vent-table"
       />
-    </div>
+    </section>
   );
 };

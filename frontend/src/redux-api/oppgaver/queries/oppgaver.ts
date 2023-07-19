@@ -3,8 +3,7 @@ import { IPartBase } from '@app/types/oppgave-common';
 import {
   ApiResponse,
   CommonOppgaverParams,
-  EnhetensFerdigstilteOppgaverParams,
-  EnhetensUferdigeOppgaverParams,
+  EnhetensOppgaverParams,
   INameSearchParams,
   INameSearchResponse,
   IOppgaverResponse,
@@ -33,17 +32,17 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (queryParams) => `/kabal-search/oppgaver/ledige${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.LEDIGE],
     }),
-    getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensFerdigstilteOppgaverParams>({
+    getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_FERDIGE],
     }),
-    getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
+    getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_UFERDIGE],
     }),
-    getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensUferdigeOppgaverParams>({
+    getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
       query: ({ enhetId, ...queryParams }) =>
         `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${queryStringify(queryParams)}`,
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
@@ -77,6 +76,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
 export const {
   useGetEnhetensUferdigeOppgaverQuery,
   useGetEnhetensVentendeOppgaverQuery,
+  useGetEnhetensFerdigstilteOppgaverQuery,
   useGetMineFerdigstilteOppgaverQuery,
   useGetMineUferdigeOppgaverQuery,
   useGetMineVentendeOppgaverQuery,

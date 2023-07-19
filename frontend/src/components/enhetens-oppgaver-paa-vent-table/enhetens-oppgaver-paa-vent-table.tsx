@@ -6,7 +6,7 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
-import { EnhetensUferdigeOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -22,7 +22,7 @@ const COLUMNS: ColumnKeyEnum[] = [
 export const EnhetensOppgaverPaaVentTable = () => {
   const { data: bruker } = useUser();
 
-  const queryParams: typeof skipToken | EnhetensUferdigeOppgaverParams =
+  const queryParams: typeof skipToken | EnhetensOppgaverParams =
     typeof bruker === 'undefined'
       ? skipToken
       : {
@@ -37,8 +37,8 @@ export const EnhetensOppgaverPaaVentTable = () => {
   });
 
   return (
-    <div>
-      <Heading size="medium">Oppgaver på vent</Heading>
+    <section>
+      <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
         columns={COLUMNS}
         zebraStripes
@@ -50,6 +50,6 @@ export const EnhetensOppgaverPaaVentTable = () => {
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
       />
-    </div>
+    </section>
   );
 };
