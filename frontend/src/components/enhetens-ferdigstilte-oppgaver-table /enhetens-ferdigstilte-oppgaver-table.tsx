@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useSakstyper } from '@app/hooks/use-kodeverk-value';
 import { useGetEnhetensFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
@@ -15,9 +14,9 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
-  ColumnKeyEnum.Medunderskriverflyt,
+  ColumnKeyEnum.Finished,
+  ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
-  ColumnKeyEnum.Oppgavestyring,
 ];
 
 export const EnhetensFerdigstilteOppgaverTable = () => {
@@ -26,18 +25,14 @@ export const EnhetensFerdigstilteOppgaverTable = () => {
     ytelser: [],
     hjemler: [],
     tildelteSaksbehandlere: [],
-    rekkefoelge: SortOrderEnum.STIGENDE,
-    sortering: SortFieldEnum.FRIST,
+    rekkefoelge: SortOrderEnum.SYNKENDE,
+    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
   });
-
-  const types = useSakstyper();
 
   const { data: bruker } = useUser();
 
   const queryParams: typeof skipToken | EnhetensOppgaverParams =
-    typeof bruker === 'undefined' || typeof types === 'undefined'
-      ? skipToken
-      : { ...params, enhetId: bruker.ansattEnhet.id };
+    typeof bruker === 'undefined' ? skipToken : { ...params, enhetId: bruker.ansattEnhet.id };
 
   const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensFerdigstilteOppgaverQuery(queryParams, {
     refetchOnFocus: true,
