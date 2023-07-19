@@ -1,3 +1,4 @@
+import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
@@ -39,17 +40,20 @@ export const MineOppgaverTable = () => {
   });
 
   return (
-    <OppgaveTable
-      columns={COLUMNS}
-      params={params}
-      setParams={setParams}
-      isError={isError || isErrorUser}
-      isLoading={isLoading || isLoadingUser}
-      isFetching={isFetching}
-      behandlinger={data?.behandlinger}
-      settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
-      refetch={refetch}
-      data-testid={TEST_ID}
-    />
+    <section>
+      <Heading size="small">Oppgaver under arbeid</Heading>
+      <OppgaveTable
+        columns={COLUMNS}
+        params={params}
+        setParams={setParams}
+        isError={isError || isErrorUser}
+        isLoading={isLoading || isLoadingUser}
+        isFetching={isFetching}
+        behandlinger={data?.behandlinger}
+        settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
+        refetch={refetch}
+        data-testid={TEST_ID}
+      />
+    </section>
   );
 };

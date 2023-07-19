@@ -28,8 +28,8 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
   }
 
   return (
-    <div>
-      <Heading size="medium">Oppgaver på vent</Heading>
+    <section>
+      <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
         columns={COLUMNS}
         data-testid="search-result-oppgaver-paa-vent"
@@ -41,6 +41,6 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
         refetch={onRefresh}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_PAA_VENT}
       />
-    </div>
+    </section>
   );
 };

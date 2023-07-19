@@ -29,8 +29,8 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
   }
 
   return (
-    <div>
-      <Heading size="medium">Oppgaver</Heading>
+    <section>
+      <Heading size="small">Oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         data-testid={TEST_ID}
@@ -41,6 +41,6 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
         behandlinger={oppgaveIds}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE}
       />
-    </div>
+    </section>
   );
 };

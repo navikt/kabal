@@ -1,6 +1,7 @@
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
+import { styled } from 'styled-components';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
@@ -22,7 +23,7 @@ const COLUMNS: ColumnKeyEnum[] = [
 
 export const LedigeOppgaverTable = (): JSX.Element => {
   const [params, setParams] = useState<CommonOppgaverParams>({
-    types: [],
+    typer: [],
     ytelser: [],
     hjemler: [],
     sortering: SortFieldEnum.FRIST,
@@ -43,11 +44,14 @@ export const LedigeOppgaverTable = (): JSX.Element => {
   });
 
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
-    queryParams === skipToken ? skipToken : { ...queryParams, ferdigstiltDaysAgo: 7 },
+    queryParams === skipToken ? skipToken : queryParams,
   );
 
   return (
-    <>
+    <section>
+      <Heading level="1" size="small">
+        Ledige oppgaver
+      </Heading>
       <OppgaveTable
         data-testid="oppgave-table"
         zebraStripes
@@ -61,7 +65,11 @@ export const LedigeOppgaverTable = (): JSX.Element => {
         isError={isError || isErrorSettings}
         refetch={refetch}
       />
-      <BodyShort size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</BodyShort>
-    </>
+      <StyledCount size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledCount>
+    </section>
   );
 };
+
+const StyledCount = styled(BodyShort)`
+  margin-top: 1rem;
+`;

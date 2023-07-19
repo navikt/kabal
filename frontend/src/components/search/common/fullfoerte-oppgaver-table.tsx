@@ -25,8 +25,8 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
   }
 
   return (
-    <div>
-      <Heading size="medium">Fullførte oppgaver siste 12 måneder</Heading>
+    <section>
+      <Heading size="small">Fullførte oppgaver siste 12 måneder</Heading>
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -37,6 +37,6 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
         settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
         data-testid="search-result-fullfoerte-oppgaver"
       />
-    </div>
+    </section>
   );
 };

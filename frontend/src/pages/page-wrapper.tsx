@@ -1,3 +1,4 @@
+import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 
@@ -13,8 +14,18 @@ const StyledMain = styled.main`
   padding: 16px;
 `;
 
-export const OppgaverPageWrapper = ({ children }: Props): JSX.Element => (
+interface OppgaverPageWrapperProps {
+  children: React.ReactNode;
+  title?: string;
+}
+
+export const OppgaverPageWrapper = ({ children, title }: OppgaverPageWrapperProps): JSX.Element => (
   <PageWrapper>
+    {typeof title === 'undefined' ? null : (
+      <Heading level="1" size="medium" spacing>
+        {title}
+      </Heading>
+    )}
     <OppgaverContainer>{children}</OppgaverContainer>
   </PageWrapper>
 );
@@ -22,8 +33,9 @@ export const OppgaverPageWrapper = ({ children }: Props): JSX.Element => (
 const OppgaverContainer = styled.article`
   display: flex;
   flex-direction: column;
-  row-gap: 75px;
+  row-gap: 64px;
   overflow: auto;
   min-height: 100%;
   padding: 16px;
+  padding-top: 0;
 `;
