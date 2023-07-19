@@ -117,6 +117,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Oppgavestyring {...oppgave} />
           </Table.DataCell>
         );
+      case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Tildeling:
         return (
           <Table.DataCell key={key}>

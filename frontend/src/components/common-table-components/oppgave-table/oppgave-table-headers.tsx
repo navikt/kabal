@@ -52,6 +52,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
             Frist
           </Table.ColumnHeader>
         );
+      case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
         return <Saksbehandler key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
