@@ -17,7 +17,7 @@ interface DeletableProps {
   isLoading: boolean;
 }
 
-interface NonDeletabelProps {
+interface NonDeletableProps {
   isDeletable: false;
   label: string;
   part: IPart;
@@ -25,7 +25,7 @@ interface NonDeletabelProps {
   isLoading: boolean;
 }
 
-export const Part = ({ part, isDeletable, label, onChange, isLoading }: DeletableProps | NonDeletabelProps) => {
+export const Part = ({ part, isDeletable, label, onChange, isLoading }: DeletableProps | NonDeletableProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const canEdit = useCanEdit();
 
@@ -49,6 +49,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
               setIsEditing(false);
             }}
             isLoading={isLoading}
+            autoFocus
           />
         ) : null}
       </BehandlingSection>
@@ -82,7 +83,9 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
             onChange(newPart);
             setIsEditing(false);
           }}
+          onClose={() => setIsEditing(false)}
           isLoading={isLoading}
+          autoFocus
         />
       ) : null}
     </BehandlingSection>

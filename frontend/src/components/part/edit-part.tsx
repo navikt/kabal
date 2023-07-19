@@ -8,10 +8,13 @@ import { Lookup } from './lookup';
 
 interface EditPartProps {
   onChange: (part: IPart) => void;
+  onClose?: () => void;
   isLoading: boolean;
+  buttonText?: string;
+  autoFocus?: boolean;
 }
 
-export const EditPart = ({ onChange, isLoading }: EditPartProps) => {
+export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose }: EditPartProps) => {
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
   const [search, { data, isLoading: isSearching, isFetching, isError }] = useLazySearchPartQuery();
@@ -28,7 +31,18 @@ export const EditPart = ({ onChange, isLoading }: EditPartProps) => {
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      onClick();
+      if (data === undefined) {
+        return;
+      }
+
+      onChange(data);
+      setValue('');
+
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      onClose?.();
     }
   };
 
@@ -50,17 +64,46 @@ export const EditPart = ({ onChange, isLoading }: EditPartProps) => {
         onChange={setValue}
         error={error}
         onKeyDown={onKeyDown}
-        autoFocus
+        autoFocus={autoFocus}
         autoComplete="off"
+        htmlSize={20}
       >
         <Search.Button onClick={onClick} loading={isSearching || isFetching} />
       </Search>
-      {isError ? (
-        <Tag variant="warning">Ingen treff</Tag>
-      ) : (
-        <Lookup isSearching={isSearching || isFetching} part={data} onChange={onChange} isLoading={isLoading} />
-      )}
+      <Result
+        part={data}
+        search={rawValue}
+        onChange={onChange}
+        isLoading={isLoading}
+        isSearching={isSearching || isFetching}
+        isError={isError}
+        buttonText={buttonText}
+      />
     </StyledEditPart>
+  );
+};
+
+interface ResultProps {
+  part: IPart | undefined;
+  onChange: (part: IPart) => void;
+  isLoading: boolean;
+  isSearching: boolean;
+  isError: boolean;
+  search: string;
+  buttonText?: string;
+}
+
+const Result = ({ part, onChange, search, isError, isLoading, isSearching, buttonText }: ResultProps) => {
+  if (isError) {
+    return <Tag variant="warning">Ingen treff</Tag>;
+  }
+
+  if (part === undefined || search.length === 0) {
+    return null;
+  }
+
+  return (
+    <Lookup isSearching={isSearching} part={part} onChange={onChange} isLoading={isLoading} buttonText={buttonText} />
   );
 };
 

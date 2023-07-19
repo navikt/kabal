@@ -4,20 +4,20 @@ import { IErrorProperty } from '@app/components/documents/new-documents/modal/fi
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { IBrevmottaker } from '@app/hooks/use-brevmottakere';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { StyledBrevmottaker, StyledBrevmottakerItem, StyledBrevmottakerList } from './styled-components';
+import { StyledBrevmottaker } from './styled-components';
 
 interface RecipientsProps {
   recipients: IBrevmottaker[];
-  selectedBrevmottakertypeIds: Brevmottakertype[];
-  setSelectedBrevmottakertypeIds: (recipients: Brevmottakertype[]) => void;
+  selectedBrevmottakerIds: string[];
+  setSelectedBrevmottakerIds: (ids: string[]) => void;
   label: string;
   sendErrors: IErrorProperty[];
 }
 
 export const Recipients = ({
   recipients,
-  selectedBrevmottakertypeIds,
-  setSelectedBrevmottakertypeIds,
+  selectedBrevmottakerIds,
+  setSelectedBrevmottakerIds,
   label,
   sendErrors,
 }: RecipientsProps) => {
@@ -25,50 +25,24 @@ export const Recipients = ({
     return null;
   }
 
-  if (recipients.length === 1 && typeof recipients[0] !== 'undefined') {
-    const [{ brevmottakertyper, navn, id, statusList }] = recipients;
-
-    const error = sendErrors?.find((e) => e.field === id)?.reason ?? null;
-
-    return (
-      <StyledBrevmottakerList>
-        <StyledBrevmottakerItem data-testid="document-send-recipient" data-userid={id}>
-          <span>
-            {navn} ({getTypeNames(brevmottakertyper)})
-          </span>
-          <PartStatusList statusList={statusList} size="xsmall" variant="neutral" />
-          {error === null ? null : (
-            <Tag variant="error" size="xsmall">
-              {error}
-            </Tag>
-          )}
-        </StyledBrevmottakerItem>
-      </StyledBrevmottakerList>
-    );
-  }
-
   return (
     <CheckboxGroup
       legend={label}
-      value={selectedBrevmottakertypeIds}
-      onChange={setSelectedBrevmottakertypeIds}
+      hideLegend
+      value={selectedBrevmottakerIds}
+      onChange={setSelectedBrevmottakerIds}
       data-testid="document-send-recipient-list"
     >
       {recipients.map(({ id, navn, brevmottakertyper, statusList }) => {
         const error = sendErrors?.find((e) => e.field === id)?.reason ?? null;
 
         return (
-          <Checkbox
-            size="small"
-            key={`${id}-${brevmottakertyper.join('-')}`}
-            value={brevmottakertyper}
-            data-testid="document-send-recipient"
-          >
+          <Checkbox size="small" key={id} value={id} data-testid="document-send-recipient" error={error !== null}>
             <StyledBrevmottaker>
               <span>
                 {navn} ({getTypeNames(brevmottakertyper)})
               </span>
-              <PartStatusList statusList={statusList} size="xsmall" variant="neutral" />
+              <PartStatusList statusList={statusList} size="xsmall" />
               {error === null ? null : (
                 <Tag variant="error" size="xsmall">
                   {error}
