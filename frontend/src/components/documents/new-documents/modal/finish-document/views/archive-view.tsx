@@ -39,7 +39,7 @@ export const ArchiveView = ({ document }: FinishProps) => {
     }
 
     setErrors([]);
-    await finish({ dokumentId, oppgaveId, brevmottakertypeIds: null });
+    await finish({ dokumentId, oppgaveId });
     remove(dokumentId, document);
   };
 

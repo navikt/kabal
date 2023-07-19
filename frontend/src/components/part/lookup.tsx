@@ -26,9 +26,10 @@ interface ResultProps {
   part: IPart;
   onChange: (part: IPart) => void;
   isLoading: boolean;
+  buttonText?: string;
 }
 
-const Result = ({ part, isLoading, onChange }: ResultProps) => (
+const Result = ({ part, isLoading, onChange, buttonText = 'Bruk' }: ResultProps) => (
   <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
     <BodyShort>
       {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
@@ -37,7 +38,7 @@ const Result = ({ part, isLoading, onChange }: ResultProps) => (
     <PartStatusList statusList={part.statusList} />
 
     <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-      Bruk
+      {buttonText}
     </Button>
   </StyledResult>
 );

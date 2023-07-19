@@ -189,10 +189,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
     finishDocument: builder.mutation<IMainDocument, IFinishDocumentParams>({
-      query: ({ oppgaveId, dokumentId, brevmottakertypeIds }) => ({
+      query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
-        body: { brevmottakertypeIds },
+        body,
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const patch = dispatch(

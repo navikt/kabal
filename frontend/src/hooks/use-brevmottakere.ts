@@ -11,14 +11,14 @@ export interface IBrevmottaker {
   statusList: IPart['statusList'];
 }
 
-export const useBrevmottakere = (): IBrevmottaker[] => {
+export const useBrevmottakere = (): [IBrevmottaker[], false] | [undefined, true] => {
   const { data, isLoading } = useOppgave();
 
-  return useMemo<IBrevmottaker[]>(() => {
+  return useMemo(() => {
     if (!isLoading && typeof data !== 'undefined') {
       const { klager, sakenGjelder, prosessfullmektig } = data;
 
-      return [
+      const brevmottakere = [
         partToBrevmottaker(klager, Brevmottakertype.KLAGER),
         partToBrevmottaker(sakenGjelder, Brevmottakertype.SAKEN_GJELDER),
         partToBrevmottaker(prosessfullmektig, Brevmottakertype.PROSESSFULLMEKTIG),
@@ -37,9 +37,11 @@ export const useBrevmottakere = (): IBrevmottaker[] => {
 
           return acc;
         }, []);
+
+      return [brevmottakere, false];
     }
 
-    return [];
+    return [undefined, true];
   }, [data, isLoading]);
 };
 

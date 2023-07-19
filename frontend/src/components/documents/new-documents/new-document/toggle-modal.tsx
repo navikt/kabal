@@ -1,7 +1,7 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -13,6 +13,14 @@ interface Props {
   children: React.ReactNode;
   titleId: string;
 }
+
+interface IModalContext {
+  close: () => void;
+}
+
+export const ModalContext = createContext<IModalContext>({
+  close: () => {},
+});
 
 export const ToggleModalButton = ({ document, titleId, children }: Props) => {
   const oppgaveId = useOppgaveId();
@@ -53,7 +61,9 @@ export const ToggleModalButton = ({ document, titleId, children }: Props) => {
         shouldCloseOnEsc={false}
         shouldCloseOnOverlayClick={true}
       >
-        <Modal.Content data-testid="document-actions-modal">{children}</Modal.Content>
+        <Modal.Content data-testid="document-actions-modal">
+          <ModalContext.Provider value={{ close: () => setOpen(false) }}>{children}</ModalContext.Provider>
+        </Modal.Content>
       </Modal>
     </DropdownContainer>
   );

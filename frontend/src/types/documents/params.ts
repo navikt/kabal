@@ -1,5 +1,4 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { Brevmottakertype } from '../kodeverk';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
 import { DistribusjonsType, UUID } from './documents';
@@ -26,6 +25,10 @@ export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams 
   dokumentTypeId: DistribusjonsType;
 }
 
-export interface IFinishDocumentParams extends IDocumentParams {
-  brevmottakertypeIds: Brevmottakertype[] | null;
+interface IArchiveDocumentParams extends IDocumentParams {}
+
+interface ISendDocumentParams extends IDocumentParams {
+  brevmottakerIds: string[];
 }
+
+export type IFinishDocumentParams = IArchiveDocumentParams | ISendDocumentParams;
