@@ -21,7 +21,7 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
   return (
     <StyledPaaVentWarning ref={ref}>
       <Alert variant="warning" inline>
-        Du legger nå en oppgave du har sett på vent tilbake i felles kø. Dersom du gjør dette, vil oppgaven ikke lenger
+        Du legger nå en oppgave som er satt på vent tilbake i felles kø. Dersom du gjør dette, vil oppgaven ikke lenger
         stå som &quot;satt på vent&quot;. Bekreft at du fortsatt ikke venter på noe.
       </Alert>
       <Buttons>
