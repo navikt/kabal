@@ -50,7 +50,6 @@ export enum TextAlignEnum {
 export enum UndeletableVoidElementsEnum {
   SIGNATURE = 'signature',
   LABEL_CONTENT = 'label-content',
-  DOCUMENT_LIST = 'document-list',
   CURRENT_DATE = 'current-date',
   PAGE_BREAK = 'page-break', // Undeletable with conventional methods (backspace etc.), but has special delete button
   HEADER = 'header',

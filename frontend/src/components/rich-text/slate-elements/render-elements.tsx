@@ -2,7 +2,6 @@ import React from 'react';
 import { RegelverkContainerElement } from '@app/components/rich-text/slate-elements/regelverk';
 import { RichTextTypes } from '@app/types/texts/texts';
 import { CurrentDate } from '../slate-void-elements/current-date';
-import { DocumentListElement } from '../slate-void-elements/document-list';
 import { FlettefeltElement } from '../slate-void-elements/flettefelt/flettefelt';
 import { HeaderFooterElement } from '../slate-void-elements/header-footer';
 import { LabelElement } from '../slate-void-elements/label';
@@ -84,8 +83,6 @@ export const renderElement = (props: RenderElementProps) => {
       return <RedigerbareMalteksterElement {...props} element={props.element} textType={RichTextTypes.REGELVERK} />;
     case UndeletableVoidElementsEnum.LABEL_CONTENT:
       return <LabelElement {...props} element={props.element} />;
-    case UndeletableVoidElementsEnum.DOCUMENT_LIST:
-      return <DocumentListElement {...props} element={props.element} />;
     case UndeletableVoidElementsEnum.CURRENT_DATE:
       return <CurrentDate {...props} />;
     case UndeletableVoidElementsEnum.PAGE_BREAK:

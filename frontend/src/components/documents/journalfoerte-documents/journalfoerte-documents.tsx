@@ -45,7 +45,7 @@ export const JournalfoerteDocuments = () => {
           allDocuments={data?.dokumenter ?? EMPTY_ARRAY}
         />
         <Wrapper>
-          <Header documents={documents} filters={filters} slicedFilteredDocuments={slicedFilteredDocuments} />
+          <Header filters={filters} slicedFilteredDocuments={slicedFilteredDocuments} />
 
           <DocumentList documents={slicedFilteredDocuments} isLoading={isLoading} />
 

@@ -1,6 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { memo, useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
@@ -48,7 +47,7 @@ export const Document = memo(
 
     const cleanDragUI = useRef<() => void>(() => undefined);
 
-    const { data } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
+    const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
     const documents = data?.dokumenter ?? EMPTY_ARRAY;
 
     const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;

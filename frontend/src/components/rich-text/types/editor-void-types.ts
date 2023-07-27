@@ -30,16 +30,6 @@ export interface LabelContentElementType extends IBaseVoid, IWithThreads {
   result?: string;
 }
 
-interface IDocumentItem {
-  id: string;
-  title: string;
-}
-
-export interface DocumentListElementType extends IBaseVoid, IWithThreads {
-  type: UndeletableVoidElementsEnum.DOCUMENT_LIST;
-  documents: IDocumentItem[];
-}
-
 export interface CurrentDateType extends IBaseVoid {
   type: UndeletableVoidElementsEnum.CURRENT_DATE;
 }
@@ -78,7 +68,6 @@ type DeletableVoidTypes = FlettefeltElementType;
 type VoidTypes =
   | SignatureElementType
   | LabelContentElementType
-  | DocumentListElementType
   | CurrentDateType
   | PageBreakElementType
   | HeaderElementType

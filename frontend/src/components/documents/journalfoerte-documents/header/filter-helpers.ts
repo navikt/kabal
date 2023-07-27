@@ -5,55 +5,6 @@ import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { DateRangeSetting } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IOption } from '../../../filter-dropdown/props';
-
-export const getAvsenderMottakerOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
-  documents.reduce<IOption<string>[]>((acc, { avsenderMottaker }) => {
-    if (avsenderMottaker === null) {
-      if (acc.every((am) => am.value !== 'NONE')) {
-        acc.push({ label: 'Ingen', value: 'NONE' });
-      }
-
-      return acc;
-    }
-
-    const { navn, id } = avsenderMottaker;
-
-    const label = navn ?? id ?? 'Ukjent';
-    const value = id ?? 'UNKNOWN';
-
-    if (acc.some((am) => am.value === value)) {
-      return acc;
-    }
-
-    acc.push({ label, value });
-
-    return acc;
-  }, []);
-
-export const getSaksIdOptions = (documents: IArkivertDocument[]): IOption<string>[] =>
-  documents.reduce<IOption<string>[]>((acc, { sak }) => {
-    if (sak === null) {
-      if (acc.every((am) => am.value !== 'NONE')) {
-        acc.push({ label: 'Ingen', value: 'NONE' });
-      }
-
-      return acc;
-    }
-
-    const { fagsakId } = sak;
-
-    const label = fagsakId ?? 'Ukjent';
-    const value = fagsakId ?? 'UNKNOWN';
-
-    if (acc.some((am) => am.value === value)) {
-      return acc;
-    }
-
-    acc.push({ label, value });
-
-    return acc;
-  }, []);
 
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
