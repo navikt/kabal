@@ -69,10 +69,6 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
       },
       providesTags: dokumenterListTags(DokumenterListTagTypes.DOKUMENTER),
     }),
-    getTilknyttedeDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
-      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger`,
-      providesTags: dokumenterListTags(DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER),
-    }),
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,
     }),
@@ -89,7 +85,6 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
 export const {
   useGetDocumentsQuery,
   useGetArkiverteDokumenterQuery,
-  useGetTilknyttedeDokumenterQuery,
   useLazyValidateDocumentQuery,
   useMergedDocumentsReferenceQuery,
 } = documentsQuerySlice;

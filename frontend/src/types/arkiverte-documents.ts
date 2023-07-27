@@ -3,6 +3,8 @@ export interface IArkiverteDocumentsResponse {
   pageReference: string | null;
   antall: number;
   totaltAntall: number;
+  sakList: Sak[];
+  avsenderMottakerList: AvsenderMottaker[];
 }
 
 /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */

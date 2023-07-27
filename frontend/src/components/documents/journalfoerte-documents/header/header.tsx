@@ -12,19 +12,19 @@ import { listHeaderCSS } from '@app/components/documents/styled-components/list-
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
+import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { DateFilter } from './date-filter';
-import { getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
 import { useFilters } from './use-filters';
 
 interface Props {
   filters: ReturnType<typeof useFilters>;
-  documents: IArkivertDocument[];
   slicedFilteredDocuments: IArkivertDocument[];
 }
 
-export const Header = ({ documents, slicedFilteredDocuments, filters }: Props) => {
+export const Header = ({ slicedFilteredDocuments, filters }: Props) => {
   const [isExpanded] = useIsExpanded();
 
   const { setSearch, search } = filters;
@@ -34,19 +34,14 @@ export const Header = ({ documents, slicedFilteredDocuments, filters }: Props) =
       <SelectAll slicedFilteredDocuments={slicedFilteredDocuments} />
       <DocumentSearch setSearch={setSearch} search={search} />
 
-      {isExpanded ? <ExpandedHeaders {...filters} documents={documents} /> : null}
+      {isExpanded ? <ExpandedHeaders {...filters} /> : null}
 
       <IncludedFilter />
     </StyledListHeader>
   );
 };
 
-interface IExpandedHeaderProps extends ReturnType<typeof useFilters> {
-  documents: IArkivertDocument[];
-}
-
 const ExpandedHeaders = ({
-  documents,
   selectedTemaer,
   setSelectedTemaer,
   selectedAvsenderMottakere,
@@ -55,9 +50,21 @@ const ExpandedHeaders = ({
   setSelectedSaksIds,
   selectedTypes,
   setSelectedTypes,
-}: IExpandedHeaderProps) => {
-  const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
-  const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
+}: ReturnType<typeof useFilters>) => {
+  const oppgaveId = useOppgaveId();
+  const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
+
+  const avsenderMottakerOptions = useMemo(
+    () =>
+      (data?.avsenderMottakerList ?? []).map(({ id, navn }) => ({ label: navn ?? 'Ukjent', value: id ?? 'UNKNOWN' })),
+    [data],
+  );
+
+  const saksIdOptions = useMemo(
+    () => (data?.sakList ?? []).map(({ fagsakId }) => ({ label: fagsakId, value: fagsakId })),
+    [data],
+  );
+
   const allTemaer = useAllTemaer();
 
   return (
