@@ -15,7 +15,7 @@ export const kvalitetsvurderingV2Api = createApi({
     }),
     updateKvalitetsvurdering: builder.mutation<IKvalitetsvurdering, Argument>({
       query: ({ id, ...body }) => ({
-        url: `/v2/${id}/`,
+        url: `/v2/${id}`,
         method: 'PATCH',
         body,
       }),
