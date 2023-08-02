@@ -41,7 +41,7 @@ export const textsApi = createApi({
   tagTypes: Object.values(TextListTagTypes),
   endpoints: (builder) => ({
     getTexts: builder.query<IText[], IGetTextsParams>({
-      query: (params) => ({ url: `/texts`, params }),
+      query: (params) => ({ url: '/texts', params }),
       transformResponse: (t: VersionedText[]) => t.map(transformResponse),
       providesTags: textsListTags,
     }),

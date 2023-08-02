@@ -43,7 +43,7 @@ export const getFontSize = ({ subscript, superscript }: LeafStyleProps) =>
 
 export const getColor = (comments: number, selected: boolean, focused: boolean) => {
   if (selected === true) {
-    return `lightblue`;
+    return 'lightblue';
   }
 
   if (comments === 0) {
