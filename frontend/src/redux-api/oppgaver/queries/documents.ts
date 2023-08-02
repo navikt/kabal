@@ -1,5 +1,4 @@
 import { IShownArchivedDocument } from '@app/components/view-pdf/types';
-import { queryStringify } from '@app/functions/query-string';
 import { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
 import { IMainDocument, IMergedDocumentsResponse } from '@app/types/documents/documents';
@@ -59,14 +58,10 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
       },
     }),
     getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
-      query: (oppgaveId) => {
-        const query = queryStringify({
-          antall: 50000,
-          forrigeSide: null,
-        });
-
-        return `/kabal-api/behandlinger/${oppgaveId}/arkivertedokumenter${query}`;
-      },
+      query: (oppgaveId) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/arkivertedokumenter`,
+        params: { antall: 50000, forrigeSide: null },
+      }),
       providesTags: dokumenterListTags(DokumenterListTagTypes.DOKUMENTER),
     }),
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({

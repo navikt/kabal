@@ -21,10 +21,10 @@ export const useTextNavigate = (): GoToTextFn => {
       const pathPrefix = getPathPrefix(textType);
 
       if (typeof id === 'undefined') {
-        return navigate(`${pathPrefix}${queryStringify(query)}`);
+        return navigate(`${pathPrefix}?${queryStringify(query)}`);
       }
 
-      return navigate(`${pathPrefix}/${id}${queryStringify(query)}`);
+      return navigate(`${pathPrefix}/${id}?${queryStringify(query)}`);
     },
     [textType, navigate, query],
   );

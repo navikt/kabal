@@ -43,11 +43,7 @@ export const queryStringify = (query: object): string => {
     .filter(isNotNull)
     .join('&');
 
-  if (params.length === 0) {
-    return '';
-  }
-
-  return `?${params}`;
+  return params;
 };
 
 const stringifyValue = (value: string | number | boolean): string | null => {

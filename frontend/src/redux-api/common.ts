@@ -1,4 +1,5 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
+import { queryStringify } from '@app/functions/query-string';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
 
@@ -9,6 +10,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
     baseUrl,
     mode,
     credentials: 'include',
+    paramsSerializer: queryStringify,
   });
 
   return retry(
