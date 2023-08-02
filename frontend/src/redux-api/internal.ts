@@ -7,19 +7,19 @@ export const kabalInternalApi = createApi({
   endpoints: (builder) => ({
     refillElasticAdmin: builder.mutation<void, void>({
       query: () => ({
-        url: `/kabal-api/internal/kafkaadmin/refill`,
+        url: '/kabal-api/internal/kafkaadmin/refill',
         method: 'POST',
       }),
     }),
     resendDvh: builder.mutation<void, void>({
       query: () => ({
-        url: `/kabal-api/internal/dvh/resend`,
+        url: '/kabal-api/internal/dvh/resend',
         method: 'POST',
       }),
     }),
     rebuildElasticAdmin: builder.mutation<void, void>({
       query: () => ({
-        url: `/kabal-search/internal/elasticadmin/rebuild`,
+        url: '/kabal-search/internal/elasticadmin/rebuild',
         method: 'POST',
       }),
     }),

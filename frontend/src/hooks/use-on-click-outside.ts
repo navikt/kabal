@@ -35,12 +35,12 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
     };
 
     window.addEventListener('mousedown', mouseListener);
-    document.addEventListener(`touchstart`, mouseListener);
+    document.addEventListener('touchstart', mouseListener);
     window.addEventListener('keydown', escapeListener);
 
     return () => {
       window.removeEventListener('mousedown', mouseListener);
-      document.removeEventListener(`touchstart`, mouseListener);
+      document.removeEventListener('touchstart', mouseListener);
       window.removeEventListener('keydown', escapeListener);
     };
   }, [callback, ref, children]);

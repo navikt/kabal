@@ -17,7 +17,7 @@ export const brukerApi = createApi({
     }),
     updateSettings: builder.mutation<ISettings, ISettings>({
       query: (body) => ({
-        url: `/me/innstillinger`,
+        url: '/me/innstillinger',
         method: 'PUT',
         body,
       }),
