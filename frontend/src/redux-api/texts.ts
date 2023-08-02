@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { VERSION } from '@app/components/rich-text/version';
 import { toast } from '@app/components/toast/store';
-import { queryStringify } from '@app/functions/query-string';
 import { VersionedText } from '@app/types/rich-text/versions';
 import {
   IGetTextsParams,
@@ -33,8 +32,8 @@ const textsListTags = (messages: IText[] | undefined) =>
   typeof messages === 'undefined'
     ? [{ type: TextListTagTypes.TEXTS, id: ListTagTypes.PARTIAL_LIST }]
     : messages
-      .map(({ id }) => ({ type: TextListTagTypes.TEXTS, id }))
-      .concat({ type: TextListTagTypes.TEXTS, id: ListTagTypes.PARTIAL_LIST });
+        .map(({ id }) => ({ type: TextListTagTypes.TEXTS, id }))
+        .concat({ type: TextListTagTypes.TEXTS, id: ListTagTypes.PARTIAL_LIST });
 
 export const textsApi = createApi({
   reducerPath: 'textsApi',
@@ -42,7 +41,7 @@ export const textsApi = createApi({
   tagTypes: Object.values(TextListTagTypes),
   endpoints: (builder) => ({
     getTexts: builder.query<IText[], IGetTextsParams>({
-      query: (query) => `/texts${queryStringify(query)}`,
+      query: (params) => ({ url: `/texts`, params }),
       transformResponse: (t: VersionedText[]) => t.map(transformResponse),
       providesTags: textsListTags,
     }),

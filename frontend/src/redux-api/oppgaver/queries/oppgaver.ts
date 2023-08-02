@@ -1,4 +1,3 @@
-import { queryStringify } from '@app/functions/query-string';
 import { IPartBase } from '@app/types/oppgave-common';
 import {
   ApiResponse,
@@ -17,38 +16,44 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (queryParams) => `/kabal-search/oppgaver/ferdigstilte${queryStringify(queryParams)}`,
+      query: (params) => ({ url: `/kabal-search/oppgaver/ferdigstilte`, params }),
       providesTags: [OppgaveListTagTypes.MINE_FERDIGE],
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (queryParams) => `/kabal-search/oppgaver/uferdige${queryStringify(queryParams)}`,
+      query: (params) => ({ url: `/kabal-search/oppgaver/uferdige`, params }),
       providesTags: [OppgaveListTagTypes.MINE_UFERDIGE],
     }),
     getMineVentendeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (queryParams) => `/kabal-search/oppgaver/paavent${queryStringify(queryParams)}`,
+      query: (params) => ({ url: `/kabal-search/oppgaver/paavent`, params }),
       providesTags: [OppgaveListTagTypes.MINE_VENTENDE],
     }),
     getLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (queryParams) => `/kabal-search/oppgaver/ledige${queryStringify(queryParams)}`,
+      query: (params) => ({ url: `/kabal-search/oppgaver/ledige`, params }),
       providesTags: [OppgaveListTagTypes.LEDIGE],
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte${queryStringify(queryParams)}`,
+      query: ({ enhetId, ...params }) => ({
+        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte`,
+        params,
+      }),
       providesTags: [OppgaveListTagTypes.ENHETENS_FERDIGE],
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige${queryStringify(queryParams)}`,
+      query: ({ enhetId, ...params }) => ({
+        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige`,
+        params,
+      }),
       providesTags: [OppgaveListTagTypes.ENHETENS_UFERDIGE],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
-      query: ({ enhetId, ...queryParams }) =>
-        `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent${queryStringify(queryParams)}`,
+      query: ({ enhetId, ...params }) => ({
+        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent`,
+        params,
+      }),
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
-      query: (queryParams) => `/kabal-search/antalloppgavermedutgaattefrister${queryStringify(queryParams)}`,
+      query: (params) => ({ url: `/kabal-search/antalloppgavermedutgaattefrister`, params }),
     }),
     searchPeopleByName: builder.query<INameSearchResponse, INameSearchParams>({
       query: (body) => ({ url: `/kabal-search/search/name`, method: 'POST', body }),
