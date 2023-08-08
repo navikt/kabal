@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { StyledFooterContent } from '@app/styled-components/table';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   to: number;
   total: number;
   pageSize: number;
-  settingsKey: OppgaveTableRowsPerPage;
+  settingsKey: TableRowsPerPage;
   columnCount: number;
   setPage: (page: number) => void;
   'data-testid': string;
@@ -74,7 +74,7 @@ export const TableFooter = ({
                 data-testid={`${testId}-pagination`}
               />
             )}
-            <RowsPerPage settingKey={settingsKey} pageSize={pageSize} data-testid={`${testId}-rows-per-page`} />
+            <RowsPerPage settingKey={settingsKey} defaultPageSize={pageSize} data-testid={`${testId}-rows-per-page`} />
           </StyledFooterContent>
         </Table.DataCell>
       </Table.Row>

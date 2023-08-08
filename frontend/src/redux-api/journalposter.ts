@@ -1,5 +1,6 @@
+import { PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks';
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IJournalpostReference } from '@app/types/documents/documents';
 import { KABAL_API_BASE_QUERY } from './common';
 import { documentsQuerySlice } from './oppgaver/queries/documents';
 
@@ -8,6 +9,7 @@ interface ISetTitleUpdate {
   dokumentInfoId: string;
   oppgaveId: string;
   tittel: string;
+  journalpostList: IJournalpostReference[];
 }
 
 interface ISetTitleResponse {
@@ -24,30 +26,42 @@ export const journalposterApi = createApi({
         method: 'PUT',
         body: { tittel },
       }),
-      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        const journalfoertePatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            for (let i = draft.dokumenter.length - 1; i >= 0; i--) {
-              const doc = draft.dokumenter[i];
+      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId, journalpostList }, { dispatch, queryFulfilled }) => {
+        const journalfoertePatchResults: PatchCollection[] = [];
 
-              if (doc === undefined) {
-                continue;
-              }
+        for (const jp of journalpostList) {
+          if (jp.dokumentInfoId === dokumentInfoId) {
+            const patch = dispatch(
+              documentsQuerySlice.util.updateQueryData(
+                'getDocument',
+                { journalpostId: jp.journalpostId, dokumentInfoId },
+                (draft) => ({ ...draft, title: tittel }),
+              ),
+            );
 
-              if (doc.dokumentInfoId === dokumentInfoId) {
-                draft.dokumenter[i] = { ...doc, tittel };
-              }
+            journalfoertePatchResults.push(patch);
 
-              for (let j = doc.vedlegg.length - 1; j >= 0; j--) {
-                const vedlegg = doc.vedlegg[j];
+            break;
+          }
 
-                if (vedlegg !== undefined && vedlegg.dokumentInfoId === dokumentInfoId) {
-                  doc.vedlegg[j] = { ...vedlegg, tittel };
-                }
-              }
+          for (const v of jp.vedlegg) {
+            if (v !== dokumentInfoId) {
+              continue;
             }
-          }),
-        );
+
+            const patch = dispatch(
+              documentsQuerySlice.util.updateQueryData(
+                'getDocument',
+                { journalpostId: jp.journalpostId, dokumentInfoId },
+                (draft) => ({ ...draft, title: tittel }),
+              ),
+            );
+
+            journalfoertePatchResults.push(patch);
+
+            break;
+          }
+        }
 
         const underArbeidPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
@@ -68,7 +82,7 @@ export const journalposterApi = createApi({
         try {
           await queryFulfilled;
         } catch {
-          journalfoertePatchResult.undo();
+          journalfoertePatchResults.forEach(({ undo }) => undo());
           underArbeidPatchResult.undo();
         }
       },

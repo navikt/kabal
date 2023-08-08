@@ -2,7 +2,7 @@ import { Heading } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useGetMineFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -46,7 +46,7 @@ export const FullfoerteOppgaverTable = () => {
         isError={isError}
         refetch={refetch}
         data-testid={TEST_ID}
-        settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
+        settingsKey={TableRowsPerPage.MINE_FERDIGE}
         behandlinger={data?.behandlinger}
         params={params}
         setParams={setParams}

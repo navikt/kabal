@@ -17,7 +17,9 @@ interface Props {
 
 export const NewParentDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
+  const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
+    fixedCacheKey: document.id,
+  });
   const [setParent] = useSetParentMutation();
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);

@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
@@ -52,7 +52,7 @@ export const OppgaverPaaVentTable = () => {
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
-        settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
+        settingsKey={TableRowsPerPage.MINE_VENTENDE}
         refetch={refetch}
         behandlinger={data?.behandlinger}
         data-testid="oppgaver-paa-vent-table"

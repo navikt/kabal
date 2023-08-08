@@ -2,7 +2,7 @@ import { Alert, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 
 interface Props {
   oppgaveIds: string[];
@@ -34,7 +34,7 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
         isError={false}
         behandlinger={oppgaveIds}
         refetch={onRefresh}
-        settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
+        settingsKey={TableRowsPerPage.SEARCH_DONE}
         data-testid="search-result-fullfoerte-oppgaver"
       />
     </section>

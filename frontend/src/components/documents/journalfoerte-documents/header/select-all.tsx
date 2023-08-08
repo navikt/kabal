@@ -1,10 +1,10 @@
 import { Checkbox } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 
 interface Props {
-  slicedFilteredDocuments: IArkivertDocument[];
+  slicedFilteredDocuments: IJournalpostReference[];
 }
 
 export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
@@ -24,7 +24,7 @@ export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
         }));
 
         const attachments = slicedFilteredDocuments.flatMap(({ journalpostId, vedlegg }) =>
-          vedlegg.map(({ dokumentInfoId }) => ({ dokumentInfoId, journalpostId })),
+          vedlegg.map((dokumentInfoId) => ({ dokumentInfoId, journalpostId })),
         );
 
         selectMany([...mainDocuments, ...attachments]);

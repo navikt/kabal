@@ -13,18 +13,19 @@ import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
-import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
+import { AvsenderMottaker, Journalposttype, Sak } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 import { DateFilter } from './date-filter';
-import { getAvsenderMottakerOptions, getSaksIdOptions } from './filter-helpers';
 import { useFilters } from './use-filters';
 
 interface Props {
   filters: ReturnType<typeof useFilters>;
-  documents: IArkivertDocument[];
-  slicedFilteredDocuments: IArkivertDocument[];
+  slicedFilteredDocuments: IJournalpostReference[];
+  avsenderMottakerList: AvsenderMottaker[];
+  sakList: Sak[];
 }
 
-export const Header = ({ documents, slicedFilteredDocuments, filters }: Props) => {
+export const Header = ({ slicedFilteredDocuments, filters, sakList, avsenderMottakerList }: Props) => {
   const [isExpanded] = useIsExpanded();
 
   const { setSearch, search } = filters;
@@ -34,7 +35,9 @@ export const Header = ({ documents, slicedFilteredDocuments, filters }: Props) =
       <SelectAll slicedFilteredDocuments={slicedFilteredDocuments} />
       <DocumentSearch setSearch={setSearch} search={search} />
 
-      {isExpanded ? <ExpandedHeaders {...filters} documents={documents} /> : null}
+      {isExpanded ? (
+        <ExpandedHeaders {...filters} avsenderMottakerList={avsenderMottakerList} saksIdList={sakList} />
+      ) : null}
 
       <IncludedFilter />
     </StyledListHeader>
@@ -42,11 +45,11 @@ export const Header = ({ documents, slicedFilteredDocuments, filters }: Props) =
 };
 
 interface IExpandedHeaderProps extends ReturnType<typeof useFilters> {
-  documents: IArkivertDocument[];
+  avsenderMottakerList: AvsenderMottaker[];
+  saksIdList: Sak[];
 }
 
 const ExpandedHeaders = ({
-  documents,
   selectedTemaer,
   setSelectedTemaer,
   selectedAvsenderMottakere,
@@ -55,9 +58,17 @@ const ExpandedHeaders = ({
   setSelectedSaksIds,
   selectedTypes,
   setSelectedTypes,
+  avsenderMottakerList,
+  saksIdList,
 }: IExpandedHeaderProps) => {
-  const avsenderMottakerOptions = useMemo(() => getAvsenderMottakerOptions(documents), [documents]);
-  const saksIdOptions = useMemo(() => getSaksIdOptions(documents), [documents]);
+  const avsenderMottakerOptions = useMemo(
+    () => avsenderMottakerList.map(({ navn, id }) => ({ label: navn ?? 'Ukjent', value: id ?? 'UNKNOWN' })),
+    [avsenderMottakerList],
+  );
+  const saksIdOptions = useMemo(
+    () => saksIdList.map(({ fagsakId }) => ({ label: fagsakId ?? 'Ukjent', value: fagsakId ?? 'UNKNOWN' })),
+    [saksIdList],
+  );
   const allTemaer = useAllTemaer();
 
   return (
@@ -71,6 +82,7 @@ const ExpandedHeaders = ({
       >
         Tema
       </StyledFilterDropdown>
+
       <DateFilter />
 
       <StyledFilterDropdown

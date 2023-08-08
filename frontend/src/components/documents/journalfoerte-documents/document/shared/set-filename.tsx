@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
+import { useGetJournalpostIdListQuery } from '@app/redux-api/oppgaver/queries/documents';
 
 interface Props {
   journalpostId: string;
@@ -16,11 +17,12 @@ export const SetFilename = ({ onDone, dokumentInfoId, journalpostId, tittel }: P
   const oppgaveId = useOppgaveId();
   const [localFilename, setLocalFilename] = useState(tittel ?? '');
   const [setFilename] = useSetTitleMutation();
+  const { data } = useGetJournalpostIdListQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
 
   const save = () => {
     onDone();
 
-    if (localFilename === tittel || oppgaveId === skipToken) {
+    if (localFilename === tittel || oppgaveId === skipToken || data === undefined) {
       return;
     }
 
@@ -29,6 +31,7 @@ export const SetFilename = ({ onDone, dokumentInfoId, journalpostId, tittel }: P
       dokumentInfoId,
       tittel: localFilename,
       oppgaveId,
+      journalpostList: data.journalpostList,
     });
   };
 

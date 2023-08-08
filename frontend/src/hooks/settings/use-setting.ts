@@ -132,7 +132,7 @@ export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs
 // Oppgavebehandling documents filters
 export const useDocumentsFilterTema = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/tema'));
 
-export type DateRangeSetting = [string | null, string | null];
+type DateRangeSetting = [string | null, string | null];
 const EMPTY_DATE_RANGE: [null, null] = [null, null];
 
 const useDateRangeSetting = (property: string): Setting<DateRangeSetting, DateRangeSetting> => {
@@ -167,7 +167,7 @@ export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tab
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
 
-export enum OppgaveTableRowsPerPage {
+export enum TableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',
   MINE_UFERDIGE = 'oppgaver/mine_uferdige/rows_per_page',
   MINE_FERDIGE = 'oppgaver/mine_ferdige/rows_per_page',
@@ -179,4 +179,6 @@ export enum OppgaveTableRowsPerPage {
   SEARCH_DONE = 'oppgaver/search_done/rows_per_page',
   SEARCH_FEILREGISTRERTE = 'oppgaver/search_feilregistrerte/rows_per_page',
   SEARCH_PAA_VENT = 'oppgaver/search_paa_vent/rows_per_page',
+
+  DOCUMENTS = 'documents/rows_per_page',
 }

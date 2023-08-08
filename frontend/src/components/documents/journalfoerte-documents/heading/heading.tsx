@@ -1,6 +1,6 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import { styled } from 'styled-components';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { InvisibleWarning, InvisibleWarningProps } from './invisible-warning';
@@ -11,9 +11,10 @@ interface RemoveFiltersProps {
   noFiltersActive: boolean;
 }
 
-interface Props extends RemoveFiltersProps, Omit<InvisibleWarningProps, 'totalLengthWithVedlegg'> {
+interface Props extends RemoveFiltersProps, Pick<InvisibleWarningProps, 'slicedFilteredDocumentIds'> {
   filteredLength: number;
-  totalLengthOfMainDocuments: number | undefined;
+  journalpostCount: number;
+  vedleggCount: number;
 }
 
 export const JournalfoertHeading = memo(
@@ -21,32 +22,23 @@ export const JournalfoertHeading = memo(
     resetFilters,
     noFiltersActive,
     filteredLength,
-    slicedFilteredDocuments,
-    allDocuments,
-    totalLengthOfMainDocuments = 0,
+    slicedFilteredDocumentIds,
+    journalpostCount,
+    vedleggCount,
   }: Props) => {
     const [isExpanded] = useIsExpanded();
-    const numberOfVedlegg = useMemo(
-      () => allDocuments.reduce((count, d) => count + d.vedlegg.length, 0),
-      [allDocuments],
-    );
-
-    const totalCount = totalLengthOfMainDocuments + numberOfVedlegg;
+    const totalCount = journalpostCount + vedleggCount;
 
     return (
       <Container $isExpanded={isExpanded}>
         <Heading
           size="xsmall"
           level="1"
-          title={`Viser ${slicedFilteredDocuments.length} av ${filteredLength} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
+          title={`Viser ${slicedFilteredDocumentIds.length} av ${filteredLength} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${journalpostCount}\nAntall vedlegg: ${vedleggCount}\nTotalt: ${totalCount}`}
         >
-          Journalførte dokumenter ({slicedFilteredDocuments.length}/{totalLengthOfMainDocuments})
+          Journalførte dokumenter ({slicedFilteredDocumentIds.length}/{filteredLength})
         </Heading>
-        <InvisibleWarning
-          slicedFilteredDocuments={slicedFilteredDocuments}
-          allDocuments={allDocuments}
-          totalLengthWithVedlegg={totalCount}
-        />
+        <InvisibleWarning slicedFilteredDocumentIds={slicedFilteredDocumentIds} totalCountWithVedlegg={totalCount} />
         <Buttons $isExpanded={isExpanded}>
           <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
           <Menu />
@@ -56,9 +48,9 @@ export const JournalfoertHeading = memo(
   },
   (prevProps, nextProps) =>
     prevProps.noFiltersActive === nextProps.noFiltersActive &&
-    prevProps.slicedFilteredDocuments === nextProps.slicedFilteredDocuments &&
+    prevProps.slicedFilteredDocumentIds === nextProps.slicedFilteredDocumentIds &&
     prevProps.filteredLength === nextProps.filteredLength &&
-    prevProps.totalLengthOfMainDocuments === nextProps.totalLengthOfMainDocuments,
+    prevProps.journalpostCount === nextProps.journalpostCount,
 );
 
 JournalfoertHeading.displayName = 'Header';

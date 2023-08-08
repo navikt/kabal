@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { IArkivertDocument, Journalposttype, RelevantDatotype } from '@app/types/arkiverte-documents';
+import { IJournalpost, Journalposttype, RelevantDatotype } from '@app/types/arkiverte-documents';
 import { EkspedertItems } from './ekspedert-items';
 import { TimelineContainer } from './styled-components';
 import { RelevantDateTimelineItem } from './timeline-item';
 
-export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kanal, kanalnavn }: IArkivertDocument) => {
+export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kanal, kanalnavn }: IJournalpost) => {
   const lastIndex = relevanteDatoer.length - 1;
 
   const sorted = useMemo(() => [...relevanteDatoer].sort((a, b) => a.dato.localeCompare(b.dato)), [relevanteDatoer]);

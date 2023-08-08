@@ -1,60 +1,100 @@
+import { Pagination } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
+import { RowsPerPage } from '@app/components/rows-per-page';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { TableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
+import {
+  useGetJournalpostIdListQuery,
+  useLazyGetDocumentQuery,
+  useLazyGetJournalpostQuery,
+} from '@app/redux-api/oppgaver/queries/documents';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
-import { LoadMore } from './load-more';
-
-const PAGE_SIZE = 50;
-const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const JournalfoerteDocuments = () => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
+  const filters = useFilters();
+  const { data, isLoading } = useGetJournalpostIdListQuery(
+    oppgaveId === skipToken
+      ? skipToken
+      : { oppgaveId, journalposttyper: filters.selectedTypes, temaIdList: filters.selectedTemaer },
+  );
+  const [getJournalpost] = useLazyGetJournalpostQuery();
+  const [getDocument] = useLazyGetDocumentQuery();
 
-  const documents = data?.dokumenter ?? EMPTY_ARRAY;
-
-  const filters = useFilters(documents);
-  const { resetFilters, noFiltersActive, totalFilteredDocuments } = filters;
+  const { resetFilters, noFiltersActive } = filters;
 
   const [page, setPage] = useState(1);
 
-  const endIndex = PAGE_SIZE * page;
+  const hasData = data !== undefined;
 
-  const slicedFilteredDocuments = useMemo(
-    () => totalFilteredDocuments.slice(0, endIndex),
-    [endIndex, totalFilteredDocuments],
-  );
+  const { value: pageSize = 20 } = useNumberSetting(TableRowsPerPage.DOCUMENTS);
+  const pageCount = hasData ? Math.ceil(data.journalpostList.length / pageSize) : 1;
+
+  useEffect(() => {
+    if (page > pageCount) {
+      setPage(pageCount);
+    }
+  }, [page, pageCount]);
+
+  useEffect(() => {
+    if (data === undefined) {
+      return;
+    }
+
+    for (const jp of data.journalpostList) {
+      getJournalpost(jp.journalpostId);
+      getDocument({ journalpostId: jp.journalpostId, dokumentInfoId: jp.dokumentInfoId });
+
+      for (const vedlegg of jp.vedlegg) {
+        getDocument({ journalpostId: jp.journalpostId, dokumentInfoId: vedlegg });
+      }
+    }
+  }, [data, getDocument, getJournalpost]);
+
+  if (!hasData) {
+    return null;
+  }
+
+  const { avsenderMottakerList, journalpostCount, journalpostList, sakList, vedleggCount } = data;
+
+  const journalpostListPage = journalpostList.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <SelectContextElement documentList={slicedFilteredDocuments}>
+    <SelectContextElement documentList={journalpostList}>
       <Container data-testid="oppgavebehandling-documents-all">
         <JournalfoertHeading
-          filteredLength={totalFilteredDocuments.length}
-          totalLengthOfMainDocuments={data?.totaltAntall}
+          filteredLength={journalpostList.length}
+          journalpostCount={journalpostCount}
+          vedleggCount={vedleggCount}
           noFiltersActive={noFiltersActive}
           resetFilters={resetFilters}
-          slicedFilteredDocuments={slicedFilteredDocuments}
-          allDocuments={data?.dokumenter ?? EMPTY_ARRAY}
+          slicedFilteredDocumentIds={journalpostListPage}
         />
         <Wrapper>
-          <Header documents={documents} filters={filters} slicedFilteredDocuments={slicedFilteredDocuments} />
-
-          <DocumentList documents={slicedFilteredDocuments} isLoading={isLoading} />
-
-          <LoadMore
-            loadedDocuments={endIndex}
-            totalDocuments={totalFilteredDocuments.length}
-            loading={isLoading}
-            onNextPage={() => setPage(page + 1)}
+          <Header
+            filters={filters}
+            slicedFilteredDocuments={journalpostList}
+            avsenderMottakerList={avsenderMottakerList}
+            sakList={sakList}
           />
+
+          <DocumentList journalpostReferenceList={journalpostListPage} isLoading={isLoading} />
+
+          <Footer>
+            <Pagination page={page} count={pageCount} onPageChange={setPage} size="small" />
+            <RowsPerPage
+              defaultPageSize={20}
+              settingKey={TableRowsPerPage.DOCUMENTS}
+              data-testid="documents-rows-per-page"
+            />
+          </Footer>
         </Wrapper>
       </Container>
     </SelectContextElement>
@@ -73,4 +113,11 @@ const Container = styled.section`
   justify-content: space-between;
   flex-grow: 1;
   overflow: hidden;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
 `;

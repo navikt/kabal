@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
@@ -55,7 +55,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
         isError={isError}
         refetch={refetch}
         behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
+        settingsKey={TableRowsPerPage.ENHETENS_VENTENDE}
       />
     </section>
   );

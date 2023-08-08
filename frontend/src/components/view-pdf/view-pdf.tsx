@@ -9,6 +9,7 @@ import { toast } from '@app/components/toast/store';
 import { Container } from '@app/components/view-pdf/container';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
+import { IShownDocument } from '@app/components/view-pdf/types';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import {
   getJournalfoertDocumentInlineUrl,
@@ -25,7 +26,6 @@ import {
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
-import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import { useMergedDocument } from './use-merged-document';
@@ -34,11 +34,12 @@ const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
+const EMPTY_SHOWN_LIST: IShownDocument[] = [];
+
 export const ViewPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
-  const { remove: close } = useDocumentsPdfViewed();
-  const { showDocumentList, title } = useShownDocuments();
+  const { value: showDocumentList = EMPTY_SHOWN_LIST, remove: close } = useDocumentsPdfViewed();
 
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
@@ -176,7 +177,7 @@ export const ViewPDF = () => {
 
         <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReloadClick} />
 
-        <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
+        <StyledDocumentTitle>{mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
 
         <Button
           as="a"

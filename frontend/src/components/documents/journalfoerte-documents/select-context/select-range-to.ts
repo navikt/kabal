@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 import { getDocumentPath, getFirstPath, matchDocuments } from './helpers';
 import { useSelectMany } from './select-many';
 import { ISelectedDocument, SelectRangeHook } from './types';
@@ -27,7 +27,7 @@ export const useSelectRangeTo: SelectRangeHook = (
 const FIRST_DOCUMENT_INDEX = 0;
 
 const getSelectedDocuments = (
-  documentList: IArkivertDocument[],
+  documentList: IJournalpostReference[],
   lastSelectedDocument: ISelectedDocument,
   document: ISelectedDocument,
 ): ISelectedDocument[] => {
@@ -55,19 +55,15 @@ const getSelectedDocuments = (
     if (firstVedleggIndex === -1) {
       return [
         document,
-        ...vedlegg.slice(0, lastVedleggCount).map((v) => ({
-          journalpostId,
-          dokumentInfoId: v.dokumentInfoId,
-        })),
+        ...vedlegg.slice(0, lastVedleggCount).map((dokumentInfoId) => ({ journalpostId, dokumentInfoId })),
       ];
     }
 
     // If the range only includes vedlegg.
     return [
-      ...vedlegg.slice(firstVedleggIndex, lastVedleggCount).map((v) => ({
-        journalpostId,
-        dokumentInfoId: v.dokumentInfoId,
-      })),
+      ...vedlegg
+        .slice(firstVedleggIndex, lastVedleggCount)
+        .map((dokumentInfoId) => ({ journalpostId, dokumentInfoId })),
     ];
   }
 
@@ -85,21 +81,12 @@ const getSelectedDocuments = (
         return [
           ...acc,
           { journalpostId, dokumentInfoId },
-          ...vedlegg.map((v) => ({
-            journalpostId,
-            dokumentInfoId: v.dokumentInfoId,
-          })),
+          ...vedlegg.map((v) => ({ journalpostId, dokumentInfoId: v })),
         ];
       }
 
       // If the document itself was not selected, add all vedlegg from the first selected vedlegg.
-      return [
-        ...acc,
-        ...vedlegg.slice(firstVedleggIndex).map((v) => ({
-          journalpostId,
-          dokumentInfoId: v.dokumentInfoId,
-        })),
-      ];
+      return [...acc, ...vedlegg.slice(firstVedleggIndex).map((v) => ({ journalpostId, dokumentInfoId: v }))];
     }
 
     // If this is the last document.
@@ -114,22 +101,12 @@ const getSelectedDocuments = (
       return [
         ...acc,
         { journalpostId, dokumentInfoId },
-        ...vedlegg.slice(0, lastVedleggCount).map((v) => ({
-          journalpostId,
-          dokumentInfoId: v.dokumentInfoId,
-        })),
+        ...vedlegg.slice(0, lastVedleggCount).map((v) => ({ journalpostId, dokumentInfoId: v })),
       ];
     }
 
     // If this is a document in between the first and last document.
     // Add the documents and all of its vedlegg.
-    return [
-      ...acc,
-      { journalpostId, dokumentInfoId },
-      ...vedlegg.map((v) => ({
-        journalpostId,
-        dokumentInfoId: v.dokumentInfoId,
-      })),
-    ];
+    return [...acc, { journalpostId, dokumentInfoId }, ...vedlegg.map((v) => ({ journalpostId, dokumentInfoId: v }))];
   }, []);
 };

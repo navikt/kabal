@@ -1,9 +1,4 @@
-export interface IArkiverteDocumentsResponse {
-  dokumenter: IArkivertDocument[];
-  pageReference: string | null;
-  antall: number;
-  totaltAntall: number;
-}
+import { IJournalfoertDokumentId } from '@app/types/documents/documents';
 
 /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */
 export enum Journalposttype {
@@ -27,7 +22,7 @@ export enum Journalstatus {
   UKJENT = 'UKJENT',
 }
 
-enum AvsenderMottakerIdType {
+export enum AvsenderMottakerIdType {
   FNR = 'FNR',
   ORGNR = 'ORGNR',
   HPRNR = 'HPRNR',
@@ -46,9 +41,9 @@ export interface AvsenderMottaker {
 }
 
 /** Sier hvilken sak journalposten er knyttet til. En journalpost kan maksimalt være knyttet til én sak, men et dokument kan være knyttet til flere journalposter og dermed flere saker. */
-interface Sak {
-  datoOpprettet: string; // LocalDate
-  fagsakId: string;
+export interface Sak {
+  datoOpprettet: string | null; // LocalDate
+  fagsakId: string | null;
   fagsaksystem: string;
 }
 
@@ -119,7 +114,7 @@ interface DocumentMetadata {
   /** Unik identifikator per journalpost */
   journalpostId: string;
   /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
-  tittel: string | null;
+  // tittel: string | null;
   /**
    * Temaet/Fagområdet som journalposten og tilhørende sak tilhører, f.eks. "FOR".
    * For sakstilknyttede journalposter, er det tema på SAK- eller PSAK-saken som er gjeldende tema.
@@ -175,17 +170,15 @@ interface DocumentMetadata {
   Documentation:
   https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
 */
-export interface IArkivertDocument extends DocumentMetadata {
+export interface IJournalpost extends DocumentMetadata {
   dokumentInfoId: string;
   registrert: string; // LocalDate
-  harTilgangTilArkivvariant: boolean;
-  vedlegg: IArkivertDocumentVedlegg[];
-  valgt: boolean;
+  vedlegg: IJournalfoertDokumentId[]; // TODO: Change to string[] with dokumentInfoId
 }
 
-export interface IArkivertDocumentVedlegg {
+export interface IJournalpostDocument {
+  journalpostId: string;
   dokumentInfoId: string;
-  tittel: string | null;
+  title: string | null;
   harTilgangTilArkivvariant: boolean;
-  valgt: boolean;
 }

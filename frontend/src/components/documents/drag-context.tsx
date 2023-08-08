@@ -1,10 +1,10 @@
 import React, { createContext, useCallback, useState } from 'react';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostDocument } from '@app/types/arkiverte-documents';
 import { IMainDocument } from '@app/types/documents/documents';
 
 interface IDragAndDropContext {
-  draggedJournalfoertDocuments: IArkivertDocument[];
-  setDraggedJournalfoertDocuments: (documents: IArkivertDocument[]) => void;
+  draggedJournalfoertDocuments: IJournalpostDocument[];
+  setDraggedJournalfoertDocuments: (documents: IJournalpostDocument[]) => void;
   draggedDocument: IMainDocument | null;
   setDraggedDocument: (document: IMainDocument | null) => void;
   clearDragState: () => void;
@@ -22,10 +22,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-const EMPTY_ARRAY: IArkivertDocument[] = [];
+const EMPTY_ARRAY: IJournalpostDocument[] = [];
 
 export const DragAndDropContextElement = ({ children }: Props) => {
-  const [draggedJournalfoertDocuments, setDraggedJournalfoertDocuments] = useState<IArkivertDocument[]>(EMPTY_ARRAY);
+  const [draggedJournalfoertDocuments, setDraggedJournalfoertDocuments] = useState<IJournalpostDocument[]>(EMPTY_ARRAY);
   const [draggedDocument, setDraggedDocument] = useState<IMainDocument | null>(null);
 
   const hasDocument = draggedDocument !== null;

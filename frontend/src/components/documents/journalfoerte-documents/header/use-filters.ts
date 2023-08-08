@@ -9,12 +9,10 @@ import {
   useDocumentsFilterType,
   useDocumentsOnlyIncluded,
 } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
 
-export const useFilters = (documents: IArkivertDocument[]) => {
+export const useFilters = () => {
   const [isExpanded] = useIsExpanded();
 
   const { value: search = '', setValue: setSearch, remove: resetTitle } = useDocumentsFilterTitle();
@@ -39,17 +37,6 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setValue: setSelectedSaksIds,
     remove: resetSaksId,
   } = useDocumentsFilterSaksId();
-
-  const totalFilteredDocuments = useFilteredDocuments(
-    documents,
-    selectedAvsenderMottakere,
-    selectedDateRange,
-    selectedSaksIds,
-    selectedTemaer,
-    selectedTypes,
-    onlyIncluded,
-    search,
-  );
 
   const resetFilters = useCallback(() => {
     resetTitle();
@@ -94,7 +81,6 @@ export const useFilters = (documents: IArkivertDocument[]) => {
   return {
     resetFilters,
     noFiltersActive,
-    totalFilteredDocuments,
     search,
     setSearch,
     selectedTypes,

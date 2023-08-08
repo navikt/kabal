@@ -1,4 +1,4 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostDocument } from '@app/types/arkiverte-documents';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
 import { DistribusjonsType, UUID } from './documents';
@@ -9,7 +9,7 @@ export interface ISetParentParams extends IDocumentParams {
 
 export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebehandlingBaseParams {
   parentId: UUID;
-  journalfoerteDokumenter: IArkivertDocument[];
+  journalfoerteDokumenter: IJournalpostDocument[];
 }
 
 export interface ISetTypeParams extends IDocumentParams {

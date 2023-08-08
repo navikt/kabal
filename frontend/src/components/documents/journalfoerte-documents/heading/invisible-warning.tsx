@@ -4,15 +4,14 @@ import React, { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 
 export interface InvisibleWarningProps {
-  allDocuments: IArkivertDocument[];
-  slicedFilteredDocuments: IArkivertDocument[];
-  totalLengthWithVedlegg: number;
+  slicedFilteredDocumentIds: IJournalpostReference[];
+  totalCountWithVedlegg: number;
 }
 
-export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedlegg }: InvisibleWarningProps) => {
+export const InvisibleWarning = ({ slicedFilteredDocumentIds, totalCountWithVedlegg }: InvisibleWarningProps) => {
   const { selectedDocuments, unselectMany } = useContext(SelectContext);
   const [isExpanded] = useIsExpanded();
 
@@ -20,19 +19,19 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
     () =>
       Object.values(selectedDocuments).filter(
         ({ journalpostId, dokumentInfoId }) =>
-          slicedFilteredDocuments.find((filteredDoc) => {
+          slicedFilteredDocumentIds.find((filteredDoc) => {
             if (filteredDoc.journalpostId === journalpostId) {
               if (filteredDoc.dokumentInfoId === dokumentInfoId) {
                 return true;
               }
 
-              return filteredDoc.vedlegg.find((v) => v.dokumentInfoId === dokumentInfoId) !== undefined;
+              return filteredDoc.vedlegg.find((v) => v === dokumentInfoId) !== undefined;
             }
 
             return false;
           }) === undefined,
       ),
-    [selectedDocuments, slicedFilteredDocuments],
+    [selectedDocuments, slicedFilteredDocumentIds],
   );
 
   if (invisibleDocuments.length === 0) {
@@ -53,7 +52,7 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
 
     return (
       <Alert variant="info" size="small" inline>
-        {numSelected}/{totalLengthWithVedlegg} enkeltdokumenter valgt
+        {numSelected}/{totalCountWithVedlegg} enkeltdokumenter valgt
       </Alert>
     );
   }

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useGetSettingsQuery } from '@app/redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
@@ -59,7 +59,7 @@ export const LedigeOppgaverTable = (): JSX.Element => {
         params={params}
         setParams={setParams}
         behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.LEDIGE}
+        settingsKey={TableRowsPerPage.LEDIGE}
         isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}

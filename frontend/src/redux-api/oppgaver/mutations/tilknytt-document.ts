@@ -6,7 +6,7 @@ import { ITilknyttDocumentResponse } from '@app/types/oppgavebehandling/response
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
-import { documentsQuerySlice } from '../queries/documents';
+import { behandlingerQuerySlice } from '../queries/behandling';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -25,55 +25,10 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: `${journalpostId}-${dokumentInfoId}` },
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
       ],
-      onQueryStarted: async ({ oppgaveId, journalpostId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
         const archiveResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => ({
-            ...draft,
-            dokumenter: draft.dokumenter.map((d) => {
-              if (d.journalpostId === journalpostId) {
-                if (d.dokumentInfoId === dokumentInfoId) {
-                  return { ...d, valgt: true };
-                }
-
-                return {
-                  ...d,
-                  vedlegg: d.vedlegg.map((v) => {
-                    if (v.dokumentInfoId === dokumentInfoId) {
-                      return { ...v, valgt: true };
-                    }
-
-                    return v;
-                  }),
-                };
-              }
-
-              return d;
-            }),
-          })),
-        );
-
-        const patchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getTilknyttedeDokumenter', oppgaveId, (draft) => {
-            draft.dokumenter = draft.dokumenter.map((d) => {
-              if (d.journalpostId === journalpostId) {
-                if (d.dokumentInfoId === dokumentInfoId) {
-                  return { ...d, valgt: true };
-                }
-
-                return {
-                  ...d,
-                  vedlegg: d.vedlegg.map((v) => {
-                    if (v.dokumentInfoId === dokumentInfoId) {
-                      return { ...v, valgt: true };
-                    }
-
-                    return v;
-                  }),
-                };
-              }
-
-              return d;
-            });
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            draft.relevantDocumentIdList = [...draft.relevantDocumentIdList, dokumentInfoId];
           }),
         );
 
@@ -81,7 +36,6 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
           await queryFulfilled;
         } catch (e) {
           archiveResult.undo();
-          patchResult.undo();
 
           const message = 'Kunne ikke tilknytte dokument.';
 

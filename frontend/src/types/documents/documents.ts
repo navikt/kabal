@@ -1,4 +1,5 @@
 import { VERSION } from '@app/components/rich-text/version';
+import { AvsenderMottaker, Journalposttype, Sak } from '@app/types/arkiverte-documents';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
 export type UUID = string;
@@ -64,4 +65,24 @@ export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokume
 export interface IMergedDocumentsResponse {
   reference: string;
   title: string;
+}
+
+export interface IJournalpostReference {
+  journalpostId: string;
+  dokumentInfoId: string;
+  vedlegg: string[];
+}
+
+export interface IJournalpostIdListParams {
+  oppgaveId: string;
+  temaIdList?: string[];
+  journalposttyper?: Journalposttype[];
+}
+
+export interface IJournalpostIdListResponse {
+  journalpostList: IJournalpostReference[];
+  journalpostCount: number;
+  vedleggCount: number;
+  avsenderMottakerList: AvsenderMottaker[];
+  sakList: Sak[];
 }

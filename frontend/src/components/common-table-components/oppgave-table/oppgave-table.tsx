@@ -8,7 +8,7 @@ import {
 } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -27,7 +27,7 @@ type Params = WithParams | WithoutParams;
 interface Props extends TableProps {
   columns: ColumnKeyEnum[];
   behandlinger: string[] | undefined;
-  settingsKey: OppgaveTableRowsPerPage;
+  settingsKey: TableRowsPerPage;
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;

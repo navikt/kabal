@@ -1,7 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { memo, useCallback, useContext, useRef, useState } from 'react';
+import { Button, Skeleton } from '@navikt/ds-react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
@@ -19,149 +18,137 @@ import {
   getHoverBackgroundColor,
 } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { findDocument } from '@app/domain/find-document';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useGetDocumentQuery, useGetJournalpostQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 import { AttachmentList } from './attachments/attachment-list';
 import { ExpandedDocument } from './expanded-document';
 import { DocumentTitle } from './shared/document-title';
 import { IncludeDocument } from './shared/include-document';
 
 interface Props {
-  document: IArkivertDocument;
+  journalpostReference: IJournalpostReference;
   isSelected: boolean;
 }
 
-const EMPTY_ARRAY: IArkivertDocument[] = [];
+export const Document = ({ journalpostReference, isSelected }: Props) => {
+  const { data: oppgave } = useOppgave();
+  const [documentExpanded, setDocumentExpanded] = useState(false);
 
-export const Document = memo(
-  ({ document, isSelected }: Props) => {
-    const oppgaveId = useOppgaveId();
-    const [expanded, setExpanded] = useState(false);
+  const { journalpostId, dokumentInfoId } = journalpostReference;
 
-    const [isExpanded] = useIsExpanded();
+  const { data: journalpost } = useGetJournalpostQuery(journalpostId);
+  const { data: document } = useGetDocumentQuery({ journalpostId, dokumentInfoId });
 
-    const { selectedDocuments } = useContext(SelectContext);
-    const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
+  const [listExpanded] = useIsExpanded();
 
-    const cleanDragUI = useRef<() => void>(() => undefined);
+  const { getSelectedDocuments } = useContext(SelectContext);
+  const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
 
-    const { data } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
-    const documents = data?.dokumenter ?? EMPTY_ARRAY;
+  const cleanDragUI = useRef<() => void>(() => undefined);
 
-    const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;
+  const toggleExpanded = () => setDocumentExpanded(!documentExpanded);
+  const Icon = documentExpanded ? ChevronUpIcon : ChevronDownIcon;
 
-    const toggleExpanded = () => setExpanded(!expanded);
-    const Icon = expanded ? ChevronUpIcon : ChevronDownIcon;
+  const onDragStart = useCallback(
+    async (e: React.DragEvent<HTMLDivElement>) => {
+      e.dataTransfer.clearData();
 
-    const onDragStart = useCallback(
-      (e: React.DragEvent<HTMLDivElement>) => {
-        e.dataTransfer.clearData();
+      if (document === undefined) {
+        return;
+      }
 
-        const docs = isSelected
-          ? Object.values(selectedDocuments)
-              .map((s) => findDocument(s.dokumentInfoId, documents))
-              .filter(isNotUndefined)
-          : [document];
+      const docs = isSelected ? await getSelectedDocuments() : [document];
 
-        if (docs.length === 0) {
-          return;
-        }
+      if (docs.length === 0) {
+        return;
+      }
 
-        cleanDragUI.current = createDragUI(
-          docs.map((d) => d.tittel ?? ''),
-          e,
-        );
+      cleanDragUI.current = createDragUI(
+        docs.map((d) => d.title ?? ''),
+        e,
+      );
 
-        e.dataTransfer.effectAllowed = 'link';
-        e.dataTransfer.dropEffect = 'link';
-        setDraggedJournalfoertDocuments(docs);
-      },
-      [document, documents, isSelected, selectedDocuments, setDraggedJournalfoertDocuments],
-    );
+      e.dataTransfer.effectAllowed = 'link';
+      e.dataTransfer.dropEffect = 'link';
+      setDraggedJournalfoertDocuments(docs);
+    },
+    [document, isSelected, getSelectedDocuments, setDraggedJournalfoertDocuments],
+  );
 
-    return (
-      <>
-        <StyledJournalfoertDocument
-          $expanded={expanded}
-          $isExpanded={isExpanded}
-          $selected={isSelected}
-          data-testid="document-journalfoert"
-          data-journalpostid={journalpostId}
-          data-dokumentinfoid={dokumentInfoId}
-          data-documentname={tittel}
-          onDragStart={onDragStart}
-          onDragEnd={() => {
-            cleanDragUI.current();
-            clearDragState();
-          }}
-          draggable
-        >
-          <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} />
-          {isExpanded ? (
-            <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
-          ) : null}
+  if (oppgave === undefined) {
+    return null;
+  }
+
+  const checked = oppgave.relevantDocumentIdList.includes(dokumentInfoId);
+
+  const hasDocumentData = document !== undefined;
+  const hasJournalpostData = journalpost !== undefined;
+
+  return (
+    <>
+      <StyledJournalfoertDocument
+        $documentExpanded={documentExpanded}
+        $listExpanded={listExpanded}
+        $selected={isSelected}
+        data-testid="document-journalfoert"
+        data-journalpostid={journalpostReference}
+        data-dokumentinfoid={dokumentInfoId}
+        data-documentname={document?.title ?? ''}
+        onDragStart={onDragStart}
+        onDragEnd={() => {
+          cleanDragUI.current();
+          clearDragState();
+        }}
+        draggable
+      >
+        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} />
+        {listExpanded ? (
+          <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
+        ) : null}
+        {hasDocumentData ? (
           <DocumentTitle
             journalpostId={journalpostId}
             dokumentInfoId={dokumentInfoId}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-            tittel={tittel ?? ''}
+            harTilgangTilArkivvariant={hasDocumentData && document.harTilgangTilArkivvariant}
+            tittel={document.title ?? ''}
           />
+        ) : (
+          <Skeleton variant="text" />
+        )}
 
-          {isExpanded ? <ExpandedColumns document={document} /> : null}
+        {listExpanded ? <ExpandedColumns journalpost={journalpost} /> : null}
 
-          <IncludeDocument
-            dokumentInfoId={dokumentInfoId}
-            journalpostId={journalpostId}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-            name={tittel ?? ''}
-            oppgavebehandlingId={oppgaveId}
-            checked={valgt}
-          />
-        </StyledJournalfoertDocument>
-        {expanded && isExpanded ? <ExpandedDocument document={document} /> : null}
-        <AttachmentList document={document} oppgaveId={oppgaveId} />
-      </>
-    );
-  },
-  (prevProps, nextProps) => {
-    const propsAreEqual =
-      prevProps.isSelected === nextProps.isSelected &&
-      prevProps.document.valgt === nextProps.document.valgt &&
-      prevProps.document.tittel === nextProps.document.tittel &&
-      prevProps.document.vedlegg.length === nextProps.document.vedlegg.length &&
-      prevProps.document.vedlegg.every((v, i) => {
-        const n = nextProps.document.vedlegg[i];
-
-        if (n === undefined) {
-          return false;
-        }
-
-        return v.valgt === n.valgt && v.tittel === n.tittel && v.dokumentInfoId === n.dokumentInfoId;
-      });
-
-    return propsAreEqual;
-  },
-);
-
-Document.displayName = 'Document';
+        <IncludeDocument
+          dokumentInfoId={dokumentInfoId}
+          journalpostId={journalpostId}
+          harTilgangTilArkivvariant={hasDocumentData && document.harTilgangTilArkivvariant}
+          name={document?.title ?? ''}
+          oppgavebehandlingId={oppgave.id}
+          checked={checked}
+        />
+      </StyledJournalfoertDocument>
+      {documentExpanded && listExpanded && hasJournalpostData ? <ExpandedDocument journalpost={journalpost} /> : null}
+      {hasJournalpostData ? <AttachmentList journalpost={journalpost} oppgaveId={oppgave.id} /> : null}
+    </>
+  );
+};
 
 const ExpandButton = styled(Button)`
   grid-area: ${Fields.Expand};
 `;
 
 const StyledJournalfoertDocument = styled.article<{
-  $expanded: boolean;
+  $documentExpanded: boolean;
   $selected: boolean;
-  $isExpanded: boolean;
+  $listExpanded: boolean;
 }>`
   ${documentCSS}
-  ${({ $isExpanded }) => ($isExpanded ? expandedJournalfoerteDocumentsGridCSS : collapsedJournalfoerteDocumentsGridCSS)}
-  background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};
+  ${({ $listExpanded }) =>
+    $listExpanded ? expandedJournalfoerteDocumentsGridCSS : collapsedJournalfoerteDocumentsGridCSS}
+  background-color: ${({ $documentExpanded, $selected }) => getBackgroundColor($documentExpanded, $selected)};
 
   &:hover {
-    background-color: ${({ $expanded, $selected }) => getHoverBackgroundColor($expanded, $selected)};
+    background-color: ${({ $documentExpanded, $selected }) => getHoverBackgroundColor($documentExpanded, $selected)};
   }
 `;

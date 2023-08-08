@@ -1,47 +1,43 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { memo, useContext } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpost } from '@app/types/arkiverte-documents';
 import { StyledAttachmentList, StyledAttachmentListItem } from '../../../styled-components/attachment-list';
 import { Attachment } from './attachment';
 
 interface Props {
   oppgaveId: string | typeof skipToken;
-  document: IArkivertDocument;
+  journalpost: IJournalpost;
 }
 
 export const AttachmentList = memo(
-  ({ oppgaveId, document }: Props) => {
+  ({ oppgaveId, journalpost }: Props) => {
     const { isSelected } = useContext(SelectContext);
 
-    if (document.vedlegg.length === 0 || typeof oppgaveId !== 'string') {
+    if (journalpost.vedlegg.length === 0 || typeof oppgaveId !== 'string') {
       return null;
     }
 
     return (
       <StyledAttachmentList data-testid="oppgavebehandling-documents-all-vedlegg-list">
-        {document.vedlegg.map((vedlegg) => (
+        {journalpost.vedlegg.map(({ dokumentInfoId }) => (
           <AttachmentListItem
-            key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
+            key={`vedlegg_${journalpost.journalpostId}_${dokumentInfoId}`}
             oppgaveId={oppgaveId}
-            journalpostId={document.journalpostId}
-            vedlegg={vedlegg}
-            isSelected={isSelected({ journalpostId: document.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId })}
+            journalpostId={journalpost.journalpostId}
+            dokumentInfoId={dokumentInfoId}
+            isSelected={isSelected({ journalpostId: journalpost.journalpostId, dokumentInfoId })}
           />
         ))}
       </StyledAttachmentList>
     );
   },
   (prevProps, nextProps) =>
-    prevProps.document.vedlegg.length === nextProps.document.vedlegg.length &&
-    prevProps.document.vedlegg.every((v, index) => {
-      const n = nextProps.document.vedlegg[index];
+    prevProps.journalpost.vedlegg.length === nextProps.journalpost.vedlegg.length &&
+    prevProps.journalpost.vedlegg.every((v, index) => {
+      const n = nextProps.journalpost.vedlegg[index];
 
-      if (n === undefined) {
-        return false;
-      }
-
-      return v.valgt === n.valgt && v.tittel === n.tittel && v.dokumentInfoId === n.dokumentInfoId;
+      return v === n;
     }),
 );
 
@@ -50,28 +46,23 @@ AttachmentList.displayName = 'AttachmentList';
 interface AttachmentListItemProps {
   oppgaveId: string;
   journalpostId: string;
-  vedlegg: IArkivertDocument['vedlegg'][0];
+  dokumentInfoId: string;
   isSelected: boolean;
 }
 
 const AttachmentListItem = memo(
-  ({ oppgaveId, journalpostId, vedlegg, isSelected }: AttachmentListItemProps) => (
-    <StyledAttachmentListItem
-      data-testid="oppgavebehandling-documents-all-list-item"
-      data-documentname={vedlegg.tittel}
-    >
+  ({ oppgaveId, journalpostId, dokumentInfoId, isSelected }: AttachmentListItemProps) => (
+    <StyledAttachmentListItem data-testid="oppgavebehandling-documents-all-list-item">
       <Attachment
         oppgavebehandlingId={oppgaveId}
-        vedlegg={vedlegg}
+        dokumentInfoId={dokumentInfoId}
         journalpostId={journalpostId}
         isSelected={isSelected}
       />
     </StyledAttachmentListItem>
   ),
   (prevProps, nextProps) =>
-    prevProps.isSelected === nextProps.isSelected &&
-    prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
-    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
+    prevProps.isSelected === nextProps.isSelected && prevProps.dokumentInfoId === nextProps.dokumentInfoId,
 );
 
 AttachmentListItem.displayName = 'AttachmentListItem';

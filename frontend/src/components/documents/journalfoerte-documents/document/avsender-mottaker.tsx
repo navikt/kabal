@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import { ClickableField } from '@app/components/documents/journalfoerte-documents/document/clickable-field';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsAvsenderMottaker } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
+import { IJournalpost, Journalposttype } from '@app/types/arkiverte-documents';
 import { formatAvsenderMottaker } from './format-avsender-mottaker';
 
-type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
+type AvsenderMottakerProps = Pick<IJournalpost, 'journalposttype' | 'avsenderMottaker'>;
 
 export const AvsenderMottaker = memo(
   ({ journalposttype, avsenderMottaker }: AvsenderMottakerProps) => {

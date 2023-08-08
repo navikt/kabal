@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { OppgaveTableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
 
 interface OppgavePagination {
   from: number;
@@ -12,7 +12,7 @@ interface OppgavePagination {
 }
 
 export const useOppgavePagination = (
-  settingsKey: OppgaveTableRowsPerPage,
+  settingsKey: TableRowsPerPage,
   allOppgaver: string[] = [],
   defaultPageSize = 10,
 ): OppgavePagination => {

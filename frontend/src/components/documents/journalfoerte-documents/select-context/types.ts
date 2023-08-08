@@ -1,4 +1,5 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 
 export interface ISelectedDocument {
   readonly journalpostId: string;
@@ -17,6 +18,7 @@ export interface ISelectContext {
   unselectMany: (documents: ISelectedDocument[]) => void;
   selectRangeTo: (document: ISelectedDocument) => void;
   unselectAll: () => void;
+  getSelectedDocuments: () => Promise<IJournalpostDocument[]>;
 }
 
 export type SelectOne = (document: ISelectedDocument) => void;
@@ -33,6 +35,6 @@ export type SelectHook<T> = (
 export type SelectRangeHook = (
   setSelectedDocuments: SetSelectedDocuments,
   setLastSelectedDocument: SetLastSelectedDocument,
-  documentList: IArkivertDocument[],
+  documentList: IJournalpostReference[],
   lastSelectedDocument: ISelectedDocument | null,
 ) => SelectOne;

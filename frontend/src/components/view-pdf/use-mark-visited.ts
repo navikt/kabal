@@ -1,13 +1,16 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useEffect } from 'react';
+import { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabUrl, getNewDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useShownDocuments } from '@app/hooks/use-shown-documents';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
+
+const EMPTY_SHOWN_LIST: IShownDocument[] = [];
 
 export const useMarkVisited = (url: string | undefined) => {
   const oppgaveId = useOppgaveId();
-  const { showDocumentList } = useShownDocuments();
+  const { value: showDocumentList = EMPTY_SHOWN_LIST } = useDocumentsPdfViewed();
 
   useEffect(() => {
     if (url === undefined) {

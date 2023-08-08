@@ -1,14 +1,14 @@
 import { CopyButton, Detail, Label } from '@navikt/ds-react';
 import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
-import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
+import { IJournalpost, Journalstatus } from '@app/types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {
-  document: IArkivertDocument;
+  journalpost: IJournalpost;
 }
 
-export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
+export const ExpandedDocument = ({ journalpost }: ExpandedDocumentProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
     }
   }, []);
 
-  const { journalstatus, kanalnavn, opprettetAvNavn, journalpostId } = document;
+  const { journalstatus, kanalnavn, opprettetAvNavn, journalpostId } = journalpost;
 
   return (
     <StyledExpandedDocument ref={ref}>
@@ -43,7 +43,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
         </section>
       </TopRow>
       <MetadataRow>
-        <Timeline {...document} />
+        <Timeline {...journalpost} />
       </MetadataRow>
     </StyledExpandedDocument>
   );

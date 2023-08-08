@@ -1,17 +1,17 @@
 import { Label, ToggleGroup } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
-import { OppgaveTableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
+import { TableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
 
 interface Props {
-  settingKey: OppgaveTableRowsPerPage;
-  pageSize: number;
+  settingKey: TableRowsPerPage;
+  defaultPageSize: number;
   'data-testid': string;
 }
 
-export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Props) => {
+export const RowsPerPage = ({ settingKey, defaultPageSize, 'data-testid': testId }: Props) => {
   const id = useId();
-  const { value = pageSize, setValue } = useNumberSetting(settingKey);
+  const { value = defaultPageSize, setValue } = useNumberSetting(settingKey);
 
   return (
     <StyledRowsPerPage>

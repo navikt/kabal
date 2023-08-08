@@ -14,7 +14,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import {
-  useGetArkiverteDokumenterQuery,
+  useGetJournalpostIdListQuery,
   useMergedDocumentsReferenceQuery,
 } from '@app/redux-api/oppgaver/queries/documents';
 
@@ -73,11 +73,16 @@ const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const { value, setValue } = useDocumentsPdfViewed();
   const { selectedDocuments } = useContext(SelectContext);
-  const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
+  const oppgaveId = useOppgaveId();
+  const { data: archivedList, isLoading: archivedIsLoading } = useGetJournalpostIdListQuery(
+    oppgaveId === skipToken ? skipToken : { oppgaveId },
+  );
 
   const documents = useMemo(
     () =>
-      archivedList === undefined ? undefined : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter),
+      archivedList === undefined
+        ? undefined
+        : getSelectedDocumentsInOrder(selectedDocuments, archivedList.journalpostList),
     [archivedList, selectedDocuments],
   );
 

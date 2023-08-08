@@ -7,11 +7,11 @@ import {
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
-import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
+import { IJournalpost, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { StyledAlert, StyledEmailContent, StyledHeading, StyledLabel, StyledSmsContent } from './styled-components';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
-interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
+interface Props extends Pick<IJournalpost, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
   datotype: RelevantDatotype;
   dato: string;
   isLast: boolean;

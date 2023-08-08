@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 import { getId } from './helpers';
 import { useSelectMany } from './select-many';
 import { useSelectOne } from './select-one';
@@ -16,16 +17,19 @@ export const SelectContext = createContext<ISelectContext>({
   unselectMany: () => {},
   selectRangeTo: () => {},
   unselectAll: () => {},
+  getSelectedDocuments: async () => [],
 });
 
 interface Props {
   children: React.ReactNode;
-  documentList: IArkivertDocument[];
+  documentList: IJournalpostReference[];
 }
 
 export const SelectContextElement = ({ children, documentList }: Props) => {
   const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>({});
   const [lastSelectedDocument, setLastSelectedDocument] = useState<ISelectedDocument | null>(null);
+
+  const [getDocument] = useLazyGetDocumentQuery();
 
   const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument);
   const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument);
@@ -78,6 +82,15 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
         selectRangeTo,
         unselectAll,
         isSelected,
+        getSelectedDocuments: async () => {
+          const documents = Object.values(selectedDocuments);
+
+          if (documents.length === 0) {
+            return [];
+          }
+
+          return Promise.all(documents.map((document) => getDocument(document, true).unwrap()));
+        },
       }}
     >
       {children}

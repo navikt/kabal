@@ -321,65 +321,32 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           })),
         },
       }),
-      onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-            const newDocuments: IMainDocument[] = journalfoerteDokumenter
-              .filter(
-                (doc) =>
-                  !draft.some(
-                    (d) =>
-                      d.type === DocumentTypeEnum.JOURNALFOERT &&
-                      d.parentId === parentId &&
-                      d.journalfoertDokumentReference?.journalpostId === doc.journalpostId &&
-                      d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId,
-                  ),
-              )
-              .map((doc) => ({
-                ...doc,
-                id: `${doc.journalpostId}-${doc.dokumentInfoId}`,
-                parentId,
-                isMarkertAvsluttet: false,
-                isSmartDokument: false,
-                dokumentTypeId:
-                  doc.journalposttype === Journalposttype.NOTAT ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
-                created: doc.datoOpprettet,
-                newOpplastet: doc.datoOpprettet,
-                tittel: doc.tittel ?? 'Ukjent',
-                type: DocumentTypeEnum.JOURNALFOERT,
-                journalfoertDokumentReference: {
-                  journalpostId: doc.journalpostId,
-                  dokumentInfoId: doc.dokumentInfoId,
-                },
-              }));
-
-            return [...draft, ...newDocuments];
-          }),
-        );
-
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
 
           dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-              for (const newDoc of data.addedJournalfoerteDokumenter) {
-                for (let index = draft.length - 1; index >= 0; index--) {
-                  const oldDoc = draft[index];
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [
+              ...draft,
+              ...data.addedJournalfoerteDokumenter,
+            ]),
+            // for (const newDoc of data.addedJournalfoerteDokumenter) {
+            // for (let index = draft.length - 1; index >= 0; index--) {
+            //   const oldDoc = draft[index];
 
-                  if (
-                    oldDoc !== undefined &&
-                    oldDoc.type === DocumentTypeEnum.JOURNALFOERT &&
-                    oldDoc.journalfoertDokumentReference.journalpostId ===
-                      newDoc.journalfoertDokumentReference.journalpostId &&
-                    oldDoc.journalfoertDokumentReference.dokumentInfoId ===
-                      newDoc.journalfoertDokumentReference.dokumentInfoId
-                  ) {
-                    draft[index] = newDoc;
-                    break;
-                  }
-                }
-              }
-            }),
+            //   if (
+            //     oldDoc !== undefined &&
+            //     oldDoc.type === DocumentTypeEnum.JOURNALFOERT &&
+            //     oldDoc.journalfoertDokumentReference.journalpostId ===
+            //       newDoc.journalfoertDokumentReference.journalpostId &&
+            //     oldDoc.journalfoertDokumentReference.dokumentInfoId ===
+            //       newDoc.journalfoertDokumentReference.dokumentInfoId
+            //   ) {
+            //     draft[index] = newDoc;
+            //     break;
+            //   }
+            // }
+            // }
           );
 
           if (data.duplicateJournalfoerteDokumenter.length !== 0) {
@@ -388,8 +355,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             );
           }
         } catch (e) {
-          patchResult.undo();
-
           const message = 'Kunne ikke sette journalpost(er) som vedlegg.';
 
           if (isApiRejectionError(e)) {

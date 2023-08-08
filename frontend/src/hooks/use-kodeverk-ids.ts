@@ -6,7 +6,7 @@ import {
 } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
-const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
+export const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
   const { data, isLoading } = useKodeverk();
 
   if (isLoading || typeof data === 'undefined') {
@@ -19,9 +19,6 @@ const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
 
   return data.tema.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
 };
-
-export const useFullTemaNameFromIdOrLoading = (temaId: string | null): string =>
-  useFullTemaNameFromId(temaId) ?? 'Laster...';
 
 export const useFullYtelseNameFromId = (ytelseId: string): string | undefined => {
   const { data, isLoading } = useSimpleYtelser();

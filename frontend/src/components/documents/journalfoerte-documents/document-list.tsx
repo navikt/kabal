@@ -1,36 +1,31 @@
 import { Loader } from '@navikt/ds-react';
-import React, { memo, useContext } from 'react';
+import React, { useContext } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalpostReference } from '@app/types/documents/documents';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { DocumentListItem } from './document-list-item';
 
 interface Props {
-  documents: IArkivertDocument[];
+  journalpostReferenceList: IJournalpostReference[];
   isLoading: boolean;
 }
 
-export const DocumentList = memo(
-  ({ documents, isLoading }: Props) => {
-    const { isSelected } = useContext(SelectContext);
+export const DocumentList = ({ journalpostReferenceList, isLoading }: Props) => {
+  const { isSelected } = useContext(SelectContext);
 
-    return (
-      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
-        <DocumentsSpinner hasDocuments={!isLoading} />
-        {documents.map((document) => (
-          <DocumentListItem
-            key={`dokument_${document.journalpostId}_${document.dokumentInfoId}`}
-            document={document}
-            isSelected={isSelected(document)}
-          />
-        ))}
-      </StyledDocumentList>
-    );
-  },
-  (prevProps, nextProps) => prevProps.documents === nextProps.documents,
-);
-
-DocumentList.displayName = 'DocumentList';
+  return (
+    <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
+      <DocumentsSpinner hasDocuments={!isLoading} />
+      {journalpostReferenceList.map((j) => (
+        <DocumentListItem
+          key={`${j.journalpostId}-${j.dokumentInfoId}`}
+          journalpostReference={j}
+          isSelected={isSelected(j)}
+        />
+      ))}
+    </StyledDocumentList>
+  );
+};
 
 interface DocumentsSpinnerProps {
   hasDocuments: boolean;
