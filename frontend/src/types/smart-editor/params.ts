@@ -1,5 +1,5 @@
-import { Descendant } from 'slate';
-import { VERSION } from '@app/components/rich-text/version';
+import { TDescendant } from '@udecode/plate-common';
+import { EditorValue } from '@app/plate/types';
 import { IDocumentParams } from '../documents/common-params';
 import { DistribusjonsType } from '../documents/documents';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
@@ -8,7 +8,7 @@ import { TemplateIdEnum } from './template-enums';
 
 interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;
-  content: Descendant[];
+  content: TDescendant[];
   templateId: TemplateIdEnum | null;
   dokumentTypeId: DistribusjonsType;
 }
@@ -18,8 +18,6 @@ export type ICreateSmartDocumentParams = Immutable<IMutableCreateSmartDocumentPa
 export type IGetSmartEditorParams = IDocumentParams;
 
 export interface IUpdateSmartDocumentParams extends IGetSmartEditorParams {
-  content: Descendant[];
+  content: EditorValue;
   templateId?: TemplateIdEnum;
-  version?: typeof VERSION;
-  title: string;
 }

@@ -114,7 +114,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         const smartEditorsPatchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-            draft.map((doc) => (doc.id === dokumentId ? { ...doc, parentId } : doc)),
+            draft.map((doc) => (doc.id === dokumentId || doc.parentId === dokumentId ? { ...doc, parentId } : doc)),
           ),
         );
 
@@ -258,7 +258,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           smartEditorQuerySlice.util.updateQueryData(
             'getSmartEditors',
             { oppgaveId },
-            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId), // Remove deleted document from list.
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId && parentId !== dokumentId), // Remove deleted document from list.
           ),
         );
 

@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { isUtfallOrNone } from '@app/functions/is-utfall';
+import { TEMPLATE_IDS } from '@app/plate/templates/templates';
+import { TemplateSections } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections } from '@app/types/texts/texts';
-import { TEMPLATE_IDS } from '../../smart-editor/templates/templates';
+import { ApiQuery } from '@app/types/texts/texts';
 import { useTextType } from './use-text-type';
 
 type Query = Partial<ApiQuery>;

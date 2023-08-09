@@ -1,5 +1,4 @@
-import { TemplateSections } from '@app/types/texts/texts';
-import { Flettefelt } from '../rich-text/types/editor-void-types';
+import { TemplateSections } from '@app/plate/types';
 
 export const COMMENT_PREFIX = 'commentThreadId_';
 
@@ -16,10 +15,3 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.SAKSKOSTNADER]: 'Sakskostnader',
   [TemplateSections.REGELVERK]: 'Regelverk',
 };
-
-export const FLETTEFELT_NAMES: Record<Flettefelt, string> = {
-  [Flettefelt.FNR]: 'Fødselsnummer',
-  [Flettefelt.ENHET_NAME]: 'Enhetsnavn',
-};
-
-export const MAX_INDENT = 15;

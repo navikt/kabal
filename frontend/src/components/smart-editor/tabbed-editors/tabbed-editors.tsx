@@ -1,20 +1,18 @@
-import { ClockDashedIcon, DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
+import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
+import { Tabs } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React from 'react';
-import { ErrorBoundary, StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
+import React, { useRef } from 'react';
+import { styled } from 'styled-components';
+import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
+import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSmartEditors } from '@app/hooks/use-smart-editors';
-import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
+import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
-import { CommentSection } from '../comments/comment-section';
-import { SmartEditorContextComponent } from '../context/smart-editor-context';
-import { GodeFormuleringer } from '../gode-formuleringer/gode-formuleringer';
+import { NoTemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { NewDocument } from '../new-document/new-document';
-import { SmartEditor } from '../smart-editor';
-import { CommentsClickBoundary } from './comments-click-boundry';
-import { ActiveTabButton, TabButton, TabsContainer } from './styled-components';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -22,141 +20,122 @@ export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
   const editors = useSmartEditors(oppgaveId);
 
-  if (typeof editors === 'undefined' || oppgaveId === skipToken) {
+  if (typeof editors === 'undefined') {
     return null;
   }
 
-  return <Tabbed oppgaveId={oppgaveId} editors={editors} />;
+  return <Tabbed editors={editors} />;
 };
 
 interface TabbedProps {
-  oppgaveId: string;
   editors: ISmartEditor[];
 }
 
-const Tabbed = ({ oppgaveId, editors }: TabbedProps) => {
+const Tabbed = ({ editors }: TabbedProps) => {
   const [firstEditor] = editors;
   const { value: editorId = firstEditor?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
 
   const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
   return (
-    <>
-      <Tabs editors={editors} activeTab={activeEditorId} setActiveTab={setEditorId} />
-      <ShowTab editors={editors} activeEditorId={activeEditorId} oppgaveId={oppgaveId} onCreate={setEditorId} />
-    </>
+    <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
+      <StyledTabsList>
+        {editors.map(({ id, tittel }) => (
+          <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
+        ))}
+        <TabNew />
+      </StyledTabsList>
+      <StyledTabPanels>
+        {editors.map((editor) => (
+          <TabPanel key={editor.id} smartEditor={editor} />
+        ))}
+        <TabPanelNew onCreate={setEditorId} />
+      </StyledTabPanels>
+    </StyledTabs>
   );
 };
 
-interface TabsProps {
-  editors: ISmartEditor[];
-  activeTab: string;
-  setActiveTab: (id: string) => void;
-}
-
-const Tabs = ({ editors, activeTab, setActiveTab }: TabsProps) => {
-  const tabs = editors.map(({ id, tittel }) => {
-    const Button = id === activeTab ? ActiveTabButton : TabButton;
-
-    return (
-      <Button type="button" key={id} onClick={() => setActiveTab(id)}>
-        <DocPencilIcon aria-hidden />
-        {tittel}
-      </Button>
-    );
-  });
-
-  return (
-    <TabsContainer>
-      {tabs}
-      <ShowNewTabButton onClick={() => setActiveTab(NEW_TAB_ID)} isActive={activeTab === NEW_TAB_ID} />
-    </TabsContainer>
-  );
-};
-
-interface ShowNewTabProps {
-  onClick: () => void;
-  isActive: boolean;
-}
-
-const ShowNewTabButton = ({ isActive, onClick }: ShowNewTabProps) => {
+const TabNew = () => {
   const isMedunderskriver = useIsMedunderskriver();
 
   if (isMedunderskriver) {
     return null;
   }
 
-  const NewTabButton = isActive ? ActiveTabButton : TabButton;
-
-  return (
-    <NewTabButton onClick={onClick} title="Nytt dokument">
-      <TabsAddIcon />
-    </NewTabButton>
-  );
+  return <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />;
 };
 
-interface Props {
-  oppgaveId: string;
-  activeEditorId: string;
-  editors: ISmartEditor[];
+interface TabPanelNewProps {
   onCreate: (documentId: string) => void;
 }
 
-const ShowTab = ({ activeEditorId, editors, oppgaveId, onCreate }: Props) => {
-  const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
+const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
+  const isMedunderskriver = useIsMedunderskriver();
 
-  const editorComponents = editors.map((editor) => {
-    const isActive = editor.id === activeEditorId;
-
-    return (
-      <SmartEditorContextComponent
-        key={editor.id}
-        documentId={editor.id}
-        templateId={editor.templateId}
-        dokumentTypeId={editor.dokumentTypeId}
-      >
-        <CommentsClickBoundary isActive={isActive}>
-          <ErrorBoundary
-            errorComponent={() => <DocumentErrorComponent documentId={editor.id} oppgaveId={oppgaveId} />}
-            actionButton={{
-              onClick: () => getSmartEditor({ dokumentId: editor.id, oppgaveId }, false).unwrap(),
-              loading: isLoading,
-              disabled: isLoading,
-              buttonText: 'Gjenopprett dokument',
-              buttonIcon: <ClockDashedIcon aria-hidden />,
-              variant: 'primary',
-              size: 'small',
-            }}
-          >
-            <GodeFormuleringer templateId={editor.templateId} />
-            <SmartEditor />
-            <CommentSection />
-          </ErrorBoundary>
-        </CommentsClickBoundary>
-      </SmartEditorContextComponent>
-    );
-  });
-
-  const newTab = activeEditorId === NEW_TAB_ID ? <NewDocument onCreate={onCreate} oppgaveId={oppgaveId} /> : null;
+  if (isMedunderskriver) {
+    return null;
+  }
 
   return (
-    <>
-      {editorComponents}
-      {newTab}
-    </>
+    <StyledTabsPanel value={NEW_TAB_ID}>
+      <NewDocument onCreate={onCreate} />
+    </StyledTabsPanel>
   );
 };
 
-interface DocumentErrorComponentProps {
-  oppgaveId: string;
-  documentId: string;
+interface TabPanelProps {
+  smartEditor: ISmartEditor;
 }
 
-const DocumentErrorComponent = ({ oppgaveId, documentId }: DocumentErrorComponentProps) => (
-  <dl>
-    <StyledDescriptionTerm>Behandlings-ID</StyledDescriptionTerm>
-    <StyledPreDescriptionDetails>{oppgaveId}</StyledPreDescriptionDetails>
-    <StyledDescriptionTerm>Dokument-ID</StyledDescriptionTerm>
-    <StyledPreDescriptionDetails>{documentId}</StyledPreDescriptionDetails>
-  </dl>
-);
+const TabPanel = ({ smartEditor }: TabPanelProps) => {
+  const oppgaveId = useOppgaveId();
+  const [update, status] = useUpdateSmartEditorMutation();
+  const timeout = useRef<NodeJS.Timeout>();
+
+  const { id, templateId, content } = smartEditor;
+
+  return (
+    <StyledTabsPanel value={smartEditor.id}>
+      <SmartEditorContextComponent editor={smartEditor}>
+        <Editor
+          key={id}
+          id={id}
+          initialValue={content}
+          templateId={templateId}
+          onChange={(c) => {
+            clearTimeout(timeout.current);
+
+            if (oppgaveId === skipToken || templateId === NoTemplateIdEnum.NONE) {
+              return;
+            }
+
+            timeout.current = setTimeout(() => update({ content: c, templateId, oppgaveId, dokumentId: id }), 1000);
+          }}
+          updateStatus={status}
+        />
+      </SmartEditorContextComponent>
+    </StyledTabsPanel>
+  );
+};
+
+const StyledTabs = styled(Tabs)`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+`;
+
+const StyledTabsPanel = styled(Tabs.Panel)`
+  height: 100%;
+  overflow: hidden;
+`;
+
+const StyledTabsList = styled(Tabs.List)`
+  max-width: 1176px;
+`;
+
+const StyledTabPanels = styled.div`
+  background: var(--a-bg-subtle);
+  overflow: hidden;
+  flex-grow: 1;
+`;

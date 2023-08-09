@@ -9,6 +9,7 @@ export const StyledAuthor = styled.p`
   font-weight: bold;
   margin: 0;
 `;
+
 export const StyledMessageContent = styled.p`
   margin: 0;
   white-space: pre-line;

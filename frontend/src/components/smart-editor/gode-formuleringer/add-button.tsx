@@ -1,12 +1,12 @@
 import { Button } from '@navikt/ds-react';
 import React from 'react';
-import { Descendant, Editor } from 'slate';
 import { styled } from 'styled-components';
+import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { insertGodFormulering, isAvailable } from './insert';
 
 interface AddButtonProps {
-  editor: Editor;
-  content: Descendant[];
+  editor: RichTextEditor;
+  content: EditorValue;
   title?: string;
   disabledTitle?: string;
   children?: string;

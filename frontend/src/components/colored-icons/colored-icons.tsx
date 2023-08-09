@@ -4,22 +4,30 @@ import {
   InformationSquareFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 type Props = React.SVGProps<SVGSVGElement> & React.RefAttributes<SVGSVGElement> & { title?: string };
 
-export const CheckmarkCircleFillIconColored = (props: Props) => (
-  <CheckmarkCircleFillIcon aria-hidden {...props} color="var(--a-icon-success)" />
-);
+export const CheckmarkCircleFillIconColored = forwardRef<SVGSVGElement, Props>((props, ref) => (
+  <CheckmarkCircleFillIcon aria-hidden {...props} color="var(--a-icon-success)" ref={ref} />
+));
 
-export const XMarkOctagonFillIconColored = (props: Props) => (
-  <XMarkOctagonFillIcon aria-hidden {...props} color="var(--a-icon-error)" />
-);
+CheckmarkCircleFillIconColored.displayName = 'CheckmarkCircleFillIconColored';
 
-export const ExclamationmarkTriangleFillIconColored = (props: Props) => (
-  <ExclamationmarkTriangleFillIcon aria-hidden {...props} color="var(--a-icon-warning)" />
-);
+export const XMarkOctagonFillIconColored = forwardRef<SVGSVGElement, Props>((props, ref) => (
+  <XMarkOctagonFillIcon aria-hidden {...props} color="var(--a-icon-danger)" ref={ref} />
+));
 
-export const InformationSquareFillIconColored = (props: Props) => (
-  <InformationSquareFillIcon aria-hidden {...props} color="var(--a-icon-info)" />
-);
+XMarkOctagonFillIconColored.displayName = 'XMarkOctagonFillIconColored';
+
+export const ExclamationmarkTriangleFillIconColored = forwardRef<SVGSVGElement, Props>((props, ref) => (
+  <ExclamationmarkTriangleFillIcon aria-hidden {...props} color="var(--a-icon-warning)" ref={ref} />
+));
+
+ExclamationmarkTriangleFillIconColored.displayName = 'ExclamationmarkTriangleFillIconColored';
+
+export const InformationSquareFillIconColored = forwardRef<SVGSVGElement, Props>((props, ref) => (
+  <InformationSquareFillIcon aria-hidden {...props} color="var(--a-icon-info)" ref={ref} />
+));
+
+InformationSquareFillIconColored.displayName = 'InformationSquareFillIconColored';

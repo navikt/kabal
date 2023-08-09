@@ -13,6 +13,7 @@ import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tab
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { MOD_KEY } from '@app/mod-key';
 import {
   useGetArkiverteDokumenterQuery,
   useMergedDocumentsReferenceQuery,
@@ -161,7 +162,7 @@ const ViewCombinedPDF = () => {
   };
 
   return (
-    <Tooltip content="Trykk med musehjulet/midterste knapp eller Ctrl/⌘ + klikk for å åpne i ny fane.">
+    <Tooltip content={`Trykk med musehjulet/midterste knapp eller ${MOD_KEY} + klikk for å åpne i ny fane.`}>
       <StyledOpenButton
         onClick={onClick}
         onAuxClick={onClick}

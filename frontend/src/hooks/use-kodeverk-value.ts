@@ -1,18 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import { useKodeverk, useLatestYtelser, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import { IKodeverk, ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
-
-export const useKodeverkValue = <K extends keyof IKodeverk>(
-  key: K | typeof skipToken = skipToken,
-): IKodeverk[K] | undefined => {
-  const { data } = useKodeverk();
-
-  if (key === skipToken || typeof data === 'undefined') {
-    return undefined;
-  }
-
-  return data[key];
-};
+import { useLatestYtelser, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
+import { ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 

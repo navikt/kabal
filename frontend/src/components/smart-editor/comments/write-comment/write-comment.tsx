@@ -1,6 +1,7 @@
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Textarea } from '@navikt/ds-react';
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import { Button, Textarea, Tooltip } from '@navikt/ds-react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { MOD_KEY } from '@app/mod-key';
 import { StyledCommentButtonContainer } from '../styled-components';
 
 interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
@@ -13,67 +14,69 @@ interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
   autoFocus?: boolean;
 }
 
-export const WriteComment = ({
-  close,
-  isLoading,
-  label,
-  onFocus = () => {},
-  onSubmit,
-  primaryButtonLabel,
-  text = '',
-  autoFocus = false,
-}: Props) => {
-  const [value, setValue] = useState(text);
-  const ref = useRef<HTMLTextAreaElement>(null);
+export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
+  (
+    { close, isLoading, label, onFocus = () => {}, onSubmit, primaryButtonLabel, text = '', autoFocus = false },
+    outerRef,
+  ) => {
+    const [value, setValue] = useState(text);
+    const ref = useRef<HTMLTextAreaElement>(null);
 
-  useLayoutEffect(() => {
-    if (ref.current !== null) {
-      ref.current.setSelectionRange(0, text.length, 'forward');
-    }
-  }, [text.length]);
+    useImperativeHandle<HTMLTextAreaElement | null, HTMLTextAreaElement | null>(outerRef, () => ref.current);
 
-  const save = () => onSubmit(value).then(() => setValue(''));
+    useEffect(() => {
+      if (autoFocus && ref.current !== null) {
+        ref.current.focus();
+        ref.current.setSelectionRange(ref.current.value.length, ref.current.value.length, 'forward');
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, [autoFocus]);
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-      event.preventDefault();
-      save();
+    const save = () => onSubmit(value).then(() => setValue(''));
 
-      return;
-    }
+    const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+        event.preventDefault();
+        save();
 
-    if (event.key === 'Escape') {
-      close();
-    }
-  };
+        return;
+      }
 
-  return (
-    <>
-      <Textarea
-        autoFocus={autoFocus}
-        disabled={isLoading}
-        hideLabel
-        label={label}
-        maxLength={0}
-        minRows={3}
-        onChange={({ target }) => setValue(target.value)}
-        onFocus={onFocus}
-        onKeyDown={onKeyDown}
-        placeholder="Skriv inn en kommentar"
-        ref={ref}
-        size="small"
-        value={value}
-      />
-      <Buttons
-        close={close}
-        disabled={value.length === 0}
-        isLoading={isLoading}
-        onSubmit={save}
-        primaryButtonLabel={primaryButtonLabel}
-      />
-    </>
-  );
-};
+      if (event.key === 'Escape') {
+        close();
+      }
+    };
+
+    return (
+      <>
+        <Textarea
+          autoFocus={autoFocus}
+          disabled={isLoading}
+          hideLabel
+          label={label}
+          maxLength={0}
+          minRows={1}
+          onChange={({ target }) => setValue(target.value)}
+          onFocus={onFocus}
+          onKeyDown={onKeyDown}
+          placeholder="Skriv inn en kommentar"
+          ref={ref}
+          size="small"
+          value={value}
+        />
+        <Buttons
+          close={close}
+          disabled={value.length === 0}
+          isLoading={isLoading}
+          onSubmit={save}
+          primaryButtonLabel={primaryButtonLabel}
+        />
+      </>
+    );
+  },
+);
+
+WriteComment.displayName = 'WriteComment';
 
 interface ButtonsProps {
   close: () => void;
@@ -85,28 +88,31 @@ interface ButtonsProps {
 
 const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: ButtonsProps) => (
   <StyledCommentButtonContainer>
-    <Button
-      disabled={disabled}
-      icon={<PaperplaneIcon aria-hidden />}
-      loading={isLoading}
-      onClick={onSubmit}
-      size="small"
-      title="Ctrl/⌘ + Enter"
-      type="button"
-      variant="primary"
-    >
-      {primaryButtonLabel}
-    </Button>
-    <Button
-      disabled={isLoading}
-      icon={<XMarkIcon aria-hidden />}
-      onClick={close}
-      size="small"
-      title="Escape"
-      type="button"
-      variant="secondary"
-    >
-      Avbryt
-    </Button>
+    <Tooltip content={primaryButtonLabel} keys={[MOD_KEY, 'Enter']}>
+      <Button
+        disabled={disabled}
+        icon={<PaperplaneIcon aria-hidden />}
+        loading={isLoading}
+        onClick={onSubmit}
+        size="small"
+        type="button"
+        variant="primary"
+      >
+        {primaryButtonLabel}
+      </Button>
+    </Tooltip>
+    <Tooltip content="Avbryt" keys={['Esc']}>
+      <Button
+        disabled={isLoading}
+        icon={<XMarkIcon aria-hidden />}
+        onClick={close}
+        size="small"
+        title="Escape"
+        type="button"
+        variant="secondary"
+      >
+        Avbryt
+      </Button>
+    </Tooltip>
   </StyledCommentButtonContainer>
 );

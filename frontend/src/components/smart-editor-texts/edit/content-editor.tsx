@@ -1,7 +1,7 @@
 import React from 'react';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainText } from '@app/types/texts/texts';
 import { HeaderFooterEditor } from './header-footer';
-import { RichTextEditor } from './rich-text';
+import { RichText } from './rich-text';
 
 type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
@@ -27,7 +27,7 @@ export const ContentEditor = ({ text, update, onKeyDown }: Props) => {
   }
 
   return (
-    <RichTextEditor
+    <RichText
       key={text.id}
       textId={text.id}
       savedContent={text.content}

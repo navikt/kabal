@@ -77,11 +77,9 @@ const Container = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(210mm + 32px);
   height: 100%;
-  min-height: 350px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
-  overflow-y: auto;
+  box-shadow: var(--a-shadow-small);
   border-radius: 4px;
 `;
 

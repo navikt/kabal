@@ -1,14 +1,14 @@
 import { styled } from 'styled-components';
 
-export const StyledNewCommentInThread = styled.div`
+export const StyledNewReply = styled.div`
   border-radius: 4px;
 `;
 
-export const StyledNewComment = styled.div`
+export const StyledNewThread = styled.div`
   position: absolute;
-  top: 0;
-  left: 16px;
-  width: calc(100% - 32px);
+  right: -2px;
+  transform: translateX(100%);
+  width: ${350 - 12 - 12}px;
   background-color: white;
   z-index: 5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

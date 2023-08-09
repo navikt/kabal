@@ -1,22 +1,24 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Editor } from 'slate';
 import { styled } from 'styled-components';
+import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
+import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
+import { godeFormuleringerPlugins } from '@app/plate/plugins/plugins';
+import { useMyPlateEditorState } from '@app/plate/types';
 import { IRichText } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
-import { renderElement } from '../../rich-text/slate-elements/maltekst/render';
 import { AddButton } from './add-button';
 
 interface Props extends IRichText {
-  editor: Editor;
   isFocused: boolean;
   onClick: () => void;
 }
 
-export const GodFormulering = ({ title, content, modified, created, editor, isFocused, onClick }: Props) => {
+export const GodFormulering = ({ title, content, modified, created, isFocused, onClick, id }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const editor = useMyPlateEditorState();
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {
@@ -41,7 +43,18 @@ export const GodFormulering = ({ title, content, modified, created, editor, isFo
         </AddButton>
       </ActionWrapper>
       <ContentContainer>
-        <StyledContent $isExpanded={isExpanded}>{content.map((e, i) => renderElement(e, `${i}`))}</StyledContent>
+        <StyledContent $isExpanded={isExpanded}>
+          <PlateEditorContextComponent
+            initialValue={content}
+            onChange={() => {}}
+            renderLeaf={renderReadOnlyLeaf}
+            id={id}
+            readonly
+            plugins={godeFormuleringerPlugins}
+          >
+            <PlateEditor id={id} readOnly />
+          </PlateEditorContextComponent>
+        </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       </ContentContainer>
     </StyledGodFormulering>
@@ -102,7 +115,7 @@ const StyledContent = styled.div<{ $isExpanded: boolean }>`
   overflow: hidden;
   position: relative;
 
-  &:after {
+  &::after {
     display: ${({ $isExpanded }) => ($isExpanded ? 'none' : 'block')};
     content: '';
     position: absolute;

@@ -7,7 +7,6 @@ export const StyledTemplateButton = styled.button`
   border: none;
   padding: 1em;
   cursor: pointer;
-  font-family: 'Source Sans Pro', Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,9 +22,11 @@ export const StyledTemplateButtonIcon = styled.div`
 `;
 
 export const StyledNewDocument = styled.section`
-  width: 100%;
+  width: 1176px;
+  height: 100%;
   padding: 32px;
   padding-top: 16px;
+  background: var(--a-bg-default);
 `;
 
 export const StyledTemplates = styled.section`

@@ -35,7 +35,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: (result) =>
         typeof result === 'undefined'
           ? [OppgaveTagTypes.OPPGAVEBEHANDLING]
-          : [{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: result?.id }],
+          : [{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: result.id }],
     }),
     getMedunderskriver: builder.query<IMedunderskriverResponse, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/medunderskriver`,

@@ -14,15 +14,17 @@ interface Props {
 }
 
 export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent, onKeyDown }: Props) => (
-  <StyledTextarea
-    minRows={4}
-    label={getLabel(type)}
-    key={textId}
-    id={textId}
-    value={savedPlainText}
-    onChange={({ target }) => setContent(target.value)}
-    onKeyDown={onKeyDown}
-  />
+  <Container>
+    <StyledTextarea
+      minRows={5}
+      label={getLabel(type)}
+      key={textId}
+      id={textId}
+      value={savedPlainText}
+      onChange={({ target }) => setContent(target.value)}
+      onKeyDown={onKeyDown}
+    />
+  </Container>
 );
 
 const getLabel = (type: PlainTextTypes.HEADER | PlainTextTypes.FOOTER) =>
@@ -30,4 +32,8 @@ const getLabel = (type: PlainTextTypes.HEADER | PlainTextTypes.FOOTER) =>
 
 const StyledTextarea = styled(Textarea)`
   margin: 16px;
+`;
+
+const Container = styled.div`
+  flex-grow: 1;
 `;

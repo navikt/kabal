@@ -1,10 +1,10 @@
-import { Descendant } from 'slate';
+import { EditorValue } from '@app/plate/types';
 import { SaksTypeEnum } from '../kodeverk';
-import { Immutable } from '../types';
+import { GenericObject, Immutable } from '../types';
 import { INewSmartEditorMetadata, ISmartEditorMetadata } from './metadata';
 
 interface INewSmartEditor extends INewSmartEditorMetadata {
-  content: Descendant[];
+  content: EditorValue;
 }
 
 export interface ISmartEditor extends Omit<INewSmartEditor, 'templateId'>, ISmartEditorMetadata {}
@@ -14,7 +14,7 @@ export enum TemplateTypeEnum {
   GENERELL = 'GENERELL',
 }
 
-interface IMutableSmartEditorTemplate extends INewSmartEditor {
+export interface IMutableSmartEditorTemplate extends INewSmartEditor, GenericObject {
   type: SaksTypeEnum | TemplateTypeEnum;
 }
 

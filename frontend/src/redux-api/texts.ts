@@ -1,28 +1,15 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { VERSION } from '@app/components/rich-text/version';
 import { toast } from '@app/components/toast/store';
-import { VersionedText } from '@app/types/rich-text/versions';
 import {
   IGetTextsParams,
   INewTextParams,
   IText,
   IUpdatePlainTextPropertyParams,
   IUpdateRichTextPropertyParams,
-  IUpdateText,
   IUpdateTextParams,
 } from '@app/types/texts/texts';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
-
-const versionGuard = (t: VersionedText): t is IText => t.version === VERSION;
-
-const transformResponse = (t: VersionedText): IText => {
-  if (!versionGuard(t)) {
-    throw new Error('Version mismatch');
-  }
-
-  return t;
-};
 
 enum TextListTagTypes {
   TEXTS = 'texts',
@@ -42,20 +29,15 @@ export const textsApi = createApi({
   endpoints: (builder) => ({
     getTexts: builder.query<IText[], IGetTextsParams>({
       query: (params) => ({ url: '/texts', params }),
-      transformResponse: (t: VersionedText[]) => t.map(transformResponse),
       providesTags: textsListTags,
     }),
-    getTextById: builder.query<IText, string>({
-      query: (id) => `/texts/${id}`,
-      transformResponse,
-    }),
+    getTextById: builder.query<IText, string>({ query: (id) => `/texts/${id}` }),
     addText: builder.mutation<IText, { text: INewTextParams; query: IGetTextsParams }>({
       query: ({ text }) => ({
         method: 'POST',
         url: '/texts',
         body: text,
       }),
-      transformResponse,
       onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
         toast.success('Ny tekst opprettet.');
@@ -105,7 +87,6 @@ export const textsApi = createApi({
           },
         };
       },
-      transformResponse,
       onQueryStarted: async ({ id, key, value, query }, { queryFulfilled, dispatch }) => {
         const idPatchResult = dispatch(
           textsApi.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, [key]: value })),
@@ -155,32 +136,6 @@ export const textsApi = createApi({
         }
       },
     }),
-    migrateGetAllTexts: builder.query<VersionedText[], void>({
-      query: () => ({
-        method: 'GET',
-        url: '/migrations/texts',
-      }),
-    }),
-    migrateUpdateTexts: builder.mutation<IText[], IUpdateText[]>({
-      query: (body) => ({
-        method: 'PUT',
-        url: '/migrations/texts',
-        body,
-      }),
-      onQueryStarted: async (texts, { queryFulfilled, dispatch }) => {
-        const { data } = await queryFulfilled;
-
-        toast.success(`${texts.length} tekster migrert.`);
-
-        data.forEach((t) => {
-          dispatch(textsApi.util.updateQueryData('getTextById', t.id, () => t));
-        });
-
-        dispatch(textsApi.util.updateQueryData('migrateGetAllTexts', undefined, () => []));
-
-        dispatch(textsApi.util.invalidateTags([{ type: TextListTagTypes.TEXTS, id: ListTagTypes.PARTIAL_LIST }]));
-      },
-    }),
   }),
 });
 
@@ -190,8 +145,5 @@ export const {
   useLazyGetTextsQuery,
   useAddTextMutation,
   useDeleteTextMutation,
-  // useUpdateTextPropertyMutation,
-  useLazyMigrateGetAllTextsQuery,
-  useMigrateUpdateTextsMutation,
   useUpdateTextMutation,
 } = textsApi;

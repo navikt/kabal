@@ -1,31 +1,7 @@
-import { Descendant } from 'slate';
-import { VERSION } from '@app/components/rich-text/version';
 import { NONE_TYPE } from '@app/components/smart-editor-texts/types';
+import { EditorValue, TemplateSections } from '@app/plate/types';
 import { UtfallEnum } from '../kodeverk';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
-
-/* 
-  Why animals?
-  
-  Short, non-sortable.
-  No need for UUIDs.
-  Many to choose from.
-
-  https://en.wikipedia.org/wiki/Haiku
-*/
-export enum TemplateSections {
-  TITLE = 'section-esel',
-  INTRODUCTION = 'section-rev',
-  KONKLUSJON = 'section-elg',
-  ANKEINFO = 'section-ape',
-  KLAGER_VEKTLAGT = 'section-ulv',
-  VURDERINGEN = 'section-mus',
-  OPPLYSNINGER = 'section-sau',
-  GENERELL_INFO = 'section-sel',
-  AVGJOERELSE = 'section-mår',
-  REGELVERK = 'section-gnu',
-  SAKSKOSTNADER = 'section-gris',
-}
 
 export interface AppQuery {
   hjemler: (string | NONE_TYPE)[];
@@ -36,7 +12,7 @@ export interface AppQuery {
   templates: (TemplateIdEnum | NoTemplateIdEnum | NONE_TYPE)[];
 }
 
-export interface TextMetadata {
+interface TextMetadata {
   hjemler: string[];
   ytelser: string[];
   utfall: UtfallEnum[];
@@ -76,25 +52,21 @@ export interface ITextBaseMetadata extends TextMetadata {
   title: string;
 }
 
-export interface ITextMetadata extends ITextBaseMetadata {
+interface ITextMetadata extends ITextBaseMetadata {
   id: string;
 }
 
 export interface INewRichTextParams extends ITextBaseMetadata {
   textType: RichTextTypes;
-  content: Descendant[];
-  version: typeof VERSION;
+  content: EditorValue;
 }
 
 export interface INewPlainTextParams extends ITextBaseMetadata {
   textType: PlainTextTypes;
   plainText: string;
-  version: typeof VERSION;
 }
 
 export type INewTextParams = INewRichTextParams | INewPlainTextParams;
-
-export type IUpdateText = INewRichTextParams | INewPlainTextParams;
 
 export interface IUpdatePlainTextProperty<K extends keyof INewPlainTextParams = keyof INewPlainTextParams> {
   key: K;

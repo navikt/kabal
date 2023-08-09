@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
+import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
+import { TEMPLATES } from '@app/plate/templates/templates';
+import { TemplateSections } from '@app/plate/types';
 import { useKlageenheter, useLatestYtelser, useUtfall } from '@app/simple-api-state/use-kodeverk';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { TemplateSections } from '@app/types/texts/texts';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { MALTEKST_SECTION_NAMES } from '../smart-editor/constants';
-import { TEMPLATES } from '../smart-editor/templates/templates';
 
 interface SectionSelectProps {
   children: string;

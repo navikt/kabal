@@ -1,45 +1,42 @@
-import { Descendant, Editor, Range, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
-import { ContentTypeEnum, TextAlignEnum } from '../../rich-text/types/editor-enums';
-import { isOfElementTypeFn } from '../../rich-text/types/editor-type-guards';
-import { ParagraphElementType } from '../../rich-text/types/editor-types';
+import {
+  findNode,
+  focusEditor,
+  insertElements,
+  insertFragment,
+  isElementEmpty,
+  isExpanded,
+  withoutNormalizing,
+  withoutSavingHistory,
+} from '@udecode/plate-common';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { EditorValue, ParagraphElement, RichTextEditor } from '@app/plate/types';
 
-export const insertGodFormulering = (editor: Editor, content: Descendant[]) => {
+export const insertGodFormulering = (editor: RichTextEditor, content: EditorValue) => {
   if (!isAvailable(editor)) {
     return;
   }
 
-  Transforms.insertFragment(
-    editor,
-    content.concat(NEW_PARAGRAPH).map((c) => ({ ...c })),
-    { voids: false },
-  );
-  ReactEditor.focus(editor);
-};
-
-export const isAvailable = (editor: Editor): boolean => {
-  if (editor.selection === null || Range.isExpanded(editor.selection)) {
-    return false;
-  }
-
-  const { focus } = editor.selection;
-
-  if (focus.path.length !== 2 || focus.offset !== 0) {
-    return false;
-  }
-
-  const [firstNode] = Editor.nodes<ParagraphElementType>(editor, {
-    match: isOfElementTypeFn(ContentTypeEnum.PARAGRAPH),
-    at: focus,
-    mode: 'lowest',
+  withoutSavingHistory(editor, () => {
+    withoutNormalizing(editor, () => {
+      insertFragment(editor, structuredClone(content), { voids: false });
+      insertElements(editor, createSimpleParagraph(), { select: true });
+    });
   });
 
-  return firstNode !== undefined;
+  focusEditor(editor);
 };
 
-const NEW_PARAGRAPH: ParagraphElementType = {
-  type: ContentTypeEnum.PARAGRAPH,
-  children: [{ text: '' }],
-  textAlign: TextAlignEnum.TEXT_ALIGN_LEFT,
-  indent: 0,
+export const isAvailable = (editor: RichTextEditor): boolean => {
+  if (editor.selection === null || isExpanded(editor.selection)) {
+    return false;
+  }
+
+  const paragraph = findNode<ParagraphElement>(editor, { match: { type: ELEMENT_PARAGRAPH } });
+
+  if (paragraph === undefined) {
+    return false;
+  }
+
+  return isElementEmpty(editor, paragraph[0]);
 };

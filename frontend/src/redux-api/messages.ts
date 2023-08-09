@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
-import { KABAL_OPPGAVEBEHANDLING_BASE_QUERY } from './common';
+import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 
 export interface IMessage {
@@ -34,7 +34,7 @@ const messagesListTags = (messages: IMessage[] | undefined) =>
 
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
-  baseQuery: KABAL_OPPGAVEBEHANDLING_BASE_QUERY,
+  baseQuery: KABAL_BEHANDLINGER_BASE_QUERY,
   tagTypes: [MessageListTagTypes.MESSAGES],
   endpoints: (builder) => ({
     getMessages: builder.query<IMessage[], string>({

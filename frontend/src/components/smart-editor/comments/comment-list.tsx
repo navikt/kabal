@@ -10,8 +10,8 @@ interface CommentListProps {
 
 export const CommentList = ({ comments, isFocused }: CommentListProps) => (
   <List>
-    {comments.map(({ id, ...comment }) => (
-      <Comment key={id} id={id} isFocused={isFocused} {...comment} />
+    {comments.map(({ id, ...comment }, index) => (
+      <Comment key={id} id={id} isFocused={isFocused} {...comment} isMain={index === 0} />
     ))}
   </List>
 );

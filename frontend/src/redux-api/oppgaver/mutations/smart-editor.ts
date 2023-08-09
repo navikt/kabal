@@ -1,6 +1,5 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { omit } from '@app/functions/omit';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
 import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
@@ -58,10 +57,10 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
         method: 'PATCH',
-        body: omit(body, 'title'),
+        body,
         timeout: 10000,
       }),
-      onQueryStarted: async ({ dokumentId, oppgaveId, title, ...update }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { dokumentId, oppgaveId }, (draft) => {
             if (draft !== null) {
@@ -97,7 +96,7 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
           patchResult.undo();
           listPatchResult.undo();
 
-          const message = `Kunne ikke lagre "${title}".`;
+          const message = 'Feil ved lagring av dokument.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);

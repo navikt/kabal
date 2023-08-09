@@ -28,6 +28,6 @@ const SmartEditorPanelContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
-  min-width: 210mm;
   min-height: 100%;
+  overflow: hidden;
 `;

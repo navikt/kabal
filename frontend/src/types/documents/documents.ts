@@ -1,4 +1,3 @@
-import { VERSION } from '@app/components/rich-text/version';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 
 export type UUID = string;
@@ -44,7 +43,6 @@ interface ISmartDocument extends IBaseDocument {
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
   templateId: TemplateIdEnum | NoTemplateIdEnum | null; // Nullable until all smart documents without this are finished. Make not nullable once all legacy smart documents are finished.
-  version?: typeof VERSION;
 }
 
 export interface IJournalfoertDokumentId {
