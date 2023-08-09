@@ -132,7 +132,7 @@ const Container = styled.div`
 
 const StyledGroupHeader = styled.h3`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   margin-left: 16px;
   margin-top: 16px;
   margin-bottom: 8px;

@@ -1,41 +1,55 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useContext } from 'react';
-import { Range } from 'slate';
-import { useSlateStatic } from 'slate-react';
+import { focusEditor, isCollapsed } from '@udecode/plate-common';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useRangePosition } from '@app/plate/hooks/use-range-position';
+import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
 import { useUser } from '@app/simple-api-state/use-user';
-import { connectCommentThread } from '../../rich-text/rich-text-editor/connect-thread';
-import { SmartEditorContext } from '../context/smart-editor-context';
-import { StyledNewComment } from './styled-components';
+import { StyledNewThread } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';
 
 interface Props {
-  close: () => void;
+  container: HTMLDivElement | null;
 }
 
-export const NewComment = ({ close }: Props) => {
+export const NewComment = ({ container }: Props) => {
   const oppgaveId = useOppgaveId();
+  const editor = useMyPlateEditorState();
   const { data: bruker, isLoading: brukerIsLoading } = useUser();
   const [postComment, { isLoading }] = usePostCommentMutation();
-  const { documentId, setFocusedThreadId } = useContext(SmartEditorContext);
+  const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
+    useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
-  const editor = useSlateStatic();
-
-  const { selection } = editor;
+  const position = useRangePosition(newCommentSelection, container);
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   const onNewThread = useCallback(
     (threadId: string) => {
-      if (editor === null || selection === null || Range.isCollapsed(selection)) {
+      if (editor === null || newCommentSelection === null || isCollapsed(newCommentSelection)) {
         return;
       }
 
-      connectCommentThread(editor, selection, threadId);
+      connectCommentThread(editor, newCommentSelection, threadId);
     },
-    [editor, selection],
+    [editor, newCommentSelection],
   );
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.focus();
+      ref.current.setSelectionRange(ref.current.value.length, ref.current.value.length, 'forward');
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [newCommentSelection]);
+
+  if (container === null || newCommentSelection === null || position === null) {
+    return null;
+  }
 
   if (
     signatureIsLoading ||
@@ -64,15 +78,29 @@ export const NewComment = ({ close }: Props) => {
       .unwrap()
       .then(({ id }) => {
         onNewThread(id);
-        close();
+        setNewCommentSelection(null);
         setTimeout(() => {
           setFocusedThreadId(id);
-        }, 1000);
+          focusEditor(editor);
+        }, 0);
       });
   };
 
+  const close = () => {
+    setNewCommentSelection(null);
+    focusEditor(editor);
+  };
+
   return (
-    <StyledNewComment>
+    <StyledNewThread
+      style={{ top: position.top }}
+      onKeyDown={(e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          close();
+        }
+      }}
+    >
       <WriteComment
         onSubmit={onSubmit}
         isLoading={isLoading}
@@ -80,7 +108,8 @@ export const NewComment = ({ close }: Props) => {
         close={close}
         primaryButtonLabel="Legg til"
         autoFocus
+        ref={ref}
       />
-    </StyledNewComment>
+    </StyledNewThread>
   );
 };

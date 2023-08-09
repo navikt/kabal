@@ -70,9 +70,11 @@ const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) =>
 
 const ErrorContainer = styled.section`
   display: block;
-  width: 210mm;
+  width: 100%;
+  background: var(--a-bg-default);
   padding: 16px;
   overflow-y: auto;
+  box-shadow: var(--a-shadow-medium);
 `;
 
 export const StyledDescriptionTerm = styled.dt`

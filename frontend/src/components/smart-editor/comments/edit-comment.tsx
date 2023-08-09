@@ -1,9 +1,9 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
-import { SmartEditorContext } from '../context/smart-editor-context';
 import { useIsCommentAuthor } from './use-is-comment-author';
 import { WriteComment } from './write-comment/write-comment';
 
@@ -13,18 +13,26 @@ interface EditButtonProps {
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
   isFocused: boolean;
+  close: () => void;
 }
 
-export const EditButton = ({ id, authorIdent, isEditing, setIsEditing, isFocused }: EditButtonProps) => {
+export const EditButton = ({ id, authorIdent, isEditing, setIsEditing, isFocused, close }: EditButtonProps) => {
   const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
 
   if (!isFocused || !isCommentAuthor) {
     return null;
   }
 
-  const toggleEdit = () => setIsEditing(!isEditing);
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    close();
+  };
 
-  return <Button size="xsmall" icon={<PencilIcon aria-hidden />} variant="secondary" onClick={toggleEdit} />;
+  return (
+    <Button size="xsmall" icon={<PencilIcon aria-hidden />} variant="tertiary" onClick={toggleEdit}>
+      Endre
+    </Button>
+  );
 };
 
 interface EditCommentProps {
@@ -55,6 +63,7 @@ export const EditComment = ({ close, id, authorIdent, defaultValue }: EditCommen
       close={close}
       text={defaultValue}
       primaryButtonLabel="Endre"
+      autoFocus
     />
   );
 };

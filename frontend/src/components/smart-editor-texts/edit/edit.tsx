@@ -8,17 +8,17 @@ import {
   useRegistreringshjemmelFromIdOrLoading,
 } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
+import { TEMPLATES } from '@app/plate/templates/templates';
 import { useUpdateTextMutation } from '@app/redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
+import { SavedStatus } from '../../saved-status/saved-status';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
-import { TEMPLATES } from '../../smart-editor/templates/templates';
 import { ResolvedTags } from '../../tags/resolved-tag';
 import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from '../edit-text-selects';
 import { HjemlerSelect } from '../hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
-import { SavedStatus } from '../saved-status';
 import { DeleteTextButton } from '../smart-editor-texts-delete';
 import { FilterDivider } from '../styled-components';
 import { ContentEditor } from './content-editor';
@@ -27,7 +27,7 @@ type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
 
 export const EditSmartEditorText = (savedText: IText) => {
-  const [update, { isLoading, isSuccess, isError }] = useUpdateTextMutation({
+  const [update, status] = useUpdateTextMutation({
     fixedCacheKey: savedText.id,
   });
   const query = useTextQuery();
@@ -46,7 +46,7 @@ export const EditSmartEditorText = (savedText: IText) => {
   const save = () => update({ text, query });
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 's' && (e.metaKey || e.ctrlKey)) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
       e.preventDefault();
       save();
     }
@@ -71,7 +71,7 @@ export const EditSmartEditorText = (savedText: IText) => {
         <LineContainer>
           <strong>Sist endret:</strong>
           <DateTime modified={modified} created={created} />
-          <SavedStatus isError={isError} isSuccess={isSuccess} isLoading={isLoading} />
+          <SavedStatus {...status} />
         </LineContainer>
 
         <LineContainer>
@@ -123,7 +123,7 @@ export const EditSmartEditorText = (savedText: IText) => {
       <ContentEditor text={text} update={updateUnsavedText} onKeyDown={onKeyDown} />
 
       <Buttons onKeyDown={onKeyDown}>
-        <Button onClick={save} icon={<CheckmarkIcon aria-hidden />} size="small" loading={isLoading}>
+        <Button onClick={save} icon={<CheckmarkIcon aria-hidden />} size="small" loading={status.isLoading}>
           Lagre og publisér
         </Button>
         <DeleteTextButton id={id} title={savedText.title} />
@@ -142,6 +142,7 @@ const Buttons = styled.div`
   display: flex;
   gap: 8px;
   padding: 16px;
+  background: var(--a-bg-subtle);
 `;
 
 const Header = styled.div`
@@ -149,7 +150,6 @@ const Header = styled.div`
   flex-direction: column;
   row-gap: 8px;
   padding: 16px;
-  padding-bottom: 0;
 `;
 
 const LineContainer = styled.div`

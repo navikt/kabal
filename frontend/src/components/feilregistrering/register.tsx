@@ -2,6 +2,7 @@ import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Textarea } from '@navikt/ds-react';
 import React, { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
+import { MOD_KEY } from '@app/mod-key';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { Context } from './context';
 import { Row } from './styled-components';
@@ -75,7 +76,7 @@ const Code = styled.code`
 
 const Description = (
   <BodyShort>
-    Skriv inn årsak og trykk <strong>Feilregistrer</strong> (<Code>CTRL/⌘ + Enter</Code>) eller <strong>Avbryt</strong>{' '}
-    (<Code>Escape</Code>) for å avbryte.
+    Skriv inn årsak og trykk <strong>Feilregistrer</strong> (<Code>{MOD_KEY} + Enter</Code>) eller{' '}
+    <strong>Avbryt</strong> (<Code>Escape</Code>) for å avbryte.
   </BodyShort>
 );

@@ -1,29 +1,24 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import React, { useMemo } from 'react';
-import { Descendant, createEditor } from 'slate';
-import { withHistory } from 'slate-history';
-import { Slate, withReact } from 'slate-react';
+import React, { useRef } from 'react';
 import { styled } from 'styled-components';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { RichTextEditorElement } from '../../rich-text/rich-text-editor/rich-text-editor';
-import { withCopy } from '../../rich-text/rich-text-editor/with-copy';
-import { withNormalization } from '../../rich-text/rich-text-editor/with-normalization';
-import { withTables } from '../../rich-text/rich-text-editor/with-tables';
-import { withEditableVoids } from '../../rich-text/rich-text-editor/with-voids';
+import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
+import { redaktoerPlugins } from '@app/plate/plugins/plugins';
+import { Sheet } from '@app/plate/sheet';
+import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
+import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
+import { EditorValue } from '@app/plate/types';
 import { ErrorComponent } from '../error-component';
 
 interface Props {
   textId: string;
-  savedContent: Descendant[];
-  setContent: (content: Descendant[]) => void;
+  savedContent: EditorValue;
+  setContent: (content: EditorValue) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: Props) => {
-  const editor = useMemo(
-    () => withTables(withCopy(withEditableVoids(withHistory(withNormalization(withReact(createEditor())))))),
-    [],
-  );
+export const RichText = ({ textId, savedContent, setContent, onKeyDown }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   return (
     <ErrorBoundary
@@ -36,14 +31,29 @@ export const RichTextEditor = ({ textId, savedContent, setContent, onKeyDown }: 
         size: 'small',
       }}
     >
-      <Slate editor={editor} initialValue={savedContent} onChange={setContent}>
-        <StyledRichTextEditorElement key={textId} showPlaceholderButton onKeyDown={onKeyDown} />
-      </Slate>
+      <PlateEditorContextComponent
+        initialValue={savedContent}
+        id={textId}
+        onChange={setContent}
+        plugins={redaktoerPlugins}
+      >
+        <Content onKeyDown={onKeyDown}>
+          <RedaktoerToolbar />
+
+          <Sheet ref={ref} $minHeight={false}>
+            <FloatingRedaktoerToolbar container={ref.current} editorId={textId} />
+            <PlateEditor id={textId} />
+          </Sheet>
+        </Content>
+      </PlateEditorContextComponent>
     </ErrorBoundary>
   );
 };
 
-const StyledRichTextEditorElement = styled(RichTextEditorElement)`
-  width: 210mm;
+const Content = styled.div`
+  padding: 16px;
+  background: var(--a-bg-subtle);
   flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;

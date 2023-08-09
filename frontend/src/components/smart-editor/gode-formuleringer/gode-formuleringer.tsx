@@ -1,13 +1,15 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { Alert, Skeleton } from '@navikt/ds-react';
+import { focusEditor } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ReactEditor, useSlateStatic } from 'slate-react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetTextsQuery } from '@app/redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IRichText, RichTextTypes } from '@app/types/texts/texts';
-import { SmartEditorContext } from '../context/smart-editor-context';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
 import { GodFormulering } from './god-formulering';
@@ -22,8 +24,9 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const editor = useSlateStatic();
+  const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
+
   const query = useQuery({ textType: RichTextTypes.GOD_FORMULERING, templateId });
   const { data = [], isLoading } = useGetTextsQuery(query);
 
@@ -58,7 +61,10 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         return;
       }
 
-      if (event.key === 'Escape') {
+      if (
+        event.key === 'Escape' ||
+        (event.key.toLowerCase() === 'f' && (event.ctrlKey || event.metaKey) && event.shiftKey)
+      ) {
         event.preventDefault();
 
         if (focused !== -1) {
@@ -74,7 +80,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         }
 
         if (editor !== null) {
-          ReactEditor.focus(editor);
+          focusEditor(editor);
         }
 
         setShowGodeFormuleringer(false);
@@ -97,17 +103,34 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     [editor, filter.length, focused, setShowGodeFormuleringer, texts],
   );
 
-  if (!showGodeFormuleringer || isLoading || typeof data === 'undefined' || editor === null) {
+  if (!showGodeFormuleringer) {
     return null;
+  }
+
+  if (isLoading) {
+    return (
+      <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
+        <Header>
+          <GodeFormuleringerTitle>
+            <LightBulbIcon />
+            Gode formuleringer ({texts.length})
+          </GodeFormuleringerTitle>
+        </Header>
+        <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
+        <Skeleton variant="rounded" height={200} />
+        <Skeleton variant="rounded" height={200} />
+        <Skeleton variant="rounded" height={200} />
+      </StyledGodeFormuleringer>
+    );
   }
 
   const godeFormuleringer =
     texts.length === 0 ? (
-      <span>Ingen gode formuleringer funnet.</span>
+      <Alert variant="info" size="small">
+        Ingen gode formuleringer funnet.
+      </Alert>
     ) : (
-      texts.map((t, i) => (
-        <GodFormulering key={t.id} {...t} isFocused={focused === i} editor={editor} onClick={() => setFocused(i)} />
-      ))
+      texts.map((t, i) => <GodFormulering key={t.id} {...t} isFocused={focused === i} onClick={() => setFocused(i)} />)
     );
 
   return (
@@ -133,7 +156,7 @@ const StyledGodeFormuleringer = styled.section`
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  width: 320px;
+  width: 350px;
   overflow-y: auto;
 `;
 

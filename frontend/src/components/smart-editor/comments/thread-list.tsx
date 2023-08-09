@@ -1,13 +1,35 @@
+import { Alert, Heading, HelpText } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { SkeletonThread } from './skeleton-thread';
 import { Thread } from './thread';
 import { useThreads } from './use-threads';
 
 export const ThreadList = () => {
   const { attached, orphans, isLoading } = useThreads();
 
-  if (isLoading || (attached.length === 0 && orphans.length === 0)) {
-    return null;
+  if (isLoading) {
+    return (
+      <StyledThreadSections>
+        <StyledThreadListContainer>
+          <SkeletonThread />
+          <SkeletonThread />
+          <SkeletonThread />
+        </StyledThreadListContainer>
+      </StyledThreadSections>
+    );
+  }
+
+  if (attached.length === 0 && orphans.length === 0) {
+    return (
+      <StyledThreadSections>
+        <NoCommentsContainer>
+          <Alert variant="success" size="small">
+            Ingen kommentarer
+          </Alert>
+        </NoCommentsContainer>
+      </StyledThreadSections>
+    );
   }
 
   return (
@@ -28,10 +50,12 @@ export const ThreadList = () => {
 };
 
 const StyledThreadSections = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
   flex-shrink: 0;
   width: 100%;
   height: 100%;
-  padding-top: 16px;
   padding-bottom: 32px;
   overflow-y: auto;
   scroll-snap-type: y proximity;
@@ -45,6 +69,11 @@ const StyledThreadListContainer = styled.section`
   gap: 16px;
 `;
 
+const NoCommentsContainer = styled.div`
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+
 interface HeaderProps {
   show: boolean;
 }
@@ -55,21 +84,23 @@ const Header = ({ show }: HeaderProps) => {
   }
 
   return (
-    <>
-      <StyledHeader>Andre kommentarer</StyledHeader>
-      <Description>Kommentarer som ikke lenger har noen direkte tilknytning til dokumentinnholdet.</Description>
-    </>
+    <Explainer>
+      <StyledHeading level="1" size="medium">
+        <span>Andre kommentarer</span>
+        <HelpText>Kommentarer som ikke lenger har noen direkte tilknytning til dokumentinnholdet.</HelpText>
+      </StyledHeading>
+    </Explainer>
   );
 };
 
-const Description = styled.p`
-  margin-left: 24px;
-  margin-right: 24px;
-  white-space: pre-wrap;
+const Explainer = styled.div`
+  margin-left: 16px;
+  margin-right: 16px;
 `;
 
-const StyledHeader = styled.h1`
-  font-size: 20px;
-  margin-left: 24px;
-  margin-right: 24px;
+const StyledHeading = styled(Heading)`
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
 `;

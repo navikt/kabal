@@ -6,7 +6,6 @@ import {
   useResendDvhMutation,
 } from '@app/redux-api/internal';
 import { ApiButton } from './api-button';
-import { useMigrateTexts } from './use-migrate-texts';
 
 export const Admin = () => (
   <StyledPageContent>
@@ -20,7 +19,6 @@ export const Admin = () => (
     </p>
     <ApiButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</ApiButton>
     <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
-    <ApiButton useApi={useMigrateTexts}>KABAL-TEXT-TEMPLATES MIGRATE</ApiButton>
   </StyledPageContent>
 );
 

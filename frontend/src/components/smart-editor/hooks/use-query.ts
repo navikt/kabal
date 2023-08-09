@@ -2,9 +2,10 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useMemo } from 'react';
 import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { TemplateSections } from '@app/plate/types';
 import { useUser } from '@app/simple-api-state/use-user';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ApiQuery, TemplateSections, TextTypes } from '@app/types/texts/texts';
+import { ApiQuery, TextTypes } from '@app/types/texts/texts';
 
 interface Params {
   textType: TextTypes;

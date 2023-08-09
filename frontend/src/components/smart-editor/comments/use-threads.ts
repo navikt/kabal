@@ -1,13 +1,13 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useContext, useMemo } from 'react';
 import { Descendant, Text } from 'slate';
-import { useSlateStatic } from 'slate-react';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { COMMENT_PREFIX } from '../constants';
-import { SmartEditorContext } from '../context/smart-editor-context';
 
 interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;
@@ -27,7 +27,7 @@ const LOADING: Threads = {
 
 export const useThreads = (): Threads => {
   const oppgaveId = useOppgaveId();
-  const editor = useSlateStatic();
+  const editor = useMyPlateEditorRef();
   const { focusedThreadId, documentId } = useContext(SmartEditorContext);
 
   const query = useMemo(() => {

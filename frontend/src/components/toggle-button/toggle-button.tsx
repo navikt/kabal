@@ -20,7 +20,6 @@ export const ToggleButton = styled.button<Props>`
   user-select: none;
   position: relative;
   font-size: 14px;
-  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #3e3832;
 

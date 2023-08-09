@@ -1,17 +1,24 @@
-import React, { memo, useState } from 'react';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import React, { memo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { DeleteButton } from './delete-button';
 import { EditButton, EditComment } from './edit-comment';
 
 interface Props extends ISmartEditorComment {
   isFocused: boolean;
+  isMain: boolean;
 }
 
 export const Comment = memo(
-  ({ author, created, text, id, isFocused }: Props) => {
+  ({ author, created, text, id, isFocused, isMain }: Props) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [showActions, setShowActions] = useState(false);
+    const actionsRef = useRef<HTMLDivElement>(null);
+    useOnClickOutside(actionsRef, () => setShowActions(false));
 
     const Text = () =>
       isEditing ? (
@@ -23,22 +30,42 @@ export const Comment = memo(
     return (
       <StyledListItem>
         <StyledComment>
-          <StyledTopRow>
-            <StyledName>{author.name}</StyledName>
-            <StyledButtons>
-              <EditButton
-                id={id}
-                authorIdent={author.ident}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                isFocused={isFocused}
-              />
-              <DeleteButton id={id} authorIdent={author.ident} isFocused={isFocused} />
-            </StyledButtons>
-          </StyledTopRow>
+          <StyledName>{author.name}</StyledName>
 
           <StyledDate dateTime={created}>{isoDateTimeToPretty(created)}</StyledDate>
+
           <Text />
+
+          {isFocused ? (
+            <ActionsContainer ref={actionsRef}>
+              <Button
+                onClick={() => setShowActions((a) => !a)}
+                size="xsmall"
+                variant="tertiary-neutral"
+                icon={<MenuElipsisVerticalIcon aria-hidden />}
+              ></Button>
+              {showActions ? (
+                <StyledButtons>
+                  <EditButton
+                    id={id}
+                    authorIdent={author.ident}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    isFocused={isFocused}
+                    close={() => setShowActions(false)}
+                  />
+                  <DeleteButton
+                    id={id}
+                    authorIdent={author.ident}
+                    isFocused={isFocused}
+                    close={() => setShowActions(false)}
+                  >
+                    {isMain ? 'Slett tråd' : 'Slett svar'}
+                  </DeleteButton>
+                </StyledButtons>
+              ) : null}
+            </ActionsContainer>
+          ) : null}
         </StyledComment>
       </StyledListItem>
     );
@@ -49,13 +76,25 @@ export const Comment = memo(
 
 Comment.displayName = 'Comment';
 
-const StyledButtons = styled.div`
-  display: flex;
-  gap: 2px;
+const ActionsContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
-const StyledTopRow = styled.div`
-  display: flex;
+const StyledButtons = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 4px;
+  box-shadow: var(--a-shadow-medium);
+  background-color: white;
+  padding: 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1;
 `;
 
 const StyledListItem = styled.li`
@@ -71,7 +110,8 @@ const StyledListItem = styled.li`
 const StyledComment = styled.article`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
+  position: relative;
 `;
 
 const StyledName = styled.div`
@@ -94,6 +134,7 @@ const StyledDate = styled.time`
 const StyledText = styled.p`
   font-size: 16px;
   margin: 0;
+  margin-top: 4px;
   white-space: break-spaces;
   overflow-wrap: break-word;
 `;

@@ -19,19 +19,8 @@ export const reduxStore = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these field paths in all actions.
-        ignoredActionPaths: [
-          'payload.payload.file',
-          'payload.file',
-          'payload.kvalitetsavvikUtredning',
-          'payload.kvalitetsavvikVedtak',
-          'payload.kvalitetsavvikOversendelsesbrev',
-          'meta.baseQueryMeta.request',
-          'meta.baseQueryMeta.response',
-          'meta.arg.originalArgs.file',
-        ],
-      },
+      serializableCheck: false,
+      immutableCheck: false,
     }).concat([
       oppgaverApi.middleware,
       brukerApi.middleware,

@@ -65,7 +65,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
       </StyledHeaders>
       <StyledList>
         {texts.map(({ id, title, modified, created, hjemler, ytelser, utfall, enheter, sections, templates }) => (
-          <ListItem key={id} active={query.id === id}>
+          <ListItem key={id} $active={query.id === id}>
             <StyledLink to={`${getPathPrefix(textType)}/${id}${window.location.search}`}>
               <StyledTitle>
                 <StyledTitleIcon />
@@ -127,15 +127,15 @@ const StyledList = styled.ul`
   margin: 0;
 `;
 
-const ListItem = styled.li<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : '#fff')};
+const ListItem = styled.li<{ $active: boolean }>`
+  background-color: ${({ $active }) => ($active ? 'var(--a-blue-100)' : '#fff')};
   transition-property: background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   border-radius: 4px;
 
   &:hover {
-    background-color: ${({ active }) => (active ? 'var(--a-blue-100)' : 'var(--a-blue-50)')};
+    background-color: ${({ $active }) => ($active ? 'var(--a-blue-100)' : 'var(--a-blue-50)')};
   }
 `;
 

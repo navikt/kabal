@@ -65,7 +65,7 @@ const TemplateTag = styled(BaseTagStyle)`
   border: 1px solid var(--a-red-300);
 `;
 
-export const VARIANTS: Record<keyof AppQuery, typeof Tag> = {
+const VARIANTS: Record<keyof AppQuery, typeof Tag> = {
   hjemler: HjemmelTag,
   ytelser: YtelseTag,
   utfall: UtfallTag,

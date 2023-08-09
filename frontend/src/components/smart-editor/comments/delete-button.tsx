@@ -1,28 +1,30 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { useSlateStatic } from 'slate-react';
+import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import { useDeleteCommentOrThreadMutation } from '@app/redux-api/smart-editor-comments';
 import { useUser } from '@app/simple-api-state/use-user';
-import { disconnectCommentThread } from '../../rich-text/rich-text-editor/connect-thread';
-import { SmartEditorContext } from '../context/smart-editor-context';
 import { useIsCommentAuthor } from './use-is-comment-author';
 
 interface DeleteButtonProps {
   id: string;
   authorIdent: string;
   isFocused: boolean;
+  children: string;
+  close: () => void;
 }
 
-export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) => {
+export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
   const { data: user } = useUser();
   const { documentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
   const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
-  const editor = useSlateStatic();
+  const editor = useMyPlateEditorRef();
 
   if (!isFocused || typeof oppgave === 'undefined' || typeof user === 'undefined' || typeof documentId !== 'string') {
     return null;
@@ -35,6 +37,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) 
   }
 
   const onDelete = () => {
+    close();
     deleteComment({ commentId: id, dokumentId: documentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
@@ -49,32 +52,35 @@ export const DeleteButton = ({ id, authorIdent, isFocused }: DeleteButtonProps) 
       <Button
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
-        variant="danger"
+        variant="tertiary-neutral"
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
-        title="Slett kommentar"
-      />
+      >
+        {children}
+      </Button>
     );
   }
 
   return (
     <>
       <Button
-        variant="danger"
-        title="Bekreft sletting"
-        icon={<TrashIcon aria-hidden />}
-        loading={isDeleting}
-        onClick={onDelete}
-        size="xsmall"
-      />
-      <Button
         size="xsmall"
         icon={<XMarkIcon aria-hidden />}
-        variant="secondary"
+        variant="tertiary"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
-        title="Avbryt sletting"
-      />
+      >
+        Avbryt
+      </Button>
+      <Button
+        size="xsmall"
+        icon={<TrashIcon aria-hidden />}
+        variant="tertiary-neutral"
+        onClick={onDelete}
+        loading={isDeleting}
+      >
+        {children}
+      </Button>
     </>
   );
 };

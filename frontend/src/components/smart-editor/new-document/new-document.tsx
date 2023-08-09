@@ -1,13 +1,16 @@
 import { Loader } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
+import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '../templates/templates';
 import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
+import { getDocumentCount } from './get-document-count';
 import { MedholdBrevIcon } from './medhold-brev-icon';
 import {
   StyledHeader,
@@ -19,15 +22,16 @@ import {
 } from './styled-components';
 
 interface Props {
-  oppgaveId: string;
   onCreate: (id: string) => void;
 }
 
-export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
+export const NewDocument = ({ onCreate }: Props) => {
+  const oppgaveId = useOppgaveId();
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const canEdit = useCanEdit();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
   const { data: oppgave } = useOppgave();
+  const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
 
   if (!canEdit || typeof oppgave === 'undefined') {
     return null;
@@ -36,7 +40,11 @@ export const NewDocument = ({ oppgaveId, onCreate }: Props) => {
   const onClick = (template: ISmartEditorTemplate) => {
     setLoadingTemplate(template.templateId);
 
-    return createSmartDocument({ ...template, oppgaveId })
+    const count = getDocumentCount(documents, template);
+
+    const tittel = count === 0 ? template.tittel : `${template.tittel} (${count})`;
+
+    return createSmartDocument({ ...template, tittel, oppgaveId: oppgave.id })
       .unwrap()
       .then(({ id }) => onCreate(id))
       .finally(() => setLoadingTemplate(null));

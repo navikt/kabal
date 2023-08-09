@@ -2,9 +2,13 @@ import { createGlobalStyle, css } from 'styled-components';
 import '@navikt/ds-css';
 
 const styles = css`
+  :root {
+    --a-font-family: 'Source Sans 3', Arial, sans-serif;
+  }
+
   html {
     box-sizing: border-box;
-    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-family: 'Source Sans 3', Arial, sans-serif;
     font-size: 16px;
   }
 
@@ -28,6 +32,11 @@ const styles = css`
   #app {
     display: flex;
     flex-flow: column;
+  }
+
+  .smart-editor {
+    outline: none;
+    min-height: 100%;
   }
 `;
 
