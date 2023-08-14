@@ -7,7 +7,7 @@
   ],
   "eslint.run": "onType",
   "eslint.codeActionsOnSave.mode": "all",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "eslint.format.enable": true,
   "editor.linkedEditing": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
