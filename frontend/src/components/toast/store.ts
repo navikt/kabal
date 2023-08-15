@@ -1,5 +1,5 @@
 import React from 'react';
-import { SLIDE_DURATION, TOAST_TIMEOUT } from './constants';
+import { TOAST_TIMEOUT } from './constants';
 import { NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
@@ -40,10 +40,9 @@ class Store {
     const expiresAt = createdAt + TOAST_TIMEOUT;
     const id = `${type}-${createdAt}-${Math.random()}`;
 
-    const timeout = setTimeout(() => this.removeMessage(id), TOAST_TIMEOUT);
-    const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
+    const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 
-    const close = () => setExpiresAt(Date.now() + SLIDE_DURATION);
+    const close = () => this.removeMessage(id);
 
     this.messages = [
       ...this.messages,
@@ -61,17 +60,10 @@ class Store {
     this.notify();
   }
 
-  private setExpiresAt(id: string, expiresAt: number, previousTimer: NodeJS.Timeout | null) {
-    if (previousTimer !== null) {
-      clearTimeout(previousTimer);
-    }
-
+  private setExpiresAt(id: string, expiresAt: number) {
     this.messages = this.messages.map((message) => {
       if (message.id === id) {
-        const timeout =
-          expiresAt === Infinity ? null : setTimeout(() => this.removeMessage(id), expiresAt - Date.now());
-
-        const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms, timeout);
+        const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 
         return {
           ...message,

@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { keyframes, styled } from 'styled-components';
 import {
   CheckmarkCircleFillIconColored,
@@ -23,37 +23,42 @@ export const Toast = memo(
     };
 
     const onMouseEnter = () => {
-      setExpiresAt(Infinity);
       setRemaining(expiresAt - Date.now());
+      setExpiresAt(Infinity);
     };
 
+    const slideOut = useCallback(() => {
+      if (ref.current === null) {
+        close();
+
+        return;
+      }
+
+      const anim = ref.current.animate([{ transform: 'translateX(0%)' }, { transform: 'translateX(100%)' }], {
+        duration: SLIDE_DURATION,
+        easing: 'ease-in-out',
+        fill: 'forwards',
+      });
+
+      anim.addEventListener('finish', close);
+    }, [close]);
+
     useEffect(() => {
-      if (expiresAt === Infinity || ref.current === null) {
+      if (expiresAt === Infinity) {
         return;
       }
 
       const timeout = expiresAt - Date.now() - SLIDE_DURATION;
-
-      const timer = setTimeout(() => {
-        if (ref.current === null) {
-          return;
-        }
-
-        ref.current.animate([{ transform: 'translateX(0%)' }, { transform: 'translateX(100%)' }], {
-          duration: SLIDE_DURATION,
-          easing: 'ease-in-out',
-          fill: 'forwards',
-        });
-      }, timeout);
+      const timer = setTimeout(slideOut, timeout);
 
       return () => clearTimeout(timer);
-    }, [expiresAt]);
+    }, [expiresAt, slideOut]);
 
     const paused = remaining !== null;
 
     return (
       <StyledToast $type={type} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} $paused={paused} ref={ref}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={close} icon={<XMarkIcon aria-hidden />} />
+        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
           <Content>{message}</Content>
