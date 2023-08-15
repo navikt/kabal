@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Message, toast } from './store';
 import { Toast } from './toast';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
+  const previousLength = useRef(0);
 
   useEffect(() => {
     toast.subscribe(setToasts);
@@ -12,9 +14,20 @@ export const Toasts = () => {
     return () => toast.unsubscribe(setToasts);
   }, []);
 
+  useEffect(() => {
+    if (toasts.length > previousLength.current) {
+      const { current } = ref;
+
+      if (current !== null) {
+        current.scrollTop = current.scrollHeight;
+      }
+    }
+    previousLength.current = toasts.length;
+  }, [toasts.length]);
+
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
 
-  return <Container>{toastList}</Container>;
+  return <Container ref={ref}>{toastList}</Container>;
 };
 
 const Container = styled.div`
