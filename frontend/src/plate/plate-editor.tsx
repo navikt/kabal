@@ -12,7 +12,7 @@ import { renderLeaf as defaultRenderLeaf } from '@app/plate/leaf/render-leaf';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
 
 const editableProps: TEditableProps<EditorValue> = {
-  spellCheck: false,
+  spellCheck: true,
   autoFocus: false,
   className: 'smart-editor',
 };
