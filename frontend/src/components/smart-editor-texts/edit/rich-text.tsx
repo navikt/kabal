@@ -7,6 +7,7 @@ import { redaktoerPlugins } from '@app/plate/plugins/plugins';
 import { Sheet } from '@app/plate/sheet';
 import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
+import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue } from '@app/plate/types';
 import { ErrorComponent } from '../error-component';
 
@@ -42,6 +43,8 @@ export const RichText = ({ textId, savedContent, setContent, onKeyDown }: Props)
 
           <Sheet ref={ref} $minHeight={false}>
             <FloatingRedaktoerToolbar container={ref.current} editorId={textId} />
+            <RedaktoerTableToolbar container={ref.current} editorId={textId} />
+
             <PlateEditor id={textId} />
           </Sheet>
         </Content>

@@ -1,12 +1,8 @@
-import { isExpanded, someNode, usePlateEditorRef, usePlateSelection } from '@udecode/plate-common';
+import { isCollapsed, isEditorFocused, someNode, usePlateEditorRef, usePlateSelection } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 import React from 'react';
 import { styled } from 'styled-components';
 import { useRangePosition } from '@app/plate/hooks/use-range-position';
-import { CommentsButton } from '@app/plate/toolbar/add-comment';
-import { Marks } from '@app/plate/toolbar/marks';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { Table } from '@app/plate/toolbar/table/table';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 
@@ -27,35 +23,22 @@ const OFFSET = FLOATING_TOOLBAR_OFFSET + FLOATING_TOOLBAR_HEIGHT;
 const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps) => {
   const editor = usePlateEditorRef();
   const selection = usePlateSelection(editorId);
-  const position = useRangePosition(selection, container);
+  const isInTable = someNode(editor, { match: { type: ELEMENT_TABLE } });
+  const position = useRangePosition(isInTable ? null : selection, container);
+  const isFocused = isEditorFocused(editor);
 
-  const tableActive = someNode(editor, { match: { type: ELEMENT_TABLE } });
-
-  if (position === null) {
+  if (isInTable || !isFocused || position === null || isCollapsed(editor.selection)) {
     return null;
   }
 
   return (
     <StyledFloatingToolbar style={{ top: position.top - OFFSET, left: position.left }}>
-      {!tableActive ? children : null}
-      {tableActive ? (
-        <>
-          <Marks />
-          <ToolbarSeparator />
-          <Table />
-          {isExpanded(editor.selection) ? (
-            <>
-              <ToolbarSeparator />
-              <CommentsButton />
-            </>
-          ) : null}
-        </>
-      ) : null}
+      {children}
     </StyledFloatingToolbar>
   );
 };
 
-const StyledFloatingToolbar = styled.section`
+export const StyledFloatingToolbar = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;

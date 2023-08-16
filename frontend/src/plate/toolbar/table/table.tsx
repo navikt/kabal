@@ -21,6 +21,7 @@ import {
 import React from 'react';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { AddColumnLeftIcon } from '@app/plate/toolbar/table/icons/add-column-left';
 import { AddColumnRightIcon } from '@app/plate/toolbar/table/icons/add-column-right';
 import { AddRowAboveIcon } from '@app/plate/toolbar/table/icons/add-row-above';
@@ -33,7 +34,7 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { TableCellElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 
-export const Table = () => {
+export const TableButtons = () => {
   const editor = useMyPlateEditorRef();
   const unchangeable = useIsUnchangeable();
 
@@ -112,6 +113,8 @@ export const Table = () => {
         icon={<MergeCellsIcon aria-hidden />}
       />
 
+      <ToolbarSeparator />
+
       <ToolbarIconButton
         label="Legg til nytt avsnitt over"
         onClick={() => {
@@ -139,6 +142,8 @@ export const Table = () => {
         }}
         icon={<TextAddSpaceAfter width={24} aria-hidden />}
       />
+
+      <ToolbarSeparator />
 
       <ToolbarIconButton
         label="Slett tabell"
