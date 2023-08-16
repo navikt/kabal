@@ -2,11 +2,13 @@ import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
 import React, { useEffect, useState } from 'react';
 import { useSelected } from 'slate-react';
-import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { EditorValue, LabelContentElement, TextAlign } from '@app/plate/types';
+import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
+import { EditorValue, LabelContentElement } from '@app/plate/types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { StyledParagraph } from './paragraph';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from './styled-components';
 
 export const LabelContent = ({
   element,
@@ -45,11 +47,14 @@ export const LabelContent = ({
   }
 
   return (
-    <PlateElement as="div" attributes={attributes} element={element} editor={editor} contentEditable={false}>
-      <VoidParagraphStyle $isFocused={isSelected} $textAlign={TextAlign.LEFT}>
-        {result}
-      </VoidParagraphStyle>
-      {children}
+    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+      <SectionContainer $isSelected={isSelected} $sectionType={SectionTypeEnum.LABEL}>
+        <StyledParagraph $isEmpty={result === null}>{result}</StyledParagraph>
+        {children}
+        <SectionToolbar contentEditable={false} $sectionType={SectionTypeEnum.LABEL} $label="Fra saken">
+          <AddNewParagraphs editor={editor} element={element} />
+        </SectionToolbar>
+      </SectionContainer>
     </PlateElement>
   );
 };
@@ -65,14 +70,3 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string => {
 
   return 'Verdi mangler';
 };
-
-const VoidParagraphStyle = styled.p<{ $isFocused: boolean; $textAlign: TextAlign }>`
-  color: var(--a-text-subtle);
-  border-radius: 2px;
-  transition:
-    background-color 0.2s ease-in-out,
-    outline-color 0.2s ease-in-out;
-  background-color: ${({ $isFocused }) => ($isFocused ? 'var(--a-gray-700)' : 'transparent')};
-  outline-color: ${({ $isFocused }) => ($isFocused ? 'var(--a-gray-700)' : 'transparent')};
-  text-align: ${({ $textAlign }) => $textAlign};
-`;
