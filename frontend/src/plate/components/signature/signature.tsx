@@ -1,15 +1,17 @@
 import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { PlateEditor, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
+import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useEffect } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
 import { IndividualSignature } from '@app/plate/components/signature/individual-signature';
 import { MISSING_TITLE } from '@app/plate/components/signature/title';
 import { EditorValue, ISignature, SignatureElement } from '@app/plate/types';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
@@ -87,35 +89,39 @@ export const Signature = ({
   useSignatureData(editor, element);
 
   return (
-    <SignaturesContainer
-      {...attributes}
-      contentEditable={false}
-      $isFocused={isSelected}
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      <StyledCheckbox
-        checked={element.useShortName}
-        size="small"
-        onChange={({ target }) => {
-          setNodes(
-            editor,
-            { ...element, useShortName: target.checked },
-            { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
-          );
+    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+      <SectionContainer
+        $isSelected={isSelected}
+        $sectionType={SectionTypeEnum.SIGNATURE}
+        onDragStart={(event) => event.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
         }}
       >
-        Bruk forkortede navn
-      </StyledCheckbox>
-      <StyledSignatures>
-        <IndividualSignature signature={element.medunderskriver} />
-        <IndividualSignature signature={element.saksbehandler} />
-      </StyledSignatures>
-      {children}
-    </SignaturesContainer>
+        <StyledCheckbox
+          checked={element.useShortName}
+          size="small"
+          onChange={({ target }) => {
+            setNodes(
+              editor,
+              { ...element, useShortName: target.checked },
+              { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
+            );
+          }}
+        >
+          Bruk forkortede navn
+        </StyledCheckbox>
+        <StyledSignatures>
+          <IndividualSignature signature={element.medunderskriver} />
+          <IndividualSignature signature={element.saksbehandler} />
+        </StyledSignatures>
+        {children}
+        <SectionToolbar contentEditable={false} $sectionType={SectionTypeEnum.SIGNATURE} $label="Signatur">
+          <AddNewParagraphs editor={editor} element={element} />
+        </SectionToolbar>
+      </SectionContainer>
+    </PlateElement>
   );
 };
 
@@ -129,22 +135,9 @@ const StyledCheckbox = styled(Checkbox)`
   padding-right: 8px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 8px;
+  margin-bottom: 6pt;
+  margin-top: 24pt;
   user-select: none;
-`;
-
-const SignaturesContainer = styled.div<{ $isFocused: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  margin-top: 32px;
-  border-radius: 2px;
-  transition:
-    background-color 0.2s ease-in-out,
-    outline-color 0.2s ease-in-out;
-  background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
-  outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
 `;
 
 const StyledSignatures = styled.div`
