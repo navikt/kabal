@@ -131,7 +131,7 @@ const StyledTabsPanel = styled(Tabs.Panel)`
 `;
 
 const StyledTabsList = styled(Tabs.List)`
-  max-width: 1176px;
+  max-width: 826px;
 `;
 
 const StyledTabPanels = styled.div`
