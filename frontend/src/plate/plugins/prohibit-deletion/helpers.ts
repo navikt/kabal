@@ -1,6 +1,18 @@
-import { ENode, TNodeEntry, getNodeAncestors, isElement, someNode } from '@udecode/plate-common';
-import { ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import {
+  ENode,
+  TNodeEntry,
+  findNode,
+  getNodeAncestors,
+  isElement,
+  isElementEmpty,
+  isEndPoint,
+  isExpanded,
+  isStartPoint,
+  removeNodes,
+  someNode,
+} from '@udecode/plate-common';
+import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
+import { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
 
 export const isInUnchangeableElement = (editor: RichTextEditor): boolean => {
   if (editor.selection === null) {
@@ -42,3 +54,47 @@ const hasUndeletableAncestor = (editor: RichTextEditor, descendantEntry: TNodeEn
 
 export const isInRegelverk = (editor: RichTextEditor): boolean =>
   someNode(editor, { match: { type: ELEMENT_REGELVERK } });
+
+export const handleDeleteBackwardInPlaceholder = (editor: RichTextEditor): boolean => {
+  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+
+  if (placeholderEntry === undefined) {
+    return false;
+  }
+
+  const [node, path] = placeholderEntry;
+
+  if (editor.selection === null || isExpanded(editor.selection)) {
+    return false;
+  }
+
+  if (isStartPoint(editor, editor.selection.anchor, path)) {
+    if (isElementEmpty(editor, node)) {
+      removeNodes(editor, { at: path });
+    }
+  }
+
+  return true;
+};
+
+export const handleDeleteForwardInPlaceholder = (editor: RichTextEditor): boolean => {
+  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+
+  if (placeholderEntry === undefined) {
+    return false;
+  }
+
+  const [node, path] = placeholderEntry;
+
+  if (editor.selection === null || isExpanded(editor.selection)) {
+    return false;
+  }
+
+  if (isEndPoint(editor, editor.selection.anchor, path)) {
+    if (isElementEmpty(editor, node)) {
+      removeNodes(editor, { at: path });
+    }
+  }
+
+  return true;
+};
