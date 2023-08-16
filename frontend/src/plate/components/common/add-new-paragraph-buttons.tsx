@@ -23,7 +23,7 @@ export const AddNewParagraphBelow = ({ editor, element }: Props) => (
   <Tooltip content="Legg til nytt avsnitt under" delay={0}>
     <StyledSectionToolbarButton
       title="Legg til nytt avsnitt under"
-      icon={<TextAddSpaceBefore size={20} aria-hidden />}
+      icon={<TextAddSpaceAfter size={20} aria-hidden />}
       onClick={() => {
         const entry = findDescendant(editor, { at: [], match: (n) => n === element });
 
@@ -44,7 +44,7 @@ export const AddNewParagraphAbove = ({ editor, element }: Props) => (
   <Tooltip content="Legg til nytt avsnitt over" delay={0}>
     <StyledSectionToolbarButton
       title="Legg til nytt avsnitt over"
-      icon={<TextAddSpaceAfter size={20} aria-hidden />}
+      icon={<TextAddSpaceBefore size={20} aria-hidden />}
       onClick={() => {
         const entry = findDescendant<RootElement>(editor, { at: [], match: (n) => n === element });
 
