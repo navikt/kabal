@@ -13,6 +13,7 @@ import { components } from '@app/plate/components';
 import { createCommentsPlugin } from '@app/plate/plugins/comments';
 import { createCopyPlugin } from '@app/plate/plugins/copy';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { createEmptyVoidPlugin } from '@app/plate/plugins/empty-void';
 import { createFooterPlugin, createHeaderPlugin } from '@app/plate/plugins/header-footer';
 import { createRedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
@@ -110,6 +111,7 @@ export const saksbehandlerPlugins = createPlugins<EditorValue>(
     createFooterPlugin(),
     createLabelContentPlugin(),
     createSignaturePlugin(),
+    createEmptyVoidPlugin(),
   ],
   { components },
 );

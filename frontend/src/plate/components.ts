@@ -4,6 +4,7 @@ import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { CurrentDate } from '@app/plate/components/current-date';
+import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { LabelContent } from '@app/plate/components/label-content';
@@ -20,6 +21,7 @@ import { Regelverk, RegelverkContainer } from '@app/plate/components/regelverk';
 import { Signature } from '@app/plate/components/signature/signature';
 import {
   ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
@@ -62,4 +64,5 @@ export const components: Record<string, PlatePluginComponent> = {
   [ELEMENT_REGELVERK]: Regelverk,
   [ELEMENT_REGELVERK_CONTAINER]: RegelverkContainer,
   [ELEMENT_SIGNATURE]: Signature,
+  [ELEMENT_EMPTY_VOID]: EmptyVoid,
 };

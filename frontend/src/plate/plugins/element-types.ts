@@ -9,6 +9,7 @@ export const ELEMENT_HEADER = 'header';
 export const ELEMENT_FOOTER = 'footer';
 export const ELEMENT_LABEL_CONTENT = 'label-content';
 export const ELEMENT_SIGNATURE = 'signature';
+export const ELEMENT_EMPTY_VOID = 'empty-void';
 
 export const UNCHANGEABLE = [
   ELEMENT_HEADER,
