@@ -1,7 +1,7 @@
 import { TNode, isNodeList, isText } from '@udecode/plate-common';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 
-export const nodesEquals = <T extends TNode>(a: T[], b: T[]): boolean => {
+export const nodesEquals = (a: TNode[], b: TNode[]): boolean => {
   if (a.length !== b.length) {
     return false;
   }

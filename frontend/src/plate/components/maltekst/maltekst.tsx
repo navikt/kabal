@@ -1,22 +1,19 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Loader, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import {
   PlateElement,
   PlateRenderElementProps,
-  findNode,
-  insertNodes,
+  findNodePath,
   isElement,
-  removeNodes,
+  replaceNodeChildren,
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelected } from 'slate-react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { NONE } from '@app/components/smart-editor-texts/types';
-import { isNotNull } from '@app/functions/is-not-type-guards';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
 import {
@@ -25,22 +22,10 @@ import {
   SectionTypeEnum,
   StyledSectionToolbarButton,
 } from '@app/plate/components/styled-components';
-import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import { EditorValue, MaltekstElement } from '@app/plate/types';
-import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { IRichText, RichTextTypes } from '@app/types/texts/texts';
-
-const lexSpecialis = (maltekster: IRichText[]): EditorValue | null => {
-  if (maltekster.length === 0) {
-    return null;
-  }
-
-  if (maltekster.length === 1) {
-    return maltekster[0]?.content ?? null;
-  }
-
-  return maltekster.find((t) => t.hjemler.length !== 0)?.content ?? maltekster[0]?.content ?? null;
-};
+import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
+import { EditorValue, EmptyVoidElement, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
+import { useGetTextsQuery } from '@app/redux-api/texts';
+import { IRichText, IText, RichTextTypes } from '@app/types/texts/texts';
 
 export const Maltekst = ({
   editor,
@@ -49,66 +34,34 @@ export const Maltekst = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const { templateId } = useContext(SmartEditorContext);
-
   const query = useQuery({
     textType: RichTextTypes.MALTEKST,
     sections: [element.section, NONE],
     templateId,
   });
-  const [getTexts, { isLoading }] = useLazyGetTextsQuery();
-  const initialized = useRef(false);
-
+  const { data, isLoading, isFetching, refetch } = useGetTextsQuery(query);
   const isSelected = useSelected();
 
-  const load = useCallback(async () => {
-    initialized.current = true;
+  useEffect(() => {
+    const path = findNodePath(editor, element);
 
-    if (query === skipToken) {
+    if (path === undefined) {
       return;
     }
 
-    const maltekster = lexSpecialis(
-      (await getTexts(query).unwrap()).map((t) => (t.textType === RichTextTypes.MALTEKST ? t : null)).filter(isNotNull),
-    );
+    const rawMaltekster = data === undefined ? EMPTY_VOID : lexSpecialis(data.filter(isMaltekst));
+    const maltekster = rawMaltekster.length === 0 ? EMPTY_VOID : rawMaltekster;
 
-    if (maltekster === null) {
-      return;
-    }
-
-    const entry = findNode(editor, {
-      at: [],
-      match: (n) => n === element,
-      voids: false,
-    });
-
-    if (entry === undefined) {
-      return;
-    }
-
-    const [node, path] = entry;
-
-    if (isElement(node) && node.type === ELEMENT_MALTEKST && nodesEquals(node.children, maltekster)) {
+    if (nodesEquals(element.children, maltekster)) {
       return;
     }
 
     withoutSavingHistory(editor, () => {
-      withoutNormalizing(editor, () => {
-        removeNodes(editor, {
-          at: path,
-          voids: false,
-          match: (n) => n === element,
-        });
-
-        insertNodes(editor, { ...element, children: maltekster }, { at: path, voids: false });
-      });
+      withoutNormalizing(editor, () =>
+        replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
+      );
     });
-  }, [editor, element, getTexts, query]);
-
-  useEffect(() => {
-    if (!initialized.current) {
-      load();
-    }
-  }, [load]);
+  }, [data, editor, element]);
 
   if (isLoading) {
     return (
@@ -116,6 +69,16 @@ export const Maltekst = ({
         <SectionContainer data-element="maltekst" $sectionType={SectionTypeEnum.MALTEKST} $isSelected={isSelected}>
           <Loader title="Laster..." />
         </SectionContainer>
+      </PlateElement>
+    );
+  }
+
+  const [first] = element.children;
+
+  if (isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
+    return (
+      <PlateElement as="div" attributes={attributes} element={element} editor={editor}>
+        {null}
       </PlateElement>
     );
   }
@@ -134,7 +97,12 @@ export const Maltekst = ({
         e.stopPropagation();
       }}
     >
-      <SectionContainer data-element="maltekst" $sectionType={SectionTypeEnum.MALTEKST} $isSelected={isSelected}>
+      <SectionContainer
+        data-element="maltekst"
+        data-section={element.section}
+        $sectionType={SectionTypeEnum.MALTEKST}
+        $isSelected={isSelected}
+      >
         {children}
         <SectionToolbar $sectionType={SectionTypeEnum.MALTEKST} $label="Maltekst" contentEditable={false}>
           <AddNewParagraphs editor={editor} element={element} />
@@ -142,10 +110,11 @@ export const Maltekst = ({
             <StyledSectionToolbarButton
               title="Oppdater til siste versjon"
               icon={<ArrowCirclepathIcon aria-hidden />}
-              onClick={load}
+              onClick={refetch}
               variant="tertiary"
               size="xsmall"
               contentEditable={false}
+              loading={isLoading || isFetching}
             />
           </Tooltip>
         </SectionToolbar>
@@ -153,3 +122,19 @@ export const Maltekst = ({
     </PlateElement>
   );
 };
+
+const lexSpecialis = (maltekster: IRichText[]): EditorValue | [EmptyVoidElement] => {
+  if (maltekster.length === 0) {
+    return EMPTY_VOID;
+  }
+
+  if (maltekster.length === 1) {
+    return maltekster[0]?.content ?? EMPTY_VOID;
+  }
+
+  return maltekster.find((t) => t.hjemler.length !== 0)?.content ?? maltekster[0]?.content ?? EMPTY_VOID;
+};
+
+const isMaltekst = (text: IText): text is IRichText => text.textType === RichTextTypes.MALTEKST;
+
+const EMPTY_VOID: [EmptyVoidElement] = [{ type: ELEMENT_EMPTY_VOID, children: [{ text: '' }] }];

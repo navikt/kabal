@@ -24,6 +24,7 @@ import {
 } from '@udecode/plate-table';
 import {
   ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
@@ -148,7 +149,7 @@ export interface TableCellElement extends BlockElement, TTableCellElement {
 export interface MaltekstElement extends BlockElement {
   type: typeof ELEMENT_MALTEKST;
   section: TemplateSections;
-  children: ParentOrChildElement[];
+  children: ParentOrChildElement[] | [EmptyVoidElement];
 }
 
 export interface RedigerbarMaltekstElement extends BlockElement {
@@ -170,6 +171,11 @@ export interface PageBreakElement extends BlockElement {
 
 export interface CurrentDateElement extends BlockElement {
   type: typeof ELEMENT_CURRENT_DATE;
+  children: [{ text: '' }];
+}
+
+export interface EmptyVoidElement extends BlockElement {
+  type: typeof ELEMENT_EMPTY_VOID;
   children: [{ text: '' }];
 }
 
@@ -247,7 +253,8 @@ export type ChildElement =
   | TableRowElement
   | TableCellElement
   | RegelverkContainerElement
-  | PlaceholderElement;
+  | PlaceholderElement
+  | EmptyVoidElement;
 
 export type RichTextEditorElement = RootElement | ChildElement;
 
