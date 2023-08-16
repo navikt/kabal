@@ -71,10 +71,12 @@ export const handleDeleteBackwardInPlaceholder = (editor: RichTextEditor): boole
   if (isStartPoint(editor, editor.selection.anchor, path)) {
     if (isElementEmpty(editor, node)) {
       removeNodes(editor, { at: path });
+
+      return true;
     }
   }
 
-  return true;
+  return false;
 };
 
 export const handleDeleteForwardInPlaceholder = (editor: RichTextEditor): boolean => {
@@ -93,8 +95,10 @@ export const handleDeleteForwardInPlaceholder = (editor: RichTextEditor): boolea
   if (isEndPoint(editor, editor.selection.anchor, path)) {
     if (isElementEmpty(editor, node)) {
       removeNodes(editor, { at: path });
+
+      return true;
     }
   }
 
-  return true;
+  return false;
 };
