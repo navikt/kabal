@@ -72,7 +72,7 @@ const StyledPopup = styled.div<StyledPopupProps>`
   right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
   width: 275px;
   max-height: 256px;
-  z-index: 3;
+  z-index: 22;
   background-color: white;
   border-radius: 0.25rem;
   border: 1px solid #c6c2bf;
