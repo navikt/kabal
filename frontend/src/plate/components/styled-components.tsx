@@ -7,6 +7,7 @@ export enum SectionTypeEnum {
   MALTEKST,
   REDIGERBAR_MALTEKST,
   REGELVERK,
+  SIGNATURE,
   HEADER,
   FOOTER,
 }
@@ -17,6 +18,7 @@ const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.REGELVERK]: 'inherit',
   [SectionTypeEnum.HEADER]: 'var(--a-gray-700)',
   [SectionTypeEnum.FOOTER]: 'var(--a-gray-700)',
+  [SectionTypeEnum.SIGNATURE]: 'var(--a-gray-700)',
 };
 
 const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
@@ -25,6 +27,7 @@ const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.REGELVERK]: 'var(--a-blue-500)',
   [SectionTypeEnum.HEADER]: 'var(--a-gray-500)',
   [SectionTypeEnum.FOOTER]: 'var(--a-gray-500)',
+  [SectionTypeEnum.SIGNATURE]: 'var(--a-limegreen-800)',
 };
 
 interface SectionToolbarProps {
