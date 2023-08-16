@@ -16,7 +16,13 @@ export const calculateRangePosition = (
   containerRef: HTMLDivElement,
   selectionStart: BasePoint,
 ): IRangePosition | null => {
-  const range = toDOMRange(editor, { anchor: selectionStart, focus: selectionStart });
+  const range = toDOMRange(editor, {
+    anchor: selectionStart,
+    focus: {
+      path: selectionStart.path,
+      offset: selectionStart.offset + 1,
+    },
+  });
 
   if (range === undefined) {
     console.warn('Could not calculate position of floating toolbar. Range is undefined.', selectionStart);
