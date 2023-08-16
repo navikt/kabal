@@ -4,6 +4,7 @@ import { StyledParagraph } from '@app/plate/components/paragraph';
 import { StyledPageBreak } from './page-break';
 
 export enum SectionTypeEnum {
+  LABEL,
   MALTEKST,
   REDIGERBAR_MALTEKST,
   REGELVERK,
@@ -19,6 +20,7 @@ const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.HEADER]: 'var(--a-gray-700)',
   [SectionTypeEnum.FOOTER]: 'var(--a-gray-700)',
   [SectionTypeEnum.SIGNATURE]: 'var(--a-gray-700)',
+  [SectionTypeEnum.LABEL]: 'var(--a-gray-700)',
 };
 
 const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
@@ -28,6 +30,7 @@ const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.HEADER]: 'var(--a-gray-500)',
   [SectionTypeEnum.FOOTER]: 'var(--a-gray-500)',
   [SectionTypeEnum.SIGNATURE]: 'var(--a-limegreen-800)',
+  [SectionTypeEnum.LABEL]: 'var(--a-gray-500)',
 };
 
 interface SectionToolbarProps {
