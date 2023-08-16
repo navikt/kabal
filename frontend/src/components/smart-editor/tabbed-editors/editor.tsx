@@ -19,6 +19,7 @@ import { Sheet } from '@app/plate/sheet';
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
+import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -116,6 +117,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   return (
     <Sheet ref={containerRef} $minHeight>
       <FloatingSaksbehandlerToolbar container={containerRef.current} editorId={id} />
+      <SaksbehandlerTableToolbar container={containerRef.current} editorId={id} />
 
       <NewComment container={containerRef.current} />
 

@@ -23,8 +23,9 @@ export const useRangePosition = (selection: TRange | null, container: HTMLDivEle
 
     previousSelectionStart.current = selectionStart;
 
-    const handle = requestIdleCallback(() =>
-      setPosition(selectionStart === null ? null : calculateRangePosition(editor, container, selectionStart)),
+    const handle = requestIdleCallback(
+      () => setPosition(selectionStart === null ? null : calculateRangePosition(editor, container, selectionStart)),
+      { timeout: 100 },
     );
 
     return () => cancelIdleCallback(handle);

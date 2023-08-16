@@ -7,7 +7,6 @@ import {
   findNode,
   insertNodes,
   isElement,
-  isNodeList,
   removeNodes,
   withoutNormalizing,
   withoutSavingHistory,
@@ -88,12 +87,7 @@ export const Maltekst = ({
 
     const [node, path] = entry;
 
-    if (
-      isElement(node) &&
-      node.type === ELEMENT_MALTEKST &&
-      isNodeList(node.children) &&
-      nodesEquals(node.children, maltekster)
-    ) {
+    if (isElement(node) && node.type === ELEMENT_MALTEKST && nodesEquals(node.children, maltekster)) {
       return;
     }
 
@@ -114,7 +108,7 @@ export const Maltekst = ({
     if (!initialized.current) {
       load();
     }
-  }, [initialized, load]);
+  }, [load]);
 
   if (isLoading) {
     return (
