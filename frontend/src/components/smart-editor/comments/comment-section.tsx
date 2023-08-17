@@ -28,6 +28,5 @@ const StyledCommentSection = styled.div`
   width: 350px;
   position: sticky;
   top: 0;
-  background-color: var(--a-bg-subtle);
   overflow-y: auto;
 `;

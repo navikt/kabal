@@ -135,7 +135,7 @@ const StyledTabsList = styled(Tabs.List)`
 `;
 
 const StyledTabPanels = styled.div`
-  background: var(--a-bg-subtle);
+  background-color: var(--a-surface-subtle);
   overflow: hidden;
   flex-grow: 1;
 `;
