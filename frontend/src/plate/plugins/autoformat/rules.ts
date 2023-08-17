@@ -4,7 +4,6 @@ import {
   autoformatLegalHtml,
   autoformatMath,
   autoformatPunctuation,
-  autoformatSmartQuotes,
 } from '@udecode/plate-autoformat';
 import { EditorAutoformatRule } from '../../types';
 import { autoformatBlocks } from './blocks';
@@ -15,7 +14,6 @@ export const autoformatRules: EditorAutoformatRule[] = [
   ...autoformatBlocks,
   ...autoformatLists,
   ...autoformatMarks,
-  ...(autoformatSmartQuotes as EditorAutoformatRule[]),
   ...(autoformatPunctuation as EditorAutoformatRule[]),
   ...(autoformatLegal as EditorAutoformatRule[]),
   ...(autoformatLegalHtml as EditorAutoformatRule[]),
