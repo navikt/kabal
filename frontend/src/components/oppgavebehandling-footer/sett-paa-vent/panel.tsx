@@ -175,7 +175,7 @@ const StyledPanel = styled(Panel)`
   bottom: 100%;
   left: 0;
   padding: 16px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 4px;
 `;
 

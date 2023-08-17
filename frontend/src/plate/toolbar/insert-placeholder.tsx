@@ -114,7 +114,7 @@ const StyledPlaceholderText = styled.div`
   background: var(--a-surface-subtle);
   padding: 8px;
   border: 1px solid var(--a-border-strong);
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   min-width: 220px;
   top: 100%;
   right: 0;

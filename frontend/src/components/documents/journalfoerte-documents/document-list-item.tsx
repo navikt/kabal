@@ -36,5 +36,5 @@ const StyledDocumentListItem = styled.li`
   display: block;
   margin-left: 2px;
   margin-right: 2px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
 `;

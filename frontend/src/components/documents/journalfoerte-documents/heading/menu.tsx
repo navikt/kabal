@@ -61,7 +61,7 @@ const Dropdown = styled.div`
   right: 0;
   z-index: 2;
   background-color: var(--a-bg-default);
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-small);
   padding: 0.5rem;
   min-width: 250px;

@@ -92,7 +92,7 @@ const StyledButtons = styled.div`
   box-shadow: var(--a-shadow-medium);
   background-color: white;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   white-space: nowrap;
   z-index: 1;
 `;

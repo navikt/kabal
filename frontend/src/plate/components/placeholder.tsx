@@ -146,7 +146,7 @@ const Anchor = styled.span`
 const Wrapper = styled.span<WrapperStyleProps>`
   display: inline-block;
   background-color: ${({ $focused }) => getBackgroundColor($focused)};
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   outline: none;
   color: #000;
 

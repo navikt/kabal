@@ -130,7 +130,7 @@ const StyledCheckbox = styled(Checkbox)`
   border-width: 2px;
   border-style: dashed;
   border-color: inherit;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   padding-left: 8px;
   padding-right: 8px;
   margin-left: auto;

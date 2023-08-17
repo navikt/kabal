@@ -27,7 +27,7 @@ export const StyledAlert = styled(Alert)`
 export const StyledSmsContent = styled.blockquote`
   border-left: 4px solid var(--a-gray-200);
   padding-left: 4px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   margin-top: 8px;
   margin-left: 0;
   margin-right: 0;
@@ -78,7 +78,7 @@ export const StyledTimelineItem = styled.li<TimelineItemStyleProps>`
   row-gap: 4px;
   padding: 8px;
   border: 1px solid var(--a-border-default);
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   background-color: ${({ $color }) => $color};
   white-space: nowrap;
 `;

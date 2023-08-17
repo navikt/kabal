@@ -100,7 +100,7 @@ const FloatingPanel = styled(Panel)<Position>`
   flex-direction: column;
   row-gap: 16px;
   z-index: 1;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   min-width: 400px;
   box-shadow: 0px 0 4px rgb(0, 0, 0, 0.25);
 `;

@@ -87,7 +87,7 @@ export const StyledPreDescriptionDetails = styled.dd`
   padding: 8px;
   background-color: #f5f5f5;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   margin-left: 0;
   margin-top: 4px;
   white-space: pre-wrap;
@@ -99,7 +99,7 @@ const StyledErrorMessage = styled.code`
   padding: 16px;
   background-color: #f5f5f5;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   margin-bottom: 16px;
   white-space: pre-wrap;
   word-break: normal;
