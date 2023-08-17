@@ -43,13 +43,17 @@ export const Maltekst = ({
   const isSelected = useSelected();
 
   useEffect(() => {
+    if (isLoading || isFetching || data === undefined) {
+      return;
+    }
+
     const path = findNodePath(editor, element);
 
     if (path === undefined) {
       return;
     }
 
-    const rawMaltekster = data === undefined ? EMPTY_VOID : lexSpecialis(data.filter(isMaltekst));
+    const rawMaltekster = lexSpecialis(data.filter(isMaltekst));
     const maltekster = rawMaltekster.length === 0 ? EMPTY_VOID : rawMaltekster;
 
     if (nodesEquals(element.children, maltekster)) {
@@ -61,7 +65,7 @@ export const Maltekst = ({
         replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
       );
     });
-  }, [data, editor, element]);
+  }, [data, editor, element, isFetching, isLoading]);
 
   if (isLoading) {
     return (
