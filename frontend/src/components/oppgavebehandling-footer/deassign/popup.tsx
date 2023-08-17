@@ -114,7 +114,7 @@ const StyledPopup = styled.div`
   width: 100%;
 
   background-color: white;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   border: 1px solid #c6c2bf;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
 `;

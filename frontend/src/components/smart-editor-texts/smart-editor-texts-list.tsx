@@ -132,7 +132,7 @@ const ListItem = styled.li<{ $active: boolean }>`
   transition-property: background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
 
   &:hover {
     background-color: ${({ $active }) => ($active ? 'var(--a-blue-100)' : 'var(--a-blue-50)')};

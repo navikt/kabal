@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 export const SettingsSection = styled.section`
   box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   width: fit-content;
   padding: 24px;
   width: 100%;

@@ -57,7 +57,7 @@ const StyledThread = styled.section<{ $isFocused: boolean }>`
   background-color: white;
   padding: 16px;
   border: 1px solid #c9c9c9;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   margin-left: 12px;
   margin-right: 12px;
   will-change: transform, opacity, box-shadow;

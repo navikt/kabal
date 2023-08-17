@@ -80,7 +80,7 @@ const Container = styled.article`
   width: calc(210mm + 32px);
   height: 100%;
   box-shadow: var(--a-shadow-small);
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
 `;
 
 const EmptyContainer = styled(Container)`

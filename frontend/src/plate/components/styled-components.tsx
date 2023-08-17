@@ -89,7 +89,7 @@ export const SectionContainer = styled.div<SectionContainerProps>`
   outline-color: ${(props) => (props.$isSelected ? PRIMARY_COLOR_MAP[props.$sectionType] : 'transparent')};
   transition: outline-color 0.2s ease-in-out;
 
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   border-top-right-radius: 0;
 
   > ${SectionToolbar} {

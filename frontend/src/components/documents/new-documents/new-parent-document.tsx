@@ -118,7 +118,7 @@ const StyledDocumentListItem = styled.li`
   display: block;
   margin-left: 2px;
   margin-right: 2px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
 `;
 
 interface IDragOver {
@@ -138,7 +138,7 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-radius: 4px;
+    border-radius: var(--a-border-radius-medium);
     outline: 2px dashed var(--a-border-action);
     font-size: 18px;
     font-weight: bold;

@@ -8,7 +8,7 @@ interface LabelProps {
 const Label = styled.div<LabelProps>`
   display: inline-block;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

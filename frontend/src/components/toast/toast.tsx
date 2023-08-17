@@ -136,7 +136,7 @@ const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }>`
   display: flex;
   flex-direction: column;
   background-color: ${({ $type }) => getSubtleColor($type)};
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   width: 300px;
   padding: var(--a-spacing-4);
   border: 1px solid ${({ $type }) => getColor($type)};

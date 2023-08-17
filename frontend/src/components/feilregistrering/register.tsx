@@ -70,7 +70,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
 const Code = styled.code`
   background-color: var(--a-bg-subtle);
   padding: 2px 4px;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   font-size: 13px;
 `;
 

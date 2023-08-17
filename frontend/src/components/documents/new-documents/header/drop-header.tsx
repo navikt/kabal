@@ -108,7 +108,7 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
     align-items: center;
     justify-content: center;
     content: 'Slipp her for å gjøre til hoveddokument';
-    border-radius: 4px;
+    border-radius: var(--a-border-radius-medium);
     outline: 2px dashed var(--a-border-action);
     font-size: 18px;
     font-weight: bold;

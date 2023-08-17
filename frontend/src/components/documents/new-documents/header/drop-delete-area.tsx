@@ -91,7 +91,7 @@ const DeleteDropAreaContainer = styled.div<{ $isDropTarget: boolean; $isDragOver
   transition-property: opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   outline: 2px dashed var(--a-surface-danger);
   font-size: 18px;
   font-weight: bold;

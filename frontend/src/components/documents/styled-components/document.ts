@@ -4,7 +4,7 @@ export const documentCSS = css`
   position: relative;
   width: 100%;
   padding-right: 0;
-  border-radius: 4px;
+  border-radius: var(--a-border-radius-medium);
   background-color: transparent;
   transition: background-color 0.2s ease-in-out;
 `;
