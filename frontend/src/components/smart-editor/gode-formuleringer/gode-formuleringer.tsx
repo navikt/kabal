@@ -1,10 +1,16 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import { Alert, Skeleton } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { focusEditor } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { isNotNull } from '@app/functions/is-not-type-guards';
+import {
+  GodeFormuleringerTitle,
+  Header,
+  ListContainer,
+  StyledGodeFormuleringer,
+  StyledSkeleton,
+  Top,
+} from '@app/components/smart-editor/gode-formuleringer/styles';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetTextsQuery } from '@app/redux-api/texts';
@@ -38,11 +44,15 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const texts: IRichText[] = useMemo(() => {
     const filterRegexp = stringToRegExp(filter);
+    const result: IRichText[] = [];
 
-    return data
-      .filter(({ title }) => filterRegexp.test(title))
-      .map((t) => (t.textType !== RichTextTypes.GOD_FORMULERING ? null : t))
-      .filter(isNotNull);
+    for (const text of data) {
+      if (text.textType === RichTextTypes.GOD_FORMULERING && filterRegexp.test(text.title)) {
+        result.push(text);
+      }
+    }
+
+    return result;
   }, [data, filter]);
 
   const onKeyDown = useCallback(
@@ -107,81 +117,55 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     return null;
   }
 
-  if (isLoading) {
-    return (
-      <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
+  return (
+    <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
+      <Top>
         <Header>
           <GodeFormuleringerTitle>
             <LightBulbIcon />
             Gode formuleringer ({texts.length})
           </GodeFormuleringerTitle>
+
+          <Button
+            title="Skjul gode formuleringer"
+            size="small"
+            variant="secondary-neutral"
+            icon={<ChevronLeftIcon />}
+            onClick={() => setShowGodeFormuleringer(false)}
+          />
         </Header>
         <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
-        <Skeleton variant="rounded" height={200} />
-        <Skeleton variant="rounded" height={200} />
-        <Skeleton variant="rounded" height={200} />
-      </StyledGodeFormuleringer>
-    );
-  }
-
-  const godeFormuleringer =
-    texts.length === 0 ? (
-      <Alert variant="info" size="small">
-        Ingen gode formuleringer funnet.
-      </Alert>
-    ) : (
-      texts.map((t, i) => <GodFormulering key={t.id} {...t} isFocused={focused === i} onClick={() => setFocused(i)} />)
-    );
-
-  return (
-    <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
-      <Header>
-        <GodeFormuleringerTitle>
-          <LightBulbIcon />
-          Gode formuleringer ({texts.length})
-        </GodeFormuleringerTitle>
-
-        <StyledCloseButton title="Skjul gode formuleringer" onClick={() => setShowGodeFormuleringer(false)}>
-          <ChevronLeftIcon />
-        </StyledCloseButton>
-      </Header>
-      <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
-      {godeFormuleringer}
+      </Top>
+      <ListContainer>
+        <List texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
+      </ListContainer>
     </StyledGodeFormuleringer>
   );
 };
 
-const StyledGodeFormuleringer = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-  width: 350px;
-  overflow-y: auto;
-`;
+interface ListProps {
+  isLoading: boolean;
+  texts: IRichText[];
+  focused: number;
+  setFocused: (index: number) => void;
+}
 
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+const List = ({ texts, isLoading, focused, setFocused }: ListProps) => {
+  if (isLoading) {
+    return (
+      <>
+        <StyledSkeleton variant="rectangle" height={339} />
+        <StyledSkeleton variant="rectangle" height={339} />
+        <StyledSkeleton variant="rectangle" height={339} />
+      </>
+    );
+  }
 
-const StyledCloseButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  padding-left: 0;
-  cursor: pointer;
-`;
-
-const GodeFormuleringerTitle = styled.h1`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  font-size: 20px;
-`;
+  return texts.length === 0 ? (
+    <Alert variant="info" size="small">
+      Ingen gode formuleringer funnet.
+    </Alert>
+  ) : (
+    texts.map((t, i) => <GodFormulering key={t.id} {...t} isFocused={focused === i} onClick={() => setFocused(i)} />)
+  );
+};

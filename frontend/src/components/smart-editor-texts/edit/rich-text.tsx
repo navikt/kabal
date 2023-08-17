@@ -55,7 +55,7 @@ export const RichText = ({ textId, savedContent, setContent, onKeyDown }: Props)
 
 const Content = styled.div`
   padding: 16px;
-  background: var(--a-bg-subtle);
+  background: var(--a-surface-subtle);
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;

@@ -2,6 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
 import { godeFormuleringerPlugins } from '@app/plate/plugins/plugins';
@@ -93,24 +94,22 @@ const ContentContainer = styled.div`
 `;
 
 const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
+  ${godFormuleringBaseStyle}
   display: flex;
   flex-direction: column;
   gap: 8px;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
   padding: 8px;
-  border-radius: 4px;
-  width: 100%;
-  background-color: #f5f5f5;
-  outline: 3px solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
+  background-color: var(--a-bg-subtle);
+  outline: ${OUTLINE_WIDTH} solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
   transition: outline 0.2s ease-in-out;
   white-space: normal;
 `;
 
 const StyledContent = styled.div<{ $isExpanded: boolean }>`
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 8px;
-  padding-bottom: 0;
+  background-color: white;
+  border-radius: var(--a-border-radius-medium);
+  padding-left: 8px;
+  padding-right: 8px;
   max-height: ${({ $isExpanded }) => ($isExpanded ? 'unset' : '200px')};
   overflow: hidden;
   position: relative;

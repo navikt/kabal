@@ -142,7 +142,7 @@ const Buttons = styled.div`
   display: flex;
   gap: 8px;
   padding: 16px;
-  background: var(--a-bg-subtle);
+  background: var(--a-surface-subtle);
 `;
 
 const Header = styled.div`
