@@ -116,7 +116,7 @@ const BookmarkList = styled.ul`
   flex-direction: column;
   justify-content: flex-start;
   list-style: none;
-  width: 100%;
+  width: 350px;
   margin: 0;
   padding: 0;
   padding-right: 16px;

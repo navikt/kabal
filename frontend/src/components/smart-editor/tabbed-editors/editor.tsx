@@ -122,7 +122,6 @@ const StickyRightContainer = styled.div`
   top: 0;
   overflow-y: auto;
   height: 100%;
-  width: 350px;
 `;
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
