@@ -5,6 +5,7 @@ import React, { useContext, useRef } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { Bookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { CommentSection } from '@app/components/smart-editor/comments/comment-section';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -104,11 +105,25 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
           </ErrorBoundary>
         </Content>
 
-        <CommentSection />
+        <StickyRightContainer>
+          <Bookmarks editorId={id} />
+          <CommentSection />
+        </StickyRightContainer>
       </PlateEditorContextComponent>
     </Container>
   );
 };
+
+const StickyRightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  height: 100%;
+  width: 350px;
+`;
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const readOnly = useCanEditDocument();
@@ -133,6 +148,7 @@ const Container = styled.div`
   height: 100%;
   overflow-y: auto;
   align-items: flex-start;
+  scroll-padding-top: 64px;
 `;
 
 const Content = ({ children }: { children?: React.ReactNode }) => {

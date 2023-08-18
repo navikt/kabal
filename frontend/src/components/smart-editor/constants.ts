@@ -1,5 +1,6 @@
 import { TemplateSections } from '@app/plate/types';
 
+export const BOOKMARK_PREFIX = 'bookmark_';
 export const COMMENT_PREFIX = 'commentThreadId_';
 
 export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {

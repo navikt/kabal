@@ -1,6 +1,6 @@
 import { PlateLeaf, PlateRenderLeafProps, findNodePath, getNodeAncestors } from '@udecode/plate-common';
-import React, { useContext, useLayoutEffect, useMemo, useRef } from 'react';
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { EditorValue, RichText, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
@@ -15,30 +15,39 @@ export const CustomLeaf = ({
   const editor = useMyPlateEditorRef();
   const ref = useRef<HTMLSpanElement>(null);
 
-  const threadIds = useMemo(() => {
-    const ids: string[] = [];
+  const { threadIds, bookmarks } = useMemo(() => {
+    const _threadIds: string[] = [];
+    const _bookmarks: { key: string; color: string }[] = [];
 
-    Object.keys(leaf).forEach((key) => {
-      if (!key.startsWith(COMMENT_PREFIX)) {
-        return;
+    const keys = Object.keys(leaf);
+
+    for (const key of keys) {
+      if (key.startsWith(COMMENT_PREFIX)) {
+        _threadIds.push(key.replace(COMMENT_PREFIX, ''));
+      } else if (key.startsWith(BOOKMARK_PREFIX)) {
+        const bookmarkColor = leaf[key];
+
+        if (typeof bookmarkColor === 'string') {
+          _bookmarks.push({ key, color: bookmarkColor });
+        }
       }
+    }
 
-      ids.push(key.replace(COMMENT_PREFIX, ''));
-    });
-
-    return ids;
+    return { threadIds: _threadIds, bookmarks: _bookmarks };
   }, [leaf]);
 
-  const isActive = useMemo(
+  const isCommentFocused = useMemo(
     () => focusedThreadId !== null && threadIds.includes(focusedThreadId),
     [focusedThreadId, threadIds],
   );
 
-  useLayoutEffect(() => {
-    if (isActive && ref.current !== null) {
-      requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'auto', block: 'center' }));
+  const style = getCustomLeafStyles(leaf, isCommentFocused, threadIds.length);
+
+  useEffect(() => {
+    if (isCommentFocused && ref.current !== null) {
+      requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
     }
-  }, [isActive]);
+  }, [isCommentFocused]);
 
   return (
     <PlateLeaf
@@ -47,7 +56,7 @@ export const CustomLeaf = ({
       leaf={leaf}
       text={text}
       ref={ref}
-      style={getCustomLeafStyles(leaf, isActive, threadIds.length)}
+      style={{ ...style, color: bookmarks[0]?.color }}
       contentEditable={contentEditable(editor, text)}
       data-selected={leaf.selected}
       suppressContentEditableWarning
@@ -79,7 +88,8 @@ export const Leaf = ({
 );
 
 const getCustomLeafStyles = (leaf: RichText, isActive: boolean, threadCount: number): React.CSSProperties => ({
-  backgroundColor: leaf.selected === true ? 'var(--a-surface-success-subtle-hover)' : getColor(threadCount, isActive),
+  backgroundColor:
+    leaf.selected === true ? 'var(--a-surface-success-subtle-hover)' : getBackgroundColor(threadCount, isActive),
   ...getLeafStyles(leaf),
 });
 
@@ -116,7 +126,7 @@ const contentEditable = (editor: RichTextEditor, text: RichText): boolean => {
   return true;
 };
 
-const getColor = (commentCount: number, isActive: boolean): React.CSSProperties['backgroundColor'] => {
+const getBackgroundColor = (commentCount: number, isActive: boolean): React.CSSProperties['backgroundColor'] => {
   if (isActive) {
     return commentCount === 1 ? 'var(--a-green-200)' : 'var(--a-green-300)';
   }
