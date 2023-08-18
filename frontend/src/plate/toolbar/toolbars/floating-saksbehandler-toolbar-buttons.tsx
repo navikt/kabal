@@ -5,6 +5,7 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import React from 'react';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
+import { BookmarkButton } from '@app/plate/toolbar/bookmark-button';
 import { Headings } from '@app/plate/toolbar/headings';
 import { Indent } from '@app/plate/toolbar/indent';
 import { Marks } from '@app/plate/toolbar/marks';
@@ -32,6 +33,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <Headings />
         <ToolbarSeparator />
+        <BookmarkButton />
         <CommentsButton />
       </>
     );
@@ -46,6 +48,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <Indent />
         <ToolbarSeparator />
+        <BookmarkButton />
         <CommentsButton />
       </>
     );
@@ -57,6 +60,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ParagraphButton />
         <Headings />
         <ToolbarSeparator />
+        <BookmarkButton />
         <CommentsButton />
       </>
     );
@@ -67,6 +71,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
       <>
         <Marks />
         <ToolbarSeparator />
+        <BookmarkButton />
         <CommentsButton />
       </>
     );

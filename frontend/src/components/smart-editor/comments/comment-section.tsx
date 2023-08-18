@@ -24,9 +24,5 @@ export const CommentSection = () => {
 };
 
 const StyledCommentSection = styled.div`
-  height: 100%;
-  width: 350px;
-  position: sticky;
-  top: 0;
-  overflow-y: auto;
+  width: 100%;
 `;

@@ -7,6 +7,7 @@ import {
   useMarkToolbarButton,
   useMarkToolbarButtonState,
 } from '@udecode/plate-common';
+import { MARK_COLOR } from '@udecode/plate-font';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import React from 'react';
 import { MOD_KEY } from '@app/mod-key';
@@ -73,7 +74,7 @@ export const Marks = () => {
       <ToolbarIconButton
         label="Fjern formatering"
         icon={<ClearFormatting aria-hidden width={24} />}
-        onClick={() => removeMark(editor, { key: [MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE] })}
+        onClick={() => removeMark(editor, { key: [MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE, MARK_COLOR] })}
         disabled={disabled}
       />
     </>

@@ -1,6 +1,7 @@
 import { TRange } from '@udecode/plate-common';
 import React, { createContext, useState } from 'react';
 import { useSmartEditorGodeFormuleringerOpen } from '@app/hooks/settings/use-setting';
+import { RichText } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -15,6 +16,10 @@ interface ISmartEditorContext extends Pick<ISmartEditor, 'templateId' | 'dokumen
   documentId: string | null;
   focusedThreadId: string | null;
   setFocusedThreadId: (threadId: string | null) => void;
+  bookmarksMap: Record<string, RichText[]>;
+  addBookmark: (bookmarkId: string, richTexts: RichText[]) => void;
+  removeBookmark: (bookmarkId: string) => void;
+  setInitialBookmarks: (bookmarks: Record<string, RichText[]>) => void;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -27,6 +32,10 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   documentId: null,
   focusedThreadId: null,
   setFocusedThreadId: noop,
+  bookmarksMap: {},
+  addBookmark: noop,
+  removeBookmark: noop,
+  setInitialBookmarks: noop,
 });
 
 interface Props {
@@ -40,6 +49,17 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
     useSmartEditorGodeFormuleringerOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
+  const [bookmarksMap, setBookmarksMap] = useState<Record<string, RichText[]>>({});
+
+  const addBookmark = (bookmarkId: string, richTexts: RichText[]) =>
+    setBookmarksMap((prev) => ({ ...prev, [bookmarkId]: richTexts }));
+
+  const removeBookmark = (bookmarkId: string) =>
+    setBookmarksMap((prev) => {
+      delete prev[bookmarkId];
+
+      return { ...prev };
+    });
 
   return (
     <SmartEditorContext.Provider
@@ -53,6 +73,10 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
         documentId: id,
         focusedThreadId,
         setFocusedThreadId,
+        bookmarksMap,
+        addBookmark,
+        removeBookmark,
+        setInitialBookmarks: setBookmarksMap,
       }}
     >
       {children}

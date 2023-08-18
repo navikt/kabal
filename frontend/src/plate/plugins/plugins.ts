@@ -3,6 +3,7 @@ import { AutoformatPlugin, createAutoformatPlugin } from '@udecode/plate-autofor
 import { createBoldPlugin, createItalicPlugin, createUnderlinePlugin } from '@udecode/plate-basic-marks';
 import { createExitBreakPlugin, createSoftBreakPlugin } from '@udecode/plate-break';
 import { PlatePlugin, PluginOptions, createPlugins, someNode } from '@udecode/plate-common';
+import { createFontColorPlugin } from '@udecode/plate-font';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
 import { createIndentPlugin } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
@@ -10,6 +11,7 @@ import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragra
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
 import { components } from '@app/plate/components';
+import { createBookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { createCommentsPlugin } from '@app/plate/plugins/comments';
 import { createCopyPlugin } from '@app/plate/plugins/copy';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
@@ -112,6 +114,8 @@ export const saksbehandlerPlugins = createPlugins<EditorValue>(
     createLabelContentPlugin(),
     createSignaturePlugin(),
     createEmptyVoidPlugin(),
+    createFontColorPlugin(),
+    createBookmarkPlugin(),
   ],
   { components },
 );
