@@ -64,9 +64,27 @@ export const Placeholder = ({
       return;
     }
 
-    if (!isFocused && hasNoText(element.children)) {
-      const at = [...path, 0];
+    const at = [...path, 0];
 
+    if (!editor.hasPath(at)) {
+      return;
+    }
+
+    // Undo (Ctrl + Z) causes the placeholder to contain two empty chars. This cleans that up.
+    if (text.length > 1 && containsOnlyEmptyChar(element.children)) {
+      withoutSavingHistory(editor, () => {
+        withoutNormalizing(editor, () => {
+          removeNodes(editor, {
+            at: path,
+            match: (n) => n !== element,
+          });
+
+          insertNodes<RichText>(editor, { text: EMPTY_CHAR }, { at });
+        });
+      });
+    }
+
+    if (!isFocused && hasNoText(element.children)) {
       withoutSavingHistory(editor, () => {
         withoutNormalizing(editor, () => {
           insertText(editor, EMPTY_CHAR, { at });
@@ -84,7 +102,6 @@ export const Placeholder = ({
           .filter((ch) => ch.charCodeAt(0) !== EMPTY_CHAR_CODE)
           .join(''),
       }));
-      const at = [...path, 0];
 
       withoutSavingHistory(editor, () => {
         withoutNormalizing(editor, () => {
@@ -124,6 +141,7 @@ const getHasNoVisibleText = (texts: RichText[]): boolean =>
 const hasNoText = (texts: RichText[]): boolean => texts.every((t) => t.text.length === 0);
 
 const containsEmptyChar = (texts: RichText[]): boolean => texts.some((t) => t.text.includes(EMPTY_CHAR));
+const containsOnlyEmptyChar = (texts: RichText[]): boolean => texts.every((t) => t.text.includes(EMPTY_CHAR));
 
 const getIsFocused = (editor: RichTextEditor, path: TPath): boolean => {
   if (editor.selection === null) {
