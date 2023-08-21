@@ -47,10 +47,6 @@ export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: EditorDescen
     return node.text.length === 0;
   }
 
-  if (node.children.length === 0) {
-    return true;
-  }
-
   return node.children.every((child) => isChildEmpty(editor, child));
 };
 

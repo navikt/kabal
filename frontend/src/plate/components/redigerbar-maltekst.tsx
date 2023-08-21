@@ -1,7 +1,7 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { PlateElement, PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate-common';
+import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { useSelected } from 'slate-react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -38,12 +38,12 @@ export const RedigerbarMaltekst = ({
 
   const [getTexts, { isLoading }] = useLazyGetTextsQuery();
 
-  const entry = findDescendant<RedigerbarMaltekstElement>(editor, { at: [], match: (n) => n === element });
+  const path = findNodePath(editor, element);
 
-  const isInitialized = useRef(entry === undefined ? false : !isNodeEmpty(editor, entry[0]));
+  const isInitialized = useRef(!isNodeEmpty(editor, element));
 
   const insertRedigerbarMaltekst = useCallback(async () => {
-    if (query === skipToken || entry === undefined) {
+    if (query === skipToken || path === undefined) {
       return;
     }
 
@@ -61,28 +61,26 @@ export const RedigerbarMaltekst = ({
       }
 
       replaceNodeChildren(editor, {
-        at: entry[1],
+        at: path,
         nodes: maltekster.length === 0 ? [createSimpleParagraph()] : maltekster,
       });
     } catch (e) {
       console.error('RedigerbarMaltekst: Failed to get texts', e, query);
       insertRedigerbarMaltekst();
     }
-  }, [editor, entry, getTexts, query]);
+  }, [editor, path, getTexts, query]);
 
   useEffect(() => {
-    if (isInitialized.current || entry === undefined) {
+    if (isInitialized.current) {
       return;
     }
 
-    const [node] = entry;
-
-    isInitialized.current = !isNodeEmpty(editor, node);
+    isInitialized.current = !isNodeEmpty(editor, element);
 
     if (!isInitialized.current) {
       insertRedigerbarMaltekst();
     }
-  }, [editor, entry, insertRedigerbarMaltekst]);
+  }, [editor, element, insertRedigerbarMaltekst]);
 
   if (isLoading) {
     return (
