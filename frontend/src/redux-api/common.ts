@@ -1,4 +1,5 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
+import { ENVIRONMENT } from '@app/environment';
 import { queryStringify } from '@app/functions/query-string';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
@@ -11,6 +12,11 @@ const staggeredBaseQuery = (baseUrl: string) => {
     mode,
     credentials: 'include',
     paramsSerializer: queryStringify,
+    prepareHeaders: (headers) => {
+      headers.set('x-kabal-version', ENVIRONMENT.version);
+
+      return headers;
+    },
   });
 
   return retry(
