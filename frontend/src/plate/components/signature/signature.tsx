@@ -1,4 +1,3 @@
-import { Checkbox } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useEffect } from 'react';
@@ -6,6 +5,7 @@ import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
 import { IndividualSignature } from '@app/plate/components/signature/individual-signature';
 import { MISSING_TITLE } from '@app/plate/components/signature/title';
@@ -99,19 +99,21 @@ export const Signature = ({
           e.stopPropagation();
         }}
       >
-        <StyledCheckbox
-          checked={element.useShortName}
-          size="small"
-          onChange={({ target }) => {
-            setNodes(
-              editor,
-              { ...element, useShortName: target.checked },
-              { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
-            );
-          }}
-        >
+        <StyledCheckboxContainer>
+          <Checkbox
+            type="checkbox"
+            checked={element.useShortName}
+            onChange={({ target }) => {
+              setNodes(
+                editor,
+                { ...element, useShortName: target.checked },
+                { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
+              );
+            }}
+          />
           Bruk forkortede navn
-        </StyledCheckbox>
+        </StyledCheckboxContainer>
+
         <StyledSignatures>
           <IndividualSignature signature={element.medunderskriver} />
           <IndividualSignature signature={element.saksbehandler} />
@@ -125,19 +127,32 @@ export const Signature = ({
   );
 };
 
-const StyledCheckbox = styled(Checkbox)`
-  width: fit-content;
-  border-width: 2px;
+const StyledCheckboxContainer = styled.label`
+  display: flex;
+  width: min-content;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: ${ptToEm(6)};
+  padding: ${ptToEm(6)};
+  border-width: ${ptToEm(2)};
   border-style: dashed;
   border-color: inherit;
   border-radius: var(--a-border-radius-medium);
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: ${ptToEm(6)};
+  padding-right: ${ptToEm(6)};
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 6pt;
-  margin-top: 24pt;
+  margin-bottom: ${ptToEm(6)};
+  margin-top: ${ptToEm(24)};
   user-select: none;
+  font-size: 1em;
+  cursor: pointer;
+`;
+
+const Checkbox = styled.input`
+  width: 1.5em;
+  height: 1.5em;
 `;
 
 const StyledSignatures = styled.div`

@@ -22,7 +22,7 @@ export const StyledTemplateButtonIcon = styled.div`
 `;
 
 export const StyledNewDocument = styled.section`
-  width: 1176px;
+  width: 826px;
   height: 100%;
   padding: 32px;
   padding-top: 16px;

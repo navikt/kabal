@@ -1,6 +1,7 @@
 import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 
 export const MISSING_TITLE = 'TITTEL MANGLER';
 
@@ -17,5 +18,5 @@ export const Title = ({ title }: Props): JSX.Element => {
 };
 
 const StyledWarning = styled(Alert)`
-  margin-top: 4px;
+  margin-top: ${ptToEm(5)};
 `;

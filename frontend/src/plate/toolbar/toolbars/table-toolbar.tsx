@@ -1,6 +1,7 @@
 import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 import React, { useEffect, useState } from 'react';
+import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
@@ -66,6 +67,7 @@ const TABLE_TOOLBAR_HEIGHT = 36;
 const OFFSET = TABLE_TOOLBAR_OFFSET + TABLE_TOOLBAR_HEIGHT;
 
 const useTablePosition = (table: TableElement | null, container: HTMLDivElement | null) => {
+  const { value } = useScaleState();
   const editor = useMyPlateEditorRef();
   const [position, setPosition] = useState<[number, number] | null>(null);
 
@@ -98,7 +100,7 @@ const useTablePosition = (table: TableElement | null, container: HTMLDivElement 
     );
 
     return () => cancelIdleCallback(handle);
-  }, [container, editor, table]);
+  }, [container, editor, table, value]);
 
   return position;
 };

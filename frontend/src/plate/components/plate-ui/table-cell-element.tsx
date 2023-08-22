@@ -1,5 +1,5 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import { ResizeHandle } from '@udecode/plate-resizable';
+import { ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
 import {
   setTableColSize,
   useTableCellElement,
@@ -9,6 +9,8 @@ import {
 } from '@udecode/plate-table';
 import React, { forwardRef, useCallback } from 'react';
 import { styled } from 'styled-components';
+import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { StyledParagraph } from '../paragraph';
 
@@ -33,6 +35,7 @@ export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>
 TableCellElement.displayName = 'TableCellElement';
 
 const Resize = () => {
+  const { value } = useScaleState();
   const { colIndex, rowIndex, readOnly, isSelectingCell, hovered } = useTableCellElementState();
   const resizableState = useTableCellElementResizableState({ colIndex, rowIndex });
   const { rightProps } = useTableCellElementResizable(resizableState);
@@ -51,18 +54,34 @@ const Resize = () => {
     return null;
   }
 
+  const { options, ...rest } = rightProps;
+
+  const scaledOptions = {
+    ...options,
+    onResize: (e: ResizeEvent) => {
+      const scale = value / 100;
+
+      return options?.onResize?.({
+        ...e,
+        initialSize: Math.round(e.initialSize / scale),
+        delta: Math.round(e.delta / scale),
+      });
+    },
+  };
+
   return (
     <StyledRightHandle
       contentEditable={false}
       suppressContentEditableWarning
       onDoubleClick={onDblClick}
-      {...rightProps}
+      {...rest}
+      options={scaledOptions}
       style={{ backgroundColor: hovered ? 'color-mix(in srgb, var(--a-blue-200), transparent)' : 'transparent' }}
     />
   );
 };
 
-const PADDING = '4pt';
+const PADDING = ptToEm(3);
 
 const StyledRightHandle = styled(ResizeHandle)`
   position: absolute;
@@ -82,7 +101,7 @@ interface CellProps {
 
 const StyledCell = styled.td<CellProps>`
   position: relative;
-  border: 1.25pt solid var(--a-border-default);
+  border: ${ptToEm(1.25)} solid var(--a-border-default);
   vertical-align: top;
   background-color: ${({ $selected }) => ($selected ? 'var(--a-surface-selected)' : 'transparent')};
   padding: 0;

@@ -113,6 +113,7 @@ const StyledButton = styled(Button)`
 
 const Container = styled.div`
   position: relative;
+  font-size: 12pt;
 `;
 
 const Bookmarks = styled.div`

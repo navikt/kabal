@@ -12,6 +12,7 @@ import {
 } from '@udecode/plate-common';
 import React from 'react';
 import { styled } from 'styled-components';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import { EditorValue, PageBreakElement, RichTextEditor } from '@app/plate/types';
 
@@ -62,25 +63,21 @@ export const PageBreak = ({
   };
 
   return (
-    <PlateElement
-      as={StyledPageBreak}
-      attributes={attributes}
-      element={element}
-      editor={editor}
-      contentEditable={false}
-    >
-      {disableDelete ? null : (
-        <StyledDeleteButton
-          onClick={onClick}
-          title="Fjern sideskift"
-          variant="tertiary-neutral"
-          size="xsmall"
-          icon={<TrashIcon aria-hidden />}
-        >
-          Fjern sideskift
-        </StyledDeleteButton>
-      )}
-      {children}
+    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+      <StyledPageBreak>
+        {disableDelete ? null : (
+          <StyledDeleteButton
+            onClick={onClick}
+            title="Fjern sideskift"
+            variant="tertiary-neutral"
+            size="xsmall"
+            icon={<TrashIcon aria-hidden />}
+          >
+            Fjern sideskift
+          </StyledDeleteButton>
+        )}
+        {children}
+      </StyledPageBreak>
     </PlateElement>
   );
 };
@@ -105,11 +102,11 @@ const StyledDeleteButton = styled(Button)`
 export const StyledPageBreak = styled.div`
   background-color: var(--a-surface-subtle);
   position: relative;
-  height: 20mm;
-  margin-top: 20mm;
-  margin-bottom: 20mm;
-  margin-left: calc(-20mm - 16px);
-  margin-right: calc(-20mm - 16px);
+  height: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  margin-top: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  margin-bottom: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  margin-left: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - 16px);
+  margin-right: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - 16px);
 
   &::before {
     content: '';

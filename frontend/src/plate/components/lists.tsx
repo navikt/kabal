@@ -10,9 +10,9 @@ export const OrderedList = ({ children, ...props }: PlateElementProps) => (
 );
 
 const OrderedListStyle = styled.ol`
-  padding-left: 12pt;
+  padding-left: 1em;
   margin: 0;
-  margin-top: 12pt;
+  margin-top: 1em;
 `;
 
 export const UnorderedList = ({ children, ...props }: PlateElementProps<EditorValue, BulletListElement>) => (
@@ -22,9 +22,9 @@ export const UnorderedList = ({ children, ...props }: PlateElementProps<EditorVa
 );
 
 const UnorderedListStyle = styled.ul`
-  padding-left: 12pt;
+  padding-left: 1em;
   margin: 0;
-  margin-top: 12pt;
+  margin-top: 1em;
 `;
 
 export const ListItem = ({ children, ...props }: PlateElementProps<EditorValue, NumberedListElement>) => (

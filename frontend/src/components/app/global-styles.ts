@@ -4,6 +4,7 @@ import '@navikt/ds-css';
 const styles = css`
   :root {
     --a-font-family: 'Source Sans 3', Arial, sans-serif;
+    --kabal-editor-scale: 1;
   }
 
   html {
