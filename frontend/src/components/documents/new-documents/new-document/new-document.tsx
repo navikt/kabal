@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useId, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
@@ -14,7 +14,6 @@ import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IMainDocument } from '@app/types/documents/documents';
-import { DocumentModalContent } from '../modal/modal-content';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
@@ -71,18 +70,8 @@ export const NewDocument = ({ document }: Props) => {
       <DocumentTitle document={document} />
       {isExpanded ? <SetDocumentType document={document} /> : null}
       {isExpanded ? <StyledDate data-testid="new-document-date" document={document} /> : null}
-      <ActionContent document={document} />
+      <ToggleModalButton document={document} />
     </StyledNewDocument>
-  );
-};
-
-const ActionContent = ({ document }: Props) => {
-  const titleId = useId();
-
-  return (
-    <ToggleModalButton document={document} titleId={titleId}>
-      <DocumentModalContent document={document} titleId={titleId} />
-    </ToggleModalButton>
   );
 };
 

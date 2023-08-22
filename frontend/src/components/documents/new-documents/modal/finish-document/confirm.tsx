@@ -36,17 +36,6 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
       <Button
         type="button"
         size="small"
-        variant="secondary"
-        onClick={() => setShowConfirm(false)}
-        data-testid="document-finish-cancel"
-        disabled={isFinishing || isValidating}
-        icon={<XMarkIcon aria-hidden />}
-      >
-        Avbryt
-      </Button>
-      <Button
-        type="button"
-        size="small"
         variant="primary"
         onClick={onClick}
         loading={isFinishing || isValidating}
@@ -54,6 +43,17 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
         icon={<PaperplaneIcon aria-hidden />}
       >
         {actionText}
+      </Button>
+      <Button
+        type="button"
+        size="small"
+        variant="secondary"
+        onClick={() => setShowConfirm(false)}
+        data-testid="document-finish-cancel"
+        disabled={isFinishing || isValidating}
+        icon={<XMarkIcon aria-hidden />}
+      >
+        Avbryt
       </Button>
     </StyledButtons>
   );

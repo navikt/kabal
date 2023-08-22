@@ -1,20 +1,18 @@
-import { Heading } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Confirm } from './confirm';
 import { ERROR_MESSAGES } from './error-messages';
-import { Errors, ValidationError } from './errors';
-import { StyledFinishDocument } from './styled-components';
 import { FinishProps } from './types';
 
-export const ArchiveView = ({ document }: FinishProps) => {
-  const { id: dokumentId, tittel: documentTitle } = document;
-  const [finish, { isLoading }] = useFinishDocumentMutation();
+export const ArchiveButtons = ({ document }: FinishProps) => {
+  const { id: dokumentId } = document;
+  const [finish, { isLoading }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const oppgaveId = useOppgaveId();
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const { setValidationErrors } = useContext(ModalContext);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
   const remove = useRemoveDocument();
@@ -33,28 +31,22 @@ export const ArchiveView = ({ document }: FinishProps) => {
         errors: v.errors.map((e) => ERROR_MESSAGES[e.type]),
       }));
 
-      setErrors(validationErrors);
+      setValidationErrors(validationErrors);
 
       return;
     }
 
-    setErrors([]);
+    setValidationErrors([]);
     await finish({ dokumentId, oppgaveId });
     remove(dokumentId, document);
   };
 
   return (
-    <StyledFinishDocument>
-      <Heading size="xsmall" level="1">{`Arkiver notatet "${documentTitle}".`}</Heading>
-
-      <Errors errors={errors} />
-
-      <Confirm
-        actionText="Arkiver"
-        onClick={onClick}
-        isFinishing={isLoading || document.isMarkertAvsluttet}
-        isValidating={isValidating}
-      />
-    </StyledFinishDocument>
+    <Confirm
+      actionText="Arkiver"
+      onClick={onClick}
+      isFinishing={isLoading || document.isMarkertAvsluttet}
+      isValidating={isValidating}
+    />
   );
 };

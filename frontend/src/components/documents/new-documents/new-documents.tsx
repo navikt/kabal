@@ -2,6 +2,8 @@ import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { ListHeader } from '@app/components/documents/new-documents/header/header';
+import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
+import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -24,12 +26,15 @@ export const NewDocuments = () => {
 
   return (
     <StyledDocumentsContainer data-testid="new-documents-section">
-      <ListHeader />
-      <StyledDocumentList data-testid="new-documents-list">
-        {documents.map((d) => (
-          <NewParentDocument document={d} key={d.id} />
-        ))}
-      </StyledDocumentList>
+      <ModalContextElement>
+        <ListHeader />
+        <StyledDocumentList data-testid="new-documents-list">
+          {documents.map((d) => (
+            <NewParentDocument document={d} key={d.id} />
+          ))}
+        </StyledDocumentList>
+        <DocumentModal />
+      </ModalContextElement>
     </StyledDocumentsContainer>
   );
 };
