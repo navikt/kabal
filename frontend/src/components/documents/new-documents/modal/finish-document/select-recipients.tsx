@@ -1,6 +1,6 @@
 import { Checkbox, CheckboxGroup, Tag } from '@navikt/ds-react';
 import React from 'react';
-import { IErrorProperty } from '@app/components/documents/new-documents/modal/finish-document/views/is-send-error';
+import { IErrorProperty } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { IBrevmottaker } from '@app/hooks/use-brevmottakere';
 import { Brevmottakertype } from '@app/types/kodeverk';
@@ -14,7 +14,7 @@ interface RecipientsProps {
   sendErrors: IErrorProperty[];
 }
 
-export const Recipients = ({
+export const SelectRecipients = ({
   recipients,
   selectedBrevmottakerIds,
   setSelectedBrevmottakerIds,

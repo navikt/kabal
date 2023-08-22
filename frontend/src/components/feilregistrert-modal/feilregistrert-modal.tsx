@@ -11,10 +11,8 @@ interface Props extends ContentProps {
 }
 
 export const FeilregistrertModal = ({ isOpen, close }: Props) => (
-  <Modal open={isOpen} aria-label="Feilregistrert oppgave" onClose={close}>
-    <StyledModalContent>
-      <Content close={close} />
-    </StyledModalContent>
+  <Modal open={isOpen} header={{ heading: 'Feilregistrert oppgave' }} onClose={close} width="medium">
+    <Content close={close} />
   </Modal>
 );
 
@@ -32,32 +30,27 @@ const Content = ({ close }: ContentProps) => {
 
   return (
     <>
-      <Heading spacing level="1" size="large">
-        Feilregistrert oppgave
-      </Heading>
-
-      <BodyShort spacing>
-        <time dateTime={oppgave.feilregistrering.registered}>
-          {isoDateTimeToPretty(oppgave.feilregistrering.registered)}
-        </time>
-      </BodyShort>
-      <BodyShort>Feilregistrert av: {oppgave.feilregistrering.feilregistrertAv.navn}</BodyShort>
-      <BodyShort spacing>Fagsystem: {fagsystemName}</BodyShort>
-      <Heading level="2" size="small" spacing>
-        Årsak
-      </Heading>
-      <StyledBodyLong spacing>{oppgave.feilregistrering.reason}</StyledBodyLong>
-      <Button variant="primary" size="small" icon={<XMarkIcon aria-hidden />} onClick={close}>
-        Lukk
-      </Button>
+      <Modal.Body>
+        <BodyShort spacing>
+          <time dateTime={oppgave.feilregistrering.registered}>
+            {isoDateTimeToPretty(oppgave.feilregistrering.registered)}
+          </time>
+        </BodyShort>
+        <BodyShort>Feilregistrert av: {oppgave.feilregistrering.feilregistrertAv.navn}</BodyShort>
+        <BodyShort spacing>Fagsystem: {fagsystemName}</BodyShort>
+        <Heading level="2" size="small" spacing>
+          Årsak
+        </Heading>
+        <StyledBodyLong spacing>{oppgave.feilregistrering.reason}</StyledBodyLong>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" size="small" icon={<XMarkIcon aria-hidden />} onClick={close}>
+          Lukk
+        </Button>
+      </Modal.Footer>
     </>
   );
 };
-
-const StyledModalContent = styled(Modal.Content)`
-  width: 800px;
-  max-width: 100%;
-`;
 
 const StyledBodyLong = styled(BodyLong)`
   border-left: 6px solid var(--a-border-subtle);

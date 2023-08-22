@@ -1,73 +1,40 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Button, Modal } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { createContext, useEffect, useState } from 'react';
+import { Button } from '@navikt/ds-react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
   document: IMainDocument;
-  children: React.ReactNode;
-  titleId: string;
 }
 
-interface IModalContext {
-  close: () => void;
-}
-
-export const ModalContext = createContext<IModalContext>({
-  close: () => {},
-});
-
-export const ToggleModalButton = ({ document, titleId, children }: Props) => {
-  const oppgaveId = useOppgaveId();
+export const ToggleModalButton = ({ document }: Props) => {
   const canEdit = useCanEdit();
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    Modal.setAppElement('#app');
-  }, []);
+  const { setDocumentId } = useContext(ModalContext);
 
   if (!canEdit) {
     return null;
   }
 
-  const onClick = async () => {
-    if (oppgaveId === skipToken) {
-      return;
-    }
-
-    setOpen(!open);
-  };
+  const onClick = () => setDocumentId(document.id);
 
   return (
-    <DropdownContainer>
-      <Button
-        onClick={onClick}
-        data-testid="document-actions-button"
-        variant="tertiary-neutral"
-        size="small"
-        icon={<Icon {...document} />}
-      />
-
-      <Modal
-        open={open}
-        aria-modal
-        aria-aria-labelledby={titleId}
-        onClose={() => setOpen(false)}
-        shouldCloseOnEsc={false}
-        shouldCloseOnOverlayClick={true}
-      >
-        <Modal.Content data-testid="document-actions-modal">
-          <ModalContext.Provider value={{ close: () => setOpen(false) }}>{children}</ModalContext.Provider>
-        </Modal.Content>
-      </Modal>
-    </DropdownContainer>
+    <StyledButton
+      onClick={onClick}
+      data-testid="document-actions-button"
+      variant="tertiary-neutral"
+      size="small"
+      icon={<Icon {...document} />}
+    />
   );
 };
+
+const StyledButton = styled(Button)`
+  grid-area: ${Fields.Action};
+`;
 
 const Icon = ({ isMarkertAvsluttet, dokumentTypeId }: IMainDocument) => {
   if (isMarkertAvsluttet) {
@@ -86,9 +53,3 @@ const Icon = ({ isMarkertAvsluttet, dokumentTypeId }: IMainDocument) => {
 
   return <MenuElipsisVerticalIcon aria-hidden />;
 };
-
-const DropdownContainer = styled.div`
-  display: flex;
-  align-items: center;
-  grid-area: ${Fields.Action};
-`;
