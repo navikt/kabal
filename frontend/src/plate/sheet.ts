@@ -1,16 +1,24 @@
 import { styled } from 'styled-components';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 
-export const Sheet = styled.div<{ $minHeight: boolean }>`
+interface Props {
+  $minHeight: boolean;
+}
+
+export const Sheet = styled.div<Props>`
   position: relative;
-  width: 210mm;
-  min-height: ${({ $minHeight }) => ($minHeight ? '297mm' : 'unset')};
-  padding-left: 20mm;
-  padding-right: 20mm;
-  padding-bottom: 20mm;
-  padding-top: 15mm;
-  font-size: 12pt;
   background-color: white;
   box-shadow: var(--a-shadow-medium);
   margin-top: 16px;
   flex-shrink: 0;
+
+  // Scaled rules
+  width: calc(var(${EDITOR_SCALE_CSS_VAR}) * 210mm);
+  min-height: ${({ $minHeight }) => ($minHeight ? `calc(var(${EDITOR_SCALE_CSS_VAR}) * 297mm)` : 'unset')};
+  padding-left: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  padding-right: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  padding-bottom: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  padding-top: calc(var(${EDITOR_SCALE_CSS_VAR}) * 15mm);
+  font-size: calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt);
 `;

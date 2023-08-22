@@ -166,6 +166,7 @@ export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
+export const useSmartEditorZoom = () => useNumberSetting(useOppgavePath('tabs/smart-editor/zoom'));
 
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',

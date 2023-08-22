@@ -3,6 +3,7 @@ import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { formatLongDate, zeroPad } from '@app/domain/date';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { CurrentDateElement, EditorValue } from '@app/plate/types';
 
 type Props = PlateRenderElementProps<EditorValue, CurrentDateElement>;
@@ -80,6 +81,6 @@ const CurrentDateContainer = styled.time<{ $isFocused: boolean }>`
   background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
   outline-style: solid;
-  outline-width: 8px;
-  margin-top: 12pt;
+  outline-width: ${ptToEm(6)};
+  margin-top: 1em;
 `;

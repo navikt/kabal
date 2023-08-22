@@ -1,6 +1,7 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
 import React from 'react';
 import { styled } from 'styled-components';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { EditorValue, H1Element, H2Element, H3Element } from '../types';
 
 interface HeadingStyleProps {
@@ -8,7 +9,7 @@ interface HeadingStyleProps {
 }
 
 const HeadingOneStyle = styled.h1<HeadingStyleProps>`
-  font-size: 16pt;
+  font-size: ${ptToEm(16)};
   font-weight: 600;
   margin-top: 1em;
   margin-bottom: 0;
@@ -28,7 +29,7 @@ export const HeadingOne = ({ children, ...props }: PlateElementProps<EditorValue
 );
 
 const HeadingTwoStyle = styled.h2<HeadingStyleProps>`
-  font-size: 14pt;
+  font-size: ${ptToEm(14)};
   font-weight: 600;
   margin-top: 1em;
   margin-bottom: 0;
@@ -48,7 +49,7 @@ export const HeadingTwo = ({ children, ...props }: PlateElementProps<EditorValue
 );
 
 const HeadingThreeStyle = styled.h3<HeadingStyleProps>`
-  font-size: 12pt;
+  font-size: 1em;
   font-weight: 600;
   margin-top: 1em;
   margin-bottom: 0;

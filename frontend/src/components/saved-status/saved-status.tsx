@@ -1,8 +1,13 @@
 import { Loader, Tooltip } from '@navikt/ds-react';
 import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
-import React from 'react';
+import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/dist/query';
+import React, { useContext } from 'react';
+import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { ErrorMessage, getErrorData } from '@app/functions/get-error-data';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {
@@ -13,27 +18,50 @@ export interface SavedStatusProps {
 }
 
 export const SavedStatus = ({ isLoading, isSuccess, isError, error }: SavedStatusProps) => {
+  const oppgaveId = useOppgaveId();
+  const { documentId } = useContext(SmartEditorContext);
+  const { data } = useGetSmartEditorQuery(
+    oppgaveId === skipToken || documentId === null ? skipToken : { oppgaveId, dokumentId: documentId },
+  );
+
+  const lastSaved =
+    typeof data?.modified === 'string' ? (
+      <StatusText>{`Sist lagret: ${isoDateTimeToPretty(data?.modified)}`}</StatusText>
+    ) : null;
+
   if (isLoading) {
     return (
-      <Tooltip content="Lagrer..." delay={0}>
-        <Loader size="xsmall" />
-      </Tooltip>
+      <Container>
+        <StatusText>Lagrer...</StatusText>
+
+        <Tooltip content="Lagrer..." delay={0}>
+          <Loader size="xsmall" />
+        </Tooltip>
+      </Container>
     );
   }
 
   if (isSuccess) {
     return (
-      <Tooltip content="Lagret!" delay={0}>
-        <CheckmarkCircleFillIconColored />
-      </Tooltip>
+      <Container>
+        {lastSaved}
+
+        <Tooltip content="Lagret!" delay={0}>
+          <CheckmarkCircleFillIconColored />
+        </Tooltip>
+      </Container>
     );
   }
 
   if (isError) {
     return (
-      <Tooltip content={`Feil ved lagring:\n${formatErrorMessage(getErrorData(error))}`} delay={0}>
-        <XMarkOctagonFillIconColored />
-      </Tooltip>
+      <Container>
+        <StatusText>Feil ved lagring</StatusText>
+
+        <Tooltip content={`Feil ved lagring:\n${formatErrorMessage(getErrorData(error))}`} delay={0}>
+          <XMarkOctagonFillIconColored />
+        </Tooltip>
+      </Container>
     );
   }
 
@@ -46,3 +74,15 @@ const formatErrorMessage = (error: ErrorMessage) => {
 
   return message;
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+`;
+
+const StatusText = styled.span`
+  color: var(--a-text-subtle);
+  font-size: var(--a-font-size-small);
+`;

@@ -13,7 +13,6 @@ import { useUpdateTextMutation } from '@app/redux-api/texts';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IText, IUpdatePlainTextProperty, IUpdateRichTextProperty, isPlainTextType } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
-import { SavedStatus } from '../../saved-status/saved-status';
 import { MALTEKST_SECTION_NAMES } from '../../smart-editor/constants';
 import { ResolvedTags } from '../../tags/resolved-tag';
 import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from '../edit-text-selects';
@@ -71,7 +70,6 @@ export const EditSmartEditorText = (savedText: IText) => {
         <LineContainer>
           <strong>Sist endret:</strong>
           <DateTime modified={modified} created={created} />
-          <SavedStatus {...status} />
         </LineContainer>
 
         <LineContainer>

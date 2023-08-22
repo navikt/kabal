@@ -17,4 +17,4 @@ export const smartEditorQuerySlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useGetSmartEditorsQuery, useLazyGetSmartEditorQuery } = smartEditorQuerySlice;
+export const { useGetSmartEditorsQuery, useLazyGetSmartEditorQuery, useGetSmartEditorQuery } = smartEditorQuerySlice;

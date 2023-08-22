@@ -11,17 +11,18 @@ import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugins';
 import { Sheet } from '@app/plate/sheet';
-import { PlateEditorContent } from '@app/plate/styled-components';
+import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
+import { EditorValue } from '@app/plate/types';
 import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
@@ -45,7 +46,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
   if (isLoading) {
     return (
       <Container>
-        <SaksbehandlerToolbar {...updateStatus} />
+        <SaksbehandlerToolbar />
         <Sheet $minHeight />
       </Container>
     );
@@ -87,7 +88,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
         <GodeFormuleringer templateId={templateId} />
 
         <Content>
-          <SaksbehandlerToolbar {...updateStatus} />
+          <SaksbehandlerToolbar />
 
           <ErrorBoundary
             errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgaveId} />}
@@ -109,6 +110,8 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
           <Bookmarks editorId={id} />
           <CommentSection />
         </StickyRightContainer>
+
+        <StatusBar {...updateStatus} />
       </PlateEditorContextComponent>
     </Container>
   );
@@ -149,26 +152,3 @@ const Container = styled.div`
   align-items: flex-start;
   scroll-padding-top: 64px;
 `;
-
-const Content = ({ children }: { children?: React.ReactNode }) => {
-  const editor = useMyPlateEditorRef();
-  const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection } = useContext(SmartEditorContext);
-
-  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    const lowerCaseKey = event.key.toLowerCase();
-
-    if ((event.ctrlKey || event.metaKey) && event.shiftKey && lowerCaseKey === 'f') {
-      event.preventDefault();
-      setShowGodeFormuleringer(!showGodeFormuleringer);
-
-      return;
-    }
-
-    if ((event.ctrlKey || event.metaKey) && lowerCaseKey === 'k') {
-      event.preventDefault();
-      setNewCommentSelection(editor.selection);
-    }
-  };
-
-  return <PlateEditorContent onKeyDown={onKeyDown}>{children}</PlateEditorContent>;
-};

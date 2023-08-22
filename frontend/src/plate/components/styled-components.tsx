@@ -54,6 +54,7 @@ export const SectionToolbar = styled.div<SectionToolbarProps>`
   background-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
   padding: 4px;
   color: white;
+  font-size: 12pt;
 
   &:focus {
     opacity: 1;
