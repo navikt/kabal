@@ -28,6 +28,7 @@ export const DocumentModal = () => {
       aria-modal
       onClose={close}
       onCancel={close}
+      data-testid="document-actions-modal"
       header={{
         heading: `Valg for "${document.tittel}"`,
         icon: <DocumentIcon type={document.type} />,
