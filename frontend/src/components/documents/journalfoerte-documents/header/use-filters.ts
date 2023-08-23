@@ -9,16 +9,21 @@ import {
   useDocumentsFilterType,
   useDocumentsOnlyIncluded,
 } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
+const EMPTY_TYPE_FILTER: Journalposttype[] = [];
 
 export const useFilters = (documents: IArkivertDocument[]) => {
   const [isExpanded] = useIsExpanded();
 
   const { value: search = '', setValue: setSearch, remove: resetTitle } = useDocumentsFilterTitle();
-  const { value: selectedTypes = [], setValue: setSelectedTypes, remove: resetTypes } = useDocumentsFilterType();
+  const {
+    value: selectedTypes = EMPTY_TYPE_FILTER,
+    setValue: setSelectedTypes,
+    remove: resetTypes,
+  } = useDocumentsFilterType();
   const { value: selectedDateRange, remove: resetDateRange } = useDocumentsFilterDato();
   const { value: onlyIncluded = false, setValue: setIncluded } = useDocumentsOnlyIncluded();
 
@@ -58,7 +63,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     resetAvsenderMottakere();
     resetSaksId();
     resetDateRange();
-    isExpanded ? setIncluded(false) : setIncluded(true);
+    setIncluded(!isExpanded);
   }, [
     isExpanded,
     resetAvsenderMottakere,

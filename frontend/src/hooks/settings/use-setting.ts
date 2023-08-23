@@ -149,12 +149,11 @@ export const useDocumentsAvsenderMottaker = () =>
 const JOURNALPOSTTYPE_LIST = Object.values(Journalposttype);
 
 export const useDocumentsFilterType = () => {
-  const { value, ...rest } = useJsonSetting<Journalposttype[]>(useOppgavePath('tabs/documents/filters/type'));
+  const { value: v, ...rest } = useJsonSetting<Journalposttype[]>(useOppgavePath('tabs/documents/filters/type'));
 
-  return {
-    ...rest,
-    value: Array.isArray(value) ? value.filter((v) => JOURNALPOSTTYPE_LIST.includes(v)) : undefined,
-  };
+  const value = useMemo(() => (Array.isArray(v) ? v.filter((t) => JOURNALPOSTTYPE_LIST.includes(t)) : undefined), [v]);
+
+  return { ...rest, value };
 };
 
 export const useDocumentsFilterTitle = () => useSetting(useOppgavePath('tabs/documents/filters/title'));
