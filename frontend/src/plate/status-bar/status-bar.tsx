@@ -27,6 +27,6 @@ const Container = styled.div`
   align-items: center;
   border-bottom-left-radius: var(--a-border-radius-medium);
   border-bottom-right-radius: var(--a-border-radius-medium);
-  background-color: var(--a-gray-300);
+  background-color: var(--a-gray-200);
   border-top: 1px solid var(--a-border-default);
 `;
