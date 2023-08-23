@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { DateRangeSetting } from '@app/hooks/settings/use-setting';
@@ -16,40 +16,51 @@ export const useFilteredDocuments = (
   onlyIncluded: boolean,
   search: string,
 ): IArkivertDocument[] => {
-  const regex = useMemo(() => (search.length === 0 ? skipToken : stringToRegExp(search)), [search]);
+  const [result, setResult] = useState<IArkivertDocument[]>(documents);
 
-  return useMemo(
-    () =>
-      documents
-        .filter(
-          ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg, valgt }) =>
-            (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-            (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-            (selectedAvsenderMottakere.length === 0 ||
-              selectedAvsenderMottakere.includes(
-                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
-              )) &&
-            (selectedSaksIds.length === 0 ||
-              selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
-            (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
-            (onlyIncluded === false || valgt) &&
-            (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
-        )
-        .map(({ vedlegg, ...rest }) => ({
-          ...rest,
-          vedlegg: vedlegg.filter(({ valgt }) => onlyIncluded === false || valgt),
-        })),
-    [
-      documents,
-      onlyIncluded,
-      regex,
-      selectedAvsenderMottakere,
-      selectedDateRange,
-      selectedSaksIds,
-      selectedTemaer,
-      selectedTypes,
-    ],
-  );
+  useEffect(() => {
+    const callback = requestIdleCallback(
+      () => {
+        const regex = search.length === 0 ? skipToken : stringToRegExp(search);
+
+        return setResult(
+          documents
+            .filter(
+              ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg, valgt }) =>
+                (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
+                (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
+                (selectedAvsenderMottakere.length === 0 ||
+                  selectedAvsenderMottakere.includes(
+                    avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
+                  )) &&
+                (selectedSaksIds.length === 0 ||
+                  selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+                (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
+                (onlyIncluded === false || valgt) &&
+                (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
+            )
+            .map(({ vedlegg, ...rest }) => ({
+              ...rest,
+              vedlegg: vedlegg.filter(({ valgt }) => onlyIncluded === false || valgt),
+            })),
+        );
+      },
+      { timeout: 200 },
+    );
+
+    return () => cancelIdleCallback(callback);
+  }, [
+    documents,
+    onlyIncluded,
+    search,
+    selectedAvsenderMottakere,
+    selectedDateRange,
+    selectedSaksIds,
+    selectedTemaer,
+    selectedTypes,
+  ]);
+
+  return result;
 };
 
 const checkDateInterval = (dateString: string, [from, to]: DateRangeSetting): boolean => {
