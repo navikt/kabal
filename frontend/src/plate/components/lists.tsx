@@ -1,10 +1,16 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
 import React from 'react';
 import { styled } from 'styled-components';
-import { BulletListElement, EditorValue, NumberedListElement } from '../types';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { BulletListElement, EditorValue, ListItemElement, NumberedListElement } from '../types';
 
-export const OrderedList = ({ children, ...props }: PlateElementProps) => (
-  <PlateElement as={OrderedListStyle} {...props}>
+export const OrderedList = ({ children, element, ...props }: PlateElementProps<EditorValue, NumberedListElement>) => (
+  <PlateElement
+    as={OrderedListStyle}
+    {...props}
+    element={element}
+    style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+  >
     {children}
   </PlateElement>
 );
@@ -15,8 +21,13 @@ const OrderedListStyle = styled.ol`
   margin-top: 1em;
 `;
 
-export const UnorderedList = ({ children, ...props }: PlateElementProps<EditorValue, BulletListElement>) => (
-  <PlateElement as={UnorderedListStyle} {...props}>
+export const UnorderedList = ({ children, element, ...props }: PlateElementProps<EditorValue, BulletListElement>) => (
+  <PlateElement
+    as={UnorderedListStyle}
+    {...props}
+    element={element}
+    style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+  >
     {children}
   </PlateElement>
 );
@@ -27,7 +38,7 @@ const UnorderedListStyle = styled.ul`
   margin-top: 1em;
 `;
 
-export const ListItem = ({ children, ...props }: PlateElementProps<EditorValue, NumberedListElement>) => (
+export const ListItem = ({ children, ...props }: PlateElementProps<EditorValue, ListItemElement>) => (
   <PlateElement as={ListItemStyle} {...props}>
     {children}
   </PlateElement>
