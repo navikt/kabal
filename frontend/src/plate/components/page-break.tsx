@@ -102,7 +102,7 @@ const StyledDeleteButton = styled(Button)`
 export const StyledPageBreak = styled.div`
   background-color: var(--a-surface-subtle);
   position: relative;
-  height: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
+  height: calc(var(${EDITOR_SCALE_CSS_VAR}) * 8mm);
   margin-top: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
   margin-bottom: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
   margin-left: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - 16px);
