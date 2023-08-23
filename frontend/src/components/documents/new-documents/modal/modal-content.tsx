@@ -1,5 +1,5 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
@@ -22,23 +22,15 @@ import { SetParentDocument } from './set-parent';
 
 interface Props {
   document: IMainDocument;
-  titleId: string;
 }
 
-export const DocumentModalContent = ({ document, titleId }: Props) => {
+export const DocumentModalContent = ({ document }: Props) => {
   const { validationErrors } = useContext(ModalContext);
 
   const icon = <DocumentIcon type={document.type} />;
 
   return (
     <>
-      <Modal.Header>
-        <StyledHeading level="1" size="medium" id={titleId}>
-          {icon}
-          Valg for &quot;{document.tittel}&quot;
-        </StyledHeading>
-      </Modal.Header>
-
       <ModalBody>
         <Row>
           <Tag variant="info" size="small" title="Dokumenttype">
@@ -114,15 +106,6 @@ const ModalBody = styled(Modal.Body)`
   flex-direction: column;
   gap: 16px;
   width: 100%;
-`;
-
-const StyledHeading = styled(Heading)`
-  display: flex;
-  flex-direction: row;
-  column-gap: 8px;
-  align-items: center;
-  white-space: nowrap;
-  margin-right: 64px;
 `;
 
 const StyledSetFilename = styled(SetFilename)`

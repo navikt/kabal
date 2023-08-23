@@ -2,6 +2,7 @@ import { Modal } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
+import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 
@@ -20,18 +21,19 @@ export const DocumentModal = () => {
     return null;
   }
 
-  const titleId = `modal-title-${documentId}`;
-
   return (
     <Modal
       width="medium"
       open={documentId !== null}
       aria-modal
-      aria-labelledby={titleId}
       onClose={close}
       onCancel={close}
+      header={{
+        heading: `Valg for "${document.tittel}"`,
+        icon: <DocumentIcon type={document.type} />,
+      }}
     >
-      <DocumentModalContent document={document} titleId={titleId} />
+      <DocumentModalContent document={document} />
     </Modal>
   );
 };
