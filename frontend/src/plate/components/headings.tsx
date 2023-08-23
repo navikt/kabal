@@ -22,9 +22,11 @@ const HeadingOneStyle = styled.h1<HeadingStyleProps>`
   }
 `;
 
-export const HeadingOne = ({ children, ...props }: PlateElementProps<EditorValue, H1Element>) => (
-  <PlateElement asChild {...props}>
-    <HeadingOneStyle $isEmpty={isEmpty(props.element)}>{children}</HeadingOneStyle>
+export const HeadingOne = ({ children, element, ...props }: PlateElementProps<EditorValue, H1Element>) => (
+  <PlateElement asChild {...props} element={element}>
+    <HeadingOneStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
+      {children}
+    </HeadingOneStyle>
   </PlateElement>
 );
 
@@ -42,9 +44,11 @@ const HeadingTwoStyle = styled.h2<HeadingStyleProps>`
   }
 `;
 
-export const HeadingTwo = ({ children, ...props }: PlateElementProps<EditorValue, H2Element>) => (
-  <PlateElement asChild {...props}>
-    <HeadingTwoStyle $isEmpty={isEmpty(props.element)}>{children}</HeadingTwoStyle>
+export const HeadingTwo = ({ children, element, ...props }: PlateElementProps<EditorValue, H2Element>) => (
+  <PlateElement asChild {...props} element={element}>
+    <HeadingTwoStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
+      {children}
+    </HeadingTwoStyle>
   </PlateElement>
 );
 
@@ -62,9 +66,11 @@ const HeadingThreeStyle = styled.h3<HeadingStyleProps>`
   }
 `;
 
-export const HeadingThree = ({ children, ...props }: PlateElementProps<EditorValue, H3Element>) => (
-  <PlateElement asChild {...props}>
-    <HeadingThreeStyle $isEmpty={isEmpty(props.element)}>{children}</HeadingThreeStyle>
+export const HeadingThree = ({ children, element, ...props }: PlateElementProps<EditorValue, H3Element>) => (
+  <PlateElement asChild {...props} element={element}>
+    <HeadingThreeStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
+      {children}
+    </HeadingThreeStyle>
   </PlateElement>
 );
 
