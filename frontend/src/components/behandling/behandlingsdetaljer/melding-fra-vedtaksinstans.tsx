@@ -1,3 +1,4 @@
+import { ReadMore } from '@navikt/ds-react';
 import React from 'react';
 import { BehandlingSection } from './behandling-section';
 
@@ -12,7 +13,9 @@ export const MeldingFraVedtaksinstans = ({ kommentarFraVedtaksinstans }: Props) 
 
   return (
     <BehandlingSection label="Melding fra vedtaksinstans for intern bruk">
-      {kommentarFraVedtaksinstans}
+      <ReadMore header="Les melding" size="small">
+        {kommentarFraVedtaksinstans}
+      </ReadMore>
     </BehandlingSection>
   );
 };
