@@ -28,12 +28,6 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           }),
         );
 
-        const flytPatchresult = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
-            draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
-          }),
-        );
-
         try {
           const { data } = await queryFulfilled;
 
@@ -46,26 +40,13 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           );
 
           dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
-              draft.medunderskriverFlyt = data.medunderskriverFlyt;
-            }),
-          );
-
-          dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriverFlyt = data.medunderskriverFlyt;
               draft.medunderskriverident = navIdent;
             }),
           );
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
-              draft.medunderskriver = data.medunderskriver;
-            }),
-          );
         } catch (e) {
           patchResult.undo();
-          flytPatchresult.undo();
 
           const message = 'Kunne ikke oppdatere medunderskriver.';
 

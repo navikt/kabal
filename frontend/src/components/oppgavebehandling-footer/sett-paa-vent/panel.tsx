@@ -3,7 +3,7 @@ import { Button, ErrorSummary, Panel, Textarea } from '@navikt/ds-react';
 import { addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
+import { ISO_DATE_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 
@@ -48,7 +48,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
       />
       <Row $gap={8}>
         {dates.map(([weeks, date]) => {
-          const formattedDate = format(date, ISO_FORMAT);
+          const formattedDate = format(date, ISO_DATE_FORMAT);
           const isActive = to === formattedDate;
 
           return (

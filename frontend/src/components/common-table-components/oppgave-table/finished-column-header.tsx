@@ -5,7 +5,7 @@ import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
+import { ISO_DATE_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -51,8 +51,8 @@ const Filter = ({ params: filters, setParams: setFilters }: FilterProps) => {
 
     setFilters({
       ...filters,
-      ferdigstiltFrom: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
-      ferdigstiltTo: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
+      ferdigstiltFrom: range.from instanceof Date ? format(range.from, ISO_DATE_FORMAT) : undefined,
+      ferdigstiltTo: range.to instanceof Date ? format(range.to, ISO_DATE_FORMAT) : undefined,
     });
   };
 

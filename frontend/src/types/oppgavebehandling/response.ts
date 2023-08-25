@@ -13,16 +13,8 @@ export interface IMedunderskrivereResponse {
   medunderskrivere: INavEmployee[];
 }
 
-export interface IMedunderskriverResponse {
-  medunderskriver: INavEmployee | null;
-}
-
 export interface ISaksbehandlerResponse {
   saksbehandler: INavEmployee | null;
-}
-
-export interface IMedunderskriverflytResponse {
-  medunderskriverFlyt: MedunderskriverFlyt;
 }
 
 export interface ISettMedunderskriverResponse extends IModifiedResponse {

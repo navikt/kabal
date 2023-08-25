@@ -1,4 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { addMilliseconds, format } from 'date-fns';
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
@@ -49,13 +51,14 @@ export const messagesApi = createApi({
         body,
       }),
       onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
-        const now = new Date().toISOString();
+        const now = format(addMilliseconds(new Date(), 150), ISO_DATETIME_FORMAT);
         const newMessageId = `new-message-optimistic-id-${now}`;
 
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
-            messages.push({ ...newMessage, created: now, modified: now, id: newMessageId });
-          }),
+          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => [
+            { ...newMessage, created: now, modified: now, id: newMessageId },
+            ...messages,
+          ]),
         );
 
         try {

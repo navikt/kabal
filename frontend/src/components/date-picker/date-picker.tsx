@@ -1,7 +1,7 @@
 import { DatePicker as DSDatePicker, DateInputProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
+import { ISO_DATE_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { prettyDateToISO } from '@app/domain/date';
 import { parseUserInput } from './parse-user-input';
 
@@ -54,7 +54,7 @@ export const DatePicker = ({
       const prettyFormatted = format(dateObject, PRETTY_FORMAT);
 
       if (prettyFormatted !== input) {
-        const isoFormatted = format(dateObject, ISO_FORMAT);
+        const isoFormatted = format(dateObject, ISO_DATE_FORMAT);
         onChange(isoFormatted);
       }
     },

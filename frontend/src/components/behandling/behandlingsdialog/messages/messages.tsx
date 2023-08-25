@@ -21,9 +21,7 @@ export const Messages = () => {
   const { data: oppgave } = useOppgave();
   const isFullfoert = useIsFullfoert();
 
-  const options = isFullfoert ? undefined : { pollingInterval: 30 * 1000 };
-
-  const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId, options);
+  const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId);
 
   if (typeof oppgave === 'undefined' || typeof messages === 'undefined' || isLoading) {
     return SKELETON;

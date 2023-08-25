@@ -27,14 +27,6 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           }),
         );
 
-        const flytPatchresult = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
-            draft.medunderskriverFlyt = isSaksbehandler
-              ? MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER
-              : MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
-          }),
-        );
-
         try {
           const { data } = await queryFulfilled;
 
@@ -55,7 +47,6 @@ const switchMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           );
         } catch (e) {
           oppgavePatchResult.undo();
-          flytPatchresult.undo();
 
           const message = isSaksbehandler
             ? 'Kunne ikke sende til medunderskriver.'

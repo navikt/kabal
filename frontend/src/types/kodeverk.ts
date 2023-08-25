@@ -10,6 +10,11 @@ export enum MedunderskriverFlyt {
   RETURNERT_TIL_SAKSBEHANDLER = 'RETURNERT_TIL_SAKSBEHANDLER',
 }
 
+export const isMedunderskriverFlyt = (value: string): value is MedunderskriverFlyt =>
+  value === MedunderskriverFlyt.IKKE_SENDT ||
+  value === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER ||
+  value === MedunderskriverFlyt.RETURNERT_TIL_SAKSBEHANDLER;
+
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',
@@ -30,6 +35,20 @@ export enum UtfallEnum {
   HEVET = '11',
   HENVIST = '12',
 }
+
+export const isUtfallId = (value: string): value is UtfallEnum =>
+  value === UtfallEnum.TRUKKET ||
+  value === UtfallEnum.RETUR ||
+  value === UtfallEnum.OPPHEVET ||
+  value === UtfallEnum.MEDHOLD ||
+  value === UtfallEnum.DELVIS_MEDHOLD ||
+  value === UtfallEnum.STADFESTELSE ||
+  value === UtfallEnum.UGUNST ||
+  value === UtfallEnum.AVVIST ||
+  value === UtfallEnum.INNSTILLING_STADFESTELSE ||
+  value === UtfallEnum.INNSTILLING_AVVIST ||
+  value === UtfallEnum.HEVET ||
+  value === UtfallEnum.HENVIST;
 
 export enum Brevmottakertype {
   KLAGER = '1',

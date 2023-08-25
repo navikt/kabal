@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
+import { ISO_DATE_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
@@ -21,7 +21,7 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ oppgaveId, ...rest }, { dispatch, queryFulfilled }) => {
         const now = new Date();
-        const venteperiode = { from: format(now, ISO_FORMAT), ...rest };
+        const venteperiode = { from: format(now, ISO_DATE_FORMAT), ...rest };
 
         const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {

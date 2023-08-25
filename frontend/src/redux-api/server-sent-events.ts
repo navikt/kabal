@@ -3,6 +3,11 @@ import { IS_LOCALHOST } from './common';
 
 export enum ServerSentEventType {
   FINISHED = 'finished',
+  MEDUNDERSKRIVERIDENT = 'MEDUNDERSKRIVERIDENT',
+  MEDUNDERSKRIVERFLYT_ID = 'MEDUNDERSKRIVERFLYT_ID',
+  MOTTATT_FOERSTEINSTANS_DATO = 'MOTTATT_FOERSTEINSTANS_DATO',
+  MESSAGE_ADDED = 'message_added',
+  UTFALL_ID = 'UTFALL_ID',
   PATCH = 'patch',
   OPERATION = 'operation',
 }
