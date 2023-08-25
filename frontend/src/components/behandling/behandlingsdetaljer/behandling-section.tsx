@@ -13,7 +13,7 @@ export const BehandlingSection = ({ label, children }: Props) => {
   return (
     <StyledBehandlingSection>
       <Label htmlFor={id} size="small">
-        {label}:
+        {label}
       </Label>
       <div id={id}>{children}</div>
     </StyledBehandlingSection>
@@ -25,4 +25,5 @@ const StyledBehandlingSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  white-space: break-spaces;
 `;
