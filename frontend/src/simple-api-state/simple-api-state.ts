@@ -1,6 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import { useEffect, useState } from 'react';
 import { ENVIRONMENT } from '@app/environment';
+import { generateRequestId } from '@app/functions/generate-request-id';
 
 interface State<T> {
   data: T | undefined;
@@ -46,7 +47,10 @@ export class SimpleApiState<T> {
     this.onChange();
 
     try {
-      const response = await fetch(this.url, { method: 'GET', headers: { 'x-kabal-version': ENVIRONMENT.version } });
+      const response = await fetch(this.url, {
+        method: 'GET',
+        headers: { 'x-kabal-version': ENVIRONMENT.version, 'nav-callid': generateRequestId() },
+      });
 
       if (!response.ok) {
         const error = new Error(`${response.status} ${response.statusText}`);
