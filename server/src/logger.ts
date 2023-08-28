@@ -26,11 +26,13 @@ interface AnyObject {
 type LogArgs =
   | {
       msg?: string;
+      navCallId?: string;
       error: Error | unknown;
       data?: SerializableValue;
     }
   | {
       msg: string;
+      navCallId?: string;
       error?: Error | unknown;
       data?: SerializableValue;
     };
@@ -44,6 +46,7 @@ interface Logger {
 
 interface Log extends AnyObject {
   '@timestamp': string;
+  nav_callid?: string;
   version: string;
   module: string;
   message?: string;
@@ -71,13 +74,14 @@ export const getLogger = (module: string): Logger => {
   return logger;
 };
 
-const getLog = (module: string, level: Level, { msg, error, data }: LogArgs) => {
+const getLog = (module: string, level: Level, { msg, navCallId, error, data }: LogArgs) => {
   const log: Log = {
     ...(typeof data === 'object' && data !== null && !Array.isArray(data) ? data : { data }),
     level,
     '@timestamp': new Date().toISOString(),
     version: VERSION,
     module,
+    nav_callid: navCallId,
   };
 
   if (error instanceof Error) {
@@ -96,7 +100,7 @@ export const httpLoggingMiddleware: RequestHandler = (req, res, next) => {
   const start = performance.now();
 
   res.once('finish', () => {
-    const { method, url } = req;
+    const { method, url, headers } = req;
 
     if (url.endsWith('/isAlive') || url.endsWith('/isReady')) {
       return;
@@ -105,11 +109,14 @@ export const httpLoggingMiddleware: RequestHandler = (req, res, next) => {
     const { statusCode } = res;
 
     const responseTime = Math.round(performance.now() - start);
+    const navCallIdValue = headers['nav-callid'];
+    const navCallId = Array.isArray(navCallIdValue) ? navCallIdValue[0] : navCallIdValue;
 
     logHttpRequest({
       method,
       url,
       statusCode,
+      navCallId,
       responseTime,
     });
   });
@@ -121,19 +128,24 @@ interface HttpData extends AnyObject {
   method: string;
   url: string;
   statusCode: number;
+  navCallId?: string;
   responseTime: number;
 }
 
-const logHttpRequest = (data: HttpData) => {
+const logHttpRequest = ({ navCallId, ...data }: HttpData) => {
   const msg = `${data.statusCode} ${data.method} ${data.url}`;
 
   if (data.statusCode >= 500) {
-    httpLogger.error({ msg, data });
+    httpLogger.error({ msg, navCallId, data });
 
     return;
   }
 
   if (data.statusCode >= 400) {
-    httpLogger.warn({ msg, data });
+    httpLogger.warn({ msg, navCallId, data });
+
+    return;
   }
+
+  httpLogger.debug({ msg, navCallId, data });
 };
