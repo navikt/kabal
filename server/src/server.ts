@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { ensureNavCallId } from '@app/request-id';
 import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
 import { init } from './init';
 import { getLogger, httpLoggingMiddleware } from './logger';
@@ -21,6 +22,8 @@ const server = express();
 
 // Add the prometheus middleware to all routes
 server.use(metricsMiddleware);
+
+server.use(ensureNavCallId);
 
 server.use(httpLoggingMiddleware);
 
