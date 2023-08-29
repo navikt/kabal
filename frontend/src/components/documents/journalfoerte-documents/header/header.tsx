@@ -96,10 +96,10 @@ const ExpandedHeaders = ({
         onChange={setSelectedSaksIds}
         selected={selectedSaksIds}
         direction="left"
-        $area={Fields.SaksId}
-        data-testid="filter-saks-id"
+        $area={Fields.Saksnummer}
+        data-testid="filter-saksnummer"
       >
-        Saks-ID
+        Saksnummer
       </StyledFilterDropdown>
 
       <StyledFilterDropdown

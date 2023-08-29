@@ -19,6 +19,7 @@ export enum ColumnKeyEnum {
   Finished,
   Feilregistrering,
   Feilregistrert,
+  Saksnummer,
 }
 
 export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
@@ -42,4 +43,5 @@ export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
   [ColumnKeyEnum.Finished]: 'Fullført',
   [ColumnKeyEnum.Feilregistrering]: null,
   [ColumnKeyEnum.Feilregistrert]: 'Tidspunkt for feilregistrering',
+  [ColumnKeyEnum.Saksnummer]: 'Saksnummer',
 };

@@ -1,5 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import React from 'react';
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -8,7 +9,6 @@ import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { StyledUtfallResultat } from '../styled-components';
 
 interface UtfallResultatProps {
   utfall: string | null;
@@ -43,7 +43,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
-    <StyledUtfallResultat data-testid="utfall-section">
+    <BehandlingSection data-testid="utfall-section">
       <Select
         disabled={!canEdit || isLoading}
         label={`${utfallLabel}:`}
@@ -57,6 +57,6 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
         <option value={NOT_SELECTED} label="Ikke valgt" />
         {options}
       </Select>
-    </StyledUtfallResultat>
+    </BehandlingSection>
   );
 };

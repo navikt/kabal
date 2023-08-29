@@ -1,7 +1,7 @@
+import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useInnsendingshjemmelFromId } from '@app/hooks/use-kodeverk-ids';
-import { LabelMain } from '@app/styled-components/labels';
 
 interface Props {
   hjemmel: string | null;
@@ -26,5 +26,5 @@ const ResolvedHjemmel = ({ hjemmel }: ResolvedProps) => {
     return <LoadingCellContent />;
   }
 
-  return <LabelMain>{hjemmelName}</LabelMain>;
+  return <Tag variant="alt1">{hjemmelName}</Tag>;
 };

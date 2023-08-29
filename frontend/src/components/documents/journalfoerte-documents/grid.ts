@@ -16,7 +16,7 @@ export enum Fields {
   Tema = 'tema',
   Date = 'date',
   AvsenderMottaker = 'avsender-mottaker',
-  SaksId = 'saksid',
+  Saksnummer = 'saksnummer',
   Type = 'type',
   Action = 'action',
 }
@@ -28,7 +28,7 @@ const SIZES: Record<Fields, string> = {
   [Fields.Tema]: '85px',
   [Fields.Date]: '86px',
   [Fields.AvsenderMottaker]: '200px',
-  [Fields.SaksId]: '100px',
+  [Fields.Saksnummer]: '135px',
   [Fields.Type]: '82px',
   [Fields.Action]: '32px',
   [Fields.ResetFilters]: '32px',
@@ -43,7 +43,7 @@ const EXPANDED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
   Fields.Tema,
   Fields.Date,
   Fields.AvsenderMottaker,
-  Fields.SaksId,
+  Fields.Saksnummer,
   Fields.Type,
   Fields.Action,
 ];
@@ -69,7 +69,7 @@ const EXPANDED_JOURNALFOERTE_DOCUMENT_FIELDS = [
   Fields.Tema,
   Fields.Date,
   Fields.AvsenderMottaker,
-  Fields.SaksId,
+  Fields.Saksnummer,
   Fields.Type,
   Fields.Action,
 ];

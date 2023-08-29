@@ -15,7 +15,3 @@ export const StyledBehandlingSection = styled.section`
   padding: 16px;
   min-height: 100%;
 `;
-
-export const StyledUtfallResultat = styled.div`
-  margin-bottom: 32px;
-`;

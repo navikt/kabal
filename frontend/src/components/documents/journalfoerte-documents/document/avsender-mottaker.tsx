@@ -1,5 +1,6 @@
+import { Button } from '@navikt/ds-react';
 import React, { memo } from 'react';
-import { ClickableField } from '@app/components/documents/journalfoerte-documents/document/clickable-field';
+import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsAvsenderMottaker } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
@@ -16,12 +17,13 @@ export const AvsenderMottaker = memo(
     }
 
     return (
-      <ClickableField
-        $area={Fields.AvsenderMottaker}
+      <AvsenderMottakerButton
         onClick={() => setValue([avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'])}
+        size="small"
+        variant="tertiary"
       >
-        {formatAvsenderMottaker(avsenderMottaker)}
-      </ClickableField>
+        {formatAvsenderMottaker(avsenderMottaker)} {formatAvsenderMottaker(avsenderMottaker)}
+      </AvsenderMottakerButton>
     );
   },
   (prevProps, nextProps) => {
@@ -35,3 +37,16 @@ export const AvsenderMottaker = memo(
 );
 
 AvsenderMottaker.displayName = 'AvsenderMottaker';
+
+const AvsenderMottakerButton = styled(Button)`
+  grid-area: ${Fields.AvsenderMottaker};
+  white-space: nowrap;
+  text-align: left;
+
+  > .navds-label {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+`;
