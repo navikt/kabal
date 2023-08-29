@@ -16,11 +16,12 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
+  ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.Medunderskriverflyt,
-  ColumnKeyEnum.Open,
   ColumnKeyEnum.OppgavestyringNonFilterable,
+  ColumnKeyEnum.Open,
   ColumnKeyEnum.Feilregistrering,
 ];
 

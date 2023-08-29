@@ -20,35 +20,30 @@ const StyledJournalposttype = styled.span`
 const getJournalposttype = (type: Journalposttype | null) => {
   if (type === null) {
     return (
-      <StyledTag size="xsmall" variant="error" title="Journalposttype mangler">
+      <Tag size="small" variant="error" title="Journalposttype mangler">
         Ingen
-      </StyledTag>
+      </Tag>
     );
   }
 
   switch (type) {
     case Journalposttype.INNGAAENDE:
       return (
-        <StyledTag size="xsmall" variant="alt2" title="Inngående">
+        <Tag size="small" variant="alt2" title="Inngående">
           I
-        </StyledTag>
+        </Tag>
       );
     case Journalposttype.UTGAAENDE:
       return (
-        <StyledTag size="xsmall" variant="alt3" title="Utgående">
+        <Tag size="small" variant="alt3" title="Utgående">
           U
-        </StyledTag>
+        </Tag>
       );
     case Journalposttype.NOTAT:
       return (
-        <StyledTag size="xsmall" variant="alt1" title="Notat">
+        <Tag size="small" variant="alt1" title="Notat">
           N
-        </StyledTag>
+        </Tag>
       );
   }
 };
-
-const StyledTag = styled(Tag)`
-  width: 20px;
-  height: 20px;
-`;

@@ -12,6 +12,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
+  ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Finished,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,

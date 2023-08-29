@@ -17,13 +17,15 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
           <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>
+        <Dropdown.Menu.Divider />
         <Dropdown.Menu.List.Item
           as={StyledCopyButton}
           title="Klikk for å kopiere versjonsnummeret"
-          text={version}
-          icon={<VersionIcon aria-hidden />}
+          copyText={version}
+          text={`Kabal-versjon: ${getShortVersion(version)}`}
+          icon={<VersionIcon fontSize={16} aria-hidden />}
         >
-          Kabal-versjon: <VersionNumber>{getShortVersion(version)}</VersionNumber>
+          {null}
         </Dropdown.Menu.List.Item>
       </Dropdown.Menu.List>
     </Menu>
@@ -38,12 +40,6 @@ const Menu = styled(Dropdown.Menu)`
   & .navds-body-short {
     font-size: 16px;
   }
-`;
-
-const VersionNumber = styled.code`
-  width: 80px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const linkStyle = css`
@@ -74,6 +70,24 @@ const StyledNavLink = styled(NavLink)`
 const StyledCopyButton = styled(CopyButton)`
   ${linkStyle}
   white-space: nowrap;
+  justify-content: flex-start;
+  overflow: hidden;
+
+  &:hover {
+    color: var(--a-text-action-on-action-subtle);
+  }
+
+  svg {
+    margin: 0;
+  }
+
+  .navds-copybutton__icon {
+    margin: 0;
+  }
+
+  .navds-copybutton__content {
+    justify-content: flex-start;
+  }
 `;
 
 const VersionIcon = styled(CogRotationIcon)`

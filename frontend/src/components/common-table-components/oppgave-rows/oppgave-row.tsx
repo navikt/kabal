@@ -2,6 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { Name } from '@app/components/common-table-components/name';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
@@ -48,7 +49,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Type:
         return (
           <Table.DataCell key={key}>
-            <Type type={oppgave.typeId} />
+            <Type type={oppgave.typeId} size="medium" />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Ytelse:
@@ -156,6 +157,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               variant="secondary-neutral"
               $position="below"
             />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.Saksnummer:
+        return (
+          <Table.DataCell key={key}>
+            <CopyButton text={oppgave.saksnummer} />
           </Table.DataCell>
         );
       default:

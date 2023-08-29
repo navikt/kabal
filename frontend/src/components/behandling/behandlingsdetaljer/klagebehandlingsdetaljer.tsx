@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
+import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -30,6 +31,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     resultat,
     ytelseId,
     prosessfullmektig,
+    saksnummer,
   } = oppgavebehandling;
 
   return (
@@ -61,6 +63,8 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       <BehandlingSection label="Ytelse">
         <Ytelse ytelseId={ytelseId} />
       </BehandlingSection>
+
+      <Saksnummer saksnummer={saksnummer} />
 
       <MottattVedtaksinstans />
 

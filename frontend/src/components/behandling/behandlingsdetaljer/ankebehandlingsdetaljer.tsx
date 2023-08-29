@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
+import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Part } from '../../part/part';
@@ -19,7 +20,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig } = oppgavebehandling;
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -50,6 +51,8 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       <BehandlingSection label="Ytelse">
         <Ytelse ytelseId={ytelseId} />
       </BehandlingSection>
+
+      <Saksnummer saksnummer={saksnummer} />
 
       <BehandlingSection label="Behandlet av">
         {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}

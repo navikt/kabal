@@ -33,6 +33,7 @@ export interface IOppgave {
   utfallId: UtfallEnum | null;
   sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: DateString | null;
+  saksnummer: string;
 }
 
 export enum SortFieldEnum {

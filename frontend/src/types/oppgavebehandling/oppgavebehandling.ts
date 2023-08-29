@@ -52,6 +52,7 @@ export interface IOppgavebehandlingBase {
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;
+  saksnummer: string;
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {

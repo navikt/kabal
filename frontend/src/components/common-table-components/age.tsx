@@ -13,9 +13,9 @@ import { IOppgave } from '@app/types/oppgaver';
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {
     return (
-      <span>
+      <StyledAge>
         {oppgave.ageKA} {oppgave.ageKA === 1 ? 'dag' : 'dager'}
-      </span>
+      </StyledAge>
     );
   }
 
@@ -31,9 +31,9 @@ const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
   const children = isOpen ? (
     <EditAge mottattDate={mottatt} oppgaveId={id} closeCalendar={closeCalendar} setUserAge={setUserAge} />
   ) : (
-    <span>
+    <StyledAge>
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
-    </span>
+    </StyledAge>
   );
 
   return (
@@ -107,4 +107,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+
+const StyledAge = styled.span`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

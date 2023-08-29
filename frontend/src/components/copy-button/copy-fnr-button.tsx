@@ -3,7 +3,7 @@ import { formatIdNumber } from '@app/functions/format-id';
 import { CopyButton } from './copy-button';
 
 interface Props {
-  fnr?: string;
+  fnr: string;
 }
 
-export const CopyFnrButton = ({ fnr }: Props) => <CopyButton text={fnr}>{formatIdNumber(fnr)}</CopyButton>;
+export const CopyFnrButton = ({ fnr }: Props) => <CopyButton copyText={fnr} text={formatIdNumber(fnr)} />;
