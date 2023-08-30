@@ -43,7 +43,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
   const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
-    <BehandlingSection data-testid="utfall-section">
+    <BehandlingSection testid="utfall-section">
       <Select
         disabled={!canEdit || isLoading}
         label={`${utfallLabel}:`}
