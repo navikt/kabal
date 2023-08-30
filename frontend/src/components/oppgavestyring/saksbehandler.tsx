@@ -105,6 +105,10 @@ const SelectSaksbehandler = ({
       ? undefined
       : `${tildeltSaksbehandlerNavn ?? 'Laster...'} (${tildeltSaksbehandlerident})`;
 
+  const valid =
+    tildeltSaksbehandlerident === null ||
+    data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
+
   return (
     <StyledSelect
       label="Velg saksbehandler"
@@ -117,6 +121,9 @@ const SelectSaksbehandler = ({
     >
       {tildeltSaksbehandlerident === null ? <option value={NOT_SELECTED}>Ikke tildelt</option> : null}
       {options}
+      {!valid ? (
+        <option value={tildeltSaksbehandlerident}>Ugyldig saksbehandler ({tildeltSaksbehandlerident})</option>
+      ) : null}
     </StyledSelect>
   );
 };
