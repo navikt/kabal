@@ -5,9 +5,10 @@ import { styled } from 'styled-components';
 interface Props {
   label?: string;
   children: React.ReactNode;
+  testid?: string;
 }
 
-export const BehandlingSection = ({ label, children }: Props) => {
+export const BehandlingSection = ({ label, children, testid }: Props) => {
   if (typeof label === 'undefined') {
     return <StyledBehandlingSection>{children}</StyledBehandlingSection>;
   }
@@ -15,7 +16,7 @@ export const BehandlingSection = ({ label, children }: Props) => {
   const id = 'behandling-section-' + label.toLowerCase().replaceAll(/\s/g, '-');
 
   return (
-    <StyledBehandlingSection>
+    <StyledBehandlingSection data-testid={testid}>
       <Label htmlFor={id} size="small">
         {label}
       </Label>
