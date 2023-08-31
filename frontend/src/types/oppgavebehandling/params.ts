@@ -73,3 +73,13 @@ export interface ISettPaaVentParams extends IOppgavebehandlingBaseParams {
   to: string; // string($date)
   reason: string;
 }
+
+export enum ValidationType {
+  FINISH = 'fullfoer',
+  FEILREGISTRERING = 'feilregistrer',
+  NEW_ANKEBEHANDLING = 'nyankebehandling',
+}
+
+export interface IValidationParams extends IOppgavebehandlingBaseParams {
+  type: ValidationType;
+}

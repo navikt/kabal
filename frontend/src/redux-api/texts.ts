@@ -61,7 +61,7 @@ export const textsApi = createApi({
           const { data } = await queryFulfilled;
           const { modified } = data;
 
-          toast.success(`Teksten "${text.title}" ble oppdatert.`);
+          toast.success(`Teksten «${text.title}» ble oppdatert.`);
 
           dispatch(textsApi.util.updateQueryData('getTextById', text.id, (t) => ({ ...t, modified })));
           dispatch(
@@ -129,7 +129,7 @@ export const textsApi = createApi({
 
         try {
           await queryFulfilled;
-          toast.success(`Teksten "${title}" ble slettet.`);
+          toast.success(`Teksten «${title}» ble slettet.`);
         } catch {
           idPatchResult.undo();
           listPatchResult.undo();

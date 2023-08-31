@@ -2,10 +2,10 @@ import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { BackLink } from './back-link';
-import { StyledButtons, StyledFinishedFooter } from './styled-components';
+import { FooterType, StyledButtons, StyledFooter } from './styled-components';
 
 export const FinishedFooter = () => (
-  <StyledFinishedFooter>
+  <StyledFooter $type={FooterType.FINISHED}>
     <StyledButtons>
       <Button
         variant="primary"
@@ -22,5 +22,5 @@ export const FinishedFooter = () => (
     <Alert variant="success" inline>
       Fullført
     </Alert>
-  </StyledFinishedFooter>
+  </StyledFooter>
 );

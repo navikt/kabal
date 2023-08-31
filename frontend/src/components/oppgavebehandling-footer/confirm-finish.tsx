@@ -1,29 +1,28 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { BodyLong, Button } from '@navikt/ds-react';
+import React, { useContext, useState } from 'react';
+import { FooterPopup } from '@app/components/oppgavebehandling-footer/popup';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
-import { StyledFinishOppgaveBox, StyledFinishOppgaveButtons, StyledFinishOppgaveText } from './styled-components';
+import { StyledFinishOppgaveButtons } from './styled-components';
 
 interface FinishProps {
   cancel: () => void;
+  show: boolean;
 }
 
-export const ConfirmFinish = ({ cancel }: FinishProps) => {
+export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const { data: oppgave } = useOppgave();
   const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
-  const [ref, setRef] = useState<HTMLElement | null>(null);
   const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
   const errorContext = useContext(ValidationErrorContext);
 
-  useEffect(() => {
-    if (ref !== null) {
-      ref.scrollIntoView();
-    }
-  }, [ref]);
+  if (!show || oppgave === undefined) {
+    return null;
+  }
 
   const finish = async () => {
     if (typeof oppgave === 'undefined') {
@@ -47,8 +46,8 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
   };
 
   return (
-    <StyledFinishOppgaveBox ref={setRef}>
-      <OppgavebehandlingText />
+    <FooterPopup close={cancel}>
+      <BodyLong>{getText(oppgave.typeId, oppgave.resultat.utfallId)}</BodyLong>
       <StyledFinishOppgaveButtons>
         <Button
           variant="primary"
@@ -73,52 +72,34 @@ export const ConfirmFinish = ({ cancel }: FinishProps) => {
           Avbryt
         </Button>
       </StyledFinishOppgaveButtons>
-    </StyledFinishOppgaveBox>
+    </FooterPopup>
   );
 };
 
-const OppgavebehandlingText = () => {
-  const { data: oppgave, isLoading } = useOppgave();
-
-  if (isLoading || typeof oppgave === 'undefined') {
-    return null;
+const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string => {
+  if (oppgaveType === SaksTypeEnum.KLAGE) {
+    return 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
   }
 
-  if (oppgave.typeId === SaksTypeEnum.KLAGE) {
-    return (
-      <StyledFinishOppgaveText>
-        Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du
-        faktisk ønsker å fullføre behandlingen.
-      </StyledFinishOppgaveText>
-    );
-  }
-
-  const { utfallId } = oppgave.resultat;
-
-  if (oppgave.typeId === SaksTypeEnum.ANKE) {
+  if (oppgaveType === SaksTypeEnum.ANKE) {
     if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
-      return (
-        <StyledFinishOppgaveText>
-          Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal.
-          Ankebehandlingen kan ikke redigeres når den er fullført.
-        </StyledFinishOppgaveText>
-      );
+      return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
     }
 
     if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
-      return (
-        <StyledFinishOppgaveText>
-          Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort,
-          før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.
-        </StyledFinishOppgaveText>
-      );
+      return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
     }
+
+    return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
   }
 
-  return (
-    <StyledFinishOppgaveText>
-      Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk
-      ønsker å fullføre behandlingen.
-    </StyledFinishOppgaveText>
-  );
+  if (oppgaveType === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+    if (utfallId === UtfallEnum.HENVIST) {
+      return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Du finner oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+    }
+
+    return 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.';
+  }
+
+  return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
 };

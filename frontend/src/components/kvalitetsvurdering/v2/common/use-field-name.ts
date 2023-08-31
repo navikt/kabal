@@ -30,13 +30,13 @@ export const KVALITETSVURDERING_V2_FIELD_NAMES: Record<Keys, string> = {
   vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdert:
     'Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert',
   vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList:
-    'Hjemler for "Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert"',
+    'Hjemler for «Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert»',
 
   vedtaketLovbestemmelsenTolketFeil: 'Lovbestemmelsen er tolket feil',
-  vedtaketLovbestemmelsenTolketFeilHjemlerList: 'Hjemler for "Lovbestemmelsen er tolket feil"',
+  vedtaketLovbestemmelsenTolketFeilHjemlerList: 'Hjemler for «Lovbestemmelsen er tolket feil»',
 
   vedtaketFeilKonkretRettsanvendelse: 'Feil i den konkrete rettsanvendelsen',
-  vedtaketFeilKonkretRettsanvendelseHjemlerList: 'Hjemler for "Feil i den konkrete rettsanvendelsen"',
+  vedtaketFeilKonkretRettsanvendelseHjemlerList: 'Hjemler for «Feil i den konkrete rettsanvendelsen»',
 
   vedtaketIkkeKonkretIndividuellBegrunnelse: 'Begrunnelsen er ikke konkret og individuell nok',
   vedtaketIkkeKonkretIndividuellBegrunnelseIkkeGodtNokFremFaktum:
@@ -50,7 +50,7 @@ export const KVALITETSVURDERING_V2_FIELD_NAMES: Record<Keys, string> = {
   vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevet:
     'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet',
   vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList:
-    'Hjemler for "Innholdet i rettsreglene er ikke tilstrekkelig beskrevet"',
+    'Hjemler for «Innholdet i rettsreglene er ikke tilstrekkelig beskrevet»',
   vedtaketDetErLagtTilGrunnFeilFaktum: 'Det er lagt til grunn feil faktum',
   vedtaketSpraakOgFormidlingErIkkeTydelig: 'Språket og formidlingen er ikke tydelig',
 

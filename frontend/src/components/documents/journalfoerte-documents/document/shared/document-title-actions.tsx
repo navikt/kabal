@@ -28,7 +28,7 @@ export const DocumentTitleActions = ({ setEditMode, editMode, harTilgangTilArkiv
         icon={<Icon aria-hidden />}
         data-testid="document-title-edit-save-button"
         title="Endre"
-        size="small"
+        size="xsmall"
         variant="tertiary"
       />
       {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}

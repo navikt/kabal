@@ -46,7 +46,7 @@ export const UtfallResultat = ({ utfall }: UtfallResultatProps) => {
     <BehandlingSection testid="utfall-section">
       <Select
         disabled={!canEdit || isLoading}
-        label={`${utfallLabel}:`}
+        label={utfallLabel}
         size="small"
         onChange={onUtfallResultatChange}
         value={utfall ?? undefined}

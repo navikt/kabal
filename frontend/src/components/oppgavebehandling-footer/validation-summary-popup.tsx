@@ -1,31 +1,29 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { IValidationSection } from '@app/functions/error-type-guard';
+import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { StyledButton, StyledIconButton, StyledPopup } from './styled-components';
 import { ValidationSummary } from './validation-summary';
 
-interface Props {
-  sections: IValidationSection[];
-  hasErrors: boolean;
-}
-
-export const ValidationSummaryPopup = ({ sections, hasErrors }: Props) => {
+export const ValidationSummaryPopup = () => {
+  const { validationSectionErrors } = useContext(ValidationErrorContext);
   const [open, setOpen] = useState(true);
   const toggleOpen = useCallback(() => setOpen((o) => !o), []);
 
   useEffect(() => {
-    if (sections.length !== 0) {
+    if (validationSectionErrors.length !== 0) {
       setOpen(true);
     }
-  }, [sections]);
+  }, [validationSectionErrors]);
 
-  if (sections.length === 0) {
+  if (validationSectionErrors.length === 0) {
     return null;
   }
 
   const Icon = open ? ChevronUpIcon : ChevronDownIcon;
+
+  const hasErrors = validationSectionErrors.length !== 0;
 
   const statusText = hasErrors ? 'Feil i utfyllingen' : 'Under utfylling';
   const statusType = hasErrors ? 'warning' : 'info';
@@ -40,17 +38,20 @@ export const ValidationSummaryPopup = ({ sections, hasErrors }: Props) => {
           </StyledAlertStripeChildren>
         </Alert>
       </StyledButton>
-      <Popup hasErrors={hasErrors} sections={sections} setOpen={setOpen} open={open} />
+      <Popup hasErrors={hasErrors} setOpen={setOpen} open={open} />
     </>
   );
 };
 
-interface PopupProps extends Props {
+interface PopupProps {
   setOpen: (open: boolean) => void;
   open: boolean;
+  hasErrors: boolean;
 }
 
-const Popup = ({ hasErrors, sections, open, setOpen }: PopupProps) => {
+const Popup = ({ open, setOpen, hasErrors }: PopupProps) => {
+  const { validationSectionErrors } = useContext(ValidationErrorContext);
+
   if (!open || !hasErrors) {
     return null;
   }
@@ -60,7 +61,7 @@ const Popup = ({ hasErrors, sections, open, setOpen }: PopupProps) => {
       <StyledIconButton onClick={() => setOpen(false)}>
         <ChevronUpIcon fill="#262626" />
       </StyledIconButton>
-      <ValidationSummary sections={sections} />
+      <ValidationSummary sections={validationSectionErrors} />
     </StyledPopup>
   );
 };

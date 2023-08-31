@@ -1,9 +1,9 @@
-import { FIELD_NAMES } from '@app/hooks/use-field-name';
+import { DEFAULT_FIELD_NAMES } from '@app/types/field-names';
 import { GenericObject, isGenericObject } from './../types/types';
 
 export interface IValidationError {
   reason: string;
-  field: keyof typeof FIELD_NAMES;
+  field: keyof typeof DEFAULT_FIELD_NAMES;
 }
 
 export enum SECTION_KEY {

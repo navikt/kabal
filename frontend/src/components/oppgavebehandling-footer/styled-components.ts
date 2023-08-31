@@ -51,7 +51,35 @@ export const StyledButtons = styled.div`
   gap: 16px;
 `;
 
-const StyledFooter = styled.div`
+export enum FooterType {
+  FINISHED = 'FINISHED',
+  UNFINISHED_NO_ERRORS = 'UNFINISHED_NO_ERRORS',
+  UNFINISHED_WITH_ERRORS = 'UNFINISHED_WITH_ERRORS',
+}
+
+const getBorderColor = (type: FooterType): string => {
+  switch (type) {
+    case FooterType.FINISHED:
+      return 'var(--a-border-success)';
+    case FooterType.UNFINISHED_NO_ERRORS:
+      return 'var(--a-border-info)';
+    case FooterType.UNFINISHED_WITH_ERRORS:
+      return 'var(--a-border-warning)';
+  }
+};
+
+const getBackgroundColor = (type: FooterType) => {
+  switch (type) {
+    case FooterType.FINISHED:
+      return 'var(--a-surface-success-subtle)';
+    case FooterType.UNFINISHED_NO_ERRORS:
+      return 'var(--a-surface-info-subtle)';
+    case FooterType.UNFINISHED_WITH_ERRORS:
+      return 'var(--a-surface-warning-subtle)';
+  }
+};
+
+export const StyledFooter = styled.div<{ $type: FooterType }>`
   display: flex;
   position: sticky;
   bottom: 0em;
@@ -64,40 +92,12 @@ const StyledFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  z-index: 15;
-`;
-
-export const StyledFinishedFooter = styled(StyledFooter)`
-  border-top: 1px solid #06893a;
-  background-color: #cde7d8;
-`;
-
-export const StyledUnfinishedNoErrorFooter = styled(StyledFooter)`
-  border-top: 1px solid #368da8;
-  background-color: #e0f5fb;
-`;
-
-export const StyledUnfinishedErrorFooter = styled(StyledFooter)`
-  border-top: 1px solid #d47b00;
-  background-color: #ffe9cc;
+  z-index: 23;
+  border-top: ${({ $type }) => `1px solid ${getBorderColor($type)}`};
+  background-color: ${({ $type }) => getBackgroundColor($type)};
 `;
 
 export const StyledFinishOppgaveButtons = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-export const StyledFinishOppgaveText = styled.p`
-  margin: 0 0 1em;
-  white-space: normal;
-`;
-
-export const StyledFinishOppgaveBox = styled.div`
-  position: fixed;
-  bottom: 1em;
-  border: 1px solid #0067c5;
-  padding: 1em;
-  background-color: #fff;
-  width: 400px;
-  z-index: 1;
 `;

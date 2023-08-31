@@ -74,7 +74,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
         maxLength={MAX_LENGTH}
         size="small"
         id="paa-vent-reason"
-        placeholder='Skriv kort hvorfor saken skal settes på vent. F.eks. "Venter på tilsvar".'
+        placeholder="Skriv kort hvorfor saken skal settes på vent. F.eks. «Venter på tilsvar»."
       />
       <Errors dateError={dateError} reasonError={reasonError} />
       <Row>

@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { format } from 'date-fns';
+import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { formatIdNumber } from '@app/functions/format-id';
@@ -9,6 +11,7 @@ import { IPart } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
+  IOppgavebehandlingBaseParams,
   IOppgavebehandlingHjemlerUpdateParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
@@ -190,6 +193,30 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
     searchPart: builder.query<IPart, string>({
       query: (identifikator) => ({ url: `/kabal-api/searchpart`, method: 'POST', body: { identifikator } }),
     }),
+    newAnkebehandling: builder.mutation<void, IOppgavebehandlingBaseParams>({
+      query: ({ oppgaveId }) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/nyankebehandlingka`, method: 'POST' }),
+      onQueryStarted: async ({ oppgaveId }, { queryFulfilled }) => {
+        const undo = update(oppgaveId, {
+          isAvsluttetAvSaksbehandler: true,
+          avsluttetAvSaksbehandlerDate: format(new Date(), ISO_FORMAT),
+        });
+
+        try {
+          await queryFulfilled;
+          toast.success('Ny ankebehandling opprettet');
+        } catch (e) {
+          undo();
+
+          const message = 'Feil ved oppretting av ny ankebehandling.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
   }),
 });
 
@@ -210,4 +237,5 @@ export const {
   useUpdateKlagerMutation,
   useSetFeilregistrertMutation,
   useLazySearchPartQuery,
+  useNewAnkebehandlingMutation,
 } = behandlingerMutationSlice;

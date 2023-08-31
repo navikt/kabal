@@ -4,6 +4,7 @@ import { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { isApiRejectionError } from '@app/types/errors';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { IValidationParams } from '@app/types/oppgavebehandling/params';
 import {
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
@@ -125,9 +126,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    validate: builder.query<IApiValidationResponse, string>({
-      query: (oppgaveId) => ({
-        url: `/kabal-api/behandlinger/${oppgaveId}/validate`,
+    validate: builder.query<IApiValidationResponse, IValidationParams>({
+      query: ({ oppgaveId, type }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/validate/${type}`,
         validateStatus: ({ status, ok }) => ok || status === 400,
       }),
     }),

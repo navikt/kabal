@@ -6,7 +6,10 @@ interface IValidationErrorContext {
   setValidationSectionErrors: (errors: IValidationSection[]) => void;
 }
 
-export const ValidationErrorContext = createContext<IValidationErrorContext | undefined>(undefined);
+export const ValidationErrorContext = createContext<IValidationErrorContext>({
+  validationSectionErrors: [],
+  setValidationSectionErrors: () => {},
+});
 
 interface Props {
   children: React.ReactNode;

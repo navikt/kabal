@@ -37,13 +37,13 @@ export const Receipients = ({ document }: FinishProps) => {
 
   return (
     <StyledFinishDocument>
-      <Heading size="xsmall">{`Send brevet "${document.tittel}" til`}</Heading>
+      <Heading size="xsmall">{`Send brevet «${document.tittel}» til`}</Heading>
       {document.isMarkertAvsluttet ? null : (
         <SelectRecipients
           recipients={partBrevmottakere}
           selectedBrevmottakerIds={selectedPartBrevmottakerIds}
           setSelectedBrevmottakerIds={setSelectedPartBrevmottakerIds}
-          label={`Send brevet "${document.tittel}" til`}
+          label={`Send brevet «${document.tittel}» til`}
           sendErrors={sendErrors}
         />
       )}
