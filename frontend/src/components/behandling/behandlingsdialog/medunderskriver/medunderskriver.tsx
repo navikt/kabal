@@ -1,37 +1,33 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
+import { styled } from 'styled-components';
+import { useCanChangeMedunderskriver } from '@app/components/behandling/behandlingsdialog/medunderskriver/hooks';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
+import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsAssignee } from '@app/hooks/use-is-assignee';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetMedunderskriverQuery, useGetMedunderskriverflytQuery } from '@app/redux-api/oppgaver/queries/behandling';
-import { Role } from '@app/types/bruker';
-import { MedunderskriverFlyt } from '@app/types/kodeverk';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { MedunderskriverInfo } from './medunderskriver-info';
+import { useGetMedunderskriverQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { MedunderskriverReadOnly } from './read-only';
 import { SelectMedunderskriver } from './select-medunderskriver';
-import { SendTilMedunderskriver } from './send-til-medunderskriver';
-import { SendTilSaksbehandler } from './send-til-saksbehandler';
+import { SendToMedunderskriver } from './send-to-medunderskriver';
+import { SendToSaksbehandler } from './send-to-saksbehandler';
+import { MedunderskriverStateText } from './state-text';
+import { TakeFromMedunderskriver } from './take-from-medunderskriver';
 
 export const Medunderskriver = () => {
   const oppgaveId = useOppgaveId();
-  const { data: oppgave } = useOppgave();
-  const hasOppgaveStyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const isSaksbehandler = useIsSaksbehandler();
-  const isAssignee = useIsAssignee();
-  const isFullfoert = useIsFullfoert();
-
-  const canChangeMedunderskriver = isSaksbehandler || hasOppgaveStyringRole;
-
-  const options = isFullfoert ? undefined : getOptions(canChangeMedunderskriver, oppgave);
+  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
+  const canChangeMedunderskriver = useCanChangeMedunderskriver();
+  const isFinished = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
+  const isEditable = !isFinished && !isFeilregistrert;
 
   // Poll the medunderskriver endpoints, in case the medunderskriver is changed by another user.
-  useGetMedunderskriverQuery(oppgaveId, canChangeMedunderskriver ? undefined : options);
-  useGetMedunderskriverflytQuery(oppgaveId, isAssignee ? undefined : options);
+  useGetMedunderskriverQuery(oppgaveId, isEditable ? { pollingInterval: 3 * 1000 } : undefined);
 
-  if (oppgave === undefined) {
+  if (oppgaveIsLoading || oppgave === undefined || oppgaveId === skipToken) {
     return SKELETON;
   }
 
@@ -39,42 +35,37 @@ export const Medunderskriver = () => {
     return null;
   }
 
+  const { typeId, medunderskriver } = oppgave;
+
+  const isReadOnly = isFinished || isFeilregistrert || !canChangeMedunderskriver;
+
+  if (isReadOnly) {
+    if (medunderskriver.navIdent === null) {
+      return null;
+    }
+
+    return (
+      <Container>
+        <MedunderskriverReadOnly typeId={typeId} medunderskriver={medunderskriver} />
+      </Container>
+    );
+  }
+
   return (
-    <>
-      <MedunderskriverInfo
-        typeId={oppgave.typeId}
-        tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-        medunderskriverident={oppgave.medunderskriverident}
-      />
-      <SelectMedunderskriver
-        ytelseId={oppgave.ytelseId}
-        typeId={oppgave.typeId}
-        id={oppgave.id}
-        medunderskriverident={oppgave.medunderskriverident}
-      />
-      <SendTilMedunderskriver
-        id={oppgave.id}
-        typeId={oppgave.typeId}
-        medunderskriverident={oppgave.medunderskriverident}
-        medunderskriverFlyt={oppgave.medunderskriverFlyt}
-      />
-      <SendTilSaksbehandler id={oppgave.id} medunderskriverFlyt={oppgave.medunderskriverFlyt} />
-    </>
+    <Container>
+      <SelectMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
+      <MedunderskriverStateText medunderskriver={medunderskriver} typeId={typeId} />
+      <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
+      <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
+      <TakeFromMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
+      <TakeFromSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
+    </Container>
   );
 };
 
-const getOptions = (canChangeMedunderskriver: boolean, oppgave: IOppgavebehandling | undefined) => {
-  if (typeof oppgave === 'undefined') {
-    return undefined;
-  }
-
-  if (canChangeMedunderskriver && oppgave.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return { pollingInterval: 3 * 1000 };
-  }
-
-  if (!canChangeMedunderskriver && oppgave.medunderskriverFlyt !== MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-    return { pollingInterval: 3 * 1000 };
-  }
-
-  return undefined;
-};
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+`;

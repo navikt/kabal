@@ -1,6 +1,7 @@
 import { Switch } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useBehandlingEnabled,
@@ -8,7 +9,6 @@ import {
   useKvalitetsvurderingEnabled,
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 export const PanelSwitches = () => {
   const {
@@ -62,7 +62,12 @@ const Brevutforming = () => {
 
   const { data: oppgave, isLoading } = useOppgave();
 
-  if (isLoading || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null) {
+  if (
+    isLoading ||
+    typeof oppgave === 'undefined' ||
+    oppgave.feilregistrering !== null ||
+    oppgave.isAvsluttetAvSaksbehandler
+  ) {
     return null;
   }
 
@@ -80,22 +85,7 @@ const Brevutforming = () => {
 
 const Kvalitetsvurdering = () => {
   const { value = true, setValue, isLoading } = useKvalitetsvurderingEnabled();
-
-  const { data: oppgave } = useOppgave();
-
-  if (typeof oppgave === 'undefined') {
-    return null;
-  }
-
-  const { typeId, resultat } = oppgave;
-
-  const hideKvalitetsvurdering =
-    oppgave.kvalitetsvurderingReference === null ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    resultat.utfallId === UtfallEnum.TRUKKET ||
-    resultat.utfallId === UtfallEnum.RETUR ||
-    resultat.utfallId === UtfallEnum.UGUNST ||
-    oppgave?.feilregistrering !== null;
+  const hideKvalitetsvurdering = useHideKvalitetsvurdering();
 
   if (hideKvalitetsvurdering) {
     return null;

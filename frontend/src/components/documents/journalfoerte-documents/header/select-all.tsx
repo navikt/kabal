@@ -1,48 +1,29 @@
 import { Checkbox } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IArkivertDocumentReference } from '@app/components/documents/journalfoerte-documents/select-context/types';
 
 interface Props {
-  slicedFilteredDocuments: IArkivertDocument[];
+  allSelectableDocuments: IArkivertDocumentReference[];
 }
 
-export const SelectAll = ({ slicedFilteredDocuments }: Props) => {
-  const { selectedDocuments, isSelected, selectMany, unselectAll } = useContext(SelectContext);
+export const SelectAll = ({ allSelectableDocuments }: Props) => {
+  const { selectedCount, selectMany, unselectAll } = useContext(SelectContext);
 
   const allSelected = useMemo(
-    () => slicedFilteredDocuments.every((document) => isSelected(document)),
-    [isSelected, slicedFilteredDocuments],
+    () => selectedCount === allSelectableDocuments.length,
+    [allSelectableDocuments.length, selectedCount],
   );
 
-  const onSelectAllChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    ({ target }) => {
-      if (target.checked) {
-        const mainDocuments = slicedFilteredDocuments.map(({ journalpostId, dokumentInfoId }) => ({
-          journalpostId,
-          dokumentInfoId,
-        }));
+  const intermediate = useMemo(() => !allSelected && selectedCount > 0, [allSelected, selectedCount]);
 
-        const attachments = slicedFilteredDocuments.flatMap(({ journalpostId, vedlegg }) =>
-          vedlegg.map(({ dokumentInfoId }) => ({ dokumentInfoId, journalpostId })),
-        );
-
-        selectMany([...mainDocuments, ...attachments]);
-      } else {
-        unselectAll();
-      }
-    },
-    [selectMany, slicedFilteredDocuments, unselectAll],
+  const onClick: React.MouseEventHandler<HTMLInputElement> = useCallback(
+    () => (intermediate || allSelected ? unselectAll() : selectMany(allSelectableDocuments)),
+    [allSelectableDocuments, allSelected, intermediate, selectMany, unselectAll],
   );
 
   return (
-    <Checkbox
-      hideLabel
-      size="small"
-      checked={allSelected}
-      indeterminate={!allSelected && Object.keys(selectedDocuments).length > 0}
-      onChange={onSelectAllChange}
-    >
+    <Checkbox hideLabel size="small" checked={allSelected} indeterminate={intermediate} onClick={onClick}>
       Velg alle dokumenter og vedlegg
     </Checkbox>
   );

@@ -14,10 +14,13 @@ export const getSelectedDocumentsInOrder = (
 
   for (const document of archivedDocuments) {
     {
-      const selected = selectedDocuments[getId(document)];
+      const selected = selectedDocuments.get(getId(document));
 
       if (selected !== undefined) {
-        sortedList.push({ ...selected, type: DocumentTypeEnum.JOURNALFOERT });
+        sortedList.push({
+          ...selected,
+          type: DocumentTypeEnum.JOURNALFOERT,
+        });
 
         if (sortedList.length === targetLength) {
           break;
@@ -26,11 +29,18 @@ export const getSelectedDocumentsInOrder = (
     }
 
     for (const vedlegg of document.vedlegg) {
-      const selected =
-        selectedDocuments[getId({ dokumentInfoId: vedlegg.dokumentInfoId, journalpostId: document.journalpostId })];
+      const selected = selectedDocuments.get(
+        getId({
+          dokumentInfoId: vedlegg.dokumentInfoId,
+          journalpostId: document.journalpostId,
+        }),
+      );
 
       if (selected !== undefined) {
-        sortedList.push({ ...selected, type: DocumentTypeEnum.JOURNALFOERT });
+        sortedList.push({
+          ...selected,
+          type: DocumentTypeEnum.JOURNALFOERT,
+        });
 
         if (sortedList.length === targetLength) {
           break;

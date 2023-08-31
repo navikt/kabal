@@ -1,5 +1,5 @@
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IDocumentReference, IPart } from '../oppgave-common';
+import { FlowState, IDocumentReference, IPart } from '../oppgave-common';
 import { ISmartEditor } from '../smart-editor/smart-editor';
 
 export interface IOppgavebehandlingBaseParams {
@@ -47,9 +47,8 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
   navIdent: string | null;
 }
 
-export interface ISwitchMedunderskriverflytParams {
-  oppgaveId: string;
-  isSaksbehandler: boolean;
+export interface ISetFlowStateParams extends IOppgavebehandlingBaseParams {
+  flowState: FlowState;
 }
 
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
@@ -82,4 +81,8 @@ export enum ValidationType {
 
 export interface IValidationParams extends IOppgavebehandlingBaseParams {
   type: ValidationType;
+}
+
+export interface ISetRolParams extends IOppgavebehandlingBaseParams {
+  navIdent: string | null;
 }

@@ -3,7 +3,6 @@ import { Button, CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 
 interface Props {
   setEditMode: (editMode: boolean) => void;
@@ -13,9 +12,7 @@ interface Props {
 }
 
 export const DocumentTitleActions = ({ setEditMode, editMode, harTilgangTilArkivvariant, tittel }: Props) => {
-  const canEdit = useCanEdit();
-
-  if (!canEdit || !harTilgangTilArkivvariant) {
+  if (!harTilgangTilArkivvariant) {
     return null;
   }
 
@@ -31,6 +28,7 @@ export const DocumentTitleActions = ({ setEditMode, editMode, harTilgangTilArkiv
         size="xsmall"
         variant="tertiary"
       />
+
       {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}
     </Container>
   );

@@ -6,7 +6,7 @@ export const documentCSS = css`
   padding-right: 0;
   border-radius: var(--a-border-radius-medium);
   background-color: transparent;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 100ms ease-in-out;
 `;
 
 export const getBackgroundColor = (expanded: boolean, selected: boolean) => {

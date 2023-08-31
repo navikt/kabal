@@ -1,13 +1,16 @@
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
-import { Tabs } from '@navikt/ds-react';
+import { Alert, Heading, Tabs } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useRef } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
+import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSmartEditors } from '@app/hooks/use-smart-editors';
 import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
@@ -32,10 +35,25 @@ interface TabbedProps {
 }
 
 const Tabbed = ({ editors }: TabbedProps) => {
-  const [firstEditor] = editors;
+  const firstEditor = useFirstEditor(editors);
   const { value: editorId = firstEditor?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
+  const isSaksbehandler = useIsSaksbehandler();
 
   const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
+
+  if (editors.length === 0 && !isSaksbehandler) {
+    return (
+      <StyledNoDocuments>
+        <Heading level="1" size="medium" spacing>
+          Ingen redigerbare dokumenter
+        </Heading>
+        <Alert variant="info" size="small">
+          Ingen redigerbare dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å opprette
+          dem.
+        </Alert>
+      </StyledNoDocuments>
+    );
+  }
 
   return (
     <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
@@ -57,8 +75,9 @@ const Tabbed = ({ editors }: TabbedProps) => {
 
 const TabNew = () => {
   const isMedunderskriver = useIsMedunderskriver();
+  const isRol = useIsRol();
 
-  if (isMedunderskriver) {
+  if (isMedunderskriver || isRol) {
     return null;
   }
 
@@ -71,8 +90,9 @@ interface TabPanelNewProps {
 
 const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
   const isMedunderskriver = useIsMedunderskriver();
+  const isRol = useIsRol();
 
-  if (isMedunderskriver) {
+  if (isMedunderskriver || isRol) {
     return null;
   }
 
@@ -138,4 +158,8 @@ const StyledTabPanels = styled.div`
   background-color: var(--a-surface-subtle);
   overflow: hidden;
   flex-grow: 1;
+`;
+
+const StyledNoDocuments = styled.div`
+  padding: 16px;
 `;

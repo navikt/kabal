@@ -1,15 +1,17 @@
 import { useCallback } from 'react';
 import { getId } from './helpers';
-import { ISelectedDocument, SelectHook, SelectOne } from './types';
+import { IArkivertDocumentReference, SelectHook, SelectOne } from './types';
 
 export const useSelectOne: SelectHook<SelectOne> = (setSelectedDocuments, setLastSelectedDocument) =>
   useCallback(
-    (document: ISelectedDocument) => {
-      setLastSelectedDocument(document);
-      setSelectedDocuments((map) => ({
-        ...map,
-        [getId(document)]: document,
-      }));
+    (documentIds: IArkivertDocumentReference) => {
+      setLastSelectedDocument(documentIds);
+
+      setSelectedDocuments((map) => {
+        map.set(getId(documentIds), documentIds);
+
+        return new Map(map);
+      });
     },
     [setLastSelectedDocument, setSelectedDocuments],
   );

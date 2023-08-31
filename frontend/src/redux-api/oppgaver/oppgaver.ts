@@ -11,6 +11,9 @@ export enum OppgaveListTagTypes {
   ENHETENS_FERDIGE = 'enhetens-ferdige',
   ENHETENS_VENTENDE = 'enhetens-ventende',
   PERSON_AND_OPPGAVER = 'person-and-oppgaver',
+  ROL_LEDIGE = 'rol-ledige',
+  ROL_UFERDIGE = 'rol-uferdige',
+  ROL_FERDIGE = 'rol-ferdige',
 }
 
 export enum DokumenterListTagTypes {

@@ -1,9 +1,17 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 
-export const findDocument = (dokumentInfoId: string, documents: IArkivertDocument[]): IArkivertDocument | undefined => {
+export const findDocument = (
+  journalpostId: string,
+  dokumentInfoId: string,
+  documents: IArkivertDocument[],
+): IArkivertDocument | undefined => {
   for (const document of documents) {
     if (document.dokumentInfoId === dokumentInfoId) {
       return document;
+    }
+
+    if (document.journalpostId !== journalpostId) {
+      continue;
     }
 
     for (const v of document.vedlegg) {

@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
@@ -26,6 +28,16 @@ const COLUMNS: ColumnKeyEnum[] = [
 ];
 
 export const OppgaverPaaVentTable = () => {
+  const hasAccess = useHasRole(Role.KABAL_SAKSBEHANDLING);
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  return <OppgaverPaaVentTableInternal />;
+};
+
+const OppgaverPaaVentTableInternal = () => {
   const { data: bruker } = useUser();
 
   const [params, setParams] = useState<CommonOppgaverParams>({

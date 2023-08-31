@@ -13,32 +13,26 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
 
         const {
           tildeltSaksbehandlerident,
-          medunderskriverFlyt,
-          medunderskriverident,
+          medunderskriver,
           avsluttetAvSaksbehandlerDate,
           isAvsluttetAvSaksbehandler,
           frist,
           sattPaaVent,
           ytelseId,
+          rol,
         } = data;
-
-        dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, () => ({
-            medunderskriverFlyt,
-          })),
-        );
 
         dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
             ...draft,
             tildeltSaksbehandlerident,
-            medunderskriverident,
-            medunderskriverFlyt,
+            medunderskriver,
             avsluttetAvSaksbehandlerDate,
             isAvsluttetAvSaksbehandler,
             frist,
             sattPaaVent,
             ytelseId,
+            rol,
           })),
         );
       },

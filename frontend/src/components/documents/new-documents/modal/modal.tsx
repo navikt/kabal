@@ -21,6 +21,8 @@ export const DocumentModal = () => {
     return null;
   }
 
+  const { tittel, type } = document;
+
   return (
     <Modal
       width="medium"
@@ -30,8 +32,8 @@ export const DocumentModal = () => {
       onCancel={close}
       data-testid="document-actions-modal"
       header={{
-        heading: `Valg for «${document.tittel}»`,
-        icon: <DocumentIcon type={document.type} />,
+        heading: `Valg for «${tittel}»`,
+        icon: <DocumentIcon type={type} />,
       }}
     >
       <DocumentModalContent document={document} />

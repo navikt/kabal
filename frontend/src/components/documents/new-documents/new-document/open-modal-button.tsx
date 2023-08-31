@@ -4,26 +4,34 @@ import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
   document: IMainDocument;
 }
 
-export const ToggleModalButton = ({ document }: Props) => {
-  const canEdit = useCanEdit();
+export const OpenModalButton = ({ document }: Props) => {
+  const isFinished = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
+  const isSaksbehandler = useIsSaksbehandler();
+  const isRol = useIsRol();
   const { setDocumentId } = useContext(ModalContext);
 
-  if (!canEdit) {
+  if (isFinished || isFeilregistrert) {
     return null;
   }
 
-  const onClick = () => setDocumentId(document.id);
+  if (!isSaksbehandler && !isRol) {
+    return null;
+  }
 
   return (
     <StyledButton
-      onClick={onClick}
+      onClick={() => setDocumentId(document.id)}
       data-testid="document-actions-button"
       variant="tertiary-neutral"
       size="small"

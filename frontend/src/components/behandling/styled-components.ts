@@ -4,7 +4,7 @@ export const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   white-space: normal;
-  width: 640px;
+  width: 750px;
   grid-column-gap: 1px;
   background-color: #c9c9c9;
   flex-grow: 1;

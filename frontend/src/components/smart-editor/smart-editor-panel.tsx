@@ -9,7 +9,12 @@ export const SmartEditorPanel = () => {
   const { value: shown = true, isLoading } = useSmartEditorEnabled();
   const { data: oppgave } = useOppgave();
 
-  const hide = !shown || isLoading || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null;
+  const hide =
+    !shown ||
+    isLoading ||
+    typeof oppgave === 'undefined' ||
+    oppgave.feilregistrering !== null ||
+    oppgave.isAvsluttetAvSaksbehandler;
 
   if (hide) {
     return null;

@@ -19,3 +19,11 @@ export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   content: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
 });
+
+export const ROL_NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.ROL_NOTAT,
+  type: TemplateTypeEnum.NOTAT,
+  tittel: 'Notat for rådgivende overlege',
+  content: [createCurrentDate(), createSimpleParagraph()],
+  dokumentTypeId: DistribusjonsType.NOTAT,
+});

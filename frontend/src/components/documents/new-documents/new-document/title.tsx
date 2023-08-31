@@ -67,7 +67,10 @@ export const DocumentTitle = ({ document }: Props) => {
 
   const isTabOpen = useIsTabOpen(documentId);
 
-  const disabled = url === undefined;
+  const disabled =
+    url === undefined ||
+    (document.type === DocumentTypeEnum.JOURNALFOERT &&
+      !document.journalfoertDokumentReference.harTilgangTilArkivvariant);
 
   const setViewedDocument = useCallback(() => {
     if (document.type === DocumentTypeEnum.JOURNALFOERT) {

@@ -117,11 +117,9 @@ export enum Kanal {
   UKJENT = 'UKJENT',
 }
 
-interface DocumentMetadata {
+export interface Journalpost {
   /** Unik identifikator per journalpost */
   journalpostId: string;
-  /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
-  tittel: string | null;
   /**
    * Temaet/Fagområdet som journalposten og tilhørende sak tilhører, f.eks. "FOR".
    * For sakstilknyttede journalposter, er det tema på SAK- eller PSAK-saken som er gjeldende tema.
@@ -154,8 +152,10 @@ interface DocumentMetadata {
    * Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. For inngående dokumenter kan innholdet være f.eks. en servicebruker eller et batchnavn.
    * */
   opprettetAvNavn: string | null;
-  /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder. */
-  datoOpprettet: string; // DateTime
+  /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder.
+   * @format LocalDateTime
+   */
+  datoOpprettet: string;
   /** Liste over datoer som kan være relevante for denne journalposten, f.eks. DATO_EKSPEDERT. Hvilke relevante datoer som returneres, avhenger av journalposttypen. */
   relevanteDatoer: RelevantDato[];
   /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til NAV. Vil kun være satt for utgående forsendelser. */
@@ -173,21 +173,31 @@ interface DocumentMetadata {
   utsendingsinfo: Utsendingsinfo | null;
 }
 
+export interface DokumentInfo {
+  /** Unik identifikator per dokument. */
+  dokumentInfoId: string;
+  /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
+  tittel: string | null;
+  /** Om bruker har tilgang til dokumentet. */
+  harTilgangTilArkivvariant: boolean;
+  /**
+   * Et dokumentInfo-objekt kan være gjenbrukt på flere journalposter. OriginalJournalpostId peker på den journalposten som dokumentene var knyttet til på arkiveringstidspunktet.
+   */
+  originalJournalpostId: string;
+}
+
+interface KabalProperties {
+  /** Om dokumentet er inkludert i saksmappen. */
+  valgt: boolean;
+}
+
 /*
   Documentation:
   https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
 */
-export interface IArkivertDocument extends DocumentMetadata {
-  dokumentInfoId: string;
-  registrert: string; // LocalDate
-  harTilgangTilArkivvariant: boolean;
+export interface IArkivertDocument extends Journalpost, DokumentInfo, KabalProperties {
+  /** All, except the first, documents in the journalpost. */
   vedlegg: IArkivertDocumentVedlegg[];
-  valgt: boolean;
 }
 
-export interface IArkivertDocumentVedlegg {
-  dokumentInfoId: string;
-  tittel: string | null;
-  harTilgangTilArkivvariant: boolean;
-  valgt: boolean;
-}
+export interface IArkivertDocumentVedlegg extends DokumentInfo, KabalProperties {}

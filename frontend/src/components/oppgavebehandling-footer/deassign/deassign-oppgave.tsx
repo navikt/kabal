@@ -4,25 +4,37 @@ import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { PaaVentWarning } from '@app/components/oppgavebehandling-footer/paa-vent-warning';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Popup } from './popup';
 
 export const DeassignOppgave = () => {
-  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
+  const { data: oppgave } = useOppgave();
   const [isOpen, setIsOpen] = useState(false);
   const [warningIsOpen, setWarningIsOpen] = useState(false);
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
+  const canEdit = useCanEdit();
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
     oppgave?.tildeltSaksbehandlerident ?? null,
-    typeof oppgave === 'undefined' || oppgave.medunderskriverident !== null, // Assume medunderskriver exists.
+    typeof oppgave === 'undefined' || oppgave.medunderskriver.navIdent !== null, // Assume medunderskriver exists.
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);
 
-  if (oppgaveIsLoading || typeof oppgave === 'undefined' || oppgaveActionsIsLoading) {
+  if (
+    !canEdit ||
+    oppgave === undefined ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.feilregistrering !== null
+  ) {
+    return null;
+  }
+
+  if (oppgaveActionsIsLoading) {
     return (
       <Container>
         <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>

@@ -2,13 +2,15 @@ import React from 'react';
 import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { IMainDocument } from '@app/types/documents/documents';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { StyledAttachmentList, StyledAttachmentListItem } from '../styled-components/attachment-list';
 
 interface Props {
-  parentId: string;
+  parentDocument: IMainDocument;
 }
 
-export const AttachmentList = ({ parentId }: Props) => {
+export const AttachmentList = ({ parentDocument }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
 
@@ -19,7 +21,7 @@ export const AttachmentList = ({ parentId }: Props) => {
   return (
     <StyledAttachmentList data-testid="new-attachments-list">
       {data
-        .filter((d) => d.parentId === parentId)
+        .filter((d) => d.parentId === parentDocument.id)
         .map((attachment) => (
           <StyledAttachmentListItem
             key={attachment.id}
@@ -28,7 +30,10 @@ export const AttachmentList = ({ parentId }: Props) => {
             data-documentid={attachment.id}
             data-documenttype="attachment"
           >
-            <NewDocument document={attachment} />
+            <NewDocument
+              document={attachment}
+              rolCanDrag={parentDocument.isSmartDokument && parentDocument.templateId === TemplateIdEnum.ROL_NOTAT}
+            />
           </StyledAttachmentListItem>
         ))}
     </StyledAttachmentList>

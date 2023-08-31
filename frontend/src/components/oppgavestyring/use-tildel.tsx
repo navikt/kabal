@@ -19,6 +19,7 @@ interface Props {
 }
 
 type UseTildel = [(navIdent: string) => Promise<void>, { isLoading: boolean }];
+type UseFradel = [() => Promise<void>, { isLoading: boolean }];
 
 export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
@@ -49,8 +50,6 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 
   return [onTildelSaksbehandler, { isLoading }];
 };
-
-type UseFradel = [() => Promise<void>, { isLoading: boolean }];
 
 export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseFradel => {
   const [getSakenGjelder] = useLazyGetSakenGjelderQuery();
@@ -106,6 +105,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           ytelseId={ytelseId}
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
+          rolIdent={null}
         >
           Åpne
         </OpenOppgavebehandling>

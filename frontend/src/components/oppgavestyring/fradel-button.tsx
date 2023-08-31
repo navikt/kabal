@@ -12,14 +12,14 @@ export const FradelButton = ({
   ytelseId,
   isAvsluttetAvSaksbehandler,
   tildeltSaksbehandlerident,
-  medunderskriverident,
+  medunderskriver,
   sattPaaVent,
 }: IOppgave): JSX.Element | null => {
   const [fradel, { isLoading }] = useFradel(id, typeId, ytelseId);
   const [paaVentWarningIsOpen, setPaaVentWarningIsOpen] = useState(false);
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
-    medunderskriverident !== null,
+    medunderskriver.navIdent !== null,
     ytelseId,
   );
 

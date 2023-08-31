@@ -1,5 +1,5 @@
-import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { INavEmployee, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
+import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
+import { IHelper, INavEmployee, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
 
 type UUID = string;
 
@@ -29,8 +29,7 @@ export interface IOppgavebehandlingBase {
     id: UUID;
     version: KvalitetsvurderingVersion;
   } | null;
-  medunderskriverident: string | null;
-  medunderskriverFlyt: MedunderskriverFlyt;
+  medunderskriver: IHelper;
   modified: string; // LocalDateTime
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
@@ -53,6 +52,7 @@ export interface IOppgavebehandlingBase {
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;
   saksnummer: string;
+  rol: IHelper;
 }
 
 interface IKlagebehandling extends IOppgavebehandlingBase {

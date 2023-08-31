@@ -13,12 +13,12 @@ export interface InvisibleWarningProps {
 }
 
 export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedlegg }: InvisibleWarningProps) => {
-  const { selectedDocuments, unselectMany } = useContext(SelectContext);
+  const { selectedDocuments, selectedCount, unselectMany } = useContext(SelectContext);
   const [isExpanded] = useIsExpanded();
 
   const invisibleDocuments = useMemo(
     () =>
-      Object.values(selectedDocuments).filter(
+      [...selectedDocuments.values()].filter(
         ({ journalpostId, dokumentInfoId }) =>
           slicedFilteredDocuments.find((filteredDoc) => {
             if (filteredDoc.journalpostId === journalpostId) {
@@ -36,9 +36,7 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
   );
 
   if (invisibleDocuments.length === 0) {
-    const numSelected = Object.keys(selectedDocuments).length;
-
-    if (numSelected === 0) {
+    if (selectedCount === 0) {
       if (isExpanded) {
         return null;
       }
@@ -53,7 +51,7 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
 
     return (
       <Alert variant="info" size="small" inline>
-        {numSelected}/{totalLengthWithVedlegg} enkeltdokumenter valgt
+        {selectedCount}/{totalLengthWithVedlegg} enkeltdokumenter valgt
       </Alert>
     );
   }

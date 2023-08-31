@@ -1,26 +1,31 @@
 import { Checkbox } from '@navikt/ds-react';
 import React, { useCallback, useContext } from 'react';
 import { SelectContext } from '../../select-context/select-context';
-import { ISelectedDocument } from '../../select-context/types';
 
-export const SelectRow = (props: ISelectedDocument) => {
+interface Props {
+  journalpostId: string;
+  dokumentInfoId: string;
+  disabled: boolean;
+}
+
+export const SelectRow = ({ disabled, ...ids }: Props) => {
   const { isSelected, selectOne, unselectOne, selectRangeTo } = useContext(SelectContext);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => (e.target.checked ? selectOne(props) : unselectOne(props)),
-    [props, selectOne, unselectOne],
+    (e) => (e.target.checked ? selectOne(ids) : unselectOne(ids)),
+    [ids, selectOne, unselectOne],
   );
 
   const onClick: React.MouseEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       if (e.shiftKey) {
-        selectRangeTo(props);
+        selectRangeTo(ids);
       }
     },
-    [props, selectRangeTo],
+    [ids, selectRangeTo],
   );
 
-  const selected = isSelected(props);
+  const selected = isSelected(ids);
 
   return (
     <Checkbox
@@ -31,6 +36,7 @@ export const SelectRow = (props: ISelectedDocument) => {
       checked={selected}
       onChange={onChange}
       onClick={onClick}
+      disabled={disabled}
     >
       Velg dokument
     </Checkbox>

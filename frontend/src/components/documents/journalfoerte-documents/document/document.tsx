@@ -18,10 +18,9 @@ import {
   getHoverBackgroundColor,
 } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { findDocument } from '@app/domain/find-document';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { AttachmentList } from './attachments/attachment-list';
 import { ExpandedDocument } from './expanded-document';
@@ -33,22 +32,19 @@ interface Props {
   isSelected: boolean;
 }
 
-const EMPTY_ARRAY: IArkivertDocument[] = [];
-
 export const Document = memo(
   ({ document, isSelected }: Props) => {
     const oppgaveId = useOppgaveId();
     const [expanded, setExpanded] = useState(false);
+    const isSaksbehandler = useIsSaksbehandler();
+    const isRol = useIsRol();
 
     const [isExpanded] = useIsExpanded();
 
-    const { selectedDocuments } = useContext(SelectContext);
+    const { getSelectedDocuments } = useContext(SelectContext);
     const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
 
     const cleanDragUI = useRef<() => void>(() => undefined);
-
-    const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
-    const documents = data?.dokumenter ?? EMPTY_ARRAY;
 
     const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;
 
@@ -59,11 +55,7 @@ export const Document = memo(
       (e: React.DragEvent<HTMLDivElement>) => {
         e.dataTransfer.clearData();
 
-        const docs = isSelected
-          ? Object.values(selectedDocuments)
-              .map((s) => findDocument(s.dokumentInfoId, documents))
-              .filter(isNotUndefined)
-          : [document];
+        const docs = isSelected ? getSelectedDocuments() : [document];
 
         if (docs.length === 0) {
           return;
@@ -78,8 +70,10 @@ export const Document = memo(
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments(docs);
       },
-      [document, documents, isSelected, selectedDocuments, setDraggedJournalfoertDocuments],
+      [document, getSelectedDocuments, isSelected, setDraggedJournalfoertDocuments],
     );
+
+    const disabled = (!isSaksbehandler && !isRol) || !harTilgangTilArkivvariant;
 
     return (
       <>
@@ -91,14 +85,14 @@ export const Document = memo(
           data-journalpostid={journalpostId}
           data-dokumentinfoid={dokumentInfoId}
           data-documentname={tittel}
-          onDragStart={onDragStart}
+          onDragStart={disabled ? (e) => e.preventDefault() : onDragStart}
           onDragEnd={() => {
             cleanDragUI.current();
             clearDragState();
           }}
-          draggable
+          draggable={!disabled}
         >
-          <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} />
+          <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} disabled={disabled} />
           {isExpanded ? (
             <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
           ) : null}
@@ -114,7 +108,7 @@ export const Document = memo(
           <IncludeDocument
             dokumentInfoId={dokumentInfoId}
             journalpostId={journalpostId}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+            disabled={disabled}
             name={tittel ?? ''}
             oppgavebehandlingId={oppgaveId}
             checked={valgt}

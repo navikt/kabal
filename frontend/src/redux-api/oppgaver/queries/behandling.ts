@@ -8,10 +8,10 @@ import { IValidationParams } from '@app/types/oppgavebehandling/params';
 import {
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
-  IMedunderskriverflytResponse,
+  IRolResponse,
   ISaksbehandlerResponse,
 } from '@app/types/oppgavebehandling/response';
-import { ISaksbehandlere } from '@app/types/oppgaver';
+import { IRols, ISaksbehandlere } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 
@@ -47,12 +47,14 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.medunderskriverident = data.medunderskriver?.navIdent ?? null;
+                draft.modified = data.modified;
+                draft.medunderskriver.navIdent = data.navIdent;
+                draft.medunderskriver.flowState = data.flowState;
               }
             }),
           );
         } catch (e) {
-          const message = 'Kunne ikke hente medunderskriver.';
+          const message = 'Kunne ikke hente status for medunderskriver.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
@@ -62,8 +64,8 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    getMedunderskriverflyt: builder.query<IMedunderskriverflytResponse, string>({
-      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/medunderskriverflyt`,
+    getRol: builder.query<IRolResponse, string>({
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/rol`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
@@ -71,12 +73,14 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.medunderskriverFlyt = data.medunderskriverFlyt;
+                draft.modified = data.modified;
+                draft.rol.navIdent = data.navIdent;
+                draft.rol.flowState = data.flowState;
               }
             }),
           );
         } catch (e) {
-          const message = 'Kunne ikke hente medunderskriverflyt.';
+          const message = 'Kunne ikke hente status for rådgivende overlege.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
@@ -138,11 +142,14 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getPotentialMedunderskrivere: builder.query<IMedunderskrivereResponse, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialmedunderskrivere`,
     }),
+    getPotentialRol: builder.query<IRols, string>({
+      query: (id) => `/kabal-api/behandlinger/${id}/potentialrol`,
+    }),
   }),
 });
 
 export const {
-  useGetMedunderskriverflytQuery,
+  useGetRolQuery,
   useGetMedunderskriverQuery,
   useGetOppgavebehandlingQuery,
   useGetPotentialMedunderskrivereQuery,
@@ -151,4 +158,5 @@ export const {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
   useLazyValidateQuery,
+  useGetPotentialRolQuery,
 } = behandlingerQuerySlice;
