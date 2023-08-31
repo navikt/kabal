@@ -24,7 +24,7 @@ export const MottattVedtaksinstans = () => {
   return (
     <StyledMottattVedtaksinstans>
       <DatePicker
-        label="Mottatt vedtaksinstans:"
+        label="Mottatt vedtaksinstans"
         disabled={!canEdit}
         onChange={(mottattVedtaksinstans) => {
           if (mottattVedtaksinstans !== null && mottattVedtaksinstans !== value) {

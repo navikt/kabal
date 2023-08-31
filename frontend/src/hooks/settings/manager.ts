@@ -6,6 +6,7 @@ type UnsubscribeFn = () => void;
 class SettingsManager {
   private listeners: ListenerMap = {};
   private settings: Record<string, string> = {};
+  private syncedSettings: Set<string> = new Set();
 
   constructor() {
     addEventListener('storage', (event) => {
@@ -15,7 +16,7 @@ class SettingsManager {
 
       const { key, newValue } = event;
 
-      if (key === null) {
+      if (key === null || !this.syncedSettings.has(key)) {
         return;
       }
 
@@ -104,6 +105,9 @@ class SettingsManager {
   public unsubscribe = (key: string, callback: ListenerFn): void => {
     this.listeners[key] = this.listeners[key]?.filter((listener) => listener !== callback) ?? [];
   };
+
+  public enableSync = (key: string): Set<string> => this.syncedSettings.add(key);
+  public disableSync = (key: string): boolean => this.syncedSettings.delete(key);
 }
 
 export const SETTINGS_MANAGER = new SettingsManager();

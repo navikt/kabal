@@ -24,7 +24,7 @@ export const AnkeMottattDato = () => {
   return (
     <StyledAnkeMottattDato>
       <DatePicker
-        label="Anke mottatt dato:"
+        label="Anke mottatt dato"
         disabled={!canEdit}
         onChange={(mottattKlageinstans) => {
           if (mottattKlageinstans !== null && mottattKlageinstans !== value) {

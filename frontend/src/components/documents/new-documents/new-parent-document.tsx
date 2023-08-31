@@ -134,7 +134,7 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     align-items: center;
     justify-content: center;
     padding: 16px;
-    content: 'Vedlegg for "' attr(data-documentname) '"';
+    content: 'Vedlegg for «' attr(data-documentname) '»';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

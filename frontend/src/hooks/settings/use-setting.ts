@@ -15,7 +15,7 @@ interface Setting<T = string, D = undefined> {
   isLoading: boolean;
 }
 
-const useSetting = (property: string): Setting => {
+const useSetting = (property: string, syncBetweenTabs: boolean = false): Setting => {
   const { data, isLoading } = useUser();
 
   const key = useMemo(() => {
@@ -29,6 +29,18 @@ const useSetting = (property: string): Setting => {
   const getSnapshot = useCallback(() => SETTINGS_MANAGER.get(key), [key]);
 
   const [value, subscribe] = useState<string | undefined>(getSnapshot);
+
+  useEffect(() => {
+    if (key === null) {
+      return;
+    }
+
+    if (syncBetweenTabs) {
+      SETTINGS_MANAGER.enableSync(key);
+    } else {
+      SETTINGS_MANAGER.disableSync(key);
+    }
+  }, [key, syncBetweenTabs]);
 
   useEffect(() => {
     if (key === null) {

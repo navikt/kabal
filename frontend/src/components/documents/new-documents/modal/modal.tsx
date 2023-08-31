@@ -30,7 +30,7 @@ export const DocumentModal = () => {
       onCancel={close}
       data-testid="document-actions-modal"
       header={{
-        heading: `Valg for "${document.tittel}"`,
+        heading: `Valg for «${document.tittel}»`,
         icon: <DocumentIcon type={document.type} />,
       }}
     >

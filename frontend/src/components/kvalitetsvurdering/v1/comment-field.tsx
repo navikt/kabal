@@ -51,7 +51,7 @@ const CommentFieldContent = ({ textareaId, kvalitetsvurdering }: CommentFieldCon
   return (
     <StyledCommentField>
       <Textarea
-        label="Oppsummert i stikkord:"
+        label="Oppsummert i stikkord"
         size="small"
         value={comment ?? ''}
         placeholder="NB: Ingen personopplysninger"

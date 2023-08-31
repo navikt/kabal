@@ -54,7 +54,7 @@ export const Lovhjemmel = () => {
   return (
     <>
       <StyledHeaderHelpTextWrapper>
-        <Label size="small">Utfallet er basert på lovhjemmel:</Label>
+        <Label size="small">Utfallet er basert på lovhjemmel</Label>
         <HelpText>
           Hjemlene skal i utgangspunktet være de samme som i klagevedtaket. Dersom saken har flere klagetemaer og
           kvaliteten er bra nok på det ene og mangelfull på det andre, velger du de hjemlene kvalitetsavviket gjelder.

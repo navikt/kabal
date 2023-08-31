@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import { ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
+import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -50,14 +50,12 @@ export const NewDocument = ({ onCreate }: Props) => {
       .finally(() => setLoadingTemplate(null));
   };
 
-  const templates = oppgave.typeId === SaksTypeEnum.KLAGE ? KLAGE_TEMPLATES : ANKE_TEMPLATES;
-
   return (
     <StyledNewDocument>
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {templates.map((template) => (
+        {getTemplates(oppgave.typeId).map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -84,6 +82,17 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
       return <AvslagBrevIcon />;
     default:
       return <GenereltBrevIcon />;
+  }
+};
+
+const getTemplates = (type: SaksTypeEnum) => {
+  switch (type) {
+    case SaksTypeEnum.KLAGE:
+      return KLAGE_TEMPLATES;
+    case SaksTypeEnum.ANKE:
+      return ANKE_TEMPLATES;
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return ANKE_I_TRYGDERETTEN_TEMPLATES;
   }
 };
 
