@@ -12,7 +12,7 @@ interface Props {
   name: string;
   dokumentInfoId: string;
   journalpostId: string;
-  harTilgangTilArkivvariant: boolean;
+  disabled: boolean;
   checked: boolean;
   className?: string;
 }
@@ -23,14 +23,14 @@ const InternalIncludeDocument = memo(
     dokumentInfoId,
     journalpostId,
     name,
-    harTilgangTilArkivvariant,
+    disabled,
     checked,
     className,
   }: Props): JSX.Element | null => {
     const [setDocument, isUpdating] = useCheckDocument(oppgavebehandlingId, dokumentInfoId, journalpostId);
     const canEdit = useCanEdit();
 
-    const disabled = !canEdit || !harTilgangTilArkivvariant || isUpdating || oppgavebehandlingId === skipToken;
+    const disableButton = !canEdit || disabled || isUpdating || oppgavebehandlingId === skipToken;
 
     const title = `${checked ? 'Ekskluder' : 'Inkluder'} ${name}`;
 
@@ -40,7 +40,7 @@ const InternalIncludeDocument = memo(
         variant={checked ? 'primary' : 'tertiary'}
         icon={<FolderPlusIcon aria-hidden />}
         title={title}
-        disabled={disabled}
+        disabled={disableButton}
         onClick={() => setDocument(!checked)}
         data-testid="journalfoert-document-button"
         loading={isUpdating}

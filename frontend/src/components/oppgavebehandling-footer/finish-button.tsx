@@ -10,6 +10,8 @@ import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { ConfirmFinish } from './confirm-finish';
 
+const TEST_ID = 'complete-button';
+
 export const FinishButton = () => {
   const canEdit = useCanEdit();
   const [validate, { data: validationData, isLoading, isFetching }] = useLazyValidateQuery();
@@ -25,7 +27,15 @@ export const FinishButton = () => {
     validationData !== undefined &&
     validationData.sections.length === 0;
 
-  if (typeof oppgave === 'undefined') {
+  if (isFullfoert) {
+    return (
+      <Button disabled size="small" data-testid={TEST_ID} icon={<CheckmarkIcon aria-hidden />}>
+        Fullført
+      </Button>
+    );
+  }
+
+  if (!canEdit || typeof oppgave === 'undefined') {
     return null;
   }
 
@@ -34,7 +44,7 @@ export const FinishButton = () => {
       <Button
         type="button"
         size="small"
-        disabled={!canEdit || isFullfoert || showConfirmFinishDisplay}
+        disabled={showConfirmFinishDisplay}
         onClick={async () => {
           if (typeof oppgave === 'undefined') {
             return;
@@ -44,7 +54,7 @@ export const FinishButton = () => {
           setValidationSectionErrors(validation.sections);
           setConfirmFinish(true);
         }}
-        data-testid="complete-button"
+        data-testid={TEST_ID}
         loading={isFetching || isLoading}
         icon={<CheckmarkIcon aria-hidden />}
       >

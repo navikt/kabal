@@ -1,4 +1,5 @@
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
+import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
 export type UUID = string;
 
@@ -26,8 +27,19 @@ interface IBaseDocument {
   id: UUID;
   tittel: string;
   dokumentTypeId: DistribusjonsType;
-  created: string; // LocalDateTime,
-  newOpplastet: string; // LocalDateTime,
+  /**
+   * The date and time the document was created.
+   *
+   * @format LocalDateTime
+   */
+  created: string; // LocalDateTime
+  /**
+   * The date and time the smart document was last modified.
+   * For all other documents, this is the same as `created`.
+   *
+   * @format LocalDateTime
+   */
+  modified: string;
   isSmartDokument: boolean;
   isMarkertAvsluttet: boolean;
   parentId: UUID | null;
@@ -45,14 +57,18 @@ interface ISmartDocument extends IBaseDocument {
   templateId: TemplateIdEnum | NoTemplateIdEnum | null; // Nullable until all smart documents without this are finished. Make not nullable once all legacy smart documents are finished.
 }
 
-export interface IJournalfoertDokumentId {
-  journalpostId: string;
-  dokumentInfoId: string;
-}
+export interface IJournalfoertDokumentId
+  extends Pick<Journalpost, 'journalpostId'>,
+    Pick<DokumentInfo, 'dokumentInfoId'> {}
+
+export interface IJournalfoertDokument
+  extends IJournalfoertDokumentId,
+    Pick<DokumentInfo, 'harTilgangTilArkivvariant'>,
+    Pick<Journalpost, 'datoOpprettet'> {}
 
 export interface IJournalfoertDokumentReference extends IBaseDocument {
   type: DocumentTypeEnum.JOURNALFOERT;
-  journalfoertDokumentReference: IJournalfoertDokumentId;
+  journalfoertDokumentReference: IJournalfoertDokument;
   isSmartDokument: false;
   parentId: UUID;
 }

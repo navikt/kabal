@@ -15,7 +15,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
-  ColumnKeyEnum.Medunderskriverflyt,
+  ColumnKeyEnum.MedunderskriverFlowState,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.Oppgavestyring,
 ];

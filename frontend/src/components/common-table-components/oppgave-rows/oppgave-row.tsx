@@ -13,9 +13,10 @@ import { Age } from '../age';
 import { Deadline } from '../deadline';
 import { Hjemmel } from '../hjemmel';
 import { LoadingRow } from '../loading-row';
-import { MedudunderskriverflytLabel } from '../medunderskriverflyt-label';
+import { MedudunderskriverFlowStateLabel } from '../medunderskriver-flow-state-label';
 import { OpenOppgavebehandling } from '../open';
 import { PaaVentReason, PaaVentTil } from '../paa-vent';
+import { RolFlowStateLabel } from '../rol-flow-state-label';
 import { SakenGjelderFnr, SakenGjelderName } from '../saken-gjelder';
 import { Utfall } from '../utfall';
 import { Ytelse } from '../ytelse';
@@ -89,14 +90,16 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Deadline {...oppgave} />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Medunderskriverflyt:
+      case ColumnKeyEnum.MedunderskriverFlowState:
         return (
           <Table.DataCell key={key}>
-            <MedudunderskriverflytLabel
-              typeId={oppgave.typeId}
-              medunderskriverFlyt={oppgave.medunderskriverFlyt}
-              medunderskriverident={oppgave.medunderskriverident}
-            />
+            <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.RolFlowState:
+        return (
+          <Table.DataCell key={key}>
+            <RolFlowStateLabel rol={oppgave.rol} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
@@ -107,7 +110,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               ytelseId={oppgave.ytelseId}
               typeId={oppgave.typeId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-              medunderskriverident={oppgave.medunderskriverident}
+              medunderskriverident={oppgave.medunderskriver.navIdent}
+              rolIdent={oppgave.rol.navIdent}
             />
           </Table.DataCell>
         );

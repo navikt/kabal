@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useUser } from '@app/simple-api-state/use-user';
-import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 
 export const useCanEditDocument = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
@@ -16,8 +16,8 @@ export const useCanEditDocument = (): boolean => {
       return false;
     }
 
-    if (oppgave.medunderskriverFlyt === MedunderskriverFlyt.OVERSENDT_TIL_MEDUNDERSKRIVER) {
-      return oppgave.medunderskriverident === user.navIdent;
+    if (oppgave.medunderskriver.flowState === FlowState.SENT) {
+      return oppgave.medunderskriver.navIdent === user.navIdent;
     }
 
     return oppgave.tildeltSaksbehandlerident === user.navIdent;

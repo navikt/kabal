@@ -5,9 +5,12 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from 'react
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsRol } from '@app/hooks/use-is-rol';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const DeleteDropArea = () => {
   const dragEnterCount = useRef(0);
@@ -16,8 +19,34 @@ export const DeleteDropArea = () => {
   const oppgaveId = useOppgaveId();
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
   const removeSmartDocument = useRemoveDocument();
+  const isRol = useIsRol();
+  const { data: allDocuments = [] } = useGetDocumentsQuery(isRol ? oppgaveId : skipToken);
 
-  const isDropTarget = useMemo(() => draggedDocument !== null, [draggedDocument]);
+  const isDropTarget = useMemo(() => {
+    if (draggedDocument === null) {
+      return false;
+    }
+
+    if (!isRol) {
+      return true;
+    }
+
+    if (draggedDocument.parentId === null) {
+      return false;
+    }
+
+    const parentDocument = allDocuments.find(({ id }) => id === draggedDocument.parentId);
+
+    if (parentDocument === undefined) {
+      return false;
+    }
+
+    if (!parentDocument.isSmartDokument) {
+      return false;
+    }
+
+    return parentDocument.templateId === TemplateIdEnum.ROL_NOTAT;
+  }, [allDocuments, draggedDocument, isRol]);
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -45,7 +74,7 @@ export const DeleteDropArea = () => {
       dragEnterCount.current = 0;
       setIsDropOver(false);
 
-      if (oppgaveId !== skipToken && draggedDocument !== null) {
+      if (isDropTarget && oppgaveId !== skipToken && draggedDocument !== null) {
         if (draggedDocument.type === DocumentTypeEnum.SMART) {
           removeSmartDocument(draggedDocument.id, draggedDocument);
         }
@@ -54,7 +83,7 @@ export const DeleteDropArea = () => {
 
       clearDragState();
     },
-    [clearDragState, deleteDocument, draggedDocument, oppgaveId, removeSmartDocument],
+    [clearDragState, deleteDocument, draggedDocument, isDropTarget, oppgaveId, removeSmartDocument],
   );
 
   return (

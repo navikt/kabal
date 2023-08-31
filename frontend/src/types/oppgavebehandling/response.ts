@@ -1,6 +1,5 @@
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { MedunderskriverFlyt } from '../kodeverk';
-import { INavEmployee, ISakenGjelder } from '../oppgave-common';
+import { FlowState, IHelper, INavEmployee, ISakenGjelder } from '../oppgave-common';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 
@@ -14,24 +13,19 @@ export interface IMedunderskrivereResponse {
 }
 
 export interface IMedunderskriverResponse {
-  medunderskriver: INavEmployee | null;
+  modified: string;
+  navIdent: string | null;
+  flowState: FlowState;
+}
+
+export interface IRolResponse {
+  modified: string;
+  navIdent: string | null;
+  flowState: FlowState;
 }
 
 export interface ISaksbehandlerResponse {
   saksbehandler: INavEmployee | null;
-}
-
-export interface IMedunderskriverflytResponse {
-  medunderskriverFlyt: MedunderskriverFlyt;
-}
-
-export interface ISettMedunderskriverResponse extends IModifiedResponse {
-  medunderskriver: INavEmployee | null;
-  medunderskriverFlyt: MedunderskriverFlyt;
-}
-
-export interface ISwitchMedunderskriverflytResponse extends IModifiedResponse, INavEmployee {
-  medunderskriverFlyt: MedunderskriverFlyt;
 }
 
 export interface ISetFeilregistrertResponse extends IModifiedResponse {
@@ -45,3 +39,8 @@ export interface IModifiedResponse {
 export interface ISakenGjelderResponse {
   sakenGjelder: ISakenGjelder;
 }
+
+export interface ISetMedunderskriverResponse extends IModifiedResponse, IHelper {}
+
+export interface ISetRolResponse extends IModifiedResponse, IHelper {}
+export interface ISetFlowStateResponse extends IModifiedResponse, IHelper {}

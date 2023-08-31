@@ -15,23 +15,24 @@ import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
+import { Journalposttype } from '@app/types/arkiverte-documents';
+import { IArkivertDocumentReference } from '../select-context/types';
 import { DateFilter } from './date-filter';
 import { useFilters } from './use-filters';
 
 interface Props {
   filters: ReturnType<typeof useFilters>;
-  slicedFilteredDocuments: IArkivertDocument[];
+  allSelectableDocuments: IArkivertDocumentReference[];
 }
 
-export const Header = ({ slicedFilteredDocuments, filters }: Props) => {
+export const Header = ({ allSelectableDocuments, filters }: Props) => {
   const [isExpanded] = useIsExpanded();
 
   const { setSearch, search } = filters;
 
   return (
     <StyledListHeader $isExpanded={isExpanded}>
-      <SelectAll slicedFilteredDocuments={slicedFilteredDocuments} />
+      <SelectAll allSelectableDocuments={allSelectableDocuments} />
       <DocumentSearch setSearch={setSearch} search={search} />
 
       {isExpanded ? <ExpandedHeaders {...filters} /> : null}

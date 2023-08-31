@@ -1,5 +1,5 @@
-import { MedunderskriverFlyt, SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
+import { SaksTypeEnum, UtfallEnum } from './kodeverk';
+import { IHelper, INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
 
 type DateString = string; // LocalDate
 
@@ -24,8 +24,8 @@ export interface IOppgave {
   hjemmelId: string | null;
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
-  medunderskriverFlyt: MedunderskriverFlyt;
-  medunderskriverident: string | null;
+  medunderskriver: IHelper;
+  rol: IHelper;
   mottatt: DateString;
   tildeltSaksbehandlerident: string | null;
   typeId: SaksTypeEnum;
@@ -88,6 +88,11 @@ export interface INameSearchResponse {
 
 export interface ISaksbehandlere {
   saksbehandlere: INavEmployee[];
+}
+
+export interface IRols {
+  // saksbehandlere: INavEmployee[];
+  rols: INavEmployee[];
 }
 
 export interface IOppgaverResponse {

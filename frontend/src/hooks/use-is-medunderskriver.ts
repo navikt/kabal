@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useUser } from '@app/simple-api-state/use-user';
+import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsMedunderskriver = () => {
@@ -11,6 +12,8 @@ export const useIsMedunderskriver = () => {
       return false;
     }
 
-    return oppgave.medunderskriverident === userData.navIdent;
+    return (
+      oppgave.medunderskriver.flowState !== FlowState.NOT_SENT && oppgave.medunderskriver.navIdent === userData.navIdent
+    );
   }, [oppgave, userData, isLoading]);
 };

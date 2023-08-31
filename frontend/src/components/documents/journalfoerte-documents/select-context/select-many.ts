@@ -1,32 +1,74 @@
+/* eslint-disable max-depth */
 import { useCallback } from 'react';
 import { getId } from './helpers';
 import { useSelectOne } from './select-one';
-import { ISelectedDocument, SelectHook, SelectMany } from './types';
+import { IArkivertDocumentReference, SelectHook, SelectMany } from './types';
 
-export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setLastSelectedDocument) => {
-  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument);
+export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setLastSelectedDocument, documentList) => {
+  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
 
   return useCallback(
-    (documents: ISelectedDocument[]) => {
+    (documents: IArkivertDocumentReference[]) => {
       if (documents.length === 0) {
         return;
       }
 
       if (documents.length === 1 && documents[0] !== undefined) {
-        selectOne(documents[0]);
+        const [document] = documents;
+
+        for (const doc of documentList) {
+          if (doc.journalpostId === document.journalpostId) {
+            if (doc.dokumentInfoId === document.dokumentInfoId) {
+              selectOne(document);
+
+              return;
+            }
+
+            for (const vedlegg of doc.vedlegg) {
+              if (vedlegg.dokumentInfoId === document.dokumentInfoId) {
+                selectOne({ journalpostId: document.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId });
+
+                return;
+              }
+            }
+          }
+        }
 
         return;
       }
 
       setLastSelectedDocument(null);
       setSelectedDocuments((map) => {
-        documents.forEach((document) => {
-          map[getId(document)] = document;
-        });
+        for (const { journalpostId, dokumentInfoId } of documents) {
+          for (const doc of documentList) {
+            if (doc.journalpostId === journalpostId) {
+              if (doc.dokumentInfoId === dokumentInfoId) {
+                if (doc.harTilgangTilArkivvariant) {
+                  map.set(getId(doc), { journalpostId, dokumentInfoId });
+                }
 
-        return { ...map };
+                break;
+              }
+
+              for (const vedlegg of doc.vedlegg) {
+                if (vedlegg.dokumentInfoId === dokumentInfoId) {
+                  if (vedlegg.harTilgangTilArkivvariant) {
+                    const ref = { journalpostId, dokumentInfoId: vedlegg.dokumentInfoId };
+                    map.set(getId(ref), ref);
+                  }
+
+                  break;
+                }
+              }
+
+              break;
+            }
+          }
+        }
+
+        return new Map(map);
       });
     },
-    [selectOne, setLastSelectedDocument, setSelectedDocuments],
+    [documentList, selectOne, setLastSelectedDocument, setSelectedDocuments],
   );
 };

@@ -16,7 +16,7 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-com
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
   const { data: medunderskriverSignature } = useGetSignatureQuery(
-    typeof oppgave?.medunderskriverident === 'string' ? oppgave.medunderskriverident : skipToken,
+    typeof oppgave?.medunderskriver.navIdent === 'string' ? oppgave?.medunderskriver.navIdent : skipToken,
   );
 
   if (typeof oppgave === 'undefined') {
@@ -27,7 +27,7 @@ const useMedunderskriverSignature = () => {
     return null;
   }
 
-  if (oppgave.medunderskriverident === null) {
+  if (oppgave.medunderskriver.navIdent === null) {
     return null;
   }
 

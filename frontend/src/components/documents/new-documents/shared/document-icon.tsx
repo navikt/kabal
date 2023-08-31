@@ -10,11 +10,11 @@ interface Props {
 export const DocumentIcon = ({ type }: Props) => {
   switch (type) {
     case DocumentTypeEnum.SMART:
-      return <StyledNotes aria-hidden title={DOCUMENT_TYPE_NAMES[DocumentTypeEnum.SMART]} />;
+      return <StyledNotes aria-hidden title={DOCUMENT_TYPE_NAMES[type]} />;
     case DocumentTypeEnum.UPLOADED:
-      return <StyledFileContent aria-hidden title={DOCUMENT_TYPE_NAMES[DocumentTypeEnum.UPLOADED]} />;
+      return <StyledFileContent aria-hidden title={DOCUMENT_TYPE_NAMES[type]} />;
     case DocumentTypeEnum.JOURNALFOERT:
-      return <StyledCopiedFile aria-hidden title={DOCUMENT_TYPE_NAMES[DocumentTypeEnum.JOURNALFOERT]} />;
+      return <StyledCopiedFile aria-hidden title={DOCUMENT_TYPE_NAMES[type]} />;
   }
 };
 

@@ -16,7 +16,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   const { data: user, isLoading: userIsLoading, isError: userIsError } = useUser();
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
-    oppgave.medunderskriverident !== null,
+    oppgave.medunderskriver.navIdent !== null,
     oppgave.ytelseId,
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(

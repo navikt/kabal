@@ -1,13 +1,15 @@
 import React, { createContext, useCallback, useState } from 'react';
+import { findDocument } from '@app/domain/find-document';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { getId } from './helpers';
 import { useSelectMany } from './select-many';
 import { useSelectOne } from './select-one';
 import { useSelectRangeTo } from './select-range-to';
-import { ISelectContext, ISelectedDocument, SelectedMap } from './types';
+import { IArkivertDocumentReference, ISelectContext, SelectedMap } from './types';
 
 export const SelectContext = createContext<ISelectContext>({
-  selectedDocuments: {},
+  selectedDocuments: new Map(),
+  selectedCount: 0,
   lastSelectedDocument: null,
   isSelected: () => false,
   selectOne: () => {},
@@ -16,6 +18,7 @@ export const SelectContext = createContext<ISelectContext>({
   unselectMany: () => {},
   selectRangeTo: () => {},
   unselectAll: () => {},
+  getSelectedDocuments: () => [],
 });
 
 interface Props {
@@ -24,11 +27,11 @@ interface Props {
 }
 
 export const SelectContextElement = ({ children, documentList }: Props) => {
-  const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>({});
-  const [lastSelectedDocument, setLastSelectedDocument] = useState<ISelectedDocument | null>(null);
+  const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>(new Map());
+  const [lastSelectedDocument, setLastSelectedDocument] = useState<IArkivertDocumentReference | null>(null);
 
-  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument);
-  const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument);
+  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
+  const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, documentList);
   const selectRangeTo = useSelectRangeTo(
     setSelectedDocuments,
     setLastSelectedDocument,
@@ -36,40 +39,62 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     lastSelectedDocument,
   );
 
-  const unselectOne = useCallback((document: ISelectedDocument) => {
+  const unselectOne = useCallback((document: IArkivertDocumentReference) => {
     setLastSelectedDocument(null);
     setSelectedDocuments((map) => {
-      delete map[getId(document)];
+      map.delete(getId(document));
 
-      return { ...map };
+      return new Map(map);
     });
   }, []);
 
   const unselectAll = useCallback(() => {
     setLastSelectedDocument(null);
-    setSelectedDocuments({});
+    setSelectedDocuments(new Map());
   }, []);
 
-  const unselectMany = useCallback((documents: ISelectedDocument[]) => {
+  const unselectMany = useCallback((documents: IArkivertDocumentReference[]) => {
     setLastSelectedDocument(null);
     setSelectedDocuments((map) => {
       documents.forEach((document) => {
-        delete map[getId(document)];
+        map.delete(getId(document));
       });
 
-      return { ...map };
+      return new Map(map);
     });
   }, []);
 
   const isSelected = useCallback(
-    (document: ISelectedDocument) => Object.hasOwn(selectedDocuments, getId(document)),
+    (document: IArkivertDocumentReference) => selectedDocuments.has(getId(document)),
     [selectedDocuments],
   );
+
+  const getSelectedDocuments = useCallback(() => {
+    if (selectedDocuments.size === 0) {
+      return [];
+    }
+
+    const selectedDocumentsArray: IArkivertDocument[] = new Array<IArkivertDocument>(selectedDocuments.size);
+
+    let index = 0;
+    selectedDocuments.forEach(({ journalpostId, dokumentInfoId }) => {
+      const doc = findDocument(journalpostId, dokumentInfoId, documentList);
+
+      if (doc !== undefined) {
+        selectedDocumentsArray[index] = doc;
+      }
+
+      index++;
+    });
+
+    return selectedDocumentsArray;
+  }, [documentList, selectedDocuments]);
 
   return (
     <SelectContext.Provider
       value={{
         selectedDocuments,
+        selectedCount: selectedDocuments.size,
         lastSelectedDocument,
         selectOne,
         unselectOne,
@@ -78,6 +103,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
         selectRangeTo,
         unselectAll,
         isSelected,
+        getSelectedDocuments,
       }}
     >
       {children}

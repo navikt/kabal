@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SettPaaVentPanel } from '@app/components/oppgavebehandling-footer/sett-paa-vent/panel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useDeleteSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 
@@ -11,10 +12,11 @@ export const VentButton = () => {
   const [showPopup, setShowPopup] = useState(false);
   const { data, isLoading: oppgaveIsloading } = useOppgave();
   const [deleteSettPaavent, { isLoading: deleteSattPaaVentIsLoading }] = useDeleteSattPaaVentMutation();
+  const canEdit = useCanEdit();
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setShowPopup(false));
 
-  if (oppgaveIsloading || typeof data === 'undefined' || data.feilregistrering !== null) {
+  if (!canEdit || oppgaveIsloading || typeof data === 'undefined' || data.feilregistrering !== null) {
     return null;
   }
 

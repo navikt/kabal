@@ -22,10 +22,10 @@ import { Role } from '@app/types/bruker';
 export const Nav = () => (
   <InternalHeader.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
-      <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
+      <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon /> Oppgaver
       </NavItem>
-      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING]}>
+      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <TasklistIcon /> Mine Oppgaver
       </NavItem>
       <NavItem

@@ -23,9 +23,7 @@ export const DocumentTitle = memo(
     const { value, setValue } = useDocumentsPdfViewed();
     const [isExpanded] = useIsExpanded();
     const { getTabRef, setTabRef } = useContext(TabContext);
-
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
-
     const isTabOpen = useIsTabOpen(documentId);
 
     const [editMode, setEditMode] = useState(false);
@@ -47,8 +45,8 @@ export const DocumentTitle = memo(
           <DocumentTitleActions
             editMode={editMode}
             setEditMode={setEditMode}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
             tittel={tittel}
+            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
           />
         </StyledDocumentTitle>
       );
@@ -122,8 +120,8 @@ export const DocumentTitle = memo(
           <DocumentTitleActions
             editMode={editMode}
             setEditMode={setEditMode}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
             tittel={tittel}
+            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
           />
         ) : null}
       </StyledDocumentTitle>

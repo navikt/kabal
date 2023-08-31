@@ -75,6 +75,18 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,
     }),
+    getLedigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: `/kabal-search/roloppgaver/ledige`, params }),
+      providesTags: [OppgaveListTagTypes.ROL_LEDIGE],
+    }),
+    getUferdigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: `/kabal-search/roloppgaver/uferdige`, params }),
+      providesTags: [OppgaveListTagTypes.ROL_UFERDIGE],
+    }),
+    getFerdigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: `/kabal-search/roloppgaver/ferdigstilte`, params }),
+      providesTags: [OppgaveListTagTypes.ROL_FERDIGE],
+    }),
   }),
 });
 
@@ -91,4 +103,7 @@ export const {
   useLazySearchPeopleByNameQuery,
   useGetSaksbehandlereInEnhetQuery,
   useSearchPersonByFnrQuery,
+  useGetFerdigeRolOppgaverQuery,
+  useGetLedigeRolOppgaverQuery,
+  useGetUferdigeRolOppgaverQuery,
 } = oppgaverQuerySlice;

@@ -2,9 +2,9 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { MedunderskriverFlyt } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 import { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
-import { ISettMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
+import { ISetMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling';
@@ -12,9 +12,9 @@ import { behandlingerQuerySlice } from '../queries/behandling';
 const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    updateChosenMedunderskriver: builder.mutation<ISettMedunderskriverResponse, ISetMedunderskriverParams>({
+    setMedunderskriver: builder.mutation<ISetMedunderskriverResponse, ISetMedunderskriverParams>({
       query: ({ oppgaveId, navIdent }) => ({
-        url: `/kabal-api/behandlinger/${oppgaveId}/medunderskriver`,
+        url: `/kabal-api/behandlinger/${oppgaveId}/medunderskrivernavident`,
         method: 'PUT',
         body: {
           navIdent,
@@ -23,49 +23,44 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.medunderskriverident = navIdent;
-            draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
-          }),
-        );
+            if (draft.medunderskriver.navIdent === navIdent) {
+              return;
+            }
 
-        const flytPatchresult = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
-            draft.medunderskriverFlyt = MedunderskriverFlyt.IKKE_SENDT;
+            draft.medunderskriver.navIdent = navIdent;
+
+            if (draft.medunderskriver.flowState === FlowState.RETURNED) {
+              draft.medunderskriver.flowState = FlowState.NOT_SENT;
+            }
           }),
         );
 
         try {
           const { data } = await queryFulfilled;
+          const { modified, ...medunderskriver } = data;
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              draft.modified = data.modified;
-              draft.medunderskriverFlyt = data.medunderskriverFlyt;
-              draft.medunderskriverident = navIdent;
-            }),
-          );
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getMedunderskriverflyt', oppgaveId, (draft) => {
-              draft.medunderskriverFlyt = data.medunderskriverFlyt;
+              draft.modified = modified;
+              draft.medunderskriver = medunderskriver;
             }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.medunderskriverFlyt = data.medunderskriverFlyt;
-              draft.medunderskriverident = navIdent;
+              draft.medunderskriver = medunderskriver;
             }),
           );
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
-              draft.medunderskriver = data.medunderskriver;
+              draft.navIdent = medunderskriver.navIdent;
+              draft.flowState = medunderskriver.flowState;
+              draft.modified = modified;
             }),
           );
         } catch (e) {
           patchResult.undo();
-          flytPatchresult.undo();
 
           const message = 'Kunne ikke oppdatere medunderskriver.';
 
@@ -80,4 +75,4 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useUpdateChosenMedunderskriverMutation } = setMedunderskriverMutationSlice;
+export const { useSetMedunderskriverMutation } = setMedunderskriverMutationSlice;

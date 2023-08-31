@@ -16,7 +16,7 @@ export const TildelButton = ({
   typeId,
   ytelseId,
   tildeltSaksbehandlerident,
-  medunderskriverident,
+  medunderskriver,
   children = 'Tildel meg',
 }: Props) => {
   const { data: user, isLoading: isUserLoading } = useUser();
@@ -24,7 +24,7 @@ export const TildelButton = ({
   const [, { isLoading: isFradeling }] = useFradel(id, typeId, ytelseId);
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
-    medunderskriverident !== null,
+    medunderskriver.navIdent !== null,
     ytelseId,
   );
 
@@ -35,7 +35,7 @@ export const TildelButton = ({
   if (
     !access.assignSelf ||
     !user.roller.includes(Role.KABAL_SAKSBEHANDLING) ||
-    medunderskriverident === user.navIdent ||
+    medunderskriver.navIdent === user.navIdent ||
     tildeltSaksbehandlerident === user.navIdent
   ) {
     return null;

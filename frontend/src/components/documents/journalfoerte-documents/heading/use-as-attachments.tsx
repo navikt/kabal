@@ -2,27 +2,33 @@ import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { findDocument } from '@app/domain/find-document';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsRol } from '@app/hooks/use-is-rol';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
-  const { selectedDocuments } = useContext(SelectContext);
+  const { getSelectedDocuments } = useContext(SelectContext);
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
-  const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
+  const isRol = useIsRol();
 
   if (oppgaveId === skipToken) {
     return null;
   }
 
   const options = data
-    .filter(({ parentId }) => parentId === null)
+    .filter((d) => {
+      if (isRol) {
+        return d.parentId === null && d.isSmartDokument && d.templateId === TemplateIdEnum.ROL_NOTAT;
+      }
+
+      return d.parentId === null;
+    })
     .map(({ id, tittel }) => (
       <option value={id} key={id}>
         {tittel}
@@ -37,9 +43,7 @@ export const UseAsAttachments = () => {
         createVedlegg({
           oppgaveId,
           parentId: target.value,
-          journalfoerteDokumenter: Object.values(selectedDocuments)
-            .map((d) => findDocument(d.dokumentInfoId, arkiverteDokumenter?.dokumenter ?? []))
-            .filter(isNotUndefined),
+          journalfoerteDokumenter: getSelectedDocuments(),
         });
       }}
       value={NONE_SELECTED}

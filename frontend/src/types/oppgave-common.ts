@@ -89,3 +89,15 @@ export interface IVenteperiode {
   to: string; // LocalDate;
   reason: string;
 }
+
+export enum FlowState {
+  NOT_SENT = 'NOT_SENT',
+  SENT = 'SENT',
+  RETURNED = 'RETURNED',
+}
+
+// Medunderskriver/ROL
+export interface IHelper {
+  navIdent: string | null;
+  flowState: FlowState;
+}

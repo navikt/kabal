@@ -18,7 +18,7 @@ export const useLandingPagePath = (): LandingPagePath => {
     return [false, '/sok', 'Søk'];
   }
 
-  if (data.roller.includes(Role.KABAL_SAKSBEHANDLING)) {
+  if (data.roller.some((r) => [Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL].includes(r))) {
     return [false, '/mineoppgaver', 'Mine oppgaver'];
   }
 

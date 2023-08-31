@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
@@ -7,28 +7,52 @@ import {
   collapsedNewDocumentsGridCSS,
   expandedNewDocumentsGridCSS,
 } from '@app/components/documents/new-documents/grid';
-import { ToggleModalButton } from '@app/components/documents/new-documents/new-document/toggle-modal';
+import { OpenModalButton } from '@app/components/documents/new-documents/new-document/open-modal-button';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
 interface Props {
   document: IMainDocument;
+  rolCanDrag: boolean;
 }
 
 const EMPTY_LIST: IMainDocument[] = [];
 
-export const NewDocument = ({ document }: Props) => {
+export const NewDocument = ({ document, rolCanDrag }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data = EMPTY_LIST, isLoading } = useGetDocumentsQuery(oppgaveId);
   const [isExpanded] = useIsExpanded();
   const cleanDragUI = useRef<() => void>(() => undefined);
   const { setDraggedDocument, clearDragState } = useContext(DragAndDropContext);
+  const isRol = useIsRol();
+  const isSaksbehandler = useIsSaksbehandler();
+
+  const isDraggable = useMemo(() => {
+    if (document.isMarkertAvsluttet || isLoading) {
+      return false;
+    }
+
+    if (
+      document.type === DocumentTypeEnum.JOURNALFOERT &&
+      !document.journalfoertDokumentReference.harTilgangTilArkivvariant
+    ) {
+      return false;
+    }
+
+    if (isRol) {
+      return rolCanDrag;
+    }
+
+    return isSaksbehandler;
+  }, [document, isLoading, isRol, rolCanDrag, isSaksbehandler]);
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -60,17 +84,17 @@ export const NewDocument = ({ document }: Props) => {
       data-documentid={document.id}
       data-testid="new-document-list-item-content"
       data-documenttype={document.parentId === null ? 'parent' : 'attachment'}
-      onDragStart={onDragStart}
+      onDragStart={isDraggable ? onDragStart : (e) => e.preventDefault()}
       onDragEnd={() => {
         cleanDragUI.current();
         clearDragState();
       }}
-      draggable={!document.isMarkertAvsluttet && !isLoading}
+      draggable={isDraggable}
     >
       <DocumentTitle document={document} />
       {isExpanded ? <SetDocumentType document={document} /> : null}
       {isExpanded ? <StyledDate data-testid="new-document-date" document={document} /> : null}
-      <ToggleModalButton document={document} />
+      <OpenModalButton document={document} />
     </StyledNewDocument>
   );
 };

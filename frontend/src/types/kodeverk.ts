@@ -4,12 +4,6 @@ export enum SexEnum {
   UNKNOWN = 'UKJENT',
 }
 
-export enum MedunderskriverFlyt {
-  IKKE_SENDT = 'IKKE_SENDT',
-  OVERSENDT_TIL_MEDUNDERSKRIVER = 'OVERSENDT_TIL_MEDUNDERSKRIVER',
-  RETURNERT_TIL_SAKSBEHANDLER = 'RETURNERT_TIL_SAKSBEHANDLER',
-}
-
 export enum SaksTypeEnum {
   KLAGE = '1',
   ANKE = '2',

@@ -26,7 +26,17 @@ export const useFilteredDocuments = (
         return setResult(
           documents
             .filter(
-              ({ tittel, journalpostId, tema, journalposttype, avsenderMottaker, registrert, sak, vedlegg, valgt }) =>
+              ({
+                tittel,
+                journalpostId,
+                tema,
+                journalposttype,
+                avsenderMottaker,
+                datoOpprettet,
+                sak,
+                vedlegg,
+                valgt,
+              }) =>
                 (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
                 (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
                 (selectedAvsenderMottakere.length === 0 ||
@@ -35,14 +45,18 @@ export const useFilteredDocuments = (
                   )) &&
                 (selectedSaksIds.length === 0 ||
                   selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
-                (selectedDateRange === undefined || checkDateInterval(registrert, selectedDateRange)) &&
+                (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
                 (onlyIncluded === false || valgt) &&
                 (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
             )
-            .map(({ vedlegg, ...rest }) => ({
-              ...rest,
-              vedlegg: vedlegg.filter(({ valgt }) => onlyIncluded === false || valgt),
-            })),
+            .map((d) =>
+              onlyIncluded
+                ? {
+                    ...d,
+                    vedlegg: d.vedlegg.filter(({ valgt }) => valgt),
+                  }
+                : d,
+            ),
         );
       },
       { timeout: 200 },

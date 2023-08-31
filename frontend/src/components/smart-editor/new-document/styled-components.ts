@@ -11,6 +11,7 @@ export const StyledTemplateButton = styled.button`
   flex-direction: column;
   align-items: center;
   position: relative;
+  width: 260px;
 
   &:hover {
     background: #ddd;

@@ -9,7 +9,7 @@ interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
 export const DocumentDate = ({ document, ...attrs }: Props) => {
   const dateString = useMemo(() => {
     if (document.type === DocumentTypeEnum.JOURNALFOERT) {
-      return document.newOpplastet;
+      return document.journalfoertDokumentReference.datoOpprettet;
     }
 
     return document.created;

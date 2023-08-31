@@ -4,7 +4,13 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { reduxStore } from '@app/redux/configure-store';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
+import {
+  DistribusjonsType,
+  DocumentTypeEnum,
+  IFileDocument,
+  IJournalfoertDokumentReference,
+  IMainDocument,
+} from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
   ICreateVedleggFromJournalfoertDocumentParams,
@@ -322,9 +328,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         },
       }),
       onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
+        const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-            const newDocuments: IMainDocument[] = journalfoerteDokumenter
+            const newDocuments = journalfoerteDokumenter
               .filter(
                 (doc) =>
                   !draft.some(
@@ -335,7 +341,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                       d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId,
                   ),
               )
-              .map((doc) => ({
+              .map<IJournalfoertDokumentReference>((doc) => ({
                 ...doc,
                 id: `${doc.journalpostId}-${doc.dokumentInfoId}`,
                 parentId,
@@ -344,16 +350,42 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 dokumentTypeId:
                   doc.journalposttype === Journalposttype.NOTAT ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
                 created: doc.datoOpprettet,
-                newOpplastet: doc.datoOpprettet,
+                modified: doc.datoOpprettet,
                 tittel: doc.tittel ?? 'Ukjent',
                 type: DocumentTypeEnum.JOURNALFOERT,
                 journalfoertDokumentReference: {
                   journalpostId: doc.journalpostId,
                   dokumentInfoId: doc.dokumentInfoId,
+                  harTilgangTilArkivvariant: doc.harTilgangTilArkivvariant,
+                  datoOpprettet: doc.datoOpprettet,
                 },
               }));
 
             return [...draft, ...newDocuments];
+          }),
+        );
+
+        const getArkiverteDokumenterPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
+            for (const doc of draft.dokumenter) {
+              const journalpost = journalfoerteDokumenter.find((d) => d.journalpostId === doc.journalpostId);
+
+              if (journalpost === undefined) {
+                continue;
+              }
+
+              if (doc.dokumentInfoId === journalpost.dokumentInfoId) {
+                doc.valgt = true;
+                continue;
+              }
+
+              for (const vedlegg of doc.vedlegg) {
+                if (vedlegg.dokumentInfoId === journalpost.dokumentInfoId) {
+                  vedlegg.valgt = true;
+                  continue;
+                }
+              }
+            }
           }),
         );
 
@@ -388,7 +420,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             );
           }
         } catch (e) {
-          patchResult.undo();
+          getDocumentsPatchResult.undo();
+          getArkiverteDokumenterPatchResult.undo();
 
           const message = 'Kunne ikke sette journalpost(er) som vedlegg.';
 

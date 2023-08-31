@@ -8,8 +8,10 @@ import { IOppgave } from '@app/types/oppgaver';
 
 interface Props
   extends Pick<ButtonProps, 'variant' | 'size'>,
-    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'medunderskriverident' | 'ytelseId' | 'typeId'> {
+    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId' | 'typeId'> {
   children?: string;
+  rolIdent: string | null;
+  medunderskriverident: string | null;
 }
 
 export const OpenOppgavebehandling = ({
@@ -18,6 +20,7 @@ export const OpenOppgavebehandling = ({
   medunderskriverident,
   ytelseId,
   typeId,
+  rolIdent,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
@@ -30,7 +33,10 @@ export const OpenOppgavebehandling = ({
   }
 
   const canOpen =
-    hasYtelseAccess || user?.navIdent === tildeltSaksbehandlerident || user?.navIdent === medunderskriverident;
+    hasYtelseAccess ||
+    user?.navIdent === tildeltSaksbehandlerident ||
+    user?.navIdent === medunderskriverident ||
+    user?.navIdent === rolIdent;
 
   if (!canOpen) {
     return null;

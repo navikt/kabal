@@ -29,7 +29,7 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
                 isMarkertAvsluttet: false,
                 isSmartDokument: true,
                 created: data.created,
-                newOpplastet: data.created,
+                modified: data.modified,
                 parentId: data.parentId,
                 templateId: data.templateId,
                 tittel: data.tittel,

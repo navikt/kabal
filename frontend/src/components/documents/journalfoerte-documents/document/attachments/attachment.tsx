@@ -15,8 +15,11 @@ import {
   getHoverBackgroundColor,
 } from '@app/components/documents/styled-components/document';
 import { findDocument } from '@app/domain/find-document';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { DocumentTitle } from '../shared/document-title';
@@ -37,18 +40,20 @@ export const Attachment = memo(
     const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
-    const { selectedDocuments } = useContext(SelectContext);
+    const { getSelectedDocuments } = useContext(SelectContext);
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
+    const isSaksbehandler = useIsSaksbehandler();
+    const isRol = useIsRol();
+    const isFinished = useIsFullfoert();
+    const isFeilregistrert = useIsFeilregistrert();
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;
 
     const onDragStart = useCallback(
       (e: React.DragEvent<HTMLDivElement>) => {
         if (isSelected) {
-          const docs = Object.values(selectedDocuments)
-            .map((s) => findDocument(s.dokumentInfoId, documents))
-            .filter(isNotUndefined);
+          const docs = getSelectedDocuments();
 
           cleanDragUI.current = createDragUI(
             docs.map((d) => d.tittel ?? 'Ukjent dokument'),
@@ -62,7 +67,7 @@ export const Attachment = memo(
           return;
         }
 
-        const doc = findDocument(dokumentInfoId, documents);
+        const doc = findDocument(journalpostId, dokumentInfoId, documents);
 
         if (doc === undefined) {
           return;
@@ -74,8 +79,10 @@ export const Attachment = memo(
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments([doc]);
       },
-      [documents, dokumentInfoId, isSelected, selectedDocuments, setDraggedJournalfoertDocuments],
+      [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
     );
+
+    const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFinished || isFeilregistrert;
 
     return (
       <StyledVedlegg
@@ -85,14 +92,14 @@ export const Attachment = memo(
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
         $selected={isSelected}
-        onDragStart={onDragStart}
+        onDragStart={disabled ? (e) => e.preventDefault() : onDragStart}
         onDragEnd={() => {
           cleanDragUI.current();
           clearDragState();
         }}
-        draggable
+        draggable={!disabled}
       >
-        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} />
+        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} disabled={disabled} />
         <DocumentTitle
           journalpostId={journalpostId}
           dokumentInfoId={dokumentInfoId}
@@ -102,7 +109,7 @@ export const Attachment = memo(
         <IncludeDocument
           dokumentInfoId={dokumentInfoId}
           journalpostId={journalpostId}
-          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          disabled={disabled}
           name={tittel ?? ''}
           oppgavebehandlingId={oppgavebehandlingId}
           checked={vedlegg.valgt}

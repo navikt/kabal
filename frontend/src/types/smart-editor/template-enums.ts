@@ -8,5 +8,5 @@ export enum TemplateIdEnum {
   GENERELT_BREV = 'generelt_brev',
   ANKEVEDTAK = 'ankevedtak',
   KLAGEVEDTAK = 'klagevedtak',
-  KLAGEVEDTAK_LEGACY = 'klagevedtak-legacy',
+  ROL_NOTAT = 'rol-notat',
 }

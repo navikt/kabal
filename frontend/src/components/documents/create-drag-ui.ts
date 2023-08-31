@@ -5,7 +5,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
   const dragElement = window.document.createElement('section');
 
   dragElement.style.backgroundColor = 'white';
-  dragElement.style.outline = '2px solid var(--a-surface-action-hover)';
+  dragElement.style.border = '2px solid var(--a-surface-action-hover)';
   dragElement.style.padding = '4px';
   dragElement.style.paddingLeft = '16px';
   dragElement.style.borderTopRightRadius = '4px';

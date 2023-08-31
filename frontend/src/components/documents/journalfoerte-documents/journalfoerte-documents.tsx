@@ -11,6 +11,7 @@ import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
 import { LoadMore } from './load-more';
+import { IArkivertDocumentReference } from './select-context/types';
 
 const PAGE_SIZE = 50;
 const EMPTY_ARRAY: IArkivertDocument[] = [];
@@ -33,8 +34,26 @@ export const JournalfoerteDocuments = () => {
     [endIndex, totalFilteredDocuments],
   );
 
+  const allSelectableDocuments = useMemo<IArkivertDocumentReference[]>(() => {
+    const selectable: IArkivertDocumentReference[] = [];
+
+    for (const doc of totalFilteredDocuments) {
+      if (doc.harTilgangTilArkivvariant) {
+        selectable.push({ journalpostId: doc.journalpostId, dokumentInfoId: doc.dokumentInfoId });
+      }
+
+      for (const vedlegg of doc.vedlegg) {
+        if (vedlegg.harTilgangTilArkivvariant) {
+          selectable.push({ journalpostId: doc.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId });
+        }
+      }
+    }
+
+    return selectable;
+  }, [totalFilteredDocuments]);
+
   return (
-    <SelectContextElement documentList={slicedFilteredDocuments}>
+    <SelectContextElement documentList={documents}>
       <Container data-testid="oppgavebehandling-documents-all">
         <JournalfoertHeading
           filteredLength={totalFilteredDocuments.length}
@@ -45,7 +64,7 @@ export const JournalfoerteDocuments = () => {
           allDocuments={data?.dokumenter ?? EMPTY_ARRAY}
         />
         <Wrapper>
-          <Header filters={filters} slicedFilteredDocuments={slicedFilteredDocuments} />
+          <Header filters={filters} allSelectableDocuments={allSelectableDocuments} />
 
           <DocumentList documents={slicedFilteredDocuments} isLoading={isLoading} />
 

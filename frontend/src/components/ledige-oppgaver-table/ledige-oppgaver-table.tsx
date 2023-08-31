@@ -5,11 +5,13 @@ import { styled } from 'styled-components';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery } from '@app/redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useGetLedigeOppgaverQuery,
 } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
@@ -21,7 +23,17 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
 
-export const LedigeOppgaverTable = (): JSX.Element => {
+export const LedigeOppgaverTable = () => {
+  const hasAccess = useHasRole(Role.KABAL_SAKSBEHANDLING);
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  return <LedigeOppgaverTableInternal />;
+};
+
+const LedigeOppgaverTableInternal = (): JSX.Element => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
