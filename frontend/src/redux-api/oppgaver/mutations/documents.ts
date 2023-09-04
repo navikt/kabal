@@ -351,6 +351,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   journalpostId: doc.journalpostId,
                   dokumentInfoId: doc.dokumentInfoId,
                 },
+                valgt: true,
               }));
 
             return [...draft, ...newDocuments];
