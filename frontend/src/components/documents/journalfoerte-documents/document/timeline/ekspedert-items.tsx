@@ -133,7 +133,7 @@ const getOtherVarselData = (kanal: Kanal) => {
       return {
         icon: EnvelopeClosedIcon,
         title: 'Ingen varsling',
-        info: 'Dokumentet er sendt til brukerens fysiske postkasse.',
+        info: 'Dokumentet er sendt til mottakers fysiske postkasse.',
         color: 'var(--a-gray-50)',
       };
     case Kanal.LOKAL_UTSKRIFT:
