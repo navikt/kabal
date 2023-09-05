@@ -17,13 +17,14 @@ export const kabalInternalApi = createApi({
         method: 'POST',
       }),
     }),
-    rebuildElasticAdmin: builder.mutation<void, void>({
+    recreateElasticAdmin: builder.mutation<void, void>({
       query: () => ({
-        url: '/kabal-search/internal/elasticadmin/rebuild',
+        url: '/kabal-search/internal/elasticadmin/recreate',
         method: 'POST',
       }),
     }),
   }),
 });
 
-export const { useRefillElasticAdminMutation, useResendDvhMutation, useRebuildElasticAdminMutation } = kabalInternalApi;
+export const { useRefillElasticAdminMutation, useResendDvhMutation, useRecreateElasticAdminMutation } =
+  kabalInternalApi;
