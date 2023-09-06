@@ -3,7 +3,10 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -16,8 +19,13 @@ export const UseAsAttachments = () => {
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
   const isRol = useIsRol();
+  const isSaksbehandler = useIsSaksbehandler();
+  const isFinished = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
 
-  if (oppgaveId === skipToken) {
+  const canEdit = (isSaksbehandler || isRol) && !isFinished && !isFeilregistrert;
+
+  if (oppgaveId === skipToken || !canEdit) {
     return null;
   }
 

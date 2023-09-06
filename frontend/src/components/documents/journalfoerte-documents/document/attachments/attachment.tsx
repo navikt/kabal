@@ -99,7 +99,11 @@ export const Attachment = memo(
         }}
         draggable={!disabled}
       >
-        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} disabled={disabled} />
+        <SelectRow
+          journalpostId={journalpostId}
+          dokumentInfoId={dokumentInfoId}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+        />
         <DocumentTitle
           journalpostId={journalpostId}
           dokumentInfoId={dokumentInfoId}

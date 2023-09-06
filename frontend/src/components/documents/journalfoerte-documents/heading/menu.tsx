@@ -21,13 +21,11 @@ import {
 
 export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { selectedDocuments } = useContext(SelectContext);
+  const { selectedCount } = useContext(SelectContext);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setIsOpen(false));
 
-  const documentCount = Object.keys(selectedDocuments).length;
-
-  if (documentCount === 0) {
+  if (selectedCount === 0) {
     return null;
   }
 
@@ -42,7 +40,7 @@ export const Menu = () => {
       />
       {isOpen && (
         <Dropdown>
-          {documentCount > 1 ? <ViewCombinedPDF /> : null}
+          {selectedCount > 1 ? <ViewCombinedPDF /> : null}
           <UseAsAttachments />
         </Dropdown>
       )}
@@ -73,13 +71,15 @@ const Dropdown = styled.div`
 const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const { value, setValue } = useDocumentsPdfViewed();
-  const { selectedDocuments } = useContext(SelectContext);
+  const { selectedDocuments, selectedCount } = useContext(SelectContext);
   const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
 
   const documents = useMemo(
     () =>
-      archivedList === undefined ? undefined : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter),
-    [archivedList, selectedDocuments],
+      archivedList === undefined
+        ? undefined
+        : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter, selectedCount),
+    [archivedList, selectedCount, selectedDocuments],
   );
 
   const isInlineOpen = useMemo(() => {
