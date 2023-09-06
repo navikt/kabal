@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { styled } from 'styled-components';
-import { useCanChangeMedunderskriver } from '@app/components/behandling/behandlingsdialog/medunderskriver/hooks';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -19,7 +18,6 @@ import { TakeFromMedunderskriver } from './take-from-medunderskriver';
 export const Medunderskriver = () => {
   const oppgaveId = useOppgaveId();
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const canChangeMedunderskriver = useCanChangeMedunderskriver();
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const isEditable = !isFinished && !isFeilregistrert;
@@ -37,7 +35,7 @@ export const Medunderskriver = () => {
 
   const { typeId, medunderskriver } = oppgave;
 
-  const isReadOnly = isFinished || isFeilregistrert || !canChangeMedunderskriver;
+  const isReadOnly = isFinished || isFeilregistrert;
 
   if (isReadOnly) {
     if (medunderskriver.navIdent === null) {

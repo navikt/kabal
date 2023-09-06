@@ -2,7 +2,6 @@ import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { FlowState, IHelper } from '@app/types/oppgave-common';
 
@@ -13,10 +12,9 @@ interface Props {
 
 export const SendToSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {
   const isMedunderskriver = useIsMedunderskriver();
-  const isSaksbehandler = useIsSaksbehandler();
-  const [setFlowState, loader] = useSetMedunderskriverFlowStateMutation();
+  const [setFlowState, { isLoading }] = useSetMedunderskriverFlowStateMutation();
 
-  if (isSaksbehandler || !isMedunderskriver || medunderskriver.flowState !== FlowState.SENT) {
+  if (!isMedunderskriver || medunderskriver.flowState !== FlowState.SENT) {
     return null;
   }
 
@@ -26,8 +24,8 @@ export const SendToSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {
       variant="primary"
       size="small"
       onClick={() => setFlowState({ oppgaveId, flowState: FlowState.RETURNED })}
-      disabled={loader.isLoading}
-      loading={loader.isLoading}
+      disabled={isLoading}
+      loading={isLoading}
       data-testid="send-to-saksbehandler"
       icon={<PaperplaneIcon aria-hidden />}
     >
