@@ -1,6 +1,7 @@
 import { BodyShort, Select } from '@navikt/ds-react';
 import React from 'react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
+import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
@@ -8,7 +9,7 @@ import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IHelper } from '@app/types/oppgave-common';
+import { FlowState, IHelper } from '@app/types/oppgave-common';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
 import { getFixedCacheKey } from './helpers';
 
@@ -24,10 +25,10 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const [setMedunderskriver] = useSetMedunderskriverMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
 
-  const canChange = isSaksbehandler || hasOppgavestyringRole;
+  const canChange = isSaksbehandler || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
   if (!canChange) {
-    return null;
+    return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
   }
 
   if (typeof data === 'undefined') {
