@@ -12,8 +12,7 @@ interface Props {
 }
 
 export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => {
-  const isSaksbehandler = useIsSaksbehandler();
-  const text = useText(medunderskriver, isSaksbehandler, typeId);
+  const text = useText(medunderskriver, typeId);
 
   return (
     <Alert variant="info" size="small" inline>
@@ -22,7 +21,9 @@ export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => 
   );
 };
 
-const useText = ({ navIdent, flowState }: IHelper, isSaksbehandler: boolean, typeId: SaksTypeEnum): string => {
+const useText = ({ navIdent, flowState }: IHelper, typeId: SaksTypeEnum): string => {
+  const isSaksbehandler = useIsSaksbehandler();
+
   switch (flowState) {
     case FlowState.NOT_SENT:
       return 'Ikke oversendt.';
