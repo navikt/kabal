@@ -7,10 +7,9 @@ import { DocumentTypeEnum } from '@app/types/documents/documents';
 export const getSelectedDocumentsInOrder = (
   selectedDocuments: SelectedMap,
   archivedDocuments: IArkivertDocument[],
+  selectedCount: number,
 ): IShownArchivedDocument[] => {
   const sortedList: IShownArchivedDocument[] = [];
-
-  const targetLength = Object.keys(selectedDocuments).length;
 
   for (const document of archivedDocuments) {
     {
@@ -22,7 +21,7 @@ export const getSelectedDocumentsInOrder = (
           type: DocumentTypeEnum.JOURNALFOERT,
         });
 
-        if (sortedList.length === targetLength) {
+        if (sortedList.length === selectedCount) {
           break;
         }
       }
@@ -42,13 +41,13 @@ export const getSelectedDocumentsInOrder = (
           type: DocumentTypeEnum.JOURNALFOERT,
         });
 
-        if (sortedList.length === targetLength) {
+        if (sortedList.length === selectedCount) {
           break;
         }
       }
     }
 
-    if (sortedList.length === targetLength) {
+    if (sortedList.length === selectedCount) {
       break;
     }
   }

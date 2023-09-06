@@ -92,7 +92,11 @@ export const Document = memo(
           }}
           draggable={!disabled}
         >
-          <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} disabled={disabled} />
+          <SelectRow
+            journalpostId={journalpostId}
+            dokumentInfoId={dokumentInfoId}
+            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          />
           {isExpanded ? (
             <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
           ) : null}

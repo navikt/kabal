@@ -5,10 +5,10 @@ import { SelectContext } from '../../select-context/select-context';
 interface Props {
   journalpostId: string;
   dokumentInfoId: string;
-  disabled: boolean;
+  harTilgangTilArkivvariant: boolean;
 }
 
-export const SelectRow = ({ disabled, ...ids }: Props) => {
+export const SelectRow = ({ harTilgangTilArkivvariant, ...ids }: Props) => {
   const { isSelected, selectOne, unselectOne, selectRangeTo } = useContext(SelectContext);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -36,7 +36,7 @@ export const SelectRow = ({ disabled, ...ids }: Props) => {
       checked={selected}
       onChange={onChange}
       onClick={onClick}
-      disabled={disabled}
+      disabled={!harTilgangTilArkivvariant}
     >
       Velg dokument
     </Checkbox>
