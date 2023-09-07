@@ -12,21 +12,24 @@ import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/o
 interface SortProps {
   params: CommonOppgaverParams;
   onSortChange: TableProps['onSortChange'];
+  sortKey: SortFieldEnum;
 }
 
 interface FilterProps {
   params: CommonOppgaverParams;
   setParams: SetCommonOppgaverParams;
+  fromKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltFrom' | 'returnertFrom'>;
+  toKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltTo' | 'returnertTo'>;
 }
 
-const Sort = ({ params, onSortChange }: SortProps) => {
+const Sort = ({ params, onSortChange, sortKey }: SortProps) => {
   const onClick = () => {
-    onSortChange?.(SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER);
+    onSortChange?.(sortKey);
   };
 
   const Icon = getSortIcon(params.sortering, params.rekkefoelge);
 
-  const sorted = params.sortering === SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER;
+  const sorted = params.sortering === sortKey;
 
   return (
     <StyledSortButton
@@ -39,38 +42,46 @@ const Sort = ({ params, onSortChange }: SortProps) => {
   );
 };
 
-const Filter = ({ params: filters, setParams: setFilters }: FilterProps) => {
+const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: FilterProps) => {
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
       return setFilters({
         ...filters,
-        ferdigstiltFrom: undefined,
-        ferdigstiltTo: undefined,
+        [fromKey]: undefined,
+        [toKey]: undefined,
       });
     }
 
     setFilters({
       ...filters,
-      ferdigstiltFrom: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
-      ferdigstiltTo: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
+      [fromKey]: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
+      [toKey]: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
     });
   };
 
-  return (
-    <DatePickerRange onChange={onChange} selected={{ from: filters.ferdigstiltFrom, to: filters.ferdigstiltTo }} />
-  );
+  return <DatePickerRange onChange={onChange} selected={{ from: filters[fromKey], to: filters[toKey] }} />;
 };
 
-export const FinishedColumnHeader = ({
-  params: filters,
-  setParams: setFilters,
-  onSortChange,
-}: SortProps & FilterProps) => (
+export const FinishedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
   <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <Container>
       Fullført
-      <Sort params={filters} onSortChange={onSortChange} />
-      <Filter params={filters} setParams={setFilters} />
+      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER} />
+      <Filter params={filters} setParams={setFilters} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo" />
+    </Container>
+  </Table.ColumnHeader>
+);
+
+interface ColumnHeaderProps
+  extends Pick<SortProps, 'params' | 'onSortChange'>,
+    Pick<FilterProps, 'params' | 'setParams'> {}
+
+export const ReturnedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
+  <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
+    <Container>
+      Returnert
+      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.RETURNERT_FRA_ROL} />
+      <Filter params={filters} setParams={setFilters} fromKey="returnertFrom" toKey="returnertTo" />
     </Container>
   </Table.ColumnHeader>
 );

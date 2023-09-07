@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
@@ -82,6 +83,7 @@ interface MainDocumentProps {
 
 const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
   const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
+  const isSaksbehandler = useIsSaksbehandler();
 
   if (document.parentId === null) {
     return (
@@ -95,6 +97,14 @@ const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
     return (
       <Alert variant="info" size="small" inline>
         Journalførte dokumenter kan kun være vedlegg.
+      </Alert>
+    );
+  }
+
+  if (!isSaksbehandler) {
+    return (
+      <Alert variant="info" size="small" inline>
+        Bare tildelt saksbehandler kan gjøre et dokument til hoveddokument.
       </Alert>
     );
   }

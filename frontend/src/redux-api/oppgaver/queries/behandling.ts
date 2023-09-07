@@ -2,6 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { isApiRejectionError } from '@app/types/errors';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { IValidationParams } from '@app/types/oppgavebehandling/params';
@@ -72,11 +73,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              if (typeof draft !== 'undefined') {
-                draft.modified = data.modified;
-                draft.rol.navIdent = data.navIdent;
-                draft.rol.flowState = data.flowState;
+              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+                return draft;
               }
+
+              draft.modified = data.modified;
+              draft.rol.navIdent = data.navIdent;
+              draft.rol.flowState = data.flowState;
             }),
           );
         } catch (e) {

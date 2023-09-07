@@ -52,15 +52,16 @@ export interface IOppgavebehandlingBase {
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;
   saksnummer: string;
+}
+
+export interface IKlagebehandling extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.KLAGE;
   rol: IHelper;
 }
 
-interface IKlagebehandling extends IOppgavebehandlingBase {
-  typeId: SaksTypeEnum.KLAGE;
-}
-
-interface IAnkebehandling extends IOppgavebehandlingBase {
+export interface IAnkebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE;
+  rol: IHelper;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {

@@ -1,11 +1,10 @@
-import { Tag, ToggleGroup } from '@navikt/ds-react';
+import { ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
-import { OPTIONS_LIST, OPTIONS_MAP } from './options';
+import { OPTIONS_LIST } from './options';
 
 interface Props {
   document: IMainDocument;
@@ -14,19 +13,6 @@ interface Props {
 export const SetDocumentType = ({ document }: Props) => {
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
-  const canEdit = useCanEdit();
-
-  if (document.parentId !== null) {
-    return null;
-  }
-
-  if (!canEdit || document.isMarkertAvsluttet) {
-    return (
-      <Tag variant="info" size="medium">
-        {OPTIONS_MAP[document.dokumentTypeId]}
-      </Tag>
-    );
-  }
 
   const onChange = (dokumentTypeId: string) => {
     if (isDocumentType(dokumentTypeId) && oppgaveId !== skipToken) {

@@ -4,7 +4,7 @@ import { OppgaveTable } from '@app/components/common-table-components/oppgave-ta
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetFerdigeRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useGetReturnerteRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -15,28 +15,28 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
   ColumnKeyEnum.Saksnummer,
-  ColumnKeyEnum.Finished,
+  ColumnKeyEnum.Returnert,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
 ];
 
-const TEST_ID = 'fullfoerte-oppgaver-table';
+const TEST_ID = 'returnerte-oppgaver-table';
 
 const EMPTY_ARRAY: string[] = [];
 
-export const FullfoerteRolOppgaverTable = () => {
+export const ReturnerteRolOppgaverTable = () => {
   const hasAccess = useHasRole(Role.KABAL_ROL);
 
   if (!hasAccess) {
     return null;
   }
 
-  return <FullfoerteRolOppgaverTableInternal />;
+  return <ReturnerteRolOppgaverTableInternal />;
 };
 
-const FullfoerteRolOppgaverTableInternal = () => {
+const ReturnerteRolOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
-    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
+    sortering: SortFieldEnum.RETURNERT_FRA_ROL,
     rekkefoelge: SortOrderEnum.SYNKENDE,
     typer: [],
     ytelser: EMPTY_ARRAY,
@@ -44,14 +44,14 @@ const FullfoerteRolOppgaverTableInternal = () => {
     tildelteSaksbehandlere: EMPTY_ARRAY,
   });
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetFerdigeRolOppgaverQuery(params, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
   return (
     <section>
-      <Heading size="small">Fullførte oppgaver</Heading>
+      <Heading size="small">Returnerte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -59,7 +59,7 @@ const FullfoerteRolOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         data-testid={TEST_ID}
-        settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
+        settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
         behandlinger={data?.behandlinger}
         params={params}
         setParams={setParams}

@@ -41,6 +41,7 @@ export enum SortFieldEnum {
   MOTTATT = 'MOTTATT',
   ALDER = 'ALDER',
   AVSLUTTET_AV_SAKSBEHANDLER = 'AVSLUTTET_AV_SAKSBEHANDLER',
+  RETURNERT_FRA_ROL = 'RETURNERT_FRA_ROL',
 }
 
 export enum SortOrderEnum {
@@ -54,6 +55,8 @@ export interface CommonOppgaverParams {
   hjemler?: string[];
   ferdigstiltFrom?: string;
   ferdigstiltTo?: string;
+  returnertFrom?: string;
+  returnertTo?: string;
   tildelteSaksbehandlere?: string[];
   sortering: SortFieldEnum;
   rekkefoelge: SortOrderEnum;

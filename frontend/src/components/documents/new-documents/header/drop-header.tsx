@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from 'react
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
@@ -17,8 +18,12 @@ export const DropHeading = ({ children }: Props) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
+  const isSaksbehandler = useIsSaksbehandler();
 
-  const isDragTarget = useMemo(() => isDroppable(draggedDocument), [draggedDocument]);
+  const isDragTarget = useMemo(
+    () => isSaksbehandler && isDroppable(draggedDocument),
+    [isSaksbehandler, draggedDocument],
+  );
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {

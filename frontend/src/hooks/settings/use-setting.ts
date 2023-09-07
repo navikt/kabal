@@ -182,7 +182,7 @@ export const useSmartEditorZoom = () => useNumberSetting(useOppgavePath('tabs/sm
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',
   MINE_UFERDIGE = 'oppgaver/mine_uferdige/rows_per_page',
-  MINE_FERDIGE = 'oppgaver/mine_ferdige/rows_per_page',
+  MINE_RETURNERTE = 'oppgaver/mine_returnerte/rows_per_page',
   MINE_VENTENDE = 'oppgaver/mine_ventende/rows_per_page',
   ENHETENS_UFERDIGE = 'oppgaver/enhetens_uferdige/rows_per_page',
   ENHETENS_VENTENDE = 'oppgaver/enhetens_ventende/rows_per_page',

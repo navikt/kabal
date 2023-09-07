@@ -2,23 +2,24 @@ import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { useCanEdit } from '@app/hooks/use-can-edit';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
-  isMarkertAvsluttet: boolean;
+  document: IMainDocument;
+  parentDocument?: IMainDocument;
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
-  type: DocumentTypeEnum;
-  title: string;
   className?: string;
 }
 
-export const TitleAction = ({ setEditMode, editMode, isMarkertAvsluttet, type, title, className }: Props) => {
-  const canEdit = useCanEdit();
+export const TitleAction = ({ setEditMode, editMode, className, document, parentDocument }: Props) => {
+  const canEdit = useCanEditDocument(document, parentDocument);
 
-  if (!canEdit || isMarkertAvsluttet || type === DocumentTypeEnum.JOURNALFOERT) {
-    return <CopyButton copyText={title} title="Kopier dokumentnavn" size="xsmall" className={className} />;
+  const { tittel } = document;
+
+  if (!canEdit) {
+    return <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" className={className} />;
   }
 
   const Icon = editMode ? CheckmarkIcon : PencilIcon;
@@ -33,7 +34,7 @@ export const TitleAction = ({ setEditMode, editMode, isMarkertAvsluttet, type, t
         variant="tertiary"
         title="Endre dokumentnavn"
       />
-      {editMode ? null : <CopyButton copyText={title} title="Kopier dokumentnavn" size="xsmall" />}
+      {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}
     </Container>
   );
 };

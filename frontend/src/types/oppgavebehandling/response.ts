@@ -1,5 +1,5 @@
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { FlowState, IHelper, INavEmployee, ISakenGjelder } from '../oppgave-common';
+import { FlowState, IHelper, INavEmployee, INotSentHelper, ISakenGjelder, ISentHelper } from '../oppgave-common';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 
@@ -40,7 +40,8 @@ export interface ISakenGjelderResponse {
   sakenGjelder: ISakenGjelder;
 }
 
-export interface ISetMedunderskriverResponse extends IModifiedResponse, IHelper {}
+export type ISetMedunderskriverResponse = IModifiedResponse & (ISentHelper | INotSentHelper);
 
-export interface ISetRolResponse extends IModifiedResponse, IHelper {}
-export interface ISetFlowStateResponse extends IModifiedResponse, IHelper {}
+export type ISetRolResponse = IModifiedResponse & (ISentHelper | INotSentHelper);
+
+export type ISetFlowStateResponse = IModifiedResponse & IHelper;

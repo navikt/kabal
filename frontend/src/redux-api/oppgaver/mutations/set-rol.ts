@@ -2,6 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { ISetRolParams } from '@app/types/oppgavebehandling/params';
 import { ISetRolResponse } from '@app/types/oppgavebehandling/response';
@@ -21,14 +22,22 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+              return draft;
+            }
+
             if (draft.rol.navIdent === navIdent) {
               return;
             }
 
-            draft.rol.navIdent = navIdent;
-
             if (draft.rol.flowState === FlowState.RETURNED) {
-              draft.rol.flowState = FlowState.NOT_SENT;
+              draft.rol = {
+                navIdent,
+                flowState: FlowState.NOT_SENT,
+                returnertdDate: null,
+              };
+            } else {
+              draft.rol.navIdent = navIdent;
             }
           }),
         );
@@ -39,6 +48,10 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+                return draft;
+              }
+
               draft.modified = modified;
               draft.rol = rol;
             }),
@@ -46,6 +59,10 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+                return draft;
+              }
+
               draft.rol = rol;
             }),
           );

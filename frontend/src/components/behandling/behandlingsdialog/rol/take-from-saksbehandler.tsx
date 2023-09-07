@@ -1,22 +1,35 @@
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps } from '@navikt/ds-react';
 import React from 'react';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;
-  rol: IHelper;
   variant?: ButtonProps['variant'];
 }
 
-export const TakeFromSaksbehandler = ({ oppgaveId, rol, variant = 'primary' }: Props) => {
+export const TakeFromSaksbehandler = ({ oppgaveId, variant = 'primary' }: Props) => {
   const isRol = useIsRol();
   const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
+  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
 
-  if (!isRol || rol.flowState !== FlowState.RETURNED) {
+  if (
+    oppgaveIsLoading ||
+    oppgave === undefined ||
+    (oppgave.typeId !== SaksTypeEnum.KLAGE && oppgave.typeId !== SaksTypeEnum.ANKE) ||
+    !isRol
+  ) {
+    return null;
+  }
+
+  const { rol } = oppgave;
+
+  if (rol === null || rol.flowState !== FlowState.RETURNED) {
     return null;
   }
 

@@ -6,6 +6,8 @@ import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
@@ -45,6 +47,7 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
 };
 
 const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
+  // eslint-disable-next-line complexity
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
@@ -99,7 +102,9 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.RolFlowState:
         return (
           <Table.DataCell key={key}>
-            <RolFlowStateLabel rol={oppgave.rol} />
+            {oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? (
+              <RolFlowStateLabel rol={oppgave.rol} />
+            ) : null}
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
@@ -149,6 +154,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.Finished:
         return <Table.DataCell key={key}>{isoDateToPretty(oppgave.avsluttetAvSaksbehandlerDate)}</Table.DataCell>;
+      case ColumnKeyEnum.Returnert:
+        return (
+          <Table.DataCell key={key}>
+            {oppgave.rol.flowState === FlowState.RETURNED ? isoDateToPretty(oppgave.rol.returnertDate) : null}
+          </Table.DataCell>
+        );
       case ColumnKeyEnum.Feilregistrering:
       case ColumnKeyEnum.Feilregistrert:
         return (

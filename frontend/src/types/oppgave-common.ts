@@ -96,8 +96,23 @@ export enum FlowState {
   RETURNED = 'RETURNED',
 }
 
-// Medunderskriver/ROL
-export interface IHelper {
-  navIdent: string | null;
-  flowState: FlowState;
+interface IReturnedHelper {
+  navIdent: string;
+  flowState: FlowState.RETURNED;
+  returnertDate: string; // LocalDateTime
 }
+
+export interface ISentHelper {
+  navIdent: string;
+  flowState: FlowState.SENT;
+  returnertDate: null; // LocalDateTime
+}
+
+export interface INotSentHelper {
+  navIdent: string | null;
+  flowState: FlowState.NOT_SENT;
+  returnertdDate: null;
+}
+
+// Medunderskriver/ROL
+export type IHelper = INotSentHelper | ISentHelper | IReturnedHelper;

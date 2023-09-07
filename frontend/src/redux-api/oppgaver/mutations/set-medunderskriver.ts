@@ -27,10 +27,14 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               return;
             }
 
-            draft.medunderskriver.navIdent = navIdent;
-
             if (draft.medunderskriver.flowState === FlowState.RETURNED) {
-              draft.medunderskriver.flowState = FlowState.NOT_SENT;
+              draft.medunderskriver = {
+                navIdent,
+                flowState: FlowState.NOT_SENT,
+                returnertdDate: null,
+              };
+            } else {
+              draft.medunderskriver.navIdent = navIdent;
             }
           }),
         );

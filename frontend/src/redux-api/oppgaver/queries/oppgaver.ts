@@ -83,8 +83,8 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (params) => ({ url: `/kabal-search/roloppgaver/uferdige`, params }),
       providesTags: [OppgaveListTagTypes.ROL_UFERDIGE],
     }),
-    getFerdigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: `/kabal-search/roloppgaver/ferdigstilte`, params }),
+    getReturnerteRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: `/kabal-search/roloppgaver/returnerte`, params }),
       providesTags: [OppgaveListTagTypes.ROL_FERDIGE],
     }),
   }),
@@ -103,7 +103,7 @@ export const {
   useLazySearchPeopleByNameQuery,
   useGetSaksbehandlereInEnhetQuery,
   useSearchPersonByFnrQuery,
-  useGetFerdigeRolOppgaverQuery,
+  useGetReturnerteRolOppgaverQuery,
   useGetLedigeRolOppgaverQuery,
   useGetUferdigeRolOppgaverQuery,
 } = oppgaverQuerySlice;

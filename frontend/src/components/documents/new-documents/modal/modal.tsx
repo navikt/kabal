@@ -8,16 +8,14 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 
 export const DocumentModal = () => {
   const oppgaveId = useOppgaveId();
-  const { documentId, close } = useContext(ModalContext);
+  const { document, close } = useContext(ModalContext);
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
 
   if (isLoading || typeof data === 'undefined') {
     return null;
   }
 
-  const document = data.find(({ id }) => id === documentId);
-
-  if (typeof document === 'undefined') {
+  if (document === null) {
     return null;
   }
 
@@ -26,7 +24,7 @@ export const DocumentModal = () => {
   return (
     <Modal
       width="medium"
-      open={documentId !== null}
+      open={document !== null}
       aria-modal
       onClose={close}
       onCancel={close}

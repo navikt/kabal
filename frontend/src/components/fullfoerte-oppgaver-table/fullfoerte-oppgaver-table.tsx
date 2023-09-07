@@ -59,7 +59,7 @@ const FullfoerteOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         data-testid={TEST_ID}
-        settingsKey={OppgaveTableRowsPerPage.MINE_FERDIGE}
+        settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
         behandlinger={data?.behandlinger}
         params={params}
         setParams={setParams}

@@ -29,8 +29,8 @@ export const UnfinishedFooter = () => {
     <StyledFooter $type={footerType}>
       <StyledButtons>
         <FinishButton />
-        <SendToSaksbehandler oppgaveId={oppgave.id} rol={oppgave.rol} isSaksbehandler={isSaksbehandler} />
-        <TakeFromSaksbehandler oppgaveId={oppgave.id} rol={oppgave.rol} variant="secondary" />
+        <SendToSaksbehandler oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} />
+        <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary" />
         <VentButton />
         <BackLink />
         <DeassignOppgave />
