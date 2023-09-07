@@ -11,7 +11,7 @@ export const Name = ({ navIdent }: Props) => {
   const { data, isLoading } = useGetSignatureQuery(navIdent ?? skipToken);
 
   if (isLoading) {
-    return <Skeleton variant="text" width={100} />;
+    return <Skeleton variant="text" width={100} as="span" style={{ display: 'inline-block' }} />;
   }
 
   const name = data?.customLongName ?? data?.longName ?? navIdent;
