@@ -3,7 +3,6 @@ import { Button } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -15,7 +14,6 @@ interface Props {
 
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const canEdit = useCanEdit();
   const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(oppgaveId);
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
@@ -44,7 +42,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     return 'Slett dokument';
   }, [data, document.id, document.parentId]);
 
-  if (!canEdit || documentsIsLoading || typeof data === 'undefined') {
+  if (documentsIsLoading || typeof data === 'undefined') {
     return null;
   }
 

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useUser } from '@app/simple-api-state/use-user';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
@@ -13,6 +14,10 @@ export const useIsRol = () => {
       return false;
     }
 
-    return oppgave.rol.flowState !== FlowState.NOT_SENT && oppgave.rol.navIdent === userData.navIdent;
+    return (
+      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.rol.flowState !== FlowState.NOT_SENT &&
+      oppgave.rol.navIdent === userData.navIdent
+    );
   }, [oppgave, userData, userIsLoading, isLoading]);
 };

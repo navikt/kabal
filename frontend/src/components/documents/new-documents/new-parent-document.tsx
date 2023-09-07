@@ -1,15 +1,14 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { IMainDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { AttachmentList } from './attachment-list';
 import { NewDocument } from './new-document/new-document';
 
@@ -24,33 +23,7 @@ export const NewParentDocument = ({ document }: Props) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
-  const isRol = useIsRol();
-
-  const isAllowedToDrop = useCallback(
-    (dragged: IMainDocument | null): dragged is IMainDocument => {
-      if (dragged === null || dragged.id === document.id || dragged.parentId === document.id) {
-        return false;
-      }
-
-      return true;
-    },
-    [document.id],
-  );
-
-  const isDropTarget = useMemo(() => {
-    const isAllowed = draggedJournalfoertDocuments.length !== 0 || isAllowedToDrop(draggedDocument);
-
-    if (!isRol) {
-      return isAllowed;
-    }
-
-    return (
-      isAllowed &&
-      document.isSmartDokument &&
-      document.templateId === TemplateIdEnum.ROL_NOTAT &&
-      !document.isMarkertAvsluttet
-    );
-  }, [isRol, document, draggedJournalfoertDocuments.length, isAllowedToDrop, draggedDocument]);
+  const isDropTarget = useCanDropOnDocument(document);
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLLIElement>) => {
@@ -61,7 +34,7 @@ export const NewParentDocument = ({ document }: Props) => {
       setIsDragOver(false);
 
       if (oppgaveId !== skipToken && isDropTarget) {
-        if (isAllowedToDrop(draggedDocument)) {
+        if (isDroppableNewDocument(draggedDocument, document.id)) {
           setParent({ dokumentId: draggedDocument.id, oppgaveId, parentId: document.id });
         } else if (draggedJournalfoertDocuments.length !== 0) {
           createVedlegg({ oppgaveId, parentId: document.id, journalfoerteDokumenter: draggedJournalfoertDocuments });
@@ -74,7 +47,6 @@ export const NewParentDocument = ({ document }: Props) => {
       oppgaveId,
       isDropTarget,
       clearDragState,
-      isAllowedToDrop,
       draggedDocument,
       draggedJournalfoertDocuments,
       setParent,
@@ -122,11 +94,14 @@ export const NewParentDocument = ({ document }: Props) => {
       $isDropTarget={isDropTarget}
       $isDragOver={isDragOver}
     >
-      <NewDocument document={document} rolCanDrag={false} />
+      <NewDocument document={document} />
       <AttachmentList parentDocument={document} />
     </StyledParentDocumentListItem>
   );
 };
+
+const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: string): dragged is IMainDocument =>
+  dragged !== null && !dragged.isMarkertAvsluttet && dragged.id !== documentId && dragged.parentId !== documentId;
 
 const StyledDocumentListItem = styled.li`
   display: block;

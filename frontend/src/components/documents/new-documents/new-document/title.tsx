@@ -24,9 +24,10 @@ import { TitleAction } from './title-action';
 
 interface Props {
   document: IMainDocument;
+  parentDocument?: IMainDocument;
 }
 
-export const DocumentTitle = ({ document }: Props) => {
+export const DocumentTitle = ({ document, parentDocument }: Props) => {
   const { value, setValue } = useDocumentsPdfViewed();
   const [editMode, setEditMode] = useState(false);
   const { getTabRef, setTabRef } = useContext(TabContext);
@@ -149,11 +150,10 @@ export const DocumentTitle = ({ document }: Props) => {
       <StyledDocumentTitle>
         <SetFilename autoFocus hideLabel document={document} onDone={() => setEditMode(false)} />
         <TitleAction
-          title={document.tittel}
-          isMarkertAvsluttet={document.isMarkertAvsluttet}
           editMode={editMode}
           setEditMode={setEditMode}
-          type={document.type}
+          document={document}
+          parentDocument={parentDocument}
         />
       </StyledDocumentTitle>
     );
@@ -176,11 +176,10 @@ export const DocumentTitle = ({ document }: Props) => {
       </StyledDocumentLink>
       {isExpanded ? (
         <StyledTitleAction
-          title={document.tittel}
-          isMarkertAvsluttet={document.isMarkertAvsluttet}
           editMode={editMode}
           setEditMode={setEditMode}
-          type={document.type}
+          document={document}
+          parentDocument={parentDocument}
         />
       ) : null}
     </StyledDocumentTitle>

@@ -7,7 +7,10 @@ import {
   Sakstype,
   Ytelse,
 } from '@app/components/common-table-components/oppgave-table/filter-dropdowns';
-import { FinishedColumnHeader } from '@app/components/common-table-components/oppgave-table/finished-column-header';
+import {
+  FinishedColumnHeader,
+  ReturnedColumnHeader,
+} from '@app/components/common-table-components/oppgave-table/finished-column-header';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
@@ -57,6 +60,8 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Saksbehandler key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
         return <FinishedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
+      case ColumnKeyEnum.Returnert:
+        return <ReturnedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
       default:
         return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
     }

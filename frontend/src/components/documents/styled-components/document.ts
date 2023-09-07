@@ -3,6 +3,7 @@ import { css } from 'styled-components';
 export const documentCSS = css`
   position: relative;
   width: 100%;
+  height: 32px;
   padding-right: 0;
   border-radius: var(--a-border-radius-medium);
   background-color: transparent;

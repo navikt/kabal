@@ -2,6 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { ISetFlowStateParams } from '@app/types/oppgavebehandling/params';
 import { ISetFlowStateResponse } from '@app/types/oppgavebehandling/response';
@@ -21,6 +22,10 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, flowState }, { dispatch, queryFulfilled }) => {
         const oppgavePatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+              return draft;
+            }
+
             draft.rol.flowState = flowState;
           }),
         );
@@ -31,6 +36,10 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+                return draft;
+              }
+
               draft.modified = modified;
               draft.rol = rol;
             }),
@@ -38,6 +47,10 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+                return draft;
+              }
+
               draft.rol.flowState = data.flowState;
               draft.rol.navIdent = data.navIdent;
             }),

@@ -1,9 +1,10 @@
 import { HourglassIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
+import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -12,14 +13,21 @@ import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents
 
 interface Props {
   document: IMainDocument;
+  parentDocument?: IMainDocument;
 }
 
-export const OpenModalButton = ({ document }: Props) => {
+export const OpenModalButton = ({ document, parentDocument }: Props) => {
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
-  const { setDocumentId } = useContext(ModalContext);
+  const { setDocument: setDocumentId } = useContext(ModalContext);
+  const canEditDocument = useCanEditDocument(document, parentDocument);
+  const canDeleteDocument = useCanDeleteDocument(document);
+
+  if (document.isMarkertAvsluttet) {
+    return <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />;
+  }
 
   if (isFinished || isFeilregistrert) {
     return null;
@@ -29,35 +37,47 @@ export const OpenModalButton = ({ document }: Props) => {
     return null;
   }
 
+  if (!canEditDocument && !canDeleteDocument) {
+    return null;
+  }
+
   return (
     <StyledButton
-      onClick={() => setDocumentId(document.id)}
+      onClick={() => setDocumentId(document)}
       data-testid="document-actions-button"
       variant="tertiary-neutral"
       size="small"
-      icon={<Icon {...document} />}
+      icon={<MenuElipsisVerticalIcon aria-hidden />}
     />
   );
 };
 
-const StyledButton = styled(Button)`
+const gridCSS = css`
   grid-area: ${Fields.Action};
 `;
 
-const Icon = ({ isMarkertAvsluttet, dokumentTypeId }: IMainDocument) => {
-  if (isMarkertAvsluttet) {
-    if (dokumentTypeId === DistribusjonsType.NOTAT) {
-      return <HourglassIcon title="Dokumentet er under journalføring." data-testid="document-archiving" aria-hidden />;
+const StyledButton = styled(Button)`
+  ${gridCSS}
+`;
+
+const IconContainer = styled.span`
+  ${gridCSS}
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ArchivingIcon = ({ dokumentTypeId }: { dokumentTypeId: DistribusjonsType }) => (
+  <IconContainer
+    title={
+      dokumentTypeId === DistribusjonsType.NOTAT
+        ? 'Dokumentet er under journalføring.'
+        : 'Dokumentet er under journalføring og utsending.'
     }
-
-    return (
-      <HourglassIcon
-        title="Dokumentet er under journalføring og utsending."
-        data-testid="document-archiving"
-        aria-hidden
-      />
-    );
-  }
-
-  return <MenuElipsisVerticalIcon aria-hidden />;
-};
+    data-testid="document-archiving"
+  >
+    <HourglassIcon aria-hidden />
+  </IconContainer>
+);

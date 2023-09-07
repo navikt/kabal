@@ -1,16 +1,14 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useCanDeleteDocument } from '@app/hooks/use-can-edit-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const DeleteDropArea = () => {
   const dragEnterCount = useRef(0);
@@ -19,34 +17,8 @@ export const DeleteDropArea = () => {
   const oppgaveId = useOppgaveId();
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
   const removeSmartDocument = useRemoveDocument();
-  const isRol = useIsRol();
-  const { data: allDocuments = [] } = useGetDocumentsQuery(isRol ? oppgaveId : skipToken);
 
-  const isDropTarget = useMemo(() => {
-    if (draggedDocument === null) {
-      return false;
-    }
-
-    if (!isRol) {
-      return true;
-    }
-
-    if (draggedDocument.parentId === null) {
-      return false;
-    }
-
-    const parentDocument = allDocuments.find(({ id }) => id === draggedDocument.parentId);
-
-    if (parentDocument === undefined) {
-      return false;
-    }
-
-    if (!parentDocument.isSmartDokument) {
-      return false;
-    }
-
-    return parentDocument.templateId === TemplateIdEnum.ROL_NOTAT;
-  }, [allDocuments, draggedDocument, isRol]);
+  const isDropTarget = useCanDeleteDocument(draggedDocument);
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {

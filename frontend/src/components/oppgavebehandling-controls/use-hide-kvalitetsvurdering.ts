@@ -12,10 +12,13 @@ export const useHideKvalitetsvurdering = (): boolean => {
 
   const { typeId, resultat } = oppgave;
 
+  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+    return true;
+  }
+
   return (
     oppgave.kvalitetsvurderingReference === null ||
     oppgave.rol.navIdent === user.navIdent ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     resultat.utfallId === UtfallEnum.TRUKKET ||
     resultat.utfallId === UtfallEnum.RETUR ||
     resultat.utfallId === UtfallEnum.UGUNST ||

@@ -51,7 +51,7 @@ export interface IFileDocument extends IBaseDocument {
   templateId: null;
 }
 
-interface ISmartDocument extends IBaseDocument {
+export interface ISmartDocument extends IBaseDocument {
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
   templateId: TemplateIdEnum | NoTemplateIdEnum | null; // Nullable until all smart documents without this are finished. Make not nullable once all legacy smart documents are finished.
