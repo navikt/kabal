@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { styled } from 'styled-components';
+import { ActionToast } from '@app/components/toast/action-toast';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -91,12 +91,9 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
     fromSaksbehandler === null ? '' : ` fra ${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
 
   return (
-    <div data-testid="oppgave-tildelt-toast" data-oppgaveid={oppgaveId}>
-      <span>
-        Oppgave for {sakenGjelderText} er tildelt {toSaksbehandlerText}
-        {fromSaksbehandlerText}.
-      </span>
-      <ButtonRow>
+    <ActionToast
+      attrs={{ 'data-oppgaveid': oppgaveId, 'data-testid': 'oppgave-tildelt-toast' }}
+      primary={
         <OpenOppgavebehandling
           size="small"
           variant="secondary"
@@ -109,6 +106,8 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
         >
           Åpne
         </OpenOppgavebehandling>
+      }
+      secondary={
         <CancelButton
           oppgaveId={oppgaveId}
           oppgaveType={oppgaveType}
@@ -116,8 +115,11 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           fromSaksbehandler={fromSaksbehandler}
           toSaksbehandler={toSaksbehandler}
         />
-      </ButtonRow>
-    </div>
+      }
+    >
+      Oppgave for {sakenGjelderText} er tildelt {toSaksbehandlerText}
+      {fromSaksbehandlerText}.
+    </ActionToast>
   );
 };
 
@@ -191,10 +193,3 @@ const createFradeltToast = (props: Props) => {
     toast.success(<Fradelt {...props} />);
   }
 };
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  column-gap: 8px;
-`;
