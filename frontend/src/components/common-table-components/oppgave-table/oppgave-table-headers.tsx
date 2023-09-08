@@ -3,6 +3,7 @@ import React from 'react';
 import {
   EnhetHjemmel,
   Hjemmel,
+  Medunderskriver,
   Saksbehandler,
   Sakstype,
   Ytelse,
@@ -58,6 +59,8 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
         return <Saksbehandler key={key} columnKey={key} params={params} setParams={setParams} />;
+      case ColumnKeyEnum.Medunderskriver:
+        return <Medunderskriver key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
         return <FinishedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
       case ColumnKeyEnum.Returnert:

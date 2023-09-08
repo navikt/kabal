@@ -6,14 +6,12 @@ import { LoadingCellContent } from '@app/components/common-table-components/load
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling';
-import { useUser } from '@app/simple-api-state/use-user';
 import { IOppgave } from '@app/types/oppgaver';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';
 
 export const Saksbehandler = (oppgave: IOppgave) => {
-  const { data: user, isLoading: userIsLoading, isError: userIsError } = useUser();
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriver.navIdent !== null,
@@ -23,15 +21,7 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     oppgave.tildeltSaksbehandlerident ?? skipToken,
   );
 
-  if (userIsError) {
-    return (
-      <Container>
-        <StyledErrorMessage>Feil ved lasting</StyledErrorMessage>
-      </Container>
-    );
-  }
-
-  if (userIsLoading || signatureIsLoading || isLoading || user === undefined) {
+  if (signatureIsLoading || isLoading) {
     return (
       <Container>
         <LoadingCellContent variant="rectangle" />

@@ -16,8 +16,9 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.MedunderskriverFlowState,
-  ColumnKeyEnum.Open,
+  ColumnKeyEnum.Medunderskriver,
   ColumnKeyEnum.Oppgavestyring,
+  ColumnKeyEnum.Open,
 ];
 
 export const EnhetensOppgaverTable = () => {

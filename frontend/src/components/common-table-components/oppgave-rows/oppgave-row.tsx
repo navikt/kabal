@@ -1,5 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
+import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import { Name } from '@app/components/common-table-components/name';
 import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -92,6 +93,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <Deadline {...oppgave} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.Medunderskriver:
+        return (
+          <Table.DataCell key={key}>
+            <Medunderskriver oppgaveId={oppgave.id} medunderskriverIdent={oppgave.medunderskriver.navIdent} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.MedunderskriverFlowState:

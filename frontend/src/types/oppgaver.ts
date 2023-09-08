@@ -58,6 +58,7 @@ export interface CommonOppgaverParams {
   returnertFrom?: string;
   returnertTo?: string;
   tildelteSaksbehandlere?: string[];
+  medunderskrivere?: string[];
   sortering: SortFieldEnum;
   rekkefoelge: SortOrderEnum;
 }
@@ -93,8 +94,11 @@ export interface ISaksbehandlere {
   saksbehandlere: INavEmployee[];
 }
 
+export interface IMedunderskrivere {
+  medunderskrivere: INavEmployee[];
+}
+
 export interface IRols {
-  // saksbehandlere: INavEmployee[];
   rols: INavEmployee[];
 }
 

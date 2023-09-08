@@ -3,16 +3,16 @@ import React from 'react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
 import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
+import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, IHelper } from '@app/types/oppgave-common';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
-import { getFixedCacheKey } from './helpers';
 
+const NONE_SELECTED = 'NONE_SELECTED';
 interface Props {
   oppgaveId: string;
   medunderskriver: IHelper;
@@ -23,7 +23,7 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const { data } = useGetPotentialMedunderskrivereQuery(oppgaveId);
   const isSaksbehandler = useIsSaksbehandler();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const [setMedunderskriver] = useSetMedunderskriverMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
+  const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
 
   const canChange = isSaksbehandler || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
@@ -41,15 +41,16 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
     return <BodyShort>Fant ingen {getTitlePlural(typeId)}</BodyShort>;
   }
 
-  const onChange = (v: string) => setMedunderskriver({ oppgaveId, navIdent: v === NONE ? null : v });
-
   return (
     <Select
       size="small"
       label={`${getTitleCapitalized(typeId)}`}
-      onChange={({ target }) => onChange(target.value)}
+      onChange={({ target }) =>
+        onChange(target.value === NONE_SELECTED ? null : target.value, medunderskriver.navIdent)
+      }
       value={medunderskriver.navIdent ?? NONE}
       data-testid="select-medunderskriver"
+      disabled={isUpdating}
     >
       <option value={NONE}>Ingen</option>
       {medunderskrivere.map(({ navn, navIdent }) => (
