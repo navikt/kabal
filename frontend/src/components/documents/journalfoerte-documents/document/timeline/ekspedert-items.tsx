@@ -3,12 +3,14 @@ import {
   EnvelopeClosedIcon,
   FingerMobileIcon,
   InformationSquareIcon,
-  MobileSmallIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
+import { CopyButton } from '@navikt/ds-react';
 import React from 'react';
-import { IArkivertDocument, Kanal, RelevantDatotype, Utsendingsinfo } from '@app/types/arkiverte-documents';
-import { StyledAlert, StyledEmailContent, StyledHeading, StyledLabel, StyledSmsContent } from './styled-components';
+import { styled } from 'styled-components';
+import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
+import { IArkivertDocument, Kanal, RelevantDatotype } from '@app/types/arkiverte-documents';
+import { StyledHeading } from './styled-components';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
@@ -28,7 +30,31 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
 
   return (
     <>
-      <RelevantDateTimelineItem datotype={datotype} dato={dato} hideNext={isLast && !hasVarsler} />
+      <RelevantDateTimelineItem
+        datotype={datotype}
+        dato={dato}
+        hideNext={false}
+        popover={
+          utsendingsinfo !== null && utsendingsinfo.fysiskpostSendt !== null
+            ? {
+                buttonText: 'Vis adresse',
+                content: (
+                  <PopupContainer>
+                    <StyledHeading size="xsmall" level="3" spacing>
+                      <EnvelopeClosedIcon aria-hidden /> Adresse
+                    </StyledHeading>
+                    {utsendingsinfo.fysiskpostSendt.adressetekstKonvolutt}
+                    <CopyButton
+                      copyText={utsendingsinfo.fysiskpostSendt.adressetekstKonvolutt}
+                      text="Kopier adresse"
+                      size="small"
+                    />
+                  </PopupContainer>
+                ),
+              }
+            : null
+        }
+      />
 
       {varselData.map(({ title, content }, i) => (
         <TimelineItem
@@ -41,59 +67,11 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
           hideNext={isLast && i === lastIndex}
         />
       ))}
+
       {hasVarsler ? null : <OtherVarselInfo dato={dato} kanal={kanal} kanalnavn={kanalnavn} isLast={isLast} />}
     </>
   );
 };
-
-interface VarselData {
-  title: string;
-  content: JSX.Element;
-}
-
-const getVarselData = (
-  isSmsSent: boolean,
-  isEmailSent: boolean,
-  utsendingsinfo: Utsendingsinfo,
-): [VarselData, VarselData] | [VarselData] | [] => {
-  if (isSmsSent && isEmailSent) {
-    return [getSmsPopoverContent(utsendingsinfo), getEmailPopoverContent(utsendingsinfo)];
-  }
-
-  if (isSmsSent) {
-    return [getSmsPopoverContent(utsendingsinfo)];
-  }
-
-  if (isEmailSent) {
-    return [getEmailPopoverContent(utsendingsinfo)];
-  }
-
-  return [];
-};
-
-const getSmsPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => ({
-  title: 'SMS-varsel sendt',
-  content: (
-    <>
-      <StyledLabel size="small">
-        <MobileSmallIcon aria-hidden /> {utsendingsinfo.smsVarselSendt?.adresse}
-      </StyledLabel>
-      <StyledSmsContent>{utsendingsinfo.smsVarselSendt?.varslingstekst}</StyledSmsContent>
-    </>
-  ),
-});
-
-const getEmailPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => ({
-  title: 'E-post-varsel sendt',
-  content: (
-    <>
-      <StyledLabel size="small">
-        <EnvelopeClosedIcon aria-hidden /> {utsendingsinfo.epostVarselSendt?.adresse}
-      </StyledLabel>
-      <EmailContent varslingstekst={utsendingsinfo.epostVarselSendt?.varslingstekst} />
-    </>
-  ),
-});
 
 interface VarselInfoProps {
   dato: string;
@@ -114,12 +92,12 @@ const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) =>
       popover={{
         buttonText: 'Vis forklaring',
         content: (
-          <StyledAlert variant="info">
-            <StyledHeading size="xsmall" level="3">
+          <PopupContainer>
+            <StyledHeading size="xsmall" level="3" spacing>
               <Icon aria-hidden /> {kanalnavn}
             </StyledHeading>
             {info}
-          </StyledAlert>
+          </PopupContainer>
         ),
       }}
       hideNext={isLast}
@@ -160,18 +138,8 @@ const getOtherVarselData = (kanal: Kanal) => {
   }
 };
 
-const BODY_REGEX = /<body>((?:.|\n|\r)*)<\/body>/i;
-
-const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }): JSX.Element | null => {
-  if (varslingstekst === undefined) {
-    return null;
-  }
-
-  const __html = varslingstekst.match(BODY_REGEX)?.[1];
-
-  if (__html === undefined) {
-    return null;
-  }
-
-  return <StyledEmailContent dangerouslySetInnerHTML={{ __html }} />;
-};
+const PopupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  white-space: pre;
+`;

@@ -11,6 +11,7 @@ interface RelevantDateTimelineItemProps {
   dato: string;
   datotype: RelevantDatotype;
   hideNext: boolean;
+  popover?: TimelineItemProps['popover'];
 }
 
 export const RelevantDateTimelineItem = ({ datotype, ...rest }: RelevantDateTimelineItemProps) => {
