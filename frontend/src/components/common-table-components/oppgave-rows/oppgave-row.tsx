@@ -1,6 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { Name } from '@app/components/common-table-components/name';
+import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
@@ -178,6 +179,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <CopyButton text={oppgave.saksnummer} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.RolTildeling:
+        return (
+          <Table.DataCell key={key}>
+            <RolTildeling oppgave={oppgave} />
           </Table.DataCell>
         );
       default:
