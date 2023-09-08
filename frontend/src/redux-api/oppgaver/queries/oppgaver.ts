@@ -3,6 +3,7 @@ import {
   ApiResponse,
   CommonOppgaverParams,
   EnhetensOppgaverParams,
+  IMedunderskrivere,
   INameSearchParams,
   INameSearchResponse,
   IOppgaverResponse,
@@ -75,6 +76,9 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,
     }),
+    getMedunderskrivereForEnhet: builder.query<IMedunderskrivere, string>({
+      query: (enhet) => `/kabal-search/enheter/${enhet}/medunderskrivere`,
+    }),
     getLedigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: `/kabal-search/roloppgaver/ledige`, params }),
       providesTags: [OppgaveListTagTypes.ROL_LEDIGE],
@@ -106,4 +110,5 @@ export const {
   useGetReturnerteRolOppgaverQuery,
   useGetLedigeRolOppgaverQuery,
   useGetUferdigeRolOppgaverQuery,
+  useGetMedunderskrivereForEnhetQuery,
 } = oppgaverQuerySlice;

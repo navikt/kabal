@@ -77,7 +77,7 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
 
   return (
     <Button
-      size="small"
+      size="xsmall"
       icon={<PencilIcon aria-hidden />}
       title="Endre frist for behandling i klageinstans"
       variant="tertiary"
