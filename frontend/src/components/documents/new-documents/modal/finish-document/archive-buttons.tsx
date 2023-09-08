@@ -12,7 +12,7 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
   const { id: dokumentId } = document;
   const [finish, { isLoading }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const oppgaveId = useOppgaveId();
-  const { setValidationErrors } = useContext(ModalContext);
+  const { close, setValidationErrors } = useContext(ModalContext);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
   const remove = useRemoveDocument();
@@ -37,8 +37,10 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
     }
 
     setValidationErrors([]);
+
     await finish({ dokumentId, oppgaveId });
     remove(dokumentId, document);
+    close();
   };
 
   return (

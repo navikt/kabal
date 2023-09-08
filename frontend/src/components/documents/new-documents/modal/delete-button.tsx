@@ -1,12 +1,13 @@
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IMainDocument } from '@app/types/documents/documents';
+import { ModalContext } from './modal-context';
 
 interface Props {
   document: IMainDocument;
@@ -18,14 +19,16 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
   const remove = useRemoveDocument();
+  const { close } = useContext(ModalContext);
 
-  const onDelete = () => {
+  const onDelete = async () => {
     if (typeof oppgaveId !== 'string') {
       return;
     }
 
+    await deleteDocument({ dokumentId: document.id, oppgaveId });
     remove(document.id, document);
-    deleteDocument({ dokumentId: document.id, oppgaveId });
+    close();
   };
 
   const text = useMemo(() => {
