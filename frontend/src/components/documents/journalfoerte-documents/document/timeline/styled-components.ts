@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Label } from '@navikt/ds-react';
+import { Heading, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const TimelineContainer = styled.ol`
@@ -14,14 +14,6 @@ export const StyledHeading = styled(Heading)`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-export const StyledAlert = styled(Alert)`
-  min-width: 500px;
-  margin-top: 8px;
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: 0;
 `;
 
 export const StyledSmsContent = styled.blockquote`
