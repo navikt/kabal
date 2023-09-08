@@ -60,10 +60,8 @@ export const SendButtons = ({ document }: FinishProps) => {
       const brevmottakerIds = customBrevmottakerList.map(({ id }) => id).concat(selectedPartBrevmottakerIds);
 
       await finish({ dokumentId, oppgaveId: data.id, brevmottakerIds }).unwrap();
-
-      close();
-
       remove(dokumentId, document);
+      close();
     } catch (e) {
       console.error(e);
     }
