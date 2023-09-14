@@ -1,10 +1,10 @@
 import { Label, ToggleGroup } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
-import { OppgaveTableRowsPerPage, useNumberSetting } from '@app/hooks/settings/use-setting';
+import { useNumberSetting } from '@app/hooks/settings/use-setting';
 
 interface Props {
-  settingKey: OppgaveTableRowsPerPage;
+  settingKey: string;
   pageSize: number;
   'data-testid': string;
 }

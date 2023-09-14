@@ -24,5 +24,5 @@ const StyledSearch = styled(Search)`
 `;
 
 const StyledContainer = styled.div`
-  padding-bottom: 16px;
+  padding: 16px;
 `;
