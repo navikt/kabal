@@ -14,7 +14,7 @@ const containsNumber = (query: string) => NUMBER_REGEX.test(query);
 
 export const NameSearch = ({ queryString }: NameSearchProps) => {
   const query = useGetQuery(queryString);
-  const [search, { data, isFetching }] = useLazySearchPeopleByNameQuery();
+  const [search, { data, isLoading, isFetching }] = useLazySearchPeopleByNameQuery();
 
   useEffect(() => {
     if (query === skipToken) {
@@ -32,7 +32,7 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
     return null;
   }
 
-  if (isFetching || typeof data === 'undefined') {
+  if (typeof data === 'undefined') {
     return <Loader size="xlarge" />;
   }
 
@@ -44,7 +44,9 @@ export const NameSearch = ({ queryString }: NameSearchProps) => {
     );
   }
 
-  return <SearchResults people={data.people} />;
+  return (
+    <SearchResults people={data.people} onRefresh={() => search(query)} isLoading={isLoading} isFetching={isFetching} />
+  );
 };
 
 const useGetQuery = (queryString: string): INameSearchParams | typeof skipToken =>

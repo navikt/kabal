@@ -1,5 +1,4 @@
-import { Alert, Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { Loader } from '@navikt/ds-react';
 import React from 'react';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
@@ -9,30 +8,17 @@ import { LedigeOppgaverTable } from '../common/ledige-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/styled-components';
 
 interface Props {
-  open: boolean;
   fnr: string;
 }
 
-export const Oppgaver = ({ open, fnr }: Props) => {
-  const { data, isFetching, isUninitialized, refetch } = useSearchOppgaverByFnrQuery(open ? fnr : skipToken, {
+export const Oppgaver = ({ fnr }: Props) => {
+  const { data, isFetching, isLoading, refetch } = useSearchOppgaverByFnrQuery(fnr, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
-  if (!open) {
-    return null;
-  }
-
-  if (isFetching) {
+  if (isLoading || typeof data === 'undefined') {
     return <Loader size="xlarge" />;
-  }
-
-  if (typeof data === 'undefined') {
-    if (isUninitialized) {
-      return null;
-    }
-
-    return <Alert variant="info">Ingen registrerte oppgaver på denne personen i Kabal</Alert>;
   }
 
   const { aapneBehandlinger, avsluttedeBehandlinger, feilregistrerteBehandlinger, paaVentBehandlinger } = data;

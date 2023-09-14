@@ -4,7 +4,7 @@ import { LedigeRolOppgaverTable } from '@app/components/rol-tables/ledige-rol-op
 import { OppgaverPageWrapper } from '../page-wrapper';
 
 export const OppgaverPage = () => (
-  <OppgaverPageWrapper>
+  <OppgaverPageWrapper testId="ledige-oppgaver-tables">
     <LedigeOppgaverTable />
     <LedigeRolOppgaverTable />
   </OppgaverPageWrapper>

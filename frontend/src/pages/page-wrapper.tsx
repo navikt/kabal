@@ -18,24 +18,41 @@ const StyledMain = styled.main`
 interface OppgaverPageWrapperProps {
   children: React.ReactNode;
   title?: string;
+  testId?: string;
 }
 
-export const OppgaverPageWrapper = ({ children, title }: OppgaverPageWrapperProps): JSX.Element => (
-  <StyledOppgaverPageWrapper>
+export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): JSX.Element => (
+  <StyledOppgaverPageWrapper data-testid={`${testId}-container`}>
     {typeof title === 'undefined' ? null : (
-      <Heading level="1" size="medium" spacing>
+      <StyledOppgaveHeading level="1" size="medium" data-testid={`${testId}-title`}>
         {title}
-      </Heading>
+      </StyledOppgaveHeading>
     )}
-    <OppgaverContainer>{children}</OppgaverContainer>
+    <OppgaverContainer data-testid={testId}>{children}</OppgaverContainer>
   </StyledOppgaverPageWrapper>
 );
 
-const StyledOppgaverPageWrapper = styled.main`
+export const SearchPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   width: 100%;
   overflow: hidden;
-  padding: 16px;
+`;
+
+const StyledOppgaverPageWrapper = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+`;
+
+const StyledOppgaveHeading = styled(Heading)`
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
 `;
 
 const OppgaverContainer = styled.article`
@@ -44,10 +61,11 @@ const OppgaverContainer = styled.article`
   row-gap: 64px;
   overflow: auto;
   width: 100%;
-  height: 100%;
-  padding-top: 0;
+  flex-grow: 1;
+  padding: 16px;
 
   > * {
-    min-width: calc(100vw - 32px);
+    min-width: 100%;
+    width: fit-content;
   }
 `;

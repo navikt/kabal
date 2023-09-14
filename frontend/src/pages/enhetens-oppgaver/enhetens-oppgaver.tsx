@@ -9,7 +9,7 @@ export const EnhetensOppgaverPage = () => {
   const { data: user } = useUser();
 
   return (
-    <OppgaverPageWrapper title={`Enhetens oppgaver - ${user?.ansattEnhet.navn}`}>
+    <OppgaverPageWrapper title={`Enhetens oppgaver - ${user?.ansattEnhet.navn}`} testId="enhetens-oppgaver-tables">
       <EnhetensOppgaverTable />
       <EnhetensOppgaverPaaVentTable />
       <EnhetensFerdigstilteOppgaverTable />
