@@ -99,13 +99,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              if (typeof draft !== 'undefined') {
-                draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
-              }
-            }),
-          );
+          // dispatch(
+          //   behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+          //     if (typeof draft !== 'undefined') {
+          //       draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
+          //     }
+          //   }),
+          // );
         } catch (e) {
           const message = 'Kunne ikke hente saksbehandler.';
 

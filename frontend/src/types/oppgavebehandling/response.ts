@@ -21,6 +21,7 @@ export interface IMedunderskriverResponse {
 export interface IRolResponse {
   modified: string;
   navIdent: string | null;
+  name: string | null;
   flowState: FlowState;
 }
 

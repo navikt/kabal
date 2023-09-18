@@ -5,7 +5,6 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
 import {
   StyledAuthor,
@@ -47,14 +46,10 @@ export const Messages = () => {
   );
 };
 
-const Message = ({ author, modified, text, created }: IMessage) => {
-  const { data } = useGetSignatureQuery(author.saksbehandlerIdent);
-
-  return (
-    <StyledMessage data-testid="message-list-item">
-      <StyledAuthor>{data?.customLongName ?? author.name}</StyledAuthor>
-      <StyledMessageContent>{isoDateTimeToPretty(modified ?? created)}</StyledMessageContent>
-      <StyledMessageContent>{text}</StyledMessageContent>
-    </StyledMessage>
-  );
-};
+const Message = ({ author, modified, text, created }: IMessage) => (
+  <StyledMessage data-testid="message-list-item">
+    <StyledAuthor>{author.name}</StyledAuthor>
+    <StyledMessageContent>{isoDateTimeToPretty(modified ?? created)}</StyledMessageContent>
+    <StyledMessageContent>{text}</StyledMessageContent>
+  </StyledMessage>
+);

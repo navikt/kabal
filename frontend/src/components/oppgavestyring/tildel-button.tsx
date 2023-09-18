@@ -15,7 +15,7 @@ export const TildelButton = ({
   id,
   typeId,
   ytelseId,
-  tildeltSaksbehandlerident,
+  tildeltSaksbehandler,
   medunderskriver,
   children = 'Tildel meg',
 }: Props) => {
@@ -23,7 +23,7 @@ export const TildelButton = ({
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useFradel(id, typeId, ytelseId);
   const [access, isAccessLoading] = useOppgaveActions(
-    tildeltSaksbehandlerident,
+    tildeltSaksbehandler?.navIdent ?? null,
     medunderskriver.navIdent !== null,
     ytelseId,
   );
@@ -36,7 +36,7 @@ export const TildelButton = ({
     !access.assignSelf ||
     !user.roller.includes(Role.KABAL_SAKSBEHANDLING) ||
     medunderskriver.navIdent === user.navIdent ||
-    tildeltSaksbehandlerident === user.navIdent
+    tildeltSaksbehandler.navIdent === user.navIdent
   ) {
     return null;
   }
@@ -53,7 +53,7 @@ export const TildelButton = ({
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
       onClick={() => {
-        tildel(user.navIdent);
+        tildel(user.navIdent, user.name);
       }}
     >
       {children}

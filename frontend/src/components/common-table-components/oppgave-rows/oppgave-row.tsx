@@ -1,7 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
-import { Name } from '@app/components/common-table-components/name';
 import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { CopyButton } from '@app/components/copy-button/copy-button';
@@ -122,7 +121,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               id={oppgave.id}
               ytelseId={oppgave.ytelseId}
               typeId={oppgave.typeId}
-              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandler.navIdent}
               medunderskriverident={oppgave.medunderskriver.navIdent}
               rolIdent={oppgave.rol.navIdent}
             />
@@ -137,11 +136,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Tildeling:
-        return (
-          <Table.DataCell key={key}>
-            <Name navIdent={oppgave.tildeltSaksbehandlerident} />
-          </Table.DataCell>
-        );
+        return <Table.DataCell key={key}>{oppgave.tildeltSaksbehandler.name}</Table.DataCell>;
       case ColumnKeyEnum.Utfall:
         return (
           <Table.DataCell key={key}>
@@ -176,7 +171,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               oppgaveId={oppgave.id}
               feilregistrert={oppgave.feilregistrert}
               fagsystemId={oppgave.fagsystemId}
-              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandler.navIdent}
               variant="secondary-neutral"
               $position="below"
             />

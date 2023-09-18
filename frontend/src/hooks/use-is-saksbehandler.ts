@@ -17,6 +17,6 @@ export const useIsSaksbehandler = () => {
       return false;
     }
 
-    return oppgavebehandling.tildeltSaksbehandlerident === userData.navIdent;
+    return oppgavebehandling.tildeltSaksbehandler?.navIdent === userData.navIdent;
   }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
 };

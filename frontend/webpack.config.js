@@ -49,7 +49,7 @@ module.exports = (_env, { mode }) => ({
     ],
     hot: true,
     host: '0.0.0.0',
-    port: 8061,
+    port: 8051,
     historyApiFallback: true,
     proxy: [
       {

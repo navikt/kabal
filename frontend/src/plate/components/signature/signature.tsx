@@ -38,7 +38,7 @@ const useSignatureData = (editor: PlateEditor<EditorValue>, element: SignatureEl
   const medunderskriverSignature = useMedunderskriverSignature();
   const { data: oppgave } = useOppgave();
   const { data: saksbehandlerSignature } = useGetSignatureQuery(
-    typeof oppgave?.tildeltSaksbehandlerident === 'string' ? oppgave.tildeltSaksbehandlerident : skipToken,
+    typeof oppgave?.tildeltSaksbehandler?.navIdent === 'string' ? oppgave.tildeltSaksbehandler.navIdent : skipToken,
   );
 
   useEffect(() => {

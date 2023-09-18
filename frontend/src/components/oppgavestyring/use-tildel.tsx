@@ -171,8 +171,7 @@ const CancelButton = ({ oppgaveId, oppgaveType, ytelse, fromSaksbehandler, toSak
     if (fromSaksbehandler === null) {
       await fradel();
     } else {
-      await tildel(fromSaksbehandler.navIdent);
-    }
+      await tildel(fromSaksbehandler.navIdent)
   };
 
   return (

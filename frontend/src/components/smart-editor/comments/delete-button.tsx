@@ -30,7 +30,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
     return null;
   }
 
-  const canDelete = isCommentAuthor || oppgave.tildeltSaksbehandlerident === user.navIdent;
+  const canDelete = isCommentAuthor || oppgave.tildeltSaksbehandler?.navIdent === user.navIdent;
 
   if (!canDelete) {
     return null;

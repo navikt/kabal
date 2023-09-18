@@ -12,7 +12,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
         const { data } = await queryFulfilled;
 
         const {
-          tildeltSaksbehandlerident,
+          tildeltSaksbehandler,
           medunderskriver,
           avsluttetAvSaksbehandlerDate,
           isAvsluttetAvSaksbehandler,
@@ -25,7 +25,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
         dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
             ...draft,
-            tildeltSaksbehandlerident,
+            tildeltSaksbehandler,
             medunderskriver,
             avsluttetAvSaksbehandlerDate,
             isAvsluttetAvSaksbehandler,

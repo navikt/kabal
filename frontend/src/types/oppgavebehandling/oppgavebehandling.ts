@@ -1,5 +1,13 @@
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IHelper, INavEmployee, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
+import {
+  IHelper,
+  INavEmployee,
+  IPart,
+  ISakenGjelder,
+  ITildeltSaksbehandler,
+  IVedlegg,
+  IVenteperiode,
+} from '../oppgave-common';
 
 type UUID = string;
 
@@ -46,8 +54,7 @@ export interface IOppgavebehandlingBase {
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
-  tildeltSaksbehandlerident: string | null;
-  tildeltSaksbehandlerEnhet: string | null;
+  tildeltSaksbehandler: ITildeltSaksbehandler | null;
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;

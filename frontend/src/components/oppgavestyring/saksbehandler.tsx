@@ -1,10 +1,8 @@
 import { ErrorMessage, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { IOppgave } from '@app/types/oppgaver';
 import { useTildel } from './use-tildel';
@@ -13,15 +11,12 @@ const NOT_SELECTED = 'NOT_SELECTED';
 
 export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
-    oppgave.tildeltSaksbehandlerident,
+    oppgave.tildeltSaksbehandler?.navIdent ?? null,
     oppgave.medunderskriver.navIdent !== null,
     oppgave.ytelseId,
   );
-  const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(
-    oppgave.tildeltSaksbehandlerident ?? skipToken,
-  );
 
-  if (signatureIsLoading || isLoading) {
+  if (isLoading) {
     return (
       <Container>
         <LoadingCellContent variant="rectangle" />
@@ -29,17 +24,19 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     );
   }
 
-  const name = signature?.customLongName ?? signature?.longName ?? null;
-
   if (access.assignOthers) {
     return (
       <Container>
-        <SelectSaksbehandler {...oppgave} tildeltSaksbehandlerNavn={name} />
+        <SelectSaksbehandler
+          {...oppgave}
+          tildeltSaksbehandlerNavn={oppgave.tildeltSaksbehandler?.name ?? null}
+          tildeltSaksbehandlerident={oppgave.tildeltSaksbehandler?.navIdent ?? null}
+        />
       </Container>
     );
   }
 
-  if (oppgave.tildeltSaksbehandlerident === null) {
+  if (oppgave.tildeltSaksbehandler === null) {
     return (
       <Container>
         <StyledSaksbehandler>Ikke tildelt</StyledSaksbehandler>
@@ -47,7 +44,9 @@ export const Saksbehandler = (oppgave: IOppgave) => {
     );
   }
 
-  const saksbehandler = `${name ?? 'Laster...'} (${oppgave.tildeltSaksbehandlerident})`;
+  const saksbehandler = `${oppgave.tildeltSaksbehandler.name ?? 'Laster...'} (${
+    oppgave.tildeltSaksbehandler.navIdent
+  })`;
 
   return (
     <Container>
@@ -56,8 +55,9 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   );
 };
 
-interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'typeId' | 'ytelseId' | 'tildeltSaksbehandlerident'> {
+interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'typeId' | 'ytelseId'> {
   tildeltSaksbehandlerNavn: string | null;
+  tildeltSaksbehandlerident: string | null;
 }
 
 const SelectSaksbehandler = ({

@@ -1,5 +1,6 @@
+import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { IHelper, INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
+import { IHelper, INavEmployee, IPartBase, ITildeltSaksbehandler, IVenteperiode } from './oppgave-common';
 
 type DateString = string; // LocalDate
 
@@ -27,7 +28,7 @@ export interface IOppgave {
   medunderskriver: IHelper;
   rol: IHelper;
   mottatt: DateString;
-  tildeltSaksbehandlerident: string | null;
+  tildeltSaksbehandler: ITildeltSaksbehandler | null;
   typeId: SaksTypeEnum;
   ytelseId: string;
   utfallId: UtfallEnum | null;

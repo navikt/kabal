@@ -3,7 +3,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
 import { useUser } from '@app/simple-api-state/use-user';
 import { StyledNewReply } from './styled-components';
@@ -18,7 +17,6 @@ interface NewCommentInThreadProps {
 
 export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
   const { data: bruker, isLoading: brukerIsLoading } = useUser();
-  const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
@@ -27,7 +25,7 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
     return null;
   }
 
-  if (typeof bruker === 'undefined' || brukerIsLoading || typeof signature === 'undefined' || oppgaveId === skipToken) {
+  if (typeof bruker === 'undefined' || brukerIsLoading || oppgaveId === skipToken) {
     return <Loader size="xlarge" />;
   }
 
@@ -38,10 +36,7 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
 
     await postReply({
       oppgaveId,
-      author: {
-        ident: bruker.navIdent,
-        name: signature?.customLongName ?? signature.longName,
-      },
+      author: { ident: bruker.navIdent, name: bruker.name },
       dokumentId: documentId,
       text,
       commentId: threadId,

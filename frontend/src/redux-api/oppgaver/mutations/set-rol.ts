@@ -32,6 +32,7 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
 
             if (draft.rol.flowState === FlowState.RETURNED) {
               draft.rol = {
+                ...draft.rol,
                 navIdent,
                 flowState: FlowState.NOT_SENT,
                 returnertdDate: null,
@@ -70,6 +71,7 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getRol', oppgaveId, (draft) => {
               draft.navIdent = rol.navIdent;
+              draft.name = rol.name;
               draft.flowState = rol.flowState;
               draft.modified = modified;
             }),

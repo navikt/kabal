@@ -1,7 +1,6 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { Name } from '@app/components/behandling/behandlingsdialog/common/name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 
@@ -13,14 +12,12 @@ export const Saksbehandler = () => {
     return null;
   }
 
-  const { tildeltSaksbehandlerident } = oppgave;
+  const { tildeltSaksbehandler } = oppgave;
 
   return (
     <Container>
       <Label size="small">Saksbehandler</Label>
-      <BodyShort>
-        {tildeltSaksbehandlerident === null ? 'Ikke tildelt' : <Name navIdent={tildeltSaksbehandlerident} />}
-      </BodyShort>
+      <BodyShort>{tildeltSaksbehandler === null ? 'Ikke tildelt' : tildeltSaksbehandler.name}</BodyShort>
     </Container>
   );
 };

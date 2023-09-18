@@ -20,6 +20,6 @@ export const useCanEditDocument = (): boolean => {
       return oppgave.medunderskriver.navIdent === user.navIdent;
     }
 
-    return oppgave.tildeltSaksbehandlerident === user.navIdent;
+    return oppgave.tildeltSaksbehandler?.navIdent === user.navIdent;
   }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, user, userIsLoading]);
 };

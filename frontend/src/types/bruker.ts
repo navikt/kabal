@@ -14,6 +14,7 @@ export interface ISettings {
 
 export interface IUserData {
   navIdent: string;
+  name: string;
   roller: Role[];
   enheter: IEnhet[];
   ansattEnhet: IEnhet;

@@ -7,7 +7,6 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRangePosition } from '@app/plate/hooks/use-range-position';
 import { useMyPlateEditorState } from '@app/plate/types';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
 import { useUser } from '@app/simple-api-state/use-user';
 import { StyledNewThread } from './styled-components';
@@ -24,7 +23,6 @@ export const NewComment = ({ container }: Props) => {
   const [postComment, { isLoading }] = usePostCommentMutation();
   const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
     useContext(SmartEditorContext);
-  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
   const position = useRangePosition(newCommentSelection, container);
   const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -51,13 +49,7 @@ export const NewComment = ({ container }: Props) => {
     return null;
   }
 
-  if (
-    signatureIsLoading ||
-    brukerIsLoading ||
-    typeof bruker === 'undefined' ||
-    typeof signature === 'undefined' ||
-    oppgaveId === skipToken
-  ) {
+  if (brukerIsLoading || typeof bruker === 'undefined' || oppgaveId === skipToken) {
     return <Loader size="xlarge" />;
   }
 
@@ -67,10 +59,7 @@ export const NewComment = ({ container }: Props) => {
     }
 
     await postComment({
-      author: {
-        ident: bruker.navIdent,
-        name: signature.customLongName ?? signature.longName,
-      },
+      author: { ident: bruker.navIdent, name: bruker.name },
       dokumentId: documentId,
       text,
       oppgaveId,

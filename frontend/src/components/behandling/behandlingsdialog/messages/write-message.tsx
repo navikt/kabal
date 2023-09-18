@@ -3,7 +3,6 @@ import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { useUser } from '@app/simple-api-state/use-user';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
@@ -15,7 +14,6 @@ export const WriteMessage = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
   const oppgaveId = useOppgaveId();
-  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   useEffect(() => {
     if (isSuccess) {
@@ -23,7 +21,7 @@ export const WriteMessage = () => {
     }
   }, [isSuccess, setMessage]);
 
-  if (signatureIsLoading || userIsLoading || typeof user === 'undefined' || typeof signature === 'undefined') {
+  if (userIsLoading || typeof user === 'undefined') {
     return <Loader size="xlarge" />;
   }
 
@@ -46,7 +44,7 @@ export const WriteMessage = () => {
       oppgaveId,
       text: message.trim(),
       author: {
-        name: signature.customLongName ?? signature.longName,
+        name: user.name,
         saksbehandlerIdent: user.navIdent,
       },
     });
