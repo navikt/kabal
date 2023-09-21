@@ -23,5 +23,4 @@ const StyledPanel = styled(Panel)`
   flex-direction: column;
   gap: 16px;
   box-shadow: var(--a-shadow-medium);
-  width: 400px;
 `;

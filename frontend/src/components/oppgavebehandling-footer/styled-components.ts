@@ -97,7 +97,9 @@ export const StyledFooter = styled.div<{ $type: FooterType }>`
   background-color: ${({ $type }) => getBackgroundColor($type)};
 `;
 
-export const StyledFinishOppgaveButtons = styled.div`
+export const StyledFinishOppgaveButtons = styled.div<{ $width: number }>`
   display: flex;
   justify-content: space-between;
+  gap: 16px;
+  width: ${({ $width }) => $width}px;
 `;
