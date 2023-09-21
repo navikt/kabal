@@ -1,5 +1,5 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
+import { Button, Modal, Tag } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
@@ -64,7 +64,7 @@ export const DocumentModalContent = ({ document }: Props) => {
           </Tag>
         </Row>
 
-        {canEditDocument ? (
+        {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
           <BottomAlignedRow>
             <StyledSetFilename document={document} />
             <Button
@@ -75,12 +75,6 @@ export const DocumentModalContent = ({ document }: Props) => {
               data-testid="document-title-edit-save-button"
             />
           </BottomAlignedRow>
-        ) : null}
-
-        {canEditDocument && document.type === DocumentTypeEnum.JOURNALFOERT ? (
-          <Alert variant="warning" size="small" inline>
-            Merk at du endrer navn på det originale journalførte dokumentet.
-          </Alert>
         ) : null}
 
         {canEditDocument && isMainDocument ? <SetDocumentType document={document} /> : null}

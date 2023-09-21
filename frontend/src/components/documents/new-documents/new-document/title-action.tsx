@@ -3,7 +3,7 @@ import { Button, CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
   document: IMainDocument;
@@ -15,10 +15,11 @@ interface Props {
 
 export const TitleAction = ({ setEditMode, editMode, className, document, parentDocument }: Props) => {
   const canEdit = useCanEditDocument(document, parentDocument);
+  const canRename = canEdit && document.type !== DocumentTypeEnum.JOURNALFOERT;
 
   const { tittel } = document;
 
-  if (!canEdit) {
+  if (!canRename) {
     return <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" className={className} />;
   }
 
