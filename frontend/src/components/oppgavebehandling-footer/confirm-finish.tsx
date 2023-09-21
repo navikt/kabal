@@ -25,14 +25,12 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const isOpphevetInTrygderetten =
     oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET;
 
-  const finishText = isOpphevetInTrygderetten
-    ? 'Fullfør registrering av resultatet fra Trygderetten uten å opprette ny ankeoppgave i Kabal'
-    : 'Fullfør';
+  const finishText = isOpphevetInTrygderetten ? 'Nei, fullfør uten å opprette ny oppgave i Kabal.' : 'Fullfør';
 
   return (
     <FooterPopup close={cancel}>
       <BodyLong>{getText(oppgave.typeId, oppgave.resultat.utfallId)}</BodyLong>
-      <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 700 : 400}>
+      <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 600 : 400}>
         {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
         <FinishButton>{finishText}</FinishButton>
         <Button
@@ -73,7 +71,7 @@ const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string
     }
 
     if (utfallId === UtfallEnum.OPPHEVET) {
-      return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», kan Kabal opprette en ny ankeoppgave som du skal behandle. Da finner du oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+      return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
     }
 
     return 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.';
@@ -83,9 +81,7 @@ const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string
 };
 
 const FinishOpphevetTRWithNyBehandling = () => (
-  <FinishButton nyBehandling>
-    Fullfør registrering av resultatet fra Trygderetten og opprett ny ankeoppgave i Kabal
-  </FinishButton>
+  <FinishButton nyBehandling>Ja, fullfør og opprett ny ankeoppgave i Kabal.</FinishButton>
 );
 
 interface FinishButtonProps {
