@@ -59,9 +59,20 @@ export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
   klager: IPart;
 }
 
-export interface IFinishOppgavebehandlingParams {
+export type IFinishOppgavebehandlingParams =
+  | IDefaultFinishOppgavebehandlingParams
+  | IFinishOppgavebehandlingOpphevetTRParams;
+
+interface IDefaultFinishOppgavebehandlingParams {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;
+  nyBehandling: false;
+}
+
+interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  utfall: UtfallEnum.OPPHEVET;
+  nyBehandling: boolean;
 }
 
 export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {

@@ -32,7 +32,10 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishOppgavebehandlingParams>({
-      query: ({ oppgaveId }) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer`, method: 'POST' }),
+      query: ({ oppgaveId, nyBehandling }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer?nybehandling=${nyBehandling}`,
+        method: 'POST',
+      }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {
         try {

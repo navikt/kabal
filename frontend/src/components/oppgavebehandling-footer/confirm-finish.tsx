@@ -6,6 +6,7 @@ import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveButtons } from './styled-components';
 
@@ -16,51 +17,24 @@ interface FinishProps {
 
 export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const { data: oppgave } = useOppgave();
-  const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
-  const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
-  const errorContext = useContext(ValidationErrorContext);
 
   if (!show || oppgave === undefined) {
     return null;
   }
 
-  const finish = async () => {
-    if (typeof oppgave === 'undefined') {
-      return;
-    }
+  const isOpphevetInTrygderetten =
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET;
 
-    finishOppgavebehandling({
-      oppgaveId: oppgave.id,
-      kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
-    })
-      .unwrap()
-      .then((res) => {
-        setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
-        errorContext?.setValidationSectionErrors([]);
-      })
-      .catch((error) => {
-        if (typeof errorContext !== 'undefined' && isReduxValidationResponse(error)) {
-          errorContext.setValidationSectionErrors(error.data.sections);
-        }
-      });
-  };
+  const finishText = isOpphevetInTrygderetten
+    ? 'Fullfør registrering av resultatet fra Trygderetten uten å opprette ny ankeoppgave i Kabal'
+    : 'Fullfør';
 
   return (
     <FooterPopup close={cancel}>
       <BodyLong>{getText(oppgave.typeId, oppgave.resultat.utfallId)}</BodyLong>
-      <StyledFinishOppgaveButtons>
-        <Button
-          variant="primary"
-          size="small"
-          type="button"
-          onClick={finish}
-          loading={hasBeenFinished || loader.isLoading}
-          disabled={hasBeenFinished || loader.isLoading}
-          data-testid="confirm-finish-klagebehandling-button"
-          icon={<CheckmarkIcon aria-hidden />}
-        >
-          Fullfør
-        </Button>
+      <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 700 : 400}>
+        {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
+        <FinishButton>{finishText}</FinishButton>
         <Button
           variant="secondary"
           type="button"
@@ -98,8 +72,82 @@ const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string
       return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Du finner oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
     }
 
+    if (utfallId === UtfallEnum.OPPHEVET) {
+      return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», kan Kabal opprette en ny ankeoppgave som du skal behandle. Da finner du oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+    }
+
     return 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.';
   }
 
   return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+};
+
+const FinishOpphevetTRWithNyBehandling = () => (
+  <FinishButton nyBehandling>
+    Fullfør registrering av resultatet fra Trygderetten og opprett ny ankeoppgave i Kabal
+  </FinishButton>
+);
+
+interface FinishButtonProps {
+  nyBehandling?: boolean;
+  children: string;
+}
+
+const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => {
+  const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
+  const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
+  const errorContext = useContext(ValidationErrorContext);
+  const { data: oppgave, isLoading } = useOppgave();
+
+  if (isLoading || oppgave === undefined) {
+    return null;
+  }
+
+  const finish = async () => {
+    if (typeof oppgave === 'undefined') {
+      return;
+    }
+
+    const params: IFinishOppgavebehandlingParams =
+      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET
+        ? {
+            oppgaveId: oppgave.id,
+            typeId: oppgave.typeId,
+            utfall: oppgave.resultat.utfallId,
+            kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
+            nyBehandling,
+          }
+        : {
+            oppgaveId: oppgave.id,
+            kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
+            nyBehandling: false,
+          };
+
+    finishOppgavebehandling(params)
+      .unwrap()
+      .then((res) => {
+        setHasBeenFinished(res.isAvsluttetAvSaksbehandler);
+        errorContext?.setValidationSectionErrors([]);
+      })
+      .catch((error) => {
+        if (typeof errorContext !== 'undefined' && isReduxValidationResponse(error)) {
+          errorContext.setValidationSectionErrors(error.data.sections);
+        }
+      });
+  };
+
+  return (
+    <Button
+      variant="primary"
+      size="small"
+      type="button"
+      onClick={finish}
+      loading={hasBeenFinished || loader.isLoading}
+      disabled={hasBeenFinished || loader.isLoading}
+      data-testid="confirm-finish-klagebehandling-button"
+      icon={<CheckmarkIcon aria-hidden />}
+    >
+      {children}
+    </Button>
+  );
 };
