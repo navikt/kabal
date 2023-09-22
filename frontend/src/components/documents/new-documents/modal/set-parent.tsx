@@ -56,7 +56,7 @@ export const SetParentDocument = ({ document }: Props) => {
         Vedlegg eller hoveddokument
       </Heading>
 
-      <MainDocument document={document} onClick={setParentFn} isLoading={isSetting} />
+      <MainDocument document={document} onClick={() => setParentFn(null)} isLoading={isSetting} />
 
       <RadioGroup
         size="small"
