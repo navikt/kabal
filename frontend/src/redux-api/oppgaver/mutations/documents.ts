@@ -286,10 +286,14 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
     uploadFileDocument: builder.mutation<IFileDocument, ICreateFileDocumentParams>({
-      query: ({ oppgaveId, file, dokumentTypeId }) => {
+      query: ({ oppgaveId, file, dokumentTypeId, parentId }) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('dokumentTypeId', dokumentTypeId);
+
+        if (typeof parentId === 'string') {
+          formData.append('parentId', parentId);
+        }
 
         return {
           url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/fil`,
@@ -327,7 +331,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           })),
         },
       }),
-      onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (
+        { oppgaveId, parentId, journalfoerteDokumenter, creatorIdent, creatorRole },
+        { dispatch, queryFulfilled },
+      ) => {
         const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
             const newDocuments = journalfoerteDokumenter
@@ -359,6 +366,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   harTilgangTilArkivvariant: doc.harTilgangTilArkivvariant,
                   datoOpprettet: doc.datoOpprettet,
                 },
+                creatorIdent,
+                creatorRole,
               }));
 
             return [...draft, ...newDocuments];

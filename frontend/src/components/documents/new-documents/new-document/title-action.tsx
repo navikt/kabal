@@ -7,14 +7,13 @@ import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents'
 
 interface Props {
   document: IMainDocument;
-  parentDocument?: IMainDocument;
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
   className?: string;
 }
 
-export const TitleAction = ({ setEditMode, editMode, className, document, parentDocument }: Props) => {
-  const canEdit = useCanEditDocument(document, parentDocument);
+export const TitleAction = ({ setEditMode, editMode, className, document }: Props) => {
+  const canEdit = useCanEditDocument(document);
   const canRename = canEdit && document.type !== DocumentTypeEnum.JOURNALFOERT;
 
   const { tittel } = document;

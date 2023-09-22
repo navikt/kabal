@@ -13,12 +13,10 @@ export const isApiError = (error: unknown): error is ApiError =>
   isGenericObject(error) &&
   'type' in error &&
   'title' in error &&
-  'detail' in error &&
   'status' in error &&
   'instance' in error &&
   typeof error.type === 'string' &&
   typeof error.title === 'string' &&
-  typeof error.detail === 'string' &&
   typeof error.status === 'number' &&
   typeof error.instance === 'string';
 

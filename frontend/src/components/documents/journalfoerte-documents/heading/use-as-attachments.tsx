@@ -9,11 +9,14 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
+  const { data: user } = useUser();
   const { getSelectedDocuments } = useContext(SelectContext);
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
@@ -25,14 +28,14 @@ export const UseAsAttachments = () => {
 
   const canEdit = (isSaksbehandler || isRol) && !isFinished && !isFeilregistrert;
 
-  if (oppgaveId === skipToken || !canEdit) {
+  if (oppgaveId === skipToken || !canEdit || user === undefined) {
     return null;
   }
 
   const options = data
     .filter((d) => {
       if (isRol) {
-        return d.parentId === null && d.isSmartDokument && d.templateId === TemplateIdEnum.ROL_NOTAT;
+        return d.parentId === null && d.isSmartDokument && d.templateId === TemplateIdEnum.ROL_QUESTIONS;
       }
 
       return d.parentId === null;
@@ -52,6 +55,8 @@ export const UseAsAttachments = () => {
           oppgaveId,
           parentId: target.value,
           journalfoerteDokumenter: getSelectedDocuments(),
+          creatorIdent: user.navIdent,
+          creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
         });
       }}
       value={NONE_SELECTED}

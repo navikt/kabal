@@ -20,10 +20,18 @@ export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   dokumentTypeId: DistribusjonsType.NOTAT,
 });
 
-export const ROL_NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.ROL_NOTAT,
+export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.ROL_QUESTIONS,
   type: TemplateTypeEnum.NOTAT,
-  tittel: 'Notat for rådgivende overlege',
+  tittel: 'Spørsmål til rådgivende overlege',
+  content: [createCurrentDate(), createSimpleParagraph()],
+  dokumentTypeId: DistribusjonsType.NOTAT,
+});
+
+export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.ROL_ANSWERS,
+  type: TemplateTypeEnum.NOTAT,
+  tittel: 'Svar fra rådgivende overlege',
   content: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
 });

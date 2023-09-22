@@ -1,7 +1,8 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Tag } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
+import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
+import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
@@ -11,16 +12,18 @@ import { SetDocumentType } from '@app/components/documents/new-documents/modal/s
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/new-documents/shared/set-filename';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
   IMainDocument,
 } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
 import { OPTIONS_MAP } from './set-type/options';
@@ -32,13 +35,7 @@ interface Props {
 export const DocumentModalContent = ({ document }: Props) => {
   const { validationErrors } = useContext(ModalContext);
 
-  const oppgaveId = useOppgaveId();
-  const { data: documents } = useGetDocumentsQuery(oppgaveId);
-  const parentDocument = useMemo(
-    () => documents?.find((d) => d.id === document.parentId),
-    [documents, document.parentId],
-  );
-  const canEditDocument = useCanEditDocument(document, parentDocument);
+  const canEditDocument = useCanEditDocument(document);
   const canDelete = useCanDeleteDocument(document);
   const isSaksbehandler = useIsSaksbehandler();
 
@@ -46,6 +43,7 @@ export const DocumentModalContent = ({ document }: Props) => {
 
   const isNotat = document.dokumentTypeId === DistribusjonsType.NOTAT;
   const isMainDocument = document.parentId === null;
+  const isRolQuestions = getIsRolQuestions(document);
 
   return (
     <>
@@ -57,11 +55,7 @@ export const DocumentModalContent = ({ document }: Props) => {
           <Tag variant="info" size="small" title="Dokumenttype">
             {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}
           </Tag>
-          <Tag variant="alt3" size="small" title="Opprettet">
-            <CalendarIcon aria-hidden />
-            &nbsp;
-            <DocumentDate document={document} />
-          </Tag>
+          <OpprettetTag document={document} />
         </Row>
 
         {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
@@ -77,9 +71,9 @@ export const DocumentModalContent = ({ document }: Props) => {
           </BottomAlignedRow>
         ) : null}
 
-        {canEditDocument && isMainDocument ? <SetDocumentType document={document} /> : null}
+        {canEditDocument && isMainDocument && !isRolQuestions ? <SetDocumentType document={document} /> : null}
 
-        {canEditDocument ? <SetParentDocument document={document} /> : null}
+        {canEditDocument && !isRolQuestions ? <SetParentDocument document={document} /> : null}
 
         {isSaksbehandler && !isNotat && isMainDocument ? <Receipients document={document} /> : null}
 
@@ -94,22 +88,49 @@ export const DocumentModalContent = ({ document }: Props) => {
   );
 };
 
+const OpprettetTag = ({ document }: { document: IMainDocument }) => {
+  if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
+    return null;
+  }
+
+  return (
+    <Tag variant="alt3" size="small" title="Opprettet">
+      <CalendarIcon aria-hidden />
+      &nbsp;
+      <DocumentDate document={document} />
+    </Tag>
+  );
+};
+
 interface IFinishButtonProps {
   document: IMainDocument;
 }
 
 const FinishButton = ({ document }: IFinishButtonProps) => {
   const isSaksbehandler = useIsSaksbehandler();
+  const { data: oppgave } = useOppgave();
+  const containsRolAttachments = useContainsRolAttachments(document);
 
-  if (!isSaksbehandler || document.parentId !== null) {
+  if (!isSaksbehandler || document.parentId !== null || oppgave === undefined) {
     return null;
   }
 
-  return document.dokumentTypeId !== DistribusjonsType.NOTAT ? (
-    <SendButtons document={document} />
-  ) : (
-    <ArchiveButtons document={document} />
-  );
+  const isNotat = document.dokumentTypeId !== DistribusjonsType.NOTAT;
+
+  const allowedToArchive =
+    oppgave !== undefined &&
+    (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+    (!containsRolAttachments || oppgave.rol.flowState === FlowState.RETURNED);
+
+  if (!allowedToArchive) {
+    return (
+      <Alert variant="info" size="small">
+        Kan ikke arkiveres før rådgivende overlege har returnert saken.
+      </Alert>
+    );
+  }
+
+  return isNotat ? <SendButtons document={document} /> : <ArchiveButtons document={document} />;
 };
 
 const Row = styled.div`

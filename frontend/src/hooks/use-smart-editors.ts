@@ -6,8 +6,6 @@ import { Role } from '@app/types/bruker';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
-const EMPTY_LIST: ISmartEditor[] = [];
-
 export const useSmartEditors = (oppgaveId: string | typeof skipToken): ISmartEditor[] | undefined => {
   const { data, isLoading } = useGetSmartEditorsQuery(oppgaveId === skipToken ? skipToken : { oppgaveId });
   const isRol = useIsRol();
@@ -17,13 +15,15 @@ export const useSmartEditors = (oppgaveId: string | typeof skipToken): ISmartEdi
     return undefined;
   }
 
+  const editors: ISmartEditor[] = [];
+
   if (hasSaksbehandlerRole) {
-    return data;
+    editors.push(...data.filter(({ templateId }) => templateId !== TemplateIdEnum.ROL_ANSWERS));
   }
 
   if (isRol) {
-    return data.filter(({ templateId }) => templateId === TemplateIdEnum.ROL_NOTAT);
+    editors.push(...data.filter(({ templateId }) => templateId === TemplateIdEnum.ROL_ANSWERS));
   }
 
-  return EMPTY_LIST;
+  return editors;
 };

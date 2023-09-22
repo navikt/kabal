@@ -13,16 +13,15 @@ import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents
 
 interface Props {
   document: IMainDocument;
-  parentDocument?: IMainDocument;
 }
 
-export const OpenModalButton = ({ document, parentDocument }: Props) => {
+export const OpenModalButton = ({ document }: Props) => {
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
   const { setDocument: setDocumentId } = useContext(ModalContext);
-  const canEditDocument = useCanEditDocument(document, parentDocument);
+  const canEditDocument = useCanEditDocument(document);
   const canDeleteDocument = useCanDeleteDocument(document);
 
   if (document.isMarkertAvsluttet) {
