@@ -1,6 +1,7 @@
 import { Select, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
+import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -20,7 +21,7 @@ export const SetDocumentType = ({ document }: Props) => {
     return null;
   }
 
-  if (!isSaksbehandler || document.isMarkertAvsluttet) {
+  if (!isSaksbehandler || document.isMarkertAvsluttet || getIsRolQuestions(document)) {
     return (
       <Tag variant="info" size="small">
         {OPTIONS_MAP[document.dokumentTypeId]}

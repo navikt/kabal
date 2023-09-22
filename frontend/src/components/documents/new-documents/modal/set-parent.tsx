@@ -29,8 +29,7 @@ export const SetParentDocument = ({ document }: Props) => {
 
     if (isRol) {
       return data.filter(
-        (d) =>
-          d.isSmartDokument && document.id !== d.id && d.parentId === null && d.templateId === TemplateIdEnum.ROL_NOTAT,
+        (d) => d.isSmartDokument && document.id !== d.id && d.templateId === TemplateIdEnum.ROL_QUESTIONS,
       );
     }
 

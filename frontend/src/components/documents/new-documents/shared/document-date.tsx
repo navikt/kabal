@@ -1,36 +1,13 @@
-import React, { HTMLAttributes, memo } from 'react';
+import React, { HTMLAttributes } from 'react';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { IJournalfoertDokumentReference } from '@app/types/documents/documents';
 
 interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
-  document: IMainDocument;
+  document: IJournalfoertDokumentReference;
 }
 
-export const DocumentDate = memo(
-  ({ document, ...attrs }: Props) => {
-    if (document.type === DocumentTypeEnum.JOURNALFOERT) {
-      return (
-        <time {...attrs} dateTime={document.journalfoertDokumentReference.datoOpprettet}>
-          {isoDateTimeToPrettyDate(document.journalfoertDokumentReference.datoOpprettet)}
-        </time>
-      );
-    }
-
-    return null;
-  },
-  (prevProps, nextProps) => {
-    if (
-      prevProps.document.type === DocumentTypeEnum.JOURNALFOERT &&
-      nextProps.document.type === DocumentTypeEnum.JOURNALFOERT
-    ) {
-      return (
-        prevProps.document.journalfoertDokumentReference.datoOpprettet ===
-        nextProps.document.journalfoertDokumentReference.datoOpprettet
-      );
-    }
-
-    return prevProps.document.type === nextProps.document.type;
-  },
+export const DocumentDate = ({ document, ...attrs }: Props) => (
+  <time {...attrs} dateTime={document.journalfoertDokumentReference.datoOpprettet}>
+    {isoDateTimeToPrettyDate(document.journalfoertDokumentReference.datoOpprettet)}
+  </time>
 );
-
-DocumentDate.displayName = 'DocumentDate';

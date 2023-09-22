@@ -1,14 +1,13 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useContext } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { isRolNotat } from '@app/components/documents/new-documents/helpers';
+import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, IJournalfoertDokumentReference, IMainDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
@@ -52,32 +51,33 @@ export const useCanDeleteDocument = (document: IMainDocument | null) => {
   const isRol = useIsRol();
   const isSaksbehandler = useIsSaksbehandler();
   const isOppgaveOpen = useIsOppgaveOpen();
-  const oppgaveId = useOppgaveId();
-  const { data: allDocuments = [] } = useGetDocumentsQuery(isRol ? oppgaveId : skipToken);
   const { data: oppgave } = useOppgave();
+  const containsRolAttachments = useContainsRolAttachments(document);
 
   if (document === null || document.isMarkertAvsluttet || isOppgaveOpen) {
     return false;
   }
 
   if (isSaksbehandler) {
-    return true;
+    if (document.creatorRole !== Role.KABAL_SAKSBEHANDLING) {
+      return false;
+    }
+
+    return !containsRolAttachments;
   }
 
   if (oppgave === undefined) {
     return false;
   }
 
-  if (isRol && document.parentId !== null && hasAccessToArchivedDocument(document) && isSentToRol(oppgave)) {
-    const parentDocument = allDocuments.find(({ id }) => id === document.parentId);
-
-    return parentDocument !== undefined && isRolNotat(parentDocument);
+  if (isRol) {
+    return canRolEditDocument(document, oppgave);
   }
 
   return false;
 };
 
-export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMainDocument) => {
+export const useCanEditDocument = (document: IMainDocument) => {
   const isRol = useIsRol();
   const isSaksbehandler = useIsSaksbehandler();
   const isOppgaveOpen = useIsOppgaveOpen();
@@ -94,16 +94,10 @@ export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMa
   }
 
   if (isSaksbehandler) {
-    return true;
+    return document.creatorRole === Role.KABAL_SAKSBEHANDLING;
   }
 
-  return (
-    isRol &&
-    parentDocument !== undefined &&
-    isRolNotat(parentDocument) &&
-    (isJournalfoert || isRolNotat(document)) &&
-    isSentToRol(oppgave)
-  );
+  return isRol && canRolEditDocument(document, oppgave);
 };
 
 const isSentToRol = (oppgave: IOppgavebehandling) =>
@@ -121,7 +115,23 @@ const hasAccessToArchivedDocument = (document: IMainDocument): document is IJour
   document.type === DocumentTypeEnum.JOURNALFOERT && document.journalfoertDokumentReference.harTilgangTilArkivvariant;
 
 const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: string): dragged is IMainDocument =>
-  dragged !== null && !dragged.isMarkertAvsluttet && dragged.id !== documentId && dragged.parentId !== documentId;
+  dragged !== null &&
+  !dragged.isMarkertAvsluttet &&
+  dragged.id !== documentId &&
+  dragged.parentId !== documentId &&
+  !getIsRolQuestions(dragged);
 
 const canRolActOnDocument = (document: IMainDocument, oppgave: IOppgavebehandling) =>
-  isRolNotat(document) && isSentToRol(oppgave);
+  getIsRolQuestions(document) && isSentToRol(oppgave);
+
+const canRolEditDocument = (document: IMainDocument, oppgave: IOppgavebehandling) => {
+  if (!isSentToRol(oppgave)) {
+    return false;
+  }
+
+  if (document.type === DocumentTypeEnum.JOURNALFOERT && !hasAccessToArchivedDocument(document)) {
+    return false;
+  }
+
+  return document.creatorRole === Role.KABAL_ROL;
+};

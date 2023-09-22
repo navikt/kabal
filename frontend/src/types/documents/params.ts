@@ -1,4 +1,5 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { Role } from '../bruker';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
 import { DistribusjonsType, UUID } from './documents';
@@ -10,6 +11,8 @@ export interface ISetParentParams extends IDocumentParams {
 export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebehandlingBaseParams {
   parentId: UUID;
   journalfoerteDokumenter: IArkivertDocument[];
+  creatorIdent: string;
+  creatorRole: Role.KABAL_SAKSBEHANDLING | Role.KABAL_ROL;
 }
 
 export interface ISetTypeParams extends IDocumentParams {
@@ -23,6 +26,7 @@ export interface ISetNameParams extends IDocumentParams {
 export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams {
   file: File;
   dokumentTypeId: DistribusjonsType;
+  parentId?: UUID;
 }
 
 interface IArchiveDocumentParams extends IDocumentParams {}

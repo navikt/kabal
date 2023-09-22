@@ -13,12 +13,12 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     createSmartDocument: builder.mutation<ISmartEditor, ICreateSmartDocumentParams>({
-      query: ({ oppgaveId, ...body }) => ({
+      query: ({ oppgaveId, content, dokumentTypeId, templateId, tittel, parentId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter`,
         method: 'POST',
-        body,
+        body: { content, dokumentTypeId, templateId, tittel, parentId },
       }),
-      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, creatorIdent, creatorRole }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           dispatch(
@@ -34,6 +34,8 @@ const smartEditorMutationSlice = oppgaverApi.injectEndpoints({
                 templateId: data.templateId,
                 tittel: data.tittel,
                 type: DocumentTypeEnum.SMART,
+                creatorIdent,
+                creatorRole,
               },
               ...draft,
             ]),

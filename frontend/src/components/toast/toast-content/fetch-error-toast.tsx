@@ -11,7 +11,7 @@ export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?
   toast.error(
     <>
       <Label size="small">{message}</Label>
-      <Details label="Uventet feil">{title}</Details>
+      <Details label="Årsak">{title}</Details>
       {typeof args === 'undefined' ? null : <Details label="URL">{typeof args === 'string' ? args : args.url}</Details>}
       <Details label="Statuskode">{status}</Details>
       <Details label="Detaljer">{detail}</Details>

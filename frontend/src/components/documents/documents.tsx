@@ -11,7 +11,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useDocumentsEnabled } from '@app/hooks/settings/use-setting';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents';
-import { UploadFileButton } from './upload-file/upload-file';
+import { UploadFile } from './upload-file/upload-file';
 
 export const Documents = () => {
   const { value: shown = true, isLoading: isSettingLoading } = useDocumentsEnabled();
@@ -49,7 +49,7 @@ const ExpandedDocuments = () => {
           <Heading size="medium" level="1">
             Dokumenter
           </Heading>
-          {isExpanded ? <UploadFileButton /> : null}
+          {isExpanded ? <UploadFile /> : null}
           <ToggleExpandedButton />
         </DocumentsHeader>
 

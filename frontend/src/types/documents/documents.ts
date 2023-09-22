@@ -1,3 +1,4 @@
+import { Role } from '../bruker';
 import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
@@ -43,6 +44,8 @@ interface IBaseDocument {
   isSmartDokument: boolean;
   isMarkertAvsluttet: boolean;
   parentId: UUID | null;
+  creatorIdent: string;
+  creatorRole: Role;
 }
 
 export interface IFileDocument extends IBaseDocument {

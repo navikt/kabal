@@ -13,25 +13,27 @@ import { documentCSS } from '@app/components/documents/styled-components/documen
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
 interface Props {
   document: IMainDocument;
-  parentDocument?: IMainDocument;
 }
 
 const EMPTY_LIST: IMainDocument[] = [];
 
-export const NewDocument = ({ document, parentDocument }: Props) => {
+export const NewDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data = EMPTY_LIST } = useGetDocumentsQuery(oppgaveId);
   const [isExpanded] = useIsExpanded();
   const cleanDragUI = useRef<() => void>(() => undefined);
   const { setDraggedDocument, clearDragState } = useContext(DragAndDropContext);
-  const isDraggable = useCanEditDocument(document, parentDocument);
+  const canEdit = useCanEditDocument(document);
+  const containsRolAttachments = useContainsRolAttachments(document);
+  const isDraggable = canEdit && !containsRolAttachments;
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -70,10 +72,12 @@ export const NewDocument = ({ document, parentDocument }: Props) => {
       }}
       draggable={isDraggable}
     >
-      <DocumentTitle document={document} parentDocument={parentDocument} />
+      <DocumentTitle document={document} />
       {isExpanded ? <SetDocumentType document={document} /> : null}
-      {isExpanded ? <StyledDate data-testid="new-document-date" document={document} /> : null}
-      <OpenModalButton document={document} parentDocument={parentDocument} />
+      {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
+        <StyledDate data-testid="new-document-date" document={document} />
+      ) : null}
+      <OpenModalButton document={document} />
     </StyledNewDocument>
   );
 };

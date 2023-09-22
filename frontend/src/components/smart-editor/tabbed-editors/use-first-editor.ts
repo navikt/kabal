@@ -16,8 +16,8 @@ export const useFirstEditor = (editors: ISmartEditor[]): ISmartEditor | null => 
   }
 
   if (isRol) {
-    return editors.find(({ templateId }) => templateId === TemplateIdEnum.ROL_NOTAT) ?? null;
+    return editors.find(({ templateId }) => templateId === TemplateIdEnum.ROL_ANSWERS) ?? null;
   }
 
-  return editors[0] ?? null;
+  return editors.filter(({ templateId }) => templateId !== TemplateIdEnum.ROL_ANSWERS)[0] ?? null;
 };
