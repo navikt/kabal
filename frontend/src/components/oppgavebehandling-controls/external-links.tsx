@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from '@navikt/ds-react';
 import React from 'react';
-import { EXTERNAL_URL_GOSYS, EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
+import { EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { ISakenGjelder } from '@app/types/oppgave-common';
@@ -9,18 +9,6 @@ import { ISakenGjelder } from '@app/types/oppgave-common';
 interface LinkProps {
   sakenGjelder: ISakenGjelder;
 }
-
-export const Gosys = ({ sakenGjelder }: LinkProps) => (
-  <Link
-    href={`${EXTERNAL_URL_GOSYS}/personoversikt/fnr=${sakenGjelder.id}`}
-    target="_blank"
-    aria-label="Ekstern lenke til Gosys for denne personen"
-    title="Åpne i ny fane"
-    rel="noreferrer"
-  >
-    Gosys <ExternalLinkIcon title="Ekstern lenke" />
-  </Link>
-);
 
 export const Modia = ({ sakenGjelder }: LinkProps) => (
   <Link

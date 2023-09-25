@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AaRegisteret, Ainntekt, Gosys, Modia } from './external-links';
+import { AaRegisteret, Ainntekt, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';
 
@@ -19,7 +19,6 @@ export const OppgavebehandlingControls = () => {
       <UserInfo {...oppgave} />
       <PanelSwitches />
       <OppgavebehandlingInformation>
-        <Gosys sakenGjelder={sakenGjelder} />
         <Modia sakenGjelder={sakenGjelder} />
         <AaRegisteret />
         <Ainntekt />
