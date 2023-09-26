@@ -1,17 +1,16 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useEffect } from 'react';
-import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { SectionContainer, SectionTypeEnum } from '@app/plate/components/section-container';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
 import { IndividualSignature } from '@app/plate/components/signature/individual-signature';
 import { MISSING_TITLE } from '@app/plate/components/signature/title';
 import { EditorValue, ISignature, SignatureElement } from '@app/plate/types';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
@@ -84,19 +83,15 @@ export const Signature = ({
   children,
   editor,
 }: PlateRenderElementProps<EditorValue, SignatureElement>) => {
-  const isSelected = useSelected();
-
   useSignatureData(editor, element);
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
       <SectionContainer
-        $isSelected={isSelected}
-        $sectionType={SectionTypeEnum.SIGNATURE}
-        onDragStart={(event) => event.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        sectionType={SectionTypeEnum.SIGNATURE}
+        menu={{
+          title: 'Signatur',
+          items: <AddNewParagraphs editor={editor} element={element} />,
         }}
       >
         <StyledCheckboxContainer>
@@ -119,9 +114,6 @@ export const Signature = ({
           <IndividualSignature signature={element.saksbehandler} />
         </StyledSignatures>
         {children}
-        <SectionToolbar contentEditable={false} $sectionType={SectionTypeEnum.SIGNATURE} $label="Signatur">
-          <AddNewParagraphs editor={editor} element={element} />
-        </SectionToolbar>
       </SectionContainer>
     </PlateElement>
   );

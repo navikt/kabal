@@ -1,11 +1,10 @@
-import { Tooltip } from '@navikt/ds-react';
+import { Dropdown } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { PlateEditor, findDescendant, insertElements } from '@udecode/plate-common';
+import { PlateEditor, findDescendant, focusEditor, insertElements } from '@udecode/plate-common';
 import React from 'react';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RootElement } from '@app/plate/types';
 import { nextPath } from '@app/plate/utils/queries';
-import { StyledSectionToolbarButton } from '../styled-components';
 
 interface Props {
   element: RootElement;
@@ -20,43 +19,35 @@ export const AddNewParagraphs = ({ editor, element }: Props) => (
 );
 
 export const AddNewParagraphBelow = ({ editor, element }: Props) => (
-  <Tooltip content="Legg til nytt avsnitt under" delay={0}>
-    <StyledSectionToolbarButton
-      title="Legg til nytt avsnitt under"
-      icon={<TextAddSpaceAfter size={20} aria-hidden />}
-      onClick={() => {
-        const entry = findDescendant(editor, { at: [], match: (n) => n === element });
+  <Dropdown.Menu.GroupedList.Item
+    onClick={() => {
+      const entry = findDescendant(editor, { at: [], match: (n) => n === element });
 
-        if (entry === undefined) {
-          return;
-        }
+      if (entry === undefined) {
+        return;
+      }
 
-        insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]) });
-      }}
-      variant="tertiary"
-      size="xsmall"
-      contentEditable={false}
-    />
-  </Tooltip>
+      focusEditor(editor);
+      insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]), select: true });
+    }}
+  >
+    <TextAddSpaceAfter size="20px" aria-hidden /> Legg til nytt avsnitt under
+  </Dropdown.Menu.GroupedList.Item>
 );
 
 export const AddNewParagraphAbove = ({ editor, element }: Props) => (
-  <Tooltip content="Legg til nytt avsnitt over" delay={0}>
-    <StyledSectionToolbarButton
-      title="Legg til nytt avsnitt over"
-      icon={<TextAddSpaceBefore size={20} aria-hidden />}
-      onClick={() => {
-        const entry = findDescendant<RootElement>(editor, { at: [], match: (n) => n === element });
+  <Dropdown.Menu.GroupedList.Item
+    onClick={() => {
+      const entry = findDescendant<RootElement>(editor, { at: [], match: (n) => n === element });
 
-        if (entry === undefined) {
-          return;
-        }
+      if (entry === undefined) {
+        return;
+      }
 
-        insertElements(editor, createSimpleParagraph(), { at: entry[1] });
-      }}
-      variant="tertiary"
-      size="xsmall"
-      contentEditable={false}
-    />
-  </Tooltip>
+      focusEditor(editor);
+      insertElements(editor, createSimpleParagraph(), { at: entry[1], select: true });
+    }}
+  >
+    <TextAddSpaceBefore size="20px" aria-hidden /> Legg til nytt avsnitt over
+  </Dropdown.Menu.GroupedList.Item>
 );

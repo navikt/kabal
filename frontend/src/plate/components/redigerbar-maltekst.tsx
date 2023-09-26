@@ -1,19 +1,13 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Loader, Tooltip } from '@navikt/ds-react';
+import { Dropdown, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
-import { useSelected } from 'slate-react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { NONE } from '@app/components/smart-editor-texts/types';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import {
-  SectionContainer,
-  SectionToolbar,
-  SectionTypeEnum,
-  StyledSectionToolbarButton,
-} from '@app/plate/components/styled-components';
+import { SectionContainer, SectionTypeEnum } from '@app/plate/components/section-container';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
@@ -34,9 +28,7 @@ export const RedigerbarMaltekst = ({
     templateId,
   });
 
-  const isSelected = useSelected();
-
-  const [getTexts, { isLoading }] = useLazyGetTextsQuery();
+  const [getTexts, { isLoading, isFetching }] = useLazyGetTextsQuery();
 
   const path = findNodePath(editor, element);
 
@@ -88,8 +80,7 @@ export const RedigerbarMaltekst = ({
         <SectionContainer
           data-element="redigerbar-maltekst"
           data-section={element.section}
-          $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
-          $isSelected={isSelected}
+          sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
         >
           <Loader title="Laster..." />
         </SectionContainer>
@@ -102,27 +93,20 @@ export const RedigerbarMaltekst = ({
       <SectionContainer
         data-element="redigerbar-maltekst"
         data-section={element.section}
-        $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
-        $isSelected={isSelected}
+        sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
+        menu={{
+          title: 'Redigerbar maltekst',
+          items: (
+            <>
+              <AddNewParagraphs editor={editor} element={element} />
+              <Dropdown.Menu.GroupedList.Item onClick={insertRedigerbarMaltekst} disabled={isLoading || isFetching}>
+                <ArrowCirclepathIcon aria-hidden height={20} width={20} /> Tilbakestill tekst
+              </Dropdown.Menu.GroupedList.Item>
+            </>
+          ),
+        }}
       >
         {children}
-        <SectionToolbar
-          contentEditable={false}
-          $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
-          $label="Redigerbar maltekst"
-        >
-          <AddNewParagraphs editor={editor} element={element} />
-          <Tooltip content="Tilbakestill tekst" delay={0}>
-            <StyledSectionToolbarButton
-              title="Tilbakestill tekst"
-              icon={<ArrowCirclepathIcon aria-hidden />}
-              onClick={insertRedigerbarMaltekst}
-              variant="tertiary"
-              size="xsmall"
-              contentEditable={false}
-            />
-          </Tooltip>
-        </SectionToolbar>
       </SectionContainer>
     </PlateElement>
   );

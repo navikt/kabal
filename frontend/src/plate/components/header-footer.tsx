@@ -2,13 +2,12 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { SectionContainer, SectionTypeEnum } from '@app/plate/components/section-container';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
@@ -30,7 +29,6 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
   const [initialized, setInitialized] = useState(false);
   const { templateId } = useContext(SmartEditorContext);
-  const isSelected = useSelected();
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
@@ -97,13 +95,12 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
         e.stopPropagation();
       }}
     >
-      <SectionContainer contentEditable={false} $isSelected={isSelected} $sectionType={SectionTypeEnum.FOOTER}>
+      <SectionContainer
+        sectionType={sectionType}
+        menu={{ title: label, items: <AddNewParagraph editor={editor} element={element} /> }}
+      >
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
-
-        <SectionToolbar contentEditable={false} $sectionType={sectionType} $label={label}>
-          <AddNewParagraph editor={editor} element={element} />
-        </SectionToolbar>
       </SectionContainer>
     </PlateElement>
   );

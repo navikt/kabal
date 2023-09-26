@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from 'react';
 
-type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
+type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent | Event) => void;
 
 export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
@@ -35,12 +35,18 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
     };
 
     window.addEventListener('mousedown', mouseListener);
-    document.addEventListener('touchstart', mouseListener);
+    window.addEventListener('touchstart', mouseListener);
     window.addEventListener('keydown', escapeListener);
+    window.addEventListener('contextmenu', mouseListener);
+    window.addEventListener(SMART_EDITOR_CONTEXT_MENU_EVENT_TYPE, callback);
 
     return () => {
       window.removeEventListener('mousedown', mouseListener);
-      document.removeEventListener('touchstart', mouseListener);
+      window.removeEventListener('touchstart', mouseListener);
       window.removeEventListener('keydown', escapeListener);
+      window.removeEventListener('contextmenu', mouseListener);
+      window.removeEventListener(SMART_EDITOR_CONTEXT_MENU_EVENT_TYPE, callback);
     };
   }, [callback, ref, children]);
+
+export const SMART_EDITOR_CONTEXT_MENU_EVENT_TYPE = 'smarteditor:contextmenu';

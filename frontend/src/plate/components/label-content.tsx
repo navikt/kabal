@@ -1,14 +1,13 @@
 import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
 import React, { useEffect, useState } from 'react';
-import { useSelected } from 'slate-react';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
+import { SectionContainer, SectionTypeEnum } from '@app/plate/components/section-container';
 import { EditorValue, LabelContentElement } from '@app/plate/types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { StyledParagraph } from './paragraph';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from './styled-components';
 
 export const LabelContent = ({
   element,
@@ -18,7 +17,6 @@ export const LabelContent = ({
 }: PlateRenderElementProps<EditorValue, LabelContentElement>) => {
   const { data: oppgave } = useOppgave();
   const [result, setResult] = useState<string | null>(null);
-  const isSelected = useSelected();
 
   useEffect(() => {
     if (result === null) {
@@ -48,12 +46,15 @@ export const LabelContent = ({
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
-      <SectionContainer $isSelected={isSelected} $sectionType={SectionTypeEnum.LABEL}>
+      <SectionContainer
+        sectionType={SectionTypeEnum.LABEL}
+        menu={{
+          title: 'Fra saken',
+          items: <AddNewParagraphs editor={editor} element={element} />,
+        }}
+      >
         <StyledParagraph $isEmpty={result === null}>{result}</StyledParagraph>
         {children}
-        <SectionToolbar contentEditable={false} $sectionType={SectionTypeEnum.LABEL} $label="Fra saken">
-          <AddNewParagraphs editor={editor} element={element} />
-        </SectionToolbar>
       </SectionContainer>
     </PlateElement>
   );
