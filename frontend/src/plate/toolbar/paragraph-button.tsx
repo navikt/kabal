@@ -1,5 +1,5 @@
 import { TextDescription } from '@styled-icons/fluentui-system-regular';
-import { setNodes, usePlateEditorRef } from '@udecode/plate-common';
+import { setNodes, useEditorRef } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import React from 'react';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
@@ -7,7 +7,7 @@ import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 
 export const ParagraphButton = () => {
-  const editor = usePlateEditorRef();
+  const editor = useEditorRef();
   const paragraphActive = useIsElementActive(ELEMENT_PARAGRAPH);
   const unchangeable = useIsUnchangeable();
 

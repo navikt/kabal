@@ -8,8 +8,8 @@ import {
   PluginOptions,
   TElement,
   TText,
-  usePlateEditorRef,
-  usePlateEditorState,
+  useEditorRef,
+  useEditorState,
 } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
@@ -280,5 +280,5 @@ export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P, EditorValue, R
 
 export type EditorAutoformatRule = AutoformatRule<EditorValue, RichTextEditor>;
 
-export const useMyPlateEditorRef = (id?: PlateId) => usePlateEditorRef<EditorValue, RichTextEditor>(id);
-export const useMyPlateEditorState = (id?: PlateId) => usePlateEditorState<EditorValue, RichTextEditor>(id);
+export const useMyPlateEditorRef = (id?: PlateId) => useEditorRef<EditorValue, RichTextEditor>(id);
+export const useMyPlateEditorState = (id?: PlateId) => useEditorState<EditorValue, RichTextEditor>(id);

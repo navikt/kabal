@@ -38,6 +38,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
   const oppgaveId = useOppgaveId();
   const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
   const { newCommentSelection } = useContext(SmartEditorContext);
+  const canEdit = useCanEditDocument();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -57,6 +58,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
       <PlateEditorContextComponent
         initialValue={initialValue}
         id={id}
+        readOnly={!canEdit}
         onChange={onChange}
         plugins={saksbehandlerPlugins}
         decorate={([node, path]) => {
@@ -128,7 +130,7 @@ const StickyRightContainer = styled.div`
 `;
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
-  const readOnly = useCanEditDocument();
+  const canEdit = useCanEditDocument();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -138,7 +140,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <NewComment container={containerRef.current} />
 
-      <PlateEditor id={id} readOnly={readOnly} />
+      <PlateEditor id={id} readOnly={!canEdit} />
     </Sheet>
   );
 };

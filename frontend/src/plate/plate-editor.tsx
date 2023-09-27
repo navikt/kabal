@@ -1,30 +1,15 @@
-import {
-  AnyObject,
-  Plate,
-  PlatePlugin,
-  PlateProvider,
-  PlateProviderProps,
-  RenderLeafFn,
-  TEditableProps,
-} from '@udecode/plate-common';
+import { AnyObject, Plate, PlateContent, PlatePlugin, PlateProps, RenderLeafFn } from '@udecode/plate-common';
 import React, { useRef } from 'react';
 import { renderLeaf as defaultRenderLeaf } from '@app/plate/leaf/render-leaf';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
 
-const editableProps: TEditableProps<EditorValue> = {
-  spellCheck: true,
-  autoFocus: false,
-  className: 'smart-editor',
-};
-
 interface PlateEditorContextComponentProps {
   id: string;
   initialValue: EditorValue;
-  onChange: (value: EditorValue) => void;
+  onChange?: (value: EditorValue) => void;
   children: React.ReactNode;
-  readonly?: boolean;
-  renderLeaf?: RenderLeafFn<EditorValue>;
-  decorate?: PlateProviderProps<EditorValue, RichTextEditor>['decorate'];
+  readOnly?: boolean;
+  decorate?: PlateProps<EditorValue, RichTextEditor>['decorate'];
   plugins: PlatePlugin<AnyObject, EditorValue, RichTextEditor>[];
 }
 
@@ -33,34 +18,33 @@ export const PlateEditorContextComponent = ({
   initialValue,
   onChange,
   children,
-  readonly,
-  renderLeaf = defaultRenderLeaf,
+  readOnly,
   plugins,
   decorate,
 }: PlateEditorContextComponentProps) => {
   const editorRef = useRef<RichTextEditor>(null);
 
   return (
-    <PlateProvider<EditorValue, RichTextEditor>
+    <Plate<EditorValue, RichTextEditor>
       editorRef={editorRef}
       initialValue={initialValue}
       plugins={plugins}
-      renderLeaf={renderLeaf}
-      readOnly={readonly}
+      readOnly={readOnly}
       id={id}
       onChange={onChange}
       decorate={decorate}
     >
       {children}
-    </PlateProvider>
+    </Plate>
   );
 };
 
 interface PlateEditorProps {
   id: string;
   readOnly?: boolean;
+  renderLeaf?: RenderLeafFn<EditorValue>;
 }
 
-export const PlateEditor = ({ id, readOnly = false }: PlateEditorProps) => (
-  <Plate<EditorValue, RichTextEditor> editableProps={editableProps} id={id} readOnly={readOnly} />
+export const PlateEditor = ({ id, readOnly = false, renderLeaf = defaultRenderLeaf }: PlateEditorProps) => (
+  <PlateContent className="smart-editor" spellCheck id={id} readOnly={readOnly} renderLeaf={renderLeaf} />
 );
