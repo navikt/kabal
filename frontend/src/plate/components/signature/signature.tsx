@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useEffect } from 'react';
-import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -84,14 +83,12 @@ export const Signature = ({
   children,
   editor,
 }: PlateRenderElementProps<EditorValue, SignatureElement>) => {
-  const isSelected = useSelected();
-
   useSignatureData(editor, element);
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
       <SectionContainer
-        $isSelected={isSelected}
+        data-element={element.type}
         $sectionType={SectionTypeEnum.SIGNATURE}
         onDragStart={(event) => event.preventDefault()}
         onDrop={(e) => {
@@ -119,7 +116,7 @@ export const Signature = ({
           <IndividualSignature signature={element.saksbehandler} />
         </StyledSignatures>
         {children}
-        <SectionToolbar contentEditable={false} $sectionType={SectionTypeEnum.SIGNATURE} $label="Signatur">
+        <SectionToolbar>
           <AddNewParagraphs editor={editor} element={element} />
         </SectionToolbar>
       </SectionContainer>
