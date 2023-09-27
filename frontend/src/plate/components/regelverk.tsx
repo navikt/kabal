@@ -1,18 +1,12 @@
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateElement, PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate-common';
 import React, { useCallback, useContext } from 'react';
-import { useSelected } from 'slate-react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import {
-  SectionContainer,
-  SectionToolbar,
-  SectionTypeEnum,
-  StyledSectionToolbarButton,
-} from '@app/plate/components/styled-components';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
 import { EditorValue, RegelverkContainerElement, RegelverkElement, TemplateSections } from '@app/plate/types';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
@@ -30,8 +24,6 @@ export const Regelverk = ({
     sections: [TemplateSections.REGELVERK], // Unncessary?
     templateId,
   });
-
-  const isSelected = useSelected();
 
   const [getTexts] = useLazyGetTextsQuery();
 
@@ -77,12 +69,11 @@ export const Regelverk = ({
         e.stopPropagation();
       }}
     >
-      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} $isSelected={isSelected} data-element="regelverk">
+      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
-        <SectionToolbar $label="Regelverk" $sectionType={SectionTypeEnum.REGELVERK} contentEditable={false}>
+        <SectionToolbar contentEditable={false}>
           <Tooltip content="Oppdater regelverk" delay={0}>
-            <StyledSectionToolbarButton
-              title="Oppdater regelverk"
+            <Button
               icon={<GavelSoundBlockIcon aria-hidden />}
               onClick={insertRegelverk}
               variant="tertiary"

@@ -1,4 +1,3 @@
-import { Button } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { StyledParagraph } from '@app/plate/components/paragraph';
 import { StyledPageBreak } from './page-break';
@@ -24,55 +23,40 @@ const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
 };
 
 const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
-  [SectionTypeEnum.MALTEKST]: 'var(--a-purple-500)',
-  [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--a-green-500)',
-  [SectionTypeEnum.REGELVERK]: 'var(--a-blue-500)',
-  [SectionTypeEnum.HEADER]: 'var(--a-gray-500)',
-  [SectionTypeEnum.FOOTER]: 'var(--a-gray-500)',
-  [SectionTypeEnum.SIGNATURE]: 'var(--a-limegreen-800)',
-  [SectionTypeEnum.LABEL]: 'var(--a-gray-500)',
+  [SectionTypeEnum.MALTEKST]: 'var(--a-purple-300)',
+  [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--a-green-100)',
+  [SectionTypeEnum.REGELVERK]: 'var(--a-blue-200)',
+  [SectionTypeEnum.HEADER]: 'var(--a-gray-300)',
+  [SectionTypeEnum.FOOTER]: 'var(--a-gray-300)',
+  [SectionTypeEnum.SIGNATURE]: 'var(--a-limegreen-300)',
+  [SectionTypeEnum.LABEL]: 'var(--a-gray-200)',
 };
 
-interface SectionToolbarProps {
-  $label: string;
-  $sectionType: SectionTypeEnum;
-}
-
-export const SectionToolbar = styled.div<SectionToolbarProps>`
+export const SectionToolbar = styled.div`
   position: absolute;
-  right: -1px;
-  bottom: 100%;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   display: flex;
   flex-direction: row;
   align-items: center;
   column-gap: 4px;
-  background-color: white;
-  border-top-right-radius: 4px;
+  background-color: var(--a-bg-subtle);
   border-top-left-radius: 4px;
-  background-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
-  padding: 4px;
-  color: white;
+  border-bottom-left-radius: 4px;
+  padding: 0;
+  color: var(--a-icon-action);
   font-size: 12pt;
+  box-shadow: var(--a-shadow-medium);
 
   &:focus {
     opacity: 1;
   }
-
-  &::after {
-    content: '${(props) => props.$label}';
-    color: white;
-    padding-left: 4px;
-  }
-`;
-
-export const StyledSectionToolbarButton = styled(Button)`
-  color: white;
 `;
 
 interface SectionContainerProps {
-  $isSelected: boolean;
   $sectionType: SectionTypeEnum;
 }
 
@@ -82,23 +66,26 @@ export const SectionContainer = styled.div<SectionContainerProps>`
   z-index: 0;
   background-color: transparent;
   user-select: text;
-
   color: ${(props) => FONT_COLOR_MAP[props.$sectionType]};
 
-  outline-width: 1px;
-  outline-style: solid;
-  outline-color: ${(props) => (props.$isSelected ? PRIMARY_COLOR_MAP[props.$sectionType] : 'transparent')};
-  transition: outline-color 0.2s ease-in-out;
-
-  border-radius: var(--a-border-radius-medium);
-  border-top-right-radius: 0;
-
-  > ${SectionToolbar} {
-    opacity: ${(props) => (props.$isSelected ? 1 : 0)};
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -8px;
+    z-index: 0;
+    transition: border-left-color 0.2s ease-in-out;
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: transparent;
   }
 
   &:hover {
-    outline-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
+    &::before {
+      border-left-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
+    }
 
     > ${SectionToolbar} {
       opacity: 1;
@@ -109,6 +96,7 @@ export const SectionContainer = styled.div<SectionContainerProps>`
     z-index: -1;
   }
 
+  /* Hide empty paragraph placeholders */
   &[data-element='maltekst'] ${StyledParagraph}::before {
     content: '';
   }

@@ -1,5 +1,5 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Loader, Tooltip } from '@navikt/ds-react';
+import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import {
   PlateElement,
   PlateRenderElementProps,
@@ -10,18 +10,12 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import React, { useContext, useEffect } from 'react';
-import { useSelected } from 'slate-react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { NONE } from '@app/components/smart-editor-texts/types';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
-import {
-  SectionContainer,
-  SectionToolbar,
-  SectionTypeEnum,
-  StyledSectionToolbarButton,
-} from '@app/plate/components/styled-components';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { EditorValue, EmptyVoidElement, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
 import { useGetTextsQuery } from '@app/redux-api/texts';
@@ -40,7 +34,6 @@ export const Maltekst = ({
     templateId,
   });
   const { data, isLoading, isFetching, refetch } = useGetTextsQuery(query);
-  const isSelected = useSelected();
 
   useEffect(() => {
     if (isLoading || isFetching || data === undefined) {
@@ -70,7 +63,11 @@ export const Maltekst = ({
   if (isLoading) {
     return (
       <PlateElement asChild attributes={attributes} element={element} editor={editor} suppressContentEditableWarning>
-        <SectionContainer data-element="maltekst" $sectionType={SectionTypeEnum.MALTEKST} $isSelected={isSelected}>
+        <SectionContainer
+          data-element={element.type}
+          data-section={element.section}
+          $sectionType={SectionTypeEnum.MALTEKST}
+        >
           <Loader title="Laster..." />
         </SectionContainer>
       </PlateElement>
@@ -102,16 +99,15 @@ export const Maltekst = ({
       }}
     >
       <SectionContainer
-        data-element="maltekst"
+        data-element={element.type}
         data-section={element.section}
         $sectionType={SectionTypeEnum.MALTEKST}
-        $isSelected={isSelected}
       >
         {children}
-        <SectionToolbar $sectionType={SectionTypeEnum.MALTEKST} $label="Maltekst" contentEditable={false}>
+        <SectionToolbar contentEditable={false}>
           <AddNewParagraphs editor={editor} element={element} />
           <Tooltip content="Oppdater til siste versjon" delay={0}>
-            <StyledSectionToolbarButton
+            <Button
               title="Oppdater til siste versjon"
               icon={<ArrowCirclepathIcon aria-hidden />}
               onClick={refetch}

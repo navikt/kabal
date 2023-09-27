@@ -2,7 +2,6 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
@@ -30,7 +29,6 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
   const [initialized, setInitialized] = useState(false);
   const { templateId } = useContext(SmartEditorContext);
-  const isSelected = useSelected();
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
@@ -80,8 +78,6 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
     }
   }, [element, initialized, loadMaltekst, query]);
 
-  const sectionType = element.type === ELEMENT_HEADER ? SectionTypeEnum.HEADER : SectionTypeEnum.FOOTER;
-  const label = element.type === ELEMENT_HEADER ? 'Topptekst' : 'Bunntekst';
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 
   return (
@@ -97,11 +93,10 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
         e.stopPropagation();
       }}
     >
-      <SectionContainer contentEditable={false} $isSelected={isSelected} $sectionType={SectionTypeEnum.FOOTER}>
+      <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
-
-        <SectionToolbar contentEditable={false} $sectionType={sectionType} $label={label}>
+        <SectionToolbar>
           <AddNewParagraph editor={editor} element={element} />
         </SectionToolbar>
       </SectionContainer>
