@@ -1,7 +1,6 @@
 import {
   findNode,
   focusEditor,
-  insertElements,
   insertFragment,
   isElementEmpty,
   isExpanded,
@@ -9,7 +8,6 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, ParagraphElement, RichTextEditor } from '@app/plate/types';
 
 export const insertGodFormulering = (editor: RichTextEditor, content: EditorValue) => {
@@ -20,11 +18,12 @@ export const insertGodFormulering = (editor: RichTextEditor, content: EditorValu
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
       insertFragment(editor, structuredClone(content), { voids: false });
-      insertElements(editor, createSimpleParagraph(), { select: true });
     });
   });
 
-  focusEditor(editor);
+  setTimeout(() => {
+    focusEditor(editor);
+  });
 };
 
 export const isAvailable = (editor: RichTextEditor): boolean => {
