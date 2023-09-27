@@ -45,15 +45,8 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <PlateEditorContextComponent
-            initialValue={content}
-            onChange={() => {}}
-            renderLeaf={renderReadOnlyLeaf}
-            id={id}
-            readonly
-            plugins={godeFormuleringerPlugins}
-          >
-            <PlateEditor id={id} readOnly />
+          <PlateEditorContextComponent initialValue={content} id={id} readOnly plugins={godeFormuleringerPlugins}>
+            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
           </PlateEditorContextComponent>
         </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />

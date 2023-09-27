@@ -1,4 +1,4 @@
-import { isCollapsed, isEditorFocused, someNode, usePlateEditorRef, usePlateSelection } from '@udecode/plate-common';
+import { isCollapsed, isEditorFocused, someNode, useEditorRef, useEditorSelection } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 import React from 'react';
 import { styled } from 'styled-components';
@@ -21,8 +21,8 @@ const FLOATING_TOOLBAR_HEIGHT = 36;
 const OFFSET = FLOATING_TOOLBAR_OFFSET + FLOATING_TOOLBAR_HEIGHT;
 
 const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps) => {
-  const editor = usePlateEditorRef();
-  const selection = usePlateSelection(editorId);
+  const editor = useEditorRef();
+  const selection = useEditorSelection(editorId);
   const isInTable = someNode(editor, { match: { type: ELEMENT_TABLE } });
   const position = useRangePosition(isInTable ? null : selection, container);
   const isFocused = isEditorFocused(editor);

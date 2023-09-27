@@ -1,4 +1,4 @@
-import { findNode, isElement, usePlateEditorState } from '@udecode/plate-common';
+import { findNode, isElement, useEditorState } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
@@ -13,7 +13,7 @@ import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 
 export const FloatingSaksbehandlerToolbarButtons = () => {
-  const editor = usePlateEditorState();
+  const editor = useEditorState();
 
   const activeElement = findNode(editor, {
     match: (n) => isElement(n) && n.type !== ELEMENT_REDIGERBAR_MALTEKST && n.type !== ELEMENT_MALTEKST,

@@ -1,4 +1,4 @@
-import { PlateElement, PlateRenderElementProps, usePlateEditorRef } from '@udecode/plate-common';
+import { PlateElement, PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
@@ -38,7 +38,7 @@ export const CurrentDate = (props: Props) => {
 
 const RenderCurrentDate = memo<Props & DateParts>(
   ({ year, month, day, children, attributes, element }) => {
-    const editor = usePlateEditorRef();
+    const editor = useEditorRef();
     const isSelected = useSelected();
 
     const isoDate = `${year}-${zeroPad(month + 1)}-${zeroPad(day)}`;
