@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
+import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
 import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -51,9 +52,11 @@ export const AttachmentList = ({ parentDocument }: Props) => {
   }
 
   const [pdfOrSmartDocuments, journalfoertDocumentReferences] = attachments;
+  const attachmentCount = pdfOrSmartDocuments.length + journalfoertDocumentReferences.length;
 
   return (
     <StyledAttachmentList data-testid="new-attachments-list">
+      {attachmentCount >= 2 ? <AttachmentsOverview documentId={parentDocument.id} /> : null}
       {pdfOrSmartDocuments.map((attachment) => (
         <Attachment key={attachment.id} attachment={attachment} />
       ))}

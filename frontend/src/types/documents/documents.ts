@@ -8,12 +8,14 @@ export enum DocumentTypeEnum {
   SMART = 'SMART',
   UPLOADED = 'UPLOADED',
   JOURNALFOERT = 'JOURNALFOERT',
+  VEDLEGGSOVERSIKT = 'VEDLEGGSOVERSIKT',
 }
 
 export const DOCUMENT_TYPE_NAMES: Record<DocumentTypeEnum, string> = {
   [DocumentTypeEnum.SMART]: 'Smartdokument',
   [DocumentTypeEnum.UPLOADED]: 'Opplastet dokument',
   [DocumentTypeEnum.JOURNALFOERT]: 'Journalført dokument',
+  [DocumentTypeEnum.VEDLEGGSOVERSIKT]: 'Vedleggsoversikt',
 };
 
 export enum DistribusjonsType {

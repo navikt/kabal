@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
+import { DocumentIcon, ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
@@ -117,7 +117,7 @@ const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
 
 interface RadioOptionProps {
   value: string;
-  type: DocumentTypeEnum;
+  type: ModalDocumentType;
   text: string;
 }
 

@@ -3,8 +3,10 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
 
+export type ModalDocumentType = DocumentTypeEnum.SMART | DocumentTypeEnum.UPLOADED | DocumentTypeEnum.JOURNALFOERT;
+
 interface Props {
-  type: DocumentTypeEnum;
+  type: ModalDocumentType;
 }
 
 export const DocumentIcon = ({ type }: Props) => {

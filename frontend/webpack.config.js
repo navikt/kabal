@@ -53,7 +53,7 @@ module.exports = (_env, { mode }) => ({
     historyApiFallback: true,
     proxy: [
       {
-        context: ['/api', '/arkivert-dokument', '/kombinert-dokument', '/nytt-dokument'],
+        context: ['/api', '/arkivert-dokument', '/kombinert-dokument', '/nytt-dokument', '/vedleggsoversikt'],
         target: 'https://kabal.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,

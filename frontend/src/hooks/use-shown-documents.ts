@@ -54,6 +54,10 @@ export const useShownDocuments = (): ShowDocumentResult => {
       }
     }
 
+    if (onlyDocument.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
+      return 'Vedleggsoversikt';
+    }
+
     return null;
   }, [documentsInProgress, journalpostDocuments, showDocumentList]);
 

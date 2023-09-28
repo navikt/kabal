@@ -88,7 +88,7 @@ const StyledDate = styled(DocumentDate)`
   text-overflow: ellipsis;
 `;
 
-const StyledNewDocument = styled.article<{ $isExpanded: boolean }>`
+export const StyledNewDocument = styled.article<{ $isExpanded: boolean }>`
   ${documentCSS}
   ${({ $isExpanded }) => ($isExpanded ? expandedNewDocumentsGridCSS : collapsedNewDocumentsGridCSS)}
 
