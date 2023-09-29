@@ -21,18 +21,24 @@ export enum Fields {
   Action = 'action',
 }
 
-const SIZES: Record<Fields, string> = {
-  [Fields.Expand]: '20px',
-  [Fields.SelectRow]: '20px',
-  [Fields.Title]: 'auto',
-  [Fields.Tema]: '85px',
-  [Fields.Date]: '86px',
-  [Fields.AvsenderMottaker]: '200px',
-  [Fields.Saksnummer]: '135px',
-  [Fields.Type]: '82px',
-  [Fields.Action]: '32px',
-  [Fields.ResetFilters]: '32px',
+export const SIZES: Record<Fields, number> = {
+  [Fields.Expand]: 20,
+  [Fields.SelectRow]: 20,
+  [Fields.Title]: -1,
+  [Fields.Tema]: 85,
+  [Fields.Date]: 86,
+  [Fields.AvsenderMottaker]: 200,
+  [Fields.Saksnummer]: 135,
+  [Fields.Type]: 82,
+  [Fields.Action]: 32,
+  [Fields.ResetFilters]: 32,
 };
 
 export const getFieldNames = (fields: Fields[]): string => fields.join(' ');
-export const getFieldSizes = (fields: Fields[]): string => fields.map((field) => SIZES[field]).join(' ');
+export const getFieldSizes = (fields: Fields[]): string => fields.map(getFieldSize).join(' ');
+
+const getFieldSize = (field: Fields): string => {
+  const size = SIZES[field];
+
+  return size === -1 ? 'auto' : `${size}px`;
+};

@@ -69,7 +69,7 @@ const ExpandedDocuments = () => {
 const Container = styled.div<{ $isExpanded: boolean }>`
   display: flex;
   flex-direction: column;
-  width: ${({ $isExpanded }) => ($isExpanded ? 'auto' : '350px')};
+  width: auto;
   height: 100%;
   overflow-y: hidden;
 `;

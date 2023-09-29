@@ -1,5 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Fields, SIZES } from '@app/components/documents/journalfoerte-documents/grid';
 import {
   StyledDocumentTitle,
   StyledTitleAction,
@@ -16,7 +17,10 @@ import {
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useArchivedDocumentsFullTitle } from '@app/hooks/settings/use-archived-documents-setting';
+import {
+  useArchivedDocumentsColumns,
+  useArchivedDocumentsFullTitle,
+} from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
@@ -177,10 +181,23 @@ export const DocumentTitle = ({ document }: Props) => {
 
 const useMaxWidth = (document: IMainDocument): string => {
   const { value: fullTitle } = useArchivedDocumentsFullTitle();
+  const [isExpanded] = useIsExpanded();
+  const { columns } = useArchivedDocumentsColumns();
 
   if (fullTitle) {
     return 'unset';
   }
 
-  return document.parentId === null ? '712px' : '862px';
+  if (isExpanded) {
+    const size: number =
+      (columns.TEMA ? SIZES[Fields.Tema] : 0) +
+      (columns.TYPE ? SIZES[Fields.Type] : 0) +
+      (columns.AVSENDER_MOTTAKER ? SIZES[Fields.AvsenderMottaker] : 0) +
+      (columns.DATO_OPPRETTET ? SIZES[Fields.Date] : 0) +
+      (columns.SAKSNUMMER ? SIZES[Fields.Saksnummer] : 0);
+
+    return document.parentId === null ? `${size + 124}px` : `${size + 274}px`;
+  }
+
+  return document.parentId === null ? '328px' : '300px';
 };
