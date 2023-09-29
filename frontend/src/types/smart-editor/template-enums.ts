@@ -10,4 +10,5 @@ export enum TemplateIdEnum {
   KLAGEVEDTAK = 'klagevedtak',
   ROL_QUESTIONS = 'rol-questions',
   ROL_ANSWERS = 'rol-answers',
+  SVAR_PAA_INNSYNSBEGJAERING = 'svar_på_innsynsbegjaering',
 }

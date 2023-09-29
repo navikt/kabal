@@ -4,6 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import { getIsInnsynsbegaering } from '@app/components/documents/new-documents/hooks/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -27,7 +28,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
   const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
 
-  if (oppgaveId === skipToken || isFinished || isFeilregistrert) {
+  if (oppgaveId === skipToken || isFinished || isFeilregistrert || getIsInnsynsbegaering(document)) {
     return null;
   }
 

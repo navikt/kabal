@@ -55,13 +55,13 @@ export const AttachmentList = ({ parentDocument }: Props) => {
   return (
     <StyledAttachmentList data-testid="new-attachments-list">
       {pdfOrSmartDocuments.map((attachment) => (
-        <Attachment key={attachment.id} attachment={attachment} />
+        <Attachment key={attachment.id} attachment={attachment} parentDocument={parentDocument} />
       ))}
 
       {pdfOrSmartDocuments.length === 0 || journalfoertDocumentReferences.length === 0 ? null : <StyledHr />}
 
       {journalfoertDocumentReferences.map((attachment) => (
-        <Attachment key={attachment.id} attachment={attachment} />
+        <Attachment key={attachment.id} attachment={attachment} parentDocument={parentDocument} />
       ))}
     </StyledAttachmentList>
   );
@@ -69,9 +69,10 @@ export const AttachmentList = ({ parentDocument }: Props) => {
 
 interface AttachmentProps {
   attachment: IMainDocument;
+  parentDocument: IMainDocument;
 }
 
-const Attachment = ({ attachment }: AttachmentProps) => (
+const Attachment = ({ attachment, parentDocument }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
@@ -79,7 +80,7 @@ const Attachment = ({ attachment }: AttachmentProps) => (
     data-documentid={attachment.id}
     data-documenttype="attachment"
   >
-    <NewDocument document={attachment} />
+    <NewDocument document={attachment} parentDocument={parentDocument} />
   </StyledAttachmentListItem>
 );
 

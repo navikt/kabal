@@ -2,9 +2,9 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { useCanDropOnDocument } from '@app/components/documents/new-documents/hooks/use-can-drop-on-document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,

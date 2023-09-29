@@ -3,6 +3,8 @@ import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import { useCanDeleteDocument } from '@app/components/documents/new-documents/hooks/use-can-delete-document';
+import { useCanEditDocument } from '@app/components/documents/new-documents/hooks/use-can-edit-document';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
@@ -13,7 +15,6 @@ import { DocumentDate } from '@app/components/documents/new-documents/shared/doc
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/new-documents/shared/set-filename';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import {

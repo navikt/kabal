@@ -4,11 +4,19 @@ import { IMutableSmartEditorTemplate, TemplateTypeEnum } from '@app/types/smart-
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { createCurrentDate, createFooter, createHeader, createSignature, createSimpleParagraph } from './helpers';
 
+const EMPTY_BREV_CONTENT = [
+  createCurrentDate(),
+  createHeader(),
+  createSimpleParagraph(),
+  createSignature(),
+  createFooter(),
+];
+
 export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.GENERELT_BREV,
   type: TemplateTypeEnum.GENERELL,
   tittel: 'Generelt brev',
-  content: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
+  content: EMPTY_BREV_CONTENT,
   dokumentTypeId: DistribusjonsType.BREV,
 });
 
@@ -34,4 +42,12 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Svar fra rådgivende overlege',
   content: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
+});
+
+export const SVAR_PAA_INNSYNSBEGJAERING_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.SVAR_PAA_INNSYNSBEGJAERING,
+  type: TemplateTypeEnum.GENERELL,
+  tittel: 'Svar på innsynsbegjæring',
+  content: EMPTY_BREV_CONTENT,
+  dokumentTypeId: DistribusjonsType.BREV,
 });

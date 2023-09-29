@@ -6,7 +6,12 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
+import {
+  ANKE_I_TRYGDERETTEN_TEMPLATES,
+  ANKE_TEMPLATES,
+  FINISHED_TEMLATES,
+  KLAGE_TEMPLATES,
+} from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useUser } from '@app/simple-api-state/use-user';
@@ -42,7 +47,7 @@ export const NewDocument = ({ onCreate }: Props) => {
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
 
-  if (isFinished || isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
+  if (isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
     return null;
   }
 
@@ -76,7 +81,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {getTemplates(oppgave.typeId).map((template) => (
+        {getTemplates(oppgave.typeId, isFinished).map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -106,7 +111,11 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
   }
 };
 
-const getTemplates = (type: SaksTypeEnum) => {
+const getTemplates = (type: SaksTypeEnum, isFinished: boolean) => {
+  if (isFinished) {
+    return FINISHED_TEMLATES;
+  }
+
   switch (type) {
     case SaksTypeEnum.KLAGE:
       return KLAGE_TEMPLATES;

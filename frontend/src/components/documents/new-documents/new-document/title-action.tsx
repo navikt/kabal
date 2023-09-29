@@ -2,7 +2,7 @@ import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useCanEditDocument } from '@app/components/documents/new-documents/hooks/use-can-edit-document';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
