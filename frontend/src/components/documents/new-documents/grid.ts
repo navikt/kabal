@@ -1,41 +1,24 @@
-import { css } from 'styled-components';
-
-const documentsGridCSS = css`
-  display: grid;
-  grid-column-gap: 8px;
-  align-items: center;
-  padding-left: 6px;
-  padding-right: 0;
-`;
-
 export enum Fields {
   Title = 'title',
-  DocumentType = 'document-type',
-  Date = 'date',
+  TypeOrDate = 'document-type',
   Action = 'action',
 }
 
-const SIZES: Record<Fields, string> = {
-  [Fields.Title]: 'auto',
-  [Fields.DocumentType]: '160px',
-  [Fields.Date]: '86px',
-  [Fields.Action]: '32px',
+const SIZES: Record<Fields, number> = {
+  [Fields.Title]: -1,
+  [Fields.TypeOrDate]: 170,
+  [Fields.Action]: 32,
 };
 
-const getFieldNames = (fields: Fields[]): string => fields.join(' ');
-const getFieldSizes = (fields: Fields[]): string => fields.map((field) => SIZES[field]).join(' ');
+export const getFieldNames = (fields: Fields[]): string => fields.join(' ');
+export const getFieldSizes = (fields: Fields[]): string => fields.map(toWidth).join(' ');
 
-const COLLAPSED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.Action];
+const toWidth = (field: Fields): string => {
+  const size = SIZES[field];
 
-export const collapsedNewDocumentsGridCSS = css`
-  ${documentsGridCSS}
-  grid-template-columns: ${getFieldSizes(COLLAPSED_NEW_DOCUMENT_FIELDS)};
-  grid-template-areas: '${getFieldNames(COLLAPSED_NEW_DOCUMENT_FIELDS)}';
-`;
-const EXPANDED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.DocumentType, Fields.Date, Fields.Action];
+  return size === -1 ? '1fr' : `${size}px`;
+};
 
-export const expandedNewDocumentsGridCSS = css`
-  ${documentsGridCSS}
-  grid-template-columns: ${getFieldSizes(EXPANDED_NEW_DOCUMENT_FIELDS)};
-  grid-template-areas: '${getFieldNames(EXPANDED_NEW_DOCUMENT_FIELDS)}';
-`;
+export const COLLAPSED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.Action];
+export const EXPANDED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];
+export const EXPANDED_NEW_ATTACHMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];

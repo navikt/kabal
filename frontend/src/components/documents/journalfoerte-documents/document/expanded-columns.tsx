@@ -3,6 +3,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsFilterSaksId, useDocumentsFilterTema } from '@app/hooks/settings/use-setting';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -20,18 +21,25 @@ export const ExpandedColumns = ({ document }: Props) => {
   const { setValue: setTema } = useDocumentsFilterTema();
 
   const temaName = useFullTemaNameFromIdOrLoading(tema);
+  const { columns } = useArchivedDocumentsColumns();
 
   return (
     <>
-      <TemaButton $area={Fields.Tema} onClick={() => setTema([tema ?? 'UNKNOWN'])} title={temaName}>
-        {temaName}
-      </TemaButton>
-      <StyledDate document={document} />
-      <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
-      <SaksIdButton size="small" variant="tertiary" onClick={() => setSaksId([sak?.fagsakId ?? 'NONE'])}>
-        {sak?.fagsakId ?? 'Ingen'}
-      </SaksIdButton>
-      <JournalposttypeTag type={journalposttype} />
+      {columns.TEMA ? (
+        <TemaButton $area={Fields.Tema} onClick={() => setTema([tema ?? 'UNKNOWN'])} title={temaName}>
+          {temaName}
+        </TemaButton>
+      ) : null}
+      {columns.DATO_OPPRETTET ? <StyledDate document={document} /> : null}
+      {columns.AVSENDER_MOTTAKER ? (
+        <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
+      ) : null}
+      {columns.SAKSNUMMER ? (
+        <SaksIdButton size="small" variant="tertiary" onClick={() => setSaksId([sak?.fagsakId ?? 'NONE'])}>
+          {sak?.fagsakId ?? 'Ingen'}
+        </SaksIdButton>
+      ) : null}
+      {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
     </>
   );
 };

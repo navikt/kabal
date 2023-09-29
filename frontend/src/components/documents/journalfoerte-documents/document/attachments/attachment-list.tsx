@@ -2,7 +2,10 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { memo, useContext } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { StyledAttachmentList, StyledAttachmentListItem } from '../../../styled-components/attachment-list';
+import {
+  JournalfoerteDocumentsAttachments,
+  StyledAttachmentListItem,
+} from '../../../styled-components/attachment-list';
 import { Attachment } from './attachment';
 
 interface Props {
@@ -19,7 +22,7 @@ export const AttachmentList = memo(
     }
 
     return (
-      <StyledAttachmentList data-testid="oppgavebehandling-documents-all-vedlegg-list">
+      <JournalfoerteDocumentsAttachments data-testid="oppgavebehandling-documents-all-vedlegg-list">
         {document.vedlegg.map((vedlegg) => (
           <AttachmentListItem
             key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
@@ -29,7 +32,7 @@ export const AttachmentList = memo(
             isSelected={isSelected({ journalpostId: document.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId })}
           />
         ))}
-      </StyledAttachmentList>
+      </JournalfoerteDocumentsAttachments>
     );
   },
   (prevProps, nextProps) =>
