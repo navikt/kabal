@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
+import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
+import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
@@ -10,7 +12,11 @@ import {
   IMainDocument,
   ISmartDocument,
 } from '@app/types/documents/documents';
-import { StyledAttachmentList, StyledAttachmentListItem } from '../styled-components/attachment-list';
+import {
+  NewDocAttachmentsContainer,
+  StyledAttachmentList,
+  StyledAttachmentListItem,
+} from '../styled-components/attachment-list';
 
 interface Props {
   parentDocument: IMainDocument;
@@ -19,6 +25,7 @@ interface Props {
 export const AttachmentList = ({ parentDocument }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
+  const [isExpanded] = useIsExpanded();
 
   const attachments = useMemo<[(IFileDocument | ISmartDocument)[], IJournalfoertDokumentReference[]]>(() => {
     if (data === undefined) {
@@ -46,24 +53,33 @@ export const AttachmentList = ({ parentDocument }: Props) => {
     ];
   }, [data, parentDocument.id]);
 
-  if (isLoading || typeof data === 'undefined') {
-    return null;
-  }
-
   const [pdfOrSmartDocuments, journalfoertDocumentReferences] = attachments;
 
+  const hasAttachments = pdfOrSmartDocuments.length !== 0 || journalfoertDocumentReferences.length !== 0;
+
+  if (isLoading || typeof data === 'undefined') {
+    return (
+      <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
+        {isExpanded ? <NewAttachmentButtons document={parentDocument} /> : null}
+      </NewDocAttachmentsContainer>
+    );
+  }
+
   return (
-    <StyledAttachmentList data-testid="new-attachments-list">
-      {pdfOrSmartDocuments.map((attachment) => (
-        <Attachment key={attachment.id} attachment={attachment} />
-      ))}
+    <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
+      {isExpanded ? <NewAttachmentButtons document={parentDocument} /> : null}
+      <StyledAttachmentList data-testid="new-attachments-list">
+        {pdfOrSmartDocuments.map((attachment) => (
+          <Attachment key={attachment.id} attachment={attachment} />
+        ))}
 
-      {pdfOrSmartDocuments.length === 0 || journalfoertDocumentReferences.length === 0 ? null : <StyledHr />}
+        {pdfOrSmartDocuments.length === 0 || journalfoertDocumentReferences.length === 0 ? null : <StyledHr />}
 
-      {journalfoertDocumentReferences.map((attachment) => (
-        <Attachment key={attachment.id} attachment={attachment} />
-      ))}
-    </StyledAttachmentList>
+        {journalfoertDocumentReferences.map((attachment) => (
+          <Attachment key={attachment.id} attachment={attachment} />
+        ))}
+      </StyledAttachmentList>
+    </NewDocAttachmentsContainer>
   );
 };
 
@@ -88,6 +104,7 @@ const StyledHr = styled.div`
   margin: 0;
   margin-top: 12px;
   margin-bottom: 12px;
+  margin-left: 4px;
   border: none;
   border-bottom: 1px solid var(--a-border-subtle);
 

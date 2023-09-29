@@ -67,7 +67,7 @@ const useSetting = (property: string, syncBetweenTabs: boolean = false): Setting
 
 const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
 
-const useBooleanSetting = (property: string): Setting<boolean> => {
+export const useBooleanSetting = (property: string): Setting<boolean> => {
   const { value, setValue, ...rest } = useSetting(property);
 
   const parsedValue = value === undefined ? undefined : value === 'true';
@@ -100,7 +100,7 @@ export const useNumberSetting = (property: string): Setting<number> => {
   };
 };
 
-const useJsonSetting = <T>(property: string): Setting<T> => {
+export const useJsonSetting = <T>(property: string): Setting<T> => {
   const { value, setValue, ...rest } = useSetting(property);
 
   const parsedValue = useMemo(() => (value === undefined ? undefined : (JSON.parse(value) as T)), [value]);

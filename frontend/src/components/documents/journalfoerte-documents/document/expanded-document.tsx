@@ -60,7 +60,7 @@ const StyledExpandedDocument = styled.div`
 
 const TopRow = styled.div`
   display: grid;
-  grid-template-columns: 150px 210px 110px auto;
+  grid-template-columns: repeat(4, auto);
   grid-column-gap: 16px;
 `;
 

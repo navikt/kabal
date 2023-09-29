@@ -3,9 +3,12 @@ import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
+  COLLAPSED_NEW_DOCUMENT_FIELDS,
+  EXPANDED_NEW_ATTACHMENT_FIELDS,
+  EXPANDED_NEW_DOCUMENT_FIELDS,
   Fields,
-  collapsedNewDocumentsGridCSS,
-  expandedNewDocumentsGridCSS,
+  getFieldNames,
+  getFieldSizes,
 } from '@app/components/documents/new-documents/grid';
 import { OpenModalButton } from '@app/components/documents/new-documents/new-document/open-modal-button';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
@@ -29,6 +32,7 @@ export const NewDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data = EMPTY_LIST } = useGetDocumentsQuery(oppgaveId);
   const [isExpanded] = useIsExpanded();
+  const isAttachment = document.parentId !== null;
   const cleanDragUI = useRef<() => void>(() => undefined);
   const { setDraggedDocument, clearDragState } = useContext(DragAndDropContext);
   const canEdit = useCanEditDocument(document);
@@ -61,6 +65,7 @@ export const NewDocument = ({ document }: Props) => {
   return (
     <StyledNewDocument
       $isExpanded={isExpanded}
+      $isAttachment={isAttachment}
       data-documentname={document.tittel}
       data-documentid={document.id}
       data-testid="new-document-list-item-content"
@@ -73,7 +78,7 @@ export const NewDocument = ({ document }: Props) => {
       draggable={isDraggable}
     >
       <DocumentTitle document={document} />
-      {isExpanded ? <SetDocumentType document={document} /> : null}
+      {isExpanded && !isAttachment ? <SetDocumentType {...document} templateId={document.templateId} /> : null}
       {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
         <StyledDate data-testid="new-document-date" document={document} />
       ) : null}
@@ -83,14 +88,33 @@ export const NewDocument = ({ document }: Props) => {
 };
 
 const StyledDate = styled(DocumentDate)`
-  grid-area: ${Fields.Date};
+  grid-area: ${Fields.TypeOrDate};
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const StyledNewDocument = styled.article<{ $isExpanded: boolean }>`
+const getGridFields = ({ $isExpanded, $isAttachment }: StlyedNewDocumentProps) => {
+  if (!$isExpanded) {
+    return COLLAPSED_NEW_DOCUMENT_FIELDS;
+  }
+
+  return $isAttachment ? EXPANDED_NEW_ATTACHMENT_FIELDS : EXPANDED_NEW_DOCUMENT_FIELDS;
+};
+
+interface StlyedNewDocumentProps {
+  $isExpanded: boolean;
+  $isAttachment: boolean;
+}
+
+const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
   ${documentCSS}
-  ${({ $isExpanded }) => ($isExpanded ? expandedNewDocumentsGridCSS : collapsedNewDocumentsGridCSS)}
+  display: grid;
+  grid-column-gap: 8px;
+  align-items: center;
+  padding-left: 6px;
+  padding-right: 0;
+  grid-template-columns: ${(props) => getFieldSizes(getGridFields(props))};
+  grid-template-areas: '${(props) => getFieldNames(getGridFields(props))}';
 
   &:hover {
     background-color: var(--a-surface-hover);

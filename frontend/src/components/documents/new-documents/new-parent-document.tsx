@@ -2,7 +2,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -14,7 +13,6 @@ import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { IMainDocument } from '@app/types/documents/documents';
 import { AttachmentList } from './attachment-list';
-import { NewAttachmentButtons } from './new-attachment-buttons';
 import { NewDocument } from './new-document/new-document';
 
 interface Props {
@@ -31,7 +29,6 @@ export const NewParentDocument = ({ document }: Props) => {
   const dragEnterCount = useRef(0);
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
   const isDropTarget = useCanDropOnDocument(document);
-  const [isExpanded] = useIsExpanded();
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLLIElement>) => {
@@ -111,7 +108,7 @@ export const NewParentDocument = ({ document }: Props) => {
       $isDragOver={isDragOver}
     >
       <NewDocument document={document} />
-      {isExpanded ? <NewAttachmentButtons document={document} /> : null}
+
       <AttachmentList parentDocument={document} />
     </StyledParentDocumentListItem>
   );

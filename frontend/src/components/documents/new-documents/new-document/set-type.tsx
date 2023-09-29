@@ -5,33 +5,29 @@ import { getIsRolQuestions } from '@app/components/documents/new-documents/helpe
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument, ISmartDocument } from '@app/types/documents/documents';
 import { OPTIONS_LIST, OPTIONS_MAP } from '../modal/set-type/options';
 
-interface Props {
-  document: IMainDocument;
+interface Props extends Pick<IMainDocument, 'id' | 'isMarkertAvsluttet' | 'dokumentTypeId' | 'isSmartDokument'> {
+  templateId?: ISmartDocument['templateId'];
 }
 
-export const SetDocumentType = ({ document }: Props) => {
+export const SetDocumentType = ({ id, dokumentTypeId, isMarkertAvsluttet, isSmartDokument, templateId }: Props) => {
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
   const isSaksbehandler = useIsSaksbehandler();
 
-  if (document.parentId !== null) {
-    return null;
-  }
-
-  if (!isSaksbehandler || document.isMarkertAvsluttet || getIsRolQuestions(document)) {
+  if (!isSaksbehandler || isMarkertAvsluttet || getIsRolQuestions({ isSmartDokument, templateId })) {
     return (
       <Tag variant="info" size="small">
-        {OPTIONS_MAP[document.dokumentTypeId]}
+        {OPTIONS_MAP[dokumentTypeId]}
       </Tag>
     );
   }
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     if (isDocumentType(target.value) && oppgaveId !== skipToken) {
-      setType({ oppgaveId, dokumentId: document.id, dokumentTypeId: target.value });
+      setType({ oppgaveId, dokumentId: id, dokumentTypeId: target.value });
     }
   };
 
@@ -42,7 +38,7 @@ export const SetDocumentType = ({ document }: Props) => {
       hideLabel
       size="small"
       onChange={onChange}
-      value={document.dokumentTypeId}
+      value={dokumentTypeId}
     >
       {OPTIONS_LIST.map(({ label, value }) => (
         <option key={value} value={value}>
