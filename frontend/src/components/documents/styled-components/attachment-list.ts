@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 const StyledDocumentListItem = styled.li`
   display: block;
@@ -18,22 +18,40 @@ export const StyledAttachmentList = styled.ul`
   margin: 0;
   margin-left: 12px;
   list-style-type: none;
+`;
+
+const treeRootStructureCss = css`
+  content: '';
+  display: block;
+  width: 0;
+  position: absolute;
+  top: 0;
+  bottom: 16px;
+  border-left: 1px solid var(--a-border-subtle);
+`;
+
+export const JournalfoerteDocumentsAttachments = styled(StyledAttachmentList)`
+  position: relative;
 
   &::before {
-    content: '';
-    display: block;
-    width: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 16px;
-    border-left: 1px solid #c6c2bf;
+    ${treeRootStructureCss}
+    left: 4px;
+  }
+`;
+
+export const NewDocAttachmentsContainer = styled.div<{ $showTreeLine: boolean }>`
+  position: relative;
+
+  &::before {
+    ${treeRootStructureCss}
+    display: ${({ $showTreeLine }) => ($showTreeLine ? 'block' : 'none')};
+    left: 16px;
   }
 `;
 
 export const StyledAttachmentListItem = styled(StyledDocumentListItem)`
   position: relative;
-  padding-left: 12px;
+  padding-left: 16px;
   margin-left: 0;
   margin-right: 0;
 
@@ -42,8 +60,8 @@ export const StyledAttachmentListItem = styled(StyledDocumentListItem)`
     display: block;
     width: 12px;
     position: absolute;
-    left: 0;
+    left: 4px;
     top: 50%;
-    border-bottom: 1px solid #c6c2bf;
+    border-bottom: 1px solid var(--a-border-subtle);
   }
 `;

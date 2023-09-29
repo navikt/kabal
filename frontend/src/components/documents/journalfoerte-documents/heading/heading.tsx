@@ -35,22 +35,25 @@ export const JournalfoertHeading = memo(
 
     return (
       <Container $isExpanded={isExpanded}>
-        <Heading
-          size="xsmall"
-          level="1"
-          title={`Viser ${slicedFilteredDocuments.length} av ${filteredLength} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
-        >
-          Journalførte dokumenter ({slicedFilteredDocuments.length}/{totalLengthOfMainDocuments})
-        </Heading>
+        <LeftGroup>
+          <Menu />
+
+          <Heading
+            size="xsmall"
+            level="1"
+            title={`Viser ${slicedFilteredDocuments.length} av ${filteredLength} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
+          >
+            Journalførte dokumenter ({slicedFilteredDocuments.length}/{totalLengthOfMainDocuments})
+          </Heading>
+        </LeftGroup>
+
         <InvisibleWarning
           slicedFilteredDocuments={slicedFilteredDocuments}
           allDocuments={allDocuments}
           totalLengthWithVedlegg={totalCount}
         />
-        <Buttons $isExpanded={isExpanded}>
-          <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
-          <Menu />
-        </Buttons>
+
+        <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
       </Container>
     );
   },
@@ -75,6 +78,13 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
   );
 };
 
+const LeftGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+`;
+
 const Container = styled.div<{ $isExpanded: boolean }>`
   display: flex;
   flex-direction: ${({ $isExpanded }) => ($isExpanded ? 'row' : 'column')};
@@ -85,14 +95,4 @@ const Container = styled.div<{ $isExpanded: boolean }>`
   column-gap: 16px;
   row-gap: 8px;
   flex-shrink: 0;
-`;
-
-const Buttons = styled.div<{ $isExpanded: boolean }>`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  align-items: center;
-  width: ${({ $isExpanded }) => ($isExpanded ? 'auto' : '100%')};
-  justify-content: flex-start;
-  min-height: 34px;
 `;

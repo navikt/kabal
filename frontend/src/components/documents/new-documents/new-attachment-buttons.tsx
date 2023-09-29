@@ -94,5 +94,5 @@ const Container = styled.div`
   align-items: center;
   flex-direction: row;
   column-gap: 8px;
-  margin-left: 24px;
+  margin-left: 28px;
 `;

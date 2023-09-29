@@ -6,19 +6,15 @@ import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
 import { SelectRow } from '@app/components/documents/journalfoerte-documents/document/shared/select-row';
-import {
-  Fields,
-  collapsedJournalfoerteDocumentsGridCSS,
-  expandedJournalfoerteDocumentsGridCSS,
-} from '@app/components/documents/journalfoerte-documents/grid';
+import { StyledJournalfoertDocument } from '@app/components/documents/journalfoerte-documents/document/styled-journalfoert-document';
+import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import {
-  documentCSS,
-  getBackgroundColor,
-  getHoverBackgroundColor,
-} from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import {
+  useArchivedDocumentsColumns,
+  useArchivedDocumentsFullTitle,
+} from '@app/hooks/settings/use-archived-documents-setting';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -38,6 +34,8 @@ export const Document = memo(
     const [expanded, setExpanded] = useState(false);
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
+    const { columns } = useArchivedDocumentsColumns();
+    const { value: fullTitle } = useArchivedDocumentsFullTitle();
 
     const [isExpanded] = useIsExpanded();
 
@@ -81,6 +79,7 @@ export const Document = memo(
           $expanded={expanded}
           $isExpanded={isExpanded}
           $selected={isSelected}
+          $columns={columns}
           data-testid="document-journalfoert"
           data-journalpostid={journalpostId}
           data-dokumentinfoid={dokumentInfoId}
@@ -97,14 +96,17 @@ export const Document = memo(
             dokumentInfoId={dokumentInfoId}
             harTilgangTilArkivvariant={harTilgangTilArkivvariant}
           />
+
           {isExpanded ? (
             <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
           ) : null}
+
           <DocumentTitle
             journalpostId={journalpostId}
             dokumentInfoId={dokumentInfoId}
             harTilgangTilArkivvariant={harTilgangTilArkivvariant}
             tittel={tittel ?? ''}
+            maxWidth={fullTitle ? '100%' : '300px'}
           />
 
           {isExpanded ? <ExpandedColumns document={document} /> : null}
@@ -147,18 +149,4 @@ Document.displayName = 'Document';
 
 const ExpandButton = styled(Button)`
   grid-area: ${Fields.Expand};
-`;
-
-const StyledJournalfoertDocument = styled.article<{
-  $expanded: boolean;
-  $selected: boolean;
-  $isExpanded: boolean;
-}>`
-  ${documentCSS}
-  ${({ $isExpanded }) => ($isExpanded ? expandedJournalfoerteDocumentsGridCSS : collapsedJournalfoerteDocumentsGridCSS)}
-  background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};
-
-  &:hover {
-    background-color: ${({ $expanded, $selected }) => getHoverBackgroundColor($expanded, $selected)};
-  }
 `;

@@ -1,6 +1,7 @@
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useContext } from 'react';
+import { styled } from 'styled-components';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -47,22 +48,28 @@ export const UseAsAttachments = () => {
     ));
 
   return (
-    <Select
-      size="small"
-      label="Bruk som vedlegg for"
-      onChange={({ target }) => {
-        createVedlegg({
-          oppgaveId,
-          parentId: target.value,
-          journalfoerteDokumenter: getSelectedDocuments(),
-          creatorIdent: user.navIdent,
-          creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
-        });
-      }}
-      value={NONE_SELECTED}
-    >
-      <option key={NONE_SELECTED} value={NONE_SELECTED} label="Velg dokument" />
-      {options}
-    </Select>
+    <Container>
+      <Select
+        size="small"
+        label="Bruk som vedlegg for"
+        onChange={({ target }) => {
+          createVedlegg({
+            oppgaveId,
+            parentId: target.value,
+            journalfoerteDokumenter: getSelectedDocuments(),
+            creatorIdent: user.navIdent,
+            creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
+          });
+        }}
+        value={NONE_SELECTED}
+      >
+        <option key={NONE_SELECTED} value={NONE_SELECTED} label="Velg dokument" />
+        {options}
+      </Select>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  margin: var(--a-spacing-1) var(--a-spacing-4) var(--a-spacing-3);
+`;

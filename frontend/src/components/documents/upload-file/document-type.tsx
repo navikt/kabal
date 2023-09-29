@@ -36,5 +36,5 @@ const NoneSelected = ({ dokumentTypeId }: NoneSelectedProps) => {
     return null;
   }
 
-  return <option value={undefined}>Velg dokumenttype</option>;
+  return <option value={undefined}>Dokumenttype</option>;
 };

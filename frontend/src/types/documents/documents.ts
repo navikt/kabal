@@ -74,6 +74,7 @@ export interface IJournalfoertDokumentReference extends IBaseDocument {
   journalfoertDokumentReference: IJournalfoertDokument;
   isSmartDokument: false;
   parentId: UUID;
+  templateId?: never;
 }
 
 export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokumentReference;

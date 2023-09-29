@@ -16,6 +16,7 @@ import {
 } from '@app/components/documents/styled-components/document';
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useArchivedDocumentsFullTitle } from '@app/hooks/settings/use-archived-documents-setting';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -47,6 +48,7 @@ export const Attachment = memo(
     const isRol = useIsRol();
     const isFinished = useIsFullfoert();
     const isFeilregistrert = useIsFeilregistrert();
+    const { value: fullTitle } = useArchivedDocumentsFullTitle();
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;
 
@@ -109,6 +111,7 @@ export const Attachment = memo(
           dokumentInfoId={dokumentInfoId}
           tittel={tittel ?? ''}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          maxWidth={fullTitle ? 'unset' : '300px'}
         />
         <IncludeDocument
           dokumentInfoId={dokumentInfoId}

@@ -1,5 +1,10 @@
-import { IMainDocument, ISmartDocument } from '@app/types/documents/documents';
+import { ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
-export const getIsRolQuestions = (document: IMainDocument): document is ISmartDocument =>
+interface Params {
+  isSmartDokument: boolean;
+  templateId?: ISmartDocument['templateId'];
+}
+
+export const getIsRolQuestions = (document: Params): boolean =>
   document.isSmartDokument && document.templateId === TemplateIdEnum.ROL_QUESTIONS;

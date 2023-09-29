@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
+import { styled } from 'styled-components';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 
@@ -16,7 +17,7 @@ export const ToggleExpandedButton = () => {
   const Icon = isExpanded ? ChevronLeftIcon : ChevronRightIcon;
 
   return (
-    <Button
+    <StyledButton
       variant="secondary"
       size="small"
       onClick={onToggle}
@@ -26,3 +27,7 @@ export const ToggleExpandedButton = () => {
     />
   );
 };
+
+const StyledButton = styled(Button)`
+  margin-left: auto;
+`;

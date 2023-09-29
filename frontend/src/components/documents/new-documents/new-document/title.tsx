@@ -16,6 +16,7 @@ import {
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useArchivedDocumentsFullTitle } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
@@ -32,6 +33,7 @@ export const DocumentTitle = ({ document }: Props) => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const [isExpanded] = useIsExpanded();
   const oppgaveId = useOppgaveId();
+  const maxWidth = useMaxWidth(document);
 
   const isInlineOpen = useMemo(
     () =>
@@ -154,7 +156,7 @@ export const DocumentTitle = ({ document }: Props) => {
   }
 
   return (
-    <StyledDocumentTitle>
+    <StyledDocumentTitle style={{ maxWidth }}>
       <StyledDocumentLink
         $disabled={disabled}
         $isActive={isInlineOpen || isTabOpen}
@@ -171,4 +173,14 @@ export const DocumentTitle = ({ document }: Props) => {
       {isExpanded ? <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} /> : null}
     </StyledDocumentTitle>
   );
+};
+
+const useMaxWidth = (document: IMainDocument): string => {
+  const { value: fullTitle } = useArchivedDocumentsFullTitle();
+
+  if (fullTitle) {
+    return 'unset';
+  }
+
+  return document.parentId === null ? '712px' : '862px';
 };

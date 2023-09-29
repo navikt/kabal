@@ -5,6 +5,7 @@ import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
   Fields,
   collapsedNewDocumentsGridCSS,
+  expandedNewAttachmentGridCSS,
   expandedNewDocumentsGridCSS,
 } from '@app/components/documents/new-documents/grid';
 import { OpenModalButton } from '@app/components/documents/new-documents/new-document/open-modal-button';
@@ -29,6 +30,7 @@ export const NewDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data = EMPTY_LIST } = useGetDocumentsQuery(oppgaveId);
   const [isExpanded] = useIsExpanded();
+  const isAttachment = document.parentId !== null;
   const cleanDragUI = useRef<() => void>(() => undefined);
   const { setDraggedDocument, clearDragState } = useContext(DragAndDropContext);
   const canEdit = useCanEditDocument(document);
@@ -61,6 +63,7 @@ export const NewDocument = ({ document }: Props) => {
   return (
     <StyledNewDocument
       $isExpanded={isExpanded}
+      $isAttachment={isAttachment}
       data-documentname={document.tittel}
       data-documentid={document.id}
       data-testid="new-document-list-item-content"
@@ -73,7 +76,7 @@ export const NewDocument = ({ document }: Props) => {
       draggable={isDraggable}
     >
       <DocumentTitle document={document} />
-      {isExpanded ? <SetDocumentType document={document} /> : null}
+      {isExpanded && !isAttachment ? <SetDocumentType {...document} templateId={document.templateId} /> : null}
       {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
         <StyledDate data-testid="new-document-date" document={document} />
       ) : null}
@@ -88,9 +91,27 @@ const StyledDate = styled(DocumentDate)`
   text-overflow: ellipsis;
 `;
 
-const StyledNewDocument = styled.article<{ $isExpanded: boolean }>`
+const getGridCss = ({ $isExpanded, $isAttachment }: StlyedNewDocumentProps) => {
+  if (!$isExpanded) {
+    return collapsedNewDocumentsGridCSS;
+  }
+
+  return $isAttachment ? expandedNewAttachmentGridCSS : expandedNewDocumentsGridCSS;
+};
+
+interface StlyedNewDocumentProps {
+  $isExpanded: boolean;
+  $isAttachment: boolean;
+}
+
+const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
   ${documentCSS}
-  ${({ $isExpanded }) => ($isExpanded ? expandedNewDocumentsGridCSS : collapsedNewDocumentsGridCSS)}
+  display: grid;
+  grid-column-gap: 8px;
+  align-items: center;
+  padding-left: 6px;
+  padding-right: 0;
+  ${getGridCss}
 
   &:hover {
     background-color: var(--a-surface-hover);

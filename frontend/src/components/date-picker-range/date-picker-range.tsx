@@ -90,11 +90,12 @@ const Time = ({ date }: TimeProps) => (
 
 const Container = styled.div`
   position: relative;
+  height: 32px;
 `;
 
 const DatepickerContainer = styled.div`
   position: absolute;
-  left: 0;
+  right: 0;
   top: 100%;
   z-index: 1;
   background-color: var(--a-surface-default);

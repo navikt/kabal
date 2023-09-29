@@ -16,10 +16,11 @@ interface Props {
   dokumentInfoId: string;
   tittel: string;
   harTilgangTilArkivvariant: boolean;
+  maxWidth: string;
 }
 
 export const DocumentTitle = memo(
-  ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: Props) => {
+  ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant, maxWidth }: Props) => {
     const { value, setValue } = useDocumentsPdfViewed();
     const [isExpanded] = useIsExpanded();
     const { getTabRef, setTabRef } = useContext(TabContext);
@@ -103,7 +104,7 @@ export const DocumentTitle = memo(
     };
 
     return (
-      <StyledDocumentTitle>
+      <StyledDocumentTitle style={{ maxWidth }}>
         <StyledDocumentLink
           $isActive={isInlineOpen || isTabOpen}
           aria-pressed={isInlineOpen || isTabOpen}
@@ -128,6 +129,7 @@ export const DocumentTitle = memo(
     );
   },
   (prevProps, nextProps) =>
+    prevProps.maxWidth === nextProps.maxWidth &&
     prevProps.tittel === nextProps.tittel &&
     prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
