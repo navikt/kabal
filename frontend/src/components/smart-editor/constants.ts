@@ -15,4 +15,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.GENERELL_INFO]: 'Generell informasjon',
   [TemplateSections.SAKSKOSTNADER]: 'Sakskostnader',
   [TemplateSections.REGELVERK]: 'Regelverk',
+  [TemplateSections.FREMLEGG]: 'Fremlegg',
+  [TemplateSections.TILSVARSRETT]: 'Tilsvarsrett',
+  [TemplateSections.VEDLEGG]: 'Vedlegg med forklaring',
+  [TemplateSections.SVAR_FRA_ROL]: 'Svar fra ROL',
 };
