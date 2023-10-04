@@ -111,7 +111,6 @@ export const createSignature = (): SignatureElement => ({
   threadIds: [],
 });
 
-// eslint-disable-next-line import/no-unused-modules
 export const createPageBreak = (): PageBreakElement => ({
   type: ELEMENT_PAGE_BREAK,
   children: [{ text: '' }],

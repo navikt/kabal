@@ -58,6 +58,10 @@ export enum TemplateSections {
   AVGJOERELSE = 'section-mår',
   REGELVERK = 'section-gnu',
   SAKSKOSTNADER = 'section-gris',
+  FREMLEGG = 'section-geit',
+  TILSVARSRETT = 'section-hund',
+  VEDLEGG = 'section-katt',
+  SVAR_FRA_ROL = 'section-emu',
 }
 
 export enum TextAlign {
