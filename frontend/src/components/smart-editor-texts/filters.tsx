@@ -1,17 +1,28 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { AppQuery } from '@app/types/texts/texts';
+import { useKlageenheterOptions, useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
+import {
+  KlageenhetSelect,
+  TemplateSectionSelect,
+  UtfallSelect,
+} from '@app/components/smart-editor-texts/query-filter-selects';
+import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
+import { AppQuery, PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/texts/texts';
 import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
-import { KlageenhetSelect, SectionSelect, TemplateSelect, UtfallSelect, YtelseSelect } from './query-filter-selects';
-import { FilterDivider } from './styled-components';
 
-export const Filters = () => {
+interface Props {
+  textType: TextTypes;
+}
+
+export const Filters = ({ textType }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { enheter, hjemler, sections, utfall, ytelser, templates } = useTextQuery();
+  const { enheter, utfall, templateSectionList, ytelseHjemmelList } = useTextQuery();
+
+  const utfallOptions = useUtfallOptions();
+  const klageenheterOptions = useKlageenheterOptions();
 
   const setFilter = (filter: keyof AppQuery, values: string[]) => {
     if (values.length === 0) {
@@ -23,34 +34,46 @@ export const Filters = () => {
     setSearchParams(searchParams);
   };
 
+  const isHeaderFooter = textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER;
+  const hasFixedLocation = isHeaderFooter || textType === RichTextTypes.REGELVERK;
+
   return (
     <Container>
-      <TemplateSelect
-        selected={templates?.filter((t): t is TemplateIdEnum => t !== NoTemplateIdEnum.NONE) ?? []}
-        onChange={(value) => setFilter('templates', value)}
-      >
-        Maler
-      </TemplateSelect>
+      {hasFixedLocation ? null : (
+        <TemplateSectionSelect
+          selected={templateSectionList ?? []}
+          onChange={(value) => setFilter('templateSectionList', value)}
+          textType={textType}
+          includeNoneOption
+          templatesSelectable
+        >
+          Maler og seksjoner
+        </TemplateSectionSelect>
+      )}
 
-      <SectionSelect selected={sections ?? []} onChange={(value) => setFilter('sections', value)}>
-        Seksjoner
-      </SectionSelect>
+      {isHeaderFooter ? null : (
+        <HjemlerSelect
+          selected={ytelseHjemmelList ?? []}
+          onChange={(value: string[]) => setFilter('ytelseHjemmelList', value)}
+          includeNoneOption
+        />
+      )}
 
-      <FilterDivider />
+      {isHeaderFooter ? null : (
+        <UtfallSelect selected={utfall} onChange={(value) => setFilter('utfall', value)} options={utfallOptions}>
+          Utfallsett
+        </UtfallSelect>
+      )}
 
-      <HjemlerSelect selected={hjemler} onChange={(value: string[]) => setFilter('hjemler', value)} includeNoneOption />
-
-      <YtelseSelect selected={ytelser ?? []} onChange={(value) => setFilter('ytelser', value)}>
-        Ytelser
-      </YtelseSelect>
-
-      <UtfallSelect selected={utfall ?? []} onChange={(value) => setFilter('utfall', value)}>
-        Utfall
-      </UtfallSelect>
-
-      <KlageenhetSelect selected={enheter ?? []} onChange={(value) => setFilter('enheter', value)}>
-        Enheter
-      </KlageenhetSelect>
+      {isHeaderFooter ? (
+        <KlageenhetSelect
+          selected={enheter ?? []}
+          onChange={(value) => setFilter('enheter', value)}
+          options={[NONE_OPTION, ...klageenheterOptions]}
+        >
+          Enheter
+        </KlageenhetSelect>
+      ) : null}
     </Container>
   );
 };
@@ -58,5 +81,5 @@ export const Filters = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 8px;
 `;

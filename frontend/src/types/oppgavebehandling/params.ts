@@ -27,6 +27,10 @@ export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandling
   utfall: UtfallEnum | null;
 }
 
+export interface IOppgavebehandlingUtfallSetUpdateParams extends IOppgavebehandlingBaseParams {
+  extraUtfallIdSet: UtfallEnum[];
+}
+
 export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlingBaseParams {
   hjemler: string[];
 }

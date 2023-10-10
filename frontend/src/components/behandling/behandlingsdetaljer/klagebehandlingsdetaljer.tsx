@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
+import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
@@ -76,7 +77,13 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-      <UtfallResultat utfall={resultat.utfallId} />
+      <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
+
+      <ExtraUtfall
+        utfallIdSet={resultat.extraUtfallIdSet}
+        mainUtfall={resultat.utfallId}
+        oppgaveId={oppgavebehandling.id}
+      />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

@@ -5,19 +5,20 @@ import { getIsRolQuestions } from '@app/components/documents/new-documents/helpe
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DistribusjonsType, IMainDocument, ISmartDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { OPTIONS_LIST, OPTIONS_MAP } from '../modal/set-type/options';
 
-interface Props extends Pick<IMainDocument, 'id' | 'isMarkertAvsluttet' | 'dokumentTypeId' | 'isSmartDokument'> {
-  templateId?: ISmartDocument['templateId'];
+interface Props {
+  document: IMainDocument;
 }
 
-export const SetDocumentType = ({ id, dokumentTypeId, isMarkertAvsluttet, isSmartDokument, templateId }: Props) => {
+export const SetDocumentType = ({ document }: Props) => {
+  const { id, dokumentTypeId, isMarkertAvsluttet } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
   const isSaksbehandler = useIsSaksbehandler();
 
-  if (!isSaksbehandler || isMarkertAvsluttet || getIsRolQuestions({ isSmartDokument, templateId })) {
+  if (!isSaksbehandler || isMarkertAvsluttet || getIsRolQuestions(document)) {
     return (
       <Tag variant="info" size="small">
         {OPTIONS_MAP[dokumentTypeId]}

@@ -47,7 +47,7 @@ export const withOverrides = (editor: RichTextEditor) => {
     insertNode(node);
   };
 
-  // Chrome: Marking content from start to end (with Shift + Ctrl/End ) would leave a selection hanging outside the placeholder,
+  // Chrome: Marking content from start to end (with Shift + Ctrl/End) would leave a selection hanging outside the placeholder,
   // causing it to seemingly not be deletable
   editor.setSelection = ({ anchor, focus }) => {
     if (anchor === undefined || focus === undefined) {

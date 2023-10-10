@@ -1,13 +1,11 @@
 import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
 import React, { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { EditorValue, LabelContentElement } from '@app/plate/types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { StyledParagraph } from './paragraph';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from './styled-components';
 
 export const LabelContent = ({
   element,
@@ -46,13 +44,10 @@ export const LabelContent = ({
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
-      <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>
-        <StyledParagraph $isEmpty={result === null}>{result}</StyledParagraph>
+      <span>
+        <StyledLabelContent>{result}</StyledLabelContent>
         {children}
-        <SectionToolbar>
-          <AddNewParagraphs editor={editor} element={element} />
-        </SectionToolbar>
-      </SectionContainer>
+      </span>
     </PlateElement>
   );
 };
@@ -66,5 +61,13 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string => {
     return formatFoedselsnummer(oppgave.sakenGjelder.id);
   }
 
+  if (source === 'saksnummer') {
+    return oppgave.saksnummer;
+  }
+
   return 'Verdi mangler';
 };
+
+const StyledLabelContent = styled.span`
+  color: var(--a-gray-700);
+`;

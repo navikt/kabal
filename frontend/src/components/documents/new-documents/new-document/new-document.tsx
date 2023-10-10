@@ -78,7 +78,7 @@ export const NewDocument = ({ document }: Props) => {
       draggable={isDraggable}
     >
       <DocumentTitle document={document} />
-      {isExpanded && !isAttachment ? <SetDocumentType {...document} templateId={document.templateId} /> : null}
+      {isExpanded && !isAttachment ? <SetDocumentType document={document} /> : null}
       {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
         <StyledDate data-testid="new-document-date" document={document} />
       ) : null}

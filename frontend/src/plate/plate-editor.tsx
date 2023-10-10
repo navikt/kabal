@@ -1,4 +1,4 @@
-import { AnyObject, Plate, PlateContent, PlatePlugin, PlateProps, RenderLeafFn } from '@udecode/plate-common';
+import { Plate, PlateContent, PlatePlugin, PlateProps, RenderLeafFn } from '@udecode/plate-common';
 import React, { useRef } from 'react';
 import { renderLeaf as defaultRenderLeaf } from '@app/plate/leaf/render-leaf';
 import { EditorValue, RichTextEditor } from '@app/plate/types';

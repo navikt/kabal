@@ -3,6 +3,7 @@ import {
   TNodeEntry,
   findNode,
   getNodeAncestors,
+  getParentNode,
   isElement,
   isElementEmpty,
   isEndPoint,
@@ -11,7 +12,13 @@ import {
   removeNodes,
   someNode,
 } from '@udecode/plate-common';
-import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
+import {
+  ELEMENT_LABEL_CONTENT,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REGELVERK,
+  UNCHANGEABLE,
+  UNDELETABLE,
+} from '@app/plate/plugins/element-types';
 import { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
 
 export const isInUnchangeableElement = (editor: RichTextEditor): boolean => {
@@ -31,9 +38,21 @@ export const isUndeletable = (
   }
 
   const nodeIsUndeletable = isElement(nodeEntry[0]) && UNDELETABLE.includes(nodeEntry[0].type);
-  const ancestorIsUndeletable = hasUndeletableAncestor(editor, nodeEntry);
 
-  return nodeIsUndeletable || ancestorIsUndeletable;
+  if (nodeIsUndeletable) {
+    return true;
+  }
+
+  if (hasUndeletableAncestor(editor, nodeEntry)) {
+    return true;
+  }
+
+  const parentNodeEntry = getParentNode(editor, nodeEntry[1]);
+  const containsLabelContent =
+    parentNodeEntry !== undefined &&
+    someNode(editor, { match: { type: ELEMENT_LABEL_CONTENT, at: parentNodeEntry[1] } });
+
+  return containsLabelContent;
 };
 
 const hasUndeletableAncestor = (editor: RichTextEditor, descendantEntry: TNodeEntry<ENode<EditorValue>>): boolean => {

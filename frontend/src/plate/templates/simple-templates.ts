@@ -1,5 +1,5 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { TemplateSections } from '@app/plate/types';
+import { TemplateSections } from '@app/plate/template-sections';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IMutableSmartEditorTemplate, TemplateTypeEnum } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';

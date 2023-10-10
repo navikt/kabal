@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import { useTextMigration } from '@app/components/admin/use-text-migration';
 import {
   useRecreateElasticAdminMutation,
   useRefillElasticAdminMutation,
@@ -13,6 +14,7 @@ export const Admin = () => (
     <ApiButton useApi={useRecreateElasticAdminMutation}>KABAL-SEARCH OPENSEARCH RECREATE</ApiButton>
     <ApiButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</ApiButton>
     <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
+    <ApiButton useApi={useTextMigration}>MIGRATE SMART EDITOR TEXTS</ApiButton>
   </StyledPageContent>
 );
 

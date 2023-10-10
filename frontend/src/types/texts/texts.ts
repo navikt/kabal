@@ -1,24 +1,25 @@
-import { NONE_TYPE } from '@app/components/smart-editor-texts/types';
-import { EditorValue, TemplateSections } from '@app/plate/types';
-import { UtfallEnum } from '../kodeverk';
-import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
+import { EditorValue } from '@app/plate/types';
 
 export interface AppQuery {
-  hjemler: (string | NONE_TYPE)[];
-  ytelser: (string | NONE_TYPE)[];
-  utfall: (UtfallEnum | NONE_TYPE)[];
-  enheter: (string | NONE_TYPE)[];
-  sections: (TemplateSections | NONE_TYPE)[];
-  templates: (TemplateIdEnum | NoTemplateIdEnum | NONE_TYPE)[];
+  templateSectionList?: string[];
+  ytelseHjemmelList?: string[];
+  utfall?: string;
+  enheter?: string[];
 }
 
 interface TextMetadata {
-  hjemler: string[];
-  ytelser: string[];
-  utfall: UtfallEnum[];
+  templateSectionList: string[];
+  ytelseHjemmelList: string[];
+  utfall: string[];
   enheter: string[];
-  sections: TemplateSections[];
-  templates: (TemplateIdEnum | NoTemplateIdEnum)[];
+  /** Deprecated */
+  hjemler: string[];
+  /** Deprecated */
+  ytelser: string[];
+  /** Deprecated */
+  templates: string[];
+  /** Deprecated */
+  sections: string[];
 }
 
 export interface ApiQuery extends AppQuery {

@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
+import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -60,7 +61,13 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <AnkeMottattDato />
 
-      <UtfallResultat utfall={resultat.utfallId} />
+      <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
+
+      <ExtraUtfall
+        utfallIdSet={resultat.extraUtfallIdSet}
+        mainUtfall={resultat.utfallId}
+        oppgaveId={oppgavebehandling.id}
+      />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

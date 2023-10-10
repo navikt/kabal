@@ -13,12 +13,14 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { NONE } from '@app/components/smart-editor-texts/types';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { EditorValue, EmptyVoidElement, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
+import { createEmptyVoid } from '@app/plate/templates/helpers';
+import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
 import { useGetTextsQuery } from '@app/redux-api/texts';
 import { IRichText, IText, RichTextTypes } from '@app/types/texts/texts';
 
@@ -28,16 +30,13 @@ export const Maltekst = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
+  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({
-    textType: RichTextTypes.MALTEKST,
-    sections: [element.section, NONE],
-    templateId,
-  });
+  const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetTextsQuery(query);
 
   useEffect(() => {
-    if (isLoading || isFetching || data === undefined) {
+    if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
       return;
     }
 
@@ -47,8 +46,16 @@ export const Maltekst = ({
       return;
     }
 
-    const rawMaltekster = lexSpecialis(data.filter(isMaltekst));
-    const maltekster = rawMaltekster.length === 0 ? EMPTY_VOID : rawMaltekster;
+    const maltekster = lexSpecialis(
+      templateId,
+      element.section,
+      oppgave.ytelseId,
+      oppgave.resultat.hjemmelIdSet,
+      oppgave.resultat.utfallId === null
+        ? oppgave.resultat.extraUtfallIdSet
+        : [oppgave.resultat.utfallId, ...oppgave.resultat.extraUtfallIdSet],
+      data.filter(isMaltekst),
+    )?.content ?? [createEmptyVoid()];
 
     if (nodesEquals(element.children, maltekster)) {
       return;
@@ -59,7 +66,7 @@ export const Maltekst = ({
         replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
       );
     });
-  }, [data, editor, element, isFetching, isLoading]);
+  }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
 
   if (isLoading) {
     return (
@@ -124,18 +131,4 @@ export const Maltekst = ({
   );
 };
 
-const lexSpecialis = (maltekster: IRichText[]): EditorValue | [EmptyVoidElement] => {
-  if (maltekster.length === 0) {
-    return EMPTY_VOID;
-  }
-
-  if (maltekster.length === 1) {
-    return maltekster[0]?.content ?? EMPTY_VOID;
-  }
-
-  return maltekster.find((t) => t.hjemler.length !== 0)?.content ?? maltekster[0]?.content ?? EMPTY_VOID;
-};
-
 const isMaltekst = (text: IText): text is IRichText => text.textType === RichTextTypes.MALTEKST;
-
-const EMPTY_VOID: [EmptyVoidElement] = [{ type: ELEMENT_EMPTY_VOID, children: [{ text: '' }] }];

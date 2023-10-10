@@ -1,5 +1,5 @@
 import { Role } from '../bruker';
-import { NoTemplateIdEnum, TemplateIdEnum } from '../smart-editor/template-enums';
+import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
 export type UUID = string;
@@ -57,7 +57,7 @@ export interface IFileDocument extends IBaseDocument {
 export interface ISmartDocument extends IBaseDocument {
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
-  templateId: TemplateIdEnum | NoTemplateIdEnum | null; // Nullable until all smart documents without this are finished. Make not nullable once all legacy smart documents are finished.
+  templateId: TemplateIdEnum;
 }
 
 export interface IJournalfoertDokumentId

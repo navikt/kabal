@@ -1,7 +1,7 @@
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, ErrorMessage } from '@navikt/ds-react';
+import { Button, ButtonProps, ErrorMessage, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -19,101 +19,98 @@ interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   'data-testid'?: string;
 }
 
-export const UploadFileButton = ({
-  variant,
-  size,
-  children,
-  parentId,
-  dokumentTypeId,
-  setDocumentTypeError,
-  'data-testid': dataTestId,
-}: Props) => {
-  const oppgaveId = useOppgaveId();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
-  const [uploadError, setUploadError] = useState<string>();
+export const UploadFileButton = forwardRef<HTMLDivElement, Props>(
+  ({ variant, size, children, parentId, dokumentTypeId, setDocumentTypeError, 'data-testid': dataTestId }, ref) => {
+    const oppgaveId = useOppgaveId();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
+    const [uploadError, setUploadError] = useState<string>();
 
-  const onClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      if (dokumentTypeId === null) {
-        if (setDocumentTypeError !== undefined) {
-          setDocumentTypeError('Dokumenttype må velges.');
+    const onClick = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (dokumentTypeId === null) {
+          if (setDocumentTypeError !== undefined) {
+            setDocumentTypeError('Dokumenttype må velges.');
+          }
+
+          return;
         }
 
-        return;
-      }
+        event.preventDefault();
+        inputRef.current?.click();
+      },
+      [dokumentTypeId, setDocumentTypeError],
+    );
 
-      event.preventDefault();
-      inputRef.current?.click();
-    },
-    [dokumentTypeId, setDocumentTypeError],
-  );
+    const uploadVedlegg = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
 
-  const uploadVedlegg = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      event.preventDefault();
+        if (oppgaveId === skipToken || dokumentTypeId === null) {
+          return;
+        }
 
-      if (oppgaveId === skipToken || dokumentTypeId === null) {
-        return;
-      }
+        const { files } = event.target;
 
-      const { files } = event.target;
+        if (files === null || files.length !== 1) {
+          return setUploadError('Kun én fil kan lastes opp av gangen.');
+        }
 
-      if (files === null || files.length !== 1) {
-        return setUploadError('Kun én fil kan lastes opp av gangen.');
-      }
+        const [file] = files;
 
-      const [file] = files;
+        if (file === undefined) {
+          return setUploadError('Ingen fil valgt.');
+        }
 
-      if (file === undefined) {
-        return setUploadError('Ingen fil valgt.');
-      }
+        if (file.size > MAX_SIZE_BYTES) {
+          return setUploadError(
+            `Filstørrelsen (${(
+              file.size / MEBI
+            ).toLocaleString()} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
+          );
+        }
 
-      if (file.size > MAX_SIZE_BYTES) {
-        return setUploadError(
-          `Filstørrelsen (${(
-            file.size / MEBI
-          ).toLocaleString()} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
-        );
-      }
+        setUploadError(undefined);
 
-      setUploadError(undefined);
+        uploadFile({ file, dokumentTypeId, oppgaveId, parentId });
 
-      uploadFile({ file, dokumentTypeId, oppgaveId, parentId });
+        event.currentTarget.value = '';
+      },
+      [oppgaveId, dokumentTypeId, uploadFile, parentId],
+    );
 
-      event.currentTarget.value = '';
-    },
-    [oppgaveId, dokumentTypeId, uploadFile, parentId],
-  );
+    return (
+      <Container ref={ref}>
+        <input
+          data-testid={`${dataTestId}-input`}
+          type="file"
+          accept="application/pdf, image/jpeg, image/png"
+          multiple={false}
+          ref={inputRef}
+          onChange={uploadVedlegg}
+          style={{ display: 'none' }}
+          disabled={isLoading}
+        />
+        <Tooltip content="Last opp dokument">
+          <Button
+            variant={variant}
+            size={size}
+            icon={<UploadIcon aria-hidden />}
+            onClick={onClick}
+            loading={isLoading}
+            data-testid={`${dataTestId}-button`}
+          >
+            {children}
+          </Button>
+        </Tooltip>
 
-  return (
-    <Container>
-      <input
-        data-testid={`${dataTestId}-input`}
-        type="file"
-        accept="application/pdf, image/jpeg, image/png"
-        multiple={false}
-        ref={inputRef}
-        onChange={uploadVedlegg}
-        style={{ display: 'none' }}
-        disabled={isLoading}
-      />
+        {typeof uploadError === 'undefined' ? null : <ErrorMessage size="small">{uploadError}</ErrorMessage>}
+      </Container>
+    );
+  },
+);
 
-      <Button
-        variant={variant}
-        size={size}
-        icon={<UploadIcon aria-hidden />}
-        onClick={onClick}
-        loading={isLoading}
-        data-testid={`${dataTestId}-button`}
-      >
-        {children}
-      </Button>
-
-      {typeof uploadError === 'undefined' ? null : <ErrorMessage size="small">{uploadError}</ErrorMessage>}
-    </Container>
-  );
-};
+UploadFileButton.displayName = 'UploadFileButton';
 
 const Container = styled.div`
   display: flex;

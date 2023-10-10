@@ -3,6 +3,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { focusEditor } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
 import {
   GodeFormuleringerTitle,
   Header,
@@ -11,10 +12,12 @@ import {
   StyledSkeleton,
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
+import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { stringToRegExp } from '@app/functions/string-to-regex';
+import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetTextsQuery } from '@app/redux-api/texts';
-import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IRichText, RichTextTypes } from '@app/types/texts/texts';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
@@ -22,18 +25,38 @@ import { GodFormulering } from './god-formulering';
 import { insertGodFormulering } from './insert';
 
 interface Props {
-  templateId: TemplateIdEnum | NoTemplateIdEnum;
+  templateId: TemplateIdEnum;
 }
+
+const filterTemplateSection = (
+  templateId: TemplateIdEnum,
+  activeSection: TemplateSections | NONE_TYPE,
+  godFormulering: IRichText,
+): boolean => {
+  for (const templateSection of godFormulering.templateSectionList) {
+    const [template, section] = templateSection.split(LIST_DELIMITER);
+
+    return (
+      (template === templateId || template === GLOBAL) &&
+      (activeSection === section || activeSection === NONE || section === undefined)
+    );
+  }
+
+  return false;
+};
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
   const [filter, setFilter] = useState<string>('');
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
-
   const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
-
-  const query = useQuery({ textType: RichTextTypes.GOD_FORMULERING, templateId });
+  const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
+  const query = useQuery({
+    textType: RichTextTypes.GOD_FORMULERING,
+    templateId,
+    section: activeSection === undefined || activeSection === NONE ? undefined : activeSection,
+  });
   const { data = [], isLoading } = useGetTextsQuery(query);
 
   useEffect(() => {
@@ -44,16 +67,20 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const texts: IRichText[] = useMemo(() => {
     const filterRegexp = stringToRegExp(filter);
-    const result: IRichText[] = [];
+    const result = [];
 
     for (const text of data) {
-      if (text.textType === RichTextTypes.GOD_FORMULERING && filterRegexp.test(text.title)) {
+      if (
+        text.textType === RichTextTypes.GOD_FORMULERING &&
+        filterTemplateSection(templateId, activeSection, text) &&
+        filterRegexp.test(text.title)
+      ) {
         result.push(text);
       }
     }
 
     return result;
-  }, [data, filter]);
+  }, [activeSection, data, filter, templateId]);
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -135,6 +162,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           />
         </Header>
         <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
+        <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
       </Top>
       <ListContainer>
         <List texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />

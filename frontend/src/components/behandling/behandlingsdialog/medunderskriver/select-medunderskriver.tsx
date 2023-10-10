@@ -12,7 +12,6 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, IHelper } from '@app/types/oppgave-common';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
 
-const NONE_SELECTED = 'NONE_SELECTED';
 interface Props {
   oppgaveId: string;
   medunderskriver: IHelper;
@@ -45,9 +44,7 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
     <Select
       size="small"
       label={`${getTitleCapitalized(typeId)}`}
-      onChange={({ target }) =>
-        onChange(target.value === NONE_SELECTED ? null : target.value, medunderskriver.navIdent)
-      }
+      onChange={({ target }) => onChange(target.value === NONE ? null : target.value, medunderskriver.navIdent)}
       value={medunderskriver.navIdent ?? NONE}
       data-testid="select-medunderskriver"
       disabled={isUpdating}

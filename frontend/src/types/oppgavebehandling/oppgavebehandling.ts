@@ -77,6 +77,7 @@ interface Resultat {
   hjemmelIdSet: string[];
   id: string;
   utfallId: UtfallEnum | null;
+  extraUtfallIdSet: UtfallEnum[];
 }
 
 export interface IFeilregistrering {

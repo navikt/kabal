@@ -1,3 +1,4 @@
+import { UtfallEnum } from '@app/types/kodeverk';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FlowState, IHelper, INavEmployee, INotSentHelper, ISakenGjelder, ISentHelper } from '../oppgave-common';
 
@@ -45,3 +46,11 @@ export type ISetMedunderskriverResponse = IModifiedResponse & (ISentHelper | INo
 export type ISetRolResponse = IModifiedResponse & (ISentHelper | INotSentHelper);
 
 export type ISetFlowStateResponse = IModifiedResponse & IHelper;
+
+export interface ISetExtraUtfallResponse extends IModifiedResponse {
+  extraUtfallIdSet: UtfallEnum[];
+}
+
+export interface ISetUtfallResponse extends ISetExtraUtfallResponse {
+  utfallId: UtfallEnum | null;
+}

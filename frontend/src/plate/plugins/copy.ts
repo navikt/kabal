@@ -1,37 +1,107 @@
 import {
-  AnyObject,
-  TElement,
+  PlateEditor,
+  TDescendant,
   TNodeEntry,
   TText,
   createPluginFactory,
-  getNode,
+  getNodeFragment,
   getNodeTexts,
   isCollapsed,
   isElement,
 } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { Path, Range } from 'slate';
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { Range } from 'slate';
+import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
+import { formatLongDate } from '@app/domain/date';
 import {
-  EditorValue,
-  H1Element,
-  H2Element,
-  H3Element,
-  ParagraphElement,
+  ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
+  ELEMENT_FOOTER,
+  ELEMENT_HEADER,
+  ELEMENT_LABEL_CONTENT,
+  ELEMENT_MALTEKST,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+  ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SIGNATURE,
+} from '@app/plate/plugins/element-types';
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import {
+  CurrentDateElement,
+  FooterElement,
+  HeaderElement,
+  LabelContentElement,
   RichText,
-  RichTextEditor,
-  TextAlign,
+  SignatureElement,
 } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 
-const SIMPLE_ELEMENTS = new Set([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3]);
-type SimpleElements = H1Element | H2Element | H3Element;
-type AllowedElements = SimpleElements | ParagraphElement;
+const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDescendant | TDescendant[] => {
+  if (Array.isArray(node)) {
+    return node.flatMap((child) => cleanNodes(editor, child));
+  }
 
-const withOverrides = (editor: RichTextEditor) => {
-  const { setFragmentData } = editor;
+  if (!isElement(node)) {
+    return removeCommentMarks(node);
+  }
+
+  if (node.type === ELEMENT_EMPTY_VOID) {
+    return [];
+  }
+
+  if (isOfElementType<CurrentDateElement>(node, ELEMENT_CURRENT_DATE)) {
+    const now = new Date();
+    const formatted = formatLongDate(now.getFullYear(), now.getMonth(), now.getDate());
+
+    return [createSimpleParagraph(`Dato: ${formatted}`)];
+  }
+
+  if (isOfElementType<FooterElement>(node, ELEMENT_FOOTER) || isOfElementType<HeaderElement>(node, ELEMENT_HEADER)) {
+    return node.content === null ? [] : [createSimpleParagraph(node.content)];
+  }
+
+  if (isOfElementType<SignatureElement>(node, ELEMENT_SIGNATURE)) {
+    const saksbehandler =
+      node.saksbehandler === undefined
+        ? []
+        : [createSimpleParagraph(node.saksbehandler.name + '\n' + node.saksbehandler.title)];
+
+    const medunderskriver =
+      node.medunderskriver === undefined
+        ? []
+        : [createSimpleParagraph(node.medunderskriver.name + '\n' + node.medunderskriver.title)];
+
+    return [...saksbehandler, ...medunderskriver];
+  }
+
+  if (isOfElementType<LabelContentElement>(node, ELEMENT_LABEL_CONTENT)) {
+    return node.result === undefined ? [] : { text: node.result };
+  }
+
+  const { type, children } = node;
+
+  if (
+    type === ELEMENT_MALTEKST ||
+    type === ELEMENT_REDIGERBAR_MALTEKST ||
+    type === ELEMENT_REGELVERK ||
+    type === ELEMENT_REGELVERK_CONTAINER
+  ) {
+    return children.flatMap((child) => cleanNodes(editor, child));
+  }
+
+  return {
+    ...node,
+    children: children.flatMap((child) => cleanNodes(editor, child)),
+  };
+};
+
+const withOverrides = (editor: PlateEditor) => {
+  const { setFragmentData, insertFragment } = editor;
+
+  editor.insertFragment = (descendants: TDescendant[]) => {
+    const nodes = cleanNodes(editor, descendants);
+
+    return insertFragment(Array.isArray(nodes) ? nodes : [nodes]);
+  };
 
   editor.setFragmentData = (data, originEvent) => {
     const { selection } = editor;
@@ -45,8 +115,12 @@ const withOverrides = (editor: RichTextEditor) => {
     const start = Range.start(selection);
     const end = Range.end(selection);
 
+    const slateFragments = cleanNodes(editor, getNodeFragment(editor, selection));
+
+    data.setData('application/x-slate-fragment', window.btoa(encodeURIComponent(JSON.stringify(slateFragments))));
+
     const textsGenerator = getNodeTexts(editor, { from: start.path, to: end.path });
-    const textEntries = new Array(...textsGenerator);
+    const textEntries = [...textsGenerator];
 
     if (textEntries.length === 0) {
       setFragmentData(data, originEvent);
@@ -75,93 +149,17 @@ const withOverrides = (editor: RichTextEditor) => {
             [{ ...lastNode, text: lastNode.text.slice(0, end.offset) }, lastPath],
           ];
 
-    const wrappedTextNodes: {
-      key: string;
-      element: AllowedElements;
-    }[] = [];
-
-    for (const entry of selectedTextEntries) {
-      const [originalTextNode, textPath] = entry;
-
-      const textNode = originEvent === 'copy' ? removeCommentMarks(originalTextNode) : originalTextNode;
-
-      for (let i = textPath.length - 1; i > 0; i--) {
-        const parentPath = textPath.slice(0, i);
-
-        const parentNode = getNode(editor, parentPath);
-
-        if (!isElement(parentNode)) {
-          continue;
-        }
-
-        const key = (parentNode.type === ELEMENT_PLACEHOLDER ? Path.parent(parentPath) : parentPath).join(',');
-
-        const existing = wrappedTextNodes.find((w) => w.key === key);
-
-        if (existing !== undefined) {
-          const { element } = existing;
-
-          element.children.push(textNode);
-
-          break;
-        }
-
-        if (isOfElementType<ParagraphElement>(parentNode, ELEMENT_PARAGRAPH)) {
-          const isFirstElement = wrappedTextNodes.length === 0;
-
-          wrappedTextNodes.push({
-            key,
-            element: {
-              ...parentNode,
-              align: isFirstElement ? TextAlign.LEFT : parentNode.align,
-              indent: isFirstElement ? 0 : parentNode.indent,
-              children: [textNode],
-            },
-          });
-
-          break;
-        }
-
-        if (isSimpleElement(parentNode)) {
-          wrappedTextNodes.push({
-            key,
-            element: { ...parentNode, children: [textNode] },
-          });
-
-          break;
-        }
-
-        wrappedTextNodes.push({
-          key,
-          element: {
-            type: ELEMENT_PARAGRAPH,
-            align: TextAlign.LEFT,
-            children: [textNode],
-          },
-        });
-
-        break;
-      }
-    }
-
     data.setData('text/plain', selectedTextEntries.map(([node]) => node.text).join(' '));
-
-    data.setData(
-      'application/x-slate-fragment',
-      window.btoa(encodeURIComponent(JSON.stringify(wrappedTextNodes.map(({ element }) => element)))),
-    );
   };
 
   return editor;
 };
 
-const isSimpleElement = (node: TElement): node is SimpleElements => SIMPLE_ELEMENTS.has(node.type);
-
 const removeCommentMarks = (textNode: TText) => {
   const cleanTextNode = { ...textNode };
 
   for (const prop of Object.keys(cleanTextNode)) {
-    if (prop.startsWith(COMMENT_PREFIX)) {
+    if (prop.startsWith(COMMENT_PREFIX) || prop.startsWith(BOOKMARK_PREFIX)) {
       delete cleanTextNode[prop];
     }
   }
@@ -169,7 +167,7 @@ const removeCommentMarks = (textNode: TText) => {
   return cleanTextNode;
 };
 
-export const createCopyPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const createCopyPlugin = createPluginFactory({
   key: 'copy',
   withOverrides,
 });

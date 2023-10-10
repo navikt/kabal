@@ -55,6 +55,9 @@ export const CustomLeaf = ({
     }
   }, [isCommentFocused]);
 
+  // Chromium Selection Fix: https://github.com/ianstormtaylor/slate/blob/main/site/examples/inlines.tsx#L347
+  const paddingLeft = leaf.text === '' ? 0.1 : undefined;
+
   return (
     <PlateLeaf
       editor={editor}
@@ -62,7 +65,7 @@ export const CustomLeaf = ({
       leaf={leaf}
       text={text}
       ref={ref}
-      style={{ ...style, color: bookmarks[0]?.color }}
+      style={{ ...style, color: bookmarks[0]?.color, paddingLeft }}
       contentEditable={contentEditable(editor, text)}
       data-selected={leaf.selected}
       suppressContentEditableWarning

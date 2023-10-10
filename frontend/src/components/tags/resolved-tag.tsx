@@ -12,17 +12,7 @@ interface Props extends BaseProps {
   id: string;
 }
 
-const ResolvedTag = ({ id, variant, useName }: Props) => {
-  const name = useName(id);
-
-  const StyledTag = VARIANTS[variant];
-
-  return (
-    <StyledTag variant="info" size="small" title={name}>
-      {name}
-    </StyledTag>
-  );
-};
+const ResolvedTag = ({ id, variant, useName }: Props) => <CustomTag variant={variant}>{useName(id)}</CustomTag>;
 
 interface ListProps extends BaseProps {
   ids: string[];
@@ -36,40 +26,30 @@ export const ResolvedTags = ({ ids, ...props }: ListProps) => (
   </>
 );
 
-const BaseTagStyle = styled(Tag)`
+interface CustomTagProps {
+  children: string;
+  variant: keyof typeof VARIANTS;
+}
+
+export const CustomTag = ({ children, variant }: CustomTagProps) => (
+  <StyledTag variant="info" size="small" title={children} $variant={variant}>
+    {children}
+  </StyledTag>
+);
+
+interface StyledTagProps {
+  $variant: keyof typeof VARIANTS;
+}
+
+const StyledTag = styled(Tag)<StyledTagProps>`
   height: fit-content;
+  border: 1px solid ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-300)`};
+  background-color: ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-100)`};
 `;
 
-const HjemmelTag = styled(BaseTagStyle)`
-  background-color: var(--a-purple-100);
-  border: 1px solid var(--a-purple-300);
-`;
-const YtelseTag = styled(BaseTagStyle)`
-  background-color: var(--a-blue-100);
-  border: 1px solid var(--a-blue-300);
-`;
-const UtfallTag = styled(BaseTagStyle)`
-  background-color: var(--a-limegreen-100);
-  border: 1px solid var(--a-limegreen-300);
-`;
-const SectionTag = styled(BaseTagStyle)`
-  background-color: var(--a-deepblue-100);
-  border: 1px solid var(--a-deepblue-300);
-`;
-const EnhetTag = styled(BaseTagStyle)`
-  background-color: var(--a-orange-100);
-  border: 1px solid var(--a-orange-300);
-`;
-const TemplateTag = styled(BaseTagStyle)`
-  background-color: var(--a-red-100);
-  border: 1px solid var(--a-red-300);
-`;
-
-const VARIANTS: Record<keyof AppQuery, typeof Tag> = {
-  hjemler: HjemmelTag,
-  ytelser: YtelseTag,
-  utfall: UtfallTag,
-  sections: SectionTag,
-  enheter: EnhetTag,
-  templates: TemplateTag,
+const VARIANTS: Record<keyof AppQuery, string> = {
+  templateSectionList: 'red',
+  ytelseHjemmelList: 'blue',
+  utfall: 'limegreen',
+  enheter: 'purple',
 };

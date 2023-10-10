@@ -8,13 +8,16 @@ import {
 } from '@app/types/texts/texts';
 
 const getMetadata = (): ITextBaseMetadata => ({
-  hjemler: [],
-  enheter: [],
-  ytelser: [],
+  templateSectionList: [],
+  ytelseHjemmelList: [],
   utfall: [],
-  sections: [],
-  templates: [],
+  enheter: [],
   title: '',
+  // TODO: Remove after migration.
+  hjemler: [],
+  templates: [],
+  sections: [],
+  ytelser: [],
 });
 
 export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({
