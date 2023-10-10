@@ -1,16 +1,10 @@
 import { UtfallEnum } from '@app/types/kodeverk';
 
+const UTFALL = Object.values(UtfallEnum);
+
 export const isUtfall = (s?: string): s is UtfallEnum => {
   if (typeof s === 'string') {
-    return Object.values(UtfallEnum).some((u) => u === s);
-  }
-
-  return false;
-};
-
-export const isUtfallOrNone = (s?: string): s is UtfallEnum | 'NONE' => {
-  if (typeof s === 'string') {
-    return s === 'NONE' || Object.values(UtfallEnum).some((u) => u === s);
+    return UTFALL.some((u) => u === s);
   }
 
   return false;

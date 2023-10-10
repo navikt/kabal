@@ -24,11 +24,11 @@ import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue } from '@app/plate/types';
 import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
-import { NoTemplateIdEnum, TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 interface EditorProps {
   id: string;
-  templateId: TemplateIdEnum | NoTemplateIdEnum;
+  templateId: TemplateIdEnum;
   initialValue: EditorValue;
   onChange: (value: EditorValue) => void;
   updateStatus: SavedStatusProps;

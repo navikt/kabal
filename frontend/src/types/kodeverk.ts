@@ -50,6 +50,14 @@ export interface IYtelse extends IKodeverkSimpleValue {
   innsendingshjemler: IKodeverkValue[];
 }
 
+interface IKabalLovKildeToRegistreringshjemmel extends IKodeverkValue {
+  registreringshjemler: IKodeverkSimpleValue[];
+}
+
+export interface IKabalYtelse extends IKodeverkSimpleValue {
+  lovKildeToRegistreringshjemler: IKabalLovKildeToRegistreringshjemmel[];
+}
+
 export interface IKlageenhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }

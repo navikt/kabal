@@ -1,8 +1,3 @@
-// TODO: Remove this enum once all smart documents are migrated to v1.
-export enum NoTemplateIdEnum {
-  NONE = 'none',
-}
-
 export enum TemplateIdEnum {
   NOTAT = 'notat',
   GENERELT_BREV = 'generelt_brev',
@@ -11,4 +6,5 @@ export enum TemplateIdEnum {
   ROL_QUESTIONS = 'rol-questions',
   ROL_ANSWERS = 'rol-answers',
   ROL_TILSVARSBREV = 'rol-tilsvarsbrev',
+  OVERSENDELSESBREV = 'oversendelsesbrev',
 }

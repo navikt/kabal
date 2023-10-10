@@ -1,6 +1,8 @@
-import { Alert, Loader } from '@navikt/ds-react';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React from 'react';
+import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useSearchOppgaverByFnrQuery, useSearchPersonByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Result } from './result';
@@ -15,21 +17,42 @@ interface Props {
 
 export const FnrSearch = ({ queryString }: Props) => {
   const query = useCleanQuery(queryString);
-  const { data: oppgaver, isFetching: oppgaverIsFetching, refetch } = useSearchOppgaverByFnrQuery(query);
-  const { data: person, isFetching: personIsFetching } = useSearchPersonByFnrQuery(query);
+  const {
+    data: oppgaver,
+    isLoading: oppgaverIsLoading,
+    isFetching: oppgaverIsFetching,
+    refetch: refetchOppgaver,
+  } = useSearchOppgaverByFnrQuery(query);
+  const {
+    data: person,
+    isLoading: personIsLoading,
+    isFetching: personIsFetching,
+    refetch: refetchPerson,
+  } = useSearchPersonByFnrQuery(query);
 
   if (query === skipToken) {
     return null;
   }
 
-  if (oppgaverIsFetching || personIsFetching) {
+  if (oppgaverIsLoading || personIsLoading) {
     return <Loader size="xlarge" />;
   }
 
   if (typeof oppgaver === 'undefined') {
     return (
       <Alert variant="info" data-testid="search-result-none">
-        Ingen registrerte oppgaver på denne personen i Kabal.
+        <AlertContent>
+          Ingen registrerte oppgaver på denne personen i Kabal.
+          <Button
+            icon={<MagnifyingGlassIcon aria-hidden />}
+            onClick={refetchOppgaver}
+            variant="primary"
+            size="small"
+            loading={oppgaverIsFetching}
+          >
+            Søk på nytt
+          </Button>
+        </AlertContent>
       </Alert>
     );
   }
@@ -37,12 +60,23 @@ export const FnrSearch = ({ queryString }: Props) => {
   if (typeof person === 'undefined') {
     return (
       <Alert variant="info" data-testid="search-result-none">
-        Fant ingen person med ID-nummer {formatFoedselsnummer(query)}.
+        <AlertContent>
+          Fant ingen person med ID-nummer {formatFoedselsnummer(query)}.
+          <Button
+            icon={<MagnifyingGlassIcon aria-hidden />}
+            onClick={refetchPerson}
+            variant="primary"
+            size="small"
+            loading={personIsFetching}
+          >
+            Søk på nytt
+          </Button>
+        </AlertContent>
       </Alert>
     );
   }
 
-  return <Result {...oppgaver} person={person} onRefresh={refetch} isLoading={oppgaverIsFetching} />;
+  return <Result {...oppgaver} person={person} onRefresh={refetchOppgaver} isLoading={oppgaverIsFetching} />;
 };
 
 const useCleanQuery = (queryString: string): string | typeof skipToken => {
@@ -52,3 +86,9 @@ const useCleanQuery = (queryString: string): string | typeof skipToken => {
 
   return cleanFnr(queryString);
 };
+
+const AlertContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;

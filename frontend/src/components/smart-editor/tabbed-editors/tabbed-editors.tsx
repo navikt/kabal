@@ -14,7 +14,6 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSmartEditors } from '@app/hooks/use-smart-editors';
 import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
-import { NoTemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { NewDocument } from '../new-document/new-document';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
@@ -125,7 +124,7 @@ const TabPanel = ({ smartEditor }: TabPanelProps) => {
           onChange={(c) => {
             clearTimeout(timeout.current);
 
-            if (oppgaveId === skipToken || templateId === NoTemplateIdEnum.NONE) {
+            if (oppgaveId === skipToken) {
               return;
             }
 

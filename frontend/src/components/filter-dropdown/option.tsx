@@ -8,6 +8,8 @@ interface FilterProps<T extends string> {
   filterId: T;
   children: string;
   focused: boolean;
+  disabled?: boolean;
+  tags?: React.ReactNode[];
 }
 
 export const Filter = <T extends string>({
@@ -16,6 +18,8 @@ export const Filter = <T extends string>({
   children,
   onChange,
   focused,
+  disabled,
+  tags,
 }: FilterProps<T>): JSX.Element => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -32,12 +36,16 @@ export const Filter = <T extends string>({
       data-label={children}
       type="checkbox"
       checked={active}
+      disabled={disabled}
       onChange={(event) => onChange(filterId, event.target.checked)}
       size="small"
       ref={ref}
       title={children}
     >
-      <span title={children}>{children}</span>
+      <CheckboxContent>
+        <span title={children}>{children}</span>
+        {tags}
+      </CheckboxContent>
     </StyledCheckbox>
   );
 };
@@ -48,4 +56,12 @@ const StyledCheckbox = styled(Checkbox)`
   width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
+`;
+
+const CheckboxContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: 4px;
+  align-items: center;
+  white-space: nowrap;
 `;

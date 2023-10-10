@@ -36,10 +36,11 @@ import {
   SignatureElement,
   TableCellElement,
   TableElement,
-  TemplateSections,
   TextAlign,
 } from '@app/plate/types';
+import { TemplateSections } from '../template-sections';
 
+// eslint-disable-next-line import/no-unused-modules
 export const createLabelContent = (source: string, label: string): LabelContentElement => ({
   type: ELEMENT_LABEL_CONTENT,
   children: [{ text: '' }],
@@ -69,8 +70,8 @@ const createRegelverkContainer = (
 
 export const createRegelverk = (): RegelverkElement => ({
   type: ELEMENT_REGELVERK,
-  section: TemplateSections.REGELVERK,
-  children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK), createRegelverkContainer()],
+  section: TemplateSections.REGELVERK_TITLE,
+  children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
 });
 
 // eslint-disable-next-line import/no-unused-modules
@@ -91,6 +92,12 @@ export const createSimpleParagraph = (text = ''): ParagraphElement => ({
   children: [{ text }],
 });
 
+export const createParagraphWithLabelContent = (source: string, label: string): ParagraphElement => ({
+  type: ELEMENT_PARAGRAPH,
+  align: TextAlign.LEFT,
+  children: [createLabelContent(source, label)],
+});
+
 // eslint-disable-next-line import/no-unused-modules
 export const createSimpleBulletList = (...textItems: string[]): BulletListElement => ({
   type: ELEMENT_UL,
@@ -104,12 +111,6 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
       },
     ],
   })),
-});
-
-// eslint-disable-next-line import/no-unused-modules
-export const createEmptyVoid = (): EmptyVoidElement => ({
-  type: ELEMENT_EMPTY_VOID,
-  children: [{ text: '' }],
 });
 
 export const createSignature = (): SignatureElement => ({
@@ -159,5 +160,10 @@ export const createTable = (): TableElement => ({
 export const createPlaceHolder = (placeholder = ''): PlaceholderElement => ({
   type: ELEMENT_PLACEHOLDER,
   placeholder,
+  children: [{ text: '' }],
+});
+
+export const createEmptyVoid = (): EmptyVoidElement => ({
+  type: ELEMENT_EMPTY_VOID,
   children: [{ text: '' }],
 });

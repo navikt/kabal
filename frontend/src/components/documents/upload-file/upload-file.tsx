@@ -1,4 +1,3 @@
-import { Tooltip } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
@@ -32,15 +31,13 @@ export const UploadFile = () => {
         error={documentTypeError}
       />
 
-      <Tooltip content="Last opp dokument" placement="bottom">
-        <UploadFileButton
-          variant="secondary"
-          size="small"
-          data-testid="upload-document"
-          dokumentTypeId={dokumentTypeId}
-          setDocumentTypeError={setDocumentTypeError}
-        />
-      </Tooltip>
+      <UploadFileButton
+        variant="secondary"
+        size="small"
+        data-testid="upload-document"
+        dokumentTypeId={dokumentTypeId}
+        setDocumentTypeError={setDocumentTypeError}
+      />
     </Container>
   );
 };

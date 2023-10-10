@@ -32,6 +32,8 @@ export const ListContainer = styled.div`
   overflow-y: auto;
   flex-grow: 1;
   row-gap: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
 `;
 
 export const GodeFormuleringerTitle = styled.h1`
@@ -46,8 +48,6 @@ export const GodeFormuleringerTitle = styled.h1`
 export const OUTLINE_WIDTH = '3px';
 
 export const godFormuleringBaseStyle = css`
-  margin-left: 16px;
-  margin-right: 16px;
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
 

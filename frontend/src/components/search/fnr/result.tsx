@@ -1,3 +1,5 @@
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
@@ -30,6 +32,15 @@ export const Result = ({
       <StyledFnr>
         <CopyFnrButton fnr={person.id} />
       </StyledFnr>
+      <Button
+        variant="secondary"
+        size="small"
+        onClick={footerProps.onRefresh}
+        loading={footerProps.isLoading}
+        icon={<MagnifyingGlassIcon aria-hidden />}
+      >
+        Søk på nytt
+      </Button>
     </StyledPerson>
     <OppgaverPageWrapper testId="search-result">
       <LedigeOppgaverTable oppgaveIds={aapneBehandlinger} {...footerProps} />

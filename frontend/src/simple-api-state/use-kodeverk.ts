@@ -1,4 +1,5 @@
 import {
+  IKabalYtelse,
   IKlageenhet,
   IKodeverk,
   IKodeverkSimpleValue,
@@ -8,10 +9,6 @@ import {
   UtfallEnum,
 } from '@app/types/kodeverk';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
-
-interface AllLovKilderToRegistreringshjemmel extends IKodeverkSimpleValue {
-  registreringshjemler: IKodeverkSimpleValue[];
-}
 
 interface IHjemmelNameWithLovkilde {
   lovkilde: IKodeverkValue;
@@ -30,11 +27,10 @@ const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 const kodeverk = new SimpleApiState<IKodeverk>(API_PREFIX);
 const hjemlerMap = new SimpleApiState<Hjemler>(`${API_PREFIX}/hjemlermap`);
 const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${API_PREFIX}/registreringshjemlermap`);
-const lovkildeToRegistreringshjemlerLatest = new SimpleApiState<AllLovKilderToRegistreringshjemmel[]>(
-  `${API_PREFIX}/lovkildetoregistreringshjemler/latest`,
-);
+
 const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelserLatest = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser/latest`);
+const kabalYtelserLatest = new SimpleApiState<IKabalYtelse[]>(`${API_PREFIX}/kabal/ytelser/latest`);
 const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenheter`);
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
 const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX}/sakstypertoutfall`);
@@ -45,9 +41,9 @@ export const useKodeverk = () => useSimpleApiState(kodeverk);
 export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
 
 export const useLatestYtelser = () => useSimpleApiState(ytelserLatest);
+export const useKabalYtelserLatest = () => useSimpleApiState(kabalYtelserLatest);
 export const useSimpleYtelser = () => useSimpleApiState(ytelserSimple);
 
-export const useLovkildeToRegistreringshjemlerLatest = () => useSimpleApiState(lovkildeToRegistreringshjemlerLatest);
 export const useRegistreringshjemlerMap = () => useSimpleApiState(registreringshjemlerMap);
 export const useKlageenheter = () => useSimpleApiState(klageenheter);
 export const useUtfall = () => useSimpleApiState(utfall);

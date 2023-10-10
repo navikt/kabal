@@ -9,7 +9,6 @@ import { DateTime } from '../datetime/datetime';
 import { getPathPrefix } from './functions/get-path-prefix';
 import { useTextQuery } from './hooks/use-text-query';
 import { QueryKey, SortKey, SortOrder, SortableHeader } from './sortable-header';
-import { LimitWarning } from './warning';
 
 interface TextListProps {
   textType: TextTypes;
@@ -64,7 +63,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
         <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
       </StyledHeaders>
       <StyledList>
-        {texts.map(({ id, title, modified, created, hjemler, ytelser, utfall, enheter, sections, templates }) => (
+        {texts.map(({ id, title, modified, created }) => (
           <ListItem key={id} $active={query.id === id}>
             <StyledLink to={`${getPathPrefix(textType)}/${id}${window.location.search}`}>
               <StyledTitle>
@@ -72,14 +71,6 @@ export const TextList = ({ textType, filter }: TextListProps) => {
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
               </StyledTitle>
               <DateTime modified={modified} created={created} />
-              <LimitWarning
-                hjemler={hjemler}
-                ytelser={ytelser}
-                utfall={utfall}
-                enheter={enheter}
-                sections={sections}
-                templates={templates}
-              />
             </StyledLink>
           </ListItem>
         ))}
@@ -141,7 +132,7 @@ const ListItem = styled.li<{ $active: boolean }>`
 
 const StyledLink = styled(Link)`
   display: grid;
-  grid-template-columns: 1fr 160px 16px;
+  grid-template-columns: 1fr 160px;
   gap: 8px;
   align-content: center;
   align-items: center;

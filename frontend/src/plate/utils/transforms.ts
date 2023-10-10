@@ -42,7 +42,6 @@ export const insertPlaceholderFromSelection = (editor: RichTextEditor) => {
     insertNodes(editor, [createPlaceHolder(textFromSelection), { text: '' }], {
       at: Range.start(selection),
       match: isText,
-      select: true,
     });
   });
 };

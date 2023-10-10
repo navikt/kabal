@@ -1,15 +1,16 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { EditorValue, TemplateSections } from '@app/plate/types';
+import { EditorValue } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { TemplateSections } from '../template-sections';
 import {
   createCurrentDate,
   createFooter,
   createHeader,
-  createLabelContent,
   createMaltekst,
+  createParagraphWithLabelContent,
   createRedigerbarMaltekst,
   createRegelverk,
   createSignature,
@@ -19,12 +20,13 @@ const INITIAL_SLATE_VALUE: EditorValue = [
   createCurrentDate(),
   createHeader(),
   createMaltekst(TemplateSections.TITLE),
-  createLabelContent('sakenGjelder.name', 'Klager'),
-  createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+  createParagraphWithLabelContent('sakenGjelder.name', 'Klager'),
+  createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+  createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
   createRedigerbarMaltekst(TemplateSections.INTRODUCTION),
   createMaltekst(TemplateSections.AVGJOERELSE),
   createRedigerbarMaltekst(TemplateSections.AVGJOERELSE),
-  createRedigerbarMaltekst(TemplateSections.KLAGER_VEKTLAGT),
+  createRedigerbarMaltekst(TemplateSections.ANFOERSLER),
   createRedigerbarMaltekst(TemplateSections.OPPLYSNINGER),
   createMaltekst(TemplateSections.VURDERINGEN),
   createRedigerbarMaltekst(TemplateSections.VURDERINGEN),
@@ -41,7 +43,7 @@ const INITIAL_SLATE_VALUE: EditorValue = [
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.KLAGEVEDTAK,
   type: SaksTypeEnum.KLAGE,
-  tittel: 'Vedtak/beslutning',
+  tittel: 'Vedtak/beslutning (klage)',
   content: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
 });

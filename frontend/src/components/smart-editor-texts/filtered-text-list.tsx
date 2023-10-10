@@ -17,7 +17,7 @@ export const FilteredTextList = ({ textType }: Props) => {
   return (
     <Container>
       <Header>
-        <Filters />
+        <Filters textType={textType} />
         <Search
           value={filter}
           onChange={setFilter}
@@ -37,7 +37,7 @@ const Container = styled.div`
   grid-template-rows: min-content 1fr;
   row-gap: 8px;
   height: 100%;
-  z-index: 10;
+  z-index: 22;
   overflow: visible;
 `;
 

@@ -5,5 +5,5 @@ export const createLabelContentPlugin = createPluginFactory({
   key: ELEMENT_LABEL_CONTENT,
   isElement: true,
   isVoid: true,
-  isInline: false,
+  isInline: true,
 });

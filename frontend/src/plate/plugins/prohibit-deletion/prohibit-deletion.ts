@@ -19,7 +19,7 @@ import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { isOfElementTypesFn, isUnchangeable } from '@app/plate/utils/queries';
 
 const withOverrides = (editor: RichTextEditor) => {
-  const { deleteBackward, deleteForward, deleteFragment, insertText, addMark, normalize } = editor;
+  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, normalize } = editor;
 
   editor.insertText = (text, options) => {
     if (isUnchangeable(editor)) {
@@ -95,6 +95,14 @@ const withOverrides = (editor: RichTextEditor) => {
     }
 
     normalize(options);
+  };
+
+  editor.insertFragment = (fragment) => {
+    if (isUnchangeable(editor)) {
+      return;
+    }
+
+    return insertFragment(fragment);
   };
 
   return editor;

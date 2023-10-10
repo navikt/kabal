@@ -1,6 +1,8 @@
 export interface IOption<T> {
   value: T;
   label: string;
+  disabled?: boolean;
+  tags?: React.ReactNode[];
 }
 
 export interface BaseProps<T extends string, O = IOption<T>> {

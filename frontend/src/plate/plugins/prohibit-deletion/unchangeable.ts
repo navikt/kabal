@@ -11,7 +11,7 @@ import {
   isStartPoint,
   removeNodes,
 } from '@udecode/plate-common';
-import { TextDirection, TextUnit } from 'slate';
+import { Path, TextDirection, TextUnit } from 'slate';
 import {
   ELEMENT_PLACEHOLDER,
   ELEMENT_REGELVERK_CONTAINER,
@@ -44,7 +44,22 @@ const deleteCurrentNode = (editor: RichTextEditor): void => {
 };
 
 export const handleDeleteBackwardIntoUnchangeable = (editor: RichTextEditor): boolean => {
-  if (editor.selection === null || !isSelectionAtBlockStart(editor)) {
+  if (editor.selection === null) {
+    return false;
+  }
+
+  const prevSibling = Path.hasPrevious(editor.selection.focus.path)
+    ? findNode(editor, { at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
+    : undefined;
+
+  // Prohibit deletion for inline undeletables
+  if (editor.selection.focus.offset === 0 && isUndeletable(editor, prevSibling)) {
+    deleteCurrentNode(editor);
+
+    return true;
+  }
+
+  if (!isSelectionAtBlockStart(editor)) {
     return false;
   }
 
@@ -77,7 +92,21 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: RichTextEditor): bo
 };
 
 export const handleDeleteForwardIntoUnchangeable = (editor: RichTextEditor): boolean => {
-  if (editor.selection === null || !isSelectionAtBlockEnd(editor)) {
+  if (editor.selection === null) {
+    return false;
+  }
+
+  const nextSibling = findNode(editor, { at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
+  const isEnd = isEndPoint(editor, editor.selection.focus, editor.selection.focus.path);
+
+  // Prohibit deletion for inline undeletables
+  if (isEnd && isUndeletable(editor, nextSibling)) {
+    deleteCurrentNode(editor);
+
+    return true;
+  }
+
+  if (!isSelectionAtBlockEnd(editor)) {
     return false;
   }
 

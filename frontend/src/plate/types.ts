@@ -36,33 +36,7 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
-
-/* 
-  Why animals?
-  
-  Short, non-sortable.
-  No need for UUIDs.
-  Many to choose from.
-
-  https://en.wikipedia.org/wiki/Haiku
-*/
-export enum TemplateSections {
-  TITLE = 'section-esel',
-  INTRODUCTION = 'section-rev',
-  KONKLUSJON = 'section-elg',
-  ANKEINFO = 'section-ape',
-  KLAGER_VEKTLAGT = 'section-ulv',
-  VURDERINGEN = 'section-mus',
-  OPPLYSNINGER = 'section-sau',
-  GENERELL_INFO = 'section-sel',
-  AVGJOERELSE = 'section-mår',
-  REGELVERK = 'section-gnu',
-  SAKSKOSTNADER = 'section-gris',
-  FREMLEGG = 'section-geit',
-  TILSVARSRETT = 'section-hund',
-  VEDLEGG = 'section-katt',
-  SVAR_FRA_ROL = 'section-emu',
-}
+import { TemplateSections } from './template-sections';
 
 export enum TextAlign {
   LEFT = 'left',
@@ -96,7 +70,7 @@ interface BlockElement extends TElement {
 
 export interface ParagraphElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
   type: typeof ELEMENT_PARAGRAPH;
-  children: (RichText | PlaceholderElement)[];
+  children: (RichText | PlaceholderElement | LabelContentElement)[];
 }
 
 export interface H1Element extends BlockElement, IndentableStyleProps {
@@ -190,7 +164,7 @@ export interface RegelverkContainerElement extends BlockElement {
 
 export interface RegelverkElement extends BlockElement {
   type: typeof ELEMENT_REGELVERK;
-  section: TemplateSections.REGELVERK;
+  section: TemplateSections.REGELVERK_TITLE;
   children: [PageBreakElement, MaltekstElement, RegelverkContainerElement];
 }
 

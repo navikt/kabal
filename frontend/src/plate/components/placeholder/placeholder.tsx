@@ -23,6 +23,7 @@ export const Placeholder = ({
   const path = findNodePath(editor, element);
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
+  const isDragging = window.getSelection()?.isCollapsed === false;
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -44,6 +45,10 @@ export const Placeholder = ({
   const isFocused = path === undefined ? false : getIsFocused(editor, path);
 
   useEffect(() => {
+    if (isDragging) {
+      return;
+    }
+
     if (path === undefined) {
       return;
     }
@@ -78,7 +83,7 @@ export const Placeholder = ({
     if (hasZeroChars(text)) {
       return insertEmptyChar(editor, path, at);
     }
-  }, [editor, element, isFocused, path, text]);
+  }, [editor, element, isDragging, isFocused, path, text]);
 
   return (
     <PlateElement
@@ -91,18 +96,12 @@ export const Placeholder = ({
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
         <Wrapper $placeholder={element.placeholder} $focused={isFocused} $hasText={!hasNoVisibleText} onClick={onClick}>
-          <Anchor contentEditable={false} />
           {children}
-          <Anchor contentEditable={false} />
         </Wrapper>
       </Tooltip>
     </PlateElement>
   );
 };
-
-const Anchor = styled.span`
-  font-size: 0;
-`;
 
 interface WrapperStyleProps {
   $placeholder: string;
@@ -121,6 +120,7 @@ const Wrapper = styled.span<WrapperStyleProps>`
     cursor: text;
     color: var(--a-text-subtle);
     content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
+    user-select: none;
   }
 `;
 
