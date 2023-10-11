@@ -159,7 +159,7 @@ export interface MaltekstElement extends BlockElement {
 export interface RedigerbarMaltekstElement extends BlockElement {
   type: typeof ELEMENT_REDIGERBAR_MALTEKST;
   section: TemplateSections;
-  children: ParentOrChildElement[];
+  children: ParentOrChildElement[] | [EmptyVoidElement];
 }
 
 export interface PlaceholderElement extends BlockElement {
