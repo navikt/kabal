@@ -1,15 +1,26 @@
 import { ArrowLeftIcon, FileTextIcon, FingerButtonIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { useGetTextByIdQuery } from '@app/redux-api/texts';
 import { EditSmartEditorText } from './edit';
 
-export const LoadText = () => {
+interface Props {
+  autofocus: boolean;
+  setAutofocus: (autofocus: boolean) => void;
+}
+
+export const LoadText = ({ autofocus, setAutofocus }: Props) => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isFetching, isUninitialized, isError } = useGetTextByIdQuery(id ?? skipToken);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setTimeout(() => setAutofocus(false));
+    }
+  }, [data, setAutofocus]);
 
   if (isError) {
     return (
@@ -48,7 +59,7 @@ export const LoadText = () => {
 
     return (
       <Container data-textid={id}>
-        <EditSmartEditorText key={id} {...data} />
+        <EditSmartEditorText key={id} savedText={data} />
         <LoaderBackground>
           <Loader size="2xlarge" />
         </LoaderBackground>
@@ -68,7 +79,7 @@ export const LoadText = () => {
 
   return (
     <Container data-textid={id}>
-      <EditSmartEditorText key={id} {...data} />
+      <EditSmartEditorText key={id} savedText={data} autofocus={autofocus} />
     </Container>
   );
 };

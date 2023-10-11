@@ -25,7 +25,12 @@ import { ContentEditor } from './content-editor';
 type Key = IUpdatePlainTextProperty['key'] | IUpdateRichTextProperty['key'];
 type Value = IUpdatePlainTextProperty['value'] | IUpdateRichTextProperty['value'];
 
-export const EditSmartEditorText = (savedText: IText) => {
+interface Props {
+  savedText: IText;
+  autofocus?: boolean;
+}
+
+export const EditSmartEditorText = ({ autofocus, savedText }: Props) => {
   const [update, status] = useUpdateTextMutation({
     fixedCacheKey: savedText.id,
   });
@@ -65,6 +70,7 @@ export const EditSmartEditorText = (savedText: IText) => {
           size="small"
           value={title}
           onChange={({ target }) => updateUnsavedText(target.value, 'title')}
+          autoFocus={autofocus}
         />
 
         <LineContainer>
@@ -122,7 +128,7 @@ export const EditSmartEditorText = (savedText: IText) => {
 
       <Buttons onKeyDown={onKeyDown}>
         <Button onClick={save} icon={<CheckmarkIcon aria-hidden />} size="small" loading={status.isLoading}>
-          Lagre og publisér
+          Lagre og publiser
         </Button>
         <DeleteTextButton id={id} title={savedText.title} />
       </Buttons>
