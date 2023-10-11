@@ -8,11 +8,22 @@ import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { NONE } from '@app/components/smart-editor-texts/types';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
-import { isNodeEmpty } from '@app/plate/utils/queries';
+import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
 import { RichTextTypes } from '@app/types/texts/texts';
+
+const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
+  if (element.children.length !== 1) {
+    return false;
+  }
+
+  const [child] = element.children;
+
+  return isOfElementType<EmptyVoidElement>(child, ELEMENT_EMPTY_VOID);
+};
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -67,7 +78,7 @@ export const RedigerbarMaltekst = ({
       return;
     }
 
-    isInitialized.current = !isNodeEmpty(editor, element);
+    isInitialized.current = !consistsOfOnlyEmptyVoid(element);
 
     if (!isInitialized.current) {
       insertRedigerbarMaltekst();

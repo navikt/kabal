@@ -4,6 +4,7 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import {
   ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
@@ -18,6 +19,7 @@ import {
 import {
   BulletListElement,
   CurrentDateElement,
+  EmptyVoidElement,
   FooterElement,
   H1Element,
   H2Element,
@@ -55,7 +57,7 @@ export const createMaltekst = (section: TemplateSections): MaltekstElement => ({
 export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbarMaltekstElement => ({
   type: ELEMENT_REDIGERBAR_MALTEKST,
   section,
-  children: [createSimpleParagraph()],
+  children: [createEmptyVoid()],
 });
 
 const createRegelverkContainer = (
@@ -102,6 +104,12 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
       },
     ],
   })),
+});
+
+// eslint-disable-next-line import/no-unused-modules
+export const createEmptyVoid = (): EmptyVoidElement => ({
+  type: ELEMENT_EMPTY_VOID,
+  children: [{ text: '' }],
 });
 
 export const createSignature = (): SignatureElement => ({
