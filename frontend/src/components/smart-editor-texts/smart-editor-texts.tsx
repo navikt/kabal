@@ -1,6 +1,6 @@
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { useAddTextMutation } from '@app/redux-api/texts';
 import { TextTypes, isPlainTextType } from '@app/types/texts/texts';
@@ -16,12 +16,14 @@ interface Props {
 export const SmartEditorTexts = ({ textType }: Props) => {
   const navigate = useTextNavigate();
   const [addText, { isLoading }] = useAddTextMutation();
+  const [autofocus, setAutofocus] = useState(false);
 
-  const onClick = async () => {
+  const onClick = useCallback(async () => {
     const text = isPlainTextType(textType) ? getNewPlainText(textType) : getNewRichText(textType);
     const { id } = await addText({ text, query: { textType } }).unwrap();
     navigate(id);
-  };
+    setAutofocus(true);
+  }, [addText, navigate, textType]);
 
   return (
     <Container>
@@ -32,7 +34,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
       </Header>
       <Content>
         <FilteredTextList textType={textType} />
-        <LoadText />
+        <LoadText autofocus={autofocus} setAutofocus={setAutofocus} />
       </Content>
     </Container>
   );
