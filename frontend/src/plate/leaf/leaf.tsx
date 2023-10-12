@@ -1,4 +1,10 @@
-import { PlateLeaf, PlateRenderLeafProps, findNodePath, getNodeAncestors } from '@udecode/plate-common';
+import {
+  PlateLeaf,
+  PlateRenderLeafProps,
+  findNodePath,
+  getNodeAncestors,
+  isEditorReadOnly,
+} from '@udecode/plate-common';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -101,6 +107,10 @@ const getLeafStyles = (leaf: RichText): React.CSSProperties => ({
 });
 
 const contentEditable = (editor: RichTextEditor, text: RichText): boolean => {
+  if (isEditorReadOnly(editor)) {
+    return false;
+  }
+
   const path = findNodePath(editor, text);
 
   if (path === undefined) {

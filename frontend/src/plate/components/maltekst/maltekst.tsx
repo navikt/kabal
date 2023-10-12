@@ -4,6 +4,7 @@ import {
   PlateElement,
   PlateRenderElementProps,
   findNodePath,
+  isEditorReadOnly,
   isElement,
   replaceNodeChildren,
   withoutNormalizing,
@@ -90,7 +91,7 @@ export const Maltekst = ({
       attributes={attributes}
       element={element}
       editor={editor}
-      contentEditable={true}
+      contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {
