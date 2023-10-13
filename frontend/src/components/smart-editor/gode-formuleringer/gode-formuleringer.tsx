@@ -33,6 +33,10 @@ const filterTemplateSection = (
   activeSection: TemplateSections | NONE_TYPE,
   godFormulering: IRichText,
 ): boolean => {
+  if (godFormulering.templateSectionList.length === 0) {
+    return true;
+  }
+
   for (const templateSection of godFormulering.templateSectionList) {
     const [template, section] = templateSection.split(LIST_DELIMITER);
 
@@ -105,24 +109,18 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         event.preventDefault();
 
         if (focused !== -1) {
-          setFocused(-1);
-
-          return;
+          return setFocused(-1);
         }
 
         if (filter.length !== 0) {
-          setFilter('');
-
-          return;
+          return setFilter('');
         }
 
         if (editor !== null) {
           focusEditor(editor);
         }
 
-        setShowGodeFormuleringer(false);
-
-        return;
+        return setShowGodeFormuleringer(false);
       }
 
       if (event.key === 'Enter' && editor !== null) {
@@ -152,7 +150,6 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
             <LightBulbIcon />
             Gode formuleringer ({texts.length})
           </GodeFormuleringerTitle>
-
           <Button
             title="Skjul gode formuleringer"
             size="small"
