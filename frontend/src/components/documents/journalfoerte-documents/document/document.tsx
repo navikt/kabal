@@ -36,7 +36,7 @@ export const Document = memo(
     const [isExpanded] = useIsExpanded();
 
     const { getSelectedDocuments } = useContext(SelectContext);
-    const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
+    const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
 
     const cleanDragUI = useRef<() => void>(() => undefined);
 
@@ -68,6 +68,7 @@ export const Document = memo(
     );
 
     const disabled = (!isSaksbehandler && !isRol) || !harTilgangTilArkivvariant;
+    const draggingIsEnabled = draggingEnabled && !disabled;
 
     return (
       <>
@@ -80,12 +81,12 @@ export const Document = memo(
           data-journalpostid={journalpostId}
           data-dokumentinfoid={dokumentInfoId}
           data-documentname={tittel}
-          onDragStart={disabled ? (e) => e.preventDefault() : onDragStart}
+          onDragStart={draggingIsEnabled ? onDragStart : (e) => e.preventDefault()}
           onDragEnd={() => {
             cleanDragUI.current();
             clearDragState();
           }}
-          draggable={!disabled}
+          draggable={draggingIsEnabled}
         >
           <SelectRow
             journalpostId={journalpostId}

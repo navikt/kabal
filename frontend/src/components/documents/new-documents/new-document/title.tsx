@@ -1,5 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
   StyledDocumentTitle,
   StyledTitleAction,
@@ -28,8 +29,9 @@ interface Props {
 
 export const DocumentTitle = ({ document }: Props) => {
   const { value, setValue } = useDocumentsPdfViewed();
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, _setEditMode] = useState(false);
   const { getTabRef, setTabRef } = useContext(TabContext);
+  const { setDraggingEnabled } = useContext(DragAndDropContext);
   const [isExpanded] = useIsExpanded();
   const oppgaveId = useOppgaveId();
 
@@ -142,6 +144,14 @@ export const DocumentTitle = ({ document }: Props) => {
       setTabRef(documentId, newTabRef);
     },
     [disabled, getTabRef, isTabOpen, setTabRef, setViewedDocument, documentId, url],
+  );
+
+  const setEditMode = useCallback(
+    (edit: boolean) => {
+      _setEditMode(edit);
+      setDraggingEnabled(!edit);
+    },
+    [setDraggingEnabled],
   );
 
   if (editMode) {

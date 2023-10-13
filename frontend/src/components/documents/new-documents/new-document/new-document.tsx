@@ -34,10 +34,10 @@ export const NewDocument = ({ document }: Props) => {
   const [isExpanded] = useIsExpanded();
   const isAttachment = document.parentId !== null;
   const cleanDragUI = useRef<() => void>(() => undefined);
-  const { setDraggedDocument, clearDragState } = useContext(DragAndDropContext);
+  const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
   const canEdit = useCanEditDocument(document);
   const containsRolAttachments = useContainsRolAttachments(document);
-  const isDraggable = canEdit && !containsRolAttachments;
+  const isDraggable = draggingEnabled && canEdit && !containsRolAttachments;
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {

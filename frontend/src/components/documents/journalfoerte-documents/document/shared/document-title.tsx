@@ -1,4 +1,5 @@
-import React, { memo, useContext, useMemo, useState } from 'react';
+import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
@@ -25,12 +26,21 @@ export const DocumentTitle = memo(
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
     const isTabOpen = useIsTabOpen(documentId);
+    const { setDraggingEnabled } = useContext(DragAndDropContext);
 
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, _setEditMode] = useState(false);
 
     const isInlineOpen = useMemo(
       () => value.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
       [dokumentInfoId, value],
+    );
+
+    const setEditMode = useCallback(
+      (edit: boolean) => {
+        _setEditMode(edit);
+        setDraggingEnabled(!edit);
+      },
+      [setDraggingEnabled],
     );
 
     if (editMode) {

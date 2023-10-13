@@ -24,12 +24,7 @@ export const SetFilename = ({ onDone, dokumentInfoId, journalpostId, tittel }: P
       return;
     }
 
-    setFilename({
-      journalpostId,
-      dokumentInfoId,
-      tittel: localFilename,
-      oppgaveId,
-    });
+    setFilename({ journalpostId, dokumentInfoId, tittel: localFilename, oppgaveId });
   };
 
   return (
