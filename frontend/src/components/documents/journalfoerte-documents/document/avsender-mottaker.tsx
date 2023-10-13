@@ -22,7 +22,7 @@ export const AvsenderMottaker = memo(
         size="small"
         variant="tertiary"
       >
-        {formatAvsenderMottaker(avsenderMottaker)} {formatAvsenderMottaker(avsenderMottaker)}
+        {formatAvsenderMottaker(avsenderMottaker)}
       </AvsenderMottakerButton>
     );
   },
