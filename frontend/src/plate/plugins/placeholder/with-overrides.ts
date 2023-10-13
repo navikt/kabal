@@ -1,10 +1,10 @@
-import { TRange, findNode } from '@udecode/plate-common';
+import { PlateEditor, TRange, findNode } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import { MaltekstElement, RichTextEditor } from '../../types';
+import { MaltekstElement } from '../../types';
 import { ELEMENT_MALTEKST } from '../element-types';
 
-export const withOverrides = (editor: RichTextEditor) => {
+export const withOverrides = (editor: PlateEditor) => {
   const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes } = editor;
 
   editor.setNodes = (props, options) => {

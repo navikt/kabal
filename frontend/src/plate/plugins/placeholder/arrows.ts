@@ -1,4 +1,5 @@
 import {
+  PlateEditor,
   TText,
   findNode,
   getNextNode,
@@ -8,10 +9,9 @@ import {
   setSelection as plateSetSelection,
 } from '@udecode/plate-common';
 import { KeyboardEvent } from 'react';
-import { RichTextEditor } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 
-export const handleArrows = (editor: RichTextEditor, e: KeyboardEvent) => {
+export const handleArrows = (editor: PlateEditor, e: KeyboardEvent) => {
   const isArrowDown = e.key === 'ArrowDown';
 
   if (isArrowDown || e.key === 'ArrowUp') {

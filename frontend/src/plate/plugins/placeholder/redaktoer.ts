@@ -1,13 +1,12 @@
-import { AnyObject, createPluginFactory } from '@udecode/plate-common';
+import { createPluginFactory } from '@udecode/plate-common';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
-import { EditorValue, RichTextEditor } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 
-export const createRedaktoerPlaceholderPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const createRedaktoerPlaceholderPlugin = createPluginFactory({
   key: ELEMENT_PLACEHOLDER,
   isElement: true,
   isVoid: false,

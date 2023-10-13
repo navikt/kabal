@@ -10,7 +10,7 @@ interface PlateEditorContextComponentProps {
   children: React.ReactNode;
   readOnly?: boolean;
   decorate?: PlateProps<EditorValue, RichTextEditor>['decorate'];
-  plugins: PlatePlugin<AnyObject, EditorValue, RichTextEditor>[];
+  plugins: PlatePlugin[];
 }
 
 export const PlateEditorContextComponent = ({
@@ -42,7 +42,7 @@ export const PlateEditorContextComponent = ({
 interface PlateEditorProps {
   id: string;
   readOnly?: boolean;
-  renderLeaf?: RenderLeafFn<EditorValue>;
+  renderLeaf?: RenderLeafFn;
 }
 
 export const PlateEditor = ({ id, readOnly = false, renderLeaf = defaultRenderLeaf }: PlateEditorProps) => (

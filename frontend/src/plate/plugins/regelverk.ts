@@ -1,19 +1,18 @@
 import { TNodeEntry, createPluginFactory, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue, RegelverkContainerElement, RegelverkElement, RichTextEditor } from '@app/plate/types';
 import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from './element-types';
 
-export const createRegelverkPlugin = createPluginFactory<RegelverkElement, EditorValue>({
+export const createRegelverkPlugin = createPluginFactory({
   key: ELEMENT_REGELVERK,
   isElement: true,
   isVoid: false,
   isInline: false,
 });
 
-export const createRegelverkContainerPlugin = createPluginFactory<RegelverkContainerElement, EditorValue>({
+export const createRegelverkContainerPlugin = createPluginFactory({
   key: ELEMENT_REGELVERK_CONTAINER,
   isElement: true,
-  withOverrides: (editor: RichTextEditor) => {
+  withOverrides: (editor) => {
     const { normalizeNode } = editor;
 
     editor.normalizeNode = ([node, path]: TNodeEntry) => {
