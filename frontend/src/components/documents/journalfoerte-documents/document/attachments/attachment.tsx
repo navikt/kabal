@@ -42,7 +42,7 @@ export const Attachment = memo(
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const { getSelectedDocuments } = useContext(SelectContext);
     const cleanDragUI = useRef<() => void>(() => undefined);
-    const { setDraggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
+    const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
     const isFinished = useIsFullfoert();
@@ -83,6 +83,7 @@ export const Attachment = memo(
     );
 
     const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFinished || isFeilregistrert;
+    const draggingIsEnabled = draggingEnabled && !disabled;
 
     return (
       <StyledVedlegg
@@ -92,12 +93,12 @@ export const Attachment = memo(
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
         $selected={isSelected}
-        onDragStart={disabled ? (e) => e.preventDefault() : onDragStart}
+        onDragStart={draggingIsEnabled ? onDragStart : (e) => e.preventDefault()}
         onDragEnd={() => {
           cleanDragUI.current();
           clearDragState();
         }}
-        draggable={!disabled}
+        draggable={draggingIsEnabled}
       >
         <SelectRow
           journalpostId={journalpostId}

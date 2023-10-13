@@ -8,6 +8,8 @@ interface IDragAndDropContext {
   draggedDocument: IMainDocument | null;
   setDraggedDocument: (document: IMainDocument | null) => void;
   clearDragState: () => void;
+  draggingEnabled: boolean;
+  setDraggingEnabled: (enabled: boolean) => void;
 }
 
 export const DragAndDropContext = createContext<IDragAndDropContext>({
@@ -16,6 +18,8 @@ export const DragAndDropContext = createContext<IDragAndDropContext>({
   draggedDocument: null,
   setDraggedDocument: () => {},
   clearDragState: () => {},
+  draggingEnabled: true,
+  setDraggingEnabled: () => {},
 });
 
 interface Props {
@@ -27,6 +31,7 @@ const EMPTY_ARRAY: IArkivertDocument[] = [];
 export const DragAndDropContextElement = ({ children }: Props) => {
   const [draggedJournalfoertDocuments, setDraggedJournalfoertDocuments] = useState<IArkivertDocument[]>(EMPTY_ARRAY);
   const [draggedDocument, setDraggedDocument] = useState<IMainDocument | null>(null);
+  const [draggingEnabled, setDraggingEnabled] = useState(true);
 
   const hasDocument = draggedDocument !== null;
   const hasJournalfoertDocuments = draggedJournalfoertDocuments.length !== 0;
@@ -49,6 +54,8 @@ export const DragAndDropContextElement = ({ children }: Props) => {
         draggedDocument,
         setDraggedDocument,
         clearDragState,
+        draggingEnabled,
+        setDraggingEnabled,
       }}
     >
       {children}
