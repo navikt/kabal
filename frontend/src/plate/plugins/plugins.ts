@@ -1,9 +1,8 @@
 import { createAlignPlugin } from '@udecode/plate-alignment';
-import { AutoformatPlugin, createAutoformatPlugin } from '@udecode/plate-autoformat';
+import { createAutoformatPlugin } from '@udecode/plate-autoformat';
 import { createBoldPlugin, createItalicPlugin, createUnderlinePlugin } from '@udecode/plate-basic-marks';
 import { createExitBreakPlugin, createSoftBreakPlugin } from '@udecode/plate-break';
-import { PlatePlugin, PluginOptions, createPlugins, someNode } from '@udecode/plate-common';
-import { createFontColorPlugin } from '@udecode/plate-font';
+import { PlatePlugin, createInsertDataPlugin, createPlugins, someNode } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
 import { createIndentPlugin } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
@@ -20,7 +19,6 @@ import { createFooterPlugin, createHeaderPlugin } from '@app/plate/plugins/heade
 import { createRedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { createSignaturePlugin } from '@app/plate/plugins/signature';
-import { EditorValue, RichTextEditor } from '../types';
 import { autoformatPlugin } from './autoformat/plugin';
 import { createCurrentDatePlugin } from './current-date';
 import { createLabelContentPlugin } from './label-content';
@@ -30,7 +28,8 @@ import { createSaksbehandlerPlaceholderPlugin } from './placeholder/saksbehandle
 import { createRedigerbarMaltekstPlugin } from './redigerbar-maltekst';
 import { createRegelverkContainerPlugin, createRegelverkPlugin } from './regelverk';
 
-const defaultPlugins: PlatePlugin<PluginOptions, EditorValue>[] = [
+const defaultPlugins: PlatePlugin[] = [
+  createInsertDataPlugin(),
   createParagraphPlugin(),
   createHeadingPlugin({
     options: { levels: 3 },
@@ -75,7 +74,7 @@ const defaultPlugins: PlatePlugin<PluginOptions, EditorValue>[] = [
     },
   }),
   createAlignPlugin({ inject: { props: { validTypes: [ELEMENT_PARAGRAPH] } } }),
-  createAutoformatPlugin<AutoformatPlugin<EditorValue, RichTextEditor>, EditorValue>(autoformatPlugin),
+  createAutoformatPlugin(autoformatPlugin),
   createExitBreakPlugin({
     options: {
       rules: [
@@ -99,7 +98,7 @@ const defaultPlugins: PlatePlugin<PluginOptions, EditorValue>[] = [
   createCopyPlugin(),
 ];
 
-export const saksbehandlerPlugins = createPlugins<EditorValue>(
+export const saksbehandlerPlugins = createPlugins(
   [
     ...defaultPlugins,
     createSaksbehandlerPlaceholderPlugin(),
@@ -114,17 +113,16 @@ export const saksbehandlerPlugins = createPlugins<EditorValue>(
     createLabelContentPlugin(),
     createSignaturePlugin(),
     createEmptyVoidPlugin(),
-    createFontColorPlugin(),
     createBookmarkPlugin(),
   ],
   { components },
 );
 
-export const redaktoerPlugins = createPlugins<EditorValue>([...defaultPlugins, createRedaktoerPlaceholderPlugin()], {
+export const redaktoerPlugins = createPlugins([...defaultPlugins, createRedaktoerPlaceholderPlugin()], {
   components,
 });
 
-export const godeFormuleringerPlugins = createPlugins<EditorValue>(
+export const godeFormuleringerPlugins = createPlugins(
   [
     ...defaultPlugins,
     createSaksbehandlerPlaceholderPlugin(),

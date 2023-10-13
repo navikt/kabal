@@ -1,12 +1,12 @@
-import { findNode, getNodeAncestors } from '@udecode/plate-common';
+import { PlateEditor, findNode, getNodeAncestors } from '@udecode/plate-common';
 import { Path } from 'slate';
-import { PlaceholderElement, RichTextEditor } from '../../types';
+import { PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
-export const getPlaceholderEntry = (editor: RichTextEditor) =>
+export const getPlaceholderEntry = (editor: PlateEditor) =>
   findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
 
-export const isPlaceholderInMaltekst = (editor: RichTextEditor, placeholderPath: Path) => {
+export const isPlaceholderInMaltekst = (editor: PlateEditor, placeholderPath: Path) => {
   const ancestors = getNodeAncestors(editor, placeholderPath);
 
   for (const ancestor of ancestors) {

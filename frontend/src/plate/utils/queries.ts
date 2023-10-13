@@ -108,5 +108,4 @@ export const isUnchangeable = (editor: RichTextEditor) => {
   return false;
 };
 
-export const isPlaceholderActive = (editor: RichTextEditor) =>
-  someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+export const isPlaceholderActive = (editor: PlateEditor) => someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });

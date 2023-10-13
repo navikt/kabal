@@ -250,13 +250,13 @@ export type RichTextEditor = PlateEditor<EditorValue> & { isDragging?: boolean }
  * Plate types
  */
 
-export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P, EditorValue, RichTextEditor>;
+export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P>;
 
 /**
  * Editor utils
  */
 
-export type EditorAutoformatRule = AutoformatRule<EditorValue, RichTextEditor>;
+export type EditorAutoformatRule = AutoformatRule;
 
 export const useMyPlateEditorRef = (id?: PlateId) => useEditorRef<EditorValue, RichTextEditor>(id);
 export const useMyPlateEditorState = (id?: PlateId) => useEditorState<EditorValue, RichTextEditor>(id);

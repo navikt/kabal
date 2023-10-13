@@ -1,4 +1,5 @@
 import {
+  PlateEditor,
   findNode,
   insertElements,
   insertNodes,
@@ -24,7 +25,7 @@ export const insertPageBreak = (editor: RichTextEditor): boolean => {
   return true;
 };
 
-export const insertPlaceholderFromSelection = (editor: RichTextEditor) => {
+export const insertPlaceholderFromSelection = (editor: PlateEditor) => {
   const { selection } = editor;
 
   if (selection === null || isCollapsed(selection)) {
@@ -46,7 +47,7 @@ export const insertPlaceholderFromSelection = (editor: RichTextEditor) => {
   });
 };
 
-export const removePlaceholder = (editor: RichTextEditor) => {
+export const removePlaceholder = (editor: PlateEditor) => {
   const entry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
 
   if (entry === undefined) {

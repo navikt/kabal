@@ -1,5 +1,5 @@
 import {
-  AnyObject,
+  PlateEditor,
   createPluginFactory,
   findNode,
   isCollapsed,
@@ -7,9 +7,9 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { EditorValue, RichText, RichTextEditor } from '@app/plate/types';
+import { RichText } from '@app/plate/types';
 
-const withOverrides = (editor: RichTextEditor) => {
+const withOverrides = (editor: PlateEditor) => {
   const { insertBreak } = editor;
 
   editor.insertBreak = () => {
@@ -21,7 +21,7 @@ const withOverrides = (editor: RichTextEditor) => {
   return editor;
 };
 
-export const createBookmarkPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const createBookmarkPlugin = createPluginFactory({
   key: 'bookmark',
   withOverrides,
   handlers: {
@@ -33,7 +33,7 @@ export const createBookmarkPlugin = createPluginFactory<AnyObject, EditorValue, 
   },
 });
 
-const removeBookmarkMarks = (editor: RichTextEditor) => {
+const removeBookmarkMarks = (editor: PlateEditor) => {
   const entry = findNode<RichText>(editor, { match: isText });
 
   if (entry === undefined) {

@@ -1,5 +1,5 @@
 import {
-  AnyObject,
+  PlateEditor,
   TNodeEntry,
   createPluginFactory,
   findNode,
@@ -12,11 +12,11 @@ import {
 import { BasePoint } from 'slate';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { EditorValue, PlaceholderElement, RichTextEditor } from '../../types';
+import { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 
-export const createSaksbehandlerPlaceholderPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const createSaksbehandlerPlaceholderPlugin = createPluginFactory({
   key: ELEMENT_PLACEHOLDER,
   isElement: true,
   isVoid: false,
@@ -57,7 +57,7 @@ export const createSaksbehandlerPlaceholderPlugin = createPluginFactory<AnyObjec
   },
 });
 
-const selectAndScrollIntoView = (editor: RichTextEditor, [node, path]: TNodeEntry<PlaceholderElement>) => {
+const selectAndScrollIntoView = (editor: PlateEditor, [node, path]: TNodeEntry<PlaceholderElement>) => {
   const lastIndex = node.children.length - 1;
   const offset = node.children[lastIndex]?.text.length ?? 0;
   const point: BasePoint = { path: [...path, lastIndex], offset };

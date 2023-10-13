@@ -1,8 +1,8 @@
-import { AnyObject, createPluginFactory, findNode, isText, withoutNormalizing } from '@udecode/plate-common';
+import { PlateEditor, createPluginFactory, findNode, isText, withoutNormalizing } from '@udecode/plate-common';
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { EditorValue, RichText, RichTextEditor } from '@app/plate/types';
+import { RichText } from '@app/plate/types';
 
-const withOverrides = (editor: RichTextEditor) => {
+const withOverrides = (editor: PlateEditor) => {
   const { insertBreak } = editor;
 
   editor.insertBreak = () => {
@@ -14,7 +14,7 @@ const withOverrides = (editor: RichTextEditor) => {
   return editor;
 };
 
-export const createCommentsPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const createCommentsPlugin = createPluginFactory({
   key: 'comments',
   withOverrides,
   handlers: {
@@ -26,7 +26,7 @@ export const createCommentsPlugin = createPluginFactory<AnyObject, EditorValue, 
   },
 });
 
-const removeCommentMarks = (editor: RichTextEditor) => {
+const removeCommentMarks = (editor: PlateEditor) => {
   const entry = findNode<RichText>(editor, { match: isText });
 
   if (entry === undefined) {
