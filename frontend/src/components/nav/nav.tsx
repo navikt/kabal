@@ -35,8 +35,12 @@ export const Nav = () => (
       >
         <MagnifyingGlassIcon /> Søk på person
       </NavItem>
-      <NavItem to="/enhetensoppgaver" testId="enhetens-oppgaver-nav-link" roles={[Role.KABAL_INNSYN_EGEN_ENHET]}>
-        <Buldings3Icon /> Enhetens oppgaver
+      <NavItem
+        to="/oppgavestyring"
+        testId="oppgavestyring-nav-link"
+        roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}
+      >
+        <Buldings3Icon /> Oppgavestyring
       </NavItem>
 
       <NavItem to="/maltekster" testId="maltekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>

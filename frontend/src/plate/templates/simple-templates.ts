@@ -39,6 +39,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createMaltekst(TemplateSections.TITLE),
     createMaltekst(TemplateSections.INTRODUCTION),
     createRedigerbarMaltekst(TemplateSections.FREMLEGG),
+    createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
 });
@@ -51,6 +52,7 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createCurrentDate(),
     createMaltekst(TemplateSections.TITLE),
     createRedigerbarMaltekst(TemplateSections.SVAR_FRA_ROL),
+    createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
 });

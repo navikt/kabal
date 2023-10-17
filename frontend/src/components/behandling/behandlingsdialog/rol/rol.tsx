@@ -8,11 +8,13 @@ import { RolStateText } from '@app/components/behandling/behandlingsdialog/rol/s
 import { TakeFromRol } from '@app/components/behandling/behandlingsdialog/rol/take-from-rol';
 import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetRolQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IAnkebehandling, IKlagebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { RolReadOnly } from './read-only';
@@ -41,13 +43,14 @@ const RolInternal = ({ oppgave }: Props) => {
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const isEditable = !isFinished && !isFeilregistrert;
+  const isKrol = useHasRole(Role.KABAL_KROL);
 
   // Poll the ROL endpoint, in case ROL is changed by another user.
   useGetRolQuery(oppgave.id, isEditable ? { pollingInterval: 3 * 1000 } : undefined);
 
   const { rol } = oppgave;
 
-  const isReadOnly = isFinished || isFeilregistrert || (!isSaksbehandler && !isRol);
+  const isReadOnly = isFinished || isFeilregistrert || (!isSaksbehandler && !isRol && !isKrol);
 
   if (isReadOnly) {
     if (rol.navIdent === null) {

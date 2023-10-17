@@ -14,6 +14,9 @@ export enum OppgaveListTagTypes {
   ROL_LEDIGE = 'rol-ledige',
   ROL_UFERDIGE = 'rol-uferdige',
   ROL_FERDIGE = 'rol-ferdige',
+  KROLS_UFERDIGE = 'krols-uferdige',
+  KROLS_FERDIGE = 'krols-ferdige',
+  KROLS_VENTENDE = 'krols-ventende',
 }
 
 export enum DokumenterListTagTypes {

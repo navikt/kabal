@@ -61,6 +61,7 @@ export interface CommonOppgaverParams {
   medunderskrivere?: string[];
   sortering: SortFieldEnum;
   rekkefoelge: SortOrderEnum;
+  tildelteRol?: string[];
 }
 
 interface EnhetParam {
@@ -96,6 +97,10 @@ export interface ISaksbehandlere {
 
 export interface IMedunderskrivere {
   medunderskrivere: INavEmployee[];
+}
+
+export interface IRolList {
+  rolList: INavEmployee[];
 }
 
 export interface IRols {

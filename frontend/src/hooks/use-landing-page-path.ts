@@ -10,8 +10,8 @@ export const useLandingPagePath = (): LandingPagePath => {
     return [true];
   }
 
-  if (data.roller.includes(Role.KABAL_INNSYN_EGEN_ENHET)) {
-    return [false, '/enhetensoppgaver', 'Enhetens oppgaver'];
+  if (data.roller.some((r) => [Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL].includes(r))) {
+    return [false, '/oppgavestyring', 'Oppgavestyring'];
   }
 
   if (data.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {

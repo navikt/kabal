@@ -14,14 +14,14 @@ const TEST_ID = 'mine-oppgaver-table';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
-  ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.RolYtelse,
+  ColumnKeyEnum.RolHjemmel,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
-  ColumnKeyEnum.RolFlowState,
+  ColumnKeyEnum.RolTildeling,
   ColumnKeyEnum.Open,
 ];
 
