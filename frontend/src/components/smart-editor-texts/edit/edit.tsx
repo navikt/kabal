@@ -91,6 +91,7 @@ export const EditSmartEditorText = ({ autofocus, savedText }: Props) => {
             <HjemlerSelect
               selected={ytelseHjemmelList}
               onChange={(value: Value) => updateUnsavedText(value, 'ytelseHjemmelList')}
+              ytelserSelectable={textType !== RichTextTypes.REGELVERK}
             />
           )}
 

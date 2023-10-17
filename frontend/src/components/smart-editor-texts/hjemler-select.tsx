@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { NestedFilterList, NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
-import { GLOBAL, LIST_DELIMITER, NONE_OPTION } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import { ToggleButton } from '../toggle-button/toggle-button';
@@ -11,11 +11,19 @@ interface Props {
   selected: string[];
   onChange: (selected: string[]) => void;
   includeNoneOption?: boolean;
+  ytelserSelectable?: boolean;
+  ytelseIsWildcard?: boolean;
 }
 
 const GENERAL_THRESHOLD = 12;
 
-export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }: Props) => {
+export const HjemlerSelect = ({
+  selected,
+  onChange,
+  includeNoneOption = false,
+  ytelserSelectable = false,
+  ytelseIsWildcard = false,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: ytelser = [] } = useKabalYtelserLatest();
   const ref = useRef<HTMLDivElement>(null);
@@ -93,9 +101,9 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
     () =>
       ytelser
         .map<NestedOption>(({ id: ytelseId, navn: ytelsenavn, lovKildeToRegistreringshjemler }) => ({
-          type: OptionType.OPTION,
+          type: ytelserSelectable ? OptionType.OPTION : OptionType.GROUP,
           label: ytelsenavn,
-          value: ytelseId,
+          value: ytelseIsWildcard ? `${ytelseId}${LIST_DELIMITER}${WILDCARD}` : ytelseId,
           filterValue: ytelsenavn,
           options: lovKildeToRegistreringshjemler.map(({ id, navn, registreringshjemler }) => ({
             type: OptionType.GROUP,
@@ -120,7 +128,7 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
           },
         ]),
 
-    [generelleHjemler, ytelser],
+    [generelleHjemler, ytelseIsWildcard, ytelser, ytelserSelectable],
   );
 
   const options = useMemo(
