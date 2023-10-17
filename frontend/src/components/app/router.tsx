@@ -8,7 +8,7 @@ import { AppLoader } from './loader';
 const AdminPage = lazy(() => import('../../pages/admin/admin'));
 const AnkebehandlingPage = lazy(() => import('../../pages/ankebehandling/ankebehandling'));
 const BunnteksterPage = lazy(() => import('../../pages/bunntekster/bunntekster'));
-const EnhetensOppgaverPage = lazy(() => import('../../pages/enhetens-oppgaver/enhetens-oppgaver'));
+const OppgavestyringPage = lazy(() => import('../../pages/oppgavestyring/oppgavestyring'));
 const GodeFormuleringerPage = lazy(() => import('../../pages/gode-formuleringer/gode-formuleringer'));
 const KlagebehandlingPage = lazy(() => import('../../pages/klagebehandling/klagebehandling'));
 const MalteksterPage = lazy(() => import('../../pages/maltekster/maltekster'));
@@ -36,7 +36,7 @@ export const Router = () => {
         <Route path="oppgaver" element={<OppgaverPage />} />
 
         <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-        <Route path="enhetensoppgaver" element={<EnhetensOppgaverPage />} />
+        <Route path="oppgavestyring" element={<OppgavestyringPage />} />
 
         <Route path="sok" element={<SearchPage />} />
 

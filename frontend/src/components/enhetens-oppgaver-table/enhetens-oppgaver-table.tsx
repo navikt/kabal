@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useSakstyper } from '@app/hooks/use-kodeverk-value';
 import { useGetEnhetensUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
+import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
@@ -15,6 +17,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.RolFlowState,
   ColumnKeyEnum.MedunderskriverFlowState,
   ColumnKeyEnum.Medunderskriver,
   ColumnKeyEnum.Oppgavestyring,
@@ -22,6 +25,16 @@ const COLUMNS: ColumnKeyEnum[] = [
 ];
 
 export const EnhetensOppgaverTable = () => {
+  const hasAccess = useHasRole(Role.KABAL_INNSYN_EGEN_ENHET);
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  return <EnhetensOppgaverTableInternal />;
+};
+
+const EnhetensOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],

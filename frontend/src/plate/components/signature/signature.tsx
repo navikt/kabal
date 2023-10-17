@@ -1,7 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
@@ -10,6 +11,8 @@ import { IndividualSignature } from '@app/plate/components/signature/individual-
 import { MISSING_TITLE } from '@app/plate/components/signature/title';
 import { EditorValue, ISignature, SignatureElement } from '@app/plate/types';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 const useMedunderskriverSignature = () => {
@@ -33,25 +36,46 @@ const useMedunderskriverSignature = () => {
   return medunderskriverSignature;
 };
 
+const useSignatureIdent = (): string | typeof skipToken => {
+  const { data: oppgave } = useOppgave();
+  const { templateId } = useContext(SmartEditorContext);
+
+  if (oppgave === undefined) {
+    return skipToken;
+  }
+
+  if (
+    templateId === TemplateIdEnum.ROL_ANSWERS &&
+    (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE)
+  ) {
+    return oppgave.rol?.navIdent ?? skipToken;
+  }
+
+  return oppgave.tildeltSaksbehandlerident ?? skipToken;
+};
+
 const useSignatureData = (editor: PlateEditor<EditorValue>, element: SignatureElement) => {
   const medunderskriverSignature = useMedunderskriverSignature();
-  const { data: oppgave } = useOppgave();
-  const { data: saksbehandlerSignature } = useGetSignatureQuery(
-    typeof oppgave?.tildeltSaksbehandlerident === 'string' ? oppgave.tildeltSaksbehandlerident : skipToken,
-  );
+  const signatureIdent = useSignatureIdent();
+  const { data: ownSignature } = useGetSignatureQuery(signatureIdent);
+  const { templateId } = useContext(SmartEditorContext);
 
   useEffect(() => {
-    if (typeof saksbehandlerSignature === 'undefined' || typeof medunderskriverSignature === 'undefined') {
+    if (typeof ownSignature === 'undefined' || typeof medunderskriverSignature === 'undefined') {
       return;
     }
 
+    const ownSuffix = templateId === TemplateIdEnum.ROL_ANSWERS ? undefined : 'saksbehandler';
+
     const saksbehandler: ISignature = {
-      name: getName(saksbehandlerSignature, element.useShortName),
-      title: getTitle(saksbehandlerSignature.customJobTitle, 'saksbehandler') ?? MISSING_TITLE,
+      name: getName(ownSignature, element.useShortName),
+      title: getTitle(ownSignature.customJobTitle, ownSuffix) ?? MISSING_TITLE,
     };
 
     const medunderskriver: ISignature | undefined =
-      medunderskriverSignature === null
+      medunderskriverSignature === null ||
+      templateId === TemplateIdEnum.ROL_QUESTIONS ||
+      templateId === TemplateIdEnum.ROL_ANSWERS
         ? undefined
         : {
             name: getName(medunderskriverSignature, element.useShortName),
@@ -74,7 +98,7 @@ const useSignatureData = (editor: PlateEditor<EditorValue>, element: SignatureEl
     };
 
     setNodes(editor, data, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });
-  }, [editor, element, medunderskriverSignature, saksbehandlerSignature]);
+  }, [editor, element, medunderskriverSignature, ownSignature, templateId]);
 };
 
 export const Signature = ({

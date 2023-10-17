@@ -102,7 +102,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           ytelseId={ytelseId}
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
-          rolIdent={null}
+          rol={null}
         >
           Åpne
         </OpenOppgavebehandling>

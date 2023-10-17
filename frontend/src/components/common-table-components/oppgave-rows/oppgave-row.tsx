@@ -1,7 +1,9 @@
+/* eslint-disable max-lines */
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import { Name } from '@app/components/common-table-components/name';
+import { Rol } from '@app/components/common-table-components/rol';
 import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { CopyButton } from '@app/components/copy-button/copy-button';
@@ -59,12 +61,14 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Ytelse:
+      case ColumnKeyEnum.RolYtelse:
         return (
           <Table.DataCell key={key}>
             <Ytelse ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Hjemmel:
+      case ColumnKeyEnum.RolHjemmel:
       case ColumnKeyEnum.EnhetHjemmel:
         return (
           <Table.DataCell key={key}>
@@ -107,6 +111,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
           </Table.DataCell>
         );
+      case ColumnKeyEnum.Rol:
+        return (
+          <Table.DataCell key={key}>
+            <Rol oppgaveId={oppgave.id} rolIdent={oppgave.rol.navIdent} />
+          </Table.DataCell>
+        );
       case ColumnKeyEnum.RolFlowState:
         return (
           <Table.DataCell key={key}>
@@ -124,7 +134,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               typeId={oppgave.typeId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               medunderskriverident={oppgave.medunderskriver.navIdent}
-              rolIdent={oppgave.rol.navIdent}
+              rol={oppgave.rol}
             />
           </Table.DataCell>
         );

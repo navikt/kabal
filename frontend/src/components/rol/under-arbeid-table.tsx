@@ -5,38 +5,33 @@ import { OppgaveTable } from '@app/components/common-table-components/oppgave-ta
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useSakstyper } from '@app/hooks/use-kodeverk-value';
+import { useGetRolUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
-  ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.RolYtelse,
+  ColumnKeyEnum.RolHjemmel,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
-  ColumnKeyEnum.PaaVentTil,
-  ColumnKeyEnum.PaaVentReason,
-  ColumnKeyEnum.Utfall,
-  ColumnKeyEnum.Medunderskriver,
-  ColumnKeyEnum.Oppgavestyring,
+  ColumnKeyEnum.Rol,
   ColumnKeyEnum.Open,
 ];
 
-export const EnhetensOppgaverPaaVentTable = () => {
-  const hasAccess = useHasRole(Role.KABAL_INNSYN_EGEN_ENHET);
+export const RolOppgaverTable = () => {
+  const hasAccess = useHasRole(Role.KABAL_KROL);
 
   if (!hasAccess) {
     return null;
   }
 
-  return <EnhetensOppgaverPaaVentTableInternal />;
+  return <RolOppgaverTableInternal />;
 };
 
-const EnhetensOppgaverPaaVentTableInternal = () => {
-  const { data: bruker } = useUser();
-
+const RolOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
@@ -46,29 +41,34 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
     sortering: SortFieldEnum.FRIST,
   });
 
-  const queryParams: typeof skipToken | EnhetensOppgaverParams =
-    typeof bruker === 'undefined' ? skipToken : { ...params, enhetId: bruker.ansattEnhet.id };
+  const types = useSakstyper();
 
-  const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
+  const { data: bruker } = useUser();
+
+  const queryParams: typeof skipToken | EnhetensOppgaverParams =
+    typeof bruker === 'undefined' || typeof types === 'undefined'
+      ? skipToken
+      : { ...params, enhetId: bruker.ansattEnhet.id };
+
+  const { data, isLoading, isFetching, isError, refetch } = useGetRolUferdigeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
   return (
     <section>
-      <Heading size="small">Oppgaver på vent</Heading>
+      <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        zebraStripes
         params={params}
         setParams={setParams}
-        data-testid="enhetens-oppgaver-paa-vent-table"
+        data-testid="rol-oppgaver-table"
+        behandlinger={data?.behandlinger}
+        settingsKey={OppgaveTableRowsPerPage.ROL_UFERDIGE}
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
-        behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
       />
     </section>
   );

@@ -7,6 +7,7 @@ import {
   INameSearchParams,
   INameSearchResponse,
   IOppgaverResponse,
+  IRolList,
   ISaksbehandlere,
   UtgaatteApiResponse,
 } from '@app/types/oppgaver';
@@ -79,6 +80,9 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMedunderskrivereForEnhet: builder.query<IMedunderskrivere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/medunderskrivere`,
     }),
+    getRolsInEnhet: builder.query<IRolList, string>({
+      query: (enhet) => `/kabal-search/enheter/${enhet}/rol-list`,
+    }),
     getLedigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: `/kabal-search/roloppgaver/ledige`, params }),
       providesTags: [OppgaveListTagTypes.ROL_LEDIGE],
@@ -90,6 +94,20 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getReturnerteRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: `/kabal-search/roloppgaver/returnerte`, params }),
       providesTags: [OppgaveListTagTypes.ROL_FERDIGE],
+    }),
+    getRolReturnerteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: ({ ...params }) => ({
+        url: `/kabal-search/kroloppgaver/tildelte/returnerte`,
+        params,
+      }),
+      providesTags: [OppgaveListTagTypes.KROLS_FERDIGE],
+    }),
+    getRolUferdigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: ({ ...params }) => ({
+        url: `/kabal-search/kroloppgaver/tildelte/uferdige`,
+        params,
+      }),
+      providesTags: [OppgaveListTagTypes.KROLS_UFERDIGE],
     }),
   }),
 });
@@ -111,4 +129,7 @@ export const {
   useGetLedigeRolOppgaverQuery,
   useGetUferdigeRolOppgaverQuery,
   useGetMedunderskrivereForEnhetQuery,
+  useGetRolReturnerteOppgaverQuery,
+  useGetRolUferdigeOppgaverQuery,
+  useGetRolsInEnhetQuery,
 } = oppgaverQuerySlice;

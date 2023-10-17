@@ -24,6 +24,7 @@ import {
 } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
 import { OPTIONS_MAP } from './set-type/options';
@@ -107,30 +108,43 @@ interface IFinishButtonProps {
 }
 
 const FinishButton = ({ document }: IFinishButtonProps) => {
-  const isSaksbehandler = useIsSaksbehandler();
   const { data: oppgave } = useOppgave();
+  const isSaksbehandler = useIsSaksbehandler();
   const containsRolAttachments = useContainsRolAttachments(document);
 
   if (!isSaksbehandler || document.parentId !== null || oppgave === undefined) {
     return null;
   }
 
-  const isNotat = document.dokumentTypeId !== DistribusjonsType.NOTAT;
-
-  const allowedToArchive =
-    oppgave !== undefined &&
-    (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
-    (!containsRolAttachments || oppgave.rol.flowState === FlowState.RETURNED);
-
-  if (!allowedToArchive) {
+  if (getMustWaitForRolToReturn(oppgave, document, containsRolAttachments)) {
     return (
-      <Alert variant="info" size="small">
-        Kan ikke arkiveres før rådgivende overlege har returnert saken.
+      <Alert variant="info" size="small" inline>
+        Kan ikke arkiveres før rådgivende overlege har svart og returnert saken.
       </Alert>
     );
   }
 
+  const isNotat = document.dokumentTypeId !== DistribusjonsType.NOTAT;
+
   return isNotat ? <SendButtons document={document} /> : <ArchiveButtons document={document} />;
+};
+
+const getMustWaitForRolToReturn = (
+  oppgave: IOppgavebehandling,
+  document: IMainDocument,
+  containsRolAttachments: boolean,
+) => {
+  const isOppgaveTypeRelevantToRol = oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE;
+
+  if (!isOppgaveTypeRelevantToRol) {
+    return false;
+  }
+
+  if (getIsRolQuestions(document)) {
+    return !(containsRolAttachments && oppgave.rol.flowState === FlowState.RETURNED);
+  }
+
+  return false;
 };
 
 const Row = styled.div`

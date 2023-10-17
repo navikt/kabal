@@ -2,21 +2,12 @@ import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
 import { OnChange } from '@app/components/oppgavestyring/types';
-import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { INavEmployee } from '@app/types/oppgave-common';
+import { EMPTY_MEDUNDERSKRIVERE, Return } from './use-set-medunderskriver';
 
-export interface Return {
-  onChange: OnChange;
-  isUpdating: boolean;
-}
-
-export const EMPTY_MEDUNDERSKRIVERE: INavEmployee[] = [];
-
-export const useSetMedunderskriver = (
-  oppgaveId: string,
-  medunderskrivere: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE,
-): Return => {
-  const [setMedunderskriver, { isLoading: isUpdating }] = useSetMedunderskriverMutation({
+export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {
+  const [setRol, { isLoading: isUpdating }] = useSetRolMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });
 
@@ -25,15 +16,15 @@ export const useSetMedunderskriver = (
       const name =
         toNavIdent === null
           ? 'fjernet'
-          : `satt til ${medunderskrivere.find((m) => m.navIdent === toNavIdent)?.navn} (${toNavIdent})`;
+          : `satt til ${rol.find((m) => m.navIdent === toNavIdent)?.navn} (${toNavIdent})`;
 
       try {
-        await setMedunderskriver({ oppgaveId, navIdent: toNavIdent });
+        await setRol({ oppgaveId, navIdent: toNavIdent });
 
         successToast({
-          testId: 'oppgave-set-medunderskriver-success-toast',
+          testId: 'oppgave-set-rol-success-toast',
           oppgaveId,
-          label: 'Medunderskriver',
+          label: 'Rådgivende overlege',
           fromNavIdent,
           toNavIdent,
           onChange,
@@ -41,9 +32,9 @@ export const useSetMedunderskriver = (
         });
       } catch (e) {
         errorToast({
-          testId: 'oppgave-set-medunderskriver-error-toast',
+          testId: 'oppgave-set-rol-error-toast',
           oppgaveId,
-          label: 'medunderskriver',
+          label: 'rådgivende overlege',
           fromNavIdent,
           toNavIdent,
           onChange,
@@ -51,7 +42,7 @@ export const useSetMedunderskriver = (
         });
       }
     },
-    [medunderskrivere, oppgaveId, setMedunderskriver],
+    [rol, oppgaveId, setRol],
   );
 
   return { onChange, isUpdating };

@@ -40,6 +40,7 @@ export enum Role {
   KABAL_MALTEKSTREDIGERING = 'KABAL_MALTEKSTREDIGERING',
   KABAL_ADMIN = 'KABAL_ADMIN',
   KABAL_ROL = 'KABAL_ROL',
+  KABAL_KROL = 'KABAL_KROL',
 }
 
 export interface ISetCustomInfoParams {

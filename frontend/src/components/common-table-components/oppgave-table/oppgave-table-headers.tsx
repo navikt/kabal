@@ -1,20 +1,21 @@
 import { Table, TableProps } from '@navikt/ds-react';
 import React from 'react';
 import {
-  EnhetHjemmel,
-  Hjemmel,
-  Medunderskriver,
-  Saksbehandler,
-  Sakstype,
-  Ytelse,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns';
-import {
   FinishedColumnHeader,
   ReturnedColumnHeader,
 } from '@app/components/common-table-components/oppgave-table/finished-column-header';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
+import { EnhetHjemmel } from './filter-drodowns/enhet-hjemmel';
+import { Hjemmel } from './filter-drodowns/hjemmel';
+import { Medunderskriver } from './filter-drodowns/medunderskriver';
+import { Rol } from './filter-drodowns/rol';
+import { RolHjemmel } from './filter-drodowns/rol-hjemmel';
+import { RolYtelse } from './filter-drodowns/rol-ytelse';
+import { Saksbehandler } from './filter-drodowns/saksbehandler';
+import { Sakstype } from './filter-drodowns/sakstype';
+import { Ytelse } from './filter-drodowns/ytelse';
 
 interface TablePlainHeadersProps {
   columnKeys: ColumnKeyEnum[];
@@ -65,6 +66,12 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <FinishedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
       case ColumnKeyEnum.Returnert:
         return <ReturnedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
+      case ColumnKeyEnum.Rol:
+        return <Rol key={key} columnKey={key} params={params} setParams={setParams} />;
+      case ColumnKeyEnum.RolYtelse:
+        return <RolYtelse key={key} columnKey={key} params={params} setParams={setParams} />;
+      case ColumnKeyEnum.RolHjemmel:
+        return <RolHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
       default:
         return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
     }

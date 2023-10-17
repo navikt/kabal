@@ -1,31 +1,28 @@
 import { Heading } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/dist/query/react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetReturnerteRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useGetRolReturnerteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
-import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.RolYtelse,
   ColumnKeyEnum.RolHjemmel,
-  ColumnKeyEnum.Navn,
-  ColumnKeyEnum.Fnr,
-  ColumnKeyEnum.Saksnummer,
-  ColumnKeyEnum.Returnert,
+  ColumnKeyEnum.Age,
+  ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.Finished,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
 ];
 
-const TEST_ID = 'returnerte-oppgaver-table';
-
-const EMPTY_ARRAY: string[] = [];
-
 export const ReturnerteRolOppgaverTable = () => {
-  const hasAccess = useHasRole(Role.KABAL_ROL);
+  const hasAccess = useHasRole(Role.KABAL_KROL);
 
   if (!hasAccess) {
     return null;
@@ -36,15 +33,20 @@ export const ReturnerteRolOppgaverTable = () => {
 
 const ReturnerteRolOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
-    sortering: SortFieldEnum.RETURNERT_FRA_ROL,
-    rekkefoelge: SortOrderEnum.SYNKENDE,
     typer: [],
-    ytelser: EMPTY_ARRAY,
-    hjemler: EMPTY_ARRAY,
-    tildelteSaksbehandlere: EMPTY_ARRAY,
+    ytelser: [],
+    hjemler: [],
+    tildelteSaksbehandlere: [],
+    rekkefoelge: SortOrderEnum.SYNKENDE,
+    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
   });
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
+  const { data: bruker } = useUser();
+
+  const queryParams: typeof skipToken | EnhetensOppgaverParams =
+    typeof bruker === 'undefined' ? skipToken : { ...params, enhetId: bruker.ansattEnhet.id };
+
+  const { data, isLoading, isFetching, isError, refetch } = useGetRolReturnerteOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -54,16 +56,15 @@ const ReturnerteRolOppgaverTableInternal = () => {
       <Heading size="small">Returnerte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
+        params={params}
+        setParams={setParams}
+        data-testid="rol-ferdigstilte-oppgaver-table"
+        behandlinger={data?.behandlinger}
+        settingsKey={OppgaveTableRowsPerPage.ROL_FERDIGE}
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
-        data-testid={TEST_ID}
-        settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
-        behandlinger={data?.behandlinger}
-        params={params}
-        setParams={setParams}
-        zebraStripes
       />
     </section>
   );

@@ -27,13 +27,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
     return null;
   }
 
-  const OpenButton = (
-    <OpenOppgavebehandling
-      {...oppgave}
-      rolIdent={oppgave.rol.navIdent}
-      medunderskriverident={oppgave.medunderskriver.navIdent}
-    />
-  );
+  const OpenButton = <OpenOppgavebehandling {...oppgave} medunderskriverident={oppgave.medunderskriver.navIdent} />;
 
   const fradel = async () => {
     try {

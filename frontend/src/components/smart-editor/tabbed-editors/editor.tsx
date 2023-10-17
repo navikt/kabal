@@ -38,7 +38,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
   const oppgaveId = useOppgaveId();
   const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
   const { newCommentSelection } = useContext(SmartEditorContext);
-  const canEdit = useCanEditDocument();
+  const canEdit = useCanEditDocument(templateId);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -130,7 +130,8 @@ const StickyRightContainer = styled.div`
 `;
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
-  const canEdit = useCanEditDocument();
+  const { templateId } = useContext(SmartEditorContext);
+  const canEdit = useCanEditDocument(templateId);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   return (
