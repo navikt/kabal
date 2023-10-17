@@ -56,6 +56,8 @@ export const Filters = ({ textType }: Props) => {
           selected={ytelseHjemmelList ?? []}
           onChange={(value: string[]) => setFilter('ytelseHjemmelList', value)}
           includeNoneOption
+          ytelserSelectable
+          ytelseIsWildcard={textType === RichTextTypes.REGELVERK}
         />
       )}
 
