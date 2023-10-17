@@ -15,7 +15,7 @@ export const DateTime = ({ modified, created }: Props) => {
 
   return (
     <StyledTime dateTime={dateTime} title={title}>
-      <Icon />
+      <Icon aria-hidden style={{ flexShrink: 0 }} />
       {isoDateTimeToPretty(dateTime)}
     </StyledTime>
   );
