@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
-import { godeFormuleringerPlugins } from '@app/plate/plugins/plugins';
+import { previewPlugins } from '@app/plate/plugins/plugins-preview';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { IRichText } from '@app/types/texts/texts';
 import { DateTime } from '../../datetime/datetime';
@@ -45,7 +45,7 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <PlateEditorContextComponent initialValue={content} id={id} readOnly plugins={godeFormuleringerPlugins}>
+          <PlateEditorContextComponent initialValue={content} id={id} readOnly plugins={previewPlugins}>
             <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
           </PlateEditorContextComponent>
         </StyledContent>

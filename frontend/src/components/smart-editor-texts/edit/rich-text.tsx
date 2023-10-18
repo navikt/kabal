@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { styled } from 'styled-components';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
-import { redaktoerPlugins } from '@app/plate/plugins/plugins';
+import { redaktoerPlugins } from '@app/plate/plugins/plugins-redaktoer';
 import { Sheet } from '@app/plate/sheet';
 import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';

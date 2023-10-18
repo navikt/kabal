@@ -7,6 +7,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.TITLE]: 'Dokumenttittel',
   [TemplateSections.INTRODUCTION]: 'Introduksjon',
   [TemplateSections.AVGJOERELSE]: 'Avgjørelse',
+  [TemplateSections.VEDTAK]: 'Vedtak',
+  [TemplateSections.BESLUTNING]: 'Beslutning',
   [TemplateSections.KONKLUSJON]: 'Konklusjonen vår',
   [TemplateSections.ANFOERSLER]: 'Anførsler',
   [TemplateSections.VURDERINGEN]: 'Vurderingen vår',
@@ -20,4 +22,6 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.VEDLEGG]: 'Vedlegg med forklaring',
   [TemplateSections.SVAR_FRA_ROL]: 'Svar fra ROL',
   [TemplateSections.TILSVARSBREV_TITLE]: 'Tilsvarsbrevtittel',
+  [TemplateSections.PAASTAND]: 'Påstand',
+  [TemplateSections.ANKEFRIST]: 'Ankefrist',
 };

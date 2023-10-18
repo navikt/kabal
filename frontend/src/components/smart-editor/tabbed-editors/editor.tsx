@@ -16,7 +16,7 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugins';
+import { saksbehandlerPlugins } from '@app/plate/plugins/plugins-saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';

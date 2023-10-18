@@ -2,33 +2,20 @@ import { createAlignPlugin } from '@udecode/plate-alignment';
 import { createAutoformatPlugin } from '@udecode/plate-autoformat';
 import { createBoldPlugin, createItalicPlugin, createUnderlinePlugin } from '@udecode/plate-basic-marks';
 import { createExitBreakPlugin, createSoftBreakPlugin } from '@udecode/plate-break';
-import { PlatePlugin, createInsertDataPlugin, createPlugins, someNode } from '@udecode/plate-common';
+import { PlatePlugin, createInsertDataPlugin, someNode } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
 import { createIndentPlugin } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragraph';
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
-import { components } from '@app/plate/components';
-import { createBookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { createCommentsPlugin } from '@app/plate/plugins/comments';
 import { createCopyPlugin } from '@app/plate/plugins/copy';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { createEmptyVoidPlugin } from '@app/plate/plugins/empty-void';
-import { createFooterPlugin, createHeaderPlugin } from '@app/plate/plugins/header-footer';
-import { createRedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
-import { createSignaturePlugin } from '@app/plate/plugins/signature';
 import { autoformatPlugin } from './autoformat/plugin';
-import { createCurrentDatePlugin } from './current-date';
-import { createLabelContentPlugin } from './label-content';
-import { createMaltekstPlugin } from './maltekst';
 import { createPageBreakPlugin } from './page-break';
-import { createSaksbehandlerPlaceholderPlugin } from './placeholder/saksbehandler';
-import { createRedigerbarMaltekstPlugin } from './redigerbar-maltekst';
-import { createRegelverkContainerPlugin, createRegelverkPlugin } from './regelverk';
 
-const defaultPlugins: PlatePlugin[] = [
+export const defaultPlugins: PlatePlugin[] = [
   createInsertDataPlugin(),
   createParagraphPlugin(),
   createHeadingPlugin({
@@ -97,40 +84,3 @@ const defaultPlugins: PlatePlugin[] = [
   createProhibitDeletionPlugin(),
   createCopyPlugin(),
 ];
-
-export const saksbehandlerPlugins = createPlugins(
-  [
-    ...defaultPlugins,
-    createSaksbehandlerPlaceholderPlugin(),
-    createCommentsPlugin(),
-    createMaltekstPlugin(),
-    createRedigerbarMaltekstPlugin(),
-    createCurrentDatePlugin(),
-    createRegelverkPlugin(),
-    createRegelverkContainerPlugin(),
-    createHeaderPlugin(),
-    createFooterPlugin(),
-    createLabelContentPlugin(),
-    createSignaturePlugin(),
-    createEmptyVoidPlugin(),
-    createBookmarkPlugin(),
-  ],
-  { components },
-);
-
-export const redaktoerPlugins = createPlugins([...defaultPlugins, createRedaktoerPlaceholderPlugin()], {
-  components,
-});
-
-export const godeFormuleringerPlugins = createPlugins(
-  [
-    ...defaultPlugins,
-    createSaksbehandlerPlaceholderPlugin(),
-    createMaltekstPlugin(),
-    createRedigerbarMaltekstPlugin(),
-    createLabelContentPlugin(),
-  ],
-  {
-    components,
-  },
-);

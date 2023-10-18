@@ -46,14 +46,14 @@ export const Maltekst = ({
       return;
     }
 
+    const { utfallId, extraUtfallIdSet, hjemmelIdSet } = oppgave.resultat;
+
     const maltekster = lexSpecialis(
       templateId,
       element.section,
       oppgave.ytelseId,
-      oppgave.resultat.hjemmelIdSet,
-      oppgave.resultat.utfallId === null
-        ? oppgave.resultat.extraUtfallIdSet
-        : [oppgave.resultat.utfallId, ...oppgave.resultat.extraUtfallIdSet],
+      hjemmelIdSet,
+      utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
       data.filter(isMaltekst),
     )?.content ?? [createEmptyVoid()];
 

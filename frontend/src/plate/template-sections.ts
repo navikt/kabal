@@ -17,7 +17,13 @@ export enum TemplateSections {
   VURDERINGEN = 'section-mus',
   OPPLYSNINGER = 'section-sau',
   GENERELL_INFO = 'section-sel',
+  /**
+   * Deprecated
+   * Use VEDTAK or BESLUTNING instead.
+   *  */
   AVGJOERELSE = 'section-mår',
+  VEDTAK = 'section-ilder',
+  BESLUTNING = 'section-sei',
   REGELVERK_TITLE = 'section-gnu',
   SAKSKOSTNADER = 'section-gris',
   FREMLEGG = 'section-geit',
@@ -25,4 +31,6 @@ export enum TemplateSections {
   VEDLEGG = 'section-katt',
   SVAR_FRA_ROL = 'section-emu',
   TILSVARSBREV_TITLE = 'section-mink',
+  PAASTAND = 'section-gås',
+  ANKEFRIST = 'section-ørn',
 }

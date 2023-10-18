@@ -63,7 +63,7 @@ interface SectionContainerProps {
 export const SectionContainer = styled.div<SectionContainerProps>`
   position: relative;
   margin-top: 0;
-  z-index: 0;
+  /* z-index: 0; */
   background-color: transparent;
   user-select: text;
   color: ${(props) => FONT_COLOR_MAP[props.$sectionType]};
