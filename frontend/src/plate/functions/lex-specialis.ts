@@ -90,14 +90,21 @@ const getYtelseScore = (ytelseId: string, hjemmelList: string[], ytelseHjemmelLi
   return -Infinity;
 };
 
+const MAX_UTFALL_SCORE = 4;
+
 const getUtfallScore = (utfallIdSet: UtfallEnum[], utfallSetList: string[]): number => {
-  if (utfallIdSet.length === 0 || utfallSetList.length === 0) {
+  const parsedUtfallList = utfallSetList.map((utfallSet) => utfallSet.split(SET_DELIMITER).filter(isUtfall));
+
+  if (utfallIdSet.length === 0) {
+    const minLength = parsedUtfallList.reduce((min, { length }) => (length < min ? length : min), 0);
+
+    return minLength === 0 ? MAX_UTFALL_SCORE : 0;
+  }
+
+  if (utfallSetList.length === 0) {
     return 0;
   }
 
-  const parsedUtfallList = utfallSetList.map((utfallSet) => utfallSet.split(SET_DELIMITER).filter(isUtfall));
-
-  const MAX_UTFALL_SCORE = 4;
   const MATCH_WEIGHT = MAX_UTFALL_SCORE / utfallIdSet.length;
   let bestScore = -Infinity;
 
