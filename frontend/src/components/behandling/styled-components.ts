@@ -15,3 +15,9 @@ export const StyledBehandlingSection = styled.section`
   padding: 16px;
   min-height: 100%;
 `;
+
+export const DateContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+`;
