@@ -41,7 +41,7 @@ export const useQuery = ({ textType, templateId, section }: Params) => {
   }, [bruker, brukerIsLoading, oppgave, isLoading, section, templateId, textType]);
 };
 
-export const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {
+const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {
   const result: string[] = [ytelse];
 
   for (const hjemmel of hjemmelList) {
