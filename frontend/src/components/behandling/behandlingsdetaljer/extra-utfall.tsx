@@ -1,4 +1,4 @@
-import { Button, HelpText, Tag } from '@navikt/ds-react';
+import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
 import React, { ReactNode, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
@@ -10,15 +10,28 @@ import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { UtfallEnum } from '@app/types/kodeverk';
 
-interface Props {
+interface TagsProps {
   utfallIdSet: UtfallEnum[];
   mainUtfall: UtfallEnum | null;
+}
+
+interface Props extends TagsProps {
   oppgaveId: string;
 }
 
-export const ExtraUtfall = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
-  const [updateUtfall] = useUpdateExtraUtfallMutation();
+export const ExtraUtfall = (props: Props) => {
   const canEdit = useCanEdit();
+
+  return (
+    <Container>
+      {canEdit ? <ExtraUtfallButton {...props} /> : null}
+      <Tags {...props} />
+    </Container>
+  );
+};
+
+const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
+  const [updateUtfall] = useUpdateExtraUtfallMutation();
   const { data: oppgave } = useOppgave();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -31,9 +44,9 @@ export const ExtraUtfall = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
       utfallKodeverk.map(({ id, navn }) => ({
         value: id,
         label: navn,
-        disabled: !canEdit || id === mainUtfall,
+        disabled: id === mainUtfall,
       })),
-    [utfallKodeverk, canEdit, mainUtfall],
+    [utfallKodeverk, mainUtfall],
   );
 
   const selected = useMemo(() => {
@@ -45,7 +58,7 @@ export const ExtraUtfall = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
   }, [utfallIdSet, mainUtfall]);
 
   return (
-    <Container ref={ref}>
+    <ButtonContainer ref={ref}>
       <HelpTextWrapper>
         <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small">
           Sett ekstra utfall for tilpasset tekst
@@ -65,8 +78,41 @@ export const ExtraUtfall = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
           close={() => setIsOpen(false)}
         />
       </Popup>
-      <TagsContainer>
-        {mainUtfall === null ? null : (
+    </ButtonContainer>
+  );
+};
+
+const ReadOnlyLabel = () => {
+  const canEdit = useCanEdit();
+
+  if (canEdit) {
+    return null;
+  }
+
+  return (
+    <HelpTextWrapper>
+      <Label htmlFor={TAGSCONTAINER_ID} size="small">
+        Ekstra utfall for tilpasset tekst
+      </Label>
+      <HelpText>
+        <HelpTextContent>Valg av flere utfall for å få opp maltekst som passer til flere utfall.</HelpTextContent>
+      </HelpText>
+    </HelpTextWrapper>
+  );
+};
+
+const TAGSCONTAINER_ID = 'tags-container';
+
+const Tags = ({ utfallIdSet, mainUtfall }: TagsProps) => {
+  const { data: oppgave } = useOppgave();
+  const [utfallKodeverk] = useUtfall(oppgave?.typeId);
+  const canEdit = useCanEdit();
+
+  return (
+    <>
+      <ReadOnlyLabel />
+      <TagsContainer id={TAGSCONTAINER_ID}>
+        {mainUtfall === null || !canEdit ? null : (
           <Tag size="small" variant="alt1">
             {utfallKodeverk.find((u) => u.id === mainUtfall)?.navn ?? `Ukjent utfall (${mainUtfall})`} (hovedutfall)
           </Tag>
@@ -79,12 +125,15 @@ export const ExtraUtfall = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
           ),
         )}
       </TagsContainer>
-    </Container>
+    </>
   );
 };
 
-const Container = styled.div`
+const ButtonContainer = styled.div`
   position: relative;
+`;
+
+const Container = styled.div`
   margin-bottom: 16px;
 `;
 

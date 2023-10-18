@@ -24,9 +24,13 @@ const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {
   utfall: 'Utfall/resultat fra Trygderetten',
 };
 
+const ANKE_FIELD_NAMES = {
+  mottattKlageinstans: 'Anke mottatt dato',
+};
+
 export const FIELD_NAMES = {
   [SaksTypeEnum.KLAGE]: DEFAULT_FIELD_NAMES,
-  [SaksTypeEnum.ANKE]: DEFAULT_FIELD_NAMES,
+  [SaksTypeEnum.ANKE]: { ...DEFAULT_FIELD_NAMES, ...ANKE_FIELD_NAMES },
   [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: { ...DEFAULT_FIELD_NAMES, ...ANKE_I_TRYGDERETTEN_FIELD_NAMES },
 };
 
