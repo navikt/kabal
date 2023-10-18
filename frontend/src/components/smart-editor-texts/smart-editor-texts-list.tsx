@@ -3,6 +3,7 @@ import { Loader } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useGetTextsQuery } from '@app/redux-api/texts';
 import { TextTypes } from '@app/types/texts/texts';
 import { DateTime } from '../datetime/datetime';
@@ -42,7 +43,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
               return isAsc ? a.modified.localeCompare(b.modified) : b.modified.localeCompare(a.modified);
             case SortKey.TITLE:
             default:
-              return isAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
+              return isAsc ? sortWithOrdinals(a.title, b.title) : sortWithOrdinals(b.title, a.title);
           }
         }),
     [order, data, filter, sort],

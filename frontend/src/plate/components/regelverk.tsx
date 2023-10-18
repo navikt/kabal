@@ -1,60 +1,19 @@
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findDescendant, replaceNodeChildren } from '@udecode/plate-common';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
-import { getYtelseHjemmelList } from '@app/components/smart-editor/hooks/use-query';
+import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
 import { EditorValue, RegelverkContainerElement, RegelverkElement } from '@app/plate/types';
 import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { IRichText, IText, RichTextTypes } from '@app/types/texts/texts';
 
 const isRegelverk = (text: IText): text is IRichText => text.textType === RichTextTypes.REGELVERK;
-
-const useSortedHjemler = (): string[] => {
-  const { data: oppgave } = useOppgave();
-  const { data: ytelser } = useLatestYtelser();
-
-  return useMemo<string[]>(() => {
-    if (oppgave === undefined || ytelser === undefined || oppgave.resultat.hjemmelIdSet.length === 0) {
-      return [];
-    }
-
-    const ytelse = ytelser.find(({ id }) => id === oppgave.ytelseId);
-    const { hjemmelIdSet } = oppgave.resultat;
-
-    if (ytelse === undefined) {
-      return hjemmelIdSet;
-    }
-
-    const sortedIds: string[] = [];
-
-    for (const lovkilde of ytelse.lovKildeToRegistreringshjemler) {
-      if (hjemmelIdSet.length === sortedIds.length) {
-        return sortedIds;
-      }
-
-      for (const registreringshjemmel of lovkilde.registreringshjemler) {
-        if (hjemmelIdSet.length === sortedIds.length) {
-          return sortedIds;
-        }
-
-        if (hjemmelIdSet.includes(registreringshjemmel.id)) {
-          sortedIds.push(registreringshjemmel.id);
-        }
-      }
-    }
-
-    if (hjemmelIdSet.length !== sortedIds.length) {
-      return Array.from(new Set([...sortedIds, ...hjemmelIdSet]));
-    }
-
-    return sortedIds;
-  }, [oppgave, ytelser]);
-};
 
 export const Regelverk = ({
   attributes,
@@ -63,13 +22,13 @@ export const Regelverk = ({
   editor,
 }: PlateRenderElementProps<EditorValue, RegelverkElement>) => {
   const [loading, setLoading] = useState(false);
-  const sortedHjemler = useSortedHjemler();
   const { data: oppgave } = useOppgave();
+  const query = useQuery({ textType: RichTextTypes.REGELVERK });
 
   const [getTexts] = useLazyGetTextsQuery();
 
   const insertRegelverk = useCallback(async () => {
-    if (oppgave === undefined) {
+    if (oppgave === undefined || query === skipToken) {
       return;
     }
 
@@ -92,21 +51,17 @@ export const Regelverk = ({
       return;
     }
 
-    const queries = sortedHjemler.map((hjemmelId) => ({
-      textType: RichTextTypes.REGELVERK,
-      ytelseHjemmelList: getYtelseHjemmelList(oppgave.ytelseId, [hjemmelId]),
-    }));
+    const regelverk = (await getTexts(query).unwrap()).filter(isRegelverk);
 
-    const promises = queries.map(async (q) =>
-      (await getTexts(q).unwrap()).filter(isRegelverk).flatMap(({ content }) => content),
-    );
+    const sortedRegelverk = regelverk.sort((a, b) => sortWithOrdinals(a.title, b.title));
 
-    const regelverk = (await Promise.all(promises)).flat();
-
-    replaceNodeChildren(editor, { at: [...regelverkContainer[1]], nodes: regelverk });
+    replaceNodeChildren(editor, {
+      at: [...regelverkContainer[1]],
+      nodes: sortedRegelverk.flatMap(({ content }) => content),
+    });
 
     setLoading(false);
-  }, [editor, element, getTexts, oppgave, sortedHjemler]);
+  }, [editor, element, getTexts, oppgave, query]);
 
   return (
     <PlateElement
