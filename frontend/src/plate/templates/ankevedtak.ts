@@ -1,14 +1,16 @@
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import {
   createCurrentDate,
   createFooter,
   createHeader,
+  createLabelContent,
   createMaltekst,
-  createParagraphWithLabelContent,
   createRedigerbarMaltekst,
   createRegelverk,
   createSignature,
 } from '@app/plate/templates/helpers';
+import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -23,9 +25,17 @@ export const ANKEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createCurrentDate(),
     createHeader(),
     createMaltekst(TemplateSections.TITLE),
-    createParagraphWithLabelContent('sakenGjelder.name', 'Den ankende part'),
-    createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-    createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
+    {
+      type: ELEMENT_PARAGRAPH,
+      align: TextAlign.LEFT,
+      children: [
+        createLabelContent('klagerIfEqualToSakenGjelder.name', 'Den ankende part'),
+        createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
+        createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+        createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Den ankende part'),
+        createLabelContent('saksnummer', 'Saksnummer'),
+      ],
+    },
     createRedigerbarMaltekst(TemplateSections.INTRODUCTION),
     createMaltekst(TemplateSections.AVGJOERELSE),
     createRedigerbarMaltekst(TemplateSections.AVGJOERELSE),
