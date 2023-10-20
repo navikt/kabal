@@ -40,7 +40,6 @@ import {
 } from '@app/plate/types';
 import { TemplateSections } from '../template-sections';
 
-// eslint-disable-next-line import/no-unused-modules
 export const createLabelContent = (source: string, label: string): LabelContentElement => ({
   type: ELEMENT_LABEL_CONTENT,
   children: [{ text: '' }],

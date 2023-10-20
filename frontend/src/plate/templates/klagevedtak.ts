@@ -1,5 +1,6 @@
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { EditorValue } from '@app/plate/types';
+import { EditorValue, TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -9,8 +10,8 @@ import {
   createCurrentDate,
   createFooter,
   createHeader,
+  createLabelContent,
   createMaltekst,
-  createParagraphWithLabelContent,
   createRedigerbarMaltekst,
   createRegelverk,
   createSignature,
@@ -20,9 +21,17 @@ const INITIAL_SLATE_VALUE: EditorValue = [
   createCurrentDate(),
   createHeader(),
   createMaltekst(TemplateSections.TITLE),
-  createParagraphWithLabelContent('sakenGjelder.name', 'Klager'),
-  createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-  createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
+  {
+    type: ELEMENT_PARAGRAPH,
+    align: TextAlign.LEFT,
+    children: [
+      createLabelContent('klagerIfEqualToSakenGjelder.name', 'Klager'),
+      createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
+      createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+      createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Klager'),
+      createLabelContent('saksnummer', 'Saksnummer'),
+    ],
+  },
   createRedigerbarMaltekst(TemplateSections.INTRODUCTION),
   createMaltekst(TemplateSections.AVGJOERELSE),
   createRedigerbarMaltekst(TemplateSections.AVGJOERELSE),

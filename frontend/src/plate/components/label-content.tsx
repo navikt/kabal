@@ -1,6 +1,6 @@
 import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -14,15 +14,12 @@ export const LabelContent = ({
   editor,
 }: PlateRenderElementProps<EditorValue, LabelContentElement>) => {
   const { data: oppgave } = useOppgave();
-  const [result, setResult] = useState<string | null>(null);
+  const [_result, setResult] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (result === null) {
-      return;
-    }
-
-    setNodes(editor, { result }, { at: [], match: (n) => n === element });
-  }, [editor, element, result]);
+  const setResultInNode = useCallback(
+    (result: string | null) => setNodes(editor, { result }, { at: [], match: (n) => n === element }),
+    [editor, element],
+  );
 
   useEffect(() => {
     if (typeof oppgave === 'undefined') {
@@ -31,12 +28,22 @@ export const LabelContent = ({
 
     const content = getContent(oppgave, element.source);
 
+    if (content === null) {
+      setResult(null);
+      setResultInNode(null);
+
+      return;
+    }
+
     if (element.label.length === 0) {
       setResult(content);
+      setResultInNode(content);
     } else {
-      setResult(`${element.label}: ${content}`);
+      const result = `${element.label}: ${content}`;
+      setResult(result);
+      setResultInNode(result);
     }
-  }, [element.label, element.source, oppgave]);
+  }, [editor, element, element.label, element.source, oppgave, _result, setResultInNode]);
 
   if (typeof oppgave === 'undefined') {
     return null;
@@ -45,27 +52,57 @@ export const LabelContent = ({
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
       <span>
-        <StyledLabelContent>{result}</StyledLabelContent>
+        <StyledLabelContent>{_result}</StyledLabelContent>
         {children}
       </span>
     </PlateElement>
   );
 };
 
-const getContent = (oppgave: IOppgavebehandling, source: string): string => {
+const getContent = (oppgave: IOppgavebehandling, source: string): string | null => {
   if (source === 'sakenGjelder.name') {
-    return oppgave.sakenGjelder.name ?? '-';
+    return `${oppgave.sakenGjelder.name}\n` ?? '-\n';
   }
 
   if (source === 'sakenGjelder.fnr') {
-    return formatFoedselsnummer(oppgave.sakenGjelder.id);
+    return `${formatFoedselsnummer(oppgave.sakenGjelder.id)}\n`;
   }
 
   if (source === 'saksnummer') {
     return oppgave.saksnummer;
   }
 
-  return 'Verdi mangler';
+  const { klager, sakenGjelder } = oppgave;
+
+  if (source === 'sakenGjelderIfDifferentFromKlager.name') {
+    if (klager.id !== sakenGjelder.id) {
+      return `${sakenGjelder.name}\n` ?? '-\n';
+    }
+
+    return null;
+  }
+
+  if (source === 'klagerIfEqualToSakenGjelder.name') {
+    if (klager.id === sakenGjelder.id) {
+      return `${klager.name}\n` ?? '-\n';
+    }
+
+    return null;
+  }
+
+  if (source === 'klagerIfDifferentFromSakenGjelder.name') {
+    if (klager.id !== sakenGjelder.id) {
+      return `${klager.name}\n` ?? '-\n';
+    }
+
+    return null;
+  }
+
+  if (source === 'klager.name') {
+    return `${klager.name}\n` ?? '-\n';
+  }
+
+  return 'Verdi mangler\n';
 };
 
 const StyledLabelContent = styled.span`
