@@ -80,8 +80,8 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getMedunderskrivereForEnhet: builder.query<IMedunderskrivere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/medunderskrivere`,
     }),
-    getRolsInEnhet: builder.query<IRolList, string>({
-      query: (enhet) => `/kabal-search/enheter/${enhet}/rol-list`,
+    getRolsInEnhet: builder.query<IRolList, void>({
+      query: () => `/kabal-search/rol-list`,
     }),
     getLedigeRolOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: `/kabal-search/roloppgaver/ledige`, params }),
