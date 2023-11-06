@@ -1,11 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import {
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDato,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
-  useDocumentsFilterTitle,
   useDocumentsFilterType,
   useDocumentsOnlyIncluded,
 } from '@app/hooks/settings/use-setting';
@@ -18,7 +17,9 @@ const EMPTY_TYPE_FILTER: Journalposttype[] = [];
 export const useFilters = (documents: IArkivertDocument[]) => {
   const [isExpanded] = useIsExpanded();
 
-  const { value: search = '', setValue: setSearch, remove: resetTitle } = useDocumentsFilterTitle();
+  const [search, setSearch] = useState('');
+  const resetTitle = useCallback(() => setSearch(''), [setSearch]);
+
   const {
     value: selectedTypes = EMPTY_TYPE_FILTER,
     setValue: setSelectedTypes,

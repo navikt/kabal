@@ -168,8 +168,6 @@ export const useDocumentsFilterType = () => {
   return { ...rest, value };
 };
 
-export const useDocumentsFilterTitle = () => useSetting(useOppgavePath('tabs/documents/filters/title'));
-
 export const useDocumentsFilterSaksId = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/saksid'));
 
 export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('tabs/documents/filters/included'));
