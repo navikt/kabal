@@ -1,9 +1,11 @@
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
-import { useAddTextMutation } from '@app/redux-api/texts';
-import { TextTypes, isPlainTextType } from '@app/types/texts/texts';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
+import { isPlainTextType } from '@app/functions/is-rich-plain-text';
+import { useAddTextMutation } from '@app/redux-api/texts/mutations';
+import { TextTypes } from '@app/types/common-text-types';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
 import { getNewPlainText, getNewRichText } from './functions/new-text';
@@ -14,16 +16,15 @@ interface Props {
 }
 
 export const SmartEditorTexts = ({ textType }: Props) => {
+  const query = useTextQuery();
   const navigate = useTextNavigate();
   const [addText, { isLoading }] = useAddTextMutation();
-  const [autofocus, setAutofocus] = useState(false);
 
   const onClick = useCallback(async () => {
     const text = isPlainTextType(textType) ? getNewPlainText(textType) : getNewRichText(textType);
-    const { id } = await addText({ text, query: { textType } }).unwrap();
+    const { id } = await addText({ text, query }).unwrap();
     navigate(id);
-    setAutofocus(true);
-  }, [addText, navigate, textType]);
+  }, [addText, navigate, query, textType]);
 
   return (
     <Container>
@@ -34,7 +35,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
       </Header>
       <Content>
         <FilteredTextList textType={textType} />
-        <LoadText autofocus={autofocus} setAutofocus={setAutofocus} />
+        <LoadText />
       </Content>
     </Container>
   );
@@ -43,8 +44,6 @@ export const SmartEditorTexts = ({ textType }: Props) => {
 const Container = styled.article`
   display: flex;
   flex-direction: column;
-  max-width: 1920px;
-  width: 100%;
   height: 100%;
   min-height: 100%;
 `;
@@ -57,9 +56,7 @@ const Header = styled.header`
 `;
 
 const Content = styled.div`
-  display: grid;
-  grid-template-columns: 650px 1fr;
-  grid-template-rows: 100%;
+  display: flex;
   column-gap: 16px;
   padding-bottom: 16px;
   padding-top: 8px;

@@ -1,5 +1,5 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import {
   PlateElement,
   PlateRenderElementProps,
@@ -7,22 +7,14 @@ import {
   isEditorReadOnly,
   isElement,
   replaceNodeChildren,
-  withoutNormalizing,
-  withoutSavingHistory,
 } from '@udecode/plate-common';
-import React, { useContext, useEffect } from 'react';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
+import React from 'react';
+import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { createEmptyVoid } from '@app/plate/templates/helpers';
-import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
-import { useGetTextsQuery } from '@app/redux-api/texts';
-import { IRichText, IText, RichTextTypes } from '@app/types/texts/texts';
+import { EditorValue, MaltekstElement } from '@app/plate/types';
+import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
+import { RichTextTypes } from '@app/types/common-text-types';
 
 export const Maltekst = ({
   editor,
@@ -30,13 +22,19 @@ export const Maltekst = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
-  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
-  const { data, isLoading, isFetching, refetch } = useGetTextsQuery(query);
+  const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
 
-  useEffect(() => {
-    if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
+  // TODO: Remove this when all smart documents in prod use maltekstseksjon
+  if (element.id === undefined) {
+    return (
+      <LegacyMaltekst editor={editor} attributes={attributes} element={element}>
+        {children}
+      </LegacyMaltekst>
+    );
+  }
+
+  const reload = async () => {
+    if (element.id === undefined) {
       return;
     }
 
@@ -46,41 +44,14 @@ export const Maltekst = ({
       return;
     }
 
-    const maltekster = lexSpecialis(
-      templateId,
-      element.section,
-      oppgave.ytelseId,
-      oppgave.resultat.hjemmelIdSet,
-      oppgave.resultat.utfallId === null
-        ? oppgave.resultat.extraUtfallIdSet
-        : [oppgave.resultat.utfallId, ...oppgave.resultat.extraUtfallIdSet],
-      data.filter(isMaltekst),
-    )?.content ?? [createEmptyVoid()];
+    const text = await getText(element.id).unwrap();
 
-    if (nodesEquals(element.children, maltekster)) {
+    if (text.textType !== RichTextTypes.MALTEKST) {
       return;
     }
 
-    withoutSavingHistory(editor, () => {
-      withoutNormalizing(editor, () =>
-        replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
-      );
-    });
-  }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
-
-  if (isLoading) {
-    return (
-      <PlateElement asChild attributes={attributes} element={element} editor={editor} suppressContentEditableWarning>
-        <SectionContainer
-          data-element={element.type}
-          data-section={element.section}
-          $sectionType={SectionTypeEnum.MALTEKST}
-        >
-          <Loader title="Laster..." />
-        </SectionContainer>
-      </PlateElement>
-    );
-  }
+    replaceNodeChildren(editor, { at: path, nodes: text.content });
+  };
 
   const [first] = element.children;
 
@@ -92,13 +63,15 @@ export const Maltekst = ({
     );
   }
 
+  const readOnly = isEditorReadOnly(editor);
+
   return (
     <PlateElement
       asChild
       attributes={attributes}
       element={element}
       editor={editor}
-      contentEditable={!isEditorReadOnly(editor)}
+      contentEditable={!readOnly}
       suppressContentEditableWarning
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {
@@ -112,23 +85,21 @@ export const Maltekst = ({
         $sectionType={SectionTypeEnum.MALTEKST}
       >
         {children}
-        <SectionToolbar contentEditable={false}>
-          <AddNewParagraphs editor={editor} element={element} />
-          <Tooltip content="Oppdater til siste versjon" delay={0}>
-            <Button
-              title="Oppdater til siste versjon"
-              icon={<ArrowCirclepathIcon aria-hidden />}
-              onClick={refetch}
-              variant="tertiary"
-              size="xsmall"
-              contentEditable={false}
-              loading={isLoading || isFetching}
-            />
-          </Tooltip>
-        </SectionToolbar>
+        {readOnly ? null : (
+          <SectionToolbar contentEditable={false}>
+            <Tooltip content="Oppdater til siste versjon" delay={0}>
+              <Button
+                icon={<ArrowCirclepathIcon aria-hidden />}
+                onClick={reload}
+                variant="tertiary"
+                size="xsmall"
+                contentEditable={false}
+                loading={isFetching}
+              />
+            </Tooltip>
+          </SectionToolbar>
+        )}
       </SectionContainer>
     </PlateElement>
   );
 };
-
-const isMaltekst = (text: IText): text is IRichText => text.textType === RichTextTypes.MALTEKST;

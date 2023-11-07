@@ -1,20 +1,21 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
+import { Plate } from '@udecode/plate-common';
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
-import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
-import { godeFormuleringerPlugins } from '@app/plate/plugins/plugins';
-import { useMyPlateEditorState } from '@app/plate/types';
-import { IRichText } from '@app/types/texts/texts';
-import { DateTime } from '../../datetime/datetime';
+import { PlateEditor } from '@app/plate/plate-editor';
+import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
+import { EditorValue, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { IRichText } from '@app/types/texts/responses';
+import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { AddButton } from './add-button';
 
-interface Props extends IRichText {
+type Props = IRichText & {
   isFocused: boolean;
   onClick: () => void;
-}
+};
 
 export const GodFormulering = ({ title, content, modified, created, isFocused, onClick, id }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
         {title}
       </Heading>
       <ActionWrapper>
-        <DateTime modified={modified} created={created} />
+        <ModifiedCreatedDateTime modified={modified} created={created} />
         <AddButton
           editor={editor}
           content={content}
@@ -45,9 +46,9 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <PlateEditorContextComponent initialValue={content} id={id} readOnly plugins={godeFormuleringerPlugins}>
+          <Plate<EditorValue, RichTextEditor> initialValue={content} id={id} readOnly plugins={previewPlugins}>
             <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
-          </PlateEditorContextComponent>
+          </Plate>
         </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       </ContentContainer>

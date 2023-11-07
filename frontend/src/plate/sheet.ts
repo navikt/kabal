@@ -9,9 +9,13 @@ interface Props {
 export const Sheet = styled.div<Props>`
   position: relative;
   background-color: white;
-  box-shadow: var(--a-shadow-medium);
-  margin-top: 16px;
   flex-shrink: 0;
+  margin-top: 16px;
+  box-shadow: var(--a-shadow-medium);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 
   // Scaled rules
   width: calc(var(${EDITOR_SCALE_CSS_VAR}) * 210mm);

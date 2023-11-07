@@ -14,7 +14,7 @@ export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?
       <Details label="Årsak">{title}</Details>
       {typeof args === 'undefined' ? null : <Details label="URL">{typeof args === 'string' ? args : args.url}</Details>}
       <Details label="Statuskode">{status}</Details>
-      <Details label="Detaljer">{detail}</Details>
+      {title === detail ? null : <Details label="Detaljer">{detail}</Details>}
     </>,
   );
 };

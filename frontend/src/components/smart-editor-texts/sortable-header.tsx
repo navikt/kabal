@@ -62,6 +62,6 @@ const getIcon = (order: SortOrder | null): Icon => {
 
 const StyledButton = styled(Button)`
   justify-content: flex-start;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 0;
+  padding-right: 0;
 `;

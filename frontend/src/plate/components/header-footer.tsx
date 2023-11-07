@@ -8,20 +8,21 @@ import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/component
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
-import { useLazyGetTextsQuery } from '@app/redux-api/texts';
+import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { useUser } from '@app/simple-api-state/use-user';
+import { ApiQuery, PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { ApiQuery, IPlainText, IText, PlainTextTypes } from '@app/types/texts/texts';
+import { IPlainText, IPublishedPlainText, IText } from '@app/types/texts/responses';
 
 const lexSpecialis = (texts: IPlainText[]): IPlainText | null => {
-  const sorted = texts.sort((a, b) => b.enheter.length - a.enheter.length);
+  const sorted = texts.sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
 
   const [first] = sorted;
 
   return first ?? null;
 };
 
-const isPlainText = (text: IText): text is IPlainText =>
+const isPlainText = (text: IText): text is IPublishedPlainText =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
 type ElementTypes = HeaderElement | FooterElement;
@@ -49,7 +50,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   const [text, setText] = useState<IPlainText>();
 
-  const [getTexts, { isLoading, isUninitialized }] = useLazyGetTextsQuery();
+  const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
   const editor = useMyPlateEditorRef();
 

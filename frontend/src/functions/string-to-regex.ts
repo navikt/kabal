@@ -1,4 +1,10 @@
+const EMPTY_REGEX = /.*/;
+
 export const stringToRegExp = (s: string): RegExp => {
+  if (s.length === 0) {
+    return EMPTY_REGEX;
+  }
+
   const cleanFilter = removeRegExpTokens(s);
   const pattern = cleanFilter.split('').join('.*');
   const escapedPattern = escapeRegExp(pattern);

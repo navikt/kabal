@@ -1,15 +1,17 @@
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import {
   createCurrentDate,
   createFooter,
   createHeader,
-  createMaltekst,
+  createLabelContent,
+  createMaltekstseksjon,
   createPageBreak,
   createParagraphWithLabelContent,
-  createRedigerbarMaltekst,
   createRegelverk,
   createSignature,
 } from '@app/plate/templates/helpers';
+import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -23,27 +25,42 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
   content: [
     createCurrentDate(),
     createHeader(),
-    createMaltekst(TemplateSections.TILSVARSBREV_TITLE),
+
+    createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
+
     createParagraphWithLabelContent('sakenGjelder.name', 'Den ankende part'),
     createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+
+    {
+      type: ELEMENT_PARAGRAPH,
+      align: TextAlign.LEFT,
+      children: [
+        createLabelContent('klagerIfEqualToSakenGjelder.name', 'Den ankende part'),
+        createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
+        createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+        createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Den ankende part'),
+      ],
+    },
+
     createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
-    createMaltekst(TemplateSections.TILSVARSRETT),
-    createMaltekst(TemplateSections.GENERELL_INFO),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT),
+    createMaltekstseksjon(TemplateSections.GENERELL_INFO),
+
     createSignature(), // TODO: Make it possible to only show saksbehandler signature here
 
     createPageBreak(),
 
-    createMaltekst(TemplateSections.TITLE),
+    createMaltekstseksjon(TemplateSections.TITLE),
+
     createParagraphWithLabelContent('sakenGjelder.name', 'Den ankende part'),
     createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
     createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
-    createRedigerbarMaltekst(TemplateSections.INTRODUCTION),
-    createMaltekst(TemplateSections.AVGJOERELSE),
-    createRedigerbarMaltekst(TemplateSections.AVGJOERELSE),
-    createRedigerbarMaltekst(TemplateSections.ANFOERSLER),
-    createRedigerbarMaltekst(TemplateSections.OPPLYSNINGER),
-    createMaltekst(TemplateSections.VURDERINGEN),
-    createRedigerbarMaltekst(TemplateSections.VURDERINGEN),
+
+    createMaltekstseksjon(TemplateSections.INTRODUCTION),
+    createMaltekstseksjon(TemplateSections.ANFOERSLER),
+    createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
+    createMaltekstseksjon(TemplateSections.VURDERINGEN),
+
     createSignature(),
     createFooter(),
     createRegelverk(),

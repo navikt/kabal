@@ -1,31 +1,33 @@
 import { Textarea } from '@navikt/ds-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { PlainTextTypes } from '@app/types/texts/texts';
+import { PlainTextTypes } from '@app/types/common-text-types';
 
 type HeaderFooter = PlainTextTypes.HEADER | PlainTextTypes.FOOTER;
 
 interface Props {
-  textId: string;
-  savedPlainText?: string;
   type: HeaderFooter;
-  setContent: (content: string) => void;
-  onKeyDown: (event: React.KeyboardEvent) => void;
+  initialValue: string;
+  update: (plainText: string) => void;
 }
 
-export const HeaderFooterEditor = ({ textId, savedPlainText, type, setContent, onKeyDown }: Props) => (
-  <Container>
-    <StyledTextarea
-      minRows={5}
-      label={getLabel(type)}
-      key={textId}
-      id={textId}
-      value={savedPlainText}
-      onChange={({ target }) => setContent(target.value)}
-      onKeyDown={onKeyDown}
-    />
-  </Container>
-);
+export const HeaderFooterEditor = ({ type, initialValue, update }: Props) => {
+  const [value, setValue] = useState(initialValue);
+
+  return (
+    <Container>
+      <StyledTextarea
+        minRows={5}
+        label={getLabel(type)}
+        value={value}
+        onChange={({ target }) => {
+          setValue(target.value);
+          update(target.value);
+        }}
+      />
+    </Container>
+  );
+};
 
 const getLabel = (type: PlainTextTypes.HEADER | PlainTextTypes.FOOTER) =>
   type === PlainTextTypes.HEADER ? 'Topptekst' : 'Bunntekst';

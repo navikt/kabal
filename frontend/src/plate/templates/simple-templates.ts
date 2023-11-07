@@ -7,9 +7,8 @@ import {
   createCurrentDate,
   createFooter,
   createHeader,
-  createMaltekst,
+  createMaltekstseksjon,
   createPageBreak,
-  createRedigerbarMaltekst,
   createSignature,
   createSimpleParagraph,
 } from './helpers';
@@ -36,9 +35,9 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Spørsmål til rådgivende overlege',
   content: [
     createCurrentDate(),
-    createMaltekst(TemplateSections.TITLE),
-    createMaltekst(TemplateSections.INTRODUCTION),
-    createRedigerbarMaltekst(TemplateSections.FREMLEGG),
+    createMaltekstseksjon(TemplateSections.TITLE),
+    createMaltekstseksjon(TemplateSections.INTRODUCTION),
+    createMaltekstseksjon(TemplateSections.FREMLEGG),
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
@@ -50,8 +49,8 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Svar fra rådgivende overlege',
   content: [
     createCurrentDate(),
-    createMaltekst(TemplateSections.TITLE),
-    createRedigerbarMaltekst(TemplateSections.SVAR_FRA_ROL),
+    createMaltekstseksjon(TemplateSections.TITLE),
+    createMaltekstseksjon(TemplateSections.SVAR_FRA_ROL),
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
@@ -63,10 +62,10 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   tittel: 'Tilsvarsbrev (ROL)',
   content: [
     createCurrentDate(),
-    createMaltekst(TemplateSections.TILSVARSRETT),
-    createMaltekst(TemplateSections.GENERELL_INFO),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT),
+    createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
-    createMaltekst(TemplateSections.VEDLEGG),
+    createMaltekstseksjon(TemplateSections.VEDLEGG),
   ],
   dokumentTypeId: DistribusjonsType.BREV,
 });

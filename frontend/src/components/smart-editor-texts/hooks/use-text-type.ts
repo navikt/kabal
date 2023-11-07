@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router';
-import { PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/texts/texts';
+import { PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/common-text-types';
 
 export const useTextType = (): TextTypes | undefined => {
+  const maltekstseksjonerMatch = useMatch({ path: '/maltekstseksjoner', end: false });
   const maltekstMatch = useMatch({ path: '/maltekster', end: false });
   const redigerbarMaltekstMatch = useMatch({ path: '/redigerbare-maltekster', end: false });
   const godeFormuleringerMatch = useMatch({ path: '/gode-formuleringer', end: false });
@@ -11,6 +12,10 @@ export const useTextType = (): TextTypes | undefined => {
   const bunntekstMatch = useMatch({ path: '/bunntekster', end: false });
 
   return useMemo(() => {
+    if (maltekstseksjonerMatch !== null) {
+      return RichTextTypes.MALTEKSTSEKSJON;
+    }
+
     if (maltekstMatch !== null) {
       return RichTextTypes.MALTEKST;
     }
@@ -36,5 +41,13 @@ export const useTextType = (): TextTypes | undefined => {
     }
 
     return undefined;
-  }, [maltekstMatch, redigerbarMaltekstMatch, godeFormuleringerMatch, regelverkMatch, topptekstMatch, bunntekstMatch]);
+  }, [
+    maltekstseksjonerMatch,
+    maltekstMatch,
+    redigerbarMaltekstMatch,
+    godeFormuleringerMatch,
+    regelverkMatch,
+    topptekstMatch,
+    bunntekstMatch,
+  ]);
 };

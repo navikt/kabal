@@ -16,9 +16,10 @@ import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-e
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { useGetTextsQuery } from '@app/redux-api/texts';
+import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
+import { RichTextTypes } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IRichText, RichTextTypes } from '@app/types/texts/texts';
+import { IRichText } from '@app/types/texts/responses';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
 import { GodFormulering } from './god-formulering';
@@ -33,17 +34,19 @@ const filterTemplateSection = (
   activeSection: TemplateSections | NONE_TYPE,
   godFormulering: IRichText,
 ): boolean => {
-  if (godFormulering.templateSectionList.length === 0) {
+  if (godFormulering.templateSectionIdList.length === 0) {
     return true;
   }
 
-  for (const templateSection of godFormulering.templateSectionList) {
+  for (const templateSection of godFormulering.templateSectionIdList) {
     const [template, section] = templateSection.split(LIST_DELIMITER);
 
-    return (
+    if (
       (template === templateId || template === GLOBAL) &&
       (activeSection === section || activeSection === NONE || section === undefined)
-    );
+    ) {
+      return true;
+    }
   }
 
   return false;
@@ -61,7 +64,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     templateId,
     section: activeSection === undefined || activeSection === NONE ? undefined : activeSection,
   });
-  const { data = [], isLoading } = useGetTextsQuery(query);
+  const { data = [], isLoading } = useGetConsumerTextsQuery(query);
 
   useEffect(() => {
     if (focused === -1 && containerRef.current !== null) {

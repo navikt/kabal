@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ApiQuery } from '@app/types/texts/texts';
+import { ApiQuery } from '@app/types/common-text-types';
 import { useTextType } from './use-text-type';
 
 type Query = Partial<ApiQuery>;
@@ -9,20 +9,20 @@ export const useTextQuery = (): Query => {
   const [params] = useSearchParams();
   const textType = useTextType();
 
-  const ytelseHjemmelList = params.get('ytelseHjemmelList');
-  const utfallSet = params.get('utfall');
-  const enheter = params.get('enheter');
-  const templateSectionList = params.get('templateSectionList');
+  const ytelseHjemmelIdList = params.get('ytelseHjemmelIdList');
+  const utfallIdList = params.get('utfallIdList');
+  const enhetIdList = params.get('enhetIdList');
+  const templateSectionIdList = params.get('templateSectionIdList');
 
   const query: Query = useMemo(
     () => ({
-      ytelseHjemmelList: ytelseHjemmelList?.split(','),
-      utfall: utfallSet ?? undefined,
-      enheter: enheter?.split(','),
-      templateSectionList: templateSectionList?.split(','),
+      ytelseHjemmelIdList: ytelseHjemmelIdList?.split(','),
+      utfallIdList: utfallIdList ?? undefined,
+      enhetIdList: enhetIdList?.split(','),
+      templateSectionIdList: templateSectionIdList?.split(','),
       textType,
     }),
-    [enheter, ytelseHjemmelList, templateSectionList, textType, utfallSet],
+    [enhetIdList, ytelseHjemmelIdList, templateSectionIdList, textType, utfallIdList],
   );
 
   return query;

@@ -9,6 +9,7 @@ import {
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
@@ -26,6 +27,7 @@ import {
   HeaderElement,
   LabelContentElement,
   MaltekstElement,
+  MaltekstseksjonElement,
   PageBreakElement,
   ParagraphElement,
   ParentOrChildElement,
@@ -48,16 +50,40 @@ export const createLabelContent = (source: string, label: string): LabelContentE
   threadIds: [],
 });
 
-export const createMaltekst = (section: TemplateSections): MaltekstElement => ({
-  type: ELEMENT_MALTEKST,
+export const createMaltekstseksjon = (
+  section: TemplateSections,
+  id?: string,
+  textIdList?: string[],
+  children?: MaltekstseksjonElement['children'],
+): MaltekstseksjonElement => ({
+  type: ELEMENT_MALTEKSTSEKSJON,
+  id,
   section,
-  children: [createSimpleParagraph()],
+  children: children ?? [createEmptyVoid()],
+  textIdList: textIdList ?? [],
 });
 
-export const createRedigerbarMaltekst = (section: TemplateSections): RedigerbarMaltekstElement => ({
+export const createMaltekst = (
+  section: TemplateSections,
+  children?: ParentOrChildElement[],
+  id?: string,
+): MaltekstElement => ({
+  type: ELEMENT_MALTEKST,
+  section,
+  id,
+  children: children ?? [createSimpleParagraph()],
+});
+
+export const createRedigerbarMaltekst = (
+  section: TemplateSections,
+  children?: ParentOrChildElement[],
+  id?: string,
+): RedigerbarMaltekstElement => ({
   type: ELEMENT_REDIGERBAR_MALTEKST,
   section,
-  children: [createEmptyVoid()],
+  id,
+  // Avoid using same reference for same redigerbar maltekst used different places
+  children: children === undefined ? [createEmptyVoid()] : structuredClone(children),
 });
 
 const createRegelverkContainer = (
@@ -70,7 +96,7 @@ const createRegelverkContainer = (
 export const createRegelverk = (): RegelverkElement => ({
   type: ELEMENT_REGELVERK,
   section: TemplateSections.REGELVERK_TITLE,
-  children: [createPageBreak(), createMaltekst(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
+  children: [createPageBreak(), createMaltekstseksjon(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
 });
 
 // eslint-disable-next-line import/no-unused-modules

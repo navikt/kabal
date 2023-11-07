@@ -9,6 +9,7 @@ import {
   isText,
   someNode,
 } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
@@ -17,6 +18,9 @@ import {
   BulletListElement,
   EditorDescendant,
   EditorValue,
+  H1Element,
+  H2Element,
+  H3Element,
   NumberedListElement,
   ParentOrChildElement,
   RichText,
@@ -64,12 +68,14 @@ export const isOfElementTypesFn =
   (node: TNode): node is T =>
     isElement(node) && types.includes(node.type);
 
+const LIST_MATCHER = isOfElementTypesFn<BulletListElement | NumberedListElement>([ELEMENT_UL, ELEMENT_OL]);
 export const isInList = (editor: RichTextEditor): boolean =>
-  someNode<BulletListElement | NumberedListElement>(editor, {
-    match: (n) => isElement(n) && (n.type === ELEMENT_UL || n.type === ELEMENT_OL),
-  });
+  someNode<BulletListElement | NumberedListElement>(editor, { match: LIST_MATCHER });
 
 export const isInTable = (editor: RichTextEditor): boolean => someNode(editor, { match: { type: ELEMENT_TABLE } });
+
+const HEADINGS_MATCHER = isOfElementTypesFn<H1Element | H2Element | H3Element>([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3]);
+export const isInHeading = (editor: RichTextEditor): boolean => someNode(editor, { match: HEADINGS_MATCHER });
 
 const isContained = (editor: RichTextEditor, type: string) => {
   if (editor.selection === null) {

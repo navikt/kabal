@@ -1,6 +1,7 @@
 import {
   Buldings3Icon,
   BulletListIcon,
+  FileIcon,
   FileTextIcon,
   GavelSoundBlockIcon,
   LightBulbIcon,
@@ -43,8 +44,12 @@ export const Nav = () => (
         <Buldings3Icon /> Oppgavestyring
       </NavItem>
 
+      <NavItem to="/maltekstseksjoner" testId="maltekstseksjoner-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
+        <PuzzlePieceIcon /> Maltekstseksjoner
+      </NavItem>
+
       <NavItem to="/maltekster" testId="maltekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
-        <PuzzlePieceIcon /> Maltekster
+        <FileIcon /> Maltekster
       </NavItem>
 
       <NavItem

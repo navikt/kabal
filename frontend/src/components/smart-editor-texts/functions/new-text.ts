@@ -1,23 +1,13 @@
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import {
-  INewPlainTextParams,
-  INewRichTextParams,
-  ITextBaseMetadata,
-  PlainTextTypes,
-  RichTextTypes,
-} from '@app/types/texts/texts';
+import { ITextBaseMetadata, PlainTextTypes, RichTextTypes } from '@app/types/common-text-types';
+import { INewPlainTextParams, INewRichTextParams } from '@app/types/texts/params';
 
 const getMetadata = (): ITextBaseMetadata => ({
-  templateSectionList: [],
-  ytelseHjemmelList: [],
-  utfall: [],
-  enheter: [],
+  templateSectionIdList: [],
+  ytelseHjemmelIdList: [],
+  utfallIdList: [],
+  enhetIdList: [],
   title: '',
-  // TODO: Remove after migration.
-  hjemler: [],
-  templates: [],
-  sections: [],
-  ytelser: [],
 });
 
 export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({

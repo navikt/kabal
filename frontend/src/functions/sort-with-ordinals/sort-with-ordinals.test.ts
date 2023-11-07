@@ -73,7 +73,7 @@ describe('sortWithOrdinals', () => {
     expect(actual).toStrictEqual([jan, feb, jul, nov, des]);
   });
 
-  it('should sort nubmers before text', () => {
+  it('should sort numbers before text', () => {
     expect.assertions(1);
 
     const a = 'abc123';
@@ -81,5 +81,15 @@ describe('sortWithOrdinals', () => {
     const c = 'abcd12';
 
     expect(sortStrings([c, b, a])).toStrictEqual([a, c, b]);
+  });
+
+  it('should ignore parentheses', () => {
+    expect.assertions(1);
+
+    const a = '1';
+    const b = '(2)';
+    const c = '3';
+
+    expect(sortStrings([c, b, a])).toStrictEqual([a, b, c]);
   });
 });

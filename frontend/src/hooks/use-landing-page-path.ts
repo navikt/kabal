@@ -31,7 +31,7 @@ export const useLandingPagePath = (): LandingPagePath => {
   }
 
   if (data.roller.includes(Role.KABAL_MALTEKSTREDIGERING)) {
-    return [false, '/maltekster', 'Maltekster'];
+    return [false, '/maltekstseksjoner', 'Maltekstseksjoner'];
   }
 
   if (data.roller.includes(Role.KABAL_ADMIN)) {

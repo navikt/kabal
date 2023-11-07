@@ -1,27 +1,28 @@
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { isUtfall } from '@app/functions/is-utfall';
 import { UtfallEnum } from '@app/types/kodeverk';
+import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IRichText } from '@app/types/texts/texts';
+import { IPublishedRichText } from '@app/types/texts/responses';
 import { TemplateSections } from '../template-sections';
 
 const MAX_SCORE = 23;
 
-export const lexSpecialis = (
+export const lexSpecialis = <T extends IPublishedRichText | IMaltekstseksjon>(
   templateId: TemplateIdEnum,
   sectionId: TemplateSections,
   ytelseId: string,
   hjemmelIdList: string[],
   utfallIdSet: UtfallEnum[],
-  richTexts: IRichText[],
-): IRichText | null => {
-  let text: IRichText | null = null;
+  richTexts: T[],
+): T | null => {
+  let text: T | null = null;
   let highscore: number = -Infinity;
 
   for (const t of richTexts) {
-    const templateScore = getTemplateScore(templateId, sectionId, t.templateSectionList);
-    const ytelseScore = getYtelseScore(ytelseId, hjemmelIdList, t.ytelseHjemmelList);
-    const utfallScore = getUtfallScore(utfallIdSet, t.utfall);
+    const templateScore = getTemplateScore(templateId, sectionId, t.templateSectionIdList);
+    const ytelseScore = getYtelseScore(ytelseId, hjemmelIdList, t.ytelseHjemmelIdList);
+    const utfallScore = getUtfallScore(utfallIdSet, t.utfallIdList);
 
     const score = templateScore + ytelseScore + utfallScore;
 

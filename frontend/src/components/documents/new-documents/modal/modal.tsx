@@ -33,6 +33,7 @@ export const DocumentModal = () => {
         heading: `Valg for «${tittel}»`,
         icon: <DocumentIcon type={type} />,
       }}
+      closeOnBackdropClick
     >
       <DocumentModalContent document={document} />
     </Modal>

@@ -1,19 +1,21 @@
 import { TDescendant, isElement } from '@udecode/plate-common';
 import { useMemo } from 'react';
+import { TEMPLATE_MAP } from '@app/hooks/use-templates';
 import {
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_REDIGERBAR_MALTEKST,
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
-import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import { EditorValue } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const EMPTY_LIST: TemplateSections[] = [];
 
 export type SectionType =
+  | typeof ELEMENT_MALTEKSTSEKSJON
   | typeof ELEMENT_MALTEKST
   | typeof ELEMENT_REDIGERBAR_MALTEKST
   | typeof ELEMENT_FOOTER

@@ -8,18 +8,19 @@ import {
   UtfallSelect,
 } from '@app/components/smart-editor-texts/query-filter-selects';
 import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
-import { AppQuery, PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/texts/texts';
+import { AppQuery, PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/common-text-types';
 import { HjemlerSelect } from './hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
   textType: TextTypes;
+  className?: string;
 }
 
-export const Filters = ({ textType }: Props) => {
+export const Filters = ({ textType, className }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { enheter, utfall, templateSectionList, ytelseHjemmelList } = useTextQuery();
+  const { enhetIdList, utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
 
   const utfallOptions = useUtfallOptions();
   const klageenheterOptions = useKlageenheterOptions();
@@ -38,11 +39,11 @@ export const Filters = ({ textType }: Props) => {
   const hasFixedLocation = isHeaderFooter || textType === RichTextTypes.REGELVERK;
 
   return (
-    <Container>
+    <Container className={className}>
       {hasFixedLocation ? null : (
         <TemplateSectionSelect
-          selected={templateSectionList ?? []}
-          onChange={(value) => setFilter('templateSectionList', value)}
+          selected={templateSectionIdList ?? []}
+          onChange={(value) => setFilter('templateSectionIdList', value)}
           textType={textType}
           includeNoneOption
           templatesSelectable
@@ -53,24 +54,28 @@ export const Filters = ({ textType }: Props) => {
 
       {isHeaderFooter ? null : (
         <HjemlerSelect
-          selected={ytelseHjemmelList ?? []}
-          onChange={(value: string[]) => setFilter('ytelseHjemmelList', value)}
+          selected={ytelseHjemmelIdList ?? []}
+          onChange={(value: string[]) => setFilter('ytelseHjemmelIdList', value)}
           includeNoneOption
           ytelserSelectable
-          ytelseIsWildcard={textType === RichTextTypes.REGELVERK}
+          ytelseIsWildcard
         />
       )}
 
       {isHeaderFooter ? null : (
-        <UtfallSelect selected={utfall} onChange={(value) => setFilter('utfall', value)} options={utfallOptions}>
+        <UtfallSelect
+          selected={utfallIdList}
+          onChange={(value) => setFilter('utfallIdList', value)}
+          options={utfallOptions}
+        >
           Utfallsett
         </UtfallSelect>
       )}
 
       {isHeaderFooter ? (
         <KlageenhetSelect
-          selected={enheter ?? []}
-          onChange={(value) => setFilter('enheter', value)}
+          selected={enhetIdList ?? []}
+          onChange={(value) => setFilter('enhetIdList', value)}
           options={[NONE_OPTION, ...klageenheterOptions]}
         >
           Enheter

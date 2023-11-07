@@ -1,5 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { isApiRejectionError } from '@app/types/errors';
 import { KABAL_API_BASE_QUERY } from './common';
 import { documentsQuerySlice } from './oppgaver/queries/documents';
 
@@ -67,7 +70,15 @@ export const journalposterApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (e) {
+          const message = 'Kunne ikke oppdatere tittel.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+
           journalfoertePatchResult.undo();
           underArbeidPatchResult.undo();
         }

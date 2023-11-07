@@ -1,8 +1,9 @@
 import { GLOBAL, GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
+import { RichTextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IRichText, RichTextTypes } from '@app/types/texts/texts';
+import { IPublishedRichText } from '@app/types/texts/responses';
 import { TemplateSections } from '../template-sections';
 
 const getText = (
@@ -11,7 +12,7 @@ const getText = (
   sectionId: TemplateSections,
   ytelseHjemmelList: string[] = [],
   utfallSetList: UtfallEnum[][] = [],
-): IRichText => {
+): IPublishedRichText => {
   const title = `${templateId} / ${sectionId}`;
 
   return {
@@ -20,24 +21,40 @@ const getText = (
     created: '',
     modified: '',
     textType: RichTextTypes.MALTEKST,
-    enheter: [],
-    utfall: utfallSetList.map((set) => set.join(SET_DELIMITER)),
-    hjemler: [],
-    sections: [],
-    templates: [],
-    ytelser: [],
+    enhetIdList: [],
+    utfallIdList: utfallSetList.map((set) => set.join(SET_DELIMITER)),
     content: [],
-    templateSectionList: [`${templateId}${LIST_DELIMITER}${sectionId}`],
-    ytelseHjemmelList,
+    templateSectionIdList: [`${templateId}${LIST_DELIMITER}${sectionId}`],
+    ytelseHjemmelIdList: ytelseHjemmelList,
+    editors: [],
+    published: false,
+    publishedBy: '',
+    publishedDateTime: '2023-11-02T13:22:54',
+    versionId: '',
+    draftMaltekstseksjonIdList: [],
+    publishedMaltekstseksjonIdList: [],
   };
 };
 
-const GENERIC_TITLE: IRichText = getText('generic-title', TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE);
-const GENERIC_TITLE_2: IRichText = getText('generic-title-2', TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE);
-const SPECIFIC_TITLE: IRichText = getText('specific-title', TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE, ['y1']);
-const MORE_SPECIFIC_TITLE: IRichText = getText(
+const GENERIC_TITLE: IPublishedRichText = getText(
+  'generic-title',
+  TemplateIdEnum.KLAGEVEDTAK_V1,
+  TemplateSections.TITLE,
+);
+const GENERIC_TITLE_2: IPublishedRichText = getText(
+  'generic-title-2',
+  TemplateIdEnum.KLAGEVEDTAK_V1,
+  TemplateSections.TITLE,
+);
+const SPECIFIC_TITLE: IPublishedRichText = getText(
+  'specific-title',
+  TemplateIdEnum.KLAGEVEDTAK_V1,
+  TemplateSections.TITLE,
+  ['y1'],
+);
+const MORE_SPECIFIC_TITLE: IPublishedRichText = getText(
   'more-specific-title',
-  TemplateIdEnum.KLAGEVEDTAK,
+  TemplateIdEnum.KLAGEVEDTAK_V1,
   TemplateSections.TITLE,
   [`y1${LIST_DELIMITER}h1`],
 );
@@ -47,7 +64,7 @@ describe('lex specialis', () => {
     expect.assertions(1);
 
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       ['h1'],
@@ -61,7 +78,7 @@ describe('lex specialis', () => {
     expect.assertions(1);
 
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       ['h1'],
@@ -74,18 +91,17 @@ describe('lex specialis', () => {
   it('returns null if no text', () => {
     expect.assertions(1);
 
-    const actual = lexSpecialis(TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE, 'y1', ['h1'], [], []);
+    const actual = lexSpecialis(TemplateIdEnum.KLAGEVEDTAK_V1, TemplateSections.TITLE, 'y1', ['h1'], [], []);
     expect(actual).toBeNull();
   });
 
   it('template is more worth than ytelse', () => {
     expect.assertions(1);
 
-    const ytelse: IRichText = getText('ytelse', GLOBAL, TemplateSections.TITLE, ['y1']);
-    const template: IRichText = getText('template', TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE);
-
+    const ytelse: IPublishedRichText = getText('ytelse', GLOBAL, TemplateSections.TITLE, ['y1']);
+    const template: IPublishedRichText = getText('template', TemplateIdEnum.KLAGEVEDTAK_V1, TemplateSections.TITLE);
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       ['h1'],
@@ -98,24 +114,22 @@ describe('lex specialis', () => {
   it('prefer text that has correct utfall', () => {
     expect.assertions(1);
 
-    const correctUtfall: IRichText = getText(
+    const correctUtfall: IPublishedRichText = getText(
       'correct-utfall',
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       [],
       [[UtfallEnum.MEDHOLD, UtfallEnum.DELVIS_MEDHOLD]],
     );
-
-    const tooSpecific: IRichText = getText(
+    const tooSpecific: IPublishedRichText = getText(
       'too-specific',
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       [],
       [[UtfallEnum.MEDHOLD, UtfallEnum.DELVIS_MEDHOLD, UtfallEnum.STADFESTELSE]],
     );
-
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       [],
@@ -129,24 +143,22 @@ describe('lex specialis', () => {
   it('utfall, template and ytelse are weighted correctly', () => {
     expect.assertions(1);
 
-    const expected: IRichText = getText(
+    const expected: IPublishedRichText = getText(
       'correct-utfall',
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       [],
       [[UtfallEnum.MEDHOLD, UtfallEnum.DELVIS_MEDHOLD]],
     );
-
-    const notExpectedOne: IRichText = getText(
+    const notExpectedOne: IPublishedRichText = getText(
       'too-specific',
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       [`y1${LIST_DELIMITER}h1`],
       [[UtfallEnum.MEDHOLD, UtfallEnum.DELVIS_MEDHOLD, UtfallEnum.STADFESTELSE]],
     );
-
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       ['h1'],
@@ -160,18 +172,22 @@ describe('lex specialis', () => {
   it('template is always most important', () => {
     expect.assertions(1);
 
-    const expected: IRichText = getText('correct-template', TemplateIdEnum.KLAGEVEDTAK, TemplateSections.TITLE, [], []);
-
-    const notExpectedOne: IRichText = getText(
+    const expected: IPublishedRichText = getText(
+      'correct-template',
+      TemplateIdEnum.KLAGEVEDTAK_V1,
+      TemplateSections.TITLE,
+      [],
+      [],
+    );
+    const notExpectedOne: IPublishedRichText = getText(
       'not-specific-enough-template',
       GLOBAL,
       TemplateSections.TITLE,
       [`y1${LIST_DELIMITER}h1`],
       [[UtfallEnum.MEDHOLD, UtfallEnum.DELVIS_MEDHOLD]],
     );
-
     const actual = lexSpecialis(
-      TemplateIdEnum.KLAGEVEDTAK,
+      TemplateIdEnum.KLAGEVEDTAK_V1,
       TemplateSections.TITLE,
       'y1',
       ['h1'],
