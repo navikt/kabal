@@ -1,42 +1,54 @@
 import { Select } from '@navikt/ds-react';
-import { findNode, isElement, useEditorSelection } from '@udecode/plate-common';
+import { findNode, useEditorSelection } from '@udecode/plate-common';
 import React, { useContext, useEffect, useMemo } from 'react';
-import { Range } from 'slate';
+import { BasePoint, Range } from 'slate';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useTemplateSections } from '@app/hooks/use-template-sections';
+import {
+  ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+} from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import {
   MaltekstElement,
+  MaltekstseksjonElement,
   RedigerbarMaltekstElement,
   RegelverkElement,
   RichTextEditor,
   useMyPlateEditorRef,
 } from '@app/plate/types';
+import { isOfElementTypeFn, isOfElementTypesFn } from '@app/plate/utils/queries';
 
 interface Props {
   activeSection: TemplateSections | NONE_TYPE;
   setActiveSection: (section: TemplateSections | NONE_TYPE) => void;
 }
 
+const MATCH = isOfElementTypesFn<MaltekstElement | RedigerbarMaltekstElement | RegelverkElement>([
+  ELEMENT_MALTEKST,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+]);
+const MATCH_SECTION = isOfElementTypeFn<MaltekstseksjonElement>(ELEMENT_MALTEKSTSEKSJON);
+const ANCHOR: BasePoint = { path: [0], offset: 0 };
+
 const getActiveSection = (editor: RichTextEditor, selection: Range): TemplateSections | null => {
-  const entry = findNode<MaltekstElement | RedigerbarMaltekstElement | RegelverkElement>(editor, {
-    at: selection.anchor ?? [],
-    match: (n) => isElement(n) && typeof n['section'] === 'string',
-  });
+  const entry =
+    findNode<MaltekstElement | RedigerbarMaltekstElement | RegelverkElement>(editor, {
+      at: selection.focus,
+      match: MATCH,
+    }) ??
+    findNode<MaltekstseksjonElement>(editor, {
+      at: { anchor: ANCHOR, focus: selection.focus },
+      match: MATCH_SECTION,
+      reverse: true,
+    });
 
-  if (entry === undefined) {
-    return null;
-  }
-
-  const [{ section }] = entry;
-
-  if (isTemplateSection(section)) {
-    return section;
-  }
-
-  return null;
+  return entry?.[0]?.section ?? null;
 };
 
 export const SectionSelect = ({ activeSection, setActiveSection }: Props) => {

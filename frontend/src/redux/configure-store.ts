@@ -8,10 +8,13 @@ import { kabalInternalApi } from '@app/redux-api/internal';
 import { journalposterApi } from '@app/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
+import { consumerMaltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/consumer';
+import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
 import { messagesApi } from '@app/redux-api/messages';
 import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
-import { textsApi } from '@app/redux-api/texts';
+import { consumerTextsApi } from '@app/redux-api/texts/consumer';
+import { textsApi } from '@app/redux-api/texts/texts';
 import { RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
@@ -31,6 +34,9 @@ export const reduxStore = configureStore({
       kabalInternalApi.middleware,
       smartEditorCommentsApi.middleware,
       textsApi.middleware,
+      consumerTextsApi.middleware,
+      maltekstseksjonerApi.middleware,
+      consumerMaltekstseksjonerApi.middleware,
       accessRightsApi.middleware,
       journalposterApi.middleware,
     ]),

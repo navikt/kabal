@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { AppQuery } from '@app/types/texts/texts';
+import { AppQuery } from '@app/types/common-text-types';
 
 interface BaseProps {
   useName: (id: string) => string;
@@ -48,8 +48,8 @@ const StyledTag = styled(Tag)<StyledTagProps>`
 `;
 
 const VARIANTS: Record<keyof AppQuery, string> = {
-  templateSectionList: 'red',
-  ytelseHjemmelList: 'blue',
-  utfall: 'limegreen',
-  enheter: 'purple',
+  templateSectionIdList: 'red',
+  ytelseHjemmelIdList: 'blue',
+  utfallIdList: 'limegreen',
+  enhetIdList: 'purple',
 };

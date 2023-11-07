@@ -1,6 +1,6 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import { isCollapsed, isText } from '@udecode/plate-common';
+import { Plate, isCollapsed, isText } from '@udecode/plate-common';
 import React, { useContext, useRef } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
@@ -15,14 +15,14 @@ import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { PlateEditor, PlateEditorContextComponent } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugins';
+import { PlateEditor } from '@app/plate/plate-editor';
+import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue } from '@app/plate/types';
+import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
@@ -55,7 +55,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
 
   return (
     <Container>
-      <PlateEditorContextComponent
+      <Plate<EditorValue, RichTextEditor>
         initialValue={initialValue}
         id={id}
         readOnly={!canEdit}
@@ -114,7 +114,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
         </StickyRightContainer>
 
         <StatusBar {...updateStatus} />
-      </PlateEditorContextComponent>
+      </Plate>
     </Container>
   );
 };

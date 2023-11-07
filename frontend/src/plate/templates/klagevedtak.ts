@@ -11,8 +11,7 @@ import {
   createFooter,
   createHeader,
   createLabelContent,
-  createMaltekst,
-  createRedigerbarMaltekst,
+  createMaltekstseksjon,
   createRegelverk,
   createSignature,
 } from './helpers';
@@ -20,7 +19,9 @@ import {
 const INITIAL_SLATE_VALUE: EditorValue = [
   createCurrentDate(),
   createHeader(),
-  createMaltekst(TemplateSections.TITLE),
+
+  createMaltekstseksjon(TemplateSections.TITLE),
+
   {
     type: ELEMENT_PARAGRAPH,
     align: TextAlign.LEFT,
@@ -32,27 +33,26 @@ const INITIAL_SLATE_VALUE: EditorValue = [
       createLabelContent('saksnummer', 'Saksnummer'),
     ],
   },
-  createRedigerbarMaltekst(TemplateSections.INTRODUCTION),
-  createMaltekst(TemplateSections.AVGJOERELSE),
-  createRedigerbarMaltekst(TemplateSections.AVGJOERELSE),
-  createRedigerbarMaltekst(TemplateSections.ANFOERSLER),
-  createRedigerbarMaltekst(TemplateSections.OPPLYSNINGER),
-  createMaltekst(TemplateSections.VURDERINGEN),
-  createRedigerbarMaltekst(TemplateSections.VURDERINGEN),
-  createMaltekst(TemplateSections.KONKLUSJON),
-  createRedigerbarMaltekst(TemplateSections.KONKLUSJON),
-  createMaltekst(TemplateSections.ANKEINFO),
-  createMaltekst(TemplateSections.SAKSKOSTNADER),
-  createMaltekst(TemplateSections.GENERELL_INFO),
+
+  createMaltekstseksjon(TemplateSections.INTRODUCTION),
+  createMaltekstseksjon(TemplateSections.AVGJOERELSE),
+  createMaltekstseksjon(TemplateSections.ANFOERSLER),
+  createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
+  createMaltekstseksjon(TemplateSections.VURDERINGEN),
+  createMaltekstseksjon(TemplateSections.KONKLUSJON),
+  createMaltekstseksjon(TemplateSections.ANKEINFO),
+  createMaltekstseksjon(TemplateSections.SAKSKOSTNADER),
+  createMaltekstseksjon(TemplateSections.GENERELL_INFO),
+
   createSignature(),
   createFooter(),
   createRegelverk(),
 ];
 
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.KLAGEVEDTAK,
+  templateId: TemplateIdEnum.KLAGEVEDTAK_V2,
   type: SaksTypeEnum.KLAGE,
-  tittel: 'Vedtak/beslutning (klage)',
+  tittel: 'Vedtak/beslutning (klage) [NY]',
   content: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
 });

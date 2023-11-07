@@ -66,9 +66,10 @@ export const sortWithOrdinals = (a: string, b: string): number => {
 
 const SPLIT_REGEX = /(\d+|\s+)/gi;
 const REPLACE_REGEX = /§{2,}/gi;
+const REMOVE_REGEX = /[()]/gi;
 
 const split = (value: string): (string | number)[] => {
-  const parts = value.split(SPLIT_REGEX);
+  const parts = value.replaceAll(REMOVE_REGEX, '').split(SPLIT_REGEX);
   const result: (string | number)[] = [];
 
   for (const rawPart of parts) {

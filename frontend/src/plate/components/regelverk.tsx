@@ -10,10 +10,11 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
 import { EditorValue, RegelverkContainerElement, RegelverkElement } from '@app/plate/types';
-import { useLazyGetTextsQuery } from '@app/redux-api/texts';
-import { IRichText, IText, RichTextTypes } from '@app/types/texts/texts';
+import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
+import { RichTextTypes } from '@app/types/common-text-types';
+import { IPublishedRichText, IText } from '@app/types/texts/responses';
 
-const isRegelverk = (text: IText): text is IRichText => text.textType === RichTextTypes.REGELVERK;
+const isRegelverk = (text: IText): text is IPublishedRichText => text.textType === RichTextTypes.REGELVERK;
 
 export const Regelverk = ({
   attributes,
@@ -25,7 +26,7 @@ export const Regelverk = ({
   const { data: oppgave } = useOppgave();
   const query = useQuery({ textType: RichTextTypes.REGELVERK });
 
-  const [getTexts] = useLazyGetTextsQuery();
+  const [getTexts] = useLazyGetConsumerTextsQuery();
 
   const insertRegelverk = useCallback(async () => {
     if (oppgave === undefined || query === skipToken) {

@@ -1,10 +1,10 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { StyledParagraph } from '@app/plate/components/paragraph';
-import { StyledPageBreak } from './page-break';
 
 export enum SectionTypeEnum {
   LABEL,
   MALTEKST,
+  MALTEKSTSEKSJON,
   REDIGERBAR_MALTEKST,
   REGELVERK,
   SIGNATURE,
@@ -13,6 +13,7 @@ export enum SectionTypeEnum {
 }
 
 const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
+  [SectionTypeEnum.MALTEKSTSEKSJON]: 'inherit',
   [SectionTypeEnum.MALTEKST]: 'var(--a-gray-700)',
   [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'inherit',
   [SectionTypeEnum.REGELVERK]: 'inherit',
@@ -23,6 +24,7 @@ const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
 };
 
 const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
+  [SectionTypeEnum.MALTEKSTSEKSJON]: 'var(--a-deepblue-300)',
   [SectionTypeEnum.MALTEKST]: 'var(--a-purple-300)',
   [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--a-green-100)',
   [SectionTypeEnum.REGELVERK]: 'var(--a-blue-200)',
@@ -32,9 +34,8 @@ const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.LABEL]: 'var(--a-gray-200)',
 };
 
-export const SectionToolbar = styled.div`
+const secionToolbarCss = css`
   position: absolute;
-  right: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
   opacity: 0;
@@ -44,8 +45,6 @@ export const SectionToolbar = styled.div`
   align-items: center;
   column-gap: 4px;
   background-color: var(--a-bg-subtle);
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
   padding: 0;
   color: var(--a-icon-action);
   font-size: 12pt;
@@ -56,30 +55,56 @@ export const SectionToolbar = styled.div`
   }
 `;
 
+export const SectionToolbar = styled.div`
+  ${secionToolbarCss}
+  right: calc(100% + 8px);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+`;
+
+export const MaltekstseksjonToolbar = styled.div`
+  ${secionToolbarCss}
+  left: calc(100% + 8px);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+`;
+
+const sectionBeforeCss = css`
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  border-style: solid;
+  border-color: transparent;
+`;
+
+const sectionContainerCss = css`
+  position: relative;
+  margin-top: 0;
+  background-color: transparent;
+  user-select: text;
+
+  /* Hide empty paragraph placeholders */
+  &[data-element='maltekst'] ${StyledParagraph}::before {
+    content: '';
+  }
+`;
+
 interface SectionContainerProps {
   $sectionType: SectionTypeEnum;
 }
 
 export const SectionContainer = styled.div<SectionContainerProps>`
-  position: relative;
-  margin-top: 0;
-  z-index: 0;
-  background-color: transparent;
-  user-select: text;
+  ${sectionContainerCss}
   color: ${(props) => FONT_COLOR_MAP[props.$sectionType]};
 
   &::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
+    ${sectionBeforeCss}
     left: -8px;
-    z-index: 0;
     transition: border-left-color 0.2s ease-in-out;
     border-left-width: 4px;
-    border-left-style: solid;
-    border-left-color: transparent;
   }
 
   &:hover {
@@ -91,13 +116,26 @@ export const SectionContainer = styled.div<SectionContainerProps>`
       opacity: 1;
     }
   }
+`;
 
-  > ${StyledPageBreak} {
-    z-index: -1;
+export const MaltekstseksjonContainer = styled.div`
+  ${sectionContainerCss}
+  color:  ${FONT_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]};
+
+  &::before {
+    ${sectionBeforeCss}
+    right: -8px;
+    transition: border-right-color 0.2s ease-in-out;
+    border-right-width: 4px;
   }
 
-  /* Hide empty paragraph placeholders */
-  &[data-element='maltekst'] ${StyledParagraph}::before {
-    content: '';
+  &:hover {
+    &::before {
+      border-right-color: ${PRIMARY_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]};
+    }
+
+    > ${MaltekstseksjonToolbar} {
+      opacity: 1;
+    }
   }
 `;

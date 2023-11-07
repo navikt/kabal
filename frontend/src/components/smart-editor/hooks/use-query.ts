@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useUser } from '@app/simple-api-state/use-user';
+import { ApiQuery, TextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ApiQuery, TextTypes } from '@app/types/texts/texts';
 
 interface Params {
   textType: TextTypes;
@@ -30,10 +30,10 @@ export const useQuery = ({ textType, templateId, section }: Params) => {
         : [];
 
     const query: ApiQuery = {
-      ytelseHjemmelList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
-      utfall: getUtfallList(extraUtfallIdSet, utfallId),
-      enheter: [bruker.ansattEnhet.id],
-      templateSectionList,
+      ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
+      utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
+      enhetIdList: [bruker.ansattEnhet.id],
+      templateSectionIdList: templateSectionList,
       textType,
     };
 
@@ -51,7 +51,7 @@ const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] =
   return result;
 };
 
-const getUtfallList = (extraUtfallIdSet: UtfallEnum[], utfallId: UtfallEnum | null): ApiQuery['utfall'] => {
+const getUtfallList = (extraUtfallIdSet: UtfallEnum[], utfallId: UtfallEnum | null): ApiQuery['utfallIdList'] => {
   const utfallSet: Set<UtfallEnum> = utfallId === null ? new Set([]) : new Set([utfallId]);
 
   for (const item of extraUtfallIdSet) {

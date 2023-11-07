@@ -29,6 +29,7 @@ import {
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
@@ -75,17 +76,17 @@ export interface ParagraphElement extends BlockElement, IndentableStyleProps, Al
 
 export interface H1Element extends BlockElement, IndentableStyleProps {
   type: typeof ELEMENT_H1;
-  children: RichText[];
+  children: (RichText | PlaceholderElement)[];
 }
 
 export interface H2Element extends BlockElement, IndentableStyleProps {
   type: typeof ELEMENT_H2;
-  children: RichText[];
+  children: (RichText | PlaceholderElement)[];
 }
 
 export interface H3Element extends BlockElement, IndentableStyleProps {
   type: typeof ELEMENT_H3;
-  children: RichText[];
+  children: (RichText | PlaceholderElement)[];
 }
 
 export interface BulletListElement extends BlockElement, IndentableStyleProps {
@@ -100,7 +101,7 @@ export interface NumberedListElement extends BlockElement, IndentableStyleProps 
 
 export interface ListItemContainerElement extends BlockElement {
   type: typeof ELEMENT_LIC;
-  children: RichText[];
+  children: (RichText | PlaceholderElement)[];
 }
 
 export interface ListItemElement extends BlockElement {
@@ -126,14 +127,24 @@ export interface TableCellElement extends BlockElement, TTableCellElement {
 
 export interface MaltekstElement extends BlockElement {
   type: typeof ELEMENT_MALTEKST;
+  id?: string;
   section: TemplateSections;
   children: ParentOrChildElement[] | [EmptyVoidElement];
 }
 
 export interface RedigerbarMaltekstElement extends BlockElement {
   type: typeof ELEMENT_REDIGERBAR_MALTEKST;
+  id?: string;
   section: TemplateSections;
   children: ParentOrChildElement[] | [EmptyVoidElement];
+}
+
+export interface MaltekstseksjonElement extends BlockElement {
+  type: typeof ELEMENT_MALTEKSTSEKSJON;
+  id?: string;
+  section: TemplateSections;
+  textIdList: string[];
+  children: (MaltekstElement | RedigerbarMaltekstElement)[] | [EmptyVoidElement];
 }
 
 export interface PlaceholderElement extends BlockElement {
@@ -165,7 +176,7 @@ export interface RegelverkContainerElement extends BlockElement {
 export interface RegelverkElement extends BlockElement {
   type: typeof ELEMENT_REGELVERK;
   section: TemplateSections.REGELVERK_TITLE;
-  children: [PageBreakElement, MaltekstElement, RegelverkContainerElement];
+  children: [PageBreakElement, MaltekstseksjonElement, RegelverkContainerElement];
 }
 
 export interface HeaderElement extends TElement {
@@ -211,7 +222,8 @@ export type ParentOrChildElement =
   | BulletListElement
   | NumberedListElement
   | TableElement
-  | LabelContentElement;
+  | LabelContentElement
+  | EmptyVoidElement;
 
 type ParentOnlyElement =
   | MaltekstElement
@@ -221,7 +233,8 @@ type ParentOnlyElement =
   | PageBreakElement
   | HeaderElement
   | FooterElement
-  | SignatureElement;
+  | SignatureElement
+  | MaltekstseksjonElement;
 
 export type RootElement = ParentOrChildElement | ParentOnlyElement;
 
@@ -231,8 +244,7 @@ export type ChildElement =
   | TableRowElement
   | TableCellElement
   | RegelverkContainerElement
-  | PlaceholderElement
-  | EmptyVoidElement;
+  | PlaceholderElement;
 
 export type RichTextEditorElement = RootElement | ChildElement;
 

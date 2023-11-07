@@ -1,28 +1,22 @@
-/* eslint-disable max-lines */
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { NestedFilterList, NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
+import { NestedFilterList, NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
 import { IOption } from '@app/components/filter-dropdown/props';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
-import {
-  GLOBAL,
-  LIST_DELIMITER,
-  NONE,
-  NONE_OPTION,
-  NONE_TYPE,
-  SET_DELIMITER,
-  WILDCARD,
-} from '@app/components/smart-editor-texts/types';
+import { NONE, NONE_OPTION, NONE_TYPE, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { SectionType, getTemplateSections } from '@app/hooks/use-template-sections';
-import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
-import { TemplateSections } from '@app/plate/template-sections';
-import { TEMPLATES } from '@app/plate/templates/templates';
+import { SectionType } from '@app/hooks/use-template-sections';
+import { useTemplates } from '@app/hooks/use-templates';
+import {
+  ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_REDIGERBAR_MALTEKST,
+} from '@app/plate/plugins/element-types';
+import { RichTextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
-import { RichTextTypes } from '@app/types/texts/texts';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
   children: string;
@@ -102,62 +96,14 @@ interface TemplateSelectProps {
   children: string;
   selected: string[];
   onChange: (value: string[]) => void;
-  textType: RichTextTypes.MALTEKST | RichTextTypes.REDIGERBAR_MALTEKST | RichTextTypes.GOD_FORMULERING;
+  textType:
+    | RichTextTypes.MALTEKST
+    | RichTextTypes.REDIGERBAR_MALTEKST
+    | RichTextTypes.GOD_FORMULERING
+    | RichTextTypes.MALTEKSTSEKSJON;
   includeNoneOption?: boolean;
   templatesSelectable?: boolean;
 }
-
-export const ALL_TEMPLATES_LABEL = 'Alle maler';
-
-const getTemplateOptions = (
-  sectionType: SectionType,
-  includeNone: boolean,
-  templatesSelectable: boolean,
-): NestedOption[] => {
-  const isMaltekst = sectionType === ELEMENT_MALTEKST || sectionType === ELEMENT_REDIGERBAR_MALTEKST;
-
-  const options: NestedOption[] = [];
-
-  for (const { templateId, tittel } of TEMPLATES) {
-    const sections = getTemplateSections(templateId, sectionType);
-
-    if (isMaltekst && sections.length === 0) {
-      continue;
-    }
-
-    options.push({
-      type: templatesSelectable ? OptionType.OPTION : OptionType.GROUP,
-      label: tittel,
-      value: `${templateId}${LIST_DELIMITER}${WILDCARD}`,
-      filterValue: templateId,
-      options: sections.map((s) => ({
-        type: OptionType.OPTION,
-        value: `${templateId}${LIST_DELIMITER}${s}`,
-        label: MALTEKST_SECTION_NAMES[s],
-        filterValue: `${tittel} ${MALTEKST_SECTION_NAMES[s]}`,
-      })),
-    });
-  }
-
-  options.push({
-    type: templatesSelectable ? OptionType.OPTION : OptionType.GROUP,
-    label: ALL_TEMPLATES_LABEL,
-    value: GLOBAL,
-    filterValue: '',
-    options: Object.values(TemplateSections).map((s) => ({
-      type: OptionType.OPTION,
-      value: `${GLOBAL}${LIST_DELIMITER}${s}`,
-      label: MALTEKST_SECTION_NAMES[s],
-      filterValue: `${ALL_TEMPLATES_LABEL} ${MALTEKST_SECTION_NAMES[s]}`,
-    })),
-  });
-
-  if (includeNone) {
-    return [{ ...NONE_OPTION, filterValue: NONE_OPTION.label, type: OptionType.OPTION }, ...options];
-  }
-
-  return options;
-};
 
 export const TemplateSectionSelect = ({
   selected,
@@ -169,17 +115,22 @@ export const TemplateSectionSelect = ({
 }: TemplateSelectProps) => {
   const sectionType: SectionType = useMemo(() => {
     switch (textType) {
+      case RichTextTypes.MALTEKSTSEKSJON:
+        return ELEMENT_MALTEKSTSEKSJON;
       case RichTextTypes.MALTEKST:
         return ELEMENT_MALTEKST;
       case RichTextTypes.REDIGERBAR_MALTEKST:
         return ELEMENT_REDIGERBAR_MALTEKST;
       case RichTextTypes.GOD_FORMULERING:
-        return ELEMENT_REDIGERBAR_MALTEKST;
+        return ELEMENT_MALTEKSTSEKSJON;
     }
   }, [textType]);
+
+  const allTemplates = useTemplates();
+
   const templates = useMemo(
-    () => getTemplateOptions(sectionType, includeNoneOption, templatesSelectable),
-    [includeNoneOption, sectionType, templatesSelectable],
+    () => getTemplateOptions(sectionType, includeNoneOption, templatesSelectable, allTemplates.templates),
+    [allTemplates.templates, includeNoneOption, sectionType, templatesSelectable],
   );
 
   return (

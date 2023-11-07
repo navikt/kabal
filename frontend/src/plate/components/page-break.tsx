@@ -99,7 +99,7 @@ const StyledDeleteButton = styled(Button)`
   }
 `;
 
-export const StyledPageBreak = styled.div`
+const StyledPageBreak = styled.div`
   background-color: var(--a-surface-subtle);
   position: relative;
   height: calc(var(${EDITOR_SCALE_CSS_VAR}) * 8mm);

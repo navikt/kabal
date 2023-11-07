@@ -1,7 +1,8 @@
 import { isCollapsed, isEditorFocused, someNode, useEditorRef, useEditorSelection } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+import { IRangePosition } from '@app/plate/functions/range-position';
 import { useRangePosition } from '@app/plate/hooks/use-range-position';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
@@ -22,20 +23,40 @@ const OFFSET = FLOATING_TOOLBAR_OFFSET + FLOATING_TOOLBAR_HEIGHT;
 
 const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps) => {
   const editor = useEditorRef();
+  const [toolbarRef, setRef] = useState<HTMLElement | null>(null);
   const selection = useEditorSelection(editorId);
   const isInTable = someNode(editor, { match: { type: ELEMENT_TABLE } });
   const position = useRangePosition(isInTable ? null : selection, container);
   const isFocused = isEditorFocused(editor);
+
+  const horizontalPosition = useMemo(
+    () => getHorizontalPosition(toolbarRef, container, position),
+    [container, position, toolbarRef],
+  );
 
   if (isInTable || !isFocused || position === null || isCollapsed(editor.selection)) {
     return null;
   }
 
   return (
-    <StyledFloatingToolbar style={{ top: position.top - OFFSET, left: position.left }}>
+    <StyledFloatingToolbar style={{ top: position.top - OFFSET, ...horizontalPosition }} ref={setRef}>
       {children}
     </StyledFloatingToolbar>
   );
+};
+
+const getHorizontalPosition = (
+  toolbarRef: HTMLElement | null,
+  container: HTMLDivElement | null,
+  position: IRangePosition | null,
+) => {
+  if (toolbarRef === null || container === null || position === null) {
+    return {};
+  }
+
+  const maxLeft = container.offsetWidth - toolbarRef.offsetWidth;
+
+  return position.left > maxLeft ? { right: 0 } : { left: position.left };
 };
 
 export const StyledFloatingToolbar = styled.section`

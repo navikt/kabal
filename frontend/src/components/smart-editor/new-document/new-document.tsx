@@ -6,7 +6,7 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
+import { ITemplates, useTemplates } from '@app/hooks/use-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useUser } from '@app/simple-api-state/use-user';
@@ -41,6 +41,7 @@ export const NewDocument = ({ onCreate }: Props) => {
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
+  const templates = useTemplates();
 
   if (isFinished || isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
     return null;
@@ -76,7 +77,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {getTemplates(oppgave.typeId).map((template) => (
+        {getTemplates(oppgave.typeId, templates).map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -106,14 +107,14 @@ const TemplateIcon = ({ type }: TemplateIconProps) => {
   }
 };
 
-const getTemplates = (type: SaksTypeEnum) => {
+const getTemplates = (type: SaksTypeEnum, templates: ITemplates) => {
   switch (type) {
     case SaksTypeEnum.KLAGE:
-      return KLAGE_TEMPLATES;
+      return templates.klageTemplates;
     case SaksTypeEnum.ANKE:
-      return ANKE_TEMPLATES;
+      return templates.ankeTemplates;
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return ANKE_I_TRYGDERETTEN_TEMPLATES;
+      return templates.ankeITrygderettenTemplates;
   }
 };
 

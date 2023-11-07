@@ -2,9 +2,9 @@ import { Search } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { stringToRegExp } from '@app/functions/string-to-regex';
-import { TextTypes } from '@app/types/texts/texts';
+import { TextTypes } from '@app/types/common-text-types';
 import { Filters } from './filters';
-import { TextList } from './smart-editor-texts-list';
+import { TextList } from './text-list';
 
 interface Props {
   textType: TextTypes;
@@ -33,12 +33,11 @@ export const FilteredTextList = ({ textType }: Props) => {
 };
 
 const Container = styled.div`
-  display: grid;
-  grid-template-rows: min-content 1fr;
   row-gap: 8px;
-  height: 100%;
   z-index: 22;
   overflow: visible;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Header = styled.div`

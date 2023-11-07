@@ -16,7 +16,7 @@ export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfall
   <StyledReadUtfallSet>
     <UtfallTags>
       {utfallSet.length === 0 ? (
-        <CustomTag variant="utfall">Alle utfall</CustomTag>
+        <CustomTag variant="utfallIdList">Alle utfall</CustomTag>
       ) : (
         utfallSet.map((u) => <UtfallTag key={u} utfallId={u} />)
       )}
@@ -45,7 +45,7 @@ const ButtonContainer = styled.div`
 const UtfallTag = ({ utfallId }: { utfallId: UtfallEnum }) => {
   const name = useUtfallNameOrLoading(utfallId);
 
-  return <CustomTag variant="utfall">{name}</CustomTag>;
+  return <CustomTag variant="utfallIdList">{name}</CustomTag>;
 };
 
 const StyledReadUtfallSet = styled.div`

@@ -13,6 +13,7 @@ export const StyledToolbar = styled.section`
   z-index: 21;
   padding: 2px;
   box-shadow: var(--a-shadow-medium);
+  margin-bottom: 16px;
 `;
 
 export const FirstRow = styled.div`

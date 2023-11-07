@@ -1,16 +1,23 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
-import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/query-filter-selects';
+import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
+import { TEMPLATE_MAP } from '@app/hooks/use-templates';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
-import { TEMPLATES } from '@app/plate/templates/templates';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import { AppQuery, IText, PlainTextTypes, RichTextTypes } from '@app/types/texts/texts';
+import { AppQuery, PlainTextTypes, RichTextTypes } from '@app/types/common-text-types';
+import { IText } from '@app/types/texts/responses';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
-export const Tags = ({ ytelseHjemmelList, utfall, enheter, templateSectionList, textType }: IText) => {
+export const Tags = ({
+  ytelseHjemmelIdList: ytelseHjemmelList,
+  utfallIdList: utfall,
+  enhetIdList: enheter,
+  templateSectionIdList: templateSectionList,
+  textType,
+}: IText) => {
   const isHeaderFooter = textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER;
   const hasFixedLocation = isHeaderFooter || textType === RichTextTypes.REGELVERK;
 
@@ -18,7 +25,7 @@ export const Tags = ({ ytelseHjemmelList, utfall, enheter, templateSectionList, 
     <TagContainer>
       {isHeaderFooter || hasFixedLocation ? null : (
         <TagList
-          variant="templateSectionList"
+          variant="templateSectionIdList"
           noneLabel="Ingen maler eller seksjoner"
           ids={templateSectionList}
           useName={getTemaplateAndSectionName}
@@ -26,17 +33,17 @@ export const Tags = ({ ytelseHjemmelList, utfall, enheter, templateSectionList, 
       )}
       {isHeaderFooter ? null : (
         <TagList
-          variant="ytelseHjemmelList"
+          variant="ytelseHjemmelIdList"
           noneLabel="Alle ytelser og hjemler"
           ids={ytelseHjemmelList}
           useName={useYtelseLovkildeAndHjemmelName}
         />
       )}
       {isHeaderFooter ? null : (
-        <TagList variant="utfall" noneLabel="Alle utfall" ids={utfall} useName={useUtfallNameOrLoading} />
+        <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfall} useName={useUtfallNameOrLoading} />
       )}
       {!isHeaderFooter ? null : (
-        <TagList variant="enheter" noneLabel="Alle enheter" ids={enheter} useName={useEnhetNameFromIdOrLoading} />
+        <TagList variant="enhetIdList" noneLabel="Alle enheter" ids={enheter} useName={useEnhetNameFromIdOrLoading} />
       )}
     </TagContainer>
   );
@@ -71,7 +78,7 @@ const getTemaplateAndSectionName = (selected: string): string => {
     return `${ALL_TEMPLATES_LABEL} - ${getMaltekstSectionName(sId) ?? sId}`;
   }
 
-  const templateName = tId === undefined ? 'Ukjent mal' : TEMPLATES.find((t) => t.templateId === tId)?.tittel ?? tId;
+  const templateName = tId === undefined ? 'Ukjent mal' : TEMPLATE_MAP[tId]?.tittel ?? tId;
 
   return sId === undefined ? templateName : `${templateName} - ${getMaltekstSectionName(sId) ?? sId}`;
 };
@@ -127,11 +134,34 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
   return 'Ukjent ytelse';
 };
 
-const TagContainer = styled.div`
+export const TagContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
   gap: 8px;
   flex-grow: 0;
+  grid-area: tags;
 `;
+
+export const YtelseHjemmelTagList = ({ ytelseHjemmelIdList }: Pick<IText, 'ytelseHjemmelIdList'>) => (
+  <TagList
+    variant="ytelseHjemmelIdList"
+    noneLabel="Alle ytelser og hjemler"
+    ids={ytelseHjemmelIdList}
+    useName={useYtelseLovkildeAndHjemmelName}
+  />
+);
+
+export const TemplateSectionTagList = ({ templateSectionIdList }: Pick<IText, 'templateSectionIdList'>) => (
+  <TagList
+    variant="templateSectionIdList"
+    noneLabel="Ingen maler eller seksjoner"
+    ids={templateSectionIdList}
+    useName={getTemaplateAndSectionName}
+  />
+);
+
+export const UtfallTagList = ({ utfallIdList }: Pick<IText, 'utfallIdList'>) => (
+  <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfallIdList} useName={useUtfallNameOrLoading} />
+);

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router';
-import { queryStringify } from '@app/functions/query-string';
+import { useLocation, useNavigate } from 'react-router';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from './use-text-query';
 import { useTextType } from './use-text-type';
@@ -11,6 +10,7 @@ export const useTextNavigate = (): GoToTextFn => {
   const navigate = useNavigate();
   const query = useTextQuery();
   const textType = useTextType();
+  const { search } = useLocation();
 
   const goToTextFn = useCallback(
     (id?: string) => {
@@ -21,12 +21,12 @@ export const useTextNavigate = (): GoToTextFn => {
       const pathPrefix = getPathPrefix(textType);
 
       if (typeof id === 'undefined') {
-        return navigate(`${pathPrefix}?${queryStringify(query)}`);
+        return navigate(`${pathPrefix}${search}`);
       }
 
-      return navigate(`${pathPrefix}/${id}?${queryStringify(query)}`);
+      return navigate(`${pathPrefix}/${id}${search}`);
     },
-    [textType, navigate, query],
+    [textType, query, navigate, search],
   );
 
   return goToTextFn;

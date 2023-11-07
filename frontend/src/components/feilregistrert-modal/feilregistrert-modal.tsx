@@ -11,7 +11,13 @@ interface Props extends ContentProps {
 }
 
 export const FeilregistrertModal = ({ isOpen, close }: Props) => (
-  <Modal open={isOpen} header={{ heading: 'Feilregistrert oppgave' }} onClose={close} width="medium">
+  <Modal
+    open={isOpen}
+    header={{ heading: 'Feilregistrert oppgave' }}
+    onClose={close}
+    width="medium"
+    closeOnBackdropClick
+  >
     <Content close={close} />
   </Modal>
 );
