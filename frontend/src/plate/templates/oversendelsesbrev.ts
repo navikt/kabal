@@ -28,9 +28,6 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
 
     createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
 
-    createParagraphWithLabelContent('sakenGjelder.name', 'Den ankende part'),
-    createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-
     {
       type: ELEMENT_PARAGRAPH,
       align: TextAlign.LEFT,
