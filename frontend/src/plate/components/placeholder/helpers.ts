@@ -7,19 +7,14 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
+import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { PlaceholderElement, RichText, RichTextEditor } from '@app/plate/types';
 
 const EMPTY_CHAR_CODE = 8203;
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
 export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
-  const _cleanText: RichText[] = element.children.map((c) => ({
-    ...c,
-    text: c.text
-      .split('')
-      .filter((ch) => ch.charCodeAt(0) !== EMPTY_CHAR_CODE)
-      .join(''),
-  }));
+  const _cleanText: RichText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
 
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
