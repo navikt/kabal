@@ -16,7 +16,7 @@ export const getAzureADClient = async () => {
         token_endpoint_auth_method: 'private_key_jwt',
         token_endpoint_auth_signing_alg: 'RS256',
       },
-      { keys }
+      { keys },
     );
   } catch (error) {
     log.error({ msg: 'Failed to get Azure AD client', error });
