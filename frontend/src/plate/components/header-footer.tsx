@@ -14,8 +14,10 @@ import { ApiQuery, PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IPlainText, IPublishedPlainText, IText } from '@app/types/texts/responses';
 
-const lexSpecialis = (texts: IPlainText[]): IPlainText | null => {
-  const sorted = texts.sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
+const lexSpecialis = (enhetId: string, texts: IPlainText[]): IPlainText | null => {
+  const sorted = texts
+    .filter((t) => t.enhetIdList.includes(enhetId))
+    .sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
 
   const [first] = sorted;
 
@@ -56,12 +58,13 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   const loadMaltekst = useCallback(
     async (e: ElementTypes, q: ApiQuery | typeof skipToken) => {
-      if (q === skipToken) {
+      if (q === skipToken || user === undefined) {
         return;
       }
 
       try {
-        const mostSpecificText = lexSpecialis((await getTexts(q).unwrap()).filter(isPlainText));
+        const texts = (await getTexts(q).unwrap()).filter(isPlainText);
+        const mostSpecificText = lexSpecialis(user.ansattEnhet.id, texts);
 
         if (mostSpecificText === null) {
           return;
@@ -82,7 +85,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
         }
       }
     },
-    [editor, getTexts],
+    [editor, getTexts, user],
   );
 
   useEffect(() => {
