@@ -62,7 +62,7 @@ export const Maltekstseksjon = ({
   const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
 
-  const autoLoad = oppgave !== undefined && oppgave.resultat.utfallId !== null;
+  const oppgaveIsLoaded = oppgave !== undefined;
 
   const path = useMemo(() => findNodePath(editor, element), [editor, element]);
 
@@ -106,7 +106,7 @@ export const Maltekstseksjon = ({
 
   const getReplaceMethod: GetReplaceMethodFn = useCallback(
     async (previousMaltekstseksjonElement, newMaltekstseksjonId) => {
-      if (autoLoad === false) {
+      if (!oppgaveIsLoaded) {
         return ReplaceMethod.NO_CHANGE;
       }
 
@@ -128,6 +128,16 @@ export const Maltekstseksjon = ({
 
       const originalTexts = await getOriginalTexts(previousId, true).unwrap();
 
+      if (originalTexts.length !== previousMaltekstseksjonElement.children.length) {
+        return ReplaceMethod.MANUAL;
+      }
+
+      for (const text of previousMaltekstseksjonElement.children) {
+        if (!originalTexts.some((ot) => ot.id === text.id)) {
+          return ReplaceMethod.MANUAL;
+        }
+      }
+
       const unchanged = areDescendantsEqual(
         previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
         originalTexts.flatMap((t) => t.content),
@@ -135,7 +145,7 @@ export const Maltekstseksjon = ({
 
       return unchanged ? ReplaceMethod.AUTO : ReplaceMethod.MANUAL;
     },
-    [autoLoad, getOriginalTexts],
+    [oppgaveIsLoaded, getOriginalTexts],
   );
 
   type UpdateMaltekstseksjonFn = (
@@ -165,6 +175,7 @@ export const Maltekstseksjon = ({
 
         if (replace === ReplaceMethod.AUTO) {
           replaceNodes(null, null, null);
+          setManualUpdate(undefined);
         } else if (replace === ReplaceMethod.MANUAL) {
           setManualUpdate(null);
         } else {
@@ -181,6 +192,7 @@ export const Maltekstseksjon = ({
 
       if (autoReplace === ReplaceMethod.AUTO) {
         replaceNodes(id, textIdList, maltekstseksjonChildren);
+        setManualUpdate(undefined);
       } else if (autoReplace === ReplaceMethod.MANUAL) {
         setManualUpdate({ maltekstseksjon, children: maltekstseksjonChildren });
       } else {
