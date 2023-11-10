@@ -189,6 +189,7 @@ export interface DokumentInfo {
 interface KabalProperties {
   /** Om dokumentet er inkludert i saksmappen. */
   valgt: boolean;
+  datoRegSendt: string | null;
 }
 
 /*

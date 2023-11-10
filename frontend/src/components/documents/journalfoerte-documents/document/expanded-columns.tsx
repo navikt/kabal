@@ -30,7 +30,8 @@ export const ExpandedColumns = ({ document }: Props) => {
           {temaName}
         </TemaButton>
       ) : null}
-      {columns.DATO_OPPRETTET ? <StyledDate document={document} /> : null}
+      {columns.DATO_OPPRETTET ? <StyledDate date={document.datoOpprettet} $gridArea={Fields.DatoOpprettet} /> : null}
+      {columns.DATO_REG_SENDT ? <StyledDate date={document.datoRegSendt} $gridArea={Fields.DatoRegSendt} /> : null}
       {columns.AVSENDER_MOTTAKER ? (
         <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
       ) : null}
@@ -44,8 +45,12 @@ export const ExpandedColumns = ({ document }: Props) => {
   );
 };
 
-const StyledDate = styled(DocumentDate)`
-  grid-area: ${Fields.Date};
+interface StyledDateProps {
+  $gridArea: Fields.DatoOpprettet | Fields.DatoRegSendt;
+}
+
+const StyledDate = styled(DocumentDate)<StyledDateProps>`
+  grid-area: ${({ $gridArea }) => $gridArea};
   overflow: hidden;
   text-overflow: ellipsis;
 `;

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import {
   useDocumentsAvsenderMottaker,
-  useDocumentsFilterDato,
+  useDocumentsFilterDatoOpprettet,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
   useDocumentsFilterType,
@@ -25,7 +25,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setValue: setSelectedTypes,
     remove: resetTypes,
   } = useDocumentsFilterType();
-  const { value: selectedDateRange, remove: resetDateRange } = useDocumentsFilterDato();
+  const { value: selectedDateRange, remove: resetDateRange } = useDocumentsFilterDatoOpprettet();
   const { value: onlyIncluded = false, setValue: setIncluded } = useDocumentsOnlyIncluded();
 
   const {

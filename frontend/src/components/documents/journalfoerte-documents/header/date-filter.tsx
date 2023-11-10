@@ -2,11 +2,13 @@ import { formatISO, parseISO } from 'date-fns';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import { useDocumentsFilterDato } from '@app/hooks/settings/use-setting';
+import { DateRangeSetting } from '@app/hooks/settings/use-setting';
 
-export const DateFilter = () => {
-  const { value, setValue, remove } = useDocumentsFilterDato();
+interface Props extends DateRangeSetting {
+  label: string;
+}
 
+export const DateFilter = ({ value, setValue, remove, label }: Props) => {
   const [fromString, toString] = value;
 
   const from = fromString === null ? undefined : formatISO(parseISO(fromString), { representation: 'date' });
@@ -23,5 +25,5 @@ export const DateFilter = () => {
     setValue([newFrom, newTo]);
   };
 
-  return <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel="Dato" />;
+  return <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} />;
 };

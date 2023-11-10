@@ -4,6 +4,7 @@ import { useBooleanSetting, useJsonSetting } from './use-setting';
 export enum ArchivedDocumentsColumn {
   TEMA = 'TEMA',
   DATO_OPPRETTET = 'DATO_OPPRETTET',
+  DATO_REG_SENDT = 'DATO_REG_SENDT',
   AVSENDER_MOTTAKER = 'AVSENDER_MOTTAKER',
   SAKSNUMMER = 'SAKSNUMMER',
   TYPE = 'TYPE',
@@ -11,7 +12,8 @@ export enum ArchivedDocumentsColumn {
 
 export const ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS: Record<ArchivedDocumentsColumn, string> = {
   [ArchivedDocumentsColumn.TEMA]: 'Tema',
-  [ArchivedDocumentsColumn.DATO_OPPRETTET]: 'Dato',
+  [ArchivedDocumentsColumn.DATO_OPPRETTET]: 'Dato opprettet',
+  [ArchivedDocumentsColumn.DATO_REG_SENDT]: 'Dato registrert/sendt',
   [ArchivedDocumentsColumn.AVSENDER_MOTTAKER]: 'Avsender/mottaker',
   [ArchivedDocumentsColumn.SAKSNUMMER]: 'Saksnummer',
   [ArchivedDocumentsColumn.TYPE]: 'Type',
@@ -35,6 +37,7 @@ export const useArchivedDocumentsColumns = () => {
     () => ({
       [ArchivedDocumentsColumn.TEMA]: value.includes(ArchivedDocumentsColumn.TEMA),
       [ArchivedDocumentsColumn.DATO_OPPRETTET]: value.includes(ArchivedDocumentsColumn.DATO_OPPRETTET),
+      [ArchivedDocumentsColumn.DATO_REG_SENDT]: value.includes(ArchivedDocumentsColumn.DATO_REG_SENDT),
       [ArchivedDocumentsColumn.AVSENDER_MOTTAKER]: value.includes(ArchivedDocumentsColumn.AVSENDER_MOTTAKER),
       [ArchivedDocumentsColumn.SAKSNUMMER]: value.includes(ArchivedDocumentsColumn.SAKSNUMMER),
       [ArchivedDocumentsColumn.TYPE]: value.includes(ArchivedDocumentsColumn.TYPE),
