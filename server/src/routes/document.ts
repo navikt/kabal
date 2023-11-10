@@ -41,7 +41,7 @@ export const setupDocumentRoutes = () => {
 
     const metadataResponse = await getMetadata<IArchivedMetadata>(
       `http://kabal-frontend/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`,
-      req.headers
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_ARCHIVED_METADATA;
 
@@ -65,7 +65,7 @@ export const setupDocumentRoutes = () => {
 
     const metadataResponse = await getMetadata<INewMetadata>(
       `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}`,
-      req.headers
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
@@ -89,7 +89,7 @@ export const setupDocumentRoutes = () => {
 
     const metadataResponse = await getMetadata<ICombinedMetadata>(
       `http://kabal-frontend/api/kabal-api/journalposter/mergedocuments/${id}`,
-      req.headers
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_COMBINED_METADATA;
 
@@ -113,7 +113,7 @@ export const setupDocumentRoutes = () => {
 
 const getMetadata = async <T extends Metadata>(
   url: string,
-  incomingHeaders: IncomingHttpHeaders
+  incomingHeaders: IncomingHttpHeaders,
 ): Promise<T | null> => {
   const headers = new Headers();
 

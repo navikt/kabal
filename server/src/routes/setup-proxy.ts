@@ -64,7 +64,7 @@ export const setupProxy = async () => {
         },
         logLevel: 'warn',
         changeOrigin: true,
-      })
+      }),
     );
   });
 
