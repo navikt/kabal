@@ -53,3 +53,7 @@ spec:
   envFrom:
     - secret: kabal-session-key
     - secret: slack-url
+  liveness:
+    path: /isAlive
+  readiness:
+    path: /isReady
