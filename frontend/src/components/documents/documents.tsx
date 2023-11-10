@@ -62,7 +62,8 @@ const ExpandedDocuments = () => {
       600 +
       Object.values(columns).reduce((acc, v) => (v ? acc + 8 : acc), 0) +
       (columns.AVSENDER_MOTTAKER ? SIZES[Fields.AvsenderMottaker] : 0) +
-      (columns.DATO_OPPRETTET ? SIZES[Fields.Date] : 0) +
+      (columns.DATO_OPPRETTET ? SIZES[Fields.DatoOpprettet] : 0) +
+      (columns.DATO_REG_SENDT ? SIZES[Fields.DatoRegSendt] : 0) +
       (columns.SAKSNUMMER ? SIZES[Fields.Saksnummer] : 0) +
       (columns.TEMA ? SIZES[Fields.Tema] : 0) +
       (columns.TYPE ? SIZES[Fields.Type] : 0)

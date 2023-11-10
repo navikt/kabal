@@ -3,13 +3,13 @@ import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns
 import { useEffect, useState } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { stringToRegExp } from '@app/functions/string-to-regex';
-import { DateRangeSetting } from '@app/hooks/settings/use-setting';
+import { DateRange } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
-  selectedDateRange: DateRangeSetting,
+  selectedDateRange: DateRange,
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
@@ -77,7 +77,7 @@ export const useFilteredDocuments = (
   return result;
 };
 
-const checkDateInterval = (dateString: string, [from, to]: DateRangeSetting): boolean => {
+const checkDateInterval = (dateString: string, [from, to]: DateRange): boolean => {
   const start = from === null ? null : parseISO(from);
   const end = to === null ? null : parseISO(to);
 

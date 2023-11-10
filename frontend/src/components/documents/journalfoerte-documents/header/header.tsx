@@ -19,6 +19,7 @@ import {
   ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
+import { useDocumentsFilterDatoOpprettet, useDocumentsFilterDatoRegSendt } from '@app/hooks/settings/use-setting';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Journalposttype } from '@app/types/arkiverte-documents';
@@ -62,6 +63,8 @@ const ExpandedHeaders = ({
   const oppgaveId = useOppgaveId();
   const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
   const { columns } = useArchivedDocumentsColumns();
+  const datoOpprettetSetting = useDocumentsFilterDatoOpprettet();
+  const datoRegSendtSetting = useDocumentsFilterDatoRegSendt();
 
   const avsenderMottakerOptions = useMemo(
     () =>
@@ -91,7 +94,8 @@ const ExpandedHeaders = ({
         </StyledFilterDropdown>
       ) : null}
 
-      {columns.DATO_OPPRETTET ? <DateFilter /> : null}
+      {columns.DATO_OPPRETTET ? <DateFilter {...datoOpprettetSetting} label="Dato opprettet" /> : null}
+      {columns.DATO_REG_SENDT ? <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" /> : null}
 
       {columns.AVSENDER_MOTTAKER ? (
         <StyledFilterDropdown
@@ -162,7 +166,8 @@ const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
     Fields.SelectRow,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
-    $columns.DATO_OPPRETTET ? Fields.Date : null,
+    $columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
+    $columns.DATO_REG_SENDT ? Fields.DatoRegSendt : null,
     $columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
     $columns.SAKSNUMMER ? Fields.Saksnummer : null,
     $columns.TYPE ? Fields.Type : null,

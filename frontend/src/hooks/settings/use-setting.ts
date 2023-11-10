@@ -144,16 +144,19 @@ export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs
 // Oppgavebehandling documents filters
 export const useDocumentsFilterTema = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/tema'));
 
-export type DateRangeSetting = [string | null, string | null];
+export type DateRange = [string | null, string | null];
 const EMPTY_DATE_RANGE: [null, null] = [null, null];
+export type DateRangeSetting = Setting<DateRange, DateRange>;
 
-const useDateRangeSetting = (property: string): Setting<DateRangeSetting, DateRangeSetting> => {
-  const { value = EMPTY_DATE_RANGE, ...rest } = useJsonSetting<DateRangeSetting>(property);
+const useDateRangeSetting = (property: string): DateRangeSetting => {
+  const { value = EMPTY_DATE_RANGE, ...rest } = useJsonSetting<DateRange>(property);
 
   return { ...rest, value };
 };
 
-export const useDocumentsFilterDato = () => useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato'));
+export const useDocumentsFilterDatoOpprettet = () => useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato'));
+export const useDocumentsFilterDatoRegSendt = () =>
+  useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato_reg_sendt'));
 
 export const useDocumentsAvsenderMottaker = () =>
   useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/avsender_mottaker'));
