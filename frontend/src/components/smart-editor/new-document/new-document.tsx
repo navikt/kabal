@@ -6,7 +6,7 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { ITemplates, useTemplates } from '@app/hooks/use-templates';
+import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useUser } from '@app/simple-api-state/use-user';
@@ -39,7 +39,6 @@ export const NewDocument = ({ onCreate }: Props) => {
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
-  const templates = useTemplates();
 
   if (isFinished || isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
     return null;
@@ -75,7 +74,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {getTemplates(oppgave.typeId, templates).map((template) => (
+        {getTemplates(oppgave.typeId).map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -88,14 +87,14 @@ export const NewDocument = ({ onCreate }: Props) => {
   );
 };
 
-const getTemplates = (type: SaksTypeEnum, templates: ITemplates) => {
+const getTemplates = (type: SaksTypeEnum) => {
   switch (type) {
     case SaksTypeEnum.KLAGE:
-      return templates.klageTemplates;
+      return KLAGE_TEMPLATES;
     case SaksTypeEnum.ANKE:
-      return templates.ankeTemplates;
+      return ANKE_TEMPLATES;
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return templates.ankeITrygderettenTemplates;
+      return ANKE_I_TRYGDERETTEN_TEMPLATES;
   }
 };
 

@@ -8,8 +8,7 @@ import {
   ELEMENT_REDIGERBAR_MALTEKST,
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
-import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { Immutable } from '@app/types/types';
+import { TEMPLATES } from '@app/plate/templates/templates';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 
@@ -17,7 +16,6 @@ export const getTemplateOptions = (
   sectionType: SectionType,
   includeNone: boolean,
   templatesSelectable: boolean,
-  templates: Immutable<IMutableSmartEditorTemplate>[],
 ): NestedOption[] => {
   const isMaltekst =
     sectionType === ELEMENT_MALTEKST ||
@@ -26,7 +24,7 @@ export const getTemplateOptions = (
 
   const options: NestedOption[] = [];
 
-  for (const { templateId, tittel } of templates) {
+  for (const { templateId, tittel } of TEMPLATES) {
     const sections = getTemplateSections(templateId, sectionType);
 
     if (isMaltekst && sections.length === 0) {

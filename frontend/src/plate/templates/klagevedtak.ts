@@ -52,7 +52,7 @@ const INITIAL_SLATE_VALUE: EditorValue = [
 export const KLAGEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.KLAGEVEDTAK_V2,
   type: SaksTypeEnum.KLAGE,
-  tittel: 'Vedtak/beslutning (klage) [NY]',
+  tittel: 'Vedtak/beslutning (klage)',
   content: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
 });
