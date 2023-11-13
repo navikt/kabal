@@ -30,7 +30,11 @@ export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]):
         return false;
       }
 
-      return areDescendantsEqual(aChildren, bChildren);
+      if (!areDescendantsEqual(aChildren, bChildren)) {
+        return false;
+      }
+
+      continue;
     }
 
     if (isElement(nodeB)) {

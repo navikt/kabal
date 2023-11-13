@@ -15,21 +15,21 @@ import { ErrorComponent } from '../smart-editor-texts/error-component';
 interface Props {
   editorId: string;
   savedContent: EditorValue;
-  setContent?: (content: EditorValue) => void;
+  onChange?: (content: EditorValue) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   readOnly?: boolean;
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
-  ({ editorId, savedContent, setContent, onKeyDown, readOnly, onFocus }, editorRef) => {
+  ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus }, editorRef) => {
     const ref = useRef<HTMLDivElement>(null);
 
     return (
       <ErrorBoundary
         errorComponent={() => <ErrorComponent textId={editorId} />}
         actionButton={{
-          onClick: async () => setContent?.(savedContent),
+          onClick: async () => onChange?.(savedContent),
           buttonText: 'Gjenopprett tekst',
           buttonIcon: <ClockDashedIcon aria-hidden />,
           variant: 'primary',
@@ -40,7 +40,7 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
           editorRef={editorRef}
           initialValue={savedContent}
           id={editorId}
-          onChange={setContent}
+          onChange={onChange}
           plugins={redaktoerPlugins}
           readOnly={readOnly}
         >
