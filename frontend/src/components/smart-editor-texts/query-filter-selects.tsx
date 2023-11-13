@@ -7,7 +7,6 @@ import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { SectionType } from '@app/hooks/use-template-sections';
-import { useTemplates } from '@app/hooks/use-templates';
 import {
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -126,11 +125,9 @@ export const TemplateSectionSelect = ({
     }
   }, [textType]);
 
-  const allTemplates = useTemplates();
-
   const templates = useMemo(
-    () => getTemplateOptions(sectionType, includeNoneOption, templatesSelectable, allTemplates.templates),
-    [allTemplates.templates, includeNoneOption, sectionType, templatesSelectable],
+    () => getTemplateOptions(sectionType, includeNoneOption, templatesSelectable),
+    [includeNoneOption, sectionType, templatesSelectable],
   );
 
   return (

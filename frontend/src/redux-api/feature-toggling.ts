@@ -1,9 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { FEATURE_TOGGLE_BASE_QUERY } from './common';
 
-export enum FeatureToggles {
-  MALTEKSTSEKSJONER = 'klage.maltekstseksjoner',
-}
+export enum FeatureToggles {}
 
 export const featureTogglingApi = createApi({
   reducerPath: 'featureTogglingApi',
