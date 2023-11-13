@@ -1,3 +1,4 @@
+import React, { HtmlHTMLAttributes } from 'react';
 import { css, styled } from 'styled-components';
 import { StyledParagraph } from '@app/plate/components/paragraph';
 
@@ -36,37 +37,54 @@ const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
 
 const secionToolbarCss = css`
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
+  bottom: 0;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 4px;
-  background-color: var(--a-bg-subtle);
   padding: 0;
-  color: var(--a-icon-action);
   font-size: 12pt;
-  box-shadow: var(--a-shadow-medium);
 
   &:focus {
     opacity: 1;
   }
 `;
 
-export const SectionToolbar = styled.div`
+const SectionToolbarStyle = styled.div`
   ${secionToolbarCss}
   right: calc(100% + 8px);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 `;
 
-export const MaltekstseksjonToolbar = styled.div`
+export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <SectionToolbarStyle {...rest}>
+    <StickyContent>{children}</StickyContent>
+  </SectionToolbarStyle>
+);
+
+const MaltekstseksjonToolbarStyle = styled.div`
   ${secionToolbarCss}
   left: calc(100% + 8px);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+`;
+
+export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <MaltekstseksjonToolbarStyle {...rest}>
+    <StickyContent>{children}</StickyContent>
+  </MaltekstseksjonToolbarStyle>
+);
+
+const StickyContent = styled.div`
+  position: sticky;
+  top: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 4px;
+  background-color: var(--a-bg-subtle);
+  color: var(--a-icon-action);
+  box-shadow: var(--a-shadow-medium);
 `;
 
 const sectionBeforeCss = css`
@@ -75,7 +93,7 @@ const sectionBeforeCss = css`
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 0;
+  z-index: 1;
   border-style: solid;
   border-color: transparent;
 `;
@@ -112,7 +130,7 @@ export const SectionContainer = styled.div<SectionContainerProps>`
       border-left-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
     }
 
-    > ${SectionToolbar} {
+    > ${SectionToolbarStyle} {
       opacity: 1;
     }
   }
@@ -134,7 +152,7 @@ export const MaltekstseksjonContainer = styled.div`
       border-right-color: ${PRIMARY_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]};
     }
 
-    > ${MaltekstseksjonToolbar} {
+    > ${MaltekstseksjonToolbarStyle} {
       opacity: 1;
     }
   }
