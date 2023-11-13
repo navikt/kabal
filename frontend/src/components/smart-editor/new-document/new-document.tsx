@@ -13,10 +13,8 @@ import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { AvslagBrevIcon } from './avslag-brev-icon';
 import { GenereltBrevIcon } from './generelt-brev-icon';
 import { getDocumentCount } from './get-document-count';
-import { MedholdBrevIcon } from './medhold-brev-icon';
 import {
   StyledHeader,
   StyledLoadingOverlay,
@@ -90,23 +88,6 @@ export const NewDocument = ({ onCreate }: Props) => {
   );
 };
 
-interface TemplateIconProps {
-  type: string;
-}
-
-const TemplateIcon = ({ type }: TemplateIconProps) => {
-  switch (type) {
-    case 'empty':
-      return <GenereltBrevIcon />;
-    case 'medhold':
-      return <MedholdBrevIcon />;
-    case 'avslag':
-      return <AvslagBrevIcon />;
-    default:
-      return <GenereltBrevIcon />;
-  }
-};
-
 const getTemplates = (type: SaksTypeEnum, templates: ITemplates) => {
   switch (type) {
     case SaksTypeEnum.KLAGE:
@@ -129,7 +110,7 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
     <LoadingOverlay loading={loading} />
 
     <StyledTemplateButtonIcon>
-      <TemplateIcon type={template.templateId} />
+      <GenereltBrevIcon />
     </StyledTemplateButtonIcon>
     {template.tittel}
   </StyledTemplateButton>
