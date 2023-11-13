@@ -140,7 +140,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         ref={editorRef}
         editorId={text.id}
         savedContent={text.content}
-        setContent={(c) => setContent(c)}
+        onChange={setContent}
         onFocus={() => setActive(text.id)}
       />
 

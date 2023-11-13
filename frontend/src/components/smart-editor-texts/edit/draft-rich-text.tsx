@@ -19,9 +19,7 @@ export const DraftRichText = ({ text, onDraftDeleted }: Props) => {
   const [content, setContent] = useState<EditorValue>(text.content);
 
   useEffect(() => {
-    const hasChanged = !areDescendantsEqual(content, text.content);
-
-    if (!hasChanged) {
+    if (areDescendantsEqual(content, text.content)) {
       return;
     }
 
@@ -42,7 +40,7 @@ export const DraftRichText = ({ text, onDraftDeleted }: Props) => {
 
   return (
     <Edit text={text} onDraftDeleted={onDraftDeleted} status={richTextStatus} onPublish={onPublish}>
-      <RedaktoerRichText editorId={text.id} savedContent={text.content} setContent={setContent} />
+      <RedaktoerRichText editorId={text.id} savedContent={text.content} onChange={setContent} />
     </Edit>
   );
 };
