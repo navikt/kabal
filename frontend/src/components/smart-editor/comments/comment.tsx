@@ -43,7 +43,7 @@ export const Comment = memo(
                 size="xsmall"
                 variant="tertiary-neutral"
                 icon={<MenuElipsisVerticalIcon aria-hidden />}
-              ></Button>
+              />
               {showActions ? (
                 <StyledButtons>
                   <EditButton
