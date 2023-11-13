@@ -15,7 +15,7 @@ export const LoadMore = ({ totalDocuments, loadedDocuments, loading, onNextPage 
 
   if (loading) {
     return (
-      <Button loading={true} type="button" variant="secondary">
+      <Button loading type="button" variant="secondary">
         Laster flere...
       </Button>
     );

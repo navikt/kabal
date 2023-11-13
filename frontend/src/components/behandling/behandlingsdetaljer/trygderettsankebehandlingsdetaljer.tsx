@@ -40,7 +40,7 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
       />
 
       <BehandlingSection label="Type">
-        <Type type={typeId}></Type>
+        <Type type={typeId} />
       </BehandlingSection>
 
       <BehandlingSection label="Ytelse">

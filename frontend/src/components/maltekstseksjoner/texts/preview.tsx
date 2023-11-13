@@ -46,7 +46,7 @@ export const TextPreview = ({ textId, className }: Props) => {
           {name}
         </Tag>
       </Header>
-      <RedaktoerRichText editorId={textId} savedContent={text.content} readOnly={true} />
+      <RedaktoerRichText editorId={textId} savedContent={text.content} readOnly />
     </section>
   );
 };

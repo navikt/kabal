@@ -27,7 +27,7 @@ export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId }: P
         </StyledHeading>
       </Header>
 
-      <RedaktoerRichText ref={editorRef} editorId={text.id} savedContent={text.content} readOnly={true} />
+      <RedaktoerRichText ref={editorRef} editorId={text.id} savedContent={text.content} readOnly />
 
       <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} maltekstseksjonId={maltekstseksjonId} />
     </Container>
