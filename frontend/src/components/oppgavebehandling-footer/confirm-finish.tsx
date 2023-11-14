@@ -1,10 +1,11 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { FooterPopup } from '@app/components/oppgavebehandling-footer/popup';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
@@ -15,8 +16,20 @@ interface FinishProps {
   show: boolean;
 }
 
+const getFinishText = (isOpphevetAnkeInTrygderettern: boolean, isModernized: boolean) => {
+  if (isOpphevetAnkeInTrygderettern) {
+    return isModernized
+      ? 'Nei, fullfør uten å opprette ny oppgave i Kabal.'
+      : 'Nei, fullfør uten å opprette ny oppgave i Kabal. Husk å sende oppgave i Gosys.';
+  }
+
+  return 'Fullfør';
+};
+
 export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const { data: oppgave } = useOppgave();
+  const text = useText();
+  const isModernized = useIsModernized();
 
   if (!show || oppgave === undefined) {
     return null;
@@ -25,12 +38,12 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const isOpphevetInTrygderetten =
     oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET;
 
-  const finishText = isOpphevetInTrygderetten ? 'Nei, fullfør uten å opprette ny oppgave i Kabal.' : 'Fullfør';
+  const finishText = getFinishText(isOpphevetInTrygderetten, isModernized);
 
   return (
     <FooterPopup close={cancel}>
-      <BodyLong>{getText(oppgave.typeId, oppgave.resultat.utfallId)}</BodyLong>
-      <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 600 : 400}>
+      <BodyLong>{text}</BodyLong>
+      <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 650 : 400}>
         {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
         <FinishButton>{finishText}</FinishButton>
         <Button
@@ -48,24 +61,57 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   );
 };
 
-const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string => {
-  if (oppgaveType === SaksTypeEnum.KLAGE) {
-    return 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+const useIsModernized = (): boolean => {
+  const { data: oppgave } = useOppgave();
+  const { data: fagsystemer } = useFagsystemer();
+
+  return useMemo(() => {
+    if (oppgave === undefined || fagsystemer === undefined) {
+      return false;
+    }
+
+    const fagsystem = fagsystemer.find(({ id }) => id === oppgave.fagsystemId);
+
+    return fagsystem?.modernized === true;
+  }, [oppgave, fagsystemer]);
+};
+
+const useText = (): string => {
+  const { data: oppgave } = useOppgave();
+  const isModernized = useIsModernized();
+
+  if (oppgave === undefined) {
+    return '';
   }
 
-  if (oppgaveType === SaksTypeEnum.ANKE) {
+  const { typeId, resultat } = oppgave;
+  const { utfallId } = resultat;
+
+  if (typeId === SaksTypeEnum.KLAGE) {
+    return isModernized
+      ? 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
+      : 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+  }
+
+  if (typeId === SaksTypeEnum.ANKE) {
+    if (!isModernized && (utfallId === UtfallEnum.MEDHOLD || utfallId === UtfallEnum.OPPHEVET)) {
+      return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+    }
+
     if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
       return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
     }
 
     if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
-      return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
+      return isModernized
+        ? 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.'
+        : 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
     }
 
     return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
   }
 
-  if (oppgaveType === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     if (utfallId === UtfallEnum.HENVIST) {
       return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Du finner oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
     }
@@ -74,7 +120,9 @@ const getText = (oppgaveType: SaksTypeEnum, utfallId: UtfallEnum | null): string
       return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
     }
 
-    return 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.';
+    return isModernized
+      ? 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.'
+      : 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen. Husk at du må sende en oppgave i Gosys med beskjed om utfallet av behandlingen hos Trygderetten.';
   }
 
   return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
