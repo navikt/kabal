@@ -5,21 +5,19 @@ export const StyledTemplateButton = styled.button`
   font-size: 16px;
   font-weight: 600;
   border: none;
-  padding: 1em;
+  padding: 16px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  width: 250px;
+  border-radius: var(--a-border-radius-medium);
+  width: 25%;
+  min-width: 190px;
 
   &:hover {
-    background: #ddd;
+    background: var(--a-surface-hover);
   }
-`;
-
-export const StyledTemplateButtonIcon = styled.div`
-  margin-bottom: 1em;
 `;
 
 export const StyledNewDocument = styled.section`
@@ -28,6 +26,7 @@ export const StyledNewDocument = styled.section`
   padding: 32px;
   padding-top: 16px;
   background: var(--a-bg-default);
+  overflow-y: auto;
 `;
 
 export const StyledTemplates = styled.section`
