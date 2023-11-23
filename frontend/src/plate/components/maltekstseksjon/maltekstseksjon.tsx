@@ -220,7 +220,10 @@ export const Maltekstseksjon = ({
       editor={editor}
       contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
-      onDragStart={(e) => e.preventDefault()}
+      onDragStart={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
       onDrop={(e) => {
         e.preventDefault();
         e.stopPropagation();
