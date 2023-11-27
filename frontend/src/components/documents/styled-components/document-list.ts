@@ -1,15 +1,14 @@
 import { styled } from 'styled-components';
+import { PADDING_BOTTOM, PADDING_TOP, ROW_GAP } from '@app/components/documents/new-documents/constants';
 
 export const StyledDocumentList = styled.ul`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: ${ROW_GAP}px;
   padding: 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: ${PADDING_TOP}px;
+  padding-bottom: ${PADDING_BOTTOM}px;
   margin: 0;
   list-style-type: none;
   flex-grow: 1;
-  border-bottom: 1px solid #c6c2bf;
-  overflow-y: auto;
 `;

@@ -1,7 +1,7 @@
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
@@ -10,23 +10,10 @@ import { Container } from '@app/components/view-pdf/container';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
-import {
-  getJournalfoertDocumentInlineUrl,
-  getMergedDocumentInlineUrl,
-  getNewDocumentInlineUrl,
-} from '@app/domain/inline-document-url';
-import {
-  getJournalfoertDocumentTabId,
-  getJournalfoertDocumentTabUrl,
-  getMergedDocumentTabId,
-  getMergedDocumentTabUrl,
-  getNewDocumentTabId,
-  getNewDocumentTabUrl,
-} from '@app/domain/tabbed-document-url';
+import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { NoFlickerReloadPdf } from './no-flicker-reload';
 import { useMergedDocument } from './use-merged-document';
 
@@ -50,43 +37,11 @@ export const ViewPDF = () => {
 
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
 
-  type DocumentData =
-    | { inlineUrl: string; tabUrl: string; documentId: string }
-    | { inlineUrl: undefined; tabUrl: undefined; documentId: undefined };
-
-  const { inlineUrl, tabUrl, documentId } = useMemo<DocumentData>(() => {
-    if (mergedDocument !== undefined) {
-      return {
-        tabUrl: getMergedDocumentTabUrl(mergedDocument.reference),
-        inlineUrl: getMergedDocumentInlineUrl(mergedDocument.reference),
-        documentId: getMergedDocumentTabId(mergedDocument.reference),
-      };
-    }
-
-    const [onlyDocument] = showDocumentList;
-
-    if (onlyDocument === undefined || oppgaveId === skipToken) {
-      return { tabUrl: undefined, inlineUrl: undefined, documentId: undefined };
-    }
-
-    if (onlyDocument.type === DocumentTypeEnum.JOURNALFOERT) {
-      return {
-        tabUrl: getJournalfoertDocumentTabUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-        inlineUrl: getJournalfoertDocumentInlineUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-        documentId: getJournalfoertDocumentTabId(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-      };
-    }
-
-    return {
-      tabUrl: getNewDocumentTabUrl(oppgaveId, onlyDocument.documentId),
-      inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
-      documentId: getNewDocumentTabId(onlyDocument.documentId),
-    };
-  }, [mergedDocument, oppgaveId, showDocumentList]);
+  const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
 
   useMarkVisited(tabUrl);
 
-  const isTabOpen = useIsTabOpen(documentId);
+  const isTabOpen = useIsTabOpen(tabId);
 
   if (showDocumentList.length === 0 || oppgaveId === skipToken) {
     return null;
@@ -122,7 +77,7 @@ export const ViewPDF = () => {
 
     e.preventDefault();
 
-    const tabRef = getTabRef(documentId);
+    const tabRef = getTabRef(tabId);
 
     // There is a reference to the tab and it is open.
     if (tabRef !== undefined && !tabRef.closed) {
@@ -137,14 +92,14 @@ export const ViewPDF = () => {
       return;
     }
 
-    const ref = window.open(tabUrl, documentId);
+    const ref = window.open(tabUrl, tabId);
 
     if (ref === null) {
       toast.error('Kunne ikke åpne dokumentet i ny fane');
 
       return;
     }
-    setTabRef(documentId, ref);
+    setTabRef(tabId, ref);
   };
 
   return (
@@ -181,7 +136,7 @@ export const ViewPDF = () => {
         <Button
           as="a"
           href={tabUrl}
-          target={documentId}
+          target={tabId}
           title="Åpne i ny fane"
           icon={<ExternalLinkIcon aria-hidden />}
           size="xsmall"

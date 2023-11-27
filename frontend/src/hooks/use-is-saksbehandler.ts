@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useGetUserQuery } from '@app/redux-api/bruker';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsSaksbehandler = () => {
   const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
 
-  const { data: userData, isLoading: userIsLoading } = useUser();
+  const { data: userData, isLoading: userIsLoading } = useGetUserQuery();
 
   return useMemo(() => {
     if (
@@ -18,5 +18,5 @@ export const useIsSaksbehandler = () => {
     }
 
     return oppgavebehandling.tildeltSaksbehandlerident === userData.navIdent;
-  }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
+  }, [oppgavebehandling, oppgavebehandlingIsLoading, userData, userIsLoading]);
 };

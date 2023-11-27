@@ -80,6 +80,30 @@ export const setupDocumentRoutes = () => {
     res.send(html);
   });
 
+  router.get('/vedleggsoversikt/:behandlingId/:documentId', async (req, res) => {
+    const { behandlingId, documentId } = req.params;
+
+    if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
+      return res.status(400).send('Invalid id');
+    }
+
+    const metadataResponse = await getMetadata<INewMetadata>(
+      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt`,
+      req.headers,
+    );
+    const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
+
+    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${queryAndHash}`;
+    const documentIdList = JSON.stringify([getAttachmentsOverviewTabId(documentId)]);
+
+    const html = TEMPLATE.replace('{{pdfUrl}}', url)
+      .replace('{{document-id-list}}', documentIdList)
+      .replace('{{title}}', metadata.title);
+
+    res.send(html);
+  });
+
   router.get('/kombinert-dokument/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -231,6 +255,7 @@ const getQueryAndHash = (query: Record<string, string | undefined>): string => {
 };
 
 const getNewDocumentDocumentId = (documentId: string) => `new-document-${documentId}`;
+const getAttachmentsOverviewTabId = (documentId: string) => `attachments-overview-${documentId}`;
 
 const getJournalfoertDocumentDocumentId = (journalpostId: string, dokumentInfoId: string) =>
   `archived-document-${journalpostId}-${dokumentInfoId}`;

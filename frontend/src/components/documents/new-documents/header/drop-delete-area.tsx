@@ -6,8 +6,10 @@ import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDeleteDocument } from '@app/hooks/use-can-edit-document';
+import { useParentDocument, useSiblings } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const DeleteDropArea = () => {
@@ -18,7 +20,14 @@ export const DeleteDropArea = () => {
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
   const removeSmartDocument = useRemoveDocument();
 
-  const isDropTarget = useCanDeleteDocument(draggedDocument);
+  const parentDocument = useParentDocument(draggedDocument?.parentId ?? null);
+  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useSiblings(draggedDocument?.parentId);
+  const isDropTarget = useCanDeleteDocument(
+    draggedDocument,
+    pdfOrSmartDocuments.some((d) => d.creatorRole === Role.KABAL_ROL) ||
+      journalfoertDocumentReferences.some((d) => d.creatorRole === Role.KABAL_ROL),
+    parentDocument,
+  );
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {

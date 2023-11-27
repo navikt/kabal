@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -30,8 +30,7 @@ interface Props {
 export const NewDocument = ({ onCreate }: Props) => {
   const { data: user } = useUser();
   const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
-  const isFinished = useIsFullfoert();
+  const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
@@ -39,11 +38,11 @@ export const NewDocument = ({ onCreate }: Props) => {
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
 
-  if (isFinished || isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
+  if (isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
     return null;
   }
 
-  if (!isRol && !isSaksbehandler) {
+  if (!isRol && !hasDocumentsAccess) {
     return null;
   }
 
@@ -73,7 +72,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {getTemplates(oppgave.typeId).map((template) => (
+        {getTemplates(oppgave.typeId, oppgave.isAvsluttetAvSaksbehandler).map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -86,7 +85,11 @@ export const NewDocument = ({ onCreate }: Props) => {
   );
 };
 
-const getTemplates = (type: SaksTypeEnum) => {
+const getTemplates = (type: SaksTypeEnum, isAvsluttet: boolean) => {
+  if (isAvsluttet) {
+    return [GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE];
+  }
+
   switch (type) {
     case SaksTypeEnum.KLAGE:
       return KLAGE_TEMPLATES;

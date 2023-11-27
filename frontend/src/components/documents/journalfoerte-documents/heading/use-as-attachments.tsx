@@ -4,10 +4,9 @@ import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useUser } from '@app/simple-api-state/use-user';
@@ -23,11 +22,10 @@ export const UseAsAttachments = () => {
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
   const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
+  const hasDocumentsAccess = useHasDocumentsAccess();
   const isFinished = useIsFullfoert();
-  const isFeilregistrert = useIsFeilregistrert();
 
-  const canEdit = (isSaksbehandler || isRol) && !isFinished && !isFeilregistrert;
+  const canEdit = hasDocumentsAccess || isRol;
 
   if (oppgaveId === skipToken || !canEdit || user === undefined) {
     return null;
@@ -59,6 +57,7 @@ export const UseAsAttachments = () => {
             journalfoerteDokumenter: getSelectedDocuments(),
             creatorIdent: user.navIdent,
             creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
+            isFinished,
           });
         }}
         value={NONE_SELECTED}
