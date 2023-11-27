@@ -5,8 +5,25 @@ import { ModalContext } from '@app/components/documents/new-documents/modal/moda
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import {
+  IFileDocument,
+  IJournalfoertDokumentReference,
+  IMainDocument,
+  ISmartDocument,
+} from '@app/types/documents/documents';
 
-export const DocumentModal = () => {
+interface DocumentWithAttachments {
+  mainDocument?: IMainDocument;
+  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
+  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+  containsRolAttachments: boolean;
+}
+
+interface Props {
+  documentMap: Map<string, DocumentWithAttachments>;
+}
+
+export const DocumentModal = ({ documentMap }: Props) => {
   const oppgaveId = useOppgaveId();
   const { document, close } = useContext(ModalContext);
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
@@ -20,6 +37,9 @@ export const DocumentModal = () => {
   }
 
   const { tittel, type } = document;
+
+  const activeDocument = documentMap.get(document.parentId ?? document.id);
+  const containsRolAttachments = activeDocument?.containsRolAttachments ?? false;
 
   return (
     <Modal
@@ -35,7 +55,11 @@ export const DocumentModal = () => {
       }}
       closeOnBackdropClick
     >
-      <DocumentModalContent document={document} />
+      <DocumentModalContent
+        document={document}
+        parentDocument={document.parentId === null ? undefined : activeDocument?.mainDocument}
+        containsRolAttachments={containsRolAttachments}
+      />
     </Modal>
   );
 };

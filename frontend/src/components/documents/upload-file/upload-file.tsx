@@ -2,41 +2,36 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SetDocumentType } from './document-type';
 
 export const UploadFile = () => {
   const { data: oppgave } = useOppgave();
-  const canEdit = useCanEdit();
-  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType | null>(null);
-  const [documentTypeError, setDocumentTypeError] = useState<string>();
+  const isFeilregistrert = useIsFeilregistrert();
+  const hasDocumentsAccess = useHasDocumentsAccess();
+  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType>(DistribusjonsType.NOTAT);
 
   const onChangeDocumentType = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     if (isDocumentType(target.value)) {
       setDokumentTypeId(target.value);
-      setDocumentTypeError(undefined);
     }
   };
 
-  if (!canEdit || typeof oppgave === 'undefined') {
+  if (!hasDocumentsAccess || isFeilregistrert || typeof oppgave === 'undefined') {
     return null;
   }
 
   return (
     <Container>
-      <SetDocumentType
-        dokumentTypeId={dokumentTypeId}
-        setDokumentTypeId={onChangeDocumentType}
-        error={documentTypeError}
-      />
+      <SetDocumentType dokumentTypeId={dokumentTypeId} setDokumentTypeId={onChangeDocumentType} />
 
       <UploadFileButton
         variant="secondary"
         size="small"
         data-testid="upload-document"
         dokumentTypeId={dokumentTypeId}
-        setDocumentTypeError={setDocumentTypeError}
       />
     </Container>
   );
@@ -45,6 +40,7 @@ export const UploadFile = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 8px;
 `;
 

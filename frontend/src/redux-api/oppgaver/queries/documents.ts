@@ -79,6 +79,7 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
 
 export const {
   useGetDocumentsQuery,
+  useLazyGetDocumentsQuery,
   useGetArkiverteDokumenterQuery,
   useLazyValidateDocumentQuery,
   useMergedDocumentsReferenceQuery,

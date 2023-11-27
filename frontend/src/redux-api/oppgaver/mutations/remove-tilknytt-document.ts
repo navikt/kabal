@@ -19,10 +19,14 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: `${journalpostId}-${dokumentInfoId}` },
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
       ],
-      onQueryStarted: async ({ oppgaveId, dokumentInfoId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, dokumentInfoId, journalpostId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
             draft.dokumenter = draft.dokumenter.map((d) => {
+              if (d.journalpostId !== journalpostId) {
+                return d;
+              }
+
               if (d.dokumentInfoId === dokumentInfoId) {
                 return { ...d, valgt: false };
               }

@@ -103,6 +103,7 @@ const ExpandedHeaders = ({
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
           direction="left"
+          maxWidth="600px"
           $area={Fields.AvsenderMottaker}
           data-testid="filter-avsender-mottaker"
         >

@@ -27,21 +27,26 @@ export const Toasts = () => {
 
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
 
-  return <Container ref={ref}>{toastList}</Container>;
+  return (
+    <Container ref={ref} aria-live="polite" aria-relevant="additions text">
+      {toastList}
+    </Container>
+  );
 };
 
 const Container = styled.div`
   position: fixed;
-  bottom: 0;
+  bottom: 8px;
   right: 0;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
+  padding-right: 8px;
+  margin-right: 0;
+  margin-bottom: 0;
   margin-top: 8px;
   max-height: calc(100% - 16px);
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
 `;

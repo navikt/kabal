@@ -12,6 +12,7 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -31,6 +32,7 @@ export const Document = memo(
     const [expanded, setExpanded] = useState(false);
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
+    const hasDocumentsAccess = useHasDocumentsAccess();
     const { columns } = useArchivedDocumentsColumns();
 
     const [isExpanded] = useIsExpanded();
@@ -68,7 +70,7 @@ export const Document = memo(
     );
 
     const disabled = (!isSaksbehandler && !isRol) || !harTilgangTilArkivvariant;
-    const draggingIsEnabled = draggingEnabled && !disabled;
+    const draggingIsEnabled = draggingEnabled && harTilgangTilArkivvariant && (isRol || hasDocumentsAccess);
 
     return (
       <>

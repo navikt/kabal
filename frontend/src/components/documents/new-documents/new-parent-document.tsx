@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
@@ -12,23 +13,27 @@ import {
 import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { IMainDocument } from '@app/types/documents/documents';
-import { AttachmentList } from './attachment-list';
+import { AttachmentList, ListProps } from './attachment-list';
 import { NewDocument } from './new-document/new-document';
 
-interface Props {
+interface Props extends ListProps {
   document: IMainDocument;
+  style: React.CSSProperties;
 }
 
-export const NewParentDocument = ({ document }: Props) => {
+export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   const { data: user } = useUser();
   const isRol = useIsRol();
   const oppgaveId = useOppgaveId();
-  const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
+  const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
+    fixedCacheKey: `createVedlegg-${document.id}`,
+  });
   const [setParent] = useSetParentMutation();
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
   const isDropTarget = useCanDropOnDocument(document);
+  const isFinished = useIsFullfoert();
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLLIElement>) => {
@@ -48,6 +53,7 @@ export const NewParentDocument = ({ document }: Props) => {
             journalfoerteDokumenter: draggedJournalfoertDocuments,
             creatorIdent: user?.navIdent ?? '',
             creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
+            isFinished,
           });
         }
       }
@@ -65,6 +71,7 @@ export const NewParentDocument = ({ document }: Props) => {
       createVedlegg,
       user?.navIdent,
       isRol,
+      isFinished,
     ],
   );
 
@@ -106,10 +113,11 @@ export const NewParentDocument = ({ document }: Props) => {
       onDragLeave={onDragLeave}
       $isDropTarget={isDropTarget}
       $isDragOver={isDragOver}
+      style={style}
     >
-      <NewDocument document={document} />
+      <NewDocument document={document} containsRolAttachments={listProps.containsRolAttachments} />
 
-      <AttachmentList parentDocument={document} />
+      <AttachmentList parentDocument={document} {...listProps} />
     </StyledParentDocumentListItem>
   );
 };

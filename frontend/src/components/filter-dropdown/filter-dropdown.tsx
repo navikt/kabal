@@ -9,6 +9,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   children: string | null;
   'data-testid': string;
   direction?: PopupProps['direction'];
+  maxWidth?: PopupProps['maxWidth'];
 }
 
 export const FilterDropdown = <T extends string>({
@@ -18,6 +19,7 @@ export const FilterDropdown = <T extends string>({
   children,
   'data-testid': testId,
   direction,
+  maxWidth,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -35,7 +37,7 @@ export const FilterDropdown = <T extends string>({
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length})
       </ToggleButton>
-      <Popup isOpen={open} direction={direction}>
+      <Popup isOpen={open} direction={direction} maxWidth={maxWidth}>
         <Dropdown selected={selected} options={options} open={open} onChange={onChange} close={close} />
       </Popup>
     </Container>
@@ -49,19 +51,25 @@ const Container = styled.section`
 interface PopupProps {
   isOpen: boolean;
   direction: StyledPopupProps['$direction'];
+  maxWidth?: StyledPopupProps['$maxWidth'];
   children: React.ReactNode;
 }
 
-const Popup = ({ isOpen, direction, children }: PopupProps) => {
+const Popup = ({ isOpen, direction, maxWidth, children }: PopupProps) => {
   if (!isOpen) {
     return null;
   }
 
-  return <StyledPopup $direction={direction}>{children}</StyledPopup>;
+  return (
+    <StyledPopup $direction={direction} $maxWidth={maxWidth}>
+      {children}
+    </StyledPopup>
+  );
 };
 
 interface StyledPopupProps {
   $direction?: 'left' | 'right';
+  $maxWidth?: string;
 }
 
 const StyledPopup = styled.div<StyledPopupProps>`
@@ -72,6 +80,7 @@ const StyledPopup = styled.div<StyledPopupProps>`
   right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
   min-width: 275px;
   max-height: 500px;
+  max-width: ${({ $maxWidth }) => $maxWidth ?? 'unset'};
   z-index: 22;
   background-color: white;
   border-radius: 0.25rem;

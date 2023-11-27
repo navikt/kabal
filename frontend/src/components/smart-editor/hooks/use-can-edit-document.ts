@@ -14,7 +14,7 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
       return false;
     }
 
-    if (typeof oppgave === 'undefined' || typeof user === 'undefined' || oppgave.isAvsluttetAvSaksbehandler) {
+    if (typeof oppgave === 'undefined' || typeof user === 'undefined') {
       return false;
     }
 

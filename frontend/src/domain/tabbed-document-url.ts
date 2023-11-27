@@ -12,3 +12,8 @@ export const getJournalfoertDocumentTabId = (journalpostId: string, dokumentInfo
   `archived-document-${journalpostId}-${dokumentInfoId}`;
 
 export const getMergedDocumentTabId = (mergedDocumentId: string) => `combined-document-${mergedDocumentId}`;
+
+export const getAttachmentsOverviewTabUrl = (oppgaveId: string, documentId: string) =>
+  `/vedleggsoversikt/${oppgaveId}/${documentId}`;
+
+export const getAttachmentsOverviewTabId = (documentId: string) => `attachments-overview-${documentId}`;

@@ -5,33 +5,18 @@ import { DeleteDropArea } from '@app/components/documents/new-documents/header/d
 import { DropHeading } from '@app/components/documents/new-documents/header/drop-header';
 import { listHeaderCSS } from '@app/components/documents/styled-components/list-header';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useValidationError } from '@app/hooks/use-validation-error';
 
 export const ListHeader = () => {
-  const isFullfoert = useIsFullfoert();
   const errorMessage = useValidationError('underArbeid');
   const [isExpanded] = useIsExpanded();
 
-  if (isFullfoert) {
-    return null;
-  }
-
-  if (typeof errorMessage === 'string') {
-    return (
-      <NewDocumentsStyledListHeader>
-        <DropHeading>
-          Dokumenter under arbeid
-          <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" />
-        </DropHeading>
-        {isExpanded ? <DeleteDropArea /> : null}
-      </NewDocumentsStyledListHeader>
-    );
-  }
-
   return (
     <NewDocumentsStyledListHeader>
-      <DropHeading>Dokumenter under arbeid</DropHeading>
+      <DropHeading>
+        Dokumenter under arbeid
+        {typeof errorMessage === 'string' ? <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" /> : null}
+      </DropHeading>
       {isExpanded ? <DeleteDropArea /> : null}
     </NewDocumentsStyledListHeader>
   );

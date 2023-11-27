@@ -15,12 +15,16 @@ import { SetFilename } from '@app/components/documents/new-documents/shared/set-
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useSiblings } from '@app/hooks/use-parent-document';
 import {
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
+  IFileDocument,
+  IJournalfoertDokumentReference,
   IMainDocument,
+  ISmartDocument,
 } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
@@ -31,14 +35,15 @@ import { OPTIONS_MAP } from './set-type/options';
 
 interface Props {
   document: IMainDocument;
+  parentDocument?: IMainDocument;
+  containsRolAttachments: boolean;
 }
 
-export const DocumentModalContent = ({ document }: Props) => {
+export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const { validationErrors } = useContext(ModalContext);
-
-  const canEditDocument = useCanEditDocument(document);
-  const canDelete = useCanDeleteDocument(document);
-  const isSaksbehandler = useIsSaksbehandler();
+  const canEditDocument = useCanEditDocument(document, parentDocument);
+  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useSiblings(document.parentId);
+  const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
 
   const icon = <DocumentIcon type={document.type} />;
 
@@ -76,14 +81,18 @@ export const DocumentModalContent = ({ document }: Props) => {
 
         {canEditDocument && !isRolQuestions ? <SetParentDocument document={document} /> : null}
 
-        {isSaksbehandler && !isNotat && isMainDocument ? <Receipients document={document} /> : null}
+        {canEditDocument && !isNotat && isMainDocument ? <Receipients document={document} /> : null}
 
         <Errors errors={validationErrors} />
       </ModalBody>
 
       <Modal.Footer>
         {canDelete ? <DeleteDocumentButton document={document} /> : null}
-        <FinishButton document={document} />
+        <FinishButton
+          document={document}
+          journalfoertDocumentReferences={journalfoertDocumentReferences}
+          pdfOrSmartDocuments={pdfOrSmartDocuments}
+        />
       </Modal.Footer>
     </>
   );
@@ -105,14 +114,18 @@ const OpprettetTag = ({ document }: { document: IMainDocument }) => {
 
 interface IFinishButtonProps {
   document: IMainDocument;
+  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
+  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
 }
 
-const FinishButton = ({ document }: IFinishButtonProps) => {
+const FinishButton = ({ document, pdfOrSmartDocuments, journalfoertDocumentReferences }: IFinishButtonProps) => {
   const { data: oppgave } = useOppgave();
-  const isSaksbehandler = useIsSaksbehandler();
-  const containsRolAttachments = useContainsRolAttachments(document);
+  const hasDocumentsAccess = useHasDocumentsAccess();
+  const containsRolPDFOrSmartAttachments = useContainsRolAttachments(document, pdfOrSmartDocuments);
+  const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoertDocumentReferences);
+  const containsRolAttachments = containsRolPDFOrSmartAttachments || containsRolJournalfoerteAttachments;
 
-  if (!isSaksbehandler || document.parentId !== null || oppgave === undefined) {
+  if (!hasDocumentsAccess || document.parentId !== null || oppgave === undefined) {
     return null;
   }
 

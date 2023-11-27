@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes as Switch } from 'react-router-dom';
 import { LandingPage } from '@app/pages/landing-page/landing-page';
 import TrygderettsankebehandlingPage from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useGetUserQuery } from '@app/redux-api/bruker';
 import { AppLoader } from './loader';
 
 const AdminPage = lazy(() => import('../../pages/admin/admin'));
@@ -23,10 +23,14 @@ const ToppteksterPage = lazy(() => import('../../pages/topptekster/topptekster')
 const AccessRightsPage = lazy(() => import('../../pages/access-rights/access-rights'));
 
 export const Router = () => {
-  const { isLoading } = useUser();
+  const { isLoading, isUninitialized, isError, data: user } = useGetUserQuery();
 
-  if (isLoading) {
+  if (isLoading || isUninitialized || user === undefined) {
     return <AppLoader text="Laster bruker..." />;
+  }
+
+  if (isError) {
+    return <AppLoader text="Kunne ikke laste bruker." />;
   }
 
   return (

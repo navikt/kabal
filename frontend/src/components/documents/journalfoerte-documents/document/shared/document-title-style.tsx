@@ -4,6 +4,7 @@ import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 export const StyledDocumentTitle = styled.h1`
   grid-area: ${Fields.Title};
   display: flex;
+  align-items: center;
   flex-direction: row;
   column-gap: 8px;
   font-size: 18px;

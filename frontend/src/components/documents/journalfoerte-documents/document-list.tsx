@@ -15,7 +15,7 @@ export const DocumentList = memo(
     const { isSelected } = useContext(SelectContext);
 
     return (
-      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
+      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" style={{ overflowY: 'auto' }}>
         <DocumentsSpinner hasDocuments={!isLoading} />
         {documents.map((document) => (
           <DocumentListItem

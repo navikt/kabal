@@ -47,13 +47,14 @@ module.exports = (_env, { mode }) => ({
         directory: path.join(__dirname, './public'),
       },
     ],
-    hot: true,
+    hot: false,
+    client: false,
     host: '0.0.0.0',
     port: 8061,
     historyApiFallback: true,
     proxy: [
       {
-        context: ['/api', '/arkivert-dokument', '/kombinert-dokument', '/nytt-dokument'],
+        context: ['/api', '/arkivert-dokument', '/kombinert-dokument', '/nytt-dokument', '/vedleggsoversikt'],
         target: 'https://kabal.intern.dev.nav.no',
         secure: false,
         changeOrigin: true,
