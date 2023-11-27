@@ -1,8 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -16,16 +16,22 @@ import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandli
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
   const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
-  const isOppgaveOpen = useIsOppgaveOpen();
+  const isTildeltSaksbehandler = useIsSaksbehandler();
+  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const isFullfoert = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
   const { data: oppgave } = useOppgave();
 
-  if (targetDocument.isMarkertAvsluttet || isOppgaveOpen || oppgave === undefined) {
+  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || oppgave === undefined) {
     return false;
   }
 
   if (draggedJournalfoertDocuments.length !== 0) {
-    if (isSaksbehandler) {
+    if (isFullfoert) {
+      return hasSaksbehandlerRole;
+    }
+
+    if (isTildeltSaksbehandler) {
       return true;
     }
 
@@ -36,25 +42,83 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
 
   const isAllowedNewDocument = isDroppableNewDocument(draggedDocument, targetDocument.id);
 
-  if (isSaksbehandler) {
-    return isAllowedNewDocument;
+  if (isTildeltSaksbehandler || (isFullfoert && hasSaksbehandlerRole)) {
+    return (
+      isAllowedNewDocument &&
+      (draggedDocument?.type === DocumentTypeEnum.JOURNALFOERT || getIsRolQuestions(targetDocument))
+    );
   }
 
   if (isRol) {
-    return isAllowedNewDocument && canRolActOnDocument(targetDocument, oppgave) && isSentToRol(oppgave);
+    return isAllowedNewDocument && canRolActOnDocument(targetDocument, oppgave);
   }
 
   return false;
 };
 
-export const useCanDeleteDocument = (document: IMainDocument | null) => {
+export const useCanDeleteDocument = (
+  document: IMainDocument | null,
+  containsRolAttachments: boolean,
+  parentDocument?: IMainDocument,
+) => {
   const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
-  const isOppgaveOpen = useIsOppgaveOpen();
+  const isTildeltSaksbehandler = useIsSaksbehandler();
+  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const isFullfoert = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
+  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
   const { data: oppgave } = useOppgave();
-  const containsRolAttachments = useContainsRolAttachments(document);
 
-  if (document === null || document.isMarkertAvsluttet || isOppgaveOpen) {
+  return useMemo(() => {
+    if (document === null || document.isMarkertAvsluttet || parentIsMarkertAvsluttet || isFeilregistrert) {
+      return false;
+    }
+
+    if (isFullfoert) {
+      return hasSaksbehandlerRole;
+    }
+
+    if (isTildeltSaksbehandler) {
+      if (document.creatorRole !== Role.KABAL_SAKSBEHANDLING) {
+        return false;
+      }
+
+      return !containsRolAttachments;
+    }
+
+    if (oppgave === undefined) {
+      return false;
+    }
+
+    if (isRol) {
+      return canRolEditDocument(document, oppgave);
+    }
+
+    return false;
+  }, [
+    containsRolAttachments,
+    document,
+    hasSaksbehandlerRole,
+    isFeilregistrert,
+    isFullfoert,
+    isRol,
+    isTildeltSaksbehandler,
+    oppgave,
+    parentIsMarkertAvsluttet,
+  ]);
+};
+
+// eslint-disable-next-line import/no-unused-modules
+export const getCanDeleteDocument = (
+  document: IMainDocument,
+  parentDocument: IMainDocument,
+  isSaksbehandler: boolean,
+  isRol: boolean,
+  isFeilregistrert: boolean,
+  containsRolAttachments: boolean,
+  oppgave: IOppgavebehandling,
+) => {
+  if (document.isMarkertAvsluttet || parentDocument.isMarkertAvsluttet || isFeilregistrert) {
     return false;
   }
 
@@ -66,10 +130,6 @@ export const useCanDeleteDocument = (document: IMainDocument | null) => {
     return !containsRolAttachments;
   }
 
-  if (oppgave === undefined) {
-    return false;
-  }
-
   if (isRol) {
     return canRolEditDocument(document, oppgave);
   }
@@ -77,13 +137,17 @@ export const useCanDeleteDocument = (document: IMainDocument | null) => {
   return false;
 };
 
-export const useCanEditDocument = (document: IMainDocument) => {
+export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMainDocument) => {
   const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
-  const isOppgaveOpen = useIsOppgaveOpen();
+  const isTildeltSaksbehandler = useIsSaksbehandler();
+  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const isFeilregistrert = useIsFeilregistrert();
+  const isFullfoert = useIsFullfoert();
   const { data: oppgave } = useOppgave();
 
-  if (document.isMarkertAvsluttet || isOppgaveOpen || oppgave === undefined) {
+  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
+
+  if (parentIsMarkertAvsluttet || document.isMarkertAvsluttet || isFeilregistrert || oppgave === undefined) {
     return false;
   }
 
@@ -93,7 +157,11 @@ export const useCanEditDocument = (document: IMainDocument) => {
     return false;
   }
 
-  if (isSaksbehandler) {
+  if (isFullfoert) {
+    return hasSaksbehandlerRole;
+  }
+
+  if (isTildeltSaksbehandler) {
     return document.creatorRole === Role.KABAL_SAKSBEHANDLING;
   }
 
@@ -103,13 +171,6 @@ export const useCanEditDocument = (document: IMainDocument) => {
 const isSentToRol = (oppgave: IOppgavebehandling) =>
   (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
   oppgave.rol.flowState === FlowState.SENT;
-
-const useIsOppgaveOpen = () => {
-  const isFinished = useIsFullfoert();
-  const isFeilregistrert = useIsFeilregistrert();
-
-  return isFinished && isFeilregistrert;
-};
 
 const hasAccessToArchivedDocument = (document: IMainDocument): document is IJournalfoertDokumentReference =>
   document.type === DocumentTypeEnum.JOURNALFOERT && document.journalfoertDokumentReference.harTilgangTilArkivvariant;

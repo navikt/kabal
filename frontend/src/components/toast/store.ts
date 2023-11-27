@@ -38,7 +38,7 @@ class Store {
   private addMessage(type: ToastType, message: React.ReactNode) {
     const createdAt = Date.now();
     const expiresAt = createdAt + TOAST_TIMEOUT;
-    const id = `${type}-${createdAt}-${Math.random()}`;
+    const id = crypto.randomUUID();
 
     const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 

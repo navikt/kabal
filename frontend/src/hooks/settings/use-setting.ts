@@ -50,11 +50,14 @@ const useSetting = (property: string, syncBetweenTabs: boolean = false): Setting
     return SETTINGS_MANAGER.subscribe(key, subscribe);
   }, [key, subscribe]);
 
-  const setValue = (newValue: string | ((oldValue: string | undefined) => string)) => {
-    if (key !== null) {
-      SETTINGS_MANAGER.set(key, typeof newValue === 'string' ? newValue : newValue(value));
-    }
-  };
+  const setValue = useCallback(
+    (newValue: string | ((oldValue: string | undefined) => string)) => {
+      if (key !== null) {
+        SETTINGS_MANAGER.set(key, typeof newValue === 'string' ? newValue : newValue(value));
+      }
+    },
+    [key, value],
+  );
 
   const remove = useCallback(() => {
     if (key !== null) {

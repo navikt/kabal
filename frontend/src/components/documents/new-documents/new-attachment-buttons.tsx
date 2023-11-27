@@ -35,7 +35,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
     return null;
   }
 
-  if (isRol && !getIsRolQuestions(document)) {
+  if (!getIsRolQuestions(document)) {
     return null;
   }
 

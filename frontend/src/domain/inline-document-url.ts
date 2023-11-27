@@ -6,3 +6,6 @@ export const getJournalfoertDocumentInlineUrl = (journalpostId: string, dokument
 
 export const getMergedDocumentInlineUrl = (mergedDocumentId: string) =>
   `/api/kabal-api/journalposter/mergedocuments/${mergedDocumentId}/pdf`;
+
+export const getAttachmentsOverviewInlineUrl = (oppgaveId: string, documentId: string) =>
+  `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/${documentId}/vedleggsoversikt/pdf`;

@@ -1,8 +1,7 @@
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useMemo } from 'react';
 import { Role } from '@app/types/bruker';
 import { IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 
 /**
  * Only checks attachments to ROL question documents.
@@ -13,16 +12,16 @@ import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
  *
  * Returns `true` while loading.
  */
-export const useContainsRolAttachments = (document: IMainDocument | null): boolean => {
-  const oppgaveId = useOppgaveId();
-  const { data: documents } = useGetDocumentsQuery(oppgaveId);
+export const useContainsRolAttachments = (document: IMainDocument | null, siblings: IMainDocument[]): boolean =>
+  useMemo(() => getContainsRolAttachments(document, siblings), [document, siblings]);
 
-  if (documents === undefined || document === null) {
+const getContainsRolAttachments = (document: IMainDocument | null, siblings: IMainDocument[]): boolean => {
+  if (document === null) {
     return true;
   }
 
   if (document.isSmartDokument && document.templateId === TemplateIdEnum.ROL_QUESTIONS) {
-    return documents.some((d) => {
+    return siblings.some((d) => {
       if (d.parentId === document.id) {
         return d.creatorRole === Role.KABAL_ROL;
       }

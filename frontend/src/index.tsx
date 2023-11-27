@@ -8,7 +8,3 @@ if (container !== null) {
   const root = createRoot(container);
   root.render(<App />);
 }
-
-if (typeof module.hot !== 'undefined') {
-  module.hot.accept();
-}

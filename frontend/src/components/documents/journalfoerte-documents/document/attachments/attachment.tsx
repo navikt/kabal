@@ -17,7 +17,6 @@ import {
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -45,7 +44,6 @@ export const Attachment = memo(
     const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
-    const isFinished = useIsFullfoert();
     const isFeilregistrert = useIsFeilregistrert();
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;
@@ -82,7 +80,7 @@ export const Attachment = memo(
       [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
     );
 
-    const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFinished || isFeilregistrert;
+    const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled;
 
     return (

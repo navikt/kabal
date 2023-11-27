@@ -8,12 +8,14 @@ export enum DocumentTypeEnum {
   SMART = 'SMART',
   UPLOADED = 'UPLOADED',
   JOURNALFOERT = 'JOURNALFOERT',
+  VEDLEGGSOVERSIKT = 'VEDLEGGSOVERSIKT',
 }
 
 export const DOCUMENT_TYPE_NAMES: Record<DocumentTypeEnum, string> = {
   [DocumentTypeEnum.SMART]: 'Smartdokument',
   [DocumentTypeEnum.UPLOADED]: 'Opplastet dokument',
   [DocumentTypeEnum.JOURNALFOERT]: 'Journalført dokument',
+  [DocumentTypeEnum.VEDLEGGSOVERSIKT]: 'Vedleggsoversikt',
 };
 
 export enum DistribusjonsType {
@@ -67,7 +69,9 @@ export interface IJournalfoertDokumentId
 export interface IJournalfoertDokument
   extends IJournalfoertDokumentId,
     Pick<DokumentInfo, 'harTilgangTilArkivvariant'>,
-    Pick<Journalpost, 'datoOpprettet'> {}
+    Pick<Journalpost, 'datoOpprettet'> {
+  sortKey: string;
+}
 
 export interface IJournalfoertDokumentReference extends IBaseDocument {
   type: DocumentTypeEnum.JOURNALFOERT;

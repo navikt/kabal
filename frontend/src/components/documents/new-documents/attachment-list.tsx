@@ -1,12 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
+import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
+import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
-import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
+import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
-  DocumentTypeEnum,
   IFileDocument,
   IJournalfoertDokumentReference,
   IMainDocument,
@@ -18,65 +17,75 @@ import {
   StyledAttachmentListItem,
 } from '../styled-components/attachment-list';
 
-interface Props {
+export interface ListProps {
+  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
+  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+  containsRolAttachments: boolean;
+
+  pdfLength: number;
+  journalfoertLength: number;
+  pdfStart: number;
+  journalfoertStart: number;
+  hasAttachments: boolean;
+  hasSeparator: boolean;
+}
+
+interface Props extends ListProps {
   parentDocument: IMainDocument;
 }
 
-export const AttachmentList = ({ parentDocument }: Props) => {
-  const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
+export const AttachmentList = ({
+  parentDocument,
+  pdfOrSmartDocuments,
+  journalfoertDocumentReferences,
+  containsRolAttachments,
+  pdfLength,
+  journalfoertLength,
+  pdfStart,
+  journalfoertStart,
+  hasAttachments,
+  hasSeparator,
+}: Props) => {
   const [isExpanded] = useIsExpanded();
 
-  const attachments = useMemo<[(IFileDocument | ISmartDocument)[], IJournalfoertDokumentReference[]]>(() => {
-    if (data === undefined) {
-      return [[], []];
-    }
+  const overviewCount = hasAttachments ? 1 : 0;
+  const totalRowCount = pdfLength + journalfoertLength + overviewCount;
 
-    const pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[] = [];
-    const journalfoertDocumentReferences: IJournalfoertDokumentReference[] = [];
+  const overviewHeight = overviewCount * ROW_HEIGHT;
+  const pdfHeight = pdfLength * ROW_HEIGHT;
+  const separatorHeight = hasSeparator ? SEPARATOR_HEIGHT : 0;
 
-    for (const doc of data) {
-      if (doc.parentId === parentDocument.id) {
-        if (doc.type === DocumentTypeEnum.JOURNALFOERT) {
-          journalfoertDocumentReferences.push(doc);
-        } else {
-          pdfOrSmartDocuments.push(doc);
-        }
-      }
-    }
-
-    return [
-      pdfOrSmartDocuments.sort((a, b) => b.created.localeCompare(a.created)),
-      journalfoertDocumentReferences.sort((a, b) =>
-        b.journalfoertDokumentReference.datoOpprettet.localeCompare(a.journalfoertDokumentReference.datoOpprettet),
-      ),
-    ];
-  }, [data, parentDocument.id]);
-
-  const [pdfOrSmartDocuments, journalfoertDocumentReferences] = attachments;
-
-  const hasAttachments = pdfOrSmartDocuments.length !== 0 || journalfoertDocumentReferences.length !== 0;
-
-  if (isLoading || typeof data === 'undefined') {
-    return (
-      <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
-        {isExpanded ? <NewAttachmentButtons document={parentDocument} /> : null}
-      </NewDocAttachmentsContainer>
-    );
-  }
+  const attachmentListHeight = totalRowCount * ROW_HEIGHT + separatorHeight;
 
   return (
     <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
       {isExpanded ? <NewAttachmentButtons document={parentDocument} /> : null}
-      <StyledAttachmentList data-testid="new-attachments-list">
-        {pdfOrSmartDocuments.map((attachment) => (
-          <Attachment key={attachment.id} attachment={attachment} />
+      <StyledAttachmentList
+        data-testid="new-attachments-list"
+        style={{ height: attachmentListHeight }}
+        aria-rowcount={totalRowCount}
+      >
+        {hasAttachments ? <AttachmentsOverview documentId={parentDocument.id} /> : null}
+        {pdfOrSmartDocuments.map((attachment, index) => (
+          <Attachment
+            key={attachment.id}
+            attachment={attachment}
+            parentDocument={parentDocument}
+            containsRolAttachments={containsRolAttachments}
+            top={(index + pdfStart) * ROW_HEIGHT + overviewHeight}
+          />
         ))}
 
-        {pdfOrSmartDocuments.length === 0 || journalfoertDocumentReferences.length === 0 ? null : <StyledHr />}
+        {hasSeparator ? <ListSeparator style={{ top: pdfHeight + overviewHeight }} /> : null}
 
-        {journalfoertDocumentReferences.map((attachment) => (
-          <Attachment key={attachment.id} attachment={attachment} />
+        {journalfoertDocumentReferences.map((attachment, index) => (
+          <Attachment
+            key={attachment.id}
+            attachment={attachment}
+            parentDocument={parentDocument}
+            containsRolAttachments={containsRolAttachments}
+            top={(index + journalfoertStart) * ROW_HEIGHT + pdfHeight + separatorHeight + overviewHeight}
+          />
         ))}
       </StyledAttachmentList>
     </NewDocAttachmentsContainer>
@@ -85,22 +94,32 @@ export const AttachmentList = ({ parentDocument }: Props) => {
 
 interface AttachmentProps {
   attachment: IMainDocument;
+  parentDocument: IMainDocument;
+  containsRolAttachments: boolean;
+  top: number;
 }
 
-const Attachment = ({ attachment }: AttachmentProps) => (
+const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
     data-documentname={attachment.tittel}
     data-documentid={attachment.id}
     data-documenttype="attachment"
+    style={{ position: 'absolute', top, width: '100%' }}
   >
-    <NewDocument document={attachment} />
+    <NewAttachment
+      document={attachment}
+      parentDocument={parentDocument}
+      containsRolAttachments={containsRolAttachments}
+    />
   </StyledAttachmentListItem>
 );
 
-const StyledHr = styled.div`
-  position: relative;
+const ListSeparator = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
   margin: 0;
   margin-top: 12px;
   margin-bottom: 12px;

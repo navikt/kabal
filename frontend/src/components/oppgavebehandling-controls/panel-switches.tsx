@@ -62,12 +62,7 @@ const Brevutforming = () => {
 
   const { data: oppgave, isLoading } = useOppgave();
 
-  if (
-    isLoading ||
-    typeof oppgave === 'undefined' ||
-    oppgave.feilregistrering !== null ||
-    oppgave.isAvsluttetAvSaksbehandler
-  ) {
+  if (isLoading || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null) {
     return null;
   }
 

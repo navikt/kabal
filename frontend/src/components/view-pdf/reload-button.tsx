@@ -11,7 +11,9 @@ interface Props {
 }
 
 export const ReloadButton = ({ showDocumentList, isLoading, onClick }: Props) => {
-  if (!showDocumentList.some((v) => v.type === DocumentTypeEnum.SMART)) {
+  if (
+    !showDocumentList.some((v) => v.type === DocumentTypeEnum.SMART || v.type === DocumentTypeEnum.VEDLEGGSOVERSIKT)
+  ) {
     return null;
   }
 

@@ -8,9 +8,10 @@ import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSmartEditors } from '@app/hooks/use-smart-editors';
 import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
 import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
@@ -36,11 +37,11 @@ interface TabbedProps {
 const Tabbed = ({ editors }: TabbedProps) => {
   const firstEditor = useFirstEditor(editors);
   const { value: editorId = firstEditor?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
-  const isSaksbehandler = useIsSaksbehandler();
+  const hasDocumentsAccess = useHasDocumentsAccess();
 
   const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
-  if (editors.length === 0 && !isSaksbehandler) {
+  if (editors.length === 0 && !hasDocumentsAccess) {
     return (
       <StyledNoDocuments>
         <Heading level="1" size="medium" spacing>
@@ -75,8 +76,10 @@ const Tabbed = ({ editors }: TabbedProps) => {
 const TabNew = () => {
   const isMedunderskriver = useIsMedunderskriver();
   const isRol = useIsRol();
+  const isFeilregistrert = useIsFeilregistrert();
+  const hasDocumentsAccess = useHasDocumentsAccess();
 
-  if (isMedunderskriver || isRol) {
+  if (isMedunderskriver || isRol || isFeilregistrert || !hasDocumentsAccess) {
     return null;
   }
 

@@ -5,6 +5,7 @@ import { TabContext } from '@app/components/documents/tab-context';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
+import { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
@@ -19,10 +20,30 @@ interface Props {
   harTilgangTilArkivvariant: boolean;
 }
 
-export const DocumentTitle = memo(
-  ({ journalpostId, dokumentInfoId, tittel, harTilgangTilArkivvariant }: Props) => {
-    const { value, setValue } = useDocumentsPdfViewed();
-    const [isExpanded] = useIsExpanded();
+export const DocumentTitle = (props: Props) => {
+  // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change
+  const { value, setValue } = useDocumentsPdfViewed();
+  const [isExpanded] = useIsExpanded();
+
+  return <DocumentTitleInternal {...props} shownDocument={value} setShownDocument={setValue} isExpanded={isExpanded} />;
+};
+
+interface DocumentTitleInternalProps extends Props {
+  shownDocument: IShownDocument[];
+  setShownDocument: (value: IShownDocument[]) => void;
+  isExpanded: boolean;
+}
+
+const DocumentTitleInternal = memo(
+  ({
+    journalpostId,
+    dokumentInfoId,
+    tittel,
+    harTilgangTilArkivvariant,
+    shownDocument,
+    setShownDocument,
+    isExpanded,
+  }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
     const isTabOpen = useIsTabOpen(documentId);
@@ -31,8 +52,8 @@ export const DocumentTitle = memo(
     const [editMode, _setEditMode] = useState(false);
 
     const isInlineOpen = useMemo(
-      () => value.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
-      [dokumentInfoId, value],
+      () => shownDocument.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
+      [dokumentInfoId, shownDocument],
     );
 
     const setEditMode = useCallback(
@@ -74,7 +95,7 @@ export const DocumentTitle = memo(
       const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
 
       if (!shouldOpenInNewTab) {
-        setValue([
+        setShownDocument([
           {
             type: DocumentTypeEnum.JOURNALFOERT,
             dokumentInfoId,
@@ -144,4 +165,4 @@ export const DocumentTitle = memo(
     prevProps.journalpostId === nextProps.journalpostId,
 );
 
-DocumentTitle.displayName = 'DocumentTitle';
+DocumentTitleInternal.displayName = 'DocumentTitleInternal';

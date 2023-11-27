@@ -1,11 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
+import { ISetCustomInfoParams, ISettings, ISignatureResponse, IUserData } from '@app/types/bruker';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',
   baseQuery: INNSTILLINGER_BASE_QUERY,
   endpoints: (builder) => ({
+    getUser: builder.query<IUserData, void>({
+      query: () => '/me/brukerdata',
+    }),
     getMySignature: builder.query<ISignatureResponse, void>({
       query: () => '/me/signature',
     }),
@@ -78,6 +81,7 @@ const cleanValue = (value: string | null) => {
 };
 
 export const {
+  useGetUserQuery,
   useGetMySignatureQuery,
   useGetSettingsQuery,
   useGetSignatureQuery,

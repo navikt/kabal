@@ -1,16 +1,11 @@
+/* eslint-disable max-depth */
 /* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
-import { Journalposttype } from '@app/types/arkiverte-documents';
+import { IArkivertDocument, IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import {
-  DistribusjonsType,
-  DocumentTypeEnum,
-  IFileDocument,
-  IJournalfoertDokumentReference,
-  IMainDocument,
-} from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
   ICreateVedleggFromJournalfoertDocumentParams,
@@ -252,7 +247,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           documentsQuerySlice.util.updateQueryData(
             'getDocuments',
             oppgaveId,
-            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId || parentId === dokumentId), // Remove deleted document from list.
+            (draft) => draft.filter(({ id, parentId }) => id !== dokumentId && parentId !== dokumentId), // Remove deleted document from list.
           ),
         );
 
@@ -332,25 +327,29 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         },
       }),
       onQueryStarted: async (
-        { oppgaveId, parentId, journalfoerteDokumenter, creatorIdent, creatorRole },
+        { oppgaveId, parentId, journalfoerteDokumenter, creatorIdent, creatorRole, isFinished },
         { dispatch, queryFulfilled },
       ) => {
         const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-            const newDocuments = journalfoerteDokumenter
-              .filter(
-                (doc) =>
-                  !draft.some(
-                    (d) =>
-                      d.type === DocumentTypeEnum.JOURNALFOERT &&
-                      d.parentId === parentId &&
-                      d.journalfoertDokumentReference?.journalpostId === doc.journalpostId &&
-                      d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId,
-                  ),
-              )
-              .map<IJournalfoertDokumentReference>((doc) => ({
+            const addedDocuments: IMainDocument[] = draft;
+
+            for (const doc of journalfoerteDokumenter) {
+              if (
+                draft.some(
+                  (d) =>
+                    d.type === DocumentTypeEnum.JOURNALFOERT &&
+                    d.parentId === parentId &&
+                    d.journalfoertDokumentReference?.journalpostId === doc.journalpostId &&
+                    d.journalfoertDokumentReference?.dokumentInfoId === doc.dokumentInfoId,
+                )
+              ) {
+                continue;
+              }
+
+              addedDocuments.push({
                 ...doc,
-                id: `${doc.journalpostId}-${doc.dokumentInfoId}`,
+                id: crypto.randomUUID(),
                 parentId,
                 isMarkertAvsluttet: false,
                 isSmartDokument: false,
@@ -365,36 +364,69 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   dokumentInfoId: doc.dokumentInfoId,
                   harTilgangTilArkivvariant: doc.harTilgangTilArkivvariant,
                   datoOpprettet: doc.datoOpprettet,
+                  sortKey: doc.sortKey,
                 },
                 creatorIdent,
                 creatorRole,
-              }));
+              });
+            }
 
-            return [...draft, ...newDocuments];
+            const sorted = addedDocuments.sort((a, b) => {
+              if (a.type === DocumentTypeEnum.JOURNALFOERT) {
+                if (b.type === DocumentTypeEnum.JOURNALFOERT) {
+                  return b.journalfoertDokumentReference.sortKey.localeCompare(a.journalfoertDokumentReference.sortKey);
+                }
+
+                return 1;
+              }
+
+              if (b.type === DocumentTypeEnum.JOURNALFOERT) {
+                return -1;
+              }
+
+              return b.created.localeCompare(a.created);
+            });
+
+            return sorted;
           }),
         );
 
         const getArkiverteDokumenterPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            for (const doc of draft.dokumenter) {
-              const journalpost = journalfoerteDokumenter.find((d) => d.journalpostId === doc.journalpostId);
-
-              if (journalpost === undefined) {
-                continue;
-              }
-
-              if (doc.dokumentInfoId === journalpost.dokumentInfoId) {
-                doc.valgt = true;
-                continue;
-              }
-
-              for (const vedlegg of doc.vedlegg) {
-                if (vedlegg.dokumentInfoId === journalpost.dokumentInfoId) {
-                  vedlegg.valgt = true;
-                  continue;
-                }
-              }
+            if (isFinished) {
+              return draft;
             }
+
+            const { length: dokumenterCount } = draft.dokumenter;
+            const dokumenter = new Array<IArkivertDocument>(dokumenterCount);
+
+            for (let i = dokumenterCount - 1; i >= 0; i--) {
+              const doc = draft.dokumenter[i]!;
+              const journalpostDocuments = journalfoerteDokumenter.filter((j) => j.journalpostId === doc.journalpostId);
+
+              if (journalpostDocuments.length === 0) {
+                dokumenter[i] = doc;
+                continue;
+              }
+
+              const { length: vedleggCount } = doc.vedlegg;
+              const vedlegg = new Array<IArkivertDocumentVedlegg>(vedleggCount);
+
+              for (let ii = vedleggCount - 1; ii >= 0; ii--) {
+                const v = doc.vedlegg[ii]!;
+                const vedleggInList =
+                  v.valgt || journalpostDocuments.some((j) => j.dokumentInfoId === v.dokumentInfoId);
+                vedlegg[ii] = vedleggInList ? { ...v, valgt: true } : v;
+              }
+
+              dokumenter[i] = {
+                ...doc,
+                valgt: doc.valgt || journalpostDocuments.some((j) => j.dokumentInfoId === doc.dokumentInfoId),
+                vedlegg,
+              };
+            }
+
+            return { ...draft, dokumenter };
           }),
         );
 
@@ -403,23 +435,32 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+              const documents = [...draft];
+
               for (const newDoc of data.addedJournalfoerteDokumenter) {
                 for (let index = draft.length - 1; index >= 0; index--) {
                   const oldDoc = draft[index];
 
+                  if (oldDoc === undefined) {
+                    continue;
+                  }
+
                   if (
-                    oldDoc !== undefined &&
                     oldDoc.type === DocumentTypeEnum.JOURNALFOERT &&
                     oldDoc.journalfoertDokumentReference.journalpostId ===
                       newDoc.journalfoertDokumentReference.journalpostId &&
                     oldDoc.journalfoertDokumentReference.dokumentInfoId ===
-                      newDoc.journalfoertDokumentReference.dokumentInfoId
+                      newDoc.journalfoertDokumentReference.dokumentInfoId &&
+                    oldDoc.parentId === newDoc.parentId
                   ) {
-                    draft[index] = newDoc;
+                    // draft[index] = newDoc;
+                    documents[index] = newDoc;
                     break;
                   }
                 }
               }
+
+              return documents;
             }),
           );
 

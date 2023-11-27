@@ -48,6 +48,7 @@ const ExpandedDocuments = () => {
   const [isExpanded] = useIsExpanded();
   const { value: fullTitle, setValue } = useArchivedDocumentsFullTitle();
   const { columns } = useArchivedDocumentsColumns();
+  // const oppgaveId = useOppgaveId();
 
   const maxWidth = useMemo(() => {
     if (fullTitle) {
@@ -78,14 +79,13 @@ const ExpandedDocuments = () => {
             Dokumenter
           </Heading>
           <Switch size="small" checked={fullTitle} onChange={(e) => setValue(e.target.checked)}>
-            Full tittel
+            <NoWrap>Full tittel</NoWrap>
           </Switch>
           {isExpanded ? <UploadFile /> : null}
           <ToggleExpandedButton />
         </DocumentsHeader>
 
         <NewDocuments />
-
         <JournalfoerteDocuments />
       </Container>
     </DragAndDropContextElement>
@@ -113,4 +113,8 @@ const DocumentsHeader = styled.div`
   padding-top: 8px;
   border-bottom: 1px solid #c6c2bf;
   margin-bottom: 8px;
+`;
+
+const NoWrap = styled.span`
+  white-space: nowrap;
 `;

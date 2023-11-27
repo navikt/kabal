@@ -1,5 +1,6 @@
+import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import {
@@ -13,9 +14,13 @@ interface Props {
   document: IArkivertDocument;
 }
 
+const PAGE_SIZE = 50;
+
 export const AttachmentList = memo(
   ({ oppgaveId, document }: Props) => {
     const { isSelected } = useContext(SelectContext);
+    const pageCount = Math.ceil(document.vedlegg.length / PAGE_SIZE);
+    const [page, setPage] = useState(1);
 
     if (document.vedlegg.length === 0 || typeof oppgaveId !== 'string') {
       return null;
@@ -23,7 +28,7 @@ export const AttachmentList = memo(
 
     return (
       <JournalfoerteDocumentsAttachments data-testid="oppgavebehandling-documents-all-vedlegg-list">
-        {document.vedlegg.map((vedlegg) => (
+        {document.vedlegg.slice(0, PAGE_SIZE * page).map((vedlegg) => (
           <AttachmentListItem
             key={`vedlegg_${document.journalpostId}_${vedlegg.dokumentInfoId}`}
             oppgaveId={oppgaveId}
@@ -32,6 +37,11 @@ export const AttachmentList = memo(
             isSelected={isSelected({ journalpostId: document.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId })}
           />
         ))}
+        {page < pageCount ? (
+          <Button variant="tertiary" size="small" onClick={() => setPage((p) => p + 1)}>
+            Vis flere vedlegg ({document.vedlegg.length - PAGE_SIZE * page})
+          </Button>
+        ) : null}
       </JournalfoerteDocumentsAttachments>
     );
   },

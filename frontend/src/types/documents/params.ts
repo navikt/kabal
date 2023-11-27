@@ -13,6 +13,7 @@ export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebe
   journalfoerteDokumenter: IArkivertDocument[];
   creatorIdent: string;
   creatorRole: Role.KABAL_SAKSBEHANDLING | Role.KABAL_ROL;
+  isFinished: boolean;
 }
 
 export interface ISetTypeParams extends IDocumentParams {

@@ -93,10 +93,8 @@ class SettingsManager {
 
     if (listeners === undefined) {
       this.listeners[key] = [callback];
-      callback(this.get(key));
     } else if (!listeners.includes(callback)) {
       this.listeners[key] = [...listeners, callback];
-      callback(this.get(key));
     }
 
     return () => this.unsubscribe(key, callback);
