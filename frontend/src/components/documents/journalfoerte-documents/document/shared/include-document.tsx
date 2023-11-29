@@ -4,11 +4,11 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { memo } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
 
 interface Props {
-  oppgavebehandlingId: string | typeof skipToken;
   name: string;
   dokumentInfoId: string;
   journalpostId: string;
@@ -18,19 +18,12 @@ interface Props {
 }
 
 const InternalIncludeDocument = memo(
-  ({
-    oppgavebehandlingId,
-    dokumentInfoId,
-    journalpostId,
-    name,
-    disabled,
-    checked,
-    className,
-  }: Props): JSX.Element | null => {
-    const [setDocument, isUpdating] = useCheckDocument(oppgavebehandlingId, dokumentInfoId, journalpostId);
+  ({ dokumentInfoId, journalpostId, name, disabled, checked, className }: Props): JSX.Element | null => {
+    const oppgaveId = useOppgaveId();
+    const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
     const canEdit = useCanEdit();
 
-    const disableButton = !canEdit || disabled || isUpdating || oppgavebehandlingId === skipToken;
+    const disableButton = !canEdit || disabled || isUpdating || oppgaveId === skipToken;
 
     const title = `${checked ? 'Ekskluder' : 'Inkluder'} ${name}`;
 

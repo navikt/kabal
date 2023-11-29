@@ -31,7 +31,9 @@ const treeRootStructureCss = css`
 `;
 
 export const JournalfoerteDocumentsAttachments = styled(StyledAttachmentList)`
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
 
   &::before {
     ${treeRootStructureCss}
@@ -50,7 +52,9 @@ export const NewDocAttachmentsContainer = styled.div<{ $showTreeLine: boolean }>
 `;
 
 export const StyledAttachmentListItem = styled(StyledDocumentListItem)`
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
   padding-left: 16px;
   margin-left: 0;
   margin-right: 0;

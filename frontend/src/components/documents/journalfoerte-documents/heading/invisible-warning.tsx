@@ -8,11 +8,11 @@ import { IArkivertDocument } from '@app/types/arkiverte-documents';
 
 export interface InvisibleWarningProps {
   allDocuments: IArkivertDocument[];
-  slicedFilteredDocuments: IArkivertDocument[];
+  filteredDocuments: IArkivertDocument[];
   totalLengthWithVedlegg: number;
 }
 
-export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedlegg }: InvisibleWarningProps) => {
+export const InvisibleWarning = ({ filteredDocuments, totalLengthWithVedlegg }: InvisibleWarningProps) => {
   const { selectedDocuments, selectedCount, unselectMany } = useContext(SelectContext);
   const [isExpanded] = useIsExpanded();
 
@@ -20,7 +20,7 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
     () =>
       [...selectedDocuments.values()].filter(
         ({ journalpostId, dokumentInfoId }) =>
-          slicedFilteredDocuments.find((filteredDoc) => {
+          filteredDocuments.find((filteredDoc) => {
             if (filteredDoc.journalpostId === journalpostId) {
               if (filteredDoc.dokumentInfoId === dokumentInfoId) {
                 return true;
@@ -32,7 +32,7 @@ export const InvisibleWarning = ({ slicedFilteredDocuments, totalLengthWithVedle
             return false;
           }) === undefined,
       ),
-    [selectedDocuments, slicedFilteredDocuments],
+    [selectedDocuments, filteredDocuments],
   );
 
   if (invisibleDocuments.length === 0) {

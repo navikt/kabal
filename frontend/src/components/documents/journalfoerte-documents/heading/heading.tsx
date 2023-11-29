@@ -12,19 +12,11 @@ interface RemoveFiltersProps {
 }
 
 interface Props extends RemoveFiltersProps, Omit<InvisibleWarningProps, 'totalLengthWithVedlegg'> {
-  filteredLength: number;
-  totalLengthOfMainDocuments: number | undefined;
+  totalLengthOfMainDocuments: number;
 }
 
 export const JournalfoertHeading = memo(
-  ({
-    resetFilters,
-    noFiltersActive,
-    filteredLength,
-    slicedFilteredDocuments,
-    allDocuments,
-    totalLengthOfMainDocuments = 0,
-  }: Props) => {
+  ({ resetFilters, noFiltersActive, filteredDocuments, allDocuments, totalLengthOfMainDocuments }: Props) => {
     const [isExpanded] = useIsExpanded();
     const numberOfVedlegg = useMemo(
       () => allDocuments.reduce((count, d) => count + d.vedlegg.length, 0),
@@ -41,15 +33,15 @@ export const JournalfoertHeading = memo(
           <Heading
             size="xsmall"
             level="1"
-            title={`Viser ${slicedFilteredDocuments.length} av ${filteredLength} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
+            title={`Viser ${filteredDocuments.length} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
           >
-            Journalførte dokumenter ({slicedFilteredDocuments.length}/{totalLengthOfMainDocuments})
+            Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
           </Heading>
           {isExpanded ? null : <Menu />}
         </LeftGroup>
 
         <InvisibleWarning
-          slicedFilteredDocuments={slicedFilteredDocuments}
+          filteredDocuments={filteredDocuments}
           allDocuments={allDocuments}
           totalLengthWithVedlegg={totalCount}
         />
@@ -60,9 +52,9 @@ export const JournalfoertHeading = memo(
   },
   (prevProps, nextProps) =>
     prevProps.noFiltersActive === nextProps.noFiltersActive &&
-    prevProps.slicedFilteredDocuments === nextProps.slicedFilteredDocuments &&
-    prevProps.filteredLength === nextProps.filteredLength &&
-    prevProps.totalLengthOfMainDocuments === nextProps.totalLengthOfMainDocuments,
+    prevProps.filteredDocuments === nextProps.filteredDocuments &&
+    prevProps.totalLengthOfMainDocuments === nextProps.totalLengthOfMainDocuments &&
+    prevProps.allDocuments === nextProps.allDocuments,
 );
 
 JournalfoertHeading.displayName = 'Header';
