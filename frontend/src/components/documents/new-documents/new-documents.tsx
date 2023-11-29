@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { Loader } from '@navikt/ds-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import {
   PADDING_BOTTOM,
@@ -41,6 +41,7 @@ const SCROLL_BUFFER_ROWS = 5;
 export const NewDocuments = () => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const [_scrollTop, _setScrollTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
@@ -50,6 +51,16 @@ export const NewDocuments = () => {
 
     return () => cancelAnimationFrame(handle);
   }, [_scrollTop]);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => setContainerHeight(containerRef.current?.clientHeight ?? 0));
+
+    if (containerRef.current !== null) {
+      resizeObserver.observe(containerRef.current);
+
+      return () => resizeObserver.disconnect();
+    }
+  }, []);
 
   const documentMap = useMemo(() => {
     const _documentMap: Map<string, DocumentWithAttachments> = new Map();
@@ -216,6 +227,11 @@ export const NewDocuments = () => {
     return _documentNodes;
   }, [documentMap, absoluteEndIndex, absoluteStartIndex]);
 
+  const onRef = useCallback((ref: HTMLDivElement | null) => {
+    setContainerHeight(ref?.clientHeight ?? 0);
+    containerRef.current = ref;
+  }, []);
+
   if (isLoading || typeof data === 'undefined') {
     return <Loader size="xlarge" />;
   }
@@ -225,7 +241,7 @@ export const NewDocuments = () => {
       <ModalContextElement>
         <ListHeader />
         <div
-          ref={(ref) => setContainerHeight(ref === null ? 0 : ref.offsetHeight)}
+          ref={onRef}
           style={{ overflowY: 'auto', borderBottom: '1px solid var(--a-border-divider)' }}
           onScroll={({ currentTarget }) => {
             const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
@@ -234,7 +250,7 @@ export const NewDocuments = () => {
         >
           <StyledDocumentList
             data-testid="new-documents-list"
-            style={{ height: listHeight, overflow: 'hidden', position: 'relative' }}
+            style={{ height: listHeight, overflowY: 'hidden', position: 'relative' }}
             aria-rowcount={documentMap.size}
           >
             {documentNodes}

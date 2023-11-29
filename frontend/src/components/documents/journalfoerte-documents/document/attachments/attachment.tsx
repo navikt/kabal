@@ -26,7 +26,6 @@ import { IncludeDocument } from '../shared/include-document';
 import { SelectRow } from '../shared/select-row';
 
 interface Props {
-  oppgavebehandlingId: string;
   journalpostId: string;
   vedlegg: IArkivertDocumentVedlegg;
   isSelected: boolean;
@@ -35,7 +34,7 @@ interface Props {
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ oppgavebehandlingId, vedlegg, journalpostId, isSelected }: Props) => {
+  ({ vedlegg, journalpostId, isSelected }: Props) => {
     const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -114,7 +113,6 @@ export const Attachment = memo(
           journalpostId={journalpostId}
           disabled={disabled}
           name={tittel ?? ''}
-          oppgavebehandlingId={oppgavebehandlingId}
           checked={vedlegg.valgt}
         />
       </StyledVedlegg>

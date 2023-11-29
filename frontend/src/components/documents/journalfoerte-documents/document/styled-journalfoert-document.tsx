@@ -54,7 +54,7 @@ interface Props {
 export const StyledJournalfoertDocument = styled.article<Props>`
   ${documentCSS}
   ${documentsGridCSS}
-  
+
   ${getGridCss}
   
   background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};

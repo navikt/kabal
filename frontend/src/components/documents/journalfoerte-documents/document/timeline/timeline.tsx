@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { styled } from 'styled-components';
 import { IArkivertDocument, Journalposttype, RelevantDatotype } from '@app/types/arkiverte-documents';
 import { EkspedertItems } from './ekspedert-items';
-import { TimelineContainer } from './styled-components';
 import { RelevantDateTimelineItem } from './timeline-item';
 
 export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kanal, kanalnavn }: IArkivertDocument) => {
@@ -34,3 +34,11 @@ export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kan
     </TimelineContainer>
   );
 };
+
+const TimelineContainer = styled.ol`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0;
+`;

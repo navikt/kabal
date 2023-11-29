@@ -2,14 +2,6 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import { Heading, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-export const TimelineContainer = styled.ol`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0;
-`;
-
 export const StyledHeading = styled(Heading)`
   display: flex;
   align-items: center;

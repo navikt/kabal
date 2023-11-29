@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
@@ -10,10 +10,8 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
-import { LoadMore } from './load-more';
 import { IArkivertDocumentReference } from './select-context/types';
 
-const PAGE_SIZE = 50;
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const JournalfoerteDocuments = () => {
@@ -24,15 +22,6 @@ export const JournalfoerteDocuments = () => {
 
   const filters = useFilters(documents);
   const { resetFilters, noFiltersActive, totalFilteredDocuments } = filters;
-
-  const [page, setPage] = useState(1);
-
-  const endIndex = PAGE_SIZE * page;
-
-  const slicedFilteredDocuments = useMemo(
-    () => totalFilteredDocuments.slice(0, endIndex),
-    [endIndex, totalFilteredDocuments],
-  );
 
   const allSelectableDocuments = useMemo<IArkivertDocumentReference[]>(() => {
     const selectable: IArkivertDocumentReference[] = [];
@@ -56,24 +45,16 @@ export const JournalfoerteDocuments = () => {
     <SelectContextElement documentList={documents}>
       <Container data-testid="oppgavebehandling-documents-all">
         <JournalfoertHeading
-          filteredLength={totalFilteredDocuments.length}
-          totalLengthOfMainDocuments={data?.totaltAntall}
+          allDocuments={documents}
+          totalLengthOfMainDocuments={data?.totaltAntall ?? 0}
           noFiltersActive={noFiltersActive}
           resetFilters={resetFilters}
-          slicedFilteredDocuments={slicedFilteredDocuments}
-          allDocuments={data?.dokumenter ?? EMPTY_ARRAY}
+          filteredDocuments={totalFilteredDocuments}
         />
         <Wrapper>
           <Header filters={filters} allSelectableDocuments={allSelectableDocuments} />
 
-          <DocumentList documents={slicedFilteredDocuments} isLoading={isLoading} />
-
-          <LoadMore
-            loadedDocuments={endIndex}
-            totalDocuments={totalFilteredDocuments.length}
-            loading={isLoading}
-            onNextPage={() => setPage(page + 1)}
-          />
+          <DocumentList documents={totalFilteredDocuments} isLoading={isLoading} />
         </Wrapper>
       </Container>
     </SelectContextElement>
