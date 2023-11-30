@@ -15,9 +15,10 @@ interface Props {
   };
   onChange: (date: DateRange | undefined) => void;
   buttonLabel?: string;
+  gridArea?: string;
 }
 
-export const DatePickerRange = ({ onChange, selected, buttonLabel }: Props) => {
+export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
   const ref = useRef(null);
@@ -30,7 +31,7 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel }: Props) => {
   const active = from !== undefined || to !== undefined;
 
   return (
-    <Container ref={ref}>
+    <Container ref={ref} $gridArea={gridArea}>
       <Button
         onClick={onClick}
         size="small"
@@ -88,9 +89,10 @@ const Time = ({ date }: TimeProps) => (
   <time dateTime={formatISO(date, { representation: 'date' })}>{format(date, 'dd.MM.yyyy')}</time>
 );
 
-const Container = styled.div`
+const Container = styled.div<{ $gridArea?: string }>`
   position: relative;
   height: 32px;
+  grid-area: ${({ $gridArea }) => $gridArea};
 `;
 
 const DatepickerContainer = styled.div`

@@ -4,7 +4,6 @@ import { AttachmentsOverview } from '@app/components/documents/new-documents/att
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import {
   IFileDocument,
   IJournalfoertDokumentReference,
@@ -46,8 +45,6 @@ export const AttachmentList = ({
   hasAttachments,
   hasSeparator,
 }: Props) => {
-  const [isExpanded] = useIsExpanded();
-
   const overviewCount = hasAttachments ? 1 : 0;
   const totalRowCount = pdfLength + journalfoertLength + overviewCount;
 
@@ -59,7 +56,7 @@ export const AttachmentList = ({
 
   return (
     <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
-      {isExpanded ? <NewAttachmentButtons document={parentDocument} /> : null}
+      <NewAttachmentButtons document={parentDocument} />
       <StyledAttachmentList
         data-testid="new-attachments-list"
         style={{ height: attachmentListHeight }}
@@ -106,7 +103,7 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
     data-documentname={attachment.tittel}
     data-documentid={attachment.id}
     data-documenttype="attachment"
-    style={{ position: 'absolute', top, width: '100%' }}
+    style={{ top }}
   >
     <NewAttachment
       document={attachment}

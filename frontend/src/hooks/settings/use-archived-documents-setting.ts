@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useBooleanSetting, useJsonSetting } from './use-setting';
+import { useJsonSetting } from './helpers';
 
 export enum ArchivedDocumentsColumn {
   TEMA = 'TEMA',
@@ -46,10 +46,4 @@ export const useArchivedDocumentsColumns = () => {
   );
 
   return { ...rest, value, columns };
-};
-
-export const useArchivedDocumentsFullTitle = () => {
-  const { value = false, ...rest } = useBooleanSetting('tabs/documents/full-title');
-
-  return { ...rest, value };
 };

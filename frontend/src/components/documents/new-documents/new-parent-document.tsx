@@ -138,7 +138,9 @@ interface IDragOver {
 }
 
 const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
 
   &::after {
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};

@@ -10,7 +10,6 @@ import {
   UPLOAD_BUTTON_HEIGHT,
 } from '@app/components/documents/new-documents/constants';
 import { ListHeader } from '@app/components/documents/new-documents/header/header';
-import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { clamp } from '@app/functions/clamp';
@@ -164,7 +163,7 @@ export const NewDocuments = () => {
     });
 
     let absoluteIndex = 0;
-    let offsetPx = 0;
+    let offsetPx = PADDING_TOP;
     let overviewCount = 0;
 
     for (let i = 0; i < documentMap.size; i++) {
@@ -176,18 +175,15 @@ export const NewDocuments = () => {
 
       const pdfLength = pdfOrSmartDocuments.length;
       const journalfoertLength = journalfoertDocumentReferences.length;
-      const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
-
-      const top = offsetPx + PADDING_TOP;
+      const vedleggCount = pdfLength + journalfoertLength;
+      const hasAttachments = vedleggCount !== 0;
 
       const overview = hasAttachments ? 1 : 0;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const separatorCount = hasSeparator ? 1 : 0;
-      const separatorHeight = hasSeparator ? SEPARATOR_HEIGHT : 0;
 
       const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS;
       const uploadButtonCount = hasUploadButton ? 1 : 0;
-      const uploadButtonHeight = hasUploadButton ? UPLOAD_BUTTON_HEIGHT : 0;
 
       const virtualRows = overview + separatorCount + uploadButtonCount;
 
@@ -209,7 +205,7 @@ export const NewDocuments = () => {
           journalfoertDocumentReferences={journalfoertDocumentReferences.slice(journalfoertStart, journalfoertEnd)}
           containsRolAttachments={containsRolAttachments}
           key={mainDocument.id}
-          style={{ position: 'absolute', top, width: '100%' }}
+          style={{ top: offsetPx }}
           pdfLength={pdfLength}
           journalfoertLength={journalfoertLength}
           pdfStart={pdfStart}
@@ -221,7 +217,13 @@ export const NewDocuments = () => {
 
       overviewCount += overview;
       absoluteIndex += 1 + pdfLength + journalfoertLength + overview;
-      offsetPx = absoluteIndex * ROW_HEIGHT + separatorHeight + uploadButtonHeight;
+      offsetPx +=
+        ROW_HEIGHT +
+        pdfLength * ROW_HEIGHT +
+        journalfoertLength * ROW_HEIGHT +
+        separatorCount * SEPARATOR_HEIGHT +
+        uploadButtonCount * UPLOAD_BUTTON_HEIGHT +
+        overview * ROW_HEIGHT;
     }
 
     return _documentNodes;
@@ -256,7 +258,6 @@ export const NewDocuments = () => {
             {documentNodes}
           </StyledDocumentList>
         </div>
-        <DocumentModal documentMap={documentMap} />
       </ModalContextElement>
     </StyledDocumentsContainer>
   );

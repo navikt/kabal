@@ -1,40 +1,38 @@
 import { TextField } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSetTitleMutation } from '@app/redux-api/journalposter';
 
 interface Props {
-  journalpostId: string;
-  dokumentInfoId: string;
   tittel: string;
-  onDone: () => void;
+  setFilename: (filename: string) => void;
+  autoFocus?: boolean;
+  hideLabel?: boolean;
+  className?: string;
+  close?: () => void;
 }
 
-export const SetFilename = ({ onDone, dokumentInfoId, journalpostId, tittel }: Props) => {
-  const oppgaveId = useOppgaveId();
+export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close }: Props) => {
   const [localFilename, setLocalFilename] = useState(tittel ?? '');
-  const [setFilename] = useSetTitleMutation();
 
   const save = () => {
-    onDone();
+    close?.();
 
-    if (localFilename === tittel || oppgaveId === skipToken) {
+    if (localFilename === tittel) {
       return;
     }
 
-    setFilename({ journalpostId, dokumentInfoId, tittel: localFilename, oppgaveId });
+    setFilename(localFilename);
   };
 
   return (
     <StyledTextField
-      autoFocus
+      className={className}
+      autoFocus={autoFocus}
       size="small"
       value={localFilename}
       title="Trykk Enter for å lagre. Escape for å avbryte."
-      label="Trykk Enter for å lagre. Escape for å avbryte."
-      hideLabel
+      label="Endre filnavn"
+      hideLabel={hideLabel}
       data-testid="document-filename-input"
       onChange={({ target }) => setLocalFilename(target.value)}
       onBlur={save}
@@ -45,7 +43,7 @@ export const SetFilename = ({ onDone, dokumentInfoId, journalpostId, tittel }: P
 
         if (key === 'Escape') {
           setLocalFilename(tittel ?? '');
-          onDone();
+          close?.();
         }
       }}
     />

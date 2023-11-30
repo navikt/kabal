@@ -1,5 +1,6 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
@@ -11,12 +12,14 @@ import { ModalContext } from '@app/components/documents/new-documents/modal/moda
 import { SetDocumentType } from '@app/components/documents/new-documents/modal/set-type/set-document-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { SetFilename } from '@app/components/documents/new-documents/shared/set-filename';
+import { SetFilename as SetFileName } from '@app/components/documents/set-filename';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useSiblings } from '@app/hooks/use-parent-document';
+import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
@@ -44,6 +47,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useSiblings(document.parentId);
   const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
+  const [setTitle] = useSetTitleMutation();
+  const oppgaveId = useOppgaveId();
 
   const icon = <DocumentIcon type={document.type} />;
 
@@ -66,7 +71,16 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
 
         {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
           <BottomAlignedRow>
-            <StyledSetFilename document={document} />
+            <StyledSetFilename
+              tittel={document.tittel}
+              setFilename={(title) => {
+                if (oppgaveId === skipToken) {
+                  return;
+                }
+
+                setTitle({ oppgaveId, dokumentId: document.id, title });
+              }}
+            />
             <Button
               size="small"
               variant="secondary"
@@ -178,7 +192,7 @@ const ModalBody = styled(Modal.Body)`
   width: 100%;
 `;
 
-const StyledSetFilename = styled(SetFilename)`
+const StyledSetFilename = styled(SetFileName)`
   flex-grow: 1;
   max-width: 512px;
 `;

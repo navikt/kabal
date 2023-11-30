@@ -1,7 +1,7 @@
 import { Label, ToggleGroup } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
-import { useNumberSetting } from '@app/hooks/settings/use-setting';
+import { useNumberSetting } from '@app/hooks/settings/helpers';
 
 interface Props {
   settingKey: string;

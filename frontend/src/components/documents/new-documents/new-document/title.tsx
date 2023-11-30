@@ -7,15 +7,15 @@ import {
 } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { SetFilename } from '@app/components/documents/set-filename';
 import {
   getJournalfoertDocumentTabId,
   getJournalfoertDocumentTabUrl,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
-import { SetFilename } from '../shared/set-filename';
 import { TitleAction } from './title-action';
 
 interface Props {
@@ -26,8 +26,8 @@ export const DocumentTitle = memo(
   ({ document }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
-    const [isExpanded] = useIsExpanded();
     const oppgaveId = useOppgaveId();
+    const [setTitle] = useSetTitleMutation();
 
     const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
       if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
@@ -57,7 +57,19 @@ export const DocumentTitle = memo(
     if (editMode) {
       return (
         <StyledDocumentTitle>
-          <SetFilename autoFocus hideLabel document={document} onDone={() => setEditMode(false)} />
+          <SetFilename
+            autoFocus
+            hideLabel
+            tittel={document.tittel}
+            close={() => setEditMode(false)}
+            setFilename={(title) => {
+              if (oppgaveId === skipToken) {
+                return;
+              }
+
+              setTitle({ oppgaveId, dokumentId: document.id, title });
+            }}
+          />
           <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
         </StyledDocumentTitle>
       );
@@ -77,7 +89,7 @@ export const DocumentTitle = memo(
           type={document.type}
           journalfoertDokumentReference={document.journalfoertDokumentReference}
         >
-          {isExpanded ? <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} /> : null}
+          <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
         </SharedDocumentTitle>
       );
     }
@@ -90,7 +102,7 @@ export const DocumentTitle = memo(
         documentId={documentId}
         type={document.type}
       >
-        {isExpanded ? <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} /> : null}
+        <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
       </SharedDocumentTitle>
     );
   },
