@@ -1,65 +1,76 @@
-import { Modal } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Button, Modal } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { styled } from 'styled-components';
+import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import {
-  IFileDocument,
-  IJournalfoertDokumentReference,
-  IMainDocument,
-  ISmartDocument,
-} from '@app/types/documents/documents';
+import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { IMainDocument } from '@app/types/documents/documents';
 
-interface DocumentWithAttachments {
-  mainDocument?: IMainDocument;
-  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+interface Props {
+  document: IMainDocument;
+  parentDocument?: IMainDocument;
   containsRolAttachments: boolean;
 }
 
-interface Props {
-  documentMap: Map<string, DocumentWithAttachments>;
-}
-
-export const DocumentModal = ({ documentMap }: Props) => {
-  const oppgaveId = useOppgaveId();
-  const { document, close } = useContext(ModalContext);
-  const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
-
-  if (isLoading || typeof data === 'undefined') {
-    return null;
-  }
-
-  if (document === null) {
-    return null;
-  }
-
+export const DocumentModal = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const { tittel, type } = document;
+  const isFeilregistrert = useIsFeilregistrert();
+  const hasDocumentsAccess = useHasDocumentsAccess();
+  const isRol = useIsRol();
+  const [open, setOpen] = useState(false);
 
-  const activeDocument = documentMap.get(document.parentId ?? document.id);
-  const containsRolAttachments = activeDocument?.containsRolAttachments ?? false;
+  const canEditDocument = useCanEditDocument(document, parentDocument);
+  const canDeleteDocument = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
+
+  if (isFeilregistrert) {
+    return null;
+  }
+
+  if (!hasDocumentsAccess && !isRol) {
+    return null;
+  }
+
+  if (!canEditDocument && !canDeleteDocument) {
+    return null;
+  }
 
   return (
-    <Modal
-      width="medium"
-      open={document !== null}
-      aria-modal
-      onClose={close}
-      onCancel={close}
-      data-testid="document-actions-modal"
-      header={{
-        heading: `Valg for «${tittel}»`,
-        icon: <DocumentIcon type={type} />,
-      }}
-      closeOnBackdropClick
-    >
-      <DocumentModalContent
-        document={document}
-        parentDocument={document.parentId === null ? undefined : activeDocument?.mainDocument}
-        containsRolAttachments={containsRolAttachments}
+    <>
+      <StyledButton
+        onClick={() => setOpen(!open)}
+        data-testid="document-actions-button"
+        variant="tertiary-neutral"
+        size="small"
+        icon={<MenuElipsisVerticalIcon aria-hidden />}
       />
-    </Modal>
+      {open ? (
+        <Modal
+          open
+          width="medium"
+          aria-modal
+          data-testid="document-actions-modal"
+          header={{
+            heading: `Valg for «${tittel}»`,
+            icon: <DocumentIcon type={type} />,
+          }}
+          closeOnBackdropClick
+        >
+          <DocumentModalContent
+            document={document}
+            parentDocument={parentDocument}
+            containsRolAttachments={containsRolAttachments}
+          />
+        </Modal>
+      ) : null}
+    </>
   );
 };
+
+const StyledButton = styled(Button)`
+  grid-area: ${Fields.Action};
+`;

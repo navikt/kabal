@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
-import { useNumberSetting } from '@app/hooks/settings/use-setting';
+import { useNumberSetting } from '@app/hooks/settings/helpers';
 import { StyledFooterContent } from '@app/styled-components/table';
 import { IPartBase } from '@app/types/oppgave-common';
 import { Result } from './result';

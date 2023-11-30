@@ -10,6 +10,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   'data-testid': string;
   direction?: PopupProps['direction'];
   maxWidth?: PopupProps['maxWidth'];
+  className?: string;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -20,6 +21,7 @@ export const FilterDropdown = <T extends string>({
   'data-testid': testId,
   direction,
   maxWidth,
+  className,
 }: FilterDropdownProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -33,7 +35,7 @@ export const FilterDropdown = <T extends string>({
   };
 
   return (
-    <Container ref={ref} data-testid={testId}>
+    <Container ref={ref} data-testid={testId} className={className}>
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length})
       </ToggleButton>

@@ -14,14 +14,13 @@ export const StyledDocumentTitle = styled.h1`
   overflow: hidden;
   white-space: nowrap;
   height: 100%;
+  min-width: 100px;
 `;
 
 export const StyledTitleAction = styled(TitleAction)`
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.2s ease-in-out;
+  display: none;
 
   ${StyledDocumentTitle}:hover & {
-    opacity: 1;
+    display: flex;
   }
 `;

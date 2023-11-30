@@ -94,8 +94,12 @@ const ExpandedHeaders = ({
         </StyledFilterDropdown>
       ) : null}
 
-      {columns.DATO_OPPRETTET ? <DateFilter {...datoOpprettetSetting} label="Dato opprettet" /> : null}
-      {columns.DATO_REG_SENDT ? <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" /> : null}
+      {columns.DATO_OPPRETTET ? (
+        <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
+      ) : null}
+      {columns.DATO_REG_SENDT ? (
+        <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
+      ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
         <StyledFilterDropdown
@@ -153,7 +157,7 @@ const StyledFilterDropdown = styled(FilterDropdown)<{ $area: Fields }>`
 const isJournalpostType = (type: Journalposttype | string): type is Journalposttype =>
   Object.values(Journalposttype).some((value) => value === type);
 
-const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [Fields.SelectRow, Fields.Title, Fields.Action];
+const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [Fields.SelectRow, Fields.Expand, Fields.Title, Fields.Action];
 
 const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
   if (!$isExpanded) {
@@ -165,6 +169,7 @@ const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
 
   const fields = [
     Fields.SelectRow,
+    Fields.Expand,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
     $columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,

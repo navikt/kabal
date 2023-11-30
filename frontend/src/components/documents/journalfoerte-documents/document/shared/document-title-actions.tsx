@@ -4,32 +4,43 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 
-interface Props {
+interface ConfirmProps {
   setEditMode: (editMode: boolean) => void;
-  editMode: boolean;
+}
+
+interface Props extends ConfirmProps {
   harTilgangTilArkivvariant: boolean;
   tittel: string;
 }
 
-export const DocumentTitleActions = ({ setEditMode, editMode, harTilgangTilArkivvariant, tittel }: Props) => {
+export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
+  <Button
+    onClick={() => setEditMode(false)}
+    icon={<StyledSuccessIcon aria-hidden />}
+    data-testid="document-title-edit-save-button"
+    title="Endre"
+    size="xsmall"
+    variant="tertiary"
+  />
+);
+
+export const DocumentTitleActions = ({ setEditMode, harTilgangTilArkivvariant, tittel }: Props) => {
   if (!harTilgangTilArkivvariant) {
     return null;
   }
 
-  const Icon = editMode ? StyledSuccessIcon : StyledEditIcon;
-
   return (
     <Container>
       <Button
-        onClick={() => setEditMode(!editMode)}
-        icon={<Icon aria-hidden />}
+        onClick={() => setEditMode(true)}
+        icon={<StyledEditIcon aria-hidden />}
         data-testid="document-title-edit-save-button"
         title="Endre"
         size="xsmall"
         variant="tertiary"
       />
 
-      {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}
+      <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />
     </Container>
   );
 };
@@ -43,15 +54,11 @@ const StyledSuccessIcon = styled(CheckmarkIcon)`
 `;
 
 const Container = styled.div`
-  display: flex;
+  display: none;
   flex-direction: row;
   align-items: center;
 
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.2s ease-in-out;
-
   ${StyledDocumentTitle}:hover & {
-    opacity: 1;
+    display: flex;
   }
 `;

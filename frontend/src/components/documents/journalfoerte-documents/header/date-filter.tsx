@@ -3,12 +3,14 @@ import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import { DateRangeSetting } from '@app/hooks/settings/use-setting';
+import { Fields } from '../grid';
 
 interface Props extends DateRangeSetting {
   label: string;
+  gridArea: Fields;
 }
 
-export const DateFilter = ({ value, setValue, remove, label }: Props) => {
+export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) => {
   const [fromString, toString] = value;
 
   const from = fromString === null ? undefined : formatISO(parseISO(fromString), { representation: 'date' });
@@ -25,5 +27,5 @@ export const DateFilter = ({ value, setValue, remove, label }: Props) => {
     setValue([newFrom, newTo]);
   };
 
-  return <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} />;
+  return <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} gridArea={gridArea} />;
 };

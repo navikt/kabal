@@ -1,17 +1,19 @@
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
+import { SetFilename } from '@app/components/documents/set-filename';
 import { TabContext } from '@app/components/documents/tab-context';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { EllipsisTitle, StyledDocumentLink } from '../../../styled-components/document-link';
-import { DocumentTitleActions } from './document-title-actions';
-import { SetFilename } from './set-filename';
+import { ConfirmEditButton, DocumentTitleActions } from './document-title-actions';
 
 interface Props {
   journalpostId: string;
@@ -23,15 +25,13 @@ interface Props {
 export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
   const { value, setValue } = useDocumentsPdfViewed();
-  const [isExpanded] = useIsExpanded();
 
-  return <DocumentTitleInternal {...props} shownDocument={value} setShownDocument={setValue} isExpanded={isExpanded} />;
+  return <DocumentTitleInternal {...props} shownDocument={value} setShownDocument={setValue} />;
 };
 
 interface DocumentTitleInternalProps extends Props {
   shownDocument: IShownDocument[];
   setShownDocument: (value: IShownDocument[]) => void;
-  isExpanded: boolean;
 }
 
 const DocumentTitleInternal = memo(
@@ -42,12 +42,13 @@ const DocumentTitleInternal = memo(
     harTilgangTilArkivvariant,
     shownDocument,
     setShownDocument,
-    isExpanded,
   }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
     const isTabOpen = useIsTabOpen(documentId);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
+    const oppgaveId = useOppgaveId();
+    const [setTitle] = useSetTitleMutation();
 
     const [editMode, _setEditMode] = useState(false);
 
@@ -68,17 +69,19 @@ const DocumentTitleInternal = memo(
       return (
         <StyledDocumentTitle>
           <SetFilename
-            journalpostId={journalpostId}
-            dokumentInfoId={dokumentInfoId}
             tittel={tittel}
-            onDone={() => setEditMode(false)}
+            close={() => setEditMode(false)}
+            hideLabel
+            setFilename={(filename) => {
+              if (oppgaveId === skipToken) {
+                return;
+              }
+
+              setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId });
+            }}
           />
-          <DocumentTitleActions
-            editMode={editMode}
-            setEditMode={setEditMode}
-            tittel={tittel}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-          />
+
+          <ConfirmEditButton setEditMode={setEditMode} />
         </StyledDocumentTitle>
       );
     }
@@ -147,14 +150,12 @@ const DocumentTitleInternal = memo(
         >
           <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
         </StyledDocumentLink>
-        {isExpanded ? (
-          <DocumentTitleActions
-            editMode={editMode}
-            setEditMode={setEditMode}
-            tittel={tittel}
-            harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-          />
-        ) : null}
+
+        <DocumentTitleActions
+          setEditMode={setEditMode}
+          tittel={tittel}
+          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+        />
       </StyledDocumentTitle>
     );
   },

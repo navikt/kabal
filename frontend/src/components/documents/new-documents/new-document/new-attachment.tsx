@@ -10,7 +10,8 @@ import {
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/new-documents/grid';
-import { ArchivingIcon, OpenModalButton } from '@app/components/documents/new-documents/new-document/open-modal-button';
+import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
+import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
@@ -125,7 +126,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
         {parentDocument.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <OpenModalButton
+          <DocumentModal
             document={document}
             parentDocument={parentDocument}
             containsRolAttachments={containsRolAttachments}

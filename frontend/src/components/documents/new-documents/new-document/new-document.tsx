@@ -9,7 +9,8 @@ import {
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/new-documents/grid';
-import { ArchivingIcon, OpenModalButton } from '@app/components/documents/new-documents/new-document/open-modal-button';
+import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
+import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -83,7 +84,7 @@ export const NewDocument = memo(
         {document.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <OpenModalButton document={document} containsRolAttachments={containsRolAttachments} />
+          <DocumentModal document={document} containsRolAttachments={containsRolAttachments} />
         )}
       </StyledNewDocument>
     );
