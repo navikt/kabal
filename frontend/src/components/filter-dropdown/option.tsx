@@ -3,8 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface FilterProps<T extends string> {
-  onChange: (id: T, active: boolean) => void;
-  active: boolean;
   filterId: T;
   children: string;
   focused: boolean;
@@ -13,10 +11,8 @@ interface FilterProps<T extends string> {
 }
 
 export const Filter = <T extends string>({
-  active,
   filterId,
   children,
-  onChange,
   focused,
   disabled,
   tags,
@@ -30,33 +26,26 @@ export const Filter = <T extends string>({
   }, [focused]);
 
   return (
-    <StyledCheckbox
+    <Checkbox
       data-testid="filter"
       data-filterid={filterId}
       data-label={children}
       type="checkbox"
-      checked={active}
       disabled={disabled}
-      onChange={(event) => onChange(filterId, event.target.checked)}
       size="small"
       ref={ref}
       title={children}
+      value={filterId}
     >
       <CheckboxContent>
         <span title={children}>{children}</span>
         {tags}
       </CheckboxContent>
-    </StyledCheckbox>
+    </Checkbox>
   );
 };
 
 Filter.displayName = 'Filter';
-
-const StyledCheckbox = styled(Checkbox)`
-  width: 100%;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;
 
 const CheckboxContent = styled.div`
   display: flex;

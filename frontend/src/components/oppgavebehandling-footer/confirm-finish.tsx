@@ -1,7 +1,7 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button } from '@navikt/ds-react';
 import React, { useContext, useMemo, useState } from 'react';
-import { FooterPopup } from '@app/components/oppgavebehandling-footer/popup';
+import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -41,7 +41,7 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const finishText = getFinishText(isOpphevetInTrygderetten, isModernized);
 
   return (
-    <FooterPopup close={cancel}>
+    <PopupContainer close={cancel} direction={Direction.RIGHT}>
       <BodyLong>{text}</BodyLong>
       <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 650 : 400}>
         {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
@@ -57,7 +57,7 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
           Avbryt
         </Button>
       </StyledFinishOppgaveButtons>
-    </FooterPopup>
+    </PopupContainer>
   );
 };
 

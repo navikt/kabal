@@ -2,10 +2,11 @@ import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
+import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { IOppgave } from '@app/types/oppgaver';
-import { useFradel, useTildel } from './use-tildel';
+import { useTildel } from './use-tildel';
 
 interface Props extends IOppgave {
   children?: string;
@@ -21,7 +22,7 @@ export const TildelButton = ({
 }: Props) => {
   const { data: user, isLoading: isUserLoading } = useUser();
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
-  const [, { isLoading: isFradeling }] = useFradel(id, typeId, ytelseId);
+  const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
     medunderskriver.navIdent !== null,

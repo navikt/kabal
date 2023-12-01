@@ -10,16 +10,16 @@ export const useSakstyper = () => {
   return sakstyper.filter(({ id }) => id !== SaksTypeEnum.ANKE_I_TRYGDERETTEN);
 };
 
-export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): IYtelse | undefined => {
-  const { data } = useLatestYtelser();
+export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): [IYtelse | undefined, boolean] => {
+  const { data, isLoading } = useLatestYtelser();
 
   if (ytelseId === skipToken || typeof data === 'undefined') {
-    return undefined;
+    return [undefined, isLoading];
   }
 
-  return data.find(({ id }) => id === ytelseId);
+  return [data.find(({ id }) => id === ytelseId), isLoading];
 };
 
 export const useLovkildeToRegistreringshjemmelForYtelse = (
   ytelseId: string | typeof skipToken = skipToken,
-): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;
+): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)[0]?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { format } from 'date-fns';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
@@ -12,7 +11,6 @@ import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandli
 import {
   IFinishOppgavebehandlingParams,
   IOppgavebehandlingBaseParams,
-  IOppgavebehandlingHjemlerUpdateParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
   ISetKlagerParams,
@@ -68,44 +66,6 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-
-    updateInnsendingshjemler: builder.mutation<IModifiedResponse, IOppgavebehandlingHjemlerUpdateParams>({
-      query: ({ oppgaveId, hjemler }) => ({
-        url: `/kabal-api/behandlinger/${oppgaveId}/innsendingshjemler`,
-        method: 'PUT',
-        body: { hjemler },
-      }),
-      onQueryStarted: async ({ oppgaveId, hjemler }, { queryFulfilled, dispatch }) => {
-        const undo = update(oppgaveId, { hjemmelIdList: hjemler });
-
-        try {
-          const { data } = await queryFulfilled;
-          update(oppgaveId, data);
-
-          toast.success(hjemler.length === 0 ? 'Hjemler fjernet' : 'Hjemler endret');
-
-          dispatch(
-            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              const [hjemmelId = null] = hjemler;
-              draft.hjemmelId = hjemmelId;
-
-              return draft;
-            }),
-          );
-        } catch (e) {
-          undo();
-
-          const message = 'Kunne ikke endre hjemler.';
-
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
-          } else {
-            toast.error(message);
-          }
-        }
-      },
-    }),
-
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
       query: ({ oppgaveId, fullmektig }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
@@ -124,7 +84,6 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           );
         } catch (e) {
           undo();
-
           const message = 'Kunne ikke endre fullmektig.';
 
           if (isApiRejectionError(e)) {
@@ -135,7 +94,6 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-
     updateKlager: builder.mutation<IModifiedResponse, ISetKlagerParams>({
       query: ({ oppgaveId, klager }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/klager`,
@@ -163,7 +121,6 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-
     setFeilregistrert: builder.mutation<ISetFeilregistrertResponse, ISetFeilregistrertParams>({
       query: ({ oppgaveId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/feilregistrer`,
@@ -235,7 +192,6 @@ const update = (oppgaveId: string, upd: Partial<IOppgavebehandling>) => {
 
 export const {
   useFinishOppgavebehandlingMutation,
-  useUpdateInnsendingshjemlerMutation,
   useUpdateFullmektigMutation,
   useUpdateKlagerMutation,
   useSetFeilregistrertMutation,

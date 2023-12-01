@@ -7,7 +7,8 @@ interface Actions {
   open: boolean;
   assignSelf: boolean;
   assignOthers: boolean;
-  deassign: boolean;
+  deassignSelf: boolean;
+  deassignOthers: boolean;
 }
 
 type ReturnType = [Actions, false] | [undefined, true];
@@ -45,7 +46,8 @@ export const useOppgaveActions = (
         open: hasYtelseAccess,
         assignSelf: canAssignSelf(access),
         assignOthers,
-        deassign: !hasMedunderskriver && (isAssignedToSelf || (assignOthers && isAssigned)),
+        deassignSelf: !hasMedunderskriver && isAssignedToSelf,
+        deassignOthers: !hasMedunderskriver && assignOthers && isAssigned,
       },
       false,
     ];

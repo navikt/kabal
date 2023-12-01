@@ -3,7 +3,7 @@ import { BodyShort, Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import { FooterPopup } from '@app/components/oppgavebehandling-footer/popup';
+import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useNewAnkebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling';
@@ -63,7 +63,7 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
   }
 
   return (
-    <FooterPopup close={close}>
+    <PopupContainer close={close} direction={Direction.RIGHT}>
       <BodyShort>
         Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i
         Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende
@@ -84,7 +84,7 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
           Avbryt
         </StyledButton>
       </Buttons>
-    </FooterPopup>
+    </PopupContainer>
   );
 };
 

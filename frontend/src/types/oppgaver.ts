@@ -76,10 +76,36 @@ export interface INameSearchParams {
   start: number;
 }
 
-export interface TildelSaksbehandlerParams {
-  navIdent: string | null;
+interface TildelSaksbehandlerParams {
+  navIdent: string;
   oppgaveId: string;
 }
+
+export enum FradelReason {
+  FEIL_HJEMMEL = 1,
+  MANGLER_KOMPETANSE = 2,
+  INHABIL = 3,
+  LENGRE_FRAVÆR = 4,
+  ANNET = 5,
+  LEDER = 6,
+}
+
+interface FradelReasonBase {
+  oppgaveId: string;
+}
+
+export interface FradelWithoutHjemler {
+  reasonId: Omit<FradelReason, FradelReason.FEIL_HJEMMEL>;
+}
+
+export interface FradelWithHjemler {
+  reasonId: FradelReason.FEIL_HJEMMEL;
+  hjemmelIdList: string[];
+}
+
+export type FradelSaksbehandlerParams = FradelReasonBase & (FradelWithHjemler | FradelWithoutHjemler);
+
+export type TildelFradelParams = TildelSaksbehandlerParams | FradelSaksbehandlerParams;
 
 export interface INameSearchParams {
   antall: number;
@@ -117,4 +143,9 @@ export interface IOppgaverResponse {
 export interface ITildelingResponse {
   saksbehandler: INavEmployee | null;
   modified: DateString;
+}
+
+export interface IFradelingResponse {
+  modified: DateString;
+  hjemmelIdList: string[];
 }
