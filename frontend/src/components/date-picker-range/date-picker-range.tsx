@@ -1,7 +1,7 @@
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Button, DatePicker } from '@navikt/ds-react';
+import { Alert, Button, ButtonProps, DatePicker } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
@@ -16,9 +16,18 @@ interface Props {
   onChange: (date: DateRange | undefined) => void;
   buttonLabel?: string;
   gridArea?: string;
+  ButtonComponent?: React.ComponentType<ButtonProps>;
+  neutral?: boolean;
 }
 
-export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea }: Props) => {
+export const DatePickerRange = ({
+  onChange,
+  selected,
+  buttonLabel,
+  gridArea,
+  ButtonComponent = Button,
+  neutral = false,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
   const ref = useRef(null);
@@ -30,16 +39,19 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea }: P
 
   const active = from !== undefined || to !== undefined;
 
+  const variant: ButtonProps['variant'] = useMemo(() => {
+    if (neutral) {
+      return active ? 'primary-neutral' : 'tertiary-neutral';
+    }
+
+    return active ? 'primary' : 'tertiary';
+  }, [active, neutral]);
+
   return (
     <Container ref={ref} $gridArea={gridArea}>
-      <Button
-        onClick={onClick}
-        size="small"
-        variant={active ? 'primary' : 'tertiary'}
-        icon={<CalendarIcon aria-hidden />}
-      >
+      <ButtonComponent onClick={onClick} size="small" variant={variant} icon={<CalendarIcon aria-hidden />}>
         {buttonLabel}
-      </Button>
+      </ButtonComponent>
       {isOpen ? (
         <DatepickerContainer>
           <StyledButtons>

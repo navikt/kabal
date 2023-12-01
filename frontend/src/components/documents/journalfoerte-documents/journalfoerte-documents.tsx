@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/dist/query';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
@@ -17,6 +17,7 @@ const EMPTY_ARRAY: IArkivertDocument[] = [];
 export const JournalfoerteDocuments = () => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
+  const [listHeight, setListHeight] = useState<number>(0);
 
   const documents = data?.dokumenter ?? EMPTY_ARRAY;
 
@@ -52,9 +53,9 @@ export const JournalfoerteDocuments = () => {
           filteredDocuments={totalFilteredDocuments}
         />
         <Wrapper>
-          <Header filters={filters} allSelectableDocuments={allSelectableDocuments} />
+          <Header filters={filters} allSelectableDocuments={allSelectableDocuments} listHeight={listHeight} />
 
-          <DocumentList documents={totalFilteredDocuments} isLoading={isLoading} />
+          <DocumentList documents={totalFilteredDocuments} isLoading={isLoading} onHeightChange={setListHeight} />
         </Wrapper>
       </Container>
     </SelectContextElement>

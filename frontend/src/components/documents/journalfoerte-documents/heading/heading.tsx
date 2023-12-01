@@ -83,8 +83,7 @@ const Container = styled.div<{ $isExpanded: boolean }>`
   flex-direction: ${({ $isExpanded }) => ($isExpanded ? 'row' : 'column')};
   align-items: ${({ $isExpanded }) => ($isExpanded ? 'center' : 'flex-start')};
   justify-content: space-between;
-  min-height: 50px;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
   column-gap: 16px;
   row-gap: 8px;
   flex-shrink: 0;

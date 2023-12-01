@@ -16,12 +16,13 @@ import { StyledDocumentListItem } from './document-list-item';
 interface Props {
   documents: IArkivertDocument[];
   isLoading: boolean;
+  onHeightChange: (height: number) => void;
 }
 
 const OVERSCAN_ROWS = 1;
 
 export const DocumentList = memo(
-  ({ documents, isLoading }: Props) => {
+  ({ documents, isLoading, onHeightChange }: Props) => {
     const { isSelected } = useContext(SelectContext);
     const [isExpanded] = useIsExpanded();
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -37,14 +38,18 @@ export const DocumentList = memo(
     }, [_scrollTop]);
 
     useEffect(() => {
-      const resizeObserver = new ResizeObserver(() => setContainerHeight(containerRef.current?.clientHeight ?? 0));
+      const resizeObserver = new ResizeObserver(() => {
+        const h = containerRef.current?.clientHeight ?? 0;
+        setContainerHeight(h);
+        onHeightChange(h);
+      });
 
       if (containerRef.current !== null) {
         resizeObserver.observe(containerRef.current);
 
         return () => resizeObserver.disconnect();
       }
-    }, []);
+    }, [onHeightChange]);
 
     const [listHeight, items] = useMemo<[number, React.ReactNode[]]>(() => {
       let _height = 0;
@@ -134,13 +139,18 @@ export const DocumentList = memo(
       _setScrollTop(clamped);
     }, []);
 
-    const onRef = useCallback((ref: HTMLDivElement | null) => {
-      setContainerHeight(ref?.clientHeight ?? 0);
-      containerRef.current = ref;
-    }, []);
+    const onRef = useCallback(
+      (ref: HTMLDivElement | null) => {
+        const h = ref?.clientHeight ?? 0;
+        setContainerHeight(h);
+        onHeightChange(h);
+        containerRef.current = ref;
+      },
+      [onHeightChange],
+    );
 
     return (
-      <div ref={onRef} style={{ overflow: 'auto', position: 'relative' }} onScroll={onScroll}>
+      <div ref={onRef} style={{ overflow: 'auto', position: 'relative', flexGrow: 1 }} onScroll={onScroll}>
         <DocumentContext.Provider value={{ expandedIds, setExpandedIds }}>
           <StyledDocumentList
             data-testid="oppgavebehandling-documents-all-list"
