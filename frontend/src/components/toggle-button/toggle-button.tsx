@@ -7,11 +7,9 @@ interface Props {
 }
 
 export const ToggleButton = styled.button<Props>`
-  border: 1px solid ${({ $error }) => ($error === true ? '#ba3a26' : '#78706a')};
-  box-shadow: ${({ $error }) => ($error === true ? '0 0 0 1px #ba3a26' : 'none')};
-  padding: 0 1.75rem 0 0.5rem;
+  border: 1px solid ${({ $error }) => ($error === true ? 'var(--a-border-danger)' : 'var(--a-border-default)')};
+  box-shadow: ${({ $error }) => ($error === true ? '0 0 0 1px var(--a-border-danger)' : 'none')};
   min-height: ${({ $minHeight }) => (typeof $minHeight === 'undefined' ? '2rem' : $minHeight)};
-  width: 100%;
   white-space: nowrap;
   border-radius: 0.25rem;
   transition: box-shadow 0.1s ease;
@@ -21,35 +19,15 @@ export const ToggleButton = styled.button<Props>`
   position: relative;
   font-size: 14px;
   font-weight: 600;
-  color: #3e3832;
+  color: var(--a-text-default);
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 0.5rem;
-    border-radius: 2px;
-    height: 2px;
-    background: #59514b;
-    right: 0.5rem;
-    top: 50%;
-    transition: transform 0.1s ease;
-  }
-
-  &::before {
-    transform: ${({ $open }) =>
-      $open ? 'translateX(-31%) translateY(-50%) rotate(-45deg)' : 'translateX(-31%) translateY(-50%) rotate(45deg)'};
-  }
-
-  &::after {
-    transform: ${({ $open }) =>
-      $open ? 'translateX(31%) translateY(-50%) rotate(45deg)' : 'translateX(31%) translateY(-50%) rotate(-45deg)'};
-  }
+  display: flex;
+  align-items: center;
 
   &:active,
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 3px #254b6d;
+    box-shadow: 0 0 0 3px var(--a-border-action-selected);
   }
 
   &:disabled {

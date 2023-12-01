@@ -25,7 +25,7 @@ export enum Fields {
 export const SIZES: Record<Fields, [number, number]> = {
   [Fields.Expand]: [20, 20],
   [Fields.SelectRow]: [20, 20],
-  [Fields.Title]: [200, -1],
+  [Fields.Title]: [275, -1],
   [Fields.Tema]: [85, 85],
   [Fields.DatoOpprettet]: [164, 164],
   [Fields.DatoRegSendt]: [171, 171],

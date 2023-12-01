@@ -1,3 +1,4 @@
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
@@ -10,6 +11,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   'data-testid': string;
   direction?: PopupProps['direction'];
   maxWidth?: PopupProps['maxWidth'];
+  maxHeight?: PopupProps['maxHeight'];
   className?: string;
 }
 
@@ -20,6 +22,7 @@ export const FilterDropdown = <T extends string>({
   children,
   'data-testid': testId,
   direction,
+  maxHeight,
   maxWidth,
   className,
 }: FilterDropdownProps<T>): JSX.Element => {
@@ -34,12 +37,14 @@ export const FilterDropdown = <T extends string>({
     setOpen(false);
   };
 
+  const chevron = open ? <ChevronUpIcon aria-hidden fontSize={20} /> : <ChevronDownIcon aria-hidden fontSize={20} />;
+
   return (
     <Container ref={ref} data-testid={testId} className={className}>
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
-        {children} ({selected.length})
+        {children} ({selected.length}) {chevron}
       </ToggleButton>
-      <Popup isOpen={open} direction={direction} maxWidth={maxWidth}>
+      <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>
         <Dropdown selected={selected} options={options} open={open} onChange={onChange} close={close} />
       </Popup>
     </Container>
@@ -54,16 +59,17 @@ interface PopupProps {
   isOpen: boolean;
   direction: StyledPopupProps['$direction'];
   maxWidth?: StyledPopupProps['$maxWidth'];
+  maxHeight?: StyledPopupProps['$maxHeight'];
   children: React.ReactNode;
 }
 
-const Popup = ({ isOpen, direction, maxWidth, children }: PopupProps) => {
+const Popup = ({ isOpen, direction, maxWidth, maxHeight, children }: PopupProps) => {
   if (!isOpen) {
     return null;
   }
 
   return (
-    <StyledPopup $direction={direction} $maxWidth={maxWidth}>
+    <StyledPopup $direction={direction} $maxWidth={maxWidth} $maxHeight={maxHeight}>
       {children}
     </StyledPopup>
   );
@@ -72,6 +78,7 @@ const Popup = ({ isOpen, direction, maxWidth, children }: PopupProps) => {
 interface StyledPopupProps {
   $direction?: 'left' | 'right';
   $maxWidth?: string;
+  $maxHeight?: number;
 }
 
 const StyledPopup = styled.div<StyledPopupProps>`
@@ -81,7 +88,7 @@ const StyledPopup = styled.div<StyledPopupProps>`
   left: ${({ $direction }) => ($direction === 'left' ? 'auto' : '0')};
   right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
   min-width: 275px;
-  max-height: 500px;
+  max-height: ${({ $maxHeight = 500 }) => $maxHeight}px;
   max-width: ${({ $maxWidth }) => $maxWidth ?? 'unset'};
   z-index: 22;
   background-color: white;
