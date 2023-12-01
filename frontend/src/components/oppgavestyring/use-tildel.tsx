@@ -1,11 +1,13 @@
-import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { ActionToast } from '@app/components/toast/action-toast';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import {
+  useFradelSaksbehandlerMutation,
+  useTildelSaksbehandlerMutation,
+} from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
-import { ITildelingResponse } from '@app/types/oppgaver';
+import { FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { toast } from '../toast/store';
 
@@ -19,7 +21,7 @@ interface Props {
 }
 
 type UseTildel = [(navIdent: string) => Promise<void>, { isLoading: boolean }];
-type UseFradel = [() => Promise<void>, { isLoading: boolean }];
+type UseFradel = [(params: FradelWithHjemler | FradelWithoutHjemler) => Promise<void>, { isLoading: boolean }];
 
 export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
@@ -54,10 +56,10 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseFradel => {
   const [getSakenGjelder] = useLazyGetSakenGjelderQuery();
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
-  const [tildel] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
+  const [fradel] = useFradelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onFradelSaksbehandler = async () => {
+  const onFradelSaksbehandler = async (params: FradelWithHjemler | FradelWithoutHjemler) => {
     setIsLoading(true);
 
     try {
@@ -65,9 +67,9 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
         getSaksbehandler(oppgaveId, true).unwrap(),
         getSakenGjelder(oppgaveId, true).unwrap(),
       ]);
-      const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent: null }).unwrap();
+      await fradel({ oppgaveId, ...params }).unwrap();
       createFradeltToast({
-        toSaksbehandler,
+        toSaksbehandler: null,
         fromSaksbehandler,
         sakenGjelder,
         oppgaveId,
@@ -107,15 +109,6 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           Åpne
         </OpenOppgavebehandling>
       }
-      secondary={
-        <CancelButton
-          oppgaveId={oppgaveId}
-          oppgaveType={oppgaveType}
-          ytelse={ytelseId}
-          fromSaksbehandler={fromSaksbehandler}
-          toSaksbehandler={toSaksbehandler}
-        />
-      }
     >
       Oppgave for {sakenGjelderText} er tildelt {toSaksbehandlerText}
       {fromSaksbehandlerText}.
@@ -123,14 +116,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
   );
 };
 
-const Fradelt = ({
-  oppgaveId,
-  oppgaveType,
-  ytelseId: ytelse,
-  sakenGjelder,
-  toSaksbehandler,
-  fromSaksbehandler,
-}: Props) => {
+const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler }: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
@@ -140,45 +126,7 @@ const Fradelt = ({
       <span>
         Oppgave for {sakenGjelderText} er lagt tilbake fra {fromSaksbehandlerText}.
       </span>
-      <CancelButton
-        oppgaveId={oppgaveId}
-        oppgaveType={oppgaveType}
-        ytelse={ytelse}
-        fromSaksbehandler={fromSaksbehandler}
-        toSaksbehandler={toSaksbehandler}
-      />
     </div>
-  );
-};
-
-interface CancelProps {
-  oppgaveId: string;
-  oppgaveType: SaksTypeEnum;
-  ytelse: string;
-  fromSaksbehandler: ITildelingResponse['saksbehandler'];
-  toSaksbehandler: ITildelingResponse['saksbehandler'];
-}
-
-const CancelButton = ({ oppgaveId, oppgaveType, ytelse, fromSaksbehandler, toSaksbehandler }: CancelProps) => {
-  const [tildel, { isLoading: isTildeling }] = useTildel(oppgaveId, oppgaveType, ytelse);
-  const [fradel, { isLoading: isFradeling }] = useFradel(oppgaveId, oppgaveType, ytelse);
-
-  if (fromSaksbehandler?.navIdent === toSaksbehandler?.navIdent) {
-    return null;
-  }
-
-  const onClick = async () => {
-    if (fromSaksbehandler === null) {
-      await fradel();
-    } else {
-      await tildel(fromSaksbehandler.navIdent);
-    }
-  };
-
-  return (
-    <Button size="small" variant="tertiary" onClick={onClick} loading={isTildeling || isFradeling}>
-      Angre
-    </Button>
   );
 };
 

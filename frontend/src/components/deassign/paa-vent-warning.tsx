@@ -2,7 +2,7 @@ import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { FooterPopup } from '@app/components/oppgavebehandling-footer/popup';
+import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 
 interface PaaVentWarningProps {
   isOpen: boolean;
@@ -16,11 +16,11 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
   }
 
   return (
-    <FooterPopup close={close}>
-      <Alert variant="warning" inline>
+    <PopupContainer close={close} direction={Direction.LEFT}>
+      <StyledAlert variant="warning" inline>
         Du legger nå en oppgave som er satt på vent tilbake i felles kø. Dersom du gjør dette, vil oppgaven ikke lenger
         stå som &quot;satt på vent&quot;. Bekreft at du fortsatt ikke venter på noe.
-      </Alert>
+      </StyledAlert>
       <Buttons>
         <Button variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
@@ -29,12 +29,16 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
           Jeg forstår, gå videre
         </Button>
       </Buttons>
-    </FooterPopup>
+    </PopupContainer>
   );
 };
 
 const Buttons = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
   align-items: center;
+`;
+
+const StyledAlert = styled(Alert)`
+  width: 305px;
 `;

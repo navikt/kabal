@@ -2,14 +2,15 @@ import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { PaaVentWarning } from '@app/components/oppgavebehandling-footer/paa-vent-warning';
+import { Direction } from '@app/components/deassign/direction';
+import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Popup } from './popup';
+import { Popup } from '../../deassign/popup';
 
 export const DeassignOppgave = () => {
   const { data: oppgave } = useOppgave();
@@ -38,7 +39,7 @@ export const DeassignOppgave = () => {
     return (
       <Container>
         <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>
-          Legg tilbake med ny hjemmel
+          Legg tilbake
         </StyledButton>
       </Container>
     );
@@ -61,16 +62,14 @@ export const DeassignOppgave = () => {
     setIsOpen(true);
   };
 
-  const disabled = !oppgaveActions.deassign;
+  const disabled = !oppgaveActions.deassignSelf;
   const title = disabled
     ? 'Oppgaven kan ikke legges tilbake på felles kø. Dette kan være pga. manglende tilgang eller fordi oppgaven har en medunderskriver.'
     : undefined;
 
   return (
     <Container ref={ref}>
-      <Popup isOpen={isOpen} close={() => setIsOpen(false)} />
-      <PaaVentWarning isOpen={warningIsOpen} close={() => setWarningIsOpen(false)} onConfirm={onConfirm} />
-      <StyledButton
+      <Button
         disabled={disabled}
         variant="secondary"
         size="small"
@@ -79,8 +78,18 @@ export const DeassignOppgave = () => {
         title={title}
         icon={<Icon aria-hidden />}
       >
-        Legg tilbake med ny hjemmel
-      </StyledButton>
+        Legg tilbake
+      </Button>
+      <PaaVentWarning isOpen={warningIsOpen} close={() => setWarningIsOpen(false)} onConfirm={onConfirm} />
+      {isOpen ? (
+        <Popup
+          direction={Direction.UP}
+          close={() => setIsOpen(false)}
+          oppgaveId={oppgave.id}
+          typeId={oppgave.typeId}
+          ytelseId={oppgave.ytelseId}
+        />
+      ) : null}
     </Container>
   );
 };

@@ -1,50 +1,35 @@
+import { CheckboxGroup } from '@navikt/ds-react';
 import React from 'react';
-import { styled } from 'styled-components';
 import { Filter } from './option';
 import { BaseProps } from './props';
 
-export const FilterList = <T extends string>({ selected, options, focused, onChange }: BaseProps<T>) => {
-  const setSelected = (value: T, active: boolean) => {
-    const selectedOptions: T[] = active
-      ? [...selected, value]
-      : selected.filter((selectedValue: string) => selectedValue !== value);
+interface Props<T extends string> extends BaseProps<T> {
+  className?: string;
+  error?: string | null;
+}
 
-    onChange(selectedOptions);
-  };
-
-  return (
-    <StyledFilterList data-testid="filter-list">
-      {options.map(({ value, label, disabled, tags }) => (
-        <StyledListItem key={value} data-testid="filter-list-item" data-filterid={value}>
-          <Filter
-            active={selected.includes(value)}
-            filterId={value}
-            onChange={setSelected}
-            focused={value === focused?.value}
-            tags={tags}
-            disabled={disabled}
-          >
-            {label}
-          </Filter>
-        </StyledListItem>
-      ))}
-    </StyledFilterList>
-  );
-};
-
-const StyledFilterList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-`;
-
-const StyledListItem = styled.li`
-  margin: 0;
-  padding: 0;
-  padding-left: 8px;
-  padding-right: 8px;
-  width: 100%;
-`;
+export const FilterList = <T extends string>({ selected, options, focused, onChange, className, error }: Props<T>) => (
+  <CheckboxGroup
+    legend="Velg hjemler"
+    hideLegend
+    data-testid="filter-list"
+    onChange={onChange}
+    value={selected}
+    className={className}
+    error={error}
+  >
+    {options.map(({ value, label, disabled, tags }) => (
+      <Filter
+        key={value}
+        data-testid="filter-list-item"
+        data-filterid={value}
+        filterId={value}
+        focused={value === focused?.value}
+        tags={tags}
+        disabled={disabled}
+      >
+        {label}
+      </Filter>
+    ))}
+  </CheckboxGroup>
+);
