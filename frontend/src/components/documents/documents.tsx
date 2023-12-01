@@ -50,7 +50,7 @@ const ExpandedDocuments = () => {
 
   const minWidth = useMemo(() => {
     if (!isExpanded) {
-      return 460;
+      return 475;
     }
 
     const _minWidth =
@@ -68,7 +68,7 @@ const ExpandedDocuments = () => {
       (columns.TEMA ? SIZES[Fields.Tema][0] : 0) +
       (columns.TYPE ? SIZES[Fields.Type][0] : 0);
 
-    return Math.max(_minWidth, 525);
+    return Math.max(_minWidth, 550);
   }, [columns, isExpanded]);
 
   // Prevent ResizeObserver from reinitializing on every resize and change.
