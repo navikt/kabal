@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';

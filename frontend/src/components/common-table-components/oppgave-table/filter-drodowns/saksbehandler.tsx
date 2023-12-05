@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useMemo } from 'react';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-drodowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';

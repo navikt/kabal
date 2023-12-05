@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { isNotNull } from '@app/functions/is-not-type-guards';

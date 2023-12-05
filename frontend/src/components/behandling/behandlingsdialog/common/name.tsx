@@ -1,5 +1,5 @@
 import { Skeleton } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 

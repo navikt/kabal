@@ -1,6 +1,6 @@
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';

@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useLatestYtelser, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
 import { ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
 

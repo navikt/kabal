@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
 import { Descendant, Text } from 'slate';
 import { SmartEditorContext } from '@app/components/smart-editor/context';

@@ -172,6 +172,7 @@ export const createFooter = (): FooterElement => ({
 const createTableCell = (text = ''): TableCellElement => ({
   type: ELEMENT_TD,
   children: [createSimpleParagraph(text)],
+  attributes: {},
 });
 
 export const createTable = (): TableElement => ({

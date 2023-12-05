@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { styled } from 'styled-components';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';

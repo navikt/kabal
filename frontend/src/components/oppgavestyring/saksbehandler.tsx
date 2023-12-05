@@ -1,5 +1,5 @@
 import { ErrorMessage, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';

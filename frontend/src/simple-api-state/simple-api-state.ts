@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { ENVIRONMENT } from '@app/environment';
 import { generateRequestId } from '@app/functions/generate-request-id';

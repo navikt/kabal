@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useParams } from 'react-router-dom';
 
 export const useOppgaveId = (): string | typeof skipToken => {

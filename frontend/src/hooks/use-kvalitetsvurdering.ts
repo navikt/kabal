@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useGetKvalitetsvurderingQuery } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { useOppgave } from './oppgavebehandling/use-oppgave';

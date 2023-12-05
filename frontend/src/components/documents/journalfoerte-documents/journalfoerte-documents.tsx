@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';

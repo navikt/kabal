@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useGetSmartEditorsQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
