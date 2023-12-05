@@ -1,6 +1,6 @@
 import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { memo } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';

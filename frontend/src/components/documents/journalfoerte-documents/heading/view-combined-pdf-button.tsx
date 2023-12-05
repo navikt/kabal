@@ -1,6 +1,6 @@
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, LinkProps, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { forwardRef, useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';

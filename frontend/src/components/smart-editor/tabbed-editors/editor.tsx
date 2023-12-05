@@ -1,5 +1,5 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
 import React, { useContext, useRef } from 'react';
 import { BasePoint, Path, Range } from 'slate';

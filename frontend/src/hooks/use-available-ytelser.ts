@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useEnhetYtelser } from '@app/simple-api-state/use-enhet-ytelser';

@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';

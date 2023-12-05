@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { useLazySearchPeopleByNameQuery } from '@app/redux-api/oppgaver/queries/oppgaver';

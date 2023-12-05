@@ -1,6 +1,7 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
 import { ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
 import {
+  TTableCellElement,
   setTableColSize,
   useTableCellElement,
   useTableCellElementResizable,
@@ -11,10 +12,10 @@ import React, { forwardRef, useCallback } from 'react';
 import { styled } from 'styled-components';
 import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 import { StyledParagraph } from '../paragraph';
 
-interface TableCellElementProps extends PlateElementProps {}
+interface TableCellElementProps extends PlateElementProps<EditorValue, TTableCellElement> {}
 
 export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>, TableCellElementProps>(
   ({ className, children, ...props }, ref) => {
@@ -36,8 +37,8 @@ TableCellElement.displayName = 'TableCellElement';
 
 const Resize = () => {
   const { value } = useScaleState();
-  const { colIndex, rowIndex, readOnly, isSelectingCell, hovered } = useTableCellElementState();
-  const resizableState = useTableCellElementResizableState({ colIndex, rowIndex });
+  const { colIndex, rowIndex, readOnly, isSelectingCell, hovered, colSpan } = useTableCellElementState();
+  const resizableState = useTableCellElementResizableState({ colIndex, rowIndex, colSpan });
   const { rightProps } = useTableCellElementResizable(resizableState);
   const editor = useMyPlateEditorRef();
 

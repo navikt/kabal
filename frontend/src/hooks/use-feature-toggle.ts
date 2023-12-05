@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { FeatureToggles, useGetFeatureToggleQuery } from '@app/redux-api/feature-toggling';
 
 export { FeatureToggles } from '@app/redux-api/feature-toggling';

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-import { PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks';
 import { formatISO } from 'date-fns';
+import { Patch } from 'immer';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
@@ -180,7 +180,12 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         url: `/maltekstseksjoner/${id}/publish-with-texts`,
       }),
       onQueryStarted: async ({ id, query }, { queryFulfilled, dispatch }) => {
-        const textPatches: PatchCollection[] = [];
+        interface PatchResult {
+          undo: () => void;
+          patches: Patch[];
+          inversePatches: Patch[];
+        }
+        const textPatches: PatchResult[] = [];
 
         const maltekstseksjonerPatch = dispatch(
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>

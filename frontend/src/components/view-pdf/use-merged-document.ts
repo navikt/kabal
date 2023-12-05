@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { useMergedDocumentsReferenceQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';

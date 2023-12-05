@@ -1,6 +1,6 @@
 import { Loader, Tooltip } from '@navikt/ds-react';
 import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/dist/query';
+import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';

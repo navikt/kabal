@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useUser } from '@app/simple-api-state/use-user';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';

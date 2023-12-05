@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { IShownDocument } from '@app/components/view-pdf/types';
 import {

@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
 import { useRemoveTilknyttetDocumentMutation } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
 import { useTilknyttDocumentMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';

@@ -1,4 +1,4 @@
-import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';

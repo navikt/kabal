@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { focusEditor, isCollapsed } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';

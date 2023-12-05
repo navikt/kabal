@@ -1,5 +1,5 @@
 import { Alert } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

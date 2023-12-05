@@ -1,4 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useGetKvalitetsvurderingQuery,
