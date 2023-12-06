@@ -16,8 +16,8 @@ export const useParentDocument = (parentId: string | null): IMainDocument | unde
   return useMemo(() => (parentId === null ? undefined : data.find((doc) => doc.id === parentId)), [data, parentId]);
 };
 
-//** Returns the siblings of an attachment. Does not work on main documents. */
-export const useSiblings = (parentId: string | null | undefined) => {
+/** Returns the attachments under the given `parentId`. */
+export const useAttachments = (parentId: string | null | undefined) => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
 

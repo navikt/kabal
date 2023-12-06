@@ -18,7 +18,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useSiblings } from '@app/hooks/use-parent-document';
+import { useAttachments } from '@app/hooks/use-parent-document';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
   DOCUMENT_TYPE_NAMES,
@@ -45,7 +45,7 @@ interface Props {
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const { validationErrors } = useContext(ModalContext);
   const canEditDocument = useCanEditDocument(document, parentDocument);
-  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useSiblings(document.parentId);
+  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(document.parentId ?? document.id);
   const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
