@@ -1,5 +1,6 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import React from 'react';
+import { styled } from 'styled-components';
 import { Filter } from './option';
 import { BaseProps } from './props';
 
@@ -9,7 +10,7 @@ interface Props<T extends string> extends BaseProps<T> {
 }
 
 export const FilterList = <T extends string>({ selected, options, focused, onChange, className, error }: Props<T>) => (
-  <CheckboxGroup
+  <StyledCheckboxGroup
     legend="Velg hjemler"
     hideLegend
     data-testid="filter-list"
@@ -31,5 +32,11 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
         {label}
       </Filter>
     ))}
-  </CheckboxGroup>
+  </StyledCheckboxGroup>
 );
+
+const StyledCheckboxGroup = styled(CheckboxGroup)`
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+`;
