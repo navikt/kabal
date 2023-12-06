@@ -82,12 +82,12 @@ interface TildelSaksbehandlerParams {
 }
 
 export enum FradelReason {
-  FEIL_HJEMMEL = 1,
-  MANGLER_KOMPETANSE = 2,
-  INHABIL = 3,
-  LENGRE_FRAVÆR = 4,
-  ANNET = 5,
-  LEDER = 6,
+  FEIL_HJEMMEL = '1',
+  MANGLER_KOMPETANSE = '2',
+  INHABIL = '3',
+  LENGRE_FRAVÆR = '4',
+  ANNET = '5',
+  LEDER = '6',
 }
 
 interface FradelReasonBase {

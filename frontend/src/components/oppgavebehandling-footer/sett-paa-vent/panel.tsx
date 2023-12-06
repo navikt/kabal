@@ -1,6 +1,6 @@
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, Panel, Textarea } from '@navikt/ds-react';
-import { addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
+import { addDays, addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
@@ -22,6 +22,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const [reasonError, setReasonError] = useState<string | null>(null);
 
   const today = new Date();
+  const fromDate = addDays(today, 1);
 
   const dates: [[number, Date], [number, Date], [number, Date], [number, Date], [number, Date]] = useMemo(() => {
     const now = new Date();
@@ -40,7 +41,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
       <DatePicker
         label="Frist"
         value={to === null ? undefined : parseISO(to)}
-        fromDate={today}
+        fromDate={fromDate}
         toDate={dates.at(-1)?.[1]}
         onChange={setTo}
         id="paa-vent-date"

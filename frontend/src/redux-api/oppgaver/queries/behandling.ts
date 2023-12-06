@@ -7,6 +7,7 @@ import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { IValidationParams } from '@app/types/oppgavebehandling/params';
 import {
+  IHistoryResponse,
   IMedunderskriverResponse,
   IMedunderskrivereResponse,
   IRolResponse,
@@ -148,6 +149,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getPotentialRol: builder.query<IRols, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialrol`,
     }),
+    getHistory: builder.query<IHistoryResponse, string>({
+      query: (id) => `/kabal-api/behandlinger/${id}/history`,
+    }),
   }),
 });
 
@@ -162,4 +166,5 @@ export const {
   useLazyGetSaksbehandlerQuery,
   useLazyValidateQuery,
   useGetPotentialRolQuery,
+  useGetHistoryQuery,
 } = behandlingerQuerySlice;

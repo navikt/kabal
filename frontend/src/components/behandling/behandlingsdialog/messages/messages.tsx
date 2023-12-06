@@ -34,7 +34,7 @@ export const Messages = () => {
   return (
     <StyledMessagesContainer>
       <Heading level="1" size="xsmall" spacing>
-        Meldinger
+        Meldinger ({messages.length})
       </Heading>
       <WriteMessage />
       {messages.length === 0 && (isFullfoert || isFeilregistrert) ? <BodyShort>Ingen meldinger</BodyShort> : null}
