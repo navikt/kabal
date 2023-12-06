@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDeleteDocument } from '@app/hooks/use-can-edit-document';
-import { useParentDocument, useSiblings } from '@app/hooks/use-parent-document';
+import { useAttachments, useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { Role } from '@app/types/bruker';
@@ -21,13 +21,13 @@ export const DeleteDropArea = () => {
   const removeSmartDocument = useRemoveDocument();
 
   const parentDocument = useParentDocument(draggedDocument?.parentId ?? null);
-  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useSiblings(draggedDocument?.parentId);
-  const isDropTarget = useCanDeleteDocument(
-    draggedDocument,
-    pdfOrSmartDocuments.some((d) => d.creatorRole === Role.KABAL_ROL) ||
-      journalfoertDocumentReferences.some((d) => d.creatorRole === Role.KABAL_ROL),
-    parentDocument,
+  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(
+    draggedDocument?.parentId ?? draggedDocument?.id,
   );
+  const containsRolAttachments =
+    pdfOrSmartDocuments.some((d) => d.creatorRole === Role.KABAL_ROL) ||
+    journalfoertDocumentReferences.some((d) => d.creatorRole === Role.KABAL_ROL);
+  const isDropTarget = useCanDeleteDocument(draggedDocument, containsRolAttachments, parentDocument);
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
