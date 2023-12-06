@@ -107,4 +107,5 @@ const StyledHeader = styled.div`
   padding: 8px;
   display: flex;
   justify-content: space-between;
+  z-index: 1;
 `;
