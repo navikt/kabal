@@ -207,7 +207,9 @@ export const Maltekstseksjon = ({
       return;
     }
 
-    updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
+    const timeout = setTimeout(() => updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query), 1000);
+
+    return () => clearTimeout(timeout);
   }, [element, oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
 
   const isFetching = maltekstseksjonIsFetching || maltekstseksjonTextsIsFetching;
