@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
+import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -52,13 +53,19 @@ const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }:
         return;
       }
 
+      if (areArraysEqual(hjemmelIdList, oppgave.hjemmelIdList)) {
+        setHjemmelError('Du må endre hjemler.');
+
+        return;
+      }
+
       await fradel({ reasonId, hjemmelIdList });
     } else {
       await fradel({ reasonId });
     }
 
     navigate('/mineoppgaver');
-  }, [fradel, hjemmelIdList, navigate, reasonId]);
+  }, [fradel, hjemmelIdList, navigate, oppgave.hjemmelIdList, reasonId]);
 
   return (
     <StyledPopup
