@@ -37,8 +37,8 @@ TableCellElement.displayName = 'TableCellElement';
 
 const Resize = () => {
   const { value } = useScaleState();
-  const { colIndex, rowIndex, readOnly, isSelectingCell, hovered, colSpan } = useTableCellElementState();
-  const resizableState = useTableCellElementResizableState({ colIndex, rowIndex, colSpan });
+  const { colIndex, readOnly, isSelectingCell, hovered, ...state } = useTableCellElementState();
+  const resizableState = useTableCellElementResizableState({ colIndex, ...state });
   const { rightProps } = useTableCellElementResizable(resizableState);
   const editor = useMyPlateEditorRef();
 
