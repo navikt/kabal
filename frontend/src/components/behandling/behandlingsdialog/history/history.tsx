@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
+import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
 import { getKlager } from '@app/components/behandling/behandlingsdialog/history/klager';
 import { getMedunderskriverEvent } from '@app/components/behandling/behandlingsdialog/history/medunderskriver';
 import { getROLEvent } from '@app/components/behandling/behandlingsdialog/history/rol';
@@ -116,7 +117,10 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
 
       <Filter filter={filter} setFilter={setFilter} counts={counts} totalCount={totalCount} />
 
-      <List>{filteredNodes}</List>
+      <List>
+        {filteredNodes}
+        <MissingHistoryWarning />
+      </List>
     </Container>
   );
 };
