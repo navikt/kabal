@@ -53,9 +53,7 @@ export const TildelButton = ({
       disabled={disabled || isLoading}
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
-      onClick={() => {
-        tildel(user.navIdent);
-      }}
+      onClick={() => tildel(user.navIdent)}
     >
       {children}
     </StyledButton>

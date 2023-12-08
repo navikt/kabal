@@ -59,12 +59,20 @@ const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }:
         return;
       }
 
-      await fradel({ reasonId, hjemmelIdList });
-    } else {
-      await fradel({ reasonId });
+      const success = await fradel({ reasonId, hjemmelIdList });
+
+      if (success) {
+        navigate('/mineoppgaver');
+      }
+
+      return;
     }
 
-    navigate('/mineoppgaver');
+    const success = await fradel({ reasonId });
+
+    if (success) {
+      navigate('/mineoppgaver');
+    }
   }, [fradel, hjemmelIdList, navigate, oppgave.hjemmelIdList, reasonId]);
 
   return (
