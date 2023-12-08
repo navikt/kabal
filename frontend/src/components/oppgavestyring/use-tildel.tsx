@@ -20,8 +20,8 @@ interface Props {
   sakenGjelder: ISakenGjelderResponse['sakenGjelder'];
 }
 
-type UseTildel = [(navIdent: string) => Promise<void>, { isLoading: boolean }];
-type UseFradel = [(params: FradelWithHjemler | FradelWithoutHjemler) => Promise<void>, { isLoading: boolean }];
+type UseTildel = [(navIdent: string) => Promise<boolean>, { isLoading: boolean }];
+type UseFradel = [(params: FradelWithHjemler | FradelWithoutHjemler) => Promise<boolean>, { isLoading: boolean }];
 
 export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
@@ -44,10 +44,15 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
         oppgaveType,
         ytelseId,
       });
+
+      return true;
     } catch {
       toast.error('Kunne ikke tildele saksbehandler');
+
+      return false;
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return [onTildelSaksbehandler, { isLoading }];
@@ -76,10 +81,15 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
         oppgaveType,
         ytelseId,
       });
+
+      return true;
     } catch {
       toast.error('Kunne ikke fradele saksbehandler.');
+
+      return false;
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return [onFradelSaksbehandler, { isLoading }];
