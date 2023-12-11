@@ -1,6 +1,14 @@
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { PlateElement, PlateRenderElementProps, findNodePath } from '@udecode/plate-common';
+import {
+  PlateEditor,
+  PlateElement,
+  PlateRenderElementProps,
+  findNodePath,
+  getNodeAncestors,
+} from '@udecode/plate-common';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { Path } from 'slate';
 import { styled } from 'styled-components';
 import {
   cleanText,
@@ -12,7 +20,35 @@ import {
   hasZeroChars,
   insertEmptyChar,
 } from '@app/plate/components/placeholder/helpers';
-import { EditorValue, PlaceholderElement } from '@app/plate/types';
+import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
+import { EditorValue, MaltekstElement, PlaceholderElement } from '@app/plate/types';
+import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
+
+const placeholderIsOnlyChildInMaltekst = (
+  editor: PlateEditor<EditorValue>,
+  element: PlaceholderElement,
+  path: Path | undefined,
+) => {
+  if (path === undefined) {
+    return false;
+  }
+
+  const ancestors = getNodeAncestors(editor, path);
+
+  for (const [node] of ancestors) {
+    if (isOfElementType<MaltekstElement>(node, ELEMENT_MALTEKST)) {
+      if (node.children.length !== 1) {
+        return false;
+      }
+
+      const [child] = node.children;
+
+      return child.children.every((c) => isNodeEmpty(editor, c) || c === element);
+    }
+  }
+
+  return false;
+};
 
 export const Placeholder = ({
   element,
@@ -85,6 +121,19 @@ export const Placeholder = ({
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 
+  const deletePlaceholder = useCallback(() => {
+    if (path === undefined) {
+      return;
+    }
+
+    editor.delete({ at: path });
+  }, [editor, path]);
+
+  const hideDeleteButton = useMemo(
+    () => placeholderIsOnlyChildInMaltekst(editor, element, path),
+    [editor, element, path],
+  );
+
   return (
     <PlateElement
       asChild
@@ -95,8 +144,19 @@ export const Placeholder = ({
       suppressContentEditableWarning
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
-        <Wrapper $placeholder={element.placeholder} $focused={isFocused} $hasText={!hasNoVisibleText} onClick={onClick}>
+        <Wrapper
+          $placeholder={element.placeholder}
+          $focused={isFocused}
+          $hasText={!hasNoVisibleText}
+          $hasButton={!hideDeleteButton}
+          onClick={onClick}
+        >
           {children}
+          {hideDeleteButton ? null : (
+            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
+              <TrashIcon aria-hidden />
+            </DeleteButton>
+          )}
         </Wrapper>
       </Tooltip>
     </PlateElement>
@@ -107,6 +167,7 @@ interface WrapperStyleProps {
   $placeholder: string;
   $focused: boolean;
   $hasText: boolean;
+  $hasButton: boolean;
 }
 
 const Wrapper = styled.span<WrapperStyleProps>`
@@ -115,12 +176,45 @@ const Wrapper = styled.span<WrapperStyleProps>`
   border-radius: var(--a-border-radius-medium);
   outline: none;
   color: #000;
+  padding-left: ${({ $hasButton }) => ($hasButton ? '1em' : '0')};
+  position: relative;
 
   &::after {
     cursor: text;
     color: var(--a-text-subtle);
     content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
     user-select: none;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--a-border-radius-medium);
+  height: 1.333em;
+  width: 1em;
+  color: var(--a-text-danger);
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  &:hover {
+    background-color: var(--a-surface-neutral-subtle-hover);
+  }
+
+  &:active {
+    background-color: var(--a-surface-neutral-active);
+  }
+
+  &:focus-visible {
+    box-shadow:
+      inset 0 0 0 2px var(--a-border-strong),
+      var(--a-shadow-focus);
   }
 `;
 

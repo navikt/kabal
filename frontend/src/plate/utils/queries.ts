@@ -1,5 +1,6 @@
 import {
   PlateEditor,
+  TDescendant,
   TElement,
   TNode,
   TText,
@@ -46,7 +47,7 @@ const isChildEmpty = (
   return child.children.every((c) => isChildEmpty(editor, c));
 };
 
-export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: EditorDescendant) => {
+export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: TDescendant) => {
   if (isText(node)) {
     return node.text.length === 0;
   }
