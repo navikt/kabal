@@ -1,5 +1,6 @@
 import {
   PlateEditor,
+  TDescendant,
   TElement,
   TNode,
   TText,
@@ -16,7 +17,6 @@ import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plu
 import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
 import {
   BulletListElement,
-  EditorDescendant,
   EditorValue,
   H1Element,
   H2Element,
@@ -46,7 +46,7 @@ const isChildEmpty = (
   return child.children.every((c) => isChildEmpty(editor, c));
 };
 
-export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: EditorDescendant) => {
+export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: TDescendant) => {
   if (isText(node)) {
     return node.text.length === 0;
   }
