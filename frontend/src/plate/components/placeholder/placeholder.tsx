@@ -1,3 +1,4 @@
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { PlateElement, PlateRenderElementProps, findNodePath } from '@udecode/plate-common';
 import React, { useCallback, useEffect, useMemo } from 'react';
@@ -11,6 +12,7 @@ import {
   getIsFocused,
   hasZeroChars,
   insertEmptyChar,
+  lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { EditorValue, PlaceholderElement } from '@app/plate/types';
 
@@ -85,6 +87,19 @@ export const Placeholder = ({
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 
+  const deletePlaceholder = useCallback(() => {
+    if (path === undefined) {
+      return;
+    }
+
+    editor.delete({ at: path });
+  }, [editor, path]);
+
+  const hideDeleteButton = useMemo(
+    () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    [editor, element, hasNoVisibleText, path],
+  );
+
   return (
     <PlateElement
       asChild
@@ -95,8 +110,19 @@ export const Placeholder = ({
       suppressContentEditableWarning
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
-        <Wrapper $placeholder={element.placeholder} $focused={isFocused} $hasText={!hasNoVisibleText} onClick={onClick}>
+        <Wrapper
+          $placeholder={element.placeholder}
+          $focused={isFocused}
+          $hasText={!hasNoVisibleText}
+          $hasButton={!hideDeleteButton}
+          onClick={onClick}
+        >
           {children}
+          {hideDeleteButton ? null : (
+            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
+              <TrashIcon aria-hidden />
+            </DeleteButton>
+          )}
         </Wrapper>
       </Tooltip>
     </PlateElement>
@@ -107,6 +133,7 @@ interface WrapperStyleProps {
   $placeholder: string;
   $focused: boolean;
   $hasText: boolean;
+  $hasButton: boolean;
 }
 
 const Wrapper = styled.span<WrapperStyleProps>`
@@ -115,12 +142,45 @@ const Wrapper = styled.span<WrapperStyleProps>`
   border-radius: var(--a-border-radius-medium);
   outline: none;
   color: #000;
+  padding-left: ${({ $hasButton }) => ($hasButton ? '1em' : '0')};
+  position: relative;
 
   &::after {
     cursor: text;
     color: var(--a-text-subtle);
     content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
     user-select: none;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--a-border-radius-medium);
+  height: 1.333em;
+  width: 1em;
+  color: var(--a-text-danger);
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  &:hover {
+    background-color: var(--a-surface-neutral-subtle-hover);
+  }
+
+  &:active {
+    background-color: var(--a-surface-neutral-active);
+  }
+
+  &:focus-visible {
+    box-shadow:
+      inset 0 0 0 2px var(--a-border-strong),
+      var(--a-shadow-focus);
   }
 `;
 
