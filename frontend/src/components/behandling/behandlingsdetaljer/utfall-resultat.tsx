@@ -85,7 +85,7 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
         hideLabel
         size="small"
         onChange={onUtfallResultatChange}
-        value={utfall ?? undefined}
+        value={utfall ?? NOT_SELECTED_VALUE}
         id={SELECT_ID}
         data-testid={SELECT_ID}
         data-ready={!isLoading}
