@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { ENVIRONMENT } from '@app/environment';
-import { generateRequestId } from '@app/functions/generate-request-id';
+import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
 
 interface State<T> {
   data: T | undefined;
@@ -49,7 +49,7 @@ export class SimpleApiState<T> {
     try {
       const response = await fetch(this.url, {
         method: 'GET',
-        headers: { 'x-kabal-version': ENVIRONMENT.version, 'nav-callid': generateRequestId() },
+        headers: { 'x-kabal-version': ENVIRONMENT.version, [TRACEPARENT_HEADER]: generateTraceParent() },
       });
 
       if (!response.ok) {

@@ -1,6 +1,6 @@
 import { FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 import { ENVIRONMENT } from '@app/environment';
-import { generateRequestId } from '@app/functions/generate-request-id';
+import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
 import { queryStringify } from '@app/functions/query-string';
 
 export const IS_LOCALHOST = window.location.hostname === 'localhost';
@@ -14,7 +14,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
     credentials: 'include',
     paramsSerializer: queryStringify,
     prepareHeaders: (headers) => {
-      headers.set('nav-callid', generateRequestId());
+      headers.set(TRACEPARENT_HEADER, generateTraceParent());
       headers.set('x-kabal-version', ENVIRONMENT.version);
 
       return headers;
