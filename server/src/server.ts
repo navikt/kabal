@@ -1,9 +1,10 @@
 import cors from 'cors';
 import express from 'express';
-import { ensureNavCallId } from '@app/request-id';
+import { ensureTraceparent } from '@app/request-id';
 import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
+import { httpLoggingMiddleware } from './http-logger';
 import { init } from './init';
-import { getLogger, httpLoggingMiddleware } from './logger';
+import { getLogger } from './logger';
 import { processErrors } from './process-errors';
 import { metricsMiddleware } from './prometheus/middleware';
 import { EmojiIcons, sendToSlack } from './slack';
@@ -23,7 +24,7 @@ const server = express();
 // Add the prometheus middleware to all routes
 server.use(metricsMiddleware);
 
-server.use(ensureNavCallId);
+server.use(ensureTraceparent);
 
 server.use(httpLoggingMiddleware);
 
