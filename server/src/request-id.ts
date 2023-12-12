@@ -1,13 +1,41 @@
-import { randomUUID } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
 import { RequestHandler } from 'express';
+import { getLogger } from '@app/logger';
 
-export const ensureNavCallId: RequestHandler = (req, res, next) => {
-  const navCallId = req.headers['nav-callid'];
+const log = getLogger('traceparent');
 
-  if (typeof navCallId === 'undefined' || navCallId.length === 0) {
-    req.headers['nav-callid'] =
-      req.headers['x-nav-callid'] ?? req.headers['x-request-id'] ?? randomUUID().replaceAll('-', '');
+export const ensureTraceparent: RequestHandler = (req, res, next) => {
+  const traceparentHeader = req.headers[TRACEPARENT_HEADER];
+
+  if (typeof traceparentHeader === 'undefined' || traceparentHeader.length === 0) {
+    const { traceparent, traceId } = generateTraceparent();
+    log.debug({ msg: 'Missing traceparent in request. Creating new traceparent.', data: { traceparent }, traceId });
+    req.headers[TRACEPARENT_HEADER] = traceparent;
   }
 
   next();
 };
+
+const TRACE_VERSION = '00';
+const TRACE_FLAGS = '00';
+
+/** Generates a traceparent ID according to https://www.w3.org/TR/trace-context/#version-format */
+const generateTraceparent = (): { traceparent: string; traceId: string } => {
+  const traceId = randomBytes(16).toString('hex');
+  const parentId = randomBytes(8).toString('hex');
+
+  return { traceparent: `${TRACE_VERSION}-${traceId}-${parentId}-${TRACE_FLAGS}`, traceId };
+};
+
+/** Parses traceId from traceparent ID according to https://www.w3.org/TR/trace-context/#version-format */
+export const getTraceIdFromTraceparent = (traceparent: string): string => {
+  const [version, traceId] = traceparent.split('-');
+
+  if (version !== TRACE_VERSION) {
+    log.warn({ msg: `Invalid traceparent version: ${version}`, data: { traceparent }, traceId });
+  }
+
+  return traceId;
+};
+
+export const TRACEPARENT_HEADER = 'traceparent';
