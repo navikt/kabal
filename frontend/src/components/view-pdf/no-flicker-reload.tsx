@@ -1,100 +1,77 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { Loader } from '@navikt/ds-react';
+import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
 
-interface Props {
-  url: string;
-  version: number;
-  onVersionLoaded: () => void;
+export interface Version {
+  data: string;
+  ready: boolean;
+  id: number;
 }
 
-export const NoFlickerReloadPdf = ({ url, version, onVersionLoaded }: Props) => {
-  const [versionMap, setVersionMap] = useState<Map<string, { versions: number[]; readyIndex: number }>>(
-    new Map([[url, { versions: [version], readyIndex: 0 }]]),
-  );
+interface Props {
+  versions: Version[];
+  isLoading: boolean;
+  onVersionLoaded: (versionId: number) => void;
+}
 
-  useEffect(() => {
-    const data = versionMap.get(url);
-
-    if (typeof data === 'undefined') {
-      setVersionMap(new Map([...versionMap, [url, { versions: [version], readyIndex: 0 }]]));
-    } else if (!data.versions.includes(version)) {
-      setVersionMap(new Map([...versionMap, [url, { ...data, versions: [...data.versions, version] }]]));
-    }
-  }, [url, version, versionMap]);
-
+export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Props) => {
   const onLoad = useCallback(
-    (index: number, loadedUrl: string) => {
-      setTimeout(
-        () =>
-          requestAnimationFrame(() => {
-            setVersionMap((map) => {
-              const data = map.get(loadedUrl);
-
-              if (typeof data === 'undefined') {
-                return map;
-              }
-
-              const { readyIndex } = data;
-
-              if (index > readyIndex) {
-                return new Map([...map, [loadedUrl, { ...data, readyIndex: index }]]);
-              }
-
-              return map;
-            });
-            onVersionLoaded();
-          }),
-        3000,
-      );
+    (version: Version) => {
+      setTimeout(() => onVersionLoaded(version.id), 2000);
     },
     [onVersionLoaded],
   );
 
-  const data = versionMap.get(url);
-
-  if (data === undefined) {
-    return null;
-  }
-
   return (
-    <StyledSwitcher>
-      {data.versions.map((v, index) => {
-        const current = index === data.readyIndex;
-        const render = current || index > data.readyIndex;
-
-        if (!render) {
-          return null;
-        }
-
-        return (
-          <StyledPDF
-            key={v}
-            aria-hidden={!current}
-            data={`${url}?version=${v}#toolbar=1&view=fitH&zoom=page-width`}
-            role="document"
-            type="application/pdf"
-            name="pdf-viewer"
-            onLoad={() => onLoad(index, url)}
-            $current={current}
-          />
-        );
-      })}
+    <StyledSwitcher data-count={versions.length} data-ready={versions.map((v) => v.ready)}>
+      {isLoading ? (
+        <Overlay>
+          <Loader size="3xlarge" />
+        </Overlay>
+      ) : null}
+      {versions.map((version) => (
+        <StyledPDF
+          key={version.id}
+          data={`${version.data}${PDFparams}`}
+          role="document"
+          type="application/pdf"
+          name="pdf-viewer"
+          onLoad={() => onLoad(version)}
+          style={{ zIndex: version.ready ? 0 : -1 }}
+        />
+      ))}
     </StyledSwitcher>
   );
 };
 
-const StyledPDF = styled.object<{ $current: boolean }>`
+NoFlickerReloadPdf.displayName = 'NoFlickerReloadPdf';
+
+const PDFparams = '#toolbar=1&view=fitH&zoom=page-width';
+
+const StyledPDF = styled.object`
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   flex-grow: 1;
-  z-index: ${({ $current }) => ($current ? 0 : -1)};
 `;
 
 const StyledSwitcher = styled.div`
   position: relative;
   width: 100%;
   flex-grow: 1;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--a-surface-neutral-moderate);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
