@@ -99,6 +99,7 @@ const StyledPopup = styled.div`
   position: absolute;
   top: 0;
   left: 100%;
+  z-index: 1;
   max-height: 400px;
   max-width: 275px;
   scroll-margin-bottom: 16px;
