@@ -4,25 +4,19 @@ import { styled } from 'styled-components';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
-import { IKvalitetsvurdering } from '@app/types/kaka-kvalitetsvurdering/v2';
+import { IKvalitetsvurderingBooleans, IKvalitetsvurderingSaksdataHjemler } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { SubSection } from './styled-components';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';
 
 interface Props {
-  field: keyof Pick<
-    IKvalitetsvurdering,
-    | 'vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList'
-    | 'vedtaketLovbestemmelsenTolketFeilHjemlerList'
-    | 'vedtaketFeilKonkretRettsanvendelseHjemlerList'
-    | 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList'
-  >;
-  show: boolean;
+  field: keyof IKvalitetsvurderingSaksdataHjemler;
+  parentKey?: keyof IKvalitetsvurderingBooleans;
 }
 
 const EMPTY_ARRAY: string[] = [];
 
-export const Hjemler = ({ field, show }: Props) => {
+export const Oppgavehjemler = ({ field, parentKey }: Props) => {
   const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV2();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useCanEdit();
@@ -32,7 +26,7 @@ export const Hjemler = ({ field, show }: Props) => {
   const selectedHjemmelIdList = isLoading ? undefined : kvalitetsvurdering[field];
 
   useEffect(() => {
-    if (!show || isLoading || selectedHjemmelIdList === undefined || previousSaksdataHjemmelIdList === undefined) {
+    if (isLoading || selectedHjemmelIdList === undefined || previousSaksdataHjemmelIdList === undefined) {
       return;
     }
 
@@ -53,9 +47,15 @@ export const Hjemler = ({ field, show }: Props) => {
         update({ [field]: EMPTY_ARRAY });
       }
     }
-  }, [field, isLoading, selectedHjemmelIdList, previousSaksdataHjemmelIdList, hjemler, show, update]);
+  }, [field, isLoading, selectedHjemmelIdList, previousSaksdataHjemmelIdList, hjemler, update]);
 
-  if (!show || isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
+  if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
+    return null;
+  }
+
+  const show = parentKey === undefined || kvalitetsvurdering[parentKey];
+
+  if (!show) {
     return null;
   }
 

@@ -10,27 +10,37 @@ export const KVALITETSVURDERING_V2_FIELD_NAMES: Record<Keys, string> = {
   klageforberedelsenSakensDokumenterManglerFysiskSaksmappe: 'Mangler fysisk saksmappe',
 
   klageforberedelsen: 'Klageforberedelsen',
-  klageforberedelsenOversittetKlagefristIkkeKommentert: 'Oversittet klagefrist er ikke kommentert.',
+  klageforberedelsenOversittetKlagefristIkkeKommentert: 'Oversittet klagefrist er ikke kommentert',
   klageforberedelsenKlagersRelevanteAnfoerslerIkkeTilstrekkeligKommentertImoetegaatt:
-    'Klagers relevante anførsler er ikke tilstrekkelig kommentert/imøtegått.',
+    'Klagers relevante anførsler er ikke tilstrekkelig kommentert/imøtegått',
   klageforberedelsenFeilVedBegrunnelsenForHvorforAvslagOpprettholdesKlagerIkkeOppfyllerVilkaar:
-    'Feil ved begrunnelsen for hvorfor avslag opprettholdes/klager ikke oppfyller vilkår.',
+    'Feil ved begrunnelsen for hvorfor avslag opprettholdes/klager ikke oppfyller vilkår',
   klageforberedelsenOversendelsesbrevetsInnholdErIkkeISamsvarMedSakensTema:
-    'Oversendelsesbrevets innhold er ikke i samsvar med sakens tema.',
+    'Oversendelsesbrevets innhold er ikke i samsvar med sakens tema',
   klageforberedelsenOversendelsesbrevIkkeSendtKopiTilPartenEllerFeilMottaker:
-    'Det er ikke sendt kopi av oversendelsesbrevet til parten, eller det er sendt til feil mottaker.',
+    'Det er ikke sendt kopi av oversendelsesbrevet til parten, eller det er sendt til feil mottaker',
+  klageforberedelsenUtredningenUnderKlageforberedelsen: 'Utredningen under klageforberedelsen',
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysninger:
+    'Klageinstansen har bedt underinstansen om å innhente nye opplysninger',
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysningerFritekst:
+    'Fritekst for »Klageinstansen har bedt underinstansen om å innhente nye opplysninger»',
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysninger:
+    'Klageinstansen har selv innhentet nye opplysninger',
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysningerFritekst:
+    'Fritekst for »Klageinstansen har selv innhentet nye opplysninger»',
 
-  utredningen: 'Utredningen',
+  utredningen: 'Utredningen før vedtak',
   utredningenAvMedisinskeForhold: 'Utredningen av medisinske forhold',
   utredningenAvInntektsforhold: 'Utredningen av inntektsforhold',
   utredningenAvArbeidsaktivitet: 'Utredningen av arbeidsaktivitet',
   utredningenAvEoesUtenlandsproblematikk: 'Utredningen av EØS-/utenlandsproblematikk',
+  utredningenAvSivilstandBoforhold: 'Utredningen av sivilstand/boforhold',
   utredningenAvAndreAktuelleForholdISaken: 'Utredningen av andre aktuelle forhold i saken',
 
-  vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdert:
-    'Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert',
-  vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList:
-    'Hjemler for «Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert»',
+  vedtaketBruktFeilHjemmel: 'Det er brukt feil hjemmel',
+  vedtaketAlleRelevanteHjemlerErIkkeVurdert: 'Alle relevante hjemler er ikke vurdert',
+  vedtaketBruktFeilHjemmelHjemlerList: 'Hjemler for «Det er brukt feil hjemmel»',
+  vedtaketAlleRelevanteHjemlerErIkkeVurdertHjemlerList: 'Hjemler for «Alle relevante hjemler er ikke vurdert»',
 
   vedtaketLovbestemmelsenTolketFeil: 'Lovbestemmelsen er tolket feil',
   vedtaketLovbestemmelsenTolketFeilHjemlerList: 'Hjemler for «Lovbestemmelsen er tolket feil»',
@@ -66,12 +76,13 @@ export const KVALITETSVURDERING_V2_FIELD_NAMES: Record<Keys, string> = {
 };
 
 export const KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES = {
-  klageforberedelsenGroup: 'Mangelfull klageforberedelse',
-  utredningenGroup: 'Mangelfull utredning',
-  vedtaketGroup: 'Mangelfullt vedtak',
-  raadgivendeLegeGroup: 'Mangelfull bruk av rådgivende lege',
+  klageforberedelsenGroup: 'Klageforberedelsen',
+  utredningenGroup: 'Utredningen før vedtak',
+  vedtaketGroup: 'Vedtaket',
+  brukAvRaadgivendeLegeGroup: 'Bruk av rådgivende lege',
   vedtaketIkkeKonkretIndividuellBegrunnelseGroup: 'Begrunnelsen er ikke konkret og individuell nok',
   klageforberedelsenSakensDokumenterGroup: 'Sakens dokumenter',
+  klageforberedelsenUtredningenUnderKlageforberedelsenGroup: 'Utredningen under klageforberedelsen',
 };
 
 export const useKvalitetsvurderingV2FieldName = (field: Keys): string => KVALITETSVURDERING_V2_FIELD_NAMES[field];

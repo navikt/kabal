@@ -6,7 +6,7 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Checkboxes } from './common/checkboxes';
 import { HeadingWithHelpText } from './common/heading-with-helptext';
 import { RadioButtonsRow, StyledRadioGroup } from './common/styled-components';
-import { ICheckboxParams } from './common/types';
+import { InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
@@ -62,51 +62,107 @@ export const Klageforberedelsen = () => {
   );
 };
 
-const CHECKBOXES: ICheckboxParams[] = [
+const CHECKBOXES: InputParams[] = [
   {
     field: 'klageforberedelsenSakensDokumenter',
+    type: KvalitetsvurderingInput.CHECKBOX,
     helpText:
       'Dokumentene er ikke fullstendige; f.eks. feil eller mangelfull journalføring av relevante opplysninger i klagebehandlingen.',
-    label: 'Sakens dokumenter.',
+    label: 'Sakens dokumenter',
     groupErrorField: 'klageforberedelsenSakensDokumenterGroup',
     checkboxes: [
       {
         field: 'klageforberedelsenSakensDokumenterRelevanteOpplysningerFraAndreFagsystemerErIkkeJournalfoert',
+        type: KvalitetsvurderingInput.CHECKBOX,
         helpText:
-          'F.eks. notater, klager, referat eller andre opplysninger fra Arena,  Pesys, Infotrygd, A-inntekt, Modia, eller digital aktivitetsplan.',
-        label: 'Relevante opplysninger fra andre fagsystemer er ikke journalført.',
+          'F.eks. notater, klager, referat eller andre opplysninger fra Arena, Pesys, Infotrygd, A-inntekt, Modia, eller digital aktivitetsplan.',
+        label: 'Relevante opplysninger fra andre fagsystemer er ikke journalført',
       },
       {
         field: 'klageforberedelsenSakensDokumenterJournalfoerteDokumenterFeilNavn',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Journalførte dokumenter har feil titler/navn',
         helpText: 'F.eks. står det «fritekstbrev» i stedet for «vedtak», eller «samtale» i stedet for «klage».',
-        label: 'Journalførte dokumenter har feil titler/navn.',
       },
       {
         field: 'klageforberedelsenSakensDokumenterManglerFysiskSaksmappe',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Mangler fysisk saksmappe',
         helpText: 'Gjelder kun i saker det er relevant/nødvendig.',
-        label: 'Mangler fysisk saksmappe.',
       },
     ],
   },
   {
     field: 'klageforberedelsenOversittetKlagefristIkkeKommentert',
-    label: 'Oversittet klagefrist er ikke kommentert.',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Oversittet klagefrist er ikke kommentert eller vurdert feil',
   },
   {
     field: 'klageforberedelsenKlagersRelevanteAnfoerslerIkkeTilstrekkeligKommentertImoetegaatt',
-    label: 'Klagers relevante anførsler er ikke tilstrekkelig kommentert/imøtegått.',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Klagers relevante anførsler er ikke tilstrekkelig kommentert/imøtegått',
   },
   {
     field: 'klageforberedelsenFeilVedBegrunnelsenForHvorforAvslagOpprettholdesKlagerIkkeOppfyllerVilkaar',
-    label: 'Feil ved begrunnelsen for hvor avslag opprettholdes/klager ikke oppfyller vilkår.',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Begrunnelsen i oversendelsesbrevet',
+    helpText:
+      'F.eks. er vilkår eller tema i oversendelsesbrevet vurdert feil, det er henvist til feil hjemler eller begrunnelsen er vanskelig å forstå.',
   },
   {
     field: 'klageforberedelsenOversendelsesbrevetsInnholdErIkkeISamsvarMedSakensTema',
-    label: 'Oversendelsesbrevets innhold er ikke i samsvar med sakens tema.',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Oversendelsesbrevets innhold er ikke i samsvar med sakens tema',
   },
   {
     field: 'klageforberedelsenOversendelsesbrevIkkeSendtKopiTilPartenEllerFeilMottaker',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Det er ikke sendt kopi av oversendelsesbrevet til parten, eller det er sendt til feil mottaker',
     helpText: 'F.eks. er oversendelsesbrevet ikke sendt til fullmektig i saken.',
-    label: 'Det er ikke sendt kopi av oversendelsesbrevet til parten, eller det er sendt til feil mottaker.',
+  },
+  {
+    field: 'klageforberedelsenUtredningenUnderKlageforberedelsen',
+    type: KvalitetsvurderingInput.CHECKBOX,
+    label: 'Utredningen under klageforberedelsen',
+    groupErrorField: 'klageforberedelsenUtredningenUnderKlageforberedelsenGroup',
+    helpText:
+      'Gjelder kvaliteten på utredningen under klageforberedelsen (fra vedtak ble fattet til saken ble oversendt klageinstansen). Gjelder kvaliteten på utredningen av opplysninger som NAV ikke har tilgang til. Dersom utredningen var mangelfull før vedtak ble fattet og dette ikke ble reparert under klageforberedelsen, huker du av for mangelfull utredning både her og under «Utredningen før vedtak».',
+    checkboxes: [
+      {
+        field:
+          'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysninger',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Klageinstansen har bedt underinstansen om å innhente nye opplysninger',
+        checkboxes: [
+          {
+            field:
+              'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysningerFritekst',
+            type: KvalitetsvurderingInput.TEXTAREA,
+            label: 'Skriv hvilke opplysninger som måtte hentes inn her (valgfri)',
+            helpText:
+              'Det du skriver her er kun for klageinstansens interne bruk og blir ikke synlig for vedtaksinstansen. Husk å skrive kort / med stikkord. Ikke skriv personopplysninger eller detaljer om saken.',
+            description:
+              'Det du skriver her er kun synlig for klageinstansen og ikke for vedtaksinstansen. Husk å ikke skrive personopplysninger.',
+          },
+        ],
+      },
+      {
+        field: 'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysninger',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Klageinstansen har selv innhentet nye opplysninger',
+        checkboxes: [
+          {
+            field:
+              'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysningerFritekst',
+            type: KvalitetsvurderingInput.TEXTAREA,
+            label: 'Skriv hvilke opplysninger som måtte hentes inn her (valgfri)',
+            helpText:
+              'Det du skriver her er kun for klageinstansens interne bruk og blir ikke synlig for vedtaksinstansen. Husk å skrive kort / med stikkord. Ikke skriv personopplysninger eller detaljer om saken.',
+            description:
+              'Det du skriver her er kun synlig for klageinstansen og ikke for vedtaksinstansen. Husk å ikke skrive personopplysninger.',
+          },
+        ],
+      },
+    ],
   },
 ];

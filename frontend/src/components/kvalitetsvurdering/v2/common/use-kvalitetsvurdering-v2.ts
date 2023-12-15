@@ -1,4 +1,5 @@
-import { skipToken } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
+import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useGetKvalitetsvurderingQuery,
@@ -7,13 +8,21 @@ import {
 import { IKvalitetsvurdering, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
+interface UpdateStatus {
+  isLoading: boolean;
+  isSuccess: boolean;
+  isUninitialized: boolean;
+  isError: boolean;
+  error?: FetchBaseQueryError | SerializedError;
+}
+
 interface Loading {
   oppgave: undefined;
   hjemler: string[];
   kvalitetsvurdering: undefined;
   update: undefined;
   isLoading: true;
-  isUpdating: false;
+  updateStatus: UpdateStatus;
 }
 
 interface Loaded {
@@ -22,7 +31,7 @@ interface Loaded {
   kvalitetsvurdering: IKvalitetsvurdering;
   update: (patch: Partial<IKvalitetsvurderingData>) => Promise<IKvalitetsvurdering>;
   isLoading: false;
-  isUpdating: boolean;
+  updateStatus: UpdateStatus;
 }
 
 const EMPTY_ARRAY: string[] = [];
@@ -34,7 +43,7 @@ export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
       ? skipToken
       : oppgave.kvalitetsvurderingReference.id;
   const { data: kvalitetsvurdering, isLoading: kvalitetsvurderingIsLoading } = useGetKvalitetsvurderingQuery(param);
-  const [update, { isLoading: updateIsLoading }] = useUpdateKvalitetsvurderingMutation();
+  const [update, updateStatus] = useUpdateKvalitetsvurderingMutation();
 
   const id = oppgave?.kvalitetsvurderingReference?.id;
 
@@ -51,7 +60,7 @@ export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
       kvalitetsvurdering: undefined,
       update: undefined,
       isLoading: true,
-      isUpdating: false,
+      updateStatus,
     };
   }
 
@@ -61,6 +70,6 @@ export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
     kvalitetsvurdering,
     update: (patch) => update({ ...patch, id }).unwrap(),
     isLoading: false,
-    isUpdating: updateIsLoading,
+    updateStatus,
   };
 };
