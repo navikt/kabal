@@ -1,12 +1,34 @@
-import { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { Hjemler } from './hjemler';
-import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
+import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import {
+  IKvalitetsvurderingAllRegistreringshjemler,
+  IKvalitetsvurderingBooleans,
+  IKvalitetsvurderingSaksdataHjemler,
+  IKvalitetsvurderingStrings,
+} from '@app/types/kaka-kvalitetsvurdering/v2';
 
-export interface ICheckboxParams {
-  field: keyof IKvalitetsvurderingBooleans;
+interface BaseParams {
   groupErrorField?: keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;
   label: string;
   helpText?: string;
-  hjemler?: Parameters<typeof Hjemler>[0]['field'];
-  checkboxes?: ICheckboxParams[];
 }
+
+export enum KvalitetsvurderingInput {
+  CHECKBOX,
+  TEXTAREA,
+}
+
+export interface CheckboxParams extends BaseParams {
+  field: keyof IKvalitetsvurderingBooleans;
+  type: KvalitetsvurderingInput.CHECKBOX;
+  checkboxes?: InputParams[];
+  saksdatahjemler?: keyof IKvalitetsvurderingSaksdataHjemler;
+  allRegistreringshjemler?: keyof IKvalitetsvurderingAllRegistreringshjemler;
+}
+
+export interface TextParams extends BaseParams {
+  field: keyof IKvalitetsvurderingStrings;
+  type: KvalitetsvurderingInput.TEXTAREA;
+  description?: string;
+}
+
+export type InputParams = CheckboxParams | TextParams;

@@ -5,7 +5,7 @@ import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
 import { RadioButtonsRow, StyledHeading, StyledRadioGroup } from './common/styled-components';
-import { ICheckboxParams } from './common/types';
+import { InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
@@ -80,62 +80,77 @@ export const Vedtaket = () => {
   );
 };
 
-const CHECKBOXES: ICheckboxParams[] = [
+const CHECKBOXES: InputParams[] = [
   {
-    field: 'vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdert',
-    label: 'Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert.',
-    hjemler: 'vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList',
-    helpText: 'Du registrerer også her dersom EØS-/utenlandsproblematikk ikke er fanget opp.',
+    field: 'vedtaketBruktFeilHjemmel',
+    label: 'Det er brukt feil hjemmel',
+    allRegistreringshjemler: 'vedtaketBruktFeilHjemmelHjemlerList',
+    type: KvalitetsvurderingInput.CHECKBOX,
+  },
+  {
+    field: 'vedtaketAlleRelevanteHjemlerErIkkeVurdert',
+    label: 'Alle relevante hjemler er ikke vurdert',
+    saksdatahjemler: 'vedtaketAlleRelevanteHjemlerErIkkeVurdertHjemlerList',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'vedtaketLovbestemmelsenTolketFeil',
-    label: 'Lovbestemmelsen er tolket feil.',
-    hjemler: 'vedtaketLovbestemmelsenTolketFeilHjemlerList',
+    label: 'Lovbestemmelsen er tolket feil',
     helpText: 'F.eks. er «en vesentlig medvirkende årsak» tolket som et krav om hovedårsak.',
+    saksdatahjemler: 'vedtaketLovbestemmelsenTolketFeilHjemlerList',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevet',
-    label: 'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet.',
-    hjemler: 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList',
+    label: 'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet',
+    saksdatahjemler: 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList',
     helpText:
       'F.eks. er ikke alle relevante momenter eller unntak beskrevet som er nødvendige for at bruker skal forstå innholdet i regelen.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'vedtaketDetErLagtTilGrunnFeilFaktum',
-    label: 'Det er lagt til grunn feil faktum.',
+    label: 'Det er lagt til grunn feil faktum',
     helpText:
       'Med faktum mener vi de faktiske forhold du legger til grunn etter å ha vurdert og vektet bevisene i saken. Du registrerer her dersom alle relevante bevis ikke er sett/vurdert, herunder informasjon fra andre fagsystemer NAV har tilgang til. Du registrerer også her dersom bevis er tolket eller vektlagt feil.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'vedtaketFeilKonkretRettsanvendelse',
-    label: 'Feil i den konkrete rettsanvendelsen.',
-    hjemler: 'vedtaketFeilKonkretRettsanvendelseHjemlerList',
+    label: 'Feil i den konkrete rettsanvendelsen',
+    saksdatahjemler: 'vedtaketFeilKonkretRettsanvendelseHjemlerList',
     helpText:
       'Det er lagt til grunn riktig tolkning av rettsregelen og riktig faktum, men likevel kommet til feil resultat/subsumsjonen er feil.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'vedtaketIkkeKonkretIndividuellBegrunnelse',
-    label: 'Begrunnelsen er ikke konkret og individuell nok.',
+    label: 'Begrunnelsen er ikke konkret og individuell nok',
     groupErrorField: 'vedtaketIkkeKonkretIndividuellBegrunnelseGroup',
+    type: KvalitetsvurderingInput.CHECKBOX,
     checkboxes: [
       {
         field: 'vedtaketIkkeKonkretIndividuellBegrunnelseIkkeGodtNokFremFaktum',
-        label: 'Det går ikke godt nok frem hva slags faktum som er lagt til grunn.',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Det går ikke godt nok frem hva slags faktum som er lagt til grunn',
       },
       {
         field: 'vedtaketIkkeKonkretIndividuellBegrunnelseIkkeGodtNokFremHvordanRettsregelenErAnvendtPaaFaktum',
-        label: 'Det går ikke godt nok frem hvordan rettsregelen er anvendt på faktum.',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Det går ikke godt nok frem hvordan rettsregelen er anvendt på faktum',
       },
       {
         field: 'vedtaketIkkeKonkretIndividuellBegrunnelseMyeStandardtekst',
-        label: 'Det er mye standardtekst.',
+        type: KvalitetsvurderingInput.CHECKBOX,
+        label: 'Det er mye standardtekst',
       },
     ],
   },
   {
     field: 'vedtaketSpraakOgFormidlingErIkkeTydelig',
-    label: 'Språket og formidlingen er ikke tydelig.',
+    label: 'Språket og formidlingen er ikke tydelig',
     helpText:
       'F.eks. er ikke språket tilpasset mottaker, oppbyggingen av innholdet er ulogisk, det er mye gjentagelser eller det er ikke mellomrom mellom ordene i brevet.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
 ];

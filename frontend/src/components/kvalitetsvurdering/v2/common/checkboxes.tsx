@@ -1,10 +1,12 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
-import { IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { Hjemler } from './hjemler';
+import { AllRegistreringshjemler } from '@app/components/kvalitetsvurdering/v2/common/all-registreringshjemler';
+import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/common/textarea';
+import { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { KvalitetsskjemaCheckbox } from './kvalitetsvurdering-checkbox';
+import { Oppgavehjemler } from './oppgavehjemler';
 import { SubSection } from './styled-components';
-import { ICheckboxParams } from './types';
+import { CheckboxParams, InputParams, KvalitetsvurderingInput } from './types';
 import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';
@@ -12,7 +14,7 @@ import { useValidationError } from './use-validation-error';
 interface Props {
   kvalitetsvurdering: IKvalitetsvurderingData;
   update: (data: Partial<IKvalitetsvurderingData>) => void;
-  checkboxes: ICheckboxParams[];
+  checkboxes: InputParams[];
   show: boolean;
   groupErrorField?: keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;
   hideLegend?: boolean;
@@ -59,41 +61,61 @@ export const Checkboxes = ({
         error={error}
         id={groupErrorField}
       >
-        {checkboxes.map((m) => (
-          <Checkbox key={m.field} {...m} />
-        ))}
+        {checkboxes.map((m) => {
+          if (isCheckbox(m)) {
+            return <Checkbox key={m.field} {...m} />;
+          }
+
+          return <KvalitetsskjemaTextarea key={m.field} {...m} />;
+        })}
       </CheckboxGroup>
     </SubSection>
   );
 };
 
-const Checkbox = ({ field, label, helpText, hjemler, checkboxes, groupErrorField }: ICheckboxParams) => {
+const Checkbox = ({
+  field,
+  label,
+  helpText,
+  saksdatahjemler,
+  allRegistreringshjemler,
+  checkboxes,
+  groupErrorField,
+}: CheckboxParams) => {
   const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV2();
 
   if (isLoading) {
     return null;
   }
 
+  const show = checkboxes !== undefined && checkboxes.length !== 0 && kvalitetsvurdering[field] === true;
+
   return (
     <>
       <KvalitetsskjemaCheckbox field={field} helpText={helpText}>
         {label}
       </KvalitetsskjemaCheckbox>
-      {typeof hjemler === 'undefined' ? null : <Hjemler field={hjemler} show={kvalitetsvurdering[field]} />}
+      {typeof saksdatahjemler === 'undefined' ? null : <Oppgavehjemler field={saksdatahjemler} parentKey={field} />}
+      {typeof allRegistreringshjemler === 'undefined' ? null : (
+        <AllRegistreringshjemler field={allRegistreringshjemler} parentKey={field} />
+      )}
       {typeof checkboxes === 'undefined' ? null : (
         <Checkboxes
           kvalitetsvurdering={kvalitetsvurdering}
           checkboxes={checkboxes}
-          show={kvalitetsvurdering[field]}
           label={label}
           hideLegend
           groupErrorField={groupErrorField}
           update={update}
+          show={show}
         />
       )}
     </>
   );
 };
 
-const getFields = (checkboxes: ICheckboxParams[]): ICheckboxParams['field'][] =>
-  checkboxes.flatMap((checkbox) => [checkbox.field, ...getFields(checkbox.checkboxes ?? [])]);
+const getFields = (checkboxes: InputParams[]): (keyof IKvalitetsvurderingBooleans)[] =>
+  checkboxes.filter(isCheckbox).flatMap((checkbox) => [checkbox.field, ...getFields(checkbox.checkboxes ?? [])]);
+
+const isCheckbox = (checkbox: InputParams): checkbox is CheckboxParams =>
+  checkbox.type === KvalitetsvurderingInput.CHECKBOX;

@@ -8,20 +8,19 @@ import {
   StyledListItem,
   StyledNoneSelected,
   StyledSelectedHjemler,
-  StyledSelectedHjemlerWrapper,
   StyledSelectedList,
   StyledSelectedSection,
   StyledSelectedSectionHeader,
 } from './styled-components';
 
-const EMPTY_LIST: string[] = [];
+interface Props {
+  selected: string[];
+}
 
-export const SelectedHjemlerList = () => {
+export const SelectedHjemlerList = ({ selected }: Props) => {
   const { data: oppgave } = useOppgave();
 
   const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
-
-  const hjemmelIdList = oppgave?.resultat.hjemmelIdSet ?? EMPTY_LIST;
 
   const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
     () =>
@@ -29,11 +28,11 @@ export const SelectedHjemlerList = () => {
         .map(({ lovkilde, registreringshjemler }) => ({
           lovkilde,
           registreringshjemler: registreringshjemler.filter((registreringshjemmel) =>
-            hjemmelIdList.includes(registreringshjemmel.id),
+            selected.includes(registreringshjemmel.id),
           ),
         }))
         .filter(({ registreringshjemler }) => registreringshjemler.length !== 0),
-    [hjemmelIdList, hjemler],
+    [selected, hjemler],
   );
 
   if (typeof oppgave === 'undefined') {
@@ -41,11 +40,9 @@ export const SelectedHjemlerList = () => {
   }
 
   return (
-    <StyledSelectedHjemlerWrapper>
-      <StyledSelectedHjemler>
-        <SelectedChildren registreringshjemmelIdList={list} />
-      </StyledSelectedHjemler>
-    </StyledSelectedHjemlerWrapper>
+    <StyledSelectedHjemler>
+      <SelectedChildren registreringshjemmelIdList={list} />
+    </StyledSelectedHjemler>
   );
 };
 

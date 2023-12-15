@@ -6,7 +6,7 @@ import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
 import { StyledHeading, StyledRadioGroup } from './common/styled-components';
-import { ICheckboxParams } from './common/types';
+import { InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
@@ -61,34 +61,38 @@ export const BrukAvRaadgivendeLege = () => {
         checkboxes={CHECKBOXES}
         update={update}
         show={brukAvRaadgivendeLege === RadiovalgExtended.MANGELFULLT}
-        groupErrorField="raadgivendeLegeGroup"
+        groupErrorField="brukAvRaadgivendeLegeGroup"
         label="Hva er mangelfullt?"
       />
     </section>
   );
 };
 
-const CHECKBOXES: ICheckboxParams[] = [
+const CHECKBOXES: InputParams[] = [
   {
     field: 'raadgivendeLegeIkkebrukt',
+    label: 'Rådgivende lege er ikke brukt',
     helpText:
-      'Du registrerer her om rådgivende lege burde vært brukt av underinstansen for å sikre og/eller synliggjøre at det trygdemedisinske er forstått riktig.',
-    label: 'Rådgivende lege er ikke brukt.',
+      'Du registrerer her om rådgivende lege burde vært brukt for å sikre og/eller synliggjøre at det trygdemedisinske er forstått riktig.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'raadgivendeLegeMangelfullBrukAvRaadgivendeLege',
+    label: 'Saksbehandlers bruk av rådgivende lege er mangelfull',
     helpText:
       'F.eks. har saksbehandler stilt feil spørsmål, eller saksbehandler har lagt for mye vekt på vurdering fra rådgivende lege/brukt som «fasit».',
-    label: 'Saksbehandlers bruk av rådgivende lege er mangelfull.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'raadgivendeLegeUttaltSegOmTemaUtoverTrygdemedisin',
-    label: 'Rådgivende lege har uttalt seg om tema utover trygdemedisin.',
+    label: 'Rådgivende lege har uttalt seg om tema utover trygdemedisin',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
   {
     field: 'raadgivendeLegeBegrunnelseMangelfullEllerIkkeDokumentert',
+    label: 'Rådgivende lege er brukt, men begrunnelsen fra rådgivende lege er mangelfull eller ikke dokumentert',
     helpText:
       'Du registrerer her om begrunnelsen er dokumentert, men for tynn, f.eks. kun inneholder en konklusjon. Du registrerer her om det ikke går frem hva slags dokumentasjon rådgivende lege har sett. Du registrerer også her om vurderingen fra rådgivende lege ikke er dokumentert i det hele tatt.',
-    label: 'Rådgivende lege er brukt, men begrunnelsen fra rådgivende lege er mangelfull eller ikke dokumentert.',
+    type: KvalitetsvurderingInput.CHECKBOX,
   },
 ];

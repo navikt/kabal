@@ -4,14 +4,14 @@ import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
-  helpText: string;
+  helpText: string | undefined;
   placement?: HelpTextProps['placement'];
 }
 
 export const ContainerWithHelpText = ({ children, helpText, placement = 'right' }: Props) => (
   <Container>
     {children}
-    <HelpText placement={placement}>{helpText}</HelpText>
+    {helpText !== undefined ? <HelpText placement={placement}>{helpText}</HelpText> : null}
   </Container>
 );
 

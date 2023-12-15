@@ -8,13 +8,33 @@ interface SakensDokumenter {
   klageforberedelsenSakensDokumenterManglerFysiskSaksmappe: boolean; // Mangler fysisk saksmappe.
 }
 
-interface Klageforberedelsen extends SakensDokumenter {
+interface UtredningenUnderKlageforberedelsen
+  extends KlageforberedelsenUtredningenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysninger,
+    KlageforberedelsenUtredningenKlageinstansenHarSelvInnhentetNyeOpplysninger {
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysninger: boolean; // Klageinstansen har bedt underinstansen om å innhente nye opplysninger.
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysninger: boolean; // Klageinstansen har selv innhentet nye opplysninger.
+}
+
+interface KlageforberedelsenUtredningenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysninger {
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysningerFritekst:
+    | string
+    | null;
+}
+
+interface KlageforberedelsenUtredningenKlageinstansenHarSelvInnhentetNyeOpplysninger {
+  klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysningerFritekst:
+    | string
+    | null;
+}
+
+interface Klageforberedelsen extends SakensDokumenter, UtredningenUnderKlageforberedelsen {
   klageforberedelsen: Radiovalg | null; // Klageforberedelsen.
   klageforberedelsenOversittetKlagefristIkkeKommentert: boolean; // Oversittet klagefrist er ikke kommentert.
   klageforberedelsenKlagersRelevanteAnfoerslerIkkeTilstrekkeligKommentertImoetegaatt: boolean; // Klagers relevante anførsler er ikke tilstrekkelig kommentert/imøtegått.
   klageforberedelsenFeilVedBegrunnelsenForHvorforAvslagOpprettholdesKlagerIkkeOppfyllerVilkaar: boolean; // Feil ved begrunnelsen for hvorfor avslag opprettholdes/klager ikke oppfyller vilkår.
   klageforberedelsenOversendelsesbrevetsInnholdErIkkeISamsvarMedSakensTema: boolean; // Oversendelsesbrevets innhold er ikke i samsvar med sakens tema.
   klageforberedelsenOversendelsesbrevIkkeSendtKopiTilPartenEllerFeilMottaker: boolean; // Det er ikke sendt kopi av oversendelsesbrevet til parten, eller det er sendt til feil mottaker.
+  klageforberedelsenUtredningenUnderKlageforberedelsen: boolean; // Utredningen under klageforberedelsen.
 }
 
 interface Utredningen {
@@ -23,12 +43,18 @@ interface Utredningen {
   utredningenAvInntektsforhold: boolean; // Utredningen av inntektsforhold.
   utredningenAvArbeidsaktivitet: boolean; // Utredningen av arbeidsaktivitet.
   utredningenAvEoesUtenlandsproblematikk: boolean; // Utredningen av EØS-/utenlandsproblematikk.
+  utredningenAvSivilstandBoforhold: boolean; // Utredningen av sivilstand/boforhold.
   utredningenAvAndreAktuelleForholdISaken: boolean; // Utredningen av andre aktuelle forhold i saken.
 }
 
-interface BruktFeilHjemler {
-  vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdert: boolean; // Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert.
-  vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList: string[]; // Default alle hjemler fra saksdata.
+interface BruktFeilHjemmel {
+  vedtaketBruktFeilHjemmel: boolean; // Det er brukt feil hjemmel eller alle relevante hjemler er ikke vurdert.
+  vedtaketBruktFeilHjemmelHjemlerList: string[]; // Default alle hjemler registreringshjmler til ytelsen.
+}
+
+interface AlleRelevanteHjemlerErIkkeVurdert {
+  vedtaketAlleRelevanteHjemlerErIkkeVurdert: boolean; // Alle relevante hjemler er ikke vurdert.
+  vedtaketAlleRelevanteHjemlerErIkkeVurdertHjemlerList: string[]; // Default alle hjemler fra saksdata.
 }
 
 interface LovbestemmelsenTolketFeil {
@@ -54,7 +80,8 @@ interface KonkretIndividuellBegrunnelse {
 }
 
 interface Vedtaket
-  extends BruktFeilHjemler,
+  extends BruktFeilHjemmel,
+    AlleRelevanteHjemlerErIkkeVurdert,
     LovbestemmelsenTolketFeil,
     InnholdetIRettsreglene,
     FeilKonkretRettsanvendelse,
@@ -80,6 +107,20 @@ interface Annet {
   annetFritekst: string | null; // Annet (valgfri).
 }
 
+export type IKvalitetsvurderingSaksdataHjemler = Pick<
+  IKvalitetsvurderingData,
+  | 'vedtaketLovbestemmelsenTolketFeilHjemlerList'
+  | 'vedtaketFeilKonkretRettsanvendelseHjemlerList'
+  | 'vedtaketBruktFeilHjemmelHjemlerList'
+  | 'vedtaketAlleRelevanteHjemlerErIkkeVurdertHjemlerList'
+  | 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList'
+>;
+
+export type IKvalitetsvurderingAllRegistreringshjemler = Pick<
+  IKvalitetsvurderingData,
+  'vedtaketBruktFeilHjemmelHjemlerList'
+>;
+
 export type IKvalitetsvurderingBooleans = Omit<
   IKvalitetsvurderingData,
   | 'klageforberedelsen'
@@ -87,16 +128,22 @@ export type IKvalitetsvurderingBooleans = Omit<
   | 'annetFritekst'
   | 'brukAvRaadgivendeLege'
   | 'vedtaket'
-  | 'vedtaketLovbestemmelsenTolketFeilHjemlerList'
-  | 'vedtaketFeilKonkretRettsanvendelseHjemlerList'
-  | 'vedtaketBruktFeilHjemmelEllerAlleRelevanteHjemlerErIkkeVurdertHjemlerList'
-  | 'vedtaketInnholdetIRettsregleneErIkkeTilstrekkeligBeskrevetHjemlerList'
+  | keyof IKvalitetsvurderingSaksdataHjemler
+  | keyof IKvalitetsvurderingAllRegistreringshjemler
+  | keyof IKvalitetsvurderingStrings
+  | keyof Annet
+>;
+
+export type IKvalitetsvurderingStrings = Pick<
+  IKvalitetsvurderingData,
+  | 'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarBedtUnderinstansenOmAaInnhenteNyeOpplysningerFritekst'
+  | 'klageforberedelsenUtredningenUnderKlageforberedelsenKlageinstansenHarSelvInnhentetNyeOpplysningerFritekst'
+  | 'annetFritekst'
 >;
 
 export interface IKvalitetsvurderingData
   extends Klageforberedelsen,
     Utredningen,
-    Vedtaket,
     Vedtaket,
     BrukAvRaadgivendeLege,
     Annet {}

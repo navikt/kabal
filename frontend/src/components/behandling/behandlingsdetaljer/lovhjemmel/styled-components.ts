@@ -4,10 +4,6 @@ export const StyledLovhjemmelSelect = styled.div`
   position: relative;
 `;
 
-export const StyledSelectedHjemlerWrapper = styled.div`
-  min-height: 350px;
-`;
-
 export const StyledSelectedHjemler = styled.div`
   margin-top: 10px;
   padding-top: 10px;
