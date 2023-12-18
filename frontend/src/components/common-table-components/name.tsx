@@ -10,11 +10,13 @@ interface Props {
 export const Name = ({ navIdent }: Props) => {
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(navIdent ?? skipToken);
 
+  if (navIdent === null) {
+    return null;
+  }
+
   if (signatureIsLoading) {
     return <LoadingCellContent />;
   }
 
-  const name = signature?.customLongName ?? signature?.longName ?? 'Ukjent';
-
-  return name;
+  return signature?.customLongName ?? signature?.longName ?? 'Ukjent';
 };

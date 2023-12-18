@@ -8,6 +8,9 @@ import { RolTildeling } from '@app/components/common-table-components/rol-tildel
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
+// See relevant-oppgaver.tsx for more information about this dependency cycle
+// eslint-disable-next-line import/no-cycle
+import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -202,6 +205,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <RolTildeling oppgave={oppgave} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.RelevantOppgaver:
+        return (
+          <Table.DataCell key={key}>
+            <RelevantOppgaver oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
       default:

@@ -15,7 +15,7 @@ type ReturnType = [Actions, false] | [undefined, true];
 
 export const useOppgaveActions = (
   tildeltSaksbehandler: string | null,
-  hasMedunderskriver: boolean,
+  medunderskriver: string | null,
   ytelse?: string,
 ): ReturnType => {
   const { data: user, isLoading: isUserLoading } = useUser();
@@ -28,6 +28,7 @@ export const useOppgaveActions = (
       return [undefined, true];
     }
 
+    const hasMedunderskriver = medunderskriver !== null;
     const isAssigned = tildeltSaksbehandler !== null;
     const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
 
@@ -35,6 +36,7 @@ export const useOppgaveActions = (
       hasYtelseAccess,
       hasOppgavestyringAccess: user.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER),
       hasSaksbehandlerAccess: user.roller.includes(Role.KABAL_SAKSBEHANDLING),
+      isMedunderskriver: hasMedunderskriver && user.navIdent === medunderskriver,
       isAssignedToSelf,
       isAssigned,
     };
@@ -51,18 +53,15 @@ export const useOppgaveActions = (
       },
       false,
     ];
-  }, [isLoading, user, tildeltSaksbehandler, hasYtelseAccess, hasMedunderskriver]);
+  }, [isLoading, user, medunderskriver, tildeltSaksbehandler, hasYtelseAccess]);
 };
 
-interface Values {
-  hasYtelseAccess: boolean;
-  hasSaksbehandlerAccess: boolean;
-  hasOppgavestyringAccess: boolean;
-  isAssigned: boolean;
-  isAssignedToSelf: boolean;
-}
-
-const canAssignSelf = ({ hasYtelseAccess, hasSaksbehandlerAccess, isAssigned }: Values): boolean => {
+const canAssignSelf = ({
+  hasYtelseAccess,
+  hasSaksbehandlerAccess,
+  isAssignedToSelf,
+  isMedunderskriver,
+}: Values): boolean => {
   if (!hasSaksbehandlerAccess) {
     return false;
   }
@@ -71,7 +70,11 @@ const canAssignSelf = ({ hasYtelseAccess, hasSaksbehandlerAccess, isAssigned }: 
     return false;
   }
 
-  return !isAssigned;
+  if (isMedunderskriver) {
+    return false;
+  }
+
+  return !isAssignedToSelf;
 };
 
 const canAssignOthers = ({ isAssignedToSelf, hasSaksbehandlerAccess, hasOppgavestyringAccess }: Values): boolean => {
@@ -85,3 +88,12 @@ const canAssignOthers = ({ isAssignedToSelf, hasSaksbehandlerAccess, hasOppgaves
 
   return false;
 };
+
+interface Values {
+  hasYtelseAccess: boolean;
+  hasSaksbehandlerAccess: boolean;
+  hasOppgavestyringAccess: boolean;
+  isMedunderskriver: boolean;
+  isAssigned: boolean;
+  isAssignedToSelf: boolean;
+}

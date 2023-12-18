@@ -2,6 +2,8 @@ import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { LoadingRow } from '@app/components/common-table-components/loading-row';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+// See relevant-oppgaver.tsx for more information about this dependency cycle
+// eslint-disable-next-line import/no-cycle
 import { OppgaveRow } from './oppgave-row';
 
 interface OppgaveRowsProps {
