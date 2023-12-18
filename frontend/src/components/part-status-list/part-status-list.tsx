@@ -14,13 +14,19 @@ interface Props extends Pick<IPart, 'statusList'> {
   variant?: TagProps['variant'];
 }
 
-export const PartStatusList = ({ statusList, size, variant }: Props) => (
-  <Container>
-    {statusList.map((status) => (
-      <PartStatus status={status} size={size} variant={variant} key={status.status} />
-    ))}
-  </Container>
-);
+export const PartStatusList = ({ statusList, size, variant }: Props) => {
+  if (statusList.length === 0) {
+    return null;
+  }
+
+  return (
+    <Container>
+      {statusList.map((status) => (
+        <PartStatus status={status} size={size} variant={variant} key={status.status} />
+      ))}
+    </Container>
+  );
+};
 
 interface IStatusProps {
   status: IPersonStatus | IOrganizationStatus;

@@ -33,7 +33,7 @@ export const UnfinishedFooter = () => {
         <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary" />
         <VentButton />
         <BackLink />
-        <DeassignOppgave />
+        <DeassignOppgave oppgave={oppgave} />
         <NewAnkebehandlingButton />
         <FeilregistrerButton />
       </StyledButtons>

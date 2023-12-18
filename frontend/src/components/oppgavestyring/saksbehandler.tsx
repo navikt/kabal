@@ -14,7 +14,7 @@ const NOT_SELECTED = 'NOT_SELECTED';
 export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
-    oppgave.medunderskriver.navIdent !== null,
+    oppgave.medunderskriver.navIdent,
     oppgave.ytelseId,
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(

@@ -29,7 +29,7 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
   const [tildel] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onTildelSaksbehandler = async (navIdent: string) => {
+  const tildelSaksbehandler = async (navIdent: string) => {
     setIsLoading(true);
 
     try {
@@ -55,7 +55,7 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
     }
   };
 
-  return [onTildelSaksbehandler, { isLoading }];
+  return [tildelSaksbehandler, { isLoading }];
 };
 
 export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseFradel => {
@@ -64,7 +64,7 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
   const [fradel] = useFradelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onFradelSaksbehandler = async (params: FradelWithHjemler | FradelWithoutHjemler) => {
+  const fradelSaksbehandler = async (params: FradelWithHjemler | FradelWithoutHjemler) => {
     setIsLoading(true);
 
     try {
@@ -92,7 +92,7 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
     }
   };
 
-  return [onFradelSaksbehandler, { isLoading }];
+  return [fradelSaksbehandler, { isLoading }];
 };
 
 const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {

@@ -4,24 +4,27 @@ import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Popup } from '../../deassign/popup';
 
-export const DeassignOppgave = () => {
-  const { data: oppgave } = useOppgave();
+interface Props {
+  oppgave: IOppgavebehandling;
+}
+
+export const DeassignOppgave = ({ oppgave }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [warningIsOpen, setWarningIsOpen] = useState(false);
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
   const canEdit = useCanEdit();
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
-    oppgave?.tildeltSaksbehandlerident ?? null,
-    typeof oppgave === 'undefined' || oppgave.medunderskriver.navIdent !== null, // Assume medunderskriver exists.
+    oppgave.tildeltSaksbehandlerident,
+    oppgave.medunderskriver.navIdent,
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

@@ -8,6 +8,11 @@ export interface ApiResponse {
   behandlinger: string[];
 }
 
+export interface RelevantOppgaverResponse {
+  aapneBehandlinger: string[];
+  paaVentBehandlinger: string[];
+}
+
 export interface UtgaatteApiResponse {
   antall: number;
 }

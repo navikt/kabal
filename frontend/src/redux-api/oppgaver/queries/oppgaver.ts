@@ -9,6 +9,7 @@ import {
   IOppgaverResponse,
   IRolList,
   ISaksbehandlere,
+  RelevantOppgaverResponse,
   UtgaatteApiResponse,
 } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
@@ -41,17 +42,11 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.ENHETENS_FERDIGE],
     }),
     getEnhetensUferdigeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
-      query: ({ enhetId, ...params }) => ({
-        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige`,
-        params,
-      }),
+      query: ({ enhetId, ...params }) => ({ url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/uferdige`, params }),
       providesTags: [OppgaveListTagTypes.ENHETENS_UFERDIGE],
     }),
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
-      query: ({ enhetId, ...params }) => ({
-        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent`,
-        params,
-      }),
+      query: ({ enhetId, ...params }) => ({ url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent`, params }),
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
@@ -96,18 +91,15 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.ROL_FERDIGE],
     }),
     getRolReturnerteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: ({ ...params }) => ({
-        url: `/kabal-search/kroloppgaver/tildelte/returnerte`,
-        params,
-      }),
+      query: (params) => ({ url: `/kabal-search/kroloppgaver/tildelte/returnerte`, params }),
       providesTags: [OppgaveListTagTypes.KROLS_FERDIGE],
     }),
     getRolUferdigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: ({ ...params }) => ({
-        url: `/kabal-search/kroloppgaver/tildelte/uferdige`,
-        params,
-      }),
+      query: (params) => ({ url: `/kabal-search/kroloppgaver/tildelte/uferdige`, params }),
       providesTags: [OppgaveListTagTypes.KROLS_UFERDIGE],
+    }),
+    getRelevantOppgaver: builder.query<RelevantOppgaverResponse, string>({
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/relevant`,
     }),
   }),
 });
@@ -132,4 +124,5 @@ export const {
   useGetRolReturnerteOppgaverQuery,
   useGetRolUferdigeOppgaverQuery,
   useGetRolsInEnhetQuery,
+  useGetRelevantOppgaverQuery,
 } = oppgaverQuerySlice;

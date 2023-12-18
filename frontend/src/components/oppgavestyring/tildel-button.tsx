@@ -23,11 +23,7 @@ export const TildelButton = ({
   const { data: user, isLoading: isUserLoading } = useUser();
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
-  const [access, isAccessLoading] = useOppgaveActions(
-    tildeltSaksbehandlerident,
-    medunderskriver.navIdent !== null,
-    ytelseId,
-  );
+  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);
 
   if (isUserLoading || isAccessLoading || typeof user === 'undefined') {
     return null;
