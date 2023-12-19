@@ -8,6 +8,7 @@ import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
@@ -26,12 +27,12 @@ export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
   const { value, setValue } = useDocumentsPdfViewed();
 
-  return <DocumentTitleInternal {...props} shownDocument={value} setShownDocument={setValue} />;
+  return <DocumentTitleInternal {...props} shownDocuments={value} setShownDocuments={setValue} />;
 };
 
 interface DocumentTitleInternalProps extends Props {
-  shownDocument: IShownDocument[];
-  setShownDocument: (value: IShownDocument[]) => void;
+  shownDocuments: IShownDocument[];
+  setShownDocuments: (value: IShownDocument[]) => void;
 }
 
 const DocumentTitleInternal = memo(
@@ -40,8 +41,8 @@ const DocumentTitleInternal = memo(
     dokumentInfoId,
     tittel,
     harTilgangTilArkivvariant,
-    shownDocument,
-    setShownDocument,
+    shownDocuments,
+    setShownDocuments,
   }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
@@ -53,8 +54,8 @@ const DocumentTitleInternal = memo(
     const [editMode, _setEditMode] = useState(false);
 
     const isInlineOpen = useMemo(
-      () => shownDocument.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
-      [dokumentInfoId, shownDocument],
+      () => shownDocuments.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
+      [dokumentInfoId, shownDocuments],
     );
 
     const setEditMode = useCallback(
@@ -98,7 +99,7 @@ const DocumentTitleInternal = memo(
       const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
 
       if (!shouldOpenInNewTab) {
-        setShownDocument([
+        setShownDocuments([
           {
             type: DocumentTypeEnum.JOURNALFOERT,
             dokumentInfoId,
@@ -163,7 +164,8 @@ const DocumentTitleInternal = memo(
     prevProps.tittel === nextProps.tittel &&
     prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
-    prevProps.journalpostId === nextProps.journalpostId,
+    prevProps.journalpostId === nextProps.journalpostId &&
+    areArraysEqual(prevProps.shownDocuments, nextProps.shownDocuments),
 );
 
 DocumentTitleInternal.displayName = 'DocumentTitleInternal';
