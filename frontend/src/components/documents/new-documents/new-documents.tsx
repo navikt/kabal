@@ -17,6 +17,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import {
+  DistribusjonsType,
   DocumentTypeEnum,
   IFileDocument,
   IJournalfoertDokumentReference,
@@ -125,14 +126,17 @@ export const NewDocuments = () => {
     let h = PADDING_TOP + PADDING_BOTTOM;
 
     for (const d of documentMap.values()) {
-      const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS;
+      const isKjennelseFraTrygderetten =
+        d.mainDocument?.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+      const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS || isKjennelseFraTrygderetten;
       const pdfLength = d.pdfOrSmartDocuments.length;
       const journalfoertLength = d.journalfoertDocumentReferences.length;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
+      const hasOverview = !isKjennelseFraTrygderetten && hasAttachments;
 
       h += hasUploadButton ? UPLOAD_BUTTON_HEIGHT : 0;
-      h += hasAttachments ? ROW_HEIGHT : 0;
+      h += hasOverview ? ROW_HEIGHT : 0;
       h += pdfLength * ROW_HEIGHT;
       h += hasSeparator ? SEPARATOR_HEIGHT : 0;
       h += journalfoertLength * ROW_HEIGHT;
@@ -173,16 +177,18 @@ export const NewDocuments = () => {
         continue;
       }
 
+      const isKjennelseFraTrygderetten = mainDocument.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+
       const pdfLength = pdfOrSmartDocuments.length;
       const journalfoertLength = journalfoertDocumentReferences.length;
       const vedleggCount = pdfLength + journalfoertLength;
       const hasAttachments = vedleggCount !== 0;
 
-      const overview = hasAttachments ? 1 : 0;
+      const overview = !isKjennelseFraTrygderetten && hasAttachments ? 1 : 0;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const separatorCount = hasSeparator ? 1 : 0;
 
-      const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS;
+      const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS || isKjennelseFraTrygderetten;
       const uploadButtonCount = hasUploadButton ? 1 : 0;
 
       const virtualRows = overview + separatorCount + uploadButtonCount;

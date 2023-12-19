@@ -16,6 +16,8 @@ import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-
 import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';
 
+const MIN_WIDTH = 550;
+
 export const Documents = () => {
   const { value: shown = true } = useDocumentsEnabled();
   const { data, isLoading } = useOppgave();
@@ -50,7 +52,7 @@ const ExpandedDocuments = () => {
 
   const minWidth = useMemo(() => {
     if (!isExpanded) {
-      return 475;
+      return MIN_WIDTH;
     }
 
     const _minWidth =
@@ -68,7 +70,7 @@ const ExpandedDocuments = () => {
       (columns.TEMA ? SIZES[Fields.Tema][0] : 0) +
       (columns.TYPE ? SIZES[Fields.Type][0] : 0);
 
-    return Math.max(_minWidth, 550);
+    return Math.max(_minWidth, MIN_WIDTH);
   }, [columns, isExpanded]);
 
   // Prevent ResizeObserver from reinitializing on every resize and change.

@@ -25,6 +25,7 @@ export enum DistribusjonsType {
   NOTAT = '2',
   VEDTAKSBREV = '4',
   BESLUTNING = '5',
+  KJENNELSE_FRA_TRYGDERETTEN = '6',
 }
 
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
@@ -32,6 +33,7 @@ export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.BESLUTNING]: 'Beslutningsbrev',
   [DistribusjonsType.BREV]: 'Brev',
   [DistribusjonsType.NOTAT]: 'Notat',
+  [DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN]: 'Kjennelse fra Trygderetten',
 };
 
 interface IBaseDocument<P extends string | null = UUID | null> {
@@ -64,6 +66,7 @@ export interface IFileDocument<P extends string | null = UUID | null> extends IB
   isSmartDokument: false;
   templateId?: never;
   content?: never;
+  datoMottatt: string | null;
 }
 
 export interface ISmartDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {

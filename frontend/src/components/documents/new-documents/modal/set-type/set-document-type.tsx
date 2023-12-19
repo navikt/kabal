@@ -2,17 +2,24 @@ import { ToggleGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
-import { OPTIONS_LIST } from './options';
 
 interface Props {
   document: IMainDocument;
+  hasAttachments: boolean;
 }
 
-export const SetDocumentType = ({ document }: Props) => {
+export const SetDocumentType = ({ document, hasAttachments }: Props) => {
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
+
+  const options = useDistribusjonstypeOptions(document.type);
+
+  if (hasAttachments) {
+    return null;
+  }
 
   const onChange = (dokumentTypeId: string) => {
     if (isDocumentType(dokumentTypeId) && oppgaveId !== skipToken) {
@@ -28,7 +35,7 @@ export const SetDocumentType = ({ document }: Props) => {
       value={document.dokumentTypeId}
       size="small"
     >
-      {OPTIONS_LIST.map(({ value, label }) => (
+      {options.map(({ value, label }) => (
         <ToggleGroup.Item key={value} value={value}>
           {label}
         </ToggleGroup.Item>

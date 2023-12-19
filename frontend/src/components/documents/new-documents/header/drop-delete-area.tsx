@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDeleteDocument } from '@app/hooks/use-can-edit-document';
+import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
 import { useAttachments, useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';

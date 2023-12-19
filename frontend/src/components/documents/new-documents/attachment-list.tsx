@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
+import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
 import {
+  DistribusjonsType,
   IFileDocument,
   IJournalfoertDokumentReference,
   IMainDocument,
@@ -45,7 +47,9 @@ export const AttachmentList = ({
   hasAttachments,
   hasSeparator,
 }: Props) => {
-  const overviewCount = hasAttachments ? 1 : 0;
+  const isKjennelseFraTrygderetten = parentDocument.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+  const hasOverview = hasAttachments && !isKjennelseFraTrygderetten;
+  const overviewCount = hasOverview ? 1 : 0;
   const totalRowCount = pdfLength + journalfoertLength + overviewCount;
 
   const overviewHeight = overviewCount * ROW_HEIGHT;
@@ -53,6 +57,14 @@ export const AttachmentList = ({
   const separatorHeight = hasSeparator ? SEPARATOR_HEIGHT : 0;
 
   const attachmentListHeight = totalRowCount * ROW_HEIGHT + separatorHeight;
+
+  const sorted = useMemo(() => {
+    if (isKjennelseFraTrygderetten) {
+      return pdfOrSmartDocuments.sort((a, b) => sortWithNumbers(a.tittel, b.tittel));
+    }
+
+    return pdfOrSmartDocuments;
+  }, [isKjennelseFraTrygderetten, pdfOrSmartDocuments]);
 
   return (
     <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
@@ -62,8 +74,8 @@ export const AttachmentList = ({
         style={{ height: attachmentListHeight }}
         aria-rowcount={totalRowCount}
       >
-        {hasAttachments ? <AttachmentsOverview documentId={parentDocument.id} /> : null}
-        {pdfOrSmartDocuments.map((attachment, index) => (
+        {hasOverview ? <AttachmentsOverview documentId={parentDocument.id} /> : null}
+        {sorted.map((attachment, index) => (
           <Attachment
             key={attachment.id}
             attachment={attachment}

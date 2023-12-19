@@ -14,19 +14,20 @@ import { ArchivingIcon } from '@app/components/documents/new-documents/new-docum
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
 interface Props {
   document: IMainDocument;
+  hasAttachments: boolean;
   containsRolAttachments: boolean;
 }
 
 export const NewDocument = memo(
-  ({ document, containsRolAttachments }: Props) => {
+  ({ document, containsRolAttachments, hasAttachments }: Props) => {
     const oppgaveId = useOppgaveId();
     const [getDocuments] = useLazyGetDocumentsQuery();
     const [isExpanded] = useIsExpanded();
@@ -80,7 +81,7 @@ export const NewDocument = memo(
         draggable={isDraggable}
       >
         <DocumentTitle document={document} />
-        {isExpanded ? <SetDocumentType document={document} /> : null}
+        {isExpanded ? <SetDocumentType document={document} hasAttachments={hasAttachments} /> : null}
         {document.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
@@ -95,6 +96,7 @@ export const NewDocument = memo(
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
+    kjennelseFraTrEqual(prev.document, next.document) &&
     prev.containsRolAttachments === next.containsRolAttachments,
 );
 
@@ -121,3 +123,14 @@ const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
     background-color: var(--a-surface-hover);
   }
 `;
+
+const isKjennelseFraTr = (doc: IMainDocument): doc is IFileDocument<null> =>
+  doc.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+
+const kjennelseFraTrEqual = (prev: IMainDocument, next: IMainDocument) => {
+  if (!isKjennelseFraTr(prev) || !isKjennelseFraTr(next)) {
+    return true;
+  }
+
+  return prev.datoMottatt === next.datoMottatt;
+};

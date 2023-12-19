@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import { UserContext } from '@app/components/app/user';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
+import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import {
@@ -115,7 +115,11 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
       $isDragOver={isDragOver}
       style={style}
     >
-      <NewDocument document={document} containsRolAttachments={listProps.containsRolAttachments} />
+      <NewDocument
+        document={document}
+        containsRolAttachments={listProps.containsRolAttachments}
+        hasAttachments={listProps.hasAttachments}
+      />
 
       <AttachmentList parentDocument={document} {...listProps} />
     </StyledParentDocumentListItem>

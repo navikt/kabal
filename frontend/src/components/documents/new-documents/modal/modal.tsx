@@ -5,7 +5,8 @@ import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
+import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -59,6 +60,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
             icon: <DocumentIcon type={type} />,
           }}
           closeOnBackdropClick
+          onClose={() => setOpen(false)}
         >
           <DocumentModalContent
             document={document}
