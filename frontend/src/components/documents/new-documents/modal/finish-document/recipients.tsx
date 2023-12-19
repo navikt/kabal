@@ -6,6 +6,7 @@ import { SelectRecipients } from '@app/components/documents/new-documents/modal/
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { StyledFinishDocument } from './styled-components';
 import { FinishProps } from './types';
 
@@ -31,7 +32,11 @@ export const Receipients = ({ document }: FinishProps) => {
     return [];
   }, [finishError]);
 
-  if (oppgaveIsLoading || typeof data === 'undefined') {
+  if (
+    oppgaveIsLoading ||
+    typeof data === 'undefined' ||
+    document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN
+  ) {
     return null;
   }
 

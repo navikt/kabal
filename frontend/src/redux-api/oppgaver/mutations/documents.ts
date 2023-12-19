@@ -461,6 +461,33 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    setDatoMottatt: builder.mutation<IMainDocument, { oppgaveId: string; dokumentId: string; datoMottatt: string }>({
+      query: ({ oppgaveId, dokumentId, datoMottatt }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/datomottatt`,
+        body: { datoMottatt },
+        method: 'PUT',
+      }),
+      onQueryStarted: async ({ dokumentId, datoMottatt, oppgaveId }, { queryFulfilled }) => {
+        const patchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+            draft.map((doc) =>
+              doc.id === dokumentId &&
+              doc.type === DocumentTypeEnum.UPLOADED &&
+              doc.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN
+                ? { ...doc, datoMottatt }
+                : doc,
+            ),
+          ),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+          toast.error('Kunne ikke endre dato mottatt.');
+        }
+      },
+    }),
   }),
 });
 
@@ -500,4 +527,5 @@ export const {
   useUploadFileDocumentMutation,
   useSetParentMutation,
   useCreateVedleggFromJournalfoertDocumentMutation,
+  useSetDatoMottattMutation,
 } = documentsMutationSlice;

@@ -35,7 +35,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
     return null;
   }
 
-  if (!getIsRolQuestions(document)) {
+  if (!getIsRolQuestions(document) && document.dokumentTypeId !== DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN) {
     return null;
   }
 

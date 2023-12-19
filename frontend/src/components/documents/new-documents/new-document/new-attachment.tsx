@@ -16,7 +16,7 @@ import { DocumentDate } from '@app/components/documents/new-documents/shared/doc
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEditDocument } from '@app/hooks/use-can-edit-document';
+import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { DocumentTitle } from './title';

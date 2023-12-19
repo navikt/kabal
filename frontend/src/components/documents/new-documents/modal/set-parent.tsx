@@ -7,16 +7,17 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 
 interface Props {
   document: IMainDocument;
+  hasAttachments: boolean;
 }
 
-export const SetParentDocument = ({ document }: Props) => {
+export const SetParentDocument = ({ document, hasAttachments }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(oppgaveId);
   const [setParent, { isLoading: isSetting }] = useSetParentMutation();
@@ -42,6 +43,10 @@ export const SetParentDocument = ({ document }: Props) => {
     potentialParents.length === 0 ||
     typeof oppgaveId !== 'string'
   ) {
+    return null;
+  }
+
+  if (document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN && hasAttachments) {
     return null;
   }
 

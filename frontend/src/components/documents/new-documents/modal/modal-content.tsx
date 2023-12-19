@@ -1,23 +1,21 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Modal, Tag } from '@navikt/ds-react';
+import { Button, Modal, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
-import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
+import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
-import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
+import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
 import { SetDocumentType } from '@app/components/documents/new-documents/modal/set-type/set-document-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { SetFilename as SetFileName } from '@app/components/documents/set-filename';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { SetFilename } from '@app/components/documents/set-filename';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDeleteDocument, useCanEditDocument } from '@app/hooks/use-can-edit-document';
-import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
-import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
+import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useAttachments } from '@app/hooks/use-parent-document';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
@@ -25,14 +23,8 @@ import {
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
-  IFileDocument,
-  IJournalfoertDokumentReference,
   IMainDocument,
-  ISmartDocument,
 } from '@app/types/documents/documents';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
 
@@ -55,6 +47,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const isNotat = document.dokumentTypeId === DistribusjonsType.NOTAT;
   const isMainDocument = document.parentId === null;
   const isRolQuestions = getIsRolQuestions(document);
+
+  const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoertDocumentReferences.length > 0;
 
   return (
     <>
@@ -91,9 +85,20 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           </BottomAlignedRow>
         ) : null}
 
-        {canEditDocument && isMainDocument && !isRolQuestions ? <SetDocumentType document={document} /> : null}
+        {canEditDocument &&
+        isMainDocument &&
+        document.type === DocumentTypeEnum.UPLOADED &&
+        document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN ? (
+          <MottattDato document={document} oppgaveId={oppgaveId} />
+        ) : null}
 
-        {canEditDocument && !isRolQuestions ? <SetParentDocument document={document} /> : null}
+        {canEditDocument && isMainDocument && !isRolQuestions ? (
+          <SetDocumentType document={document} hasAttachments={hasAttachments} />
+        ) : null}
+
+        {canEditDocument && !isRolQuestions ? (
+          <SetParentDocument document={document} hasAttachments={hasAttachments} />
+        ) : null}
 
         {canEditDocument && !isNotat && isMainDocument ? <Receipients document={document} /> : null}
 
@@ -126,54 +131,6 @@ const OpprettetTag = ({ document }: { document: IMainDocument }) => {
   );
 };
 
-interface IFinishButtonProps {
-  document: IMainDocument;
-  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
-}
-
-const FinishButton = ({ document, pdfOrSmartDocuments, journalfoertDocumentReferences }: IFinishButtonProps) => {
-  const { data: oppgave } = useOppgave();
-  const hasDocumentsAccess = useHasDocumentsAccess();
-  const containsRolPDFOrSmartAttachments = useContainsRolAttachments(document, pdfOrSmartDocuments);
-  const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoertDocumentReferences);
-  const containsRolAttachments = containsRolPDFOrSmartAttachments || containsRolJournalfoerteAttachments;
-
-  if (!hasDocumentsAccess || document.parentId !== null || oppgave === undefined) {
-    return null;
-  }
-
-  if (getMustWaitForRolToReturn(oppgave, document, containsRolAttachments)) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Kan ikke arkiveres før rådgivende overlege har svart og returnert saken.
-      </Alert>
-    );
-  }
-
-  const isNotat = document.dokumentTypeId !== DistribusjonsType.NOTAT;
-
-  return isNotat ? <SendButtons document={document} /> : <ArchiveButtons document={document} />;
-};
-
-const getMustWaitForRolToReturn = (
-  oppgave: IOppgavebehandling,
-  document: IMainDocument,
-  containsRolAttachments: boolean,
-) => {
-  const isOppgaveTypeRelevantToRol = oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE;
-
-  if (!isOppgaveTypeRelevantToRol) {
-    return false;
-  }
-
-  if (getIsRolQuestions(document)) {
-    return !(containsRolAttachments && oppgave.rol.flowState === FlowState.RETURNED);
-  }
-
-  return false;
-};
-
 const Row = styled.div`
   display: flex;
   flex-direction: row;
@@ -192,7 +149,7 @@ const ModalBody = styled(Modal.Body)`
   width: 100%;
 `;
 
-const StyledSetFilename = styled(SetFileName)`
+const StyledSetFilename = styled(SetFilename)`
   flex-grow: 1;
   max-width: 512px;
 `;
