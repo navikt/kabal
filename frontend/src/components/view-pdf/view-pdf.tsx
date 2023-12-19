@@ -1,12 +1,11 @@
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Loader } from '@navikt/ds-react';
+import { Alert, Button, ButtonProps, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import { Container } from '@app/components/view-pdf/container';
+import { Container, ErrorOrLoadingContainer } from '@app/components/view-pdf/container';
 import { getDataUrl } from '@app/components/view-pdf/get-data-url';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
@@ -27,7 +26,7 @@ export const ViewPDF = () => {
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
   const { showDocumentList, title } = useShownDocuments();
-  const abortController = useRef<AbortController | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const [versions, setVersions] = useState<Version[]>([]);
@@ -62,25 +61,38 @@ export const ViewPDF = () => {
       return;
     }
 
-    if (abortController.current !== null) {
-      abortController.current.abort();
+    // Abort previous request.
+    if (abortControllerRef.current !== null && !abortControllerRef.current.signal.aborted) {
+      abortControllerRef.current.abort('Aborted to load new document.');
     }
 
-    abortController.current = new AbortController();
+    // Create new abort controller for the new request.
+    const abortController = new AbortController();
+    // Make the new abort controller available for the next request.
+    abortControllerRef.current = abortController;
     setIsLoading(true);
 
-    const data = await getDataUrl(url, abortController.current);
+    try {
+      const data = await getDataUrl(url, abortController);
 
-    setVersions((v) => {
-      const lastReady = v.findLast((e) => e.ready);
-      const newData = { data, ready: false, id: Date.now() };
+      setVersions((v) => {
+        const lastReady = v.findLast((e) => e.ready);
+        const newData = { data, ready: false, id: Date.now() };
 
-      if (lastReady !== undefined) {
-        return [lastReady, newData];
+        if (lastReady !== undefined) {
+          return [lastReady, newData];
+        }
+
+        return [newData];
+      });
+    } catch {
+      if (abortController.signal.aborted) {
+        console.info(abortController.signal.reason ?? 'Aborted for unknown reason.');
+      } else {
+        // If it was not aborted.
+        toast.error('Kunne ikke laste dokument(er).');
       }
-
-      return [newData];
-    });
+    }
   }, []);
 
   const onReloadClick = useCallback(() => load(inlineUrl), [inlineUrl, load]);
@@ -154,27 +166,9 @@ export const ViewPDF = () => {
   return (
     <Container style={{ width: pdfWidth }} data-testid="show-document">
       <Header>
-        <Button
-          onClick={close}
-          title="Lukk forhåndsvisning"
-          icon={<XMarkIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary-neutral"
-        />
-        <Button
-          onClick={decrease}
-          title="Smalere PDF"
-          icon={<ZoomMinusIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary-neutral"
-        />
-        <Button
-          onClick={increase}
-          title="Bredere PDF"
-          icon={<ZoomPlusIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary-neutral"
-        />
+        <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
+        <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
+        <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
         <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReloadClick} />
         <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
         <Button
@@ -183,10 +177,9 @@ export const ViewPDF = () => {
           target={tabId}
           title="Åpne i ny fane"
           icon={<ExternalLinkIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary-neutral"
           onClick={onNewTabClick}
           onAuxClick={onNewTabClick}
+          {...BUTTON_PROPS}
         />
       </Header>
       <NoFlickerReloadPdf versions={versions} isLoading={isLoading} onVersionLoaded={onLoaded} />
@@ -194,7 +187,7 @@ export const ViewPDF = () => {
   );
 };
 
-const ErrorOrLoadingContainer = styled(Container)`
-  align-items: center;
-  justify-content: center;
-`;
+const BUTTON_PROPS: ButtonProps = {
+  size: 'xsmall',
+  variant: 'tertiary-neutral',
+};

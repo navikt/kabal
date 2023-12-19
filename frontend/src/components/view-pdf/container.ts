@@ -11,3 +11,8 @@ export const Container = styled.section`
   height: 100%;
   scroll-snap-align: start;
 `;
+
+export const ErrorOrLoadingContainer = styled(Container)`
+  align-items: center;
+  justify-content: center;
+`;
