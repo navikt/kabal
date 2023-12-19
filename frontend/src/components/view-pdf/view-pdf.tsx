@@ -135,7 +135,7 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
-      <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
+      <ErrorOrLoadingContainer style={{ width: pdfWidth }} data-testid="show-document">
         <Alert variant="error" size="small">
           Kunne ikke vise dokument(er)
         </Alert>
@@ -145,14 +145,14 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsLoading) {
     return (
-      <ErrorOrLoadingContainer width={pdfWidth} data-testid="show-document">
+      <ErrorOrLoadingContainer style={{ width: pdfWidth }} data-testid="show-document">
         <Loader title="Laster dokument" size="3xlarge" />
       </ErrorOrLoadingContainer>
     );
   }
 
   return (
-    <Container width={pdfWidth} data-testid="show-document">
+    <Container style={{ width: pdfWidth }} data-testid="show-document">
       <Header>
         <Button
           onClick={close}
