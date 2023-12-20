@@ -1,12 +1,11 @@
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ButtonProps, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import { Container, ErrorOrLoadingContainer } from '@app/components/view-pdf/container';
-import { getDataUrl } from '@app/components/view-pdf/get-data-url';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
@@ -26,7 +25,6 @@ export const ViewPDF = () => {
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
   const { showDocumentList, title } = useShownDocuments();
-  const abortControllerRef = useRef<AbortController | null>(null);
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const [versions, setVersions] = useState<Version[]>([]);
@@ -61,38 +59,18 @@ export const ViewPDF = () => {
       return;
     }
 
-    // Abort previous request.
-    if (abortControllerRef.current !== null && !abortControllerRef.current.signal.aborted) {
-      abortControllerRef.current.abort('Aborted to load new document.');
-    }
-
-    // Create new abort controller for the new request.
-    const abortController = new AbortController();
-    // Make the new abort controller available for the next request.
-    abortControllerRef.current = abortController;
     setIsLoading(true);
 
-    try {
-      const data = await getDataUrl(url, abortController);
+    setVersions((v) => {
+      const lastReady = v.findLast((e) => e.ready);
+      const newData: Version = { url, ready: false, id: Date.now() };
 
-      setVersions((v) => {
-        const lastReady = v.findLast((e) => e.ready);
-        const newData = { data, ready: false, id: Date.now() };
-
-        if (lastReady !== undefined) {
-          return [lastReady, newData];
-        }
-
-        return [newData];
-      });
-    } catch {
-      if (abortController.signal.aborted) {
-        console.info(abortController.signal.reason ?? 'Aborted for unknown reason.');
-      } else {
-        // If it was not aborted.
-        toast.error('Kunne ikke laste dokument(er).');
+      if (lastReady !== undefined) {
+        return [lastReady, newData];
       }
-    }
+
+      return [newData];
+    });
   }, []);
 
   const onReloadClick = useCallback(() => load(inlineUrl), [inlineUrl, load]);
