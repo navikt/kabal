@@ -8,8 +8,7 @@ export const ensureTraceparent: RequestHandler = (req, res, next) => {
   const traceparentHeader = req.headers[TRACEPARENT_HEADER];
 
   if (typeof traceparentHeader === 'undefined' || traceparentHeader.length === 0) {
-    const { traceparent, traceId } = generateTraceparent();
-    log.debug({ msg: 'Missing traceparent in request. Creating new traceparent.', data: { traceparent }, traceId });
+    const { traceparent } = generateTraceparent();
     req.headers[TRACEPARENT_HEADER] = traceparent;
   }
 
