@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
 
 export interface Version {
-  data: string;
+  url: string;
   ready: boolean;
   id: number;
 }
@@ -32,7 +32,7 @@ export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Pro
       {versions.map((version) => (
         <StyledPDF
           key={version.id}
-          data={`${version.data}${PDFparams}`}
+          data={`${version.url}?version=${version.id}${PDFparams}`}
           role="document"
           type="application/pdf"
           name="pdf-viewer"
