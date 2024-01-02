@@ -119,7 +119,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.tildeltSaksbehandlerident = null;
-              draft.hjemmelId = data.hjemmelIdList[0] ?? null;
+              draft.hjemmelIdList = data.hjemmelIdList;
             }),
           );
 
