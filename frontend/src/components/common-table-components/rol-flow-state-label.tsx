@@ -15,21 +15,37 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
   }
 
   if (rol.navIdent === null && rol.flowState === FlowState.SENT) {
-    return <StyledTag variant="alt3">I felles kø for rådgivende overleger</StyledTag>;
+    return (
+      <StyledTag variant="alt3" title="I felles kø for rådgivende overlege">
+        I felles kø for ROL
+      </StyledTag>
+    );
   }
 
   const isRol = rol.navIdent === data.navIdent;
 
   if (isRol && rol.flowState === FlowState.SENT) {
-    return <StyledTag variant="alt3">Rådgivende overlege</StyledTag>;
+    return (
+      <StyledTag variant="alt3" title="Rådgivende overlege">
+        ROL
+      </StyledTag>
+    );
   }
 
   if (!isRol && rol.flowState === FlowState.SENT) {
-    return <StyledTag variant="alt3">Sendt til rådgivende overlege</StyledTag>;
+    return (
+      <StyledTag variant="alt3" title="Sendt til rådgivende overlege">
+        Sendt til ROL
+      </StyledTag>
+    );
   }
 
   if (!isRol && rol.flowState === FlowState.RETURNED) {
-    return <StyledTag variant="info">Sendt tilbake av rådgivende overlege</StyledTag>;
+    return (
+      <StyledTag variant="info" title="Tilbake fra rådgivende overlege">
+        Tilbake fra ROL
+      </StyledTag>
+    );
   }
 
   return null;
