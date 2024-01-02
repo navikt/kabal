@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Table } from '@navikt/ds-react';
 import React from 'react';
+import { styled } from 'styled-components';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import { Name } from '@app/components/common-table-components/name';
 import { Rol } from '@app/components/common-table-components/rol';
@@ -108,24 +109,21 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Medunderskriver oppgaveId={oppgave.id} medunderskriverIdent={oppgave.medunderskriver.navIdent} />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.MedunderskriverFlowState:
+      case ColumnKeyEnum.FlowStates:
         return (
           <Table.DataCell key={key}>
-            <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+            <FlowStateContainer>
+              <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              {oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? (
+                <RolFlowStateLabel rol={oppgave.rol} />
+              ) : null}
+            </FlowStateContainer>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Rol:
         return (
           <Table.DataCell key={key}>
             <Rol oppgaveId={oppgave.id} rolIdent={oppgave.rol.navIdent} />
-          </Table.DataCell>
-        );
-      case ColumnKeyEnum.RolFlowState:
-        return (
-          <Table.DataCell key={key}>
-            {oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? (
-              <RolFlowStateLabel rol={oppgave.rol} />
-            ) : null}
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
@@ -217,3 +215,9 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return <Table.DataCell key={key} />;
     }
   });
+
+const FlowStateContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-spacing-2);
+`;
