@@ -26,7 +26,7 @@ export interface IOppgave {
   avsluttetAvSaksbehandlerDate: DateString | null;
   fagsystemId: string;
   frist: DateString | null;
-  hjemmelId: string | null;
+  hjemmelIdList: string[];
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriver: IHelper;

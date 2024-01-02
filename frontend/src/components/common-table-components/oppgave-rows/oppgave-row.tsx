@@ -20,7 +20,7 @@ import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
 import { Age } from '../age';
 import { Deadline } from '../deadline';
-import { Hjemmel } from '../hjemmel';
+import { Hjemler } from '../hjemler';
 import { LoadingRow } from '../loading-row';
 import { MedudunderskriverFlowStateLabel } from '../medunderskriver-flow-state-label';
 import { OpenOppgavebehandling } from '../open';
@@ -75,7 +75,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.EnhetHjemmel:
         return (
           <Table.DataCell key={key}>
-            <Hjemmel hjemmel={oppgave.hjemmelId} />
+            <Hjemler hjemmelIdList={oppgave.hjemmelIdList} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:

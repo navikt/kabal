@@ -52,12 +52,12 @@ export const useEnhetNameFromIdOrLoading = (enhetId?: string | null): string => 
   return 'Mangler';
 };
 
-export const useInnsendingshjemmelFromId = (hjemmelId: string): string | undefined => {
+export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): string[] | undefined => {
   const { data, isLoading } = useInnsendingshjemlerMap();
 
   if (isLoading || typeof data === 'undefined') {
     return undefined;
   }
 
-  return data[hjemmelId] ?? hjemmelId;
+  return hjemmelIdList.map((hjemmelId) => data[hjemmelId] ?? hjemmelId);
 };
