@@ -37,6 +37,9 @@ export const setupProxy = async () => {
         pathRewrite: {
           [`^/api/${appName}`]: '',
         },
+        onProxyReq: (proxyRes, req, res) => {
+          res.on('close', () => proxyRes.destroy());
+        },
         onError: (error, req, res) => {
           if (res.headersSent) {
             log.error({
