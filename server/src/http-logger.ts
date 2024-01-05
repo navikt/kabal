@@ -8,7 +8,7 @@ const httpLogger = getLogger('http');
 export const httpLoggingMiddleware: RequestHandler = (req, res, next) => {
   const start = performance.now();
 
-  res.once('finish', () => {
+  const onEnd = (event: string) => () => {
     const { method, url, headers } = req;
 
     if (url.endsWith('/isAlive') || url.endsWith('/isReady')) {
@@ -28,8 +28,12 @@ export const httpLoggingMiddleware: RequestHandler = (req, res, next) => {
       statusCode,
       traceId,
       responseTime,
+      event,
     });
-  });
+  };
+
+  res.once('finish', onEnd('finish'));
+  res.once('close', onEnd('close'));
 
   next();
 };
@@ -40,6 +44,7 @@ interface HttpData extends AnyObject {
   statusCode: number;
   traceId: string | undefined;
   responseTime: number;
+  event?: string;
 }
 
 const logHttpRequest = ({ traceId, ...data }: HttpData) => {
