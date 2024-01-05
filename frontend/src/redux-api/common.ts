@@ -67,6 +67,5 @@ export const KABAL_BEHANDLINGER_BASE_QUERY = staggeredBaseQuery(KABAL_BEHANDLING
 export const KABAL_INTERNAL_BASE_QUERY = staggeredBaseQuery('/api');
 export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PATH);
 export const KAKA_KVALITETSVURDERING_BASE_QUERY = staggeredBaseQuery('/api/kaka-api/kvalitetsvurderinger');
-export const FEATURE_TOGGLE_BASE_QUERY = staggeredBaseQuery(`${KABAL_API_BASE_PATH}/featuretoggle`);
 export const KABAL_TEXT_TEMPLATES_BASE_QUERY = staggeredBaseQuery('/api/kabal-text-templates');
 export const KABAL_API_BASE_QUERY = staggeredBaseQuery(KABAL_API_BASE_PATH);
