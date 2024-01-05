@@ -9,6 +9,7 @@ export const getOnBehalfOfAccessToken = async (
   authClient: Client,
   authHeader: string,
   appName: string,
+  traceId: string,
 ): Promise<string> => {
   const cacheKey = `${authHeader}-${appName}`;
 
@@ -26,7 +27,7 @@ export const getOnBehalfOfAccessToken = async (
 
   if (typeof authClient.issuer.metadata.token_endpoint !== 'string') {
     const error = new Error(`OpenID issuer misconfigured. Missing token endpoint.`);
-    log.error({ msg: 'On-Behalf-Of error', error });
+    log.error({ msg: 'On-Behalf-Of error', error, traceId });
     throw error;
   }
 
@@ -58,7 +59,7 @@ export const getOnBehalfOfAccessToken = async (
 
     return obo_access_token;
   } catch (error) {
-    log.error({ msg: 'On-Behalf-Of error', error });
+    log.error({ msg: 'On-Behalf-Of error', error, traceId });
 
     throw error;
   }

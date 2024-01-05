@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { Gauge, Histogram } from 'prom-client';
 import { VERSION } from '@app/config/config';
+import { getLogger } from '@app/logger';
 import { registers } from '@app/prometheus/types';
+import { ensureTraceparent } from '@app/request-id';
+
+const log = getLogger('active-clients');
 
 const router = Router();
 
@@ -20,6 +24,14 @@ const histogram = new Histogram({
 
 const gauge = new Gauge({ name: 'active_clients', help: 'Number of active clients', registers });
 
+type StopTimerFn = () => void;
+const stopTimerList: StopTimerFn[] = [];
+
+export const resetActiveClientCounter = () => {
+  gauge.reset();
+  stopTimerList.forEach((stopTimer) => stopTimer());
+};
+
 export const setupVersionRoute = () => {
   router.get('/version', (req, res) => {
     if (req.headers.accept !== 'text/event-stream') {
@@ -28,18 +40,30 @@ export const setupVersionRoute = () => {
       return;
     }
 
+    const traceId = ensureTraceparent(req);
+
     const stopTimer = histogram.startTimer();
 
+    const stopTimerIndex = stopTimerList.push(stopTimer);
+
+    let isOpen = true;
+
     gauge.inc();
+
+    res.once('close', () => {
+      log.debug({ msg: 'Version connection closed', traceId });
+
+      if (isOpen) {
+        isOpen = false;
+        stopTimer();
+        gauge.dec();
+        stopTimerList.splice(stopTimerIndex, 1);
+      }
+    });
 
     res.writeHead(200, HEADERS);
     res.write('retry: 0\n');
     res.write(`data: ${VERSION}\n\n`);
-
-    res.once('close', () => {
-      stopTimer();
-      gauge.dec();
-    });
   });
 
   return router;
