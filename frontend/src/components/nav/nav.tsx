@@ -16,7 +16,6 @@ import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHe
 import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { FeatureToggles, useFeatureToggle } from '@app/hooks/use-feature-toggle';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 
@@ -86,15 +85,12 @@ export const Nav = () => (
 interface NavItemProps extends NavLinkProps {
   testId?: string;
   roles?: Role[];
-  requiredFeature?: FeatureToggles;
 }
 
-const NavItem = ({ testId, roles, requiredFeature: feature, ...props }: NavItemProps) => {
+const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
   const hasRole = useHasAnyOfRoles(roles);
-  const enabled = useFeatureToggle(feature);
-  const featureDisabled = typeof feature !== 'undefined' && !enabled;
 
-  if (!hasRole || featureDisabled) {
+  if (!hasRole) {
     return null;
   }
 
