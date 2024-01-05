@@ -21,10 +21,10 @@ if (isDeployed) {
 
 const server = express();
 
+server.use(ensureTraceparent);
+
 // Add the prometheus middleware to all routes
 server.use(metricsMiddleware);
-
-server.use(ensureTraceparent);
 
 server.use(httpLoggingMiddleware);
 

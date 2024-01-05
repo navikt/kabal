@@ -4,6 +4,7 @@ import { getAzureADClient } from '@app/auth/get-auth-client';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { API_CLIENT_IDS } from '@app/config/config';
 import { getLogger } from '@app/logger';
+import { TRACEPARENT_HEADER, generateTraceId, getTraceIdFromTraceparent } from '@app/request-id';
 
 const log = getLogger('proxy');
 
@@ -30,6 +31,8 @@ export const setupProxy = async () => {
       next();
     });
 
+    const proxy_target_application = appName;
+
     router.use(
       route,
       createProxyMiddleware({
@@ -38,9 +41,46 @@ export const setupProxy = async () => {
           [`^/api/${appName}`]: '',
         },
         onProxyReq: (proxyRes, req, res) => {
-          res.on('close', () => proxyRes.destroy());
+          const { url, originalUrl, method, headers } = req;
+          const traceparentHeader = headers[TRACEPARENT_HEADER];
+          const hasTraceparent = typeof traceparentHeader === 'string' && traceparentHeader.length !== 0;
+          const traceId = hasTraceparent ? getTraceIdFromTraceparent(traceparentHeader) : generateTraceId();
+
+          res.on('close', () => {
+            log.debug({
+              msg: 'Proxy connection closed',
+              data: {
+                proxy_target_application,
+                url,
+                originalUrl,
+                method,
+                traceId,
+                event: 'close',
+              },
+            });
+
+            proxyRes.destroy();
+          });
+          res.on('error', (error) => {
+            log.debug({
+              msg: 'Proxy connection error',
+              error,
+              data: {
+                proxy_target_application,
+                url,
+                originalUrl,
+                method,
+                traceId,
+                event: 'error',
+              },
+            });
+
+            proxyRes.destroy();
+          });
         },
         onError: (error, req, res) => {
+          const { url, originalUrl, method } = req;
+
           if (res.headersSent) {
             log.error({
               msg: 'Headers already sent.',
@@ -48,8 +88,9 @@ export const setupProxy = async () => {
               data: {
                 appName,
                 statusCode: res.statusCode,
-                url: req.originalUrl,
-                method: req.method,
+                url,
+                originalUrl,
+                method,
               },
             });
 
@@ -62,7 +103,7 @@ export const setupProxy = async () => {
           log.error({
             msg: 'Failed to connect to API.',
             error,
-            data: { appName, url: req.originalUrl, method: req.method },
+            data: { proxy_target_application, url, originalUrl, method },
           });
         },
         logLevel: 'warn',
