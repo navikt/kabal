@@ -142,6 +142,8 @@ export const TagContainer = styled.div`
   gap: 8px;
   flex-grow: 0;
   grid-area: tags;
+  max-height: 250px;
+  overflow-y: auto;
 `;
 
 export const YtelseHjemmelTagList = ({ ytelseHjemmelIdList }: Pick<IText, 'ytelseHjemmelIdList'>) => (
