@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
 import { IPublishedTextMetadata } from '@app/types/texts/responses';
@@ -15,13 +16,14 @@ interface Props {
 
 export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId }: Props) => {
   const [createDraft] = useCreateDraftFromVersionMutation();
+  const query = useTextQuery();
 
   const { id, versionId, publishedDateTime, title } = text;
 
   const createDraftAndNotify = useCallback(async () => {
-    const draft = await createDraft({ id, title, versionId }).unwrap();
+    const draft = await createDraft({ id, title, versionId, query }).unwrap();
     onDraftCreated(draft.versionId);
-  }, [createDraft, id, title, versionId, onDraftCreated]);
+  }, [createDraft, id, title, versionId, query, onDraftCreated]);
 
   return (
     <Container>

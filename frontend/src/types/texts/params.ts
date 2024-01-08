@@ -51,3 +51,10 @@ export interface IUnpublishTextParams extends IUpdateBaseParams {
   title: string;
   textDraft: IText | undefined;
 }
+
+export interface ICreateDraftFromVersionParams {
+  id: string;
+  title: string;
+  versionId: string;
+  query: IGetTextsParams;
+}
