@@ -7,6 +7,7 @@ import { reduxStore } from '@app/redux/configure-store';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { isApiRejectionError } from '@app/types/errors';
 import {
+  ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,
   IGetTextsParams,
   INewTextParams,
@@ -174,13 +175,13 @@ const textsMutationSlice = textsApi.injectEndpoints({
         }
       },
     }),
-    createDraftFromVersion: builder.mutation<IText, { id: string; title: string; versionId: string }>({
+    createDraftFromVersion: builder.mutation<IText, ICreateDraftFromVersionParams>({
       query: ({ id, versionId }) => ({
         method: 'POST',
         url: `/texts/${id}/draft`,
         body: { versionId },
       }),
-      onQueryStarted: async ({ id, title }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
 
         toast.success(`Nytt utkast for «${title}» opprettet.`);
@@ -193,7 +194,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
         dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
         dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', {}, (draft) => draft.map((t) => (t.id === id ? data : t))),
+          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+            draft.map((t) => (t.id === id ? data : t)),
+          ),
         );
       },
     }),
