@@ -22,13 +22,20 @@ const histogram = new Histogram({
   registers,
 });
 
-const gauge = new Gauge({ name: 'active_clients', help: 'Number of active clients', registers });
+const activeClientsGauge = new Gauge({ name: 'active_clients', help: 'Number of active clients', registers });
+const uniqueUsersGauge = new Gauge({
+  name: 'active_users',
+  help: 'Number of active unique users',
+  labelNames: ['nav_ident'] as const,
+  registers,
+});
 
 type StopTimerFn = () => void;
 const stopTimerList: StopTimerFn[] = [];
 
 export const resetActiveClientCounter = () => {
-  gauge.reset();
+  activeClientsGauge.reset();
+  uniqueUsersGauge.reset();
   stopTimerList.forEach((stopTimer) => stopTimer());
 };
 
@@ -48,7 +55,9 @@ export const setupVersionRoute = () => {
 
     let isOpen = true;
 
-    gauge.inc();
+    const stopUserSession = startUserSession(req.headers.authorization, traceId);
+
+    activeClientsGauge.inc();
 
     res.once('close', () => {
       log.debug({ msg: 'Version connection closed', traceId });
@@ -56,7 +65,8 @@ export const setupVersionRoute = () => {
       if (isOpen) {
         isOpen = false;
         stopTimer();
-        gauge.dec();
+        activeClientsGauge.dec();
+        stopUserSession();
         stopTimerList.splice(stopTimerIndex, 1);
       }
     });
@@ -68,3 +78,55 @@ export const setupVersionRoute = () => {
 
   return router;
 };
+
+interface TokenPayload {
+  aud: string;
+  iss: string;
+  iat: number;
+  nbf: number;
+  exp: number;
+  aio: string;
+  azp: string;
+  azpacr: string;
+  groups: string[];
+  name: string;
+  oid: string;
+  preferred_username: string;
+  rh: string;
+  scp: string;
+  sub: string;
+  tid: string;
+  uti: string;
+  ver: string;
+  NAVident: string;
+  azp_name: string;
+}
+
+/** Parses the user ID from the JWT. */
+const startUserSession = (token: string | undefined, traceId: string): (() => void) => {
+  if (token === undefined) {
+    return NOOP;
+  }
+
+  const [, payload] = token.split('.');
+
+  if (payload === undefined) {
+    return NOOP;
+  }
+
+  const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
+
+  try {
+    const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
+
+    uniqueUsersGauge.set({ nav_ident }, 1);
+
+    return () => uniqueUsersGauge.remove({ nav_ident });
+  } catch (error) {
+    log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
+
+    return NOOP;
+  }
+};
+
+const NOOP = () => undefined;
