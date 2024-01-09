@@ -11,7 +11,6 @@ export const PlateEditorContent = styled.div`
   text-underline-offset: 0.25em; // To match PDF.
   word-wrap: normal;
   word-break: normal;
-  hyphens: auto;
 
   &::after {
     content: '';
