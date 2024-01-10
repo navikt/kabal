@@ -23,6 +23,7 @@ const histogram = new Histogram({
 });
 
 const activeClientsGauge = new Gauge({ name: 'active_clients', help: 'Number of active clients', registers });
+
 const uniqueUsersGauge = new Gauge({
   name: 'active_users',
   help: 'Number of active unique users',
@@ -33,14 +34,17 @@ const uniqueUsersGauge = new Gauge({
 type StopTimerFn = () => void;
 const stopTimerList: StopTimerFn[] = [];
 
-export const resetActiveClientCounter = () => {
+export const resetClientsAndUniqueUsersMetrics = async () => {
   activeClientsGauge.reset();
-  uniqueUsersGauge.reset();
   stopTimerList.forEach((stopTimer) => stopTimer());
+  await resetUniqueUsersCounts();
+
+  // Wait for metrics to be collected.
+  return new Promise<void>((resolve) => setTimeout(resolve, 2000));
 };
 
 export const setupVersionRoute = () => {
-  router.get('/version', (req, res) => {
+  router.get('/version', async (req, res) => {
     if (req.headers.accept !== 'text/event-stream') {
       res.status(307).redirect('/');
 
@@ -51,11 +55,11 @@ export const setupVersionRoute = () => {
 
     const stopTimer = histogram.startTimer();
 
-    const stopTimerIndex = stopTimerList.push(stopTimer);
+    const stopTimerIndex = stopTimerList.push(stopTimer) - 1;
 
     let isOpen = true;
 
-    const stopUserSession = startUserSession(req.headers.authorization, traceId);
+    const endUserSession = await startUserSession(req.headers.authorization, traceId);
 
     activeClientsGauge.inc();
 
@@ -64,10 +68,10 @@ export const setupVersionRoute = () => {
 
       if (isOpen) {
         isOpen = false;
+        stopTimerList.splice(stopTimerIndex, 1);
         stopTimer();
         activeClientsGauge.dec();
-        stopUserSession();
-        stopTimerList.splice(stopTimerIndex, 1);
+        endUserSession();
       }
     });
 
@@ -103,7 +107,7 @@ interface TokenPayload {
 }
 
 /** Parses the user ID from the JWT. */
-const startUserSession = (token: string | undefined, traceId: string): (() => void) => {
+const startUserSession = async (token: string | undefined, traceId: string): Promise<() => void> => {
   if (token === undefined) {
     return NOOP;
   }
@@ -119,9 +123,9 @@ const startUserSession = (token: string | undefined, traceId: string): (() => vo
   try {
     const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
 
-    uniqueUsersGauge.set({ nav_ident }, 1);
+    await iterateCount(nav_ident, increment);
 
-    return () => uniqueUsersGauge.remove({ nav_ident });
+    return () => iterateCount(nav_ident, decrement);
   } catch (error) {
     log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
 
@@ -130,3 +134,28 @@ const startUserSession = (token: string | undefined, traceId: string): (() => vo
 };
 
 const NOOP = () => undefined;
+
+const iterateCount = async (nav_ident: string, getNewValue: (oldValue: number) => number) => {
+  const { values } = await uniqueUsersGauge.get();
+
+  for (const { labels, value } of values) {
+    if (labels.nav_ident === nav_ident) {
+      uniqueUsersGauge.set(labels, getNewValue(value));
+
+      return;
+    }
+  }
+
+  uniqueUsersGauge.set({ nav_ident }, getNewValue(0));
+};
+
+const increment = (oldValue: number) => oldValue + 1;
+const decrement = (oldValue: number) => (oldValue === 0 ? 0 : oldValue - 1);
+
+const resetUniqueUsersCounts = async () => {
+  const { values } = await uniqueUsersGauge.get();
+
+  for (const { labels } of values) {
+    uniqueUsersGauge.set(labels, 0);
+  }
+};

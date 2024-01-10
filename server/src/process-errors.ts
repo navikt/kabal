@@ -1,4 +1,4 @@
-import { resetActiveClientCounter } from '@app/routes/version';
+import { resetClientsAndUniqueUsersMetrics } from '@app/routes/version';
 import { getLogger } from './logger';
 import { EmojiIcons, sendToSlack } from './slack';
 
@@ -14,23 +14,21 @@ export const processErrors = () => {
     .on('uncaughtException', (error) =>
       log.error({ error, msg: `Process ${process.pid} received a uncaughtException signal` }),
     )
-    .on('SIGTERM', (signal) => {
+    .on('SIGTERM', async (signal) => {
       log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down in 2 seconds.` });
-      resetActiveClientCounter();
-      // Wait for metrics to be collected.
-      setTimeout(() => process.exit(0), 2000);
+      await resetClientsAndUniqueUsersMetrics();
+      process.exit(0);
     })
-    .on('SIGINT', (signal) => {
+    .on('SIGINT', async (signal) => {
       const error = new Error(`Process ${process.pid} has been interrupted, ${signal}. Shutting down in 2 seconds.`);
       log.error({ error });
-      resetActiveClientCounter();
-      // Wait for metrics to be collected.
-      setTimeout(() => process.exit(1), 2000);
+      await resetClientsAndUniqueUsersMetrics();
+      process.exit(1);
     })
     .on('beforeExit', async (code) => {
       const msg = `Crash ${JSON.stringify(code)}`;
       log.error({ msg });
       sendToSlack(msg, EmojiIcons.Scream);
-      resetActiveClientCounter();
+      await resetClientsAndUniqueUsersMetrics();
     });
 };
