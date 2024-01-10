@@ -22,8 +22,6 @@ const histogram = new Histogram({
   registers,
 });
 
-const activeClientsGauge = new Gauge({ name: 'active_clients', help: 'Number of active clients', registers });
-
 const uniqueUsersGauge = new Gauge({
   name: 'active_users',
   help: 'Number of active unique users',
@@ -35,7 +33,6 @@ type StopTimerFn = () => void;
 const stopTimerList: StopTimerFn[] = [];
 
 export const resetClientsAndUniqueUsersMetrics = async () => {
-  activeClientsGauge.reset();
   stopTimerList.forEach((stopTimer) => stopTimer());
   await resetUniqueUsersCounts();
 
@@ -61,8 +58,6 @@ export const setupVersionRoute = () => {
 
     const endUserSession = await startUserSession(req.headers.authorization, traceId);
 
-    activeClientsGauge.inc();
-
     res.once('close', () => {
       log.debug({ msg: 'Version connection closed', traceId });
 
@@ -70,7 +65,6 @@ export const setupVersionRoute = () => {
         isOpen = false;
         stopTimerList.splice(stopTimerIndex, 1);
         stopTimer();
-        activeClientsGauge.dec();
         endUserSession();
       }
     });
@@ -123,9 +117,9 @@ const startUserSession = async (token: string | undefined, traceId: string): Pro
   try {
     const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
 
-    await iterateCount(nav_ident, increment);
+    await setCount(nav_ident, increment);
 
-    return () => iterateCount(nav_ident, decrement);
+    return () => setCount(nav_ident, decrement);
   } catch (error) {
     log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
 
@@ -135,7 +129,7 @@ const startUserSession = async (token: string | undefined, traceId: string): Pro
 
 const NOOP = () => undefined;
 
-const iterateCount = async (nav_ident: string, getNewValue: (oldValue: number) => number) => {
+const setCount = async (nav_ident: string, getNewValue: (oldValue: number) => number) => {
   const { values } = await uniqueUsersGauge.get();
 
   for (const { labels, value } of values) {
