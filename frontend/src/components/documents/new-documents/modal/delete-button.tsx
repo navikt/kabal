@@ -6,7 +6,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 import { ModalContext } from './modal-context';
 
 interface Props {
@@ -34,7 +34,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   const text = useMemo(() => {
     // If the document has a parent, it is an attachment.
     if (document.parentId !== null) {
-      return 'Slett vedlegg';
+      return document.type === DocumentTypeEnum.JOURNALFOERT ? 'Fjern vedlegg' : 'Slett vedlegg';
     }
 
     // If the document has attatchments.
@@ -43,7 +43,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     }
 
     return 'Slett dokument';
-  }, [data, document.id, document.parentId]);
+  }, [data, document.id, document.parentId, document.type]);
 
   if (documentsIsLoading || typeof data === 'undefined') {
     return null;
