@@ -20,6 +20,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Open,
 ];
 
