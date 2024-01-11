@@ -64,7 +64,7 @@ export const setupDocumentRoutes = () => {
     }
 
     const metadataResponse = await getMetadata<INewMetadata>(
-      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}`,
+      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
       req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
