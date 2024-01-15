@@ -73,6 +73,8 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
             displayError(`Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`);
           }
         }
+
+        event.target.value = '';
       },
       [oppgaveId, displayError, uploadFile, dokumentTypeId, parentId],
     );
