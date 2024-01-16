@@ -12,40 +12,40 @@ import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useSmartEditors } from '@app/hooks/use-smart-editors';
-import { useUpdateSmartEditorMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
-import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
+import { useSmartDocuments } from '@app/hooks/use-smart-documents';
+import { useUpdateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
+import { ISmartDocument } from '@app/types/documents/documents';
 import { NewDocument } from '../new-document/new-document';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
-  const editors = useSmartEditors(oppgaveId);
+  const documents = useSmartDocuments(oppgaveId);
 
-  if (typeof editors === 'undefined') {
+  if (typeof documents === 'undefined') {
     return null;
   }
 
-  return <Tabbed editors={editors} />;
+  return <Tabbed documents={documents} />;
 };
 
 interface TabbedProps {
-  editors: ISmartEditor[];
+  documents: ISmartDocument[];
 }
 
-const Tabbed = ({ editors }: TabbedProps) => {
-  const firstEditor = useFirstEditor(editors);
-  const { value: editorId = firstEditor?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
+const Tabbed = ({ documents }: TabbedProps) => {
+  const firstDocument = useFirstEditor(documents);
+  const { value: editorId = firstDocument?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
-  const activeEditorId = editors.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
+  const activeEditorId = documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
-  if (editors.length === 0 && !hasDocumentsAccess) {
+  if (documents.length === 0 && !hasDocumentsAccess) {
     return (
       <StyledNoDocuments>
         <Heading level="1" size="medium" spacing>
-          Ingen redigerbare dokumenter
+          Ingen redigerbare dokumenter.
         </Heading>
         <Alert variant="info" size="small">
           Ingen redigerbare dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å opprette
@@ -58,13 +58,13 @@ const Tabbed = ({ editors }: TabbedProps) => {
   return (
     <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
       <StyledTabsList>
-        {editors.map(({ id, tittel }) => (
+        {documents.map(({ id, tittel }) => (
           <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
         ))}
         <TabNew />
       </StyledTabsList>
       <StyledTabPanels>
-        {editors.map((editor) => (
+        {documents.map((editor) => (
           <TabPanel key={editor.id} smartEditor={editor} />
         ))}
         <TabPanelNew onCreate={setEditorId} />
@@ -106,12 +106,12 @@ const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
 };
 
 interface TabPanelProps {
-  smartEditor: ISmartEditor;
+  smartEditor: ISmartDocument;
 }
 
 const TabPanel = ({ smartEditor }: TabPanelProps) => {
   const oppgaveId = useOppgaveId();
-  const [update, status] = useUpdateSmartEditorMutation();
+  const [update, status] = useUpdateSmartDocumentMutation();
   const timeout = useRef<NodeJS.Timeout>();
 
   const { id, templateId, content } = smartEditor;

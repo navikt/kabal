@@ -6,7 +6,6 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetUferdigeRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -41,9 +40,7 @@ const MineRolOppgaverTableInternal = () => {
     rekkefoelge: SortOrderEnum.STIGENDE,
   });
 
-  const { data: bruker, isLoading: isLoadingUser, isError: isErrorUser } = useUser();
-
-  const queryParams: typeof skipToken | CommonOppgaverParams = typeof bruker === 'undefined' ? skipToken : params;
+  const queryParams: typeof skipToken | CommonOppgaverParams = params;
 
   const { data, isError, isLoading, isFetching, refetch } = useGetUferdigeRolOppgaverQuery(queryParams, {
     refetchOnFocus: true,
@@ -57,8 +54,8 @@ const MineRolOppgaverTableInternal = () => {
         columns={COLUMNS}
         params={params}
         setParams={setParams}
-        isError={isError || isErrorUser}
-        isLoading={isLoading || isLoadingUser}
+        isError={isError}
+        isLoading={isLoading}
         isFetching={isFetching}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}

@@ -10,7 +10,7 @@ import {
 } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

@@ -9,7 +9,7 @@ import {
 import { ISetExtraUtfallResponse, ISetUtfallResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

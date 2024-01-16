@@ -1,12 +1,13 @@
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '@app/simple-api-state/use-user';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 export const useHideKvalitetsvurdering = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { data: user, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
 
-  if (oppgaveIsLoading || userIsLoading || oppgave === undefined || user === undefined) {
+  if (oppgaveIsLoading || oppgave === undefined) {
     return false;
   }
 

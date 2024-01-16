@@ -1,15 +1,14 @@
 import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { useUser } from '@app/simple-api-state/use-user';
 import { ApiQuery, PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IPlainText, IPublishedPlainText, IText } from '@app/types/texts/responses';
@@ -41,14 +40,9 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
   const [initialized, setInitialized] = useState(false);
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
-
-  const query = useMemo(
-    () => (user === undefined ? skipToken : { enheter: [user.ansattEnhet.id], textType }),
-    [textType, user],
-  );
 
   const [text, setText] = useState<IPlainText>();
 
@@ -57,11 +51,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
   const editor = useMyPlateEditorRef();
 
   const loadMaltekst = useCallback(
-    async (e: ElementTypes, q: ApiQuery | typeof skipToken) => {
-      if (q === skipToken || user === undefined) {
-        return;
-      }
-
+    async (e: ElementTypes, q: ApiQuery) => {
       try {
         const texts = (await getTexts(q).unwrap()).filter(isPlainText);
         const mostSpecificText = lexSpecialis(user.ansattEnhet.id, texts);
@@ -90,9 +80,9 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   useEffect(() => {
     if (!initialized) {
-      loadMaltekst(element, query);
+      loadMaltekst(element, { enhetIdList: [user.ansattEnhet.id], textType });
     }
-  }, [element, initialized, loadMaltekst, query]);
+  }, [element, initialized, loadMaltekst, textType, user.ansattEnhet.id]);
 
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 

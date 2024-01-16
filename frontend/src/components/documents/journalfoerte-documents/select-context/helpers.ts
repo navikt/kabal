@@ -1,15 +1,15 @@
-import { IArkivertDocumentReference } from '@app/components/documents/journalfoerte-documents/select-context/types';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
-export const getId = (document: IArkivertDocumentReference) => `${document.journalpostId}:${document.dokumentInfoId}`;
+export const getId = (document: IJournalfoertDokumentId) => `${document.journalpostId}:${document.dokumentInfoId}`;
 
-export const matchDocuments = (document: IArkivertDocumentReference, otherDocument: IArkivertDocumentReference) =>
+export const matchDocuments = (document: IJournalfoertDokumentId, otherDocument: IJournalfoertDokumentId) =>
   document.journalpostId === otherDocument.journalpostId && document.dokumentInfoId === otherDocument.dokumentInfoId;
 
 // Find the path to the document or vedlegg in the document list.
 export const getDocumentPath = (
   documentList: IArkivertDocument[],
-  document: IArkivertDocumentReference,
+  document: IJournalfoertDokumentId,
 ): [number, number] => {
   for (let i = documentList.length - 1; i >= 0; i--) {
     const doc = documentList[i];

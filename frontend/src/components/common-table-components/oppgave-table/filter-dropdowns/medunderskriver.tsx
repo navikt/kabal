@@ -1,17 +1,16 @@
 import { Table } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useMemo } from 'react';
-import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-drodowns/helpers';
+import React, { useContext, useMemo } from 'react';
+import { UserContext } from '@app/components/app/user';
+import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { IOption } from '@app/components/filter-dropdown/props';
 import { useGetMedunderskrivereForEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
 import { FilterDropdownProps } from './types';
 
 export const Medunderskriver = ({ params, setParams, columnKey }: FilterDropdownProps) => {
-  const { data: bruker } = useUser();
-  const { data } = useGetMedunderskrivereForEnhetQuery(bruker?.ansattEnhet.id ?? skipToken);
+  const user = useContext(UserContext);
+  const { data } = useGetMedunderskrivereForEnhetQuery(user.ansattEnhet.id);
   const options = useMemo<IOption<string>[]>(() => navEmployeesToOptions(data?.medunderskrivere), [data]);
 
   return (

@@ -1,16 +1,16 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
-import { useUser } from '@app/simple-api-state/use-user';
 import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const { data: user, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
@@ -23,7 +23,7 @@ export const WriteMessage = () => {
     }
   }, [isSuccess, setMessage]);
 
-  if (signatureIsLoading || userIsLoading || typeof user === 'undefined' || typeof signature === 'undefined') {
+  if (signatureIsLoading || typeof signature === 'undefined') {
     return <Loader size="xlarge" />;
   }
 

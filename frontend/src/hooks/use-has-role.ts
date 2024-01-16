@@ -1,24 +1,23 @@
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { Role } from '@app/types/bruker';
 
-const useUserRoles = () => {
-  const { data } = useUser();
-
-  return data?.roller ?? [];
-};
-
 export const useHasAnyOfRoles = (roles?: Role[]) => {
-  const userRoles = useUserRoles();
+  const { roller } = useContext(UserContext);
 
   if (typeof roles === 'undefined' || roles.length === 0) {
     return true;
   }
 
-  if (userRoles.length === 0) {
+  if (roller.length === 0) {
     return false;
   }
 
-  return roles.some((role) => userRoles.includes(role));
+  return roles.some((role) => roller.includes(role));
 };
 
-export const useHasRole = (role: Role) => useHasAnyOfRoles([role]);
+export const useHasRole = (role: Role) => {
+  const { roller } = useContext(UserContext);
+
+  return roller.includes(role);
+};

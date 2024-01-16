@@ -1,15 +1,14 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import {
   SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
 } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import { useUser } from '@app/simple-api-state/use-user';
 import { IYtelse } from '@app/types/kodeverk';
 import { Body } from './body';
 import { Head } from './head';
@@ -17,10 +16,9 @@ import { Head } from './head';
 const EMPTY_ARRAY: [] = [];
 
 export const AccessRights = () => {
-  const { data: user, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
   const { data: ytelser = EMPTY_ARRAY } = useLatestYtelser();
-  const enhet = userIsLoading || typeof user === 'undefined' ? skipToken : user.ansattEnhet.id;
-  const { data, isLoading } = useGetAccessRightsQuery(enhet);
+  const { data, isLoading } = useGetAccessRightsQuery(user.ansattEnhet.id);
 
   if (isLoading || typeof ytelser === 'undefined' || typeof data === 'undefined') {
     return <Loader />;

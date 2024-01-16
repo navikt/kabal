@@ -9,6 +9,11 @@ export const StyledAuthor = styled.p`
   margin: 0;
 `;
 
+export const StyledTime = styled.time`
+  font-size: 14px;
+  font-style: italic;
+`;
+
 export const StyledMessageContent = styled.p`
   margin: 0;
   white-space: pre-line;

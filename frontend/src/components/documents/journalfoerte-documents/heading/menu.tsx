@@ -62,10 +62,10 @@ const SelectedMenu = () => {
 };
 
 const ColumnOptions = () => {
-  const { value, setValue, isLoading } = useArchivedDocumentsColumns();
+  const { value, setValue } = useArchivedDocumentsColumns();
 
   return (
-    <CheckboxGroup size="small" legend="Kolonner" disabled={isLoading} value={value} onChange={setValue}>
+    <CheckboxGroup size="small" legend="Kolonner" value={value} onChange={setValue}>
       {ARCHIVED_DOCUMENTS_COLUMN_OPTIONS.map((option) => (
         <Checkbox key={option} value={option}>
           {ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS[option]}

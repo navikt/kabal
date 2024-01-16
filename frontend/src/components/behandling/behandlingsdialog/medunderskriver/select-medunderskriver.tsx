@@ -6,7 +6,7 @@ import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/me
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, IHelper } from '@app/types/oppgave-common';

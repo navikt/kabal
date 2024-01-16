@@ -2,7 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes as Switch } from 'react-router-dom';
 import { LandingPage } from '@app/pages/landing-page/landing-page';
 import TrygderettsankebehandlingPage from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
-import { useGetUserQuery } from '@app/redux-api/bruker';
 import { AppLoader } from './loader';
 
 const AdminPage = lazy(() => import('../../pages/admin/admin'));
@@ -22,69 +21,57 @@ const SettingsPage = lazy(() => import('../../pages/settings/settings'));
 const ToppteksterPage = lazy(() => import('../../pages/topptekster/topptekster'));
 const AccessRightsPage = lazy(() => import('../../pages/access-rights/access-rights'));
 
-export const Router = () => {
-  const { isLoading, isUninitialized, isError, data: user } = useGetUserQuery();
+export const Router = () => (
+  <Suspense fallback={<AppLoader text="Laster siden..." />}>
+    <Switch>
+      <Route path="/" element={<LandingPage />} />
 
-  if (isLoading || isUninitialized || user === undefined) {
-    return <AppLoader text="Laster bruker..." />;
-  }
+      <Route path="oppgaver" element={<OppgaverPage />} />
 
-  if (isError) {
-    return <AppLoader text="Kunne ikke laste bruker." />;
-  }
+      <Route path="mineoppgaver" element={<MineOppgaverPage />} />
+      <Route path="oppgavestyring" element={<OppgavestyringPage />} />
 
-  return (
-    <Suspense fallback={<AppLoader text="Laster siden..." />}>
-      <Switch>
-        <Route path="/" element={<LandingPage />} />
+      <Route path="sok" element={<SearchPage />} />
 
-        <Route path="oppgaver" element={<OppgaverPage />} />
+      <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
+      <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
+      <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
 
-        <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-        <Route path="oppgavestyring" element={<OppgavestyringPage />} />
+      <Route
+        path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId"
+        element={<MaltekstseksjonerPage />}
+      />
+      <Route path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId" element={<MaltekstseksjonerPage />} />
+      <Route path="maltekstseksjoner/:id" element={<MaltekstseksjonerPage />} />
+      <Route path="maltekstseksjoner" element={<MaltekstseksjonerPage />} />
 
-        <Route path="sok" element={<SearchPage />} />
+      <Route path="maltekster/:id/versjoner/:versionId" element={<MalteksterPage />} />
+      <Route path="maltekster/:id" element={<MalteksterPage />} />
+      <Route path="maltekster" element={<MalteksterPage />} />
 
-        <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
-        <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
-        <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
+      <Route path="redigerbare-maltekster/:id/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
+      <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
+      <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
 
-        <Route
-          path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId"
-          element={<MaltekstseksjonerPage />}
-        />
-        <Route path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId" element={<MaltekstseksjonerPage />} />
-        <Route path="maltekstseksjoner/:id" element={<MaltekstseksjonerPage />} />
-        <Route path="maltekstseksjoner" element={<MaltekstseksjonerPage />} />
+      <Route path="gode-formuleringer/:id/versjoner/:versionId" element={<GodeFormuleringerPage />} />
+      <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
+      <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
 
-        <Route path="maltekster/:id/versjoner/:versionId" element={<MalteksterPage />} />
-        <Route path="maltekster/:id" element={<MalteksterPage />} />
-        <Route path="maltekster" element={<MalteksterPage />} />
+      <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
+      <Route path="regelverk/:id" element={<RegelverkPage />} />
+      <Route path="regelverk/" element={<RegelverkPage />} />
 
-        <Route path="redigerbare-maltekster/:id/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
-        <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
-        <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
+      <Route path="topptekster/:id/versjoner/:versionId" element={<ToppteksterPage />} />
+      <Route path="topptekster/:id" element={<ToppteksterPage />} />
+      <Route path="topptekster/" element={<ToppteksterPage />} />
 
-        <Route path="gode-formuleringer/:id/versjoner/:versionId" element={<GodeFormuleringerPage />} />
-        <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
-        <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
+      <Route path="bunntekster/:id/versjoner/:versionId" element={<BunnteksterPage />} />
+      <Route path="bunntekster/:id" element={<BunnteksterPage />} />
+      <Route path="bunntekster/" element={<BunnteksterPage />} />
 
-        <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
-        <Route path="regelverk/:id" element={<RegelverkPage />} />
-        <Route path="regelverk/" element={<RegelverkPage />} />
-
-        <Route path="topptekster/:id/versjoner/:versionId" element={<ToppteksterPage />} />
-        <Route path="topptekster/:id" element={<ToppteksterPage />} />
-        <Route path="topptekster/" element={<ToppteksterPage />} />
-
-        <Route path="bunntekster/:id/versjoner/:versionId" element={<BunnteksterPage />} />
-        <Route path="bunntekster/:id" element={<BunnteksterPage />} />
-        <Route path="bunntekster/" element={<BunnteksterPage />} />
-
-        <Route path="innstillinger" element={<SettingsPage />} />
-        <Route path="tilgangsstyring" element={<AccessRightsPage />} />
-        <Route path="admin" element={<AdminPage />} />
-      </Switch>
-    </Suspense>
-  );
-};
+      <Route path="innstillinger" element={<SettingsPage />} />
+      <Route path="tilgangsstyring" element={<AccessRightsPage />} />
+      <Route path="admin" element={<AdminPage />} />
+    </Switch>
+  </Suspense>
+);

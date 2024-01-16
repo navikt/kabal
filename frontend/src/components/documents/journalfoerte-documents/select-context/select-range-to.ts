@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getDocumentPath, getFirstPath, matchDocuments } from './helpers';
 import { useSelectMany } from './select-many';
-import { IArkivertDocumentReference, SelectRangeHook } from './types';
+import { SelectRangeHook } from './types';
 
 export const useSelectRangeTo: SelectRangeHook = (
   setSelectedDocuments,
@@ -13,7 +14,7 @@ export const useSelectRangeTo: SelectRangeHook = (
   const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, documentList);
 
   return useCallback(
-    (document: IArkivertDocumentReference) => {
+    (document: IJournalfoertDokumentId) => {
       if (lastSelectedDocument === null || matchDocuments(lastSelectedDocument, document)) {
         return;
       }
@@ -28,9 +29,9 @@ const FIRST_DOCUMENT_INDEX = 0;
 
 const getSelectedDocuments = (
   documentList: IArkivertDocument[],
-  lastSelectedDocument: IArkivertDocumentReference,
-  document: IArkivertDocumentReference,
-): IArkivertDocumentReference[] => {
+  lastSelectedDocument: IJournalfoertDokumentId,
+  document: IJournalfoertDokumentId,
+): IJournalfoertDokumentId[] => {
   const lastSelectedPath = getDocumentPath(documentList, lastSelectedDocument);
   const selectedPath = getDocumentPath(documentList, document);
 
@@ -82,7 +83,7 @@ const getSelectedDocuments = (
 
   const optimizedLastDocumentIndex = optimizedDocumentList.length - 1;
 
-  return optimizedDocumentList.reduce<IArkivertDocumentReference[]>(
+  return optimizedDocumentList.reduce<IJournalfoertDokumentId[]>(
     (acc, { journalpostId, dokumentInfoId, vedlegg }, index) => {
       // If this is the first document.
       if (index === FIRST_DOCUMENT_INDEX) {

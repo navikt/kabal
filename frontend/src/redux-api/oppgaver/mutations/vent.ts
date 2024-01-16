@@ -8,7 +8,7 @@ import { ISettPaaVentParams } from '@app/types/oppgavebehandling/params';
 import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const ventMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

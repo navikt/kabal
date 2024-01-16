@@ -9,7 +9,8 @@ import {
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { DocumentTypeEnum, IJournalfoertDokumentId } from '@app/types/documents/documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
 
 interface BaseProps {

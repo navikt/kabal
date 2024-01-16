@@ -7,7 +7,7 @@ import { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
 import { ISetMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -31,7 +31,7 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.medunderskriver = {
                 navIdent,
                 flowState: FlowState.NOT_SENT,
-                returnertdDate: null,
+                returnertDate: null,
               };
             } else {
               draft.medunderskriver.navIdent = navIdent;
@@ -53,14 +53,6 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriver = medunderskriver;
-            }),
-          );
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getMedunderskriver', oppgaveId, (draft) => {
-              draft.navIdent = medunderskriver.navIdent;
-              draft.flowState = medunderskriver.flowState;
-              draft.modified = modified;
             }),
           );
         } catch (e) {

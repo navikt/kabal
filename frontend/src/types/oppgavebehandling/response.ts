@@ -68,7 +68,7 @@ export enum HistoryEventTypes {
   FEILREGISTRERT = 'FEILREGISTRERT',
 }
 
-interface BaseEvent<T, E extends HistoryEventTypes> {
+export interface BaseEvent<T, E extends HistoryEventTypes> {
   type: E;
   timestamp: string; // DateTime
   /** `null` means lack of data. Should not happen. Show as unknown user. */
@@ -94,13 +94,13 @@ interface TildelingEvent {
   hjemmelIdList: string[] | null;
 }
 
-interface MedunderskriverEvent {
+export interface MedunderskriverEvent {
   /** Nav Ident. `null` betyr "felles kø". */
   medunderskriver: string | null; // NAV Ident
   flow: FlowState;
 }
 
-interface RolEvent {
+export interface RolEvent {
   /** Nav Ident. `null` betyr "felles kø". */
   rol: string | null; // NAV Ident
   flow: FlowState;
@@ -119,14 +119,14 @@ interface FeilregistrertEvent {
 export interface IPart {
   id: string;
   type: string;
-  name: string;
+  name: string | null;
 }
 
-interface KlagerEvent {
+export interface KlagerEvent {
   part: IPart;
 }
 
-interface FullmektigEvent {
+export interface FullmektigEvent {
   part: IPart | null;
 }
 
@@ -140,8 +140,8 @@ export type IRolEvent = WithPrevious<RolEvent, HistoryEventTypes.ROL>;
 export type IKlagerEvent = WithPrevious<KlagerEvent, HistoryEventTypes.KLAGER>;
 export type IFullmektigEvent = WithPrevious<FullmektigEvent, HistoryEventTypes.FULLMEKTIG>;
 export type ISattPaaVentEvent = WithPrevious<SattPaaVentEvent | null, HistoryEventTypes.SATT_PAA_VENT>;
-export type IFerdigstiltEvent = WithPrevious<FerdigstiltEvent, HistoryEventTypes.FERDIGSTILT>;
-export type IFeilregistrertEvent = WithPrevious<FeilregistrertEvent, HistoryEventTypes.FEILREGISTRERT>;
+export type IFerdigstiltEvent = WithPrevious<FerdigstiltEvent | null, HistoryEventTypes.FERDIGSTILT>;
+export type IFeilregistrertEvent = WithPrevious<FeilregistrertEvent | null, HistoryEventTypes.FEILREGISTRERT>;
 
 export type IHistory =
   | ITildelingEvent

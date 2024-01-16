@@ -8,7 +8,7 @@ import { ISetRolParams } from '@app/types/oppgavebehandling/params';
 import { ISetRolResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRolMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -34,7 +34,7 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
               draft.rol = {
                 navIdent,
                 flowState: FlowState.NOT_SENT,
-                returnertdDate: null,
+                returnertDate: null,
               };
             } else {
               draft.rol.navIdent = navIdent;
@@ -64,14 +64,6 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               draft.rol = rol;
-            }),
-          );
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getRol', oppgaveId, (draft) => {
-              draft.navIdent = rol.navIdent;
-              draft.flowState = rol.flowState;
-              draft.modified = modified;
             }),
           );
         } catch (e) {

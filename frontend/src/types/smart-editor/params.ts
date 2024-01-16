@@ -19,9 +19,7 @@ interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams
 
 export type ICreateSmartDocumentParams = Immutable<IMutableCreateSmartDocumentParams>;
 
-export type IGetSmartEditorParams = IDocumentParams;
-
-export interface IUpdateSmartDocumentParams extends IGetSmartEditorParams {
+export interface IUpdateSmartDocumentParams extends IDocumentParams {
   content: EditorValue;
   templateId?: TemplateIdEnum;
 }

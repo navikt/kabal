@@ -1,13 +1,15 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { Name } from '@app/components/behandling/behandlingsdialog/common/name';
+import { Name } from '@app/components/name/name';
 import { HistoryEventTypes, IHistory } from '@app/types/oppgavebehandling/response';
 
 export const getName = (navIdent: string | null, fallback: string = 'felles kø') => (
   <b>{navIdent === null ? fallback : <Name navIdent={navIdent} />}</b>
 );
 
-export const toKey = (event: IHistory) => `${event.type}:${event.timestamp}`;
+type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
+
+export const toKey = (event: KeySource) => `${event.type}:${event.timestamp}`;
 
 export const getActorName = (navIdent: string | null) => getName(navIdent, '[Ukjent bruker]');
 

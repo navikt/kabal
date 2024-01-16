@@ -17,7 +17,7 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 // eslint-disable-next-line import/no-cycle
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useGetOppgavebehandlingQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { useGetRelevantOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 
 interface Props {
@@ -30,7 +30,7 @@ const CURRENT_TEST_ID = 'relevant-current-oppgave-table';
 
 export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: oppgave, isLoading: isOppgaveLoading } = useGetOppgavebehandlingQuery(oppgaveId);
+  const { data: sakenGjelder, isLoading: isOppgaveLoading } = useGetSakenGjelderQuery(oppgaveId);
   const { data, isLoading, refetch, isFetching, isError } = useGetRelevantOppgaverQuery(oppgaveId);
 
   const uferdigeOppgaverIdList = data?.aapneBehandlinger ?? EMPTY_LIST;
@@ -47,8 +47,8 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
     return null;
   }
 
-  const fnr = formatFoedselsnummer(oppgave?.sakenGjelder.id);
-  const name = oppgave?.sakenGjelder.name ?? '';
+  const fnr = formatFoedselsnummer(sakenGjelder?.id);
+  const name = sakenGjelder?.name ?? '';
   const heading = `${totalCount} andre pågående oppgaver for ${name} (${fnr})`;
   const tooltip = totalCount === 1 ? '1 annen pågående oppgave' : `${totalCount} andre pågående oppgaver`;
 
@@ -69,7 +69,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
       {isOpen ? (
         <Modal header={{ heading }} width="2000px" closeOnBackdropClick open onBeforeClose={onClose}>
           <StyledBody>
-            {isOppgaveLoading || oppgave === undefined ? (
+            {isOppgaveLoading || sakenGjelder === undefined ? (
               <Loader />
             ) : (
               <section>

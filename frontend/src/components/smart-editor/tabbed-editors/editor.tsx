@@ -23,7 +23,7 @@ import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floati
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { useLazyGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
+import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 interface EditorProps {
@@ -36,7 +36,7 @@ interface EditorProps {
 
 export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }: EditorProps) => {
   const oppgaveId = useOppgaveId();
-  const [getSmartEditor, { isLoading }] = useLazyGetSmartEditorQuery();
+  const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
 
@@ -95,7 +95,7 @@ export const Editor = ({ id, templateId, initialValue, onChange, updateStatus }:
           <ErrorBoundary
             errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgaveId} />}
             actionButton={{
-              onClick: () => getSmartEditor({ dokumentId: id, oppgaveId }, false).unwrap(),
+              onClick: () => getDocument({ dokumentId: id, oppgaveId }, false).unwrap(),
               loading: isLoading,
               disabled: isLoading,
               buttonText: 'Gjenopprett dokument',

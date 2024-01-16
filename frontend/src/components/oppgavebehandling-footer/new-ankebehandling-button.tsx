@@ -6,7 +6,7 @@ import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/valid
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useNewAnkebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ValidationType } from '@app/types/oppgavebehandling/params';
 

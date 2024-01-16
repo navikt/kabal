@@ -14,18 +14,20 @@ import {
   ISetParentParams,
   ISetTypeParams,
 } from '@app/types/documents/params';
-import { ICreateVedleggFromJournalfoertDocumentResponse, ISetParentResponse } from '@app/types/documents/response';
+import {
+  ICreateVedleggFromJournalfoertDocumentResponse,
+  IModifiedDocumentResonse,
+  ISetParentResponse,
+} from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
-import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
-import { smartEditorQuerySlice } from '../queries/smart-editor';
 
 const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    setType: builder.mutation<IMainDocument, ISetTypeParams>({
+    setType: builder.mutation<IModifiedDocumentResonse, ISetTypeParams>({
       query: ({ oppgaveId, dokumentId, dokumentTypeId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/dokumenttype`,
         body: { dokumentTypeId },
@@ -35,14 +37,15 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         const undo = optimisticUpdate(oppgaveId, dokumentId, 'dokumentTypeId', dokumentTypeId);
 
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
         } catch {
           undo();
           toast.error('Kunne ikke endre dokumenttype.');
         }
       },
     }),
-    setTitle: builder.mutation<void, ISetNameParams>({
+    setTitle: builder.mutation<IModifiedDocumentResonse, ISetNameParams>({
       query: ({ oppgaveId, dokumentId, title }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/tittel`,
         body: { title },
@@ -52,7 +55,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         const undo = optimisticUpdate(oppgaveId, dokumentId, 'tittel', title);
 
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
         } catch (e) {
           undo();
 
@@ -113,22 +117,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           }),
         );
 
-        const smartEditorsPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-            draft.map((doc) => (doc.id === dokumentId || doc.parentId === dokumentId ? { ...doc, parentId } : doc)),
-          ),
-        );
-
-        const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, (draft) => {
-            if (draft !== null) {
-              return { ...draft, parentId };
-            }
-
-            return draft;
-          }),
-        );
-
         try {
           const { data } = await queryFulfilled;
 
@@ -143,7 +131,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 for (const alteredDoc of data.alteredDocuments) {
                   if (oldDoc.id === alteredDoc.id) {
                     altered = true;
-                    newDocuments.push(alteredDoc);
+                    newDocuments.push({ ...oldDoc, parentId: alteredDoc.parentId, modified: alteredDoc.modified });
                     break;
                   }
                 }
@@ -154,9 +142,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 }
 
                 // If it is not altered, check if it is a duplicate.
-                const isDuplicate = data.duplicateJournalfoerteDokumenter.some(
-                  (duplicate) => duplicate.id === oldDoc.id,
-                );
+                const isDuplicate = data.duplicateJournalfoerteDokumenter.includes(oldDoc.id);
 
                 // If it is a duplicate, continue to next document.
                 if (isDuplicate) {
@@ -184,12 +170,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             toast.error(message);
           }
           documentsPatchResult.undo();
-          smartEditorsPatchResult.undo();
-          smartEditorPatchResult.undo();
         }
       },
     }),
-    finishDocument: builder.mutation<IMainDocument, IFinishDocumentParams>({
+    finishDocument: builder.mutation<IModifiedDocumentResonse, IFinishDocumentParams>({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
@@ -213,15 +197,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.map((doc) => (doc.id === data.id ? data : doc)),
-            ),
-          );
-
-          dispatch(smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null));
-
-          dispatch(
-            smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-              draft.filter(({ id }) => id !== dokumentId),
+              draft.map((doc) => (doc.id === dokumentId ? { ...doc, ...data } : doc)),
             ),
           );
         } catch (e) {
@@ -252,13 +228,13 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         );
 
         const smartEditorPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, () => null),
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, () => undefined),
         );
 
         const smartEditorsPatchResult = dispatch(
-          smartEditorQuerySlice.util.updateQueryData(
-            'getSmartEditors',
-            { oppgaveId },
+          documentsQuerySlice.util.updateQueryData(
+            'getDocuments',
+            oppgaveId,
             (draft) => draft.filter(({ id, parentId }) => id !== dokumentId && parentId !== dokumentId), // Remove deleted document from list.
           ),
         );
@@ -299,7 +275,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-          dispatch(documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => [data, ...draft]));
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+              draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
+            ),
+          );
         } catch (e) {
           const message = 'Kunne ikke laste opp dokument.';
 
@@ -435,8 +415,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-              const documents = [...draft];
-
               for (const newDoc of data.addedJournalfoerteDokumenter) {
                 for (let index = draft.length - 1; index >= 0; index--) {
                   const oldDoc = draft[index];
@@ -451,16 +429,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                       newDoc.journalfoertDokumentReference.journalpostId &&
                     oldDoc.journalfoertDokumentReference.dokumentInfoId ===
                       newDoc.journalfoertDokumentReference.dokumentInfoId &&
-                    oldDoc.parentId === newDoc.parentId
+                    oldDoc.parentId === newDoc.parentId &&
+                    oldDoc.id !== newDoc.id
                   ) {
-                    // draft[index] = newDoc;
-                    documents[index] = newDoc;
+                    draft[index] = newDoc;
                     break;
                   }
                 }
               }
 
-              return documents;
+              return draft;
             }),
           );
 
@@ -486,11 +464,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
+const optimisticUpdate = <K extends keyof IMainDocument>(
   oppgaveId: string,
   dokumentId: string,
   key: K,
-  value: (ISmartEditor & IMainDocument)[K],
+  value: IMainDocument[K],
 ) => {
   const documentsPatchResult = reduxStore.dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
@@ -498,14 +476,8 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
     ),
   );
 
-  const smartEditorsPatchResult = reduxStore.dispatch(
-    smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) =>
-      draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc)),
-    ),
-  );
-
   const smartEditorPatchResult = reduxStore.dispatch(
-    smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId }, (draft) => {
+    documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
       if (draft !== null) {
         return { ...draft, [key]: value };
       }
@@ -516,7 +488,6 @@ const optimisticUpdate = <K extends keyof ISmartEditor & keyof IMainDocument>(
 
   return () => {
     documentsPatchResult.undo();
-    smartEditorsPatchResult.undo();
     smartEditorPatchResult.undo();
   };
 };

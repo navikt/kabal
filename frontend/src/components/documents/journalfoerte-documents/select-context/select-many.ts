@@ -1,14 +1,15 @@
 /* eslint-disable max-depth */
 import { useCallback } from 'react';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getId } from './helpers';
 import { useSelectOne } from './select-one';
-import { IArkivertDocumentReference, SelectHook, SelectMany } from './types';
+import { SelectHook, SelectMany } from './types';
 
 export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setLastSelectedDocument, documentList) => {
   const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
 
   return useCallback(
-    (documents: IArkivertDocumentReference[]) => {
+    (documents: IJournalfoertDokumentId[]) => {
       if (documents.length === 0) {
         return;
       }

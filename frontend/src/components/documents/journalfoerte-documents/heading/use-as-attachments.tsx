@@ -2,6 +2,7 @@ import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -9,14 +10,13 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const { getSelectedDocuments } = useContext(SelectContext);
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
@@ -27,7 +27,7 @@ export const UseAsAttachments = () => {
 
   const canEdit = hasDocumentsAccess || isRol;
 
-  if (oppgaveId === skipToken || !canEdit || user === undefined) {
+  if (oppgaveId === skipToken || !canEdit) {
     return null;
   }
 

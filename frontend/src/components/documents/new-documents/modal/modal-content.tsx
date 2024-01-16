@@ -21,6 +21,7 @@ import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useAttachments } from '@app/hooks/use-parent-document';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
+  DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
@@ -34,7 +35,6 @@ import { FlowState } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
-import { OPTIONS_MAP } from './set-type/options';
 
 interface Props {
   document: IMainDocument;
@@ -61,7 +61,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
       <ModalBody>
         <Row>
           <Tag variant="info" size="small">
-            {isMainDocument ? OPTIONS_MAP[document.dokumentTypeId] : 'Vedlegg'}
+            {isMainDocument ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg'}
           </Tag>
           <Tag variant="info" size="small" title="Dokumenttype">
             {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}

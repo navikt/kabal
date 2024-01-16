@@ -1,13 +1,13 @@
 import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useSakstyper } from '@app/hooks/use-kodeverk-value';
 import { useGetRolUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -43,12 +43,10 @@ const RolOppgaverTableInternal = () => {
 
   const types = useSakstyper();
 
-  const { data: bruker } = useUser();
+  const user = useContext(UserContext);
 
   const queryParams: typeof skipToken | EnhetensOppgaverParams =
-    typeof bruker === 'undefined' || typeof types === 'undefined'
-      ? skipToken
-      : { ...params, enhetId: bruker.ansattEnhet.id };
+    typeof types === 'undefined' ? skipToken : { ...params, enhetId: user.ansattEnhet.id };
 
   const { data, isLoading, isFetching, isError, refetch } = useGetRolUferdigeOppgaverQuery(queryParams, {
     refetchOnFocus: true,

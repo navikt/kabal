@@ -1,18 +1,18 @@
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMySignatureQuery, useSetCustomInfoMutation } from '@app/redux-api/bruker';
-import { useUser } from '@app/simple-api-state/use-user';
 import { ISetCustomInfoParams, ISignatureResponse, Role } from '@app/types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {
-  const { data: bruker, isLoading: brukerIsLoading } = useUser();
+  const user = useContext(UserContext);
   const { data: ownSignature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
-  if (signatureIsLoading || brukerIsLoading || typeof ownSignature === 'undefined' || typeof bruker === 'undefined') {
+  if (signatureIsLoading || typeof ownSignature === 'undefined') {
     return null;
   }
 
@@ -29,19 +29,19 @@ export const Signature = () => {
         det.
       </p>
       <SignatureValue
-        navIdent={bruker.navIdent}
+        navIdent={user.navIdent}
         saksbehandlerSignature={ownSignature}
         infoKey="customLongName"
         label="Langt navn (f.eks.: Kari Nordmann)"
       />
       <SignatureValue
-        navIdent={bruker.navIdent}
+        navIdent={user.navIdent}
         saksbehandlerSignature={ownSignature}
         infoKey="customShortName"
         label="Kort navn (f.eks. K. Nordmann)"
       />
       <TitleSelector
-        navIdent={bruker.navIdent}
+        navIdent={user.navIdent}
         saksbehandlerSignature={ownSignature}
         infoKey="customJobTitle"
         label="Stillingstittel (f.eks. Rådgiver)"

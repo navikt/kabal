@@ -1,7 +1,6 @@
 import { Heading, Select } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
 import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
@@ -11,7 +10,7 @@ import { getROLEvent } from '@app/components/behandling/behandlingsdialog/histor
 import { getSattPaaVent } from '@app/components/behandling/behandlingsdialog/history/satt-paa-vent';
 import { getTildelingEvent } from '@app/components/behandling/behandlingsdialog/history/tildeling';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, IHistory, IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { getFeilregistrertEvent } from './feilregistrert';
 import { getFerdigstiltEvent } from './ferdigstilt';
@@ -130,13 +129,13 @@ interface NodesCategory {
   timestamp: string;
 }
 
-type ToNodeFn<T extends IHistory> = (event: T, key: string) => React.ReactNode | null;
+type ToNodeFn<T extends IHistory> = (event: T) => React.ReactNode | null;
 
 const toNodes = <T extends IHistory>(events: T[], toNode: ToNodeFn<T>): NodesCategory[] => {
   const renderedEvents: NodesCategory[] = [];
 
   for (const event of events) {
-    const node = toNode(event, toKey(event));
+    const node = toNode(event);
 
     if (node !== null) {
       renderedEvents.push({ node, timestamp: event.timestamp });

@@ -17,10 +17,10 @@ import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';
 
 export const Documents = () => {
-  const { value: shown = true, isLoading: isSettingLoading } = useDocumentsEnabled();
+  const { value: shown = true } = useDocumentsEnabled();
   const { data, isLoading } = useOppgave();
 
-  if (!shown || isSettingLoading) {
+  if (!shown) {
     return null;
   }
 

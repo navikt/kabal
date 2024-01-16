@@ -1,12 +1,11 @@
 import { Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -36,7 +35,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
 };
 
 const EnhetensOppgaverPaaVentTableInternal = () => {
-  const { data: bruker } = useUser();
+  const user = useContext(UserContext);
 
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
@@ -47,8 +46,7 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
     sortering: SortFieldEnum.FRIST,
   });
 
-  const queryParams: typeof skipToken | EnhetensOppgaverParams =
-    typeof bruker === 'undefined' ? skipToken : { ...params, enhetId: bruker.ansattEnhet.id };
+  const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
   const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
     refetchOnFocus: true,

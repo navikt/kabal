@@ -24,7 +24,7 @@ import { IS_LOCALHOST } from '../../common';
 import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
 import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -80,7 +80,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           update(oppgaveId, data);
 
           toast.success(
-            fullmektig === null ? 'Fullmektig fjernet' : `Fullmektig endret til ${formatIdNumber(fullmektig.id)}`,
+            fullmektig === null
+              ? 'Fullmektig fjernet'
+              : `Fullmektig satt til ${fullmektig.name} (${formatIdNumber(fullmektig.id)})`,
           );
         } catch (e) {
           undo();
@@ -106,11 +108,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
-
-          toast.success(`Klager endret til ${formatIdNumber(klager.id)}`);
+          toast.success(`Klager endret til ${klager.name} (${formatIdNumber(klager.id)})`);
         } catch (e) {
           undo();
-
           const message = 'Kunne ikke endre fullmektig.';
 
           if (isApiRejectionError(e)) {

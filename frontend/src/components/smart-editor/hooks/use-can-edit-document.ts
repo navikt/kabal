@@ -1,20 +1,20 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '@app/simple-api-state/use-user';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
-  const { data: user, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
 
   return useMemo<boolean>(() => {
-    if (oppgaveIsLoading || userIsLoading || oppgaveIsFetching) {
+    if (oppgaveIsLoading || oppgaveIsFetching) {
       return false;
     }
 
-    if (typeof oppgave === 'undefined' || typeof user === 'undefined') {
+    if (oppgave === undefined) {
       return false;
     }
 
@@ -40,5 +40,5 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
     }
 
     return oppgave.tildeltSaksbehandlerident === user.navIdent;
-  }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, templateId, user, userIsLoading]);
+  }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, templateId, user]);
 };

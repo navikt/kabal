@@ -1,20 +1,12 @@
-import { useMemo } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 
-type ReturnType = [false, true] | [boolean, false];
+export const useHasYtelseAccess = (ytelse: string | undefined): boolean => {
+  const user = useContext(UserContext);
 
-export const useHasYtelseAccess = (ytelse: string | undefined): ReturnType => {
-  const { data: user, isLoading } = useUser();
+  if (typeof ytelse === 'undefined') {
+    return false;
+  }
 
-  return useMemo<ReturnType>(() => {
-    if (typeof ytelse === 'undefined') {
-      return [false, false];
-    }
-
-    if (isLoading || typeof user === 'undefined') {
-      return [false, true];
-    }
-
-    return [user.tildelteYtelser.some((y) => y === ytelse), false];
-  }, [isLoading, user, ytelse]);
+  return user.tildelteYtelser.some((y) => y === ytelse);
 };

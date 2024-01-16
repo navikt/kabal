@@ -1,7 +1,7 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { Name } from '@app/components/behandling/behandlingsdialog/common/name';
+import { Name } from '@app/components/name/name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 

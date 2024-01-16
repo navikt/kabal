@@ -4,10 +4,13 @@ import { formatIdNumber } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HistoryEventTypes, IKlagerEvent, IPart } from '@app/types/oppgavebehandling/response';
-import { Line, getActorName } from './common';
+import { Line, getActorName, toKey } from './common';
 import { HistoryEvent } from './event';
 
-export const getKlager = ({ actor, event, previous, timestamp }: IKlagerEvent, key: string) => {
+export const getKlager = (e: IKlagerEvent) => {
+  const key = toKey(e);
+  const { actor, event, previous, timestamp } = e;
+
   if (previous.event.part === null && event.part !== null) {
     return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }

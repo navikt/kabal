@@ -1,23 +1,45 @@
+import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
 import { parseJSON } from '@app/functions/parse-json';
-import { IS_LOCALHOST } from './common';
+import { IS_LOCALHOST } from '../common';
 
 export enum ServerSentEventType {
-  FINISHED = 'finished',
-  PATCH = 'patch',
-  OPERATION = 'operation',
+  // Dokumenter under arbeid
+  DOCUMENT_FINISHED = 'DOCUMENT_FINISHED',
+  DOCUMENTS_ADDED = 'DOCUMENTS_ADDED',
+  DOCUMENTS_REMOVED = 'DOCUMENTS_REMOVED',
+  DOCUMENTS_CHANGED = 'DOCUMENTS_CHANGED',
+
+  // Journalførte dokumenter
+  JOURNALFOERT_DOCUMENT_MODIFIED = 'JOURNALFOERT_DOCUMENT_MODIFIED',
+  JOURNALPOST_ADDED = 'JOURNALPOST_ADDED',
+
+  // Behandlingsdetaljer
+  ROL = 'ROL',
+  MEDUNDERSKRIVER = 'MEDUNDERSKRIVER',
+  KLAGER = 'KLAGER',
+  FULLMEKTIG = 'FULLMEKTIG',
+  /** Added or changed */
+  MESSAGE = 'MESSAGE',
+  UTFALL = 'UTFALL',
+  EXTRA_UTFALL = 'EXTRA_UTFALL',
+  REGISTRERINGSHJEMLER = 'REGISTRERINGSHJEMLER',
+  INNSENDINGSHJEMLER = 'INNSENDINGSHJEMLER',
+  MOTTATT_VEDTAKSINSTANS = 'MOTTATT_VEDTAKSINSTANS',
+  SATT_PAA_VENT = 'SATT_PAA_VENT',
+  FERDIGSTILT = 'FERDIGSTILT',
+  FEILREGISTRERING = 'FEILREGISTRERING',
 }
 
 type ServerSentEvent = MessageEvent<string>;
 
 type ListenerFn<T> = (event: T) => void;
-type JsonListenerFn<T> = (data: T | null, event: ServerSentEvent) => void;
+type JsonListenerFn<T> = (data: T, event: ServerSentEvent) => void;
 type EventListenerFn = (event: Event) => void;
 type EventListener = [ServerSentEventType, EventListenerFn];
 
 export class ServerSentEventManager {
   private events: EventSource;
   private listeners: EventListener[] = [];
-  private connectionListeners: ListenerFn<boolean>[] = [];
   private url: string;
   private lastEventId: string | null = null;
 
@@ -27,14 +49,6 @@ export class ServerSentEventManager {
     this.url = url;
     this.lastEventId = initialEventId;
     this.events = this.createEventSource();
-  }
-
-  public addConnectionListener(listener: ListenerFn<boolean>) {
-    if (!this.connectionListeners.includes(listener)) {
-      this.connectionListeners.push(listener);
-    }
-
-    listener(this.isConnected);
   }
 
   public addEventListener(eventName: ServerSentEventType, listener: ListenerFn<ServerSentEvent>) {
@@ -54,11 +68,16 @@ export class ServerSentEventManager {
   public addJsonEventListener<T>(eventName: ServerSentEventType, listener: JsonListenerFn<T>) {
     this.addEventListener(eventName, (event) => {
       if (event.data.length === 0) {
-        return listener(null, event);
+        return;
       }
 
       const parsed = parseJSON<T>(event.data);
-      listener(parsed, event);
+
+      if (parsed === null) {
+        return;
+      }
+
+      return listener(parsed, event);
     });
 
     return this;
@@ -71,7 +90,10 @@ export class ServerSentEventManager {
   }
 
   private createEventSource(): EventSource {
-    const url = this.lastEventId === null ? this.url : `${this.url}?lastEventId=${this.lastEventId}`;
+    const url =
+      this.lastEventId === null
+        ? `${this.url}?${TRACEPARENT_HEADER}=${generateTraceParent()}`
+        : `${this.url}?lastEventId=${this.lastEventId}&${TRACEPARENT_HEADER}=${generateTraceParent()}`;
 
     const events = new EventSource(url, {
       withCredentials: IS_LOCALHOST,
@@ -83,7 +105,6 @@ export class ServerSentEventManager {
       }
 
       this.isConnected = false;
-      this.connectionListeners.forEach((listener) => listener(this.isConnected));
 
       setTimeout(() => {
         this.events = this.createEventSource();
@@ -93,7 +114,6 @@ export class ServerSentEventManager {
     events.addEventListener('open', () => {
       this.listeners.forEach(([event, listener]) => events.addEventListener(event, listener));
       this.isConnected = true;
-      this.connectionListeners.forEach((listener) => listener(this.isConnected));
     });
 
     return events;

@@ -1,7 +1,7 @@
 import { Select, Skeleton } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import { INavEmployee } from '@app/types/oppgave-common';
 import { useSetRol } from '../oppgavestyring/use-set-rol';

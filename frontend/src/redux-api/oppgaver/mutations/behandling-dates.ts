@@ -13,7 +13,7 @@ import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 import { toast } from './../../../components/toast/store';
 import { isoDateToPretty } from './../../../domain/date';
 

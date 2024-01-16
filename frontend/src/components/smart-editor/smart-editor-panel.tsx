@@ -6,10 +6,10 @@ import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { TabbedEditors } from './tabbed-editors/tabbed-editors';
 
 export const SmartEditorPanel = () => {
-  const { value: shown = true, isLoading } = useSmartEditorEnabled();
+  const { value: shown = true } = useSmartEditorEnabled();
   const { data: oppgave } = useOppgave();
 
-  const hide = !shown || isLoading || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null;
+  const hide = !shown || typeof oppgave === 'undefined' || oppgave.feilregistrering !== null;
 
   if (hide) {
     return null;

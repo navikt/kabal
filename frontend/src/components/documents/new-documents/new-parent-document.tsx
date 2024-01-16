@@ -1,6 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-edit-document';
@@ -10,7 +11,6 @@ import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { IMainDocument } from '@app/types/documents/documents';
 import { AttachmentList, ListProps } from './attachment-list';
@@ -22,7 +22,7 @@ interface Props extends ListProps {
 }
 
 export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const isRol = useIsRol();
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
@@ -51,7 +51,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
             oppgaveId,
             parentId: document.id,
             journalfoerteDokumenter: draggedJournalfoertDocuments,
-            creatorIdent: user?.navIdent ?? '',
+            creatorIdent: user.navIdent,
             creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
             isFinished,
           });
@@ -69,7 +69,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
       draggedJournalfoertDocuments,
       setParent,
       createVedlegg,
-      user?.navIdent,
+      user.navIdent,
       isRol,
       isFinished,
     ],

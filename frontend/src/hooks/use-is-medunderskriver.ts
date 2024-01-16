@@ -1,19 +1,15 @@
-import { useMemo } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsMedunderskriver = () => {
-  const { data: userData, isLoading } = useUser();
+  const user = useContext(UserContext);
   const { data: oppgave } = useOppgave();
 
-  return useMemo(() => {
-    if (typeof oppgave === 'undefined' || isLoading || typeof userData === 'undefined') {
-      return false;
-    }
+  if (oppgave === undefined) {
+    return false;
+  }
 
-    return (
-      oppgave.medunderskriver.flowState !== FlowState.NOT_SENT && oppgave.medunderskriver.navIdent === userData.navIdent
-    );
-  }, [oppgave, userData, isLoading]);
+  return oppgave.medunderskriver.flowState !== FlowState.NOT_SENT && oppgave.medunderskriver.navIdent === user.navIdent;
 };

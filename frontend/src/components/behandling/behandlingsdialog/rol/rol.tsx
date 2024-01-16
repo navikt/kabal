@@ -13,7 +13,6 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetRolQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IAnkebehandling, IKlagebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -42,11 +41,7 @@ const RolInternal = ({ oppgave }: Props) => {
   const isRol = useIsRol();
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
-  const isEditable = !isFinished && !isFeilregistrert;
   const isKrol = useHasRole(Role.KABAL_KROL);
-
-  // Poll the ROL endpoint, in case ROL is changed by another user.
-  useGetRolQuery(oppgave.id, isEditable ? { pollingInterval: 3 * 1000 } : undefined);
 
   const { rol } = oppgave;
 

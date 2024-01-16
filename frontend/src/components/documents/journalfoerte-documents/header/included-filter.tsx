@@ -5,11 +5,7 @@ import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 
 export const IncludedFilter = () => {
-  const { value = false, setValue, isLoading } = useDocumentsOnlyIncluded();
-
-  if (isLoading) {
-    return null;
-  }
+  const { value = false, setValue } = useDocumentsOnlyIncluded();
 
   const title = value ? 'Viser kun inkluderte dokumenter.' : 'Viser alle dokumenter.';
 

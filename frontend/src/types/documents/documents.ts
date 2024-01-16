@@ -1,3 +1,5 @@
+import { EditorValue } from '@app/plate/types';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { Role } from '../bruker';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
@@ -25,7 +27,14 @@ export enum DistribusjonsType {
   BESLUTNING = '5',
 }
 
-interface IBaseDocument {
+export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
+  [DistribusjonsType.VEDTAKSBREV]: 'Vedtaksbrev',
+  [DistribusjonsType.BESLUTNING]: 'Beslutningsbrev',
+  [DistribusjonsType.BREV]: 'Brev',
+  [DistribusjonsType.NOTAT]: 'Notat',
+};
+
+interface IBaseDocument<P extends string | null = UUID | null> {
   type: DocumentTypeEnum;
   id: UUID;
   tittel: string;
@@ -45,43 +54,43 @@ interface IBaseDocument {
   modified: string;
   isSmartDokument: boolean;
   isMarkertAvsluttet: boolean;
-  parentId: UUID | null;
+  parentId: P;
   creatorIdent: string;
   creatorRole: Role;
 }
 
-export interface IFileDocument extends IBaseDocument {
+export interface IFileDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
   type: DocumentTypeEnum.UPLOADED;
   isSmartDokument: false;
-  templateId: null;
+  templateId?: never;
+  content?: never;
 }
 
-export interface ISmartDocument extends IBaseDocument {
+export interface ISmartDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
   templateId: TemplateIdEnum;
+  content: EditorValue;
 }
 
-export interface IJournalfoertDokumentId
-  extends Pick<Journalpost, 'journalpostId'>,
-    Pick<DokumentInfo, 'dokumentInfoId'> {}
-
-export interface IJournalfoertDokument
+interface IJournalfoertDokument
   extends IJournalfoertDokumentId,
     Pick<DokumentInfo, 'harTilgangTilArkivvariant'>,
     Pick<Journalpost, 'datoOpprettet'> {
   sortKey: string;
 }
 
-export interface IJournalfoertDokumentReference extends IBaseDocument {
+export interface IJournalfoertDokumentReference extends IBaseDocument<UUID> {
   type: DocumentTypeEnum.JOURNALFOERT;
   journalfoertDokumentReference: IJournalfoertDokument;
   isSmartDokument: false;
-  parentId: UUID;
   templateId?: never;
+  content?: never;
 }
 
 export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokumentReference;
+
+export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
 
 export interface IMergedDocumentsResponse {
   reference: string;

@@ -11,23 +11,13 @@ import {
 } from '@app/hooks/settings/use-setting';
 
 export const PanelSwitches = () => {
-  const {
-    value: documentsEnabled = true,
-    setValue: setDocumentsEnabled,
-    isLoading: documentsLoading,
-  } = useDocumentsEnabled();
-
-  const {
-    value: behandlingEnabled = true,
-    setValue: setBehandlingEnabled,
-    isLoading: behandlingLoading,
-  } = useBehandlingEnabled();
+  const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
+  const { value: behandlingEnabled = true, setValue: setBehandlingEnabled } = useBehandlingEnabled();
 
   return (
     <Container data-testid="behandling-panel-switches">
       <TogglePanelButton
         checked={documentsEnabled}
-        loading={documentsLoading}
         togglePanel={() => setDocumentsEnabled(!documentsEnabled)}
         testId="panel-switch-documents"
       >
@@ -36,7 +26,6 @@ export const PanelSwitches = () => {
       <Brevutforming />
       <TogglePanelButton
         checked={behandlingEnabled}
-        loading={behandlingLoading}
         togglePanel={() => setBehandlingEnabled(!behandlingEnabled)}
         testId="panel-switch-behandling"
       >
@@ -54,11 +43,7 @@ const Container = styled.div`
 `;
 
 const Brevutforming = () => {
-  const {
-    value: smartEditorEnabled = true,
-    setValue: setSmartEditorEnabled,
-    isLoading: smartEditorLoading,
-  } = useSmartEditorEnabled();
+  const { value: smartEditorEnabled = true, setValue: setSmartEditorEnabled } = useSmartEditorEnabled();
 
   const { data: oppgave, isLoading } = useOppgave();
 
@@ -69,7 +54,6 @@ const Brevutforming = () => {
   return (
     <TogglePanelButton
       checked={smartEditorEnabled}
-      loading={smartEditorLoading}
       togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
       testId="panel-switch-smart-editor"
     >
@@ -79,7 +63,7 @@ const Brevutforming = () => {
 };
 
 const Kvalitetsvurdering = () => {
-  const { value = true, setValue, isLoading } = useKvalitetsvurderingEnabled();
+  const { value = true, setValue } = useKvalitetsvurderingEnabled();
   const hideKvalitetsvurdering = useHideKvalitetsvurdering();
 
   if (hideKvalitetsvurdering) {
@@ -87,12 +71,7 @@ const Kvalitetsvurdering = () => {
   }
 
   return (
-    <TogglePanelButton
-      checked={value}
-      loading={isLoading}
-      togglePanel={() => setValue(!value)}
-      testId="panel-switch-kvalitetsvurdering"
-    >
+    <TogglePanelButton checked={value} togglePanel={() => setValue(!value)} testId="panel-switch-kvalitetsvurdering">
       Kvalitetsvurdering
     </TogglePanelButton>
   );
@@ -101,13 +80,12 @@ const Kvalitetsvurdering = () => {
 interface TogglePanelButtonProps {
   togglePanel: () => void;
   checked: boolean;
-  loading: boolean;
   children: string;
   testId?: string;
 }
 
-const TogglePanelButton = ({ togglePanel, children, checked, loading, testId }: TogglePanelButtonProps) => (
-  <Switch checked={checked} size="small" onChange={togglePanel} loading={loading} data-testid={testId}>
+const TogglePanelButton = ({ togglePanel, children, checked, testId }: TogglePanelButtonProps) => (
+  <Switch checked={checked} size="small" onChange={togglePanel} data-testid={testId}>
     {children}
   </Switch>
 );

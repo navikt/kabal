@@ -7,15 +7,15 @@ import {
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
-import { EnhetHjemmel } from './filter-drodowns/enhet-hjemmel';
-import { Hjemmel } from './filter-drodowns/hjemmel';
-import { Medunderskriver } from './filter-drodowns/medunderskriver';
-import { Rol } from './filter-drodowns/rol';
-import { RolHjemmel } from './filter-drodowns/rol-hjemmel';
-import { RolYtelse } from './filter-drodowns/rol-ytelse';
-import { Saksbehandler } from './filter-drodowns/saksbehandler';
-import { Sakstype } from './filter-drodowns/sakstype';
-import { Ytelse } from './filter-drodowns/ytelse';
+import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
+import { Hjemmel } from './filter-dropdowns/hjemmel';
+import { Medunderskriver } from './filter-dropdowns/medunderskriver';
+import { Rol } from './filter-dropdowns/rol';
+import { RolHjemmel } from './filter-dropdowns/rol-hjemmel';
+import { RolYtelse } from './filter-dropdowns/rol-ytelse';
+import { Saksbehandler } from './filter-dropdowns/saksbehandler';
+import { Sakstype } from './filter-dropdowns/sakstype';
+import { Ytelse } from './filter-dropdowns/ytelse';
 
 interface TablePlainHeadersProps {
   columnKeys: ColumnKeyEnum[];

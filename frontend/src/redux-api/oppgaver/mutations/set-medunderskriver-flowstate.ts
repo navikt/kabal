@@ -7,7 +7,7 @@ import { ISetFlowStateParams } from '@app/types/oppgavebehandling/params';
 import { ISetFlowStateResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

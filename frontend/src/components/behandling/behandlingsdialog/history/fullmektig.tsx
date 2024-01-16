@@ -2,10 +2,13 @@ import { ArrowRightLeftIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { formatIdNumber } from '@app/functions/format-id';
 import { HistoryEventTypes, IFullmektigEvent, IPart } from '@app/types/oppgavebehandling/response';
-import { Line, getActorName } from './common';
+import { Line, getActorName, toKey } from './common';
 import { HistoryEvent } from './event';
 
-export const getFullmektig = ({ actor, event, previous, timestamp }: IFullmektigEvent, key: string) => {
+export const getFullmektig = (e: IFullmektigEvent) => {
+  const key = toKey(e);
+  const { actor, event, previous, timestamp } = e;
+
   if (previous.event.part === null && event.part !== null) {
     return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }

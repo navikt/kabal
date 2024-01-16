@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext, useMemo } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { Role } from '@app/types/bruker';
 import { useHasYtelseAccess } from './use-has-ytelse-access';
 
@@ -18,16 +18,10 @@ export const useOppgaveActions = (
   medunderskriver: string | null,
   ytelse?: string,
 ): ReturnType => {
-  const { data: user, isLoading: isUserLoading } = useUser();
-  const [hasYtelseAccess, isYtelseLoading] = useHasYtelseAccess(ytelse);
-
-  const isLoading = isUserLoading || isYtelseLoading;
+  const user = useContext(UserContext);
+  const hasYtelseAccess = useHasYtelseAccess(ytelse);
 
   return useMemo<ReturnType>(() => {
-    if (isLoading || typeof user === 'undefined') {
-      return [undefined, true];
-    }
-
     const hasMedunderskriver = medunderskriver !== null;
     const isAssigned = tildeltSaksbehandler !== null;
     const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
@@ -53,7 +47,7 @@ export const useOppgaveActions = (
       },
       false,
     ];
-  }, [isLoading, user, medunderskriver, tildeltSaksbehandler, hasYtelseAccess]);
+  }, [user, medunderskriver, tildeltSaksbehandler, hasYtelseAccess]);
 };
 
 const canAssignSelf = ({
