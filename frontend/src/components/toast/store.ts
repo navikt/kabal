@@ -65,11 +65,7 @@ class Store {
       if (message.id === id) {
         const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 
-        return {
-          ...message,
-          expiresAt,
-          setExpiresAt,
-        };
+        return { ...message, expiresAt, setExpiresAt };
       }
 
       return message;

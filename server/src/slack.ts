@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { slack } from './config/config';
 import { ENVIRONMENT, isDeployed } from './config/env';
 import { getLogger } from './logger';

@@ -1,6 +1,6 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Name } from '@app/components/behandling/behandlingsdialog/common/name';
+import { Name } from '@app/components/name/name';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IHelper } from '@app/types/oppgave-common';
 import { getTitleCapitalized } from './get-title';

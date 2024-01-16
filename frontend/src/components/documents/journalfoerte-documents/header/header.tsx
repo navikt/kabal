@@ -17,12 +17,12 @@ import {
   ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
-import { IArkivertDocumentReference } from '../select-context/types';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useFilters } from './use-filters';
 
 interface Props {
   filters: ReturnType<typeof useFilters>;
-  allSelectableDocuments: IArkivertDocumentReference[];
+  allSelectableDocuments: IJournalfoertDokumentId[];
   listHeight: number;
 }
 

@@ -25,6 +25,8 @@ enum MessageListTagTypes {
   MESSAGES = 'messages',
 }
 
+export const OPTIMISTIC_MESSAGE_ID_PREFIX = 'new-message-optimistic-id';
+
 const messagesListTags = (messages: IMessage[] | undefined) =>
   typeof messages === 'undefined'
     ? [{ type: MessageListTagTypes.MESSAGES, id: ListTagTypes.PARTIAL_LIST }]
@@ -42,15 +44,14 @@ export const messagesApi = createApi({
       providesTags: messagesListTags,
     }),
     postMessage: builder.mutation<IMessage, IPostMessage & IOppgavebehandlingBaseParams>({
-      invalidatesTags: [MessageListTagTypes.MESSAGES],
-      query: ({ oppgaveId, ...body }) => ({
+      query: ({ oppgaveId, text }) => ({
         method: 'POST',
         url: `/${oppgaveId}/meldinger`,
-        body,
+        body: { text },
       }),
       onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
         const now = new Date().toISOString();
-        const newMessageId = `new-message-optimistic-id-${now}`;
+        const newMessageId = `${OPTIMISTIC_MESSAGE_ID_PREFIX}-${now}`;
 
         const patchResult = dispatch(
           messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {

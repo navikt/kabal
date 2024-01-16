@@ -1,8 +1,8 @@
 import { SexEnum } from '@app/types/kodeverk';
 
-export interface IDocumentReference {
-  journalpostId: string;
-  dokumentInfoId: string;
+export interface IJournalfoertDokumentId {
+  readonly journalpostId: string;
+  readonly dokumentInfoId: string;
 }
 
 export interface IVedlegg {
@@ -68,12 +68,12 @@ export interface IOrganizationStatus {
   date: string;
 }
 
-interface IPersonPart extends IPartBase {
+export interface IPersonPart extends IPartBase {
   type: IdType.FNR;
   statusList: IPersonStatus[];
 }
 
-interface IOrganizationPart extends IPartBase {
+export interface IOrganizationPart extends IPartBase {
   type: IdType.ORGNR;
   statusList: IOrganizationStatus[];
 }
@@ -111,7 +111,7 @@ export interface ISentHelper {
 export interface INotSentHelper {
   navIdent: string | null;
   flowState: FlowState.NOT_SENT;
-  returnertdDate: null;
+  returnertDate: null;
 }
 
 // Medunderskriver/ROL

@@ -59,6 +59,11 @@ module.exports = (_env, { mode }) => ({
         secure: false,
         changeOrigin: true,
         withCredentials: true,
+        on: {
+          proxyReq: (proxyReq, req, res) => {
+            res.on('close', () => proxyReq.destroy());
+          },
+        }
       },
     ],
   },

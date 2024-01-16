@@ -1,10 +1,10 @@
 import { Checkbox } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IArkivertDocumentReference } from '@app/components/documents/journalfoerte-documents/select-context/types';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface Props {
-  allSelectableDocuments: IArkivertDocumentReference[];
+  allSelectableDocuments: IJournalfoertDokumentId[];
 }
 
 export const SelectAll = ({ allSelectableDocuments }: Props) => {

@@ -2,13 +2,12 @@ import { TRange } from '@udecode/plate-common';
 import React, { createContext, useState } from 'react';
 import { useSmartEditorGodeFormuleringerOpen } from '@app/hooks/settings/use-setting';
 import { RichText } from '@app/plate/types';
-import { DistribusjonsType } from '@app/types/documents/documents';
-import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
+import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const noop = () => {};
 
-interface ISmartEditorContext extends Pick<ISmartEditor, 'templateId' | 'dokumentTypeId'> {
+interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
   setShowGodeFormuleringer: (show: boolean) => void;
   newCommentSelection: TRange | null;
@@ -40,7 +39,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
 
 interface Props {
   children: React.ReactNode;
-  editor: ISmartEditor;
+  editor: ISmartDocument;
 }
 
 export const SmartEditorContextComponent = ({ children, editor }: Props) => {

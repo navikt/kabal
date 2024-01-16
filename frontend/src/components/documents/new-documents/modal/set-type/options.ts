@@ -1,27 +1,20 @@
-import { DistribusjonsType } from '@app/types/documents/documents';
-
-export const OPTIONS_MAP: Record<DistribusjonsType, string> = {
-  [DistribusjonsType.VEDTAKSBREV]: 'Vedtaksbrev',
-  [DistribusjonsType.BESLUTNING]: 'Beslutningsbrev',
-  [DistribusjonsType.BREV]: 'Brev',
-  [DistribusjonsType.NOTAT]: 'Notat',
-};
+import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType } from '@app/types/documents/documents';
 
 export const OPTIONS_LIST = [
   {
-    label: OPTIONS_MAP[DistribusjonsType.VEDTAKSBREV],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.VEDTAKSBREV],
     value: DistribusjonsType.VEDTAKSBREV,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.BESLUTNING],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.BESLUTNING],
     value: DistribusjonsType.BESLUTNING,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.BREV],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.BREV],
     value: DistribusjonsType.BREV,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.NOTAT],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.NOTAT],
     value: DistribusjonsType.NOTAT,
   },
 ];

@@ -2,7 +2,6 @@ import fs from 'fs';
 import { IncomingHttpHeaders } from 'http';
 import path from 'path';
 import { Router } from 'express';
-import fetch, { Headers } from 'node-fetch';
 
 const router = Router();
 

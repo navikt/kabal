@@ -4,7 +4,10 @@ import {
   useFradelSaksbehandlerMutation,
   useTildelSaksbehandlerMutation,
 } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { useLazyGetSakenGjelderQuery, useLazyGetSaksbehandlerQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import {
+  useLazyGetSakenGjelderQuery,
+  useLazyGetSaksbehandlerQuery,
+} from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
 import { FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';

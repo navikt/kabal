@@ -14,10 +14,10 @@ import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 export const Kvalitetsvurdering = (): JSX.Element | null => {
   const header = useSectionTitle(SECTION_KEY.KVALITETSVURDERING);
 
-  const { value: shown = true, isLoading } = useKvalitetsvurderingEnabled();
+  const { value: shown = true } = useKvalitetsvurderingEnabled();
   const hideKvalitetsvurdering = useHideKvalitetsvurdering();
 
-  if (hideKvalitetsvurdering || !shown || isLoading) {
+  if (hideKvalitetsvurdering || !shown) {
     return null;
   }
 

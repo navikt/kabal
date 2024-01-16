@@ -29,7 +29,7 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
         Behandling
       </Heading>
 
-      <BehandlingSection label="Anker">{oppgavebehandling.klager.name ?? ''}</BehandlingSection>
+      <BehandlingSection label="Anker">{oppgavebehandling.klager.name ?? 'Navn mangler'}</BehandlingSection>
 
       <Part
         isDeletable

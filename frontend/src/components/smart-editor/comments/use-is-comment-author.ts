@@ -1,11 +1,8 @@
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 
 export const useIsCommentAuthor = (commentId: string, authorIdent: string): boolean => {
-  const { data: user, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
 
-  if (userIsLoading || typeof user === 'undefined' || authorIdent !== user.navIdent) {
-    return false;
-  }
-
-  return true;
+  return authorIdent === user.navIdent;
 };

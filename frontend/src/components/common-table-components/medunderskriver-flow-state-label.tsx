@@ -1,11 +1,11 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import {
   getTitleCapitalized,
   getTitleLowercase,
 } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { useUser } from '@app/simple-api-state/use-user';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
@@ -13,13 +13,13 @@ import { IOppgave } from '@app/types/oppgaver';
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
-  const { data, isLoading } = useUser();
+  const user = useContext(UserContext);
 
-  if (medunderskriver.navIdent === null || isLoading || data === undefined) {
+  if (medunderskriver.navIdent === null) {
     return null;
   }
 
-  const isMedunderskriver = medunderskriver.navIdent === data.navIdent;
+  const isMedunderskriver = medunderskriver.navIdent === user.navIdent;
 
   if (isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (

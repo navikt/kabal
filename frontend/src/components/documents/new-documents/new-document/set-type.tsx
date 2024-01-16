@@ -5,8 +5,8 @@ import { getIsRolQuestions } from '@app/components/documents/new-documents/helpe
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
-import { OPTIONS_LIST, OPTIONS_MAP } from '../modal/set-type/options';
+import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { OPTIONS_LIST } from '../modal/set-type/options';
 
 interface Props {
   document: IMainDocument;
@@ -21,7 +21,7 @@ export const SetDocumentType = ({ document }: Props) => {
   if (!hasDocumentsAccess || isMarkertAvsluttet || getIsRolQuestions(document)) {
     return (
       <Tag variant="info" size="small">
-        {OPTIONS_MAP[dokumentTypeId]}
+        {DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}
       </Tag>
     );
   }

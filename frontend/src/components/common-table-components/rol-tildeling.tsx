@@ -1,10 +1,10 @@
-import { Button, Skeleton } from '@navikt/ds-react';
-import React from 'react';
+import { Button } from '@navikt/ds-react';
+import React, { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { toast } from '@app/components/toast/store';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { useUser } from '@app/simple-api-state/use-user';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 
@@ -13,15 +13,11 @@ interface Props {
 }
 
 export const RolTildeling = ({ oppgave }: Props) => {
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const [setRol, { isLoading }] = useSetRolMutation();
   const { rol } = oppgave;
 
   const { flowState, navIdent } = rol;
-
-  if (user === undefined) {
-    return <Skeleton variant="rounded" />;
-  }
 
   if (flowState === FlowState.NOT_SENT || flowState === FlowState.RETURNED) {
     return null;

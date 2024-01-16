@@ -4,7 +4,7 @@ import { isApiRejectionError } from '@app/types/errors';
 import { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling';
+import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

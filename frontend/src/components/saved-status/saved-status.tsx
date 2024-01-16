@@ -7,7 +7,7 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ErrorMessage, getErrorData } from '@app/functions/get-error-data';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetSmartEditorQuery } from '@app/redux-api/oppgaver/queries/smart-editor';
+import { useGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {
@@ -20,14 +20,12 @@ export interface SavedStatusProps {
 export const SavedStatus = ({ isLoading, isSuccess, isError, error }: SavedStatusProps) => {
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
-  const { data } = useGetSmartEditorQuery(
+  const { data } = useGetDocumentQuery(
     oppgaveId === skipToken || documentId === null ? skipToken : { oppgaveId, dokumentId: documentId },
   );
 
   const lastSaved =
-    typeof data?.modified === 'string' ? (
-      <StatusText>{`Sist lagret: ${isoDateTimeToPretty(data?.modified)}`}</StatusText>
-    ) : null;
+    data === undefined ? null : <StatusText>{`Sist lagret: ${isoDateTimeToPretty(data.modified)}`}</StatusText>;
 
   if (isLoading) {
     return (

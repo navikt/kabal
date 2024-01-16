@@ -1,9 +1,9 @@
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { IOppgave } from '@app/types/oppgaver';
 import { useTildel } from './use-tildel';
@@ -20,12 +20,12 @@ export const TildelButton = ({
   medunderskriver,
   children = 'Tildel meg',
 }: Props) => {
-  const { data: user, isLoading: isUserLoading } = useUser();
+  const user = useContext(UserContext);
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);
 
-  if (isUserLoading || isAccessLoading || typeof user === 'undefined') {
+  if (isAccessLoading) {
     return null;
   }
 
@@ -38,15 +38,14 @@ export const TildelButton = ({
     return null;
   }
 
-  const disabled = isUserLoading;
-  const isLoading = isUserLoading || isTildeling || isFradeling;
+  const isLoading = isTildeling || isFradeling;
 
   return (
     <StyledButton
       variant="secondary"
       size="small"
       loading={isLoading}
-      disabled={disabled || isLoading}
+      disabled={isLoading}
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
       onClick={() => tildel(user.navIdent)}

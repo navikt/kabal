@@ -1,12 +1,10 @@
 import { Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMineUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
@@ -44,11 +42,7 @@ const MineOppgaverTableInternal = () => {
     rekkefoelge: SortOrderEnum.STIGENDE,
   });
 
-  const { data: bruker, isLoading: isLoadingUser, isError: isErrorUser } = useUser();
-
-  const queryParams: typeof skipToken | CommonOppgaverParams = typeof bruker === 'undefined' ? skipToken : params;
-
-  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(queryParams, {
+  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -60,8 +54,8 @@ const MineOppgaverTableInternal = () => {
         columns={COLUMNS}
         params={params}
         setParams={setParams}
-        isError={isError || isErrorUser}
-        isLoading={isLoading || isLoadingUser}
+        isError={isError}
+        isLoading={isLoading}
         isFetching={isFetching}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}

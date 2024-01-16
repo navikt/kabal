@@ -13,6 +13,7 @@ import {
   StyledMessageContent,
   StyledMessages,
   StyledMessagesContainer,
+  StyledTime,
 } from './styled-components';
 import { WriteMessage } from './write-message';
 
@@ -21,9 +22,7 @@ export const Messages = () => {
   const { data: oppgave } = useOppgave();
   const isFullfoert = useIsFullfoert();
 
-  const options = isFullfoert ? undefined : { pollingInterval: 30 * 1000 };
-
-  const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId, options);
+  const { data: messages, isLoading } = useGetMessagesQuery(oppgaveId);
 
   if (typeof oppgave === 'undefined' || typeof messages === 'undefined' || isLoading) {
     return SKELETON;
@@ -47,14 +46,16 @@ export const Messages = () => {
   );
 };
 
-const Message = ({ author, modified, text, created }: IMessage) => {
+const Message = ({ id, author, modified, text, created }: IMessage) => {
   const { data } = useGetSignatureQuery(author.saksbehandlerIdent);
 
+  const time = modified ?? created;
+
   return (
-    <StyledMessage data-testid="message-list-item">
+    <StyledMessage data-testid="message-list-item" data-message-id={id}>
       <StyledAuthor>{data?.customLongName ?? author.name}</StyledAuthor>
-      <StyledMessageContent>{isoDateTimeToPretty(modified ?? created)}</StyledMessageContent>
-      <StyledMessageContent>{text}</StyledMessageContent>
+      <StyledTime dateTime={time}>{isoDateTimeToPretty(time)}</StyledTime>
+      <StyledMessageContent data-testid="message-list-item-text">{text}</StyledMessageContent>
     </StyledMessage>
   );
 };

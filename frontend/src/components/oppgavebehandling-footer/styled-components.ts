@@ -52,9 +52,10 @@ export const StyledButtons = styled.div`
 `;
 
 export enum FooterType {
-  FINISHED = 'FINISHED',
-  UNFINISHED_NO_ERRORS = 'UNFINISHED_NO_ERRORS',
-  UNFINISHED_WITH_ERRORS = 'UNFINISHED_WITH_ERRORS',
+  FINISHED,
+  UNFINISHED_NO_ERRORS,
+  UNFINISHED_WITH_ERRORS,
+  SATT_PAA_VENT,
 }
 
 const getBorderColor = (type: FooterType): string => {
@@ -65,6 +66,8 @@ const getBorderColor = (type: FooterType): string => {
       return 'var(--a-border-info)';
     case FooterType.UNFINISHED_WITH_ERRORS:
       return 'var(--a-border-warning)';
+    case FooterType.SATT_PAA_VENT:
+      return 'var(--a-border-default)';
   }
 };
 
@@ -76,6 +79,8 @@ const getBackgroundColor = (type: FooterType) => {
       return 'var(--a-surface-info-subtle)';
     case FooterType.UNFINISHED_WITH_ERRORS:
       return 'var(--a-surface-warning-subtle)';
+    case FooterType.SATT_PAA_VENT:
+      return 'var(--a-bg-subtle)';
   }
 };
 

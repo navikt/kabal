@@ -1,8 +1,9 @@
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -11,8 +12,7 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { Role } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 
@@ -58,7 +58,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
 
 const NewRolAnswerDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const isRol = useIsRol();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 
@@ -66,7 +66,7 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     return null;
   }
 
-  if (!getIsRolQuestions(document) || !isRol || user === undefined) {
+  if (!getIsRolQuestions(document) || !isRol) {
     return null;
   }
 

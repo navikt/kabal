@@ -1,11 +1,21 @@
-import { IJournalfoertDokument, IJournalfoertDokumentReference, IMainDocument } from '@app/types/documents/documents';
+import { IJournalfoertDokumentReference } from '@app/types/documents/documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export interface ICreateVedleggFromJournalfoertDocumentResponse {
   addedJournalfoerteDokumenter: IJournalfoertDokumentReference[];
-  duplicateJournalfoerteDokumenter: IJournalfoertDokument[];
+  duplicateJournalfoerteDokumenter: IJournalfoertDokumentId[];
 }
 
-export interface ISetParentResponse {
-  alteredDocuments: IMainDocument[];
-  duplicateJournalfoerteDokumenter: IJournalfoertDokumentReference[];
+interface AlteredDocument extends IModifiedDocumentResonse {
+  id: string;
+  parentId: string;
+}
+
+export interface ISetParentResponse extends IModifiedDocumentResonse {
+  alteredDocuments: AlteredDocument[];
+  duplicateJournalfoerteDokumenter: string[];
+}
+
+export interface IModifiedDocumentResonse {
+  modified: string;
 }

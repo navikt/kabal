@@ -12,9 +12,9 @@ import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledBehandlingSection, StyledContainer } from './styled-components';
 
 export const Behandling = () => {
-  const { value: shown = true, isLoading } = useBehandlingEnabled();
+  const { value: shown = true } = useBehandlingEnabled();
 
-  if (!shown || isLoading) {
+  if (!shown) {
     return null;
   }
 

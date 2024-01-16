@@ -2,6 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { focusEditor, isCollapsed } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -9,7 +10,6 @@ import { useRangePosition } from '@app/plate/hooks/use-range-position';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
-import { useUser } from '@app/simple-api-state/use-user';
 import { StyledNewThread } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';
 
@@ -20,7 +20,7 @@ interface Props {
 export const NewComment = ({ container }: Props) => {
   const oppgaveId = useOppgaveId();
   const editor = useMyPlateEditorState();
-  const { data: bruker, isLoading: brukerIsLoading } = useUser();
+  const user = useContext(UserContext);
   const [postComment, { isLoading }] = usePostCommentMutation();
   const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
     useContext(SmartEditorContext);
@@ -51,13 +51,7 @@ export const NewComment = ({ container }: Props) => {
     return null;
   }
 
-  if (
-    signatureIsLoading ||
-    brukerIsLoading ||
-    typeof bruker === 'undefined' ||
-    typeof signature === 'undefined' ||
-    oppgaveId === skipToken
-  ) {
+  if (signatureIsLoading || typeof signature === 'undefined' || oppgaveId === skipToken) {
     return <Loader size="xlarge" />;
   }
 
@@ -68,7 +62,7 @@ export const NewComment = ({ container }: Props) => {
 
     await postComment({
       author: {
-        ident: bruker.navIdent,
+        ident: user.navIdent,
         name: signature.customLongName ?? signature.longName,
       },
       dokumentId: documentId,

@@ -1,4 +1,4 @@
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';

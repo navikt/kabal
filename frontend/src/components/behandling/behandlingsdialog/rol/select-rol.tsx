@@ -6,7 +6,7 @@ import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/ro
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling';
+import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import { FlowState, IHelper } from '@app/types/oppgave-common';
 

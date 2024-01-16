@@ -5,14 +5,12 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
-import { useUser } from '@app/simple-api-state/use-user';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 
 const EMPTY_LIST: string[] = [];
 
 export const Lovhjemmel = () => {
-  const { data: user } = useUser();
   const [updateHjemler] = useUpdateRegistreringshjemlerMutation();
   const { data: oppgave } = useOppgave();
   const canEdit = useCanEdit();
@@ -20,15 +18,11 @@ export const Lovhjemmel = () => {
 
   const selected = oppgave?.resultat.hjemmelIdSet ?? EMPTY_LIST;
 
-  if (typeof oppgave === 'undefined' || typeof user === 'undefined') {
+  if (oppgave === undefined) {
     return null;
   }
 
   const onLovhjemmelChange = (hjemler: string[]) => {
-    if (typeof user === 'undefined') {
-      return;
-    }
-
     updateHjemler({
       oppgaveId: oppgave.id,
       hjemler,

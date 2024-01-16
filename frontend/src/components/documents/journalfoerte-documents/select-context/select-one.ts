@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getId } from './helpers';
-import { IArkivertDocumentReference, SelectHook, SelectOne } from './types';
+import { SelectHook, SelectOne } from './types';
 
 export const useSelectOne: SelectHook<SelectOne> = (setSelectedDocuments, setLastSelectedDocument) =>
   useCallback(
-    (documentIds: IArkivertDocumentReference) => {
+    (documentIds: IJournalfoertDokumentId) => {
       setLastSelectedDocument(documentIds);
 
       setSelectedDocuments((map) => {

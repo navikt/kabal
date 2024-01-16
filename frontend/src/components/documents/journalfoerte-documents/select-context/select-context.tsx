@@ -1,11 +1,12 @@
 import React, { createContext, useCallback, useState } from 'react';
 import { findDocument } from '@app/domain/find-document';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getId } from './helpers';
 import { useSelectMany } from './select-many';
 import { useSelectOne } from './select-one';
 import { useSelectRangeTo } from './select-range-to';
-import { IArkivertDocumentReference, ISelectContext, SelectedMap } from './types';
+import { ISelectContext, SelectedMap } from './types';
 
 export const SelectContext = createContext<ISelectContext>({
   selectedDocuments: new Map(),
@@ -28,7 +29,7 @@ interface Props {
 
 export const SelectContextElement = ({ children, documentList }: Props) => {
   const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>(new Map());
-  const [lastSelectedDocument, setLastSelectedDocument] = useState<IArkivertDocumentReference | null>(null);
+  const [lastSelectedDocument, setLastSelectedDocument] = useState<IJournalfoertDokumentId | null>(null);
 
   const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
   const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, documentList);
@@ -39,7 +40,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     lastSelectedDocument,
   );
 
-  const unselectOne = useCallback((document: IArkivertDocumentReference) => {
+  const unselectOne = useCallback((document: IJournalfoertDokumentId) => {
     setLastSelectedDocument(null);
     setSelectedDocuments((map) => {
       map.delete(getId(document));
@@ -53,7 +54,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     setSelectedDocuments(new Map());
   }, []);
 
-  const unselectMany = useCallback((documents: IArkivertDocumentReference[]) => {
+  const unselectMany = useCallback((documents: IJournalfoertDokumentId[]) => {
     setLastSelectedDocument(null);
     setSelectedDocuments((map) => {
       documents.forEach((document) => {
@@ -65,7 +66,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
   }, []);
 
   const isSelected = useCallback(
-    (document: IArkivertDocumentReference) => selectedDocuments.has(getId(document)),
+    (document: IJournalfoertDokumentId) => selectedDocuments.has(getId(document)),
     [selectedDocuments],
   );
 

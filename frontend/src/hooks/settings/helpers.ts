@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 
@@ -10,19 +10,12 @@ export interface Setting<T = string, D = undefined> {
   value: T | D;
   setValue: (value: T | SetterFn<T>) => void;
   remove: () => void;
-  isLoading: boolean;
 }
 
 export const useSetting = (property: string, syncBetweenTabs: boolean = false): Setting => {
-  const { data, isLoading } = useUser();
+  const user = useContext(UserContext);
 
-  const key = useMemo(() => {
-    if (isLoading || data === undefined) {
-      return null;
-    }
-
-    return `${data.navIdent}/${property}`;
-  }, [data, isLoading, property]);
+  const key = `${user.navIdent}/${property}`;
 
   const getSnapshot = useCallback(() => SETTINGS_MANAGER.get(key), [key]);
 
@@ -63,7 +56,7 @@ export const useSetting = (property: string, syncBetweenTabs: boolean = false): 
     }
   }, [key]);
 
-  return { value, setValue, remove, isLoading };
+  return { value, setValue, remove };
 };
 
 const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
@@ -81,7 +74,7 @@ export const useBooleanSetting = (property: string): Setting<boolean> => {
 };
 
 export const useNumberSetting = (property: string): Setting<number> => {
-  const { value, setValue, remove, isLoading } = useSetting(property);
+  const { value, setValue, remove } = useSetting(property);
 
   const parsedValue = useMemo(() => {
     if (value === undefined) {
@@ -108,10 +101,7 @@ export const useNumberSetting = (property: string): Setting<number> => {
     [setValue],
   );
 
-  return useMemo(
-    () => ({ value: parsedValue, setValue: _setValue, remove, isLoading }),
-    [_setValue, parsedValue, remove, isLoading],
-  );
+  return useMemo(() => ({ value: parsedValue, setValue: _setValue, remove }), [_setValue, parsedValue, remove]);
 };
 
 export const useJsonSetting = <T>(property: string): Setting<T> => {

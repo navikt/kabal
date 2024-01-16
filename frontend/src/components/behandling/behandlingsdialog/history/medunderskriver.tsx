@@ -8,12 +8,14 @@ import {
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
-import { Line, getActorName, getName } from '@app/components/behandling/behandlingsdialog/history/common';
+import { Line, getActorName, getName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { FlowState } from '@app/types/oppgave-common';
 import { HistoryEventTypes, IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 
-export const getMedunderskriverEvent = ({ event, actor, previous, timestamp }: IMedunderskriverEvent, key: string) => {
+export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
+  const key = toKey(e);
+  const { event, actor, previous, timestamp } = e;
   const isFlowChange = event.flow !== previous.event.flow;
 
   if (isFlowChange) {

@@ -3,13 +3,15 @@ import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Label, Tag } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
-import { Line, getActorName, getName } from '@app/components/behandling/behandlingsdialog/history/common';
+import { Line, getActorName, getName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import { HistoryEventTypes, ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
 
-export const getTildelingEvent = ({ actor, event, previous, timestamp }: ITildelingEvent, key: string) => {
+export const getTildelingEvent = (e: ITildelingEvent) => {
+  const key = toKey(e);
+  const { actor, event, previous, timestamp } = e;
   const { saksbehandler } = event;
 
   const isFradeling = 'fradelingReasonId' in event;

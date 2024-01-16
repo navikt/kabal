@@ -5,6 +5,10 @@ export interface IArkiverteDocumentsResponse {
   totaltAntall: number;
   sakList: Sak[];
   avsenderMottakerList: AvsenderMottaker[];
+  journalposttypeList: Journalposttype[];
+  temaIdList: string[];
+  fromDate: string | null;
+  toDate: string | null;
 }
 
 /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */
@@ -48,7 +52,7 @@ export interface AvsenderMottaker {
 }
 
 /** Sier hvilken sak journalposten er knyttet til. En journalpost kan maksimalt være knyttet til én sak, men et dokument kan være knyttet til flere journalposter og dermed flere saker. */
-interface Sak {
+export interface Sak {
   datoOpprettet: string; // LocalDate
   fagsakId: string;
   fagsaksystem: string;
@@ -193,7 +197,7 @@ interface KabalProperties {
   sortKey: string;
 }
 
-/*
+/**
   Documentation:
   https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
 */

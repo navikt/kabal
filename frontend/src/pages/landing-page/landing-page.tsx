@@ -1,17 +1,15 @@
-import { ErrorMessage, Loader } from '@navikt/ds-react';
+import { ErrorMessage } from '@navikt/ds-react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
 import { PageWrapper } from '../page-wrapper';
 
 export const LandingPage = () => {
-  const [isLoading, path] = useLandingPagePath();
+  const result = useLandingPagePath();
 
-  if (isLoading) {
-    return <Loader size="xlarge" />;
-  }
+  if (result !== null) {
+    const [path] = result;
 
-  if (path !== null) {
     return <Navigate replace to={path} />;
   }
 

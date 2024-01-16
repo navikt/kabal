@@ -14,12 +14,9 @@ import { FooterType, StyledButtons, StyledFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const UnfinishedFooter = () => {
-  const { validationSectionErrors } = useContext(ValidationErrorContext);
   const { data: oppgave } = useOppgave();
   const isSaksbehandler = useIsSaksbehandler();
-
-  const footerType =
-    validationSectionErrors.length === 0 ? FooterType.UNFINISHED_NO_ERRORS : FooterType.UNFINISHED_WITH_ERRORS;
+  const footerType = useFooterType();
 
   if (typeof oppgave === 'undefined') {
     return null;
@@ -40,4 +37,19 @@ export const UnfinishedFooter = () => {
       <ValidationSummaryPopup />
     </StyledFooter>
   );
+};
+
+const useFooterType = () => {
+  const { validationSectionErrors } = useContext(ValidationErrorContext);
+  const { data } = useOppgave();
+
+  if (validationSectionErrors.length !== 0) {
+    return FooterType.UNFINISHED_WITH_ERRORS;
+  }
+
+  if (data?.sattPaaVent !== null) {
+    return FooterType.SATT_PAA_VENT;
+  }
+
+  return FooterType.UNFINISHED_NO_ERRORS;
 };

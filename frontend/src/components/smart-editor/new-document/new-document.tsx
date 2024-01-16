@@ -1,5 +1,6 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -8,9 +9,8 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-editor';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { useUser } from '@app/simple-api-state/use-user';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -28,7 +28,7 @@ interface Props {
 }
 
 export const NewDocument = ({ onCreate }: Props) => {
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const isRol = useIsRol();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();
@@ -38,7 +38,7 @@ export const NewDocument = ({ onCreate }: Props) => {
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
 
-  if (isFeilregistrert || typeof oppgave === 'undefined' || user === undefined) {
+  if (isFeilregistrert || oppgave === undefined) {
     return null;
   }
 

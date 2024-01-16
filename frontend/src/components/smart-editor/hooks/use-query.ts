@@ -1,8 +1,8 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useUser } from '@app/simple-api-state/use-user';
 import { ApiQuery, TextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -15,10 +15,10 @@ interface Params {
 
 export const useQuery = ({ textType, templateId, section }: Params) => {
   const { data: oppgave, isLoading } = useOppgave();
-  const { data: bruker, isLoading: brukerIsLoading } = useUser();
+  const user = useContext(UserContext);
 
   return useMemo<ApiQuery | typeof skipToken>(() => {
-    if (isLoading || brukerIsLoading || typeof oppgave === 'undefined' || typeof bruker === 'undefined') {
+    if (isLoading || oppgave === undefined) {
       return skipToken;
     }
 
@@ -32,13 +32,13 @@ export const useQuery = ({ textType, templateId, section }: Params) => {
     const query: ApiQuery = {
       ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
-      enhetIdList: [bruker.ansattEnhet.id],
+      enhetIdList: [user.ansattEnhet.id],
       templateSectionIdList: templateSectionList,
       textType,
     };
 
     return query;
-  }, [bruker, brukerIsLoading, oppgave, isLoading, section, templateId, textType]);
+  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType]);
 };
 
 const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {

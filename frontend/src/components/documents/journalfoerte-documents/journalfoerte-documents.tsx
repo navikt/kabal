@@ -8,9 +8,9 @@ import { commonStyles } from '@app/components/documents/styled-components/contai
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
-import { IArkivertDocumentReference } from './select-context/types';
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
@@ -24,8 +24,8 @@ export const JournalfoerteDocuments = () => {
   const filters = useFilters(documents);
   const { resetFilters, noFiltersActive, totalFilteredDocuments } = filters;
 
-  const allSelectableDocuments = useMemo<IArkivertDocumentReference[]>(() => {
-    const selectable: IArkivertDocumentReference[] = [];
+  const allSelectableDocuments = useMemo<IJournalfoertDokumentId[]>(() => {
+    const selectable: IJournalfoertDokumentId[] = [];
 
     for (const doc of totalFilteredDocuments) {
       if (doc.harTilgangTilArkivvariant) {

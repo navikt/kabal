@@ -1,13 +1,13 @@
+import { ISmartDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { FlowState, IDocumentReference, IPart } from '../oppgave-common';
-import { ISmartEditor } from '../smart-editor/smart-editor';
+import { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
 }
 
-export interface IMigrateSmartEditorsParams extends IOppgavebehandlingBaseParams {
-  body: ISmartEditor[];
+export interface IMigrateSmartDocumentsParams extends IOppgavebehandlingBaseParams {
+  body: ISmartDocument[];
 }
 
 export interface IFristParams extends IOppgavebehandlingBaseParams {
@@ -45,7 +45,7 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
 }
 
-export type ICheckDocumentParams = IDocumentReference & IOppgavebehandlingBaseParams;
+export type ICheckDocumentParams = IJournalfoertDokumentId & IOppgavebehandlingBaseParams;
 
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
   navIdent: string | null;

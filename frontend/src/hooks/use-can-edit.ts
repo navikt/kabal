@@ -1,25 +1,20 @@
-import { useMemo } from 'react';
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext, useMemo } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useCanEdit = () => {
   const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
-  const { data: userData, isLoading: userIsLoading } = useUser();
+  const user = useContext(UserContext);
 
   return useMemo(() => {
-    if (
-      oppgavebehandlingIsLoading ||
-      userIsLoading ||
-      typeof oppgavebehandling === 'undefined' ||
-      typeof userData === 'undefined'
-    ) {
+    if (oppgavebehandlingIsLoading || typeof oppgavebehandling === 'undefined') {
       return false;
     }
 
     return (
       !oppgavebehandling.isAvsluttetAvSaksbehandler &&
-      oppgavebehandling.tildeltSaksbehandlerident === userData.navIdent &&
+      oppgavebehandling.tildeltSaksbehandlerident === user.navIdent &&
       oppgavebehandling.feilregistrering === null
     );
-  }, [oppgavebehandling, userData, userIsLoading, oppgavebehandlingIsLoading]);
+  }, [oppgavebehandling, oppgavebehandlingIsLoading, user.navIdent]);
 };

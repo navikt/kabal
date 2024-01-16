@@ -7,7 +7,6 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useGetMedunderskriverQuery } from '@app/redux-api/oppgaver/queries/behandling';
 import { MedunderskriverReadOnly } from './read-only';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendToMedunderskriver } from './send-to-medunderskriver';
@@ -20,10 +19,6 @@ export const Medunderskriver = () => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
-  const isEditable = !isFinished && !isFeilregistrert;
-
-  // Poll the medunderskriver endpoints, in case the medunderskriver is changed by another user.
-  useGetMedunderskriverQuery(oppgaveId, isEditable ? { pollingInterval: 3 * 1000 } : undefined);
 
   if (oppgaveIsLoading || oppgave === undefined || oppgaveId === skipToken) {
     return SKELETON;

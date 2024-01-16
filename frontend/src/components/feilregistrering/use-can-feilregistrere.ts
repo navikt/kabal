@@ -1,16 +1,13 @@
-import { useUser } from '@app/simple-api-state/use-user';
+import { useContext } from 'react';
+import { UserContext } from '@app/components/app/user';
 import { Role } from '@app/types/bruker';
 
 export const useCanFeilregistrere = (tildeltSaksbehandlerident: string | null) => {
-  const { data: bruker, isLoading: brukerIsloading } = useUser();
+  const user = useContext(UserContext);
 
-  if (brukerIsloading || bruker === undefined) {
-    return false;
-  }
-
-  if (bruker.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {
+  if (user.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {
     return true;
   }
 
-  return tildeltSaksbehandlerident === null || bruker.navIdent === tildeltSaksbehandlerident;
+  return tildeltSaksbehandlerident === null || user.navIdent === tildeltSaksbehandlerident;
 };

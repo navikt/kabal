@@ -1,13 +1,13 @@
-import { IMigrateSmartEditorsParams } from '@app/types/oppgavebehandling/params';
-import { ISmartEditor } from '@app/types/smart-editor/smart-editor';
+import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
+import { ISmartDocument } from '@app/types/documents/documents';
+import { IMigrateSmartDocumentsParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
-import { smartEditorQuerySlice } from '../queries/smart-editor';
 
-const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
+const smartDocumentMigrationMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    migrateUpdateSmartEditors: builder.mutation<ISmartEditor[], IMigrateSmartEditorsParams>({
+    migrateUpdateSmartEditors: builder.mutation<ISmartDocument[], IMigrateSmartDocumentsParams>({
       query: ({ oppgaveId, body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter`,
         method: 'PUT',
@@ -17,13 +17,11 @@ const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
         const { data } = await queryFulfilled;
 
         data.forEach((s) => {
-          dispatch(
-            smartEditorQuerySlice.util.updateQueryData('getSmartEditor', { oppgaveId, dokumentId: s.id }, () => s),
-          );
+          dispatch(documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId: s.id }, () => s));
         });
 
         dispatch(
-          smartEditorQuerySlice.util.updateQueryData('getSmartEditors', { oppgaveId }, (draft) => {
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
             draft.map((d) => {
               const updated = data.find(({ id }) => d.id === id);
 
@@ -37,4 +35,4 @@ const smartEditorMigrationMutationSlice = oppgaverApi.injectEndpoints({
 });
 
 // eslint-disable-next-line import/no-unused-modules
-export const { useMigrateUpdateSmartEditorsMutation } = smartEditorMigrationMutationSlice;
+export const { useMigrateUpdateSmartEditorsMutation } = smartDocumentMigrationMutationSlice;

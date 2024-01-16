@@ -1,4 +1,5 @@
 import { ENVIRONMENT } from '@app/environment';
+import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
 
 type OnVersionFn = (isDifferent: boolean) => void;
 
@@ -18,7 +19,7 @@ export class VersionChecker {
   private delay = 0;
 
   private getEventSource() {
-    const events = new EventSource('/version');
+    const events = new EventSource(`/version?${TRACEPARENT_HEADER}=${generateTraceParent()}`);
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {

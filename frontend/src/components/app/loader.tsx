@@ -8,7 +8,10 @@ interface Props {
 
 export const AppLoader = ({ text }: Props) => (
   <LoaderWrapper>
-    <Loader size="2xlarge" variant="interaction" transparent title={text} />
+    <Content>
+      <Loader size="2xlarge" variant="neutral" transparent title={text} />
+      <span>{text}</span>
+    </Content>
   </LoaderWrapper>
 );
 
@@ -19,4 +22,10 @@ const LoaderWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #fafafa;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

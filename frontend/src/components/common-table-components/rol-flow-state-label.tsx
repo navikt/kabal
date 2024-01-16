@@ -1,18 +1,14 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { useUser } from '@app/simple-api-state/use-user';
+import { UserContext } from '@app/components/app/user';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 
 type Props = Pick<IOppgave, 'rol'>;
 
 export const RolFlowStateLabel = ({ rol }: Props) => {
-  const { data, isLoading } = useUser();
-
-  if (isLoading || data === undefined) {
-    return null;
-  }
+  const user = useContext(UserContext);
 
   if (rol.navIdent === null && rol.flowState === FlowState.SENT) {
     return (
@@ -22,7 +18,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
     );
   }
 
-  const isRol = rol.navIdent === data.navIdent;
+  const isRol = rol.navIdent === user.navIdent;
 
   if (isRol && rol.flowState === FlowState.SENT) {
     return (
