@@ -3,7 +3,6 @@ import { Alert, Button, ButtonProps, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { TabContext } from '@app/components/documents/tab-context';
-import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import { Container, ErrorOrLoadingContainer } from '@app/components/view-pdf/container';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
@@ -32,7 +31,6 @@ export const ViewPDF = () => {
   const oppgaveId = useOppgaveId();
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
-  const isTabOpen = useIsTabOpen(tabId);
 
   useMarkVisited(tabUrl);
 
@@ -101,12 +99,6 @@ export const ViewPDF = () => {
         return;
       }
 
-      if (isTabOpen) {
-        toast.warning('Dokumentet er allerede åpent i en annen fane');
-
-        return;
-      }
-
       const ref = window.open(tabUrl, tabId);
 
       if (ref === null) {
@@ -116,7 +108,7 @@ export const ViewPDF = () => {
       }
       setTabRef(tabId, ref);
     },
-    [getTabRef, isTabOpen, setTabRef, tabId, tabUrl],
+    [getTabRef, setTabRef, tabId, tabUrl],
   );
 
   if (showDocumentList.length === 0 || oppgaveId === skipToken) {
