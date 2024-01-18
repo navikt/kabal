@@ -35,6 +35,7 @@ export enum PartStatusEnum {
   FULLMAKT = 'FULLMAKT',
   FORTROLIG = 'FORTROLIG',
   STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
+  RESERVERT_I_KRR = 'RESERVERT_I_KRR',
 }
 
 export type IPersonStatus =
@@ -60,6 +61,10 @@ export type IPersonStatus =
     }
   | {
       status: PartStatusEnum.STRENGT_FORTROLIG;
+      date: null;
+    }
+  | {
+      status: PartStatusEnum.RESERVERT_I_KRR;
       date: null;
     };
 
