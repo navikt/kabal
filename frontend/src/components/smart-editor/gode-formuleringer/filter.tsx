@@ -8,7 +8,7 @@ interface Props {
   onFocus: () => void;
 }
 
-const LABEL = 'Filtrer på tittel';
+const LABEL = 'Filtrer på innhold';
 
 export const Filter = ({ isFocused, filter, setFilter, onFocus }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
