@@ -82,4 +82,27 @@ describe('fuzzy search', () => {
 
     expect(best).toBeGreaterThan(worst);
   });
+
+  it('should only accept perfect hits if term is enclosed in double quotes', () => {
+    expect.assertions(2);
+
+    expect(fuzzySearch('"quick"', TEXT)).toBeGreaterThan(0);
+    expect(fuzzySearch('"qck"', TEXT)).toBe(0);
+  });
+
+  it('should only accept perfect hits if term is enclosed in single quotes', () => {
+    expect.assertions(2);
+
+    expect(fuzzySearch("'quick'", TEXT)).toBeGreaterThan(0);
+    expect(fuzzySearch("'qck'", TEXT)).toBe(0);
+  });
+
+  it('should score earlier hits better if term is enclosed in quotes', () => {
+    expect.assertions(1);
+
+    const best = fuzzySearch('"test"', 'test this is');
+    const worst = fuzzySearch('"test"', 'this is test');
+
+    expect(best).toBeGreaterThan(worst);
+  });
 });
