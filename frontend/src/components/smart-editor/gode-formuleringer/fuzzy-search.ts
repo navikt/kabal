@@ -2,6 +2,16 @@ export const fuzzySearch = (query: string, text: string): number => {
   const queryLower = query.toLowerCase();
   const textLower = text.toLowerCase();
 
+  if (
+    (queryLower.startsWith('"') && queryLower.endsWith('"')) ||
+    (queryLower.startsWith("'") && queryLower.endsWith("'"))
+  ) {
+    const strippedQuery = queryLower.slice(1, -1);
+    const index = textLower.indexOf(strippedQuery);
+
+    return index === -1 ? 0 : textLower.length - index;
+  }
+
   // If the query is an exact match, return a high score
   if (queryLower === textLower) {
     return query.length * 4;
