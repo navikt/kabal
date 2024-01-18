@@ -32,14 +32,6 @@ const uniqueUsersGauge = new Gauge({
 type StopTimerFn = () => void;
 const stopTimerList: StopTimerFn[] = [];
 
-export const resetClientsAndUniqueUsersMetrics = async () => {
-  stopTimerList.forEach((stopTimer) => stopTimer());
-  await resetUniqueUsersCounts();
-
-  // Wait for metrics to be collected.
-  return new Promise<void>((resolve) => setTimeout(resolve, 2000));
-};
-
 export const setupVersionRoute = () => {
   router.get('/version', async (req, res) => {
     if (req.headers.accept !== 'text/event-stream') {
@@ -145,11 +137,3 @@ const setCount = async (nav_ident: string, getNewValue: (oldValue: number) => nu
 
 const increment = (oldValue: number) => oldValue + 1;
 const decrement = (oldValue: number) => (oldValue === 0 ? 0 : oldValue - 1);
-
-const resetUniqueUsersCounts = async () => {
-  const { values } = await uniqueUsersGauge.get();
-
-  for (const { labels } of values) {
-    uniqueUsersGauge.set(labels, 0);
-  }
-};
