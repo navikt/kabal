@@ -41,7 +41,7 @@ export const setupProxy = async () => {
         pathRewrite: {
           [`^/api/${appName}`]: '',
         },
-        onProxyReq: (proxyRes, req, res) => {
+        onProxyReq: (proxyReq, req, res) => {
           if (req.headers.accept !== 'text/event-stream') {
             return;
           }
@@ -56,17 +56,26 @@ export const setupProxy = async () => {
             data: { proxy_target_application, url, originalUrl, method },
           });
 
-          const onEnd = (msg: string) => (error: Error | undefined) => {
+          let closedByTarget = false;
+          let closedByClient = false;
+
+          const onClose = (msg: string) => {
             const duration = Math.round(performance.now() - start);
 
-            log.debug({ msg, error, traceId, data: { proxy_target_application, url, originalUrl, method, duration } });
+            log.debug({ msg, traceId, data: { proxy_target_application, url, originalUrl, method, duration } });
 
-            proxyRes.end();
-            res.end();
+            proxyReq.destroy();
+            res.destroy();
           };
 
-          proxyRes.once('close', onEnd('Proxy connection closed by target'));
-          res.on('close', onEnd('Proxy connection closed'));
+          proxyReq.once('close', () => {
+            closedByTarget = true;
+            onClose('Proxy connection closed by target' + (closedByClient ? ', already closed by client' : ''));
+          });
+          res.once('close', () => {
+            closedByClient = true;
+            onClose('Proxy connection closed' + (closedByTarget ? ', already closed by target' : ''));
+          });
         },
         onError: (error, req, res) => {
           const { url, originalUrl, method } = req;
