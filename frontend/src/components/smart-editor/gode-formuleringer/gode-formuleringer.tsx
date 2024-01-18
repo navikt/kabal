@@ -1,37 +1,38 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
-import { focusEditor } from '@udecode/plate-common';
+import { Button } from '@navikt/ds-react';
+import { focusEditor, getNodeString } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
 import {
   GodeFormuleringerTitle,
   Header,
   ListContainer,
   StyledGodeFormuleringer,
-  StyledSkeleton,
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
-import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IRichText } from '@app/types/texts/responses';
+import { IPublishedRichText, IPublishedText, IRichText } from '@app/types/texts/responses';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
-import { GodFormulering } from './god-formulering';
 import { insertGodFormulering } from './insert';
 
 interface Props {
   templateId: TemplateIdEnum;
 }
 
+type ActiveSection = TemplateSections | NONE_TYPE;
+
 const filterTemplateSection = (
   templateId: TemplateIdEnum,
-  activeSection: TemplateSections | NONE_TYPE,
+  activeSection: ActiveSection,
   godFormulering: IRichText,
 ): boolean => {
   if (godFormulering.templateSectionIdList.length === 0) {
@@ -51,6 +52,13 @@ const filterTemplateSection = (
 
   return false;
 };
+
+const isFilteredPublishedRichText = (
+  text: IPublishedText,
+  templateId: TemplateIdEnum,
+  activeSection: ActiveSection,
+): text is IPublishedRichText =>
+  text.textType === RichTextTypes.GOD_FORMULERING && filterTemplateSection(templateId, activeSection, text);
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
   const [filter, setFilter] = useState<string>('');
@@ -72,22 +80,33 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
   }, [focused]);
 
-  const texts: IRichText[] = useMemo(() => {
-    const filterRegexp = stringToRegExp(filter);
-    const result = [];
+  const texts = useMemo(() => {
+    if (filter.length === 0) {
+      const result: IPublishedRichText[] = [];
+
+      for (const text of data) {
+        if (isFilteredPublishedRichText(text, templateId, activeSection)) {
+          result.push(text);
+        }
+      }
+
+      return result;
+    }
+
+    const result: [IPublishedRichText, number][] = [];
 
     for (const text of data) {
-      if (
-        text.textType === RichTextTypes.GOD_FORMULERING &&
-        filterTemplateSection(templateId, activeSection, text) &&
-        filterRegexp.test(text.title)
-      ) {
-        result.push(text);
+      if (isFilteredPublishedRichText(text, templateId, activeSection)) {
+        const score = fuzzySearch(filter, text.title + text.content.map(getNodeString).join(' '));
+
+        if (score > 0) {
+          result.push([text, score]);
+        }
       }
     }
 
-    return result;
-  }, [activeSection, data, filter, templateId]);
+    return result.sort(([, a], [, b]) => b - a).map(([t]) => t);
+  }, [data, filter, templateId, activeSection]);
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -165,35 +184,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
       </Top>
       <ListContainer>
-        <List texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
+        <GodeFormuleringerList texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
       </ListContainer>
     </StyledGodeFormuleringer>
-  );
-};
-
-interface ListProps {
-  isLoading: boolean;
-  texts: IRichText[];
-  focused: number;
-  setFocused: (index: number) => void;
-}
-
-const List = ({ texts, isLoading, focused, setFocused }: ListProps) => {
-  if (isLoading) {
-    return (
-      <>
-        <StyledSkeleton variant="rectangle" height={339} />
-        <StyledSkeleton variant="rectangle" height={339} />
-        <StyledSkeleton variant="rectangle" height={339} />
-      </>
-    );
-  }
-
-  return texts.length === 0 ? (
-    <Alert variant="info" size="small">
-      Ingen gode formuleringer funnet.
-    </Alert>
-  ) : (
-    texts.map((t, i) => <GodFormulering key={t.id} {...t} isFocused={focused === i} onClick={() => setFocused(i)} />)
   );
 };
