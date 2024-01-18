@@ -48,14 +48,18 @@ export const setupProxy = async () => {
 
           const { url, originalUrl, method } = req;
           const traceId = ensureTraceparent(req);
+          const start = performance.now();
+
+          log.debug({
+            msg: 'Proxying SSE connection',
+            traceId,
+            data: { proxy_target_application, url, originalUrl, method },
+          });
 
           const onEnd = (msg: string) => (error: Error | undefined) => {
-            log.debug({
-              msg,
-              error,
-              traceId,
-              data: { proxy_target_application, url, originalUrl, method },
-            });
+            const duration = Math.round(performance.now() - start);
+
+            log.debug({ msg, error, traceId, data: { proxy_target_application, url, originalUrl, method, duration } });
 
             proxyRes.end();
             res.end();
