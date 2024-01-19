@@ -5,7 +5,7 @@ import { ArchiveButtons } from '@app/components/documents/new-documents/modal/fi
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
-import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useHasArchiveAccess } from '@app/hooks/use-has-documents-access';
 import {
   DistribusjonsType,
   IFileDocument,
@@ -25,12 +25,12 @@ interface Props {
 
 export const FinishButton = ({ document, pdfOrSmartDocuments, journalfoertDocumentReferences }: Props) => {
   const { data: oppgave } = useOppgave();
-  const hasDocumentsAccess = useHasDocumentsAccess();
+  const hasArchiveAccess = useHasArchiveAccess(document);
   const containsRolPDFOrSmartAttachments = useContainsRolAttachments(document, pdfOrSmartDocuments);
   const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoertDocumentReferences);
   const containsRolAttachments = containsRolPDFOrSmartAttachments || containsRolJournalfoerteAttachments;
 
-  if (!hasDocumentsAccess || document.parentId !== null || oppgave === undefined) {
+  if (!hasArchiveAccess || document.parentId !== null || oppgave === undefined) {
     return null;
   }
 
