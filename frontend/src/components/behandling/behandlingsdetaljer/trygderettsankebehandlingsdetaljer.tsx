@@ -1,9 +1,11 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Part } from '../../part/part';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
@@ -15,7 +17,7 @@ import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
 interface Props {
-  oppgavebehandling: IOppgavebehandling;
+  oppgavebehandling: ITrygderettsankebehandling;
 }
 
 export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
@@ -45,6 +47,13 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
 
       <BehandlingSection label="Ytelse">
         <Ytelse ytelseId={ytelseId} />
+      </BehandlingSection>
+
+      <BehandlingSection label="Ankebehandling fullført av">
+        <PreviousSaksbehandler
+          previousSaksbehandler={oppgavebehandling.previousSaksbehandlerident}
+          type={SaksTypeEnum.ANKE_I_TRYGDERETTEN}
+        />
       </BehandlingSection>
 
       <Saksnummer saksnummer={saksnummer} />
