@@ -1,27 +1,81 @@
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, Label, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { styled } from 'styled-components';
 import { Name } from '@app/components/name/name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@app/hooks/use-has-role';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
+import { Role } from '@app/types/bruker';
+
+const ID = 'tildelt-saksbehandler';
 
 export const Saksbehandler = () => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const isSaksbehandler = useIsSaksbehandler();
+  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const isFullfoert = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
 
-  if (isSaksbehandler || oppgaveIsLoading || oppgave === undefined) {
+  if (oppgaveIsLoading || oppgave === undefined) {
     return null;
   }
+
+  const showSelect = !isFeilregistrert && !isFullfoert && (isSaksbehandler || hasOppgavestyringRole);
 
   const { tildeltSaksbehandlerident } = oppgave;
 
   return (
     <Container>
-      <Label size="small">Saksbehandler</Label>
-      <BodyShort>
-        {tildeltSaksbehandlerident === null ? 'Ikke tildelt' : <Name navIdent={tildeltSaksbehandlerident} />}
-      </BodyShort>
+      {showSelect ? (
+        <SelectSaksbehandler />
+      ) : (
+        <>
+          <Label size="small" htmlFor={ID}>
+            Saksbehandler
+          </Label>
+          <BodyShort id={ID}>
+            {tildeltSaksbehandlerident === null ? 'Ikke tildelt' : <Name navIdent={tildeltSaksbehandlerident} />}
+          </BodyShort>
+        </>
+      )}
     </Container>
+  );
+};
+
+const NONE = 'NONE';
+
+const SelectSaksbehandler = () => {
+  const { data: oppgave } = useOppgave();
+  const { data: potentialSaksbehandlere } = useGetPotentialSaksbehandlereQuery(oppgave?.id ?? skipToken);
+  const [tildel] = useTildelSaksbehandlerMutation();
+
+  if (oppgave === undefined) {
+    return null;
+  }
+
+  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    tildel({ oppgaveId: oppgave.id, navIdent: target.value });
+  };
+
+  const options = potentialSaksbehandlere?.saksbehandlere.map(({ navn, navIdent }) => (
+    <option key={navIdent} value={navIdent}>
+      {navn}
+    </option>
+  ));
+
+  const noneSelectedOption =
+    oppgave.tildeltSaksbehandlerident === null ? <option value={NONE}>Ingen valgt</option> : null;
+
+  return (
+    <Select label="Saksbehandler" size="small" onChange={onChange} value={oppgave.tildeltSaksbehandlerident ?? NONE}>
+      {noneSelectedOption}
+      {options}
+    </Select>
   );
 };
 
