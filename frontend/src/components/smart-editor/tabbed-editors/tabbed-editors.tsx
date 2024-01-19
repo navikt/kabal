@@ -131,7 +131,17 @@ const TabPanel = ({ smartEditor }: TabPanelProps) => {
               return;
             }
 
-            timeout.current = setTimeout(() => update({ content: c, templateId, oppgaveId, dokumentId: id }), 1000);
+            timeout.current = setTimeout(
+              () =>
+                update({
+                  content: c,
+                  templateId,
+                  oppgaveId,
+                  dokumentId: id,
+                  version: smartEditor.version,
+                }),
+              1000,
+            );
           }}
           updateStatus={status}
         />

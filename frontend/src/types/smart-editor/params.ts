@@ -22,4 +22,5 @@ export type ICreateSmartDocumentParams = Immutable<IMutableCreateSmartDocumentPa
 export interface IUpdateSmartDocumentParams extends IDocumentParams {
   content: EditorValue;
   templateId?: TemplateIdEnum;
+  version: number;
 }
