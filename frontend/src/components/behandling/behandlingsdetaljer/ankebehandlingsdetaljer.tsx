@@ -1,8 +1,10 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Part } from '../../part/part';
 import { Type } from '../../type/type';
@@ -51,6 +53,13 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <BehandlingSection label="Ytelse">
         <Ytelse ytelseId={ytelseId} />
+      </BehandlingSection>
+
+      <BehandlingSection label="Klagebehandling fullført av">
+        <PreviousSaksbehandler
+          previousSaksbehandler={oppgavebehandling.previousSaksbehandlerident}
+          type={SaksTypeEnum.ANKE}
+        />
       </BehandlingSection>
 
       <Saksnummer saksnummer={saksnummer} />
