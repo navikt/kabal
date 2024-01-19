@@ -74,6 +74,7 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   isSmartDokument: true;
   templateId: TemplateIdEnum;
   content: EditorValue;
+  version: number;
 }
 
 interface IJournalfoertDokument
