@@ -28,21 +28,8 @@ export const LabelContent = ({
 
     const content = getContent(oppgave, element.source);
 
-    if (content === null) {
-      setResult(null);
-      setResultInNode(null);
-
-      return;
-    }
-
-    if (element.label.length === 0) {
-      setResult(content);
-      setResultInNode(content);
-    } else {
-      const result = `${element.label}: ${content}`;
-      setResult(result);
-      setResultInNode(result);
-    }
+    setResult(content);
+    setResultInNode(content);
   }, [editor, element, element.label, element.source, oppgave, _result, setResultInNode]);
 
   if (typeof oppgave === 'undefined') {
@@ -52,7 +39,11 @@ export const LabelContent = ({
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
       <span>
-        <StyledLabelContent>{_result}</StyledLabelContent>
+        {_result === null ? null : (
+          <StyledLabelContent>
+            <b>{element.label}</b>: {_result}
+          </StyledLabelContent>
+        )}
         {children}
       </span>
     </PlateElement>
