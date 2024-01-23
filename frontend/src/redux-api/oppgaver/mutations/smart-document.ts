@@ -52,17 +52,16 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
         const patchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
             if (draft !== null && draft.isSmartDokument) {
-              return {
-                ...draft,
-                ...update,
-              };
+              return { ...draft, ...update, version: draft.version + 1 };
             }
           }),
         );
 
         const listPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-            draft.map((e) => (e.isSmartDokument && e.id === dokumentId ? { ...e, ...update } : e)),
+            draft.map((e) =>
+              e.isSmartDokument && e.id === dokumentId ? { ...e, ...update, version: e.version + 1 } : e,
+            ),
           ),
         );
 
@@ -71,10 +70,7 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
               if (draft !== null && draft.isSmartDokument) {
-                return {
-                  ...draft,
-                  ...data,
-                };
+                return { ...draft, modified: data.modified };
               }
 
               return data;
