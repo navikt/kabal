@@ -6,12 +6,11 @@ type OnVersionFn = (isDifferent: boolean) => void;
 export class VersionChecker {
   private events: EventSource | undefined;
   private onVersion: OnVersionFn;
-  private version: string = ENVIRONMENT.version;
 
   constructor(onVersion: OnVersionFn) {
     this.onVersion = onVersion;
 
-    console.info('CURRENT VERSION', this.version);
+    console.info('CURRENT VERSION', ENVIRONMENT.version);
 
     this.getEventSource();
   }
@@ -19,7 +18,9 @@ export class VersionChecker {
   private delay = 0;
 
   private getEventSource() {
-    const events = new EventSource(`/version?${TRACEPARENT_HEADER}=${generateTraceParent()}`);
+    const events = new EventSource(
+      `/version?version=${ENVIRONMENT.version}&${TRACEPARENT_HEADER}=${generateTraceParent()}`,
+    );
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {
@@ -39,7 +40,7 @@ export class VersionChecker {
 
     events.addEventListener('message', ({ data }) => {
       console.info('VERSION', data);
-      this.onVersion(data !== this.version);
+      this.onVersion(data !== ENVIRONMENT.version);
     });
 
     this.events = events;

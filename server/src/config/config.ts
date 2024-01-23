@@ -30,3 +30,4 @@ export const AZURE_APP_JWK = requiredEnvJson<JWK>('AZURE_APP_JWK');
 export const VERSION = requiredEnvString('VERSION');
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME');
+export const START_TIME = Date.now();

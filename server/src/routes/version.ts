@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import { Gauge, Histogram } from 'prom-client';
-import { VERSION } from '@app/config/config';
+import { Request, Router } from 'express';
+import { Gauge, Histogram, LabelValues } from 'prom-client';
+import { START_TIME, VERSION } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { registers } from '@app/prometheus/types';
 import { ensureTraceparent } from '@app/request-id';
@@ -22,10 +22,21 @@ const histogram = new Histogram({
   registers,
 });
 
+const labelNames = [
+  'nav_ident',
+  'client_version',
+  'up_to_date_client',
+  'start_time',
+  'app_start_time',
+  'trace_id',
+] as const;
+
+type LabelNames = (typeof labelNames)[number];
+
 const uniqueUsersGauge = new Gauge({
   name: 'active_users',
-  help: 'Number of active unique users',
-  labelNames: ['nav_ident'] as const,
+  help: 'Number of active unique users. All timestamps are Unix timestamps in milliseconds (UTC). "start_time" is when the session started. "app_start_time" is when the app started.',
+  labelNames,
   registers,
 });
 
@@ -34,7 +45,7 @@ const stopTimerList: StopTimerFn[] = [];
 
 export const resetClientsAndUniqueUsersMetrics = async () => {
   stopTimerList.forEach((stopTimer) => stopTimer());
-  await resetUniqueUsersCounts();
+  uniqueUsersGauge.reset();
 
   // Wait for metrics to be collected.
   return new Promise<void>((resolve) => setTimeout(resolve, 2000));
@@ -56,7 +67,7 @@ export const setupVersionRoute = () => {
 
     let isOpen = true;
 
-    const endUserSession = await startUserSession(req.headers.authorization, traceId);
+    const endUserSession = await startUserSession(req, traceId);
 
     res.once('close', () => {
       log.debug({ msg: 'Version connection closed', traceId });
@@ -101,12 +112,12 @@ interface TokenPayload {
 }
 
 /** Parses the user ID from the JWT. */
-const startUserSession = async (token: string | undefined, traceId: string): Promise<() => void> => {
-  if (token === undefined) {
+const startUserSession = async (req: Request, traceId: string): Promise<() => void> => {
+  if (req.headers.authorization === undefined) {
     return NOOP;
   }
 
-  const [, payload] = token.split('.');
+  const [, payload] = req.headers.authorization.split('.');
 
   if (payload === undefined) {
     return NOOP;
@@ -117,9 +128,7 @@ const startUserSession = async (token: string | undefined, traceId: string): Pro
   try {
     const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
 
-    await setCount(nav_ident, increment);
-
-    return () => setCount(nav_ident, decrement);
+    return start(nav_ident, getClientVersion(req), traceId);
   } catch (error) {
     log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
 
@@ -129,27 +138,22 @@ const startUserSession = async (token: string | undefined, traceId: string): Pro
 
 const NOOP = () => undefined;
 
-const setCount = async (nav_ident: string, getNewValue: (oldValue: number) => number) => {
-  const { values } = await uniqueUsersGauge.get();
+type EndFn = () => void;
 
-  for (const { labels, value } of values) {
-    if (labels.nav_ident === nav_ident) {
-      uniqueUsersGauge.set(labels, getNewValue(value));
+const start = (nav_ident: string, clientVersion: string | undefined, trace_id: string): EndFn => {
+  const labels: LabelValues<LabelNames> = {
+    nav_ident,
+    client_version: clientVersion?.substring(0, 7) ?? 'UNKNOWN',
+    up_to_date_client: clientVersion === VERSION ? 'true' : 'false',
+    start_time: Date.now().toString(10),
+    app_start_time: START_TIME,
+    trace_id,
+  };
 
-      return;
-    }
-  }
+  uniqueUsersGauge.set(labels, 1);
 
-  uniqueUsersGauge.set({ nav_ident }, getNewValue(0));
+  return () => uniqueUsersGauge.remove(labels);
 };
 
-const increment = (oldValue: number) => oldValue + 1;
-const decrement = (oldValue: number) => (oldValue === 0 ? 0 : oldValue - 1);
-
-const resetUniqueUsersCounts = async () => {
-  const { values } = await uniqueUsersGauge.get();
-
-  for (const { labels } of values) {
-    uniqueUsersGauge.set(labels, 0);
-  }
-};
+const getClientVersion = (req: Request): string | undefined =>
+  typeof req.query.version === 'string' ? req.query.version : undefined;
