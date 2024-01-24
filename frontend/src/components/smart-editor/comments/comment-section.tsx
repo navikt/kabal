@@ -25,4 +25,5 @@ export const CommentSection = () => {
 
 const StyledCommentSection = styled.div`
   width: 350px;
+  margin-top: 16px;
 `;

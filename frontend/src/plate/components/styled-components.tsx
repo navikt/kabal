@@ -1,3 +1,4 @@
+import { useEditorReadOnly } from '@udecode/plate-common';
 import React, { HtmlHTMLAttributes } from 'react';
 import { css, styled } from 'styled-components';
 import { StyledParagraph } from '@app/plate/components/paragraph';
@@ -56,11 +57,17 @@ const SectionToolbarStyle = styled.div`
   border-bottom-left-radius: 4px;
 `;
 
-export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
-  <SectionToolbarStyle {...rest}>
-    <StickyContent>{children}</StickyContent>
-  </SectionToolbarStyle>
-);
+export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
+  if (useEditorReadOnly()) {
+    return null;
+  }
+
+  return (
+    <SectionToolbarStyle {...rest}>
+      <StickyContent>{children}</StickyContent>
+    </SectionToolbarStyle>
+  );
+};
 
 const MaltekstseksjonToolbarStyle = styled.div`
   ${secionToolbarCss}
@@ -69,11 +76,17 @@ const MaltekstseksjonToolbarStyle = styled.div`
   border-bottom-right-radius: 4px;
 `;
 
-export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
-  <MaltekstseksjonToolbarStyle {...rest}>
-    <StickyContent>{children}</StickyContent>
-  </MaltekstseksjonToolbarStyle>
-);
+export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
+  if (useEditorReadOnly()) {
+    return null;
+  }
+
+  return (
+    <MaltekstseksjonToolbarStyle {...rest}>
+      <StickyContent>{children}</StickyContent>
+    </MaltekstseksjonToolbarStyle>
+  );
+};
 
 const StickyContent = styled.div`
   position: sticky;

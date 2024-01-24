@@ -1,13 +1,8 @@
-import { ISmartDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
 import { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
-}
-
-export interface IMigrateSmartDocumentsParams extends IOppgavebehandlingBaseParams {
-  body: ISmartDocument[];
 }
 
 export interface IFristParams extends IOppgavebehandlingBaseParams {

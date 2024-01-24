@@ -1,8 +1,9 @@
 /* eslint-disable import/no-unused-modules */
+import { INavEmployee } from '@app/types/bruker';
 import { UtfallEnum } from '@app/types/kodeverk';
+import { FlowState, IHelper, INotSentHelper, ISakenGjelder, ISentHelper } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FradelReason } from '@app/types/oppgaver';
-import { FlowState, IHelper, INavEmployee, INotSentHelper, ISakenGjelder, ISentHelper } from '../oppgave-common';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 

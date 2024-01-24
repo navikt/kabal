@@ -1,19 +1,24 @@
-import React, { useCallback, useContext, useLayoutEffect, useRef } from 'react';
+import { findNode, toDOMNode } from '@udecode/plate-common';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { COMMENT_PREFIX } from '../constants';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
 
 interface Props {
   thread: ISmartEditorComment;
   isFocused: boolean;
+  isOrphan?: boolean;
 }
 
-export const Thread = ({ thread, isFocused }: Props) => {
+export const Thread = ({ thread, isFocused, isOrphan = false }: Props) => {
   const { setFocusedThreadId, focusedThreadId } = useContext(SmartEditorContext);
+  const editor = useMyPlateEditorRef();
 
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => {
     if (focusedThreadId === thread.id) {
@@ -21,17 +26,45 @@ export const Thread = ({ thread, isFocused }: Props) => {
     }
   }, [focusedThreadId, setFocusedThreadId, thread.id]);
 
-  const open = useCallback(() => {
-    if (focusedThreadId !== thread.id) {
+  const open: React.MouseEventHandler<HTMLElement> = useCallback(
+    (event) => {
+      if (focusedThreadId === thread.id) {
+        return;
+      }
+
       setFocusedThreadId(thread.id);
-    }
-  }, [focusedThreadId, setFocusedThreadId, thread.id]);
+
+      if (isOrphan) {
+        return;
+      }
+
+      const leafEntry = findNode(editor, { at: [], match: { [`${COMMENT_PREFIX}${thread.id}`]: true } });
+
+      if (leafEntry === undefined) {
+        return;
+      }
+
+      const [leafNode] = leafEntry;
+      const domNode = toDOMNode(editor, leafNode);
+
+      if (domNode === undefined) {
+        return;
+      }
+
+      event.currentTarget.addEventListener(
+        'transitionend',
+        () => setTimeout(() => domNode.scrollIntoView({ behavior: 'smooth', block: 'center' })),
+        { once: true },
+      );
+    },
+    [editor, focusedThreadId, isOrphan, setFocusedThreadId, thread.id],
+  );
 
   const onFocus = useCallback(() => {
     setFocusedThreadId(thread.id);
   }, [setFocusedThreadId, thread.id]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isFocused && ref.current !== null) {
       requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
     }
@@ -58,15 +91,13 @@ const StyledThread = styled.section<{ $isFocused: boolean }>`
   padding: 16px;
   border: 1px solid #c9c9c9;
   border-radius: var(--a-border-radius-medium);
-  margin-left: 12px;
-  margin-right: 12px;
   will-change: transform, opacity, box-shadow;
   cursor: ${({ $isFocused: isFocused }) => (isFocused ? 'auto' : 'pointer')};
   user-select: ${({ $isFocused: isFocused }) => (isFocused ? 'auto' : 'none')};
   opacity: ${({ $isFocused: isFocused }) => (isFocused ? '1' : '0.5')};
   box-shadow: ${({ $isFocused: isFocused }) => (isFocused ? '0 1px 4px 0 rgba(0, 0, 0, 0.3)' : 'none')};
   transform: ${({ $isFocused: isFocused }) => (isFocused ? 'translateX(-10px)' : 'translateX(0px)')};
-  transition-duration: 0.2s;
+  transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
   transition-property: transform, opacity, box-shadow;
   scroll-snap-align: start;

@@ -1,5 +1,6 @@
+import { INavEmployee } from '../bruker';
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IHelper, INavEmployee, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
+import { IHelper, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
 
 type UUID = string;
 

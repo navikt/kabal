@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
+import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -64,8 +65,8 @@ const Tabbed = ({ documents }: TabbedProps) => {
         <TabNew />
       </StyledTabsList>
       <StyledTabPanels>
-        {documents.map((editor) => (
-          <TabPanel key={editor.id} smartEditor={editor} />
+        {documents.map((d) => (
+          <TabPanel key={d.id} smartDocument={d} />
         ))}
         <TabPanelNew onCreate={setEditorId} />
       </StyledTabPanels>
@@ -106,25 +107,27 @@ const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
 };
 
 interface TabPanelProps {
-  smartEditor: ISmartDocument;
+  smartDocument: ISmartDocument;
 }
 
-const TabPanel = ({ smartEditor }: TabPanelProps) => {
+const TabPanel = ({ smartDocument }: TabPanelProps) => {
   const oppgaveId = useOppgaveId();
   const [update, status] = useUpdateSmartDocumentMutation();
   const timeout = useRef<NodeJS.Timeout>();
 
-  const { id, templateId, content } = smartEditor;
+  const { id, templateId, content } = smartDocument;
 
   return (
-    <StyledTabsPanel value={smartEditor.id}>
-      <SmartEditorContextComponent editor={smartEditor}>
+    <StyledTabsPanel value={smartDocument.id}>
+      <SmartEditorContextComponent editor={smartDocument}>
         <Editor
           key={id}
-          id={id}
-          initialValue={content}
-          templateId={templateId}
+          smartDocument={smartDocument}
           onChange={(c) => {
+            if (areDescendantsEqual(c, content)) {
+              return;
+            }
+
             clearTimeout(timeout.current);
 
             if (oppgaveId === skipToken) {
@@ -138,7 +141,7 @@ const TabPanel = ({ smartEditor }: TabPanelProps) => {
                   templateId,
                   oppgaveId,
                   dokumentId: id,
-                  version: smartEditor.version,
+                  version: smartDocument.version,
                 }),
               1000,
             );
@@ -163,7 +166,7 @@ const StyledTabsPanel = styled(Tabs.Panel)`
 `;
 
 const StyledTabsList = styled(Tabs.List)`
-  max-width: 826px;
+  max-width: 762px;
   white-space: nowrap;
 `;
 

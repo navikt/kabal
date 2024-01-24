@@ -1,7 +1,8 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { INavEmployee } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { UtfallEnum } from '@app/types/kodeverk';
-import { IHelper, INavEmployee, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
+import { IHelper, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 interface BaseEvent {

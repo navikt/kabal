@@ -1,6 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { PlateElement, PlateRenderElementProps, findNodePath } from '@udecode/plate-common';
+import { PlateElement, PlateRenderElementProps, findNodePath, useEditorReadOnly } from '@udecode/plate-common';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import {
@@ -25,6 +25,7 @@ export const Placeholder = ({
   const path = findNodePath(editor, element);
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
+  const isReadOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
 
   const onClick = useCallback(
@@ -119,7 +120,12 @@ export const Placeholder = ({
         >
           {children}
           {hideDeleteButton ? null : (
-            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
+            <DeleteButton
+              title="Slett innfyllingsfelt"
+              onClick={deletePlaceholder}
+              contentEditable={false}
+              disabled={isReadOnly}
+            >
               <TrashIcon aria-hidden />
             </DeleteButton>
           )}
@@ -170,6 +176,10 @@ const DeleteButton = styled.button`
   top: 0;
 
   &:hover {
+    &:disabled {
+      background: none;
+    }
+
     background-color: var(--a-surface-neutral-subtle-hover);
   }
 
@@ -181,6 +191,11 @@ const DeleteButton = styled.button`
     box-shadow:
       inset 0 0 0 2px var(--a-border-strong),
       var(--a-shadow-focus);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: #444;
   }
 `;
 

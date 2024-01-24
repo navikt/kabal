@@ -3,7 +3,7 @@ import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/m
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
 import { OnChange } from '@app/components/oppgavestyring/types';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
-import { INavEmployee } from '@app/types/oppgave-common';
+import { INavEmployee } from '@app/types/bruker';
 
 export interface Return {
   onChange: OnChange;

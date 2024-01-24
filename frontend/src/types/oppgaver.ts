@@ -1,5 +1,6 @@
-import { SaksTypeEnum, UtfallEnum } from './kodeverk';
-import { IHelper, INavEmployee, IPartBase, IVenteperiode } from './oppgave-common';
+import { INavEmployee } from '@app/types/bruker';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
 
 type DateString = string; // LocalDate
 

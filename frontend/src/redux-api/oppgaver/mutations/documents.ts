@@ -16,7 +16,7 @@ import {
 } from '@app/types/documents/params';
 import {
   ICreateVedleggFromJournalfoertDocumentResponse,
-  IModifiedDocumentResonse,
+  IModifiedDocumentResponse,
   ISetParentResponse,
 } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
@@ -27,7 +27,7 @@ import { documentsQuerySlice } from '../queries/documents';
 const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    setType: builder.mutation<IModifiedDocumentResonse, ISetTypeParams>({
+    setType: builder.mutation<IModifiedDocumentResponse, ISetTypeParams>({
       query: ({ oppgaveId, dokumentId, dokumentTypeId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/dokumenttype`,
         body: { dokumentTypeId },
@@ -45,7 +45,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    setTitle: builder.mutation<IModifiedDocumentResonse, ISetNameParams>({
+    setTitle: builder.mutation<IModifiedDocumentResponse, ISetNameParams>({
       query: ({ oppgaveId, dokumentId, title }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/tittel`,
         body: { title },
@@ -173,7 +173,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    finishDocument: builder.mutation<IModifiedDocumentResonse, IFinishDocumentParams>({
+    finishDocument: builder.mutation<IModifiedDocumentResponse, IFinishDocumentParams>({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',

@@ -6,16 +6,20 @@ export interface ICreateVedleggFromJournalfoertDocumentResponse {
   duplicateJournalfoerteDokumenter: IJournalfoertDokumentId[];
 }
 
-interface AlteredDocument extends IModifiedDocumentResonse {
+interface AlteredDocument extends IModifiedDocumentResponse {
   id: string;
   parentId: string;
 }
 
-export interface ISetParentResponse extends IModifiedDocumentResonse {
+export interface ISetParentResponse extends IModifiedDocumentResponse {
   alteredDocuments: AlteredDocument[];
   duplicateJournalfoerteDokumenter: string[];
 }
 
-export interface IModifiedDocumentResonse {
+export interface IModifiedDocumentResponse {
   modified: string;
+}
+
+export interface IModifiedSmartDocumentResponse extends IModifiedDocumentResponse {
+  version: number;
 }

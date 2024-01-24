@@ -11,12 +11,6 @@ export interface IVedlegg {
   opplastet: string | null; // LocalDateTime
 }
 
-// Empoyee from vedtaksinstans or KA.
-export interface INavEmployee {
-  navIdent: string;
-  navn: string;
-}
-
 export interface IPartBase {
   id: string;
   name: string | null;

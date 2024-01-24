@@ -1,6 +1,6 @@
 import { EditorValue } from '@app/plate/types';
+import { INavEmployee, Role } from '@app/types/bruker';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { Role } from '../bruker';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
@@ -99,4 +99,14 @@ export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
 export interface IMergedDocumentsResponse {
   reference: string;
   title: string;
+}
+
+export interface ISmartDocumentVersion {
+  version: number;
+  author: INavEmployee | null;
+  /** When the version was created.
+   * @format LocalDateTime
+   * @example 2024-01-22T10:17:48.961Z
+   */
+  timestamp: string;
 }

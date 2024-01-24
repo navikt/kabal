@@ -58,7 +58,7 @@ export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]):
   return true;
 };
 
-const areKeysEqual = (a: Record<string, unknown>, b: Record<string, unknown>): boolean => {
+export const areKeysEqual = (a: Record<string, unknown>, b: Record<string, unknown>): boolean => {
   const aKeys = Object.keys(a);
   const bKeys = Object.keys(b);
 
@@ -67,16 +67,34 @@ const areKeysEqual = (a: Record<string, unknown>, b: Record<string, unknown>): b
   }
 
   for (const key of aKeys) {
-    if (a[key] !== b[key]) {
+    if (!valuesAreEqual(a[key], b[key])) {
       return false;
     }
   }
 
   for (const key of bKeys) {
-    if (a[key] !== b[key]) {
+    if (!valuesAreEqual(a[key], b[key])) {
       return false;
     }
   }
 
   return true;
 };
+
+const valuesAreEqual = (a: unknown, b: unknown): boolean => {
+  if (a === null || b === null) {
+    return a === b;
+  }
+
+  if (isRecord(a)) {
+    if (!isRecord(b)) {
+      return false;
+    }
+
+    return areKeysEqual(a, b);
+  }
+
+  return a === b;
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;

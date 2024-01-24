@@ -1,7 +1,7 @@
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { TNode, getNodeString, isText, setNodes, toDOMNode } from '@udecode/plate-common';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -12,26 +12,8 @@ interface Props {
 }
 
 export const Bookmarks = ({ editorId }: Props) => {
-  const { bookmarksMap, removeBookmark, setInitialBookmarks } = useContext(SmartEditorContext);
+  const { bookmarksMap, removeBookmark } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorState(editorId);
-  const isInitalized = useRef(false);
-
-  useEffect(() => {
-    if (!isInitalized.current) {
-      isInitalized.current = true;
-      setInitialBookmarks(getBookmarks(editor));
-
-      return;
-    }
-
-    // Update bookmarks.
-    const timer = setTimeout(
-      () => requestIdleCallback(() => setInitialBookmarks(getBookmarks(editor)), { timeout: 200 }),
-      500,
-    );
-
-    return () => clearTimeout(timer);
-  }, [editor, editor.children, setInitialBookmarks]);
 
   const bookmarks = Object.entries(bookmarksMap);
 
@@ -85,7 +67,7 @@ export const Bookmarks = ({ editorId }: Props) => {
   );
 };
 
-const getBookmarks = (editor: RichTextEditor): Record<string, RichText[]> => {
+export const getBookmarks = (editor: RichTextEditor): Record<string, RichText[]> => {
   const bookmarkEntries = editor.nodes<RichText>({
     match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
     at: [],
@@ -118,6 +100,7 @@ const BookmarkList = styled.ul`
   list-style: none;
   width: 350px;
   margin: 0;
+  margin-top: 16px;
   padding: 0;
   padding-right: 16px;
 `;
