@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { queryParamsToHeaders, setProxyVersionHeader } from '@app/headers';
 import { ensureTraceparentHandler } from '@app/request-id';
 import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
 import { httpLoggingMiddleware } from './http-logger';
@@ -21,6 +22,8 @@ if (isDeployed) {
 
 const server = express();
 
+server.use(queryParamsToHeaders);
+server.use(setProxyVersionHeader);
 server.use(ensureTraceparentHandler);
 
 // Add the prometheus middleware to all routes

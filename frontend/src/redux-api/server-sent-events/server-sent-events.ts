@@ -1,5 +1,5 @@
-import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
 import { parseJSON } from '@app/functions/parse-json';
+import { getQueryParams } from '@app/headers';
 import { IS_LOCALHOST } from '../common';
 
 export enum ServerSentEventType {
@@ -92,8 +92,8 @@ export class ServerSentEventManager {
   private createEventSource(): EventSource {
     const url =
       this.lastEventId === null
-        ? `${this.url}?${TRACEPARENT_HEADER}=${generateTraceParent()}`
-        : `${this.url}?lastEventId=${this.lastEventId}&${TRACEPARENT_HEADER}=${generateTraceParent()}`;
+        ? `${this.url}?${getQueryParams()}`
+        : `${this.url}?lastEventId=${this.lastEventId}&${getQueryParams()}`;
 
     const events = new EventSource(url, {
       withCredentials: IS_LOCALHOST,
