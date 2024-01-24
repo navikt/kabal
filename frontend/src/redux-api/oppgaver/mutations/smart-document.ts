@@ -1,8 +1,10 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { ISmartDocument } from '@app/types/documents/documents';
+import { IModifiedSmartDocumentResponse } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
+import { user } from '@app/user';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
@@ -41,7 +43,7 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
 
-    updateSmartDocument: builder.mutation<ISmartDocument, IUpdateSmartDocumentParams>({
+    updateSmartDocument: builder.mutation<IModifiedSmartDocumentResponse, IUpdateSmartDocumentParams>({
       query: ({ oppgaveId, dokumentId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
         method: 'PATCH',
@@ -65,20 +67,49 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
+        const versionId = update.version + 1;
+        const { navIdent, navn } = await user;
+
+        const versionsPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) => [
+            { version: versionId, timestamp: new Date().toISOString(), author: { navIdent, navn } },
+            ...draft,
+          ]),
+        );
+
+        const versionPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData(
+            'getSmartDocumentVersion',
+            { dokumentId, oppgaveId, versionId },
+            () => update.content,
+          ),
+        );
+
         try {
           const { data } = await queryFulfilled;
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+              draft.map((e) => (e.id === dokumentId ? { ...e, modified: data.modified } : e)),
+            ),
+          );
+
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
-              if (draft !== null && draft.isSmartDokument) {
-                return { ...draft, modified: data.modified };
-              }
-
-              return data;
+              draft.modified = data.modified;
             }),
+          );
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) =>
+              draft.map((e) => (e.version === versionId ? { ...e, timestamp: data.modified } : e)),
+            ),
           );
         } catch (e: unknown) {
           patchResult.undo();
           listPatchResult.undo();
+          versionsPatchResult.undo();
+          versionPatchResult.undo();
 
           const message = 'Feil ved lagring av dokument.';
 

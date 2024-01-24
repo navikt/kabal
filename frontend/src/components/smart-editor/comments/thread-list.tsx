@@ -52,12 +52,14 @@ export const ThreadList = () => {
 const StyledThreadSections = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   row-gap: 16px;
   flex-shrink: 0;
   width: 100%;
   height: 100%;
   padding-bottom: 32px;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-snap-type: y proximity;
   scroll-padding-bottom: 24px;
   scroll-padding-top: 48px;
@@ -67,6 +69,7 @@ const StyledThreadListContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 340px;
 `;
 
 const NoCommentsContainer = styled.div`

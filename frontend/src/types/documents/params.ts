@@ -37,3 +37,5 @@ interface ISendDocumentParams extends IDocumentParams {
 }
 
 export type IFinishDocumentParams = IArchiveDocumentParams | ISendDocumentParams;
+
+export type IGetVersionParams = IDocumentParams & { versionId: number };

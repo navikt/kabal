@@ -1,10 +1,16 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ELEMENT_LABEL_CONTENT } from '@app/plate/plugins/element-types';
-import { TextAlign } from '@app/plate/types';
+import { EditorValue, TextAlign } from '@app/plate/types';
 import { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { IMainDocument, IMergedDocumentsResponse, ISmartDocument } from '@app/types/documents/documents';
+import {
+  IMainDocument,
+  IMergedDocumentsResponse,
+  ISmartDocument,
+  ISmartDocumentVersion,
+} from '@app/types/documents/documents';
+import { IGetVersionParams } from '@app/types/documents/params';
 import { IValidateDocumentResponse } from '@app/types/documents/validation';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
@@ -69,6 +75,14 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
         body,
       }),
     }),
+    getSmartDocumentVersions: builder.query<ISmartDocumentVersion[], IDocumentParams>({
+      query: ({ oppgaveId, dokumentId }) =>
+        `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions`,
+    }),
+    getSmartDocumentVersion: builder.query<EditorValue, IGetVersionParams>({
+      query: ({ oppgaveId, dokumentId, versionId }) =>
+        `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions/${versionId}`,
+    }),
   }),
 });
 
@@ -80,4 +94,6 @@ export const {
   useLazyValidateDocumentQuery,
   useMergedDocumentsReferenceQuery,
   useLazyGetDocumentQuery,
+  useGetSmartDocumentVersionsQuery,
+  useGetSmartDocumentVersionQuery,
 } = documentsQuerySlice;

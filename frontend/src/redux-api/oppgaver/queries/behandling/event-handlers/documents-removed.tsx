@@ -5,6 +5,7 @@ import { toast } from '@app/components/toast/store';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentsRemovedEvent } from '@app/redux-api/server-sent-events/types';
+import { INavEmployee } from '@app/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
@@ -12,7 +13,6 @@ import {
   IMainDocument,
   IParentDocument,
 } from '@app/types/documents/documents';
-import { INavEmployee } from '@app/types/oppgave-common';
 
 export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) => (event: DocumentsRemovedEvent) => {
   reduxStore.dispatch(

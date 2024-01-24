@@ -1,6 +1,7 @@
 import React from 'react';
 import { getName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
-import { FlowState, INavEmployee } from '@app/types/oppgave-common';
+import { INavEmployee } from '@app/types/bruker';
+import { FlowState } from '@app/types/oppgave-common';
 
 interface Params {
   flowState: FlowState;

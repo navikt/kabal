@@ -8,10 +8,11 @@ interface Props {
 }
 
 export const UserContext = createContext<IUserData>({
-  ansattEnhet: { id: '', navn: '', lovligeYtelser: [] },
-  enheter: [],
   navIdent: '',
+  navn: '',
   roller: [],
+  enheter: [],
+  ansattEnhet: { id: '', navn: '', lovligeYtelser: [] },
   tildelteYtelser: [],
 });
 

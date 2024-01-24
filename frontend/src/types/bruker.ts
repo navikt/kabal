@@ -12,8 +12,15 @@ export interface ISettings {
   typer: SaksTypeEnum[];
 }
 
-export interface IUserData {
+// Employee from vedtaksinstans or KA.
+export interface INavEmployee {
   navIdent: string;
+  navn: string;
+}
+
+export interface IUserData extends INavEmployee {
+  navIdent: string;
+  navn: string;
   roller: Role[];
   enheter: IEnhet[];
   ansattEnhet: IEnhet;

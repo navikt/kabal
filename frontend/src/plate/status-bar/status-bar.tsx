@@ -11,12 +11,7 @@ export const StatusBar = ({ ...status }: SavedStatusProps) => (
 );
 
 const Container = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 22;
   width: 100%;
-  height: auto;
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 8px;

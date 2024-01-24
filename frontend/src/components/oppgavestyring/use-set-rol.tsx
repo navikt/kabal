@@ -3,7 +3,7 @@ import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/m
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
 import { OnChange } from '@app/components/oppgavestyring/types';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { INavEmployee } from '@app/types/oppgave-common';
+import { INavEmployee } from '@app/types/bruker';
 import { EMPTY_MEDUNDERSKRIVERE, Return } from './use-set-medunderskriver';
 
 export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {

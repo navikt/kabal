@@ -3,8 +3,7 @@ import React, { useMemo } from 'react';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { Role } from '@app/types/bruker';
-import { INavEmployee } from '@app/types/oppgave-common';
+import { INavEmployee, Role } from '@app/types/bruker';
 
 interface Props {
   oppgaveId: string;

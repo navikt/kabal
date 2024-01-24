@@ -1,6 +1,6 @@
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { PlateEditor, findDescendant, insertElements } from '@udecode/plate-common';
+import { PlateEditor, findDescendant, insertElements, useEditorReadOnly } from '@udecode/plate-common';
 import React from 'react';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RootElement } from '@app/plate/types';
@@ -11,12 +11,18 @@ interface Props {
   editor: PlateEditor<EditorValue>;
 }
 
-export const AddNewParagraphs = ({ editor, element }: Props) => (
-  <>
-    <AddNewParagraphAbove editor={editor} element={element} />
-    <AddNewParagraphBelow editor={editor} element={element} />
-  </>
-);
+export const AddNewParagraphs = ({ editor, element }: Props) => {
+  if (useEditorReadOnly()) {
+    return null;
+  }
+
+  return (
+    <>
+      <AddNewParagraphAbove editor={editor} element={element} />
+      <AddNewParagraphBelow editor={editor} element={element} />
+    </>
+  );
+};
 
 export const AddNewParagraphBelow = ({ editor, element }: Props) => (
   <Tooltip content="Legg til nytt avsnitt under" delay={0}>

@@ -1,6 +1,6 @@
 import '@app/mocks/window';
 import { TElement, TText } from '@udecode/plate-common';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
+import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';
 
 describe('are-descendants-equal', () => {
   // eslint-disable-next-line jest/no-hooks
@@ -66,4 +66,41 @@ const e = (type: string, children: (TText | TElement)[], ...props: Record<string
   type,
   children,
   ...props,
+});
+
+describe('are-keys-equal', () => {
+  it('should return true if the keys and values are equal', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: true }, { a: true })).toBe(true);
+  });
+
+  it('should return false if the number of keys is different', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: true, b: true }, { a: true })).toBe(false);
+  });
+
+  it('should return false if the values are not equal', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: true }, { a: false })).toBe(false);
+  });
+
+  it('should return false if the keys are not equal', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: true }, { b: false })).toBe(false);
+  });
+
+  it('missing key is equal to undefined value for same key', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: undefined }, { b: undefined })).toBe(true);
+  });
+
+  it('should return true if nested objects are equal', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: { b: true } }, { a: { b: true } })).toBe(true);
+  });
+
+  it('should return false if nested objects are not equal', () => {
+    expect.assertions(1);
+    expect(areKeysEqual({ a: { b: true } }, { a: { b: false } })).toBe(false);
+  });
 });

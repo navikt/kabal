@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
+import { PlateEditor, PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
 import React, { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -108,6 +108,7 @@ export const Signature = ({
   editor,
 }: PlateRenderElementProps<EditorValue, SignatureElement>) => {
   useSignatureData(editor, element);
+  const isReadOnly = useEditorReadOnly();
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
@@ -122,6 +123,7 @@ export const Signature = ({
       >
         <StyledCheckboxContainer>
           <Checkbox
+            disabled={isReadOnly}
             type="checkbox"
             checked={element.useShortName}
             onChange={({ target }) => {

@@ -5,7 +5,7 @@ import {
   getNodeAncestors,
   isEditorReadOnly,
 } from '@udecode/plate-common';
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
@@ -49,14 +49,8 @@ export const CustomLeaf = ({
 
   const style = getCustomLeafStyles(leaf, isCommentFocused, threadIds.length);
 
-  useEffect(() => {
-    if (isCommentFocused && ref.current !== null) {
-      requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
-    }
-  }, [isCommentFocused]);
-
   // Chromium Selection Fix: https://github.com/ianstormtaylor/slate/blob/main/site/examples/inlines.tsx#L347
-  const paddingLeft = leaf.text === '' ? 0.1 : undefined;
+  const paddingLeft = leaf.text.length === 0 ? 0.1 : undefined;
 
   return (
     <PlateLeaf
