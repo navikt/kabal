@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
-import { ENVIRONMENT } from '@app/environment';
-import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
+import { getHeaders } from '@app/headers';
 
 interface State<T> {
   data: T | undefined;
@@ -47,10 +46,7 @@ export class SimpleApiState<T> {
     this.onChange();
 
     try {
-      const response = await fetch(this.url, {
-        method: 'GET',
-        headers: { 'x-kabal-version': ENVIRONMENT.version, [TRACEPARENT_HEADER]: generateTraceParent() },
-      });
+      const response = await fetch(this.url, { method: 'GET', headers: getHeaders() });
 
       if (!response.ok) {
         const error = new Error(`${response.status} ${response.statusText}`);

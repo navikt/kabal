@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { Request, RequestHandler } from 'express';
+import { CLIENT_VERSION_KEY } from '@app/headers';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('traceparent');
@@ -13,9 +14,8 @@ export const ensureTraceparentHandler: RequestHandler = (req, res, next) => {
 
 /** Ensure the request has a traceparent header. Returns the `traceId` segment. */
 export const ensureTraceparent = (req: Request): string => {
-  const traceparentHeader = req.headers[TRACEPARENT_HEADER];
-  const parsedTraceparentHeader = Array.isArray(traceparentHeader) ? traceparentHeader[0] : traceparentHeader;
-  const hasTraceparentHeader = typeof parsedTraceparentHeader === 'string' && parsedTraceparentHeader.length !== 0;
+  const traceparentHeader = req.get(TRACEPARENT_HEADER);
+  const hasTraceparentHeader = typeof traceparentHeader === 'string' && traceparentHeader.length !== 0;
 
   // Request has no traceparent header.
   if (!hasTraceparentHeader) {
@@ -31,7 +31,7 @@ export const ensureTraceparent = (req: Request): string => {
     return traceId;
   }
 
-  const parsedTraceId = getTraceIdFromTraceparent(parsedTraceparentHeader);
+  const parsedTraceId = getTraceIdFromTraceparent(traceparentHeader, req);
 
   // Request has traceparent header, but it is invalid.
   if (parsedTraceId === undefined) {
@@ -59,11 +59,16 @@ const generateTraceparent = (traceId: string = generateTraceId()): string => {
 const generateTraceId = (): string => randomBytes(16).toString('hex');
 
 /** Parses traceId from traceparent ID according to https://www.w3.org/TR/trace-context/#version-format */
-export const getTraceIdFromTraceparent = (traceparent: string): string | undefined => {
+export const getTraceIdFromTraceparent = (traceparent: string, req: Request): string | undefined => {
   const [version, traceId] = traceparent.split('-');
 
   if (version !== TRACE_VERSION) {
-    log.warn({ msg: `Invalid traceparent version: ${version}`, data: { traceparent }, traceId });
+    log.warn({
+      msg: `Invalid traceparent version: ${version}`,
+      data: { traceparent },
+      traceId,
+      client_version: req.get(CLIENT_VERSION_KEY),
+    });
   }
 
   return traceId;

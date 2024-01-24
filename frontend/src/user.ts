@@ -1,12 +1,11 @@
-import { ENVIRONMENT } from '@app/environment';
-import { TRACEPARENT_HEADER, generateTraceParent } from '@app/functions/generate-request-id';
+import { getHeaders } from '@app/headers';
 import { INNSTILLINGER_BASE_PATH } from '@app/redux-api/common';
 import { IUserData } from '@app/types/bruker';
 
 const loadUser = async (attempt: number = 0): Promise<IUserData> => {
   const res = await fetch(`${INNSTILLINGER_BASE_PATH}/me/brukerdata`, {
     method: 'GET',
-    headers: { 'x-kabal-version': ENVIRONMENT.version, [TRACEPARENT_HEADER]: generateTraceParent() },
+    headers: getHeaders(),
   });
 
   if (res.status === 401) {

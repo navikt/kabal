@@ -10,5 +10,3 @@ export const generateTraceParent = (): string => {
 
   return `${TRACE_VERSION}-${traceId}-${parentId}-${TRACE_FLAGS}`;
 };
-
-export const TRACEPARENT_HEADER = 'traceparent';

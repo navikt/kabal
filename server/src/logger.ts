@@ -24,12 +24,16 @@ type LogArgs =
   | {
       msg?: string;
       traceId?: string;
+      client_version?: string;
+      tab_id?: string;
       error: Error | unknown;
       data?: SerializableValue;
     }
   | {
       msg: string;
       traceId?: string;
+      client_version?: string;
+      tab_id?: string;
       error?: Error | unknown;
       data?: SerializableValue;
     };
@@ -44,7 +48,8 @@ interface Logger {
 interface Log extends AnyObject {
   '@timestamp': string;
   traceId?: string;
-  version: string;
+  proxy_version: string;
+  client_version?: string;
   module: string;
   message?: string;
   stacktrace?: string;
@@ -71,12 +76,14 @@ export const getLogger = (module: string): Logger => {
   return logger;
 };
 
-const getLog = (module: string, level: Level, { msg, traceId, error, data }: LogArgs) => {
+const getLog = (module: string, level: Level, { msg, traceId, client_version, tab_id, error, data }: LogArgs) => {
   const log: Log = {
     ...(typeof data === 'object' && data !== null && !Array.isArray(data) ? data : { data }),
     level,
     '@timestamp': new Date().toISOString(),
-    version: VERSION,
+    proxy_version: VERSION,
+    client_version,
+    tab_id,
     module,
     traceId,
   };
