@@ -116,7 +116,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const StyledVersionTabs = styled(VersionTabs)`
+const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
   overflow: hidden;
   flex-grow: 1;
   display: flex;

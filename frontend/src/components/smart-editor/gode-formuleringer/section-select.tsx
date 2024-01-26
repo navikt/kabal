@@ -1,11 +1,12 @@
 import { Select } from '@navikt/ds-react';
-import { findNode, useEditorSelection } from '@udecode/plate-common';
+import { findNode } from '@udecode/plate-common';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { BasePoint, Range } from 'slate';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useTemplateSections } from '@app/hooks/use-template-sections';
+import { useSelection } from '@app/plate/hooks/use-selection';
 import {
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -54,7 +55,7 @@ const getActiveSection = (editor: RichTextEditor, selection: Range): TemplateSec
 export const SectionSelect = ({ activeSection, setActiveSection }: Props) => {
   const { templateId } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
-  const selection = useEditorSelection();
+  const selection = useSelection();
   const sections = useTemplateSections(templateId);
 
   useEffect(() => {
