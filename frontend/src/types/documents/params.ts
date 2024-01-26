@@ -1,4 +1,5 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { INavEmployee } from '../bruker';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
 import { CreatorRole, DistribusjonsType, UUID } from './documents';
@@ -10,8 +11,10 @@ export interface ISetParentParams extends IDocumentParams {
 export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebehandlingBaseParams {
   parentId: UUID;
   journalfoerteDokumenter: IArkivertDocument[];
-  creatorIdent: string;
-  creatorRole: CreatorRole.KABAL_SAKSBEHANDLING | CreatorRole.KABAL_ROL;
+  creator: {
+    employee: INavEmployee;
+    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING | CreatorRole.KABAL_ROL;
+  };
   isFinished: boolean;
 }
 

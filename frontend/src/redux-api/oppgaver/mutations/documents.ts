@@ -307,7 +307,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         },
       }),
       onQueryStarted: async (
-        { oppgaveId, parentId, journalfoerteDokumenter, creatorIdent, creatorRole, isFinished },
+        { oppgaveId, parentId, journalfoerteDokumenter, creator, isFinished },
         { dispatch, queryFulfilled },
       ) => {
         const getDocumentsPatchResult = dispatch(
@@ -346,8 +346,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   datoOpprettet: doc.datoOpprettet,
                   sortKey: doc.sortKey,
                 },
-                creatorIdent,
-                creatorRole,
+                creator,
               });
             }
 

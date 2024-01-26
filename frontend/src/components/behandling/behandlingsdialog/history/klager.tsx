@@ -1,10 +1,10 @@
 import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { formatIdNumber } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HistoryEventTypes, IKlagerEvent, IPart } from '@app/types/oppgavebehandling/response';
-import { Line, getActorName, toKey } from './common';
+import { Line, employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getKlager = (e: IKlagerEvent) => {
@@ -29,7 +29,7 @@ export const getKlager = (e: IKlagerEvent) => {
 };
 
 interface SetProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   part: IPart;
   timestamp: string;
 }
@@ -40,18 +40,14 @@ const Set = ({ actor, part, timestamp }: SetProps) => {
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={PlusIcon}>
       <Line>
-        {getActorName(actor)} satt {tag.toLowerCase()} til{' '}
-        <b>
-          {part.name} ({formatIdNumber(part.id)})
-        </b>
-        . Ingen tidligere {tag.toLowerCase()}.
+        {employeeName(actor)} satt {tag.toLowerCase()} til {partName(part)}. Ingen tidligere {tag.toLowerCase()}.
       </Line>
     </HistoryEvent>
   );
 };
 
 interface RemoveProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   previousPart: IPart;
   timestamp: string;
 }
@@ -62,18 +58,14 @@ const Remove = ({ actor, previousPart, timestamp }: RemoveProps) => {
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={XMarkOctagonIcon}>
       <Line>
-        {getActorName(actor)} fjernet {tag.toLowerCase()}. Tidligere {tag.toLowerCase()} var{' '}
-        <b>
-          {previousPart.name} ({formatIdNumber(previousPart.id)})
-        </b>
-        .
+        {employeeName(actor)} fjernet {tag.toLowerCase()}. Tidligere {tag.toLowerCase()} var {partName(previousPart)}.
       </Line>
     </HistoryEvent>
   );
 };
 
 interface ChangeProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   part: IPart;
   previousPart: IPart;
 
@@ -86,15 +78,7 @@ const Change = ({ actor, part, previousPart, timestamp }: ChangeProps) => {
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={ArrowRightLeftIcon}>
       <Line>
-        {getActorName(actor)} endret {tag.toLowerCase()} fra{' '}
-        <b>
-          {previousPart.name} ({formatIdNumber(previousPart.id)})
-        </b>{' '}
-        til{' '}
-        <b>
-          {part.name} ({formatIdNumber(part.id)})
-        </b>
-        .
+        {employeeName(actor)} endret {tag.toLowerCase()} fra {partName(previousPart)} til {partName(part)}.
       </Line>
     </HistoryEvent>
   );

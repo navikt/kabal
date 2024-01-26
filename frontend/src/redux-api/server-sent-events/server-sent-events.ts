@@ -14,6 +14,7 @@ export enum ServerSentEventType {
   JOURNALPOST_ADDED = 'JOURNALPOST_ADDED',
 
   // Behandlingsdetaljer
+  TILDELING = 'TILDELING',
   ROL = 'ROL',
   MEDUNDERSKRIVER = 'MEDUNDERSKRIVER',
   KLAGER = 'KLAGER',

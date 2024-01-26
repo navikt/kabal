@@ -32,7 +32,6 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
-          const { modified, ...rol } = data;
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
@@ -40,8 +39,9 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
                 return draft;
               }
 
-              draft.modified = modified;
-              draft.rol = rol;
+              draft.modified = data.modified;
+              draft.rol.flowState = data.flowState;
+              draft.rol.employee = data.employee;
             }),
           );
 
@@ -52,7 +52,9 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               draft.rol.flowState = data.flowState;
-              draft.rol.navIdent = data.navIdent;
+              draft.rol.navIdent = data.employee?.navIdent ?? null;
+              draft.rol.navn = data.employee?.navn ?? null;
+              draft.rol.returnertDate = null;
             }),
           );
         } catch (e) {

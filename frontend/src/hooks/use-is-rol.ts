@@ -16,8 +16,9 @@ export const useIsRol = () => {
 
     return (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.rol.employee !== null &&
       oppgave.rol.flowState !== FlowState.NOT_SENT &&
-      oppgave.rol.navIdent === user.navIdent
+      oppgave.rol.employee.navIdent === user.navIdent
     );
   }, [oppgave, isLoading, user]);
 };

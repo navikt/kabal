@@ -1,8 +1,7 @@
-import { BodyShort, Label, Select } from '@navikt/ds-react';
+import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { styled } from 'styled-components';
-import { Name } from '@app/components/name/name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -27,7 +26,7 @@ export const Saksbehandler = () => {
 
   const showSelect = !isFeilregistrert && !isFullfoert && (isSaksbehandler || hasOppgavestyringRole);
 
-  const { tildeltSaksbehandlerident } = oppgave;
+  const { saksbehandler } = oppgave;
 
   return (
     <Container>
@@ -38,9 +37,7 @@ export const Saksbehandler = () => {
           <Label size="small" htmlFor={ID}>
             Saksbehandler
           </Label>
-          <BodyShort id={ID}>
-            {tildeltSaksbehandlerident === null ? 'Ikke tildelt' : <Name navIdent={tildeltSaksbehandlerident} />}
-          </BodyShort>
+          <BodyShort id={ID}>{saksbehandler === null ? 'Ikke tildelt' : saksbehandler.navn}</BodyShort>
         </>
       )}
     </Container>
@@ -54,25 +51,32 @@ const SelectSaksbehandler = () => {
   const { data: potentialSaksbehandlere } = useGetPotentialSaksbehandlereQuery(oppgave?.id ?? skipToken);
   const [tildel] = useTildelSaksbehandlerMutation();
 
-  if (oppgave === undefined) {
-    return null;
+  if (oppgave === undefined || potentialSaksbehandlere === undefined) {
+    return (
+      <>
+        <Label size="small" htmlFor={ID}>
+          Saksbehandler
+        </Label>
+        <Skeleton height={32} id={ID} />
+      </>
+    );
   }
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    tildel({ oppgaveId: oppgave.id, navIdent: target.value });
+    const employee = potentialSaksbehandlere.saksbehandlere.find((s) => s.navIdent === target.value)!;
+    tildel({ oppgaveId: oppgave.id, employee });
   };
 
-  const options = potentialSaksbehandlere?.saksbehandlere.map(({ navn, navIdent }) => (
+  const options = potentialSaksbehandlere.saksbehandlere.map(({ navn, navIdent }) => (
     <option key={navIdent} value={navIdent}>
       {navn}
     </option>
   ));
 
-  const noneSelectedOption =
-    oppgave.tildeltSaksbehandlerident === null ? <option value={NONE}>Ingen valgt</option> : null;
+  const noneSelectedOption = oppgave.saksbehandler === null ? <option value={NONE}>Ingen valgt</option> : null;
 
   return (
-    <Select label="Saksbehandler" size="small" onChange={onChange} value={oppgave.tildeltSaksbehandlerident ?? NONE}>
+    <Select label="Saksbehandler" size="small" onChange={onChange} value={oppgave.saksbehandler?.navIdent ?? NONE}>
       {noneSelectedOption}
       {options}
     </Select>

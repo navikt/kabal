@@ -52,7 +52,7 @@ export const handlefullmektigEvent =
           }
 
           const baseEvent: BaseEvent<FullmektigHistoryEvent, HistoryEventTypes.FULLMEKTIG> = {
-            actor: actor.navIdent,
+            actor,
             timestamp,
             event: { part },
             type: HistoryEventTypes.FULLMEKTIG,
@@ -77,7 +77,7 @@ export const handlefullmektigEvent =
           }
 
           const historyEvent: IFullmektigEvent = {
-            actor: actor.navIdent,
+            actor,
             timestamp,
             event: { part },
             type: HistoryEventTypes.FULLMEKTIG,

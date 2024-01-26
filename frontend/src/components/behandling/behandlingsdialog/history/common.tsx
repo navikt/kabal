@@ -1,17 +1,26 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { Name } from '@app/components/name/name';
-import { HistoryEventTypes, IHistory } from '@app/types/oppgavebehandling/response';
-
-export const getName = (navIdent: string | null, fallback: string = 'felles kø') => (
-  <b>{navIdent === null ? fallback : <Name navIdent={navIdent} />}</b>
-);
+import { formatEmployeeName } from '@app/domain/employee-name';
+import { formatIdNumber } from '@app/functions/format-id';
+import { INavEmployee } from '@app/types/bruker';
+import { HistoryEventTypes, IHistory, IPart } from '@app/types/oppgavebehandling/response';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 
 export const toKey = (event: KeySource) => `${event.type}:${event.timestamp}`;
 
-export const getActorName = (navIdent: string | null) => getName(navIdent, '[Ukjent bruker]');
+export const employeeName = (employee: INavEmployee | null, fallback = '[Ukjent bruker]') => (
+  <b>{formatEmployeeName(employee, fallback)}</b>
+);
+
+export const QUEUE = <b>felles kø</b>;
+export const SELF = <b>seg selv</b>;
+
+export const partName = ({ name, id }: IPart) => (
+  <b>
+    {name} ({formatIdNumber(id)})
+  </b>
+);
 
 export const Line = styled.p`
   margin: 0;

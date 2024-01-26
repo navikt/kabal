@@ -19,12 +19,12 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
     }
 
     if (oppgave.medunderskriver.flowState === FlowState.SENT) {
-      return oppgave.medunderskriver.navIdent === user.navIdent;
+      return oppgave.medunderskriver.employee?.navIdent === user.navIdent;
     }
 
     if (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
-      oppgave.rol.flowState === FlowState.SENT &&
+      oppgave.rol?.flowState === FlowState.SENT &&
       templateId === TemplateIdEnum.ROL_QUESTIONS
     ) {
       return false;
@@ -32,13 +32,14 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
 
     if (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.rol.employee !== null &&
       oppgave.rol.flowState === FlowState.SENT &&
       templateId === TemplateIdEnum.ROL_ANSWERS &&
-      oppgave.rol.navIdent === user.navIdent
+      oppgave.rol.employee.navIdent === user.navIdent
     ) {
       return true;
     }
 
-    return oppgave.tildeltSaksbehandlerident === user.navIdent;
+    return oppgave.saksbehandler?.navIdent === user.navIdent;
   }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, templateId, user]);
 };

@@ -34,7 +34,7 @@ export const handleFerdigstiltEvent =
             ...history,
             ferdigstilt: [
               {
-                actor: actor.navIdent,
+                actor,
                 timestamp,
                 event: { avsluttetAvSaksbehandler },
                 type: HistoryEventTypes.FERDIGSTILT,

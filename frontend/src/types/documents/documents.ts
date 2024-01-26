@@ -64,8 +64,10 @@ interface IBaseDocument<P extends string | null = UUID | null> {
   isSmartDokument: boolean;
   isMarkertAvsluttet: boolean;
   parentId: P;
-  creatorIdent: string;
-  creatorRole: CreatorRole;
+  creator: {
+    employee: INavEmployee;
+    creatorRole: CreatorRole;
+  };
 }
 
 export interface IFileDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {

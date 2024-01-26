@@ -8,8 +8,9 @@ import {
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
-import { Line, getActorName, getName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
+import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import { HistoryEventTypes, IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 
@@ -26,7 +27,7 @@ export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
         return null;
       }
 
-      if (actor === event.medunderskriver) {
+      if (actor?.navIdent === event.medunderskriver.navIdent) {
         return <Retracted actor={actor} timestamp={timestamp} key={key} />;
       }
 
@@ -79,7 +80,7 @@ export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
 };
 
 interface RetractedProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   timestamp: string;
 }
 
@@ -91,14 +92,14 @@ const Retracted = ({ actor, timestamp }: RetractedProps) => (
     icon={ArrowRedoIcon}
   >
     <Line>
-      {getActorName(actor)} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
+      {employeeName(actor)} hentet saken tilbake fra saksbehandler til {SELF}.
     </Line>
   </HistoryEvent>
 );
 
 interface SendBackProps {
-  actor: string | null;
-  medunderskriver: string | null;
+  actor: INavEmployee | null;
+  medunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -110,14 +111,14 @@ const SendBack = ({ actor, medunderskriver, timestamp }: SendBackProps) => (
     icon={ArrowRedoIcon}
   >
     <Line>
-      {getActorName(actor)} sendte saken tilbake til medunderskriver {getName(medunderskriver)}.
+      {employeeName(actor)} sendte saken tilbake til medunderskriver {employeeName(medunderskriver)}.
     </Line>
   </HistoryEvent>
 );
 
 interface SendProps {
-  actor: string | null;
-  medunderskriver: string | null;
+  actor: INavEmployee | null;
+  medunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -129,13 +130,13 @@ const Send = ({ actor, medunderskriver, timestamp }: SendProps) => (
     icon={PaperplaneIcon}
   >
     <Line>
-      {getActorName(actor)} sendte saken til medunderskriver {getName(medunderskriver)}.
+      {employeeName(actor)} sendte saken til medunderskriver {employeeName(medunderskriver)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ReturnProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   timestamp: string;
 }
 
@@ -146,13 +147,13 @@ const Return = ({ actor, timestamp }: ReturnProps) => (
     timestamp={timestamp}
     icon={CheckmarkIcon}
   >
-    <Line>{getActorName(actor)} returnerte saken fra medunderskrift til saksbehandler.</Line>
+    <Line>{employeeName(actor)} returnerte saken fra medunderskrift til saksbehandler.</Line>
   </HistoryEvent>
 );
 
 interface RetractOther {
-  actor: string | null;
-  medunderskriver: string | null;
+  actor: INavEmployee | null;
+  medunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -164,14 +165,14 @@ const RetractOther = ({ actor, medunderskriver, timestamp }: RetractOther) => (
     icon={ArrowUndoIcon}
   >
     <Line>
-      {getActorName(actor)} hentet saken tilbake fra medunderskriver {getName(medunderskriver)}.
+      {employeeName(actor)} hentet saken tilbake fra medunderskriver {employeeName(medunderskriver)}.
     </Line>
   </HistoryEvent>
 );
 
 interface RemoveProps {
-  actor: string | null;
-  previousMedunderskriver: string | null;
+  actor: INavEmployee | null;
+  previousMedunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -183,14 +184,14 @@ const Remove = ({ actor, previousMedunderskriver, timestamp }: RemoveProps) => (
     icon={XMarkOctagonIcon}
   >
     <Line>
-      {getActorName(actor)} fjernet {getName(previousMedunderskriver)} som medunderskriver.
+      {employeeName(actor)} fjernet {employeeName(previousMedunderskriver)} som medunderskriver.
     </Line>
   </HistoryEvent>
 );
 
 interface SendOtherProps {
-  actor: string | null;
-  medunderskriver: string | null;
+  actor: INavEmployee | null;
+  medunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -202,15 +203,15 @@ const SendOther = ({ actor, medunderskriver, timestamp }: SendOtherProps) => (
     icon={PaperplaneIcon}
   >
     <Line>
-      {getActorName(actor)} sendte saken til medunderskriver {getName(medunderskriver)}.
+      {employeeName(actor)} sendte saken til medunderskriver {employeeName(medunderskriver)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ChangeProps {
-  actor: string | null;
-  medunderskriver: string | null;
-  previousMedunderskriver: string | null;
+  actor: INavEmployee | null;
+  medunderskriver: INavEmployee | null;
+  previousMedunderskriver: INavEmployee | null;
   timestamp: string;
 }
 
@@ -222,8 +223,8 @@ const Change = ({ actor, medunderskriver, previousMedunderskriver, timestamp }: 
     icon={ArrowRightLeftIcon}
   >
     <Line>
-      {getActorName(actor)} byttet medunderskriver fra {getName(previousMedunderskriver)} til {getName(medunderskriver)}
-      .
+      {employeeName(actor)} byttet medunderskriver fra {employeeName(previousMedunderskriver)} til{' '}
+      {employeeName(medunderskriver)}.
     </Line>
   </HistoryEvent>
 );

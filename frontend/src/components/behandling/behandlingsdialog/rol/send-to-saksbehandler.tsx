@@ -29,7 +29,7 @@ export const SendToSaksbehandler = ({ oppgaveId, isSaksbehandler }: Props) => {
 
   const { rol } = oppgave;
 
-  if (rol.flowState !== FlowState.SENT || rol.navIdent !== user.navIdent) {
+  if (rol.flowState !== FlowState.SENT || rol.employee?.navIdent !== user.navIdent) {
     return null;
   }
 

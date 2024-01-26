@@ -9,12 +9,12 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
 
 interface Props {
   oppgaveId: string;
-  medunderskriver: IHelper;
+  medunderskriver: IMedunderskriverRol;
   typeId: SaksTypeEnum;
 }
 
@@ -44,8 +44,10 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
     <Select
       size="small"
       label={`${getTitleCapitalized(typeId)}`}
-      onChange={({ target }) => onChange(target.value === NONE ? null : target.value, medunderskriver.navIdent)}
-      value={medunderskriver.navIdent ?? NONE}
+      onChange={({ target }) =>
+        onChange(target.value === NONE ? null : target.value, medunderskriver.employee?.navIdent ?? null)
+      }
+      value={medunderskriver.employee?.navIdent ?? NONE}
       data-testid="select-medunderskriver"
       disabled={isUpdating}
     >

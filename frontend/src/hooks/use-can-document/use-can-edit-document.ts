@@ -38,7 +38,7 @@ export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMa
   }
 
   if (isTildeltSaksbehandler) {
-    return document.creatorRole === CreatorRole.KABAL_SAKSBEHANDLING;
+    return document.creator.creatorRole === CreatorRole.KABAL_SAKSBEHANDLING;
   }
 
   return isRol && canRolEditDocument(document, oppgave);

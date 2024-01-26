@@ -8,6 +8,7 @@ import {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
 } from '@app/redux-api/oppgaver/queries/behandling/behandling';
+import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
 import { FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
@@ -23,7 +24,7 @@ interface Props {
   sakenGjelder: ISakenGjelderResponse['sakenGjelder'];
 }
 
-type UseTildel = [(navIdent: string) => Promise<boolean>, { isLoading: boolean }];
+type UseTildel = [(employee: INavEmployee) => Promise<boolean>, { isLoading: boolean }];
 type UseFradel = [(params: FradelWithHjemler | FradelWithoutHjemler) => Promise<boolean>, { isLoading: boolean }];
 
 export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
@@ -32,12 +33,12 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
   const [tildel] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const tildelSaksbehandler = async (navIdent: string) => {
+  const tildelSaksbehandler = async (employee: INavEmployee) => {
     setIsLoading(true);
 
     try {
       const { saksbehandler: fromSaksbehandler } = await getSaksbehandler(oppgaveId, true).unwrap();
-      const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, navIdent }).unwrap();
+      const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, employee }).unwrap();
       const sakenGjelder = await getSakenGjelder(oppgaveId, true).unwrap();
       createTildeltToast({
         toSaksbehandler,

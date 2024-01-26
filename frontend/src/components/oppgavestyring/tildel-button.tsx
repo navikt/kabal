@@ -20,7 +20,7 @@ export const TildelButton = ({
   medunderskriver,
   children = 'Tildel meg',
 }: Props) => {
-  const user = useContext(UserContext);
+  const { navIdent, navn, roller } = useContext(UserContext);
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);
@@ -31,9 +31,9 @@ export const TildelButton = ({
 
   if (
     !access.assignSelf ||
-    !user.roller.includes(Role.KABAL_SAKSBEHANDLING) ||
-    medunderskriver.navIdent === user.navIdent ||
-    tildeltSaksbehandlerident === user.navIdent
+    !roller.includes(Role.KABAL_SAKSBEHANDLING) ||
+    medunderskriver.navIdent === navIdent ||
+    tildeltSaksbehandlerident === navIdent
   ) {
     return null;
   }
@@ -48,7 +48,7 @@ export const TildelButton = ({
       disabled={isLoading}
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
-      onClick={() => tildel(user.navIdent)}
+      onClick={() => tildel({ navIdent, navn })}
     >
       {children}
     </StyledButton>

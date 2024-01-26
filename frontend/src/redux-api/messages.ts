@@ -1,24 +1,20 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { INavEmployee } from '@app/types/bruker';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 
 export interface IMessage {
-  author: IAuthor;
+  author: INavEmployee;
   created: string;
   id: string;
   modified: string;
   text: string;
 }
 
-interface IAuthor {
-  name: string;
-  saksbehandlerIdent: string;
-}
-
 interface IPostMessage {
   text: string;
-  author: IAuthor;
+  author: INavEmployee;
 }
 
 enum MessageListTagTypes {

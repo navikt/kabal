@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 import { INavEmployee } from '@app/types/bruker';
 import { UtfallEnum } from '@app/types/kodeverk';
-import { FlowState, IHelper, INotSentHelper, ISakenGjelder, ISentHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FradelReason } from '@app/types/oppgaver';
 
@@ -44,11 +44,11 @@ export interface ISakenGjelderResponse {
   sakenGjelder: ISakenGjelder;
 }
 
-export type ISetMedunderskriverResponse = IModifiedResponse & (ISentHelper | INotSentHelper);
+export type ISetMedunderskriverResponse = IModifiedResponse & IMedunderskriverRol;
 
-export type ISetRolResponse = IModifiedResponse & (ISentHelper | INotSentHelper);
+export type ISetRolResponse = IModifiedResponse & IMedunderskriverRol;
 
-export type ISetFlowStateResponse = IModifiedResponse & IHelper;
+export type ISetFlowStateResponse = IModifiedResponse & IMedunderskriverRol;
 
 export interface ISetExtraUtfallResponse extends IModifiedResponse {
   extraUtfallIdSet: UtfallEnum[];
@@ -73,7 +73,7 @@ export interface BaseEvent<T, E extends HistoryEventTypes> {
   type: E;
   timestamp: string; // DateTime
   /** `null` means lack of data. Should not happen. Show as unknown user. */
-  actor: string | null; // NAV Ident
+  actor: INavEmployee | null;
   event: T;
 }
 
@@ -81,29 +81,22 @@ interface WithPrevious<T, E extends HistoryEventTypes> extends BaseEvent<T, E> {
   previous: BaseEvent<T, E>;
 }
 
-interface FradelingEvent {
-  saksbehandler: string | null; // NAV Ident
-  fradelingReasonId: FradelReason;
-  /** `null` means no change. */
-  hjemmelIdList: string[] | null;
-}
-
 interface TildelingEvent {
-  saksbehandler: string | null; // NAV Ident
-  fradelingReasonId: null;
+  saksbehandler: INavEmployee | null; // NAV Ident
+  fradelingReasonId: FradelReason | null;
   /** `null` means no change. */
   hjemmelIdList: string[] | null;
 }
 
 export interface MedunderskriverEvent {
   /** Nav Ident. `null` betyr "felles kø". */
-  medunderskriver: string | null; // NAV Ident
+  medunderskriver: INavEmployee | null; // NAV Ident
   flow: FlowState;
 }
 
 export interface RolEvent {
   /** Nav Ident. `null` betyr "felles kø". */
-  rol: string | null; // NAV Ident
+  rol: INavEmployee | null; // NAV Ident
   flow: FlowState;
 }
 
@@ -135,7 +128,7 @@ interface FerdigstiltEvent {
   avsluttetAvSaksbehandler: string; // DateTime
 }
 
-export type ITildelingEvent = WithPrevious<TildelingEvent | FradelingEvent, HistoryEventTypes.TILDELING>;
+export type ITildelingEvent = WithPrevious<TildelingEvent, HistoryEventTypes.TILDELING>;
 export type IMedunderskriverEvent = WithPrevious<MedunderskriverEvent, HistoryEventTypes.MEDUNDERSKRIVER>;
 export type IRolEvent = WithPrevious<RolEvent, HistoryEventTypes.ROL>;
 export type IKlagerEvent = WithPrevious<KlagerEvent, HistoryEventTypes.KLAGER>;

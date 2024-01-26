@@ -40,7 +40,7 @@ export const handleKlagerEvent =
           }
 
           const baseEvent: BaseEvent<KlagerHistoryEvent, HistoryEventTypes.KLAGER> = {
-            actor: actor.navIdent,
+            actor,
             timestamp,
             event: { part },
             type: HistoryEventTypes.KLAGER,
@@ -65,7 +65,7 @@ export const handleKlagerEvent =
           }
 
           const historyEvent: IKlagerEvent = {
-            actor: actor.navIdent,
+            actor,
             timestamp,
             event: { part },
             type: HistoryEventTypes.KLAGER,

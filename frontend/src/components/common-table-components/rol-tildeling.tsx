@@ -27,7 +27,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
 
   const fradel = async () => {
     try {
-      await setRol({ navIdent: null, oppgaveId: oppgave.id }).unwrap();
+      await setRol({ employee: null, oppgaveId: oppgave.id }).unwrap();
 
       toast.success(
         <ActionToast
@@ -50,7 +50,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
 
   const tildel = async () => {
     try {
-      await setRol({ navIdent: user.navIdent, oppgaveId: oppgave.id }).unwrap();
+      await setRol({ employee: { navIdent: user.navIdent, navn: user.navn }, oppgaveId: oppgave.id }).unwrap();
 
       toast.success(
         <ActionToast

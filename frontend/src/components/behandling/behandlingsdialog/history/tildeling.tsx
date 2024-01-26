@@ -3,9 +3,10 @@ import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Label, Tag } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
-import { Line, getActorName, getName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { Line, QUEUE, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
 
@@ -59,35 +60,35 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
 };
 
 interface ToSelfProps {
-  actor: string | null;
-  previousSaksbehandler: string | null;
+  actor: INavEmployee | null;
+  previousSaksbehandler: INavEmployee | null;
   timestamp: string;
 }
 
 const ToSelf = ({ actor, previousSaksbehandler, timestamp }: ToSelfProps) => (
   <HistoryEvent tag="Tildeling" type={HistoryEventTypes.TILDELING} timestamp={timestamp} icon={PlusIcon}>
     <Line>
-      {getActorName(actor)} tildelte seg saken fra {getName(previousSaksbehandler)}.
+      {employeeName(actor)} tildelte seg saken fra {employeeName(previousSaksbehandler)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ToOtherProps {
-  actor: string | null;
-  saksbehandler: string | null;
+  actor: INavEmployee | null;
+  saksbehandler: INavEmployee;
   timestamp: string;
 }
 
 const ToOther = ({ actor, saksbehandler, timestamp }: ToOtherProps) => (
   <HistoryEvent tag="Tildeling" type={HistoryEventTypes.TILDELING} timestamp={timestamp} icon={PlusIcon}>
     <Line>
-      {getActorName(actor)} tildelte saken til {getName(saksbehandler)}.
+      {employeeName(actor)} tildelte saken til {employeeName(saksbehandler)}.
     </Line>
   </HistoryEvent>
 );
 
 interface FromSelfProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   fradelingReasonId: FradelReason | null;
   previousHjemmelIdList: string[] | null;
   hjemmelIdList: string[] | null;
@@ -116,8 +117,8 @@ const FromSelf = ({ actor, fradelingReasonId, previousHjemmelIdList, hjemmelIdLi
 };
 
 interface FromOtherProps {
-  actor: string | null;
-  previousSaksbehandler: string | null;
+  actor: INavEmployee | null;
+  previousSaksbehandler: INavEmployee | null;
   timestamp: string;
 }
 
@@ -130,14 +131,14 @@ const FromOther = ({ actor, previousSaksbehandler, timestamp }: FromOtherProps) 
     icon={ArrowUndoIcon}
   >
     <Line>
-      {getActorName(actor)} flyttet saken fra {getName(previousSaksbehandler)} til felles kø.
+      {employeeName(actor)} flyttet saken fra {employeeName(previousSaksbehandler)} til {QUEUE}.
     </Line>
   </HistoryEvent>
 );
 
 const getReason = (
   reasonId: FradelReason | null,
-  actor: string | null,
+  actor: INavEmployee | null,
   oldHjemler: string[] | null,
   newHjemler: string[] | null,
   labelId: string,
@@ -146,26 +147,26 @@ const getReason = (
     case null:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b>. Årsak: <b>Ukjent</b>.
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Ukjent</b>.
         </Line>
       );
     case FradelReason.ANNET:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b>. Årsak: <b>Annet</b>.
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Annet</b>.
         </Line>
       );
     case FradelReason.INHABIL:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b>. Årsak: <b>Inhabilitet</b>.
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Inhabilitet</b>.
         </Line>
       );
     case FradelReason.FEIL_HJEMMEL: {
       return (
         <>
           <Line>
-            {getActorName(actor)} la saken tilbake i <b>felles kø</b>.
+            {employeeName(actor)} la saken tilbake i {QUEUE}.
           </Line>
 
           <FlexRowContainer>
@@ -212,19 +213,19 @@ const getReason = (
     case FradelReason.LEDER:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b> som leder.
+          {employeeName(actor)} la saken tilbake i {QUEUE} som leder.
         </Line>
       );
     case FradelReason.LENGRE_FRAVÆR:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b>. Årsak: <b>Lengre fravær</b>.
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Lengre fravær</b>.
         </Line>
       );
     case FradelReason.MANGLER_KOMPETANSE:
       return (
         <Line>
-          {getActorName(actor)} la saken tilbake i <b>felles kø</b>. Årsak: <b>Manglende kompetanse</b>.
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Manglende kompetanse</b>.
         </Line>
       );
   }

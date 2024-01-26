@@ -38,7 +38,7 @@ export const handleFeilregistreringEvent =
             ...history,
             feilregistrert: [
               {
-                actor: actor.navIdent,
+                actor,
                 timestamp,
                 event: { reason },
                 type: HistoryEventTypes.FEILREGISTRERT,

@@ -1,11 +1,11 @@
 import React from 'react';
-import { getName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 
 interface Params {
   flowState: FlowState;
-  navIdent: string | null;
+  medunderskriver: INavEmployee | null;
 }
 
 export const getMedunderskriverToastContent = (
@@ -17,13 +17,13 @@ export const getMedunderskriverToastContent = (
 
   if (isFlowChange) {
     if (previous.flowState === FlowState.RETURNED && next.flowState === FlowState.SENT) {
-      if (next.navIdent === null) {
+      if (next.medunderskriver === null) {
         console.warn('Cannot be sent to medunderskriver when medunderskriver is null.');
 
         return null;
       }
 
-      if (actor.navIdent === next.navIdent) {
+      if (actor.navIdent === next.medunderskriver.navIdent) {
         return (
           <>
             {actor.navn} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
@@ -33,7 +33,7 @@ export const getMedunderskriverToastContent = (
 
       return (
         <>
-          {actor.navn} sendte saken tilbake til {getName(next.navIdent)} (medunderskriver).
+          {actor.navn} sendte saken tilbake til {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }
@@ -41,7 +41,7 @@ export const getMedunderskriverToastContent = (
     if (previous.flowState === FlowState.NOT_SENT && next.flowState === FlowState.SENT) {
       return (
         <>
-          {actor.navn} sendte saken til {getName(next.navIdent)} (medunderskriver).
+          {actor.navn} sendte saken til {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }
@@ -53,34 +53,35 @@ export const getMedunderskriverToastContent = (
     if (previous.flowState === FlowState.SENT && next.flowState === FlowState.NOT_SENT) {
       return (
         <>
-          {actor.navn} hentet saken tilbake fra {getName(next.navIdent)} (medunderskriver).
+          {actor.navn} hentet saken tilbake fra {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }
   }
 
-  const isMedunderskriverChange = next.navIdent !== previous.navIdent;
+  const isMedunderskriverChange = next.medunderskriver?.navIdent !== previous.medunderskriver?.navIdent;
 
   if (isMedunderskriverChange) {
-    if (next.navIdent === null) {
+    if (next.medunderskriver === null) {
       return (
         <>
-          {actor.navn} fjernet {getName(previous.navIdent)} som medunderskriver.
+          {employeeName(actor)} fjernet {employeeName(previous.medunderskriver)} som medunderskriver.
         </>
       );
     }
 
-    if (previous.navIdent === null) {
+    if (previous.medunderskriver === null) {
       return (
         <>
-          {actor.navn} satt {getName(next.navIdent)} som medunderskriver.
+          {employeeName(actor)} satt {employeeName(next.medunderskriver)} som medunderskriver.
         </>
       );
     }
 
     return (
       <>
-        {actor.navn} byttet medunderskriver fra {getName(previous.navIdent)} til {getName(next.navIdent)}.
+        {employeeName(actor)} byttet medunderskriver fra {employeeName(previous.medunderskriver)} til{' '}
+        {employeeName(next.medunderskriver)}.
       </>
     );
   }

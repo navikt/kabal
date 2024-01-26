@@ -5,6 +5,7 @@ import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { isoDateToPretty } from '@app/domain/date';
 import { reduxStore } from '@app/redux/configure-store';
+import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import { SattPaaVentEvent } from '@app/redux-api/server-sent-events/types';
@@ -23,7 +24,7 @@ export const handleSattPaaVentEvent =
         if (sattPaaVent === null) {
           toast.info(
             <InfoToast title="Venteperiode avsluttet">
-              {actor.navn} har avsluttet venteperioden for behandlingen.
+              {employeeName(actor)} har avsluttet venteperioden for behandlingen.
             </InfoToast>,
           );
         } else {
@@ -31,7 +32,7 @@ export const handleSattPaaVentEvent =
           toast.info(
             <InfoToast title="Behandling satt på vent">
               <Line>
-                {actor.navn} har satt behandlingen på vent til {isoDateToPretty(sattPaaVent.to)}.
+                {employeeName(actor)} har satt behandlingen på vent til {isoDateToPretty(sattPaaVent.to)}.
               </Line>
               <Label size="small" htmlFor={id}>
                 Årsak
@@ -55,7 +56,7 @@ export const handleSattPaaVentEvent =
             ...history,
             sattPaaVent: [
               {
-                actor: actor.navIdent,
+                actor,
                 timestamp,
                 event: sattPaaVent,
                 type: HistoryEventTypes.SATT_PAA_VENT,

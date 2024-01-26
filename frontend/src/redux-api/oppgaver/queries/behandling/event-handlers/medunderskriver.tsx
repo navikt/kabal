@@ -6,14 +6,15 @@ import { getMedunderskriverToastContent } from '@app/redux-api/oppgaver/queries/
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import { MedunderskriverEvent } from '@app/redux-api/server-sent-events/types';
+import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 
 export const handleMedunderskriverEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
-  ({ flowState, navIdent, actor, timestamp }: MedunderskriverEvent) => {
-    let previousMedunderskriver: string | null = null;
+  ({ flowState, actor, timestamp, medunderskriver }: MedunderskriverEvent) => {
+    let previousMedunderskriver: INavEmployee | null = null;
     let previousFlow = FlowState.NOT_SENT;
 
     updateCachedData((draft) => {
@@ -21,14 +22,14 @@ export const handleMedunderskriverEvent =
         return draft;
       }
 
-      previousMedunderskriver = draft.medunderskriver.navIdent;
+      previousMedunderskriver = draft.medunderskriver.employee;
       previousFlow = draft.medunderskriver.flowState;
 
       if (actor.navIdent !== userId) {
         const toastContent = getMedunderskriverToastContent(
           actor,
-          { flowState: previousFlow, navIdent: previousMedunderskriver },
-          { flowState, navIdent },
+          { flowState: previousFlow, medunderskriver: previousMedunderskriver },
+          { flowState, medunderskriver },
         );
 
         if (toastContent !== null) {
@@ -36,7 +37,10 @@ export const handleMedunderskriverEvent =
         }
       }
 
-      draft.medunderskriver.navIdent = navIdent;
+      if (medunderskriver !== null) {
+        draft.medunderskriver.employee = medunderskriver;
+      }
+
       draft.medunderskriver.flowState = flowState;
       draft.modified = timestamp;
 
@@ -57,9 +61,9 @@ export const handleMedunderskriverEvent =
               ...history,
               medunderskriver: [
                 {
-                  actor: actor.navIdent,
+                  actor,
                   timestamp,
-                  event: { flow: flowState, medunderskriver: navIdent },
+                  event: { flow: flowState, medunderskriver },
                   type: HistoryEventTypes.MEDUNDERSKRIVER,
                   previous: {
                     actor: null,
@@ -76,7 +80,7 @@ export const handleMedunderskriverEvent =
             return history;
           }
 
-          if (flowState === previousFlow && navIdent === previousMedunderskriver) {
+          if (flowState === previousFlow && medunderskriver?.navIdent === previousMedunderskriver?.navIdent) {
             return history;
           }
 
@@ -84,9 +88,9 @@ export const handleMedunderskriverEvent =
             ...history,
             medunderskriver: [
               {
-                actor: actor.navIdent,
+                actor,
                 timestamp,
-                event: { flow: flowState, medunderskriver: navIdent },
+                event: { flow: flowState, medunderskriver },
                 type: HistoryEventTypes.MEDUNDERSKRIVER,
                 previous,
               },

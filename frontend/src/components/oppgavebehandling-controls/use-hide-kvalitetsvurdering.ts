@@ -19,7 +19,7 @@ export const useHideKvalitetsvurdering = (): boolean => {
 
   return (
     oppgave.kvalitetsvurderingReference === null ||
-    oppgave.rol.navIdent === user.navIdent ||
+    oppgave.rol.employee?.navIdent === user.navIdent ||
     resultat.utfallId === UtfallEnum.TRUKKET ||
     resultat.utfallId === UtfallEnum.RETUR ||
     resultat.utfallId === UtfallEnum.UGUNST ||

@@ -37,7 +37,7 @@ export const useCanDeleteDocument = (
     }
 
     if (isTildeltSaksbehandler) {
-      if (document.creatorRole !== CreatorRole.KABAL_SAKSBEHANDLING) {
+      if (document.creator.creatorRole !== CreatorRole.KABAL_SAKSBEHANDLING) {
         return false;
       }
 

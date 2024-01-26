@@ -21,7 +21,7 @@ export const canRolEditDocument = (document: IMainDocument, oppgave: IOppgavebeh
     return false;
   }
 
-  return document.creatorRole === CreatorRole.KABAL_ROL;
+  return document.creator.creatorRole === CreatorRole.KABAL_ROL;
 };
 
 const hasAccessToArchivedDocument = (document: IMainDocument): document is IJournalfoertDokumentReference =>

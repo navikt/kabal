@@ -16,7 +16,7 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
-  const user = useContext(UserContext);
+  const { navIdent, navn } = useContext(UserContext);
   const { getSelectedDocuments } = useContext(SelectContext);
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
@@ -55,8 +55,10 @@ export const UseAsAttachments = () => {
             oppgaveId,
             parentId: target.value,
             journalfoerteDokumenter: getSelectedDocuments(),
-            creatorIdent: user.navIdent,
-            creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
+            creator: {
+              employee: { navIdent, navn },
+              creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
+            },
             isFinished,
           });
         }}

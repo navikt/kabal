@@ -13,7 +13,8 @@ import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 
 export const handleRolEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
-  ({ flowState, navIdent, actor, timestamp }: RolEvent) => {
+  ({ flowState, actor, timestamp, rol }: RolEvent) => {
+    const navIdent = rol?.navIdent ?? null;
     let previousRol: string | null = null;
     let previousFlow = FlowState.NOT_SENT;
 
@@ -22,7 +23,7 @@ export const handleRolEvent =
         return draft;
       }
 
-      previousRol = draft.rol.navIdent;
+      previousRol = draft.rol.employee?.navIdent ?? null;
       previousFlow = draft.rol.flowState;
 
       if (actor.navIdent !== userId) {
@@ -30,8 +31,9 @@ export const handleRolEvent =
 
         const toastContent = getRolToastContent(
           actor,
-          { flowState: current.flowState, navIdent: current.navIdent },
-          { flowState, navIdent },
+          userId,
+          { flowState: current.flowState, rol: current.employee },
+          { flowState, rol },
         );
 
         if (toastContent !== null) {
@@ -39,7 +41,7 @@ export const handleRolEvent =
         }
       }
 
-      draft.rol.navIdent = navIdent;
+      draft.rol.employee = rol;
       draft.rol.flowState = flowState;
       draft.modified = timestamp;
 
@@ -60,9 +62,9 @@ export const handleRolEvent =
               ...history,
               rol: [
                 {
-                  actor: actor.navIdent,
+                  actor,
                   timestamp,
-                  event: { flow: flowState, rol: navIdent },
+                  event: { flow: flowState, rol },
                   type: HistoryEventTypes.ROL,
                   previous: {
                     actor: null,
@@ -87,9 +89,9 @@ export const handleRolEvent =
             ...history,
             rol: [
               {
-                actor: actor.navIdent,
+                actor,
                 timestamp,
-                event: { flow: flowState, rol: navIdent },
+                event: { flow: flowState, rol },
                 type: HistoryEventTypes.ROL,
                 previous,
               },
