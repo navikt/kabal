@@ -103,7 +103,7 @@ const PanelContent = styled.div`
   flex-grow: 1;
 `;
 
-const StyledVersionTabs = styled(VersionTabs)`
+const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
   display: flex;
   flex-direction: column;
   overflow: hidden;

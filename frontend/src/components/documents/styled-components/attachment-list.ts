@@ -51,7 +51,7 @@ export const NewDocAttachmentsContainer = styled.div<{ $showTreeLine: boolean }>
   }
 `;
 
-export const StyledAttachmentListItem = styled(StyledDocumentListItem)`
+export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(StyledDocumentListItem)`
   position: absolute;
   left: 0;
   right: 0;

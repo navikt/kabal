@@ -1,13 +1,14 @@
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
-import { isCollapsed, useEditorSelection } from '@udecode/plate-common';
+import { isCollapsed } from '@udecode/plate-common';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { MOD_KEY } from '@app/mod-key';
+import { useSelection } from '@app/plate/hooks/use-selection';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 
 export const CommentsButton = () => {
   const { setNewCommentSelection, newCommentSelection } = useContext(SmartEditorContext);
-  const selection = useEditorSelection();
+  const selection = useSelection();
 
   return (
     <ToolbarIconButton
