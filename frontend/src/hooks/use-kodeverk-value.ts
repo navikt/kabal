@@ -1,13 +1,13 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useLatestYtelser, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import { ILovKildeToRegistreringshjemmel, IYtelse, SaksTypeEnum } from '@app/types/kodeverk';
+import { ILovKildeToRegistreringshjemmel, IYtelse } from '@app/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 
 export const useSakstyper = () => {
   const { data: sakstyper = EMPTY_ARRAY } = useSakstyperToUtfall();
 
-  return sakstyper.filter(({ id }) => id !== SaksTypeEnum.ANKE_I_TRYGDERETTEN);
+  return sakstyper;
 };
 
 export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): [IYtelse | undefined, boolean] => {
