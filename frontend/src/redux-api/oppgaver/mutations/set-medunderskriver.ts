@@ -13,46 +13,45 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setMedunderskriver: builder.mutation<ISetMedunderskriverResponse, ISetMedunderskriverParams>({
-      query: ({ oppgaveId, navIdent }) => ({
+      query: ({ oppgaveId, employee }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/medunderskrivernavident`,
         method: 'PUT',
         body: {
-          navIdent,
+          navIdent: employee?.navIdent ?? null,
         },
       }),
-      onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, employee }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.medunderskriver.navIdent === navIdent) {
-              return;
+            if (draft.medunderskriver.employee?.navIdent === employee?.navIdent) {
+              return draft;
             }
 
+            draft.medunderskriver.employee = employee;
+
             if (draft.medunderskriver.flowState === FlowState.RETURNED) {
-              draft.medunderskriver = {
-                navIdent,
-                flowState: FlowState.NOT_SENT,
-                returnertDate: null,
-              };
-            } else {
-              draft.medunderskriver.navIdent = navIdent;
+              draft.medunderskriver.flowState = FlowState.NOT_SENT;
             }
           }),
         );
 
         try {
           const { data } = await queryFulfilled;
-          const { modified, ...medunderskriver } = data;
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              draft.modified = modified;
-              draft.medunderskriver = medunderskriver;
+              draft.modified = data.modified;
+              draft.medunderskriver.flowState = data.flowState;
+              draft.medunderskriver.employee = data.employee;
             }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.medunderskriver = medunderskriver;
+              draft.medunderskriver.flowState = data.flowState;
+              draft.medunderskriver.navIdent = data.employee?.navIdent ?? null;
+              draft.medunderskriver.navn = data.employee?.navn ?? null;
+              draft.medunderskriver.returnertDate = null;
             }),
           );
         } catch (e) {

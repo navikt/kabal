@@ -32,14 +32,16 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
               draft.medunderskriver.flowState = data.flowState;
-              draft.medunderskriver.navIdent = data.navIdent;
+              draft.medunderskriver.employee = data.employee;
             }),
           );
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriver.flowState = data.flowState;
-              draft.medunderskriver.navIdent = data.navIdent;
+              draft.medunderskriver.navIdent = data.employee?.navIdent ?? null;
+              draft.medunderskriver.navn = data.employee?.navn ?? null;
+              draft.medunderskriver.returnertDate = null;
             }),
           );
         } catch (e) {

@@ -3,8 +3,9 @@ import { Label } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
+import { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, ISattPaaVentEvent, SattPaaVentEvent } from '@app/types/oppgavebehandling/response';
-import { Line, Reason, getActorName, toKey } from './common';
+import { Line, Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getSattPaaVent = (e: ISattPaaVentEvent) => {
@@ -19,7 +20,7 @@ export const getSattPaaVent = (e: ISattPaaVentEvent) => {
 };
 
 interface StartProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   event: SattPaaVentEvent;
   timestamp: string;
 }
@@ -30,7 +31,7 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
   return (
     <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PauseIcon}>
       <Line>
-        {getActorName(actor)} satte behandlingen på vent til{' '}
+        {employeeName(actor)} satte behandlingen på vent til{' '}
         <StyledTime dateTime={event.to}>{isoDateToPretty(event.to)}</StyledTime>.
       </Line>
       <Label size="small" htmlFor={id}>
@@ -42,13 +43,13 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
 };
 
 interface StopProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   timestamp: string;
 }
 
 const Stop = ({ actor, timestamp }: StopProps) => (
   <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PlayIcon}>
-    <Line>{getActorName(actor)} avsluttet venteperioden for behandlingen.</Line>
+    <Line>{employeeName(actor)} avsluttet venteperioden for behandlingen.</Line>
   </HistoryEvent>
 );
 

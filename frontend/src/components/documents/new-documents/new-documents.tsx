@@ -102,11 +102,11 @@ export const NewDocuments = () => {
           existing.pdfOrSmartDocuments.push(document);
         }
         existing.containsRolAttachments =
-          existing.containsRolAttachments || document.creatorRole === CreatorRole.KABAL_ROL;
+          existing.containsRolAttachments || document.creator.creatorRole === CreatorRole.KABAL_ROL;
         continue;
       }
 
-      const containsRolAttachments = document.creatorRole === CreatorRole.KABAL_ROL;
+      const containsRolAttachments = document.creator.creatorRole === CreatorRole.KABAL_ROL;
       // Unknown parent.
       _documentMap.set(
         document.parentId,

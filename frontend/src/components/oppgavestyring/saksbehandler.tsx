@@ -88,7 +88,10 @@ const SelectSaksbehandler = ({
     </option>
   ));
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => tildel(target.value);
+  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value)!;
+    tildel(employee);
+  };
 
   const saksbehandler =
     tildeltSaksbehandlerident === null

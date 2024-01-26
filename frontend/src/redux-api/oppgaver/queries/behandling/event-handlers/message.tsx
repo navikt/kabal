@@ -19,7 +19,7 @@ export const handleMessageEvent = (oppgaveId: string, userId: string) => (event:
     messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
       const { id, text, timestamp, actor } = event;
       const message: IMessage = {
-        author: { name: actor.navn, saksbehandlerIdent: actor.navIdent },
+        author: actor,
         id,
         text,
         created: timestamp,

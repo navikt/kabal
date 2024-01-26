@@ -33,7 +33,7 @@ export const Medunderskriver = () => {
   const isReadOnly = isFinished || isFeilregistrert;
 
   if (isReadOnly) {
-    if (medunderskriver.navIdent === null) {
+    if (medunderskriver.employee === null) {
       return null;
     }
 

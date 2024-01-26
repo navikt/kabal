@@ -19,6 +19,7 @@ import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/beh
 import { handleKlagerEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/klager';
 import { handleMottattVedtaksinstansEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
 import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
+import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
 import { isApiRejectionError } from '@app/types/errors';
@@ -61,6 +62,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           events.addJsonEventListener(ServerSentEventType.MESSAGE, handleMessageEvent(oppgaveId, navIdent));
 
+          const tildeling = handleTildelingEvent(oppgaveId, navIdent, updateCachedData);
           const medunderskriverListener = handleMedunderskriverEvent(oppgaveId, navIdent, updateCachedData);
           const klagerListener = handleKlagerEvent(oppgaveId, navIdent, updateCachedData);
           const fullmektigListener = handlefullmektigEvent(oppgaveId, navIdent, updateCachedData);
@@ -73,6 +75,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           const ferdigstilt = handleFerdigstiltEvent(oppgaveId, navIdent, updateCachedData);
           const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData);
 
+          events.addJsonEventListener(ServerSentEventType.TILDELING, tildeling);
           events.addJsonEventListener(ServerSentEventType.MEDUNDERSKRIVER, medunderskriverListener);
           events.addJsonEventListener(ServerSentEventType.ROL, handleRolEvent(oppgaveId, navIdent, updateCachedData));
           events.addJsonEventListener(ServerSentEventType.KLAGER, klagerListener);
@@ -125,7 +128,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               if (typeof draft !== 'undefined') {
-                draft.tildeltSaksbehandlerident = data.saksbehandler?.navIdent ?? null;
+                draft.saksbehandler = data.saksbehandler;
               }
             }),
           );

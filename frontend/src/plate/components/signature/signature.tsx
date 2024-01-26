@@ -18,7 +18,9 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-com
 const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
   const { data: medunderskriverSignature } = useGetSignatureQuery(
-    typeof oppgave?.medunderskriver.navIdent === 'string' ? oppgave?.medunderskriver.navIdent : skipToken,
+    typeof oppgave?.medunderskriver.employee?.navIdent === 'string'
+      ? oppgave.medunderskriver.employee.navIdent
+      : skipToken,
   );
 
   if (typeof oppgave === 'undefined') {
@@ -29,7 +31,7 @@ const useMedunderskriverSignature = () => {
     return null;
   }
 
-  if (oppgave.medunderskriver.navIdent === null) {
+  if (oppgave.medunderskriver.employee === null) {
     return null;
   }
 
@@ -48,10 +50,10 @@ const useSignatureIdent = (): string | typeof skipToken => {
     templateId === TemplateIdEnum.ROL_ANSWERS &&
     (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE)
   ) {
-    return oppgave.rol?.navIdent ?? skipToken;
+    return oppgave.rol?.employee?.navIdent ?? skipToken;
   }
 
-  return oppgave.tildeltSaksbehandlerident ?? skipToken;
+  return oppgave.saksbehandler?.navIdent ?? skipToken;
 };
 
 const useSignatureData = (editor: PlateEditor<EditorValue>, element: SignatureElement) => {

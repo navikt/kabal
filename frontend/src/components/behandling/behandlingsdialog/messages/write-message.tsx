@@ -10,7 +10,7 @@ import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const user = useContext(UserContext);
+  const { navIdent, navn } = useContext(UserContext);
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
@@ -45,10 +45,7 @@ export const WriteMessage = () => {
     postMessage({
       oppgaveId,
       text: message.trim(),
-      author: {
-        name: signature.customLongName ?? signature.longName,
-        saksbehandlerIdent: user.navIdent,
-      },
+      author: { navIdent, navn },
     });
   };
 

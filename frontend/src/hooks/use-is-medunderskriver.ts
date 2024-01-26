@@ -11,5 +11,9 @@ export const useIsMedunderskriver = () => {
     return false;
   }
 
-  return oppgave.medunderskriver.flowState !== FlowState.NOT_SENT && oppgave.medunderskriver.navIdent === user.navIdent;
+  return (
+    oppgave.medunderskriver.employee !== null &&
+    oppgave.medunderskriver.flowState !== FlowState.NOT_SENT &&
+    oppgave.medunderskriver.employee.navIdent === user.navIdent
+  );
 };

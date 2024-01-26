@@ -1,12 +1,12 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-import { Name } from '@app/components/name/name';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IHelper } from '@app/types/oppgave-common';
+import { IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getTitleCapitalized } from './get-title';
 
 interface Props {
-  medunderskriver: IHelper;
+  medunderskriver: IMedunderskriverRol;
   typeId: SaksTypeEnum;
 }
 
@@ -16,9 +16,7 @@ export const MedunderskriverReadOnly = ({ medunderskriver, typeId }: Props) => {
   return (
     <>
       <Label size="small">{title}</Label>
-      <BodyShort>
-        {medunderskriver.navIdent === null ? 'Ikke satt' : <Name navIdent={medunderskriver.navIdent} />}
-      </BodyShort>
+      <BodyShort>{formatEmployeeName(medunderskriver.employee, 'Ikke satt')}</BodyShort>
     </>
   );
 };

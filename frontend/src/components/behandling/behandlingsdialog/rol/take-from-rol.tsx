@@ -2,13 +2,13 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;
   isSaksbehandler: boolean;
-  rol: IHelper;
+  rol: IMedunderskriverRol;
 }
 
 export const TakeFromRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
@@ -18,7 +18,7 @@ export const TakeFromRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
     return null;
   }
 
-  const from = rol.navIdent === null ? 'felles kø' : 'rådgivende overlege';
+  const from = rol.employee === null ? 'felles kø' : 'rådgivende overlege';
 
   return (
     <Button

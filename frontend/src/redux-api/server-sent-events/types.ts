@@ -2,24 +2,65 @@ import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { INavEmployee } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { UtfallEnum } from '@app/types/kodeverk';
-import { IHelper, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
+import { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { FradelReason } from '@app/types/oppgaver';
 
 interface BaseEvent {
   actor: INavEmployee;
   timestamp: string;
 }
 
-interface ReturnedDate {
-  returnedDate: string;
+interface SentMedunderskriverEvent {
+  medunderskriver: INavEmployee;
+  flowState: FlowState.SENT;
 }
 
-export type MedunderskriverEvent = BaseEvent & Omit<IHelper, 'returnertDate'>;
-export type RolEvent = BaseEvent & IHelper & ReturnedDate;
+interface NotSentMedunderskriverEvent {
+  medunderskriver: INavEmployee | null;
+  flowState: FlowState.NOT_SENT;
+}
+
+interface ReturnedMedunderskriverEvent {
+  medunderskriver: INavEmployee;
+  flowState: FlowState.RETURNED;
+}
+
+type Medunderskriver = SentMedunderskriverEvent | NotSentMedunderskriverEvent | ReturnedMedunderskriverEvent;
+
+export type MedunderskriverEvent = BaseEvent & Medunderskriver;
+
+interface SentRolEvent {
+  rol: INavEmployee;
+  flowState: FlowState.SENT;
+  returnertDate: null;
+}
+
+interface NotSentRolEvent {
+  rol: INavEmployee | null;
+  flowState: FlowState.NOT_SENT;
+  returnertDate: null;
+}
+
+interface ReturnedRolEvent {
+  rol: INavEmployee;
+  flowState: FlowState.RETURNED;
+  returnertDate: string; // LocalDateTime
+}
+
+type Rol = SentRolEvent | NotSentRolEvent | ReturnedRolEvent;
+
+export type RolEvent = BaseEvent & Rol;
 
 export interface NewMessageEvent extends BaseEvent {
   id: string;
   text: string;
+}
+
+export interface TildelingEvent extends BaseEvent {
+  saksbehandler: INavEmployee | null;
+  fradelingReasonId: FradelReason | null;
+  hjemmelIdList: string[];
 }
 
 interface KlagerPersonEvent extends BaseEvent {

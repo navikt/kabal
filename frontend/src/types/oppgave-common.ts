@@ -1,4 +1,5 @@
 import { SexEnum } from '@app/types/kodeverk';
+import { INavEmployee } from './bruker';
 
 export interface IJournalfoertDokumentId {
   readonly journalpostId: string;
@@ -97,21 +98,29 @@ export enum FlowState {
 
 interface IReturnedHelper {
   navIdent: string;
+  navn: string;
   flowState: FlowState.RETURNED;
   returnertDate: string; // LocalDateTime
 }
 
-export interface ISentHelper {
+interface ISentHelper {
   navIdent: string;
+  navn: string;
   flowState: FlowState.SENT;
   returnertDate: null; // LocalDateTime
 }
 
-export interface INotSentHelper {
+interface INotSentHelper {
   navIdent: string | null;
+  navn: string | null;
   flowState: FlowState.NOT_SENT;
   returnertDate: null;
 }
 
 // Medunderskriver/ROL
 export type IHelper = INotSentHelper | ISentHelper | IReturnedHelper;
+
+export interface IMedunderskriverRol {
+  employee: INavEmployee | null;
+  flowState: FlowState;
+}

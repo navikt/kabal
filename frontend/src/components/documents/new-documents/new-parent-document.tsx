@@ -50,8 +50,13 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
             oppgaveId,
             parentId: document.id,
             journalfoerteDokumenter: draggedJournalfoertDocuments,
-            creatorIdent: user.navIdent,
-            creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
+            creator: {
+              employee: {
+                navIdent: user.navIdent,
+                navn: user.navn,
+              },
+              creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
+            },
             isFinished,
           });
         }
@@ -69,6 +74,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
       setParent,
       createVedlegg,
       user.navIdent,
+      user.navn,
       isRol,
       isFinished,
     ],

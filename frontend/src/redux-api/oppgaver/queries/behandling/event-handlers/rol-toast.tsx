@@ -1,47 +1,48 @@
 import React, { useContext } from 'react';
 import { UserContext } from '@app/components/app/user';
-import { getName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 
 interface Params {
   flowState: FlowState;
-  navIdent: string | null;
+  rol: INavEmployee | null;
 }
 
-export const getRolToastContent = (actor: INavEmployee, previous: Params, next: Params) => {
+export const getRolToastContent = (actor: INavEmployee, userId: string, previous: Params, next: Params) => {
+  const nextNavIdent = next.rol?.navIdent ?? null;
   const isFlowChange = next.flowState !== previous.flowState;
 
   if (isFlowChange) {
     // ROL henter saken tilbake fra saksbehandler.
     if (previous.flowState === FlowState.RETURNED && next.flowState === FlowState.SENT) {
-      if (actor.navIdent === next.navIdent) {
+      if (actor.navIdent === nextNavIdent) {
         return (
           <>
-            {actor.navn} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
+            {employeeName(actor)} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
           </>
         );
       }
 
       return (
         <>
-          {actor.navn} sendte saken tilbake til {getName(next.navIdent)}.
+          {employeeName(actor)} sendte saken tilbake til {nextNavIdent === userId ? 'deg' : employeeName(next.rol)}.
         </>
       );
     }
 
     if (next.flowState === FlowState.SENT) {
-      if (actor.navIdent === next.navIdent) {
+      if (actor.navIdent === nextNavIdent) {
         return (
           <>
-            {actor.navn} satte <From previous={previous} /> til <b>seg selv</b>.
+            {employeeName(actor)} satte <From {...previous} /> til <b>seg selv</b>.
           </>
         );
       }
 
       return (
         <>
-          {actor.navn} sendte <From previous={previous} /> til {getName(next.navIdent)}.
+          {employeeName(actor)} sendte <From {...previous} /> til {employeeName(next.rol)}.
         </>
       );
     }
@@ -49,7 +50,7 @@ export const getRolToastContent = (actor: INavEmployee, previous: Params, next: 
     if (next.flowState === FlowState.RETURNED) {
       return (
         <>
-          {actor.navn} returnerte saken <b>til saksbehandler</b>.
+          {employeeName(actor)} returnerte saken <b>til saksbehandler</b>.
         </>
       );
     }
@@ -57,34 +58,35 @@ export const getRolToastContent = (actor: INavEmployee, previous: Params, next: 
     if (previous.flowState === FlowState.SENT && next.flowState === FlowState.NOT_SENT) {
       return (
         <>
-          {actor.navn} hentet saken tilbake fra {getName(next.navIdent)}.
+          {employeeName(actor)} hentet saken tilbake fra {employeeName(next.rol)}.
         </>
       );
     }
   }
 
-  const isRolChange = next.navIdent !== previous.navIdent;
+  const isRolChange = next.rol !== previous.rol;
 
   if (isRolChange) {
     if (next.flowState !== FlowState.NOT_SENT) {
       return (
         <>
-          {actor.navn} flyttet saken fra {getName(previous.navIdent)} til {getName(next.navIdent, 'felles kø')}.
+          {employeeName(actor)} flyttet saken fra {employeeName(previous.rol)} til {employeeName(next.rol, 'felles kø')}
+          .
         </>
       );
     }
 
-    if (next.navIdent === null) {
+    if (next.rol === null) {
       return (
         <>
-          {actor.navn} fjernet {getName(previous.navIdent)} som ROL.
+          {employeeName(actor)} fjernet {employeeName(previous.rol)} som ROL.
         </>
       );
     }
 
     return (
       <>
-        {actor.navn} endret ROL fra {getName(previous.navIdent)} til {getName(next.navIdent)}.
+        {employeeName(actor)} endret ROL fra {employeeName(previous.rol)} til {employeeName(next.rol)}.
       </>
     );
   }
@@ -92,16 +94,16 @@ export const getRolToastContent = (actor: INavEmployee, previous: Params, next: 
   return null;
 };
 
-const From = ({ previous }: { previous: Params }) => {
+const From = ({ flowState, rol }: Params) => {
   const user = useContext(UserContext);
 
-  if (previous.flowState === FlowState.NOT_SENT) {
+  if (flowState === FlowState.NOT_SENT) {
     return <>saken</>;
   }
 
-  if (user.navIdent === previous.navIdent) {
+  if (user.navIdent === rol?.navIdent) {
     return <>saken din</>;
   }
 
-  return <>saken hos {getName(previous.navIdent)}</>;
+  return <>saken hos {employeeName(rol)}</>;
 };

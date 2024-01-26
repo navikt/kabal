@@ -22,7 +22,7 @@ const getContainsRolAttachments = (document: IMainDocument | null, siblings: IMa
   if (document.isSmartDokument && document.templateId === TemplateIdEnum.ROL_QUESTIONS) {
     return siblings.some((d) => {
       if (d.parentId === document.id) {
-        return d.creatorRole === CreatorRole.KABAL_ROL;
+        return d.creator.creatorRole === CreatorRole.KABAL_ROL;
       }
 
       return false;

@@ -1,9 +1,9 @@
 import { Alert } from '@navikt/ds-react';
 import React from 'react';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 
 interface Props {
-  rol: IHelper;
+  rol: IMedunderskriverRol;
   isSaksbehandler: boolean;
 }
 
@@ -17,13 +17,13 @@ export const RolStateText = ({ rol, isSaksbehandler }: Props) => {
   );
 };
 
-const useText = ({ navIdent, flowState }: IHelper, isSaksbehandler: boolean): string => {
+const useText = ({ employee, flowState }: IMedunderskriverRol, isSaksbehandler: boolean): string => {
   switch (flowState) {
     case FlowState.NOT_SENT:
-      return navIdent === null ? 'Ikke i felles kø eller oversendt.' : 'Ikke oversendt.';
+      return employee === null ? 'Ikke i felles kø eller oversendt.' : 'Ikke oversendt.';
     case FlowState.SENT:
       return isSaksbehandler
-        ? `Oversendt til ${navIdent === null ? 'felles kø' : 'rådgivende overlege'}.`
+        ? `Oversendt til ${employee === null ? 'felles kø' : 'rådgivende overlege'}.`
         : 'Oversendt fra saksbehandler.';
     case FlowState.RETURNED:
       return isSaksbehandler ? 'Returnert av rådgivende overlege.' : 'Returnert til saksbehandler.';

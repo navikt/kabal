@@ -14,37 +14,32 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     setRol: builder.mutation<ISetRolResponse, ISetRolParams>({
-      query: ({ oppgaveId, navIdent }) => ({
+      query: ({ oppgaveId, employee }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/rolnavident`,
         method: 'PUT',
-        body: { navIdent },
+        body: { navIdent: employee?.navIdent ?? null },
       }),
-      onQueryStarted: async ({ oppgaveId, navIdent }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, employee }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
               return draft;
             }
 
-            if (draft.rol.navIdent === navIdent) {
-              return;
+            if (draft.rol.employee?.navIdent === employee?.navIdent) {
+              return draft;
             }
 
+            draft.rol.employee = employee;
+
             if (draft.rol.flowState === FlowState.RETURNED) {
-              draft.rol = {
-                navIdent,
-                flowState: FlowState.NOT_SENT,
-                returnertDate: null,
-              };
-            } else {
-              draft.rol.navIdent = navIdent;
+              draft.rol.flowState = FlowState.NOT_SENT;
             }
           }),
         );
 
         try {
           const { data } = await queryFulfilled;
-          const { modified, ...rol } = data;
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
@@ -52,8 +47,9 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
                 return draft;
               }
 
-              draft.modified = modified;
-              draft.rol = rol;
+              draft.modified = data.modified;
+              draft.rol.flowState = data.flowState;
+              draft.rol.employee = data.employee;
             }),
           );
 
@@ -63,7 +59,10 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
                 return draft;
               }
 
-              draft.rol = rol;
+              draft.rol.flowState = data.flowState;
+              draft.rol.navIdent = data.employee?.navIdent ?? null;
+              draft.rol.navn = data.employee?.navn ?? null;
+              draft.rol.returnertDate = null;
             }),
           );
         } catch (e) {

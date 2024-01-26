@@ -23,8 +23,8 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const canEdit = useCanEdit();
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
-    oppgave.tildeltSaksbehandlerident,
-    oppgave.medunderskriver.navIdent,
+    oppgave.saksbehandler?.navIdent ?? null,
+    oppgave.medunderskriver.employee?.navIdent ?? null,
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

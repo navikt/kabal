@@ -3,12 +3,12 @@ import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;
-  medunderskriver: IHelper;
+  medunderskriver: IMedunderskriverRol;
 }
 
 export const TakeFromSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {

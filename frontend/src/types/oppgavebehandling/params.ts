@@ -1,3 +1,4 @@
+import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
 import { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
@@ -43,7 +44,7 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
 export type ICheckDocumentParams = IJournalfoertDokumentId & IOppgavebehandlingBaseParams;
 
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
-  navIdent: string | null;
+  employee: INavEmployee | null;
 }
 
 export interface ISetFlowStateParams extends IOppgavebehandlingBaseParams {
@@ -94,5 +95,5 @@ export interface IValidationParams extends IOppgavebehandlingBaseParams {
 }
 
 export interface ISetRolParams extends IOppgavebehandlingBaseParams {
-  navIdent: string | null;
+  employee: INavEmployee | null;
 }

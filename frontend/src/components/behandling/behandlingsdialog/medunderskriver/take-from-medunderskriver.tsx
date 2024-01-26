@@ -4,13 +4,13 @@ import React from 'react';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
+import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getTitleLowercase } from './get-title';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;
-  medunderskriver: IHelper;
+  medunderskriver: IMedunderskriverRol;
   typeId: SaksTypeEnum;
 }
 

@@ -48,7 +48,7 @@ const RolInternal = ({ oppgave }: Props) => {
   const isReadOnly = isFinished || isFeilregistrert || (!isSaksbehandler && !isRol && !isKrol);
 
   if (isReadOnly) {
-    if (rol.navIdent === null) {
+    if (rol.employee === null) {
       return null;
     }
 

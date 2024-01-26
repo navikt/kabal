@@ -1,6 +1,6 @@
 import { INavEmployee } from '../bruker';
 import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { IHelper, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
+import { IMedunderskriverRol, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
 
 type UUID = string;
 
@@ -30,7 +30,7 @@ export interface IOppgavebehandlingBase {
     id: UUID;
     version: KvalitetsvurderingVersion;
   } | null;
-  medunderskriver: IHelper;
+  medunderskriver: IMedunderskriverRol;
   modified: string; // LocalDateTime
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
@@ -48,8 +48,7 @@ export interface IOppgavebehandlingBase {
   temaId: string;
   tilbakemelding: string | null;
   tildelt: string | null; // LocalDate
-  tildeltSaksbehandlerident: string | null;
-  tildeltSaksbehandlerEnhet: string | null;
+  saksbehandler: INavEmployee | null;
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;
@@ -58,12 +57,12 @@ export interface IOppgavebehandlingBase {
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.KLAGE;
-  rol: IHelper;
+  rol: IMedunderskriverRol;
 }
 
 export interface IAnkebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE;
-  rol: IHelper;
+  rol: IMedunderskriverRol;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {

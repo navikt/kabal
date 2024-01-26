@@ -7,8 +7,9 @@ import {
   PlusIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
-import { Line, getActorName, getName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
+import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import { HistoryEventTypes, IRolEvent } from '@app/types/oppgavebehandling/response';
 
@@ -28,7 +29,7 @@ export const getROLEvent = (e: IRolEvent) => {
     }
 
     if (event.flow === FlowState.SENT) {
-      const from = previous.event.flow !== FlowState.NOT_SENT ? <> fra {getName(previous.event.rol)}</> : <></>;
+      const from = previous.event.flow !== FlowState.NOT_SENT ? <> fra {employeeName(previous.event.rol)}</> : <></>;
 
       if (actor === event.rol) {
         return <ClaimSelf actor={actor} from={from} timestamp={timestamp} key={key} />;
@@ -56,34 +57,34 @@ export const getROLEvent = (e: IRolEvent) => {
 };
 
 interface Reclaim {
-  actor: string | null;
+  actor: INavEmployee | null;
   timestamp: string;
 }
 
 const Reclaim = ({ actor, timestamp }: Reclaim) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={ArrowRedoIcon}>
     <Line>
-      {getActorName(actor)} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
+      {employeeName(actor)} hentet saken tilbake fra saksbehandler til {SELF}.
     </Line>
   </HistoryEvent>
 );
 
 interface Resend {
-  actor: string | null;
-  rol: string | null;
+  actor: INavEmployee | null;
+  rol: INavEmployee | null;
   timestamp: string;
 }
 
 const Resend = ({ actor, rol, timestamp }: Resend) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={ArrowRedoIcon}>
     <Line>
-      {getActorName(actor)} sendte saken tilbake til {getName(rol)}.
+      {employeeName(actor)} sendte saken tilbake til {employeeName(rol)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ClaimSelfProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   from: React.ReactNode;
   timestamp: string;
 }
@@ -91,14 +92,14 @@ interface ClaimSelfProps {
 const ClaimSelf = ({ actor, from, timestamp }: ClaimSelfProps) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={PlusIcon}>
     <Line>
-      {getActorName(actor)} satte saken{from} til <b>seg selv</b>.
+      {employeeName(actor)} satte saken{from} til {SELF}.
     </Line>
   </HistoryEvent>
 );
 
 interface SendToOtherProps {
-  actor: string | null;
-  rol: string | null;
+  actor: INavEmployee | null;
+  rol: INavEmployee | null;
   from: React.ReactNode;
   timestamp: string;
 }
@@ -106,49 +107,49 @@ interface SendToOtherProps {
 const SendToOther = ({ actor, rol, from, timestamp }: SendToOtherProps) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={PaperplaneIcon}>
     <Line>
-      {getActorName(actor)} sendte saken{from} til {getName(rol)}.
+      {employeeName(actor)} sendte saken{from} til {employeeName(rol)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ReturnProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   timestamp: string;
 }
 
 const Return = ({ actor, timestamp }: ReturnProps) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={CheckmarkIcon}>
     <Line>
-      {getActorName(actor)} returnerte saken <b>til saksbehandler</b>.
+      {employeeName(actor)} returnerte saken <b>til saksbehandler</b>.
     </Line>
   </HistoryEvent>
 );
 
 interface RetractProps {
-  actor: string | null;
-  rol: string | null;
+  actor: INavEmployee | null;
+  rol: INavEmployee | null;
   timestamp: string;
 }
 
 const Retract = ({ actor, rol, timestamp }: RetractProps) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={ArrowUndoIcon}>
     <Line>
-      {getActorName(actor)} hentet saken tilbake fra {getName(rol)}.
+      {employeeName(actor)} hentet saken tilbake fra {employeeName(rol)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ChangeProps {
-  actor: string | null;
-  previousRol: string | null;
-  rol: string | null;
+  actor: INavEmployee | null;
+  previousRol: INavEmployee | null;
+  rol: INavEmployee | null;
   timestamp: string;
 }
 
 const Change = ({ actor, previousRol, rol, timestamp }: ChangeProps) => (
   <HistoryEvent tag="Rådgivende overlege" type={HistoryEventTypes.ROL} timestamp={timestamp} icon={ArrowRightLeftIcon}>
     <Line>
-      {getActorName(actor)} flyttet saken fra {getName(previousRol)} til {getName(rol)}.
+      {employeeName(actor)} flyttet saken fra {employeeName(previousRol)} til {employeeName(rol)}.
     </Line>
   </HistoryEvent>
 );

@@ -1,8 +1,8 @@
 import { ArrowRightLeftIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { formatIdNumber } from '@app/functions/format-id';
+import { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, IFullmektigEvent, IPart } from '@app/types/oppgavebehandling/response';
-import { Line, getActorName, toKey } from './common';
+import { Line, employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getFullmektig = (e: IFullmektigEvent) => {
@@ -27,7 +27,7 @@ export const getFullmektig = (e: IFullmektigEvent) => {
 };
 
 interface SetProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   part: IPart;
   timestamp: string;
 }
@@ -35,17 +35,13 @@ interface SetProps {
 const Set = ({ actor, part, timestamp }: SetProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={PlusIcon}>
     <Line>
-      {getActorName(actor)} satt fullmektig til{' '}
-      <b>
-        {part.name} ({formatIdNumber(part.id)})
-      </b>
-      . Ingen tidligere fullmektig.
+      {employeeName(actor)} satt fullmektig til {partName(part)}. Ingen tidligere fullmektig.
     </Line>
   </HistoryEvent>
 );
 
 interface RemoveProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   previousPart: IPart;
   timestamp: string;
 }
@@ -53,17 +49,13 @@ interface RemoveProps {
 const Remove = ({ actor, previousPart, timestamp }: RemoveProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={XMarkIcon}>
     <Line>
-      {getActorName(actor)} fjernet fullmektig. Tidligere fullmektig var{' '}
-      <b>
-        {previousPart.name} ({formatIdNumber(previousPart.id)})
-      </b>
-      .
+      {employeeName(actor)} fjernet fullmektig. Tidligere fullmektig var {partName(previousPart)}.
     </Line>
   </HistoryEvent>
 );
 
 interface ChangeProps {
-  actor: string | null;
+  actor: INavEmployee | null;
   part: IPart;
   previousPart: IPart;
   timestamp: string;
@@ -72,15 +64,7 @@ interface ChangeProps {
 const Change = ({ actor, part, previousPart, timestamp }: ChangeProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={ArrowRightLeftIcon}>
     <Line>
-      {getActorName(actor)} endret fullmektig fra{' '}
-      <b>
-        {previousPart.name} ({formatIdNumber(previousPart.id)})
-      </b>{' '}
-      til{' '}
-      <b>
-        {part.name} ({formatIdNumber(part.id)})
-      </b>
-      .
+      {employeeName(actor)} endret fullmektig fra {partName(previousPart)} til {partName(part)}.
     </Line>
   </HistoryEvent>
 );

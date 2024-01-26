@@ -82,8 +82,8 @@ export interface INameSearchParams {
   start: number;
 }
 
-interface TildelSaksbehandlerParams {
-  navIdent: string;
+export interface TildelSaksbehandlerParams {
+  employee: INavEmployee;
   oppgaveId: string;
 }
 
@@ -110,8 +110,6 @@ export interface FradelWithHjemler {
 }
 
 export type FradelSaksbehandlerParams = FradelReasonBase & (FradelWithHjemler | FradelWithoutHjemler);
-
-export type TildelFradelParams = TildelSaksbehandlerParams | FradelSaksbehandlerParams;
 
 export interface INameSearchParams {
   antall: number;
