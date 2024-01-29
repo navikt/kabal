@@ -77,11 +77,11 @@ export interface IFileDocument<P extends string | null = UUID | null> extends IB
 }
 
 export interface ISmartDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
-  type: DocumentTypeEnum.SMART;
-  isSmartDokument: true;
-  templateId: TemplateIdEnum;
-  content: EditorValue;
-  version: number;
+  readonly type: DocumentTypeEnum.SMART;
+  readonly isSmartDokument: true;
+  readonly templateId: TemplateIdEnum;
+  readonly content: EditorValue;
+  readonly version: number;
 }
 
 interface IJournalfoertDokument
