@@ -47,7 +47,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
         id="paa-vent-date"
         size="small"
       />
-      <Row $gap={8}>
+      <Column>
         {dates.map(([weeks, date]) => {
           const formattedDate = format(date, ISO_FORMAT);
           const isActive = to === formattedDate;
@@ -67,7 +67,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
             </Button>
           );
         })}
-      </Row>
+      </Column>
       <Textarea
         label="Grunn (stikkord)"
         value={reason}
@@ -85,12 +85,12 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           size="small"
           onClick={() => {
             const newDateError = validateDate(to);
-            const newRreasonError = validateReason(reason);
+            const newReasonError = validateReason(reason);
 
             setDateError(newDateError);
-            setReasonError(newRreasonError);
+            setReasonError(newReasonError);
 
-            if (newDateError === null && newRreasonError === null && to !== null) {
+            if (newDateError === null && newReasonError === null && to !== null) {
               settPaaVent({ to, oppgaveId, reason });
             }
           }}
@@ -178,11 +178,18 @@ const StyledPanel = styled(Panel)`
   padding: 16px;
   border-radius: var(--a-border-radius-medium);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 4px;
+  width: 400px;
 `;
 
-const Row = styled.div<{ $gap?: number }>`
+const Row = styled.div`
   display: flex;
-  column-gap: ${({ $gap = 16 }) => $gap}px;
+  column-gap: 16px;
   align-items: center;
   flex-direction: row;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
