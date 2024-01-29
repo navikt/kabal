@@ -50,67 +50,45 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
         body,
         timeout: 10_000,
       }),
-      onQueryStarted: async ({ dokumentId, oppgaveId, ...update }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
-            if (draft !== null && draft.isSmartDokument) {
-              return { ...draft, ...update, version: draft.version + 1 };
-            }
-          }),
-        );
-
-        const listPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-            draft.map((e) =>
-              e.isSmartDokument && e.id === dokumentId ? { ...e, ...update, version: e.version + 1 } : e,
-            ),
-          ),
-        );
-
-        const versionId = update.version + 1;
-        const { navIdent, navn } = await user;
-
-        const versionsPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) => [
-            { version: versionId, timestamp: new Date().toISOString(), author: { navIdent, navn } },
-            ...draft,
-          ]),
-        );
-
-        const versionPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData(
-            'getSmartDocumentVersion',
-            { dokumentId, oppgaveId, versionId },
-            () => update.content,
-          ),
-        );
-
+      onQueryStarted: async ({ dokumentId, oppgaveId, content }, { dispatch, queryFulfilled }) => {
         try {
+          const { navIdent, navn } = await user;
           const { data } = await queryFulfilled;
-
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.map((e) => (e.id === dokumentId ? { ...e, modified: data.modified } : e)),
-            ),
-          );
+          const { modified, version } = data;
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
-              draft.modified = data.modified;
+              if (draft !== null && draft.isSmartDokument) {
+                return { ...draft, content, modified, version };
+              }
             }),
           );
 
           dispatch(
-            documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) =>
-              draft.map((e) => (e.version === versionId ? { ...e, timestamp: data.modified } : e)),
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+              draft.map((d) => (d.isSmartDokument && d.id === dokumentId ? { ...d, modified, version, content } : d)),
             ),
           );
-        } catch (e: unknown) {
-          patchResult.undo();
-          listPatchResult.undo();
-          versionsPatchResult.undo();
-          versionPatchResult.undo();
 
+          dispatch(
+            documentsQuerySlice.util.updateQueryData(
+              'getSmartDocumentVersion',
+              { dokumentId, oppgaveId, versionId: version },
+              () => content,
+            ),
+          );
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) => [
+              {
+                version,
+                timestamp: modified,
+                author: { navIdent, navn },
+              },
+              ...draft,
+            ]),
+          );
+        } catch (e: unknown) {
           const message = 'Feil ved lagring av dokument.';
 
           if (isApiRejectionError(e)) {

@@ -115,7 +115,7 @@ const TabPanel = ({ smartDocument }: TabPanelProps) => {
   const [update, status] = useUpdateSmartDocumentMutation();
   const timeout = useRef<NodeJS.Timeout>();
 
-  const { id, templateId, content } = smartDocument;
+  const { id, content } = smartDocument;
 
   return (
     <StyledTabsPanel value={smartDocument.id}>
@@ -138,7 +138,6 @@ const TabPanel = ({ smartDocument }: TabPanelProps) => {
               () =>
                 update({
                   content: c,
-                  templateId,
                   oppgaveId,
                   dokumentId: id,
                   version: smartDocument.version,
