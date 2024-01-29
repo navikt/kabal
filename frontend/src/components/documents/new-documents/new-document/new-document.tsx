@@ -91,13 +91,14 @@ export const NewDocument = memo(
     );
   },
   (prev, next) =>
+    prev.hasAttachments === next.hasAttachments &&
+    prev.containsRolAttachments === next.containsRolAttachments &&
     prev.document.id === next.document.id &&
     prev.document.tittel === next.document.tittel &&
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
-    kjennelseFraTrEqual(prev.document, next.document) &&
-    prev.containsRolAttachments === next.containsRolAttachments,
+    kjennelseFraTrEqual(prev.document, next.document),
 );
 
 NewDocument.displayName = 'NewDocument';
