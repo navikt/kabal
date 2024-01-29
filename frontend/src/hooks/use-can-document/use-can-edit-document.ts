@@ -6,9 +6,10 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMainDocument) => {
+  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
@@ -28,12 +29,16 @@ export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMa
     return false;
   }
 
+  if (isMerkantil) {
+    return true;
+  }
+
   if (isFullfoert) {
     return hasSaksbehandlerRole;
   }
 
   if (isTildeltSaksbehandler) {
-    return document.creatorRole === Role.KABAL_SAKSBEHANDLING;
+    return document.creatorRole === CreatorRole.KABAL_SAKSBEHANDLING;
   }
 
   return isRol && canRolEditDocument(document, oppgave);

@@ -1,5 +1,5 @@
 import { EditorValue } from '@app/plate/types';
-import { INavEmployee, Role } from '@app/types/bruker';
+import { INavEmployee } from '@app/types/bruker';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
@@ -36,6 +36,13 @@ export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN]: 'Kjennelse fra Trygderetten',
 };
 
+export enum CreatorRole {
+  KABAL_SAKSBEHANDLING = 'KABAL_SAKSBEHANDLING',
+  KABAL_ROL = 'KABAL_ROL',
+  KABAL_MEDUNDERSKRIVER = 'KABAL_MEDUNDERSKRIVER',
+  NONE = 'NONE',
+}
+
 interface IBaseDocument<P extends string | null = UUID | null> {
   type: DocumentTypeEnum;
   id: UUID;
@@ -58,7 +65,7 @@ interface IBaseDocument<P extends string | null = UUID | null> {
   isMarkertAvsluttet: boolean;
   parentId: P;
   creatorIdent: string;
-  creatorRole: Role;
+  creatorRole: CreatorRole;
 }
 
 export interface IFileDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {

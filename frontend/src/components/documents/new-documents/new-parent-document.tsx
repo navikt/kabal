@@ -11,8 +11,7 @@ import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
-import { Role } from '@app/types/bruker';
-import { IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, IMainDocument } from '@app/types/documents/documents';
 import { AttachmentList, ListProps } from './attachment-list';
 import { NewDocument } from './new-document/new-document';
 
@@ -52,7 +51,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
             parentId: document.id,
             journalfoerteDokumenter: draggedJournalfoertDocuments,
             creatorIdent: user.navIdent,
-            creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
+            creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
             isFinished,
           });
         }

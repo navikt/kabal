@@ -9,8 +9,7 @@ import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete
 import { useAttachments, useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const DeleteDropArea = () => {
   const dragEnterCount = useRef(0);
@@ -25,8 +24,8 @@ export const DeleteDropArea = () => {
     draggedDocument?.parentId ?? draggedDocument?.id,
   );
   const containsRolAttachments =
-    pdfOrSmartDocuments.some((d) => d.creatorRole === Role.KABAL_ROL) ||
-    journalfoertDocumentReferences.some((d) => d.creatorRole === Role.KABAL_ROL);
+    pdfOrSmartDocuments.some((d) => d.creatorRole === CreatorRole.KABAL_ROL) ||
+    journalfoertDocumentReferences.some((d) => d.creatorRole === CreatorRole.KABAL_ROL);
   const isDropTarget = useCanDeleteDocument(draggedDocument, containsRolAttachments, parentDocument);
 
   const onDragEnter = useCallback(

@@ -1,5 +1,9 @@
-import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, IJournalfoertDokumentReference, IMainDocument } from '@app/types/documents/documents';
+import {
+  CreatorRole,
+  DocumentTypeEnum,
+  IJournalfoertDokumentReference,
+  IMainDocument,
+} from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -17,7 +21,7 @@ export const canRolEditDocument = (document: IMainDocument, oppgave: IOppgavebeh
     return false;
   }
 
-  return document.creatorRole === Role.KABAL_ROL;
+  return document.creatorRole === CreatorRole.KABAL_ROL;
 };
 
 const hasAccessToArchivedDocument = (document: IMainDocument): document is IJournalfoertDokumentReference =>
