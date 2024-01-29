@@ -8,11 +8,16 @@ import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents
 export const useHasDocumentsAccess = (): boolean => {
   const isFullfoert = useIsFullfoert();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const isFeilregistrert = useIsFeilregistrert();
 
   if (isFeilregistrert) {
     return false;
+  }
+
+  if (hasOppgavestyringRole) {
+    return true;
   }
 
   if (isFullfoert) {
