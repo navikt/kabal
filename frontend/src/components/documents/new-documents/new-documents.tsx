@@ -15,8 +15,8 @@ import { commonStyles } from '@app/components/documents/styled-components/contai
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Role } from '@app/types/bruker';
 import {
+  CreatorRole,
   DistribusjonsType,
   DocumentTypeEnum,
   IFileDocument,
@@ -101,11 +101,12 @@ export const NewDocuments = () => {
         } else {
           existing.pdfOrSmartDocuments.push(document);
         }
-        existing.containsRolAttachments = existing.containsRolAttachments || document.creatorRole === Role.KABAL_ROL;
+        existing.containsRolAttachments =
+          existing.containsRolAttachments || document.creatorRole === CreatorRole.KABAL_ROL;
         continue;
       }
 
-      const containsRolAttachments = document.creatorRole === Role.KABAL_ROL;
+      const containsRolAttachments = document.creatorRole === CreatorRole.KABAL_ROL;
       // Unknown parent.
       _documentMap.set(
         document.parentId,

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { Role } from '@app/types/bruker';
-import { IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 /**
@@ -23,7 +22,7 @@ const getContainsRolAttachments = (document: IMainDocument | null, siblings: IMa
   if (document.isSmartDokument && document.templateId === TemplateIdEnum.ROL_QUESTIONS) {
     return siblings.some((d) => {
       if (d.parentId === document.id) {
-        return d.creatorRole === Role.KABAL_ROL;
+        return d.creatorRole === CreatorRole.KABAL_ROL;
       }
 
       return false;

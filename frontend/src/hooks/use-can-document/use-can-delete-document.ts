@@ -7,13 +7,14 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, IMainDocument } from '@app/types/documents/documents';
 
 export const useCanDeleteDocument = (
   document: IMainDocument | null,
   containsRolAttachments: boolean,
   parentDocument?: IMainDocument,
 ) => {
+  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
@@ -27,12 +28,16 @@ export const useCanDeleteDocument = (
       return false;
     }
 
+    if (isMerkantil) {
+      return true;
+    }
+
     if (isFullfoert) {
       return hasSaksbehandlerRole;
     }
 
     if (isTildeltSaksbehandler) {
-      if (document.creatorRole !== Role.KABAL_SAKSBEHANDLING) {
+      if (document.creatorRole !== CreatorRole.KABAL_SAKSBEHANDLING) {
         return false;
       }
 
@@ -54,6 +59,7 @@ export const useCanDeleteDocument = (
     hasSaksbehandlerRole,
     isFeilregistrert,
     isFullfoert,
+    isMerkantil,
     isRol,
     isTildeltSaksbehandler,
     oppgave,

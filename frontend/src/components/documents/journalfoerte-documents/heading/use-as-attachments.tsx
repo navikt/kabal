@@ -10,7 +10,7 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Role } from '@app/types/bruker';
+import { CreatorRole } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const NONE_SELECTED = 'NONE_SELECTED';
@@ -56,7 +56,7 @@ export const UseAsAttachments = () => {
             parentId: target.value,
             journalfoerteDokumenter: getSelectedDocuments(),
             creatorIdent: user.navIdent,
-            creatorRole: isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING,
+            creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
             isFinished,
           });
         }}
