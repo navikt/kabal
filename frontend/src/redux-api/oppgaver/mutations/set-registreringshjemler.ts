@@ -10,15 +10,15 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     updateRegistreringshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
-      query: ({ oppgaveId, hjemler }) => ({
+      query: ({ oppgaveId, hjemmelIdSet }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/resultat/hjemler`,
         method: 'PUT',
-        body: { hjemler },
+        body: { hjemmelIdSet },
       }),
-      onQueryStarted: async ({ oppgaveId, hjemler }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, hjemmelIdSet }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.resultat.hjemmelIdSet = hjemler;
+            draft.resultat.hjemmelIdSet = hjemmelIdSet;
           }),
         );
 

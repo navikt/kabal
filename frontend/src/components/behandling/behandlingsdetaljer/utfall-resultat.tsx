@@ -62,9 +62,9 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
     }
 
     if (isUtfall(value)) {
-      updateUtfall({ oppgaveId, utfall: value });
+      updateUtfall({ oppgaveId, utfallId: value });
     } else if (value === NOT_SELECTED_VALUE) {
-      updateUtfall({ oppgaveId, utfall: null });
+      updateUtfall({ oppgaveId, utfallId: null });
     }
   };
 

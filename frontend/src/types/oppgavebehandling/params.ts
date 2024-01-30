@@ -20,7 +20,7 @@ export interface IMottattVedtaksinstansParams extends IOppgavebehandlingBasePara
 }
 
 export interface IOppgavebehandlingUtfallUpdateParams extends IOppgavebehandlingBaseParams {
-  utfall: UtfallEnum | null;
+  utfallId: UtfallEnum | null;
 }
 
 export interface IOppgavebehandlingUtfallSetUpdateParams extends IOppgavebehandlingBaseParams {
@@ -28,7 +28,7 @@ export interface IOppgavebehandlingUtfallSetUpdateParams extends IOppgavebehandl
 }
 
 export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlingBaseParams {
-  hjemler: string[];
+  hjemmelIdSet: string[];
 }
 
 export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
