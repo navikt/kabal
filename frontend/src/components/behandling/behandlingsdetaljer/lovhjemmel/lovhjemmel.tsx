@@ -22,12 +22,7 @@ export const Lovhjemmel = () => {
     return null;
   }
 
-  const onLovhjemmelChange = (hjemler: string[]) => {
-    updateHjemler({
-      oppgaveId: oppgave.id,
-      hjemler,
-    });
-  };
+  const onLovhjemmelChange = (hjemmelIdSet: string[]) => updateHjemler({ oppgaveId: oppgave.id, hjemmelIdSet });
 
   return (
     <>

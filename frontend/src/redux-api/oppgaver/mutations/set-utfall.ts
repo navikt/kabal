@@ -15,16 +15,16 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     updateUtfall: builder.mutation<ISetUtfallResponse, IOppgavebehandlingUtfallUpdateParams>({
-      query: ({ oppgaveId, utfall }) => ({
+      query: ({ oppgaveId, utfallId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/resultat/utfall`,
         method: 'PUT',
-        body: { utfall },
+        body: { utfallId },
       }),
-      onQueryStarted: async ({ oppgaveId, utfall }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, utfallId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.resultat.utfallId = utfall;
-            draft.resultat.extraUtfallIdSet = draft.resultat.extraUtfallIdSet.filter((id) => id !== utfall);
+            draft.resultat.utfallId = utfallId;
+            draft.resultat.extraUtfallIdSet = draft.resultat.extraUtfallIdSet.filter((id) => id !== utfallId);
           }),
         );
 
@@ -41,7 +41,7 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.utfallId = utfall;
+              draft.utfallId = utfallId;
               draft.utfallId = data.utfallId;
             }),
           );
