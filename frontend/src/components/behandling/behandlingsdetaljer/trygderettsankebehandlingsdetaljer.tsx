@@ -51,7 +51,7 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
 
       <BehandlingSection label="Ankebehandling fullført av">
         <PreviousSaksbehandler
-          previousSaksbehandler={oppgavebehandling.previousSaksbehandlerident}
+          previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
           type={SaksTypeEnum.ANKE_I_TRYGDERETTEN}
         />
       </BehandlingSection>
