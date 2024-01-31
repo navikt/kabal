@@ -57,6 +57,19 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
     getDocuments: builder.query<IMainDocument[], string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter`,
       transformResponse: (documents: IMainDocument[]) => documents.map(transformResponse),
+      onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+
+        for (const document of data) {
+          dispatch(
+            documentsQuerySlice.util.updateQueryData(
+              'getDocument',
+              { oppgaveId, dokumentId: document.id },
+              () => document,
+            ),
+          );
+        }
+      },
     }),
     getArkiverteDokumenter: builder.query<IArkiverteDocumentsResponse, string>({
       query: (oppgaveId) => ({
