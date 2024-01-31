@@ -1,17 +1,14 @@
-import { Alert, Skeleton } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 interface Props {
-  previousSaksbehandler: string | null;
+  previousSaksbehandler: INavEmployee | null;
   type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE;
 }
 
 export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) => {
-  const { data } = useGetSignatureQuery(previousSaksbehandler ?? skipToken);
-
   if (previousSaksbehandler === null) {
     return (
       <Alert variant="info" size="small" inline>
@@ -20,7 +17,7 @@ export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) =>
     );
   }
 
-  return data === undefined ? <Skeleton width={200} height={21} /> : data.longName;
+  return `${previousSaksbehandler.navn} (${previousSaksbehandler.navIdent})`;
 };
 
 const getTypeName = (type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE) => {

@@ -57,7 +57,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <BehandlingSection label="Klagebehandling fullført av">
         <PreviousSaksbehandler
-          previousSaksbehandler={oppgavebehandling.previousSaksbehandlerident}
+          previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
           type={SaksTypeEnum.ANKE}
         />
       </BehandlingSection>

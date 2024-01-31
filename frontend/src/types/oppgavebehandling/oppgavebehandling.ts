@@ -34,7 +34,7 @@ export interface IOppgavebehandlingBase {
   modified: string; // LocalDateTime
   mottattVedtaksinstans: string | null; // LocalDate
   mottattKlageinstans: string | null; // LocalDate
-  previousSaksbehandlerident: string | null;
+  previousSaksbehandler: INavEmployee | null;
   prosessfullmektig: IPart | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
