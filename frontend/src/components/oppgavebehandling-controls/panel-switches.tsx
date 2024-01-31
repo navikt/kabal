@@ -9,6 +9,7 @@ import {
   useKvalitetsvurderingEnabled,
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
@@ -18,7 +19,10 @@ export const PanelSwitches = () => {
     <Container data-testid="behandling-panel-switches">
       <TogglePanelButton
         checked={documentsEnabled}
-        togglePanel={() => setDocumentsEnabled(!documentsEnabled)}
+        togglePanel={() => {
+          pushEvent('toggle-documents-panel', undefined, 'panels', { skipDedupe: true });
+          setDocumentsEnabled(!documentsEnabled);
+        }}
         testId="panel-switch-documents"
       >
         Dokumenter
@@ -26,7 +30,10 @@ export const PanelSwitches = () => {
       <Brevutforming />
       <TogglePanelButton
         checked={behandlingEnabled}
-        togglePanel={() => setBehandlingEnabled(!behandlingEnabled)}
+        togglePanel={() => {
+          pushEvent('toggle-behandling-panel', undefined, 'panels', { skipDedupe: true });
+          setBehandlingEnabled(!behandlingEnabled);
+        }}
         testId="panel-switch-behandling"
       >
         Behandling
@@ -54,7 +61,10 @@ const Brevutforming = () => {
   return (
     <TogglePanelButton
       checked={smartEditorEnabled}
-      togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
+      togglePanel={() => {
+        pushEvent('toggle-smart-editor-panel', undefined, 'panels', { skipDedupe: true });
+        setSmartEditorEnabled(!smartEditorEnabled);
+      }}
       testId="panel-switch-smart-editor"
     >
       Brevutforming
@@ -71,7 +81,14 @@ const Kvalitetsvurdering = () => {
   }
 
   return (
-    <TogglePanelButton checked={value} togglePanel={() => setValue(!value)} testId="panel-switch-kvalitetsvurdering">
+    <TogglePanelButton
+      checked={value}
+      togglePanel={() => {
+        pushEvent('toggle-kvalitetsvurdering-panel', undefined, 'panels', { skipDedupe: true });
+        setValue(!value);
+      }}
+      testId="panel-switch-kvalitetsvurdering"
+    >
       Kvalitetsvurdering
     </TogglePanelButton>
   );

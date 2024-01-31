@@ -28,8 +28,12 @@ module.exports = (_env, { mode }) => ({
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src'),
+      'react-dom$': 'react-dom/profiling',
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    // fallback:{
+    //   "path": false
+    // },
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -65,6 +69,11 @@ module.exports = (_env, { mode }) => ({
           },
         }
       },
+      {
+        target: 'http://localhost:12347',
+        context: ['/collect'],
+        changeOrigin: true,
+      }
     ],
   },
   plugins: [

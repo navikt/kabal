@@ -1,9 +1,10 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import React, { useContext, useRef, useState } from 'react';
+import React, { Profiler, useContext, useRef, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
+import { UserContext } from '@app/components/app/user';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -15,6 +16,7 @@ import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { pushMeasurement } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
@@ -39,6 +41,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
   const { newCommentSelection } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
+  const user = useContext(UserContext);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -105,7 +108,18 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
                 size: 'small',
               }}
             >
-              <EditorWithNewCommentAndFloatingToolbar id={id} />
+              <Profiler
+                id="render_smart_editor"
+                onRender={(pid, phase, actualDuration) =>
+                  pushMeasurement({
+                    type: 'render_smart_editor',
+                    values: { render_smart_editor: actualDuration },
+                    context: { user: user.navIdent },
+                  })
+                }
+              >
+                <EditorWithNewCommentAndFloatingToolbar id={id} />
+              </Profiler>
             </ErrorBoundary>
           </Content>
 

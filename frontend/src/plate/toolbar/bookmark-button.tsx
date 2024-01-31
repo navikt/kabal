@@ -1,3 +1,4 @@
+import { faro } from '@grafana/faro-web-sdk';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
@@ -95,6 +96,7 @@ const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
     <StyledButton
       onClick={() => {
         setBookmark(color.value);
+        faro.api.pushEvent('set_bookmark', { color: color.name }, 'smart-editor', { skipDedupe: true });
         setIsOpen(false);
       }}
       size="small"
