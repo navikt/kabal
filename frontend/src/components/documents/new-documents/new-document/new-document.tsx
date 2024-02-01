@@ -13,10 +13,11 @@ import { DocumentModal } from '@app/components/documents/new-documents/modal/mod
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, IFileDocument, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
@@ -98,7 +99,8 @@ export const NewDocument = memo(
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
-    kjennelseFraTrEqual(prev.document, next.document),
+    mottattDatoEqual(prev.document, next.document) &&
+    annenInngaaendeEqual(prev.document, next.document),
 );
 
 NewDocument.displayName = 'NewDocument';
@@ -125,13 +127,24 @@ const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
   }
 `;
 
-const isKjennelseFraTr = (doc: IMainDocument): doc is IFileDocument<null> =>
-  doc.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+const hasMottattDato = (doc: IMainDocument): doc is IFileDocument<null> =>
+  doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc);
 
-const kjennelseFraTrEqual = (prev: IMainDocument, next: IMainDocument) => {
-  if (!isKjennelseFraTr(prev) || !isKjennelseFraTr(next)) {
+const mottattDatoEqual = (prev: IMainDocument, next: IMainDocument) => {
+  if (!hasMottattDato(prev) || !hasMottattDato(next)) {
     return true;
   }
 
   return prev.datoMottatt === next.datoMottatt;
+};
+
+const isAnnenInngaaende = (doc: IMainDocument): doc is IFileDocument<null> =>
+  doc.type === DocumentTypeEnum.UPLOADED && doc.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST;
+
+const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
+  if (!isAnnenInngaaende(prev) || !isAnnenInngaaende(next)) {
+    return true;
+  }
+
+  return prev.inngaaendeKanal === next.inngaaendeKanal && prev.avsender?.id === next.avsender?.id;
 };

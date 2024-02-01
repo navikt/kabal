@@ -1,3 +1,4 @@
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { canRolEditDocument } from '@app/hooks/use-can-document/common';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -9,7 +10,6 @@ import { Role } from '@app/types/bruker';
 import { CreatorRole, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMainDocument) => {
-  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
@@ -29,17 +29,21 @@ export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMa
     return false;
   }
 
-  if (isMerkantil) {
-    return true;
-  }
-
   if (isFullfoert) {
     return hasSaksbehandlerRole;
+  }
+
+  if (getIsIncomingDocument(document) || getIsIncomingDocument(parentDocument)) {
+    return true;
   }
 
   if (isTildeltSaksbehandler) {
     return document.creator.creatorRole === CreatorRole.KABAL_SAKSBEHANDLING;
   }
 
-  return isRol && canRolEditDocument(document, oppgave);
+  if (isRol) {
+    return canRolEditDocument(document, oppgave);
+  }
+
+  return false;
 };

@@ -1,34 +1,48 @@
-import { OPTIONS_MAP } from '@app/components/documents/new-documents/modal/set-type/options';
-import { DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
+import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 
 const OPTIONS_LIST = [
   {
-    label: OPTIONS_MAP[DistribusjonsType.VEDTAKSBREV],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.VEDTAKSBREV],
     value: DistribusjonsType.VEDTAKSBREV,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.BESLUTNING],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.BESLUTNING],
     value: DistribusjonsType.BESLUTNING,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.BREV],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.BREV],
     value: DistribusjonsType.BREV,
   },
   {
-    label: OPTIONS_MAP[DistribusjonsType.NOTAT],
+    label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.NOTAT],
     value: DistribusjonsType.NOTAT,
   },
 ];
 
-const KJENNELSE_FRA_TRYGDERETTEN = {
-  label: OPTIONS_MAP[DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN],
+export const KJENNELSE_FRA_TRYGDERETTEN = {
+  label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN],
   value: DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN,
 };
 
-export const useDistribusjonstypeOptions = (type: DocumentTypeEnum) => {
+export const ANNEN_INNGAAENDE_POST = {
+  label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.ANNEN_INNGAAENDE_POST],
+  value: DistribusjonsType.ANNEN_INNGAAENDE_POST,
+};
+
+interface Result {
+  incoming: Option[];
+  outgoing: Option[];
+}
+
+export const useDistribusjonstypeOptions = (type: DocumentTypeEnum): Result => {
   if (type !== DocumentTypeEnum.UPLOADED) {
-    return OPTIONS_LIST;
+    return { outgoing: OPTIONS_LIST, incoming: [] };
   }
 
-  return [...OPTIONS_LIST, KJENNELSE_FRA_TRYGDERETTEN];
+  return { outgoing: OPTIONS_LIST, incoming: [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST] };
 };
+
+export interface Option {
+  label: string;
+  value: DistribusjonsType;
+}

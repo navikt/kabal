@@ -9,12 +9,8 @@ import { DISTRIBUTION_TYPE_NAMES, DocumentTypeEnum, IMainDocument } from '@app/t
 
 export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) => (event: DocumentsChangedEvent) => {
   reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-      if (draft === undefined) {
-        return draft;
-      }
-
-      return draft.map((document) => {
+    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+      draft.map((document) => {
         const update = event.documents.find((d) => d.id === document.id);
 
         if (update === undefined) {
@@ -42,8 +38,8 @@ export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) =
           tittel: update.tittel,
           isMarkertAvsluttet: update.isMarkertAvsluttet,
         };
-      });
-    }),
+      }),
+    ),
   );
 };
 

@@ -4,9 +4,9 @@ import { CustomRecipients } from '@app/components/documents/new-documents/modal/
 import { isSendError } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
 import { SelectRecipients } from '@app/components/documents/new-documents/modal/finish-document/select-recipients';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DistribusjonsType } from '@app/types/documents/documents';
 import { StyledFinishDocument } from './styled-components';
 import { FinishProps } from './types';
 
@@ -32,11 +32,7 @@ export const Receipients = ({ document }: FinishProps) => {
     return [];
   }, [finishError]);
 
-  if (
-    oppgaveIsLoading ||
-    typeof data === 'undefined' ||
-    document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN
-  ) {
+  if (oppgaveIsLoading || typeof data === 'undefined' || getIsIncomingDocument(document)) {
     return null;
   }
 

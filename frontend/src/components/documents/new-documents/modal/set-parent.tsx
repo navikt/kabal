@@ -1,30 +1,47 @@
-import { Alert, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Alert, Button, Heading, Radio, RadioGroup, Tag } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DocumentIcon, ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import {
+  DISTRIBUTION_TYPE_NAMES,
+  DistribusjonsType,
+  DocumentTypeEnum,
+  IMainDocument,
+} from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 
 interface Props {
   document: IMainDocument;
+  parentDocument: IMainDocument | undefined;
   hasAttachments: boolean;
 }
 
-export const SetParentDocument = ({ document, hasAttachments }: Props) => {
+export const SetParentDocument = ({ document, parentDocument, hasAttachments }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(oppgaveId);
   const [setParent, { isLoading: isSetting }] = useSetParentMutation();
   const isRol = useIsRol();
 
+  const isIncomingDocument = getIsIncomingDocument(document) || getIsIncomingDocument(parentDocument);
+
   const potentialParents = useMemo(() => {
     if (data === undefined) {
+      return [];
+    }
+
+    if (document.type === DocumentTypeEnum.UPLOADED || isIncomingDocument) {
+      return data.filter((d) => document.id !== d.id && d.parentId === null && getIsIncomingDocument(d));
+    }
+
+    if (hasAttachments) {
       return [];
     }
 
@@ -35,7 +52,7 @@ export const SetParentDocument = ({ document, hasAttachments }: Props) => {
     }
 
     return data.filter((d) => document.id !== d.id && d.parentId === null);
-  }, [data, document.id, document.type, isRol]);
+  }, [data, document.id, document.type, hasAttachments, isIncomingDocument, isRol]);
 
   if (
     isLoadingDocuments ||
@@ -43,10 +60,6 @@ export const SetParentDocument = ({ document, hasAttachments }: Props) => {
     potentialParents.length === 0 ||
     typeof oppgaveId !== 'string'
   ) {
-    return null;
-  }
-
-  if (document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN && hasAttachments) {
     return null;
   }
 
@@ -60,7 +73,12 @@ export const SetParentDocument = ({ document, hasAttachments }: Props) => {
         Vedlegg eller hoveddokument
       </Heading>
 
-      <MainDocument document={document} onClick={() => setParentFn(null)} isLoading={isSetting} />
+      <MainDocument
+        document={document}
+        isIncomingDocument={isIncomingDocument}
+        onClick={() => setParentFn(null)}
+        isLoading={isSetting}
+      />
 
       <RadioGroup
         size="small"
@@ -71,8 +89,8 @@ export const SetParentDocument = ({ document, hasAttachments }: Props) => {
         data-testid="document-set-parent-document"
         disabled={isSetting}
       >
-        {potentialParents.map(({ tittel, id, type }) => (
-          <RadioOption key={id} value={id} type={type} text={tittel} />
+        {potentialParents.map(({ tittel, id, type, dokumentTypeId }) => (
+          <RadioOption key={id} value={id} type={type} text={tittel} distType={dokumentTypeId} />
         ))}
       </RadioGroup>
     </VedleggSection>
@@ -81,11 +99,12 @@ export const SetParentDocument = ({ document, hasAttachments }: Props) => {
 
 interface MainDocumentProps {
   document: IMainDocument;
+  isIncomingDocument: boolean;
   onClick: () => void;
   isLoading: boolean;
 }
 
-const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
+const MainDocument = ({ document, isIncomingDocument, onClick, isLoading }: MainDocumentProps) => {
   const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
   const isSaksbehandler = useIsSaksbehandler();
 
@@ -105,10 +124,10 @@ const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
     );
   }
 
-  if (!isSaksbehandler) {
+  if (!isSaksbehandler && !isIncomingDocument) {
     return (
       <Alert variant="info" size="small" inline>
-        Bare tildelt saksbehandler kan gjøre et dokument til hoveddokument.
+        Bare tildelt saksbehandler kan gjøre dette dokumentet til et hoveddokument.
       </Alert>
     );
   }
@@ -123,14 +142,18 @@ const MainDocument = ({ document, onClick, isLoading }: MainDocumentProps) => {
 interface RadioOptionProps {
   value: string;
   type: ModalDocumentType;
+  distType: DistribusjonsType;
   text: string;
 }
 
-const RadioOption = ({ value, type, text }: RadioOptionProps) => (
+const RadioOption = ({ value, type, distType, text }: RadioOptionProps) => (
   <Radio key={value} value={value} title={text}>
     <RadioContent>
       <DocumentIcon type={type} />
       <RadioText>{text}</RadioText>
+      <Tag size="xsmall" variant="info">
+        {DISTRIBUTION_TYPE_NAMES[distType]}
+      </Tag>
     </RadioContent>
   </Radio>
 );

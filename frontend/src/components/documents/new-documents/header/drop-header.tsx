@@ -4,8 +4,10 @@ import React, { useCallback, useContext, useMemo, useRef, useState } from 'react
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
 
 interface Props {
@@ -19,10 +21,11 @@ export const DropHeading = ({ children }: Props) => {
   const dragEnterCount = useRef(0);
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
   const isSaksbehandler = useIsSaksbehandler();
+  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
   const isDragTarget = useMemo(
-    () => isSaksbehandler && isDroppable(draggedDocument),
-    [isSaksbehandler, draggedDocument],
+    () => (isSaksbehandler || hasOppgavestyringRole) && isDroppable(draggedDocument),
+    [isSaksbehandler, hasOppgavestyringRole, draggedDocument],
   );
 
   const onDragEnter = useCallback(
@@ -112,7 +115,7 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;
-    content: 'Slipp her for å gjøre til hoveddokument';
+    content: 'Hoveddokument';
     border-radius: var(--a-border-radius-medium);
     outline: 2px dashed var(--a-border-action);
     font-size: 18px;

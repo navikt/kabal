@@ -3,11 +3,13 @@ import React from 'react';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
 import { useHasArchiveAccess } from '@app/hooks/use-has-documents-access';
 import {
   DistribusjonsType,
+  DocumentTypeEnum,
   IFileDocument,
   IJournalfoertDokumentReference,
   IMainDocument,
@@ -42,8 +44,19 @@ export const FinishButton = ({ document, pdfOrSmartDocuments, journalfoertDocume
     );
   }
 
-  return document.dokumentTypeId === DistribusjonsType.NOTAT ||
-    document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN ? (
+  if (
+    document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST &&
+    document.type === DocumentTypeEnum.UPLOADED &&
+    (document.avsender === null || document.inngaaendeKanal === null)
+  ) {
+    return (
+      <Alert variant="info" size="small" inline>
+        Kan ikke arkiveres før avsender og inngående kanal er satt.
+      </Alert>
+    );
+  }
+
+  return document.dokumentTypeId === DistribusjonsType.NOTAT || getIsIncomingDocument(document) ? (
     <ArchiveButtons document={document} />
   ) : (
     <SendButtons document={document} />

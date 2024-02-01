@@ -2,10 +2,17 @@
 /* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
 import { IArkivertDocument, IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
 import { IDocumentParams } from '@app/types/documents/common-params';
-import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
+import {
+  DistribusjonsType,
+  DocumentTypeEnum,
+  IFileDocument,
+  IMainDocument,
+  InngaaendeKanal,
+} from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
   ICreateVedleggFromJournalfoertDocumentParams,
@@ -20,6 +27,7 @@ import {
   ISetParentResponse,
 } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
+import { IPart } from '@app/types/oppgave-common';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
@@ -481,23 +489,97 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, datoMottatt, oppgaveId }, { queryFulfilled }) => {
-        const patchResult = reduxStore.dispatch(
+        const collectionPatchResult = reduxStore.dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
-              doc.id === dokumentId &&
-              doc.type === DocumentTypeEnum.UPLOADED &&
-              doc.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN
+              doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc)
                 ? { ...doc, datoMottatt }
                 : doc,
             ),
           ),
         );
 
+        const documentPatchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
+            if (draft !== null && draft.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(draft)) {
+              draft.datoMottatt = datoMottatt;
+            }
+          }),
+        );
+
         try {
           await queryFulfilled;
         } catch {
-          patchResult.undo();
+          collectionPatchResult.undo();
+          documentPatchResult.undo();
           toast.error('Kunne ikke endre dato mottatt.');
+        }
+      },
+    }),
+    setInngaaendeKanal: builder.mutation<
+      void,
+      { oppgaveId: string; dokumentId: string; inngaaendeKanal: InngaaendeKanal }
+    >({
+      query: ({ oppgaveId, dokumentId, inngaaendeKanal }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/inngaaendekanal`,
+        body: { kanal: inngaaendeKanal },
+        method: 'PUT',
+      }),
+      onQueryStarted: async ({ dokumentId, inngaaendeKanal, oppgaveId }, { queryFulfilled }) => {
+        const collectionPatchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+            draft.map((doc) =>
+              doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, inngaaendeKanal } : doc,
+            ),
+          ),
+        );
+
+        const documentPatchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
+            if (draft.type === DocumentTypeEnum.UPLOADED) {
+              draft.inngaaendeKanal = inngaaendeKanal;
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          collectionPatchResult.undo();
+          documentPatchResult.undo();
+          toast.error('Kunne ikke endre inngående kanal.');
+        }
+      },
+    }),
+    setAvsender: builder.mutation<void, { oppgaveId: string; dokumentId: string; avsender: IPart }>({
+      query: ({ oppgaveId, dokumentId, avsender }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/avsender`,
+        body: { id: avsender.id },
+        method: 'PUT',
+      }),
+      onQueryStarted: async ({ dokumentId, avsender, oppgaveId }, { queryFulfilled }) => {
+        const collectionPatchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+            draft.map((doc) =>
+              doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, avsender } : doc,
+            ),
+          ),
+        );
+
+        const documentPatchResult = reduxStore.dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
+            if (draft.type === DocumentTypeEnum.UPLOADED) {
+              draft.avsender = avsender;
+            }
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          collectionPatchResult.undo();
+          documentPatchResult.undo();
+          toast.error('Kunne ikke endre avsender.');
         }
       },
     }),
@@ -541,4 +623,6 @@ export const {
   useSetParentMutation,
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetDatoMottattMutation,
+  useSetInngaaendeKanalMutation,
+  useSetAvsenderMutation,
 } = documentsMutationSlice;
