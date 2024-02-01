@@ -4,15 +4,17 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
-import { SetDocumentType } from '@app/components/documents/new-documents/modal/set-type/set-document-type';
+import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
@@ -85,19 +87,23 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           </BottomAlignedRow>
         ) : null}
 
-        {canEditDocument &&
-        isMainDocument &&
-        document.type === DocumentTypeEnum.UPLOADED &&
-        document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN ? (
-          <MottattDato document={document} oppgaveId={oppgaveId} />
-        ) : null}
-
         {canEditDocument && isMainDocument && !isRolQuestions ? (
           <SetDocumentType document={document} hasAttachments={hasAttachments} />
         ) : null}
 
         {canEditDocument && !isRolQuestions ? (
-          <SetParentDocument document={document} hasAttachments={hasAttachments} />
+          <SetParentDocument document={document} parentDocument={parentDocument} hasAttachments={hasAttachments} />
+        ) : null}
+
+        {canEditDocument &&
+        isMainDocument &&
+        document.type === DocumentTypeEnum.UPLOADED &&
+        getIsIncomingDocument(document) ? (
+          <MottattDato document={document} oppgaveId={oppgaveId} />
+        ) : null}
+
+        {isMainDocument && document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
+          <AnnenInngaaende document={document} canEditDocument={canEditDocument} />
         ) : null}
 
         {canEditDocument && !isNotat && isMainDocument ? <Receipients document={document} /> : null}

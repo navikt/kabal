@@ -1,5 +1,5 @@
 import { CheckmarkCircleIcon, TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Table, Tag } from '@navikt/ds-react';
+import { Button, Label, Table, Tag } from '@navikt/ds-react';
 import React from 'react';
 import { EditPart } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
@@ -15,9 +15,12 @@ interface Props {
 
 export const CustomRecipients = ({ brevMottakere, setBrevMottakere, sendErrors }: Props) => (
   <section>
-    <Heading size="xsmall">Ekstra mottakere</Heading>
+    <Label size="small" htmlFor="extra-recipients">
+      Ekstra mottakere
+    </Label>
     <EditPart
       isLoading={false}
+      id="extra-recipients"
       onChange={(part) => {
         if (!brevMottakere.some(({ id }) => id === part.id)) {
           setBrevMottakere([...brevMottakere, part]);

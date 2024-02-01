@@ -12,9 +12,10 @@ interface EditPartProps {
   isLoading: boolean;
   buttonText?: string;
   autoFocus?: boolean;
+  id?: string;
 }
 
-export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose }: EditPartProps) => {
+export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
   const [search, { data, isLoading: isSearching, isFetching, isError }] = useLazySearchPartQuery();
@@ -56,7 +57,7 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose }
   }, [rawValue, search]);
 
   return (
-    <StyledEditPart>
+    <StyledEditPart id={id}>
       <Search
         label="Søk"
         size="small"
@@ -111,5 +112,4 @@ const StyledEditPart = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  margin-top: 16px;
 `;

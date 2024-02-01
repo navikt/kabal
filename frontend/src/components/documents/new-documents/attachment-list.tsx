@@ -4,9 +4,9 @@ import { AttachmentsOverview } from '@app/components/documents/new-documents/att
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
 import {
-  DistribusjonsType,
   IFileDocument,
   IJournalfoertDokumentReference,
   IMainDocument,
@@ -47,8 +47,8 @@ export const AttachmentList = ({
   hasAttachments,
   hasSeparator,
 }: Props) => {
-  const isKjennelseFraTrygderetten = parentDocument.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
-  const hasOverview = hasAttachments && !isKjennelseFraTrygderetten;
+  const isIncomingDocument = getIsIncomingDocument(parentDocument);
+  const hasOverview = hasAttachments && !isIncomingDocument;
   const overviewCount = hasOverview ? 1 : 0;
   const totalRowCount = pdfLength + journalfoertLength + overviewCount;
 
@@ -59,12 +59,12 @@ export const AttachmentList = ({
   const attachmentListHeight = totalRowCount * ROW_HEIGHT + separatorHeight;
 
   const sorted = useMemo(() => {
-    if (isKjennelseFraTrygderetten) {
+    if (isIncomingDocument) {
       return pdfOrSmartDocuments.sort((a, b) => sortWithNumbers(a.tittel, b.tittel));
     }
 
     return pdfOrSmartDocuments;
-  }, [isKjennelseFraTrygderetten, pdfOrSmartDocuments]);
+  }, [isIncomingDocument, pdfOrSmartDocuments]);
 
   return (
     <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>

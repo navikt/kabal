@@ -1,6 +1,6 @@
 import { EditorValue } from '@app/plate/types';
 import { INavEmployee } from '@app/types/bruker';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
@@ -26,6 +26,7 @@ export enum DistribusjonsType {
   VEDTAKSBREV = '4',
   BESLUTNING = '5',
   KJENNELSE_FRA_TRYGDERETTEN = '6',
+  ANNEN_INNGAAENDE_POST = '7',
 }
 
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
@@ -34,7 +35,13 @@ export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.BREV]: 'Brev',
   [DistribusjonsType.NOTAT]: 'Notat',
   [DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN]: 'Kjennelse fra Trygderetten',
+  [DistribusjonsType.ANNEN_INNGAAENDE_POST]: 'Annen inngående post',
 };
+
+export enum InngaaendeKanal {
+  E_POST = 'E_POST',
+  ALTINN = 'ALTINN_INNBOKS',
+}
 
 export enum CreatorRole {
   KABAL_SAKSBEHANDLING = 'KABAL_SAKSBEHANDLING',
@@ -76,14 +83,16 @@ export interface IFileDocument<P extends string | null = UUID | null> extends IB
   templateId?: never;
   content?: never;
   datoMottatt: string | null;
+  inngaaendeKanal: InngaaendeKanal | null;
+  avsender: IPart | null;
 }
 
 export interface ISmartDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
-  readonly type: DocumentTypeEnum.SMART;
-  readonly isSmartDokument: true;
-  readonly templateId: TemplateIdEnum;
-  readonly content: EditorValue;
-  readonly version: number;
+  type: DocumentTypeEnum.SMART;
+  isSmartDokument: true;
+  templateId: TemplateIdEnum;
+  content: EditorValue;
+  version: number;
 }
 
 interface IJournalfoertDokument

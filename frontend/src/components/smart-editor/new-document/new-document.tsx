@@ -7,12 +7,14 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { getDocumentCount } from './get-document-count';
 import {
@@ -37,6 +39,7 @@ export const NewDocument = ({ onCreate }: Props) => {
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
+  const templates = useTemplates(oppgave);
 
   if (isFeilregistrert || oppgave === undefined) {
     return null;
@@ -46,7 +49,7 @@ export const NewDocument = ({ onCreate }: Props) => {
     return null;
   }
 
-  const onClick = (template: ISmartEditorTemplate) => {
+  const onClick = async (template: ISmartEditorTemplate) => {
     setLoadingTemplate(template.templateId);
 
     const count = getDocumentCount(documents, template);
@@ -54,17 +57,20 @@ export const NewDocument = ({ onCreate }: Props) => {
     const creatorRole = isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING;
     const tittel = count === 0 ? template.tittel : `${template.tittel} (${count})`;
 
-    return createSmartDocument({
-      ...template,
-      tittel,
-      oppgaveId: oppgave.id,
-      creatorIdent: user.navIdent,
-      creatorRole,
-      parentId: null,
-    })
-      .unwrap()
-      .then(({ id }) => onCreate(id))
-      .finally(() => setLoadingTemplate(null));
+    try {
+      const { id } = await createSmartDocument({
+        ...template,
+        tittel,
+        oppgaveId: oppgave.id,
+        creatorIdent: user.navIdent,
+        creatorRole,
+        parentId: null,
+      }).unwrap();
+
+      return onCreate(id);
+    } finally {
+      setLoadingTemplate(null);
+    }
   };
 
   return (
@@ -72,7 +78,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
       <StyledTemplates>
-        {getTemplates(oppgave.typeId, oppgave.isAvsluttetAvSaksbehandler).map((template) => (
+        {templates.map((template) => (
           <TemplateButton
             template={template}
             key={template.templateId}
@@ -85,19 +91,32 @@ export const NewDocument = ({ onCreate }: Props) => {
   );
 };
 
-const getTemplates = (type: SaksTypeEnum, isAvsluttet: boolean) => {
-  if (isAvsluttet) {
+const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
+  const isSaksbehandler = useIsSaksbehandler();
+  const isRol = useIsRol();
+
+  if (oppgave === undefined) {
+    return [];
+  }
+
+  const { isAvsluttetAvSaksbehandler, typeId } = oppgave;
+
+  if (isAvsluttetAvSaksbehandler) {
     return [GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE];
   }
 
-  switch (type) {
-    case SaksTypeEnum.KLAGE:
-      return KLAGE_TEMPLATES;
-    case SaksTypeEnum.ANKE:
-      return ANKE_TEMPLATES;
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return ANKE_I_TRYGDERETTEN_TEMPLATES;
+  if (isSaksbehandler || isRol) {
+    switch (typeId) {
+      case SaksTypeEnum.KLAGE:
+        return KLAGE_TEMPLATES;
+      case SaksTypeEnum.ANKE:
+        return ANKE_TEMPLATES;
+      case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+        return ANKE_I_TRYGDERETTEN_TEMPLATES;
+    }
   }
+
+  return [];
 };
 
 interface TemplateButtonProps {

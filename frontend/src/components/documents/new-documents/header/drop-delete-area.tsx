@@ -79,7 +79,7 @@ export const DeleteDropArea = () => {
       $isDragOver={isDropOver}
     >
       <TrashIcon aria-hidden />
-      <span>Slipp her for å slette</span>
+      <span>Slett</span>
       {isLoading ? <Loader /> : null}
     </DeleteDropAreaContainer>
   );

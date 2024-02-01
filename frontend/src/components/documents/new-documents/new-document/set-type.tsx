@@ -4,8 +4,14 @@ import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
+import {
+  ANNEN_INNGAAENDE_POST,
+  KJENNELSE_FRA_TRYGDERETTEN,
+  Option,
+  useDistribusjonstypeOptions,
+} from '@app/hooks/use-distribusjonstype-options';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 
@@ -18,32 +24,66 @@ export const SetDocumentType = ({ document, hasAttachments }: Props) => {
   const { id, dokumentTypeId, isMarkertAvsluttet } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
+  const isSaksbehandler = useIsSaksbehandler();
   const hasDocumentsAccess = useHasDocumentsAccess();
-  const options = useDistribusjonstypeOptions(document.type);
+  const { outgoing, incoming } = useDistribusjonstypeOptions(document.type);
 
-  const [canChangeType, reason] = useMemo<[boolean, string]>(() => {
+  const [canChangeType, options, reason] = useMemo<[boolean, Option[], string | null]>(() => {
     if (!hasDocumentsAccess) {
-      return [false, 'Ingen tilgang.'];
+      return [false, [], 'Ingen tilgang'];
     }
 
     if (isMarkertAvsluttet) {
-      return [false, 'Du kan ikke endre type på ferdigstilte dokumenter.'];
+      return [false, [], 'Du kan ikke endre type på ferdigstilte dokumenter'];
     }
 
     if (getIsRolQuestions(document)) {
-      return [false, 'Du kan ikke endre type for dokumenter for ROL-spørsmål.'];
+      return [false, [], 'Du kan ikke endre type for dokumenter for ROL-spørsmål'];
     }
 
-    if (dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN && hasAttachments) {
-      return [false, 'Du kan ikke endre type for kjennelse fra Trygderetten med vedlegg.'];
+    if (dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN) {
+      return hasAttachments
+        ? [
+            true,
+            [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST],
+            'Kan kun endres til «Annen inngående post» fordi dokumentet har opplastede vedlegg',
+          ]
+        : [true, [...outgoing, ...incoming], null];
     }
 
-    return [true, ''];
-  }, [document, dokumentTypeId, hasAttachments, hasDocumentsAccess, isMarkertAvsluttet]);
+    if (dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST) {
+      return hasAttachments
+        ? [
+            true,
+            [ANNEN_INNGAAENDE_POST, KJENNELSE_FRA_TRYGDERETTEN],
+            'Kan kun endres til «Kjennelse fra TR» fordi dokumentet har opplastede vedlegg',
+          ]
+        : [true, [...outgoing, ...incoming], null];
+    }
+
+    if (hasAttachments) {
+      return [true, outgoing, 'Kan kun endres til andre utgående typer fordi dokumentet har vedlegg fra arkivet'];
+    }
+
+    if (isSaksbehandler) {
+      return [true, [...outgoing, ...incoming], null];
+    }
+
+    return [false, [], 'Du kan ikke endre utgående dokumenter uten å være tildelt saken'];
+  }, [
+    hasDocumentsAccess,
+    isMarkertAvsluttet,
+    document,
+    dokumentTypeId,
+    hasAttachments,
+    isSaksbehandler,
+    outgoing,
+    incoming,
+  ]);
 
   if (!canChangeType) {
     return (
-      <Tooltip content={reason}>
+      <Tooltip content={reason ?? ''}>
         <Tag variant="info" size="small">
           <NoWrap>{DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}</NoWrap>
         </Tag>
@@ -58,20 +98,22 @@ export const SetDocumentType = ({ document, hasAttachments }: Props) => {
   };
 
   return (
-    <StyledSelect
-      data-testid="document-type-select"
-      label="Dokumenttype"
-      hideLabel
-      size="small"
-      onChange={onChange}
-      value={dokumentTypeId}
-    >
-      {options.map(({ label, value }) => (
-        <option key={value} value={value}>
-          {label}
-        </option>
-      ))}
-    </StyledSelect>
+    <Tooltip content={reason ?? 'Kan endres til alle typer'} maxChar={Infinity}>
+      <StyledSelect
+        data-testid="document-type-select"
+        label="Dokumenttype"
+        hideLabel
+        size="small"
+        onChange={onChange}
+        value={dokumentTypeId}
+      >
+        {options.map(({ label, value }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </StyledSelect>
+    </Tooltip>
   );
 };
 

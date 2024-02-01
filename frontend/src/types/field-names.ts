@@ -18,6 +18,8 @@ export const DEFAULT_FIELD_NAMES = {
   mottattVedtaksinstans: 'Mottatt vedtaksinstans',
   kjennelseMottatt: 'Kjennelse mottatt',
   sendtTilTrygderetten: 'Sendt til Trygderetten',
+  inngaaendeKanal: 'Inngående kanal',
+  avsender: 'Avsender',
 };
 
 const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {

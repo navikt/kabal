@@ -7,11 +7,9 @@ import { UserContext } from '@app/components/app/user';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { Role } from '@app/types/bruker';
@@ -22,9 +20,6 @@ interface Props {
 }
 
 export const NewAttachmentButtons = ({ document }: Props) => {
-  const isRol = useIsRol();
-  const isSaksbehandler = useIsSaksbehandler();
-  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
@@ -33,11 +28,11 @@ export const NewAttachmentButtons = ({ document }: Props) => {
     return null;
   }
 
-  if (!isRol && !isSaksbehandler && !hasOppgavestyringRole) {
-    return null;
-  }
-
-  if (!getIsRolQuestions(document) && document.dokumentTypeId !== DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN) {
+  if (
+    !getIsRolQuestions(document) &&
+    document.dokumentTypeId !== DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN &&
+    document.dokumentTypeId !== DistribusjonsType.ANNEN_INNGAAENDE_POST
+  ) {
     return null;
   }
 

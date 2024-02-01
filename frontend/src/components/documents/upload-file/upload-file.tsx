@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
@@ -9,11 +9,11 @@ export const UploadFile = () => {
   const hasUploadAccess = useHasUploadAccess();
   const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType | null>(null);
 
-  const onChangeDocumentType = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeDocumentType = useCallback(({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     if (isDocumentType(target.value)) {
       setDokumentTypeId(target.value);
     }
-  };
+  }, []);
 
   if (!hasUploadAccess) {
     return null;

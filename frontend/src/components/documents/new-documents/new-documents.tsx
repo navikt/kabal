@@ -13,11 +13,11 @@ import { ListHeader } from '@app/components/documents/new-documents/header/heade
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { clamp } from '@app/functions/clamp';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   CreatorRole,
-  DistribusjonsType,
   DocumentTypeEnum,
   IFileDocument,
   IJournalfoertDokumentReference,
@@ -127,14 +127,13 @@ export const NewDocuments = () => {
     let h = PADDING_TOP + PADDING_BOTTOM;
 
     for (const d of documentMap.values()) {
-      const isKjennelseFraTrygderetten =
-        d.mainDocument?.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
-      const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS || isKjennelseFraTrygderetten;
+      const isIncomingDocument = getIsIncomingDocument(d.mainDocument);
+      const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS || isIncomingDocument;
       const pdfLength = d.pdfOrSmartDocuments.length;
       const journalfoertLength = d.journalfoertDocumentReferences.length;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
-      const hasOverview = !isKjennelseFraTrygderetten && hasAttachments;
+      const hasOverview = !isIncomingDocument && hasAttachments;
 
       h += hasUploadButton ? UPLOAD_BUTTON_HEIGHT : 0;
       h += hasOverview ? ROW_HEIGHT : 0;
@@ -178,18 +177,18 @@ export const NewDocuments = () => {
         continue;
       }
 
-      const isKjennelseFraTrygderetten = mainDocument.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN;
+      const isIncomingDocument = getIsIncomingDocument(mainDocument);
 
       const pdfLength = pdfOrSmartDocuments.length;
       const journalfoertLength = journalfoertDocumentReferences.length;
       const vedleggCount = pdfLength + journalfoertLength;
       const hasAttachments = vedleggCount !== 0;
 
-      const overview = !isKjennelseFraTrygderetten && hasAttachments ? 1 : 0;
+      const overview = !isIncomingDocument && hasAttachments ? 1 : 0;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const separatorCount = hasSeparator ? 1 : 0;
 
-      const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS || isKjennelseFraTrygderetten;
+      const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS || isIncomingDocument;
       const uploadButtonCount = hasUploadButton ? 1 : 0;
 
       const virtualRows = overview + separatorCount + uploadButtonCount;

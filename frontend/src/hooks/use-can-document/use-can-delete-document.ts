@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { canRolEditDocument } from '@app/hooks/use-can-document/common';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -14,7 +15,6 @@ export const useCanDeleteDocument = (
   containsRolAttachments: boolean,
   parentDocument?: IMainDocument,
 ) => {
-  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
@@ -28,12 +28,12 @@ export const useCanDeleteDocument = (
       return false;
     }
 
-    if (isMerkantil) {
-      return true;
-    }
-
     if (isFullfoert) {
       return hasSaksbehandlerRole;
+    }
+
+    if (getIsIncomingDocument(document)) {
+      return true;
     }
 
     if (isTildeltSaksbehandler) {
@@ -59,7 +59,6 @@ export const useCanDeleteDocument = (
     hasSaksbehandlerRole,
     isFeilregistrert,
     isFullfoert,
-    isMerkantil,
     isRol,
     isTildeltSaksbehandler,
     oppgave,
