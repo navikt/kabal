@@ -7,7 +7,7 @@ import { SetDocumentType } from './document-type';
 
 export const UploadFile = () => {
   const hasUploadAccess = useHasUploadAccess();
-  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType>(DistribusjonsType.NOTAT);
+  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType | null>(null);
 
   const onChangeDocumentType = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     if (isDocumentType(target.value)) {

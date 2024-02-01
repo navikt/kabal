@@ -7,9 +7,12 @@ import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import { DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 
+const NONE = 'NONE';
+const NONE_OPTION = <option value={NONE}>Velg dokumenttype</option>;
+
 interface DocumentTypeProps {
   setDokumentTypeId: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  dokumentTypeId: DistribusjonsType;
+  dokumentTypeId: DistribusjonsType | null;
 }
 
 const useOptions = () => {
@@ -46,12 +49,13 @@ export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId }: DocumentT
     <StyledSelect
       onChange={setDokumentTypeId}
       label="Dokumenttype"
-      value={dokumentTypeId}
+      value={dokumentTypeId ?? NONE}
       hideLabel
       size="small"
       title="Dokumenttype for opplastet dokument"
       data-testid="upload-document-type-select"
     >
+      {dokumentTypeId === null ? NONE_OPTION : null}
       {options}
     </StyledSelect>
   );
