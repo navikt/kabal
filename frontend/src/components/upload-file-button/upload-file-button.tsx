@@ -14,7 +14,7 @@ const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   parentId?: string;
-  dokumentTypeId: DistribusjonsType;
+  dokumentTypeId: DistribusjonsType | null;
   'data-testid'?: string;
 }
 
@@ -46,7 +46,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
       async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
 
-        if (oppgaveId === skipToken) {
+        if (oppgaveId === skipToken || dokumentTypeId === null) {
           return;
         }
 
@@ -100,6 +100,8 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
             onClick={onClick}
             loading={isLoading}
             data-testid={`${dataTestId}-button`}
+            disabled={dokumentTypeId === null}
+            title={dokumentTypeId === null ? 'Velg dokumenttype' : undefined}
           >
             {children}
           </Button>
