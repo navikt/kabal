@@ -48,7 +48,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
       <UploadFileButton
         variant="tertiary"
         size="xsmall"
-        dokumentTypeId={DistribusjonsType.NOTAT}
+        dokumentTypeId={document.dokumentTypeId}
         parentId={document.id}
         data-testid="upload-attachment"
       >
