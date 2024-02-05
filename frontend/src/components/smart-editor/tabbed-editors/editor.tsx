@@ -14,7 +14,8 @@ import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSignatureIdent } from '@app/plate/components/signature/signature';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
@@ -23,6 +24,7 @@ import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floati
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
+import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { ISmartDocument } from '@app/types/documents/documents';
 
@@ -34,13 +36,22 @@ interface EditorProps {
 
 export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) => {
   const { id, templateId, content } = smartDocument;
-  const oppgaveId = useOppgaveId();
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
+  const { data: oppgave } = useOppgave();
 
-  if (oppgaveId === skipToken) {
+  const { isLoading: medunderskriverSignatureIsLoading } = useGetSignatureQuery(
+    typeof oppgave?.medunderskriver.employee?.navIdent === 'string'
+      ? oppgave.medunderskriver.employee.navIdent
+      : skipToken,
+  );
+  const signatureIdent = useSignatureIdent();
+  const { isLoading: saksbehandlerSignatureIsLoading } = useGetSignatureQuery(signatureIdent);
+
+  // Ensure signatures are initially loaded before rendering the editor in order to avoid unnecessary re-renders and patches
+  if (oppgave === undefined || medunderskriverSignatureIsLoading || saksbehandlerSignatureIsLoading) {
     return null;
   }
 
@@ -94,9 +105,9 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
             <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
 
             <ErrorBoundary
-              errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgaveId} />}
+              errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
               actionButton={{
-                onClick: () => getDocument({ dokumentId: id, oppgaveId }, false).unwrap(),
+                onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
                 loading: isLoading,
                 disabled: isLoading,
                 buttonText: 'Gjenopprett dokument',
@@ -111,7 +122,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
 
           <StickyRight id={id} />
 
-          {showHistory ? <History oppgaveId={oppgaveId} smartDocument={smartDocument} /> : null}
+          {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
         </MainContainer>
 
         <StatusBar {...updateStatus} />

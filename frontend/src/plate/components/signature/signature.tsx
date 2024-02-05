@@ -27,10 +27,6 @@ const useMedunderskriverSignature = () => {
     return undefined;
   }
 
-  if (typeof medunderskriverSignature === 'undefined') {
-    return null;
-  }
-
   if (oppgave.medunderskriver.employee === null) {
     return null;
   }
@@ -38,7 +34,7 @@ const useMedunderskriverSignature = () => {
   return medunderskriverSignature;
 };
 
-const useSignatureIdent = (): string | typeof skipToken => {
+export const useSignatureIdent = (): string | typeof skipToken => {
   const { data: oppgave } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
 
