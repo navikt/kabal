@@ -2,6 +2,7 @@ import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { MOD_KEY } from '@app/mod-key';
+import { pushEvent } from '@app/observability';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
@@ -27,7 +28,12 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           keys={[MOD_KEY, 'Shift', 'F']}
           icon={<LightBulbIcon aria-hidden />}
           active={showGodeFormuleringer}
-          onClick={() => setShowGodeFormuleringer(!showGodeFormuleringer)}
+          onClick={() => {
+            if (!showGodeFormuleringer) {
+              pushEvent('show-gode-formuleringer', { enabled: 'true' }, 'smart-editor');
+            }
+            setShowGodeFormuleringer(!showGodeFormuleringer);
+          }}
         />
 
         <ToolbarIconButton
@@ -35,7 +41,11 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           keys={[MOD_KEY, 'Shift', 'H']}
           icon={<ClockDashedIcon aria-hidden />}
           active={showHistory}
-          onClick={() => setShowHistory(!showHistory)}
+          onClick={() => {
+            const enabled = !showHistory;
+            pushEvent('toggle-show-history', { enabled: enabled.toString() }, 'smart-editor');
+            setShowHistory(enabled);
+          }}
         />
       </FirstRow>
     </StyledToolbar>

@@ -3,6 +3,7 @@ import { Dropdown } from '@navikt/ds-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
+import { pushEvent } from '@app/observability';
 import { CopyButton } from '../../copy-button/copy-button';
 
 export const UserDropdown = (): JSX.Element | null => {
@@ -14,7 +15,12 @@ export const UserDropdown = (): JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledNavLink} to="/innstillinger" data-testid="innstillinger-link">
           <CogIcon /> Innstillinger
         </Dropdown.Menu.List.Item>
-        <Dropdown.Menu.List.Item as={StyledLogoutLink} href="/oauth2/logout" data-testid="logout-link">
+        <Dropdown.Menu.List.Item
+          as={StyledLogoutLink}
+          href="/oauth2/logout"
+          data-testid="logout-link"
+          onClick={() => pushEvent('logout', undefined, 'user-menu')}
+        >
           <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>
         <Dropdown.Menu.Divider />

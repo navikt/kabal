@@ -3,6 +3,7 @@ import { Link } from '@navikt/ds-react';
 import React from 'react';
 import { EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { pushEvent } from '@app/observability';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 
@@ -17,6 +18,7 @@ export const Modia = ({ sakenGjelder }: LinkProps) => (
     aria-label="Ekstern lenke til Modia for denne personen"
     title="Åpne i ny fane"
     rel="noreferrer"
+    onClick={() => pushEvent('modia-link', undefined, 'external-links')}
   >
     Modia <ExternalLinkIcon title="Ekstern lenke" />
   </Link>
@@ -36,6 +38,7 @@ export const AaRegisteret = () => {
       aria-label="Ekstern lenke til Aa-registeret for denne personen"
       title="Åpne i ny fane"
       rel="noreferrer"
+      onClick={() => pushEvent('aaregister-link', undefined, 'external-links')}
     >
       Aa-registeret <ExternalLinkIcon title="Ekstern lenke" />
     </Link>
@@ -56,6 +59,7 @@ export const Ainntekt = () => {
       aria-label="Ekstern lenke til A-inntekt for denne personen"
       title="Åpne i ny fane"
       rel="noreferrer"
+      onClick={() => pushEvent('ainntekt-link', undefined, 'external-links')}
     >
       A-inntekt <ExternalLinkIcon title="Ekstern lenke" />
     </Link>

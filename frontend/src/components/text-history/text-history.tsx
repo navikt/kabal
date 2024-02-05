@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { pushEvent } from '@app/observability';
 import { IEditor } from '@app/types/common-text-types';
 
 interface PublishedProps {
@@ -81,7 +82,11 @@ export const TextHistory = ({
       <Button
         variant="tertiary"
         size="xsmall"
-        onClick={() => setShowEditors(!showEditors)}
+        onClick={() => {
+          const enabled = !showEditors;
+          pushEvent('toggle-text-history', { enabled: enabled.toString() }, 'texts');
+          setShowEditors(enabled);
+        }}
         icon={<ClockDashedIcon aria-hidden />}
       >
         {showEditors ? 'Skjul' : 'Vis'} historikk

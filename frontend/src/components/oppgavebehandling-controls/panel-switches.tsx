@@ -9,6 +9,7 @@ import {
   useKvalitetsvurderingEnabled,
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
@@ -18,7 +19,11 @@ export const PanelSwitches = () => {
     <Container data-testid="behandling-panel-switches">
       <TogglePanelButton
         checked={documentsEnabled}
-        togglePanel={() => setDocumentsEnabled(!documentsEnabled)}
+        togglePanel={() => {
+          const isEnabled = !documentsEnabled;
+          pushEvent('toggle-documents-panel', { enabled: isEnabled.toString() }, 'panels');
+          setDocumentsEnabled(isEnabled);
+        }}
         testId="panel-switch-documents"
       >
         Dokumenter
@@ -26,7 +31,11 @@ export const PanelSwitches = () => {
       <Brevutforming />
       <TogglePanelButton
         checked={behandlingEnabled}
-        togglePanel={() => setBehandlingEnabled(!behandlingEnabled)}
+        togglePanel={() => {
+          const isEnabled = !behandlingEnabled;
+          pushEvent('toggle-behandling-panel', { enabled: isEnabled.toString() }, 'panels');
+          setBehandlingEnabled(isEnabled);
+        }}
         testId="panel-switch-behandling"
       >
         Behandling
@@ -54,7 +63,11 @@ const Brevutforming = () => {
   return (
     <TogglePanelButton
       checked={smartEditorEnabled}
-      togglePanel={() => setSmartEditorEnabled(!smartEditorEnabled)}
+      togglePanel={() => {
+        const isEnabled = !smartEditorEnabled;
+        pushEvent('toggle-smart-editor-panel', { enabled: isEnabled.toString() }, 'panels');
+        setSmartEditorEnabled(isEnabled);
+      }}
       testId="panel-switch-smart-editor"
     >
       Brevutforming
@@ -71,7 +84,15 @@ const Kvalitetsvurdering = () => {
   }
 
   return (
-    <TogglePanelButton checked={value} togglePanel={() => setValue(!value)} testId="panel-switch-kvalitetsvurdering">
+    <TogglePanelButton
+      checked={value}
+      togglePanel={() => {
+        const isEnabled = !value;
+        pushEvent('toggle-kvalitetsvurdering-panel', { enabled: isEnabled.toString() }, 'panels');
+        setValue(isEnabled);
+      }}
+      testId="panel-switch-kvalitetsvurdering"
+    >
       Kvalitetsvurdering
     </TogglePanelButton>
   );

@@ -1,7 +1,7 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import React, { useContext, useRef, useState } from 'react';
+import React, { Profiler, useContext, useRef, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';
@@ -15,6 +15,7 @@ import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { editorMeasurements } from '@app/observability';
 import { useSignatureIdent } from '@app/plate/components/signature/signature';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -116,7 +117,12 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
                 size: 'small',
               }}
             >
-              <EditorWithNewCommentAndFloatingToolbar id={id} />
+              <Profiler
+                id="render_smart_editor"
+                onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
+              >
+                <EditorWithNewCommentAndFloatingToolbar id={id} />
+              </Profiler>
             </ErrorBoundary>
           </Content>
 

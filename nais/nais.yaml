@@ -57,3 +57,6 @@ spec:
     path: /isAlive
   readiness:
     path: /isReady
+  observability:
+    tracing:
+      enabled: true
