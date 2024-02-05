@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { pushEvent } from '@app/observability';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { RichText, useMyPlateEditorState } from '@app/plate/types';
@@ -94,6 +95,7 @@ const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
   <Tooltip content={color.name} key={color.value}>
     <StyledButton
       onClick={() => {
+        pushEvent('set-bookmark', { color: color.name }, 'smart-editor');
         setBookmark(color.value);
         setIsOpen(false);
       }}

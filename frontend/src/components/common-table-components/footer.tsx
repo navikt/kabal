@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import { StyledFooterContent } from '@app/styled-components/table';
 
 interface Props {
@@ -57,7 +58,10 @@ export const TableFooter = ({
               <Button
                 size="small"
                 variant="tertiary-neutral"
-                onClick={onRefresh}
+                onClick={() => {
+                  pushEvent('refresh-oppgave-list', {}, testId);
+                  onRefresh();
+                }}
                 loading={isLoading || isFetching}
                 icon={<ArrowsCirclepathIcon aria-hidden />}
                 title="Oppdater"
@@ -70,7 +74,10 @@ export const TableFooter = ({
                 page={page}
                 count={Math.max(Math.ceil(total / pageSize), 1)}
                 prevNextTexts
-                onPageChange={setPage}
+                onPageChange={(p) => {
+                  pushEvent('oppgave-list-change-page', { page: p.toString() }, testId);
+                  setPage(p);
+                }}
                 data-testid={`${testId}-pagination`}
               />
             )}

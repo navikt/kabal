@@ -12,6 +12,7 @@ import { ViewPDF } from '@app/components/view-pdf/view-pdf';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsEnabled, useDocumentsWidth } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';
@@ -88,7 +89,21 @@ const ExpandedDocuments = () => {
       return;
     }
 
-    const observer = new ResizeObserver(() => setRef.current(ref.current?.clientWidth ?? minWidthRef.current));
+    let timeout: NodeJS.Timeout | null = null;
+
+    const observer = new ResizeObserver(() => {
+      const newWidth = ref.current?.clientWidth ?? minWidthRef.current;
+      setRef.current(newWidth);
+
+      if (timeout !== null) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(() => {
+        pushEvent('set-documents-panel-size', { width: newWidth.toString(10) }, 'documents');
+      }, 5000);
+    });
+
     observer.observe(ref.current);
 
     return () => observer.disconnect();

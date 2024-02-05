@@ -17,6 +17,7 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 // eslint-disable-next-line import/no-cycle
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { useGetRelevantOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 
@@ -59,7 +60,12 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           size={size}
           variant="secondary-neutral"
           loading={isLoading}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            if (!isOpen) {
+              pushEvent('open-relevant-oppgaver', { enabled: 'true' }, 'oppgave-lists');
+            }
+            setIsOpen(!isOpen);
+          }}
           icon={<FolderFileIcon aria-hidden />}
         >
           {totalCount.toString(10)}

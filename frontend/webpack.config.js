@@ -28,6 +28,7 @@ module.exports = (_env, { mode }) => ({
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src'),
+      'react-dom$': 'react-dom/profiling',
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
@@ -65,6 +66,11 @@ module.exports = (_env, { mode }) => ({
           },
         }
       },
+      {
+        target: 'https://telemetry.ekstern.dev.nav.no',
+        context: ['/collect'],
+        changeOrigin: true,
+      }
     ],
   },
   plugins: [

@@ -8,8 +8,10 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import {
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS,
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS,
+  ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
+import { pushEvent } from '@app/observability';
 import { useIsExpanded } from '../../use-is-expanded';
 
 export const Menu = () => {
@@ -67,7 +69,13 @@ const ColumnOptions = () => {
   return (
     <CheckboxGroup size="small" legend="Kolonner" value={value} onChange={setValue}>
       {ARCHIVED_DOCUMENTS_COLUMN_OPTIONS.map((option) => (
-        <Checkbox key={option} value={option}>
+        <Checkbox
+          key={option}
+          value={option}
+          onChange={({ target }) => {
+            logColumnEvent(option, target.checked);
+          }}
+        >
           {ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS[option]}
         </Checkbox>
       ))}
@@ -78,3 +86,6 @@ const ColumnOptions = () => {
 const StyledDropdownMenu = styled(Dropdown.Menu)`
   width: 350px;
 `;
+
+const logColumnEvent = (column: ArchivedDocumentsColumn, checked: boolean) =>
+  pushEvent(`toggle-col-archived-docs-${column.toLowerCase()}`, { checked: checked.toString() }, 'documents');

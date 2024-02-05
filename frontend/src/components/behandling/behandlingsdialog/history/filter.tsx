@@ -1,5 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
+import { pushEvent } from '@app/observability';
 import { HistoryEventTypes, IHistoryResponse } from '@app/types/oppgavebehandling/response';
 
 export const ALL = 'ALL';
@@ -37,6 +38,8 @@ export const Filter = ({ counts, totalCount, filter, setFilter }: Props) => {
       size="small"
       hideLabel
       onChange={({ target }) => {
+        pushEvent('change-history-filter', { value: target.value }, 'behandling-panel');
+
         if (target.value === ALL || isHistoryResponse(target.value)) {
           setFilter(target.value);
         }

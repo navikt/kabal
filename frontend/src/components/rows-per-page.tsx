@@ -2,6 +2,7 @@ import { Label, ToggleGroup } from '@navikt/ds-react';
 import React, { useId } from 'react';
 import { styled } from 'styled-components';
 import { useNumberSetting } from '@app/hooks/settings/helpers';
+import { pushEvent } from '@app/observability';
 
 interface Props {
   settingKey: string;
@@ -20,7 +21,10 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
       </Label>
       <ToggleGroup
         value={value.toString(10)}
-        onChange={(v) => setValue(Number.parseInt(v, 10))}
+        onChange={(v) => {
+          pushEvent('change-rows-per-page', { value: v }, 'oppgave-lists');
+          setValue(Number.parseInt(v, 10));
+        }}
         size="small"
         variant="neutral"
         aria-describedby={id}
@@ -41,6 +45,7 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
         <ToggleGroup.Item value="-1" data-value="-1">
           Alle
         </ToggleGroup.Item>
+        1
       </ToggleGroup>
     </StyledRowsPerPage>
   );

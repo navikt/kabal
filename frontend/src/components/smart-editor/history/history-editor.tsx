@@ -8,6 +8,7 @@ import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { pushEvent } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
@@ -68,7 +69,14 @@ export const HistoryEditor = memo(
       <HistoryEditorContainer>
         <StyledButton
           variant="primary"
-          onClick={() => restore(mainEditor, version)}
+          onClick={() => {
+            pushEvent(
+              'restore-smart-editor-version',
+              { versionId: versionId.toString(), documentId: smartDocument.id },
+              'smart-editor',
+            );
+            restore(mainEditor, version);
+          }}
           size="small"
           disabled={disableRestore}
         >
