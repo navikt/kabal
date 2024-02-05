@@ -1,7 +1,7 @@
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Tabs } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
@@ -113,9 +113,36 @@ interface TabPanelProps {
 const TabPanel = ({ smartDocument }: TabPanelProps) => {
   const oppgaveId = useOppgaveId();
   const [update, status] = useUpdateSmartDocumentMutation();
-  const timeout = useRef<NodeJS.Timeout>();
+  const [localContent, setLocalContent] = useState(smartDocument.content);
+  const refContent = useRef(smartDocument.content);
 
   const { id, content } = smartDocument;
+
+  // Normal debounce
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (areDescendantsEqual(localContent, content) || oppgaveId === skipToken) {
+        return;
+      }
+
+      update({ content: localContent, oppgaveId, dokumentId: id, version: smartDocument.version });
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [content, id, oppgaveId, smartDocument.version, update, localContent]);
+
+  // Unmount debounce
+  useEffect(
+    () => () => {
+      if (areDescendantsEqual(refContent.current, content) || oppgaveId === skipToken) {
+        return;
+      }
+
+      update({ content: refContent.current, oppgaveId, dokumentId: id, version: smartDocument.version });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <StyledTabsPanel value={smartDocument.id}>
@@ -124,26 +151,8 @@ const TabPanel = ({ smartDocument }: TabPanelProps) => {
           key={id}
           smartDocument={smartDocument}
           onChange={(c) => {
-            if (areDescendantsEqual(c, content)) {
-              return;
-            }
-
-            clearTimeout(timeout.current);
-
-            if (oppgaveId === skipToken) {
-              return;
-            }
-
-            timeout.current = setTimeout(
-              () =>
-                update({
-                  content: c,
-                  oppgaveId,
-                  dokumentId: id,
-                  version: smartDocument.version,
-                }),
-              1000,
-            );
+            refContent.current = c;
+            setLocalContent(c);
           }}
           updateStatus={status}
         />
