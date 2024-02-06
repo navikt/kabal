@@ -3,6 +3,8 @@ import { LogLevel, PushLogOptions, faro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { Routes, createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 import { ENVIRONMENT } from '@app/environment';
+import { IUserData } from '@app/types/bruker';
+import { user } from '@app/user';
 
 const getUrl = () => {
   if (ENVIRONMENT.isProduction) {
@@ -48,8 +50,13 @@ const { pushMeasurement } = faro.api;
 class EditorMeasurements {
   private measurements: number[] = [];
   private counter = 0;
+  private user: IUserData | null = null;
 
   constructor() {
+    user.then((userData) => {
+      this.user = userData;
+    });
+
     setInterval(() => {
       if (this.measurements.length === 0) {
         return;
@@ -58,10 +65,14 @@ class EditorMeasurements {
       const max = Math.max(...this.measurements);
       const average = this.measurements.reduce((a, b) => a + b, 0) / this.measurements.length;
 
+      faro.api.setUser({ id: this.user?.navIdent ?? 'Unknown user' });
+
       pushMeasurement({
         type: 'render_smart_editor',
         values: { render_smart_editor_max: max, render_smart_editor_avg: average },
       });
+
+      faro.api.resetUser();
 
       this.measurements = [];
     }, 10000);
