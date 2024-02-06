@@ -1,5 +1,5 @@
 import { ReactIntegration, ReactRouterVersion, getWebInstrumentations, initializeFaro } from '@grafana/faro-react';
-import { faro } from '@grafana/faro-web-sdk';
+import { LogLevel, PushLogOptions, faro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { Routes, createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 import { ENVIRONMENT } from '@app/environment';
@@ -39,6 +39,9 @@ initializeFaro({
 
 export const pushEvent = (name: string, attributes: Record<string, string> | undefined, domain?: string) =>
   faro.api.pushEvent(name, attributes, domain, { skipDedupe: true });
+
+export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>
+  faro.api.pushLog([message], { ...options, skipDedupe: true, level });
 
 const { pushMeasurement } = faro.api;
 
