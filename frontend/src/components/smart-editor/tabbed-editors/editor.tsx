@@ -16,7 +16,7 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { editorMeasurements } from '@app/observability';
-import { useSignatureIdent } from '@app/plate/components/signature/signature';
+import { useSignatureIdent } from '@app/plate/components/signature/hooks';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
