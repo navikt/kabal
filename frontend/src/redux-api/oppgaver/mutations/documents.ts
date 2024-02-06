@@ -180,7 +180,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        const patch = dispatch(
+        const collectionPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) => {
               if (doc.id === dokumentId) {
@@ -192,6 +192,12 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
+        const documentPatchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
+            draft.isMarkertAvsluttet = true;
+          }),
+        );
+
         try {
           const { data } = await queryFulfilled;
 
@@ -200,8 +206,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               draft.map((doc) => (doc.id === dokumentId ? { ...doc, ...data } : doc)),
             ),
           );
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => ({
+              ...draft,
+              ...data,
+            })),
+          );
         } catch (e) {
-          patch.undo();
+          collectionPatchResult.undo();
+          documentPatchResult.undo();
 
           const message = 'Kunne ikke ferdigstille dokumentet.';
 

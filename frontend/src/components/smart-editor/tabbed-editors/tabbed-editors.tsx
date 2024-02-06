@@ -118,6 +118,8 @@ const TabPanel = ({ smartDocument }: TabPanelProps) => {
 
   const { id, content } = smartDocument;
 
+  const smartDocumentRef = useRef<ISmartDocument>(smartDocument);
+
   // Normal debounce
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -131,14 +133,27 @@ const TabPanel = ({ smartDocument }: TabPanelProps) => {
     return () => clearTimeout(timeout);
   }, [content, id, oppgaveId, smartDocument.version, update, localContent]);
 
+  // Ensure that smartDocumentRef is always up to date in order to avoid the unmount debounce triggering on archive/delete
+  useEffect(() => {
+    smartDocumentRef.current = smartDocument;
+
+    return () => {
+      smartDocumentRef.current = smartDocument;
+    };
+  }, [smartDocument]);
+
   // Unmount debounce
   useEffect(
     () => () => {
-      if (areDescendantsEqual(refContent.current, content) || oppgaveId === skipToken) {
+      if (
+        areDescendantsEqual(refContent.current, smartDocumentRef.current.content) ||
+        oppgaveId === skipToken ||
+        smartDocumentRef.current.isMarkertAvsluttet
+      ) {
         return;
       }
 
-      update({ content: refContent.current, oppgaveId, dokumentId: id, version: smartDocument.version });
+      update({ content: refContent.current, oppgaveId, dokumentId: id, version: smartDocumentRef.current.version });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
