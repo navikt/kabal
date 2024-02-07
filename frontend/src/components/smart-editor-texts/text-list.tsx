@@ -7,10 +7,11 @@ import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { TextTypes } from '@app/types/common-text-types';
+import { SortOrder } from '@app/types/sort';
 import { ModifiedCreatedDateTime } from '../datetime/datetime';
 import { getPathPrefix } from './functions/get-path-prefix';
 import { useTextQuery } from './hooks/use-text-query';
-import { QueryKey, SortKey, SortOrder, SortableHeader } from './sortable-header';
+import { QueryKey, SortKey, SortableHeader } from './sortable-header';
 
 interface TextListProps {
   textType: TextTypes;

@@ -1,14 +1,25 @@
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useDocumentsFilterDatoOpprettet, useDocumentsFilterDatoRegSendt } from '@app/hooks/settings/use-setting';
+import {
+  ArchivedDocumentsColumn,
+  useArchivedDocumentsColumns,
+} from '@app/hooks/settings/use-archived-documents-setting';
+import {
+  ArchivedDocumentsSort,
+  ArchivedDocumentsSortColumn,
+  useDocumentsFilterDatoOpprettet,
+  useDocumentsFilterDatoRegSendt,
+} from '@app/hooks/settings/use-setting';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Journalposttype } from '@app/types/arkiverte-documents';
+import { SortOrder } from '@app/types/sort';
 import { DateFilter } from './date-filter';
 import { useFilters } from './use-filters';
 
@@ -26,6 +37,8 @@ export const ExpandedHeaders = ({
   selectedTypes,
   setSelectedTypes,
   listHeight,
+  sort,
+  setSort,
 }: ExpandedHeadersProps) => {
   const oppgaveId = useOppgaveId();
   const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -64,10 +77,16 @@ export const ExpandedHeaders = ({
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
-        <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
+        <DateContainer>
+          <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} />
+          <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
+        </DateContainer>
       ) : null}
       {columns.DATO_REG_SENDT ? (
-        <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
+        <DateContainer>
+          <SortButton column={ArchivedDocumentsColumn.DATO_REG_SENDT} sort={sort} setSort={setSort} />
+          <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
+        </DateContainer>
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
@@ -117,6 +136,41 @@ export const ExpandedHeaders = ({
     </>
   );
 };
+
+const SortButton = ({
+  column,
+  sort,
+  setSort,
+}: {
+  column: ArchivedDocumentsSortColumn;
+  sort: ArchivedDocumentsSort;
+  setSort: (sort: ArchivedDocumentsSort) => void;
+}) => (
+  <Button
+    icon={getSortIcon(sort, column)}
+    variant="tertiary-neutral"
+    size="small"
+    onClick={() =>
+      setSort({
+        order: column === sort.orderBy && sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
+        orderBy: column,
+      })
+    }
+  />
+);
+
+const getSortIcon = (sort: ArchivedDocumentsSort, column: ArchivedDocumentsSortColumn) => {
+  if (sort.orderBy === column) {
+    return sort.order === 'desc' ? <ArrowDownIcon aria-hidden /> : <ArrowUpIcon aria-hidden />;
+  }
+
+  return <ArrowsUpDownIcon aria-hidden />;
+};
+
+const DateContainer = styled.span`
+  display: flex;
+  align-items: center;
+`;
 
 const JOURNALPOSTTYPE_OPTIONS = [
   { label: 'Inngående', value: Journalposttype.INNGAAENDE },
