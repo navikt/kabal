@@ -49,7 +49,7 @@ export const useFilteredDocuments = (
                 (selectedSaksIds.length === 0 ||
                   selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
                 (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
-                (onlyIncluded === false || valgt) &&
+                (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)) &&
                 (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
             )
             .map((d) => (onlyIncluded ? { ...d, vedlegg: d.vedlegg.filter(({ valgt }) => valgt) } : d))
