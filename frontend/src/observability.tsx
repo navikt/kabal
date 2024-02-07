@@ -6,6 +6,8 @@ import { ENVIRONMENT } from '@app/environment';
 import { IUserData } from '@app/types/bruker';
 import { user } from '@app/user';
 
+const MEASURE_TIME_INTERVAL = 10_000;
+
 const getUrl = () => {
   if (ENVIRONMENT.isProduction) {
     return 'https://telemetry.nav.no/collect';
@@ -45,7 +47,7 @@ export const pushEvent = (name: string, attributes: Record<string, string> | und
 export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>
   faro.api.pushLog([message], { ...options, skipDedupe: true, level });
 
-const { pushMeasurement } = faro.api;
+export const { pushMeasurement } = faro.api;
 
 class EditorMeasurements {
   private measurements: number[] = [];
@@ -75,7 +77,7 @@ class EditorMeasurements {
       faro.api.resetUser();
 
       this.measurements = [];
-    }, 10000);
+    }, MEASURE_TIME_INTERVAL);
   }
 
   add = (render_smart_editor: number) => {
