@@ -3,17 +3,13 @@ import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { SortOrder } from '@app/types/sort';
 
 type Icon = typeof ArrowUpIcon | typeof ArrowDownIcon | typeof ArrowsUpDownIcon;
 
 export enum SortKey {
   TITLE = 'title',
   MODIFIED = 'modified',
-}
-
-export enum SortOrder {
-  ASC = 'asc',
-  DESC = 'desc',
 }
 
 export enum QueryKey {

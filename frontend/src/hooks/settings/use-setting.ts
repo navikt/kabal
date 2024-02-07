@@ -8,7 +8,9 @@ import {
   useOppgavePath,
   useSetting,
 } from '@app/hooks/settings/helpers';
+import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { Journalposttype } from '@app/types/arkiverte-documents';
+import { SortOrder } from '@app/types/sort';
 
 // Oppgavebehandling tabs
 export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/documents/enabled'));
@@ -47,6 +49,17 @@ export const useDocumentsFilterDatoRegSendt = () =>
 
 export const useDocumentsAvsenderMottaker = () =>
   useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/avsender_mottaker'));
+
+export type ArchivedDocumentsSortColumn =
+  | ArchivedDocumentsColumn.DATO_OPPRETTET
+  | ArchivedDocumentsColumn.DATO_REG_SENDT;
+
+export interface ArchivedDocumentsSort {
+  order: SortOrder;
+  orderBy: ArchivedDocumentsSortColumn;
+}
+
+export const useDocumentsSort = () => useJsonSetting<ArchivedDocumentsSort>(useOppgavePath('tabs/documents/sort'));
 
 const JOURNALPOSTTYPE_LIST = Object.values(Journalposttype);
 

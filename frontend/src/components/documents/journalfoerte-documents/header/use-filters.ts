@@ -1,18 +1,23 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import {
+  ArchivedDocumentsSort,
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDatoOpprettet,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
   useDocumentsFilterType,
   useDocumentsOnlyIncluded,
+  useDocumentsSort,
 } from '@app/hooks/settings/use-setting';
 import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
+import { SortOrder } from '@app/types/sort';
 import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
 const EMPTY_TYPE_FILTER: Journalposttype[] = [];
+const DEFAULT_SORT: ArchivedDocumentsSort = { order: SortOrder.DESC, orderBy: ArchivedDocumentsColumn.DATO_OPPRETTET };
 
 export const useFilters = (documents: IArkivertDocument[]) => {
   const [isExpanded] = useIsExpanded();
@@ -46,6 +51,8 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     remove: resetSaksId,
   } = useDocumentsFilterSaksId();
 
+  const { value: sort = DEFAULT_SORT, setValue: setSort } = useDocumentsSort();
+
   const totalFilteredDocuments = useFilteredDocuments(
     documents,
     selectedAvsenderMottakere,
@@ -55,6 +62,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     selectedTypes,
     onlyIncluded,
     search,
+    sort,
   );
 
   const resetFilters = useCallback(() => {
@@ -112,5 +120,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setSelectedAvsenderMottakere,
     selectedSaksIds,
     setSelectedSaksIds,
+    sort,
+    setSort,
   };
 };
