@@ -1,7 +1,13 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { PlateElement, PlateRenderElementProps, findNodePath, useEditorReadOnly } from '@udecode/plate-common';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import {
+  PlateElement,
+  PlateRenderElementProps,
+  findNodePath,
+  focusEditor,
+  useEditorReadOnly,
+} from '@udecode/plate-common';
+import React, { MouseEvent, useCallback, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import {
   cleanText,
@@ -88,13 +94,19 @@ export const Placeholder = ({
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 
-  const deletePlaceholder = useCallback(() => {
-    if (path === undefined) {
-      return;
-    }
+  const deletePlaceholder = useCallback(
+    (event: MouseEvent) => {
+      if (path === undefined) {
+        return;
+      }
 
-    editor.delete({ at: path });
-  }, [editor, path]);
+      event.stopPropagation();
+
+      editor.delete({ at: path });
+      focusEditor(editor);
+    },
+    [editor, path],
+  );
 
   const hideDeleteButton = useMemo(
     () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
