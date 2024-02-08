@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
@@ -7,7 +7,7 @@ import { useOppgave } from './oppgavebehandling/use-oppgave';
 export const useIsRol = () => {
   const { data: oppgave, isLoading } = useOppgave();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   return useMemo(() => {
     if (isLoading || oppgave === undefined) {

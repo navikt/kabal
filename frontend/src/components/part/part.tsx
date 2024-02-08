@@ -1,5 +1,5 @@
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, CopyButton } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { EditPart } from '@app/components/part/edit-part';
@@ -64,7 +64,8 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
           <PartStatusList statusList={part.statusList} size="xsmall" />
         </StyledName>
 
-        <div>
+        <ButtonContainer>
+          {part.name === null ? null : <CopyButton copyText={part.name} size="small" />}
           {isDeletable && isEditing ? (
             <DeleteButton
               onDelete={() => {
@@ -74,7 +75,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
             />
           ) : null}
           {canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}
-        </div>
+        </ButtonContainer>
       </StyledPart>
 
       {isEditing ? (
@@ -115,4 +116,12 @@ const StyledName = styled.div`
   align-items: start;
   justify-content: start;
   row-gap: 0;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0;
+  align-self: flex-start;
 `;

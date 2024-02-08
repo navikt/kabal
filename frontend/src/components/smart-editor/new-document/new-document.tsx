@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -30,7 +30,7 @@ interface Props {
 }
 
 export const NewDocument = ({ onCreate }: Props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const isRol = useIsRol();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();

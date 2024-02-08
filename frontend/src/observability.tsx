@@ -3,8 +3,8 @@ import { LogLevel, PushLogOptions, faro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { Routes, createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 import { ENVIRONMENT } from '@app/environment';
+import { user } from '@app/static-data/static-data';
 import { IUserData } from '@app/types/bruker';
-import { user } from '@app/user';
 
 const MEASURE_TIME_INTERVAL = 10_000;
 

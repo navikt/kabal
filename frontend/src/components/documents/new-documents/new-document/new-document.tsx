@@ -13,6 +13,7 @@ import { DocumentModal } from '@app/components/documents/new-documents/modal/mod
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { documentCSS } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
@@ -100,7 +101,8 @@ export const NewDocument = memo(
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
     mottattDatoEqual(prev.document, next.document) &&
-    annenInngaaendeEqual(prev.document, next.document),
+    annenInngaaendeEqual(prev.document, next.document) &&
+    mottakereEqual(prev.document, next.document),
 );
 
 NewDocument.displayName = 'NewDocument';
@@ -147,4 +149,33 @@ const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
   }
 
   return prev.inngaaendeKanal === next.inngaaendeKanal && prev.avsender?.id === next.avsender?.id;
+};
+
+const mottakereEqual = (prev: IMainDocument, next: IMainDocument) => {
+  if (prev.mottakerList.length !== next.mottakerList.length) {
+    return false;
+  }
+
+  for (let i = 0; i < prev.mottakerList.length; i++) {
+    const p = prev.mottakerList[i];
+    const n = next.mottakerList[i];
+
+    if (p === undefined || n === undefined) {
+      return false;
+    }
+
+    if (p.part.id !== n.part.id || p.handling !== n.handling) {
+      return false;
+    }
+
+    if (p.overriddenAddress === null || n.overriddenAddress === null) {
+      if (n.overriddenAddress !== p.overriddenAddress) {
+        return false;
+      }
+    } else if (!areAddressesEqual(p.overriddenAddress, n.overriddenAddress)) {
+      return false;
+    }
+  }
+
+  return true;
 };

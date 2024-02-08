@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { IPartBase } from '@app/types/oppgave-common';
-import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
+import { CopyIdButton } from '../../copy-button/copy-id-button';
 import { StyledFnr, StyledName } from '../common/styled-components';
 import { Oppgaver } from './oppgaver';
 
@@ -20,7 +20,7 @@ export const Result = ({ id, name }: IPartBase) => {
 
       <Table.DataCell>
         <StyledFnr>
-          <CopyFnrButton fnr={id} />
+          <CopyIdButton id={id} />
         </StyledFnr>
       </Table.DataCell>
     </Table.ExpandableRow>

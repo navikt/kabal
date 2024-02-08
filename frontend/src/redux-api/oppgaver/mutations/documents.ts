@@ -17,9 +17,11 @@ import {
   ICreateFileDocumentParams,
   ICreateVedleggFromJournalfoertDocumentParams,
   IFinishDocumentParams,
+  ISetMottakerListParams,
   ISetNameParams,
   ISetParentParams,
   ISetTypeParams,
+  mottakerToInputMottaker,
 } from '@app/types/documents/params';
 import {
   ICreateVedleggFromJournalfoertDocumentResponse,
@@ -35,6 +37,24 @@ import { documentsQuerySlice } from '../queries/documents';
 const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
+    setMottakerList: builder.mutation<IModifiedDocumentResponse, ISetMottakerListParams>({
+      query: ({ oppgaveId, dokumentId, mottakerList }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/mottakere`,
+        body: { mottakerList: mottakerList.map(mottakerToInputMottaker) },
+        method: 'PUT',
+      }),
+      onQueryStarted: async ({ dokumentId, mottakerList, oppgaveId }, { queryFulfilled }) => {
+        const undo = optimisticUpdate(oppgaveId, dokumentId, 'mottakerList', mottakerList);
+
+        try {
+          const { data } = await queryFulfilled;
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
+        } catch (e) {
+          undo();
+          toast.error('Kunne ikke endre mottakere.');
+        }
+      },
+    }),
     setType: builder.mutation<IModifiedDocumentResponse, ISetTypeParams>({
       query: ({ oppgaveId, dokumentId, dokumentTypeId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/dokumenttype`,
@@ -182,10 +202,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       },
     }),
     finishDocument: builder.mutation<IModifiedDocumentResponse, IFinishDocumentParams>({
-      query: ({ oppgaveId, dokumentId, ...body }) => ({
+      query: ({ oppgaveId, dokumentId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
-        body,
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const collectionPatchResult = dispatch(
@@ -369,6 +388,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   sortKey: doc.sortKey,
                 },
                 creator,
+                mottakerList: [],
               });
             }
 
@@ -615,6 +635,7 @@ const optimisticUpdate = <K extends keyof IMainDocument>(
 };
 
 export const {
+  useSetMottakerListMutation,
   useDeleteDocumentMutation,
   useFinishDocumentMutation,
   useSetTitleMutation,

@@ -1,5 +1,6 @@
 import { EditorValue } from '@app/plate/types';
 import { INavEmployee } from '@app/types/bruker';
+import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
 import { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
@@ -75,6 +76,13 @@ interface IBaseDocument<P extends string | null = UUID | null> {
     employee: INavEmployee;
     creatorRole: CreatorRole;
   };
+  mottakerList: IMottaker[];
+}
+
+export interface IMottaker {
+  part: IPart;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
 }
 
 export interface IFileDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {

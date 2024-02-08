@@ -35,7 +35,7 @@ const Result = ({ part, isLoading, onChange, buttonText = 'Bruk' }: ResultProps)
       {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
     </BodyShort>
 
-    <PartStatusList statusList={part.statusList} />
+    <PartStatusList statusList={part.statusList} size="xsmall" />
 
     <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
       {buttonText}

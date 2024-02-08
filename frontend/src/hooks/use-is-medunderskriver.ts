@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsMedunderskriver = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data: oppgave } = useOppgave();
 
   if (oppgave === undefined) {

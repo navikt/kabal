@@ -41,7 +41,7 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
         value={document.inngaaendeKanal?.toString() ?? null}
         disabled={!canEditDocument}
       >
-        <Radio value={InngaaendeKanal.ALTINN}>Altinn</Radio>
+        <Radio value={InngaaendeKanal.ALTINN}>Altinn Innboks</Radio>
         <Radio value={InngaaendeKanal.E_POST}>E-post</Radio>
       </RadioGroup>
 

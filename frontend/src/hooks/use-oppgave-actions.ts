@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
 import { useHasYtelseAccess } from './use-has-ytelse-access';
 
@@ -18,7 +18,7 @@ export const useOppgaveActions = (
   medunderskriver: string | null,
   ytelse?: string,
 ): ReturnType => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const hasYtelseAccess = useHasYtelseAccess(ytelse);
 
   return useMemo<ReturnType>(() => {

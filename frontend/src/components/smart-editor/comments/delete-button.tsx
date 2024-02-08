@@ -1,7 +1,7 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -20,7 +20,7 @@ interface DeleteButtonProps {
 export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { documentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
   const isCommentAuthor = useIsCommentAuthor(id, authorIdent);

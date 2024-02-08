@@ -2,7 +2,8 @@ import { Search, Tag } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/part/validate';
-import { useLazySearchPartQuery } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
 import { IPart } from '@app/types/oppgave-common';
 import { Lookup } from './lookup';
 
@@ -16,17 +17,18 @@ interface EditPartProps {
 }
 
 export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
+  const { data: oppgave } = useOppgave();
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching, isFetching, isError }] = useLazySearchPartQuery();
+  const [search, { data, isLoading: isSearching, isFetching, isError }] = useLazySearchpartwithutsendingskanalQuery();
 
   const onClick = () => {
     const [value, inputError] = cleanAndValidate(rawValue);
 
     setError(inputError);
 
-    if (inputError === undefined) {
-      search(value);
+    if (inputError === undefined && oppgave !== undefined) {
+      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.id, ytelseId: oppgave.ytelseId });
     }
   };
 
@@ -51,10 +53,10 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
     const [value, inputError] = cleanAndValidate(rawValue);
     setError(undefined);
 
-    if (inputError === undefined) {
-      search(value);
+    if (inputError === undefined && oppgave !== undefined) {
+      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.id, ytelseId: oppgave.ytelseId });
     }
-  }, [rawValue, search]);
+  }, [oppgave, rawValue, search]);
 
   return (
     <StyledEditPart id={id}>
@@ -74,7 +76,10 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
       <Result
         part={data}
         search={rawValue}
-        onChange={onChange}
+        onChange={(p) => {
+          setValue('');
+          onChange(p);
+        }}
         isLoading={isLoading}
         isSearching={isSearching || isFetching}
         isError={isError}

@@ -106,7 +106,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           <AnnenInngaaende document={document} canEditDocument={canEditDocument} />
         ) : null}
 
-        {canEditDocument && !isNotat && isMainDocument ? <Receipients document={document} /> : null}
+        {canEditDocument && !isNotat && isMainDocument ? <Receipients {...document} /> : null}
 
         <Errors errors={validationErrors} />
       </ModalBody>

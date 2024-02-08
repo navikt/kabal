@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
 
 type LandingPagePath = [string, string] | null;
 
 export const useLandingPagePath = (): LandingPagePath => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (user.roller.some((r) => [Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL].includes(r))) {
     return ['/oppgavestyring', 'Oppgavestyring'];

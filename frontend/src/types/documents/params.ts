@@ -1,8 +1,9 @@
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
 import { INavEmployee } from '../bruker';
 import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import { IDocumentParams } from './common-params';
-import { CreatorRole, DistribusjonsType, UUID } from './documents';
+import { CreatorRole, DistribusjonsType, IMottaker, UUID } from './documents';
 
 export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;
@@ -32,12 +33,26 @@ export interface ICreateFileDocumentParams extends IOppgavebehandlingBaseParams 
   parentId?: UUID;
 }
 
-interface IArchiveDocumentParams extends IDocumentParams {}
-
-interface ISendDocumentParams extends IDocumentParams {
-  brevmottakerIds: string[];
-}
-
-export type IFinishDocumentParams = IArchiveDocumentParams | ISendDocumentParams;
+export type IFinishDocumentParams = IDocumentParams;
 
 export type IGetVersionParams = IDocumentParams & { versionId: number };
+
+interface InputMottaker {
+  id: string;
+  handling: HandlingEnum;
+  overriddenAddress: IAddress | null;
+}
+
+export interface ISetMottakerListParams extends IDocumentParams {
+  mottakerList: IMottaker[];
+}
+
+export const mottakerToInputMottaker = (mottaker: IMottaker): InputMottaker => {
+  const { part, handling, overriddenAddress } = mottaker;
+
+  return {
+    id: part.id,
+    handling,
+    overriddenAddress,
+  };
+};

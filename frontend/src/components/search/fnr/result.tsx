@@ -7,7 +7,7 @@ import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa
 import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
 import { IPartBase } from '@app/types/oppgave-common';
 import { IOppgaverResponse } from '@app/types/oppgaver';
-import { CopyFnrButton } from '../../copy-button/copy-fnr-button';
+import { CopyIdButton } from '../../copy-button/copy-id-button';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { LedigeOppgaverTable } from '../common/ledige-oppgaver-table';
 import { StyledFnr, StyledName } from '../common/styled-components';
@@ -30,7 +30,7 @@ export const Result = ({
     <StyledPerson data-testid="search-result-person">
       <StyledName>{person.name}</StyledName>
       <StyledFnr>
-        <CopyFnrButton fnr={person.id} />
+        <CopyIdButton id={person.id} />
       </StyledFnr>
       <Button
         variant="secondary"

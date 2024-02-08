@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useEnhetYtelser } from '@app/simple-api-state/use-enhet-ytelser';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
@@ -9,7 +9,7 @@ const EMPTY_ARRAY: IYtelse[] = [];
 
 export const useAvailableYtelser = (): IYtelse[] => {
   const { data: ytelser } = useLatestYtelser();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   return useMemo<IYtelse[]>(() => {
     if (typeof ytelser === 'undefined') {
@@ -21,7 +21,7 @@ export const useAvailableYtelser = (): IYtelse[] => {
 };
 
 export const useAvailableYtelserForEnhet = (): IYtelse[] => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data: ytelser = [] } = useLatestYtelser();
   const { data: ytelseIds = [] } = useEnhetYtelser(user.ansattEnhet.id);
 

@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
@@ -7,7 +7,7 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   return useMemo<boolean>(() => {
     if (oppgaveIsLoading || oppgaveIsFetching) {
