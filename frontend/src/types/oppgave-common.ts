@@ -31,6 +31,7 @@ export enum PartStatusEnum {
   FORTROLIG = 'FORTROLIG',
   STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
   RESERVERT_I_KRR = 'RESERVERT_I_KRR',
+  DELT_ANSVAR = 'DELT_ANSVAR',
 }
 
 export type IPersonStatus =
@@ -63,10 +64,15 @@ export type IPersonStatus =
       date: null;
     };
 
-export interface IOrganizationStatus {
-  status: PartStatusEnum.DELETED;
-  date: string;
-}
+export type IOrganizationStatus =
+  | {
+      status: PartStatusEnum.DELETED;
+      date: string;
+    }
+  | {
+      status: PartStatusEnum.DELT_ANSVAR;
+      date: null;
+    };
 
 export interface IPersonPart extends IPartBase {
   type: IdType.FNR;

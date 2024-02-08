@@ -70,6 +70,7 @@ const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.FORTROLIG]: 'Fortrolig',
   [PartStatusEnum.STRENGT_FORTROLIG]: 'Strengt fortrolig',
   [PartStatusEnum.RESERVERT_I_KRR]: 'Reservert i KRR',
+  [PartStatusEnum.DELT_ANSVAR]: 'Delt ansvar',
 };
 
 const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
@@ -81,4 +82,5 @@ const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
   [PartStatusEnum.FORTROLIG]: 'info',
   [PartStatusEnum.STRENGT_FORTROLIG]: 'alt1',
   [PartStatusEnum.RESERVERT_I_KRR]: 'warning',
+  [PartStatusEnum.DELT_ANSVAR]: 'info',
 };
