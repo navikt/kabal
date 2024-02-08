@@ -2,7 +2,7 @@ import { Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
-import { CopyFnrButton } from '@app/components/copy-button/copy-fnr-button';
+import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 
 interface Props {
@@ -41,5 +41,5 @@ export const SakenGjelderFnr = ({ oppgaveId }: Props) => {
     return <LoadingCellContent />;
   }
 
-  return <CopyFnrButton fnr={data.id} />;
+  return <CopyIdButton id={data.id} />;
 };

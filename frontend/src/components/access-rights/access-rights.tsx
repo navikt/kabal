@@ -2,7 +2,7 @@ import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
@@ -16,7 +16,7 @@ import { Head } from './head';
 const EMPTY_ARRAY: [] = [];
 
 export const AccessRights = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data: ytelser = EMPTY_ARRAY } = useLatestYtelser();
   const { data, isLoading } = useGetAccessRightsQuery(user.ansattEnhet.id);
 

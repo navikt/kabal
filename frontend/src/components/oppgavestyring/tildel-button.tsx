@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { Role } from '@app/types/bruker';
@@ -20,7 +20,8 @@ export const TildelButton = ({
   medunderskriver,
   children = 'Tildel meg',
 }: Props) => {
-  const { navIdent, navn, roller } = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
+  const { navIdent, navn, roller } = user;
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);

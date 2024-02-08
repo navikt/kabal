@@ -22,13 +22,13 @@ import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandli
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
+import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { IValidationParams } from '@app/types/oppgavebehandling/params';
 import { IMedunderskrivereResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
 import { IRols, ISaksbehandlere } from '@app/types/oppgaver';
-import { user } from '@app/user';
 import { OppgaveTagTypes, oppgaverApi } from '../../oppgaver';
 import { handleMedunderskriverEvent } from './event-handlers/medunderskriver';
 import { handleMessageEvent } from './event-handlers/message';

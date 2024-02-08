@@ -53,7 +53,7 @@ const staggeredBaseQuery = (baseUrl: string) => {
 const API_PATH = '/api';
 export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
 
-const KABAL_API_BASE_PATH = '/api/kabal-api';
+export const KABAL_API_BASE_PATH = '/api/kabal-api';
 export const KABAL_BEHANDLINGER_BASE_PATH = `${KABAL_API_BASE_PATH}/behandlinger`;
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
 

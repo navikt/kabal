@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { focusEditor, isCollapsed } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -20,7 +20,7 @@ interface Props {
 export const NewComment = ({ container }: Props) => {
   const oppgaveId = useOppgaveId();
   const editor = useMyPlateEditorState();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const [postComment, { isLoading }] = usePostCommentMutation();
   const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
     useContext(SmartEditorContext);

@@ -3,7 +3,7 @@ import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -55,7 +55,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
 
 const NewRolAnswerDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const isRol = useIsRol();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 

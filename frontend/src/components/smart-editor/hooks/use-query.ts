@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { ApiQuery, TextTypes } from '@app/types/common-text-types';
@@ -15,7 +15,7 @@ interface Params {
 
 export const useQuery = ({ textType, templateId, section }: Params) => {
   const { data: oppgave, isLoading } = useOppgave();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   return useMemo<ApiQuery | typeof skipToken>(() => {
     if (isLoading || oppgave === undefined) {

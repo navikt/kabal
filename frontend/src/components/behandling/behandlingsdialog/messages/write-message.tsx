@@ -1,7 +1,7 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
@@ -10,7 +10,8 @@ import { StyleSendMessage, StyledWriteMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
-  const { navIdent, navn } = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
+  const { navIdent, navn } = user;
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();

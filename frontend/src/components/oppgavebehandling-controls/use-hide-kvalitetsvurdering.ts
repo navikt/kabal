@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 export const useHideKvalitetsvurdering = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (oppgaveIsLoading || oppgave === undefined) {
     return false;

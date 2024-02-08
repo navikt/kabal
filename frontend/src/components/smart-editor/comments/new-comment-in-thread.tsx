@@ -1,7 +1,7 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
@@ -17,7 +17,7 @@ interface NewCommentInThreadProps {
 }
 
 export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();

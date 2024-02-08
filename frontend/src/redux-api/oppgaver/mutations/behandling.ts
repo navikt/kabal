@@ -6,7 +6,6 @@ import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { IPart } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import {
   IFinishOppgavebehandlingParams,
@@ -150,9 +149,6 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    searchPart: builder.query<IPart, string>({
-      query: (identifikator) => ({ url: `/kabal-api/searchpart`, method: 'POST', body: { identifikator } }),
-    }),
     newAnkebehandling: builder.mutation<void, IOppgavebehandlingBaseParams>({
       query: ({ oppgaveId }) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/nyankebehandlingka`, method: 'POST' }),
       onQueryStarted: async ({ oppgaveId }, { queryFulfilled }) => {
@@ -195,6 +191,5 @@ export const {
   useUpdateFullmektigMutation,
   useUpdateKlagerMutation,
   useSetFeilregistrertMutation,
-  useLazySearchPartQuery,
   useNewAnkebehandlingMutation,
 } = behandlingerMutationSlice;

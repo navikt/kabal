@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
 import { Role } from '@app/types/bruker';
@@ -29,7 +29,7 @@ export const OpenOppgavebehandling = ({
   size = 'small',
 }: Props) => {
   const hasYtelseAccess = useHasYtelseAccess(ytelseId);
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const isKrol = useHasRole(Role.KABAL_KROL);
 
   const canOpen =

@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
@@ -21,7 +21,7 @@ interface Props extends ListProps {
 }
 
 export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const isRol = useIsRol();
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({

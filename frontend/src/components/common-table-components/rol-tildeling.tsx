@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { toast } from '@app/components/toast/store';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const RolTildeling = ({ oppgave }: Props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const [setRol, { isLoading }] = useSetRolMutation();
   const { rol } = oppgave;
 

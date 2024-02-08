@@ -1,6 +1,6 @@
 import { faro } from '@grafana/faro-web-sdk';
 import { pushMeasurement } from '@app/observability';
-import { user } from './user';
+import { user } from '@app/static-data/static-data';
 
 const MEASURE_FRAME_TIME_INTERVAL = 10_000;
 

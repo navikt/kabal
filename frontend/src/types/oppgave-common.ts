@@ -1,3 +1,4 @@
+import { IAddress } from '@app/types/documents/recipients';
 import { SexEnum } from '@app/types/kodeverk';
 import { INavEmployee } from './bruker';
 
@@ -12,9 +13,31 @@ export interface IVedlegg {
   opplastet: string | null; // LocalDateTime
 }
 
+export enum Utsendingskanal {
+  SENTRAL_UTSKRIFT = 'SENTRAL_UTSKRIFT',
+  SDP = 'SDP',
+  NAV_NO = 'NAV_NO',
+  LOKAL_UTSKRIFT = 'LOKAL_UTSKRIFT',
+  INGEN_DISTRIBUSJON = 'INGEN_DISTRIBUSJON',
+  TRYGDERETTEN = 'TRYGDERETTEN',
+  DPVT = 'DPVT',
+}
+
+export const UTSENDINGSKANAL: Record<Utsendingskanal, string> = {
+  [Utsendingskanal.SENTRAL_UTSKRIFT]: 'Sentral utskrift',
+  [Utsendingskanal.SDP]: 'Digital Postkasse Innbygger',
+  [Utsendingskanal.NAV_NO]: 'Nav.no',
+  [Utsendingskanal.LOKAL_UTSKRIFT]: 'Lokal utskrift',
+  [Utsendingskanal.INGEN_DISTRIBUSJON]: 'Ingen distribusjon',
+  [Utsendingskanal.TRYGDERETTEN]: 'Trygderetten',
+  [Utsendingskanal.DPVT]: 'Taushetsbelagt digital post til virksomhet',
+};
+
 export interface IPartBase {
   id: string;
   name: string | null;
+  address: IAddress;
+  utsendingskanal: Utsendingskanal;
 }
 
 export enum IdType {

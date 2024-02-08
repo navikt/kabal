@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
 
 export const useCanFeilregistrere = (tildeltSaksbehandlerident: string | null) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (user.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER)) {
     return true;

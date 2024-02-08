@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import React, { useContext, useMemo } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
@@ -9,7 +9,7 @@ import { useGetSaksbehandlereInEnhetQuery } from '@app/redux-api/oppgaver/querie
 import { FilterDropdownProps } from './types';
 
 export const Saksbehandler = ({ params, setParams, columnKey }: FilterDropdownProps) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data } = useGetSaksbehandlereInEnhetQuery(user.ansattEnhet.id);
   const options = useMemo<IOption<string>[]>(() => navEmployeesToOptions(data?.saksbehandlere), [data]);
 

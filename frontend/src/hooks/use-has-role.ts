@@ -1,23 +1,23 @@
 import { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
 
 export const useHasAnyOfRoles = (roles?: Role[]) => {
-  const { roller } = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (typeof roles === 'undefined' || roles.length === 0) {
     return true;
   }
 
-  if (roller.length === 0) {
+  if (user.roller.length === 0) {
     return false;
   }
 
-  return roles.some((role) => roller.includes(role));
+  return roles.some((role) => user.roller.includes(role));
 };
 
 export const useHasRole = (role: Role) => {
-  const { roller } = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
-  return roller.includes(role);
+  return user.roller.includes(role);
 };

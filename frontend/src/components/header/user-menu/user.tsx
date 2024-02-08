@@ -1,13 +1,13 @@
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { UserDropdown } from './dropdown';
 
 export const User = () => {
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   const name =
     signatureIsLoading || typeof signature === 'undefined'

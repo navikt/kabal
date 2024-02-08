@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -40,7 +40,7 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
   const [initialized, setInitialized] = useState(false);
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 

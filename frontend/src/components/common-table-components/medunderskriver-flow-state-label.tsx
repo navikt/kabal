@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   getTitleCapitalized,
   getTitleLowercase,
@@ -13,7 +13,7 @@ import { IOppgave } from '@app/types/oppgaver';
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (medunderskriver.navIdent === null) {
     return null;

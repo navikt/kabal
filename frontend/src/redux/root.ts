@@ -9,6 +9,7 @@ import { consumerMaltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/c
 import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
 import { messagesApi } from '@app/redux-api/messages';
 import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { searchApi } from '@app/redux-api/search';
 import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
 import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
@@ -27,6 +28,7 @@ export const rootReducer = combineReducers({
   [maltekstseksjonerApi.reducerPath]: maltekstseksjonerApi.reducer,
   [accessRightsApi.reducerPath]: accessRightsApi.reducer,
   [journalposterApi.reducerPath]: journalposterApi.reducer,
+  [searchApi.reducerPath]: searchApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

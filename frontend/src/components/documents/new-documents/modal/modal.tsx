@@ -52,7 +52,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
       {open ? (
         <Modal
           open
-          width="medium"
+          width="1200px"
           aria-modal
           data-testid="document-actions-modal"
           header={{

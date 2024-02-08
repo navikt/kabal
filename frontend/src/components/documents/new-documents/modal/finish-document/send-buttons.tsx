@@ -4,20 +4,23 @@ import React, { useContext } from 'react';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
-import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
+import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Confirm } from './confirm';
 import { ERROR_MESSAGES } from './error-messages';
 import { FinishProps } from './types';
 
 export const SendButtons = ({ document }: FinishProps) => {
-  const { id: dokumentId, tittel: documentTitle } = document;
+  const { id: dokumentId, tittel: documentTitle, mottakerList } = document;
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
+  const [setMottakerList] = useSetMottakerListMutation();
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(typeof data !== 'undefined' ? data.id : skipToken);
   const remove = useRemoveDocument();
-  const { close, customBrevmottakerList, selectedPartBrevmottakerIds, setValidationErrors } = useContext(ModalContext);
+  const { close, setValidationErrors } = useContext(ModalContext);
+  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList);
 
   if (oppgaveIsLoading || typeof data === 'undefined') {
     return null;
@@ -44,7 +47,7 @@ export const SendButtons = ({ document }: FinishProps) => {
       return;
     }
 
-    if (selectedPartBrevmottakerIds.length === 0 && customBrevmottakerList.length === 0) {
+    if (mottakerList.length === 0 && suggestedBrevmottakere.length !== 1) {
       setValidationErrors([
         {
           dokumentId,
@@ -57,9 +60,14 @@ export const SendButtons = ({ document }: FinishProps) => {
     }
 
     try {
-      const brevmottakerIds = customBrevmottakerList.map(({ id }) => id).concat(selectedPartBrevmottakerIds);
-
-      await finish({ dokumentId, oppgaveId: data.id, brevmottakerIds }).unwrap();
+      if (mottakerList.length === 0 && suggestedBrevmottakere.length === 1) {
+        await setMottakerList({
+          oppgaveId: data.id,
+          dokumentId,
+          mottakerList: suggestedBrevmottakere,
+        });
+      }
+      await finish({ dokumentId, oppgaveId: data.id });
       remove(dokumentId, document);
       close();
     } catch (e) {

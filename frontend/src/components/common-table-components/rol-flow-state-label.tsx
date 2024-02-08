@@ -1,14 +1,14 @@
 import { Tag } from '@navikt/ds-react';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { FlowState } from '@app/types/oppgave-common';
 import { IOppgave } from '@app/types/oppgaver';
 
 type Props = Pick<IOppgave, 'rol'>;
 
 export const RolFlowStateLabel = ({ rol }: Props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (rol.navIdent === null && rol.flowState === FlowState.SENT) {
     return (

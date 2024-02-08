@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateEditor, setNodes } from '@udecode/plate-common';
 import { useContext, useEffect } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -40,7 +40,7 @@ const useMedunderskriverSignature = () => {
   );
 
   const version = useVersion();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (typeof oppgave === 'undefined') {
     pushLog('useMedunderskriverSignature: oppgave is undefined. Returning undefined.', {

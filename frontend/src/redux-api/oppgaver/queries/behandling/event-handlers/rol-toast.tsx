@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
@@ -95,7 +95,7 @@ export const getRolToastContent = (actor: INavEmployee, userId: string, previous
 };
 
 const From = ({ flowState, rol }: Params) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (flowState === FlowState.NOT_SENT) {
     return <>saken</>;

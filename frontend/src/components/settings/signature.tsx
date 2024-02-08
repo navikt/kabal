@@ -2,14 +2,14 @@ import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMySignatureQuery, useSetCustomInfoMutation } from '@app/redux-api/bruker';
 import { ISetCustomInfoParams, ISignatureResponse, Role } from '@app/types/bruker';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
   const { data: ownSignature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
 
   if (signatureIsLoading || typeof ownSignature === 'undefined') {

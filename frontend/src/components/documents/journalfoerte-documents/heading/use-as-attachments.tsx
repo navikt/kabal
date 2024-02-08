@@ -2,7 +2,7 @@ import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext } from 'react';
 import { styled } from 'styled-components';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -16,7 +16,8 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
-  const { navIdent, navn } = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
+  const { navIdent, navn } = user;
   const { getSelectedDocuments } = useContext(SelectContext);
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);

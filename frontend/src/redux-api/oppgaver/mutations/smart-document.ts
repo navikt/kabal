@@ -1,10 +1,10 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { user } from '@app/static-data/static-data';
 import { ISmartDocument } from '@app/types/documents/documents';
 import { IModifiedSmartDocumentResponse } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
-import { user } from '@app/user';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';

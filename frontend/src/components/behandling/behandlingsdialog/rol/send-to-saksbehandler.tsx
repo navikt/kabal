@@ -1,7 +1,7 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
-import { UserContext } from '@app/components/app/user';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
@@ -16,7 +16,7 @@ interface Props {
 export const SendToSaksbehandler = ({ oppgaveId, isSaksbehandler }: Props) => {
   const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const user = useContext(UserContext);
+  const { user } = useContext(StaticDataContext);
 
   if (
     isSaksbehandler ||
