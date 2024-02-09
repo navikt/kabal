@@ -1,12 +1,9 @@
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Tabs } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
-import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
+import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -14,7 +11,6 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
-import { useUpdateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { ISmartDocument } from '@app/types/documents/documents';
 import { NewDocument } from '../new-document/new-document';
 
@@ -106,84 +102,9 @@ const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
   );
 };
 
-interface TabPanelProps {
-  smartDocument: ISmartDocument;
-}
-
-const TabPanel = ({ smartDocument }: TabPanelProps) => {
-  const oppgaveId = useOppgaveId();
-  const [update, status] = useUpdateSmartDocumentMutation();
-  const [localContent, setLocalContent] = useState(smartDocument.content);
-  const refContent = useRef(smartDocument.content);
-
-  const { id, content } = smartDocument;
-
-  const smartDocumentRef = useRef<ISmartDocument>(smartDocument);
-
-  // Normal debounce
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (areDescendantsEqual(localContent, content) || oppgaveId === skipToken) {
-        return;
-      }
-
-      update({ content: localContent, oppgaveId, dokumentId: id, version: smartDocument.version });
-    }, 5000);
-
-    return () => clearTimeout(timeout);
-  }, [content, id, oppgaveId, smartDocument.version, update, localContent]);
-
-  // Ensure that smartDocumentRef is always up to date in order to avoid the unmount debounce triggering on archive/delete
-  useEffect(() => {
-    smartDocumentRef.current = smartDocument;
-
-    return () => {
-      smartDocumentRef.current = smartDocument;
-    };
-  }, [smartDocument]);
-
-  // Unmount debounce
-  useEffect(
-    () => () => {
-      if (
-        areDescendantsEqual(refContent.current, smartDocumentRef.current.content) ||
-        oppgaveId === skipToken ||
-        smartDocumentRef.current.isMarkertAvsluttet
-      ) {
-        return;
-      }
-
-      update({ content: refContent.current, oppgaveId, dokumentId: id, version: smartDocumentRef.current.version });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
-  return (
-    <StyledTabsPanel value={smartDocument.id}>
-      <SmartEditorContextComponent editor={smartDocument}>
-        <Editor
-          key={id}
-          smartDocument={smartDocument}
-          onChange={(c) => {
-            refContent.current = c;
-            setLocalContent(c);
-          }}
-          updateStatus={status}
-        />
-      </SmartEditorContextComponent>
-    </StyledTabsPanel>
-  );
-};
-
 const StyledTabs = styled(Tabs)`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`;
-
-const StyledTabsPanel = styled(Tabs.Panel)`
   height: 100%;
   overflow: hidden;
 `;
