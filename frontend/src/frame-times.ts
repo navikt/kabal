@@ -28,7 +28,7 @@ class FrameTimes {
     const now = getNow();
     this.measurements.push(now - previousTime);
 
-    if (this.isRunning) {
+    if (this.isRunning && !document.hidden) {
       this.currentAnimationFrame = requestAnimationFrame(() => this.runMeasureLoop(now));
     }
 
@@ -61,7 +61,7 @@ class FrameTimes {
   }
 
   private start() {
-    if (this.isRunning) {
+    if (this.isRunning || document.hidden) {
       return this;
     }
 
