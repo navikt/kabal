@@ -27,6 +27,13 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
+      autoLoginIgnorePaths: 
+        - /assets/*
+        - /*.js.map
+        - /*.js
+        - /*.html
+        - /*.txt
+        - /*.css
   prometheus:
     enabled: true
   accessPolicy:
