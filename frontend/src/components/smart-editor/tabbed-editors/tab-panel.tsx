@@ -3,6 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
+import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -23,10 +24,13 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
 
   const smartDocumentRef = useRef<ISmartDocument>(smartDocument);
 
+  const canEditDocument = useCanEditDocument(smartDocument.templateId);
+  const canEditDocumentRef = useRef(canEditDocument);
+
   // Normal debounce
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (areDescendantsEqual(localContent, content) || oppgaveId === skipToken) {
+      if (!canEditDocument || areDescendantsEqual(localContent, content) || oppgaveId === skipToken) {
         return;
       }
 
@@ -34,24 +38,28 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
     }, 5000);
 
     return () => clearTimeout(timeout);
-  }, [content, id, oppgaveId, smartDocument.version, update, localContent]);
+  }, [content, id, oppgaveId, smartDocument.version, update, localContent, canEditDocument]);
 
-  // Ensure that smartDocumentRef is always up to date in order to avoid the unmount debounce triggering on archive/delete
+  // Ensure that smartDocumentRef and canEditDocumentRef are always up to date in order to avoid the unmount debounce triggering on archive/delete/fradeling
   useEffect(() => {
-    smartDocumentRef.current = smartDocument;
-
-    return () => {
+    const setRefs = () => {
       smartDocumentRef.current = smartDocument;
+      canEditDocumentRef.current = canEditDocument;
     };
-  }, [smartDocument]);
+
+    setRefs();
+
+    return setRefs;
+  }, [canEditDocument, smartDocument]);
 
   // Unmount debounce
   useEffect(
     () => () => {
       if (
-        areDescendantsEqual(refContent.current, smartDocumentRef.current.content) ||
         oppgaveId === skipToken ||
-        smartDocumentRef.current.isMarkertAvsluttet
+        !canEditDocumentRef.current ||
+        smartDocumentRef.current.isMarkertAvsluttet ||
+        areDescendantsEqual(refContent.current, smartDocumentRef.current.content)
       ) {
         return;
       }
