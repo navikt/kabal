@@ -63,7 +63,12 @@ const SelectSaksbehandler = () => {
   }
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const employee = potentialSaksbehandlere.saksbehandlere.find((s) => s.navIdent === target.value)!;
+    const employee = potentialSaksbehandlere.saksbehandlere.find((s) => s.navIdent === target.value);
+
+    if (employee === undefined) {
+      return;
+    }
+
     tildel({ oppgaveId: oppgave.id, employee });
   };
 
