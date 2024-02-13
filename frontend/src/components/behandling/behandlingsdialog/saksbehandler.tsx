@@ -1,15 +1,15 @@
 import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { styled } from 'styled-components';
+import { useTildel } from '@app/components/oppgavestyring/use-tildel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 const ID = 'tildelt-saksbehandler';
 
@@ -31,7 +31,7 @@ export const Saksbehandler = () => {
   return (
     <Container>
       {showSelect ? (
-        <SelectSaksbehandler />
+        <SelectSaksbehandler oppgave={oppgave} />
       ) : (
         <>
           <Label size="small" htmlFor={ID}>
@@ -46,12 +46,15 @@ export const Saksbehandler = () => {
 
 const NONE = 'NONE';
 
-const SelectSaksbehandler = () => {
-  const { data: oppgave } = useOppgave();
-  const { data: potentialSaksbehandlere } = useGetPotentialSaksbehandlereQuery(oppgave?.id ?? skipToken);
-  const [tildel] = useTildelSaksbehandlerMutation();
+interface SelectSaksbehandlerProps {
+  oppgave: IOppgavebehandling;
+}
 
-  if (oppgave === undefined || potentialSaksbehandlere === undefined) {
+const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } }: SelectSaksbehandlerProps) => {
+  const { data: potentialSaksbehandlere } = useGetPotentialSaksbehandlereQuery(id);
+  const [tildel] = useTildel(id, typeId, ytelseId);
+
+  if (potentialSaksbehandlere === undefined) {
     return (
       <>
         <Label size="small" htmlFor={ID}>
@@ -69,7 +72,7 @@ const SelectSaksbehandler = () => {
       return;
     }
 
-    tildel({ oppgaveId: oppgave.id, employee });
+    tildel(employee);
   };
 
   const options = potentialSaksbehandlere.saksbehandlere.map(({ navn, navIdent }) => (
@@ -78,10 +81,10 @@ const SelectSaksbehandler = () => {
     </option>
   ));
 
-  const noneSelectedOption = oppgave.saksbehandler === null ? <option value={NONE}>Ingen valgt</option> : null;
+  const noneSelectedOption = saksbehandler === null ? <option value={NONE}>Ingen valgt</option> : null;
 
   return (
-    <Select label="Saksbehandler" size="small" onChange={onChange} value={oppgave.saksbehandler?.navIdent ?? NONE}>
+    <Select label="Saksbehandler" size="small" onChange={onChange} value={saksbehandler?.navIdent ?? NONE}>
       {noneSelectedOption}
       {options}
     </Select>

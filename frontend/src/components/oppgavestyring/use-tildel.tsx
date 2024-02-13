@@ -1,5 +1,7 @@
+import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { ActionToast } from '@app/components/toast/action-toast';
+import { useHasRole } from '@app/hooks/use-has-role';
 import {
   useFradelSaksbehandlerMutation,
   useTildelSaksbehandlerMutation,
@@ -8,10 +10,10 @@ import {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
 } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { INavEmployee } from '@app/types/bruker';
+import { INavEmployee, Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
-import { FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
+import { FradelReason, FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { toast } from '../toast/store';
 
@@ -105,6 +107,28 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
     toSaksbehandler === null ? 'ukjent saksbehandler' : `${toSaksbehandler.navn} (${toSaksbehandler.navIdent})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : ` fra ${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
+  const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
+  const [fradel] = useFradel(oppgaveId, oppgaveType, ytelseId);
+  const canDeassignOthers = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+
+  const secondary =
+    fromSaksbehandler !== null || canDeassignOthers ? (
+      <Button
+        variant="tertiary"
+        size="small"
+        onClick={() => {
+          if (fromSaksbehandler !== null) {
+            return tildel(fromSaksbehandler);
+          }
+
+          if (canDeassignOthers) {
+            return fradel({ reasonId: FradelReason.LEDER });
+          }
+        }}
+      >
+        Angre
+      </Button>
+    ) : null;
 
   return (
     <ActionToast
@@ -123,6 +147,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           Åpne
         </OpenOppgavebehandling>
       }
+      secondary={secondary}
     >
       Oppgave for {sakenGjelderText} er tildelt {toSaksbehandlerText}
       {fromSaksbehandlerText}.
@@ -130,17 +155,23 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
   );
 };
 
-const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler }: Props) => {
+const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytelseId }: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const fromSaksbehandlerText =
     fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
+  const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
+
+  const primary =
+    fromSaksbehandler === null ? null : (
+      <Button variant="tertiary" size="small" onClick={() => tildel(fromSaksbehandler)}>
+        Angre
+      </Button>
+    );
 
   return (
-    <div data-testid="oppgave-fradelt-toast" data-oppgaveid={oppgaveId}>
-      <span>
-        Oppgave for {sakenGjelderText} er lagt tilbake fra {fromSaksbehandlerText}.
-      </span>
-    </div>
+    <ActionToast attrs={{ 'data-oppgaveid': oppgaveId, 'data-testid': 'oppgave-fradelt-toast' }} primary={primary}>
+      Oppgave for {sakenGjelderText} er lagt tilbake fra {fromSaksbehandlerText}.
+    </ActionToast>
   );
 };
 

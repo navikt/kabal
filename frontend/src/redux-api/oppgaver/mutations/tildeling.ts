@@ -8,7 +8,6 @@ import {
   ITildelingResponse,
   TildelSaksbehandlerParams,
 } from '@app/types/oppgaver';
-import { user } from '@app/user';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
@@ -60,9 +59,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               saksbehandler: data.saksbehandler,
             })),
           );
-
-          const { navIdent } = await user;
-          toast.success(`${navIdent === employee.navIdent ? 'Du' : employee.navn} har blitt tildelt oppgaven.`);
         } catch (e) {
           optimisticBehandling.undo();
 
