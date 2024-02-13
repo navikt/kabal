@@ -8,7 +8,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Popup } from '../../deassign/popup';
 
@@ -29,12 +28,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
 
   useOnClickOutside(ref, () => setIsOpen(false), true);
 
-  if (
-    !canEdit ||
-    oppgave === undefined ||
-    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    oppgave.feilregistrering !== null
-  ) {
+  if (!canEdit || oppgave === undefined || oppgave.feilregistrering !== null) {
     return null;
   }
 
