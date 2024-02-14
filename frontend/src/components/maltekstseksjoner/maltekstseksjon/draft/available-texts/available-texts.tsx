@@ -21,13 +21,21 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Props) =>
   const typeLabel = textType === RichTextTypes.MALTEKST ? 'Låste' : 'Redigerbare';
   const [open, setOpen] = useState(false);
 
+  const onClose = useCallback(() => setOpen(false), []);
+
   return (
     <div>
       <Button variant="tertiary" size="small" onClick={() => setOpen(!open)} icon={<Icon aria-hidden />}>
         {typeLabel}
       </Button>
 
-      <Modal header={{ heading: typeLabel + ' tekster' }} width={1200} open={open} closeOnBackdropClick>
+      <Modal
+        header={{ heading: typeLabel + ' tekster' }}
+        width={1200}
+        open={open}
+        onClose={onClose}
+        closeOnBackdropClick
+      >
         <Modal.Body>
           {/* Ensures JIT loading */}
           {open ? (
@@ -35,7 +43,7 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Props) =>
           ) : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button size="small" variant="secondary" onClick={() => setOpen(false)} icon={<XMarkIcon aria-hidden />}>
+          <Button size="small" variant="secondary" onClick={onClose} icon={<XMarkIcon aria-hidden />}>
             Lukk
           </Button>
         </Modal.Footer>

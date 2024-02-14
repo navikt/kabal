@@ -38,11 +38,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const ventendeOppgaverIdList = data?.paaVentBehandlinger ?? EMPTY_LIST;
   const totalCount = uferdigeOppgaverIdList.length + ventendeOppgaverIdList.length;
 
-  const onClose = useCallback(() => {
-    setIsOpen(false);
-
-    return true;
-  }, []);
+  const onClose = useCallback(() => setIsOpen(false), []);
 
   if (!isLoading && totalCount === 0) {
     return null;
@@ -73,7 +69,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
       </Tooltip>
 
       {isOpen ? (
-        <Modal header={{ heading }} width="2000px" closeOnBackdropClick open onBeforeClose={onClose}>
+        <Modal header={{ heading }} width="2000px" closeOnBackdropClick open onClose={onClose}>
           <StyledBody>
             {isOppgaveLoading || sakenGjelder === undefined ? (
               <Loader />
