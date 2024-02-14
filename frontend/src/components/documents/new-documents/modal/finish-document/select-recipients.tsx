@@ -10,7 +10,6 @@ interface RecipientsProps {
   recipients: IBrevmottaker[];
   selectedBrevmottakerIds: string[];
   setSelectedBrevmottakerIds: (ids: string[]) => void;
-  label: string;
   sendErrors: IErrorProperty[];
 }
 
@@ -18,7 +17,6 @@ export const SelectRecipients = ({
   recipients,
   selectedBrevmottakerIds,
   setSelectedBrevmottakerIds,
-  label,
   sendErrors,
 }: RecipientsProps) => {
   if (recipients.length === 0) {
@@ -27,7 +25,7 @@ export const SelectRecipients = ({
 
   return (
     <CheckboxGroup
-      legend={label}
+      legend="Mottakere"
       hideLegend
       value={selectedBrevmottakerIds}
       onChange={setSelectedBrevmottakerIds}
