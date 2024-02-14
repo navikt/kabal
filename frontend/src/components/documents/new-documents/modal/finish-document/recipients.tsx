@@ -44,7 +44,6 @@ export const Receipients = ({ document }: FinishProps) => {
           recipients={partBrevmottakere}
           selectedBrevmottakerIds={selectedPartBrevmottakerIds}
           setSelectedBrevmottakerIds={setSelectedPartBrevmottakerIds}
-          label={`Send brevet «${document.tittel}» til`}
           sendErrors={sendErrors}
         />
       )}
