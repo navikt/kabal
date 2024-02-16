@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { EditorValue, LabelContentElement } from '@app/plate/types';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 
 export const LabelContent = ({
   element,
@@ -13,7 +13,6 @@ export const LabelContent = ({
   children,
   editor,
 }: PlateRenderElementProps<EditorValue, LabelContentElement>) => {
-  const { data: oppgave } = useOppgave();
   const [_result, setResult] = useState<string | null>(null);
 
   const setResultInNode = useCallback(
@@ -21,20 +20,12 @@ export const LabelContent = ({
     [editor, element],
   );
 
+  const content = useContent(element.source);
+
   useEffect(() => {
-    if (typeof oppgave === 'undefined') {
-      return;
-    }
-
-    const content = getContent(oppgave, element.source);
-
     setResult(content);
     setResultInNode(content);
-  }, [editor, element, element.label, element.source, oppgave, _result, setResultInNode]);
-
-  if (typeof oppgave === 'undefined') {
-    return null;
-  }
+  }, [editor, element, element.label, element.source, _result, setResultInNode, content]);
 
   return (
     <PlateElement
@@ -61,7 +52,14 @@ export const LabelContent = ({
   );
 };
 
-const getContent = (oppgave: IOppgavebehandling, source: string): string | null => {
+const useContent = (source: string): string | null => {
+  const { data: oppgave } = useOppgave();
+  const { data: ytelser = [] } = useLatestYtelser();
+
+  if (oppgave === undefined) {
+    return null;
+  }
+
   if (source === 'sakenGjelder.name') {
     return `${oppgave.sakenGjelder.name}\n` ?? '-\n';
   }
@@ -102,6 +100,12 @@ const getContent = (oppgave: IOppgavebehandling, source: string): string | null 
 
   if (source === 'klager.name') {
     return `${klager.name}\n` ?? '-\n';
+  }
+
+  if (source === 'ytelse') {
+    const ytelse = ytelser.find((y) => y.id === oppgave.ytelseId)?.navn;
+
+    return ytelse !== undefined ? `${ytelse}\n` : `Ytelse-ID ${oppgave.ytelseId}\n`;
   }
 
   return 'Verdi mangler\n';
