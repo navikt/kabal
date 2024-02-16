@@ -13,15 +13,14 @@ class FrameTimes {
   private isRunning = false;
   private currentAnimationFrame: number | null = null;
 
-  public constructor() {
-    document.addEventListener('visibilitychange', () => this.onVisibilityChange());
-  }
-
   public async init() {
+    await delay(10_000);
+
     if (!document.hidden) {
-      await delay(10_000);
       this.start();
     }
+
+    document.addEventListener('visibilitychange', () => this.onVisibilityChange());
   }
 
   private runMeasureLoop(previousTime: number = getNow()) {
