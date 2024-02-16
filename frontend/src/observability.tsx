@@ -23,8 +23,9 @@ const getUrl = () => {
 initializeFaro({
   url: getUrl(),
   app: { name: 'kabal-frontend', version: ENVIRONMENT.version },
+  paused: ENVIRONMENT.isLocal,
   instrumentations: [
-    ...getWebInstrumentations(),
+    ...getWebInstrumentations({ captureConsole: false }),
     new TracingInstrumentation(),
     new ReactIntegration({
       router: {
