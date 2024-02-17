@@ -18,6 +18,9 @@ interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   'data-testid'?: string;
 }
 
+const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
+const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
+
 export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
   ({ variant, size, children, parentId, dokumentTypeId, 'data-testid': dataTestId }, ref) => {
     const oppgaveId = useOppgaveId();
@@ -57,6 +60,11 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
         }
 
         for (const file of files) {
+          if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+            displayError(`«${file.name}» (${file.type}) har en ugyldig filtype.`);
+            continue;
+          }
+
           if (file.size > MAX_SIZE_BYTES) {
             displayError(
               `«${file.name}» (${formatFileSize(
@@ -84,7 +92,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
         <input
           data-testid={`${dataTestId}-input`}
           type="file"
-          accept="application/pdf, image/jpeg, image/png"
+          accept={INPUT_ACCEPT}
           multiple
           ref={inputRef}
           onChange={uploadVedlegg}
