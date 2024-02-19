@@ -39,7 +39,7 @@ interface Props {
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const { validationErrors } = useContext(ModalContext);
   const canEditDocument = useCanEditDocument(document, parentDocument);
-  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(document.parentId ?? document.id);
+  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(document.id);
   const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
