@@ -122,6 +122,8 @@ const DOCUMENT_TYPES = Object.values(DistribusjonsType);
 const isDocumentType = (type: string): type is DistribusjonsType => DOCUMENT_TYPES.some((t) => t === type);
 
 const StyledSelect = styled(Select)`
+  max-width: 250px;
+
   select {
     white-space: nowrap;
     overflow: hidden;
