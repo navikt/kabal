@@ -18,9 +18,10 @@ import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, IMainDocument } from '@app/
 interface Props {
   document: IMainDocument;
   hasAttachments: boolean;
+  showLabel?: boolean;
 }
 
-export const SetDocumentType = ({ document, hasAttachments }: Props) => {
+export const SetDocumentType = ({ document, hasAttachments, showLabel = false }: Props) => {
   const { id, dokumentTypeId, isMarkertAvsluttet } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
@@ -102,7 +103,7 @@ export const SetDocumentType = ({ document, hasAttachments }: Props) => {
       <StyledSelect
         data-testid="document-type-select"
         label="Dokumenttype"
-        hideLabel
+        hideLabel={!showLabel}
         size="small"
         onChange={onChange}
         value={dokumentTypeId}
