@@ -88,7 +88,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
         ) : null}
 
         {canEditDocument && isMainDocument && !isRolQuestions ? (
-          <SetDocumentType document={document} hasAttachments={hasAttachments} />
+          <SetDocumentType document={document} hasAttachments={hasAttachments} showLabel />
         ) : null}
 
         {canEditDocument && !isRolQuestions ? (
