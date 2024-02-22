@@ -4,6 +4,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { recipientStyle } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
 import {
   StyledBrevmottaker,
@@ -12,7 +13,6 @@ import {
 import { EditPart } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { IMottaker } from '@app/types/documents/documents';
-import { HandlingEnum } from '@app/types/documents/recipients';
 import { IdType } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { IErrorProperty } from './is-send-error';
@@ -41,7 +41,9 @@ export const CustomRecipients = ({
     <EditPart
       isLoading={false}
       id="extra-recipients"
-      onChange={(part) => addMottakere([{ part, handling: HandlingEnum.AUTO, overriddenAddress: null }])}
+      onChange={(part) =>
+        addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
+      }
       buttonText="Legg til mottaker"
     />
     <Recipients
