@@ -18,7 +18,7 @@ export const Receipients = (document: IMainDocument) => {
   });
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
 
-  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList);
+  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document);
 
   const sendErrors = useMemo(() => {
     if (isSendError(finishError)) {

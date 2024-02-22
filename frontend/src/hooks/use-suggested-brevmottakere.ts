@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
+import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { IMottaker } from '@app/types/documents/documents';
-import { HandlingEnum } from '@app/types/documents/recipients';
+import { IMainDocument, IMottaker } from '@app/types/documents/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
 import { IPart } from '@app/types/oppgave-common';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker extends IMottaker {
   brevmottakertyper: Brevmottakertype[];
 }
 
-export const useSuggestedBrevmottakere = (mottakerList: IMottaker[]): [IBrevmottaker[], boolean] => {
+export const useSuggestedBrevmottakere = ({ mottakerList, templateId }: IMainDocument): [IBrevmottaker[], boolean] => {
   const { data, isLoading } = useOppgave();
 
   return useMemo(() => {
@@ -18,9 +19,9 @@ export const useSuggestedBrevmottakere = (mottakerList: IMottaker[]): [IBrevmott
       const { klager, sakenGjelder, prosessfullmektig } = data;
 
       const brevmottakere = [
-        partToBrevmottaker(klager, Brevmottakertype.KLAGER),
-        partToBrevmottaker(sakenGjelder, Brevmottakertype.SAKEN_GJELDER),
-        partToBrevmottaker(prosessfullmektig, Brevmottakertype.PROSESSFULLMEKTIG),
+        partToBrevmottaker(klager, Brevmottakertype.KLAGER, templateId),
+        partToBrevmottaker(sakenGjelder, Brevmottakertype.SAKEN_GJELDER, templateId),
+        partToBrevmottaker(prosessfullmektig, Brevmottakertype.PROSESSFULLMEKTIG, templateId),
       ]
         .filter(isNotNull)
         .reduce<IBrevmottaker[]>((acc, curr) => {
@@ -46,15 +47,21 @@ export const useSuggestedBrevmottakere = (mottakerList: IMottaker[]): [IBrevmott
     }
 
     return [EMPTY_BREVMOTTAKER_LIST, true];
-  }, [data, mottakerList, isLoading]);
+  }, [isLoading, data, templateId, mottakerList]);
 };
 
 const EMPTY_BREVMOTTAKER_LIST: IBrevmottaker[] = [];
 
-const partToBrevmottaker = (part: IPart | null, brevmottakerType: Brevmottakertype): IBrevmottaker | null => {
+const partToBrevmottaker = (
+  part: IPart | null,
+  brevmottakerType: Brevmottakertype,
+  templateId: TemplateIdEnum | undefined,
+): IBrevmottaker | null => {
   if (part === null) {
     return null;
   }
 
-  return { part, brevmottakertyper: [brevmottakerType], handling: HandlingEnum.AUTO, overriddenAddress: null };
+  const handling = getInitalHandling(part, templateId);
+
+  return { part, brevmottakertyper: [brevmottakerType], handling, overriddenAddress: null };
 };
