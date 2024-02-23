@@ -13,9 +13,15 @@ import { FradelReason, IOppgave } from '@app/types/oppgaver';
 const KABAL_HEADER_HEIGHT = 48;
 
 export const FradelButton = (props: IOppgave) => {
-  const { tildeltSaksbehandlerident, medunderskriver, ytelseId, isAvsluttetAvSaksbehandler } = props;
+  const { tildeltSaksbehandlerident, medunderskriver, ytelseId, isAvsluttetAvSaksbehandler, rol } = props;
 
-  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);
+  const [access, isAccessLoading] = useOppgaveActions(
+    tildeltSaksbehandlerident,
+    medunderskriver.navIdent,
+    medunderskriver.flowState,
+    rol.flowState,
+    ytelseId,
+  );
 
   if (isAccessLoading || isAvsluttetAvSaksbehandler) {
     return null;
