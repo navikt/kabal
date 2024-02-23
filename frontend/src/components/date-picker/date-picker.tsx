@@ -1,9 +1,10 @@
-import { DatePicker as DSDatePicker, DateInputProps } from '@navikt/ds-react';
-import { format } from 'date-fns';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
-import { prettyDateToISO } from '@app/domain/date';
-import { parseUserInput } from './parse-user-input';
+import { DatePicker as DSDatePicker } from '@navikt/ds-react';
+import { addYears, format, isAfter, isBefore, isValid, parse, subDays, subYears } from 'date-fns';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
+import { getFullYear, isDateParts, isEightChars, isFourChars, isSixChars } from '@app/components/date-picker/helpers';
+import { Warning } from '@app/components/date-picker/warning';
+import { isoDateToPretty } from '@app/domain/date';
 
 interface Props {
   centuryThreshold?: number;
@@ -13,70 +14,156 @@ interface Props {
   id?: string;
   label: React.ReactNode;
   onChange: (date: string | null) => void;
-  size?: DateInputProps['size'];
+  size: 'small' | 'medium';
   toDate?: Date;
-  value?: Date;
+  value: string | null;
   warningThreshhold?: Date;
   className?: string;
   hideLabel?: boolean;
   autoFocus?: boolean;
 }
 
-const DEFAULT_FROM_DATE = new Date(1970);
-
 export const DatePicker = ({
   disabled,
   error,
-  fromDate = DEFAULT_FROM_DATE,
+  fromDate = new Date(1970),
   id,
   label,
   onChange,
   toDate = new Date(),
-  value = undefined,
+  value,
   size,
   centuryThreshold = 50,
+  warningThreshhold,
   className,
   hideLabel,
   autoFocus,
 }: Props) => {
-  const [input, setInput] = useState<string>(value === undefined ? '' : format(value, PRETTY_FORMAT));
+  const [inputError, setInputError] = useState<string>();
+  const [input, setInput] = useState<string>(value === null ? '' : isoDateToPretty(value) ?? '');
 
   useEffect(() => {
-    setInput(value === undefined ? '' : format(value, PRETTY_FORMAT));
+    setInput(value === null ? '' : isoDateToPretty(value) ?? '');
+    setInputError(undefined);
   }, [value]);
 
-  const onDateChange = useCallback(
-    (dateObject?: Date) => {
-      if (dateObject === undefined) {
-        return onChange(null);
+  const selected = useMemo(() => (value === null ? undefined : parse(value, FORMAT, new Date())), [value]);
+
+  const onDateChange = (date?: Date) => {
+    setInputError(undefined);
+
+    if (date === undefined) {
+      onChange(null);
+    } else {
+      onChange(format(date, FORMAT));
+    }
+  };
+
+  const [month, setMonth] = useState(selected);
+
+  const validateInput = useCallback(
+    (fullInput: string) => {
+      const date = parse(fullInput, PRETTY_FORMAT, new Date());
+      const validFormat = isValid(date);
+      const validRange = isAfter(date, subDays(fromDate, 1)) && isBefore(date, toDate);
+
+      if (!validFormat) {
+        setInputError('Ugyldig dato');
+
+        return;
       }
 
-      const prettyFormatted = format(dateObject, PRETTY_FORMAT);
+      if (!validRange) {
+        setInputError(`Dato må være mellom ${format(fromDate, PRETTY_FORMAT)} og ${format(toDate, PRETTY_FORMAT)}`);
 
-      if (prettyFormatted !== input) {
-        const isoFormatted = format(dateObject, ISO_FORMAT);
-        onChange(isoFormatted);
+        return;
       }
+
+      setInputError(undefined);
+      onChange(format(date, FORMAT));
     },
-    [input, onChange],
+    [fromDate, onChange, toDate],
   );
 
-  const [month, setMonth] = useState(value);
-
-  const onBlur = useCallback(() => {
+  const onInputChange = useCallback(() => {
     if (input === '') {
+      setInputError(undefined);
       onChange(null);
 
       return;
     }
 
-    requestAnimationFrame(() => {
-      const dateString = parseUserInput(input, fromDate, toDate, centuryThreshold);
+    const parts = input.split('.');
 
-      onChange(dateString === null ? null : prettyDateToISO(dateString));
-      setInput(dateString);
-    });
-  }, [centuryThreshold, fromDate, input, onChange, toDate]);
+    // Prefix with reasonable century, e.g. 20 for 2022 and 19 for 1999.
+    if (isDateParts(parts)) {
+      const [dd, mm, yy] = parts;
+      const date = `${dd.padStart(2, '0')}.${mm.padStart(2, '0')}.${getFullYear(yy, centuryThreshold)}`;
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    const chars = input.split('');
+
+    // 211220 -> 21.12.2020
+    if (isSixChars(chars)) {
+      const [d1, d2, m1, m2, y1, y2] = chars;
+      const date = `${d1}${d2}.${m1}${m2}.${getFullYear(`${y1}${y2}`, centuryThreshold)}`;
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    // 31122020 -> 31.12.2020
+    if (isEightChars(chars)) {
+      const [d1, d2, m1, m2, y1, y2, y3, y4] = chars;
+      const date = `${d1}${d2}.${m1}${m2}.${y1}${y2}${y3}${y4}`;
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    // Current year if the date is in the past, otherwise previous year.
+    // 3112 -> 31.12.2021
+    if (isFourChars(chars)) {
+      const [d1, d2, m1, m2] = chars;
+      const dateObject = parse(`${d1}${d2}.${m1}${m2}`, 'dd.MM', new Date());
+
+      if (!isValid(dateObject)) {
+        validateInput(input);
+
+        return;
+      }
+
+      if (isAfter(dateObject, toDate)) {
+        const date = format(subYears(dateObject, 1), PRETTY_FORMAT);
+        setInput(date);
+        requestAnimationFrame(() => validateInput(date));
+
+        return;
+      }
+
+      if (isBefore(dateObject, fromDate)) {
+        const date = format(addYears(dateObject, 1), PRETTY_FORMAT);
+        setInput(date);
+        requestAnimationFrame(() => validateInput(date));
+
+        return;
+      }
+
+      const date = format(dateObject, PRETTY_FORMAT);
+      setInput(date);
+      requestAnimationFrame(() => validateInput(date));
+
+      return;
+    }
+
+    validateInput(input);
+  }, [centuryThreshold, fromDate, input, onChange, toDate, validateInput]);
 
   return (
     <DSDatePicker
@@ -84,28 +171,29 @@ export const DatePicker = ({
       data-testid={id}
       fromDate={fromDate}
       toDate={toDate}
-      defaultSelected={value}
-      selected={value}
+      defaultSelected={selected}
+      selected={selected}
       onSelect={onDateChange}
       locale="nb"
       dropdownCaption
       month={month}
       onMonthChange={setMonth}
-      onOpenToggle={() => setMonth(value)}
+      onOpenToggle={() => setMonth(selected)}
       className={className}
     >
       <DSDatePicker.Input
         id={id}
-        error={error}
+        error={error ?? inputError}
         label={label}
         disabled={disabled}
         value={input}
         onChange={({ target }) => setInput(target.value)}
-        onBlur={onBlur}
+        onBlur={onInputChange}
         size={size}
-        autoFocus={autoFocus}
         hideLabel={hideLabel}
+        autoFocus={autoFocus}
       />
+      <Warning date={selected} threshhold={warningThreshhold} />
     </DSDatePicker>
   );
 };

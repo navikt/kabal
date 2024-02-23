@@ -1,4 +1,3 @@
-import { parseISO } from 'date-fns';
 import React from 'react';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
@@ -40,7 +39,7 @@ export const AnkeMottattDato = () => {
             setMottattKlageinstans({ oppgaveId: data.id, mottattKlageinstans });
           }
         }}
-        value={value === null ? undefined : parseISO(value)}
+        value={value}
         error={error}
         id={ID}
         size="small"
