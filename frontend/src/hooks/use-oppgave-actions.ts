@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
+import { FlowState } from '@app/types/oppgave-common';
 import { useHasYtelseAccess } from './use-has-ytelse-access';
 
 interface Actions {
@@ -16,13 +17,17 @@ type ReturnType = [Actions, false] | [undefined, true];
 export const useOppgaveActions = (
   tildeltSaksbehandler: string | null,
   medunderskriver: string | null,
+  medunderskriverFlowState: FlowState | null,
+  rolFlowState: FlowState | null,
   ytelse?: string,
 ): ReturnType => {
   const { user } = useContext(StaticDataContext);
   const hasYtelseAccess = useHasYtelseAccess(ytelse);
 
   return useMemo<ReturnType>(() => {
-    const hasMedunderskriver = medunderskriver !== null;
+    const medunderskriverInvolved =
+      medunderskriverFlowState !== null && medunderskriverFlowState !== FlowState.NOT_SENT;
+    const rolInvolved = rolFlowState !== null && rolFlowState !== FlowState.NOT_SENT;
     const isAssigned = tildeltSaksbehandler !== null;
     const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
 
@@ -30,7 +35,7 @@ export const useOppgaveActions = (
       hasYtelseAccess,
       hasOppgavestyringAccess: user.roller.includes(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER),
       hasSaksbehandlerAccess: user.roller.includes(Role.KABAL_SAKSBEHANDLING),
-      isMedunderskriver: hasMedunderskriver && user.navIdent === medunderskriver,
+      isMedunderskriver: user.navIdent === medunderskriver,
       isAssignedToSelf,
       isAssigned,
     };
@@ -42,12 +47,20 @@ export const useOppgaveActions = (
         open: hasYtelseAccess,
         assignSelf: canAssignSelf(access),
         assignOthers,
-        deassignSelf: !hasMedunderskriver && isAssignedToSelf,
-        deassignOthers: !hasMedunderskriver && assignOthers && isAssigned,
+        deassignSelf: !medunderskriverInvolved && !rolInvolved && isAssignedToSelf,
+        deassignOthers: !medunderskriverInvolved && !rolInvolved && assignOthers && isAssigned,
       },
       false,
     ];
-  }, [user, medunderskriver, tildeltSaksbehandler, hasYtelseAccess]);
+  }, [
+    medunderskriverFlowState,
+    rolFlowState,
+    tildeltSaksbehandler,
+    user.navIdent,
+    user.roller,
+    hasYtelseAccess,
+    medunderskriver,
+  ]);
 };
 
 const canAssignSelf = ({

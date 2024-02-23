@@ -15,6 +15,8 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriver.navIdent,
+    oppgave.medunderskriver.flowState,
+    oppgave.rol.flowState,
     oppgave.ytelseId,
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(

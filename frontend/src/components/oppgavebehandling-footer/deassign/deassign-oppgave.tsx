@@ -8,6 +8,7 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Popup } from '../../deassign/popup';
 
@@ -24,6 +25,8 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
     oppgave.saksbehandler?.navIdent ?? null,
     oppgave.medunderskriver.employee?.navIdent ?? null,
+    oppgave.medunderskriver.flowState,
+    oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? oppgave.rol.flowState : null,
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

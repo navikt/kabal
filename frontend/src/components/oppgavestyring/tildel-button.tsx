@@ -18,13 +18,20 @@ export const TildelButton = ({
   ytelseId,
   tildeltSaksbehandlerident,
   medunderskriver,
+  rol,
   children = 'Tildel meg',
 }: Props) => {
   const { user } = useContext(StaticDataContext);
   const { navIdent, navn, roller } = user;
   const [tildel, { isLoading: isTildeling }] = useTildel(id, typeId, ytelseId);
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
-  const [access, isAccessLoading] = useOppgaveActions(tildeltSaksbehandlerident, medunderskriver.navIdent, ytelseId);
+  const [access, isAccessLoading] = useOppgaveActions(
+    tildeltSaksbehandlerident,
+    medunderskriver.navIdent,
+    medunderskriver.flowState,
+    rol.flowState,
+    ytelseId,
+  );
 
   if (isAccessLoading) {
     return null;
