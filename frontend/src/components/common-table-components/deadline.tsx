@@ -112,7 +112,7 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
       id=""
       label="Frist"
       hideLabel
-      value={frist === null ? undefined : parseISO(frist)}
+      value={frist}
       size="small"
       onChange={onChange}
       autoFocus

@@ -40,7 +40,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
     <StyledPanel>
       <DatePicker
         label="Frist"
-        value={to === null ? undefined : parseISO(to)}
+        value={to}
         fromDate={fromDate}
         toDate={dates.at(-1)?.[1]}
         onChange={setTo}

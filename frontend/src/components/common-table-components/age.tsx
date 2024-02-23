@@ -94,7 +94,7 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
       id="mottatt-dato"
       label="Mottattdato"
       hideLabel
-      value={mottattDate === null ? undefined : parseISO(mottattDate)}
+      value={mottattDate}
       size="small"
       onChange={onChange}
       centuryThreshold={CURRENT_YEAR_IN_CENTURY}
