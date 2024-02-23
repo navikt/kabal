@@ -11,14 +11,12 @@ import {
 } from '@app/plate/templates/helpers';
 import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { TemplateSections } from '../template-sections';
 
 export const ANKEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ANKEVEDTAK,
-  type: SaksTypeEnum.ANKE,
   tittel: 'Vedtak/beslutning (anke)',
   content: [
     createCurrentDate(),

@@ -11,7 +11,6 @@ import {
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
-  createRegelverk,
   createSignature,
 } from './helpers';
 
@@ -19,38 +18,29 @@ const INITIAL_SLATE_VALUE: EditorValue = [
   createCurrentDate(),
   createHeader(),
 
-  createMaltekstseksjon(TemplateSections.TITLE),
+  createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
 
   {
     type: ELEMENT_PARAGRAPH,
     align: TextAlign.LEFT,
     children: [
-      createLabelContent('klagerIfEqualToSakenGjelder.name', 'Klager'),
+      createLabelContent('klagerIfEqualToSakenGjelder.name', 'Den ankende part'),
       createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
       createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-      createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Klager'),
+      createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Den ankende part'),
       createLabelContent('saksnummer', 'Saksnummer'),
     ],
   },
 
-  createMaltekstseksjon(TemplateSections.INTRODUCTION),
-  createMaltekstseksjon(TemplateSections.AVGJOERELSE),
-  createMaltekstseksjon(TemplateSections.ANFOERSLER),
-  createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
-  createMaltekstseksjon(TemplateSections.VURDERINGEN),
-  createMaltekstseksjon(TemplateSections.KONKLUSJON),
-  createMaltekstseksjon(TemplateSections.ANKEINFO),
-  createMaltekstseksjon(TemplateSections.SAKSKOSTNADER),
-  createMaltekstseksjon(TemplateSections.GENERELL_INFO),
+  createMaltekstseksjon(TemplateSections.TILSVARSRETT),
 
   createSignature(),
   createFooter(),
-  createRegelverk(),
 ];
 
-export const KLAGEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.KLAGEVEDTAK_V2,
-  tittel: 'Vedtak/beslutning (klage)',
+export const ORIENTERING_OM_TILSVAR_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.ORIENTERING_OM_TILSVAR,
+  tittel: 'Orientering om tilsvar direkte til Trygderetten',
   content: INITIAL_SLATE_VALUE,
-  dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
+  dokumentTypeId: DistribusjonsType.BREV,
 });

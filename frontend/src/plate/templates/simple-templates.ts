@@ -1,7 +1,7 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { TemplateSections } from '@app/plate/template-sections';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { IMutableSmartEditorTemplate, TemplateTypeEnum } from '@app/types/smart-editor/smart-editor';
+import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import {
   createCurrentDate,
@@ -15,7 +15,6 @@ import {
 
 export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.GENERELT_BREV,
-  type: TemplateTypeEnum.GENERELL,
   tittel: 'Generelt brev',
   content: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
   dokumentTypeId: DistribusjonsType.BREV,
@@ -23,7 +22,6 @@ export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 
 export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.NOTAT,
-  type: TemplateTypeEnum.NOTAT,
   tittel: 'Notat',
   content: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
@@ -31,7 +29,6 @@ export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 
 export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_QUESTIONS,
-  type: TemplateTypeEnum.NOTAT,
   tittel: 'Spørsmål til rådgivende overlege',
   content: [
     createCurrentDate(),
@@ -45,7 +42,6 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 
 export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_ANSWERS,
-  type: TemplateTypeEnum.NOTAT,
   tittel: 'Svar fra rådgivende overlege',
   content: [
     createCurrentDate(),
@@ -58,7 +54,6 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 
 export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_TILSVARSBREV,
-  type: TemplateTypeEnum.GENERELL,
   tittel: 'Tilsvarsbrev (ROL)',
   content: [
     createCurrentDate(),

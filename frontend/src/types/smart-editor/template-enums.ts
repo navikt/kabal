@@ -8,4 +8,5 @@ export enum TemplateIdEnum {
   ROL_ANSWERS = 'rol-answers',
   ROL_TILSVARSBREV = 'rol-tilsvarsbrev',
   OVERSENDELSESBREV = 'oversendelsesbrev',
+  ORIENTERING_OM_TILSVAR = 'orientering-om-tilsvar',
 }
