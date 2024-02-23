@@ -39,7 +39,7 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
           editor={editor}
           content={content}
           title="Sett inn god formulering i markert område"
-          disabledTitle="En god formulering kan kun settes inn i et tomt avsnitt"
+          disabledTitle="Mangler markert område å sette inn god formulering i"
         >
           Sett inn
         </AddButton>
