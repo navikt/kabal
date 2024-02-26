@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { styled } from 'styled-components';
+import { pushError } from '@app/observability';
 
 interface Props {
   children: ReactNode;
@@ -25,6 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
+    pushError(error);
   }
 
   render() {
