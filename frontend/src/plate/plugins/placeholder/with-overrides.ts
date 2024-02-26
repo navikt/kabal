@@ -1,11 +1,20 @@
-import { PlateEditor, TRange, findNode } from '@udecode/plate-common';
+import { PlateEditor, TDescendant, TRange, TText, findNode, insertNodes, isElement } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import { MaltekstElement } from '../../types';
-import { ELEMENT_MALTEKST } from '../element-types';
+import { MaltekstElement, PlaceholderElement } from '../../types';
+import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
+
+const extractText = (fragment: TDescendant[]): TText[] =>
+  fragment.flatMap((node, index) => {
+    if (isElement(node)) {
+      return extractText(index === fragment.length - 1 ? node.children : [...node.children, { text: '\n' }]);
+    }
+
+    return node;
+  });
 
 export const withOverrides = (editor: PlateEditor) => {
-  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes } = editor;
+  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes, insertFragment } = editor;
 
   editor.setNodes = (props, options) => {
     const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });
@@ -47,7 +56,29 @@ export const withOverrides = (editor: PlateEditor) => {
     insertNode(node);
   };
 
-  // Chrome: Marking content from start to end (with Shift + Ctrl/End) would leave a selection hanging outside the placeholder,
+  editor.insertFragment = (fragment: TDescendant[]) => {
+    if (editor.selection === null) {
+      return insertFragment(fragment);
+    }
+
+    const activeNode = findNode<PlaceholderElement>(editor, {
+      at: editor.selection,
+      match: { type: ELEMENT_PLACEHOLDER },
+    });
+
+    if (activeNode === undefined) {
+      return insertFragment(fragment);
+    }
+
+    const [placeholder] = activeNode;
+
+    // Fixes fragments being pasted outside of placeholder
+    if (placeholder.type === ELEMENT_PLACEHOLDER) {
+      insertNodes(editor, extractText(fragment));
+    }
+  };
+
+  // Chrome: Marking content from start to end (with Shift + Ctrl/nd) would leave a selection hanging outside the placeholder,
   // causing it to seemingly not be deletable
   editor.setSelection = ({ anchor, focus }) => {
     if (anchor === undefined || focus === undefined) {
