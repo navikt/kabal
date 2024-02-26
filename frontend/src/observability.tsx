@@ -48,7 +48,7 @@ export const pushEvent = (name: string, attributes: Record<string, string> | und
 export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>
   faro.api.pushLog([message], { ...options, skipDedupe: true, level });
 
-export const { pushMeasurement } = faro.api;
+export const { pushMeasurement, pushError } = faro.api;
 
 class EditorMeasurements {
   private measurements: number[] = [];
