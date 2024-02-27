@@ -4,6 +4,8 @@ import React, { memo, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolAnswers, getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
+import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -82,9 +84,11 @@ export const HistoryEditor = memo(
         >
           Gjenopprett denne versjonen
         </StyledButton>
-        <Plate<EditorValue, RichTextEditor> id={id} readOnly plugins={saksbehandlerPlugins} initialValue={version}>
-          <HistoryContent id={id} version={version} />
-        </Plate>
+        <StyledErrorBoundary errorComponent={() => <ErrorComponent textId={id} />}>
+          <Plate<EditorValue, RichTextEditor> id={id} readOnly plugins={saksbehandlerPlugins} initialValue={version}>
+            <HistoryContent id={id} version={version} />
+          </Plate>
+        </StyledErrorBoundary>
       </HistoryEditorContainer>
     );
   },
@@ -149,4 +153,8 @@ const StyledButton = styled(Button)`
   top: 0;
   width: 210mm;
   z-index: 1;
+`;
+
+const StyledErrorBoundary = styled(ErrorBoundary)`
+  width: 210mm;
 `;

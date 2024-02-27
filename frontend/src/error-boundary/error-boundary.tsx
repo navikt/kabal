@@ -5,6 +5,7 @@ import { pushError } from '@app/observability';
 
 interface Props {
   children: ReactNode;
+  className?: string;
   errorComponent: (error: Error) => ReactNode;
   actionButton?: ActionButtonProps;
 }
@@ -30,11 +31,11 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   render() {
-    const { children, errorComponent, actionButton } = this.props;
+    const { children, errorComponent, actionButton, className } = this.props;
 
     if (this.state.error !== null) {
       return (
-        <ErrorContainer>
+        <ErrorContainer className={className}>
           <h1>Ooops, noe gikk galt :(</h1>
           {errorComponent(this.state.error)}
           {typeof actionButton === 'undefined' ? null : (
