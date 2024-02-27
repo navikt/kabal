@@ -11,6 +11,7 @@ import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
 import { createCopyPlugin } from '@app/plate/plugins/copy';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { createNormalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { createPageBreakPlugin } from '@app/plate/plugins/page-break';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { autoformatPlugin } from '../autoformat/plugin';
@@ -83,4 +84,5 @@ export const defaultPlugins: PlatePlugin[] = [
   createPageBreakPlugin(),
   createProhibitDeletionPlugin(),
   createCopyPlugin(),
+  createNormalizeNodePlugin(),
 ];
