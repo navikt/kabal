@@ -26,6 +26,8 @@ import {
   H2Element,
   HeaderElement,
   LabelContentElement,
+  ListItemContainerElement,
+  ListItemElement,
   MaltekstElement,
   MaltekstseksjonElement,
   PageBreakElement,
@@ -38,6 +40,7 @@ import {
   SignatureElement,
   TableCellElement,
   TableElement,
+  TableRowElement,
   TextAlign,
 } from '@app/plate/types';
 import { TemplateSections } from '../template-sections';
@@ -86,7 +89,7 @@ export const createRedigerbarMaltekst = (
   children: children === undefined ? [createEmptyVoid()] : structuredClone(children),
 });
 
-const createRegelverkContainer = (
+export const createRegelverkContainer = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
 ): RegelverkContainerElement => ({
   type: ELEMENT_REGELVERK_CONTAINER,
@@ -123,19 +126,21 @@ export const createParagraphWithLabelContent = (source: string, label: string): 
   children: [createLabelContent(source, label)],
 });
 
+export const createSimpleListItemContainer = (text = ''): ListItemContainerElement => ({
+  type: ELEMENT_LIC,
+  children: [{ text }],
+});
+
+export const createSimpleListItem = (text = ''): ListItemElement => ({
+  type: ELEMENT_LI,
+  children: [createSimpleListItemContainer(text)],
+});
+
 // eslint-disable-next-line import/no-unused-modules
 export const createSimpleBulletList = (...textItems: string[]): BulletListElement => ({
   type: ELEMENT_UL,
   indent: 2,
-  children: textItems.map((text) => ({
-    type: ELEMENT_LI,
-    children: [
-      {
-        type: ELEMENT_LIC,
-        children: [{ text }],
-      },
-    ],
-  })),
+  children: textItems.map(createSimpleListItem),
 });
 
 export const createSignature = (): SignatureElement => ({
@@ -169,7 +174,9 @@ export const createFooter = (): FooterElement => ({
   content: null,
 });
 
-const createTableCell = (text = ''): TableCellElement => ({
+export const createTableRow = (children = [createTableCell()]): TableRowElement => ({ type: ELEMENT_TR, children });
+
+export const createTableCell = (text = ''): TableCellElement => ({
   type: ELEMENT_TD,
   children: [createSimpleParagraph(text)],
   attributes: {},
@@ -178,8 +185,8 @@ const createTableCell = (text = ''): TableCellElement => ({
 export const createTable = (): TableElement => ({
   type: ELEMENT_TABLE,
   children: [
-    { type: ELEMENT_TR, children: [createTableCell(), createTableCell()] },
-    { type: ELEMENT_TR, children: [createTableCell(), createTableCell()] },
+    createTableRow([createTableCell(), createTableCell()]),
+    createTableRow([createTableCell(), createTableCell()]),
   ],
 });
 
