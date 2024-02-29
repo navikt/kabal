@@ -107,6 +107,7 @@ const StyledTabs = styled(Tabs)`
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  background: white;
 `;
 
 const StyledTabsList = styled(Tabs.List)`
@@ -121,5 +122,6 @@ const StyledTabPanels = styled.div`
 `;
 
 const StyledNoDocuments = styled.div`
+  background: white;
   padding: 16px;
 `;

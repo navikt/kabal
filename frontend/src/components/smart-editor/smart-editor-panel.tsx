@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
+import { Behandling } from '@app/components/behandling/behandling';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
@@ -16,18 +17,23 @@ export const SmartEditorPanel = () => {
   }
 
   return (
-    <PanelContainer data-testid="smart-editor-panel">
-      <SmartEditorPanelContainer>
+    <StyledPanelContainer data-testid="smart-editor-panel">
+      <SmartEditorContainer>
         <TabbedEditors />
-      </SmartEditorPanelContainer>
-    </PanelContainer>
+        <Behandling />
+      </SmartEditorContainer>
+    </StyledPanelContainer>
   );
 };
 
-const SmartEditorPanelContainer = styled.div`
+const SmartEditorContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  gap: 16px;
   padding: 0;
   min-height: 100%;
   overflow: hidden;
+`;
+
+const StyledPanelContainer = styled(PanelContainer)`
+  background: transparent;
 `;

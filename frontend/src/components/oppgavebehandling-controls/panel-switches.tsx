@@ -4,7 +4,6 @@ import { styled } from 'styled-components';
 import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
-  useBehandlingEnabled,
   useDocumentsEnabled,
   useKvalitetsvurderingEnabled,
   useSmartEditorEnabled,
@@ -13,7 +12,6 @@ import { pushEvent } from '@app/observability';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
-  const { value: behandlingEnabled = true, setValue: setBehandlingEnabled } = useBehandlingEnabled();
 
   return (
     <Container data-testid="behandling-panel-switches">
@@ -29,17 +27,6 @@ export const PanelSwitches = () => {
         Dokumenter
       </TogglePanelButton>
       <Brevutforming />
-      <TogglePanelButton
-        checked={behandlingEnabled}
-        togglePanel={() => {
-          const isEnabled = !behandlingEnabled;
-          pushEvent('toggle-behandling-panel', { enabled: isEnabled.toString() }, 'panels');
-          setBehandlingEnabled(isEnabled);
-        }}
-        testId="panel-switch-behandling"
-      >
-        Behandling
-      </TogglePanelButton>
       <Kvalitetsvurdering />
     </Container>
   );
