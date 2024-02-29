@@ -1,6 +1,7 @@
-import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
 import { MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
@@ -15,6 +16,7 @@ interface Props {
 
 export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => {
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
+  const { value: behandlingEnabled = true, setValue: setBehandlingEnabled } = useBehandlingEnabled();
 
   return (
     <StyledToolbar>
@@ -45,6 +47,19 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
             const enabled = !showHistory;
             pushEvent('toggle-show-history', { enabled: enabled.toString() }, 'smart-editor');
             setShowHistory(enabled);
+          }}
+        />
+
+        <ToolbarSeparator />
+
+        <ToolbarIconButton
+          label="Vis behandling"
+          icon={<InboxUpIcon aria-hidden />}
+          active={behandlingEnabled}
+          onClick={() => {
+            const enabled = !behandlingEnabled;
+            pushEvent('toggle-behandling-panel', { enabled: enabled.toString() }, 'smart-editor');
+            setBehandlingEnabled(enabled);
           }}
         />
       </FirstRow>
