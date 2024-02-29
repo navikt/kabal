@@ -9,23 +9,40 @@ import {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATES } from '@app/plate/templates/templates';
+import { RichTextTypes } from '@app/types/common-text-types';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 
+export type TextType =
+  | RichTextTypes.MALTEKST
+  | RichTextTypes.REDIGERBAR_MALTEKST
+  | RichTextTypes.GOD_FORMULERING
+  | RichTextTypes.MALTEKSTSEKSJON;
+
+const getSectionType = (textType: TextType): SectionType | undefined => {
+  switch (textType) {
+    case RichTextTypes.MALTEKSTSEKSJON:
+      return ELEMENT_MALTEKSTSEKSJON;
+    case RichTextTypes.MALTEKST:
+      return ELEMENT_MALTEKST;
+    case RichTextTypes.REDIGERBAR_MALTEKST:
+      return ELEMENT_REDIGERBAR_MALTEKST;
+    default:
+      return undefined;
+  }
+};
+
 export const getTemplateOptions = (
-  sectionType: SectionType,
+  textType: TextType,
   includeNone: boolean,
   templatesSelectable: boolean,
 ): NestedOption[] => {
-  const isMaltekst =
-    sectionType === ELEMENT_MALTEKST ||
-    sectionType === ELEMENT_REDIGERBAR_MALTEKST ||
-    sectionType === ELEMENT_MALTEKSTSEKSJON;
+  const isMaltekst = textType !== RichTextTypes.GOD_FORMULERING;
 
   const options: NestedOption[] = [];
 
   for (const { templateId, tittel } of TEMPLATES) {
-    const sections = getTemplateSections(templateId, sectionType);
+    const sections = getTemplateSections(templateId, getSectionType(textType));
 
     if (isMaltekst && sections.length === 0) {
       continue;

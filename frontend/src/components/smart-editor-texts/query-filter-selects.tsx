@@ -6,16 +6,9 @@ import { NONE, NONE_OPTION, NONE_TYPE, SET_DELIMITER } from '@app/components/sma
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { SectionType } from '@app/hooks/use-template-sections';
-import {
-  ELEMENT_MALTEKST,
-  ELEMENT_MALTEKSTSEKSJON,
-  ELEMENT_REDIGERBAR_MALTEKST,
-} from '@app/plate/plugins/element-types';
-import { RichTextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { getTemplateOptions } from './get-template-options';
+import { TextType, getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
   children: string;
@@ -95,11 +88,7 @@ interface TemplateSelectProps {
   children: string;
   selected: string[];
   onChange: (value: string[]) => void;
-  textType:
-    | RichTextTypes.MALTEKST
-    | RichTextTypes.REDIGERBAR_MALTEKST
-    | RichTextTypes.GOD_FORMULERING
-    | RichTextTypes.MALTEKSTSEKSJON;
+  textType: TextType;
   includeNoneOption?: boolean;
   templatesSelectable?: boolean;
 }
@@ -112,22 +101,9 @@ export const TemplateSectionSelect = ({
   includeNoneOption = false,
   templatesSelectable = false,
 }: TemplateSelectProps) => {
-  const sectionType: SectionType = useMemo(() => {
-    switch (textType) {
-      case RichTextTypes.MALTEKSTSEKSJON:
-        return ELEMENT_MALTEKSTSEKSJON;
-      case RichTextTypes.MALTEKST:
-        return ELEMENT_MALTEKST;
-      case RichTextTypes.REDIGERBAR_MALTEKST:
-        return ELEMENT_REDIGERBAR_MALTEKST;
-      case RichTextTypes.GOD_FORMULERING:
-        return ELEMENT_MALTEKSTSEKSJON;
-    }
-  }, [textType]);
-
   const templates = useMemo(
-    () => getTemplateOptions(sectionType, includeNoneOption, templatesSelectable),
-    [includeNoneOption, sectionType, templatesSelectable],
+    () => getTemplateOptions(textType, includeNoneOption, templatesSelectable),
+    [includeNoneOption, templatesSelectable, textType],
   );
 
   return (
