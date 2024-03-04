@@ -35,7 +35,7 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
       }
 
       update({ content: localContent, oppgaveId, dokumentId: id, version: smartDocument.version });
-    }, 5000);
+    }, 2_000);
 
     return () => clearTimeout(timeout);
   }, [content, id, oppgaveId, smartDocument.version, update, localContent, canEditDocument]);
