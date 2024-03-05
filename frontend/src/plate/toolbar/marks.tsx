@@ -10,7 +10,7 @@ import {
 import { MARK_COLOR } from '@udecode/plate-font';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import React from 'react';
-import { MOD_KEY } from '@app/mod-key';
+import { MOD_KEY } from '@app/keys';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';

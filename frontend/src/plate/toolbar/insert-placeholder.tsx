@@ -4,7 +4,7 @@ import { insertElements, isCollapsed, isExpanded, useEditorState } from '@udecod
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { MOD_KEY } from '@app/mod-key';
+import { MOD_KEY } from '@app/keys';
 import { createPlaceHolder } from '@app/plate/templates/helpers';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef } from '@app/plate/types';
