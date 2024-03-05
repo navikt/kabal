@@ -11,7 +11,7 @@ import { toast } from '@app/components/toast/store';
 import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MOD_KEY } from '@app/mod-key';
+import { MOD_KEY } from '@app/keys';
 import {
   useGetArkiverteDokumenterQuery,
   useMergedDocumentsReferenceQuery,

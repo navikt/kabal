@@ -1,7 +1,7 @@
 import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { MOD_KEY } from '@app/mod-key';
+import { MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';

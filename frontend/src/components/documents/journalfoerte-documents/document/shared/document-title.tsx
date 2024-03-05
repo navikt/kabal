@@ -11,6 +11,7 @@ import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@ap
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { EllipsisTitle, StyledDocumentLink } from '../../../styled-components/document-link';
@@ -90,13 +91,17 @@ const DocumentTitleInternal = memo(
     const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
 
     const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+      if (e.button === MouseButtons.RIGHT) {
+        return;
+      }
+
       e.preventDefault();
 
       if (!harTilgangTilArkivvariant) {
         return;
       }
 
-      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
+      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
 
       if (!shouldOpenInNewTab) {
         setShownDocuments([

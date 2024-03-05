@@ -9,6 +9,7 @@ import {
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { MouseButtons } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
@@ -92,13 +93,17 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
 
   const onClick: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
     (e) => {
+      if (disabled || e.button === MouseButtons.RIGHT) {
+        return;
+      }
+
       e.preventDefault();
 
       if (disabled) {
         return;
       }
 
-      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
+      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
 
       // Open in PDF-viewer panel.
       if (!shouldOpenInNewTab) {
