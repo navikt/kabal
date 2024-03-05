@@ -5,8 +5,7 @@ export const stringToRegExp = (s: string): RegExp => {
     return EMPTY_REGEX;
   }
 
-  const cleanFilter = removeRegExpTokens(s);
-  const pattern = cleanFilter.split('').join('.*');
+  const pattern = removeRegExpTokens(s).split('').join('.*');
   const escapedPattern = escapeRegExp(pattern);
   const filter = new RegExp(`.*${escapedPattern}.*`, 'i');
 
