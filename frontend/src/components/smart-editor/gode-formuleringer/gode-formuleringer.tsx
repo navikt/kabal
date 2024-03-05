@@ -1,11 +1,12 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { focusEditor, getNodeString } from '@udecode/plate-common';
+import { focusEditor } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
+import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import {
   GodeFormuleringerTitle,
   Header,
@@ -14,6 +15,7 @@ import {
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
+import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
@@ -97,7 +99,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
     for (const text of data) {
       if (isFilteredPublishedRichText(text, templateId, activeSection)) {
-        const score = fuzzySearch(filter, text.title + text.content.map(getNodeString).join(' '));
+        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text));
 
         if (score > 0) {
           result.push([text, score]);
