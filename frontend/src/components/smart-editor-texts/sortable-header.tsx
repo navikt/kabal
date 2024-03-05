@@ -1,5 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -10,6 +10,7 @@ type Icon = typeof ArrowUpIcon | typeof ArrowDownIcon | typeof ArrowsUpDownIcon;
 export enum SortKey {
   TITLE = 'title',
   MODIFIED = 'modified',
+  SCORE = 'score',
 }
 
 export enum QueryKey {
@@ -18,13 +19,14 @@ export enum QueryKey {
 }
 
 interface Props {
-  label: string;
+  label: React.ReactNode;
   sortKey: SortKey;
   querySortKey: SortKey;
   querySortOrder: SortOrder;
+  title?: string;
 }
 
-export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder }: Props) => {
+export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, title }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const onClick = () => {
@@ -38,10 +40,20 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder }:
 
   const Icon = getIcon(querySortKey === sortKey ? querySortOrder : null);
 
+  if (title === undefined) {
+    return (
+      <StyledButton onClick={onClick} variant="tertiary" iconPosition="right" icon={<Icon aria-hidden />} size="small">
+        {label}
+      </StyledButton>
+    );
+  }
+
   return (
-    <StyledButton onClick={onClick} variant="tertiary" iconPosition="right" icon={<Icon aria-hidden />} size="small">
-      {label}
-    </StyledButton>
+    <Tooltip content={title}>
+      <StyledButton onClick={onClick} variant="tertiary" iconPosition="right" icon={<Icon aria-hidden />} size="small">
+        {label}
+      </StyledButton>
+    </Tooltip>
   );
 };
 

@@ -1,10 +1,9 @@
 import { Search } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TextTypes } from '@app/types/common-text-types';
 import { Filters } from './filters';
-import { TextList } from './text-list';
+import { TextList } from './text-list/text-list';
 
 interface Props {
   textType: TextTypes;
@@ -12,7 +11,6 @@ interface Props {
 
 export const FilteredTextList = ({ textType }: Props) => {
   const [filter, setFilter] = useState<string>('');
-  const filterRegex = useMemo(() => stringToRegExp(filter), [filter]);
 
   return (
     <Container>
@@ -21,13 +19,14 @@ export const FilteredTextList = ({ textType }: Props) => {
         <Search
           value={filter}
           onChange={setFilter}
-          placeholder="Filtrer på tittel"
-          label="Filtrer på tittel"
+          placeholder="Filtrer på tittel og innhold"
+          label="Filtrer på tittel og innhold"
           size="small"
           hideLabel
+          spellCheck
         />
       </Header>
-      <TextList textType={textType} filter={filterRegex} />
+      <TextList textType={textType} filter={filter} />
     </Container>
   );
 };
