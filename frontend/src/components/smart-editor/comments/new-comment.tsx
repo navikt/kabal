@@ -6,7 +6,7 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useRangePosition } from '@app/plate/hooks/use-range-position';
+import { getRangePosition } from '@app/plate/functions/get-range-position';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
@@ -25,7 +25,7 @@ export const NewComment = ({ container }: Props) => {
   const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
     useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
-  const position = useRangePosition(newCommentSelection, container);
+  const position = getRangePosition(editor, newCommentSelection, container);
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const onNewThread = useCallback(
