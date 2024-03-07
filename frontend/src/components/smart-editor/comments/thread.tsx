@@ -14,6 +14,8 @@ interface Props {
   isOrphan?: boolean;
 }
 
+const DONT_WAIT_FOR_TRANSITION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export const Thread = ({ thread, isFocused, isOrphan = false }: Props) => {
   const { setFocusedThreadId, focusedThreadId } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
@@ -49,6 +51,10 @@ export const Thread = ({ thread, isFocused, isOrphan = false }: Props) => {
 
       if (domNode === undefined) {
         return;
+      }
+
+      if (DONT_WAIT_FOR_TRANSITION) {
+        return domNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
       event.currentTarget.addEventListener(
