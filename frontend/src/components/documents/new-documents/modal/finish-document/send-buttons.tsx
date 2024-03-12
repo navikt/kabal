@@ -7,9 +7,10 @@ import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
 import { Confirm } from './confirm';
-import { ERROR_MESSAGES } from './error-messages';
-import { FinishProps } from './types';
+import { VALIDATION_ERROR_MESSAGES } from './error-messages';
+import { FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const SendButtons = ({ document }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList } = document;
@@ -26,12 +27,24 @@ export const SendButtons = ({ document }: FinishProps) => {
     return null;
   }
 
-  const onClick = async () => {
+  const onValidate = async () => {
     if (typeof data?.id !== 'string') {
-      return;
+      return false;
     }
 
     setValidationErrors([]);
+
+    if (mottakerList.length === 0 && suggestedBrevmottakere.length !== 1) {
+      setValidationErrors([
+        {
+          dokumentId,
+          title: documentTitle,
+          errors: [{ type: NO_RECIPIENTS_ERROR, message: 'Utsendingen må ha minst én mottaker' }],
+        },
+      ]);
+
+      return false;
+    }
 
     const validation = await validate({ dokumentId, oppgaveId: data.id }).unwrap();
 
@@ -39,40 +52,15 @@ export const SendButtons = ({ document }: FinishProps) => {
       const errors = validation.map((v) => ({
         dokumentId: v.dokumentId,
         title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,
-        errors: v.errors.map((e) => ERROR_MESSAGES[e.type]),
+        errors: v.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
       }));
 
       setValidationErrors(errors);
 
-      return;
+      return false;
     }
 
-    if (mottakerList.length === 0 && suggestedBrevmottakere.length !== 1) {
-      setValidationErrors([
-        {
-          dokumentId,
-          title: documentTitle,
-          errors: ['Utsendingen må ha minst én mottaker'],
-        },
-      ]);
-
-      return;
-    }
-
-    try {
-      if (mottakerList.length === 0 && suggestedBrevmottakere.length === 1) {
-        await setMottakerList({
-          oppgaveId: data.id,
-          dokumentId,
-          mottakerList: suggestedBrevmottakere,
-        });
-      }
-      await finish({ dokumentId, oppgaveId: data.id });
-      remove(dokumentId, document);
-      close();
-    } catch (e) {
-      console.error(e);
-    }
+    return true;
   };
 
   if (document.isMarkertAvsluttet) {
@@ -83,5 +71,39 @@ export const SendButtons = ({ document }: FinishProps) => {
     );
   }
 
-  return <Confirm actionText="Send ut" onClick={onClick} isValidating={isValidating} isFinishing={isFinishing} />;
+  const onFinish = async () => {
+    try {
+      if (mottakerList.length === 0 && suggestedBrevmottakere.length === 1) {
+        await setMottakerList({
+          oppgaveId: data.id,
+          dokumentId,
+          mottakerList: suggestedBrevmottakere,
+        });
+      }
+      await finish({ dokumentId, oppgaveId: data.id }).unwrap();
+
+      remove(dokumentId, document);
+      close();
+    } catch (e) {
+      if (isSmartDocumentValidatonError(e)) {
+        const validationErrors = e.data.documents.map((d) => ({
+          dokumentId: d.dokumentId,
+          title: documents.find((doc) => doc.id === d.dokumentId)?.tittel ?? d.dokumentId,
+          errors: d.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
+        }));
+
+        setValidationErrors(validationErrors);
+      }
+    }
+  };
+
+  return (
+    <Confirm
+      actionText="Send ut"
+      onValidate={onValidate}
+      onFinish={onFinish}
+      isValidating={isValidating}
+      isFinishing={isFinishing}
+    />
+  );
 };

@@ -57,7 +57,7 @@ const Brevutforming = () => {
       }}
       testId="panel-switch-smart-editor"
     >
-      Brevutforming
+      Brevutforming og behandling
     </TogglePanelButton>
   );
 };

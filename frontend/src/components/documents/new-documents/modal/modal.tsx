@@ -1,9 +1,10 @@
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
+import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
@@ -24,6 +25,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isRol = useIsRol();
   const [open, setOpen] = useState(false);
+  const { close } = useContext(ModalContext);
 
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const canDeleteDocument = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
@@ -52,7 +54,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
       {open ? (
         <Modal
           open
-          width="1200px"
+          width={document.parentId === null ? '2000px' : '600px'}
           aria-modal
           data-testid="document-actions-modal"
           header={{
@@ -60,7 +62,10 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
             icon: <DocumentIcon type={type} />,
           }}
           closeOnBackdropClick
-          onClose={() => setOpen(false)}
+          onClose={() => {
+            close();
+            setOpen(false);
+          }}
         >
           <DocumentModalContent
             document={document}

@@ -1,8 +1,8 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 
-export interface Version {
+interface Version {
   url: string;
   ready: boolean;
   id: number;
@@ -14,10 +14,59 @@ interface Props {
   onVersionLoaded: (versionId: number) => void;
 }
 
+export interface UseNoFlickerReloadPdf {
+  onLoaded: (versionId: number) => void;
+  versions: Version[];
+  onReload: () => void;
+  setVersions: (versions: Version[]) => void;
+}
+
+export const useNoFlickerReloadPdf = (
+  pdfUrl: string | undefined,
+  setIsLoading: (loading: boolean) => void,
+): UseNoFlickerReloadPdf => {
+  const [versions, setVersions] = useState<Version[]>([]);
+
+  const onLoaded = useCallback(
+    (versionId: number) => {
+      setVersions((versionList) => versionList.map((v) => (v.id === versionId ? { ...v, ready: true } : v)));
+
+      setIsLoading(false);
+    },
+    [setIsLoading],
+  );
+
+  const load = useCallback(
+    async (url: string | undefined) => {
+      if (url === undefined) {
+        return;
+      }
+
+      setIsLoading(true);
+
+      setVersions((v) => {
+        const lastReady = v.findLast((e) => e.ready);
+        const newData: Version = { url, ready: false, id: Date.now() };
+
+        if (lastReady !== undefined) {
+          return [lastReady, newData];
+        }
+
+        return [newData];
+      });
+    },
+    [setIsLoading],
+  );
+
+  const onReload = useCallback(() => load(pdfUrl), [pdfUrl, load]);
+
+  return { onLoaded, versions, onReload, setVersions };
+};
+
 export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Props) => {
   const onLoad = useCallback(
     (version: Version) => {
-      setTimeout(() => onVersionLoaded(version.id), 2000);
+      setTimeout(() => onVersionLoaded(version.id), 250);
     },
     [onVersionLoaded],
   );

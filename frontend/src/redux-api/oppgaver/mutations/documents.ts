@@ -207,24 +207,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'POST',
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        const collectionPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-            draft.map((doc) => {
-              if (doc.id === dokumentId) {
-                return { ...doc, isMarkertAvsluttet: true };
-              }
-
-              return doc;
-            }),
-          ),
-        );
-
-        const documentPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
-            draft.isMarkertAvsluttet = true;
-          }),
-        );
-
         try {
           const { data } = await queryFulfilled;
 
@@ -241,14 +223,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             })),
           );
         } catch (e) {
-          collectionPatchResult.undo();
-          documentPatchResult.undo();
-
           const message = 'Kunne ikke ferdigstille dokumentet.';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
-          } else {
+          // API error is shown in modal
+          if (!isApiRejectionError(e)) {
             toast.error(message);
           }
         }

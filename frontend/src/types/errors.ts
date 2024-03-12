@@ -1,7 +1,7 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { isGenericObject } from './types';
 
-interface ApiError {
+export interface ApiError {
   type: string; // about:blank
   title: string; // Bad Request
   status: number; // 400
