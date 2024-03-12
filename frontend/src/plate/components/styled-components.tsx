@@ -93,7 +93,6 @@ const StickyContent = styled.div`
   top: 48px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   column-gap: 4px;
   background-color: var(--a-bg-subtle);
   color: var(--a-icon-action);
@@ -146,6 +145,8 @@ export const SectionContainer = styled.div<SectionContainerProps>`
     > ${SectionToolbarStyle} {
       opacity: 1;
     }
+
+    z-index: 1;
   }
 `;
 
@@ -168,5 +169,7 @@ export const MaltekstseksjonContainer = styled.div`
     > ${MaltekstseksjonToolbarStyle} {
       opacity: 1;
     }
+
+    z-index: 1;
   }
 `;
