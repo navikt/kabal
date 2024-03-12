@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useState } from 'react';
-import { ValidationError } from '@app/components/documents/new-documents/modal/finish-document/errors';
+import { ValidationError } from '@app/components/documents/new-documents/modal/finish-document/types';
 import { IMainDocument } from '@app/types/documents/documents';
 
 interface IModalContext {
@@ -36,7 +36,10 @@ export const ModalContextElement = ({ children }: Props) => {
     setValidationErrors(INITIAL_VALIDATION_ERRORS);
   }, []);
 
-  const close = useCallback(() => setDocument(null), [setDocument]);
+  const close = useCallback(() => {
+    setValidationErrors(INITIAL_VALIDATION_ERRORS);
+    setDocument(null);
+  }, [setDocument]);
 
   return (
     <ModalContext.Provider

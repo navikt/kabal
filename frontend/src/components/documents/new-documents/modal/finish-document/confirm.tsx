@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import { StyledButtons } from './styled-components';
 
 interface ConfirmProps {
-  onClick: () => void;
+  onFinish: () => void;
+  onValidate: () => Promise<boolean>;
   isFinishing: boolean;
   isValidating: boolean;
   actionText: string;
 }
 
-export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: ConfirmProps) => {
+export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFinishing }: ConfirmProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   if (!showConfirm) {
@@ -20,7 +21,10 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
           type="button"
           size="small"
           variant="primary"
-          onClick={() => setShowConfirm(true)}
+          onClick={async () => {
+            const isValid = await onValidate();
+            setShowConfirm(isValid);
+          }}
           loading={isFinishing || isValidating}
           data-testid="document-finish-button"
           icon={<PaperplaneIcon aria-hidden />}
@@ -37,7 +41,7 @@ export const Confirm = ({ onClick, actionText, isValidating, isFinishing }: Conf
         type="button"
         size="small"
         variant="primary"
-        onClick={onClick}
+        onClick={onFinish}
         loading={isFinishing || isValidating}
         data-testid="document-finish-confirm"
         icon={<PaperplaneIcon aria-hidden />}

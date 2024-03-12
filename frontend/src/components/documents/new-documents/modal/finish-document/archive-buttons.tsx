@@ -5,8 +5,8 @@ import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Confirm } from './confirm';
-import { ERROR_MESSAGES } from './error-messages';
-import { FinishProps } from './types';
+import { VALIDATION_ERROR_MESSAGES } from './error-messages';
+import { FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const ArchiveButtons = ({ document }: FinishProps) => {
   const { id: dokumentId } = document;
@@ -17,9 +17,9 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
   const remove = useRemoveDocument();
 
-  const onClick = async () => {
+  const onValidate = async () => {
     if (typeof oppgaveId !== 'string') {
-      return;
+      return false;
     }
 
     const validation = await validate({ dokumentId, oppgaveId }).unwrap();
@@ -28,25 +28,47 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
       const validationErrors = validation.map((v) => ({
         dokumentId: v.dokumentId,
         title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,
-        errors: v.errors.map((e) => ERROR_MESSAGES[e.type]),
+        errors: v.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
       }));
 
       setValidationErrors(validationErrors);
 
-      return;
+      return false;
     }
 
     setValidationErrors([]);
 
-    await finish({ dokumentId, oppgaveId });
-    remove(dokumentId, document);
-    close();
+    return true;
+  };
+
+  const onFinish = async () => {
+    if (typeof oppgaveId !== 'string') {
+      return;
+    }
+
+    try {
+      await finish({ dokumentId, oppgaveId }).unwrap();
+
+      remove(dokumentId, document);
+      close();
+    } catch (e) {
+      if (isSmartDocumentValidatonError(e)) {
+        const validationErrors = e.data.documents.map((d) => ({
+          dokumentId: d.dokumentId,
+          title: documents.find((doc) => doc.id === d.dokumentId)?.tittel ?? d.dokumentId,
+          errors: d.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
+        }));
+
+        setValidationErrors(validationErrors);
+      }
+    }
   };
 
   return (
     <Confirm
       actionText="Arkiver"
-      onClick={onClick}
+      onValidate={onValidate}
+      onFinish={onFinish}
       isFinishing={isLoading || document.isMarkertAvsluttet}
       isValidating={isValidating}
     />

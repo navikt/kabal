@@ -12,7 +12,7 @@ import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-doc
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
-import { NoFlickerReloadPdf, Version } from './no-flicker-reload';
+import { NoFlickerReloadPdf, useNoFlickerReloadPdf } from './no-flicker-reload';
 import { useMergedDocument } from './use-merged-document';
 
 const MIN_PDF_WIDTH = 400;
@@ -26,57 +26,18 @@ export const ViewPDF = () => {
   const { showDocumentList, title } = useShownDocuments();
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
-  const [versions, setVersions] = useState<Version[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const oppgaveId = useOppgaveId();
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
+  const { onLoaded, onReload, setVersions, versions } = useNoFlickerReloadPdf(inlineUrl, setIsLoading);
 
   useMarkVisited(tabUrl);
 
-  const onLoaded = useCallback((versionId: number) => {
-    setVersions((versionList) => {
-      const _versions: Version[] = [];
-
-      for (const version of versionList) {
-        if (version.id === versionId) {
-          _versions.push({ ...version, ready: true });
-        } else if (!version.ready) {
-          _versions.push(version);
-        }
-      }
-
-      return _versions;
-    });
-
-    setIsLoading(false);
-  }, []);
-
-  const load = useCallback(async (url: string | undefined) => {
-    if (url === undefined) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    setVersions((v) => {
-      const lastReady = v.findLast((e) => e.ready);
-      const newData: Version = { url, ready: false, id: Date.now() };
-
-      if (lastReady !== undefined) {
-        return [lastReady, newData];
-      }
-
-      return [newData];
-    });
-  }, []);
-
-  const onReloadClick = useCallback(() => load(inlineUrl), [inlineUrl, load]);
-
   useEffect(() => {
     setVersions([]);
-    onReloadClick();
-  }, [onReloadClick]);
+    onReload();
+  }, [onReload, setVersions]);
 
   const onNewTabClick: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
@@ -139,7 +100,7 @@ export const ViewPDF = () => {
         <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
-        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReloadClick} />
+        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReload} />
         <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
         <Button
           as="a"

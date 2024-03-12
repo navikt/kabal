@@ -27,6 +27,7 @@ export const useDocumentsPdfViewed = () => {
   return { value: values, ...rest };
 };
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
+export const useDocumentsArchivePdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/modal/pdf/width'));
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
 export const useDocumentsWidth = () => useNumberSetting(useOppgavePath('tabs/documents/width'));
 

@@ -1,9 +1,14 @@
 import { Path } from 'slate';
 
 export enum DocumentValidationErrorType {
-  EMPTY_PLACEHOLDERS = 'EMPTY_PLACEHOLDERS',
+  EMPTY_PLACEHOLDER = 'EMPTY_PLACEHOLDER',
   EMPTY_REGELVERK = 'EMPTY_REGELVERK',
+  WRONG_DATE = 'WRONG_DATE',
+  DOCUMENT_MODIFIED = 'DOCUMENT_MODIFIED',
 }
+
+// Caught by frontend
+export const NO_RECIPIENTS_ERROR = 'NO_RECIPIENTS_ERROR';
 
 interface IValidationError {
   type: DocumentValidationErrorType;
