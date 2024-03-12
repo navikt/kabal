@@ -1,4 +1,4 @@
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathIcon, CheckmarkIcon, PadlockUnlockedIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import {
   PlateElement,
@@ -7,8 +7,11 @@ import {
   isEditorReadOnly,
   isElement,
   replaceNodeChildren,
+  unwrapNodes,
 } from '@udecode/plate-common';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { styled } from 'styled-components';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
@@ -63,6 +66,8 @@ export const Maltekst = ({
     );
   }
 
+  const unlock = () => unwrapNodes(editor, { match: (n) => n === element, at: [] });
+
   const readOnly = isEditorReadOnly(editor);
 
   return (
@@ -97,9 +102,80 @@ export const Maltekst = ({
                 loading={isFetching}
               />
             </Tooltip>
+            <Unlock onClick={unlock} loading={isFetching} />
           </SectionToolbar>
         )}
       </SectionContainer>
     </PlateElement>
   );
 };
+
+const Unlock = ({ onClick, loading }: { loading: boolean; onClick: () => void }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(ref, () => setShowConfirm(false));
+
+  const buttonStyle = showConfirm ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {};
+
+  return (
+    <UnlockContainer ref={ref}>
+      <Tooltip
+        content="Lås opp tekst (Obs! Kan ikke låses igjen. Teksten du låser opp vil ikke lenger automatisk påvirkes om du endrer utfall/resultat eller hjemmel.)"
+        delay={0}
+      >
+        <Button
+          style={buttonStyle}
+          icon={<PadlockUnlockedIcon aria-hidden />}
+          onClick={() => setShowConfirm(!showConfirm)}
+          variant={showConfirm ? 'primary' : 'tertiary'}
+          size="xsmall"
+          contentEditable={false}
+          loading={loading}
+        />
+      </Tooltip>
+
+      {showConfirm ? (
+        <ConfirmContainer>
+          <Tooltip content="Bekreft" delay={0} placement="right">
+            <Button
+              icon={<CheckmarkIcon aria-hidden />}
+              onClick={onClick}
+              variant="tertiary"
+              size="xsmall"
+              contentEditable={false}
+              loading={loading}
+            />
+          </Tooltip>
+          <Tooltip content="Avbryt" delay={0} placement="right">
+            <Button
+              icon={<XMarkIcon aria-hidden />}
+              onClick={() => setShowConfirm(false)}
+              variant="tertiary"
+              size="xsmall"
+              contentEditable={false}
+              loading={loading}
+            />
+          </Tooltip>
+        </ConfirmContainer>
+      ) : null}
+    </UnlockContainer>
+  );
+};
+
+const UnlockContainer = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+const ConfirmContainer = styled.div`
+  position: absolute;
+  top: 100%;
+  background-color: var(--a-bg-subtle);
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: var(--a-shadow-medium);
+`;
