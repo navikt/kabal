@@ -45,7 +45,6 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
         <ToggleGroup.Item value="-1" data-value="-1">
           Alle
         </ToggleGroup.Item>
-        1
       </ToggleGroup>
     </StyledRowsPerPage>
   );
