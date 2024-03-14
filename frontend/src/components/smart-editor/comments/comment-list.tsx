@@ -5,13 +5,13 @@ import { Comment } from './comment';
 
 interface CommentListProps {
   comments: ISmartEditorComment[];
-  isFocused: boolean;
+  isExpanded: boolean;
 }
 
-export const CommentList = ({ comments, isFocused }: CommentListProps) => (
+export const CommentList = ({ comments, isExpanded }: CommentListProps) => (
   <List>
     {comments.map(({ id, ...comment }, index) => (
-      <Comment key={id} id={id} isFocused={isFocused} {...comment} isMain={index === 0} />
+      <Comment key={id} id={id} isExpanded={isExpanded} {...comment} isMain={index === 0} />
     ))}
   </List>
 );
@@ -23,4 +23,5 @@ const List = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
+  font-size: 16px;
 `;

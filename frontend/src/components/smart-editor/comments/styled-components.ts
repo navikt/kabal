@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 export const StyledNewReply = styled.div`
   border-radius: var(--a-border-radius-medium);
+  font-size: 16px;
 `;
 
 export const StyledNewThread = styled.div`

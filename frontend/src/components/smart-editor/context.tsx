@@ -1,6 +1,9 @@
 import { TRange } from '@udecode/plate-common';
 import React, { createContext, useState } from 'react';
-import { useSmartEditorGodeFormuleringerOpen } from '@app/hooks/settings/use-setting';
+import {
+  useSmartEditorAnnotationsAtOrigin,
+  useSmartEditorGodeFormuleringerOpen,
+} from '@app/hooks/settings/use-setting';
 import { RichText } from '@app/plate/types';
 import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -19,6 +22,10 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   addBookmark: (bookmarkId: string, richTexts: RichText[]) => void;
   removeBookmark: (bookmarkId: string) => void;
   setInitialBookmarks: (bookmarks: Record<string, RichText[]>) => void;
+  showAnnotationsAtOrigin: boolean;
+  setShowAnnotationsAtOrigin: (show: boolean) => void;
+  sheetRef: HTMLDivElement | null;
+  setSheetRef: (ref: HTMLDivElement | null) => void;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -35,6 +42,10 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   addBookmark: noop,
   removeBookmark: noop,
   setInitialBookmarks: noop,
+  showAnnotationsAtOrigin: false,
+  setShowAnnotationsAtOrigin: noop,
+  sheetRef: null,
+  setSheetRef: noop,
 });
 
 interface Props {
@@ -49,6 +60,9 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
   const [bookmarksMap, setBookmarksMap] = useState<Record<string, RichText[]>>({});
+  const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
+    useSmartEditorAnnotationsAtOrigin();
+  const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
 
   const addBookmark = (bookmarkId: string, richTexts: RichText[]) =>
     setBookmarksMap((prev) => ({ ...prev, [bookmarkId]: richTexts }));
@@ -76,6 +90,10 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
         addBookmark,
         removeBookmark,
         setInitialBookmarks: setBookmarksMap,
+        showAnnotationsAtOrigin,
+        setShowAnnotationsAtOrigin,
+        sheetRef,
+        setSheetRef,
       }}
     >
       {children}

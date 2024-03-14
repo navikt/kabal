@@ -1,4 +1,4 @@
-import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, FileExportIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
@@ -15,7 +15,8 @@ interface Props {
 }
 
 export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => {
-  const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
+  const { showGodeFormuleringer, setShowGodeFormuleringer, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } =
+    useContext(SmartEditorContext);
   const { value: behandlingEnabled = true, setValue: setBehandlingEnabled } = useBehandlingEnabled();
 
   return (
@@ -47,6 +48,19 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
             const enabled = !showHistory;
             pushEvent('toggle-show-history', { enabled: enabled.toString() }, 'smart-editor');
             setShowHistory(enabled);
+          }}
+        />
+
+        <ToolbarSeparator />
+
+        <ToolbarIconButton
+          label="Vis kommentarer og bokmerker ved siden av innhold"
+          icon={<FileExportIcon aria-hidden />}
+          active={showAnnotationsAtOrigin}
+          onClick={() => {
+            const enabled = !showAnnotationsAtOrigin;
+            pushEvent('toggle-show-annotations-at-origin', { enabled: enabled.toString() }, 'smart-editor');
+            setShowAnnotationsAtOrigin(enabled);
           }}
         />
 

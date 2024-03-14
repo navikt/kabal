@@ -1,19 +1,19 @@
 import { toDOMRange } from '@udecode/plate-common';
 import { BasePoint } from 'slate';
+import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
 import { RichTextEditor } from '@app/plate/types';
 
 export interface IRangePosition {
+  /** em */
   top: number;
+  /** em */
   left: number;
-  right: number;
-  bottom: number;
-  height: number;
-  width: number;
 }
 
 export const calculateRangePosition = (
   editor: RichTextEditor,
-  containerRef: HTMLDivElement,
+  containerRef: HTMLElement,
   selectionStart: BasePoint,
 ): IRangePosition | null => {
   const range = toDOMRange(editor, {
@@ -34,11 +34,7 @@ export const calculateRangePosition = (
   const containerPosition = containerRef.getBoundingClientRect();
 
   return {
-    top: rangePosition.top - containerPosition.top,
-    left: rangePosition.left - containerPosition.left,
-    right: rangePosition.right - containerPosition.right,
-    bottom: rangePosition.bottom - containerPosition.bottom,
-    height: rangePosition.height,
-    width: rangePosition.width,
+    top: (rangePosition.top - containerPosition.top) / CURRENT_SCALE / BASE_FONT_SIZE_PX,
+    left: (rangePosition.left - containerPosition.left) / CURRENT_SCALE / BASE_FONT_SIZE_PX,
   };
 };

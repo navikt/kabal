@@ -9,7 +9,7 @@ import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { COMMENT_PREFIX } from '../constants';
 
-interface FocusedComment extends ISmartEditorComment {
+export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;
 }
 

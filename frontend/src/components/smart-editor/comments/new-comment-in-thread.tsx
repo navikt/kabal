@@ -11,19 +11,18 @@ import { WriteComment } from './write-comment/write-comment';
 
 interface NewCommentInThreadProps {
   threadId: string;
-  isFocused: boolean;
-  close: () => void;
-  onFocus: () => void;
+  isExpanded: boolean;
+  close?: () => void;
 }
 
-export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewCommentInThreadProps) => {
+export const NewCommentInThread = ({ threadId, isExpanded, close }: NewCommentInThreadProps) => {
   const { user } = useContext(StaticDataContext);
   const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
 
-  if (!isFocused) {
+  if (!isExpanded) {
     return null;
   }
 
@@ -55,7 +54,6 @@ export const NewCommentInThread = ({ threadId, isFocused, close, onFocus }: NewC
         isLoading={isLoading}
         label="Svar på kommentar"
         close={close}
-        onFocus={onFocus}
         primaryButtonLabel="Legg til"
       />
     </StyledNewReply>

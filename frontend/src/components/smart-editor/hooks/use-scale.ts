@@ -10,11 +10,33 @@ export const MAX = 500;
 
 const USER_STEP = 5;
 
+export let CURRENT_SCALE = DEFAULT / 100;
+
 export const useScaleState = () => {
   const { value = DEFAULT, setValue } = useSmartEditorZoom();
 
-  const scaleUp = useCallback(() => setValue((v = DEFAULT) => snapUp(v)), [setValue]);
-  const scaleDown = useCallback(() => setValue((v = DEFAULT) => snapDown(v)), [setValue]);
+  CURRENT_SCALE = value / 100;
+
+  const scaleUp = useCallback(
+    () =>
+      setValue((v = DEFAULT) => {
+        const snapped = snapUp(v);
+        CURRENT_SCALE = snapped / 100;
+
+        return snapped;
+      }),
+    [setValue],
+  );
+  const scaleDown = useCallback(
+    () =>
+      setValue((v = DEFAULT) => {
+        const snapped = snapDown(v);
+        CURRENT_SCALE = snapped / 100;
+
+        return snapped;
+      }),
+    [setValue],
+  );
 
   return { scaleUp, scaleDown, setValue, value };
 };

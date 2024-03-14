@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
-import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { DEFAULT, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { PlateEditorContent } from '@app/plate/styled-components';
@@ -7,10 +6,9 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 
 export const Content = ({ children }: { children?: React.ReactNode }) => {
   const editor = useMyPlateEditorRef();
-  const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection, newCommentSelection, bookmarksMap } =
+  const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection, showAnnotationsAtOrigin } =
     useContext(SmartEditorContext);
   const { scaleUp, scaleDown, setValue } = useScaleState();
-  const { attached, orphans } = useThreads();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -28,7 +26,7 @@ export const Content = ({ children }: { children?: React.ReactNode }) => {
       return;
     }
 
-    if (lowerCaseKey === 'k') {
+    if (!event.shiftKey && lowerCaseKey === 'k') {
       event.preventDefault();
       setNewCommentSelection(editor.selection);
 
@@ -82,12 +80,8 @@ export const Content = ({ children }: { children?: React.ReactNode }) => {
     return () => element.removeEventListener('wheel', onWheel);
   }, [onWheel]);
 
-  const bookmarks = Object.keys(bookmarksMap);
-  const paddingRight =
-    attached.length === 0 && orphans.length === 0 && newCommentSelection === null && bookmarks.length === 0 ? 0 : 360;
-
   return (
-    <PlateEditorContent onKeyDown={onKeyDown} ref={ref} style={{ paddingRight }}>
+    <PlateEditorContent onKeyDown={onKeyDown} ref={ref} $showAnnotationsAtOrigin={showAnnotationsAtOrigin}>
       {children}
     </PlateEditorContent>
   );

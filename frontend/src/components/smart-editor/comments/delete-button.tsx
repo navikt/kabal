@@ -1,6 +1,7 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -49,7 +50,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
 
   if (!showConfirm) {
     return (
-      <Button
+      <AlignLeftButton
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         variant="tertiary-neutral"
@@ -57,13 +58,13 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
         disabled={isDeleting}
       >
         {children}
-      </Button>
+      </AlignLeftButton>
     );
   }
 
   return (
     <>
-      <Button
+      <AlignLeftButton
         size="xsmall"
         icon={<XMarkIcon aria-hidden />}
         variant="tertiary"
@@ -71,8 +72,8 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
         disabled={isDeleting}
       >
         Avbryt
-      </Button>
-      <Button
+      </AlignLeftButton>
+      <AlignLeftButton
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         variant="tertiary-neutral"
@@ -80,7 +81,11 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
         loading={isDeleting}
       >
         {children}
-      </Button>
+      </AlignLeftButton>
     </>
   );
 };
+
+const AlignLeftButton = styled(Button)`
+  justify-content: flex-start;
+`;
