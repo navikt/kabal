@@ -24,6 +24,6 @@ export const CommentSection = () => {
 };
 
 const StyledCommentSection = styled.div`
-  width: 350px;
-  margin-top: 16px;
+  width: fit-content;
+  padding-right: 16px;
 `;

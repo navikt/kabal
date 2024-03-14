@@ -9,12 +9,12 @@ import { DeleteButton } from './delete-button';
 import { EditButton, EditComment } from './edit-comment';
 
 interface Props extends ISmartEditorComment {
-  isFocused: boolean;
+  isExpanded: boolean;
   isMain: boolean;
 }
 
 export const Comment = memo(
-  ({ author, created, text, id, isFocused, isMain }: Props) => {
+  ({ author, created, text, id, isExpanded, isMain }: Props) => {
     const [isEditing, setIsEditing] = useState(false);
     const [showActions, setShowActions] = useState(false);
     const actionsRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export const Comment = memo(
 
           <Text />
 
-          {isFocused ? (
+          {isExpanded ? (
             <ActionsContainer ref={actionsRef}>
               <Button
                 onClick={() => setShowActions((a) => !a)}
@@ -51,13 +51,13 @@ export const Comment = memo(
                     authorIdent={author.ident}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
-                    isFocused={isFocused}
+                    isFocused={isExpanded}
                     close={() => setShowActions(false)}
                   />
                   <DeleteButton
                     id={id}
                     authorIdent={author.ident}
-                    isFocused={isFocused}
+                    isFocused={isExpanded}
                     close={() => setShowActions(false)}
                   >
                     {isMain ? 'Slett tråd' : 'Slett svar'}
@@ -71,7 +71,7 @@ export const Comment = memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isFocused === nextProps.isFocused,
+    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isExpanded === nextProps.isExpanded,
 );
 
 Comment.displayName = 'Comment';
@@ -86,8 +86,8 @@ const StyledButtons = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   row-gap: 4px;
   box-shadow: var(--a-shadow-medium);
   background-color: white;
@@ -128,7 +128,7 @@ const StyledDate = styled.time`
   display: block;
   width: 100%;
   font-size: 14px;
-  color: #828282;
+  color: var(--a-gray-700);
 `;
 
 const StyledText = styled.p`

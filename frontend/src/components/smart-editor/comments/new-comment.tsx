@@ -87,9 +87,9 @@ export const NewComment = ({ container }: Props) => {
 
   return (
     <StyledNewThread
-      style={{ top: position.top }}
+      style={{ top: `${position.top}em` }}
       onKeyDown={(e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'k') {
           e.preventDefault();
           close();
         }

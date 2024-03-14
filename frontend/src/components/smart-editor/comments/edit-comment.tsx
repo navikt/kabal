@@ -1,6 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useContext } from 'react';
+import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
@@ -29,9 +30,9 @@ export const EditButton = ({ id, authorIdent, isEditing, setIsEditing, isFocused
   };
 
   return (
-    <Button size="xsmall" icon={<PencilIcon aria-hidden />} variant="tertiary" onClick={toggleEdit}>
+    <AlignLeftButton size="xsmall" icon={<PencilIcon aria-hidden />} variant="tertiary" onClick={toggleEdit}>
       Endre
-    </Button>
+    </AlignLeftButton>
   );
 };
 
@@ -67,3 +68,7 @@ export const EditComment = ({ close, id, authorIdent, defaultValue }: EditCommen
     />
   );
 };
+
+const AlignLeftButton = styled(Button)`
+  justify-content: flex-start;
+`;

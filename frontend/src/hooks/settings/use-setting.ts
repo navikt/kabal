@@ -80,6 +80,8 @@ export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tab
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
 export const useSmartEditorZoom = () => useNumberSetting(useOppgavePath('tabs/smart-editor/zoom'));
+export const useSmartEditorAnnotationsAtOrigin = () =>
+  useBooleanSetting(useOppgavePath('tabs/smart-editor/annotations_at_origin'));
 
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',

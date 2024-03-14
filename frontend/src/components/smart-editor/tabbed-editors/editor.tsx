@@ -1,7 +1,7 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import React, { Profiler, useContext, useRef, useState } from 'react';
+import React, { Profiler, useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';
@@ -11,6 +11,7 @@ import { GodeFormuleringer } from '@app/components/smart-editor/gode-formulering
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
+import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
@@ -38,7 +39,7 @@ interface EditorProps {
 export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) => {
   const { id, templateId, content } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
-  const { newCommentSelection } = useContext(SmartEditorContext);
+  const { newCommentSelection, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
   const { data: oppgave } = useOppgave();
@@ -58,15 +59,15 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
 
   if (isLoading) {
     return (
-      <EditorContainer>
+      <Container>
         <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
         <Sheet $minHeight />
-      </EditorContainer>
+      </Container>
     );
   }
 
   return (
-    <EditorContainer>
+    <Container>
       <Plate<EditorValue, RichTextEditor>
         initialValue={content}
         id={id}
@@ -103,51 +104,59 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
           <GodeFormuleringer templateId={templateId} />
 
           <Content>
-            <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
+            <EditorContainer data-area="content">
+              <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
 
-            <ErrorBoundary
-              errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
-              actionButton={{
-                onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
-                loading: isLoading,
-                disabled: isLoading,
-                buttonText: 'Gjenopprett dokument',
-                buttonIcon: <ClockDashedIcon aria-hidden />,
-                variant: 'primary',
-                size: 'small',
-              }}
-            >
-              <Profiler
-                id="render_smart_editor"
-                onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
+              <ErrorBoundary
+                errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
+                actionButton={{
+                  onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
+                  loading: isLoading,
+                  disabled: isLoading,
+                  buttonText: 'Gjenopprett dokument',
+                  buttonIcon: <ClockDashedIcon aria-hidden />,
+                  variant: 'primary',
+                  size: 'small',
+                }}
               >
-                <EditorWithNewCommentAndFloatingToolbar id={id} />
-              </Profiler>
-            </ErrorBoundary>
+                <Profiler
+                  id="render_smart_editor"
+                  onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
+                >
+                  <EditorWithNewCommentAndFloatingToolbar id={id} />
+                </Profiler>
+              </ErrorBoundary>
+            </EditorContainer>
+
+            {showAnnotationsAtOrigin ? <PositionedRight /> : null}
           </Content>
 
-          <StickyRight id={id} />
+          {showAnnotationsAtOrigin ? null : <StickyRight id={id} />}
 
           {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
         </MainContainer>
 
         <StatusBar {...updateStatus} />
       </Plate>
-    </EditorContainer>
+    </Container>
   );
 };
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
-  const { templateId } = useContext(SmartEditorContext);
+  const { templateId, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setSheetRef(containerRef);
+  }, [containerRef, setSheetRef]);
 
   return (
-    <Sheet ref={containerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
-      <FloatingSaksbehandlerToolbar container={containerRef.current} editorId={id} />
-      <SaksbehandlerTableToolbar container={containerRef.current} editorId={id} />
+    <Sheet ref={setContainerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+      <FloatingSaksbehandlerToolbar container={containerRef} editorId={id} />
+      <SaksbehandlerTableToolbar container={containerRef} editorId={id} />
 
-      <NewComment container={containerRef.current} />
+      <NewComment container={containerRef} />
 
       <PlateEditor id={id} readOnly={!canEdit} />
     </Sheet>
@@ -158,16 +167,22 @@ const MainContainer = styled.div`
   display: flex;
   max-height: 100%;
   flex-shrink: 1;
-  overflow: hidden;
+  overflow-y: scroll;
+  scroll-padding-top: 64px;
   padding-left: 16px;
 `;
 
 const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
+  grid-area: content;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
   height: 100%;
   align-items: flex-start;
-  scroll-padding-top: 64px;
   overflow: hidden;
 `;

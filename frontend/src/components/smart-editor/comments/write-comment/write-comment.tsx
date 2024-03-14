@@ -5,20 +5,16 @@ import { MOD_KEY } from '@app/keys';
 import { StyledCommentButtonContainer } from '../styled-components';
 
 interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
-  close: () => void;
+  close?: () => void;
   isLoading: boolean;
   label: string;
-  onFocus?: () => void;
   onSubmit: (value: string) => Promise<void>;
   text?: string;
   autoFocus?: boolean;
 }
 
 export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
-  (
-    { close, isLoading, label, onFocus = () => {}, onSubmit, primaryButtonLabel, text = '', autoFocus = false },
-    outerRef,
-  ) => {
+  ({ close, isLoading, label, onSubmit, primaryButtonLabel, text = '', autoFocus = false }, outerRef) => {
     const [value, setValue] = useState(text);
     const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -43,7 +39,7 @@ export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
       }
 
       if (event.key === 'Escape') {
-        close();
+        close?.();
       }
     };
 
@@ -57,7 +53,6 @@ export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
           maxLength={0}
           minRows={1}
           onChange={({ target }) => setValue(target.value)}
-          onFocus={onFocus}
           onKeyDown={onKeyDown}
           placeholder="Skriv inn en kommentar"
           ref={ref}
@@ -79,7 +74,7 @@ export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
 WriteComment.displayName = 'WriteComment';
 
 interface ButtonsProps {
-  close: () => void;
+  close?: () => void;
   disabled: boolean;
   isLoading: boolean;
   onSubmit: () => void;
@@ -101,18 +96,20 @@ const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: B
         {primaryButtonLabel}
       </Button>
     </Tooltip>
-    <Tooltip content="Avbryt" keys={['Esc']}>
-      <Button
-        disabled={isLoading}
-        icon={<XMarkIcon aria-hidden />}
-        onClick={close}
-        size="small"
-        title="Escape"
-        type="button"
-        variant="secondary"
-      >
-        Avbryt
-      </Button>
-    </Tooltip>
+    {close === undefined ? null : (
+      <Tooltip content="Avbryt" keys={['Esc']}>
+        <Button
+          disabled={isLoading}
+          icon={<XMarkIcon aria-hidden />}
+          onClick={close}
+          size="small"
+          title="Escape"
+          type="button"
+          variant="secondary"
+        >
+          Avbryt
+        </Button>
+      </Tooltip>
+    )}
   </StyledCommentButtonContainer>
 );

@@ -2,6 +2,8 @@ import { isCollapsed, isEditorFocused, someNode } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 import React, { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
 import { getRangePosition } from '@app/plate/functions/get-range-position';
 import { IRangePosition } from '@app/plate/functions/range-position';
 import { useSelection } from '@app/plate/hooks/use-selection';
@@ -41,7 +43,14 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
   }
 
   return (
-    <StyledFloatingToolbar style={{ top: position.top - OFFSET, ...horizontalPosition }} ref={setRef}>
+    <StyledFloatingToolbar
+      style={{
+        top: `calc(${position.top}em - ${OFFSET}px)`,
+        left: horizontalPosition.left === undefined ? undefined : `${horizontalPosition.left}em`,
+        right: horizontalPosition.right === undefined ? undefined : `${horizontalPosition.right}em`,
+      }}
+      ref={setRef}
+    >
       {children}
     </StyledFloatingToolbar>
   );
@@ -56,7 +65,7 @@ const getHorizontalPosition = (
     return {};
   }
 
-  const maxLeft = container.offsetWidth - toolbarRef.offsetWidth;
+  const maxLeft = (container.offsetWidth - toolbarRef.offsetWidth) / CURRENT_SCALE / BASE_FONT_SIZE_PX;
 
   return position.left > maxLeft ? { right: 0 } : { left: position.left };
 };
@@ -71,9 +80,6 @@ export const StyledFloatingToolbar = styled.section`
   background-color: var(--a-surface-default);
   z-index: 21;
   will-change: left, top;
-  transition:
-    left 50ms ease-in-out,
-    top 50ms ease-in-out;
 `;
 
 export const FloatingSaksbehandlerToolbar = (props: Props) => (

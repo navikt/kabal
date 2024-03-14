@@ -22,7 +22,7 @@ export const Bookmarks = ({ editorId }: Props) => {
     return null;
   }
 
-  const onClick = (node: TNode) => toDOMNode(editor, node)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const onClick = (node: TNode) => toDOMNode(editor, node)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   return (
     <BookmarkList>
@@ -100,11 +100,12 @@ const BookmarkList = styled.ul`
   flex-direction: column;
   justify-content: flex-start;
   list-style: none;
-  width: 350px;
+  width: 100%;
   margin: 0;
-  margin-top: 16px;
   padding: 0;
+  padding-left: 16px;
   padding-right: 16px;
+  position: relative;
 `;
 
 const BookmarkListItem = styled.li`

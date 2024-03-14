@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { Bookmarks, getBookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { CommentSection } from '@app/components/smart-editor/comments/comment-section';
-import { useThreads } from '@app/components/smart-editor/comments/use-threads';
+import { NumberOfComments } from '@app/components/smart-editor/comments/number-of-comments';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useMyPlateEditorState } from '@app/plate/types';
 
@@ -11,8 +11,7 @@ interface StickyRightProps {
 }
 
 export const StickyRight = ({ id }: StickyRightProps) => {
-  const { newCommentSelection, bookmarksMap, setInitialBookmarks } = useContext(SmartEditorContext);
-  const { attached, orphans } = useThreads();
+  const { setInitialBookmarks } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorState(id);
   const isInitalized = useRef(false);
 
@@ -33,17 +32,9 @@ export const StickyRight = ({ id }: StickyRightProps) => {
     return () => clearTimeout(timer);
   }, [editor, editor.children, setInitialBookmarks]);
 
-  if (
-    attached.length === 0 &&
-    orphans.length === 0 &&
-    newCommentSelection === null &&
-    Object.keys(bookmarksMap).length === 0
-  ) {
-    return null;
-  }
-
   return (
     <StickyRightContainer>
+      <NumberOfComments />
       <Bookmarks editorId={id} />
       <CommentSection />
     </StickyRightContainer>
@@ -51,13 +42,11 @@ export const StickyRight = ({ id }: StickyRightProps) => {
 };
 
 const StickyRightContainer = styled.div`
+  grid-area: right;
   display: flex;
   flex-direction: column;
   row-gap: 16px;
   position: sticky;
   top: 0;
   overflow-y: auto;
-  height: 100%;
-  margin-left: -370px;
-  margin-right: 20px;
 `;
