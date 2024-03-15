@@ -54,7 +54,7 @@ export const Maltekstseksjon = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
   const { data: oppgave } = useOppgave();
-  const { templateId } = useContext(SmartEditorContext);
+  const { templateId, onComponentLoad } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKSTSEKSJON, section: element.section, templateId });
   const [fetchMaltekstseksjon, { isFetching: maltekstseksjonIsFetching }] = useLazyGetConsumerMaltekstseksjonerQuery();
   const [fetchMaltekstseksjonTexts, { isFetching: maltekstseksjonTextsIsFetching }] =
@@ -95,8 +95,10 @@ export const Maltekstseksjon = ({
           }
         });
       });
+
+      onComponentLoad();
     },
-    [path, editor],
+    [path, editor, onComponentLoad],
   );
 
   type GetReplaceMethodFn = (

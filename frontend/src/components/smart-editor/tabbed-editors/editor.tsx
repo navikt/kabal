@@ -1,7 +1,7 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import React, { Profiler, useContext, useEffect, useState } from 'react';
+import React, { Profiler, useContext, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';
@@ -143,20 +143,15 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
 };
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
-  const { templateId, setSheetRef } = useContext(SmartEditorContext);
+  const { templateId, sheetRef, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
-  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setSheetRef(containerRef);
-  }, [containerRef, setSheetRef]);
 
   return (
-    <Sheet ref={setContainerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
-      <FloatingSaksbehandlerToolbar container={containerRef} editorId={id} />
-      <SaksbehandlerTableToolbar container={containerRef} editorId={id} />
+    <Sheet ref={setSheetRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+      <FloatingSaksbehandlerToolbar container={sheetRef} editorId={id} />
+      <SaksbehandlerTableToolbar container={sheetRef} editorId={id} />
 
-      <NewComment container={containerRef} />
+      <NewComment container={sheetRef} />
 
       <PlateEditor id={id} readOnly={!canEdit} />
     </Sheet>

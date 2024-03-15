@@ -1,5 +1,5 @@
 import { TRange } from '@udecode/plate-common';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useRef, useState } from 'react';
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,
@@ -9,6 +9,9 @@ import { DistribusjonsType, ISmartDocument } from '@app/types/documents/document
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const noop = () => {};
+
+type ComponentLoadListener = () => void;
+type RemoveComponentLoadListener = () => void;
 
 interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
@@ -26,6 +29,9 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: HTMLDivElement | null;
   setSheetRef: (ref: HTMLDivElement | null) => void;
+  onComponentLoad: () => void;
+  addComponentLoadListener: (listener: ComponentLoadListener) => RemoveComponentLoadListener;
+  removeComponentLoadListener: (listener: ComponentLoadListener) => void;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -46,6 +52,9 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setShowAnnotationsAtOrigin: noop,
   sheetRef: null,
   setSheetRef: noop,
+  onComponentLoad: noop,
+  addComponentLoadListener: () => noop,
+  removeComponentLoadListener: noop,
 });
 
 interface Props {
@@ -63,6 +72,7 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
   const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
+  const componentLoadListeners = useRef<ComponentLoadListener[]>([]);
 
   const addBookmark = (bookmarkId: string, richTexts: RichText[]) =>
     setBookmarksMap((prev) => ({ ...prev, [bookmarkId]: richTexts }));
@@ -73,6 +83,23 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
 
       return { ...prev };
     });
+
+  const onComponentLoad = useCallback(() => {
+    componentLoadListeners.current.forEach((l) => l());
+  }, []);
+
+  const removeComponentLoadListener = useCallback((listener: () => void) => {
+    componentLoadListeners.current = componentLoadListeners.current.filter((l) => l !== listener);
+  }, []);
+
+  const addComponentLoadListener = useCallback(
+    (listener: () => void) => {
+      componentLoadListeners.current.push(listener);
+
+      return () => removeComponentLoadListener(listener);
+    },
+    [removeComponentLoadListener],
+  );
 
   return (
     <SmartEditorContext.Provider
@@ -94,6 +121,9 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
         setShowAnnotationsAtOrigin,
         sheetRef,
         setSheetRef,
+        onComponentLoad,
+        addComponentLoadListener,
+        removeComponentLoadListener,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
@@ -21,13 +21,13 @@ const EMPTY_LIST: PositionedItem<ThreadData>[] = [];
 
 export const PositionedComments = () => {
   const { attached, orphans } = useThreads();
-  const { sheetRef, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { sheetRef, showAnnotationsAtOrigin, addComponentLoadListener } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
 
-  const { positionedItems, maxCount } = useMemo<{
+  const calulateItems = useCallback((): {
     positionedItems: PositionedItem<ThreadData>[];
     maxCount: number;
-  }>(() => {
+  } => {
     if (!showAnnotationsAtOrigin) {
       return { positionedItems: EMPTY_LIST, maxCount: 0 };
     }
@@ -40,7 +40,16 @@ export const PositionedComments = () => {
       positionedItems: p.positionedItems,
       maxCount: Math.max(p.maxCount, orphans.length),
     };
-  }, [showAnnotationsAtOrigin, attached, editor, sheetRef, orphans.length]);
+  }, [attached, editor, orphans.length, sheetRef, showAnnotationsAtOrigin]);
+
+  const [{ positionedItems, maxCount }, setItems] = useState(calulateItems());
+
+  useEffect(() => {
+    addComponentLoadListener(() => {
+      console.log('onComponentLoad');
+      setItems(calulateItems());
+    });
+  }, [addComponentLoadListener, calulateItems]);
 
   return (
     <Container style={{ width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET }}>
