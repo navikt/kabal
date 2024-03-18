@@ -1,25 +1,21 @@
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
-import React, { useContext } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import { OrphansModal } from '@app/components/smart-editor/comments/orphans-modal';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useThreads } from './use-threads';
+import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 
 export const NumberOfComments = () => {
-  const { attached, orphans } = useThreads();
-  const { bookmarksMap } = useContext(SmartEditorContext);
+  const { attached, orphans, bookmarks: bookmarksCount } = useAnnotationsCounts();
 
-  const bookmarksCount = Object.keys(bookmarksMap).length;
-
-  if (attached.length === 0 && orphans.length === 0 && bookmarksCount === 0) {
-    return <Wrapper>Ingen kommentarer eller bokmerker</Wrapper>;
+  if (attached === 0 && orphans === 0 && bookmarksCount === 0) {
+    return null;
   }
 
   return (
     <Wrapper>
-      <TextContainer>{threads(attached.length)}</TextContainer>
+      <TextContainer>{threads(attached)}</TextContainer>
 
-      {orphans.length === 0 ? null : <OrphansModal />}
+      {orphans === 0 ? null : <OrphansModal />}
 
       <TextContainer>{bookmarks(bookmarksCount)}</TextContainer>
     </Wrapper>
