@@ -1,6 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -114,7 +115,8 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
 
   const secondary =
     fromSaksbehandler !== null || canDeassignOthers ? (
-      <Button
+      <CountdownButton
+        seconds={10}
         variant="tertiary"
         size="small"
         onClick={() => {
@@ -128,7 +130,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
         }}
       >
         Angre
-      </Button>
+      </CountdownButton>
     ) : null;
 
   return (

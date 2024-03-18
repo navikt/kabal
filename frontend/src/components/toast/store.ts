@@ -26,7 +26,7 @@ class Store {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  public success = (message: React.ReactNode) => this.addMessage(ToastType.SUCCESS, message);
+  public success = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.SUCCESS, message, timeout);
   public error = (message: React.ReactNode) => this.addMessage(ToastType.ERROR, message);
   public warning = (message: React.ReactNode) => this.addMessage(ToastType.WARNING, message);
   public info = (message: React.ReactNode) => this.addMessage(ToastType.INFO, message);
@@ -35,9 +35,9 @@ class Store {
     this.listeners.forEach((listener) => listener(this.messages));
   }
 
-  private addMessage(type: ToastType, message: React.ReactNode) {
+  private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT) {
     const createdAt = Date.now();
-    const expiresAt = createdAt + TOAST_TIMEOUT;
+    const expiresAt = createdAt + timeout;
     const id = crypto.randomUUID();
 
     const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
