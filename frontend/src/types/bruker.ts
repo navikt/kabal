@@ -31,6 +31,7 @@ interface ICustomUserInfo {
   customLongName: string | null;
   customShortName: string | null;
   customJobTitle: string | null;
+  anonymous: boolean;
 }
 
 export interface ISignatureResponse extends ICustomUserInfo {
@@ -51,7 +52,7 @@ export enum Role {
 }
 
 export interface ISetCustomInfoParams {
-  key: keyof ICustomUserInfo;
+  key: keyof Omit<ICustomUserInfo, 'anonymous'>;
   value: string | null;
   navIdent: string;
 }
