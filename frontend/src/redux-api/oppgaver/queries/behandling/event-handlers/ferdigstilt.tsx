@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
@@ -17,7 +18,11 @@ export const handleFerdigstiltEvent =
       }
 
       if (userId !== actor.navIdent && draft.avsluttetAvSaksbehandlerDate === null) {
-        toast.info(<InfoToast title="Behandling ferdigstilt">{actor.navn} har ferdigstilt behandlingen.</InfoToast>);
+        toast.info(
+          <InfoToast title="Behandling ferdigstilt">
+            {formatEmployeeName(actor)} har ferdigstilt behandlingen.
+          </InfoToast>,
+        );
       }
 
       draft.avsluttetAvSaksbehandlerDate = avsluttetAvSaksbehandler;

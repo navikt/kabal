@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { formatEmployeeName } from '@app/domain/employee-name';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
 import { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, IHistory, IPart } from '@app/types/oppgavebehandling/response';
@@ -10,7 +10,7 @@ type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 export const toKey = (event: KeySource) => `${event.type}:${event.timestamp}`;
 
 export const employeeName = (employee: INavEmployee | null, fallback = '[Ukjent bruker]') => (
-  <b>{formatEmployeeName(employee, fallback)}</b>
+  <b>{formatEmployeeNameAndIdFallback(employee, fallback)}</b>
 );
 
 export const QUEUE = <b>felles kø</b>;

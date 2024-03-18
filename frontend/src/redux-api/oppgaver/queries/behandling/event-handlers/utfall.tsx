@@ -2,6 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { UtfallEvent } from '@app/redux-api/server-sent-events/types';
@@ -21,7 +22,7 @@ export const handleUtfallEvent =
 
         toast.info(
           <InfoToast title="Utfall endret">
-            {actor.navn} har endret utfall fra:{' '}
+            {formatEmployeeName(actor)} har endret utfall fra:{' '}
             <Tag size="xsmall" variant="alt1">
               {oldUtfall === null ? 'Ikke valgt' : <UtfallName utfall={oldUtfall} />}
             </Tag>{' '}

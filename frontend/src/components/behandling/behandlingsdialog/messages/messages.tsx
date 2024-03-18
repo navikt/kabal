@@ -2,6 +2,7 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
@@ -50,7 +51,7 @@ const Message = ({ id, author, modified, text, created }: IMessage) => {
 
   return (
     <StyledMessage data-testid="message-list-item" data-message-id={id}>
-      <StyledAuthor>{author.navn}</StyledAuthor>
+      <StyledAuthor>{formatEmployeeName(author)}</StyledAuthor>
       <StyledTime dateTime={time}>{isoDateTimeToPretty(time)}</StyledTime>
       <StyledMessageContent data-testid="message-list-item-text">{text}</StyledMessageContent>
     </StyledMessage>

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { HistoryEditor } from '@app/components/smart-editor/history/history-editor';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import {
   useGetSmartDocumentVersionQuery,
   useGetSmartDocumentVersionsQuery,
@@ -121,9 +122,7 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
         <Tag variant="alt3" size="xsmall">
           <ClockDashedIcon aria-hidden /> Versjon: {version}
         </Tag>
-        <StyledHistoryItemAuthor>
-          {author === null ? 'Ukjent forfatter' : `${author.navn} (${author.navIdent})`}
-        </StyledHistoryItemAuthor>
+        <StyledHistoryItemAuthor>{formatEmployeeNameAndIdFallback(author, 'Ukjent forfatter')}</StyledHistoryItemAuthor>
         <StyledHistoryItemTimestamp>{isoDateTimeToPretty(timestamp)}</StyledHistoryItemTimestamp>
       </StyledButton>
     </li>

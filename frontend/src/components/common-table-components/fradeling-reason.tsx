@@ -4,7 +4,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { formatEmployeeName } from '@app/domain/employee-name';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useGetFradelingReasonQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 
@@ -40,8 +40,8 @@ export const FradelingReason = ({ oppgaveId }: Props) => {
       <Popover open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
         <Popover.Content>
           <Line>
-            {user.navIdent === data.actor?.navIdent ? 'Du' : formatEmployeeName(data.actor, 'Ukjent')} la saken tilbake
-            i felles kø <Time dateTime={data.timestamp}>{isoDateTimeToPretty(data.timestamp)}</Time>.
+            {user.navIdent === data.actor?.navIdent ? 'Du' : formatEmployeeNameAndIdFallback(data.actor, 'Ukjent')} la
+            saken tilbake i felles kø <Time dateTime={data.timestamp}>{isoDateTimeToPretty(data.timestamp)}</Time>.
           </Line>
           {data.event.fradelingReasonId === null || data.event.fradelingReasonId === FradelReason.LEDER ? null : (
             <Line>

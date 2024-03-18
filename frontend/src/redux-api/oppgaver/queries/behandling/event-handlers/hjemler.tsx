@@ -3,9 +3,11 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { HjemlerEvent } from '@app/redux-api/server-sent-events/types';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import { INavEmployee } from '@app/types/bruker';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 export const handleRegistreringshjemlerEvent =
@@ -19,7 +21,7 @@ export const handleRegistreringshjemlerEvent =
       if (userId !== actor.navIdent) {
         toast.info(
           <Toast
-            actor={actor.navn}
+            actor={actor}
             oldHjemler={[...draft.resultat.hjemmelIdSet]}
             newHjemler={hjemmelIdSet}
             type="Registreringshjemler"
@@ -43,7 +45,7 @@ export const handleInnsendingshjemlerEvent =
       if (userId !== actor.navIdent) {
         toast.info(
           <Toast
-            actor={actor.navn}
+            actor={actor}
             oldHjemler={[...draft.hjemmelIdList]}
             newHjemler={hjemmelIdSet}
             type="Innsendingshjemler"
@@ -57,7 +59,7 @@ export const handleInnsendingshjemlerEvent =
   };
 
 interface Props {
-  actor: string;
+  actor: INavEmployee;
   newHjemler: string[];
   oldHjemler: string[];
   type: 'Registreringshjemler' | 'Innsendingshjemler';
@@ -84,7 +86,7 @@ const Toast = ({ actor, newHjemler, oldHjemler, type }: Props) => {
   return (
     <InfoToast title={`${type} endret`}>
       <div>
-        {actor} har endret {type.toLowerCase()} fra:
+        {formatEmployeeName(actor)} har endret {type.toLowerCase()} fra:
       </div>
       {from}
       <div>til:</div>

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
 import { OnChange } from '@app/components/oppgavestyring/types';
-import { formatEmployeeName } from '@app/domain/employee-name';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { INavEmployee } from '@app/types/bruker';
 
@@ -27,7 +27,9 @@ export const useSetMedunderskriver = (
         toNavIdent === null ? null : medunderskrivere.find((m) => m.navIdent === toNavIdent) ?? null;
 
       const name =
-        toMedunderskriver === null ? 'fjernet' : `satt til ${formatEmployeeName(toMedunderskriver, 'ingen')}`;
+        toMedunderskriver === null
+          ? 'fjernet'
+          : `satt til ${formatEmployeeNameAndIdFallback(toMedunderskriver, 'ingen')}`;
 
       try {
         await setMedunderskriver({ oppgaveId, employee: toMedunderskriver });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { FormatName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
@@ -25,7 +26,8 @@ export const handleKlagerEvent =
       if (userId !== actor.navIdent && part.id !== draft.klager.id) {
         toast.info(
           <InfoToast title="Klager endret">
-            {actor.navn} har endret klager fra <FormatName {...draft.klager} /> til <FormatName {...part} />.
+            {formatEmployeeName(actor)} har endret klager fra <FormatName {...draft.klager} /> til{' '}
+            <FormatName {...part} />.
           </InfoToast>,
         );
       }

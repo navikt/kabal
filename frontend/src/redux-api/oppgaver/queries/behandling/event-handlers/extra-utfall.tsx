@@ -3,6 +3,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { ExtraUtfallEvent } from '@app/redux-api/server-sent-events/types';
@@ -41,19 +42,20 @@ export const handleExtraUtfallEvent =
         if (added.length > 0 && removed.length > 0) {
           toast.info(
             <InfoToast title="Ekstra utfall endret">
-              {actor.navn} har fjernet ekstra utfall for tilpasset tekst: {removedTags} og lagt til: {addedTags}.
+              {formatEmployeeName(actor)} har fjernet ekstra utfall for tilpasset tekst: {removedTags} og lagt til:{' '}
+              {addedTags}.
             </InfoToast>,
           );
         } else if (added.length > 0) {
           toast.info(
             <InfoToast title="Ekstra utfall lagt til">
-              {actor.navn} har lagt til ekstra utfall for tilpasset tekst: {addedTags}.
+              {formatEmployeeName(actor)} har lagt til ekstra utfall for tilpasset tekst: {addedTags}.
             </InfoToast>,
           );
         } else if (removed.length > 0) {
           toast.info(
             <InfoToast title="Ekstra utfall fjernet">
-              {actor.navn} har fjernet ekstra utfall for tilpasset tekst: {removedTags}.
+              {formatEmployeeName(actor)} har fjernet ekstra utfall for tilpasset tekst: {removedTags}.
             </InfoToast>,
           );
         }

@@ -2,9 +2,11 @@ import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
+import { INavEmployee } from '@app/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
@@ -16,7 +18,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
   const { actor, documents } = event;
 
   if (actor.navIdent !== userId) {
-    handleToast(documents, actor.navn);
+    handleToast(documents, actor);
   }
 
   reduxStore.dispatch(
@@ -90,7 +92,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
   );
 };
 
-const handleToast = (documents: IMainDocument[], name: string) => {
+const handleToast = (documents: IMainDocument[], actor: INavEmployee) => {
   const count = documents.length;
 
   if (count === 0) {
@@ -115,7 +117,7 @@ const handleToast = (documents: IMainDocument[], name: string) => {
 
     toast.info(
       <InfoToast title={`${type} ${action} som ${distType.toLowerCase()}`}>
-        {type} «{document?.tittel}» har blitt {action} som {distTypeTag} av {name}.
+        {type} «{document?.tittel}» har blitt {action} som {distTypeTag} av {formatEmployeeName(actor)}.
       </InfoToast>,
     );
   } else {
@@ -124,13 +126,13 @@ const handleToast = (documents: IMainDocument[], name: string) => {
     if (vedleggCount === 0) {
       toast.info(
         <InfoToast title="Dokumenter lagt til">
-          {count} dokumenter har blitt lagt til av {name}.
+          {count} dokumenter har blitt lagt til av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     } else if (vedleggCount === count) {
       toast.info(
         <InfoToast title="Vedlegg lagt til">
-          {count} vedlegg har blitt lagt til av {name}.
+          {count} vedlegg har blitt lagt til av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     } else {
@@ -145,14 +147,14 @@ const handleToast = (documents: IMainDocument[], name: string) => {
 
         toast.info(
           <InfoToast title="Dokumenter og vedlegg lagt til">
-            «{parent.tittel}» og {vedleggCount} vedlegg har blitt lagt til av {name}.
+            «{parent.tittel}» og {vedleggCount} vedlegg har blitt lagt til av {formatEmployeeName(actor)}.
           </InfoToast>,
         );
       } else {
         const dokument = parentCount === 1 ? 'dokument' : 'dokumenter';
         toast.info(
           <InfoToast title="Dokumenter og vedlegg lagt til">
-            {parentCount} {dokument} og {vedleggCount} vedlegg har blitt lagt til av {name}.
+            {parentCount} {dokument} og {vedleggCount} vedlegg har blitt lagt til av {formatEmployeeName(actor)}.
           </InfoToast>,
         );
       }

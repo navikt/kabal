@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
@@ -26,14 +27,14 @@ export const getMedunderskriverToastContent = (
       if (actor.navIdent === next.medunderskriver.navIdent) {
         return (
           <>
-            {actor.navn} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
+            {formatEmployeeName(actor)} hentet saken tilbake fra saksbehandler til <b>seg selv</b>.
           </>
         );
       }
 
       return (
         <>
-          {actor.navn} sendte saken tilbake til {employeeName(next.medunderskriver)} (medunderskriver).
+          {formatEmployeeName(actor)} sendte saken tilbake til {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }
@@ -41,19 +42,19 @@ export const getMedunderskriverToastContent = (
     if (previous.flowState === FlowState.NOT_SENT && next.flowState === FlowState.SENT) {
       return (
         <>
-          {actor.navn} sendte saken til {employeeName(next.medunderskriver)} (medunderskriver).
+          {formatEmployeeName(actor)} sendte saken til {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }
 
     if (previous.flowState === FlowState.SENT && next.flowState === FlowState.RETURNED) {
-      return <>{actor.navn} returnerte saken fra medunderskrift til saksbehandler.</>;
+      return <>{formatEmployeeName(actor)} returnerte saken fra medunderskrift til saksbehandler.</>;
     }
 
     if (previous.flowState === FlowState.SENT && next.flowState === FlowState.NOT_SENT) {
       return (
         <>
-          {actor.navn} hentet saken tilbake fra {employeeName(next.medunderskriver)} (medunderskriver).
+          {formatEmployeeName(actor)} hentet saken tilbake fra {employeeName(next.medunderskriver)} (medunderskriver).
         </>
       );
     }

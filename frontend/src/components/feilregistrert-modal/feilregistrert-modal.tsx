@@ -3,6 +3,7 @@ import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-
 import React from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFagsystemName } from '@app/hooks/use-fagsystem-name';
 
@@ -42,7 +43,7 @@ const Content = ({ close }: ContentProps) => {
             {isoDateTimeToPretty(oppgave.feilregistrering.registered)}
           </time>
         </BodyShort>
-        <BodyShort>Feilregistrert av: {oppgave.feilregistrering.feilregistrertAv.navn}</BodyShort>
+        <BodyShort>Feilregistrert av: {formatEmployeeName(oppgave.feilregistrering.feilregistrertAv)}</BodyShort>
         <BodyShort spacing>Fagsystem: {fagsystemName}</BodyShort>
         <Heading level="2" size="small" spacing>
           Årsak

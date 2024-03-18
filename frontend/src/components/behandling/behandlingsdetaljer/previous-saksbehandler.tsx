@@ -1,5 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import React from 'react';
+import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
@@ -17,7 +18,7 @@ export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) =>
     );
   }
 
-  return `${previousSaksbehandler.navn} (${previousSaksbehandler.navIdent})`;
+  return formatEmployeeNameAndId(previousSaksbehandler);
 };
 
 const getTypeName = (type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE) => {

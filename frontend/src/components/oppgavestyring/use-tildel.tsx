@@ -1,6 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { ActionToast } from '@app/components/toast/action-toast';
+import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useHasRole } from '@app/hooks/use-has-role';
 import {
   useFradelSaksbehandlerMutation,
@@ -103,10 +104,8 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 
 const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
-  const toSaksbehandlerText =
-    toSaksbehandler === null ? 'ukjent saksbehandler' : `${toSaksbehandler.navn} (${toSaksbehandler.navIdent})`;
-  const fromSaksbehandlerText =
-    fromSaksbehandler === null ? '' : ` fra ${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
+  const toSaksbehandlerText = formatEmployeeNameAndIdFallback(toSaksbehandler, 'ukjent saksbehandler');
+  const fromSaksbehandlerText = fromSaksbehandler === null ? '' : ` fra ${formatEmployeeNameAndId(fromSaksbehandler)}`;
   const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
   const [fradel] = useFradel(oppgaveId, oppgaveType, ytelseId);
   const canDeassignOthers = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
@@ -157,8 +156,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
 
 const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytelseId }: Props) => {
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
-  const fromSaksbehandlerText =
-    fromSaksbehandler === null ? '' : `${fromSaksbehandler.navn} (${fromSaksbehandler.navIdent})`;
+  const fromSaksbehandlerText = formatEmployeeNameAndIdFallback(fromSaksbehandler, '');
   const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
 
   const primary =

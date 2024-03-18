@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { FormatName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
@@ -26,17 +27,20 @@ export const handlefullmektigEvent =
 
       if (userId !== actor.navIdent) {
         if (part === null) {
-          toast.info(<InfoToast title="Fullmektig fjernet">{actor.navn} har fjernet fullmektig.</InfoToast>);
+          toast.info(
+            <InfoToast title="Fullmektig fjernet">{formatEmployeeName(actor)} har fjernet fullmektig.</InfoToast>,
+          );
         } else if (fullmektig !== null && part.id !== fullmektig.id) {
           toast.info(
             <InfoToast title="Fullmektig endret">
-              {actor.navn} har endret fullmektig fra <FormatName {...fullmektig} /> til <FormatName {...part} />.
+              {formatEmployeeName(actor)} har endret fullmektig fra <FormatName {...fullmektig} /> til{' '}
+              <FormatName {...part} />.
             </InfoToast>,
           );
         } else {
           toast.info(
             <InfoToast title="Fullmektig satt">
-              {actor.navn} har satt fullmektig til <FormatName {...part} />.
+              {formatEmployeeName(actor)} har satt fullmektig til <FormatName {...part} />.
             </InfoToast>,
           );
         }

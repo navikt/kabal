@@ -2,6 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentsRemovedEvent } from '@app/redux-api/server-sent-events/types';
@@ -50,7 +51,7 @@ export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) =
 };
 
 const handleToast = (
-  { navn }: INavEmployee,
+  actor: INavEmployee,
   removedParentDocuments: IParentDocument[],
   removedVedlegg: IMainDocument[],
   documents: IMainDocument[],
@@ -75,13 +76,13 @@ const handleToast = (
 
       toast.info(
         <InfoToast title={`Vedlegg ${action}`}>
-          «{v.tittel}» {tag} har blitt {action} av {navn}.
+          «{v.tittel}» {tag} har blitt {action} av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     } else {
       toast.info(
         <InfoToast title="Vedlegg slettet">
-          {vedleggCount} {tag} har blitt slettet av {navn}.
+          {vedleggCount} {tag} har blitt slettet av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     }
@@ -101,7 +102,7 @@ const handleToast = (
 
         toast.info(
           <InfoToast title={`Dokument ${action}`}>
-            {type} «{d.tittel}» {distType} har blitt {action} av {navn}.
+            {type} «{d.tittel}» {distType} har blitt {action} av {formatEmployeeName(actor)}.
           </InfoToast>,
         );
       } else {
@@ -113,7 +114,7 @@ const handleToast = (
 
         toast.info(
           <InfoToast title="Dokument og vedlegg slettet">
-            {type} «{d.tittel}» {distType} og {vedleggCount} {tag} har blitt slettet av {navn}.
+            {type} «{d.tittel}» {distType} og {vedleggCount} {tag} har blitt slettet av {formatEmployeeName(actor)}.
           </InfoToast>,
         );
       }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
@@ -19,7 +20,7 @@ export const handleFeilregistreringEvent =
       if (userId !== actor.navIdent && draft.feilregistrering === null) {
         toast.info(
           <InfoToast title="Behandling feilregistrert">
-            {actor.navn} har feilregistrert behandlingen.
+            {formatEmployeeName(actor)} har feilregistrert behandlingen.
             {reason}
           </InfoToast>,
         );
