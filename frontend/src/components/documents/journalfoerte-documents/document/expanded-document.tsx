@@ -1,4 +1,4 @@
-import { CopyButton, Detail, Label } from '@navikt/ds-react';
+import { CopyButton, Detail, HelpText, Label } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
@@ -17,7 +17,10 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
       <TopRow>
         <Section>
           <Label size="small">Status</Label>
-          <NowrapDetail>{journalstatus === null ? 'Ingen' : JOURNALSTATUS_NAME[journalstatus]}</NowrapDetail>
+          <NowrapDetail>
+            {journalstatus === null ? 'Ingen' : JOURNALSTATUS_NAME[journalstatus]}
+            {journalstatus === Journalstatus.MOTTATT ? <MottattHelpText /> : null}
+          </NowrapDetail>
         </Section>
 
         <Section>
@@ -42,6 +45,22 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
   );
 };
 
+const MottattHelpText = () => (
+  <HelpText>
+    <HelpTextContent>
+      Denne journalposten har status «Mottatt» og har ikke blitt journalført. Sørg for å få dokumentet journalført
+      riktig før du bruker det i saksbehandlingen din.
+    </HelpTextContent>
+  </HelpText>
+);
+
+const HelpTextContent = styled.p`
+  font-size: 16px;
+  white-space: normal;
+  line-height: var(--a-font-line-height-medium);
+  margin: 0;
+`;
+
 const StyledExpandedDocument = styled.div`
   display: flex;
   flex-direction: column;
@@ -60,6 +79,7 @@ const TopRow = styled.div`
   grid-column-gap: 16px;
   white-space: nowrap;
   position: sticky;
+  z-index: 1;
   left: 0;
 `;
 
@@ -76,6 +96,10 @@ const MetadataRow = styled.div`
 `;
 
 const NowrapDetail = styled(Detail)`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
