@@ -1,4 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { format } from 'date-fns';
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { INavEmployee } from '@app/types/bruker';
 import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
@@ -46,7 +48,7 @@ export const messagesApi = createApi({
         body: { text },
       }),
       onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
-        const now = new Date().toISOString();
+        const now = format(new Date(), ISO_DATETIME_FORMAT);
         const newMessageId = `${OPTIMISTIC_MESSAGE_ID_PREFIX}-${now}`;
 
         const patchResult = dispatch(
