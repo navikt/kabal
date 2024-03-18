@@ -1,8 +1,10 @@
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { DeleteButton } from './delete-button';
@@ -19,6 +21,11 @@ export const Comment = memo(
     const [showActions, setShowActions] = useState(false);
     const actionsRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(actionsRef, () => setShowActions(false));
+    const { user } = useContext(StaticDataContext);
+    const isSaksbehandler = useIsSaksbehandler();
+
+    const isAuthor = author.ident === user.navIdent;
+    const canEdit = isSaksbehandler || isAuthor;
 
     const Text = () =>
       isEditing ? (
@@ -36,7 +43,7 @@ export const Comment = memo(
 
           <Text />
 
-          {isExpanded ? (
+          {canEdit && isExpanded ? (
             <ActionsContainer ref={actionsRef}>
               <Button
                 onClick={() => setShowActions((a) => !a)}
