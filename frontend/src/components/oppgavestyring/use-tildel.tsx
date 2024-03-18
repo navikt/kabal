@@ -1,5 +1,6 @@
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -103,6 +104,7 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 };
 
 const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
+  const { user } = useContext(StaticDataContext);
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const toSaksbehandlerText = formatEmployeeNameAndIdFallback(toSaksbehandler, 'ukjent saksbehandler');
   const fromSaksbehandlerText = fromSaksbehandler === null ? '' : ` fra ${formatEmployeeNameAndId(fromSaksbehandler)}`;
@@ -120,7 +122,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
             return tildel(fromSaksbehandler);
           }
 
-          if (canDeassignOthers) {
+          if (canDeassignOthers || toSaksbehandler?.navIdent === user.navIdent) {
             return fradel({ reasonId: FradelReason.ANGRET });
           }
         }}
