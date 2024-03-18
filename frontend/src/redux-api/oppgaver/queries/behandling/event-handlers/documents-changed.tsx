@@ -2,6 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
@@ -53,13 +54,14 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
     if (vedleggCount === 0) {
       toast.info(
         <InfoToast title="Dokument satt til journalføring">
-          «{document.tittel}» har blitt satt til journalføring av {actor.navn}.
+          «{document.tittel}» har blitt satt til journalføring av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     } else {
       toast.info(
         <InfoToast title="Dokument satt til journalføring">
-          «{document.tittel}» med {vedleggCount} vedlegg har blitt satt til journalføring av {actor.navn}.
+          «{document.tittel}» med {vedleggCount} vedlegg har blitt satt til journalføring av {formatEmployeeName(actor)}
+          .
         </InfoToast>,
       );
     }
@@ -70,7 +72,7 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
 
     toast.info(
       <InfoToast title="Dokument gjort om til vedlegg">
-        «{document.tittel}» har blitt gjort til vedlegg for «{newParent}» av {actor.navn}.
+        «{document.tittel}» har blitt gjort til vedlegg for «{newParent}» av {formatEmployeeName(actor)}.
       </InfoToast>,
     );
   } else if (document.parentId !== null && update.parentId === null) {
@@ -78,7 +80,7 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
 
     toast.info(
       <InfoToast title="Dokument gjort om til hoveddokument">
-        «{document.tittel}» har blitt gjort til hoveddokument for «{oldParent}» av {actor.navn}.
+        «{document.tittel}» har blitt gjort til hoveddokument for «{oldParent}» av {formatEmployeeName(actor)}.
       </InfoToast>,
     );
   } else if (document.parentId !== update.parentId) {
@@ -87,7 +89,8 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
 
     toast.info(
       <InfoToast title="Vedlegg flyttet">
-        Vedlegg «{document.tittel}» har blitt flyttet fra «{oldParent}» til «{newParent}» av {actor.navn}.
+        Vedlegg «{document.tittel}» har blitt flyttet fra «{oldParent}» til «{newParent}» av {formatEmployeeName(actor)}
+        .
       </InfoToast>,
     );
   }
@@ -107,7 +110,7 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
 
     toast.info(
       <InfoToast title="Dokumenttype endret">
-        «{document.tittel}» har blitt endret fra {from} til {to} endret av {actor.navn}.
+        «{document.tittel}» har blitt endret fra {from} til {to} endret av {formatEmployeeName(actor)}.
       </InfoToast>,
     );
   }
@@ -115,7 +118,7 @@ const handleToast = (document: IMainDocument, update: Update, actor: Actor, draf
   if (document.tittel !== update.tittel) {
     toast.info(
       <InfoToast title="Dokumentnavn endret">
-        «{document.tittel}» har blitt omdøpt til «{update.tittel}» av {actor.navn}.
+        «{document.tittel}» har blitt omdøpt til «{update.tittel}» av {formatEmployeeName(actor)}.
       </InfoToast>,
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { JournalpostAddedEvent } from '@app/redux-api/server-sent-events/types';
@@ -18,12 +19,14 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
 
       toast.info(
         <InfoToast title="Dokument journalført og distribuert">
-          Et dokument har blitt journalført og distribuert til {mottakere} av {actor.navn}.
+          Et dokument har blitt journalført og distribuert til {mottakere} av {formatEmployeeName(actor)}.
         </InfoToast>,
       );
     } else {
       toast.info(
-        <InfoToast title="Dokument journalført">Et dokument har blitt journalført av {actor.navn}.</InfoToast>,
+        <InfoToast title="Dokument journalført">
+          Et dokument har blitt journalført av {formatEmployeeName(actor)}.
+        </InfoToast>,
       );
     }
   }

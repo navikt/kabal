@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatEmployeeName } from '@app/domain/employee-name';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
 import { INavEmployee } from '@app/types/bruker';
 
@@ -15,7 +15,7 @@ export const FormatName = ({ id, name = 'Navn mangler' }: Props) => (
 );
 
 export const employeeName = (employee: INavEmployee | null, fallback: string = 'ingen / felles kø') => (
-  <b>{formatEmployeeName(employee, fallback)}</b>
+  <b>{formatEmployeeNameAndIdFallback(employee, fallback)}</b>
 );
 
 export const QUEUE = <b>felles kø</b>;

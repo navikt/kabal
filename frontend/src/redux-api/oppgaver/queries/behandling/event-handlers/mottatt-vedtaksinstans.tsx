@@ -2,6 +2,7 @@ import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { isoDateToPretty } from '@app/domain/date';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { MottattVedtaksinstansEvent } from '@app/redux-api/server-sent-events/types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -20,7 +21,7 @@ export const handleMottattVedtaksinstansEvent =
 
         toast.info(
           <InfoToast title="Mottatt vedtaksintans endret">
-            {actor.navn} endret dato for mottatt vedtaksinstans fra {from} til {to}.
+            {formatEmployeeName(actor)} endret dato for mottatt vedtaksinstans fra {from} til {to}.
           </InfoToast>,
         );
       }

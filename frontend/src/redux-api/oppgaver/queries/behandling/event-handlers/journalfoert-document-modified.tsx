@@ -1,6 +1,7 @@
 import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { formatEmployeeName } from '@app/domain/employee-name';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { JournalfoertDocumentModifiedEvent } from '@app/redux-api/server-sent-events/types';
@@ -37,11 +38,9 @@ export const handleJournalfoertDocumentModified =
         }
 
         if (oldTitle !== event.tittel) {
-          const { navn } = event.actor;
-
           toast.info(
             <InfoToast title="Journalført dokument endret">
-              «{oldTitle}» har blitt omdøpt til «{event.tittel}» av {navn}.
+              «{oldTitle}» har blitt omdøpt til «{event.tittel}» av {formatEmployeeName(event.actor)}.
             </InfoToast>,
           );
         }

@@ -1,5 +1,6 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
+import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { IMedunderskriverRol } from '@app/types/oppgave-common';
 
 interface Props {
@@ -9,6 +10,6 @@ interface Props {
 export const RolReadOnly = ({ rol }: Props) => (
   <>
     <Label size="small">Rådgivende overlege</Label>
-    <BodyShort>{rol.employee === null ? 'Ikke satt' : `${rol.employee.navn} (${rol.employee.navIdent})`}</BodyShort>
+    <BodyShort>{formatEmployeeNameAndIdFallback(rol.employee, 'Ikke satt')}</BodyShort>
   </>
 );
