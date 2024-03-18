@@ -2,6 +2,7 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import { Name } from '@app/components/common-table-components/name';
 import { Rol } from '@app/components/common-table-components/rol';
@@ -209,6 +210,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <RelevantOppgaver oppgaveId={oppgave.id} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.FradelingReason:
+        return (
+          <Table.DataCell key={key}>
+            <FradelingReason oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
       default:

@@ -122,7 +122,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
           }
 
           if (canDeassignOthers) {
-            return fradel({ reasonId: FradelReason.LEDER });
+            return fradel({ reasonId: FradelReason.ANGRET });
           }
         }}
       >

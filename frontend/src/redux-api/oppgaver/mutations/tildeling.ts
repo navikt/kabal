@@ -1,8 +1,13 @@
+import { format } from 'date-fns';
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
+import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 import {
+  FradelReason,
   FradelSaksbehandlerParams,
   IFradelingResponse,
   ITildelingResponse,
@@ -80,18 +85,50 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
         const { oppgaveId } = params;
-        const hjemmelIdList = 'hjemmelIdList' in params ? params.hjemmelIdList : null;
+        const isFeilHjemmel = params.reasonId === FradelReason.FEIL_HJEMMEL;
 
         const optimisticBehandling = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (typeof draft !== 'undefined') {
-              draft.saksbehandler = null;
+            draft.saksbehandler = null;
 
-              if (hjemmelIdList !== null) {
-                draft.hjemmelIdList = hjemmelIdList;
-              }
+            if (isFeilHjemmel) {
+              draft.hjemmelIdList = params.hjemmelIdList;
             }
           }),
+        );
+
+        const userData = await user;
+
+        const optimisticFradelingReason = dispatch(
+          behandlingerQuerySlice.util.updateQueryData('getFradelingReason', oppgaveId, (draft) => ({
+            previous: {
+              actor: draft?.actor ?? null,
+              event: draft?.event ?? {
+                fradelingReasonId: null,
+                hjemmelIdList: [],
+                saksbehandler: null,
+              },
+              timestamp: draft?.timestamp ?? format(new Date(), ISO_DATETIME_FORMAT),
+              type: HistoryEventTypes.TILDELING,
+            },
+            timestamp: format(new Date(), ISO_DATETIME_FORMAT),
+            type: HistoryEventTypes.TILDELING,
+            actor: {
+              navIdent: userData.navIdent,
+              navn: userData.navn,
+            },
+            event: isFeilHjemmel
+              ? {
+                  saksbehandler: null,
+                  fradelingReasonId: params.reasonId,
+                  hjemmelIdList: params.hjemmelIdList,
+                }
+              : {
+                  saksbehandler: null,
+                  fradelingReasonId: params.reasonId,
+                  hjemmelIdList: [],
+                },
+          })),
         );
 
         try {
@@ -127,6 +164,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           );
         } catch (e) {
           optimisticBehandling.undo();
+          optimisticFradelingReason.undo();
 
           const message = 'Kunne ikke fradele oppgave.';
 

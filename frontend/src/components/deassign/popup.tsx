@@ -9,7 +9,7 @@ import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { FradelReason } from '@app/types/oppgaver';
+import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { Direction } from './direction';
 
 interface Props {
@@ -81,11 +81,11 @@ const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }:
       data-testid="deassign-oppgave-popup"
     >
       <RadioGroup value={reasonId} onChange={setReasonId} legend="Årsak for å legge tilbake" size="small">
-        <Radio value={FradelReason.FEIL_HJEMMEL}>Feil hjemmel</Radio>
-        <Radio value={FradelReason.MANGLER_KOMPETANSE}>Mangler kompetanse</Radio>
-        <Radio value={FradelReason.INHABIL}>Inhabil</Radio>
-        <Radio value={FradelReason.LENGRE_FRAVÆR}>Lengre fravær</Radio>
-        <Radio value={FradelReason.ANNET}>Annet</Radio>
+        <Radio value={FradelReason.FEIL_HJEMMEL}>{FradelReasonText[FradelReason.FEIL_HJEMMEL]}</Radio>
+        <Radio value={FradelReason.MANGLER_KOMPETANSE}>{FradelReasonText[FradelReason.MANGLER_KOMPETANSE]}</Radio>
+        <Radio value={FradelReason.INHABIL}>{FradelReasonText[FradelReason.INHABIL]}</Radio>
+        <Radio value={FradelReason.LENGRE_FRAVÆR}>{FradelReasonText[FradelReason.LENGRE_FRAVÆR]}</Radio>
+        <Radio value={FradelReason.ANNET}>{FradelReasonText[FradelReason.ANNET]}</Radio>
       </RadioGroup>
       {reasonId === FradelReason.FEIL_HJEMMEL ? (
         <HjemmelList

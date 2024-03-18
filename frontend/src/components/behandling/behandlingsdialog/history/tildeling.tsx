@@ -228,6 +228,18 @@ const getReason = (
           {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Manglende kompetanse</b>.
         </Line>
       );
+    case FradelReason.UTGÅTT:
+      return (
+        <Line>
+          {employeeName(actor)} la saken tilbake i {QUEUE}. Årsak: <b>Utgått</b>.
+        </Line>
+      );
+    case FradelReason.ANGRET:
+      return (
+        <Line>
+          {employeeName(actor)} angret på tildelingen og la saken tilbake i {QUEUE}.
+        </Line>
+      );
   }
 };
 

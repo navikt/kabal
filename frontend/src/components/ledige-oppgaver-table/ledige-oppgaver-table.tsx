@@ -21,6 +21,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.OppgavestyringNonFilterable,
+  ColumnKeyEnum.FradelingReason,
 ];
 
 export const LedigeOppgaverTable = () => {
@@ -41,6 +42,7 @@ const LedigeOppgaverTableInternal = (): JSX.Element => {
     sortering: SortFieldEnum.FRIST,
     rekkefoelge: SortOrderEnum.STIGENDE,
   });
+
   const {
     data: settingsData,
     isLoading: isLoadingSettings,

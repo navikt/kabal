@@ -214,6 +214,18 @@ const getToastContent = (
             {fromText}. Årsak: <b>Manglende kompetanse</b>.
           </InfoToast>
         );
+      case FradelReason.UTGÅTT:
+        return (
+          <InfoToast title="Fradelt">
+            {employeeName(from)} jobber ikke lenger i NAV. Saken er lagt tilbake i {QUEUE}.
+          </InfoToast>
+        );
+      case FradelReason.ANGRET:
+        return (
+          <InfoToast title="Fradelt">
+            {employeeName(actor)} angret på tildelingen og la saken tilbake i {QUEUE}.
+          </InfoToast>
+        );
     }
   }
 
