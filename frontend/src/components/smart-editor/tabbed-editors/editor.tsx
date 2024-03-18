@@ -17,7 +17,6 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { editorMeasurements } from '@app/observability';
-import { useSignatureIdent } from '@app/plate/components/signature/hooks';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
@@ -26,7 +25,7 @@ import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floati
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { useGetMySignatureQuery, useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { ISmartDocument } from '@app/types/documents/documents';
 
@@ -49,8 +48,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
       ? oppgave.medunderskriver.employee.navIdent
       : skipToken,
   );
-  const signatureIdent = useSignatureIdent();
-  const { isLoading: saksbehandlerSignatureIsLoading } = useGetSignatureQuery(signatureIdent);
+  const { isLoading: saksbehandlerSignatureIsLoading } = useGetMySignatureQuery();
 
   // Ensure signatures are initially loaded before rendering the editor in order to avoid unnecessary re-renders and patches
   if (oppgave === undefined || medunderskriverSignatureIsLoading || saksbehandlerSignatureIsLoading) {

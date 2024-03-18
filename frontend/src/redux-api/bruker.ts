@@ -60,6 +60,26 @@ export const brukerApi = createApi({
         }
       },
     }),
+    setAnonymous: builder.mutation<{ value: boolean }, boolean>({
+      query: (value) => ({
+        method: 'PUT',
+        url: '/me/anonymous',
+        body: { value },
+      }),
+      onQueryStarted: async (value, { dispatch, queryFulfilled }) => {
+        const myPatchResult = dispatch(
+          brukerApi.util.updateQueryData('getMySignature', undefined, (draft) => {
+            draft.anonymous = value;
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          myPatchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -83,4 +103,5 @@ export const {
   useGetSignatureQuery,
   useUpdateSettingsMutation,
   useSetCustomInfoMutation,
+  useSetAnonymousMutation,
 } = brukerApi;

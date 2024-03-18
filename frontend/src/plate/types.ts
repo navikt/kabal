@@ -201,7 +201,7 @@ export interface LabelContentElement extends TElement {
 
 export interface ISignature {
   name: string;
-  title: string;
+  title?: string;
 }
 
 interface ISignatureContent {
