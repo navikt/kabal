@@ -2,3 +2,4 @@ export const CURRENT_YEAR_IN_CENTURY = Number.parseInt(new Date().getFullYear().
 export const ISO_FORMAT = 'yyyy-MM-dd';
 export const PRETTY_FORMAT = 'dd.MM.yyyy';
 export const FORMAT = 'yyyy-MM-dd';
+export const ISO_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";

@@ -94,14 +94,34 @@ export enum FradelReason {
   LENGRE_FRAVÆR = '4',
   ANNET = '5',
   LEDER = '6',
+  UTGÅTT = '7',
+  ANGRET = '8',
 }
+
+export const FradelReasonText: Record<FradelReason, string> = {
+  [FradelReason.FEIL_HJEMMEL]: 'Feil hjemmel',
+  [FradelReason.MANGLER_KOMPETANSE]: 'Mangler kompetanse',
+  [FradelReason.INHABIL]: 'Inhabil',
+  [FradelReason.LENGRE_FRAVÆR]: 'Lengre fravær',
+  [FradelReason.ANNET]: 'Annet',
+  [FradelReason.LEDER]: 'Leder',
+  [FradelReason.UTGÅTT]: 'Utgått',
+  [FradelReason.ANGRET]: 'Angret tildeling',
+};
 
 interface FradelReasonBase {
   oppgaveId: string;
 }
 
 export interface FradelWithoutHjemler {
-  reasonId: Omit<FradelReason, FradelReason.FEIL_HJEMMEL>;
+  reasonId:
+    | FradelReason.MANGLER_KOMPETANSE
+    | FradelReason.INHABIL
+    | FradelReason.LENGRE_FRAVÆR
+    | FradelReason.ANNET
+    | FradelReason.LEDER
+    | FradelReason.UTGÅTT
+    | FradelReason.ANGRET;
 }
 
 export interface FradelWithHjemler {

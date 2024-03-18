@@ -27,7 +27,11 @@ import { isApiRejectionError } from '@app/types/errors';
 import { ISakenGjelder } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { IValidationParams } from '@app/types/oppgavebehandling/params';
-import { IMedunderskrivereResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
+import {
+  IMedunderskrivereResponse,
+  ISaksbehandlerResponse,
+  ITildelingEvent,
+} from '@app/types/oppgavebehandling/response';
 import { IRols, ISaksbehandlere } from '@app/types/oppgaver';
 import { OppgaveTagTypes, oppgaverApi } from '../../oppgaver';
 import { handleMedunderskriverEvent } from './event-handlers/medunderskriver';
@@ -174,6 +178,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getPotentialRol: builder.query<IRols, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialrol`,
     }),
+    getFradelingReason: builder.query<ITildelingEvent | null, string>({
+      query: (id) => `/kabal-api/behandlinger/${id}/fradelingreason`,
+    }),
   }),
 });
 
@@ -186,4 +193,5 @@ export const {
   useLazyGetSaksbehandlerQuery,
   useLazyValidateQuery,
   useGetPotentialRolQuery,
+  useGetFradelingReasonQuery,
 } = behandlingerQuerySlice;

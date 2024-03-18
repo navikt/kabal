@@ -1,7 +1,9 @@
 /* eslint-disable import/no-unused-modules */
+import { pushLog } from '@app/observability';
+
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/; // 2020-10-29
 const isoTimeRegex = /^\d{2}:\d{2}:\d{2}\.?\d*$/; // 14:25:19.734593
-const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d*Z?$/; // 2020-10-29T14:25:19.734593Z
+const isoDateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d*$/; // 2020-10-29T14:25:19.734593
 
 export type ISODate = string;
 export type ISODateTime = string;
@@ -11,58 +13,92 @@ export type prettyDateTime = string;
 export type prettyTime = string;
 
 export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDateTime | null => {
-  if (isoDateTime === null || !isoDateTimeRegex.test(isoDateTime)) {
+  if (isoDateTime === null) {
+    return null;
+  }
+
+  if (!isoDateTimeRegex.test(isoDateTime)) {
+    pushLog('Invalid ISO date time', { context: { isoDateTime } });
+    console.warn('Invalid ISO date time', isoDateTime);
+
     return null;
   }
 
   const [isoDate, isoTime] = isoDateTime.split('T');
 
-  const prettyDate = isoDateToPretty(isoDate);
-  const prettyTime = isoTimeToPretty(isoTime);
-
-  if (prettyDate === null || prettyTime === null) {
+  if (isoDate === undefined || isoTime === undefined) {
     return null;
   }
 
-  return `${prettyDate} ${prettyTime}`;
+  return `${_isoDateToPretty(isoDate)} ${_isoTimeToPretty(isoTime)}`;
 };
 
 export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null | undefined): prettyDateTime | null => {
-  if (isoDateTime === null || isoDateTime === undefined || !isoDateTimeRegex.test(isoDateTime)) {
+  if (isoDateTime === null || isoDateTime === undefined) {
+    return null;
+  }
+
+  if (!isoDateTimeRegex.test(isoDateTime)) {
+    pushLog('Invalid ISO date time', { context: { isoDateTime } });
+    console.warn('Invalid ISO date time', isoDateTime);
+
     return null;
   }
 
   const [isoDate] = isoDateTime.split('T');
 
-  return isoDateToPretty(isoDate);
+  if (isoDate === undefined) {
+    return null;
+  }
+
+  return _isoDateToPretty(isoDate);
 };
 
 export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime | null => {
-  if (isoTime === null || isoTime === undefined || !isoTimeRegex.test(isoTime)) {
+  if (isoTime === null || isoTime === undefined) {
     return null;
   }
 
-  const [first] = isoTime.split('.');
+  if (!isoTimeRegex.test(isoTime)) {
+    pushLog('Invalid ISO time', { context: { isoTime } });
+    console.warn('Invalid ISO time', isoTime);
 
-  if (first === undefined) {
     return null;
   }
 
-  return first;
+  return _isoTimeToPretty(isoTime);
 };
+
+const _isoTimeToPretty = (isoTime: ISOTime): prettyTime => isoTime.split('.')[0]!;
 
 export const isoDateToPretty = (isoDate: ISODate | null | undefined): prettyDate | null => {
-  if (isoDate === null || isoDate === undefined || !isoDateRegex.test(isoDate)) {
+  if (isoDate === null || isoDate === undefined) {
     return null;
   }
 
-  return isoDate.split('-').reverse().join('.');
+  if (!isoDateRegex.test(isoDate)) {
+    pushLog('Invalid ISO date', { context: { isoDate } });
+    console.warn('Invalid ISO date', isoDate);
+
+    return null;
+  }
+
+  return _isoDateToPretty(isoDate);
 };
+
+const _isoDateToPretty = (isoDate: ISODate): prettyDate => isoDate.split('-').reverse().join('.');
 
 const prettyRegex = /^\d{2}.\d{2}.\d{4}$/;
 
 export const prettyDateToISO = (prettyDate: prettyDate | null | undefined): ISODate | null => {
-  if (prettyDate === null || prettyDate === undefined || !prettyRegex.test(prettyDate)) {
+  if (prettyDate === null || prettyDate === undefined) {
+    return null;
+  }
+
+  if (!prettyRegex.test(prettyDate)) {
+    pushLog('Invalid pretty date', { context: { prettyDate } });
+    console.warn('Invalid pretty date', prettyDate);
+
     return null;
   }
 
