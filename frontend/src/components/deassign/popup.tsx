@@ -6,9 +6,7 @@ import { styled } from 'styled-components';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { Direction } from './direction';
 
@@ -16,37 +14,16 @@ interface Props {
   oppgaveId: string;
   typeId: SaksTypeEnum;
   ytelseId: string;
+  hjemmelIdList: string[];
   close: () => void;
   direction: Direction;
   redirect?: boolean;
 }
 
-export const Popup = (props: Props) => {
-  const { data, isLoading } = useOppgave(props.oppgaveId);
-
-  if (isLoading || data === undefined) {
-    return null;
-  }
-
-  return <LoadedPopup {...props} oppgave={data} />;
-};
-
-interface LoadedPopupProps extends Props {
-  oppgave: IOppgavebehandling;
-}
-
-const LoadedPopup = ({
-  oppgave,
-  oppgaveId,
-  typeId,
-  ytelseId,
-  close,
-  direction,
-  redirect = false,
-}: LoadedPopupProps) => {
+export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direction, redirect = false }: Props) => {
   const navigate = useNavigate();
   const [reasonId, setReasonId] = useState<FradelReason | null>(null);
-  const [hjemmelIdList, setHjemmelIdList] = useState<string[]>(oppgave.hjemmelIdList);
+  const [selectedHjemmelIdList, setSelectedHjemmelIdList] = useState<string[]>(hjemmelIdList);
   const [fradel, { isLoading }] = useFradel(oppgaveId, typeId, ytelseId);
   const [hjemmelError, setHjemmelError] = useState<string | null>(null);
 
@@ -56,19 +33,19 @@ const LoadedPopup = ({
     }
 
     if (reasonId === FradelReason.FEIL_HJEMMEL) {
-      if (hjemmelIdList.length === 0) {
+      if (selectedHjemmelIdList.length === 0) {
         setHjemmelError('Du må velge minst én hjemmel.');
 
         return;
       }
 
-      if (areArraysEqual(hjemmelIdList, oppgave.hjemmelIdList)) {
+      if (areArraysEqual(selectedHjemmelIdList, hjemmelIdList)) {
         setHjemmelError('Du må endre hjemler.');
 
         return;
       }
 
-      const success = await fradel({ reasonId, hjemmelIdList });
+      const success = await fradel({ reasonId, hjemmelIdList: selectedHjemmelIdList });
 
       if (redirect && success) {
         navigate('/mineoppgaver');
@@ -82,7 +59,7 @@ const LoadedPopup = ({
     if (redirect && success) {
       navigate('/mineoppgaver');
     }
-  }, [fradel, hjemmelIdList, navigate, oppgave.hjemmelIdList, reasonId, redirect]);
+  }, [reasonId, fradel, redirect, selectedHjemmelIdList, hjemmelIdList, navigate]);
 
   return (
     <StyledPopup
@@ -98,8 +75,8 @@ const LoadedPopup = ({
       </RadioGroup>
       {reasonId === FradelReason.FEIL_HJEMMEL ? (
         <HjemmelList
-          selected={hjemmelIdList}
-          onChange={setHjemmelIdList}
+          selected={selectedHjemmelIdList}
+          onChange={setSelectedHjemmelIdList}
           ytelseId={ytelseId}
           direction={direction}
           error={hjemmelError}
