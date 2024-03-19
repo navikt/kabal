@@ -8,14 +8,14 @@ import { TildelButton } from './tildel-button';
 export const Oppgavestyring = (oppgave: IOppgave) => (
   <Container>
     <TildelButton {...oppgave} />
-    <Saksbehandler {...oppgave} />
     <FradelButton {...oppgave} />
+    <Saksbehandler {...oppgave} />
   </Container>
 );
 
 const Container = styled.div`
   display: grid;
   column-gap: 8px;
-  grid-template-columns: minmax(min-content, auto) 400px 110px;
-  grid-template-areas: 'tildel saksbehandler fradel';
+  grid-template-columns: 110px 400px;
+  grid-template-areas: 'tildel saksbehandler';
 `;

@@ -41,7 +41,7 @@ export const TildelButton = ({
     !access.assignSelf ||
     !roller.includes(Role.KABAL_SAKSBEHANDLING) ||
     medunderskriver.navIdent === navIdent ||
-    tildeltSaksbehandlerident === navIdent
+    tildeltSaksbehandlerident !== null
   ) {
     return null;
   }
@@ -66,5 +66,4 @@ export const TildelButton = ({
 const StyledButton = styled(Button)`
   grid-area: tildel;
   white-space: nowrap;
-  width: 100px;
 `;

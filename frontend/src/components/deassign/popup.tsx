@@ -6,6 +6,8 @@ import { styled } from 'styled-components';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
+import { useHasRole } from '@app/hooks/use-has-role';
+import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { Direction } from './direction';
@@ -26,6 +28,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
   const [selectedHjemmelIdList, setSelectedHjemmelIdList] = useState<string[]>(hjemmelIdList);
   const [fradel, { isLoading }] = useFradel(oppgaveId, typeId, ytelseId);
   const [hjemmelError, setHjemmelError] = useState<string | null>(null);
+  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
   const onClick = useCallback(async () => {
     if (reasonId === null) {
@@ -72,6 +75,9 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
         <Radio value={FradelReason.INHABIL}>{FradelReasonText[FradelReason.INHABIL]}</Radio>
         <Radio value={FradelReason.LENGRE_FRAVÆR}>{FradelReasonText[FradelReason.LENGRE_FRAVÆR]}</Radio>
         <Radio value={FradelReason.ANNET}>{FradelReasonText[FradelReason.ANNET]}</Radio>
+        {hasOppgavestyringRole ? (
+          <Radio value={FradelReason.LEDER}>{FradelReasonText[FradelReason.LEDER]}</Radio>
+        ) : null}
       </RadioGroup>
       {reasonId === FradelReason.FEIL_HJEMMEL ? (
         <HjemmelList

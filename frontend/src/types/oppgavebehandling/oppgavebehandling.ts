@@ -10,15 +10,19 @@ export enum KvalitetsvurderingVersion {
 }
 
 export interface IOppgavebehandlingBase {
-  avsluttetAvSaksbehandlerDate: string | null; // LocalDate
-  created: string; // LocalDateTime
-  datoSendtMedunderskriver: string | null; // LocalDate
+  /** DateTime */
+  avsluttetAvSaksbehandlerDate: string | null;
+  /** DateTime */
+  created: string;
+  /** DateTime */
+  datoSendtMedunderskriver: string | null;
   egenansatt: boolean;
   eoes: string | null;
   fortrolig: boolean;
   fraNAVEnhet: string | null;
   fraNAVEnhetNavn: string | null;
   fraSaksbehandlerident: string | null;
+  /** Date */
   frist: string | null;
   hjemmelIdList: string[];
   id: string;
@@ -31,9 +35,12 @@ export interface IOppgavebehandlingBase {
     version: KvalitetsvurderingVersion;
   } | null;
   medunderskriver: IMedunderskriverRol;
-  modified: string; // LocalDateTime
-  mottattVedtaksinstans: string | null; // LocalDate
-  mottattKlageinstans: string | null; // LocalDate
+  /** DateTime */
+  modified: string;
+  /** Date */
+  mottattVedtaksinstans: string | null;
+  /** Date */
+  mottattKlageinstans: string | null;
   previousSaksbehandler: INavEmployee | null;
   prosessfullmektig: IPart | null;
   raadfoertMedLege: string | null;
@@ -43,11 +50,13 @@ export interface IOppgavebehandlingBase {
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
   vergemaalEllerFremtidsfullmakt: boolean;
-  dead: string | null; // LocalDate
+  /** DateTime */
+  dead: string | null;
   fullmakt: boolean;
   temaId: string;
   tilbakemelding: string | null;
-  tildelt: string | null; // LocalDate
+  /** Date */
+  tildelt: string | null;
   saksbehandler: INavEmployee | null;
   ytelseId: string;
   feilregistrering: IFeilregistrering | null;
