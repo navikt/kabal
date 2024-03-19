@@ -38,7 +38,7 @@ export const FradelButton = (props: IOppgave) => {
   return null;
 };
 
-const DeassignSelf = ({ id, typeId, ytelseId, sattPaaVent }: IOppgave): JSX.Element | null => {
+const DeassignSelf = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave): JSX.Element | null => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [paaVentWarningIsOpen, setPaaVentWarningIsOpen] = useState(false);
   const [reasonPopupDirection, setReasonPopupDirection] = useState<Direction | null>(null);
@@ -91,7 +91,14 @@ const DeassignSelf = ({ id, typeId, ytelseId, sattPaaVent }: IOppgave): JSX.Elem
       />
 
       {reasonPopupDirection !== null ? (
-        <Popup direction={reasonPopupDirection} close={closePopup} oppgaveId={id} typeId={typeId} ytelseId={ytelseId} />
+        <Popup
+          direction={reasonPopupDirection}
+          close={closePopup}
+          oppgaveId={id}
+          typeId={typeId}
+          ytelseId={ytelseId}
+          hjemmelIdList={hjemmelIdList}
+        />
       ) : null}
     </Container>
   );
