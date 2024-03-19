@@ -18,6 +18,7 @@ interface Props {
   ytelseId: string;
   close: () => void;
   direction: Direction;
+  redirect?: boolean;
 }
 
 export const Popup = (props: Props) => {
@@ -34,7 +35,15 @@ interface LoadedPopupProps extends Props {
   oppgave: IOppgavebehandling;
 }
 
-const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }: LoadedPopupProps) => {
+const LoadedPopup = ({
+  oppgave,
+  oppgaveId,
+  typeId,
+  ytelseId,
+  close,
+  direction,
+  redirect = false,
+}: LoadedPopupProps) => {
   const navigate = useNavigate();
   const [reasonId, setReasonId] = useState<FradelReason | null>(null);
   const [hjemmelIdList, setHjemmelIdList] = useState<string[]>(oppgave.hjemmelIdList);
@@ -61,7 +70,7 @@ const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }:
 
       const success = await fradel({ reasonId, hjemmelIdList });
 
-      if (success) {
+      if (redirect && success) {
         navigate('/mineoppgaver');
       }
 
@@ -70,10 +79,10 @@ const LoadedPopup = ({ oppgave, oppgaveId, typeId, ytelseId, close, direction }:
 
     const success = await fradel({ reasonId });
 
-    if (success) {
+    if (redirect && success) {
       navigate('/mineoppgaver');
     }
-  }, [fradel, hjemmelIdList, navigate, oppgave.hjemmelIdList, reasonId]);
+  }, [fradel, hjemmelIdList, navigate, oppgave.hjemmelIdList, reasonId, redirect]);
 
   return (
     <StyledPopup
