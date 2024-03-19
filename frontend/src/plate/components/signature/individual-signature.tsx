@@ -3,9 +3,8 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
-import { useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
+import { useMedunderskriverSignature, useSaksbehandlerSignature } from '@app/plate/components/signature/hooks';
 import { ISignature, SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { MISSING_TITLE, Title } from './title';
 
@@ -16,11 +15,11 @@ interface Props {
 
 export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
   const editor = useMyPlateEditorRef();
-  const { data } = useGetMySignatureQuery();
+  const data = useSaksbehandlerSignature();
   const { templateId } = useContext(SmartEditorContext);
 
   const signature: ISignature | undefined = useMemo(() => {
-    if (typeof data === 'undefined') {
+    if (data === null) {
       return undefined;
     }
 
