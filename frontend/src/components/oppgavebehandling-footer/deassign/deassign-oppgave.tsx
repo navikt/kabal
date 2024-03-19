@@ -88,6 +88,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
           oppgaveId={oppgave.id}
           typeId={oppgave.typeId}
           ytelseId={oppgave.ytelseId}
+          redirect
         />
       ) : null}
     </Container>
