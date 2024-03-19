@@ -57,6 +57,12 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
             Frist
           </Table.ColumnHeader>
         );
+      case ColumnKeyEnum.PaaVentTil:
+        return (
+          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
+            På vent til
+          </Table.ColumnHeader>
+        );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
         return <Saksbehandler key={key} columnKey={key} params={params} setParams={setParams} />;

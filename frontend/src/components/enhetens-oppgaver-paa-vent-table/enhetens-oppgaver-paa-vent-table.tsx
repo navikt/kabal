@@ -43,7 +43,7 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
     hjemler: [],
     tildelteSaksbehandlere: [],
     rekkefoelge: SortOrderEnum.STIGENDE,
-    sortering: SortFieldEnum.FRIST,
+    sortering: SortFieldEnum.PAA_VENT_TO,
   });
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
