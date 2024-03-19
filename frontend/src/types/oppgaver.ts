@@ -2,7 +2,8 @@ import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
 
-type DateString = string; // LocalDate
+/** DateTime */
+type DateString = string;
 
 export interface ApiResponse {
   antallTreffTotalt: number;
@@ -23,7 +24,8 @@ interface IOppgaveRowVenteperiode extends IVenteperiode {
 }
 
 export interface IOppgave {
-  ageKA: number; // Age in days.
+  /** Age in days. */
+  ageKA: number;
   avsluttetAvSaksbehandlerDate: DateString | null;
   fagsystemId: string;
   frist: DateString | null;
@@ -34,6 +36,8 @@ export interface IOppgave {
   rol: IHelper;
   mottatt: DateString;
   tildeltSaksbehandlerident: string | null;
+  /** DateTime */
+  tildeltTimestamp?: DateString;
   typeId: SaksTypeEnum;
   ytelseId: string;
   utfallId: UtfallEnum | null;
@@ -104,7 +108,7 @@ export const FradelReasonText: Record<FradelReason, string> = {
   [FradelReason.INHABIL]: 'Inhabil',
   [FradelReason.LENGRE_FRAVÆR]: 'Lengre fravær',
   [FradelReason.ANNET]: 'Annet',
-  [FradelReason.LEDER]: 'Leder',
+  [FradelReason.LEDER]: 'Oppgavestyring',
   [FradelReason.UTGÅTT]: 'Utgått',
   [FradelReason.ANGRET]: 'Angret tildeling',
 };

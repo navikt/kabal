@@ -1,6 +1,8 @@
 import { Button } from '@navikt/ds-react';
-import React, { useCallback, useRef, useState } from 'react';
+import { differenceInSeconds, parse } from 'date-fns';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
 import { Popup } from '@app/components/deassign/popup';
@@ -11,9 +13,46 @@ import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutation
 import { FradelReason, IOppgave } from '@app/types/oppgaver';
 
 const KABAL_HEADER_HEIGHT = 48;
+const UNDO_TIMEOUT_SECONDS = 10;
 
 export const FradelButton = (props: IOppgave) => {
-  const { tildeltSaksbehandlerident, medunderskriver, ytelseId, isAvsluttetAvSaksbehandler, rol } = props;
+  const {
+    id,
+    typeId,
+    tildeltSaksbehandlerident,
+    medunderskriver,
+    ytelseId,
+    isAvsluttetAvSaksbehandler,
+    rol,
+    tildeltTimestamp,
+  } = props;
+
+  const [fradel, { isLoading }] = useFradel(id, typeId, ytelseId);
+
+  const [undoSecondsLeft, setUndoSecondsLeft] = useState(0);
+
+  useEffect(() => {
+    if (tildeltSaksbehandlerident === null || tildeltTimestamp === undefined) {
+      return;
+    }
+
+    const parsed = parse(tildeltTimestamp, ISO_DATETIME_FORMAT, new Date());
+    const diff = differenceInSeconds(new Date(), parsed);
+
+    setUndoSecondsLeft(diff >= UNDO_TIMEOUT_SECONDS ? 0 : UNDO_TIMEOUT_SECONDS - diff);
+  }, [tildeltSaksbehandlerident, tildeltTimestamp]);
+
+  const undoInterval = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    undoInterval.current = setInterval(() => setUndoSecondsLeft((prev) => (prev <= 1 ? 0 : prev - 1)), 1_000);
+
+    return () => {
+      if (undoInterval.current !== null) {
+        clearInterval(undoInterval.current);
+      }
+    };
+  }, [undoSecondsLeft]);
 
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
@@ -27,18 +66,34 @@ export const FradelButton = (props: IOppgave) => {
     return null;
   }
 
-  if (access.deassignSelf) {
-    return <DeassignSelf {...props} />;
+  if (tildeltSaksbehandlerident !== null && undoSecondsLeft > 0) {
+    return (
+      <StyledButton
+        variant="secondary"
+        size="small"
+        loading={isLoading}
+        onClick={async () => {
+          await fradel({ reasonId: FradelReason.ANGRET });
+          setUndoSecondsLeft(0);
+
+          if (undoInterval.current !== null) {
+            clearInterval(undoInterval.current);
+          }
+        }}
+      >
+        Angre ({undoSecondsLeft})
+      </StyledButton>
+    );
   }
 
-  if (access.deassignOthers) {
-    return <LederDeassign {...props} />;
+  if (access.deassignSelf || access.deassignOthers) {
+    return <Deassign {...props} />;
   }
 
   return null;
 };
 
-const DeassignSelf = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave): JSX.Element | null => {
+const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave): JSX.Element | null => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [paaVentWarningIsOpen, setPaaVentWarningIsOpen] = useState(false);
   const [reasonPopupDirection, setReasonPopupDirection] = useState<Direction | null>(null);
@@ -109,37 +164,7 @@ const StyledButton = styled(Button)`
 `;
 
 const Container = styled.div`
-  grid-area: fradel;
+  grid-area: tildel;
+  display: flex;
   position: relative;
 `;
-
-const LederDeassign = ({ id, typeId, ytelseId, sattPaaVent }: IOppgave): JSX.Element | null => {
-  const [fradel, { isLoading }] = useFradel(id, typeId, ytelseId);
-  const [paaVentWarningIsOpen, setPaaVentWarningIsOpen] = useState(false);
-
-  const lederDeassign = useCallback(() => fradel({ reasonId: FradelReason.LEDER }), [fradel]);
-
-  const onLeggTilbake = sattPaaVent === null ? lederDeassign : () => setPaaVentWarningIsOpen(true);
-
-  return (
-    <Container>
-      <StyledButton
-        variant="secondary"
-        type="button"
-        size="small"
-        onClick={onLeggTilbake}
-        loading={isLoading}
-        disabled={isLoading}
-        data-testid="behandling-fradel-button"
-        data-klagebehandlingid={id}
-      >
-        Legg tilbake
-      </StyledButton>
-      <PaaVentWarning
-        close={() => setPaaVentWarningIsOpen(false)}
-        onConfirm={lederDeassign}
-        isOpen={paaVentWarningIsOpen}
-      />
-    </Container>
-  );
-};

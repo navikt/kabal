@@ -56,6 +56,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.tildeltSaksbehandlerident = employee.navIdent;
+              draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
             }),
           );
 
@@ -153,6 +154,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.tildeltSaksbehandlerident = null;
+              draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
               draft.hjemmelIdList = data.hjemmelIdList;
             }),
           );
