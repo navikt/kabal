@@ -16,3 +16,16 @@ export const useMedunderskriverSignature = () => {
 
   return medunderskriverSignature;
 };
+
+export const useSaksbehandlerSignature = () => {
+  const { data: oppgave } = useOppgave();
+  const { data: saksbehandlerSignature } = useGetSignatureQuery(
+    typeof oppgave?.saksbehandler?.navIdent === 'string' ? oppgave.saksbehandler.navIdent : skipToken,
+  );
+
+  if (oppgave === undefined || oppgave.saksbehandler === null || saksbehandlerSignature === undefined) {
+    return null;
+  }
+
+  return saksbehandlerSignature;
+};
