@@ -9,17 +9,17 @@ import { CopyButton } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
-import { IArkivertDocument, Kanal, RelevantDatotype } from '@app/types/arkiverte-documents';
+import { IArkivertDocument, Kanal, TimelineTypes } from '@app/types/arkiverte-documents';
 import { StyledHeading } from './styled-components';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
-  datotype: RelevantDatotype;
-  dato: string;
+  type: TimelineTypes;
+  timestamp: string;
   isLast: boolean;
 }
 
-export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnavn, isLast }: Props) => {
+export const EkspedertItems = ({ utsendingsinfo, type, timestamp, kanal, kanalnavn, isLast }: Props) => {
   const hasUtsendingsinfo = utsendingsinfo !== null;
   const isSmsSent = hasUtsendingsinfo && utsendingsinfo.smsVarselSendt !== null;
   const isEmailSent = hasUtsendingsinfo && utsendingsinfo.epostVarselSendt !== null;
@@ -31,8 +31,8 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
   return (
     <>
       <RelevantDateTimelineItem
-        datotype={datotype}
-        dato={dato}
+        type={type}
+        timestamp={timestamp}
         hideNext={false}
         popover={
           utsendingsinfo !== null && utsendingsinfo.fysiskpostSendt !== null
@@ -59,7 +59,7 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
       {varselData.map(({ title, content }, i) => (
         <TimelineItem
           key={i}
-          dato={dato}
+          timestamp={timestamp}
           title={title}
           icon={<BellIcon aria-hidden />}
           color="var(--a-lightblue-50)"
@@ -68,7 +68,7 @@ export const EkspedertItems = ({ utsendingsinfo, datotype, dato, kanal, kanalnav
         />
       ))}
 
-      {hasVarsler ? null : <OtherVarselInfo dato={dato} kanal={kanal} kanalnavn={kanalnavn} isLast={isLast} />}
+      {hasVarsler ? null : <OtherVarselInfo dato={timestamp} kanal={kanal} kanalnavn={kanalnavn} isLast={isLast} />}
     </>
   );
 };
@@ -85,7 +85,7 @@ const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) =>
 
   return (
     <TimelineItem
-      dato={dato}
+      timestamp={dato}
       title={title}
       icon={<BellIcon aria-hidden />}
       color={color}
