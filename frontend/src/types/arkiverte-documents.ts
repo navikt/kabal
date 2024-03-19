@@ -77,7 +77,7 @@ export interface Utsendingsinfo {
   } | null;
 }
 
-export enum RelevantDatotype {
+enum RelevantDatotype {
   DATO_SENDT_PRINT = 'DATO_SENDT_PRINT',
   DATO_EKSPEDERT = 'DATO_EKSPEDERT',
   DATO_JOURNALFOERT = 'DATO_JOURNALFOERT',
@@ -88,7 +88,7 @@ export enum RelevantDatotype {
 }
 
 interface RelevantDato {
-  dato: string; // LocalDate
+  dato: string;
   datotype: RelevantDatotype;
 }
 
@@ -121,6 +121,10 @@ export enum Kanal {
   UKJENT = 'UKJENT',
 }
 
+/**
+ * SAF Journalpost
+ * @documentation https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
+ */
 export interface Journalpost {
   /** Unik identifikator per journalpost */
   journalpostId: string;
@@ -177,6 +181,7 @@ export interface Journalpost {
   utsendingsinfo: Utsendingsinfo | null;
 }
 
+/** SAF Dokument */
 export interface DokumentInfo {
   /** Unik identifikator per dokument. */
   dokumentInfoId: string;
@@ -190,17 +195,32 @@ export interface DokumentInfo {
   originalJournalpostId: string;
 }
 
+export enum TimelineTypes {
+  OPPRETTET = 'OPPRETTET',
+  SENDT_PRINT = 'SENDT_PRINT',
+  EKSPEDERT = 'EKSPEDERT',
+  JOURNALFOERT = 'JOURNALFOERT',
+  REGISTRERT = 'REGISTRERT',
+  AVSENDER_RETUR = 'AVSENDER_RETUR',
+  LEST = 'LEST',
+}
+
+interface TimelineItem {
+  /** DateTime */
+  timestamp: string;
+  type: TimelineTypes;
+}
+
+/** Kabal */
 interface KabalProperties {
   /** Om dokumentet er inkludert i saksmappen. */
   valgt: boolean;
   datoRegSendt: string | null;
   sortKey: string;
+  timeline: TimelineItem[];
 }
 
-/**
-  Documentation:
-  https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
-*/
+/** Archived Kabal document */
 export interface IArkivertDocument extends Journalpost, DokumentInfo, KabalProperties {
   /** All, except the first, documents in the journalpost. */
   vedlegg: IArkivertDocumentVedlegg[];

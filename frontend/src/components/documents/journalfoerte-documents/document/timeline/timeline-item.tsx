@@ -3,26 +3,26 @@ import { Button, Detail, Popover } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { RelevantDatotype } from '@app/types/arkiverte-documents';
+import { TimelineTypes } from '@app/types/arkiverte-documents';
 import { BACKGROUND_COLOR, DATOTYPE_NAME, ICON } from './helpers';
 import { NextArrow, StyledLabel, StyledTimelineItem } from './styled-components';
 
 interface RelevantDateTimelineItemProps {
-  dato: string;
-  datotype: RelevantDatotype;
-  hideNext: boolean;
+  timestamp: string;
+  type: TimelineTypes;
+  hideNext?: boolean;
   popover?: TimelineItemProps['popover'];
 }
 
-export const RelevantDateTimelineItem = ({ datotype, ...rest }: RelevantDateTimelineItemProps) => {
-  const Icon = ICON[datotype] ?? XMarkOctagonIcon;
+export const RelevantDateTimelineItem = ({ type, ...rest }: RelevantDateTimelineItemProps) => {
+  const Icon = ICON[type] ?? XMarkOctagonIcon;
 
   return (
     <TimelineItem
       {...rest}
       icon={<Icon aria-hidden />}
-      title={DATOTYPE_NAME[datotype] ?? datotype}
-      color={BACKGROUND_COLOR[datotype] ?? 'var(--a-gray-50)'}
+      title={DATOTYPE_NAME[type] ?? type}
+      color={BACKGROUND_COLOR[type] ?? 'var(--a-gray-50)'}
     />
   );
 };
@@ -30,8 +30,8 @@ export const RelevantDateTimelineItem = ({ datotype, ...rest }: RelevantDateTime
 interface TimelineItemProps {
   title: string;
   icon: React.ReactNode;
-  dato: string;
-  hideNext: boolean;
+  timestamp: string;
+  hideNext?: boolean;
   color: string;
   popover?: {
     content: React.ReactNode;
@@ -39,12 +39,19 @@ interface TimelineItemProps {
   } | null;
 }
 
-export const TimelineItem = ({ icon, title, dato, color, popover = null, hideNext }: TimelineItemProps) => (
+export const TimelineItem = ({
+  icon,
+  title,
+  timestamp,
+  color,
+  popover = null,
+  hideNext = false,
+}: TimelineItemProps) => (
   <StyledTimelineItem $color={color}>
     <StyledLabel size="small">
       {icon} <span>{title}</span>
     </StyledLabel>
-    <Detail>{isoDateTimeToPretty(dato)}</Detail>
+    <Detail>{isoDateTimeToPretty(timestamp)}</Detail>
     {popover === null ? null : <TimelinePopover buttonText={popover.buttonText}>{popover.content}</TimelinePopover>}
     {hideNext ? null : <NextArrow aria-hidden />}
   </StyledTimelineItem>

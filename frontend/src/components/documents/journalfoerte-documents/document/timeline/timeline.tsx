@@ -1,26 +1,24 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
-import { IArkivertDocument, Journalposttype, RelevantDatotype } from '@app/types/arkiverte-documents';
+import { IArkivertDocument, Journalposttype, TimelineTypes } from '@app/types/arkiverte-documents';
 import { EkspedertItems } from './ekspedert-items';
 import { RelevantDateTimelineItem } from './timeline-item';
 
-export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kanal, kanalnavn }: IArkivertDocument) => {
-  const lastIndex = relevanteDatoer.length - 1;
-
-  const sorted = useMemo(() => [...relevanteDatoer].sort((a, b) => a.dato.localeCompare(b.dato)), [relevanteDatoer]);
+export const Timeline = ({ timeline, journalposttype, utsendingsinfo, kanal, kanalnavn }: IArkivertDocument) => {
+  const lastIndex = timeline.length - 1;
 
   return (
     <TimelineContainer>
-      {sorted.map(({ datotype, dato }, index) => {
-        const key = `${datotype}-${dato}`;
+      {timeline.map(({ type, timestamp }, index) => {
+        const key = `${type}-${timestamp}`;
         const isLast = index === lastIndex;
 
-        if (datotype === RelevantDatotype.DATO_EKSPEDERT && journalposttype === Journalposttype.UTGAAENDE) {
+        if (type === TimelineTypes.EKSPEDERT && journalposttype === Journalposttype.UTGAAENDE) {
           return (
             <EkspedertItems
               key={key}
-              datotype={datotype}
-              dato={dato}
+              type={type}
+              timestamp={timestamp}
               utsendingsinfo={utsendingsinfo}
               kanal={kanal}
               kanalnavn={kanalnavn}
@@ -29,7 +27,7 @@ export const Timeline = ({ relevanteDatoer, journalposttype, utsendingsinfo, kan
           );
         }
 
-        return <RelevantDateTimelineItem key={key} datotype={datotype} dato={dato} hideNext={isLast} />;
+        return <RelevantDateTimelineItem key={key} type={type} timestamp={timestamp} hideNext={isLast} />;
       })}
     </TimelineContainer>
   );
