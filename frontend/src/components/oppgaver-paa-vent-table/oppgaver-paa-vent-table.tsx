@@ -41,7 +41,7 @@ const OppgaverPaaVentTableInternal = () => {
     typer: [],
     ytelser: [],
     hjemler: [],
-    sortering: SortFieldEnum.FRIST,
+    sortering: SortFieldEnum.PAA_VENT_TO,
     rekkefoelge: SortOrderEnum.STIGENDE,
   });
 
