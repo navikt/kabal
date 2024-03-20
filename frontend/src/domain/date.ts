@@ -13,7 +13,7 @@ export type prettyDateTime = string;
 export type prettyTime = string;
 
 export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDateTime | null => {
-  if (isoDateTime === null) {
+  if (isoDateTime === null || isoDateTime.length === 0) {
     return null;
   }
 
@@ -34,7 +34,7 @@ export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDate
 };
 
 export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null | undefined): prettyDateTime | null => {
-  if (isoDateTime === null || isoDateTime === undefined) {
+  if (isoDateTime === null || isoDateTime === undefined || isoDateTime.length === 0) {
     return null;
   }
 
@@ -55,7 +55,7 @@ export const isoDateTimeToPrettyDate = (isoDateTime: ISODateTime | null | undefi
 };
 
 export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime | null => {
-  if (isoTime === null || isoTime === undefined) {
+  if (isoTime === null || isoTime === undefined || isoTime.length === 0) {
     return null;
   }
 
@@ -72,7 +72,7 @@ export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime
 const _isoTimeToPretty = (isoTime: ISOTime): prettyTime => isoTime.split('.')[0]!;
 
 export const isoDateToPretty = (isoDate: ISODate | null | undefined): prettyDate | null => {
-  if (isoDate === null || isoDate === undefined) {
+  if (isoDate === null || isoDate === undefined || isoDate.length === 0) {
     return null;
   }
 
@@ -91,7 +91,7 @@ const _isoDateToPretty = (isoDate: ISODate): prettyDate => isoDate.split('-').re
 const prettyRegex = /^\d{2}.\d{2}.\d{4}$/;
 
 export const prettyDateToISO = (prettyDate: prettyDate | null | undefined): ISODate | null => {
-  if (prettyDate === null || prettyDate === undefined) {
+  if (prettyDate === null || prettyDate === undefined || prettyDate.length === 0) {
     return null;
   }
 
