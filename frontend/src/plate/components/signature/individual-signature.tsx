@@ -15,38 +15,42 @@ interface Props {
 
 export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
   const editor = useMyPlateEditorRef();
-  const data = useSaksbehandlerSignature();
+  const saksbehandlerSignature = useSaksbehandlerSignature();
   const { templateId } = useContext(SmartEditorContext);
 
   const signature: ISignature | undefined = useMemo(() => {
-    if (data === null) {
+    if (saksbehandlerSignature === null) {
       return undefined;
     }
 
     const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && useSuffix ? 'saksbehandler' : undefined;
 
-    if (data.anonymous) {
+    if (saksbehandlerSignature.anonymous) {
       return { name: 'NAV Klageinstans' };
     }
 
     return {
-      name: getName(data, element.useShortName),
-      title: getTitle(data.customJobTitle, suffix) ?? MISSING_TITLE,
+      name: getName(saksbehandlerSignature, element.useShortName),
+      title: getTitle(saksbehandlerSignature.customJobTitle, suffix) ?? MISSING_TITLE,
     };
-  }, [data, element.useShortName, templateId, useSuffix]);
+  }, [saksbehandlerSignature, element.useShortName, templateId, useSuffix]);
 
   useEffect(() => {
     if (element.saksbehandler?.name === signature?.name && element.saksbehandler?.title === signature?.title) {
       return;
     }
 
-    const newData: Partial<SignatureElement> = {
+    const data: Partial<SignatureElement> = {
       useShortName: element.useShortName,
+      medunderskriver: element.medunderskriver,
       saksbehandler: signature,
     };
 
-    setNodes(editor, newData, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });
-  }, [editor, element, data, templateId, signature]);
+    setNodes(editor, data, {
+      at: [],
+      match: (n) => n === element,
+    });
+  }, [editor, element, saksbehandlerSignature, templateId, signature]);
 
   if (signature === undefined) {
     return null;
@@ -93,11 +97,23 @@ export const MedunderskriverSignature = ({ element, includeMedunderskriver }: Me
 
   useEffect(() => {
     if (noMedunderskriver) {
-      return setNodes(editor, { ...element, medunderskriver: undefined }, { match: (n) => n === element });
+      const data: Partial<SignatureElement> = {
+        useShortName: element.useShortName,
+        saksbehandler: element.saksbehandler,
+        medunderskriver: undefined,
+      };
+
+      return setNodes(editor, data, { match: (n) => n === element, at: [] });
     }
 
-    return setNodes(editor, { ...element, medunderskriver: signature }, { match: (n) => n === element });
-  }, [noMedunderskriver, element, editor, signature]);
+    const data: Partial<SignatureElement> = {
+      useShortName: element.useShortName,
+      saksbehandler: element.saksbehandler,
+      medunderskriver: signature,
+    };
+
+    setNodes(editor, data, { match: (n) => n === element, at: [] });
+  }, [editor, element, noMedunderskriver, signature]);
 
   if (noMedunderskriver || signature === undefined) {
     return null;
