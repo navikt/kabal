@@ -12,8 +12,8 @@ export type prettyDate = string;
 export type prettyDateTime = string;
 export type prettyTime = string;
 
-export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null): prettyDateTime | null => {
-  if (isoDateTime === null || isoDateTime.length === 0) {
+export const isoDateTimeToPretty = (isoDateTime: ISODateTime | null | undefined): prettyDateTime | null => {
+  if (isoDateTime === null || isoDateTime === undefined || isoDateTime.length === 0) {
     return null;
   }
 
