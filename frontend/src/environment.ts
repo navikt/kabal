@@ -22,24 +22,12 @@ class Environment implements EnvironmentVariables {
   public readonly isDeployed: boolean;
 
   constructor() {
-    const { environment, version, isProduction, isDevelopment, isLocal, isDeployed } = this.init();
-    this.environment = environment;
-    this.version = version;
-    this.isProduction = isProduction;
-    this.isDevelopment = isDevelopment;
-    this.isLocal = isLocal;
-    this.isDeployed = isDeployed;
-  }
-
-  private init(): EnvironmentVariables {
-    const environment = this.getEnvironment();
-    const version = this.getVersion();
-    const isProduction = environment === EnvString.PROD;
-    const isDevelopment = environment === EnvString.DEV;
-    const isLocal = environment === EnvString.LOCAL;
-    const isDeployed = !isLocal;
-
-    return { environment, version, isProduction, isDevelopment, isLocal, isDeployed };
+    this.environment = this.getEnvironment();
+    this.version = this.getVersion();
+    this.isProduction = this.environment === EnvString.PROD;
+    this.isDevelopment = this.environment === EnvString.DEV;
+    this.isLocal = this.environment === EnvString.LOCAL;
+    this.isDeployed = !this.isLocal;
   }
 
   private getEnvironment(): EnvString {
