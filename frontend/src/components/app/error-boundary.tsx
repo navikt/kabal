@@ -1,6 +1,8 @@
-import { Button, CopyButton, Heading } from '@navikt/ds-react';
+import { Alert, Button, CopyButton, Heading } from '@navikt/ds-react';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { styled } from 'styled-components';
+import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
+import { ENVIRONMENT } from '@app/environment';
 import { pushError } from '@app/observability';
 
 interface Props {
@@ -31,26 +33,42 @@ export class AppErrorBoundary extends Component<Props, State> {
     const { children, className } = this.props;
 
     if (this.state.error !== null) {
+      const lastestVersion = VERSION_CHECKER.getLatestVersion();
+      const isUpToDate = VERSION_CHECKER.getIsUpToDate();
+
+      const versionText = isUpToDate
+        ? `Kabal er utdatert: ${ENVIRONMENT.version} vs. ${lastestVersion}`
+        : `Kabal er oppdatert: ${ENVIRONMENT.version} vs. ${lastestVersion}`;
+
+      const copyText = `${versionText}\n\n${this.state.error.message}\n\n${this.state.error.stack}`;
+
       return (
         <ErrorContainer className={className}>
           <Heading level="1" size="large" spacing>
             Ooops, noe gikk galt :(
           </Heading>
+          {isUpToDate ? null : (
+            <StyledAlert variant="warning">
+              <b>Kabal er utdatert.</b>
+              <div>
+                Din versjon: <Code>{ENVIRONMENT.version}</Code>
+              </div>
+              <div>
+                Siste versjon: <Code>{lastestVersion}</Code>
+              </div>
+            </StyledAlert>
+          )}
           <Heading level="2" size="medium" spacing>
             Feilmelding
           </Heading>
           <ErrorContent>
-            <Code>{this.state.error.message}</Code>
-            <Code>{this.state.error.stack}</Code>
+            <CodeBlock>{this.state.error.message}</CodeBlock>
+            <CodeBlock>{this.state.error.stack}</CodeBlock>
             <Row>
               <Button onClick={() => window.location.reload()} variant="secondary">
                 Last Kabal på nytt
               </Button>
-              <CopyButton
-                copyText={`${this.state.error.message}\n${this.state.error.stack}`}
-                text="Kopier feilmeldingen"
-                variant="action"
-              />
+              <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />
             </Row>
           </ErrorContent>
         </ErrorContainer>
@@ -83,6 +101,14 @@ const ErrorContent = styled.div`
 `;
 
 const Code = styled.code`
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: var(--a-border-radius-medium);
+  padding-left: 4px;
+  padding-right: 4px;
+`;
+
+const CodeBlock = styled.code`
   display: block;
   padding: 16px;
   background-color: #f5f5f5;
@@ -97,4 +123,8 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: 8px;
+`;
+
+const StyledAlert = styled(Alert)`
+  margin-bottom: 16px;
 `;
