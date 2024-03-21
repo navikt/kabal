@@ -22,11 +22,11 @@ interface EditProps extends Addresses {
 
 export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: EditProps) => {
   const currentAddress = overriddenAddress ?? address;
-  const [adresselinje1, setAdresselinje1] = useState(currentAddress.adresselinje1);
-  const [adresselinje2, setAdresselinje2] = useState(currentAddress.adresselinje2);
-  const [adresselinje3, setAdresselinje3] = useState(currentAddress.adresselinje3);
-  const [landkode, setLandkode] = useState(currentAddress.landkode);
-  const [postnummer, setPostnummer] = useState(currentAddress.postnummer);
+  const [adresselinje1, setAdresselinje1] = useState(currentAddress?.adresselinje1 ?? null);
+  const [adresselinje2, setAdresselinje2] = useState(currentAddress?.adresselinje2 ?? null);
+  const [adresselinje3, setAdresselinje3] = useState(currentAddress?.adresselinje3 ?? null);
+  const [landkode, setLandkode] = useState(currentAddress?.landkode ?? 'NO');
+  const [postnummer, setPostnummer] = useState(currentAddress?.postnummer ?? null);
 
   const [addresseLinje1Error, setAddresseLinje1Error] = useState(false);
   const [postnummerError, setPostnummerError] = useState(false);
@@ -40,23 +40,13 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
 
   const isSaved = useMemo(
     () =>
+      currentAddress !== null &&
       adresselinje1 === currentAddress.adresselinje1 &&
       adresselinje2 === currentAddress.adresselinje2 &&
       adresselinje3 === currentAddress.adresselinje3 &&
       landkode === currentAddress.landkode &&
       postnummer === currentAddress.postnummer,
-    [
-      adresselinje1,
-      adresselinje2,
-      adresselinje3,
-      currentAddress.adresselinje1,
-      currentAddress.adresselinje2,
-      currentAddress.adresselinje3,
-      currentAddress.landkode,
-      currentAddress.postnummer,
-      landkode,
-      postnummer,
-    ],
+    [adresselinje1, adresselinje2, adresselinje3, currentAddress, landkode, postnummer],
   );
 
   const isNorway = landkode === 'NO';
@@ -87,6 +77,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
     }
 
     const isOriginalAddress =
+      address !== null &&
       adresselinje1 === address.adresselinje1 &&
       adresselinje2 === address.adresselinje2 &&
       adresselinje3 === address.adresselinje3 &&
@@ -162,7 +153,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
           id="adresselinje1"
           label="Adresselinje 1"
           value={adresselinje1}
-          originalValue={address.adresselinje1}
+          originalValue={address?.adresselinje1 ?? null}
           onChange={setAdresselinje1}
           autoFocus
           required={!isNorway}
@@ -174,7 +165,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
         <AddressField
           label="Adresselinje 2"
           value={adresselinje2}
-          originalValue={address.adresselinje2}
+          originalValue={address?.adresselinje2 ?? null}
           onChange={setAdresselinje2}
           htmlSize={64}
         />
@@ -183,18 +174,18 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
         <AddressField
           label="Adresselinje 3"
           value={adresselinje3}
-          originalValue={address.adresselinje3}
+          originalValue={address?.adresselinje3 ?? null}
           onChange={setAdresselinje3}
           htmlSize={64}
         />
       </Row>
       <Row>
-        <Country value={landkode} originalValue={address.landkode} onChange={onCountryChange} />
+        <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
       </Row>
       {isNorway ? (
         <Postnummer
           value={postnummer}
-          originalValue={address.postnummer}
+          originalValue={address?.postnummer ?? null}
           onChange={setPostnummer}
           error={postnummerError}
         />

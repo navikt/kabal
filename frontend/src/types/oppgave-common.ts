@@ -36,7 +36,7 @@ export const UTSENDINGSKANAL: Record<Utsendingskanal, string> = {
 export interface IPartBase {
   id: string;
   name: string | null;
-  address: IAddress;
+  address: IAddress | null;
   utsendingskanal: Utsendingskanal;
 }
 

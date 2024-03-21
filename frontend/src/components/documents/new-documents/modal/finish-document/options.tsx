@@ -25,7 +25,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
       onChange({
         part,
         handling,
-        overriddenAddress: address === null || areAddressesEqual(address, part.address) ? null : address,
+        overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
       }),
     [handling, onChange, part],
   );
