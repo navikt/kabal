@@ -1,18 +1,26 @@
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
+import { pushError } from '@app/observability';
 
-type OnVersionFn = (isDifferent: boolean) => void;
+type ListenerFn = (isUpToDate: boolean) => void;
 
-export class VersionChecker {
-  private events: EventSource | undefined;
-  private onVersion: OnVersionFn;
+class VersionChecker {
+  private latestVersion = ENVIRONMENT.version;
+  private isUpToDate = true;
+  private listeners: ListenerFn[] = [];
 
-  constructor(onVersion: OnVersionFn) {
-    this.onVersion = onVersion;
-
+  constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
     this.getEventSource();
+  }
+
+  public onOutdatedVersion(listener: ListenerFn): VersionChecker {
+    if (!this.listeners.includes(listener)) {
+      this.listeners.push(listener);
+    }
+
+    return this;
   }
 
   private delay = 0;
@@ -28,7 +36,7 @@ export class VersionChecker {
           setTimeout(this.getEventSource.bind(this), this.delay);
         }
 
-        this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10000);
+        this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
       }
     });
 
@@ -38,13 +46,25 @@ export class VersionChecker {
 
     events.addEventListener('message', ({ data }) => {
       console.info('VERSION', data);
-      this.onVersion(data !== ENVIRONMENT.version);
+
+      if (typeof data !== 'string') {
+        console.error('Invalid version data', data);
+        pushError(new Error('Invalid version data'));
+
+        return;
+      }
+
+      this.latestVersion = data;
+      this.isUpToDate = data === ENVIRONMENT.version;
+
+      for (const listener of this.listeners) {
+        listener(this.isUpToDate);
+      }
     });
-
-    this.events = events;
   }
 
-  public close() {
-    this.events?.close();
-  }
+  public getIsUpToDate = (): boolean => this.isUpToDate;
+  public getLatestVersion = (): string => this.latestVersion;
 }
+
+export const VERSION_CHECKER = new VersionChecker();
