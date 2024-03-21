@@ -8,12 +8,12 @@ import { FieldLabel, Row } from '@app/components/documents/new-documents/modal/f
 import { CountryCode } from '@app/types/common';
 
 interface Props {
-  value: string;
-  originalValue: string;
+  value?: string;
+  originalValue?: string;
   onChange: (landkode: string) => void;
 }
 
-export const Country = ({ value, originalValue, onChange }: Props) => {
+export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props) => {
   const { countryCodeList, getCountryName } = useContext(StaticDataContext);
   const isOverridden = value !== originalValue;
   const currentCountryName = getCountryName(value) ?? value;

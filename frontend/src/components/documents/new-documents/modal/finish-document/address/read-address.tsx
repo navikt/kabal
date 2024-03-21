@@ -24,14 +24,18 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
   const copyAddress = formatCopyAddress(part, addressLines);
   const isOverridden = isEditable && overriddenAddress !== null && !areAddressesEqual(address, overriddenAddress);
 
+  const noAddress = addressLines.length === 0;
+
   return (
     <Container $state={isOverridden ? AddressState.OVERRIDDEN : AddressState.SAVED}>
       <Row>
-        <span>{addressLines.join(', ')}</span>
+        <span>{noAddress ? 'Ingen adresse' : addressLines.join(', ')}</span>
 
-        <Tooltip content="Kopier navn og adresse">
-          <CopyButton size="xsmall" variant="neutral" copyText={copyAddress} title="Kopier navn og adresse" />
-        </Tooltip>
+        {noAddress ? null : (
+          <Tooltip content="Kopier navn og adresse">
+            <CopyButton size="xsmall" variant="neutral" copyText={copyAddress} title="Kopier navn og adresse" />
+          </Tooltip>
+        )}
 
         {onEdit === undefined ? null : (
           <Tooltip content="Overstyr adressen kun for dette dokumentet.">
@@ -51,8 +55,13 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
   );
 };
 
-const useAddressLines = (address: IAddress): string[] => {
+const useAddressLines = (address: IAddress | null): string[] => {
   const { getPoststed, getCountryName } = useContext(StaticDataContext);
+
+  if (address === null) {
+    return [];
+  }
+
   const country = getCountryName(address.landkode) ?? address.landkode;
 
   return [
