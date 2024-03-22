@@ -17,7 +17,7 @@ import {
 import { PlainTextTypes, RichTextTypes } from '@app/types/common-text-types';
 import { IText } from '@app/types/texts/responses';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
-import { HjemlerSelect } from '../hjemler-select';
+import { HjemlerSelect } from '../hjemler-select/hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
 
 interface Props {

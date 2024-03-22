@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select';
+import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
 import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';

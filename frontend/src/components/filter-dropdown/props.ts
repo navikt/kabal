@@ -1,5 +1,6 @@
 export interface IOption<T> {
   value: T;
+  indeterminate?: boolean;
   label: string;
   disabled?: boolean;
   tags?: React.ReactNode[];
