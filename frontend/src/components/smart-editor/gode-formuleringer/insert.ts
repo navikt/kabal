@@ -1,4 +1,4 @@
-import { focusEditor, insertFragment, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
+import { focusEditor, insertFragment } from '@udecode/plate-common';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
 
 export const insertGodFormulering = (editor: RichTextEditor, content: EditorValue) => {
@@ -6,11 +6,7 @@ export const insertGodFormulering = (editor: RichTextEditor, content: EditorValu
     return;
   }
 
-  withoutSavingHistory(editor, () => {
-    withoutNormalizing(editor, () => {
-      insertFragment(editor, structuredClone(content), { voids: false });
-    });
-  });
+  insertFragment(editor, structuredClone(content), { voids: false });
 
   setTimeout(() => {
     focusEditor(editor);
