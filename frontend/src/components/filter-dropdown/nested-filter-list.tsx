@@ -3,6 +3,7 @@ import { BulletListIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navi
 import { BodyShort, Button, Checkbox, Search, Tag } from '@navikt/ds-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
+import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { BaseProps, IOption } from './props';
 
@@ -198,7 +199,13 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
   }
 
   return (
-    <StyledCheckbox value={value} size="small" checked={selected.includes(value)} onChange={() => onCheck(value)}>
+    <StyledCheckbox
+      value={value}
+      size="small"
+      checked={selected.includes(value)}
+      indeterminate={option.indeterminate}
+      onChange={() => onCheck(value)}
+    >
       <CheckboxLabel>
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
@@ -256,7 +263,10 @@ const getAllSubOptions = (options: NestedOption[], selected: string[], filter: R
       isSubInFilter = true;
     }
 
-    if (selected.includes(subOpt.value)) {
+    if (
+      selected.includes(subOpt.value) ||
+      selected.includes(`${GLOBAL}${LIST_DELIMITER}${subOpt.value.split(LIST_DELIMITER)[1]}`)
+    ) {
       subSelectionCount++;
     }
 

@@ -9,7 +9,7 @@ import {
 } from '@app/components/smart-editor-texts/query-filter-selects';
 import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
 import { AppQuery, PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/common-text-types';
-import { HjemlerSelect } from './hjemler-select';
+import { HjemlerSelect } from './hjemler-select/hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {

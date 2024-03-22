@@ -1,11 +1,13 @@
 /* eslint-disable max-depth */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { NestedFilterList, NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
+import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';
+import { Popup } from '@app/components/smart-editor-texts/hjemler-select/popup';
 import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
+import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import { ToggleButton } from '../toggle-button/toggle-button';
 
 interface Props {
   selected: string[];
@@ -31,7 +33,6 @@ export const HjemlerSelect = ({
 
   const generelleHjemler = useMemo(() => {
     const lovkildeOptionList: NestedOption[] = [];
-
     const allHjemler = ytelser
       .flatMap(({ lovKildeToRegistreringshjemler }) =>
         lovKildeToRegistreringshjemler.flatMap(({ registreringshjemler }) => registreringshjemler.map(({ id }) => id)),
@@ -100,24 +101,39 @@ export const HjemlerSelect = ({
   const ytelseOptions: NestedOption[] = useMemo(
     () =>
       ytelser
-        .map<NestedOption>(({ id: ytelseId, navn: ytelsenavn, lovKildeToRegistreringshjemler }) => ({
-          type: ytelserSelectable ? OptionType.OPTION : OptionType.GROUP,
-          label: ytelsenavn,
-          value: ytelseIsWildcard ? `${ytelseId}${LIST_DELIMITER}${WILDCARD}` : ytelseId,
-          filterValue: ytelsenavn,
-          options: lovKildeToRegistreringshjemler.map(({ id, navn, registreringshjemler }) => ({
-            type: OptionType.GROUP,
-            label: navn,
-            value: `${ytelseId}${LIST_DELIMITER}${id}`,
-            filterValue: `${ytelsenavn} ${navn}`,
-            options: registreringshjemler.map((h) => ({
-              type: OptionType.OPTION,
-              value: `${ytelseId}${LIST_DELIMITER}${h.id}`,
-              label: h.navn,
-              filterValue: `${ytelsenavn} ${navn} ${h.navn}`,
+        .map<NestedOption>(({ id: ytelseId, navn: ytelsenavn, lovKildeToRegistreringshjemler }) => {
+          const ytelseValue = ytelseIsWildcard ? `${ytelseId}${LIST_DELIMITER}${WILDCARD}` : ytelseId;
+          const indeterminate =
+            !ytelseIsWildcard &&
+            !selected.includes(ytelseValue) &&
+            lovKildeToRegistreringshjemler.some(({ registreringshjemler }) =>
+              registreringshjemler.some(
+                (h) =>
+                  selected.includes(createHjemmelValue(ytelseId, h.id)) || isIndeterminate(selected, h.id, ytelseId),
+              ),
+            );
+
+          return {
+            type: ytelserSelectable ? OptionType.OPTION : OptionType.GROUP,
+            label: ytelsenavn,
+            value: ytelseValue,
+            indeterminate,
+            filterValue: ytelsenavn,
+            options: lovKildeToRegistreringshjemler.map<NestedOption>(({ id, navn, registreringshjemler }) => ({
+              type: OptionType.GROUP,
+              label: navn,
+              value: `${ytelseId}${LIST_DELIMITER}${id}`,
+              filterValue: `${ytelsenavn} ${navn}`,
+              options: registreringshjemler.map<NestedOption>((h) => ({
+                type: OptionType.OPTION,
+                value: createHjemmelValue(ytelseId, h.id),
+                indeterminate: !ytelseIsWildcard && isIndeterminate(selected, h.id, ytelseId),
+                label: h.navn,
+                filterValue: `${ytelsenavn} ${navn} ${h.navn}`,
+              })),
             })),
-          })),
-        }))
+          };
+        })
         .concat([
           {
             type: OptionType.OPTION,
@@ -128,7 +144,7 @@ export const HjemlerSelect = ({
           },
         ]),
 
-    [generelleHjemler, ytelseIsWildcard, ytelser, ytelserSelectable],
+    [generelleHjemler, selected, ytelseIsWildcard, ytelser, ytelserSelectable],
   );
 
   const options = useMemo(
@@ -158,43 +174,8 @@ export const HjemlerSelect = ({
   );
 };
 
+const createHjemmelValue = (ytelseId: string, hjemmelId: string) => `${ytelseId}${LIST_DELIMITER}${hjemmelId}`;
+
 const Container = styled.div`
   position: relative;
-`;
-
-interface PopupProps {
-  isOpen: boolean;
-  children: React.ReactNode;
-}
-
-const Popup = ({ isOpen, children }: PopupProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
-    }
-  }, [isOpen]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  return <StyledPopup>{children}</StyledPopup>;
-};
-
-const StyledPopup = styled.div`
-  display: flex;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  max-height: 400px;
-  max-width: 275px;
-  scroll-margin-bottom: 16px;
-  z-index: 22;
-
-  background-color: white;
-  border-radius: var(--a-border-radius-medium);
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 `;
