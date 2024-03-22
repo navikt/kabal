@@ -79,7 +79,6 @@ const TopRow = styled.div`
   grid-column-gap: 16px;
   white-space: nowrap;
   position: sticky;
-  z-index: 1;
   left: 0;
 `;
 
