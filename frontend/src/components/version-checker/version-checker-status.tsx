@@ -12,7 +12,7 @@ export const VersionCheckerStatus = () => {
       return;
     }
 
-    VERSION_CHECKER.onOutdatedVersion(setIsUpToDate);
+    VERSION_CHECKER.addListener(setIsUpToDate);
   }, []);
 
   if (isUpToDate) {
