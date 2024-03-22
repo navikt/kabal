@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+/* eslint-disable max-depth */
 import React from 'react';
 import { styled } from 'styled-components';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
@@ -11,15 +13,11 @@ import { AppQuery, PlainTextTypes, RichTextTypes } from '@app/types/common-text-
 import { IText } from '@app/types/texts/responses';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
-export const Tags = ({
-  ytelseHjemmelIdList: ytelseHjemmelList,
-  utfallIdList: utfall,
-  enhetIdList: enheter,
-  templateSectionIdList: templateSectionList,
-  textType,
-}: IText) => {
+export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {
   const isHeaderFooter = textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER;
   const hasFixedLocation = isHeaderFooter || textType === RichTextTypes.REGELVERK;
+
+  const expandedYtelseHjemmelIdList = useExpandedYtelseHjemmelIdList(ytelseHjemmelIdList);
 
   return (
     <TagContainer>
@@ -27,7 +25,7 @@ export const Tags = ({
         <TagList
           variant="templateSectionIdList"
           noneLabel="Ingen maler eller seksjoner"
-          ids={templateSectionList}
+          ids={templateSectionIdList}
           useName={getTemaplateAndSectionName}
         />
       )}
@@ -35,18 +33,57 @@ export const Tags = ({
         <TagList
           variant="ytelseHjemmelIdList"
           noneLabel="Alle ytelser og hjemler"
-          ids={ytelseHjemmelList}
+          ids={expandedYtelseHjemmelIdList}
           useName={useYtelseLovkildeAndHjemmelName}
         />
       )}
       {isHeaderFooter ? null : (
-        <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfall} useName={useUtfallNameOrLoading} />
+        <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfallIdList} useName={useUtfallNameOrLoading} />
       )}
       {!isHeaderFooter ? null : (
-        <TagList variant="enhetIdList" noneLabel="Alle enheter" ids={enheter} useName={useEnhetNameFromIdOrLoading} />
+        <TagList
+          variant="enhetIdList"
+          noneLabel="Alle enheter"
+          ids={enhetIdList}
+          useName={useEnhetNameFromIdOrLoading}
+        />
       )}
     </TagContainer>
   );
+};
+
+const useExpandedYtelseHjemmelIdList = (selectedList: string[]): string[] => {
+  const { data: ytelser = [] } = useKabalYtelserLatest();
+  const result: string[] = [];
+
+  for (const selected of selectedList) {
+    if (selected === GLOBAL) {
+      for (const { id } of ytelser) {
+        result.push(id);
+      }
+      continue;
+    }
+
+    const [ytelseId, hjemmelId] = selected.split(LIST_DELIMITER);
+
+    if (hjemmelId === undefined) {
+      result.push(selected);
+    } else if (ytelseId === GLOBAL) {
+      for (const { id, lovKildeToRegistreringshjemler } of ytelser) {
+        for (const { registreringshjemler } of lovKildeToRegistreringshjemler) {
+          for (const hjemmel of registreringshjemler) {
+            if (hjemmel.id === hjemmelId) {
+              result.push(`${id}${LIST_DELIMITER}${hjemmelId}`);
+            }
+          }
+        }
+      }
+    } else {
+      result.push(selected);
+    }
+  }
+
+  return result;
 };
 
 interface TagListProps {
