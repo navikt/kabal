@@ -12,10 +12,12 @@ class VersionChecker {
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
-    this.getEventSource();
+    if (!ENVIRONMENT.isLocal) {
+      this.createEventSource();
+    }
   }
 
-  public onOutdatedVersion(listener: ListenerFn): VersionChecker {
+  public addListener(listener: ListenerFn): VersionChecker {
     if (!this.listeners.includes(listener)) {
       this.listeners.push(listener);
     }
@@ -25,15 +27,15 @@ class VersionChecker {
 
   private delay = 0;
 
-  private getEventSource() {
+  private createEventSource = () => {
     const events = new EventSource(`/version?${getQueryParams()}`);
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {
         if (this.delay === 0) {
-          this.getEventSource();
+          this.createEventSource();
         } else {
-          setTimeout(this.getEventSource.bind(this), this.delay);
+          setTimeout(this.createEventSource, this.delay);
         }
 
         this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
@@ -61,7 +63,7 @@ class VersionChecker {
         listener(this.isUpToDate);
       }
     });
-  }
+  };
 
   public getIsUpToDate = (): boolean => this.isUpToDate;
   public getLatestVersion = (): string => this.latestVersion;
