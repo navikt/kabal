@@ -106,6 +106,7 @@ const BookmarkList = styled.ul`
   padding-left: 16px;
   padding-right: 16px;
   position: relative;
+  max-width: 350px;
 `;
 
 const BookmarkListItem = styled.li`
