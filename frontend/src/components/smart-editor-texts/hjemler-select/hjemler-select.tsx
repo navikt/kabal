@@ -98,6 +98,8 @@ export const HjemlerSelect = ({
     return lovkildeOptionList;
   }, [ytelser]);
 
+  const isGlobalSelected = selected.includes(GLOBAL);
+
   const ytelseOptions: NestedOption[] = useMemo(
     () =>
       ytelser
@@ -106,12 +108,13 @@ export const HjemlerSelect = ({
           const indeterminate =
             !ytelseIsWildcard &&
             !selected.includes(ytelseValue) &&
-            lovKildeToRegistreringshjemler.some(({ registreringshjemler }) =>
-              registreringshjemler.some(
-                (h) =>
-                  selected.includes(createHjemmelValue(ytelseId, h.id)) || isIndeterminate(selected, h.id, ytelseId),
-              ),
-            );
+            (isGlobalSelected ||
+              lovKildeToRegistreringshjemler.some(({ registreringshjemler }) =>
+                registreringshjemler.some(
+                  (h) =>
+                    selected.includes(createHjemmelValue(ytelseId, h.id)) || isIndeterminate(selected, h.id, ytelseId),
+                ),
+              ));
 
           return {
             type: ytelserSelectable ? OptionType.OPTION : OptionType.GROUP,
@@ -144,7 +147,7 @@ export const HjemlerSelect = ({
           },
         ]),
 
-    [generelleHjemler, selected, ytelseIsWildcard, ytelser, ytelserSelectable],
+    [generelleHjemler, isGlobalSelected, selected, ytelseIsWildcard, ytelser, ytelserSelectable],
   );
 
   const options = useMemo(
