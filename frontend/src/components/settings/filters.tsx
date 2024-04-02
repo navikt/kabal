@@ -2,10 +2,10 @@ import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Switch } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
-import { useSakstyper } from '@app/hooks/use-kodeverk-value';
+import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';
 import { useKodeverk } from '@app/simple-api-state/use-kodeverk';
-import { ISettings } from '@app/types/bruker';
+import { ISettings, Role } from '@app/types/bruker';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import {
   ButtonContainer,
@@ -18,7 +18,6 @@ import {
 import { useHjemlerFromSettingsYtelser } from './use-hjemler-from-settings-ytelser';
 
 const EMPTY_SETTINGS: ISettings = {
-  typer: [],
   ytelser: [],
   hjemler: [],
 };
@@ -28,7 +27,7 @@ export const Filters = () => {
   const { data: settingsData } = useGetSettingsQuery();
   const hjemler = useHjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
-  const sakstyper = useSakstyper();
+  const isSaksbehandler = useHasRole(Role.KABAL_SAKSBEHANDLING);
 
   const ytelserOptions = useMemo(
     () =>
@@ -48,7 +47,7 @@ export const Filters = () => {
 
   const settings = settingsData ?? EMPTY_SETTINGS;
 
-  if (typeof kodeverk === 'undefined') {
+  if (!isSaksbehandler || typeof kodeverk === 'undefined') {
     return null;
   }
 
@@ -57,7 +56,6 @@ export const Filters = () => {
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
       <StyledFilters>
-        <SettingsFilter label="Typer" options={sakstyper} selected={settings.typer} settingKey="typer" />
         <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
         <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
       </StyledFilters>

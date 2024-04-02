@@ -1,5 +1,3 @@
-import { SaksTypeEnum } from './kodeverk';
-
 interface IEnhet {
   id: string;
   navn: string;
@@ -9,7 +7,6 @@ interface IEnhet {
 export interface ISettings {
   hjemler: string[];
   ytelser: string[];
-  typer: SaksTypeEnum[];
 }
 
 // Employee from vedtaksinstans or KA.
