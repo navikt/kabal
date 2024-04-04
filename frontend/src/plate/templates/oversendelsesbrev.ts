@@ -7,7 +7,6 @@ import {
   createLabelContent,
   createMaltekstseksjon,
   createPageBreak,
-  createParagraphWithLabelContent,
   createRegelverk,
   createSignature,
 } from '@app/plate/templates/helpers';
@@ -36,22 +35,30 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
         createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
         createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
         createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Den ankende part'),
+        createLabelContent('saksnummer', 'Saksnummer'),
       ],
     },
 
-    createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
 
-    createSignature(), // TODO: Make it possible to only show saksbehandler signature here
+    createSignature(),
 
     createPageBreak(),
 
+    createCurrentDate(),
+
     createMaltekstseksjon(TemplateSections.TITLE),
 
-    createParagraphWithLabelContent('sakenGjelder.name', 'Den ankende part'),
-    createParagraphWithLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-    createParagraphWithLabelContent('saksnummer', 'Saksnummer'),
+    {
+      type: ELEMENT_PARAGRAPH,
+      align: TextAlign.LEFT,
+      children: [
+        createLabelContent('sakenGjelder.name', 'Den ankende part'),
+        createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
+        createLabelContent('saksnummer', 'Saksnummer'),
+      ],
+    },
 
     createMaltekstseksjon(TemplateSections.INTRODUCTION),
     createMaltekstseksjon(TemplateSections.ANFOERSLER),
