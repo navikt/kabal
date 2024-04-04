@@ -120,12 +120,6 @@ export const createSimpleParagraph = (text = ''): ParagraphElement => ({
   children: [{ text }],
 });
 
-export const createParagraphWithLabelContent = (source: string, label: string): ParagraphElement => ({
-  type: ELEMENT_PARAGRAPH,
-  align: TextAlign.LEFT,
-  children: [createLabelContent(source, label)],
-});
-
 export const createSimpleListItemContainer = (text = ''): ListItemContainerElement => ({
   type: ELEMENT_LIC,
   children: [{ text }],
