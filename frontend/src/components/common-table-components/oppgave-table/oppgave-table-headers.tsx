@@ -14,7 +14,7 @@ import { Rol } from './filter-dropdowns/rol';
 import { RolHjemmel } from './filter-dropdowns/rol-hjemmel';
 import { RolYtelse } from './filter-dropdowns/rol-ytelse';
 import { Saksbehandler } from './filter-dropdowns/saksbehandler';
-import { Sakstype } from './filter-dropdowns/sakstype';
+import { Sakstype, SakstypeWithAnkeITrygderetten } from './filter-dropdowns/sakstype';
 import { Ytelse } from './filter-dropdowns/ytelse';
 
 interface TablePlainHeadersProps {
@@ -39,6 +39,8 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
     switch (key) {
       case ColumnKeyEnum.Type:
         return <Sakstype key={key} columnKey={key} params={params} setParams={setParams} />;
+      case ColumnKeyEnum.TypeWithAnkeITrygderetten:
+        return <SakstypeWithAnkeITrygderetten key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Ytelse:
         return <Ytelse key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Hjemmel:

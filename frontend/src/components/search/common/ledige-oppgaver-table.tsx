@@ -13,7 +13,7 @@ interface Props {
 const TEST_ID = 'search-result-active-oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Saksnummer,

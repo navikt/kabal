@@ -9,7 +9,7 @@ import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Navn,

@@ -11,7 +11,7 @@ import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/o
 const TEST_ID = 'mine-oppgaver-table';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Navn,

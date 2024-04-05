@@ -124,7 +124,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
 };
 
 const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Saksnummer,
@@ -135,7 +135,7 @@ const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
 ];
 
 const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Saksnummer,
