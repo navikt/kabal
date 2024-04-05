@@ -1,5 +1,6 @@
 export enum ColumnKeyEnum {
   Type,
+  TypeWithAnkeITrygderetten,
   Ytelse,
   RolYtelse,
   Hjemmel,
@@ -32,6 +33,7 @@ export enum ColumnKeyEnum {
 
 export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
   [ColumnKeyEnum.Type]: 'Type',
+  [ColumnKeyEnum.TypeWithAnkeITrygderetten]: 'Type',
   [ColumnKeyEnum.Ytelse]: 'Ytelse',
   [ColumnKeyEnum.RolYtelse]: 'Ytelse',
   [ColumnKeyEnum.Hjemmel]: 'Hjemmel',

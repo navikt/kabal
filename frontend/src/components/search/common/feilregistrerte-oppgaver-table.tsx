@@ -14,7 +14,7 @@ const TEST_ID = 'search-result-feilregistrerte-oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Feilregistrert,
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Hjemmel,
   ColumnKeyEnum.Saksnummer,
