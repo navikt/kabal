@@ -219,9 +219,9 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <FradelingReason oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
-      default:
-        return <Table.DataCell key={key} />;
     }
+
+    return <Table.DataCell key={key} />;
   });
 
 const FlowStateContainer = styled.div`
