@@ -15,6 +15,3 @@ export const SearchPage = () => {
     </SearchPageWrapper>
   );
 };
-
-// eslint-disable-next-line import/no-default-export
-export default SearchPage;

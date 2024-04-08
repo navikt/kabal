@@ -15,6 +15,3 @@ export const MineOppgaverPage = () => (
     <ReturnerteRolOppgaverTable />
   </OppgaverPageWrapper>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default MineOppgaverPage;
