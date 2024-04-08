@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { fuzzySearch } from './fuzzy-search';
 

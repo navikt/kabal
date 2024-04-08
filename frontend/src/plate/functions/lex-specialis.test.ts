@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { GLOBAL, GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { RichTextTypes } from '@app/types/common-text-types';
@@ -36,28 +37,15 @@ const getText = (
   };
 };
 
-const GENERIC_TITLE: IPublishedRichText = getText(
-  'generic-title',
-  TemplateIdEnum.KLAGEVEDTAK_V1,
-  TemplateSections.TITLE,
-);
-const GENERIC_TITLE_2: IPublishedRichText = getText(
-  'generic-title-2',
-  TemplateIdEnum.KLAGEVEDTAK_V1,
-  TemplateSections.TITLE,
-);
-const SPECIFIC_TITLE: IPublishedRichText = getText(
-  'specific-title',
-  TemplateIdEnum.KLAGEVEDTAK_V1,
-  TemplateSections.TITLE,
-  ['y1'],
-);
-const MORE_SPECIFIC_TITLE: IPublishedRichText = getText(
-  'more-specific-title',
-  TemplateIdEnum.KLAGEVEDTAK_V1,
-  TemplateSections.TITLE,
-  [`y1${LIST_DELIMITER}h1`],
-);
+const { TITLE } = TemplateSections;
+const { KLAGEVEDTAK_V1 } = TemplateIdEnum;
+
+const GENERIC_TITLE: IPublishedRichText = getText('generic-title', KLAGEVEDTAK_V1, TITLE);
+const GENERIC_TITLE_2: IPublishedRichText = getText('generic-title-2', KLAGEVEDTAK_V1, TITLE);
+const SPECIFIC_TITLE: IPublishedRichText = getText('specific-title', KLAGEVEDTAK_V1, TITLE, ['y1']);
+const MORE_SPECIFIC_TITLE: IPublishedRichText = getText('more-specific-title', KLAGEVEDTAK_V1, TITLE, [
+  `y1${LIST_DELIMITER}h1`,
+]);
 
 describe('lex specialis', () => {
   it('prioritize specific text', () => {
