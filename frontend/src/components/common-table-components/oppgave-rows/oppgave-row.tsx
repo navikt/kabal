@@ -60,6 +60,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
+      case ColumnKeyEnum.TypeWithAnkeITrygderetten:
         return (
           <Table.DataCell key={key}>
             <Type type={oppgave.typeId} size="medium" />
