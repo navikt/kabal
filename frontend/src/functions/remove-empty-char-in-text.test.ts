@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 
 const EMPTY_CHAR_CODE = 8203;

@@ -1,3 +1,4 @@
+import { afterEach, describe, expect, it, jest } from '@jest/globals';
 import '@app/mocks/window';
 import { TElement, TText } from '@udecode/plate-common';
 import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';

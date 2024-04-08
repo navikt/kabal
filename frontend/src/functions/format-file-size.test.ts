@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 
 const KB = BYTES_PER_KB;
