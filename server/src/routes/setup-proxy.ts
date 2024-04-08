@@ -1,3 +1,5 @@
+import { IncomingMessage, ServerResponse } from 'http';
+import { Socket } from 'net';
 import { Router } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { getAzureADClient } from '@app/auth/get-auth-client';
@@ -41,74 +43,85 @@ export const setupProxy = async () => {
         pathRewrite: {
           [`^/api/${appName}`]: '',
         },
-        onProxyReq: (proxyReq, req, res) => {
-          if (req.headers.accept !== 'text/event-stream') {
-            return;
-          }
+        on: {
+          proxyReq: (proxyReq, req, res) => {
+            if (req.headers.accept !== 'text/event-stream') {
+              return;
+            }
 
-          const { url, originalUrl, method } = req;
-          const traceId = ensureTraceparent(req);
-          const start = performance.now();
+            const { url, method } = req;
+            const traceId = ensureTraceparent(req);
+            const start = performance.now();
 
-          log.debug({
-            msg: 'Proxying SSE connection',
-            traceId,
-            data: { proxy_target_application, url, originalUrl, method },
-          });
-
-          let closedByTarget = false;
-          let closedByClient = false;
-
-          const onClose = (msg: string) => {
-            const duration = Math.round(performance.now() - start);
-
-            log.debug({ msg, traceId, data: { proxy_target_application, url, originalUrl, method, duration } });
-
-            proxyReq.destroy();
-            res.destroy();
-          };
-
-          proxyReq.once('close', () => {
-            closedByTarget = true;
-            onClose('Proxy connection closed by target' + (closedByClient ? ', already closed by client' : ''));
-          });
-          res.once('close', () => {
-            closedByClient = true;
-            onClose('Proxy connection closed' + (closedByTarget ? ', already closed by target' : ''));
-          });
-        },
-        onError: (error, req, res) => {
-          const { url, originalUrl, method } = req;
-          const traceId = ensureTraceparent(req);
-
-          if (res.headersSent) {
-            log.error({
-              msg: 'Headers already sent.',
-              error,
+            log.debug({
+              msg: 'Proxying SSE connection',
               traceId,
-              data: {
-                appName,
-                statusCode: res.statusCode,
-                url,
-                originalUrl,
-                method,
-              },
+              data: { proxy_target_application, url, method },
             });
 
-            return;
-          }
+            let closedByTarget = false;
+            let closedByClient = false;
 
-          res.writeHead(500, { 'Content-Type': 'application/json' });
-          const body = JSON.stringify({ error: `Failed to connect to API. Reason: ${error.message}` });
-          res.end(body);
-          log.error({
-            msg: 'Failed to connect to API.',
-            error,
-            traceId,
-            data: { proxy_target_application, url, originalUrl, method },
-          });
+            const onClose = (msg: string) => {
+              const duration = Math.round(performance.now() - start);
+
+              log.debug({ msg, traceId, data: { proxy_target_application, url, method, duration } });
+
+              proxyReq.destroy();
+              res.destroy();
+            };
+
+            proxyReq.once('close', () => {
+              closedByTarget = true;
+              onClose('Proxy connection closed by target' + (closedByClient ? ', already closed by client' : ''));
+            });
+            res.once('close', () => {
+              closedByClient = true;
+              onClose('Proxy connection closed' + (closedByTarget ? ', already closed by target' : ''));
+            });
+          },
+          error: (error, req, res) => {
+            const { url, method } = req;
+            const traceId = ensureTraceparent(req);
+
+            if (!isServerResponse(res)) {
+              log.error({
+                msg: 'Server response is not a ServerResponse.',
+                error,
+                traceId,
+                data: { proxy_target_application, url, method },
+              });
+
+              return;
+            }
+
+            if (res.headersSent) {
+              log.error({
+                msg: 'Headers already sent.',
+                error,
+                traceId,
+                data: {
+                  appName,
+                  statusCode: res.statusCode,
+                  url,
+                  method,
+                },
+              });
+
+              return;
+            }
+
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            const body = JSON.stringify({ error: `Failed to connect to API. Reason: ${error.message}` });
+            res.end(body);
+            log.error({
+              msg: 'Failed to connect to API.',
+              error,
+              traceId,
+              data: { proxy_target_application, url, method },
+            });
+          },
         },
-        logLevel: 'warn',
         changeOrigin: true,
       }),
     );
@@ -116,3 +129,11 @@ export const setupProxy = async () => {
 
   return router;
 };
+
+const isServerResponse = (res: ServerResponse<IncomingMessage> | Socket): res is ServerResponse<IncomingMessage> =>
+  'headersSent' in res &&
+  typeof res.headersSent === 'boolean' &&
+  'writeHead' in res &&
+  typeof res.writeHead === 'function' &&
+  'end' in res &&
+  typeof res.end === 'function';
