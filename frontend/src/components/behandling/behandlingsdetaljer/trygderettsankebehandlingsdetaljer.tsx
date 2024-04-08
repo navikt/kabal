@@ -1,6 +1,5 @@
 import { Heading } from '@navikt/ds-react';
 import React from 'react';
-import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -63,12 +62,6 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
       <KjennelseMottatt />
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
-
-      <ExtraUtfall
-        utfallIdSet={resultat.extraUtfallIdSet}
-        mainUtfall={resultat.utfallId}
-        oppgaveId={oppgavebehandling.id}
-      />
 
       <Lovhjemmel />
     </StyledBehandlingSection>
