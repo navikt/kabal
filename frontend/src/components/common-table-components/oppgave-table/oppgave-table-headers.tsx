@@ -31,6 +31,7 @@ interface TableFilterHeadersProps extends TablePlainHeadersProps {
 }
 
 export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: TableFilterHeadersProps) =>
+  // eslint-disable-next-line complexity
   columnKeys.map((key) => {
     if (params === undefined || setParams === undefined) {
       return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
@@ -80,7 +81,22 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <RolYtelse key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.RolHjemmel:
         return <RolHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
-      default:
+      case ColumnKeyEnum.Navn:
+      case ColumnKeyEnum.Fnr:
+      case ColumnKeyEnum.FlowStates:
+      case ColumnKeyEnum.Open:
+      case ColumnKeyEnum.Tildeling:
+      case ColumnKeyEnum.OppgavestyringNonFilterable:
+      case ColumnKeyEnum.Utfall:
+      case ColumnKeyEnum.PaaVentReason:
+      case ColumnKeyEnum.Feilregistrering:
+      case ColumnKeyEnum.Feilregistrert:
+      case ColumnKeyEnum.Saksnummer:
+      case ColumnKeyEnum.RolTildeling:
+      case ColumnKeyEnum.RelevantOppgaver:
+      case ColumnKeyEnum.FradelingReason:
         return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
     }
+
+    return <Table.ColumnHeader key={key} />;
   });
