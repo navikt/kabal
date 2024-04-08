@@ -9,6 +9,3 @@ export const OppgaverPage = () => (
     <LedigeRolOppgaverTable />
   </OppgaverPageWrapper>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default OppgaverPage;

@@ -8,6 +8,3 @@ export const RegelverkPage = () => (
     <SmartEditorTexts textType={RichTextTypes.REGELVERK} />
   </PageWrapper>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default RegelverkPage;

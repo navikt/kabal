@@ -8,6 +8,3 @@ export const BunnteksterPage = () => (
     <SmartEditorTexts textType={PlainTextTypes.FOOTER} />
   </PageWrapper>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default BunnteksterPage;

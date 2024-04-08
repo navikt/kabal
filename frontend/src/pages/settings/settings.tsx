@@ -7,6 +7,3 @@ export const SettingsPage = () => (
     <Settings />
   </PageWrapper>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default SettingsPage;

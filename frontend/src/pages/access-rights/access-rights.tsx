@@ -18,6 +18,3 @@ const AccessRightsArticle = styled.article`
   flex-direction: column;
   row-gap: 16px;
 `;
-
-// eslint-disable-next-line import/no-default-export
-export default AccessRightsPage;
