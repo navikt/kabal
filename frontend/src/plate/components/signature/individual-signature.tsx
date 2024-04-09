@@ -10,10 +10,9 @@ import { MISSING_TITLE, Title } from './title';
 
 interface Props {
   element: SignatureElement;
-  useSuffix: boolean;
 }
 
-export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
+export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
   const saksbehandlerSignature = useSaksbehandlerSignature();
   const { templateId } = useContext(SmartEditorContext);
@@ -23,7 +22,7 @@ export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
       return undefined;
     }
 
-    const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && useSuffix ? 'saksbehandler' : undefined;
+    const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
 
     if (saksbehandlerSignature.anonymous) {
       return { name: 'NAV Klageinstans' };
@@ -33,7 +32,7 @@ export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
       name: getName(saksbehandlerSignature, element.useShortName),
       title: getTitle(saksbehandlerSignature.customJobTitle, suffix) ?? MISSING_TITLE,
     };
-  }, [saksbehandlerSignature, element.useShortName, templateId, useSuffix]);
+  }, [saksbehandlerSignature, templateId, element.useSuffix, element.useShortName]);
 
   useEffect(() => {
     if (element.saksbehandler?.name === signature?.name && element.saksbehandler?.title === signature?.title) {
@@ -68,10 +67,9 @@ export const SaksbehandlerSignature = ({ element, useSuffix }: Props) => {
 
 interface MedunderskriverSignatureProps {
   element: SignatureElement;
-  includeMedunderskriver: boolean;
 }
 
-export const MedunderskriverSignature = ({ element, includeMedunderskriver }: MedunderskriverSignatureProps) => {
+export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
   const medunderskriverSignature = useMedunderskriverSignature();
   const { templateId } = useContext(SmartEditorContext);
@@ -86,13 +84,13 @@ export const MedunderskriverSignature = ({ element, includeMedunderskriver }: Me
 
   const signature = useMemo(
     () =>
-      noMedunderskriver || medunderskriverSignature === null || !includeMedunderskriver
+      noMedunderskriver || medunderskriverSignature === null || !element.includeMedunderskriver
         ? undefined
         : {
             name: getName(medunderskriverSignature, element.useShortName),
             title: medunderskriverSignature.customJobTitle ?? MISSING_TITLE,
           },
-    [noMedunderskriver, medunderskriverSignature, includeMedunderskriver, element.useShortName],
+    [noMedunderskriver, medunderskriverSignature, element.includeMedunderskriver, element.useShortName],
   );
 
   useEffect(() => {

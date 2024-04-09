@@ -206,6 +206,8 @@ export interface ISignature {
 
 interface ISignatureContent {
   useShortName: boolean;
+  useSuffix: boolean;
+  includeMedunderskriver: boolean;
   saksbehandler?: ISignature;
   medunderskriver?: ISignature;
 }

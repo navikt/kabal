@@ -1,5 +1,5 @@
 import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
-import React, { InputHTMLAttributes, useState } from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -16,8 +16,6 @@ export const Signature = ({
   editor,
 }: PlateRenderElementProps<EditorValue, SignatureElement>) => {
   const isReadOnly = useEditorReadOnly();
-  const [includeMedunderskriver, setIncludeMu] = useState(true);
-  const [useSuffix, setUseSuffix] = useState(true);
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
 
@@ -30,6 +28,9 @@ export const Signature = ({
   const showSuffixCheckbox = !signature.anonymous;
 
   const hideAll = !showForkortedeNavnCheckbox && !showSuffixCheckbox && !hasMedunderskriver;
+
+  const setSignatureProp = (prop: Partial<SignatureElement>) =>
+    setNodes(editor, { ...element, ...prop }, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });
 
   return (
     <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
@@ -48,13 +49,7 @@ export const Signature = ({
               <Checkbox
                 disabled={isReadOnly}
                 checked={element.useShortName}
-                onChange={({ target }) => {
-                  setNodes(
-                    editor,
-                    { ...element, useShortName: target.checked },
-                    { at: [], voids: true, mode: 'lowest', match: (n) => n === element },
-                  );
-                }}
+                onChange={({ target }) => setSignatureProp({ useShortName: target.checked })}
               >
                 Bruk forkortede navn
               </Checkbox>
@@ -63,8 +58,8 @@ export const Signature = ({
             {hasMedunderskriver ? (
               <Checkbox
                 disabled={isReadOnly}
-                checked={includeMedunderskriver}
-                onChange={({ target }) => setIncludeMu(target.checked)}
+                checked={element.includeMedunderskriver}
+                onChange={({ target }) => setSignatureProp({ includeMedunderskriver: target.checked })}
               >
                 Inkluder medunderskriver
               </Checkbox>
@@ -73,8 +68,8 @@ export const Signature = ({
             {showSuffixCheckbox ? (
               <Checkbox
                 disabled={isReadOnly || signature?.anonymous === true}
-                checked={useSuffix}
-                onChange={({ target }) => setUseSuffix(target.checked)}
+                checked={element.useSuffix}
+                onChange={({ target }) => setSignatureProp({ useSuffix: target.checked })}
               >
                 Bruk «/saksbehandler»-tittel
               </Checkbox>
@@ -83,8 +78,8 @@ export const Signature = ({
         )}
 
         <StyledSignatures>
-          <MedunderskriverSignature element={element} includeMedunderskriver={includeMedunderskriver} />
-          <SaksbehandlerSignature element={element} useSuffix={useSuffix} />
+          <MedunderskriverSignature element={element} />
+          <SaksbehandlerSignature element={element} />
         </StyledSignatures>
         {children}
         <SectionToolbar>

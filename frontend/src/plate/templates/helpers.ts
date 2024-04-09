@@ -140,6 +140,8 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
 export const createSignature = (): SignatureElement => ({
   type: ELEMENT_SIGNATURE,
   useShortName: false,
+  includeMedunderskriver: true,
+  useSuffix: true,
   children: [{ text: '' }],
   threadIds: [],
 });
