@@ -28,7 +28,7 @@ export const SakstypeWithAnkeITrygderetten = ({ params, setParams, columnKey }: 
     <FilterDropdown<SaksTypeEnum>
       selected={params.typer ?? []}
       onChange={(typer) => setParams({ ...params, typer })}
-      options={[...OPTIONS, { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i trygderetten' }]}
+      options={[...OPTIONS, { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' }]}
       data-testid="filter-type"
     >
       {TABLE_HEADERS[columnKey]}
