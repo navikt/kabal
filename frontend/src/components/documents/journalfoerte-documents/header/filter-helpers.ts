@@ -58,11 +58,13 @@ export const useFilteredDocuments = (
         for (const document of filtered) {
           const vedlegg: ScoredArkvertDocumentVedlegg[] = [];
           let highestVedleggScore = 0;
+          const journalpostScore = fuzzySearch(splitQuery(search), (document.tittel ?? '') + document.journalpostId);
+          const noJournalpostHit = journalpostScore <= 0;
 
           for (const v of document.vedlegg) {
             const score = fuzzySearch(splitQuery(search), v.tittel ?? '');
 
-            if (score <= 0) {
+            if (noJournalpostHit && score <= 0) {
               continue;
             }
 
@@ -72,8 +74,6 @@ export const useFilteredDocuments = (
 
             vedlegg.push({ ...v, score });
           }
-
-          const journalpostScore = fuzzySearch(splitQuery(search), (document.tittel ?? '') + document.journalpostId);
 
           const score = Math.max(journalpostScore, highestVedleggScore);
 
