@@ -1,12 +1,19 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { stringToRegExp } from '@app/functions/string-to-regex';
+import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
+import { splitQuery } from './../../../smart-editor/gode-formuleringer/split-query';
+
+interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
+  score: number;
+}
+interface ScoredArkivertDocument extends IArkivertDocument {
+  score: number;
+  vedlegg: ScoredArkvertDocumentVedlegg[];
+}
 
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
@@ -24,37 +31,58 @@ export const useFilteredDocuments = (
   useEffect(() => {
     const callback = requestIdleCallback(
       () => {
-        const regex = search.length === 0 ? skipToken : stringToRegExp(search);
-
-        return setResult(
-          documents
-            .filter(
-              ({
-                tittel,
-                journalpostId,
-                tema,
-                journalposttype,
-                avsenderMottaker,
-                datoOpprettet,
-                sak,
-                vedlegg,
-                valgt,
-              }) =>
-                (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-                (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-                (selectedAvsenderMottakere.length === 0 ||
-                  selectedAvsenderMottakere.includes(
-                    avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
-                  )) &&
-                (selectedSaksIds.length === 0 ||
-                  selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
-                (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
-                (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)) &&
-                (regex === skipToken || filterDocumentsBySearch(regex, { tittel, journalpostId, vedlegg })),
-            )
-            .map((d) => (onlyIncluded ? { ...d, vedlegg: d.vedlegg.filter(({ valgt }) => valgt) } : d))
-            .toSorted((a, b) => sortByDate(a, b, sort)),
+        const filtered = documents.filter(
+          ({ tema, journalposttype, avsenderMottaker, datoOpprettet, sak, vedlegg, valgt }) =>
+            (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
+            (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
+            (selectedAvsenderMottakere.length === 0 ||
+              selectedAvsenderMottakere.includes(
+                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
+              )) &&
+            (selectedSaksIds.length === 0 ||
+              selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+            (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
+            (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)),
         );
+
+        if (search.length === 0) {
+          return setResult(
+            filtered
+              .map((d) => (onlyIncluded ? { ...d, vedlegg: d.vedlegg.filter(({ valgt }) => valgt) } : d))
+              .toSorted((a, b) => sortByDate(a, b, sort)),
+          );
+        }
+
+        const scored: ScoredArkivertDocument[] = [];
+
+        for (const document of filtered) {
+          const vedlegg: ScoredArkvertDocumentVedlegg[] = [];
+          let highestVedleggScore = 0;
+
+          for (const v of document.vedlegg) {
+            const score = fuzzySearch(splitQuery(search), v.tittel ?? '');
+
+            if (score <= 0) {
+              continue;
+            }
+
+            if (score > highestVedleggScore) {
+              highestVedleggScore = score;
+            }
+
+            vedlegg.push({ ...v, score });
+          }
+
+          const journalpostScore = fuzzySearch(splitQuery(search), (document.tittel ?? '') + document.journalpostId);
+
+          const score = Math.max(journalpostScore, highestVedleggScore);
+
+          if (score > 0) {
+            scored.push({ ...document, score, vedlegg: vedlegg.toSorted((a, b) => b.score - a.score) });
+          }
+        }
+
+        setResult(scored.toSorted((a, b) => (a.score === b.score ? sortByDate(a, b, sort) : b.score - a.score)));
       },
       { timeout: 200 },
     );
@@ -101,19 +129,6 @@ const checkDateInterval = (dateString: string, [from, to]: DateRange): boolean =
   }
 
   return false;
-};
-
-interface FilterDocument {
-  tittel: string | null;
-  journalpostId: string;
-  vedlegg: { tittel: string | null }[];
-}
-
-const filterDocumentsBySearch = (regex: RegExp, { tittel, journalpostId, vedlegg }: FilterDocument) => {
-  const vedleggTitler = vedlegg.map((v) => v.tittel).join(' ');
-  const searchIn = [tittel, journalpostId, vedleggTitler].filter(isNotNull).join(' ');
-
-  return regex.test(searchIn);
 };
 
 const sortByDate = (a: IArkivertDocument, b: IArkivertDocument, sort: ArchivedDocumentsSort) => {
