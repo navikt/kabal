@@ -9,6 +9,7 @@ interface Props {
   className?: string;
   icon?: React.ReactNode;
   size?: CopyButtonProps['size'];
+  activeText?: string;
 }
 
 export const CopyButton = ({
@@ -18,6 +19,7 @@ export const CopyButton = ({
   className,
   icon,
   size = 'small',
+  activeText,
 }: Props) => {
   if (
     copyText === null ||
@@ -33,7 +35,7 @@ export const CopyButton = ({
   return (
     <StyledCopyButton
       className={className}
-      activeText="Kopiert!"
+      activeText={activeText}
       copyText={copyText}
       title={title}
       size={size}

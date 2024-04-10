@@ -1,7 +1,9 @@
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
+import { CopyButton } from '@app/components/copy-button/copy-button';
+import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -60,12 +62,19 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
     <BehandlingSection label={label}>
       <StyledPart>
         <StyledName>
-          <span>{part.name}</span>
+          <Container>
+            {part.name === null ? (
+              <span>Navn mangler</span>
+            ) : (
+              <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} />
+            )}
+            <CopyIdButton size="small" id={part.id} />
+          </Container>
+
           <PartStatusList statusList={part.statusList} size="xsmall" />
         </StyledName>
 
         <ButtonContainer>
-          {part.name === null ? null : <CopyButton copyText={part.name} size="small" />}
           {isDeletable && isEditing ? (
             <DeleteButton
               onDelete={() => {
@@ -97,6 +106,13 @@ interface EditButtonProps {
   onClick: () => void;
   isEditing: boolean;
 }
+
+const Container = styled.div`
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+`;
 
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
