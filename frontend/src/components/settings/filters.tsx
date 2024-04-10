@@ -52,7 +52,7 @@ export const Filters = () => {
   }
 
   return (
-    <SettingsSection>
+    <SettingsSection $area="filters">
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
       <StyledFilters>

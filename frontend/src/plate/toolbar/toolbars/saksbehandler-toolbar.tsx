@@ -1,4 +1,4 @@
-import { ClockDashedIcon, FileExportIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import React, { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
@@ -8,6 +8,7 @@ import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-button
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { Settings } from '@app/plate/toolbar/toolbars/settings';
 
 interface Props {
   showHistory: boolean;
@@ -15,8 +16,7 @@ interface Props {
 }
 
 export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => {
-  const { showGodeFormuleringer, setShowGodeFormuleringer, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } =
-    useContext(SmartEditorContext);
+  const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
   const { value: behandlingEnabled = true, setValue: setBehandlingEnabled } = useBehandlingEnabled();
 
   return (
@@ -28,7 +28,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
 
         <ToolbarIconButton
           label="Vis gode formuleringer"
-          keys={[MOD_KEY, 'Shift', 'F']}
+          keys={[MOD_KEY, 'Shift', 'G']}
           icon={<LightBulbIcon aria-hidden />}
           active={showGodeFormuleringer}
           onClick={() => {
@@ -53,16 +53,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
 
         <ToolbarSeparator />
 
-        <ToolbarIconButton
-          label="Vis kommentarer og bokmerker ved siden av innhold"
-          icon={<FileExportIcon aria-hidden />}
-          active={showAnnotationsAtOrigin}
-          onClick={() => {
-            const enabled = !showAnnotationsAtOrigin;
-            pushEvent('toggle-show-annotations-at-origin', { enabled: enabled.toString() }, 'smart-editor');
-            setShowAnnotationsAtOrigin(enabled);
-          }}
-        />
+        <Settings showComments />
 
         <ToolbarSeparator />
 

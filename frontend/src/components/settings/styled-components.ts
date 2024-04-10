@@ -1,19 +1,23 @@
 import { Fieldset } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-export const SettingsSection = styled.section`
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px;
+export const SettingsSection = styled.section<{ $area: string }>`
+  grid-area: ${({ $area }) => $area};
+  box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
   width: fit-content;
   padding: 24px;
   width: 100%;
-  max-width: 1548px;
+  height: fit-content;
 `;
 
 export const SectionHeader = styled.h1`
   font-size: 24px;
-  margin: 0%;
+  margin: 0;
   margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 export const StyledFilters = styled.div`
