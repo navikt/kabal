@@ -128,7 +128,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
       if (
         event.key === 'Escape' ||
-        (event.key.toLowerCase() === 'f' && (event.ctrlKey || event.metaKey) && event.shiftKey)
+        (event.key.toLowerCase() === 'g' && (event.ctrlKey || event.metaKey) && event.shiftKey)
       ) {
         event.preventDefault();
 

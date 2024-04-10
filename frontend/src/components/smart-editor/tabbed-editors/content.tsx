@@ -19,7 +19,7 @@ export const Content = ({ children }: { children?: React.ReactNode }) => {
       return;
     }
 
-    if (event.shiftKey && lowerCaseKey === 'f') {
+    if (event.shiftKey && lowerCaseKey === 'g') {
       event.preventDefault();
       setShowGodeFormuleringer(!showGodeFormuleringer);
 

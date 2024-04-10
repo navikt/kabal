@@ -4,6 +4,7 @@ import { ELEMENT_LI, ELEMENT_LIC } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import React from 'react';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
+import { Abbreviation } from '@app/plate/toolbar/abbreviation';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { BookmarkButton } from '@app/plate/toolbar/bookmark-button';
 import { Headings } from '@app/plate/toolbar/headings';
@@ -35,6 +36,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <BookmarkButton />
         <CommentsButton />
+        <Abbreviation />
       </>
     );
   }
@@ -50,6 +52,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <BookmarkButton />
         <CommentsButton />
+        <Abbreviation />
       </>
     );
   }
@@ -62,6 +65,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <BookmarkButton />
         <CommentsButton />
+        <Abbreviation />
       </>
     );
   }
@@ -73,6 +77,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
         <ToolbarSeparator />
         <BookmarkButton />
         <CommentsButton />
+        <Abbreviation />
       </>
     );
   }

@@ -53,3 +53,9 @@ export interface ISetCustomInfoParams {
   value: string | null;
   navIdent: string;
 }
+
+export interface CustomAbbrevation {
+  id: string;
+  short: string;
+  long: string;
+}

@@ -9,12 +9,13 @@ import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragraph';
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
+import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
 import { createCopyPlugin } from '@app/plate/plugins/copy';
+import { createCustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createNormalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { createPageBreakPlugin } from '@app/plate/plugins/page-break';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
-import { autoformatPlugin } from '../autoformat/plugin';
 
 export const defaultPlugins: PlatePlugin[] = [
   createInsertDataPlugin(),
@@ -62,7 +63,12 @@ export const defaultPlugins: PlatePlugin[] = [
     },
   }),
   createAlignPlugin({ inject: { props: { validTypes: [ELEMENT_PARAGRAPH] } } }),
-  createAutoformatPlugin(autoformatPlugin),
+  createAutoformatPlugin({
+    options: {
+      rules: autoformatRules,
+      enableUndoOnDelete: true,
+    },
+  }),
   createExitBreakPlugin({
     options: {
       rules: [
@@ -85,4 +91,5 @@ export const defaultPlugins: PlatePlugin[] = [
   createProhibitDeletionPlugin(),
   createCopyPlugin(),
   createNormalizeNodePlugin(),
+  createCustomAbbreviationPlugin(),
 ];

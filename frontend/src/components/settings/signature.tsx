@@ -17,7 +17,7 @@ export const Signature = () => {
   }
 
   return (
-    <SettingsSection>
+    <SettingsSection $area="signature">
       <SectionHeader>Signatur</SectionHeader>
       <p>
         <strong>NB: Endringer gjort her påvirker kun Kabal.</strong>
