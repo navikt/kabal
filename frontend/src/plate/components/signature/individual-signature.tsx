@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
-import { useMedunderskriverSignature, useSaksbehandlerSignature } from '@app/plate/components/signature/hooks';
+import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
 import { ISignature, SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { MISSING_TITLE, Title } from './title';
@@ -14,8 +14,8 @@ interface Props {
 
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
-  const saksbehandlerSignature = useSaksbehandlerSignature();
   const { templateId } = useContext(SmartEditorContext);
+  const saksbehandlerSignature = useMainSignature(templateId);
 
   const signature: ISignature | undefined = useMemo(() => {
     if (saksbehandlerSignature === null) {
