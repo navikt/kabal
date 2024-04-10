@@ -8,6 +8,6 @@ interface Props {
 
 export const Saksnummer = ({ saksnummer }: Props) => (
   <BehandlingSection label="Saksnummer">
-    <CopyButton text={saksnummer} size="xsmall" />
+    <CopyButton text={saksnummer} activeText={saksnummer} size="small" />
   </BehandlingSection>
 );
