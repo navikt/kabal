@@ -27,6 +27,7 @@ export const Abbreviation = () => {
       }
 
       if (e.key.toLowerCase() === 'f' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault();
         setIsOpen((o) => !o);
       }
     };
