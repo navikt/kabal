@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Abbreviation } from '@app/components/settings/abbreviations/abbreviation';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
+import { pushEvent } from '@app/observability';
 import { useDeleteAbbreviationMutation, useUpdateAbbreviationMutation } from '@app/redux-api/bruker';
 import { CustomAbbrevation } from '@app/types/bruker';
 
@@ -25,8 +26,14 @@ export const ExistingAbbreviation = ({ short: savedShort, long: savedLong, id }:
       setShort={setLocalShort}
       long={localLong}
       setLong={setLocalLong}
-      onSave={() => updateAbbreviation({ short, long, id })}
-      onDelete={() => deleteAbbreviation(id)}
+      onSave={() => {
+        updateAbbreviation({ short, long, id });
+        pushEvent('update-abbreviation', { short, long }, 'abbreviations');
+      }}
+      onDelete={() => {
+        deleteAbbreviation(id);
+        pushEvent('delete-abbreviation', { short, long }, 'abbreviations');
+      }}
       isSaved={isSaved}
       isSaving={isUpdating}
       isDeleting={isDeleting}

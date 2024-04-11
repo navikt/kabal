@@ -5,6 +5,7 @@ import { RichText } from '@app/plate/types';
 
 interface PreviousWord {
   long: RichText;
+  short: RichText;
   range: Range;
 }
 
@@ -59,5 +60,5 @@ export const getAbbreviation = (editor: PlateEditor, key: string): PreviousWord 
     return null;
   }
 
-  return { long: { ...shortNode, text: `${long}${key}` }, range };
+  return { short: shortNode, long: { ...shortNode, text: `${long}${key}` }, range };
 };

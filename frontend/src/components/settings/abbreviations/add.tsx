@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Abbreviation } from '@app/components/settings/abbreviations/abbreviation';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
+import { pushEvent } from '@app/observability';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 
 export const AddAbbreviation = () => {
@@ -19,6 +20,7 @@ export const AddAbbreviation = () => {
     await addAbbreviation({ short, long }).unwrap();
     setLocalShort('');
     setLocalLong('');
+    pushEvent('add-abbreviation', { short, long }, 'abbreviations');
   };
 
   return (
