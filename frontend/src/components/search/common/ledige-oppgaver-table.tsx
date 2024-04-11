@@ -15,7 +15,7 @@ const TEST_ID = 'search-result-active-oppgaver';
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,

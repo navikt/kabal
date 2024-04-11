@@ -6,7 +6,7 @@ export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getOppgave: builder.query<IOppgave, string>({
-      query: (oppgaveId) => `/kabal-search/oppgaver/${oppgaveId}`,
+      query: (oppgaveId) => `/kabal-api/oppgaver/${oppgaveId}`,
     }),
   }),
 });

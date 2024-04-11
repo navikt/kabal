@@ -1,5 +1,6 @@
 import { Table, TableProps } from '@navikt/ds-react';
 import React from 'react';
+import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import {
   FinishedColumnHeader,
   ReturnedColumnHeader,
@@ -44,10 +45,12 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <SakstypeWithAnkeITrygderetten key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Ytelse:
         return <Ytelse key={key} columnKey={key} params={params} setParams={setParams} />;
-      case ColumnKeyEnum.Hjemmel:
+      case ColumnKeyEnum.Innsendingshjemler:
         return <Hjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
-      case ColumnKeyEnum.EnhetHjemmel:
+      case ColumnKeyEnum.EnhetInnsendingshjemler:
         return <EnhetHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
+      case ColumnKeyEnum.Registreringshjemler:
+        return <Registreringshjemler key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Age:
         return (
           <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
@@ -79,7 +82,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Rol key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.RolYtelse:
         return <RolYtelse key={key} columnKey={key} params={params} setParams={setParams} />;
-      case ColumnKeyEnum.RolHjemmel:
+      case ColumnKeyEnum.RolInnsendingshjemler:
         return <RolHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Navn:
       case ColumnKeyEnum.Fnr:

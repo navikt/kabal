@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
@@ -17,7 +17,10 @@ export interface OptionGroup<T extends string> {
 interface GroupedDropdownProps<T extends string> extends BaseProps<T, OptionGroup<T>>, DropdownProps {
   showFjernAlle?: boolean;
   testType: string;
+  openDirection?: Direction;
 }
+
+type Direction = 'down' | 'right';
 
 export const GroupedFilterList = <T extends string>({
   selected,
@@ -26,8 +29,10 @@ export const GroupedFilterList = <T extends string>({
   onChange,
   close,
   testType,
+  openDirection: direction = 'down',
   showFjernAlle = true,
 }: GroupedDropdownProps<T>): JSX.Element | null => {
+  const ref = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -55,6 +60,16 @@ export const GroupedFilterList = <T extends string>({
     }
   }, [open, focused]);
 
+  useEffect(() => {
+    if (open) {
+      ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+    }
+  }, [open]);
+
+  if (!open) {
+    return null;
+  }
+
   const reset = () => onChange([]);
 
   const onSelectFocused = () => {
@@ -77,7 +92,7 @@ export const GroupedFilterList = <T extends string>({
   const focusedOption = flattenedFilteredOptions[focused] ?? null;
 
   return (
-    <Container>
+    <Container $openDirection={direction} ref={ref}>
       <Header
         onFocusChange={setFocused}
         onFilterChange={setFilter}
@@ -117,17 +132,26 @@ const GroupHeader = ({ header }: GroupHeaderProps) => {
   return <StyledGroupHeader data-testid="group-title">{header}</StyledGroupHeader>;
 };
 
-const Container = styled.div`
+const Container = styled.div<{ $openDirection: Direction }>`
   display: flex;
   flex-direction: column;
   padding: 0;
   margin: 0;
-  z-index: 1;
-  width: 100%;
-  min-width: 275px;
-  max-width: 100%;
-  max-height: 100%;
   overflow-y: auto;
+
+  position: absolute;
+  top: ${({ $openDirection }) => ($openDirection === 'down' ? '100%' : '0')};
+  left: ${({ $openDirection }) => ($openDirection === 'down' ? '0' : '100%')};
+  z-index: 2;
+  max-height: 400px;
+  scroll-margin-bottom: 16px;
+  background-color: white;
+  border-radius: 0.25rem;
+  border: 1px solid var(--a-border-subtle);
+  box-shadow: var(--a-shadow-medium);
+
+  width: 350px;
+  height: 400px;
 `;
 
 const StyledGroupHeader = styled.h3`

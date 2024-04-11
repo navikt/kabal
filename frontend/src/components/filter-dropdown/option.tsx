@@ -52,7 +52,4 @@ const CheckboxContent = styled.div`
   flex-direction: row;
   column-gap: 4px;
   align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;

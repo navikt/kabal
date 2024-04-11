@@ -14,7 +14,7 @@ import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderE
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.RelevantOppgaver,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,

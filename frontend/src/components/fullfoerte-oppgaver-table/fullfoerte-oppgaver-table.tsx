@@ -11,7 +11,7 @@ import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/o
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
   ColumnKeyEnum.Saksnummer,
@@ -40,7 +40,7 @@ const FullfoerteOppgaverTableInternal = () => {
     rekkefoelge: SortOrderEnum.SYNKENDE,
     typer: [],
     ytelser: EMPTY_ARRAY,
-    hjemler: EMPTY_ARRAY,
+    registreringshjemler: EMPTY_ARRAY,
     tildelteSaksbehandlere: EMPTY_ARRAY,
   });
 

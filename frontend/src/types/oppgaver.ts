@@ -30,6 +30,7 @@ export interface IOppgave {
   fagsystemId: string;
   frist: DateString | null;
   hjemmelIdList: string[];
+  registreringshjemmelIdList: string[];
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriver: IHelper;
@@ -65,6 +66,7 @@ export interface CommonOppgaverParams {
   typer?: SaksTypeEnum[];
   ytelser?: string[];
   hjemler?: string[];
+  registreringshjemler?: string[];
   ferdigstiltFrom?: string;
   ferdigstiltTo?: string;
   returnertFrom?: string;

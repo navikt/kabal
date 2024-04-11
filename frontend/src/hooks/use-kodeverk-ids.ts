@@ -1,4 +1,9 @@
-import { useInnsendingshjemlerMap, useKodeverk, useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
+import {
+  useInnsendingshjemlerMap,
+  useKodeverk,
+  useRegistreringshjemlerMap,
+  useSimpleYtelser,
+} from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
@@ -60,4 +65,18 @@ export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): string[] 
   }
 
   return hjemmelIdList.map((hjemmelId) => data[hjemmelId] ?? hjemmelId);
+};
+
+export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): string[] | undefined => {
+  const { data, isLoading } = useRegistreringshjemlerMap();
+
+  if (isLoading || typeof data === 'undefined') {
+    return undefined;
+  }
+
+  return hjemmelIdList.map((hjemmelId) => {
+    const hjemmel = data[hjemmelId];
+
+    return hjemmel === undefined ? hjemmelId : hjemmel.lovkilde.beskrivelse + ' ' + hjemmel.hjemmelnavn;
+  });
 };
