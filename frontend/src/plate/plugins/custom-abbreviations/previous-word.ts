@@ -3,13 +3,16 @@ import { Range } from 'slate';
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
 import { RichText } from '@app/plate/types';
 
+type Marks = Omit<RichText, 'text'>;
+
 interface PreviousWord {
-  long: RichText;
-  short: RichText;
+  long: string;
+  short: string;
   range: Range;
+  marks: Marks;
 }
 
-export const getAbbreviation = (editor: PlateEditor, key: string): PreviousWord | null => {
+export const getAbbreviation = (editor: PlateEditor): PreviousWord | null => {
   const { selection } = editor;
 
   if (selection === null || Range.isExpanded(selection)) {
@@ -36,13 +39,13 @@ export const getAbbreviation = (editor: PlateEditor, key: string): PreviousWord 
 
   const words = lineToCaretText.split(' ');
 
-  const lastWord = words.at(-1);
+  const short = words.at(-1);
 
-  if (lastWord === undefined || lastWord.length === 0) {
+  if (short === undefined || short.length === 0) {
     return null;
   }
 
-  const anchor = getPointBefore(editor, selection, { unit: 'character', distance: lastWord.length });
+  const anchor = getPointBefore(editor, selection, { unit: 'character', distance: short.length });
 
   if (anchor === undefined) {
     return null;
@@ -54,11 +57,18 @@ export const getAbbreviation = (editor: PlateEditor, key: string): PreviousWord 
 
   const secondToLastWord = words.at(-2);
 
-  const long = getLong(lastWord, secondToLastWord);
+  const long = getLong(short, secondToLastWord);
 
   if (long === null) {
     return null;
   }
 
-  return { short: shortNode, long: { ...shortNode, text: `${long}${key}` }, range };
+  return { short, long, marks: getMarks(shortNode), range };
+};
+
+const getMarks = (node: RichText): Marks => {
+  const marks: Marks = { ...node };
+  delete marks.text;
+
+  return marks;
 };

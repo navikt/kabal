@@ -58,13 +58,13 @@ export const onKeyDown =
       return;
     }
 
-    const abbreviation = getAbbreviation(editor, key);
+    const abbreviation = getAbbreviation(editor);
 
     if (abbreviation === null) {
       return;
     }
 
-    const { long, range } = abbreviation;
+    const { long, range, short, marks } = abbreviation;
 
     e.preventDefault();
 
@@ -74,19 +74,13 @@ export const onKeyDown =
     });
 
     deleteText(editor, { at: range });
-    insertNode(editor, long);
+    insertNode(editor, { ...marks, text: `${long}${key}` });
 
-    const { text, ...marks } = abbreviation.short;
     const numberOfMarks = Object.values(marks).filter((m) => m).length;
 
     pushEvent(
       'smart-editor-insert-abbreviation',
-      {
-        short: text,
-        long: long.text,
-        trigger: key,
-        marks: numberOfMarks.toString(10),
-      },
+      { short, long, trigger: key, marks: numberOfMarks.toString(10) },
       'smart-editor',
     );
   };
