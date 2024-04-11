@@ -8,6 +8,7 @@ import {
   withoutMergingHistory,
 } from '@udecode/plate-common';
 import React from 'react';
+import { pushEvent } from '@app/observability';
 import { getAbbreviation } from '@app/plate/plugins/custom-abbreviations/previous-word';
 
 const SPACE = ' ';
@@ -74,4 +75,18 @@ export const onKeyDown =
 
     deleteText(editor, { at: range });
     insertNode(editor, long);
+
+    const { text, ...marks } = abbreviation.short;
+    const numberOfMarks = Object.values(marks).filter((m) => m).length;
+
+    pushEvent(
+      'smart-editor-insert-abbreviation',
+      {
+        short: text,
+        long: long.text,
+        trigger: key,
+        marks: numberOfMarks.toString(10),
+      },
+      'smart-editor',
+    );
   };

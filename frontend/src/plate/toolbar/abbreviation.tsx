@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
@@ -75,6 +76,8 @@ export const Abbreviation = () => {
     await addAbbreviation({ short, long }).unwrap();
     focusEditor(editorRef);
     setIsOpen(false);
+
+    pushEvent('smart-editor-add-abbreviation', { short, long }, 'smart-editor');
   };
 
   useOnClickOutside(containerRef, () => {
