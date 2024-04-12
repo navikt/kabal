@@ -22,7 +22,7 @@ import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
 import { Age } from '../age';
 import { Deadline } from '../deadline';
-import { Hjemler } from '../hjemler';
+import { Innsendingshjemler, Registreringshjemler } from '../hjemler';
 import { LoadingRow } from '../loading-row';
 import { MedudunderskriverFlowStateLabel } from '../medunderskriver-flow-state-label';
 import { OpenOppgavebehandling } from '../open';
@@ -73,12 +73,18 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Ytelse ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Hjemmel:
-      case ColumnKeyEnum.RolHjemmel:
-      case ColumnKeyEnum.EnhetHjemmel:
+      case ColumnKeyEnum.Innsendingshjemler:
+      case ColumnKeyEnum.RolInnsendingshjemler:
+      case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
-            <Hjemler hjemmelIdList={oppgave.hjemmelIdList} />
+            <Innsendingshjemler hjemmelIdList={oppgave.hjemmelIdList} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.Registreringshjemler:
+        return (
+          <Table.DataCell key={key}>
+            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:

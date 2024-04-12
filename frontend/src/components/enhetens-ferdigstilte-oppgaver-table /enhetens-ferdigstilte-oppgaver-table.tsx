@@ -12,7 +12,7 @@ import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderE
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.Finished,
@@ -34,7 +34,7 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
-    hjemler: [],
+    registreringshjemler: [],
     tildelteSaksbehandlere: [],
     rekkefoelge: SortOrderEnum.SYNKENDE,
     sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,

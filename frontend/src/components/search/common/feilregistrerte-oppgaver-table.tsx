@@ -16,7 +16,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Feilregistrert,
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
   ColumnKeyEnum.Ytelse,
-  ColumnKeyEnum.Hjemmel,
+  ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Open,
 ];

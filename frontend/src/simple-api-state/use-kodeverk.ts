@@ -22,6 +22,10 @@ interface IFagsystem extends IKodeverkValue {
   modernized: boolean;
 }
 
+interface ILovKildeToRegistreringshjemmel extends IKodeverkValue {
+  registreringshjemler: IKodeverkSimpleValue[];
+}
+
 const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 
 const kodeverk = new SimpleApiState<IKodeverk>(API_PREFIX);
@@ -36,6 +40,9 @@ const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PRE
 const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX}/sakstypertoutfall`);
 const hjemler = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/hjemler`);
 const fagsystemer = new SimpleApiState<IFagsystem[]>(`${API_PREFIX}/fagsystemer`);
+const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistreringshjemmel[]>(
+  `${API_PREFIX}/lovkildetoregistreringshjemler/latest`,
+);
 
 export const useKodeverk = () => useSimpleApiState(kodeverk);
 export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
@@ -50,3 +57,4 @@ export const useUtfall = () => useSimpleApiState(utfall);
 export const useSakstyperToUtfall = () => useSimpleApiState(sakstyperToUtfall);
 export const useHjemler = () => useSimpleApiState(hjemler);
 export const useFagsystemer = () => useSimpleApiState(fagsystemer);
+export const useLovKildeToRegistreringshjemler = () => useSimpleApiState(lovkildeToRegistreringshjemler);
