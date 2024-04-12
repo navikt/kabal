@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
 import { InputError } from '@app/components/input-error/input-error';
@@ -76,17 +76,16 @@ export const LovhjemmelSelect = ({
           {children}
         </StyledButton>
 
-        <Popup isOpen={open} openDirection={openDirection}>
-          <GroupedFilterList
-            selected={selected}
-            options={options}
-            open={open}
-            onChange={onChange}
-            close={close}
-            showFjernAlle={showFjernAlle}
-            testType="lovhjemmel"
-          />
-        </Popup>
+        <GroupedFilterList
+          selected={selected}
+          options={options}
+          open={open}
+          onChange={onChange}
+          close={close}
+          showFjernAlle={showFjernAlle}
+          testType="lovhjemmel"
+          openDirection={openDirection}
+        />
       </StyledLovhjemmelSelect>
       <InputError error={error} />
     </>
@@ -95,46 +94,4 @@ export const LovhjemmelSelect = ({
 
 const StyledButton = styled(Button)`
   width: 100%;
-`;
-
-interface PopupProps {
-  isOpen: boolean;
-  children: React.ReactNode;
-  openDirection: Direction;
-}
-
-const Popup = ({ isOpen, children, openDirection }: PopupProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
-    }
-  }, [isOpen]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <StyledPopup ref={ref} $openDirection={openDirection}>
-      {children}
-    </StyledPopup>
-  );
-};
-
-const StyledPopup = styled.div<{ $openDirection: Direction }>`
-  display: flex;
-  position: absolute;
-  top: ${({ $openDirection }) => ($openDirection === 'down' ? '100%' : '0')};
-  left: ${({ $openDirection }) => ($openDirection === 'down' ? '0' : '100%')};
-  z-index: 2;
-  max-height: 400px;
-  max-width: 275px;
-  scroll-margin-bottom: 16px;
-
-  background-color: white;
-  border-radius: 0.25rem;
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
 `;
