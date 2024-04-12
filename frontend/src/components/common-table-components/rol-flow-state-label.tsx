@@ -10,7 +10,7 @@ type Props = Pick<IOppgave, 'rol'>;
 export const RolFlowStateLabel = ({ rol }: Props) => {
   const { user } = useContext(StaticDataContext);
 
-  if (rol.navIdent === null && rol.flowState === FlowState.SENT) {
+  if (rol.employee === null && rol.flowState === FlowState.SENT) {
     return (
       <StyledTag variant="alt3" title="I felles kø for rådgivende overlege">
         I felles kø for ROL
@@ -18,7 +18,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
     );
   }
 
-  const isRol = rol.navIdent === user.navIdent;
+  const isRol = rol.employee?.navIdent === user.navIdent;
 
   if (isRol && rol.flowState === FlowState.SENT) {
     return (

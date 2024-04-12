@@ -39,8 +39,7 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
               draft.medunderskriver.flowState = data.flowState;
-              draft.medunderskriver.navIdent = data.employee?.navIdent ?? null;
-              draft.medunderskriver.navn = data.employee?.navn ?? null;
+              draft.medunderskriver.employee = data.employee;
               draft.medunderskriver.returnertDate = null;
             }),
           );

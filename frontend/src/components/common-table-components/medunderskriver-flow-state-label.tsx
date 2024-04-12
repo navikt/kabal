@@ -15,11 +15,11 @@ type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
   const { user } = useContext(StaticDataContext);
 
-  if (medunderskriver.navIdent === null) {
+  if (medunderskriver.employee === null) {
     return null;
   }
 
-  const isMedunderskriver = medunderskriver.navIdent === user.navIdent;
+  const isMedunderskriver = medunderskriver.employee.navIdent === user.navIdent;
 
   if (isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (

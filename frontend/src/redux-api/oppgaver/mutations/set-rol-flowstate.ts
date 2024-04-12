@@ -52,8 +52,7 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
               }
 
               draft.rol.flowState = data.flowState;
-              draft.rol.navIdent = data.employee?.navIdent ?? null;
-              draft.rol.navn = data.employee?.navn ?? null;
+              draft.rol.employee = data.employee;
               draft.rol.returnertDate = null;
             }),
           );

@@ -32,19 +32,20 @@ export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDro
   return (
     <Table.ColumnHeader style={{ position: 'relative' }} ref={ref}>
       <ToggleButton onClick={toggleOpen} data-testid="lovhjemmel-button" $open={open}>
-        {TABLE_HEADERS[columnKey]} ({params.hjemler?.length ?? 0}) {chevron}
+        {TABLE_HEADERS[columnKey]} ({params.registreringshjemler?.length ?? 0}) {chevron}
       </ToggleButton>
 
-      <GroupedFilterList
-        data-testid="filter-hjemler"
-        selected={params.registreringshjemler ?? []}
-        options={options}
-        open={open}
-        onChange={(registreringshjemler) => setParams({ ...params, registreringshjemler })}
-        close={close}
-        showFjernAlle
-        testType="oppgave-list-filter-registreringshjemler"
-      />
+      {open ? (
+        <GroupedFilterList
+          data-testid="filter-hjemler"
+          selected={params.registreringshjemler ?? []}
+          options={options}
+          onChange={(registreringshjemler) => setParams({ ...params, registreringshjemler })}
+          close={close}
+          showFjernAlle
+          testType="oppgave-list-filter-registreringshjemler"
+        />
+      ) : null}
     </Table.ColumnHeader>
   );
 };

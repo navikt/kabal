@@ -17,13 +17,15 @@ export const RolTildeling = ({ oppgave }: Props) => {
   const [setRol, { isLoading }] = useSetRolMutation();
   const { rol } = oppgave;
 
-  const { flowState, navIdent } = rol;
+  const { flowState, employee } = rol;
 
   if (flowState === FlowState.NOT_SENT || flowState === FlowState.RETURNED) {
     return null;
   }
 
-  const OpenButton = <OpenOppgavebehandling {...oppgave} medunderskriverident={oppgave.medunderskriver.navIdent} />;
+  const OpenButton = (
+    <OpenOppgavebehandling {...oppgave} medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null} />
+  );
 
   const fradel = async () => {
     try {
@@ -72,7 +74,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
     </Button>
   );
 
-  if (navIdent === null) {
+  if (employee === null) {
     return (
       <Button onClick={tildel} loading={isLoading} size="small" variant="primary">
         Tildel meg
@@ -80,7 +82,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
     );
   }
 
-  if (navIdent === user.navIdent) {
+  if (employee.navIdent === user.navIdent) {
     return (
       <Button onClick={fradel} loading={isLoading} size="small" variant="secondary">
         Legg i felles kø

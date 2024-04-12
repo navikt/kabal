@@ -27,7 +27,7 @@ export const TildelButton = ({
   const [, { isLoading: isFradeling }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
-    medunderskriver.navIdent,
+    medunderskriver.employee?.navIdent ?? null,
     medunderskriver.flowState,
     rol.flowState,
     ytelseId,
@@ -40,7 +40,7 @@ export const TildelButton = ({
   if (
     !access.assignSelf ||
     !roller.includes(Role.KABAL_SAKSBEHANDLING) ||
-    medunderskriver.navIdent === navIdent ||
+    medunderskriver.employee?.navIdent === navIdent ||
     tildeltSaksbehandlerident !== null
   ) {
     return null;

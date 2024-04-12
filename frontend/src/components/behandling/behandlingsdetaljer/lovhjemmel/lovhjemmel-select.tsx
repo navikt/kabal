@@ -76,16 +76,17 @@ export const LovhjemmelSelect = ({
           {children}
         </StyledButton>
 
-        <GroupedFilterList
-          selected={selected}
-          options={options}
-          open={open}
-          onChange={onChange}
-          close={close}
-          showFjernAlle={showFjernAlle}
-          testType="lovhjemmel"
-          openDirection={openDirection}
-        />
+        {open ? (
+          <GroupedFilterList
+            selected={selected}
+            options={options}
+            onChange={onChange}
+            close={close}
+            showFjernAlle={showFjernAlle}
+            testType="lovhjemmel"
+            openDirection={openDirection}
+          />
+        ) : null}
       </StyledLovhjemmelSelect>
       <InputError error={error} />
     </>

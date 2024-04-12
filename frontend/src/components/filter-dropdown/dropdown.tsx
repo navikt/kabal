@@ -6,13 +6,7 @@ import { BaseProps, DropdownProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 
-export const Dropdown = <T extends string>({
-  selected,
-  options,
-  open,
-  onChange,
-  close,
-}: Props<T>): JSX.Element | null => {
+export const Dropdown = <T extends string>({ selected, options, onChange, close }: Props<T>): JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -20,12 +14,6 @@ export const Dropdown = <T extends string>({
   useEffect(() => {
     setFilteredOptions(options.filter(({ label }) => filter.test(label)));
   }, [setFilteredOptions, options, filter]);
-
-  useEffect(() => {
-    if (!open && focused !== -1) {
-      setFocused(-1);
-    }
-  }, [open, focused]);
 
   const reset = () => onChange([]);
 

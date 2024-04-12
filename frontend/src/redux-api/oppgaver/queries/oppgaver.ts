@@ -19,7 +19,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: `/kabal-search/oppgaver/ferdigstilte`, params }),
+      query: (params) => ({ url: `/kabal-api/oppgaver/ferdigstilte`, params }),
       providesTags: [OppgaveListTagTypes.MINE_FERDIGE],
     }),
     getMineUferdigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
@@ -36,7 +36,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
       query: ({ enhetId, ...params }) => ({
-        url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/ferdigstilte`,
+        url: `/kabal-api/enheter/${enhetId}/oppgaver/tildelte/ferdigstilte`,
         params,
       }),
       providesTags: [OppgaveListTagTypes.ENHETENS_FERDIGE],

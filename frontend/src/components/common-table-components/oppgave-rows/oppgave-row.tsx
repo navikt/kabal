@@ -114,7 +114,10 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Medunderskriver:
         return (
           <Table.DataCell key={key}>
-            <Medunderskriver oppgaveId={oppgave.id} medunderskriverIdent={oppgave.medunderskriver.navIdent} />
+            <Medunderskriver
+              oppgaveId={oppgave.id}
+              medunderskriverIdent={oppgave.medunderskriver.employee?.navIdent ?? null}
+            />
           </Table.DataCell>
         );
       case ColumnKeyEnum.FlowStates:
@@ -131,7 +134,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Rol:
         return (
           <Table.DataCell key={key}>
-            <Rol oppgaveId={oppgave.id} rolIdent={oppgave.rol.navIdent} />
+            <Rol oppgaveId={oppgave.id} rolIdent={oppgave.rol.employee?.navIdent ?? null} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
@@ -142,7 +145,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               ytelseId={oppgave.ytelseId}
               typeId={oppgave.typeId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-              medunderskriverident={oppgave.medunderskriver.navIdent}
+              medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
               rol={oppgave.rol}
             />
           </Table.DataCell>
