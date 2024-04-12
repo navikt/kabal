@@ -1,24 +1,25 @@
 import { Table } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
-import { StaticDataContext } from '@app/components/app/static-data-context';
+import React, { useMemo } from 'react';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { IOption } from '@app/components/filter-dropdown/props';
-import { useGetMedunderskrivereForEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { INavEmployee } from '@app/types/bruker';
 import { FilterDropdownProps } from './types';
 
-export const Medunderskriver = ({ params, setParams, columnKey }: FilterDropdownProps) => {
-  const { user } = useContext(StaticDataContext);
-  const { data } = useGetMedunderskrivereForEnhetQuery(user.ansattEnhet.id);
-  const options = useMemo<IOption<string>[]>(() => navEmployeesToOptions(data?.medunderskrivere), [data]);
+interface Props extends FilterDropdownProps {
+  options: INavEmployee[];
+}
+
+export const Medunderskriver = ({ params, setParams, columnKey, options }: Props) => {
+  const filterOptions = useMemo<IOption<string>[]>(() => navEmployeesToOptions(options), [options]);
 
   return (
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.medunderskrivere ?? []}
         onChange={(medunderskrivere) => setParams({ ...params, medunderskrivere })}
-        options={options}
+        options={filterOptions}
         data-testid="filter-medunderskriver"
       >
         {TABLE_HEADERS[columnKey]}

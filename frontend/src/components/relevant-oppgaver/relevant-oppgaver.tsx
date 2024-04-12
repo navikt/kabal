@@ -90,8 +90,8 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             )}
 
             <section>
-              <Heading size="small">Andre oppgaver</Heading>
               <OppgaveTable
+                heading="Andre oppgaver"
                 behandlinger={uferdigeOppgaverIdList}
                 settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
                 data-testid="relevant-uferdige-oppgaver-table"
@@ -104,8 +104,8 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             </section>
 
             <section>
-              <Heading size="small">Oppgaver på vent</Heading>
               <OppgaveTable
+                heading="Oppgaver på vent"
                 behandlinger={ventendeOppgaverIdList}
                 settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
                 data-testid="relevant-ventende-oppgaver-table"
@@ -124,7 +124,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
 };
 
 const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,
@@ -135,7 +135,7 @@ const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
 ];
 
 const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,

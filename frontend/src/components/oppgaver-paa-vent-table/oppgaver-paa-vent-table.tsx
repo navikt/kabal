@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -9,7 +8,7 @@ import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Navn,
@@ -50,10 +49,14 @@ const OppgaverPaaVentTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
+        heading="Oppgaver på vent"
         columns={COLUMNS}
         params={params}
         setParams={setParams}
@@ -64,6 +67,7 @@ const OppgaverPaaVentTableInternal = () => {
         refetch={refetch}
         behandlinger={data?.behandlinger}
         data-testid="oppgaver-paa-vent-table"
+        filters={data.filters}
       />
     </section>
   );

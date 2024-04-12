@@ -14,7 +14,7 @@ const TEST_ID = 'search-result-feilregistrerte-oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Feilregistrert,
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,
@@ -30,6 +30,7 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
     <section>
       <Heading size="small">Feilregistrerte oppgaver</Heading>
       <OppgaveTable
+        heading="Feilregistrerte oppgaver"
         columns={COLUMNS}
         data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}

@@ -6,20 +6,39 @@ import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useLovKildeToRegistreringshjemler } from '@app/simple-api-state/use-kodeverk';
+import { LovkildeToRegistreringshjemmelFilter } from '@app/types/oppgaver';
 import { FilterDropdownProps } from './types';
 
-export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDropdownProps) => {
+interface Props extends FilterDropdownProps {
+  options: LovkildeToRegistreringshjemmelFilter[];
+}
+
+export const Registreringshjemler = ({ params, setParams, columnKey, options }: Props) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLTableCellElement>(null);
-  const { data: hjemler = [] } = useLovKildeToRegistreringshjemler();
+  const { data: lovkildeToRegistreringshjemler = [] } = useLovKildeToRegistreringshjemler();
 
-  const options: OptionGroup<string>[] = useMemo(
+  const filterOptions: OptionGroup<string>[] = useMemo(
     () =>
-      hjemler.map(({ id, navn, registreringshjemler }) => ({
-        sectionHeader: { id, name: navn },
-        sectionOptions: registreringshjemler.map((r) => ({ value: r.id, label: r.navn })),
-      })),
-    [hjemler],
+      options.map(({ lovkildeId, registreringshjemmelIdList }) => {
+        const lovkilde = lovkildeToRegistreringshjemler.find(({ id }) => id === lovkildeId);
+
+        if (lovkilde === undefined) {
+          return {
+            sectionHeader: { id: lovkildeId, name: lovkildeId },
+            sectionOptions: [],
+          };
+        }
+
+        return {
+          sectionHeader: { id: lovkildeId, name: lovkilde.navn },
+          sectionOptions: registreringshjemmelIdList.map((value) => ({
+            value,
+            label: lovkilde.registreringshjemler.find((rh) => rh.id === value)?.navn ?? value,
+          })),
+        };
+      }),
+    [lovkildeToRegistreringshjemler, options],
   );
 
   useOnClickOutside(ref, () => setOpen(false), true);
@@ -38,7 +57,7 @@ export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDro
       <GroupedFilterList
         data-testid="filter-hjemler"
         selected={params.registreringshjemler ?? []}
-        options={options}
+        options={filterOptions}
         open={open}
         onChange={(registreringshjemler) => setParams({ ...params, registreringshjemler })}
         close={close}

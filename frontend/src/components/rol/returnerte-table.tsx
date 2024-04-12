@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
@@ -49,10 +48,14 @@ const ReturnerteRolOppgaverTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Returnerte oppgaver</Heading>
       <OppgaveTable
+        heading="Returnerte oppgaver"
         columns={COLUMNS}
         params={params}
         setParams={setParams}
@@ -63,6 +66,7 @@ const ReturnerteRolOppgaverTableInternal = () => {
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
+        filters={data.filters}
       />
     </section>
   );

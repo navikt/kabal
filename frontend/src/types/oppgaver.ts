@@ -5,9 +5,28 @@ import { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
 /** DateTime */
 type DateString = string;
 
+export interface LovkildeToRegistreringshjemmelFilter {
+  lovkildeId: string;
+  registreringshjemmelIdList: string[];
+}
+
+export interface Filters {
+  typer: SaksTypeEnum[];
+  ytelser: string[];
+  hjemler: string[];
+  registreringshjemler: LovkildeToRegistreringshjemmelFilter[];
+  ferdigstiltFrom: string;
+  ferdigstiltTo: string;
+  returnertFrom: string;
+  returnertTo: string;
+  tildelteSaksbehandlere: INavEmployee[];
+  medunderskrivere: INavEmployee[];
+  tildelteRol: INavEmployee[];
+}
+
 export interface ApiResponse {
-  antallTreffTotalt: number;
   behandlinger: string[];
+  filters: Filters;
 }
 
 export interface RelevantOppgaverResponse {

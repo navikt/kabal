@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
@@ -29,7 +28,7 @@ export const LedigeRolOppgaverTable = () => {
   return <LedigeOppgaverTableInternal />;
 };
 
-const LedigeOppgaverTableInternal = (): JSX.Element => {
+const LedigeOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
@@ -51,12 +50,14 @@ const LedigeOppgaverTableInternal = (): JSX.Element => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading level="1" size="small">
-        Ledige oppgaver
-      </Heading>
       <OppgaveTable
+        heading="Ledige oppgaver"
         data-testid="oppgave-table"
         zebraStripes
         columns={COLUMNS}
@@ -68,6 +69,7 @@ const LedigeOppgaverTableInternal = (): JSX.Element => {
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}
+        filters={data.filters}
       />
     </section>
   );

@@ -1,4 +1,4 @@
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
@@ -34,7 +34,7 @@ export const LedigeOppgaverTable = () => {
   return <LedigeOppgaverTableInternal />;
 };
 
-const LedigeOppgaverTableInternal = (): JSX.Element => {
+const LedigeOppgaverTableInternal = () => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],
@@ -61,12 +61,14 @@ const LedigeOppgaverTableInternal = (): JSX.Element => {
     queryParams === skipToken ? skipToken : queryParams,
   );
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading level="1" size="small">
-        Ledige oppgaver
-      </Heading>
       <OppgaveTable
+        heading="Ledige oppgaver"
         data-testid="oppgave-table"
         zebraStripes
         columns={COLUMNS}
@@ -78,6 +80,7 @@ const LedigeOppgaverTableInternal = (): JSX.Element => {
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}
+        filters={data.filters}
       />
       <StyledCount size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledCount>
     </section>

@@ -1,4 +1,4 @@
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Saksnummer,
@@ -27,8 +27,8 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
 
   return (
     <section>
-      <Heading size="small">Fullførte oppgaver siste 12 måneder</Heading>
       <OppgaveTable
+        heading="Fullførte oppgaver siste 12 måneder"
         columns={COLUMNS}
         isLoading={isLoading}
         isFetching={false}

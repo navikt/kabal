@@ -1,4 +1,4 @@
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -13,7 +13,7 @@ interface Props {
 const TEST_ID = 'search-result-active-oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Saksnummer,
@@ -31,8 +31,8 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
 
   return (
     <section>
-      <Heading size="small">Oppgaver</Heading>
       <OppgaveTable
+        heading="Oppgaver"
         columns={COLUMNS}
         data-testid={TEST_ID}
         isLoading={isLoading}

@@ -18,6 +18,8 @@ interface Props {
   gridArea?: string;
   ButtonComponent?: React.ComponentType<ButtonProps>;
   neutral?: boolean;
+  fromDate?: string;
+  toDate?: string;
 }
 
 export const DatePickerRange = ({
@@ -25,6 +27,8 @@ export const DatePickerRange = ({
   selected,
   buttonLabel,
   gridArea,
+  fromDate,
+  toDate,
   ButtonComponent = Button,
   neutral = false,
 }: Props) => {
@@ -70,7 +74,13 @@ export const DatePickerRange = ({
             </Button>
           </StyledButtons>
           <StyledDateRange>{formatDateRange(from, to)}</StyledDateRange>
-          <DatePicker.Standalone selected={{ from, to }} mode="range" onSelect={onChange} />
+          <DatePicker.Standalone
+            selected={{ from, to }}
+            mode="range"
+            onSelect={onChange}
+            fromDate={fromDate === undefined ? undefined : new Date(fromDate)}
+            toDate={toDate === undefined ? undefined : new Date(toDate)}
+          />
         </DatepickerContainer>
       ) : null}
     </Container>

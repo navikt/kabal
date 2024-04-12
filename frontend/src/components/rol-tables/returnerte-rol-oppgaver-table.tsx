@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -49,10 +48,14 @@ const ReturnerteRolOppgaverTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Returnerte oppgaver</Heading>
       <OppgaveTable
+        heading="Returnerte oppgaver"
         columns={COLUMNS}
         isLoading={isLoading}
         isFetching={isFetching}
@@ -64,6 +67,7 @@ const ReturnerteRolOppgaverTableInternal = () => {
         params={params}
         setParams={setParams}
         zebraStripes
+        filters={data.filters}
       />
     </section>
   );

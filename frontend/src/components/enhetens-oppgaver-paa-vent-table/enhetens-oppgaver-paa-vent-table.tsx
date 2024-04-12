@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
@@ -10,7 +9,7 @@ import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.RelevantOppgaver,
@@ -53,10 +52,14 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
+        heading="Oppgaver på vent"
         columns={COLUMNS}
         zebraStripes
         params={params}
@@ -68,6 +71,7 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
         refetch={refetch}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
+        filters={data.filters}
       />
     </section>
   );

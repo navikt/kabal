@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
@@ -53,10 +52,14 @@ const RolOppgaverTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
+        heading="Tildelte oppgaver"
         columns={COLUMNS}
         params={params}
         setParams={setParams}
@@ -67,6 +70,7 @@ const RolOppgaverTableInternal = () => {
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
+        filters={data.filters}
       />
     </section>
   );

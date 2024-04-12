@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -9,7 +8,7 @@ import { Role } from '@app/types/bruker';
 import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.Type,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Navn,
@@ -49,10 +48,14 @@ const FullfoerteOppgaverTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
+        heading="Fullførte oppgaver"
         columns={COLUMNS}
         isLoading={isLoading}
         isFetching={isFetching}
@@ -64,6 +67,7 @@ const FullfoerteOppgaverTableInternal = () => {
         params={params}
         setParams={setParams}
         zebraStripes
+        filters={data.filters}
       />
     </section>
   );

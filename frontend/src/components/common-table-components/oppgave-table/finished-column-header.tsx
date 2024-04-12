@@ -20,6 +20,8 @@ interface FilterProps {
   setParams: SetCommonOppgaverParams;
   fromKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltFrom' | 'returnertFrom'>;
   toKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltTo' | 'returnertTo'>;
+  from: string;
+  to: string;
 }
 
 const Sort = ({ params, onSortChange, sortKey }: SortProps) => {
@@ -42,7 +44,7 @@ const Sort = ({ params, onSortChange, sortKey }: SortProps) => {
   );
 };
 
-const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: FilterProps) => {
+const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey, from, to }: FilterProps) => {
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
       return setFilters({
@@ -59,15 +61,40 @@ const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: Filt
     });
   };
 
-  return <DatePickerRange onChange={onChange} selected={{ from: filters[fromKey], to: filters[toKey] }} />;
+  return (
+    <DatePickerRange
+      onChange={onChange}
+      selected={{ from: filters[fromKey], to: filters[toKey] }}
+      fromDate={from}
+      toDate={to}
+    />
+  );
 };
 
-export const FinishedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
+interface FinishedColumnHeaderProps extends ColumnHeaderProps {
+  ferdigstiltFrom: string;
+  ferdigstiltTo: string;
+}
+
+export const FinishedColumnHeader = ({
+  params: filters,
+  setParams: setFilters,
+  onSortChange,
+  ferdigstiltFrom,
+  ferdigstiltTo,
+}: FinishedColumnHeaderProps) => (
   <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <Container>
       Fullført
       <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER} />
-      <Filter params={filters} setParams={setFilters} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo" />
+      <Filter
+        params={filters}
+        setParams={setFilters}
+        fromKey="ferdigstiltFrom"
+        toKey="ferdigstiltTo"
+        from={ferdigstiltFrom}
+        to={ferdigstiltTo}
+      />
     </Container>
   </Table.ColumnHeader>
 );
@@ -76,12 +103,30 @@ interface ColumnHeaderProps
   extends Pick<SortProps, 'params' | 'onSortChange'>,
     Pick<FilterProps, 'params' | 'setParams'> {}
 
-export const ReturnedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
+interface ReturnedColumnHeaderProps extends ColumnHeaderProps {
+  returnertFrom: string;
+  returnertTo: string;
+}
+
+export const ReturnedColumnHeader = ({
+  params: filters,
+  setParams: setFilters,
+  onSortChange,
+  returnertFrom,
+  returnertTo,
+}: ReturnedColumnHeaderProps) => (
   <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <Container>
       Returnert
       <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.RETURNERT_FRA_ROL} />
-      <Filter params={filters} setParams={setFilters} fromKey="returnertFrom" toKey="returnertTo" />
+      <Filter
+        params={filters}
+        setParams={setFilters}
+        fromKey="returnertFrom"
+        toKey="returnertTo"
+        from={returnertFrom}
+        to={returnertTo}
+      />
     </Container>
   </Table.ColumnHeader>
 );

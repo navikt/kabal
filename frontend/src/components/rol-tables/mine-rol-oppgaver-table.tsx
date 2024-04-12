@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
@@ -47,10 +46,14 @@ const MineRolOppgaverTableInternal = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  if (data === undefined) {
+    return null;
+  }
+
   return (
     <section>
-      <Heading size="small">Oppgaver under arbeid</Heading>
       <OppgaveTable
+        heading="Oppgaver under arbeid"
         columns={COLUMNS}
         params={params}
         setParams={setParams}
@@ -61,6 +64,7 @@ const MineRolOppgaverTableInternal = () => {
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
         refetch={refetch}
         data-testid={TEST_ID}
+        filters={data.filters}
       />
     </section>
   );
