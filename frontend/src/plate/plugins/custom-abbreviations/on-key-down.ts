@@ -9,7 +9,7 @@ import {
 } from '@udecode/plate-common';
 import React from 'react';
 import { pushEvent } from '@app/observability';
-import { getAbbreviation } from '@app/plate/plugins/custom-abbreviations/previous-word';
+import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 
 const SPACE = ' ';
 const PERIOD = '.';
@@ -58,13 +58,13 @@ export const onKeyDown =
       return;
     }
 
-    const abbreviation = getAbbreviation(editor);
+    const shortAndLong = getShortAndLong(editor);
 
-    if (abbreviation === null) {
+    if (shortAndLong === null) {
       return;
     }
 
-    const { long, range, short, marks } = abbreviation;
+    const { short, long, range, marks } = shortAndLong;
 
     e.preventDefault();
 
