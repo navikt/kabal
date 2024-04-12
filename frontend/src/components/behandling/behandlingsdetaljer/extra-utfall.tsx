@@ -74,7 +74,6 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
           selected={selected}
           onChange={(newList) => updateUtfall({ oppgaveId, extraUtfallIdSet: newList.filter(isUtfall) })}
           options={options}
-          open={isOpen}
           close={() => setIsOpen(false)}
         />
       </Popup>

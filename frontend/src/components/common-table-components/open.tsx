@@ -36,7 +36,7 @@ export const OpenOppgavebehandling = ({
     hasYtelseAccess ||
     user.navIdent === tildeltSaksbehandlerident ||
     user.navIdent === medunderskriverident ||
-    (rol !== null && user.navIdent === rol.navIdent) ||
+    (rol !== null && user.navIdent === rol.employee?.navIdent) ||
     (rol !== null && rol.flowState === FlowState.SENT && isKrol);
 
   if (!canOpen) {

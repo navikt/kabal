@@ -45,7 +45,7 @@ export const FilterDropdown = <T extends string>({
         {children} ({selected.length}) {chevron}
       </ToggleButton>
       <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>
-        <Dropdown selected={selected} options={options} open={open} onChange={onChange} close={close} />
+        <Dropdown selected={selected} options={options} onChange={onChange} close={close} />
       </Popup>
     </Container>
   );

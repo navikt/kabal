@@ -56,7 +56,7 @@ export const FradelButton = (props: IOppgave) => {
 
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,
-    medunderskriver.navIdent,
+    medunderskriver.employee?.navIdent ?? null,
     medunderskriver.flowState,
     rol.flowState,
     ytelseId,

@@ -126,22 +126,19 @@ export enum FlowState {
 }
 
 interface IReturnedHelper {
-  navIdent: string;
-  navn: string;
+  employee: INavEmployee;
   flowState: FlowState.RETURNED;
   returnertDate: string; // LocalDateTime
 }
 
 interface ISentHelper {
-  navIdent: string;
-  navn: string;
+  employee: INavEmployee;
   flowState: FlowState.SENT;
   returnertDate: null; // LocalDateTime
 }
 
 interface INotSentHelper {
-  navIdent: string | null;
-  navn: string | null;
+  employee: INavEmployee | null;
   flowState: FlowState.NOT_SENT;
   returnertDate: null;
 }

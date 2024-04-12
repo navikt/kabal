@@ -2,7 +2,7 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useMemo } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
+import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';
 import {
   StyledListItem,
@@ -20,7 +20,7 @@ interface Props {
 export const SelectedHjemlerList = ({ selected }: Props) => {
   const { data: oppgave } = useOppgave();
 
-  const hjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
+  const hjemler = useAllLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
   const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
     () =>

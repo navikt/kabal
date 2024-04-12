@@ -34,6 +34,7 @@ const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${A
 
 const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelserLatest = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser/latest`);
+const ytelserAll = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser`);
 const kabalYtelserLatest = new SimpleApiState<IKabalYtelse[]>(`${API_PREFIX}/kabal/ytelser/latest`);
 const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenheter`);
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
@@ -41,7 +42,7 @@ const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX
 const hjemler = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/hjemler`);
 const fagsystemer = new SimpleApiState<IFagsystem[]>(`${API_PREFIX}/fagsystemer`);
 const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistreringshjemmel[]>(
-  `${API_PREFIX}/lovkildetoregistreringshjemler/latest`,
+  `${API_PREFIX}/lovkildetoregistreringshjemler`,
 );
 
 export const useKodeverk = () => useSimpleApiState(kodeverk);
@@ -57,4 +58,5 @@ export const useUtfall = () => useSimpleApiState(utfall);
 export const useSakstyperToUtfall = () => useSimpleApiState(sakstyperToUtfall);
 export const useHjemler = () => useSimpleApiState(hjemler);
 export const useFagsystemer = () => useSimpleApiState(fagsystemer);
+export const useYtelserAll = () => useSimpleApiState(ytelserAll);
 export const useLovKildeToRegistreringshjemler = () => useSimpleApiState(lovkildeToRegistreringshjemler);

@@ -25,7 +25,6 @@ type Direction = 'down' | 'right';
 export const GroupedFilterList = <T extends string>({
   selected,
   options,
-  open,
   onChange,
   close,
   testType,
@@ -55,20 +54,8 @@ export const GroupedFilterList = <T extends string>({
   }, [setFilteredOptions, options, filter]);
 
   useEffect(() => {
-    if (!open && focused !== -1) {
-      setFocused(-1);
-    }
-  }, [open, focused]);
-
-  useEffect(() => {
-    if (open) {
-      ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
-    }
-  }, [open]);
-
-  if (!open) {
-    return null;
-  }
+    ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+  }, []);
 
   const reset = () => onChange([]);
 

@@ -14,7 +14,7 @@ const NOT_SELECTED = 'NOT_SELECTED';
 export const Saksbehandler = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
-    oppgave.medunderskriver.navIdent,
+    oppgave.medunderskriver.employee?.navIdent ?? null,
     oppgave.medunderskriver.flowState,
     oppgave.rol.flowState,
     oppgave.ytelseId,

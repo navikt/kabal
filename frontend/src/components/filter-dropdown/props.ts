@@ -14,6 +14,5 @@ export interface BaseProps<T extends string, O = IOption<T>> {
 }
 
 export interface DropdownProps {
-  open: boolean;
   close: () => void;
 }
