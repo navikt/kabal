@@ -12,7 +12,7 @@ interface PreviousWord {
   marks: Marks;
 }
 
-export const getAbbreviation = (editor: PlateEditor): PreviousWord | null => {
+export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
   const { selection } = editor;
 
   if (selection === null || Range.isExpanded(selection)) {
@@ -45,6 +45,12 @@ export const getAbbreviation = (editor: PlateEditor): PreviousWord | null => {
     return null;
   }
 
+  const long = getLong(short, words.at(-2));
+
+  if (long === null) {
+    return null;
+  }
+
   const anchor = getPointBefore(editor, selection, { unit: 'character', distance: short.length });
 
   if (anchor === undefined) {
@@ -54,14 +60,6 @@ export const getAbbreviation = (editor: PlateEditor): PreviousWord | null => {
   const range: Range = { anchor, focus: selection.focus };
 
   const [shortNode] = getLeafNode(editor, range);
-
-  const secondToLastWord = words.at(-2);
-
-  const long = getLong(short, secondToLastWord);
-
-  if (long === null) {
-    return null;
-  }
 
   return { short, long, marks: getMarks(shortNode), range };
 };
