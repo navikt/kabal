@@ -1,4 +1,5 @@
 import { EditorValue } from '@app/plate/types';
+import { Language } from '@app/types/texts/common';
 import { IGetTextsParams, RichTextTypes } from '../common-text-types';
 import { IText } from './responses';
 
@@ -24,11 +25,13 @@ export interface IDeleteTextDraftParams extends IUpdateBaseParams {
 }
 
 export interface IUpdateTextContentParams extends IUpdateBaseParams {
-  content: EditorValue;
+  richText: EditorValue;
+  language: Language;
 }
 
 export interface IUpdateTextPlainTextParams extends IUpdateBaseParams {
   plainText: string;
+  language: Language;
 }
 
 export interface IUpdateTextTemplateSectionIdListParams extends IUpdateBaseParams {

@@ -3,6 +3,7 @@ import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { getRichText } from '@app/functions/get-translated-content';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import {
   ELEMENT_LABEL_CONTENT,
@@ -22,15 +23,17 @@ import {
 } from '@app/plate/types';
 import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { Language } from '@app/types/texts/common';
 import { IPublishedRichText } from '@app/types/texts/responses';
 
 export const getChildren = (
   texts: IPublishedRichText[],
   previous: MaltekstseksjonElement,
   section: TemplateSections,
+  language: Language,
 ): (MaltekstElement | RedigerbarMaltekstElement)[] =>
   texts
-    .flatMap(({ content, textType, id }) => {
+    .flatMap(({ richText: languageVersions, textType, id }) => {
       const prevText = previous.children.find((c) => c.id === id);
 
       if (prevText !== undefined) {
@@ -47,11 +50,15 @@ export const getChildren = (
       }
 
       if (textType === RichTextTypes.MALTEKST) {
-        return createMaltekst(section, content.filter(isParentOrChildElement), id);
+        return createMaltekst(section, getRichText(language, languageVersions).filter(isParentOrChildElement), id);
       }
 
       if (textType === RichTextTypes.REDIGERBAR_MALTEKST) {
-        return createRedigerbarMaltekst(section, content.filter(isParentOrChildElement), id);
+        return createRedigerbarMaltekst(
+          section,
+          getRichText(language, languageVersions).filter(isParentOrChildElement),
+          id,
+        );
       }
 
       return null;

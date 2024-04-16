@@ -318,18 +318,52 @@ const textsMutationSlice = textsApi.injectEndpoints({
       },
     }),
     updateContent: builder.mutation<IRichText, IUpdateTextContentParams>({
-      query: ({ id, content }) => ({
+      query: ({ id, ...body }) => ({
         method: 'PUT',
         url: `/texts/${id}/content`,
-        body: { content },
+        body,
       }),
-      onQueryStarted: async ({ id, content, query }, { queryFulfilled }) => {
-        const undo = update(id, { content }, query);
+      onQueryStarted: async ({ id, richText, language, query }, { queryFulfilled }) => {
+        const idPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
+            if (draft.publishedDateTime !== null) {
+              return draft;
+            }
+
+            if (isRichText(draft)) {
+              return { ...draft, richText: { ...draft.richText, [language]: richText } };
+            }
+
+            return draft;
+          }),
+        );
+
+        const listPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+            draft.map((t) =>
+              t.publishedDateTime === null && t.id === id && isRichText(t)
+                ? { ...t, richText: { ...t.richText, [language]: richText } }
+                : t,
+            ),
+          ),
+        );
+
+        const versionPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
+            draft.map((t) =>
+              t.publishedDateTime === null && t.id === id && isRichText(t)
+                ? { ...t, richText: { ...t.richText, [language]: richText } }
+                : t,
+            ),
+          ),
+        );
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
         } catch {
-          undo();
+          idPatchResult.undo();
+          listPatchResult.undo();
+          versionPatchResult.undo();
         }
       },
     }),
@@ -339,13 +373,47 @@ const textsMutationSlice = textsApi.injectEndpoints({
         url: `/texts/${id}/plaintext`,
         body: { plainText },
       }),
-      onQueryStarted: async ({ id, plainText, query }, { queryFulfilled }) => {
-        const undo = update(id, { plainText }, query);
+      onQueryStarted: async ({ id, plainText, language, query }, { queryFulfilled }) => {
+        const idPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
+            if (draft.publishedDateTime !== null) {
+              return draft;
+            }
+
+            if (isPlainText(draft)) {
+              return { ...draft, plainText: { ...draft.plainText, [language]: plainText } };
+            }
+
+            return draft;
+          }),
+        );
+
+        const listPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+            draft.map((t) =>
+              t.publishedDateTime === null && t.id === id && isPlainText(t)
+                ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
+                : t,
+            ),
+          ),
+        );
+
+        const versionPatchResult = reduxStore.dispatch(
+          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
+            draft.map((t) =>
+              t.publishedDateTime === null && t.id === id && isPlainText(t)
+                ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
+                : t,
+            ),
+          ),
+        );
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
         } catch {
-          undo();
+          idPatchResult.undo();
+          listPatchResult.undo();
+          versionPatchResult.undo();
         }
       },
     }),
@@ -420,9 +488,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
 });
 
 type Update = Partial<
-  Pick<IText, 'title' | 'templateSectionIdList' | 'utfallIdList' | 'ytelseHjemmelIdList' | 'enhetIdList'> &
-    Pick<IRichText, 'content'> &
-    Pick<IPlainText, 'plainText'>
+  Pick<IText, 'title' | 'templateSectionIdList' | 'utfallIdList' | 'ytelseHjemmelIdList' | 'enhetIdList'>
 >;
 
 const update = (id: string, upd: Update, query: IGetTextsParams) => {

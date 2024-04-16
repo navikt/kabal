@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { getPlainText } from '@app/functions/get-translated-content';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
@@ -117,6 +118,8 @@ interface HeaderFooterContentProps {
 }
 
 const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps) => {
+  const { language } = useContext(SmartEditorContext);
+
   if (isLoading || typeof text === 'undefined') {
     return (
       <Paragraph $textAlign={TextAlign.LEFT}>
@@ -125,7 +128,7 @@ const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps
     );
   }
 
-  const { plainText } = text;
+  const plainText = getPlainText(language, text.plainText);
 
   if (plainText === null) {
     return <Paragraph $textAlign={TextAlign.LEFT}>Ingen {getLabel(type)} funnet.</Paragraph>;

@@ -22,7 +22,8 @@ import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
-import { IText } from '@app/types/texts/responses';
+import { LANGUAGES } from '@app/types/texts/common';
+import { IPlainText, IRichText, IText } from '@app/types/texts/responses';
 import { getTextAsString } from '../../../plate/functions/get-text-string';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { getPathPrefix } from '../functions/get-path-prefix';
@@ -37,6 +38,10 @@ interface TextListProps {
 type ScoredText = IText & {
   score: number;
 };
+
+const getAllRichTexts = (text: IRichText) => LANGUAGES.map((lang) => getTextAsString(text, lang));
+
+const getAllPlainTexts = (text: IPlainText) => Object.values(text.plainText);
 
 export const TextList = ({ textType, filter }: TextListProps) => {
   const textQuery = useTextQuery();
@@ -80,9 +85,13 @@ export const TextList = ({ textType, filter }: TextListProps) => {
     const result: ScoredText[] = [];
 
     for (const text of data) {
-      const filterText = isRichText(text) ? getTextAsString(text) : text.plainText;
+      const texts = isRichText(text) ? getAllRichTexts(text) : getAllPlainTexts(text);
 
-      const score = fuzzySearch(splitQuery(filter), filterText);
+      const q = splitQuery(filter);
+
+      const scores = texts.map((t) => fuzzySearch(q, t));
+
+      const score = Math.max(...scores);
 
       if (score > 0) {
         result.push({ ...text, score });

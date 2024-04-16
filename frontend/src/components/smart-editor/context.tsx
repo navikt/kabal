@@ -7,6 +7,7 @@ import {
 import { RichText } from '@app/plate/types';
 import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 
 const noop = () => {};
 
@@ -26,6 +27,7 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: HTMLDivElement | null;
   setSheetRef: (ref: HTMLDivElement | null) => void;
+  language: Language;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -46,6 +48,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setShowAnnotationsAtOrigin: noop,
   sheetRef: null,
   setSheetRef: noop,
+  language: Language.NB,
 });
 
 interface Props {
@@ -54,7 +57,7 @@ interface Props {
 }
 
 export const SmartEditorContextComponent = ({ children, editor }: Props) => {
-  const { dokumentTypeId, templateId, id } = editor;
+  const { dokumentTypeId, templateId, id, language } = editor;
   const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
     useSmartEditorGodeFormuleringerOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
@@ -77,6 +80,7 @@ export const SmartEditorContextComponent = ({ children, editor }: Props) => {
   return (
     <SmartEditorContext.Provider
       value={{
+        language,
         templateId,
         dokumentTypeId,
         setShowGodeFormuleringer,

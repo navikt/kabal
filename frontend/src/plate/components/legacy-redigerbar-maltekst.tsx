@@ -5,6 +5,7 @@ import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildre
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { getRichText } from '@app/functions/get-translated-content';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -35,6 +36,7 @@ export const LegacyRedigerbarMaltekst = ({
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
+  const { language } = useContext(SmartEditorContext);
 
   const query = useQuery({ textType: RichTextTypes.REDIGERBAR_MALTEKST, section: element.section, templateId });
 
@@ -57,21 +59,23 @@ export const LegacyRedigerbarMaltekst = ({
       const { ytelseId, resultat } = oppgave;
       const { hjemmelIdSet, utfallId, extraUtfallIdSet } = resultat;
 
-      const nodes = lexSpecialis(
+      const maltekster = lexSpecialis(
         templateId,
         element.section,
         ytelseId,
         hjemmelIdSet,
         utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
         tekster.filter(isRedigerbarMaltekst),
-      )?.content ?? [createSimpleParagraph()];
+      );
+
+      const nodes = maltekster === null ? [createSimpleParagraph()] : getRichText(language, maltekster.richText);
 
       replaceNodeChildren(editor, { at: path, nodes });
     } catch (e) {
       console.error('RedigerbarMaltekst: Failed to get texts', e, query);
       insertRedigerbarMaltekst();
     }
-  }, [query, path, oppgaveIsLoading, oppgave, getTexts, templateId, element.section, editor]);
+  }, [query, path, oppgaveIsLoading, oppgave, getTexts, templateId, element.section, language, editor]);
 
   useEffect(() => {
     if (isInitialized.current) {

@@ -7,7 +7,9 @@ import {
   isEditorReadOnly,
   replaceNodeChildren,
 } from '@udecode/plate-common';
-import React from 'react';
+import React, { useContext } from 'react';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { getRichText } from '@app/functions/get-translated-content';
 import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
@@ -21,6 +23,7 @@ export const RedigerbarMaltekst = ({
   editor,
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
+  const { language } = useContext(SmartEditorContext);
 
   const reload = async () => {
     if (element.id === undefined) {
@@ -39,7 +42,7 @@ export const RedigerbarMaltekst = ({
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: text.content });
+    replaceNodeChildren(editor, { at: path, nodes: getRichText(language, text.richText) });
   };
 
   // TODO: Remove when all smart documents in prod use maltekstseksjon

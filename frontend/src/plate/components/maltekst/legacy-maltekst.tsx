@@ -13,6 +13,7 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { getRichText } from '@app/functions/get-translated-content';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
@@ -35,6 +36,7 @@ export const LegacyMaltekst = ({
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
+  const { language } = useContext(SmartEditorContext);
 
   useEffect(() => {
     if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
@@ -57,18 +59,18 @@ export const LegacyMaltekst = ({
       hjemmelIdSet,
       utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
       data.filter(isMaltekst),
-    )?.content ?? [createEmptyVoid()];
+    );
 
-    if (nodesEquals(element.children, maltekster)) {
+    const nodes = maltekster === null ? [createEmptyVoid()] : getRichText(language, maltekster.richText);
+
+    if (nodesEquals(element.children, nodes)) {
       return;
     }
 
     withoutSavingHistory(editor, () => {
-      withoutNormalizing(editor, () =>
-        replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
-      );
+      withoutNormalizing(editor, () => replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes }));
     });
-  }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
+  }, [data, editor, element, isFetching, isLoading, language, oppgave, oppgaveIsLoading, templateId]);
 
   if (isLoading) {
     return (

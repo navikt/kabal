@@ -1,6 +1,7 @@
 import {
   DraftTextReadOnlyMetadata,
   ITextBaseMetadata,
+  ITranslatedTextContent,
   PublishedTextReadOnlyMetadata,
   TextReadOnlyMetadata,
 } from '../common-text-types';
@@ -13,12 +14,14 @@ export type IDraftRichText = INewRichTextParams &
     id: string; // UUID
     modified: string; // Datetime
     created: string; // Datetime
+    richText: ITranslatedTextContent;
   };
 
 export interface IPublishedTextMetadata extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
   id: string; // UUID
   modified: string; // Datetime
   created: string; // Datetime
+  richText: ITranslatedTextContent;
 }
 
 export interface IPublishedRichText extends IPublishedTextMetadata, INewRichTextParams {}
@@ -31,6 +34,7 @@ export type IDraftPlainText = INewPlainTextParams &
     id: string; // UUID
     modified: string; // Datetime
     created: string; // Datetime
+    plainText: ITranslatedTextContent;
   };
 
 export type IPlainText = INewPlainTextParams &
@@ -38,6 +42,7 @@ export type IPlainText = INewPlainTextParams &
     id: string; // UUID
     modified: string; // Datetime
     created: string; // Datetime
+    plainText: ITranslatedTextContent;
   };
 
 export type IText = IRichText | IPlainText;

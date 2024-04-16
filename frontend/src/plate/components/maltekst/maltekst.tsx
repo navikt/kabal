@@ -9,8 +9,10 @@ import {
   replaceNodeChildren,
   unwrapNodes,
 } from '@udecode/plate-common';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { getRichText } from '@app/functions/get-translated-content';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -26,6 +28,7 @@ export const Maltekst = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
+  const { language } = useContext(SmartEditorContext);
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
@@ -53,7 +56,7 @@ export const Maltekst = ({
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: text.content });
+    replaceNodeChildren(editor, { at: path, nodes: getRichText(language, text.richText) });
   };
 
   const [first] = element.children;

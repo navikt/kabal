@@ -1,5 +1,6 @@
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { ITextBaseMetadata, PlainTextTypes, RichTextTypes } from '@app/types/common-text-types';
+import { Language } from '@app/types/texts/common';
 import { INewPlainTextParams, INewRichTextParams } from '@app/types/texts/params';
 
 const getMetadata = (): ITextBaseMetadata => ({
@@ -11,13 +12,19 @@ const getMetadata = (): ITextBaseMetadata => ({
 });
 
 export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({
-  content: [createSimpleParagraph()],
+  richText: {
+    [Language.NB]: [createSimpleParagraph()],
+    [Language.NN]: [createSimpleParagraph()],
+  },
   textType,
   ...getMetadata(),
 });
 
 export const getNewPlainText = (textType: PlainTextTypes): INewPlainTextParams => ({
-  plainText: '',
+  plainText: {
+    [Language.NB]: '',
+    [Language.NN]: '',
+  },
   textType,
   ...getMetadata(),
 });

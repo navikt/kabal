@@ -24,7 +24,7 @@ export const DraftRichText = ({ text, onDraftDeleted }: Props) => {
     }
 
     const timer = setTimeout(() => {
-      updateRichText({ query, content, id: text.id });
+      updateRichText({ query, richText: content, id: text.id });
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -32,7 +32,7 @@ export const DraftRichText = ({ text, onDraftDeleted }: Props) => {
 
   const onPublish = useCallback(async () => {
     if (!areDescendantsEqual(content, text.content)) {
-      await updateRichText({ query, content, id: text.id });
+      await updateRichText({ query, richText: content, id: text.id });
     }
 
     publish({ query, id: text.id });

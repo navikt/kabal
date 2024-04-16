@@ -15,12 +15,14 @@ import {
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
+import { getRichText } from '@app/functions/get-translated-content';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 import { IPublishedRichText, IPublishedText, IRichText } from '@app/types/texts/responses';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
@@ -69,6 +71,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
   const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
+  const { language } = useContext(SmartEditorContext);
+
   const query = useQuery({
     textType: RichTextTypes.GOD_FORMULERING,
     templateId,
@@ -99,7 +103,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
     for (const text of data) {
       if (isFilteredPublishedRichText(text, templateId, activeSection)) {
-        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text));
+        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text, language));
 
         if (score > 0) {
           result.push([text, score]);
@@ -108,7 +112,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
 
     return result.sort(([, a], [, b]) => b - a).map(([t]) => t);
-  }, [data, filter, templateId, activeSection]);
+  }, [filter, data, templateId, activeSection, language]);
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -154,12 +158,12 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           const text = texts[focused];
 
           if (text !== undefined) {
-            insertGodFormulering(editor, text.content);
+            insertGodFormulering(editor, getRichText(language, text.richText));
           }
         }
       }
     },
-    [editor, filter.length, focused, setShowGodeFormuleringer, texts],
+    [editor, filter.length, focused, language, setShowGodeFormuleringer, texts],
   );
 
   if (!showGodeFormuleringer) {

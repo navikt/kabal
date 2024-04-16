@@ -2,9 +2,11 @@ import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { getRichText } from '@app/functions/get-translated-content';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -62,6 +64,7 @@ export const RegelverkContainer = ({
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useQuery({ textType: RichTextTypes.REGELVERK });
+  const { language } = useContext(SmartEditorContext);
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 
@@ -79,12 +82,14 @@ export const RegelverkContainer = ({
     }
 
     const regelverk = (await getTexts(query).unwrap()).filter(isRegelverk);
-    const nodes = regelverk.sort((a, b) => sortWithOrdinals(a.title, b.title)).flatMap(({ content }) => content);
+    const nodes = regelverk
+      .sort((a, b) => sortWithOrdinals(a.title, b.title))
+      .flatMap(({ richText: languageVersions }) => getRichText(language, languageVersions));
 
     replaceNodeChildren(editor, { at, nodes });
 
     setLoading(false);
-  }, [editor, element, getTexts, oppgave, query]);
+  }, [editor, element, getTexts, language, oppgave, query]);
 
   return (
     <PlateElement

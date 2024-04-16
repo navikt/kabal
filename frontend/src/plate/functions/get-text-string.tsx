@@ -1,14 +1,16 @@
 import { TDescendant, getNodeString, isElement } from '@udecode/plate-common';
+import { getRichText } from '@app/functions/get-translated-content';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
+import { Language } from '@app/types/texts/common';
 import { IRichText } from '@app/types/texts/responses';
 
 const SPACE_REGEX = /\s+/g;
 
-export const getTextAsString = (text: IRichText): string =>
-  text.content.map(getElementString).join(' ').replaceAll(SPACE_REGEX, ' ');
+export const getTextAsString = (text: IRichText, language: Language): string =>
+  getRichText(language, text.richText).map(getElementString).join(' ').replaceAll(SPACE_REGEX, ' ');
 
 const getElementString = (element: TDescendant): string => {
   if (!isElement(element)) {

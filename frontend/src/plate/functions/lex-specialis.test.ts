@@ -4,6 +4,7 @@ import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 import { IPublishedRichText } from '@app/types/texts/responses';
 import { TemplateSections } from '../template-sections';
 
@@ -24,7 +25,10 @@ const getText = (
     textType: RichTextTypes.MALTEKST,
     enhetIdList: [],
     utfallIdList: utfallSetList.map((set) => set.join(SET_DELIMITER)),
-    content: [],
+    richText: {
+      [Language.NB]: [],
+      [Language.NN]: [],
+    },
     templateSectionIdList: [`${templateId}${LIST_DELIMITER}${sectionId}`],
     ytelseHjemmelIdList: ytelseHjemmelList,
     editors: [],

@@ -1,9 +1,11 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import { Plate } from '@udecode/plate-common';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
+import { getRichText } from '@app/functions/get-translated-content';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
@@ -17,10 +19,13 @@ type Props = IRichText & {
   onClick: () => void;
 };
 
-export const GodFormulering = ({ title, content, modified, created, isFocused, onClick, id }: Props) => {
+export const GodFormulering = ({ title, richText, modified, created, isFocused, onClick, id }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const editor = useMyPlateEditorState();
+  const { language } = useContext(SmartEditorContext);
+
+  const content = getRichText(language, richText);
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {

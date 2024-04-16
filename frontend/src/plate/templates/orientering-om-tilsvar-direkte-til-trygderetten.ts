@@ -4,6 +4,7 @@ import { EditorValue, TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 import { TemplateSections } from '../template-sections';
 import {
   createCurrentDate,
@@ -43,4 +44,5 @@ export const ORIENTERING_OM_TILSVAR_TEMPLATE = deepFreeze<IMutableSmartEditorTem
   tittel: 'Orientering om tilsvar direkte til Trygderetten',
   content: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
+  language: Language.NB,
 });

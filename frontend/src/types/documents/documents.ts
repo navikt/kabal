@@ -2,6 +2,7 @@ import { EditorValue } from '@app/plate/types';
 import { INavEmployee } from '@app/types/bruker';
 import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
 import { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
+import { Language } from '@app/types/texts/common';
 import { TemplateIdEnum } from '../smart-editor/template-enums';
 import { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
@@ -100,6 +101,7 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   isSmartDokument: true;
   templateId: TemplateIdEnum;
   content: EditorValue;
+  language: Language;
   version: number;
 }
 

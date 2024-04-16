@@ -3,14 +3,16 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
+import { getPlainText } from '@app/functions/get-translated-content';
 import { IPublishedPlainText } from '@app/types/texts/responses';
 
 interface Props {
   text: IPublishedPlainText;
   onDraftCreated: (id: string) => void;
+  language: string;
 }
 
-export const PublishedPlainText = ({ text, onDraftCreated }: Props) => (
+export const PublishedPlainText = ({ text, onDraftCreated, language }: Props) => (
   <PublishedContainer>
     <Heading level="1" size="small" spacing>
       {text.title}
@@ -19,7 +21,7 @@ export const PublishedPlainText = ({ text, onDraftCreated }: Props) => (
     <Tags {...text} />
 
     <Background>
-      <StyledBodyLong>{text.plainText}</StyledBodyLong>
+      <StyledBodyLong>{getPlainText(language, text.plainText)}</StyledBodyLong>
     </Background>
 
     <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} />

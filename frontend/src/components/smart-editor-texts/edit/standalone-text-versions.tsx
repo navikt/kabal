@@ -1,5 +1,5 @@
-import { Loader } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { Loader, ToggleGroup } from '@navikt/ds-react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
@@ -11,6 +11,7 @@ import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { PlainTextTypes } from '@app/types/common-text-types';
+import { Language, isLanguage } from '@app/types/texts/common';
 import {
   IDraftPlainText,
   IDraftRichText,
@@ -53,6 +54,9 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
   const publishedVersion = useMemo(() => versions.find(({ published }) => published), [versions]);
   const { versionId } = useParams();
 
+  // TODO: use router instead
+  const [language, setLanguage] = useState<Language>(Language.NB);
+
   const version = publishedVersion ?? firstText;
 
   const onDraftDeleted = () =>
@@ -68,33 +72,44 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
     <Container>
       <UnpublishTextButton {...version} id={id} />
 
+      <ToggleGroup
+        value={language}
+        onChange={(value) => {
+          if (isLanguage(value)) {
+            setLanguage(value);
+          }
+        }}
+      >
+        <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
+        <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+      </ToggleGroup>
+
       <StyledVersionTabs<IDraftPlainText | IDraftRichText, IPublishedPlainText | IPublishedRichText>
         first={firstText}
         versions={versions}
         selectedTabId={versionId}
         setSelectedTabId={navigateToVersion}
-        createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
-        createPublishedPanel={(v) => <PublishedVersion text={v} setVersionTabId={navigateToVersion} />}
+        createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} language={language} />}
+        createPublishedPanel={(v) => (
+          <PublishedVersion text={v} setVersionTabId={navigateToVersion} language={language} />
+        )}
       />
     </Container>
   );
 };
 
-const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) =>
-  isPlainText(text) ? (
-    <DraftPlainText text={text} onDraftDeleted={onDraftDeleted} />
-  ) : (
-    <DraftRichText text={text} onDraftDeleted={onDraftDeleted} />
-  );
+const DraftVersion = ({ text, ...rest }: DraftVersionProps) =>
+  isPlainText(text) ? <DraftPlainText text={text} {...rest} /> : <DraftRichText text={text} {...rest} />;
 
 interface PublishedVersionProps {
   text: IPublishedPlainText | IPublishedRichText;
   setVersionTabId: (versionId: string) => void;
+  language: Language;
 }
 
-const PublishedVersion = ({ text, setVersionTabId }: PublishedVersionProps) => {
+const PublishedVersion = ({ text, setVersionTabId, language }: PublishedVersionProps) => {
   if (isPlainText(text)) {
-    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} />;
+    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} language={language} />;
   }
 
   return (

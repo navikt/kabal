@@ -1,3 +1,5 @@
+import { Language } from '@app/types/texts/common';
+
 export interface IEditor {
   created: string;
   modified: string;
@@ -13,6 +15,13 @@ interface TextMetadata {
 
 export interface ITextBaseMetadata extends TextMetadata {
   title: string;
+}
+
+export interface ITranslatedTextContent {
+  /** List of version IDs. */
+  [Language.NB]: string[];
+  /** List of version IDs. */
+  [Language.NN]: string[];
 }
 
 export interface PublishedTextReadOnlyMetadata {

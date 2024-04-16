@@ -15,6 +15,7 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 import { TemplateSections } from '../template-sections';
 
 export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -70,4 +71,5 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createRegelverk(),
   ],
   dokumentTypeId: DistribusjonsType.BREV,
+  language: Language.NB,
 });

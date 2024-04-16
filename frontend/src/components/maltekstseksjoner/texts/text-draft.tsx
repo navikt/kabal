@@ -63,7 +63,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       }
       isUpdating.current = true;
       const query = queryRef.current;
-      await updateContent({ query, id, content: _content });
+      await updateContent({ query, id, richText: _content });
       isUpdating.current = false;
     },
     [id, text.content, updateContent],

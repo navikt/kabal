@@ -3,6 +3,7 @@ import { TemplateSections } from '@app/plate/template-sections';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language } from '@app/types/texts/common';
 import {
   createCurrentDate,
   createFooter,
@@ -18,6 +19,7 @@ export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Generelt brev',
   content: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
   dokumentTypeId: DistribusjonsType.BREV,
+  language: Language.NB,
 });
 
 export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -25,6 +27,7 @@ export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Notat',
   content: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
+  language: Language.NB,
 });
 
 export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -38,6 +41,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
+  language: Language.NB,
 });
 
 export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -50,6 +54,7 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
+  language: Language.NB,
 });
 
 export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -63,4 +68,5 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
     createMaltekstseksjon(TemplateSections.VEDLEGG),
   ],
   dokumentTypeId: DistribusjonsType.BREV,
+  language: Language.NB,
 });
