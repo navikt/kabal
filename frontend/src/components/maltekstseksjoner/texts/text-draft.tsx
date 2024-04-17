@@ -32,15 +32,15 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const [publish] = usePublishMutation({ fixedCacheKey: text.id });
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
-  const [content, setContent] = useState(text.content);
+  const [richText, setRichText] = useState(text.richText);
   const { id } = text;
   const isUpdating = useRef(false);
-  const contentRef = useRef(content);
+  const richTextRef = useRef(richText);
   const queryRef = useRef({ textType: text.textType });
 
   useEffect(() => {
-    contentRef.current = content;
-  }, [content]);
+    richTextRef.current = richText;
+  }, [richText]);
 
   useEffect(() => {
     queryRef.current.textType = text.textType;
@@ -58,7 +58,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
 
   const updateContentIfChanged = useCallback(
     async (_content: EditorValue) => {
-      if (isUpdating.current || areDescendantsEqual(_content, text.content)) {
+      if (isUpdating.current || areDescendantsEqual(_content, text.richText)) {
         return;
       }
       isUpdating.current = true;
@@ -66,11 +66,11 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       await updateContent({ query, id, richText: _content });
       isUpdating.current = false;
     },
-    [id, text.content, updateContent],
+    [id, text.richText, updateContent],
   );
 
   useEffect(() => {
-    if (isUpdating.current || areDescendantsEqual(content, text.content)) {
+    if (isUpdating.current || areDescendantsEqual(richText, text.richText)) {
       return;
     }
 
@@ -78,22 +78,22 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       if (isUpdating.current) {
         return;
       }
-      updateContentIfChanged(content);
+      updateContentIfChanged(richText);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [content, id, updateContent, text.content, updateContentIfChanged]);
+  }, [richText, id, updateContent, text.richText, updateContentIfChanged]);
 
   useEffect(
     () => () => {
       // Save on unmount, if changed.
-      updateContentIfChanged(contentRef.current);
+      updateContentIfChanged(richTextRef.current);
     },
     [updateContentIfChanged],
   );
 
   const onPublish = useCallback(async () => {
-    await updateContentIfChanged(contentRef.current);
+    await updateContentIfChanged(richTextRef.current);
     const query = queryRef.current;
     await publish({ id, query });
   }, [id, publish, updateContentIfChanged]);
@@ -139,8 +139,8 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       <RedaktoerRichText
         ref={editorRef}
         editorId={text.id}
-        savedContent={text.content}
-        onChange={setContent}
+        savedContent={text.richText}
+        onChange={setRichText}
         onFocus={() => setActive(text.id)}
       />
 

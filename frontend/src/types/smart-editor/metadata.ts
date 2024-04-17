@@ -1,4 +1,4 @@
-import { Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 import { DistribusjonsType } from '../documents/documents';
 import { TemplateIdEnum } from './template-enums';
 

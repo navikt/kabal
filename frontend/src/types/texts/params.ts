@@ -1,12 +1,10 @@
 import { EditorValue } from '@app/plate/types';
-import { Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 import { IGetTextsParams, RichTextTypes } from '../common-text-types';
 import { IText } from './responses';
 
 export type { INewTextParams, INewPlainTextParams, INewRichTextParams } from './common';
 export type { IGetTextsParams } from '../common-text-types';
-
-/** Update params */
 
 export interface IUpdateBaseParams {
   id: string;

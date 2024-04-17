@@ -2,11 +2,11 @@ import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { GodFormulering } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
 import { StyledSkeleton } from '@app/components/smart-editor/gode-formuleringer/styles';
-import { IRichText } from '@app/types/texts/responses';
+import { RichTextVersion } from '@app/types/texts/responses';
 
 interface ListProps {
   isLoading: boolean;
-  texts: IRichText[];
+  texts: RichTextVersion[];
   focused: number;
   setFocused: (index: number) => void;
 }

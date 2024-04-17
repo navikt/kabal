@@ -1,4 +1,4 @@
-import { Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 
 export interface IEditor {
   created: string;
@@ -60,16 +60,23 @@ export enum PlainTextTypes {
 }
 
 export interface AppQuery {
+  // Redaktørquery?
   templateSectionIdList?: string[];
   ytelseHjemmelIdList?: string[];
   utfallIdList?: string;
   enhetIdList?: string[];
+  // language: Language;
 }
 
 export interface ApiQuery extends AppQuery {
   textType: RichTextTypes | PlainTextTypes;
 }
 
-export type IGetTextsParams = Partial<ApiQuery>;
+export interface ConsumerQuery extends AppQuery {
+  textType: RichTextTypes | PlainTextTypes;
+  language: Language;
+}
+
+export type IGetTextsParams = ApiQuery;
 
 export type TextTypes = RichTextTypes | PlainTextTypes;

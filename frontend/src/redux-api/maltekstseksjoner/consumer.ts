@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IGetTextsParams } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IPublishedRichText } from '@app/types/texts/responses';
+import { RichTextVersion } from '@app/types/texts/responses';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
 export enum ConsumerMaltekstseksjonerTagTypes {
@@ -20,7 +20,7 @@ export const consumerMaltekstseksjonerApi = createApi({
       providesTags: (maltekstseksjoner) =>
         maltekstseksjoner?.map(({ id }) => ({ type: ConsumerMaltekstseksjonerTagTypes.MALTEKSTSEKSJON, id })) ?? [],
     }),
-    getMaltekstseksjonTexts: builder.query<IPublishedRichText[], string>({
+    getMaltekstseksjonTexts: builder.query<RichTextVersion[], string>({
       query: (id) => `/consumer/maltekstseksjoner/${id}/texts`,
       providesTags: (_, __, id) => [{ type: ConsumerMaltekstseksjonerTagTypes.MALTEKSTSEKSJON_TEXTS, id }],
     }),

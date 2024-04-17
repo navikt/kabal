@@ -22,7 +22,7 @@ import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
-import { LANGUAGES } from '@app/types/texts/common';
+import { LANGUAGES } from '@app/types/texts/language';
 import { IPlainText, IRichText, IText } from '@app/types/texts/responses';
 import { getTextAsString } from '../../../plate/functions/get-text-string';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';

@@ -3,12 +3,12 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IPublishedRichText } from '@app/types/texts/responses';
+import { RichTextVersion } from '@app/types/texts/responses';
 import { TemplateSections } from '../template-sections';
 
 const MAX_SCORE = 23;
 
-export const lexSpecialis = <T extends IPublishedRichText | IMaltekstseksjon>(
+export const lexSpecialis = <T extends RichTextVersion | IMaltekstseksjon>(
   templateId: TemplateIdEnum,
   sectionId: TemplateSections,
   ytelseId: string,

@@ -7,14 +7,13 @@ import {
   isEditorReadOnly,
   replaceNodeChildren,
 } from '@udecode/plate-common';
-import React, { useContext } from 'react';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getRichText } from '@app/functions/get-translated-content';
+import React from 'react';
 import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -23,7 +22,6 @@ export const RedigerbarMaltekst = ({
   editor,
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
-  const { language } = useContext(SmartEditorContext);
 
   const reload = async () => {
     if (element.id === undefined) {
@@ -38,11 +36,11 @@ export const RedigerbarMaltekst = ({
 
     const text = await getText(element.id).unwrap();
 
-    if (text.textType !== RichTextTypes.REDIGERBAR_MALTEKST) {
+    if (!isRedigerbarMaltekst(text)) {
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: getRichText(language, text.richText) });
+    replaceNodeChildren(editor, { at: path, nodes: text.richText });
   };
 
   // TODO: Remove when all smart documents in prod use maltekstseksjon
@@ -82,3 +80,6 @@ export const RedigerbarMaltekst = ({
     </PlateElement>
   );
 };
+
+const isRedigerbarMaltekst = (text: TextVersion): text is RichTextVersion =>
+  text.textType === RichTextTypes.REDIGERBAR_MALTEKST;

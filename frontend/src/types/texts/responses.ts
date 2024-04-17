@@ -1,31 +1,37 @@
+import { EditorValue } from '@app/plate/types';
 import {
   DraftTextReadOnlyMetadata,
   ITextBaseMetadata,
   ITranslatedTextContent,
+  PlainTextTypes,
   PublishedTextReadOnlyMetadata,
+  RichTextTypes,
   TextReadOnlyMetadata,
 } from '../common-text-types';
 import { INewPlainTextParams, INewRichTextParams } from './common';
 
 export type IRichText = IDraftRichText | IPublishedRichText;
 
-export type IDraftRichText = INewRichTextParams &
-  DraftTextReadOnlyMetadata & {
-    id: string; // UUID
-    modified: string; // Datetime
-    created: string; // Datetime
-    richText: ITranslatedTextContent;
-  };
-
-export interface IPublishedTextMetadata extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
+export interface IDraftRichText extends ITextBaseMetadata, DraftTextReadOnlyMetadata {
+  textType: RichTextTypes;
   id: string; // UUID
   modified: string; // Datetime
   created: string; // Datetime
   richText: ITranslatedTextContent;
 }
 
-export interface IPublishedRichText extends IPublishedTextMetadata, INewRichTextParams {}
-export interface IPublishedPlainText extends IPublishedTextMetadata, INewPlainTextParams {}
+export interface IPublishedTextMetadata extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
+  id: string; // UUID
+  modified: string; // Datetime
+  created: string; // Datetime
+}
+
+export interface IPublishedRichText extends IPublishedTextMetadata, INewRichTextParams {
+  richText: ITranslatedTextContent;
+}
+export interface IPublishedPlainText extends IPublishedTextMetadata, INewPlainTextParams {
+  plainText: ITranslatedTextContent;
+}
 
 export type IPublishedText = IPublishedRichText | IPublishedPlainText;
 
@@ -46,3 +52,18 @@ export type IPlainText = INewPlainTextParams &
   };
 
 export type IText = IRichText | IPlainText;
+
+export interface TextVersion extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
+  textType: RichTextTypes | PlainTextTypes;
+  id: string;
+}
+
+export interface RichTextVersion extends Omit<TextVersion, 'textType'> {
+  textType: RichTextTypes;
+  richText: EditorValue;
+}
+
+export interface PlainTextVersion extends Omit<TextVersion, 'textType'> {
+  textType: PlainTextTypes;
+  plainText: string;
+}

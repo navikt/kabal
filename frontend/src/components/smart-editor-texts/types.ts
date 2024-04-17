@@ -1,5 +1,4 @@
 import { IOption } from '@app/components/filter-dropdown/props';
-import { Language } from '@app/types/texts/common';
 import { IDraftPlainText, IDraftRichText } from '@app/types/texts/responses';
 
 /** `NONE` means it will match texts with no filters set. The user intent here is for these texts to be general. As in not limited to specific options. */
@@ -18,5 +17,4 @@ export const LIST_DELIMITER = '>';
 export interface DraftVersionProps {
   text: IDraftPlainText | IDraftRichText;
   onDraftDeleted: () => void;
-  language: Language;
 }

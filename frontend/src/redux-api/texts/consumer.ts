@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { IGetTextsParams } from '@app/types/common-text-types';
-import { IPublishedText } from '@app/types/texts/responses';
+import { TextVersion } from '@app/types/texts/responses';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
 export enum ConsumerTextsTagTypes {
@@ -12,7 +12,7 @@ export const consumerTextsApi = createApi({
   baseQuery: KABAL_TEXT_TEMPLATES_BASE_QUERY,
   tagTypes: Object.values(ConsumerTextsTagTypes),
   endpoints: (builder) => ({
-    getConsumerTexts: builder.query<IPublishedText[], IGetTextsParams>({
+    getConsumerTexts: builder.query<TextVersion[], IGetTextsParams>({
       query: (params) => ({ url: '/consumer/texts', params }),
       providesTags: (texts) => texts?.map(({ id }) => ({ type: ConsumerTextsTagTypes.TEXT, id })) ?? [],
       onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
@@ -23,7 +23,7 @@ export const consumerTextsApi = createApi({
         }
       },
     }),
-    getConsumerTextById: builder.query<IPublishedText, string>({
+    getConsumerTextById: builder.query<TextVersion, string>({
       query: (id) => `/consumer/texts/${id}`,
       providesTags: (_, __, id) => [{ type: ConsumerTextsTagTypes.TEXT, id }],
     }),

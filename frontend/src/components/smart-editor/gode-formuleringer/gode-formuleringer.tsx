@@ -15,15 +15,13 @@ import {
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
-import { getRichText } from '@app/functions/get-translated-content';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/common';
-import { IPublishedRichText, IPublishedText, IRichText } from '@app/types/texts/responses';
+import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -37,7 +35,7 @@ type ActiveSection = TemplateSections | NONE_TYPE;
 const filterTemplateSection = (
   templateId: TemplateIdEnum,
   activeSection: ActiveSection,
-  godFormulering: IRichText,
+  godFormulering: TextVersion,
 ): boolean => {
   if (godFormulering.templateSectionIdList.length === 0) {
     return true;
@@ -58,10 +56,10 @@ const filterTemplateSection = (
 };
 
 const isFilteredPublishedRichText = (
-  text: IPublishedText,
+  text: TextVersion,
   templateId: TemplateIdEnum,
   activeSection: ActiveSection,
-): text is IPublishedRichText =>
+): text is RichTextVersion =>
   text.textType === RichTextTypes.GOD_FORMULERING && filterTemplateSection(templateId, activeSection, text);
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
@@ -71,7 +69,6 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
   const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
-  const { language } = useContext(SmartEditorContext);
 
   const query = useQuery({
     textType: RichTextTypes.GOD_FORMULERING,
@@ -88,7 +85,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const texts = useMemo(() => {
     if (filter.length === 0) {
-      const result: IPublishedRichText[] = [];
+      const result: RichTextVersion[] = [];
 
       for (const text of data) {
         if (isFilteredPublishedRichText(text, templateId, activeSection)) {
@@ -99,11 +96,11 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       return result;
     }
 
-    const result: [IPublishedRichText, number][] = [];
+    const result: [RichTextVersion, number][] = [];
 
     for (const text of data) {
       if (isFilteredPublishedRichText(text, templateId, activeSection)) {
-        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text, language));
+        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text));
 
         if (score > 0) {
           result.push([text, score]);
@@ -112,7 +109,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
 
     return result.sort(([, a], [, b]) => b - a).map(([t]) => t);
-  }, [filter, data, templateId, activeSection, language]);
+  }, [filter, data, templateId, activeSection]);
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -158,12 +155,12 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           const text = texts[focused];
 
           if (text !== undefined) {
-            insertGodFormulering(editor, getRichText(language, text.richText));
+            insertGodFormulering(editor, text.richText);
           }
         }
       }
     },
-    [editor, filter.length, focused, language, setShowGodeFormuleringer, texts],
+    [editor, filter.length, focused, setShowGodeFormuleringer, texts],
   );
 
   if (!showGodeFormuleringer) {

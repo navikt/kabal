@@ -2,10 +2,11 @@
 import { formatISO } from 'date-fns';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { isPlainText, isRichText } from '@app/functions/is-rich-plain-text';
+import { isPlainText, isPlainTextType, isRichText } from '@app/functions/is-rich-plain-text';
 import { reduxStore } from '@app/redux/configure-store';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { isApiRejectionError } from '@app/types/errors';
+import { LANGUAGES } from '@app/types/texts/language';
 import {
   ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,
@@ -82,11 +83,13 @@ const textsMutationSlice = textsApi.injectEndpoints({
             ),
           );
 
-          dispatch(
-            textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-              draft.map((v) => (v.versionId === data.versionId ? data : { ...v, published: false })),
-            ),
-          );
+          for (const language of LANGUAGES) {
+            dispatch(
+              textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+                draft.map((v) => (v.versionId === data.versionId ? data : { ...v, published: false })),
+              ),
+            );
+          }
         } catch {
           idPatchResult.undo();
         }
@@ -137,16 +140,18 @@ const textsMutationSlice = textsApi.injectEndpoints({
           }),
         );
 
-        const versionPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => {
-            for (const version of draft) {
-              if (version.publishedDateTime === null && !isPlainText(version)) {
-                version.textType = newTextType;
+        const versionPatchResults = LANGUAGES.map((language) =>
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) => {
+              for (const version of draft) {
+                if (version.publishedDateTime === null && !isPlainText(version)) {
+                  version.textType = newTextType;
 
-                continue;
+                  continue;
+                }
               }
-            }
-          }),
+            }),
+          ),
         );
 
         try {
@@ -155,7 +160,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
           idPatchResult.undo();
           movedToListPatchResult.undo();
           movedFromListPatchResult.undo();
-          versionPatchResult.undo();
+          versionPatchResults.forEach((patch) => patch.undo());
         }
       },
     }),
@@ -186,12 +191,14 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         toast.success(`Nytt utkast for «${title}» opprettet.`);
 
-        dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => [
-            data,
-            ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
-          ]),
-        );
+        for (const language of LANGUAGES) {
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) => [
+              data,
+              ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+            ]),
+          );
+        }
         dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
         dispatch(
           textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
@@ -232,9 +239,11 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         const idPatchResult = dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => textDraft));
 
-        const versionsPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-            draft.map((text) => ({ ...text, published: false })),
+        const versionsPatchResults = LANGUAGES.map((language) =>
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+              draft.map((text) => ({ ...text, published: false })),
+            ),
           ),
         );
 
@@ -255,7 +264,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         } catch (e) {
           idPatchResult.undo();
           listPatchResult.undo();
-          versionsPatchResult.undo();
+          versionsPatchResults.forEach((patch) => patch.undo());
 
           const message = 'Kunne ikke avpublisere tekst.';
 
@@ -268,14 +277,16 @@ const textsMutationSlice = textsApi.injectEndpoints({
       },
     }),
     deleteDraft: builder.mutation<IDeleteDraftOrUnpublishTextResponse, IDeleteTextDraftParams>({
-      query: ({ id }) => ({
+      query: ({ id, query }) => ({
         method: 'DELETE',
-        url: `/texts/${id}/draft`,
+        url: isPlainTextType(query.textType) ? `/plaintexts/${id}` : `/richtexts/${id}`,
       }),
       onQueryStarted: async ({ id, title, query, lastPublishedVersion }, { queryFulfilled, dispatch }) => {
-        const versionsPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-            draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+        const versionsPatchResults = LANGUAGES.map((language) =>
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+              draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+            ),
           ),
         );
 
@@ -311,7 +322,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
             );
           }
         } catch {
-          versionsPatchResult.undo();
+          versionsPatchResults.forEach((patch) => patch.undo());
           idPatchResult.undo();
           listPatchResult.undo();
         }
@@ -349,7 +360,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
 
         const versionPatchResult = reduxStore.dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
+          textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
             draft.map((t) =>
               t.publishedDateTime === null && t.id === id && isRichText(t)
                 ? { ...t, richText: { ...t.richText, [language]: richText } }
@@ -399,7 +410,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
 
         const versionPatchResult = reduxStore.dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
+          textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
             draft.map((t) =>
               t.publishedDateTime === null && t.id === id && isPlainText(t)
                 ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
@@ -508,22 +519,24 @@ const update = (id: string, upd: Update, query: IGetTextsParams) => {
     ),
   );
 
-  const versionPatchResult = reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-      draft.map((version) => {
-        if (version.published || version.publishedDateTime !== null) {
-          return version;
-        }
+  const versionPatchResults = LANGUAGES.map((language) =>
+    reduxStore.dispatch(
+      textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+        draft.map((version) => {
+          if (version.published || version.publishedDateTime !== null) {
+            return version;
+          }
 
-        return { ...version, ...upd };
-      }),
+          return { ...version, ...upd };
+        }),
+      ),
     ),
   );
 
   return () => {
     idPatchResult.undo();
     listPatchResult.undo();
-    versionPatchResult.undo();
+    versionPatchResults.forEach((patch) => patch.undo());
   };
 };
 
@@ -544,17 +557,19 @@ const pessimisticUpdate = (id: string, data: IText, query: IGetTextsParams, show
     ),
   );
 
-  reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-      draft.map((version) => {
-        if (version.published || version.publishedDateTime !== null) {
-          return version;
-        }
+  for (const language of LANGUAGES) {
+    reduxStore.dispatch(
+      textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+        draft.map((version) => {
+          if (version.published || version.publishedDateTime !== null) {
+            return version;
+          }
 
-        return { ...version, modified, editors };
-      }),
-    ),
-  );
+          return { ...version, modified, editors };
+        }),
+      ),
+    );
+  }
 };
 
 export const {

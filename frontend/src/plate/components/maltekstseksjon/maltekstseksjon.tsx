@@ -17,7 +17,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { getRichText } from '@app/functions/get-translated-content';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { getChildren } from '@app/plate/components/maltekstseksjon/get-children';
@@ -39,7 +38,7 @@ import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
 } from '@app/redux-api/maltekstseksjoner/consumer';
-import { ApiQuery, RichTextTypes } from '@app/types/common-text-types';
+import { ConsumerQuery, RichTextTypes } from '@app/types/common-text-types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 enum ReplaceMethod {
@@ -62,7 +61,6 @@ export const Maltekstseksjon = ({
     useLazyGetMaltekstseksjonTextsQuery();
   const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
-  const { language } = useContext(SmartEditorContext);
 
   const oppgaveIsLoaded = oppgave !== undefined;
 
@@ -142,19 +140,19 @@ export const Maltekstseksjon = ({
 
       const unchanged = areDescendantsEqual(
         previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
-        originalTexts.flatMap((t) => getRichText(language, t.richText)),
+        originalTexts.flatMap((t) => t.richText),
       );
 
       return unchanged ? ReplaceMethod.AUTO : ReplaceMethod.MANUAL;
     },
-    [oppgaveIsLoaded, getOriginalTexts, language],
+    [oppgaveIsLoaded, getOriginalTexts],
   );
 
   type UpdateMaltekstseksjonFn = (
     _element: MaltekstseksjonElement,
     resultat: IOppgavebehandling['resultat'],
     ytelseId: IOppgavebehandling['ytelseId'],
-    _query: ApiQuery,
+    _query: ConsumerQuery,
   ) => Promise<void>;
 
   const updateMaltekstseksjon: UpdateMaltekstseksjonFn = useCallback(
@@ -189,7 +187,7 @@ export const Maltekstseksjon = ({
 
       const { id, textIdList } = maltekstseksjon;
       const texts = await fetchMaltekstseksjonTexts(id).unwrap();
-      const maltekstseksjonChildren = getChildren(texts, _element, _element.section, language);
+      const maltekstseksjonChildren = getChildren(texts, _element, _element.section);
       const autoReplace = await getReplaceMethod(_element, id);
 
       if (autoReplace === ReplaceMethod.AUTO) {
@@ -201,7 +199,7 @@ export const Maltekstseksjon = ({
         setManualUpdate(undefined);
       }
     },
-    [fetchMaltekstseksjon, templateId, fetchMaltekstseksjonTexts, language, getReplaceMethod, replaceNodes],
+    [fetchMaltekstseksjon, templateId, fetchMaltekstseksjonTexts, getReplaceMethod, replaceNodes],
   );
 
   useEffect(() => {

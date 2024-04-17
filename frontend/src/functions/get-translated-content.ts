@@ -1,8 +1,5 @@
-import { EditorValue } from '@app/plate/types';
-import { INewPlainTextParams, INewRichTextParams, Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 
-export const getRichText = (language: Language, versions: INewRichTextParams['richText']): EditorValue =>
-  versions[language];
+type Content<T> = Record<Language, T>;
 
-export const getPlainText = (language: Language, versions: INewPlainTextParams['plainText']): string =>
-  versions[language];
+export const getLanguageContent = <T>(language: Language, versions: Content<T>): T => versions[language];

@@ -1,5 +1,6 @@
 import { IS_LOCALHOST } from '@app/redux-api/common';
 import { TextsTagTypes, textsApi } from '@app/redux-api/texts/texts';
+import { Language } from '@app/types/texts/language';
 import { IGetTextsParams } from '@app/types/texts/params';
 import { IText } from '@app/types/texts/responses';
 import { ListTagTypes } from '../tag-types';
@@ -22,9 +23,9 @@ export const textsQuerySlice = textsApi.injectEndpoints({
       query: (id) => `/texts/${id}`,
       providesTags: (_, __, id) => [{ type: TextsTagTypes.TEXT, id }],
     }),
-    getTextVersions: builder.query<IText[], string>({
-      query: (id) => `/texts/${id}/versions`,
-      providesTags: (_, __, id) => [{ type: TextsTagTypes.TEXT_VERSIONS, id }],
+    getTextVersions: builder.query<IText[], { id: string; language: Language }>({
+      query: ({ id, language }) => `/texts/${id}/${language}/versions`,
+      providesTags: (_, __, { id, language }) => [{ type: TextsTagTypes.TEXT_VERSIONS, id: `${id}-${language}` }],
     }),
   }),
 });

@@ -3,7 +3,7 @@ import { TemplateSections } from '@app/plate/template-sections';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 import {
   createCurrentDate,
   createFooter,

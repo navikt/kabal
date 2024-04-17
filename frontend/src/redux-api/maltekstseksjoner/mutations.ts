@@ -30,6 +30,7 @@ import {
   IPublishWithTextsResponse,
   IPublishedMaltekstseksjon,
 } from '@app/types/maltekstseksjoner/responses';
+import { LANGUAGES } from '@app/types/texts/language';
 import { IPublishedText } from '@app/types/texts/responses';
 import { textsQuerySlice } from '../texts/queries';
 
@@ -211,16 +212,22 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
                         ...publishedProps,
                       })),
                     ),
-                    dispatch(
-                      textsQuerySlice.util.updateQueryData('getTextVersions', textId, (versionsDraft) => {
-                        const [draftVersion, ...rest] = versionsDraft;
+                    ...LANGUAGES.map((language) =>
+                      dispatch(
+                        textsQuerySlice.util.updateQueryData(
+                          'getTextVersions',
+                          { id: textId, language },
+                          (versionsDraft) => {
+                            const [draftVersion, ...rest] = versionsDraft;
 
-                        if (draftVersion === undefined || draftVersion.publishedDateTime !== null) {
-                          return versionsDraft;
-                        }
+                            if (draftVersion === undefined || draftVersion.publishedDateTime !== null) {
+                              return versionsDraft;
+                            }
 
-                        return [{ ...draftVersion, ...publishedProps }, ...rest];
-                      }),
+                            return [{ ...draftVersion, ...publishedProps }, ...rest];
+                          },
+                        ),
+                      ),
                     ),
                   );
                 }
@@ -264,11 +271,14 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           for (const text of publishedTexts) {
             dispatch(consumerTextsApi.util.updateQueryData('getConsumerTextById', text.id, () => text));
             dispatch(textsQuerySlice.util.updateQueryData('getTextById', text.id, () => text));
-            dispatch(
-              textsQuerySlice.util.updateQueryData('getTextVersions', text.id, (versionsDraft) =>
-                versionsDraft.map((v) => (v.versionId === text.versionId ? text : { ...v, published: false })),
-              ),
-            );
+
+            for (const language of LANGUAGES) {
+              dispatch(
+                textsQuerySlice.util.updateQueryData('getTextVersions', { id: text.id, language }, (versionsDraft) =>
+                  versionsDraft.map((v) => (v.versionId === text.versionId ? text : { ...v, published: false })),
+                ),
+              );
+            }
           }
 
           dispatch(

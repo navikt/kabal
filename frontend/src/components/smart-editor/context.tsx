@@ -7,7 +7,7 @@ import {
 import { RichText } from '@app/plate/types';
 import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/common';
+import { Language } from '@app/types/texts/language';
 
 const noop = () => {};
 

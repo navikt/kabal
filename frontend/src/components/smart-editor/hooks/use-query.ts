@@ -1,9 +1,10 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { ApiQuery, TextTypes } from '@app/types/common-text-types';
+import { ApiQuery, ConsumerQuery, TextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
@@ -16,8 +17,9 @@ interface Params {
 export const useQuery = ({ textType, templateId, section }: Params) => {
   const { data: oppgave, isLoading } = useOppgave();
   const { user } = useContext(StaticDataContext);
+  const { language } = useContext(SmartEditorContext);
 
-  return useMemo<ApiQuery | typeof skipToken>(() => {
+  return useMemo<ConsumerQuery | typeof skipToken>(() => {
     if (isLoading || oppgave === undefined) {
       return skipToken;
     }
@@ -29,16 +31,17 @@ export const useQuery = ({ textType, templateId, section }: Params) => {
         ? [`${templateId}${LIST_DELIMITER}${section}`, `${GLOBAL}${LIST_DELIMITER}${section}`]
         : [];
 
-    const query: ApiQuery = {
+    const query: ConsumerQuery = {
       ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
       enhetIdList: [user.ansattEnhet.id],
       templateSectionIdList: templateSectionList,
       textType,
+      language,
     };
 
     return query;
-  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType]);
+  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType, language]);
 };
 
 const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {

@@ -1,31 +1,26 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import { Plate } from '@udecode/plate-common';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
-import { getRichText } from '@app/functions/get-translated-content';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import { EditorValue, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
-import { IRichText } from '@app/types/texts/responses';
+import { RichTextVersion } from '@app/types/texts/responses';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { AddButton } from './add-button';
 
-type Props = IRichText & {
+type Props = RichTextVersion & {
   isFocused: boolean;
   onClick: () => void;
 };
 
-export const GodFormulering = ({ title, richText, modified, created, isFocused, onClick, id }: Props) => {
+export const GodFormulering = ({ title, richText, isFocused, onClick, id }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const editor = useMyPlateEditorState();
-  const { language } = useContext(SmartEditorContext);
-
-  const content = getRichText(language, richText);
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {
@@ -39,10 +34,10 @@ export const GodFormulering = ({ title, richText, modified, created, isFocused, 
         {title}
       </Heading>
       <ActionWrapper>
-        <ModifiedCreatedDateTime modified={modified} created={created} />
+        {/* <ModifiedCreatedDateTime modified={modified} created={created} /> */}
         <AddButton
           editor={editor}
-          content={content}
+          content={richText}
           title="Sett inn god formulering i markert område"
           disabledTitle="Mangler markert område å sette inn god formulering i"
         >
@@ -51,7 +46,7 @@ export const GodFormulering = ({ title, richText, modified, created, isFocused, 
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <Plate<EditorValue, RichTextEditor> initialValue={content} id={id} readOnly plugins={previewPlugins}>
+          <Plate<EditorValue, RichTextEditor> initialValue={richText} id={id} readOnly plugins={previewPlugins}>
             <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
           </Plate>
         </StyledContent>

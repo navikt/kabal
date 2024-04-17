@@ -9,10 +9,8 @@ import {
   replaceNodeChildren,
   unwrapNodes,
 } from '@udecode/plate-common';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getRichText } from '@app/functions/get-translated-content';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -20,6 +18,7 @@ import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { EditorValue, MaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
 
 export const Maltekst = ({
   editor,
@@ -28,7 +27,6 @@ export const Maltekst = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
-  const { language } = useContext(SmartEditorContext);
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
@@ -52,11 +50,11 @@ export const Maltekst = ({
 
     const text = await getText(element.id).unwrap();
 
-    if (text.textType !== RichTextTypes.MALTEKST) {
+    if (!isMaltekst(text)) {
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: getRichText(language, text.richText) });
+    replaceNodeChildren(editor, { at: path, nodes: text.richText });
   };
 
   const [first] = element.children;
@@ -182,3 +180,4 @@ const ConfirmContainer = styled.div`
   border-top-right-radius: 0;
   box-shadow: var(--a-shadow-medium);
 `;
+const isMaltekst = (text: TextVersion): text is RichTextVersion => text.textType === RichTextTypes.MALTEKST;

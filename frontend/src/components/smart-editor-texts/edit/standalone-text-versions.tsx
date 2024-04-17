@@ -9,9 +9,9 @@ import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { PlainTextTypes } from '@app/types/common-text-types';
-import { Language, isLanguage } from '@app/types/texts/common';
+import { Language, isLanguage } from '@app/types/texts/language';
 import {
   IDraftPlainText,
   IDraftRichText,
@@ -28,19 +28,38 @@ interface Props {
 }
 
 export const StandaloneTextVersions = ({ id }: Props) => {
-  const { data = [], isFetching } = useGetTextVersionsQuery(id);
+  // TODO: use router instead
+  const { data } = useGetTextByIdQuery(id);
+  const [language, setLanguage] = useState<Language>(Language.NB);
+  const { data: populatedVersions = [] } = useGetTextVersionsQuery({ id, language });
 
-  if (isFetching) {
+  if (data === undefined) {
     return <Loader />;
   }
 
-  const [first] = data;
+  const [first] = populatedVersions;
 
   if (first === undefined) {
     return <p>Ingen tekst med ID {id}</p>;
   }
 
-  return <VersionsLoaded versions={data} firstText={first} id={id} />;
+  return (
+    <>
+      <ToggleGroup
+        value={language}
+        onChange={(value) => {
+          if (isLanguage(value)) {
+            setLanguage(value);
+          }
+        }}
+      >
+        <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
+        <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+      </ToggleGroup>
+
+      <VersionsLoaded versions={populatedVersions} firstText={first} id={id} />
+    </>
+  );
 };
 
 interface VersionsLoadedProps {
@@ -53,9 +72,6 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
   const navigate = useNavigateToStandaloneTextVersion();
   const publishedVersion = useMemo(() => versions.find(({ published }) => published), [versions]);
   const { versionId } = useParams();
-
-  // TODO: use router instead
-  const [language, setLanguage] = useState<Language>(Language.NB);
 
   const version = publishedVersion ?? firstText;
 
@@ -72,27 +88,13 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
     <Container>
       <UnpublishTextButton {...version} id={id} />
 
-      <ToggleGroup
-        value={language}
-        onChange={(value) => {
-          if (isLanguage(value)) {
-            setLanguage(value);
-          }
-        }}
-      >
-        <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
-        <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
-      </ToggleGroup>
-
       <StyledVersionTabs<IDraftPlainText | IDraftRichText, IPublishedPlainText | IPublishedRichText>
         first={firstText}
         versions={versions}
         selectedTabId={versionId}
         setSelectedTabId={navigateToVersion}
-        createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} language={language} />}
-        createPublishedPanel={(v) => (
-          <PublishedVersion text={v} setVersionTabId={navigateToVersion} language={language} />
-        )}
+        createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
+        createPublishedPanel={(v) => <PublishedVersion text={v} setVersionTabId={navigateToVersion} />}
       />
     </Container>
   );
@@ -104,12 +106,11 @@ const DraftVersion = ({ text, ...rest }: DraftVersionProps) =>
 interface PublishedVersionProps {
   text: IPublishedPlainText | IPublishedRichText;
   setVersionTabId: (versionId: string) => void;
-  language: Language;
 }
 
-const PublishedVersion = ({ text, setVersionTabId, language }: PublishedVersionProps) => {
+const PublishedVersion = ({ text, setVersionTabId }: PublishedVersionProps) => {
   if (isPlainText(text)) {
-    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} language={language} />;
+    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} />;
   }
 
   return (

@@ -13,7 +13,6 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { getRichText } from '@app/functions/get-translated-content';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
@@ -24,7 +23,7 @@ import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText, IText } from '@app/types/texts/responses';
+import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
 
 export const LegacyMaltekst = ({
   editor,
@@ -52,7 +51,7 @@ export const LegacyMaltekst = ({
     const { ytelseId, resultat } = oppgave;
     const { hjemmelIdSet, utfallId, extraUtfallIdSet } = resultat;
 
-    const maltekster = lexSpecialis(
+    const maltekst = lexSpecialis(
       templateId,
       element.section,
       ytelseId,
@@ -61,7 +60,7 @@ export const LegacyMaltekst = ({
       data.filter(isMaltekst),
     );
 
-    const nodes = maltekster === null ? [createEmptyVoid()] : getRichText(language, maltekster.richText);
+    const nodes = maltekst === null ? [createEmptyVoid()] : maltekst.richText;
 
     if (nodesEquals(element.children, nodes)) {
       return;
@@ -134,4 +133,4 @@ export const LegacyMaltekst = ({
   );
 };
 
-const isMaltekst = (text: IText): text is IPublishedRichText => text.textType === RichTextTypes.MALTEKST;
+const isMaltekst = (text: TextVersion): text is RichTextVersion => text.textType === RichTextTypes.MALTEKST;

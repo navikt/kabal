@@ -35,36 +35,36 @@ export const Router = () => (
     <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
 
     <Route
-      path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId"
+      path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId/:lang"
       element={<MaltekstseksjonerPage />}
     />
     <Route path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId" element={<MaltekstseksjonerPage />} />
     <Route path="maltekstseksjoner/:id" element={<MaltekstseksjonerPage />} />
     <Route path="maltekstseksjoner" element={<MaltekstseksjonerPage />} />
 
-    <Route path="maltekster/:id/versjoner/:versionId" element={<MalteksterPage />} />
+    <Route path="maltekster/:id/:lang/versjoner/:versionId" element={<MalteksterPage />} />
     <Route path="maltekster/:id" element={<MalteksterPage />} />
     <Route path="maltekster" element={<MalteksterPage />} />
 
-    <Route path="redigerbare-maltekster/:id/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
+    <Route path="redigerbare-maltekster/:id/:lang/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
     <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
     <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
 
-    <Route path="gode-formuleringer/:id/versjoner/:versionId" element={<GodeFormuleringerPage />} />
+    <Route path="gode-formuleringer/:id/:lang/versjoner/:versionId" element={<GodeFormuleringerPage />} />
     <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
     <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
+
+    <Route path="topptekster/:id/:lang/versjoner/:versionId" element={<ToppteksterPage />} />
+    <Route path="topptekster/:id" element={<ToppteksterPage />} />
+    <Route path="topptekster/" element={<ToppteksterPage />} />
+
+    <Route path="bunntekster/:id/:lang/versjoner/:versionId" element={<BunnteksterPage />} />
+    <Route path="bunntekster/:id" element={<BunnteksterPage />} />
+    <Route path="bunntekster/" element={<BunnteksterPage />} />
 
     <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
     <Route path="regelverk/:id" element={<RegelverkPage />} />
     <Route path="regelverk/" element={<RegelverkPage />} />
-
-    <Route path="topptekster/:id/versjoner/:versionId" element={<ToppteksterPage />} />
-    <Route path="topptekster/:id" element={<ToppteksterPage />} />
-    <Route path="topptekster/" element={<ToppteksterPage />} />
-
-    <Route path="bunntekster/:id/versjoner/:versionId" element={<BunnteksterPage />} />
-    <Route path="bunntekster/:id" element={<BunnteksterPage />} />
-    <Route path="bunntekster/" element={<BunnteksterPage />} />
 
     <Route path="innstillinger" element={<SettingsPage />} />
     <Route path="tilgangsstyring" element={<AccessRightsPage />} />

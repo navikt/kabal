@@ -4,17 +4,16 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getPlainText } from '@app/functions/get-translated-content';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { ApiQuery, PlainTextTypes } from '@app/types/common-text-types';
+import { ConsumerQuery, PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { IPlainText, IPublishedPlainText, IText } from '@app/types/texts/responses';
+import { PlainTextVersion, TextVersion } from '@app/types/texts/responses';
 
-const lexSpecialis = (enhetId: string, texts: IPlainText[]): IPlainText | null => {
+const lexSpecialis = (enhetId: string, texts: PlainTextVersion[]): PlainTextVersion | null => {
   const sorted = texts
     .filter((t) => t.enhetIdList.includes(enhetId))
     .sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
@@ -24,7 +23,7 @@ const lexSpecialis = (enhetId: string, texts: IPlainText[]): IPlainText | null =
   return first ?? null;
 };
 
-const isPlainText = (text: IText): text is IPublishedPlainText =>
+const isPlainText = (text: TextVersion): text is PlainTextVersion =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
 type ElementTypes = HeaderElement | FooterElement;
@@ -42,17 +41,18 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
   const [initialized, setInitialized] = useState(false);
   const { user } = useContext(StaticDataContext);
+  const { language } = useContext(SmartEditorContext);
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
-  const [text, setText] = useState<IPlainText>();
+  const [text, setText] = useState<PlainTextVersion>();
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
   const editor = useMyPlateEditorRef();
 
   const loadMaltekst = useCallback(
-    async (e: ElementTypes, q: ApiQuery) => {
+    async (e: ElementTypes, q: ConsumerQuery) => {
       try {
         const texts = (await getTexts(q).unwrap()).filter(isPlainText);
         const mostSpecificText = lexSpecialis(user.ansattEnhet.id, texts);
@@ -81,9 +81,9 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   useEffect(() => {
     if (!initialized) {
-      loadMaltekst(element, { enhetIdList: [user.ansattEnhet.id], textType });
+      loadMaltekst(element, { enhetIdList: [user.ansattEnhet.id], textType, language });
     }
-  }, [element, initialized, loadMaltekst, textType, user.ansattEnhet.id]);
+  }, [element, initialized, language, loadMaltekst, textType, user.ansattEnhet.id]);
 
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 
@@ -112,14 +112,12 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 };
 
 interface HeaderFooterContentProps {
-  text?: IPlainText;
+  text?: PlainTextVersion;
   isLoading: boolean;
   type: typeof ELEMENT_HEADER | typeof ELEMENT_FOOTER;
 }
 
 const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps) => {
-  const { language } = useContext(SmartEditorContext);
-
   if (isLoading || typeof text === 'undefined') {
     return (
       <Paragraph $textAlign={TextAlign.LEFT}>
@@ -128,7 +126,7 @@ const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps
     );
   }
 
-  const plainText = getPlainText(language, text.plainText);
+  const { plainText } = text;
 
   if (plainText === null) {
     return <Paragraph $textAlign={TextAlign.LEFT}>Ingen {getLabel(type)} funnet.</Paragraph>;

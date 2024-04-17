@@ -5,7 +5,6 @@ import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildre
 import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { getRichText } from '@app/functions/get-translated-content';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -16,7 +15,7 @@ import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/p
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText, IText } from '@app/types/texts/responses';
+import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   if (element.children.length !== 1) {
@@ -36,7 +35,6 @@ export const LegacyRedigerbarMaltekst = ({
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
-  const { language } = useContext(SmartEditorContext);
 
   const query = useQuery({ textType: RichTextTypes.REDIGERBAR_MALTEKST, section: element.section, templateId });
 
@@ -68,14 +66,14 @@ export const LegacyRedigerbarMaltekst = ({
         tekster.filter(isRedigerbarMaltekst),
       );
 
-      const nodes = maltekster === null ? [createSimpleParagraph()] : getRichText(language, maltekster.richText);
+      const nodes = maltekster === null ? [createSimpleParagraph()] : maltekster.richText;
 
       replaceNodeChildren(editor, { at: path, nodes });
     } catch (e) {
       console.error('RedigerbarMaltekst: Failed to get texts', e, query);
       insertRedigerbarMaltekst();
     }
-  }, [query, path, oppgaveIsLoading, oppgave, getTexts, templateId, element.section, language, editor]);
+  }, [query, path, oppgaveIsLoading, oppgave, getTexts, templateId, element.section, editor]);
 
   useEffect(() => {
     if (isInitialized.current) {
@@ -129,5 +127,5 @@ export const LegacyRedigerbarMaltekst = ({
   );
 };
 
-const isRedigerbarMaltekst = (text: IText): text is IPublishedRichText =>
+const isRedigerbarMaltekst = (text: TextVersion): text is RichTextVersion =>
   text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
