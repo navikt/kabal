@@ -1,6 +1,8 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import {
   MaltekstseksjonReferences,
@@ -8,7 +10,8 @@ import {
 } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useUnpublishTextMutation } from '@app/redux-api/texts/mutations';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { isLanguage } from '@app/types/texts/language';
 import { IText } from '@app/types/texts/responses';
 import { useTextQuery } from './hooks/use-text-query';
 
@@ -22,8 +25,10 @@ interface Props {
 export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [, { isLoading }] = useUnpublishTextMutation({ fixedCacheKey: id });
-  const { data: versions = [] } = useGetTextVersionsQuery(id);
-  const draft = useMemo(() => versions.find(({ publishedDateTime }) => publishedDateTime === null), [versions]);
+  const { lang } = useParams();
+  const { data: text } = useGetTextByIdQuery(id);
+  const { data: versions = [] } = useGetTextVersionsQuery(isLanguage(lang) ? { id, language: lang } : skipToken);
+  // const draft = useMemo(() => versions.find(({ publishedDateTime }) => publishedDateTime === null), [versions]);
 
   if (!versions.some(({ published }) => published)) {
     return null;
@@ -33,7 +38,7 @@ export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
     return (
       <Header>
         <Container>
-          <ConfirmUnpublishTextButton id={id} title={title} textDraft={draft} {...props} />
+          <ConfirmUnpublishTextButton id={id} title={title} textDraft={text} {...props} />
           <Button
             size="small"
             variant="secondary"

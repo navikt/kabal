@@ -93,7 +93,7 @@ interface TagListProps {
   useName: (id: string) => string;
 }
 
-const TagList = ({ noneLabel, ...rest }: TagListProps) =>
+export const TagList = ({ noneLabel, ...rest }: TagListProps) =>
   rest.ids.length === 0 ? <CustomTag variant={rest.variant}>{noneLabel}</CustomTag> : <ResolvedTags {...rest} />;
 
 const MALTEKST_SECTION_IDS = Object.keys(MALTEKST_SECTION_NAMES);

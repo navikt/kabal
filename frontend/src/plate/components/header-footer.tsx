@@ -11,9 +11,9 @@ import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorR
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { ConsumerQuery, PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { PlainTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedPlainTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
-const lexSpecialis = (enhetId: string, texts: PlainTextVersion[]): PlainTextVersion | null => {
+const lexSpecialis = (enhetId: string, texts: PublishedPlainTextVersion[]): PublishedPlainTextVersion | null => {
   const sorted = texts
     .filter((t) => t.enhetIdList.includes(enhetId))
     .sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
@@ -23,7 +23,7 @@ const lexSpecialis = (enhetId: string, texts: PlainTextVersion[]): PlainTextVers
   return first ?? null;
 };
 
-const isPlainText = (text: TextVersion): text is PlainTextVersion =>
+const isPlainText = (text: PublishedTextVersion): text is PublishedPlainTextVersion =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
 type ElementTypes = HeaderElement | FooterElement;
@@ -45,7 +45,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
-  const [text, setText] = useState<PlainTextVersion>();
+  const [text, setText] = useState<PublishedPlainTextVersion>();
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
@@ -112,7 +112,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 };
 
 interface HeaderFooterContentProps {
-  text?: PlainTextVersion;
+  text?: PublishedPlainTextVersion;
   isLoading: boolean;
   type: typeof ELEMENT_HEADER | typeof ELEMENT_FOOTER;
 }

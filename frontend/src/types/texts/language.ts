@@ -4,4 +4,4 @@ export enum Language {
 }
 export const LANGUAGES = Object.values(Language);
 
-export const isLanguage = (value: string): value is Language => LANGUAGES.some((lang) => lang === value);
+export const isLanguage = (value: unknown): value is Language => LANGUAGES.some((lang) => lang === value);

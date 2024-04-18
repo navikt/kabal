@@ -1,4 +1,5 @@
 import { EditorValue } from '@app/plate/types';
+import { Language } from '@app/types/texts/language';
 import {
   DraftTextReadOnlyMetadata,
   ITextBaseMetadata,
@@ -53,17 +54,83 @@ export type IPlainText = INewPlainTextParams &
 
 export type IText = IRichText | IPlainText;
 
-export interface TextVersion extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
+export interface PublishedTextVersion extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
   textType: RichTextTypes | PlainTextTypes;
   id: string;
 }
 
-export interface RichTextVersion extends Omit<TextVersion, 'textType'> {
+export interface DraftTextVersion extends ITextBaseMetadata, DraftTextReadOnlyMetadata {
+  textType: RichTextTypes | PlainTextTypes;
+  id: string;
+}
+
+export interface PublishedRichTextVersion extends Omit<PublishedTextVersion, 'textType'> {
   textType: RichTextTypes;
   richText: EditorValue;
 }
 
-export interface PlainTextVersion extends Omit<TextVersion, 'textType'> {
+export interface PublishedPlainTextVersion extends Omit<PublishedTextVersion, 'textType'> {
   textType: PlainTextTypes;
   plainText: string;
+}
+
+export interface DraftRichTextVersion extends Omit<DraftTextVersion, 'textType'> {
+  textType: RichTextTypes;
+  richText: EditorValue;
+}
+
+export interface DraftPlainTextVersion extends Omit<DraftTextVersion, 'textType'> {
+  textType: PlainTextTypes;
+  plainText: string;
+}
+
+export type RichTextVersion = PublishedRichTextVersion | DraftRichTextVersion;
+export type PlainTextVersion = PublishedPlainTextVersion | DraftPlainTextVersion;
+export type TextVersion = RichTextVersion | PlainTextVersion;
+
+export interface TranslatedRichTexts {
+  [Language.NB]: EditorValue;
+  [Language.NN]: EditorValue;
+}
+
+export interface TranslatedPlainTexts {
+  [Language.NB]: string;
+  [Language.NN]: string;
+}
+
+export interface SearchableTextItem {
+  id: string;
+  title: string;
+  modified: string; // Siste endring i title, richtext (bokmål/nynorsk), plaintext (bokmål/nynorsk) eller metadata.
+  publishedDateTime: string | null;
+  created: string;
+  textType: RichTextTypes | PlainTextTypes;
+  richText: TranslatedRichTexts | null;
+  plainText: TranslatedPlainTexts | null;
+}
+
+interface RichTextContent {
+  richText: EditorValue;
+  title: string;
+  textType: RichTextTypes;
+  id: string;
+}
+
+interface PlainTextContent {
+  plainText: string;
+  title: string;
+  textType: PlainTextTypes;
+  enhetIdList: string[];
+  id: string;
+}
+
+export interface PublishedRichTextContent extends PublishedTextReadOnlyMetadata, RichTextContent {}
+
+export interface DraftRichTextContent extends DraftTextReadOnlyMetadata, RichTextContent {}
+
+export interface PublishedPlainTextContent extends PublishedTextReadOnlyMetadata, PlainTextContent {}
+
+export interface DraftPlainTextContent extends DraftTextReadOnlyMetadata, PlainTextContent {
+  modified: string; // Datetime
+  created: string; // Datetime
 }

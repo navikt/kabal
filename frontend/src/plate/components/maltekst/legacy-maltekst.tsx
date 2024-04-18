@@ -23,7 +23,7 @@ import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
 export const LegacyMaltekst = ({
   editor,
@@ -133,4 +133,5 @@ export const LegacyMaltekst = ({
   );
 };
 
-const isMaltekst = (text: TextVersion): text is RichTextVersion => text.textType === RichTextTypes.MALTEKST;
+const isMaltekst = (text: PublishedTextVersion): text is PublishedRichTextVersion =>
+  text.textType === RichTextTypes.MALTEKST;

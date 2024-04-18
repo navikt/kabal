@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Language } from '@app/types/texts/language';
 
 interface Params {
   id?: string | null;
@@ -37,7 +38,9 @@ const calculatePath = (
     return path;
   }
 
-  path += `/${newId}`;
+  const lang = oldParams.lang ?? Language.NB;
+
+  path += `/${newId}/${lang}`;
 
   const newVersionId = newParams.versionId ?? oldParams.versionId;
 

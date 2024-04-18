@@ -1,6 +1,6 @@
 import { EditorValue } from '@app/plate/types';
 import { Language } from '@app/types/texts/language';
-import { IGetTextsParams, RichTextTypes } from '../common-text-types';
+import { ApiQuery, IGetTextsParams, RichTextTypes } from '../common-text-types';
 import { IText } from './responses';
 
 export type { INewTextParams, INewPlainTextParams, INewRichTextParams } from './common';
@@ -17,7 +17,12 @@ export interface IUpdateTextTypeParams {
   oldTextType: RichTextTypes;
 }
 
-export interface IDeleteTextDraftParams extends IUpdateBaseParams {
+interface IDeleteBaseParams {
+  id: string;
+  query: ApiQuery;
+}
+
+export interface IDeleteTextDraftParams extends IDeleteBaseParams {
   title: string;
   lastPublishedVersion: IText | undefined;
 }
@@ -29,7 +34,7 @@ export interface IUpdateTextContentParams extends IUpdateBaseParams {
 
 export interface IUpdateTextPlainTextParams extends IUpdateBaseParams {
   plainText: string;
-  language: Language;
+  // language: Language;
 }
 
 export interface IUpdateTextTemplateSectionIdListParams extends IUpdateBaseParams {
@@ -58,4 +63,5 @@ export interface ICreateDraftFromVersionParams {
   title: string;
   versionId: string;
   query: IGetTextsParams;
+  language: Language;
 }

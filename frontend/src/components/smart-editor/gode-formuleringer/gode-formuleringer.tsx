@@ -21,7 +21,7 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 import { useQuery } from '../hooks/use-query';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -35,7 +35,7 @@ type ActiveSection = TemplateSections | NONE_TYPE;
 const filterTemplateSection = (
   templateId: TemplateIdEnum,
   activeSection: ActiveSection,
-  godFormulering: TextVersion,
+  godFormulering: PublishedTextVersion,
 ): boolean => {
   if (godFormulering.templateSectionIdList.length === 0) {
     return true;
@@ -56,10 +56,10 @@ const filterTemplateSection = (
 };
 
 const isFilteredPublishedRichText = (
-  text: TextVersion,
+  text: PublishedTextVersion,
   templateId: TemplateIdEnum,
   activeSection: ActiveSection,
-): text is RichTextVersion =>
+): text is PublishedRichTextVersion =>
   text.textType === RichTextTypes.GOD_FORMULERING && filterTemplateSection(templateId, activeSection, text);
 
 export const GodeFormuleringer = ({ templateId }: Props) => {
@@ -85,7 +85,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const texts = useMemo(() => {
     if (filter.length === 0) {
-      const result: RichTextVersion[] = [];
+      const result: PublishedRichTextVersion[] = [];
 
       for (const text of data) {
         if (isFilteredPublishedRichText(text, templateId, activeSection)) {
@@ -96,11 +96,11 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       return result;
     }
 
-    const result: [RichTextVersion, number][] = [];
+    const result: [PublishedRichTextVersion, number][] = [];
 
     for (const text of data) {
       if (isFilteredPublishedRichText(text, templateId, activeSection)) {
-        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text));
+        const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text.richText));
 
         if (score > 0) {
           result.push([text, score]);

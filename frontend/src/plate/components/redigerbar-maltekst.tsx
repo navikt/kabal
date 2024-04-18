@@ -13,7 +13,7 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/co
 import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
 export const RedigerbarMaltekst = ({
   attributes,
@@ -81,5 +81,5 @@ export const RedigerbarMaltekst = ({
   );
 };
 
-const isRedigerbarMaltekst = (text: TextVersion): text is RichTextVersion =>
+const isRedigerbarMaltekst = (text: PublishedTextVersion): text is PublishedRichTextVersion =>
   text.textType === RichTextTypes.REDIGERBAR_MALTEKST;

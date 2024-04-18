@@ -18,7 +18,7 @@ import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { EditorValue, MaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
 export const Maltekst = ({
   editor,
@@ -180,4 +180,5 @@ const ConfirmContainer = styled.div`
   border-top-right-radius: 0;
   box-shadow: var(--a-shadow-medium);
 `;
-const isMaltekst = (text: TextVersion): text is RichTextVersion => text.textType === RichTextTypes.MALTEKST;
+const isMaltekst = (text: PublishedTextVersion): text is PublishedRichTextVersion =>
+  text.textType === RichTextTypes.MALTEKST;

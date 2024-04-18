@@ -8,11 +8,11 @@ import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import { EditorValue, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
-import { RichTextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion } from '@app/types/texts/responses';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { AddButton } from './add-button';
 
-type Props = RichTextVersion & {
+type Props = PublishedRichTextVersion & {
   isFocused: boolean;
   onClick: () => void;
 };

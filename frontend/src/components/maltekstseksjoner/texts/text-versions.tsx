@@ -1,7 +1,7 @@
 import { Alert, Loader } from '@navikt/ds-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { useGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
 import { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
@@ -16,39 +16,41 @@ interface Props {
   className?: string;
 }
 
-export const TextVersions = ({ textId, className, ...rest }: Props) => {
-  const { data: versions, isLoading: versionsIsLoading, isError, error } = useGetTextVersionsQuery(textId);
+export const TextVersions = ({ textId, className, ...rest }: Props) => null;
 
-  if (isError) {
-    return (
-      <div className={className}>
-        <Alert variant="error" inline size="small">
-          Feil ved lasting: {'data' in error && isApiError(error.data) ? error.data.detail : 'Ukjent feil'}
-        </Alert>
-      </div>
-    );
-  }
+// export const TextVersions = ({ textId, className, ...rest }: Props) => {
+//   const { data: versions, isLoading: versionsIsLoading, isError, error } = useGetTextByIdQuery(textId);
 
-  if (versionsIsLoading || versions === undefined) {
-    return (
-      <div className={className}>
-        <Loader />
-      </div>
-    );
-  }
+//   if (isError) {
+//     return (
+//       <div className={className}>
+//         <Alert variant="error" inline size="small">
+//           Feil ved lasting: {'data' in error && isApiError(error.data) ? error.data.detail : 'Ukjent feil'}
+//         </Alert>
+//       </div>
+//     );
+//   }
 
-  const validVersions = versions.filter(isValidType);
+//   if (versionsIsLoading || versions === undefined) {
+//     return (
+//       <div className={className}>
+//         <Loader />
+//       </div>
+//     );
+//   }
 
-  const [firstVersion] = validVersions;
+//   const validVersions = versions.filter(isValidType);
 
-  if (firstVersion === undefined) {
-    return <p>Ingen tekst med ID {textId}</p>;
-  }
+//   const [firstVersion] = validVersions;
 
-  return (
-    <Loaded firstVersion={firstVersion} versions={validVersions} textId={textId} className={className} {...rest} />
-  );
-};
+//   if (firstVersion === undefined) {
+//     return <p>Ingen tekst med ID {textId}</p>;
+//   }
+
+//   return (
+//     <Loaded firstVersion={firstVersion} versions={validVersions} textId={textId} className={className} {...rest} />
+//   );
+// };
 
 const isValidType = (text: IText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
@@ -58,54 +60,54 @@ interface LoadedProps extends Props {
   versions: IRichText[];
 }
 
-const Loaded = ({ firstVersion, versions, isActive, className, ...props }: LoadedProps) => {
-  const tabsContainerRef = useRef<HTMLDivElement | null>(null);
-  const [tabId, setTabId] = useState(firstVersion.versionId);
+// const Loaded = ({ firstVersion, versions, isActive, className, ...props }: LoadedProps) => {
+//   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
+//   const [tabId, setTabId] = useState(firstVersion.versionId);
 
-  useEffect(() => {
-    if (isActive && tabsContainerRef.current !== null) {
-      setTimeout(() => {
-        if (tabsContainerRef.current !== null) {
-          tabsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
-  }, [isActive]);
+//   useEffect(() => {
+//     if (isActive && tabsContainerRef.current !== null) {
+//       setTimeout(() => {
+//         if (tabsContainerRef.current !== null) {
+//           tabsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+//         }
+//       }, 100);
+//     }
+//   }, [isActive]);
 
-  const onDraftDeleted = useCallback(() => {
-    const publishedVersion = versions.find((v) => v.publishedDateTime !== null);
+//   const onDraftDeleted = useCallback(() => {
+//     const publishedVersion = versions.find((v) => v.publishedDateTime !== null);
 
-    if (publishedVersion !== undefined) {
-      setTabId(publishedVersion?.versionId);
-    }
-  }, [versions]);
+//     if (publishedVersion !== undefined) {
+//       setTabId(publishedVersion?.versionId);
+//     }
+//   }, [versions]);
 
-  const hasMoreThanOneVersion = versions.length > 1;
+//   const hasMoreThanOneVersion = versions.length > 1;
 
-  return (
-    <VersionTabs<IDraftRichText, IPublishedRichText>
-      className={className}
-      first={firstVersion}
-      versions={versions}
-      selectedTabId={tabId}
-      setSelectedTabId={setTabId}
-      setRef={(ref) => {
-        tabsContainerRef.current = ref;
-      }}
-      createDraftPanel={(version) => (
-        <DraftText
-          {...props}
-          key={version.versionId}
-          isActive={isActive}
-          text={version}
-          isDeletable={hasMoreThanOneVersion}
-          onDraftDeleted={onDraftDeleted}
-        />
-      )}
-      createPublishedPanel={(version) => (
-        <PublishedRichText {...props} key={version.versionId} text={version} onDraftCreated={setTabId} />
-      )}
-      allowOverflow
-    />
-  );
-};
+//   return (
+//     <VersionTabs<IDraftRichText, IPublishedRichText>
+//       className={className}
+//       first={firstVersion}
+//       versions={versions}
+//       selectedTabId={tabId}
+//       setSelectedTabId={setTabId}
+//       setRef={(ref) => {
+//         tabsContainerRef.current = ref;
+//       }}
+//       createDraftPanel={(version) => (
+//         <DraftText
+//           {...props}
+//           key={version.versionId}
+//           isActive={isActive}
+//           text={version}
+//           isDeletable={hasMoreThanOneVersion}
+//           onDraftDeleted={onDraftDeleted}
+//         />
+//       )}
+//       createPublishedPanel={(version) => (
+//         <PublishedRichText {...props} key={version.versionId} text={version} onDraftCreated={setTabId} />
+//       )}
+//       allowOverflow
+//     />
+//   );
+// };

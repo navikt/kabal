@@ -16,15 +16,13 @@ import {
   StyledTitleIcon,
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
-import { isRichText } from '@app/functions/is-rich-plain-text';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { usePrevious } from '@app/hooks/use-previous';
-import { useGetTextsQuery } from '@app/redux-api/texts/queries';
+import { getTextAsString } from '@app/plate/functions/get-text-string';
+import { useGetTextListQuery } from '@app/redux-api/texts/queries';
 import { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
-import { LANGUAGES } from '@app/types/texts/language';
-import { IPlainText, IRichText, IText } from '@app/types/texts/responses';
-import { getTextAsString } from '../../../plate/functions/get-text-string';
+import { SearchableTextItem, TranslatedPlainTexts, TranslatedRichTexts } from '@app/types/texts/responses';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from '../hooks/use-text-query';
@@ -35,17 +33,29 @@ interface TextListProps {
   filter: string;
 }
 
-type ScoredText = IText & {
+type ScoredText = SearchableTextItem & {
   score: number;
 };
 
-const getAllRichTexts = (text: IRichText) => LANGUAGES.map((lang) => getTextAsString(text, lang));
+const getAllTexts = (text: SearchableTextItem): string[] => {
+  if (text.richText !== null) {
+    return getAllRichTexts(text.richText);
+  }
 
-const getAllPlainTexts = (text: IPlainText) => Object.values(text.plainText);
+  if (text.plainText !== null) {
+    return getAllPlainTexts(text.plainText);
+  }
+
+  return [];
+};
+
+const getAllRichTexts = (texts: TranslatedRichTexts) => Object.values(texts).map(getTextAsString);
+
+const getAllPlainTexts = (texts: TranslatedPlainTexts) => Object.values(texts);
 
 export const TextList = ({ textType, filter }: TextListProps) => {
   const textQuery = useTextQuery();
-  const { data = [], isLoading } = useGetTextsQuery(textQuery);
+  const { data = [], isLoading } = useGetTextListQuery(textQuery);
   const query = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const prevFilter = usePrevious(filter);
@@ -85,7 +95,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
     const result: ScoredText[] = [];
 
     for (const text of data) {
-      const texts = isRichText(text) ? getAllRichTexts(text) : getAllPlainTexts(text);
+      const texts = getAllTexts(text);
 
       const q = splitQuery(filter);
 

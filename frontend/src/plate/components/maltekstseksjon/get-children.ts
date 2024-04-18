@@ -22,10 +22,10 @@ import {
 } from '@app/plate/types';
 import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion } from '@app/types/texts/responses';
 
 export const getChildren = (
-  texts: RichTextVersion[],
+  texts: PublishedRichTextVersion[],
   previous: MaltekstseksjonElement,
   section: TemplateSections,
 ): (MaltekstElement | RedigerbarMaltekstElement)[] =>

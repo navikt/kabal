@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
-import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
@@ -13,12 +12,12 @@ import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/tex
 import { PlainTextTypes } from '@app/types/common-text-types';
 import { Language, isLanguage } from '@app/types/texts/language';
 import {
-  IDraftPlainText,
-  IDraftRichText,
-  IPlainText,
-  IPublishedPlainText,
-  IPublishedRichText,
-  IText,
+  DraftPlainTextVersion,
+  DraftRichTextVersion,
+  PlainTextVersion,
+  PublishedPlainTextVersion,
+  PublishedRichTextVersion,
+  RichTextVersion,
 } from '@app/types/texts/responses';
 import { DraftPlainText } from './draft-plain-text';
 import { DraftRichText } from './draft-rich-text';
@@ -63,8 +62,8 @@ export const StandaloneTextVersions = ({ id }: Props) => {
 };
 
 interface VersionsLoadedProps {
-  versions: IText[];
-  firstText: IText;
+  versions: (RichTextVersion | PlainTextVersion)[];
+  firstText: RichTextVersion | PlainTextVersion;
   id: string;
 }
 
@@ -88,7 +87,10 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
     <Container>
       <UnpublishTextButton {...version} id={id} />
 
-      <StyledVersionTabs<IDraftPlainText | IDraftRichText, IPublishedPlainText | IPublishedRichText>
+      <StyledVersionTabs<
+        DraftPlainTextVersion | DraftRichTextVersion,
+        PublishedPlainTextVersion | PublishedRichTextVersion
+      >
         first={firstText}
         versions={versions}
         selectedTabId={versionId}
@@ -101,28 +103,31 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
 };
 
 const DraftVersion = ({ text, ...rest }: DraftVersionProps) =>
-  isPlainText(text) ? <DraftPlainText text={text} {...rest} /> : <DraftRichText text={text} {...rest} />;
+  isPlainTextDraft(text) ? <DraftPlainText text={text} {...rest} /> : <DraftRichText text={text} {...rest} />;
 
 interface PublishedVersionProps {
-  text: IPublishedPlainText | IPublishedRichText;
+  text: PublishedPlainTextVersion | PublishedRichTextVersion;
   setVersionTabId: (versionId: string) => void;
 }
 
 const PublishedVersion = ({ text, setVersionTabId }: PublishedVersionProps) => {
-  if (isPlainText(text)) {
+  if (isPlainTextPublished(text)) {
     return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} />;
   }
 
   return (
     <PublishedContainer>
-      <Tags {...text} />
-
       <PublishedRichText text={text} onDraftCreated={setVersionTabId} />
     </PublishedContainer>
   );
 };
 
-const isPlainText = (text: IText): text is IPlainText =>
+const isPlainTextPublished = (
+  text: PublishedRichTextVersion | PublishedPlainTextVersion,
+): text is PublishedPlainTextVersion =>
+  text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
+
+const isPlainTextDraft = (text: DraftRichTextVersion | DraftPlainTextVersion): text is DraftPlainTextVersion =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
 const Container = styled.div`

@@ -1,6 +1,8 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
+import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
@@ -9,23 +11,24 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { IEditor } from '@app/types/common-text-types';
-import { IText } from '@app/types/texts/responses';
+import { isLanguage } from '@app/types/texts/language';
+import { DraftPlainTextContent, DraftRichTextVersion } from '@app/types/texts/responses';
 import { DeleteDraftButton } from '../delete-draft-button';
 
 interface Props {
-  text: IText;
+  text: DraftPlainTextContent | DraftRichTextVersion;
   onDraftDeleted: () => void;
   status: SavedStatusProps;
   onPublish: () => void;
 }
 
 export const Footer = ({ text, onDraftDeleted, status, onPublish }: Props) => {
-  const [, { isLoading: publishIsLoading }] = usePublishMutation({ fixedCacheKey: text.id });
-  const { data: versions = [] } = useGetTextVersionsQuery(text.id);
+  const { id, editors, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList, publishedDateTime, title } = text;
+  const [, { isLoading: publishIsLoading }] = usePublishMutation({ fixedCacheKey: id });
+  const { lang } = useParams();
+  const { data: versions = [] } = useGetTextVersionsQuery(isLanguage(lang) ? { id, language: lang } : skipToken);
 
-  const { id, editors, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList } = text;
-
-  const isDraft = text.publishedDateTime === null;
+  const isDraft = publishedDateTime === null;
 
   return (
     <Container>
@@ -34,7 +37,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish }: Props) => {
           Publiser
         </Button>
         {isDraft ? (
-          <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
+          <DeleteDraftButton id={id} title={title} onDraftDeleted={onDraftDeleted}>
             {`Slett ${versions.length <= 1 ? 'tekst' : 'utkast'}`}
           </DeleteDraftButton>
         ) : null}

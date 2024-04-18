@@ -5,11 +5,19 @@ import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { useLanguageRedaktoer } from '@app/hooks/use-language-redaktoer';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
-import { IPublishedTextMetadata } from '@app/types/texts/responses';
 
 interface Props {
-  text: IPublishedTextMetadata;
+  text: {
+    id: string;
+    versionId: string;
+    publishedDateTime: string;
+    title: string;
+    publishedBy: string;
+    draftMaltekstseksjonIdList: string[];
+    publishedMaltekstseksjonIdList: string[];
+  };
   onDraftCreated: (versionId: string) => void;
   maltekstseksjonId?: string;
 }
@@ -17,13 +25,18 @@ interface Props {
 export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId }: Props) => {
   const [createDraft] = useCreateDraftFromVersionMutation();
   const query = useTextQuery();
+  const language = useLanguageRedaktoer();
 
   const { id, versionId, publishedDateTime, title } = text;
 
   const createDraftAndNotify = useCallback(async () => {
-    const draft = await createDraft({ id, title, versionId, query }).unwrap();
+    if (language === null) {
+      return;
+    }
+
+    const draft = await createDraft({ id, title, versionId, query, language }).unwrap();
     onDraftCreated(draft.versionId);
-  }, [createDraft, id, title, versionId, query, onDraftCreated]);
+  }, [createDraft, id, title, versionId, query, language, onDraftCreated]);
 
   return (
     <Container>

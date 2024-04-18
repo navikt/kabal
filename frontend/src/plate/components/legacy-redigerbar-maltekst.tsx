@@ -15,7 +15,7 @@ import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/p
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   if (element.children.length !== 1) {
@@ -127,5 +127,5 @@ export const LegacyRedigerbarMaltekst = ({
   );
 };
 
-const isRedigerbarMaltekst = (text: TextVersion): text is RichTextVersion =>
+const isRedigerbarMaltekst = (text: PublishedTextVersion): text is PublishedRichTextVersion =>
   text.textType === RichTextTypes.REDIGERBAR_MALTEKST;

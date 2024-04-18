@@ -2,12 +2,12 @@ import { BodyLong, Heading } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
-import { Tags } from '@app/components/smart-editor-texts/edit/tags';
-import { getLanguageContent } from '@app/functions/get-translated-content';
-import { IPublishedPlainText } from '@app/types/texts/responses';
+import { TagContainer, TagList } from '@app/components/smart-editor-texts/edit/tags';
+import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
+import { PublishedPlainTextVersion } from '@app/types/texts/responses';
 
 interface Props {
-  text: IPublishedPlainText;
+  text: PublishedPlainTextVersion;
   onDraftCreated: (id: string) => void;
 }
 
@@ -17,10 +17,17 @@ export const PublishedPlainText = ({ text, onDraftCreated }: Props) => (
       {text.title}
     </Heading>
 
-    <Tags {...text} />
+    <TagContainer>
+      <TagList
+        variant="enhetIdList"
+        noneLabel="Alle enheter"
+        ids={text.enhetIdList}
+        useName={useEnhetNameFromIdOrLoading}
+      />
+    </TagContainer>
 
     <Background>
-      <StyledBodyLong>{getLanguageContent(language, text.plainText)}</StyledBodyLong>
+      <StyledBodyLong>{text.plainText}</StyledBodyLong>
     </Background>
 
     <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} />

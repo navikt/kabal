@@ -2,7 +2,7 @@
 import { formatISO } from 'date-fns';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { isPlainText, isPlainTextType, isRichText } from '@app/functions/is-rich-plain-text';
+import { isDraftPlainTextVersion, isPlainText, isPlainTextType, isRichText } from '@app/functions/is-rich-plain-text';
 import { reduxStore } from '@app/redux/configure-store';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { isApiRejectionError } from '@app/types/errors';
@@ -23,12 +23,16 @@ import {
   IUpdateTextYtelseHjemmelIdListParams,
 } from '@app/types/texts/params';
 import {
+  DraftPlainTextVersion,
+  DraftRichTextVersion,
   IDraftRichText,
   IPlainText,
   IPublishedPlainText,
   IPublishedRichText,
   IRichText,
   IText,
+  PublishedPlainTextVersion,
+  PublishedRichTextVersion,
 } from '@app/types/texts/responses';
 import { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
 import { maltekstseksjonerQuerySlice } from '../maltekstseksjoner/queries';
@@ -36,7 +40,7 @@ import { textsQuerySlice } from './queries';
 
 const textsMutationSlice = textsApi.injectEndpoints({
   endpoints: (builder) => ({
-    publish: builder.mutation<IPublishedPlainText, IUpdateBaseParams>({
+    publish: builder.mutation<PublishedPlainTextVersion | PublishedRichTextVersion, IUpdateBaseParams>({
       query: ({ id }) => ({
         method: 'POST',
         url: `/texts/${id}/publish`,
@@ -75,13 +79,13 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
           toast.success(`Teksten «${data.title}» ble publisert.`);
 
-          dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
+          // dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
 
-          dispatch(
-            textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-              draft.map((t) => (t.id === id ? data : t)),
-            ),
-          );
+          // dispatch(
+          //   textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+          //     draft.map((t) => (t.id === id ? data : t)),
+          //   ),
+          // );
 
           for (const language of LANGUAGES) {
             dispatch(
@@ -95,7 +99,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         }
       },
     }),
-    setTextType: builder.mutation<IRichText, IUpdateTextTypeParams>({
+    setTextType: builder.mutation<DraftRichTextVersion | DraftPlainTextVersion, IUpdateTextTypeParams>({
       query: ({ id, newTextType }) => ({
         method: 'PUT',
         url: `/texts/${id}/texttype`,
@@ -144,7 +148,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
           dispatch(
             textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) => {
               for (const version of draft) {
-                if (version.publishedDateTime === null && !isPlainText(version)) {
+                if (version.publishedDateTime === null && !isDraftPlainTextVersion(version)) {
                   version.textType = newTextType;
 
                   continue;
@@ -170,41 +174,55 @@ const textsMutationSlice = textsApi.injectEndpoints({
         url: `/texts/${id}/title`,
         body: { title },
       }),
-      onQueryStarted: async ({ id, title, query }, { queryFulfilled }) => {
+      onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
         const undo = update(id, { title }, query);
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
+          const { data } = await queryFulfilled;
+
+          dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
         } catch {
           undo();
         }
       },
     }),
-    createDraftFromVersion: builder.mutation<IText, ICreateDraftFromVersionParams>({
+    createDraftFromVersion: builder.mutation<DraftRichTextVersion, ICreateDraftFromVersionParams>({
       query: ({ id, versionId }) => ({
         method: 'POST',
-        url: `/texts/${id}/draft`,
+        url: `/richtexts/${id}/draft`,
         body: { versionId },
       }),
-      onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ id, title, query, language }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
 
         toast.success(`Nytt utkast for «${title}» opprettet.`);
 
-        for (const language of LANGUAGES) {
-          dispatch(
-            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) => [
-              data,
-              ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
-            ]),
-          );
-        }
-        dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
         dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-            draft.map((t) => (t.id === id ? data : t)),
-          ),
+          textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) => [
+            data,
+            ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+          ]),
         );
+
+        dispatch(
+          textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
+            if (!isRichText(draft)) {
+              return draft;
+            }
+
+            draft.richText[language] = [data.id, ...draft.richText[language]];
+
+            return draft;
+          }),
+        );
+
+        // TODO: Update getTextsList to include the new draft.
+
+        // dispatch(
+        //   textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+        //     draft.map((t) => (t.id === id ? data : t)),
+        //   ),
+        // );
       },
     }),
     addText: builder.mutation<IText, { text: INewTextParams; query: IGetTextsParams }>({
@@ -328,7 +346,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         }
       },
     }),
-    updateContent: builder.mutation<IRichText, IUpdateTextContentParams>({
+    updateContent: builder.mutation<DraftRichTextVersion, IUpdateTextContentParams>({
       query: ({ id, ...body }) => ({
         method: 'PUT',
         url: `/texts/${id}/content`,
@@ -362,7 +380,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const versionPatchResult = reduxStore.dispatch(
           textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
             draft.map((t) =>
-              t.publishedDateTime === null && t.id === id && isRichText(t)
+              t.publishedDateTime === null && t.id === id && !isDraftPlainTextVersion(t)
                 ? { ...t, richText: { ...t.richText, [language]: richText } }
                 : t,
             ),
@@ -378,43 +396,43 @@ const textsMutationSlice = textsApi.injectEndpoints({
         }
       },
     }),
-    updatePlainText: builder.mutation<IPlainText, IUpdateTextPlainTextParams>({
+    updatePlainText: builder.mutation<DraftPlainTextVersion, IUpdateTextPlainTextParams>({
       query: ({ id, plainText }) => ({
         method: 'PUT',
-        url: `/texts/${id}/plaintext`,
+        url: `/plaintexts/${id}`,
         body: { plainText },
       }),
-      onQueryStarted: async ({ id, plainText, language, query }, { queryFulfilled }) => {
-        const idPatchResult = reduxStore.dispatch(
-          textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
-            if (draft.publishedDateTime !== null) {
-              return draft;
-            }
+      onQueryStarted: async ({ id, plainText, query }, { queryFulfilled }) => {
+        // const idPatchResult = reduxStore.dispatch(
+        //   textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
+        //     if (draft.publishedDateTime !== null) {
+        //       return draft;
+        //     }
 
-            if (isPlainText(draft)) {
-              return { ...draft, plainText: { ...draft.plainText, [language]: plainText } };
-            }
+        //     if (isPlainText(draft)) {
+        //       return { ...draft, plainText: { ...draft.plainText, [language]: plainText } };
+        //     }
 
-            return draft;
-          }),
-        );
+        //     return draft;
+        //   }),
+        // );
 
-        const listPatchResult = reduxStore.dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-            draft.map((t) =>
-              t.publishedDateTime === null && t.id === id && isPlainText(t)
-                ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
-                : t,
-            ),
-          ),
-        );
+        // const listPatchResult = reduxStore.dispatch(
+        //   textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+        //     draft.map((t) =>
+        //       t.publishedDateTime === null && t.id === id && isPlainText(t)
+        //         ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
+        //         : t,
+        //     ),
+        //   ),
+        // );
 
-        const versionPatchResult = reduxStore.dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
-            draft.map((t) =>
-              t.publishedDateTime === null && t.id === id && isPlainText(t)
-                ? { ...t, plainText: { ...t.plainText, [language]: plainText } }
-                : t,
+        const versionPatchResults = LANGUAGES.map((language) =>
+          reduxStore.dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', { id, language }, (draft) =>
+              draft.map((t) =>
+                t.publishedDateTime === null && t.id === id && isDraftPlainTextVersion(t) ? { ...t, plainText } : t,
+              ),
             ),
           ),
         );
@@ -422,9 +440,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
         } catch {
-          idPatchResult.undo();
-          listPatchResult.undo();
-          versionPatchResult.undo();
+          // idPatchResult.undo();
+          // listPatchResult.undo();
+          versionPatchResults.forEach((patch) => patch.undo());
         }
       },
     }),
@@ -438,7 +456,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const undo = update(id, { templateSectionIdList }, query);
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
+          await queryFulfilled;
+          // pessimisticUpdate(id, (await queryFulfilled).data, query);
+          // TODO: templateSectionIdList is to be removed from texts?
         } catch {
           undo();
         }
@@ -455,7 +475,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const undo = update(id, { ytelseHjemmelIdList }, query);
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
+          await queryFulfilled;
+          // pessimisticUpdate(id, (await queryFulfilled).data, query);
+          // TODO: ytelseHjemmelIdList is to be removed from texts?
         } catch {
           undo();
         }
@@ -472,7 +494,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const undo = update(id, { utfallIdList }, query);
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
+          await queryFulfilled;
+          // pessimisticUpdate(id, (await queryFulfilled).data, query);
+          // TODO: utfallIdList is to be removed from texts?
         } catch {
           undo();
         }
@@ -489,7 +513,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const undo = update(id, { enhetIdList }, query);
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
+          await queryFulfilled;
+          // pessimisticUpdate(id, (await queryFulfilled).data, query);
+          // TODO: enhetIdList is to be removed from texts?
         } catch {
           undo();
         }
@@ -540,22 +566,27 @@ const update = (id: string, upd: Update, query: IGetTextsParams) => {
   };
 };
 
-const pessimisticUpdate = (id: string, data: IText, query: IGetTextsParams, showToast = true) => {
+const pessimisticUpdate = (
+  id: string,
+  data: DraftPlainTextVersion | DraftRichTextVersion,
+  query: IGetTextsParams,
+  showToast = true,
+) => {
   const { modified, title, editors } = data;
 
   if (showToast) {
     toast.success(`Malteksten «${title}» ble oppdatert.`);
   }
 
-  reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified, editors })),
-  );
+  // reduxStore.dispatch(
+  //   textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified, editors })),
+  // );
 
-  reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-      draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, modified, editors } : t)),
-    ),
-  );
+  // reduxStore.dispatch(
+  //   textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+  //     draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, modified, editors } : t)),
+  //   ),
+  // );
 
   for (const language of LANGUAGES) {
     reduxStore.dispatch(

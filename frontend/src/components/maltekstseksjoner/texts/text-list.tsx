@@ -7,7 +7,7 @@ import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstse
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { TextVersions } from './text-versions';
+import { Text } from './text';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
@@ -178,7 +178,7 @@ const ArrowButtonsContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledTextVersions = styled(TextVersions)`
+const StyledTextVersions = styled(Text)`
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
   border-width: 4px;

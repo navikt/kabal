@@ -5,11 +5,11 @@ import { StyledHeading, getTitle } from '@app/components/editable-title/editable
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { RichTextEditor } from '@app/plate/types';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText } from '@app/types/texts/responses';
+import { PublishedRichTextVersion } from '@app/types/texts/responses';
 import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 
 interface Props {
-  text: IPublishedRichText;
+  text: PublishedRichTextVersion;
   onDraftCreated: (versionId: string) => void;
   maltekstseksjonId?: string;
 }
@@ -27,7 +27,7 @@ export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId }: P
         </StyledHeading>
       </Header>
 
-      <RedaktoerRichText ref={editorRef} editorId={text.id} savedContent={text.content} readOnly />
+      <RedaktoerRichText ref={editorRef} editorId={text.id} savedContent={text.richText} readOnly />
 
       <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} maltekstseksjonId={maltekstseksjonId} />
     </Container>

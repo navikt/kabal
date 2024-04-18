@@ -11,9 +11,10 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/co
 import { EditorValue, RegelverkContainerElement, RegelverkElement } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { RichTextVersion, TextVersion } from '@app/types/texts/responses';
+import { PublishedRichTextVersion, PublishedTextVersion } from '@app/types/texts/responses';
 
-const isRegelverk = (text: TextVersion): text is RichTextVersion => text.textType === RichTextTypes.REGELVERK;
+const isRegelverk = (text: PublishedTextVersion): text is PublishedRichTextVersion =>
+  text.textType === RichTextTypes.REGELVERK;
 
 export const Regelverk = ({
   attributes,

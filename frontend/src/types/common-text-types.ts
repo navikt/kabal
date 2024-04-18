@@ -29,6 +29,8 @@ export interface PublishedTextReadOnlyMetadata {
   readonly publishedBy: string | 'LOADING';
   readonly publishedDateTime: string;
   readonly editors: IEditor[];
+  readonly modified: string;
+  readonly created: string;
   readonly versionId: string;
   readonly draftMaltekstseksjonIdList: string[];
   readonly publishedMaltekstseksjonIdList: string[];
@@ -39,6 +41,8 @@ export interface DraftTextReadOnlyMetadata {
   readonly publishedBy: null;
   readonly publishedDateTime: null;
   readonly editors: IEditor[];
+  readonly modified: string;
+  readonly created: string;
   readonly versionId: string;
   readonly draftMaltekstseksjonIdList: string[];
   readonly publishedMaltekstseksjonIdList: string[];
@@ -77,6 +81,7 @@ export interface ConsumerQuery extends AppQuery {
   language: Language;
 }
 
-export type IGetTextsParams = ApiQuery;
+// export type IGetTextsParams = ApiQuery;
+export type IGetTextsParams = Partial<ApiQuery>;
 
 export type TextTypes = RichTextTypes | PlainTextTypes;
