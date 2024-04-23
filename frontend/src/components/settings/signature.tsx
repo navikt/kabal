@@ -80,7 +80,6 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   const savedValue = saksbehandlerSignature[infoKey];
   const [setInfo, updateStatus] = useSetCustomInfoMutation();
   const [value, setDefaultValue] = useState<string>(savedValue ?? '');
-  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
   useEffect(() => {
     if (value === (savedValue ?? '')) {
@@ -98,7 +97,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
         label={label}
         value={value}
         onChange={({ target }) => setDefaultValue(target.value)}
-        disabled={saksbehandlerSignature.anonymous || !isMerkantil}
+        disabled={saksbehandlerSignature.anonymous}
       />
       <Status {...updateStatus} />
     </StyledSignature>
@@ -111,7 +110,6 @@ const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: Sig
   const savedValue = saksbehandlerSignature[infoKey];
   const [setInfo, updateStatus] = useSetCustomInfoMutation();
   const isRol = useHasRole(Role.KABAL_ROL);
-  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
   if (isRol) {
     return null;
@@ -119,7 +117,7 @@ const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: Sig
 
   return (
     <>
-      <StyledRadioGroup legend={label} value={savedValue} disabled={saksbehandlerSignature.anonymous || !isMerkantil}>
+      <StyledRadioGroup legend={label} value={savedValue} disabled={saksbehandlerSignature.anonymous}>
         {TITLES.map((value) => (
           <Radio name={infoKey} onChange={() => setInfo({ key: infoKey, value, navIdent })} value={value} key={value}>
             {value}
