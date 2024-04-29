@@ -4,12 +4,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { MaltekstseksjonPreview } from '@app/components/maltekstseksjoner/maltekstseksjon/preview';
 import { TextList } from '@app/components/maltekstseksjoner/texts/text-list';
-import { IGetTextsParams } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 enum TabsEnum {

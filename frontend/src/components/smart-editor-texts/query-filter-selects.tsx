@@ -6,9 +6,10 @@ import { NONE, NONE_OPTION, NONE_TYPE, SET_DELIMITER } from '@app/components/sma
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { TextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
-import { TextType, getTemplateOptions } from './get-template-options';
+import { getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
   children: string;
@@ -88,7 +89,7 @@ interface TemplateSelectProps {
   children: string;
   selected: string[];
   onChange: (value: string[]) => void;
-  textType: TextType;
+  textType: TextTypes;
   includeNoneOption?: boolean;
   templatesSelectable?: boolean;
 }

@@ -1,12 +1,12 @@
 import { MaltekstseksjonTagTypes, maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
-import { IGetTextsParams } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IS_LOCALHOST } from '../common';
 
 export const maltekstseksjonerQuerySlice = maltekstseksjonerApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getMaltekstseksjoner: builder.query<IMaltekstseksjon[], IGetTextsParams>({
+    getMaltekstseksjoner: builder.query<IMaltekstseksjon[], IGetMaltekstseksjonParams>({
       query: (params) => ({ url: '/maltekstseksjoner', params }),
       providesTags: (maltekstseksjoner) =>
         maltekstseksjoner?.map(({ id }) => ({ type: MaltekstseksjonTagTypes.MALTEKSTSEKSJON, id })) ?? [],

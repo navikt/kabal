@@ -10,6 +10,7 @@ import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -107,12 +108,13 @@ interface HistoryContentProps {
 
 const HistoryContent = ({ id, version }: HistoryContentProps) => {
   const edior = useMyPlateEditorRef(id);
+  const lang = useSmartEditorSpellCheckLanguage();
 
   useEffect(() => restore(edior, version), [edior, version]);
 
   return (
     <Sheet $minHeight>
-      <PlateEditor id={id} readOnly />
+      <PlateEditor id={id} readOnly lang={lang} />
     </Sheet>
   );
 };

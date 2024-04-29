@@ -37,6 +37,7 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import { Language } from '@app/types/texts/language';
 import { TemplateSections } from './template-sections';
 
 export enum TextAlign {
@@ -128,6 +129,7 @@ export interface TableCellElement extends BlockElement, TTableCellElement {
 export interface MaltekstElement extends BlockElement {
   type: typeof ELEMENT_MALTEKST;
   id?: string;
+  language?: Language;
   section: TemplateSections;
   children: ParentOrChildElement[] | [EmptyVoidElement];
 }
@@ -135,6 +137,7 @@ export interface MaltekstElement extends BlockElement {
 export interface RedigerbarMaltekstElement extends BlockElement {
   type: typeof ELEMENT_REDIGERBAR_MALTEKST;
   id?: string;
+  language?: Language;
   section: TemplateSections;
   children: ParentOrChildElement[] | [EmptyVoidElement];
 }

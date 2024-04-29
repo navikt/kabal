@@ -21,7 +21,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
   templateId: TemplateIdEnum.OVERSENDELSESBREV,
   type: SaksTypeEnum.ANKE,
   tittel: 'Tilsvarsbrev med oversendelsesbrev',
-  content: [
+  richText: [
     createCurrentDate(),
     createHeader(),
 

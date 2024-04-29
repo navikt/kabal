@@ -6,7 +6,7 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
 import { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
 import { PublishedRichText } from './published-rich-text';
-import { DraftText } from './text-draft';
+import { DraftText } from './text-draft/text-draft';
 
 interface Props {
   textId: string;
@@ -81,6 +81,7 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
   }, [versions]);
 
   const hasMoreThanOneVersion = versions.length > 1;
+  const hasDraft = versions.some((v) => v.publishedDateTime === null);
 
   return (
     <VersionTabs<IDraftRichText, IPublishedRichText>
@@ -103,7 +104,13 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
         />
       )}
       createPublishedPanel={(version) => (
-        <PublishedRichText {...props} key={version.versionId} text={version} onDraftCreated={setTabId} />
+        <PublishedRichText
+          {...props}
+          key={version.versionId}
+          text={version}
+          onDraftCreated={setTabId}
+          hasDraft={hasDraft}
+        />
       )}
       allowOverflow
     />

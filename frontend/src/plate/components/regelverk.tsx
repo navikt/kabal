@@ -10,10 +10,11 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { EditorValue, RegelverkContainerElement, RegelverkElement } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText, IText } from '@app/types/texts/responses';
+import { REGELVERK_TYPE } from '@app/types/common-text-types';
+import { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
+import { UNTRANSLATED } from '@app/types/texts/language';
 
-const isRegelverk = (text: IText): text is IPublishedRichText => text.textType === RichTextTypes.REGELVERK;
+const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
 export const Regelverk = ({
   attributes,
@@ -61,7 +62,7 @@ export const RegelverkContainer = ({
 }: PlateRenderElementProps<EditorValue, RegelverkContainerElement>) => {
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
-  const query = useQuery({ textType: RichTextTypes.REGELVERK });
+  const query = useQuery({ textType: REGELVERK_TYPE, language: UNTRANSLATED });
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 
@@ -79,7 +80,7 @@ export const RegelverkContainer = ({
     }
 
     const regelverk = (await getTexts(query).unwrap()).filter(isRegelverk);
-    const nodes = regelverk.sort((a, b) => sortWithOrdinals(a.title, b.title)).flatMap(({ content }) => content);
+    const nodes = regelverk.sort((a, b) => sortWithOrdinals(a.title, b.title)).flatMap(({ richText }) => richText);
 
     replaceNodeChildren(editor, { at, nodes });
 

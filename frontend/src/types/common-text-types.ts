@@ -1,48 +1,61 @@
+import { Language, UNTRANSLATED } from '@app/types/texts/language';
+
+export enum TextChangeType {
+  RICH_TEXT_NB = 'RICH_TEXT_NB',
+  RICH_TEXT_NN = 'RICH_TEXT_NN',
+  RICH_TEXT_UNTRANSLATED = 'RICH_TEXT_UNTRANSLATED',
+  PLAIN_TEXT_NB = 'PLAIN_TEXT_NB',
+  PLAIN_TEXT_NN = 'PLAIN_TEXT_NN',
+  TEXT_TYPE = 'TEXT_TYPE',
+  TEXT_VERSION_CREATED = 'TEXT_VERSION_CREATED',
+  TEXT_TITLE = 'TEXT_TITLE',
+  TEXT_UTFALL = 'TEXT_UTFALL',
+  TEXT_SECTIONS = 'TEXT_SECTIONS',
+  TEXT_YTELSE_HJEMMEL = 'TEXT_YTELSE_HJEMMEL',
+  SMART_EDITOR_VERSION = 'SMART_EDITOR_VERSION',
+  TEXT_ENHETER = 'TEXT_ENHETER',
+  UNKNOWN = 'UNKNOWN',
+}
+
 export interface IEditor {
   created: string;
-  modified: string;
+  changeType: TextChangeType;
   navIdent: string;
 }
 
-interface TextMetadata {
+export interface ITextBaseMetadata {
   templateSectionIdList: string[];
   ytelseHjemmelIdList: string[];
   utfallIdList: string[];
   enhetIdList: string[];
-}
-
-export interface ITextBaseMetadata extends TextMetadata {
   title: string;
 }
 
-export interface PublishedTextReadOnlyMetadata {
+interface ReadOnlyMetadata {
+  readonly id: string; // UUID
+  readonly modified: string; // Datetime
+  readonly created: string; // Datetime
+  readonly editors: IEditor[];
+  readonly versionId: string;
+  readonly draftMaltekstseksjonIdList: string[];
+  readonly publishedMaltekstseksjonIdList: string[];
+}
+
+export interface PublishedTextReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: boolean;
   readonly publishedBy: string | 'LOADING';
   readonly publishedDateTime: string;
-  readonly editors: IEditor[];
-  readonly versionId: string;
-  readonly draftMaltekstseksjonIdList: string[];
-  readonly publishedMaltekstseksjonIdList: string[];
 }
 
-export interface DraftTextReadOnlyMetadata {
+export interface DraftTextReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: false;
   readonly publishedBy: null;
   readonly publishedDateTime: null;
-  readonly editors: IEditor[];
-  readonly versionId: string;
-  readonly draftMaltekstseksjonIdList: string[];
-  readonly publishedMaltekstseksjonIdList: string[];
 }
 
-export type TextReadOnlyMetadata = PublishedTextReadOnlyMetadata | DraftTextReadOnlyMetadata;
-
 export enum RichTextTypes {
-  GOD_FORMULERING = 'GOD_FORMULERING',
   MALTEKST = 'MALTEKST',
-  MALTEKSTSEKSJON = 'MALTEKSTSEKSJON',
   REDIGERBAR_MALTEKST = 'REDIGERBAR_MALTEKST',
-  REGELVERK = 'REGELVERK',
 }
 
 export enum PlainTextTypes {
@@ -50,17 +63,32 @@ export enum PlainTextTypes {
   FOOTER = 'FOOTER',
 }
 
-export interface AppQuery {
+export interface IGetMaltekstseksjonParams {
   templateSectionIdList?: string[];
   ytelseHjemmelIdList?: string[];
   utfallIdList?: string;
   enhetIdList?: string[];
 }
 
-export interface ApiQuery extends AppQuery {
-  textType: RichTextTypes | PlainTextTypes;
+export interface IGetTextsParams extends IGetMaltekstseksjonParams {
+  textType: TextTypes;
 }
 
-export type IGetTextsParams = Partial<ApiQuery>;
+export interface IGetConsumerTextsParams extends IGetTextsParams {
+  language: Language | typeof UNTRANSLATED;
+}
 
-export type TextTypes = RichTextTypes | PlainTextTypes;
+export interface IGetConsumerTextParams {
+  language: Language | typeof UNTRANSLATED;
+  textId: string;
+}
+
+export const REGELVERK_TYPE = 'REGELVERK';
+export const GOD_FORMULERING_TYPE = 'GOD_FORMULERING';
+export const MALTEKSTSEKSJON_TYPE = 'MALTEKSTSEKSJON';
+export type TextTypes =
+  | RichTextTypes
+  | PlainTextTypes
+  | typeof REGELVERK_TYPE
+  | typeof GOD_FORMULERING_TYPE
+  | typeof MALTEKSTSEKSJON_TYPE;

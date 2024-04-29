@@ -16,6 +16,7 @@ import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { Language } from '@app/types/texts/language';
 import { getDocumentCount } from './get-document-count';
 import {
   StyledHeader,
@@ -65,6 +66,7 @@ export const NewDocument = ({ onCreate }: Props) => {
         creatorIdent: user.navIdent,
         creatorRole,
         parentId: null,
+        language: Language.NB,
       }).unwrap();
 
       return onCreate(id);

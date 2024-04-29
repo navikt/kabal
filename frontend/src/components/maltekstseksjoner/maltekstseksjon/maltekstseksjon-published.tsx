@@ -15,7 +15,7 @@ import {
 } from '@app/components/smart-editor-texts/edit/tags';
 import { TextHistory } from '@app/components/text-history/text-history';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TextListItem } from '../styled-components';
 import {
@@ -31,7 +31,7 @@ import { LoadTextListItem } from './list-item';
 
 interface MaltekstProps {
   maltekstseksjon: IPublishedMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
   onDraftCreated: (versionId: string) => void;
 }
 

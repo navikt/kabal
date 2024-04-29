@@ -23,7 +23,7 @@ import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText, IText } from '@app/types/texts/responses';
+import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
 export const LegacyMaltekst = ({
   editor,
@@ -57,7 +57,7 @@ export const LegacyMaltekst = ({
       hjemmelIdSet,
       utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
       data.filter(isMaltekst),
-    )?.content ?? [createEmptyVoid()];
+    )?.richText ?? [createEmptyVoid()];
 
     if (nodesEquals(element.children, maltekster)) {
       return;
@@ -132,4 +132,4 @@ export const LegacyMaltekst = ({
   );
 };
 
-const isMaltekst = (text: IText): text is IPublishedRichText => text.textType === RichTextTypes.MALTEKST;
+const isMaltekst = (text: IConsumerText): text is IConsumerRichText => text.textType === RichTextTypes.MALTEKST;

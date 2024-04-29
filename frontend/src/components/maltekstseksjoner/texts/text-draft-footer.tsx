@@ -1,5 +1,5 @@
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, Loader } from '@navikt/ds-react';
+import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
@@ -16,6 +16,7 @@ interface Props {
   onDraftDeleted: () => void;
   onPublish: () => void;
   maltekstseksjonId: string;
+  error?: string;
 }
 
 export const DraftTextFooter = ({
@@ -25,6 +26,7 @@ export const DraftTextFooter = ({
   onDraftDeleted,
   onPublish,
   maltekstseksjonId,
+  error,
 }: Props) => {
   const [, { isLoading: isPublishing }] = usePublishMutation({ fixedCacheKey: text.id });
   const { id, title, modified } = text;
@@ -42,6 +44,7 @@ export const DraftTextFooter = ({
       >
         Publiser
       </Button>
+      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       <DeleteDraftButton id={id} title={title} onDraftDeleted={onDraftDeleted}>
         {isDeletable ? 'Slett utkast' : 'Slett tekst'}
       </DeleteDraftButton>

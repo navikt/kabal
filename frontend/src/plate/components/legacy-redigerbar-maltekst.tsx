@@ -15,7 +15,7 @@ import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/p
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText, IText } from '@app/types/texts/responses';
+import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   if (element.children.length !== 1) {
@@ -42,7 +42,7 @@ export const LegacyRedigerbarMaltekst = ({
 
   const path = findNodePath(editor, element);
 
-  const isInitialized = useRef(!isNodeEmpty(editor, element));
+  const isInitialized = useRef(!isNodeEmpty(element));
 
   const insertRedigerbarMaltekst = useCallback(async () => {
     if (query === skipToken || path === undefined || oppgaveIsLoading || oppgave === undefined) {
@@ -64,7 +64,7 @@ export const LegacyRedigerbarMaltekst = ({
         hjemmelIdSet,
         utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
         tekster.filter(isRedigerbarMaltekst),
-      )?.content ?? [createSimpleParagraph()];
+      )?.richText ?? [createSimpleParagraph()];
 
       replaceNodeChildren(editor, { at: path, nodes });
     } catch (e) {
@@ -125,5 +125,5 @@ export const LegacyRedigerbarMaltekst = ({
   );
 };
 
-const isRedigerbarMaltekst = (text: IText): text is IPublishedRichText =>
+const isRedigerbarMaltekst = (text: IConsumerText): text is IConsumerRichText =>
   text.textType === RichTextTypes.REDIGERBAR_MALTEKST;

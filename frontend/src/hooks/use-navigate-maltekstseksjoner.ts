@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Language } from '@app/types/texts/language';
 
 interface PathParams {
   maltekstseksjonId?: string | null;
   maltekstseksjonVersionId?: string | null;
   textId?: string | null;
+  lang?: Language | null;
 }
 
 export const useNavigateMaltekstseksjoner = () => {
@@ -27,6 +29,10 @@ export const useMaltekstseksjonPath = (newParams: PathParams) => {
 
 const calculateMaltekstseksjonPath = (oldParams: Record<string, string | undefined>, newParams: PathParams): string => {
   let path = '/maltekstseksjoner';
+
+  const language = newParams.lang ?? oldParams.lang ?? Language.NB;
+
+  path += `/${language}`;
 
   if (newParams.maltekstseksjonId === null) {
     return path;

@@ -7,9 +7,8 @@ import { createDragUI } from '@app/components/maltekstseksjoner/drag-and-drop/cr
 import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { TextLink } from '../text-link';
@@ -17,7 +16,7 @@ import { TextLink } from '../text-link';
 interface LoadTextListItemProps {
   textId: string;
   maltekstseksjon: IMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextListItemProps) => {

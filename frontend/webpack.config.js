@@ -70,7 +70,7 @@ module.exports = (_env, { mode }) => ({
         target: 'https://telemetry.ekstern.dev.nav.no',
         context: ['/collect'],
         changeOrigin: true,
-      }
+      },
     ],
   },
   plugins: [

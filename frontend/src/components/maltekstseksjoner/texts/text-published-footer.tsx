@@ -6,15 +6,16 @@ import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-ref
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
-import { IPublishedTextMetadata } from '@app/types/texts/responses';
+import { IPublishedText } from '@app/types/texts/responses';
 
 interface Props {
-  text: IPublishedTextMetadata;
+  text: IPublishedText;
   onDraftCreated: (versionId: string) => void;
   maltekstseksjonId?: string;
+  hasDraft: boolean;
 }
 
-export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId }: Props) => {
+export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId, hasDraft }: Props) => {
   const [createDraft] = useCreateDraftFromVersionMutation();
   const query = useTextQuery();
 
@@ -27,9 +28,11 @@ export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId }:
 
   return (
     <Container>
-      <Button size="small" variant="secondary" onClick={createDraftAndNotify}>
-        Opprett utkast basert på denne versjonen
-      </Button>
+      {hasDraft ? null : (
+        <Button size="small" variant="secondary" onClick={createDraftAndNotify}>
+          Opprett utkast basert på denne versjonen
+        </Button>
+      )}
       <Right>
         <div style={{ display: 'flex' }}>
           <AllMaltekstseksjonReferences

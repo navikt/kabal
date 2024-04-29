@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
-import { AppQuery } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 
 interface BaseProps {
   useName: (id: string) => string;
@@ -47,7 +47,7 @@ const StyledTag = styled(Tag)<StyledTagProps>`
   background-color: ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-100)`};
 `;
 
-const VARIANTS: Record<keyof AppQuery, string> = {
+const VARIANTS: Record<keyof IGetMaltekstseksjonParams, string> = {
   templateSectionIdList: 'red',
   ytelseHjemmelIdList: 'blue',
   utfallIdList: 'limegreen',

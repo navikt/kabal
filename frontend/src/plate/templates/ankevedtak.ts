@@ -18,7 +18,7 @@ import { TemplateSections } from '../template-sections';
 export const ANKEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ANKEVEDTAK,
   tittel: 'Vedtak/beslutning (anke)',
-  content: [
+  richText: [
     createCurrentDate(),
     createHeader(),
     createMaltekstseksjon(TemplateSections.TITLE),

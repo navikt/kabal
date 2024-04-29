@@ -2,7 +2,7 @@ import { Skeleton } from '@navikt/ds-react';
 import { css, styled } from 'styled-components';
 
 export const StyledGodeFormuleringer = styled.section`
-  margin-top: 16px;
+  padding-top: 16px;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -18,6 +18,7 @@ export const Top = styled.div`
   flex-shrink: 0;
   row-gap: 8px;
   padding-right: 16px;
+  padding-left: 4px;
 `;
 
 export const Header = styled.header`
@@ -33,6 +34,7 @@ export const ListContainer = styled.div`
   flex-grow: 1;
   row-gap: 16px;
   padding-right: 16px;
+  padding-left: 4px;
 `;
 
 export const GodeFormuleringerTitle = styled.h1`

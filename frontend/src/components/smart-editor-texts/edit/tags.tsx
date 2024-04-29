@@ -4,50 +4,50 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';
+import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import { AppQuery, PlainTextTypes, RichTextTypes } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { IText } from '@app/types/texts/responses';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
 export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {
-  const isHeaderFooter = textType === PlainTextTypes.HEADER || textType === PlainTextTypes.FOOTER;
-  const hasFixedLocation = isHeaderFooter || textType === RichTextTypes.REGELVERK;
+  const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
   const expandedYtelseHjemmelIdList = useExpandedYtelseHjemmelIdList(ytelseHjemmelIdList);
 
   return (
     <TagContainer>
-      {isHeaderFooter || hasFixedLocation ? null : (
+      {templateSection ? (
         <TagList
           variant="templateSectionIdList"
           noneLabel="Ingen maler eller seksjoner"
           ids={templateSectionIdList}
           useName={getTemaplateAndSectionName}
         />
-      )}
-      {isHeaderFooter ? null : (
+      ) : null}
+      {ytelseHjemmel ? (
         <TagList
           variant="ytelseHjemmelIdList"
           noneLabel="Alle ytelser og hjemler"
           ids={expandedYtelseHjemmelIdList}
           useName={useYtelseLovkildeAndHjemmelName}
         />
-      )}
-      {isHeaderFooter ? null : (
+      ) : null}
+      {utfall ? (
         <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfallIdList} useName={useUtfallNameOrLoading} />
-      )}
-      {!isHeaderFooter ? null : (
+      ) : null}
+      {enhet ? (
         <TagList
           variant="enhetIdList"
           noneLabel="Alle enheter"
           ids={enhetIdList}
           useName={useEnhetNameFromIdOrLoading}
         />
-      )}
+      ) : null}
     </TagContainer>
   );
 };
@@ -87,7 +87,7 @@ const useExpandedYtelseHjemmelIdList = (selectedList: string[]): string[] => {
 };
 
 interface TagListProps {
-  variant: keyof AppQuery;
+  variant: keyof IGetMaltekstseksjonParams;
   noneLabel: string;
   ids: string[];
   useName: (id: string) => string;

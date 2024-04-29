@@ -9,19 +9,13 @@ import {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATES } from '@app/plate/templates/templates';
-import { RichTextTypes } from '@app/types/common-text-types';
+import { GOD_FORMULERING_TYPE, MALTEKSTSEKSJON_TYPE, RichTextTypes, TextTypes } from '@app/types/common-text-types';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 
-export type TextType =
-  | RichTextTypes.MALTEKST
-  | RichTextTypes.REDIGERBAR_MALTEKST
-  | RichTextTypes.GOD_FORMULERING
-  | RichTextTypes.MALTEKSTSEKSJON;
-
-const getSectionType = (textType: TextType): SectionType | undefined => {
+const getSectionType = (textType: TextTypes): SectionType | undefined => {
   switch (textType) {
-    case RichTextTypes.MALTEKSTSEKSJON:
+    case MALTEKSTSEKSJON_TYPE:
       return ELEMENT_MALTEKSTSEKSJON;
     case RichTextTypes.MALTEKST:
       return ELEMENT_MALTEKST;
@@ -33,11 +27,11 @@ const getSectionType = (textType: TextType): SectionType | undefined => {
 };
 
 export const getTemplateOptions = (
-  textType: TextType,
+  textType: TextTypes,
   includeNone: boolean,
   templatesSelectable: boolean,
 ): NestedOption[] => {
-  const isMaltekst = textType !== RichTextTypes.GOD_FORMULERING;
+  const isMaltekst = textType !== GOD_FORMULERING_TYPE;
 
   const options: NestedOption[] = [];
 

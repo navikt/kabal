@@ -16,15 +16,16 @@ import {
   StyledTitleIcon,
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
-import { isRichText } from '@app/functions/is-rich-plain-text';
+import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
+import { Language, UNTRANSLATED } from '@app/types/texts/language';
 import { IText } from '@app/types/texts/responses';
 import { getTextAsString } from '../../../plate/functions/get-text-string';
-import { ModifiedCreatedDateTime } from '../../datetime/datetime';
+import { DateTime } from '../../datetime/datetime';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from '../hooks/use-text-query';
 import { QueryKey, SortKey, SortableHeader } from '../sortable-header';
@@ -32,13 +33,36 @@ import { QueryKey, SortKey, SortableHeader } from '../sortable-header';
 interface TextListProps {
   textType: TextTypes;
   filter: string;
+  language: Language;
 }
 
 type ScoredText = IText & {
   score: number;
 };
 
-export const TextList = ({ textType, filter }: TextListProps) => {
+const getString = (text: IText, language: Language) => {
+  if (isRichText(text) || isGodFormulering(text)) {
+    const richText = text.richText[language];
+
+    if (richText === null) {
+      return null;
+    }
+
+    return getTextAsString(richText);
+  }
+
+  if (isRegelverk(text)) {
+    return getTextAsString(text.richText[UNTRANSLATED]);
+  }
+
+  if (isPlainText(text)) {
+    return text.plainText[language];
+  }
+
+  return null;
+};
+
+export const TextList = ({ textType, filter, language }: TextListProps) => {
   const textQuery = useTextQuery();
   const { data = [], isLoading } = useGetTextsQuery(textQuery);
   const query = useParams<{ id: string }>();
@@ -80,7 +104,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
     const result: ScoredText[] = [];
 
     for (const text of data) {
-      const filterText = isRichText(text) ? getTextAsString(text) : text.plainText;
+      const filterText = text.title + getString(text, language) ?? '';
 
       const score = fuzzySearch(splitQuery(filter), filterText);
 
@@ -90,7 +114,7 @@ export const TextList = ({ textType, filter }: TextListProps) => {
     }
 
     return result;
-  }, [data, filter]);
+  }, [data, filter, language]);
 
   const sortedTexts: ScoredText[] = useMemo(
     () =>
@@ -137,16 +161,16 @@ export const TextList = ({ textType, filter }: TextListProps) => {
         />
       </StyledHeaders>
       <StyledList>
-        {sortedTexts.map(({ id, title, modified, created, publishedDateTime, score }) => (
+        {sortedTexts.map(({ id, title, modified, publishedDateTime, score }) => (
           <ListItem key={id} $active={query.id === id}>
-            <StyledLink to={`${getPathPrefix(textType)}/${id}${window.location.search}`}>
+            <StyledLink to={`${getPathPrefix(textType)}/${language}/${id}${window.location.search}`}>
               <StyledTitle>
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
               </StyledTitle>
 
               <StatusTag hasDraft={publishedDateTime === null} />
-              <ModifiedCreatedDateTime modified={modified} created={created} />
+              <DateTime dateTime={modified} />
               <span>{score.toFixed(0)} %</span>
             </StyledLink>
           </ListItem>

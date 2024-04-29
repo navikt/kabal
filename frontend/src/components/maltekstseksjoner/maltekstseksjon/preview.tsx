@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { EditorValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
@@ -20,7 +22,8 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [getText] = useLazyGetTextByIdQuery();
   const { textIdList } = maltekstseksjon;
-  const editorId = textIdList.join(':');
+  const lang = useRedaktoerLanguage();
+  const editorId = `${textIdList.join(':')}-${lang}-preview`;
 
   useEffect(() => {
     setError(null);
@@ -28,7 +31,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
     const promises = textIdList.map((textId) => getText(textId, true).unwrap());
 
     Promise.all(promises)
-      .then((_texts) => setTexts(_texts.filter(isRichText)))
+      .then((textList) => setTexts(textList.filter(isRichText)))
       .catch((e) => setError('data' in e && isApiError(e.data) ? e.data.detail : e.message));
   }, [getText, textIdList]);
 
@@ -50,14 +53,23 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
     );
   }
 
-  const savedContent = texts.reduce<EditorValue>((acc, { content }) => [...acc, ...content], []);
+  const savedContent = texts.reduce<EditorValue>((acc, { richText }) => {
+    const content = richText[lang];
+
+    return content === null ? acc : [...acc, ...content];
+  }, []);
 
   if (isUpdating) {
     return (
       <Section>
         <Overlay>
           <StyledLoader size="large" />
-          <RedaktoerRichText editorId={editorId} savedContent={savedContent} readOnly />
+          <RedaktoerRichText
+            editorId={editorId}
+            savedContent={savedContent}
+            readOnly
+            lang={SPELL_CHECK_LANGUAGES[lang]}
+          />
         </Overlay>
       </Section>
     );
@@ -75,7 +87,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
 
   return (
     <Section>
-      <RedaktoerRichText editorId={editorId} savedContent={savedContent} readOnly />
+      <RedaktoerRichText editorId={editorId} savedContent={savedContent} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
     </Section>
   );
 };

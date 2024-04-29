@@ -4,6 +4,9 @@ import { Plate } from '@udecode/plate-common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getTitle } from '@app/components/editable-title/editable-title';
+import { isNotNull } from '@app/functions/is-not-type-guards';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
@@ -21,6 +24,7 @@ export const Preview = ({ id }: Props) => {
   const { data: maltekstseksjon } = useGetMaltekstseksjonQuery(id ?? skipToken);
   const [getContent] = useLazyGetTextByIdQuery();
   const [children, setChildren] = useState<RootElement[] | null>(null);
+  const lang = useRedaktoerLanguage();
 
   const getChildren = useCallback(async () => {
     if (maltekstseksjon === undefined) {
@@ -29,10 +33,13 @@ export const Preview = ({ id }: Props) => {
 
     const texts = await Promise.all(maltekstseksjon.textIdList.map((tId) => getContent(tId, false).unwrap()));
 
-    const c: RootElement[] = texts.filter(isMaltekstOrRedigerbarMaltekst).flatMap((text) => text.content);
+    const c: RootElement[] = texts
+      .filter(isMaltekstOrRedigerbarMaltekst)
+      .flatMap((text) => text.richText[lang])
+      .filter(isNotNull);
 
     setChildren(c);
-  }, [getContent, maltekstseksjon]);
+  }, [getContent, lang, maltekstseksjon]);
 
   useEffect(() => {
     getChildren();
@@ -54,7 +61,7 @@ export const Preview = ({ id }: Props) => {
         </Heading>
         <Sheet>
           <Plate<EditorValue, RichTextEditor> id={id} initialValue={children} readOnly plugins={previewPlugins}>
-            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
+            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
         </Sheet>
       </PreviewBackground>

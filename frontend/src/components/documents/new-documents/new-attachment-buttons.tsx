@@ -14,6 +14,7 @@ import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { Role } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { Language } from '@app/types/texts/language';
 
 interface Props {
   document: IMainDocument;
@@ -74,9 +75,10 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
       creatorIdent: user.navIdent,
       creatorRole: Role.KABAL_ROL,
       tittel: 'Svar fra rådgivende overlege',
-      content: ROL_ANSWERS_TEMPLATE.content,
+      richText: ROL_ANSWERS_TEMPLATE.richText,
       dokumentTypeId: ROL_ANSWERS_TEMPLATE.dokumentTypeId,
       templateId: ROL_ANSWERS_TEMPLATE.templateId,
+      language: Language.NB,
     });
 
   return (

@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ApiQuery } from '@app/types/common-text-types';
+import { IGetTextsParams } from '@app/types/common-text-types';
 import { useTextType } from './use-text-type';
 
-type Query = Partial<ApiQuery>;
-
-export const useTextQuery = (): Query => {
+export const useTextQuery = (): IGetTextsParams => {
   const [params] = useSearchParams();
   const textType = useTextType();
 
@@ -14,16 +12,18 @@ export const useTextQuery = (): Query => {
   const enhetIdList = params.get('enhetIdList');
   const templateSectionIdList = params.get('templateSectionIdList');
 
-  const query: Query = useMemo(
-    () => ({
+  return useMemo(() => {
+    const q: IGetTextsParams = {
       ytelseHjemmelIdList: ytelseHjemmelIdList?.split(','),
-      utfallIdList: utfallIdList ?? undefined,
       enhetIdList: enhetIdList?.split(','),
       templateSectionIdList: templateSectionIdList?.split(','),
       textType,
-    }),
-    [enhetIdList, ytelseHjemmelIdList, templateSectionIdList, textType, utfallIdList],
-  );
+    };
 
-  return query;
+    if (utfallIdList !== null) {
+      q.utfallIdList = utfallIdList;
+    }
+
+    return q;
+  }, [enhetIdList, ytelseHjemmelIdList, templateSectionIdList, textType, utfallIdList]);
 };

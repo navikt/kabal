@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import { ModifiedCreatedDateTime } from '@app/components/datetime/datetime';
+import { DateTime } from '@app/components/datetime/datetime';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { Filters } from '@app/components/maltekstseksjoner/filters';
@@ -18,7 +18,7 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { Container, DateTimeContainer, Header, MetadataContainer } from '../common';
 import { Actions } from './actions';
@@ -26,7 +26,7 @@ import { Sidebar } from './sidebar';
 
 interface MaltekstProps {
   maltekstseksjon: IDraftMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
   onDraftDeleted: () => void;
 }
 
@@ -61,11 +61,7 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
         <MetadataContainer>
           <DateTimeContainer>
             <strong>Sist endret:</strong>
-            {isUpdating ? (
-              <Loader size="xsmall" />
-            ) : (
-              <ModifiedCreatedDateTime modified={maltekstseksjon.modified} created={maltekstseksjon.created} />
-            )}
+            {isUpdating ? <Loader size="xsmall" /> : <DateTime dateTime={maltekstseksjon.modified} />}
           </DateTimeContainer>
           <span>av {lastEditor === undefined ? 'Ukjent' : <EditorName editorId={lastEditor.navIdent} />}</span>
           <TextHistory {...maltekstseksjon} isUpdating={isUpdating} />

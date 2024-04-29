@@ -1,26 +1,29 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Tag } from '@navikt/ds-react';
 import { Plate } from '@udecode/plate-common';
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
+import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import { EditorValue, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
-import { IRichText } from '@app/types/texts/responses';
-import { ModifiedCreatedDateTime } from '../../datetime/datetime';
+import { NonNullableGodFormulering } from '@app/types/texts/consumer';
+import { LANGUAGE_NAMES } from '@app/types/texts/language';
+import { DateTime } from '../../datetime/datetime';
 import { AddButton } from './add-button';
 
-type Props = IRichText & {
+type Props = NonNullableGodFormulering & {
   isFocused: boolean;
   onClick: () => void;
 };
 
-export const GodFormulering = ({ title, content, modified, created, isFocused, onClick, id }: Props) => {
+export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, onClick, id, language }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const editor = useMyPlateEditorState();
+  const primaryLanguage = useSmartEditorLanguage();
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {
@@ -34,10 +37,17 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
         {title}
       </Heading>
       <ActionWrapper>
-        <ModifiedCreatedDateTime modified={modified} created={created} />
+        <Left>
+          <DateTime dateTime={publishedDateTime} title="Sist endret" icon={<CalendarIcon aria-hidden />} />
+          {primaryLanguage === language ? null : (
+            <Tag size="xsmall" variant="warning">
+              {LANGUAGE_NAMES[language]}
+            </Tag>
+          )}
+        </Left>
         <AddButton
           editor={editor}
-          content={content}
+          content={richText}
           title="Sett inn god formulering i markert område"
           disabledTitle="Mangler markert område å sette inn god formulering i"
         >
@@ -46,8 +56,8 @@ export const GodFormulering = ({ title, content, modified, created, isFocused, o
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <Plate<EditorValue, RichTextEditor> initialValue={content} id={id} readOnly plugins={previewPlugins}>
-            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
+          <Plate<EditorValue, RichTextEditor> initialValue={richText} id={id} readOnly plugins={previewPlugins}>
+            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} lang={SPELL_CHECK_LANGUAGES[language]} />
           </Plate>
         </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
@@ -73,6 +83,11 @@ const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
   </Button>
 );
 
+const Left = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
 const ActionWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -95,7 +110,6 @@ const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
   padding: 8px;
   background-color: var(--a-bg-subtle);
   outline: ${OUTLINE_WIDTH} solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
-  transition: outline 0.2s ease-in-out;
   white-space: normal;
 `;
 

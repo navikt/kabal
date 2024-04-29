@@ -3,6 +3,8 @@ import { formatISO } from 'date-fns';
 import { Patch } from 'immer';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { EditorValue } from '@app/plate/types';
 import { reduxStore } from '@app/redux/configure-store';
 import {
   ConsumerMaltekstseksjonerTagTypes,
@@ -11,7 +13,7 @@ import {
 import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { IGetTextsParams } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
 import { isApiRejectionError } from '@app/types/errors';
 import {
   ICreateDraftFromMaltekstseksjonVersionParams,
@@ -30,7 +32,8 @@ import {
   IPublishWithTextsResponse,
   IPublishedMaltekstseksjon,
 } from '@app/types/maltekstseksjoner/responses';
-import { IPublishedText } from '@app/types/texts/responses';
+import { INewRichTextParams } from '@app/types/texts/common';
+import { LANGUAGES, Language } from '@app/types/texts/language';
 import { textsQuerySlice } from '../texts/queries';
 
 const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
@@ -189,21 +192,28 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
 
         const maltekstseksjonerPatch = dispatch(
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
-            draft.map((t) => {
-              if (t.id === id) {
-                const publishedProps: Pick<IPublishedText, 'published' | 'publishedDateTime' | 'publishedBy'> = {
-                  published: true,
-                  publishedDateTime: formatISO(new Date()),
-                  publishedBy: 'LOADING',
-                };
+            draft.map((section) => {
+              if (section.id === id) {
+                const publishedDateTime = formatISO(new Date());
 
-                for (const textId of t.textIdList) {
+                const publishedProps: Pick<
+                  PublishedTextReadOnlyMetadata,
+                  'published' | 'publishedDateTime' | 'publishedBy'
+                > = { published: true, publishedDateTime, publishedBy: 'LOADING' };
+
+                for (const textId of section.textIdList) {
                   textPatches.push(
-                    dispatch(
-                      consumerTextsApi.util.updateQueryData('getConsumerTextById', textId, (textDraft) => ({
-                        ...textDraft,
-                        ...publishedProps,
-                      })),
+                    ...LANGUAGES.map((language) =>
+                      dispatch(
+                        consumerTextsApi.util.updateQueryData(
+                          'getConsumerTextById',
+                          { textId, language },
+                          (textDraft) => ({
+                            ...textDraft,
+                            publishedDateTime: publishedProps.publishedDateTime,
+                          }),
+                        ),
+                      ),
                     ),
                     dispatch(
                       textsQuerySlice.util.updateQueryData('getTextById', textId, (textDraft) => ({
@@ -225,10 +235,10 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
                   );
                 }
 
-                return { ...t, ...publishedProps };
+                return { ...section, ...publishedProps };
               }
 
-              return t;
+              return section;
             }),
           ),
         );
@@ -262,7 +272,16 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           );
 
           for (const text of publishedTexts) {
-            dispatch(consumerTextsApi.util.updateQueryData('getConsumerTextById', text.id, () => text));
+            for (const language of LANGUAGES) {
+              dispatch(
+                consumerTextsApi.util.updateQueryData('getConsumerTextById', { textId: text.id, language }, () => ({
+                  ...text,
+                  richText: text.richText[language] ?? getFallbackContent(language, text.richText),
+                  language,
+                })),
+              );
+            }
+
             dispatch(textsQuerySlice.util.updateQueryData('getTextById', text.id, () => text));
             dispatch(
               textsQuerySlice.util.updateQueryData('getTextVersions', text.id, (versionsDraft) =>
@@ -398,7 +417,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
   }),
 });
 
-const update = (id: string, upd: Partial<IDraftMaltekstseksjon>, query: IGetTextsParams) => {
+const update = (id: string, upd: Partial<IDraftMaltekstseksjon>, query: IGetMaltekstseksjonParams) => {
   const draftPatchResult = reduxStore.dispatch(
     maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
       draft.map((version) => {
@@ -447,3 +466,18 @@ export const {
   usePublishWithTextsMutation,
   useUnpublishMaltekstseksjonMutation,
 } = maltekstseksjonerMutationSlice;
+
+const getFallbackContent = (language: Language, richTexts: INewRichTextParams['richText']): EditorValue => {
+  for (const lang of LANGUAGES) {
+    if (lang === language) {
+      continue;
+    }
+    const text = richTexts[lang];
+
+    if (text !== null) {
+      return text;
+    }
+  }
+
+  return [createSimpleParagraph()];
+};

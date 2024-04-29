@@ -6,7 +6,7 @@ import { EditorName } from '@app/components/editor-name/editor-name';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
-import { IEditor } from '@app/types/common-text-types';
+import { IEditor } from '@app/types/maltekstseksjoner/responses';
 
 interface PublishedProps {
   publishedDateTime: string;
@@ -62,8 +62,7 @@ export const TextHistory = ({
               </StyledTag>
               <span>
                 {' '}
-                av <EditorName key={editor.navIdent} editorId={editor.navIdent} />{' '}
-                {isoDateTimeToPretty(editor.modified)}
+                av <EditorName key={editor.navIdent} editorId={editor.navIdent} /> {isoDateTimeToPretty(editor.created)}
               </span>
             </ListItem>
           ))}

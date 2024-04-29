@@ -3,21 +3,25 @@ import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { ApiQuery, TextTypes } from '@app/types/common-text-types';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
+import { IGetConsumerTextsParams, IGetTextsParams, TextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Language, UNTRANSLATED } from '@app/types/texts/language';
 
 interface Params {
   textType: TextTypes;
   templateId?: TemplateIdEnum;
   section?: string;
+  language?: Language | typeof UNTRANSLATED;
 }
 
-export const useQuery = ({ textType, templateId, section }: Params) => {
+export const useQuery = ({ textType, templateId, section, language }: Params) => {
   const { data: oppgave, isLoading } = useOppgave();
   const { user } = useContext(StaticDataContext);
+  const defaultLanguagae = useSmartEditorLanguage();
 
-  return useMemo<ApiQuery | typeof skipToken>(() => {
+  return useMemo<IGetConsumerTextsParams | typeof skipToken>(() => {
     if (isLoading || oppgave === undefined) {
       return skipToken;
     }
@@ -29,16 +33,17 @@ export const useQuery = ({ textType, templateId, section }: Params) => {
         ? [`${templateId}${LIST_DELIMITER}${section}`, `${GLOBAL}${LIST_DELIMITER}${section}`]
         : [];
 
-    const query: ApiQuery = {
+    const query: IGetConsumerTextsParams = {
       ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
       enhetIdList: [user.ansattEnhet.id],
       templateSectionIdList: templateSectionList,
       textType,
+      language: language ?? defaultLanguagae,
     };
 
     return query;
-  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType]);
+  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType, language, defaultLanguagae]);
 };
 
 const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {
@@ -51,7 +56,10 @@ const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] =
   return result;
 };
 
-const getUtfallList = (extraUtfallIdSet: UtfallEnum[], utfallId: UtfallEnum | null): ApiQuery['utfallIdList'] => {
+const getUtfallList = (
+  extraUtfallIdSet: UtfallEnum[],
+  utfallId: UtfallEnum | null,
+): IGetTextsParams['utfallIdList'] => {
   const utfallSet: Set<UtfallEnum> = utfallId === null ? new Set([]) : new Set([utfallId]);
 
   for (const item of extraUtfallIdSet) {

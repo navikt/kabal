@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DragAndDropContext } from '../../drag-and-drop/drag-context';
 import { TextListItem } from '../../styled-components';
@@ -11,7 +11,7 @@ interface DraggableListItemProps {
   maltekst: IMaltekstseksjon;
   onDragEnter: () => void;
   onDrop: () => void;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export const DraggableListItem = ({ textId, maltekst, onDragEnter, onDrop, query }: DraggableListItemProps) => {

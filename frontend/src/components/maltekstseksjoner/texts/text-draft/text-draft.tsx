@@ -1,20 +1,26 @@
 import { HelpText, Switch, Tooltip } from '@navikt/ds-react';
 import { focusEditor, getEndPoint, isEditorFocused } from '@udecode/plate-common';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
+import { Container, Header, HeaderGroup } from '@app/components/maltekstseksjoner/texts/text-draft/styled-components';
+import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
+import { isNodeEmpty } from '@app/plate/utils/queries';
 import {
   usePublishMutation,
   useSetTextTitleMutation,
   useSetTextTypeMutation,
-  useUpdateContentMutation,
+  useUpdateRichTextMutation,
 } from '@app/redux-api/texts/mutations';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { LANGUAGES, Language, isLanguage } from '@app/types/texts/language';
 import { IDraftRichText } from '@app/types/texts/responses';
-import { areDescendantsEqual } from '../../../functions/are-descendants-equal';
-import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
-import { DraftTextFooter } from './text-draft-footer';
+import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
+import { RedaktoerRichText } from '../../../redaktoer-rich-text/redaktoer-rich-text';
+import { DraftTextFooter } from '../text-draft-footer';
 
 interface Props {
   text: IDraftRichText;
@@ -25,26 +31,22 @@ interface Props {
   maltekstseksjonId: string;
 }
 
+type RichTexts = Record<Language, EditorValue | null>;
+
 export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const [updateTextType, { isLoading: isTextTypeUpdating }] = useSetTextTypeMutation();
   const [updateTitle, { isLoading: isTitleUpdating }] = useSetTextTitleMutation();
-  const [updateContent, { isLoading: isUpdatingContent }] = useUpdateContentMutation();
+  const [updateRichText, { isLoading: isUpdatingContent }] = useUpdateRichTextMutation();
   const [publish] = usePublishMutation({ fixedCacheKey: text.id });
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
-  const [content, setContent] = useState(text.content);
+  const language = useRedaktoerLanguage();
+  const [richTexts, setRichTexts] = useState<RichTexts>(text.richText);
   const { id } = text;
   const isUpdating = useRef(false);
-  const contentRef = useRef(content);
+  const richTextRef = useRef(richTexts);
   const queryRef = useRef({ textType: text.textType });
-
-  useEffect(() => {
-    contentRef.current = content;
-  }, [content]);
-
-  useEffect(() => {
-    queryRef.current.textType = text.textType;
-  }, [text.textType]);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (isActive && editorRef.current !== null && !isEditorFocused(editorRef.current)) {
@@ -57,20 +59,33 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   }, [isActive]);
 
   const updateContentIfChanged = useCallback(
-    async (_content: EditorValue) => {
-      if (isUpdating.current || areDescendantsEqual(_content, text.content)) {
+    async (_richTexts: RichTexts) => {
+      if (isUpdating.current) {
         return;
       }
-      isUpdating.current = true;
-      const query = queryRef.current;
-      await updateContent({ query, id, content: _content });
+
+      const promises = LANGUAGES.map(async (lang) => {
+        const localRichText = _richTexts[lang] ?? [];
+
+        if (areDescendantsEqual(localRichText, text.richText[lang] ?? [])) {
+          return;
+        }
+
+        isUpdating.current = true;
+        const query = queryRef.current;
+
+        return updateRichText({ query, id, richText: localRichText, language: lang });
+      });
+
+      await Promise.all(promises);
+
       isUpdating.current = false;
     },
-    [id, text.content, updateContent],
+    [id, text.richText, updateRichText],
   );
 
   useEffect(() => {
-    if (isUpdating.current || areDescendantsEqual(content, text.content)) {
+    if (isUpdating.current || areDescendantsEqual(richTexts[language] ?? [], text.richText[language] ?? [])) {
       return;
     }
 
@@ -78,25 +93,40 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       if (isUpdating.current) {
         return;
       }
-      updateContentIfChanged(content);
+
+      updateContentIfChanged(richTexts);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [content, id, updateContent, text.content, updateContentIfChanged]);
+  }, [language, richTexts, text.richText, updateContentIfChanged]);
 
   useEffect(
     () => () => {
       // Save on unmount, if changed.
-      updateContentIfChanged(contentRef.current);
+      updateContentIfChanged(richTextRef.current);
     },
     [updateContentIfChanged],
   );
 
   const onPublish = useCallback(async () => {
-    await updateContentIfChanged(contentRef.current);
+    await updateContentIfChanged(richTextRef.current);
     const query = queryRef.current;
+
+    const untranslated: Language[] = Object.entries(text.richText)
+      .filter(([, t]) => t === null || t.every(isNodeEmpty))
+      .map(([l]) => l)
+      .filter(isLanguage);
+
+    if (untranslated.length > 0) {
+      setError(`Teksten må oversettes til ${getLanguageNames(untranslated)} før publisering`);
+
+      return;
+    }
+
+    setError(undefined);
+
     await publish({ id, query });
-  }, [id, publish, updateContentIfChanged]);
+  }, [id, publish, text.richText, updateContentIfChanged]);
 
   const isLocked = text.textType === RichTextTypes.MALTEKST;
 
@@ -118,13 +148,11 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
               checked={isLocked}
               size="small"
               loading={isTextTypeUpdating}
-              onChange={({ target }) =>
-                updateTextType({
-                  id,
-                  newTextType: target.checked ? RichTextTypes.MALTEKST : RichTextTypes.REDIGERBAR_MALTEKST,
-                  oldTextType: text.textType,
-                })
-              }
+              onChange={({ target }) => {
+                const newTextType = target.checked ? RichTextTypes.MALTEKST : RichTextTypes.REDIGERBAR_MALTEKST;
+                queryRef.current.textType = newTextType;
+                updateTextType({ id, newTextType, oldTextType: text.textType });
+              }}
             >
               Låst
             </Switch>
@@ -138,40 +166,24 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
 
       <RedaktoerRichText
         ref={editorRef}
-        editorId={text.id}
-        savedContent={text.content}
-        onChange={setContent}
+        editorId={`${text.id}-${language}`}
+        savedContent={text.richText[language] ?? [createSimpleParagraph()]}
+        onChange={(t) => {
+          const changed: RichTexts = { ...richTexts, [language]: t };
+          richTextRef.current = changed;
+          setRichTexts(changed);
+        }}
         onFocus={() => setActive(text.id)}
+        lang={SPELL_CHECK_LANGUAGES[language]}
       />
 
       <DraftTextFooter
         text={text}
         isSaving={isUpdatingContent || isTextTypeUpdating || isTitleUpdating}
         onPublish={onPublish}
+        error={error}
         {...rest}
       />
     </Container>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  padding-top: 8px;
-`;
-
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-`;
-
-const HeaderGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 8px;
-`;

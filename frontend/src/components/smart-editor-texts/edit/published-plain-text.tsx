@@ -3,28 +3,34 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { IPublishedPlainText } from '@app/types/texts/responses';
 
 interface Props {
   text: IPublishedPlainText;
   onDraftCreated: (id: string) => void;
+  hasDraft: boolean;
 }
 
-export const PublishedPlainText = ({ text, onDraftCreated }: Props) => (
-  <PublishedContainer>
-    <Heading level="1" size="small" spacing>
-      {text.title}
-    </Heading>
+export const PublishedPlainText = ({ text, onDraftCreated, hasDraft }: Props) => {
+  const lang = useRedaktoerLanguage();
 
-    <Tags {...text} />
+  return (
+    <PublishedContainer>
+      <Heading level="1" size="small" spacing>
+        {text.title}
+      </Heading>
 
-    <Background>
-      <StyledBodyLong>{text.plainText}</StyledBodyLong>
-    </Background>
+      <Tags {...text} />
 
-    <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} />
-  </PublishedContainer>
-);
+      <Background>
+        <StyledBodyLong>{text.plainText[lang]}</StyledBodyLong>
+      </Background>
+
+      <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} hasDraft={hasDraft} />
+    </PublishedContainer>
+  );
+};
 
 const Background = styled.div`
   background: var(--a-bg-subtle);

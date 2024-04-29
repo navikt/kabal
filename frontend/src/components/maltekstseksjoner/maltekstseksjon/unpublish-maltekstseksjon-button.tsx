@@ -5,13 +5,13 @@ import { styled } from 'styled-components';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useUnpublishMaltekstseksjonMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { IGetTextsParams } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 
 interface Props {
   id: string;
   title: string;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export const UnpublishMaltekstseksjonButton = ({ id, title, query }: Props) => {
@@ -26,29 +26,25 @@ export const UnpublishMaltekstseksjonButton = ({ id, title, query }: Props) => {
 
   if (isOpen) {
     return (
-      <MaltekstseksjonHeader>
-        <Container>
-          <ConfirmUnpublishMaltekstseksjonButton id={id} title={title} query={query} maltekstseksjonDraft={draft} />
-          <Button
-            size="small"
-            variant="secondary"
-            onClick={() => setIsOpen(false)}
-            disabled={isLoading}
-            icon={<XMarkIcon aria-hidden />}
-          >
-            Avbryt
-          </Button>
-        </Container>
-      </MaltekstseksjonHeader>
+      <Container>
+        <ConfirmUnpublishMaltekstseksjonButton id={id} title={title} query={query} maltekstseksjonDraft={draft} />
+        <Button
+          size="small"
+          variant="secondary"
+          onClick={() => setIsOpen(false)}
+          disabled={isLoading}
+          icon={<XMarkIcon aria-hidden />}
+        >
+          Avbryt
+        </Button>
+      </Container>
     );
   }
 
   return (
-    <MaltekstseksjonHeader>
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
-        Avpubliser aktiv versjon
-      </Button>
-    </MaltekstseksjonHeader>
+    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+      Avpubliser aktiv versjon
+    </Button>
   );
 };
 
@@ -81,12 +77,4 @@ const ConfirmUnpublishMaltekstseksjonButton = ({
 const Container = styled.div`
   display: flex;
   gap: 8px;
-`;
-
-const MaltekstseksjonHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 16px;
-  padding-bottom: 0;
 `;

@@ -4,14 +4,15 @@ import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TextVersions } from './text-versions';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export const TextList = ({ maltekstseksjon, query }: Props) => {
@@ -20,6 +21,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
   const [updateMaltekst, { isLoading: isMaltekstUpdating }] = useUpdateTextIdListMutation({
     fixedCacheKey: maltekstseksjon.id,
   });
+  const lang = useRedaktoerLanguage();
 
   useEffect(() => {
     if (activeTextId === undefined) {
@@ -57,11 +59,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
         }
       }
 
-      updateMaltekst({
-        id,
-        query,
-        textIdList: newTextIdList,
-      });
+      updateMaltekst({ id, query, textIdList: newTextIdList });
     },
     [id, query, textIdList, updateMaltekst],
   );
@@ -88,20 +86,16 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
         }
       }
 
-      updateMaltekst({
-        id,
-        query,
-        textIdList: newTextIdList,
-      });
+      updateMaltekst({ id, query, textIdList: newTextIdList });
     },
     [id, query, textIdList, updateMaltekst],
   );
 
   const setActive = useCallback(
     (textId: string) => {
-      setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId });
+      setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId, lang });
     },
-    [id, versionId, setPath],
+    [setPath, id, versionId, lang],
   );
 
   const lastIndex = textIdList.length - 1;

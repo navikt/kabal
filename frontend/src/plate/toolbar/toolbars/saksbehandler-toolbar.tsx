@@ -8,7 +8,7 @@ import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-button
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { Settings } from '@app/plate/toolbar/toolbars/settings';
+import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
 
 interface Props {
   showHistory: boolean;
@@ -41,7 +41,6 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
 
         <ToolbarIconButton
           label="Vis historikk"
-          keys={[MOD_KEY, 'Shift', 'H']}
           icon={<ClockDashedIcon aria-hidden />}
           active={showHistory}
           onClick={() => {
@@ -53,7 +52,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
 
         <ToolbarSeparator />
 
-        <Settings showComments />
+        <SaksbehandlerSettings />
 
         <ToolbarSeparator />
 

@@ -35,36 +35,42 @@ export const Router = () => (
     <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
 
     <Route
-      path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId"
+      path="maltekstseksjoner/:lang/:id/versjoner/:maltekstseksjonVersionId/tekster/:textId"
       element={<MaltekstseksjonerPage />}
     />
-    <Route path="maltekstseksjoner/:id/versjoner/:maltekstseksjonVersionId" element={<MaltekstseksjonerPage />} />
-    <Route path="maltekstseksjoner/:id" element={<MaltekstseksjonerPage />} />
+    <Route path="maltekstseksjoner/:lang/:id/versjoner/:maltekstseksjonVersionId" element={<MaltekstseksjonerPage />} />
+    <Route path="maltekstseksjoner/:lang/:id" element={<MaltekstseksjonerPage />} />
+    <Route path="maltekstseksjoner/:lang" element={<MaltekstseksjonerPage />} />
     <Route path="maltekstseksjoner" element={<MaltekstseksjonerPage />} />
 
-    <Route path="maltekster/:id/versjoner/:versionId" element={<MalteksterPage />} />
-    <Route path="maltekster/:id" element={<MalteksterPage />} />
+    <Route path="maltekster/:lang/:id/versjoner/:versionId" element={<MalteksterPage />} />
+    <Route path="maltekster/:lang/:id" element={<MalteksterPage />} />
+    <Route path="maltekster/:lang" element={<MalteksterPage />} />
     <Route path="maltekster" element={<MalteksterPage />} />
 
-    <Route path="redigerbare-maltekster/:id/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
-    <Route path="redigerbare-maltekster/:id" element={<RedigerbareMalteksterPage />} />
-    <Route path="redigerbare-maltekster/" element={<RedigerbareMalteksterPage />} />
+    <Route path="redigerbare-maltekster/:lang/:id/versjoner/:versionId" element={<RedigerbareMalteksterPage />} />
+    <Route path="redigerbare-maltekster/:lang/:id" element={<RedigerbareMalteksterPage />} />
+    <Route path="redigerbare-maltekster/:lang" element={<RedigerbareMalteksterPage />} />
+    <Route path="redigerbare-maltekster" element={<RedigerbareMalteksterPage />} />
 
-    <Route path="gode-formuleringer/:id/versjoner/:versionId" element={<GodeFormuleringerPage />} />
-    <Route path="gode-formuleringer/:id" element={<GodeFormuleringerPage />} />
-    <Route path="gode-formuleringer/" element={<GodeFormuleringerPage />} />
+    <Route path="gode-formuleringer/:lang/:id/versjoner/:versionId" element={<GodeFormuleringerPage />} />
+    <Route path="gode-formuleringer/:lang/:id" element={<GodeFormuleringerPage />} />
+    <Route path="gode-formuleringer/:lang" element={<GodeFormuleringerPage />} />
+    <Route path="gode-formuleringer" element={<GodeFormuleringerPage />} />
+
+    <Route path="topptekster/:lang/:id/versjoner/:versionId" element={<ToppteksterPage />} />
+    <Route path="topptekster/:lang/:id" element={<ToppteksterPage />} />
+    <Route path="topptekster/:lang" element={<ToppteksterPage />} />
+    <Route path="topptekster" element={<ToppteksterPage />} />
+
+    <Route path="bunntekster/:lang/:id/versjoner/:versionId" element={<BunnteksterPage />} />
+    <Route path="bunntekster/:lang/:id" element={<BunnteksterPage />} />
+    <Route path="bunntekster/:lang" element={<BunnteksterPage />} />
+    <Route path="bunntekster" element={<BunnteksterPage />} />
 
     <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
     <Route path="regelverk/:id" element={<RegelverkPage />} />
-    <Route path="regelverk/" element={<RegelverkPage />} />
-
-    <Route path="topptekster/:id/versjoner/:versionId" element={<ToppteksterPage />} />
-    <Route path="topptekster/:id" element={<ToppteksterPage />} />
-    <Route path="topptekster/" element={<ToppteksterPage />} />
-
-    <Route path="bunntekster/:id/versjoner/:versionId" element={<BunnteksterPage />} />
-    <Route path="bunntekster/:id" element={<BunnteksterPage />} />
-    <Route path="bunntekster/" element={<BunnteksterPage />} />
+    <Route path="regelverk" element={<RegelverkPage />} />
 
     <Route path="innstillinger" element={<SettingsPage />} />
     <Route path="tilgangsstyring" element={<AccessRightsPage />} />

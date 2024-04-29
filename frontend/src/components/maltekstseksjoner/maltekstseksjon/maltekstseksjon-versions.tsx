@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import {
   IDraftMaltekstseksjon,
   IMaltekstseksjon,
@@ -15,7 +15,7 @@ import { PublishedMaltekstSection } from './maltekstseksjon-published';
 
 interface Props {
   id: string;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export const MaltekstseksjonVersions = ({ id, query }: Props) => {
@@ -41,7 +41,7 @@ export const MaltekstseksjonVersions = ({ id, query }: Props) => {
 interface LoadedProps {
   versions: IMaltekstseksjon[];
   first: IMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 const Loaded = ({ versions, first, query }: LoadedProps) => {

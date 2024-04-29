@@ -31,7 +31,7 @@ export const getTemplateSections = (templateId: TemplateIdEnum, sectionType?: Se
     return EMPTY_LIST;
   }
 
-  return getSections(template.content as EditorValue, sectionType);
+  return getSections(template.richText as EditorValue, sectionType);
 };
 
 const getSections = (children: TDescendant[], sectionType?: SectionType): TemplateSections[] => {

@@ -26,7 +26,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
   // Reset ignored when text changes.
   useEffect(() => setIgnored(false), [next?.maltekstseksjon?.id]);
 
-  const replaceMaltekstseksjonContent = useCallback(async () => {
+  const replaceMaltekstseksjonContent = useCallback(() => {
     if (next === null) {
       return replaceNodes(null, null, null);
     }

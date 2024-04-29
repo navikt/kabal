@@ -43,6 +43,7 @@ import {
   TableRowElement,
   TextAlign,
 } from '@app/plate/types';
+import { Language } from '@app/types/texts/language';
 import { TemplateSections } from '../template-sections';
 
 export const createLabelContent = (source: string, label: string): LabelContentElement => ({
@@ -70,10 +71,12 @@ export const createMaltekst = (
   section: TemplateSections,
   children?: ParentOrChildElement[],
   id?: string,
+  language?: Language,
 ): MaltekstElement => ({
   type: ELEMENT_MALTEKST,
   section,
   id,
+  language,
   children: children ?? [createSimpleParagraph()],
 });
 
@@ -81,10 +84,12 @@ export const createRedigerbarMaltekst = (
   section: TemplateSections,
   children?: ParentOrChildElement[],
   id?: string,
+  language?: Language,
 ): RedigerbarMaltekstElement => ({
   type: ELEMENT_REDIGERBAR_MALTEKST,
   section,
   id,
+  language,
   // Avoid using same reference for same redigerbar maltekst used different places
   children: children === undefined ? [createEmptyVoid()] : structuredClone(children),
 });
