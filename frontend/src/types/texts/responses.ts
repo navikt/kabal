@@ -1,43 +1,23 @@
-import {
-  DraftTextReadOnlyMetadata,
-  ITextBaseMetadata,
-  PublishedTextReadOnlyMetadata,
-  TextReadOnlyMetadata,
-} from '../common-text-types';
-import { INewPlainTextParams, INewRichTextParams } from './common';
+import { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '../common-text-types';
+import { INewGodFormuleringParams, INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
+
+export type IDraftRichText = INewRichTextParams & DraftTextReadOnlyMetadata;
+type IDraftRegelverk = INewRegelverkParams & DraftTextReadOnlyMetadata;
+type IDraftPlainText = INewPlainTextParams & DraftTextReadOnlyMetadata;
+type IDraftGodFormulering = INewGodFormuleringParams & DraftTextReadOnlyMetadata;
+
+export type IDraft = IDraftPlainText | IDraftRichText | IDraftRegelverk | IDraftGodFormulering;
+
+export interface IPublishedRichText extends PublishedTextReadOnlyMetadata, INewRichTextParams {}
+export interface IPublishedPlainText extends PublishedTextReadOnlyMetadata, INewPlainTextParams {}
+export interface IPublishedRegelverk extends PublishedTextReadOnlyMetadata, INewRegelverkParams {}
+export interface IPublishedGodFormulering extends PublishedTextReadOnlyMetadata, INewGodFormuleringParams {}
+
+export type IPublishedText = IPublishedRichText | IPublishedPlainText | IPublishedRegelverk | IPublishedGodFormulering;
 
 export type IRichText = IDraftRichText | IPublishedRichText;
+export type IRegelverk = IDraftRegelverk | IPublishedRegelverk;
+export type IGodFormulering = IDraftGodFormulering | IPublishedGodFormulering;
+export type IPlainText = IDraftPlainText | IPublishedPlainText;
 
-export type IDraftRichText = INewRichTextParams &
-  DraftTextReadOnlyMetadata & {
-    id: string; // UUID
-    modified: string; // Datetime
-    created: string; // Datetime
-  };
-
-export interface IPublishedTextMetadata extends ITextBaseMetadata, PublishedTextReadOnlyMetadata {
-  id: string; // UUID
-  modified: string; // Datetime
-  created: string; // Datetime
-}
-
-export interface IPublishedRichText extends IPublishedTextMetadata, INewRichTextParams {}
-export interface IPublishedPlainText extends IPublishedTextMetadata, INewPlainTextParams {}
-
-export type IPublishedText = IPublishedRichText | IPublishedPlainText;
-
-export type IDraftPlainText = INewPlainTextParams &
-  DraftTextReadOnlyMetadata & {
-    id: string; // UUID
-    modified: string; // Datetime
-    created: string; // Datetime
-  };
-
-export type IPlainText = INewPlainTextParams &
-  TextReadOnlyMetadata & {
-    id: string; // UUID
-    modified: string; // Datetime
-    created: string; // Datetime
-  };
-
-export type IText = IRichText | IPlainText;
+export type IText = IDraft | IPublishedText;

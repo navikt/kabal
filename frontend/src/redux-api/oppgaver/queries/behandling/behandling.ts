@@ -19,6 +19,7 @@ import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/beh
 import { handleKlagerEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/klager';
 import { handleMottattVedtaksinstansEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
 import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
+import { handleSmartDocumentLanguageEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document-language';
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
@@ -103,6 +104,11 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_CHANGED, documentsChanged);
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_REMOVED, documentsRemoved);
           events.addJsonEventListener(ServerSentEventType.DOCUMENT_FINISHED, documentFinished);
+
+          // Smart documents
+          const smartDocumentLanguage = handleSmartDocumentLanguageEvent(oppgaveId, navIdent);
+
+          events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_LANGUAGE, smartDocumentLanguage);
 
           // Journalposter
           const journalpostAdded = handleJournalpostAddedEvent(oppgaveId, navIdent);

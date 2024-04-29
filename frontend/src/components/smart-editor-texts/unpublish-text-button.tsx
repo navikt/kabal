@@ -9,6 +9,7 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useUnpublishTextMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
 import { IText } from '@app/types/texts/responses';
 import { useTextQuery } from './hooks/use-text-query';
 
@@ -17,6 +18,7 @@ interface Props {
   title: string;
   publishedMaltekstseksjonIdList: string[];
   draftMaltekstseksjonIdList: string[];
+  textType: TextTypes;
 }
 
 export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
@@ -31,29 +33,25 @@ export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
 
   if (isOpen) {
     return (
-      <Header>
-        <Container>
-          <ConfirmUnpublishTextButton id={id} title={title} textDraft={draft} {...props} />
-          <Button
-            size="small"
-            variant="secondary"
-            onClick={() => setIsOpen(false)}
-            disabled={isLoading}
-            icon={<XMarkIcon aria-hidden />}
-          >
-            Avbryt
-          </Button>
-        </Container>
-      </Header>
+      <Container>
+        <ConfirmUnpublishTextButton id={id} title={title} textDraft={draft} {...props} />
+        <Button
+          size="small"
+          variant="secondary"
+          onClick={() => setIsOpen(false)}
+          disabled={isLoading}
+          icon={<XMarkIcon aria-hidden />}
+        >
+          Avbryt
+        </Button>
+      </Container>
     );
   }
 
   return (
-    <Header>
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
-        Avpubliser aktiv versjon
-      </Button>
-    </Header>
+    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+      Avpubliser aktiv versjon
+    </Button>
   );
 };
 
@@ -61,11 +59,12 @@ const ConfirmUnpublishTextButton = ({
   id,
   title,
   textDraft,
+  textType,
   draftMaltekstseksjonIdList = [],
   publishedMaltekstseksjonIdList = [],
 }: Props & { textDraft: IText | undefined }) => {
   const [unpublish, { isLoading }] = useUnpublishTextMutation({ fixedCacheKey: id });
-  const navigate = useNavigateToStandaloneTextVersion();
+  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
   const query = useTextQuery();
 
   const onClick = async () => {
@@ -96,7 +95,7 @@ const Warning = ({
   id,
   draftMaltekstseksjonIdList: draftList,
   publishedMaltekstseksjonIdList: publishedList,
-}: Omit<Props, 'title'>) => {
+}: Omit<Props, 'title' | 'textType'>) => {
   if (draftList.length === 0 && publishedList.length === 0) {
     return null;
   }
@@ -143,11 +142,4 @@ const Container = styled.div`
 
 const StyledReferences = styled(MaltekstseksjonReferences)`
   display: inline-block;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 16px;
-  padding-bottom: 0;
 `;

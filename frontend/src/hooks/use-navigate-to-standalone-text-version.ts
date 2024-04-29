@@ -1,23 +1,34 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Language } from '@app/types/texts/language';
 
 interface Params {
   id?: string | null;
   versionId?: string | null;
+  lang?: string;
 }
 
-export const useNavigateToStandaloneTextVersion = () => {
+export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const oldParams = useParams();
+  const { lang } = useParams();
 
   const [, rootPath] = pathname.split('/');
 
-  return useCallback(
+  const navigateToText = useCallback(
     (newParams: Params, replace = false) =>
       navigate(`${calculatePath(rootPath, oldParams, newParams)}${search}`, { replace }),
     [navigate, oldParams, rootPath, search],
   );
+
+  useEffect(() => {
+    if (lang === undefined && hasLanguage) {
+      navigateToText({ lang: Language.NB });
+    }
+  }, [hasLanguage, lang, navigateToText]);
+
+  return navigateToText;
 };
 
 const calculatePath = (
@@ -26,6 +37,10 @@ const calculatePath = (
   newParams: Params,
 ): string => {
   let path = `/${rootPath}`;
+
+  const newLanguage = newParams.lang ?? oldParams.lang ?? Language.NB;
+
+  path += `/${newLanguage}`;
 
   if (newParams.id === null) {
     return path;
@@ -38,6 +53,10 @@ const calculatePath = (
   }
 
   path += `/${newId}`;
+
+  if (newParams.versionId === null) {
+    return path;
+  }
 
   const newVersionId = newParams.versionId ?? oldParams.versionId;
 

@@ -3,21 +3,22 @@ import { Search } from '@navikt/ds-react';
 import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { CreateMaltekst } from '@app/components/maltekstseksjoner/create';
+import { CreateMaltekstseksjon } from '@app/components/maltekstseksjoner/create';
 import { Maltekstseksjon } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon';
 import { Filters } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-filters';
 import { MaltekstseksjontListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-item';
+import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { DragAndDropContextElement } from '../drag-and-drop/drag-context';
 import { List } from './common';
 
 export const MaltekstseksjonList = () => {
   const { id } = useParams();
   const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
-  const query: IGetTextsParams = { templateSectionIdList, ytelseHjemmelIdList, utfallIdList };
+  const query: IGetMaltekstseksjonParams = { templateSectionIdList, ytelseHjemmelIdList, utfallIdList };
   const { data: malteksterseksjoner = [] } = useGetMaltekstseksjonerQuery(query);
 
   const [rawSearch, setRawSearch] = useState('');
@@ -34,7 +35,8 @@ export const MaltekstseksjonList = () => {
   return (
     <Container>
       <Header>
-        <CreateMaltekst query={query} />
+        <CreateMaltekstseksjon query={query} />
+        <SetMaltekstseksjonLanguage />
       </Header>
 
       <Filters />
@@ -111,7 +113,7 @@ const Header = styled.header`
   flex-direction: row;
   justify-content: left;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 16px;
   margin-bottom: 8px;
   grid-area: header;
 `;

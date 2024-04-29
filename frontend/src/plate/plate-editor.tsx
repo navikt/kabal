@@ -1,6 +1,11 @@
 import { PlateContent, PlateContentProps } from '@udecode/plate-common';
 import React from 'react';
+import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { renderLeaf as defaultRenderLeaf, renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
+
+interface Props extends PlateContentProps {
+  lang: SpellCheckLanguage;
+}
 
 export const PlateEditor = ({
   readOnly = false,
@@ -8,7 +13,7 @@ export const PlateEditor = ({
   className,
   spellCheck = true,
   ...props
-}: PlateContentProps) => (
+}: Props) => (
   <PlateContent
     {...props}
     className={className === undefined ? 'smart-editor' : `smart-editor ${className}`}

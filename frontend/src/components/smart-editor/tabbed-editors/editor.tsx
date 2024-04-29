@@ -16,6 +16,7 @@ import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -144,6 +145,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const { templateId, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+  const lang = useSmartEditorSpellCheckLanguage();
 
   useEffect(() => {
     setSheetRef(containerRef);
@@ -156,7 +158,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <NewComment container={containerRef} />
 
-      <PlateEditor id={id} readOnly={!canEdit} />
+      <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
     </Sheet>
   );
 };

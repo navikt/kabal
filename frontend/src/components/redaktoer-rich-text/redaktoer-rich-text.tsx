@@ -3,6 +3,7 @@ import { Plate } from '@udecode/plate-common';
 import React, { forwardRef, useRef } from 'react';
 import { styled } from 'styled-components';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
+import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { redaktoerPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
 import { Sheet } from '@app/plate/sheet';
@@ -19,10 +20,11 @@ interface Props {
   onKeyDown?: (event: React.KeyboardEvent) => void;
   readOnly?: boolean;
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
+  lang: SpellCheckLanguage;
 }
 
 export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
-  ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus }, editorRef) => {
+  ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus, lang }, editorRef) => {
     const ref = useRef<HTMLDivElement>(null);
 
     return (
@@ -49,9 +51,10 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 
             <Sheet ref={ref} $minHeight={false}>
               <FloatingRedaktoerToolbar container={ref.current} editorId={editorId} />
+
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
-              <PlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} />
+              <PlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
             </Sheet>
           </Content>
         </Plate>

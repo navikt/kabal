@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IGetTextsParams } from '@app/types/common-text-types';
-import { IPublishedText } from '@app/types/texts/responses';
+import { IGetConsumerTextParams, IGetConsumerTextsParams } from '@app/types/common-text-types';
+import { IConsumerText } from '@app/types/texts/consumer';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
 export enum ConsumerTextsTagTypes {
@@ -12,20 +12,30 @@ export const consumerTextsApi = createApi({
   baseQuery: KABAL_TEXT_TEMPLATES_BASE_QUERY,
   tagTypes: Object.values(ConsumerTextsTagTypes),
   endpoints: (builder) => ({
-    getConsumerTexts: builder.query<IPublishedText[], IGetTextsParams>({
-      query: (params) => ({ url: '/consumer/texts', params }),
-      providesTags: (texts) => texts?.map(({ id }) => ({ type: ConsumerTextsTagTypes.TEXT, id })) ?? [],
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+    getConsumerTexts: builder.query<IConsumerText[], IGetConsumerTextsParams>({
+      query: ({ language, ...params }) => ({ url: `/consumer/texts/${language}`, params }),
+      providesTags: (texts, _, { language }) =>
+        texts === undefined
+          ? [ConsumerTextsTagTypes.TEXT]
+          : [
+              ...texts.map(({ id }) => ({ type: ConsumerTextsTagTypes.TEXT, id: `${id}-${language}` })),
+              ConsumerTextsTagTypes.TEXT,
+            ],
+      onQueryStarted: async ({ language }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 
         for (const text of data) {
-          dispatch(consumerTextsApi.util.updateQueryData('getConsumerTextById', text.id, () => text));
+          dispatch(
+            consumerTextsApi.util.updateQueryData('getConsumerTextById', { textId: text.id, language }, () => text),
+          );
         }
       },
     }),
-    getConsumerTextById: builder.query<IPublishedText, string>({
-      query: (id) => `/consumer/texts/${id}`,
-      providesTags: (_, __, id) => [{ type: ConsumerTextsTagTypes.TEXT, id }],
+    getConsumerTextById: builder.query<IConsumerText, IGetConsumerTextParams>({
+      query: ({ textId, language }) => `/consumer/texts/${textId}/${language}`,
+      providesTags: (_, __, { textId, language }) => [
+        { type: ConsumerTextsTagTypes.TEXT, id: `${textId}-${language}` },
+      ],
     }),
   }),
 });

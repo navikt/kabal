@@ -1,9 +1,10 @@
 import { EditorValue } from '@app/plate/types';
 import { IGetTextsParams, RichTextTypes } from '../common-text-types';
+import { Language, UNTRANSLATED } from './language';
 import { IText } from './responses';
 
-export type { INewTextParams, INewPlainTextParams, INewRichTextParams } from './common';
 export type { IGetTextsParams } from '../common-text-types';
+export type { INewPlainTextParams, INewRichTextParams, INewTextParams } from './common';
 
 /** Update params */
 
@@ -23,12 +24,14 @@ export interface IDeleteTextDraftParams extends IUpdateBaseParams {
   lastPublishedVersion: IText | undefined;
 }
 
-export interface IUpdateTextContentParams extends IUpdateBaseParams {
-  content: EditorValue;
+export interface IUpdateRichTextContentParams extends IUpdateBaseParams {
+  richText: EditorValue | null;
+  language: Language | typeof UNTRANSLATED;
 }
 
 export interface IUpdateTextPlainTextParams extends IUpdateBaseParams {
   plainText: string;
+  language: Language | typeof UNTRANSLATED;
 }
 
 export interface IUpdateTextTemplateSectionIdListParams extends IUpdateBaseParams {

@@ -41,6 +41,6 @@ const INITIAL_SLATE_VALUE: EditorValue = [
 export const ORIENTERING_OM_TILSVAR_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ORIENTERING_OM_TILSVAR,
   tittel: 'Orientering om tilsvar direkte til Trygderetten',
-  content: INITIAL_SLATE_VALUE,
+  richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
 });

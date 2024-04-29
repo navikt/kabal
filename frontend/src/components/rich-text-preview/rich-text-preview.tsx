@@ -5,6 +5,8 @@ import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
@@ -36,6 +38,7 @@ export const RichTextPreview = ({
   const [viewContent, setViewContent] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setViewContent(false));
+  const lang = useRedaktoerLanguage();
 
   return (
     <PreviewContainer ref={ref}>
@@ -57,7 +60,7 @@ export const RichTextPreview = ({
             readOnly
             plugins={previewPlugins}
           >
-            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} />
+            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
         </ContentContainer>
       ) : null}

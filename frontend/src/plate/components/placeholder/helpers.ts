@@ -138,7 +138,7 @@ const containsLonePlaceholder = (
     return false;
   }
 
-  const filtered = child.children.filter((c) => !isNodeEmpty(editor, c));
+  const filtered = child.children.filter((c) => !isNodeEmpty(c));
 
   if (filtered.length !== 1) {
     return false;

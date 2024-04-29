@@ -18,13 +18,14 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { getChildren } from '@app/plate/components/maltekstseksjon/get-children';
+import { containsEditedPlaceholder, getChildren } from '@app/plate/components/maltekstseksjon/get-children';
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
 import { MaltekstseksjonContainer, MaltekstseksjonToolbar } from '@app/plate/components/styled-components';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
-import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
+import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import {
   EditorValue,
@@ -38,7 +39,7 @@ import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
 } from '@app/redux-api/maltekstseksjoner/consumer';
-import { ApiQuery, RichTextTypes } from '@app/types/common-text-types';
+import { IGetTextsParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 enum ReplaceMethod {
@@ -46,6 +47,18 @@ enum ReplaceMethod {
   MANUAL,
   NO_CHANGE,
 }
+
+type GetReplaceMethodFn = (
+  previousMaltekstseksjonElement: MaltekstseksjonElement,
+  newMaltekstseksjonId: string | null,
+) => Promise<ReplaceMethod>;
+
+type UpdateMaltekstseksjonFn = (
+  _element: MaltekstseksjonElement,
+  resultat: IOppgavebehandling['resultat'],
+  ytelseId: IOppgavebehandling['ytelseId'],
+  _query: IGetTextsParams,
+) => Promise<void>;
 
 export const Maltekstseksjon = ({
   editor,
@@ -55,12 +68,13 @@ export const Maltekstseksjon = ({
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
   const { data: oppgave } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({ textType: RichTextTypes.MALTEKSTSEKSJON, section: element.section, templateId });
+  const query = useQuery({ textType: MALTEKSTSEKSJON_TYPE, section: element.section, templateId });
   const [fetchMaltekstseksjon, { isFetching: maltekstseksjonIsFetching }] = useLazyGetConsumerMaltekstseksjonerQuery();
   const [fetchMaltekstseksjonTexts, { isFetching: maltekstseksjonTextsIsFetching }] =
     useLazyGetMaltekstseksjonTextsQuery();
   const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
+  const language = useSmartEditorLanguage();
 
   const oppgaveIsLoaded = oppgave !== undefined;
 
@@ -99,11 +113,6 @@ export const Maltekstseksjon = ({
     [path, editor],
   );
 
-  type GetReplaceMethodFn = (
-    previousMaltekstseksjonElement: MaltekstseksjonElement,
-    newMaltekstseksjonId: string | null,
-  ) => Promise<ReplaceMethod>;
-
   const getReplaceMethod: GetReplaceMethodFn = useCallback(
     async (previousMaltekstseksjonElement, newMaltekstseksjonId) => {
       if (!oppgaveIsLoaded) {
@@ -113,6 +122,18 @@ export const Maltekstseksjon = ({
       const previousId = previousMaltekstseksjonElement.id ?? null;
 
       if (previousId === newMaltekstseksjonId) {
+        if (previousMaltekstseksjonElement.children.some((c) => c.language !== language)) {
+          if (
+            previousMaltekstseksjonElement.children.every(
+              (e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e),
+            )
+          ) {
+            return ReplaceMethod.AUTO;
+          }
+
+          return ReplaceMethod.MANUAL;
+        }
+
         return ReplaceMethod.NO_CHANGE;
       }
 
@@ -126,7 +147,7 @@ export const Maltekstseksjon = ({
         return ReplaceMethod.AUTO;
       }
 
-      const originalTexts = await getOriginalTexts(previousId, true).unwrap();
+      const originalTexts = await getOriginalTexts({ id: previousId, language }, true).unwrap();
 
       if (originalTexts.length !== previousMaltekstseksjonElement.children.length) {
         return ReplaceMethod.MANUAL;
@@ -140,20 +161,13 @@ export const Maltekstseksjon = ({
 
       const unchanged = areDescendantsEqual(
         previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
-        originalTexts.flatMap((t) => t.content),
+        originalTexts.flatMap((t) => t.richText),
       );
 
       return unchanged ? ReplaceMethod.AUTO : ReplaceMethod.MANUAL;
     },
-    [oppgaveIsLoaded, getOriginalTexts],
+    [oppgaveIsLoaded, getOriginalTexts, language],
   );
-
-  type UpdateMaltekstseksjonFn = (
-    _element: MaltekstseksjonElement,
-    resultat: IOppgavebehandling['resultat'],
-    ytelseId: IOppgavebehandling['ytelseId'],
-    _query: ApiQuery,
-  ) => Promise<void>;
 
   const updateMaltekstseksjon: UpdateMaltekstseksjonFn = useCallback(
     async (_element, resultat, ytelseId, _query) => {
@@ -186,8 +200,8 @@ export const Maltekstseksjon = ({
       }
 
       const { id, textIdList } = maltekstseksjon;
-      const texts = await fetchMaltekstseksjonTexts(id).unwrap();
-      const maltekstseksjonChildren = getChildren(texts, _element, _element.section);
+      const texts = await fetchMaltekstseksjonTexts({ id, language }).unwrap();
+      const maltekstseksjonChildren = getChildren(texts, _element, _element.section, language);
       const autoReplace = await getReplaceMethod(_element, id);
 
       if (autoReplace === ReplaceMethod.AUTO) {
@@ -199,7 +213,7 @@ export const Maltekstseksjon = ({
         setManualUpdate(undefined);
       }
     },
-    [fetchMaltekstseksjon, fetchMaltekstseksjonTexts, replaceNodes, getReplaceMethod, templateId],
+    [fetchMaltekstseksjon, templateId, fetchMaltekstseksjonTexts, language, getReplaceMethod, replaceNodes],
   );
 
   useEffect(() => {
@@ -207,9 +221,7 @@ export const Maltekstseksjon = ({
       return;
     }
 
-    const timeout = setTimeout(() => updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query), 1000);
-
-    return () => clearTimeout(timeout);
+    updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
   }, [element, oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
 
   const isFetching = maltekstseksjonIsFetching || maltekstseksjonTextsIsFetching;

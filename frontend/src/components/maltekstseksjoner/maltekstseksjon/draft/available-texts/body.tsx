@@ -4,8 +4,10 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { IRichText } from '@app/types/texts/responses';
 import { Row } from './row';
 
+type ScoredText = IRichText & { score: number };
+
 interface Props {
-  texts: IRichText[];
+  texts: ScoredText[];
   usedIds: string[];
   onAdd: (id: string) => void;
   onRemove: (id: string) => void;
@@ -14,7 +16,7 @@ interface Props {
 export const Body = ({ texts, usedIds, onAdd, onRemove }: Props) => {
   const rows = useMemo(
     () =>
-      texts.map(({ title, modified, id, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList }) => {
+      texts.map(({ title, modified, id, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList, score }) => {
         const isUsed = usedIds.includes(id);
 
         return (
@@ -34,6 +36,7 @@ export const Body = ({ texts, usedIds, onAdd, onRemove }: Props) => {
                 publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
               />
             </Table.DataCell>
+            <Table.DataCell>{score.toFixed(2)} %</Table.DataCell>
             <Table.DataCell>
               <Button size="xsmall" variant="tertiary" onClick={() => (isUsed ? onRemove(id) : onAdd(id))}>
                 {isUsed ? 'Fjern' : 'Legg til'}

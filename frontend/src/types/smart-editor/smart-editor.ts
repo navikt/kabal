@@ -3,7 +3,7 @@ import { GenericObject, Immutable } from '../types';
 import { INewSmartEditorMetadata } from './metadata';
 
 interface INewSmartEditor extends INewSmartEditorMetadata {
-  content: EditorValue;
+  richText: EditorValue;
 }
 
 export interface IMutableSmartEditorTemplate extends INewSmartEditor, GenericObject {}

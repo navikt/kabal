@@ -125,7 +125,7 @@ const Container = styled.div`
 const Dropdown = styled.div`
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 0;
   background-color: white;
   border: 1px solid black;
   z-index: 100;

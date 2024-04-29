@@ -5,7 +5,7 @@ import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select
 import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';
-import { AppQuery, RichTextTypes } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
 
 export const Filters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,7 +14,7 @@ export const Filters = () => {
 
   const utfallOptions = useUtfallOptions();
 
-  const setFilter = (filter: keyof AppQuery, values: string[]) => {
+  const setFilter = (filter: keyof IGetMaltekstseksjonParams, values: string[]) => {
     if (values.length === 0) {
       searchParams.delete(filter);
     } else {
@@ -29,7 +29,7 @@ export const Filters = () => {
       <TemplateSectionSelect
         selected={templateSectionIdList ?? []}
         onChange={(value) => setFilter('templateSectionIdList', value)}
-        textType={RichTextTypes.MALTEKSTSEKSJON}
+        textType={MALTEKSTSEKSJON_TYPE}
         includeNoneOption
         templatesSelectable
       >

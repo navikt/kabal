@@ -22,16 +22,18 @@ import {
 } from '@app/plate/types';
 import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IPublishedRichText } from '@app/types/texts/responses';
+import { IConsumerRichText } from '@app/types/texts/consumer';
+import { Language } from '@app/types/texts/language';
 
 export const getChildren = (
-  texts: IPublishedRichText[],
+  texts: IConsumerRichText[],
   previous: MaltekstseksjonElement,
   section: TemplateSections,
+  language: Language,
 ): (MaltekstElement | RedigerbarMaltekstElement)[] =>
   texts
-    .flatMap(({ content, textType, id }) => {
-      const prevText = previous.children.find((c) => c.id === id);
+    .flatMap(({ richText: content, textType, id }) => {
+      const prevText = previous.children.find((c) => c.id === id && c.language === language);
 
       if (prevText !== undefined) {
         if (isOfElementType<RedigerbarMaltekstElement>(prevText, ELEMENT_REDIGERBAR_MALTEKST)) {
@@ -47,18 +49,18 @@ export const getChildren = (
       }
 
       if (textType === RichTextTypes.MALTEKST) {
-        return createMaltekst(section, content.filter(isParentOrChildElement), id);
+        return createMaltekst(section, content.filter(isParentOrChildElement), id, language);
       }
 
       if (textType === RichTextTypes.REDIGERBAR_MALTEKST) {
-        return createRedigerbarMaltekst(section, content.filter(isParentOrChildElement), id);
+        return createRedigerbarMaltekst(section, content.filter(isParentOrChildElement), id, language);
       }
 
       return null;
     })
     .filter(isNotNull);
 
-const containsEditedPlaceholder = (node: TElement): boolean => {
+export const containsEditedPlaceholder = (node: TElement): boolean => {
   for (const child of node.children) {
     if (isOfElementType<PlaceholderElement>(child, ELEMENT_PLACEHOLDER)) {
       return getNodeString(child).length !== 0;

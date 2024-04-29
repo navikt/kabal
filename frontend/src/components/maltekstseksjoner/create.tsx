@@ -9,16 +9,17 @@ import {
   useUpdateTextIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { RichTextTypes } from '@app/types/common-text-types';
+import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { INewMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IGetTextsParams, INewTextParams } from '@app/types/texts/params';
+import { Language } from '@app/types/texts/language';
+import { INewTextParams } from '@app/types/texts/params';
 
 interface Props {
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
-export const CreateMaltekst = ({ query }: Props) => {
+export const CreateMaltekstseksjon = ({ query }: Props) => {
   const [createMaltekstseksjon, { isLoading }] = useCreateMaltekstseksjonMutation();
   const setPath = useNavigateMaltekstseksjoner();
 
@@ -44,7 +45,7 @@ export const CreateMaltekst = ({ query }: Props) => {
 };
 
 interface CreateTextProps {
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
   textType: RichTextTypes.MALTEKST | RichTextTypes.REDIGERBAR_MALTEKST;
   maltekstseksjon: IMaltekstseksjon;
 }
@@ -64,7 +65,10 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
     const text: INewTextParams = {
       title: '',
       textType,
-      content: [createSimpleParagraph()],
+      richText: {
+        [Language.NB]: [createSimpleParagraph()],
+        [Language.NN]: [createSimpleParagraph()],
+      },
       enhetIdList: [],
       templateSectionIdList: [],
       utfallIdList: [],
@@ -78,7 +82,7 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
     setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId: createdText.id });
   }, [textType, createText, updateMaltekst, id, query, textIdList, setPath, versionId]);
 
-  const textName = isLocked ? 'Låst' : 'Redigerbar';
+  const textName = isLocked ? 'låst' : 'redigerbar';
   const Icon = isLocked ? PadlockLockedIcon : PencilWritingIcon;
 
   return (
@@ -89,11 +93,11 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
       loading={isLoading || isMaltekstLoading}
       icon={<Icon aria-hidden />}
     >
-      {textName}
+      Opprett ny {textName} tekst
     </StyledButton>
   );
 };
 
 const StyledButton = styled(Button)`
-  width: min-content;
+  justify-content: flex-start;
 `;

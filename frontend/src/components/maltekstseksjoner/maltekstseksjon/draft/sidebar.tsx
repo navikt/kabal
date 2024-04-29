@@ -1,19 +1,19 @@
+import { Heading } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { CreateText } from '@app/components/maltekstseksjoner/create';
 import { AvailableTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { IGetTextsParams } from '@app/types/maltekstseksjoner/params';
+import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DragAndDropContext } from '../../drag-and-drop/drag-context';
-import { List, SidebarContainer, StyledHeading } from '../common';
+import { List, SidebarContainer } from '../common';
 import { DraggableListItem } from './draggable-list-item';
 
 interface Props {
   maltekstseksjon: IDraftMaltekstseksjon;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 enum DragDirection {
@@ -129,15 +129,13 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
       </List>
 
       <ButtonsContainer>
-        <StyledHeading level="1" size="xsmall">
-          Ny tekst
-        </StyledHeading>
+        <Heading level="1" size="xsmall">
+          Legg til tekst i denne maltekstseksjonen
+        </Heading>
+
         <CreateText query={query} textType={RichTextTypes.MALTEKST} maltekstseksjon={maltekstseksjon} />
         <CreateText query={query} textType={RichTextTypes.REDIGERBAR_MALTEKST} maltekstseksjon={maltekstseksjon} />
 
-        <StyledHeading level="1" size="xsmall">
-          Eksisterende tekster
-        </StyledHeading>
         <AvailableTexts
           onAdd={onAddText}
           onRemove={onRemoveText}
@@ -155,9 +153,10 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
   );
 };
 
-const ButtonsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, min-content);
+const ButtonsContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
   margin-top: 8px;
-  align-items: center;
+  width: 100%;
 `;

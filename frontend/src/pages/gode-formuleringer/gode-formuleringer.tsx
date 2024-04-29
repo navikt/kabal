@@ -1,10 +1,10 @@
 import React from 'react';
 import { SmartEditorTexts } from '@app/components/smart-editor-texts/smart-editor-texts';
-import { RichTextTypes } from '@app/types/common-text-types';
+import { GOD_FORMULERING_TYPE } from '@app/types/common-text-types';
 import { PageWrapper } from '../page-wrapper';
 
 export const GodeFormuleringerPage = () => (
   <PageWrapper>
-    <SmartEditorTexts textType={RichTextTypes.GOD_FORMULERING} />
+    <SmartEditorTexts textType={GOD_FORMULERING_TYPE} />
   </PageWrapper>
 );

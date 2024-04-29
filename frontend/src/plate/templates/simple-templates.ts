@@ -16,21 +16,21 @@ import {
 export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.GENERELT_BREV,
   tittel: 'Generelt brev',
-  content: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
+  richText: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
   dokumentTypeId: DistribusjonsType.BREV,
 });
 
 export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.NOTAT,
   tittel: 'Notat',
-  content: [createCurrentDate(), createSimpleParagraph()],
+  richText: [createCurrentDate(), createSimpleParagraph()],
   dokumentTypeId: DistribusjonsType.NOTAT,
 });
 
 export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_QUESTIONS,
   tittel: 'Spørsmål til rådgivende overlege',
-  content: [
+  richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
     createMaltekstseksjon(TemplateSections.INTRODUCTION),
@@ -43,7 +43,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_ANSWERS,
   tittel: 'Svar fra rådgivende overlege',
-  content: [
+  richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
     createMaltekstseksjon(TemplateSections.SVAR_FRA_ROL),
@@ -55,7 +55,7 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_TILSVARSBREV,
   tittel: 'Tilsvarsbrev (ROL)',
-  content: [
+  richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),

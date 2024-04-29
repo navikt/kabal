@@ -33,10 +33,10 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
   const rects: React.ReactNode[] = [];
   let y = MARGIN;
   let bottomOffset = 39 + MARGIN;
-  const { length } = template.content;
+  const { length } = template.richText;
 
   for (let i = 0; i < length; i++) {
-    const content = template.content[i];
+    const content = template.richText[i];
 
     if (content === undefined) {
       continue;

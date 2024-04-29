@@ -2,13 +2,19 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
+import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { isPlainTextType } from '@app/functions/is-rich-plain-text';
+import {
+  isGodFormuleringType,
+  isPlainTextType,
+  isRegelverkType,
+  isRichTextType,
+} from '@app/functions/is-rich-plain-text';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
 import { TextTypes } from '@app/types/common-text-types';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
-import { getNewPlainText, getNewRichText } from './functions/new-text';
+import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';
 import { useTextNavigate } from './hooks/use-text-navigate';
 
 interface Props {
@@ -21,7 +27,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   const [addText, { isLoading }] = useAddTextMutation();
 
   const onClick = useCallback(async () => {
-    const text = isPlainTextType(textType) ? getNewPlainText(textType) : getNewRichText(textType);
+    const text = getNewText(textType);
     const { id } = await addText({ text, query }).unwrap();
     navigate(id);
   }, [addText, navigate, query, textType]);
@@ -32,6 +38,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
         <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>
+        <SetStandaloneTextLanguage textType={textType} />
       </Header>
       <Content>
         <FilteredTextList textType={textType} />
@@ -39,6 +46,26 @@ export const SmartEditorTexts = ({ textType }: Props) => {
       </Content>
     </Container>
   );
+};
+
+const getNewText = (textType: TextTypes) => {
+  if (isPlainTextType(textType)) {
+    return getNewPlainText(textType);
+  }
+
+  if (isRegelverkType(textType)) {
+    return getNewRegelverk();
+  }
+
+  if (isRichTextType(textType)) {
+    return getNewRichText(textType);
+  }
+
+  if (isGodFormuleringType(textType)) {
+    return getNewGodFormulering();
+  }
+
+  throw new Error(`Unknown text type`);
 };
 
 const Container = styled.article`
@@ -51,7 +78,8 @@ const Container = styled.article`
 const Header = styled.header`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  column-gap: 16px;
   padding-bottom: 16px;
 `;
 

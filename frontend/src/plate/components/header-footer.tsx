@@ -1,19 +1,21 @@
 import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { EditorValue, FooterElement, HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { ApiQuery, PlainTextTypes } from '@app/types/common-text-types';
+import { PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { IPlainText, IPublishedPlainText, IText } from '@app/types/texts/responses';
+import { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 
-const lexSpecialis = (enhetId: string, texts: IPlainText[]): IPlainText | null => {
+const lexSpecialis = (enhetId: string, texts: IConsumerPlainText[]): IConsumerPlainText | null => {
   const sorted = texts
     .filter((t) => t.enhetIdList.includes(enhetId))
     .sort((a, b) => b.enhetIdList.length - a.enhetIdList.length);
@@ -23,7 +25,7 @@ const lexSpecialis = (enhetId: string, texts: IPlainText[]): IPlainText | null =
   return first ?? null;
 };
 
-const isPlainText = (text: IText): text is IPublishedPlainText =>
+const isPlainText = (text: IConsumerText): text is IConsumerPlainText =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
 type ElementTypes = HeaderElement | FooterElement;
@@ -44,16 +46,21 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
-  const [text, setText] = useState<IPlainText>();
+  const [text, setText] = useState<IConsumerPlainText>();
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
   const editor = useMyPlateEditorRef();
+  const query = useQuery({ textType });
 
   const loadMaltekst = useCallback(
-    async (e: ElementTypes, q: ApiQuery) => {
+    async (e: ElementTypes) => {
+      if (query === skipToken) {
+        return;
+      }
+
       try {
-        const texts = (await getTexts(q).unwrap()).filter(isPlainText);
+        const texts = (await getTexts(query).unwrap()).filter(isPlainText);
         const mostSpecificText = lexSpecialis(user.ansattEnhet.id, texts);
 
         if (mostSpecificText === null) {
@@ -75,12 +82,12 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
         }
       }
     },
-    [editor, getTexts, user],
+    [editor, getTexts, query, user.ansattEnhet.id],
   );
 
   useEffect(() => {
     if (!initialized) {
-      loadMaltekst(element, { enhetIdList: [user.ansattEnhet.id], textType });
+      loadMaltekst(element);
     }
   }, [element, initialized, loadMaltekst, textType, user.ansattEnhet.id]);
 
@@ -111,7 +118,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 };
 
 interface HeaderFooterContentProps {
-  text?: IPlainText;
+  text?: IConsumerPlainText;
   isLoading: boolean;
   type: typeof ELEMENT_HEADER | typeof ELEMENT_FOOTER;
 }

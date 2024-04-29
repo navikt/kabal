@@ -1,10 +1,18 @@
-import { Heading, Loader, Tag, TagProps } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Heading, Loader, Tag, TagProps } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import { isPlainText } from '@app/functions/is-rich-plain-text';
+import { isRichText } from '@app/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { useGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
+import {
+  GOD_FORMULERING_TYPE,
+  MALTEKSTSEKSJON_TYPE,
+  REGELVERK_TYPE,
+  RichTextTypes,
+} from '@app/types/common-text-types';
+import { LANGUAGE_NAMES } from '@app/types/texts/language';
 
 interface Props {
   textId: string;
@@ -13,28 +21,23 @@ interface Props {
 
 export const TextPreview = ({ textId, className }: Props) => {
   const { data: text, isLoading } = useGetTextByIdQuery(textId);
+  const language = useRedaktoerLanguage();
 
   if (isLoading || text === undefined) {
     return <Loader size="small" />;
   }
 
-  if (isPlainText(text)) {
+  if (!isRichText(text)) {
     return (
-      <section className={className}>
-        <Header>
-          <Heading level="1" size="small">
-            {text.title}
-          </Heading>
-          <Tag size="xsmall" variant="neutral">
-            Tekst
-          </Tag>
-        </Header>
-        <div>{text.plainText}</div>
-      </section>
+      <ErrorMessage>
+        Tekst {text.title} ({text.created}) er ikke en riktekst: {text.textType}
+      </ErrorMessage>
     );
   }
 
   const [name, tagVariant] = getRichTextTypeTagVariantAndName(text.textType);
+
+  const savedContent = text.richText[language];
 
   return (
     <section className={className}>
@@ -46,22 +49,36 @@ export const TextPreview = ({ textId, className }: Props) => {
           {name}
         </Tag>
       </Header>
-      <RedaktoerRichText editorId={textId} savedContent={text.content} readOnly />
+
+      {savedContent === null ? (
+        <Alert variant="info" size="small">
+          Tekst for {LANGUAGE_NAMES[language]} mangler
+        </Alert>
+      ) : (
+        <RedaktoerRichText
+          editorId={textId}
+          savedContent={savedContent}
+          readOnly
+          lang={SPELL_CHECK_LANGUAGES[language]}
+        />
+      )}
     </section>
   );
 };
 
-const getRichTextTypeTagVariantAndName = (textType: RichTextTypes): [string, TagProps['variant']] => {
+const getRichTextTypeTagVariantAndName = (
+  textType: RichTextTypes | typeof REGELVERK_TYPE | typeof GOD_FORMULERING_TYPE | typeof MALTEKSTSEKSJON_TYPE,
+): [string, TagProps['variant']] => {
   switch (textType) {
     case RichTextTypes.MALTEKST:
       return ['Maltekst', 'alt1'];
     case RichTextTypes.REDIGERBAR_MALTEKST:
       return ['Redigerbar maltekst', 'warning'];
-    case RichTextTypes.GOD_FORMULERING:
+    case GOD_FORMULERING_TYPE:
       return ['God formulering', 'success'];
-    case RichTextTypes.REGELVERK:
+    case REGELVERK_TYPE:
       return ['Regelverk', 'info'];
-    case RichTextTypes.MALTEKSTSEKSJON:
+    case MALTEKSTSEKSJON_TYPE:
       return ['Maltekstseksjon', 'neutral'];
   }
 };

@@ -5,6 +5,7 @@ import { UtfallEnum } from '@app/types/kodeverk';
 import { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FradelReason } from '@app/types/oppgaver';
+import { Language } from '@app/types/texts/language';
 
 interface BaseEvent {
   actor: INavEmployee;
@@ -133,6 +134,11 @@ export interface DocumentFinishedEvent extends BaseEvent {
 
 export interface DocumentsRemovedEvent extends BaseEvent {
   idList: string[];
+}
+
+export interface SmartDocumentLanguageEvent extends BaseEvent {
+  id: string;
+  language: Language;
 }
 
 export interface JournalpostAddedEvent extends BaseEvent {

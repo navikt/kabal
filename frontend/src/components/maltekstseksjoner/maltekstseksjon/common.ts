@@ -27,7 +27,7 @@ export const Header = styled.header`
     'metadata actions'
     'filters actions'
     'tags tags';
-  grid-template-columns: 1fr min-content;
+  grid-template-columns: 1fr fit-content;
   white-space: nowrap;
   padding-right: 8px;
 `;

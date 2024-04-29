@@ -12,12 +12,14 @@ import {
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { EditorValue, MaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
 export const Maltekst = ({
   editor,
@@ -26,6 +28,7 @@ export const Maltekst = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
+  const language = useSmartEditorLanguage();
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
@@ -47,13 +50,13 @@ export const Maltekst = ({
       return;
     }
 
-    const text = await getText(element.id).unwrap();
+    const text = await getText({ textId: element.id, language }).unwrap();
 
-    if (text.textType !== RichTextTypes.MALTEKST) {
+    if (!isMaltekst(text)) {
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: text.content });
+    replaceNodeChildren(editor, { at: path, nodes: text.richText });
   };
 
   const [first] = element.children;
@@ -122,6 +125,7 @@ const Unlock = ({ onClick, loading }: { loading: boolean; onClick: () => void })
     <UnlockContainer ref={ref}>
       <Tooltip
         content="Lås opp tekst (Obs! Kan ikke låses igjen. Teksten du låser opp vil ikke lenger automatisk påvirkes om du endrer utfall/resultat eller hjemmel.)"
+        maxChar={Infinity}
         delay={0}
       >
         <Button
@@ -162,6 +166,9 @@ const Unlock = ({ onClick, loading }: { loading: boolean; onClick: () => void })
     </UnlockContainer>
   );
 };
+
+const isMaltekst = (element: IConsumerText): element is IConsumerRichText =>
+  element.textType === RichTextTypes.MALTEKST;
 
 const UnlockContainer = styled.div`
   position: relative;

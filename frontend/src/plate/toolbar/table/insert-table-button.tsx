@@ -36,7 +36,7 @@ export const InsertTableButton = () => {
     insertNodes(editor, createTable(), { at: current !== undefined ? nextPath(current[1]) : undefined });
 
     if (current !== undefined) {
-      if (isNodeEmpty(editor, current[0])) {
+      if (isNodeEmpty(current[0])) {
         removeNodes(editor, { at: current[1] });
       }
     }

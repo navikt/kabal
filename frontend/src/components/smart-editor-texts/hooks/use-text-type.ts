@@ -1,8 +1,15 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router';
-import { PlainTextTypes, RichTextTypes, TextTypes } from '@app/types/common-text-types';
+import {
+  GOD_FORMULERING_TYPE,
+  MALTEKSTSEKSJON_TYPE,
+  PlainTextTypes,
+  REGELVERK_TYPE,
+  RichTextTypes,
+  TextTypes,
+} from '@app/types/common-text-types';
 
-export const useTextType = (): TextTypes | undefined => {
+export const useTextType = (): TextTypes => {
   const maltekstseksjonerMatch = useMatch({ path: '/maltekstseksjoner', end: false });
   const maltekstMatch = useMatch({ path: '/maltekster', end: false });
   const redigerbarMaltekstMatch = useMatch({ path: '/redigerbare-maltekster', end: false });
@@ -13,7 +20,7 @@ export const useTextType = (): TextTypes | undefined => {
 
   return useMemo(() => {
     if (maltekstseksjonerMatch !== null) {
-      return RichTextTypes.MALTEKSTSEKSJON;
+      return MALTEKSTSEKSJON_TYPE;
     }
 
     if (maltekstMatch !== null) {
@@ -25,11 +32,11 @@ export const useTextType = (): TextTypes | undefined => {
     }
 
     if (godeFormuleringerMatch !== null) {
-      return RichTextTypes.GOD_FORMULERING;
+      return GOD_FORMULERING_TYPE;
     }
 
     if (regelverkMatch !== null) {
-      return RichTextTypes.REGELVERK;
+      return REGELVERK_TYPE;
     }
 
     if (topptekstMatch !== null) {
@@ -40,7 +47,7 @@ export const useTextType = (): TextTypes | undefined => {
       return PlainTextTypes.FOOTER;
     }
 
-    return undefined;
+    throw new Error('Unknown text type');
   }, [
     maltekstseksjonerMatch,
     maltekstMatch,

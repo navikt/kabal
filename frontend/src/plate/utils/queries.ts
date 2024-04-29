@@ -17,7 +17,6 @@ import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plu
 import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
 import {
   BulletListElement,
-  EditorValue,
   H1Element,
   H2Element,
   H3Element,
@@ -35,23 +34,20 @@ export const nextPath = (path: number[]) => {
   return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
 };
 
-const isChildEmpty = (
-  editor: PlateEditor<EditorValue>,
-  child: ParentOrChildElement | TElement | TText | RichText,
-): boolean => {
+const isChildEmpty = (child: ParentOrChildElement | TElement | TText | RichText): boolean => {
   if (isText(child)) {
     return child.text.length === 0;
   }
 
-  return child.children.every((c) => isChildEmpty(editor, c));
+  return child.children.every((c) => isChildEmpty(c));
 };
 
-export const isNodeEmpty = (editor: PlateEditor<EditorValue>, node: TDescendant) => {
+export const isNodeEmpty = (node: TDescendant) => {
   if (isText(node)) {
     return node.text.length === 0;
   }
 
-  return node.children.every((child) => isChildEmpty(editor, child));
+  return node.children.every((child) => isChildEmpty(child));
 };
 
 // TODO: Only allow known keys in args

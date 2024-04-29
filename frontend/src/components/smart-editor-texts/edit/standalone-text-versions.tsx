@@ -3,22 +3,19 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
+import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
+import { DraftGodFormulering } from '@app/components/smart-editor-texts/edit/draft-god-formulering';
+import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
+import { isGodFormulering, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { PlainTextTypes } from '@app/types/common-text-types';
-import {
-  IDraftPlainText,
-  IDraftRichText,
-  IPlainText,
-  IPublishedPlainText,
-  IPublishedRichText,
-  IText,
-} from '@app/types/texts/responses';
+import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { PlainTextTypes, REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
+import { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
 import { DraftPlainText } from './draft-plain-text';
 import { DraftRichText } from './draft-rich-text';
 
@@ -27,9 +24,10 @@ interface Props {
 }
 
 export const StandaloneTextVersions = ({ id }: Props) => {
-  const { data = [], isFetching } = useGetTextVersionsQuery(id);
+  const { data = [], isFetching: isFetchingVersions } = useGetTextVersionsQuery(id);
+  const { data: text } = useGetTextByIdQuery(id);
 
-  if (isFetching) {
+  if (isFetchingVersions || text === undefined) {
     return <Loader />;
   }
 
@@ -39,17 +37,18 @@ export const StandaloneTextVersions = ({ id }: Props) => {
     return <p>Ingen tekst med ID {id}</p>;
   }
 
-  return <VersionsLoaded versions={data} firstText={first} id={id} />;
+  return <VersionsLoaded versions={data} firstText={first} id={id} textType={text.textType} />;
 };
 
 interface VersionsLoadedProps {
   versions: IText[];
   firstText: IText;
   id: string;
+  textType: TextTypes;
 }
 
-const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
-  const navigate = useNavigateToStandaloneTextVersion();
+const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedProps) => {
+  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
   const publishedVersion = useMemo(() => versions.find(({ published }) => published), [versions]);
   const { versionId } = useParams();
 
@@ -64,44 +63,72 @@ const VersionsLoaded = ({ versions, firstText, id }: VersionsLoadedProps) => {
 
   const navigateToVersion = (vId: string) => navigate({ id, versionId: vId });
 
+  const hasDraft = versions.some((v) => 'publishedDateTime' in v && v.publishedDateTime === null);
+
   return (
     <Container>
-      <UnpublishTextButton {...version} id={id} />
+      <Header>
+        <Changelog versions={versions} />
+        <UnpublishTextButton {...version} id={id} textType={textType} />
+      </Header>
 
-      <StyledVersionTabs<IDraftPlainText | IDraftRichText, IPublishedPlainText | IPublishedRichText>
+      <StyledVersionTabs<IDraft, IPublishedText>
         first={firstText}
         versions={versions}
         selectedTabId={versionId}
         setSelectedTabId={navigateToVersion}
         createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
-        createPublishedPanel={(v) => <PublishedVersion text={v} setVersionTabId={navigateToVersion} />}
+        createPublishedPanel={(v) => (
+          <PublishedVersion text={v} setVersionTabId={navigateToVersion} hasDraft={hasDraft} />
+        )}
       />
     </Container>
   );
 };
 
-const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) =>
-  isPlainText(text) ? (
-    <DraftPlainText text={text} onDraftDeleted={onDraftDeleted} />
-  ) : (
-    <DraftRichText text={text} onDraftDeleted={onDraftDeleted} />
-  );
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  padding-bottom: 0;
+`;
+
+const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) => {
+  if (isRichText(text)) {
+    return <DraftRichText text={text} onDraftDeleted={onDraftDeleted} />;
+  }
+
+  if (isRegelverk(text)) {
+    return <DraftRegelverk text={text} onDraftDeleted={onDraftDeleted} />;
+  }
+
+  if (isGodFormulering(text)) {
+    return <DraftGodFormulering text={text} onDraftDeleted={onDraftDeleted} />;
+  }
+
+  if (isPlainText(text)) {
+    return <DraftPlainText text={text} onDraftDeleted={onDraftDeleted} />;
+  }
+
+  return null;
+};
 
 interface PublishedVersionProps {
-  text: IPublishedPlainText | IPublishedRichText;
+  text: IPublishedText;
   setVersionTabId: (versionId: string) => void;
+  hasDraft: boolean;
 }
 
-const PublishedVersion = ({ text, setVersionTabId }: PublishedVersionProps) => {
+const PublishedVersion = ({ text, setVersionTabId, hasDraft }: PublishedVersionProps) => {
   if (isPlainText(text)) {
-    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} />;
+    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} hasDraft={hasDraft} />;
   }
 
   return (
     <PublishedContainer>
       <Tags {...text} />
 
-      <PublishedRichText text={text} onDraftCreated={setVersionTabId} />
+      <PublishedRichText text={text} onDraftCreated={setVersionTabId} hasDraft={hasDraft} />
     </PublishedContainer>
   );
 };

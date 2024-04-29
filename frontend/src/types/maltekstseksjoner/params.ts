@@ -1,19 +1,19 @@
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IGetTextsParams, ITextBaseMetadata } from '../common-text-types';
+import { IGetMaltekstseksjonParams, ITextBaseMetadata } from '../common-text-types';
 
-export type { IGetTextsParams } from '../common-text-types';
+export type { IGetMaltekstseksjonParams } from '../common-text-types';
 
 /** Create params */
 export interface INewMaltekstseksjonParams {
   maltekstseksjon: ITextBaseMetadata & { textIdList: string[] };
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 /** Update params for maltekstseksjoner */
 
 export interface IUpdateBaseParams {
   id: string;
-  query: IGetTextsParams;
+  query: IGetMaltekstseksjonParams;
 }
 
 export interface IUpdateMaltekstseksjonTextIsListParams extends IUpdateBaseParams {
