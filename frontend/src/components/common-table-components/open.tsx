@@ -28,11 +28,13 @@ export const OpenOppgavebehandling = ({
   variant = 'primary',
   size = 'small',
 }: Props) => {
+  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const hasYtelseAccess = useHasYtelseAccess(ytelseId);
   const { user } = useContext(StaticDataContext);
   const isKrol = useHasRole(Role.KABAL_KROL);
 
   const canOpen =
+    isMerkantil ||
     hasYtelseAccess ||
     user.navIdent === tildeltSaksbehandlerident ||
     user.navIdent === medunderskriverident ||
