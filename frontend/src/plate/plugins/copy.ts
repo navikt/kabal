@@ -19,6 +19,7 @@ import {
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
@@ -80,6 +81,7 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
   const { type, children } = node;
 
   if (
+    type === ELEMENT_MALTEKSTSEKSJON ||
     type === ELEMENT_MALTEKST ||
     type === ELEMENT_REDIGERBAR_MALTEKST ||
     type === ELEMENT_REGELVERK ||
