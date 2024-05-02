@@ -35,16 +35,18 @@ export const LanguageEditor = ({
     return null;
   }
 
-  <RedaktoerRichText
-    ref={editorRef}
-    editorId={`${text.id}-${language}`}
-    savedContent={savedContent}
-    onChange={(t) => {
-      const changed: RichTexts = { ...richTexts, [language]: t };
-      richTextRef.current = changed;
-      setRichTexts(changed);
-    }}
-    onFocus={() => setActive(text.id)}
-    lang={SPELL_CHECK_LANGUAGES[language]}
-  />;
+  return (
+    <RedaktoerRichText
+      ref={editorRef}
+      editorId={`${text.id}-${language}`}
+      savedContent={savedContent}
+      onChange={(t) => {
+        const changed: RichTexts = { ...richTexts, [language]: t };
+        richTextRef.current = changed;
+        setRichTexts(changed);
+      }}
+      onFocus={() => setActive(text.id)}
+      lang={SPELL_CHECK_LANGUAGES[language]}
+    />
+  );
 };

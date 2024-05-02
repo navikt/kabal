@@ -168,10 +168,12 @@ const LanguageEditor = ({ language, text, savedContent, setRichTexts, richTexts 
     return null;
   }
 
-  <RedaktoerRichText
-    editorId={`${text.id}-${language}`}
-    savedContent={savedContent}
-    onChange={(t) => setRichTexts({ ...richTexts, [language]: t })}
-    lang={SPELL_CHECK_LANGUAGES[language]}
-  />;
+  return (
+    <RedaktoerRichText
+      editorId={`${text.id}-${language}`}
+      savedContent={savedContent}
+      onChange={(t) => setRichTexts({ ...richTexts, [language]: t })}
+      lang={SPELL_CHECK_LANGUAGES[language]}
+    />
+  );
 };
