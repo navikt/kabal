@@ -10,8 +10,10 @@ import {
   isRegelverkType,
   isRichTextType,
 } from '@app/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
 import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
+import { Language } from '@app/types/texts/language';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
 import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';
@@ -25,12 +27,13 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   const query = useTextQuery();
   const navigate = useTextNavigate();
   const [addText, { isLoading }] = useAddTextMutation();
+  const lang = useRedaktoerLanguage();
 
   const onClick = useCallback(async () => {
-    const text = getNewText(textType);
+    const text = getNewText(textType, lang);
     const { id } = await addText({ text, query }).unwrap();
     navigate(id);
-  }, [addText, navigate, query, textType]);
+  }, [addText, lang, navigate, query, textType]);
 
   const temporarilyHideToggle = textType === GOD_FORMULERING_TYPE;
 
@@ -52,9 +55,9 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   );
 };
 
-const getNewText = (textType: TextTypes) => {
+const getNewText = (textType: TextTypes, lang: Language) => {
   if (isPlainTextType(textType)) {
-    return getNewPlainText(textType);
+    return getNewPlainText(textType, lang);
   }
 
   if (isRegelverkType(textType)) {
@@ -62,11 +65,11 @@ const getNewText = (textType: TextTypes) => {
   }
 
   if (isRichTextType(textType)) {
-    return getNewRichText(textType);
+    return getNewRichText(textType, lang);
   }
 
   if (isGodFormuleringType(textType)) {
-    return getNewGodFormulering();
+    return getNewGodFormulering(lang);
   }
 
   throw new Error(`Unknown text type`);

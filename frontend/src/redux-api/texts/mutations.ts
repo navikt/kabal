@@ -5,7 +5,6 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { reduxStore } from '@app/redux/configure-store';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { insertFallbackText } from '@app/redux-api/texts/helpers';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -175,20 +174,19 @@ const textsMutationSlice = textsApi.injectEndpoints({
       }),
       onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
-        const mappedData = insertFallbackText(data);
 
         toast.success(`Nytt utkast for «${title}» opprettet.`);
 
         dispatch(
           textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => [
-            mappedData,
+            data,
             ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
           ]),
         );
-        dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => mappedData));
+        dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
         dispatch(
           textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-            draft.map((t) => (t.id === id ? mappedData : t)),
+            draft.map((t) => (t.id === id ? data : t)),
           ),
         );
       },
@@ -340,7 +338,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
             }
 
             if (isRichText(t)) {
-              if (isLanguage(language) && richText !== null) {
+              if (isLanguage(language)) {
                 return { ...t, richText: { ...t.richText, [language]: richText } };
               }
 

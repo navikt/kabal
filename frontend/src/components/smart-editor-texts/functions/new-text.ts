@@ -18,19 +18,19 @@ const getMetadata = (): ITextBaseMetadata => ({
   title: '',
 });
 
-export const getNewRichText = (textType: RichTextTypes): INewRichTextParams => ({
+export const getNewRichText = (textType: RichTextTypes, lang: Language = Language.NB): INewRichTextParams => ({
   richText: {
-    [Language.NB]: [createSimpleParagraph()],
-    [Language.NN]: [createSimpleParagraph()],
+    [Language.NB]: lang === Language.NB ? [createSimpleParagraph()] : null,
+    [Language.NN]: lang === Language.NN ? [createSimpleParagraph()] : null,
   },
   textType,
   ...getMetadata(),
 });
 
-export const getNewPlainText = (textType: PlainTextTypes): INewPlainTextParams => ({
+export const getNewPlainText = (textType: PlainTextTypes, lang: Language = Language.NB): INewPlainTextParams => ({
   plainText: {
-    [Language.NB]: '',
-    [Language.NN]: '',
+    [Language.NB]: lang === Language.NB ? '' : null,
+    [Language.NN]: lang === Language.NN ? '' : null,
   },
   textType,
   ...getMetadata(),

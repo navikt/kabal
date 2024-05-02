@@ -2,13 +2,12 @@ import { HelpText, Switch, Tooltip } from '@navikt/ds-react';
 import { focusEditor, getEndPoint, isEditorFocused } from '@udecode/plate-common';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
+import { LanguageEditor, RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
 import { Container, Header, HeaderGroup } from '@app/components/maltekstseksjoner/texts/text-draft/styled-components';
+import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { isNodeEmpty } from '@app/plate/utils/queries';
+import { RichTextEditor } from '@app/plate/types';
 import {
   usePublishMutation,
   useSetTextTitleMutation,
@@ -19,7 +18,6 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import { LANGUAGES, Language, isLanguage } from '@app/types/texts/language';
 import { IDraftRichText } from '@app/types/texts/responses';
 import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
-import { RedaktoerRichText } from '../../../redaktoer-rich-text/redaktoer-rich-text';
 import { DraftTextFooter } from '../text-draft-footer';
 
 interface Props {
@@ -31,12 +29,10 @@ interface Props {
   maltekstseksjonId: string;
 }
 
-type RichTexts = Record<Language, EditorValue | null>;
-
 export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const [updateTextType, { isLoading: isTextTypeUpdating }] = useSetTextTypeMutation();
   const [updateTitle, { isLoading: isTitleUpdating }] = useSetTextTitleMutation();
-  const [updateRichText, { isLoading: isUpdatingContent }] = useUpdateRichTextMutation();
+  const [updateRichText, richTextStatus] = useUpdateRichTextMutation();
   const [publish] = usePublishMutation({ fixedCacheKey: text.id });
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
@@ -47,6 +43,10 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const richTextRef = useRef(richTexts);
   const queryRef = useRef({ textType: text.textType });
   const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    setRichTexts(text.richText);
+  }, [text.richText]);
 
   useEffect(() => {
     if (isActive && editorRef.current !== null && !isEditorFocused(editorRef.current)) {
@@ -65,9 +65,9 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       }
 
       const promises = LANGUAGES.map(async (lang) => {
-        const localRichText = _richTexts[lang] ?? [];
+        const localRichText = _richTexts[lang];
 
-        if (areDescendantsEqual(localRichText, text.richText[lang] ?? [])) {
+        if (areDescendantsEqual(localRichText ?? [], text.richText[lang] ?? [])) {
           return;
         }
 
@@ -113,7 +113,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
     const query = queryRef.current;
 
     const untranslated: Language[] = Object.entries(text.richText)
-      .filter(([, t]) => t === null || t.every(isNodeEmpty))
+      .filter(([, t]) => t === null)
       .map(([l]) => l)
       .filter(isLanguage);
 
@@ -129,6 +129,8 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   }, [id, publish, text.richText, updateContentIfChanged]);
 
   const isLocked = text.textType === RichTextTypes.MALTEKST;
+
+  const savedContent = text.richText[language];
 
   return (
     <Container ref={containerRef}>
@@ -164,26 +166,33 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         </HeaderGroup>
       </Header>
 
-      <RedaktoerRichText
-        ref={editorRef}
-        editorId={`${text.id}-${language}`}
-        savedContent={text.richText[language] ?? [createSimpleParagraph()]}
-        onChange={(t) => {
-          const changed: RichTexts = { ...richTexts, [language]: t };
-          richTextRef.current = changed;
-          setRichTexts(changed);
-        }}
-        onFocus={() => setActive(text.id)}
-        lang={SPELL_CHECK_LANGUAGES[language]}
-      />
+      {savedContent === null ? (
+        <CreateTranslatedRichText id={text.id} />
+      ) : (
+        <>
+          {LANGUAGES.map((lang) => (
+            <LanguageEditor
+              key={lang}
+              language={lang}
+              text={text}
+              savedContent={savedContent}
+              richTexts={richTexts}
+              setRichTexts={setRichTexts}
+              editorRef={editorRef}
+              richTextRef={richTextRef}
+              setActive={setActive}
+            />
+          ))}
 
-      <DraftTextFooter
-        text={text}
-        isSaving={isUpdatingContent || isTextTypeUpdating || isTitleUpdating}
-        onPublish={onPublish}
-        error={error}
-        {...rest}
-      />
+          <DraftTextFooter
+            text={text}
+            isSaving={richTextStatus.isLoading || isTextTypeUpdating || isTitleUpdating}
+            onPublish={onPublish}
+            error={error}
+            {...rest}
+          />
+        </>
+      )}
     </Container>
   );
 };

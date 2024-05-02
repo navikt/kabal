@@ -10,7 +10,7 @@ import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/func
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { GOD_FORMULERING_TYPE, IEditor, TextChangeType } from '@app/types/common-text-types';
+import { IEditor, TextChangeType } from '@app/types/common-text-types';
 import { TextType } from '@app/types/texts/common';
 import { LANGUAGE_NAMES, Language } from '@app/types/texts/language';
 import { IText } from '@app/types/texts/responses';
@@ -40,7 +40,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         <Button onClick={onPublish} icon={<UploadIcon aria-hidden />} size="small" loading={publishIsLoading}>
           Publiser
         </Button>
-        <DeleteLanguageVersion text={text} deleteTranslation={deleteTranslation} />
+        <DeleteLanguageVersion deleteTranslation={deleteTranslation} />
         {isDraft ? (
           <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
             {`Slett ${versions.length <= 1 ? 'tekst' : 'utkast'}`}
@@ -63,15 +63,14 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
 };
 
 interface DeleteLanguageVersionProps {
-  text: IText;
   deleteTranslation?: () => void;
 }
 
-const DeleteLanguageVersion = ({ text, deleteTranslation }: DeleteLanguageVersionProps) => {
+const DeleteLanguageVersion = ({ deleteTranslation }: DeleteLanguageVersionProps) => {
   const [confirm, setConfirm] = useState(false);
   const language = useRedaktoerLanguage();
 
-  if (text.textType !== GOD_FORMULERING_TYPE || deleteTranslation === undefined) {
+  if (deleteTranslation === undefined) {
     return null;
   }
 

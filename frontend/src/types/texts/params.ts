@@ -30,7 +30,7 @@ export interface IUpdateRichTextContentParams extends IUpdateBaseParams {
 }
 
 export interface IUpdateTextPlainTextParams extends IUpdateBaseParams {
-  plainText: string;
+  plainText: string | null;
   language: Language | typeof UNTRANSLATED;
 }
 
