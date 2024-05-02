@@ -45,6 +45,8 @@ export interface IOppgave {
   sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: DateString | null;
   saksnummer: string;
+  datoSendtTilTR: DateString | null;
+  previousSaksbehandler: INavEmployee | null;
 }
 
 export enum SortFieldEnum {

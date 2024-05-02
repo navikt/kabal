@@ -228,6 +228,26 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <FradelingReason oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
+      case ColumnKeyEnum.PreviousSaksbehandler:
+        if (oppgave.previousSaksbehandler === null) {
+          return <Table.DataCell key={key} />;
+        }
+
+        return (
+          <Table.DataCell key={key}>
+            {oppgave.previousSaksbehandler.navn} ({oppgave.previousSaksbehandler.navIdent})
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.DatoSendtTilTr:
+        if (oppgave.datoSendtTilTR === null) {
+          return <Table.DataCell key={key} />;
+        }
+
+        return (
+          <Table.DataCell key={key}>
+            <time dateTime={oppgave.datoSendtTilTR}>{isoDateToPretty(oppgave.datoSendtTilTR)}</time>
+          </Table.DataCell>
+        );
     }
 
     return <Table.DataCell key={key} />;
