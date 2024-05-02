@@ -30,6 +30,8 @@ export enum ColumnKeyEnum {
   RolTildeling,
   RelevantOppgaver,
   FradelingReason,
+  PreviousSaksbehandler,
+  DatoSendtTilTr,
 }
 
 export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
@@ -64,4 +66,6 @@ export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
   [ColumnKeyEnum.RolTildeling]: 'Tildeling',
   [ColumnKeyEnum.RelevantOppgaver]: null,
   [ColumnKeyEnum.FradelingReason]: null,
+  [ColumnKeyEnum.PreviousSaksbehandler]: 'Forrige saksbehandler',
+  [ColumnKeyEnum.DatoSendtTilTr]: 'Dato sendt til TR',
 };

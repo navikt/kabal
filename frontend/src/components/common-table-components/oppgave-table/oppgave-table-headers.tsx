@@ -98,6 +98,8 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.RolTildeling:
       case ColumnKeyEnum.RelevantOppgaver:
       case ColumnKeyEnum.FradelingReason:
+      case ColumnKeyEnum.PreviousSaksbehandler:
+      case ColumnKeyEnum.DatoSendtTilTr:
         return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
     }
 
