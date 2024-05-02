@@ -4,8 +4,8 @@ import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
 import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
-import { DraftGodFormulering } from '@app/components/smart-editor-texts/edit/draft-god-formulering';
 import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
+import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
@@ -17,7 +17,6 @@ import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/tex
 import { PlainTextTypes, REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
 import { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
 import { DraftPlainText } from './draft-plain-text';
-import { DraftRichText } from './draft-rich-text';
 
 interface Props {
   id: string;

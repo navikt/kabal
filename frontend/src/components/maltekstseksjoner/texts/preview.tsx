@@ -52,7 +52,7 @@ export const TextPreview = ({ textId, className }: Props) => {
 
       {savedContent === null ? (
         <Alert variant="info" size="small">
-          Tekst for {LANGUAGE_NAMES[language]} mangler
+          Tekst for {LANGUAGE_NAMES[language].toLowerCase()} mangler
         </Alert>
       ) : (
         <RedaktoerRichText

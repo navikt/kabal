@@ -2,8 +2,9 @@ import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-ic
 import { Button } from '@navikt/ds-react';
 import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
+import { getNewRichText } from '@app/components/smart-editor-texts/functions/new-text';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import {
   useCreateMaltekstseksjonMutation,
   useUpdateTextIdListMutation,
@@ -12,8 +13,6 @@ import { useAddTextMutation } from '@app/redux-api/texts/mutations';
 import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { INewMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { Language } from '@app/types/texts/language';
-import { INewTextParams } from '@app/types/texts/params';
 
 interface Props {
   query: IGetMaltekstseksjonParams;
@@ -56,31 +55,21 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
     fixedCacheKey: maltekstseksjon.id,
   });
   const setPath = useNavigateMaltekstseksjoner();
+  const lang = useRedaktoerLanguage();
 
   const isLocked = textType === RichTextTypes.MALTEKST;
 
   const { id, versionId, textIdList } = maltekstseksjon;
 
   const create = useCallback(async () => {
-    const text: INewTextParams = {
-      title: '',
-      textType,
-      richText: {
-        [Language.NB]: [createSimpleParagraph()],
-        [Language.NN]: [createSimpleParagraph()],
-      },
-      enhetIdList: [],
-      templateSectionIdList: [],
-      utfallIdList: [],
-      ytelseHjemmelIdList: [],
-    };
+    const text = getNewRichText(textType, lang);
 
     const createdText = await createText({ text, query: { textType } }).unwrap();
 
     await updateMaltekst({ id, query, textIdList: [...textIdList, createdText.id] });
 
     setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId: createdText.id });
-  }, [textType, createText, updateMaltekst, id, query, textIdList, setPath, versionId]);
+  }, [textType, lang, createText, updateMaltekst, id, query, textIdList, setPath, versionId]);
 
   const textName = isLocked ? 'låst' : 'redigerbar';
   const Icon = isLocked ? PadlockLockedIcon : PencilWritingIcon;

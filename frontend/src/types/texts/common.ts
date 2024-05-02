@@ -11,8 +11,8 @@ import {
 export interface INewRichTextParams extends ITextBaseMetadata {
   textType: RichTextTypes;
   richText: {
-    [Language.NB]: EditorValue;
-    [Language.NN]: EditorValue;
+    [Language.NB]: EditorValue | null;
+    [Language.NN]: EditorValue | null;
   };
 }
 
@@ -34,8 +34,8 @@ export interface INewGodFormuleringParams extends ITextBaseMetadata {
 export interface INewPlainTextParams extends ITextBaseMetadata {
   textType: PlainTextTypes;
   plainText: {
-    [Language.NB]: string;
-    [Language.NN]: string;
+    [Language.NB]: string | null;
+    [Language.NN]: string | null;
   };
 }
 

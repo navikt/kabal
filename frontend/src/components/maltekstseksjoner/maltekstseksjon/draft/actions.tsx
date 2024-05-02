@@ -4,7 +4,6 @@ import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteMaltekstseksjonDraftButton } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
 import { isRichText } from '@app/functions/is-rich-plain-text';
-import { isNodeEmpty } from '@app/plate/utils/queries';
 import {
   useDeleteDraftVersionMutation,
   usePublishMutation,
@@ -111,9 +110,7 @@ const useUtranslatedWarning = (textIdList: string[]): (() => Promise<string | nu
     const untranslated = texts
       .filter(
         (text): text is IRichText =>
-          text !== undefined &&
-          isRichText(text) &&
-          LANGUAGES.some((lang) => text.richText[lang] === null || text.richText[lang].every(isNodeEmpty)),
+          text !== undefined && isRichText(text) && LANGUAGES.some((lang) => text.richText[lang] === null),
       )
       .map((text) => (text.title.length > 0 ? text.title : '<Ingen tittel>'));
 
