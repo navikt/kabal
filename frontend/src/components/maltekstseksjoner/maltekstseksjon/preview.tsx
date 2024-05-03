@@ -2,13 +2,12 @@ import { Alert, Loader } from '@navikt/ds-react';
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { EditorValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useLazyGetTextVersionsQuery } from '@app/redux-api/texts/queries';
+import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { isApiError } from '@app/types/errors';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IRichText } from '@app/types/texts/responses';
@@ -21,7 +20,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   const [, { isLoading: isUpdating }] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjon.id });
   const [texts, setTexts] = useState<IRichText[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [getTextVersions] = useLazyGetTextVersionsQuery();
+  const [getText] = useLazyGetTextByIdQuery();
   const { textIdList } = maltekstseksjon;
   const lang = useRedaktoerLanguage();
   const editorId = `${textIdList.join(':')}-${lang}-preview`;
@@ -29,25 +28,12 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   useEffect(() => {
     setError(null);
 
-    const promises = textIdList.map((textId) => getTextVersions(textId, true).unwrap());
+    const promises = textIdList.map((textId) => getText(textId, true).unwrap());
 
     Promise.all(promises)
-      .then((textVersionsList) =>
-        textVersionsList
-          .map((textVersions) =>
-            textVersions.find((v) => {
-              if (maltekstseksjon.publishedDateTime !== null) {
-                return v.publishedDateTime !== null && v.publishedDateTime <= maltekstseksjon.publishedDateTime;
-              }
-
-              return true;
-            }),
-          )
-          .filter(isNotUndefined),
-      )
       .then((textList) => setTexts(textList.filter(isRichText)))
       .catch((e) => setError('data' in e && isApiError(e.data) ? e.data.detail : e.message));
-  }, [getTextVersions, maltekstseksjon.publishedDateTime, textIdList]);
+  }, [getText, textIdList]);
 
   if (error !== null) {
     return (

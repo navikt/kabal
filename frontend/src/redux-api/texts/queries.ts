@@ -29,10 +29,5 @@ export const textsQuerySlice = textsApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetTextByIdQuery,
-  useGetTextVersionsQuery,
-  useGetTextsQuery,
-  useLazyGetTextByIdQuery,
-  useLazyGetTextVersionsQuery,
-} = textsQuerySlice;
+export const { useGetTextByIdQuery, useGetTextVersionsQuery, useGetTextsQuery, useLazyGetTextByIdQuery } =
+  textsQuerySlice;

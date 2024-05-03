@@ -14,12 +14,12 @@ import { DraftMaltekstSection } from './draft/draft';
 import { PublishedMaltekstSection } from './maltekstseksjon-published';
 
 interface Props {
-  maltekstseksjon: IMaltekstseksjon;
+  id: string;
   query: IGetMaltekstseksjonParams;
 }
 
-export const MaltekstseksjonVersions = ({ maltekstseksjon, query }: Props) => {
-  const { data: versions, isLoading } = useGetMaltekstseksjonVersionsQuery(maltekstseksjon.id);
+export const MaltekstseksjonVersions = ({ id, query }: Props) => {
+  const { data: versions, isLoading } = useGetMaltekstseksjonVersionsQuery(id);
 
   if (isLoading || versions === undefined) {
     return null;

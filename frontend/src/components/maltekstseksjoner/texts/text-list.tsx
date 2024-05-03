@@ -143,7 +143,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
             textId={textId}
             isActive={textId === activeTextId}
             setActive={setActive}
-            maltekstseksjon={maltekstseksjon}
+            maltekstseksjonId={maltekstseksjon.id}
           />
         </ListItem>
       ))}
