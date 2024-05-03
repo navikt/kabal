@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -15,23 +16,42 @@ import {
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { getChildren } from '@app/plate/components/maltekstseksjon/get-children';
+import { containsEditedPlaceholder, getChildren } from '@app/plate/components/maltekstseksjon/get-children';
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
-import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
 import { MaltekstseksjonContainer, MaltekstseksjonToolbar } from '@app/plate/components/styled-components';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
+import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
-import { EditorValue, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import {
+  EditorValue,
+  EmptyVoidElement,
+  MaltekstElement,
+  MaltekstseksjonElement,
+  RedigerbarMaltekstElement,
+} from '@app/plate/types';
+import { isOfElementType } from '@app/plate/utils/queries';
 import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
 } from '@app/redux-api/maltekstseksjoner/consumer';
 import { IGetTextsParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+
+enum ReplaceMethod {
+  AUTO,
+  MANUAL,
+  NO_CHANGE,
+}
+
+type GetReplaceMethodFn = (
+  previousMaltekstseksjonElement: MaltekstseksjonElement,
+  newMaltekstseksjonId: string | null,
+) => Promise<ReplaceMethod>;
 
 type UpdateMaltekstseksjonFn = (
   _element: MaltekstseksjonElement,
@@ -52,11 +72,11 @@ export const Maltekstseksjon = ({
   const [fetchMaltekstseksjon, { isFetching: maltekstseksjonIsFetching }] = useLazyGetConsumerMaltekstseksjonerQuery();
   const [fetchMaltekstseksjonTexts, { isFetching: maltekstseksjonTextsIsFetching }] =
     useLazyGetMaltekstseksjonTextsQuery();
+  const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
   const language = useSmartEditorLanguage();
 
   const oppgaveIsLoaded = oppgave !== undefined;
-  const getReplaceMethod = useGetReplaceMethod(oppgaveIsLoaded);
 
   const path = useMemo(() => findNodePath(editor, element), [editor, element]);
 
@@ -91,6 +111,62 @@ export const Maltekstseksjon = ({
       });
     },
     [path, editor],
+  );
+
+  const getReplaceMethod: GetReplaceMethodFn = useCallback(
+    async (previousMaltekstseksjonElement, newMaltekstseksjonId) => {
+      if (!oppgaveIsLoaded) {
+        return ReplaceMethod.NO_CHANGE;
+      }
+
+      const previousId = previousMaltekstseksjonElement.id ?? null;
+
+      if (previousId === newMaltekstseksjonId) {
+        if (previousMaltekstseksjonElement.children.some((c) => c.language !== language)) {
+          if (
+            previousMaltekstseksjonElement.children.every(
+              (e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e),
+            )
+          ) {
+            return ReplaceMethod.AUTO;
+          }
+
+          return ReplaceMethod.MANUAL;
+        }
+
+        return ReplaceMethod.NO_CHANGE;
+      }
+
+      if (previousId === null) {
+        return ReplaceMethod.AUTO;
+      }
+
+      const [firstChild] = previousMaltekstseksjonElement.children;
+
+      if (isOfElementType<EmptyVoidElement>(firstChild, ELEMENT_EMPTY_VOID)) {
+        return ReplaceMethod.AUTO;
+      }
+
+      const originalTexts = await getOriginalTexts({ id: previousId, language }, true).unwrap();
+
+      if (originalTexts.length !== previousMaltekstseksjonElement.children.length) {
+        return ReplaceMethod.MANUAL;
+      }
+
+      for (const text of previousMaltekstseksjonElement.children) {
+        if (!originalTexts.some((ot) => ot.id === text.id)) {
+          return ReplaceMethod.MANUAL;
+        }
+      }
+
+      const unchanged = areDescendantsEqual(
+        previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
+        originalTexts.flatMap((t) => t.richText),
+      );
+
+      return unchanged ? ReplaceMethod.AUTO : ReplaceMethod.MANUAL;
+    },
+    [oppgaveIsLoaded, getOriginalTexts, language],
   );
 
   const updateMaltekstseksjon: UpdateMaltekstseksjonFn = useCallback(
