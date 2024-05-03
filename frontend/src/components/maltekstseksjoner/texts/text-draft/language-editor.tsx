@@ -38,7 +38,7 @@ export const LanguageEditor = ({
   return (
     <RedaktoerRichText
       ref={editorRef}
-      editorId={`${text.id}-${language}`}
+      editorId={`${text.id}-${text.versionId}-${language}`}
       savedContent={savedContent}
       onChange={(t) => {
         const changed: RichTexts = { ...richTexts, [language]: t };

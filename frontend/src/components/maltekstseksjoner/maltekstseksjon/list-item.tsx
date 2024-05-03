@@ -10,6 +10,7 @@ import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { IText } from '@app/types/texts/responses';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { TextLink } from '../text-link';
 
@@ -43,7 +44,10 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     [setDraggedTextId, textId],
   );
 
-  const text = !isLoading && versions !== undefined ? versions[0] : undefined;
+  const text =
+    !isLoading && versions !== undefined
+      ? getFirstText(versions, maltekstseksjon.publishedDateTime !== null)
+      : undefined;
 
   const isReady = text !== undefined;
 
@@ -145,3 +149,11 @@ const HelpTextContainer = styled.div`
   max-width: 300px;
   white-space: normal;
 `;
+
+const getFirstText = (versions: IText[], isPublished: boolean) => {
+  if (isPublished) {
+    return versions.at(0);
+  }
+
+  return versions.find((v) => v.published);
+};

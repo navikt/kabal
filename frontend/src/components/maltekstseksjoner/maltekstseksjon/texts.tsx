@@ -9,6 +9,7 @@ import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
+  nextMaltekstseksjon?: IMaltekstseksjon;
   query: IGetMaltekstseksjonParams;
 }
 
@@ -17,7 +18,7 @@ enum TabsEnum {
   EDIT = 'EDIT',
 }
 
-export const MaltekstseksjonTexts = ({ maltekstseksjon, query }: Props) => {
+export const MaltekstseksjonTexts = ({ maltekstseksjon, nextMaltekstseksjon, query }: Props) => {
   const [activeTab, setActiveTab] = useState<TabsEnum>(TabsEnum.PREVIEW);
   const textCount = maltekstseksjon.textIdList.length;
   const [previousTextCount, setPreviousTextCount] = useState(textCount);
@@ -41,10 +42,10 @@ export const MaltekstseksjonTexts = ({ maltekstseksjon, query }: Props) => {
         <Tabs.Tab value={TabsEnum.PREVIEW} label="Forhåndsvisning" icon={<MagnifyingGlassIcon aria-hidden />} />
       </Tabs.List>
       <StyledTabPanel value={TabsEnum.PREVIEW}>
-        <MaltekstseksjonPreview maltekstseksjon={maltekstseksjon} />
+        <MaltekstseksjonPreview maltekstseksjon={maltekstseksjon} nextMaltekstseksjon={nextMaltekstseksjon} />
       </StyledTabPanel>
       <StyledTabPanel value={TabsEnum.EDIT}>
-        <TextList maltekstseksjon={maltekstseksjon} query={query} />
+        <TextList maltekstseksjon={maltekstseksjon} nextMaltekstseksjon={nextMaltekstseksjon} query={query} />
       </StyledTabPanel>
     </StyledTabs>
   );

@@ -1,21 +1,22 @@
 import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
+import { isoDateTimeToPretty } from '@app/domain/date';
 
 interface TabLabelProps {
   isDraft: boolean;
   isPublished: boolean;
-  children: string | number;
+  date: string;
 }
 
-export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
+export const TabLabel = ({ isDraft, isPublished, date }: TabLabelProps) => {
   if (isPublished) {
     return (
       <Container>
         <Tag size="xsmall" variant="info">
           Aktiv
         </Tag>
-        Versjon {children}
+        {isoDateTimeToPretty(date)}
       </Container>
     );
   }
@@ -26,7 +27,7 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
         <Tag size="xsmall" variant="warning">
           Utkast
         </Tag>
-        Versjon {children}
+        {isoDateTimeToPretty(date)}
       </Container>
     );
   }
@@ -36,7 +37,7 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
       <Tag size="xsmall" variant="neutral">
         Inaktiv
       </Tag>
-      Versjon {children}
+      {isoDateTimeToPretty(date)}
     </Container>
   );
 };
