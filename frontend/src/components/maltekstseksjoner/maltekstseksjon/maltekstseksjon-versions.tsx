@@ -14,12 +14,12 @@ import { DraftMaltekstSection } from './draft/draft';
 import { PublishedMaltekstSection } from './maltekstseksjon-published';
 
 interface Props {
-  id: string;
+  maltekstseksjon: IMaltekstseksjon;
   query: IGetMaltekstseksjonParams;
 }
 
-export const MaltekstseksjonVersions = ({ id, query }: Props) => {
-  const { data: versions, isLoading } = useGetMaltekstseksjonVersionsQuery(id);
+export const MaltekstseksjonVersions = ({ maltekstseksjon, query }: Props) => {
+  const { data: versions, isLoading } = useGetMaltekstseksjonVersionsQuery(maltekstseksjon.id);
 
   if (isLoading || versions === undefined) {
     return null;
@@ -81,14 +81,24 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
       selectedTabId={maltekstseksjonVersionId}
       setSelectedTabId={setSelectedTabId}
       versions={versions}
-      createDraftPanel={(version) => (
+      createDraftPanel={(version, nextVersion) => (
         <PanelContent>
-          <DraftMaltekstSection maltekstseksjon={version} query={query} onDraftDeleted={onDraftDeleted} />
+          <DraftMaltekstSection
+            maltekstseksjon={version}
+            nextMaltekstseksjon={nextVersion}
+            query={query}
+            onDraftDeleted={onDraftDeleted}
+          />
         </PanelContent>
       )}
-      createPublishedPanel={(version) => (
+      createPublishedPanel={(version, nextVersion) => (
         <PanelContent>
-          <PublishedMaltekstSection maltekstseksjon={version} query={query} onDraftCreated={onDraftCreated} />
+          <PublishedMaltekstSection
+            maltekstseksjon={version}
+            nextMaltekstseksjon={nextVersion}
+            query={query}
+            onDraftCreated={onDraftCreated}
+          />
         </PanelContent>
       )}
     />

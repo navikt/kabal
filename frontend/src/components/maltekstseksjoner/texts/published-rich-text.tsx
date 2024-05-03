@@ -52,7 +52,7 @@ export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId, has
         <>
           <RedaktoerRichText
             ref={editorRef}
-            editorId={`${text.id}-${lang}`}
+            editorId={`${text.id}-${text.versionId}-${lang}`}
             savedContent={savedContent}
             readOnly
             lang={SPELL_CHECK_LANGUAGES[lang]}

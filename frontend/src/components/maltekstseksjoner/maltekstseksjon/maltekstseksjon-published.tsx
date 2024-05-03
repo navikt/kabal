@@ -7,6 +7,7 @@ import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
+import { MaltekstHistoryModal } from '@app/components/maltekstseksjoner/maltekstseksjon/timeline/timeline';
 import {
   TagContainer,
   TemplateSectionTagList,
@@ -16,7 +17,7 @@ import {
 import { TextHistory } from '@app/components/text-history/text-history';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { IMaltekstseksjon, IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TextListItem } from '../styled-components';
 import {
   ActionsContainer,
@@ -31,11 +32,17 @@ import { LoadTextListItem } from './list-item';
 
 interface MaltekstProps {
   maltekstseksjon: IPublishedMaltekstseksjon;
+  nextMaltekstseksjon?: IMaltekstseksjon;
   query: IGetMaltekstseksjonParams;
   onDraftCreated: (versionId: string) => void;
 }
 
-export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreated }: MaltekstProps) => {
+export const PublishedMaltekstSection = ({
+  maltekstseksjon,
+  nextMaltekstseksjon,
+  query,
+  onDraftCreated,
+}: MaltekstProps) => {
   const { textId: activeTextId } = useParams<{ textId: string }>();
   const { id, title, textIdList, publishedDateTime, versionId, publishedBy } = maltekstseksjon;
   const [createDraft, { isLoading }] = useCreateDraftFromVersionMutation();
@@ -60,6 +67,10 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
             av {publishedBy === null ? 'Ukjent' : <EditorName editorId={publishedBy} />}
           </LabelValue>
           <TextHistory {...maltekstseksjon} isUpdating={false} />
+          <MaltekstHistoryModal
+            maltekstseksjon={maltekstseksjon}
+            nextMaltekstseksjonDate={nextMaltekstseksjon?.publishedDateTime}
+          />
         </Row>
         <TagContainer>
           <TemplateSectionTagList templateSectionIdList={maltekstseksjon.templateSectionIdList} />
@@ -83,7 +94,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
         </List>
       </SidebarContainer>
 
-      <MaltekstseksjonTexts maltekstseksjon={maltekstseksjon} query={query} />
+      <MaltekstseksjonTexts maltekstseksjon={maltekstseksjon} nextMaltekstseksjon={nextMaltekstseksjon} query={query} />
     </Container>
   );
 };
