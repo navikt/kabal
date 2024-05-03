@@ -16,7 +16,7 @@ export const Maltekstseksjon = ({ maltekstseksjon, query }: Props) => (
       <UnpublishMaltekstseksjonButton id={maltekstseksjon.id} title={maltekstseksjon.title} query={query} />
     </MaltekstseksjonHeader>
 
-    <MaltekstseksjonVersions maltekstseksjon={maltekstseksjon} query={query} />
+    <MaltekstseksjonVersions id={maltekstseksjon.id} query={query} />
   </MaltekstseksjonContainer>
 );
 
