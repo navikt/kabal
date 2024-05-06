@@ -7,6 +7,7 @@ import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element
 import { EmptyVoidElement, MaltekstseksjonElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetMaltekstseksjonTextsQuery } from '@app/redux-api/maltekstseksjoner/consumer';
+import { Language } from '@app/types/texts/language';
 
 export enum ReplaceMethod {
   AUTO,
@@ -73,17 +74,17 @@ export const useGetReplaceMethod = (oppgaveIsLoaded: boolean) => {
       const { children } = previousMaltekstseksjonElement;
 
       if (previousId === newMaltekstseksjonId) {
-        if (children.filter((c) => c.type !== ELEMENT_EMPTY_VOID).some((c) => c.language !== language)) {
-          if (children.every((e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e))) {
-            return ReplaceMethod.AUTO;
-          }
-
-          const isChanged = await getIsChanged(previousMaltekstseksjonElement);
-
-          return isChanged ? ReplaceMethod.MANUAL : ReplaceMethod.AUTO;
+        if (children.every((c) => (c.language ?? Language.NB) === language)) {
+          return ReplaceMethod.NO_CHANGE;
         }
 
-        return ReplaceMethod.NO_CHANGE;
+        if (children.every((e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e))) {
+          return ReplaceMethod.AUTO;
+        }
+
+        const isChanged = await getIsChanged(previousMaltekstseksjonElement);
+
+        return isChanged ? ReplaceMethod.MANUAL : ReplaceMethod.AUTO;
       }
 
       if (previousId === null) {
