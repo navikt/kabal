@@ -8,7 +8,6 @@ import {
 } from '@app/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { ENVIRONMENT } from '@app/environment';
 import { useSetSmartEditorLanguage } from '@app/hooks/use-set-smart-editor-language';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
@@ -56,17 +55,15 @@ export const SaksbehandlerSettings = () => {
           </Heading>
         </Modal.Header>
         <StyledModalBody>
-          {ENVIRONMENT.isProduction ? null : (
-            <section>
-              <Heading level="2" size="small" spacing>
-                Språk
-              </Heading>
-              <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
-                <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
-                <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
-              </ToggleGroup>
-            </section>
-          )}
+          <section>
+            <Heading level="2" size="small" spacing>
+              Språk
+            </Heading>
+            <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
+              <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
+              <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+            </ToggleGroup>
+          </section>
 
           <section>
             <Heading level="2" size="small" spacing>

@@ -12,7 +12,7 @@ import {
 } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
+import { TextTypes } from '@app/types/common-text-types';
 import { Language } from '@app/types/texts/language';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
@@ -35,17 +35,13 @@ export const SmartEditorTexts = ({ textType }: Props) => {
     navigate(id);
   }, [addText, lang, navigate, query, textType]);
 
-  const temporarilyHideToggle = textType === GOD_FORMULERING_TYPE;
-
   return (
     <Container>
       <Header>
         <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>
-        {temporarilyHideToggle || textType === REGELVERK_TYPE ? null : (
-          <SetStandaloneTextLanguage textType={textType} />
-        )}
+        <SetStandaloneTextLanguage textType={textType} />
       </Header>
       <Content>
         <FilteredTextList textType={textType} />
