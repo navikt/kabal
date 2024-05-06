@@ -137,6 +137,8 @@ const ListContainer = styled.div`
   margin-bottom: 16px;
   margin-right: 16px;
   min-width: 300px;
+  position: sticky;
+  top: 0;
 `;
 
 const ListHeader = styled.div`

@@ -142,6 +142,7 @@ const HistoryEditorContainer = styled.div`
   overflow-x: visible;
   padding-top: 16px;
   padding-right: 16px;
+  height: max-content;
 
   &::after {
     content: '';
