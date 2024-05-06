@@ -73,7 +73,7 @@ export const useGetReplaceMethod = (oppgaveIsLoaded: boolean) => {
       const { children } = previousMaltekstseksjonElement;
 
       if (previousId === newMaltekstseksjonId) {
-        if (children.some((c) => c.language !== language)) {
+        if (children.filter((c) => c.type !== ELEMENT_EMPTY_VOID).some((c) => c.language !== language)) {
           if (children.every((e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e))) {
             return ReplaceMethod.AUTO;
           }
