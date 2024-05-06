@@ -5,10 +5,10 @@ import {
   PlateElement,
   PlateRenderElementProps,
   findNodePath,
-  isEditorReadOnly,
   replaceNodeChildren,
   setNodes,
   unsetNodes,
+  useEditorReadOnly,
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
@@ -46,6 +46,7 @@ export const Maltekstseksjon = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
+  const readOnly = useEditorReadOnly(editor.id);
   const { data: oppgave } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: MALTEKSTSEKSJON_TYPE, section: element.section, templateId });
@@ -141,12 +142,12 @@ export const Maltekstseksjon = ({
   );
 
   useEffect(() => {
-    if (oppgave?.ytelseId === undefined || oppgave?.resultat === undefined || query === skipToken) {
+    if (readOnly || oppgave?.ytelseId === undefined || oppgave?.resultat === undefined || query === skipToken) {
       return;
     }
 
     updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
-  }, [element, oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
+  }, [element, oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon, readOnly]);
 
   const isFetching = maltekstseksjonIsFetching || maltekstseksjonTextsIsFetching;
 
@@ -156,7 +157,7 @@ export const Maltekstseksjon = ({
       attributes={attributes}
       element={element}
       editor={editor}
-      contentEditable={!isEditorReadOnly(editor)}
+      contentEditable={!readOnly}
       suppressContentEditableWarning
       onDragStart={(e) => {
         e.preventDefault();

@@ -7,6 +7,7 @@ import {
   isEditorReadOnly,
   isElement,
   replaceNodeChildren,
+  useEditorReadOnly,
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
@@ -31,13 +32,14 @@ export const LegacyMaltekst = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
+  const readOnly = useEditorReadOnly(editor.id);
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
 
   useEffect(() => {
-    if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
+    if (readOnly || isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
       return;
     }
 
@@ -68,7 +70,7 @@ export const LegacyMaltekst = ({
         replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
       );
     });
-  }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
+  }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, readOnly, templateId]);
 
   if (isLoading) {
     return (

@@ -1,10 +1,17 @@
-import { PlateElement, PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
+import {
+  PlateElement,
+  PlateRenderElementProps,
+  setNodes,
+  useEditorReadOnly,
+  useEditorRef,
+} from '@udecode/plate-common';
+import { parseISO } from 'date-fns';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { CurrentDateElement, EditorValue } from '@app/plate/types';
+import { CurrentDateElement, EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 
 type Props = PlateRenderElementProps<EditorValue, CurrentDateElement>;
 
@@ -14,10 +21,16 @@ interface DateParts {
   day: number;
 }
 
-export const CurrentDate = (props: Props) => {
-  const [now, setNow] = useState(new Date());
+export const CurrentDate = ({ element, ...props }: Props) => {
+  const editor = useMyPlateEditorRef();
+  const readOnly = useEditorReadOnly(editor.id);
+  const [now, setNow] = useState(element.date === undefined ? new Date() : parseISO(element.date));
 
   useEffect(() => {
+    if (readOnly) {
+      return;
+    }
+
     const millisecondsToNextDay = 86400000 - (now.getTime() % 86400000);
     const timeout = setTimeout(() => setNow(new Date()), millisecondsToNextDay);
 
@@ -33,15 +46,24 @@ export const CurrentDate = (props: Props) => {
     [now],
   );
 
-  return <RenderCurrentDate {...props} {...parts} />;
+  return <RenderCurrentDate element={element} {...props} {...parts} />;
 };
 
 const RenderCurrentDate = memo<Props & DateParts>(
   ({ year, month, day, children, attributes, element }) => {
     const editor = useEditorRef();
+    const readOnly = useEditorReadOnly(editor.id);
     const isSelected = useSelected();
 
     const isoDate = `${year}-${zeroPad(month + 1)}-${zeroPad(day)}`;
+
+    useEffect(() => {
+      if (readOnly || element.date === isoDate) {
+        return;
+      }
+
+      setNodes(editor, { date: isoDate }, { match: (n) => n === element, at: [], mode: 'highest' });
+    }, [editor, element, isoDate, readOnly]);
 
     return (
       <PlateElement
@@ -59,7 +81,11 @@ const RenderCurrentDate = memo<Props & DateParts>(
       >
         {children}
         <CurrentDateContainer dateTime={isoDate} $isFocused={isSelected} contentEditable={false}>
-          <span>Dato: {formatLongDate(year, month, day)}</span>
+          <span>
+            {element.date === undefined
+              ? `Dato: se dato i listen til venstre`
+              : `Dato: ${formatLongDate(year, month, day)}`}
+          </span>
         </CurrentDateContainer>
       </PlateElement>
     );

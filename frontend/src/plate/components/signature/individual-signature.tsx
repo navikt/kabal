@@ -1,4 +1,4 @@
-import { setNodes } from '@udecode/plate-common';
+import { setNodes, useEditorReadOnly } from '@udecode/plate-common';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -14,6 +14,7 @@ interface Props {
 
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
+  const readOnly = useEditorReadOnly(editor.id);
   const { templateId } = useContext(SmartEditorContext);
   const saksbehandlerSignature = useMainSignature(templateId);
 
@@ -35,7 +36,10 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
   }, [saksbehandlerSignature, templateId, element.useSuffix, element.useShortName]);
 
   useEffect(() => {
-    if (element.saksbehandler?.name === signature?.name && element.saksbehandler?.title === signature?.title) {
+    if (
+      readOnly ||
+      (element.saksbehandler?.name === signature?.name && element.saksbehandler?.title === signature?.title)
+    ) {
       return;
     }
 
@@ -49,7 +53,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
       at: [],
       match: (n) => n === element,
     });
-  }, [editor, element, saksbehandlerSignature, templateId, signature]);
+  }, [editor, element, saksbehandlerSignature, templateId, signature, readOnly]);
 
   if (signature === undefined) {
     return null;
@@ -71,6 +75,7 @@ interface MedunderskriverSignatureProps {
 
 export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
+  const readOnly = useEditorReadOnly(editor.id);
   const medunderskriverSignature = useMedunderskriverSignature();
   const { templateId } = useContext(SmartEditorContext);
 
@@ -94,6 +99,10 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   );
 
   useEffect(() => {
+    if (readOnly) {
+      return;
+    }
+
     if (noMedunderskriver) {
       const data: Partial<SignatureElement> = {
         useShortName: element.useShortName,
@@ -111,7 +120,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     };
 
     setNodes(editor, data, { match: (n) => n === element, at: [] });
-  }, [editor, element, noMedunderskriver, signature]);
+  }, [editor, element, noMedunderskriver, readOnly, signature]);
 
   if (noMedunderskriver || signature === undefined) {
     return null;

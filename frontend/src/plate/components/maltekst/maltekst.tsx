@@ -4,10 +4,10 @@ import {
   PlateElement,
   PlateRenderElementProps,
   findNodePath,
-  isEditorReadOnly,
   isElement,
   replaceNodeChildren,
   unwrapNodes,
+  useEditorReadOnly,
 } from '@udecode/plate-common';
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -27,6 +27,7 @@ export const Maltekst = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
+  const readOnly = useEditorReadOnly(editor.id);
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
 
@@ -70,8 +71,6 @@ export const Maltekst = ({
   }
 
   const unlock = () => unwrapNodes(editor, { match: (n) => n === element, at: [] });
-
-  const readOnly = isEditorReadOnly(editor);
 
   return (
     <PlateElement

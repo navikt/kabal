@@ -1,11 +1,12 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, setNodes } from '@udecode/plate-common';
+import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
@@ -41,16 +42,33 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
 };
 
 const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
+  const editor = useMyPlateEditorRef();
+  const readOnly = useEditorReadOnly(editor.id);
+  const language = useSmartEditorLanguage();
   const [initialized, setInitialized] = useState(false);
   const { user } = useContext(StaticDataContext);
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
-  const [text, setText] = useState<IConsumerPlainText>();
+  const [text, setText] = useState<IConsumerPlainText | undefined>(
+    element.content === null
+      ? undefined
+      : {
+          textType,
+          plainText: element.content,
+          language,
+          enhetIdList: [],
+          id: '',
+          publishedDateTime: '',
+          templateSectionIdList: [],
+          title: '',
+          utfallIdList: [],
+          ytelseHjemmelIdList: [],
+        },
+  );
 
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
-  const editor = useMyPlateEditorRef();
   const query = useQuery({ textType });
 
   const loadMaltekst = useCallback(
@@ -86,10 +104,10 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
   );
 
   useEffect(() => {
-    if (!initialized) {
+    if (!initialized && !readOnly) {
       loadMaltekst(element);
     }
-  }, [element, initialized, loadMaltekst, textType, user.ansattEnhet.id]);
+  }, [element, initialized, loadMaltekst, readOnly, textType, user.ansattEnhet.id]);
 
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 
@@ -107,7 +125,12 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
       }}
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>
-        <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
+        <HeaderFooterContent
+          text={text}
+          isLoading={isLoading && isUninitialized}
+          type={element.type}
+          readonly={readOnly}
+        />
         {children}
         <SectionToolbar>
           <AddNewParagraph editor={editor} element={element} />
@@ -121,10 +144,15 @@ interface HeaderFooterContentProps {
   text?: IConsumerPlainText;
   isLoading: boolean;
   type: typeof ELEMENT_HEADER | typeof ELEMENT_FOOTER;
+  readonly: boolean;
 }
 
-const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps) => {
-  if (isLoading || typeof text === 'undefined') {
+const HeaderFooterContent = ({ text, isLoading, type, readonly }: HeaderFooterContentProps) => {
+  if (isLoading || text === undefined) {
+    if (readonly) {
+      return null;
+    }
+
     return (
       <Paragraph $textAlign={TextAlign.LEFT}>
         <Loader />

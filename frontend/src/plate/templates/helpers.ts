@@ -2,6 +2,8 @@ import { ELEMENT_H1, ELEMENT_H2 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { format } from 'date-fns';
+import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -159,6 +161,7 @@ export const createPageBreak = (): PageBreakElement => ({
 export const createCurrentDate = (): CurrentDateElement => ({
   type: ELEMENT_CURRENT_DATE,
   children: [{ text: '' }],
+  date: format(new Date(), ISO_FORMAT),
 });
 
 export const createHeader = (): HeaderElement => ({
@@ -197,7 +200,4 @@ export const createPlaceHolder = (placeholder = ''): PlaceholderElement => ({
   children: [{ text: '' }],
 });
 
-export const createEmptyVoid = (): EmptyVoidElement => ({
-  type: ELEMENT_EMPTY_VOID,
-  children: [{ text: '' }],
-});
+export const createEmptyVoid = (): EmptyVoidElement => ({ type: ELEMENT_EMPTY_VOID, children: [{ text: '' }] });

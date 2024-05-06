@@ -34,6 +34,8 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
         return;
       }
 
+      // console.log('Updating document', content, localContent);
+
       update({ content: localContent, oppgaveId, dokumentId: id, version: smartDocument.version });
     }, 2_000);
 

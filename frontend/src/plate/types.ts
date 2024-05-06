@@ -163,6 +163,7 @@ export interface PageBreakElement extends BlockElement {
 
 export interface CurrentDateElement extends BlockElement {
   type: typeof ELEMENT_CURRENT_DATE;
+  date: string | undefined;
   children: [{ text: '' }];
 }
 
