@@ -18,8 +18,8 @@ export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
 
   const navigateToText = useCallback(
     (newParams: Params, replace = false) =>
-      navigate(`${calculatePath(rootPath, oldParams, newParams)}${search}`, { replace }),
-    [navigate, oldParams, rootPath, search],
+      navigate(`${calculatePath(rootPath, oldParams, newParams, hasLanguage)}${search}`, { replace }),
+    [hasLanguage, navigate, oldParams, rootPath, search],
   );
 
   useEffect(() => {
@@ -35,12 +35,15 @@ const calculatePath = (
   rootPath: string | undefined,
   oldParams: Record<string, string | undefined>,
   newParams: Params,
+  hasLanguage: boolean,
 ): string => {
   let path = `/${rootPath}`;
 
-  const newLanguage = newParams.lang ?? oldParams.lang ?? Language.NB;
+  if (hasLanguage) {
+    const newLanguage = newParams.lang ?? oldParams.lang ?? Language.NB;
 
-  path += `/${newLanguage}`;
+    path += `/${newLanguage}`;
+  }
 
   if (newParams.id === null) {
     return path;

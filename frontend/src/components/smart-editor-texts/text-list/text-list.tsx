@@ -20,7 +20,7 @@ import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/fun
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
-import { TextTypes } from '@app/types/common-text-types';
+import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { Language, UNTRANSLATED } from '@app/types/texts/language';
 import { IText } from '@app/types/texts/responses';
@@ -163,7 +163,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
       <StyledList>
         {sortedTexts.map(({ id, title, modified, publishedDateTime, score }) => (
           <ListItem key={id} $active={query.id === id}>
-            <StyledLink to={`${getPathPrefix(textType)}/${language}/${id}${window.location.search}`}>
+            <StyledLink to={getLink(textType, language, id)}>
               <StyledTitle>
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
@@ -178,6 +178,14 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
       </StyledList>
     </Container>
   );
+};
+
+const getLink = (textType: TextTypes, language: Language, id: string) => {
+  if (textType === REGELVERK_TYPE) {
+    return `${getPathPrefix(textType)}/${id}${window.location.search}`;
+  }
+
+  return `${getPathPrefix(textType)}/${language}/${id}${window.location.search}`;
 };
 
 const getTitle = (title: string) => (title.trim().length === 0 ? '<Ingen tittel>' : title);
