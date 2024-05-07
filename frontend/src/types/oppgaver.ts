@@ -64,15 +64,23 @@ export enum SortOrderEnum {
   SYNKENDE = 'SYNKENDE',
 }
 
-export interface CommonOppgaverParams {
+export interface FromDateSortKeys {
+  ferdigstiltFrom?: string;
+  returnertFrom?: string;
+  fristFrom?: string;
+}
+
+export interface ToDateSortKeys {
+  ferdigstiltTo?: string;
+  returnertTo?: string;
+  fristTo?: string;
+}
+
+export interface CommonOppgaverParams extends FromDateSortKeys, ToDateSortKeys {
   typer?: SaksTypeEnum[];
   ytelser?: string[];
   hjemler?: string[];
   registreringshjemler?: string[];
-  ferdigstiltFrom?: string;
-  ferdigstiltTo?: string;
-  returnertFrom?: string;
-  returnertTo?: string;
   tildelteSaksbehandlere?: string[];
   medunderskrivere?: string[];
   sortering: SortFieldEnum;

@@ -1,44 +1,53 @@
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, Table, TableProps } from '@navikt/ds-react';
+import { Button, ButtonProps, TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
+import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import {
+  CommonOppgaverParams,
+  FromDateSortKeys,
+  SortFieldEnum,
+  SortOrderEnum,
+  ToDateSortKeys,
+} from '@app/types/oppgaver';
 
 interface SortProps {
   params: CommonOppgaverParams;
   onSortChange: TableProps['onSortChange'];
   sortKey: SortFieldEnum;
+  children: string;
 }
 
 interface FilterProps {
   params: CommonOppgaverParams;
   setParams: SetCommonOppgaverParams;
-  fromKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltFrom' | 'returnertFrom'>;
-  toKey: keyof Pick<CommonOppgaverParams, 'ferdigstiltTo' | 'returnertTo'>;
+  fromKey: keyof FromDateSortKeys;
+  toKey: keyof ToDateSortKeys;
 }
 
-const Sort = ({ params, onSortChange, sortKey }: SortProps) => {
+const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
   const onClick = () => {
     onSortChange?.(sortKey);
   };
 
-  const Icon = getSortIcon(params.sortering, params.rekkefoelge);
-
   const sorted = params.sortering === sortKey;
+  const Icon = getSortIcon(sorted, params.rekkefoelge);
 
   return (
     <StyledSortButton
-      size="small"
       variant="tertiary"
       icon={<Icon fontSize={16} />}
       onClick={onClick}
       $sorted={sorted}
-    />
+      iconPosition="right"
+    >
+      {children}
+    </StyledSortButton>
   );
 };
 
@@ -62,32 +71,35 @@ const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: Filt
   return <DatePickerRange onChange={onChange} selected={{ from: filters[fromKey], to: filters[toKey] }} />;
 };
 
-export const FinishedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
-  <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
+interface DateColumnHeaderProps {
+  params: CommonOppgaverParams;
+  setParams: SetCommonOppgaverParams;
+  onSortChange: TableProps['onSortChange'];
+  children: string;
+  fromKey: keyof FromDateSortKeys;
+  toKey: keyof ToDateSortKeys;
+}
+
+export const DateColumnHeader = ({
+  params: filters,
+  setParams: setFilters,
+  onSortChange,
+  children,
+  fromKey,
+  toKey,
+}: DateColumnHeaderProps) => (
+  <StyledColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <Container>
-      Fullført
-      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER} />
-      <Filter params={filters} setParams={setFilters} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo" />
+      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.MOTTATT}>
+        {children}
+      </Sort>
+      <Filter params={filters} setParams={setFilters} fromKey={fromKey} toKey={toKey} />
     </Container>
-  </Table.ColumnHeader>
+  </StyledColumnHeader>
 );
 
-interface ColumnHeaderProps
-  extends Pick<SortProps, 'params' | 'onSortChange'>,
-    Pick<FilterProps, 'params' | 'setParams'> {}
-
-export const ReturnedColumnHeader = ({ params: filters, setParams: setFilters, onSortChange }: ColumnHeaderProps) => (
-  <Table.ColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
-    <Container>
-      Returnert
-      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.RETURNERT_FRA_ROL} />
-      <Filter params={filters} setParams={setFilters} fromKey="returnertFrom" toKey="returnertTo" />
-    </Container>
-  </Table.ColumnHeader>
-);
-
-const getSortIcon = (sortering: SortFieldEnum, rekkefoelge: SortOrderEnum) => {
-  if (sortering === SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER) {
+const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
+  if (sorted) {
     return rekkefoelge === SortOrderEnum.STIGENDE ? ArrowUpIcon : ArrowDownIcon;
   }
 
@@ -98,7 +110,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: var(--a-spacing-4) var(--a-spacing-3);
 `;
 
 interface StyledSortButtonProps {
@@ -111,4 +122,7 @@ const SortButton = (props: SortButtonProps) => <Button {...props} />;
 
 const StyledSortButton = styled(SortButton)<StyledSortButtonProps>`
   background-color: ${({ $sorted }) => ($sorted ? 'var(--a-surface-selected)' : 'transparent')};
+  white-space: nowrap;
+  border-radius: var(--a-border-radius-small);
+  padding: var(--a-spacing-4) var(--a-spacing-3);
 `;
