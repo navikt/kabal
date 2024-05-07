@@ -3,7 +3,7 @@ import {
   PlateEditor,
   deleteBackward,
   deleteText,
-  insertNode,
+  insertNodes,
   insertText,
   withoutMergingHistory,
 } from '@udecode/plate-common';
@@ -74,7 +74,7 @@ export const onKeyDown =
     });
 
     deleteText(editor, { at: range });
-    insertNode(editor, { ...marks, text: `${long}${key}` });
+    insertNodes(editor, { ...marks, text: `${long}${key}` });
 
     const numberOfMarks = Object.values(marks).filter((m) => m).length;
 
