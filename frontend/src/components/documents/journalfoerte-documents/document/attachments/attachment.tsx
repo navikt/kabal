@@ -1,3 +1,5 @@
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 import React, { memo, useCallback, useContext, useRef } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
@@ -29,12 +31,14 @@ interface Props {
   journalpostId: string;
   vedlegg: IArkivertDocumentVedlegg;
   isSelected: boolean;
+  showVedlegg: boolean;
+  toggleShowVedlegg: () => void;
 }
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ vedlegg, journalpostId, isSelected }: Props) => {
+  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg }: Props) => {
     const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -82,6 +86,8 @@ export const Attachment = memo(
     const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled;
 
+    const Icon = showVedlegg ? ChevronUpIcon : ChevronDownIcon;
+
     return (
       <StyledVedlegg
         key={journalpostId + dokumentInfoId}
@@ -102,12 +108,22 @@ export const Attachment = memo(
           dokumentInfoId={dokumentInfoId}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
         />
+
+        <ExpandButton
+          variant="tertiary"
+          size="small"
+          icon={<Icon aria-hidden />}
+          onClick={toggleShowVedlegg}
+          aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
+        />
+
         <DocumentTitle
           journalpostId={journalpostId}
           dokumentInfoId={dokumentInfoId}
           tittel={tittel ?? ''}
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
         />
+
         <IncludeDocument
           dokumentInfoId={dokumentInfoId}
           journalpostId={journalpostId}
@@ -119,6 +135,9 @@ export const Attachment = memo(
     );
   },
   (prevProps, nextProps) =>
+    prevProps.showVedlegg === nextProps.showVedlegg &&
+    prevProps.journalpostId === nextProps.journalpostId &&
+    prevProps.toggleShowVedlegg === nextProps.toggleShowVedlegg &&
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
     prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
@@ -126,7 +145,7 @@ export const Attachment = memo(
 
 Attachment.displayName = 'Attachment';
 
-const VEDLEGG_FIELDS = [Fields.SelectRow, Fields.Title, Fields.Action];
+const VEDLEGG_FIELDS = [Fields.SelectRow, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 
 const StyledVedlegg = styled.article<{ $selected: boolean }>`
   ${documentCSS}
@@ -134,9 +153,13 @@ const StyledVedlegg = styled.article<{ $selected: boolean }>`
   grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
   grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
 
-  background-color: ${({ $selected }) => getBackgroundColor(false, $selected)};
+  background-color: ${({ $selected }) => getBackgroundColor($selected)};
 
   &:hover {
-    background-color: ${({ $selected }) => getHoverBackgroundColor(false, $selected)};
+    background-color: ${({ $selected }) => getHoverBackgroundColor($selected)};
   }
+`;
+
+const ExpandButton = styled(Button)`
+  grid-area: ${Fields.ToggleVedlegg};
 `;

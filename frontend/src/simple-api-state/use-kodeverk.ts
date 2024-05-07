@@ -35,6 +35,7 @@ const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${A
 const ytelserSimple = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/ytelser/simple`);
 const ytelserLatest = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser/latest`);
 const ytelserAll = new SimpleApiState<IYtelse[]>(`${API_PREFIX}/ytelser`);
+const tema = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/tema`);
 const kabalYtelserLatest = new SimpleApiState<IKabalYtelse[]>(`${API_PREFIX}/kabal/ytelser/latest`);
 const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenheter`);
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
@@ -51,6 +52,8 @@ export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
 export const useLatestYtelser = () => useSimpleApiState(ytelserLatest);
 export const useKabalYtelserLatest = () => useSimpleApiState(kabalYtelserLatest);
 export const useSimpleYtelser = () => useSimpleApiState(ytelserSimple);
+
+export const useTema = () => useSimpleApiState(tema);
 
 export const useRegistreringshjemlerMap = () => useSimpleApiState(registreringshjemlerMap);
 export const useKlageenheter = () => useSimpleApiState(klageenheter);

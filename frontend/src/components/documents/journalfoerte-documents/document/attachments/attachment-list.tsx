@@ -7,15 +7,33 @@ interface AttachmentListItemProps extends HTMLProps<HTMLLIElement> {
   journalpostId: string;
   vedlegg: IArkivertDocument['vedlegg'][0];
   isSelected: boolean;
+  showVedlegg: boolean;
+  toggleShowVedlegg: () => void;
+  children?: React.ReactNode;
 }
 
-export const AttachmentListItem = ({ journalpostId, vedlegg, isSelected, ...props }: AttachmentListItemProps) => (
+export const AttachmentListItem = ({
+  journalpostId,
+  vedlegg,
+  isSelected,
+  showVedlegg,
+  toggleShowVedlegg,
+  children,
+  ...props
+}: AttachmentListItemProps) => (
   <StyledAttachmentListItem
     data-testid="oppgavebehandling-documents-all-list-item"
     data-documentname={vedlegg.tittel}
     {...props}
   >
-    <Attachment vedlegg={vedlegg} journalpostId={journalpostId} isSelected={isSelected} />
+    <Attachment
+      vedlegg={vedlegg}
+      journalpostId={journalpostId}
+      isSelected={isSelected}
+      showVedlegg={showVedlegg}
+      toggleShowVedlegg={toggleShowVedlegg}
+    />
+    {children}
   </StyledAttachmentListItem>
 );
 

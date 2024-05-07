@@ -36,6 +36,5 @@ export const DocumentSearch = memo(
 DocumentSearch.displayName = 'DocumentSearch';
 
 const StyledSearch = styled(Search)`
-  grid-column-start: ${Fields.Expand};
-  grid-column-end: ${Fields.Title};
+  grid-area: ${Fields.Title};
 `;

@@ -1,3 +1,4 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
@@ -12,9 +13,11 @@ import { JournalposttypeTag } from './journalposttype';
 
 interface Props {
   document: IArkivertDocument;
+  showMetadata: boolean;
+  toggleShowMetadata: () => void;
 }
 
-export const ExpandedColumns = ({ document }: Props) => {
+export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: Props) => {
   const { tema, avsenderMottaker, sak, journalposttype } = document;
 
   const { setValue: setSaksId } = useDocumentsFilterSaksId();
@@ -41,6 +44,12 @@ export const ExpandedColumns = ({ document }: Props) => {
         </SaksIdButton>
       ) : null}
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
+      <ExpandButton
+        variant={showMetadata ? 'primary' : 'tertiary'}
+        size="small"
+        icon={<InformationSquareIcon aria-hidden />}
+        onClick={toggleShowMetadata}
+      />
     </>
   );
 };
@@ -91,4 +100,8 @@ const SaksIdButton = styled(Button)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+`;
+
+const ExpandButton = styled(Button)`
+  grid-area: ${Fields.ToggleMetadata};
 `;
