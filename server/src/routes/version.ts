@@ -29,6 +29,7 @@ const labelNames = [
   'start_time',
   'app_start_time',
   'trace_id',
+  'domain',
 ] as const;
 
 type LabelNames = (typeof labelNames)[number];
@@ -128,7 +129,7 @@ const startUserSession = async (req: Request, traceId: string): Promise<() => vo
   try {
     const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
 
-    return start(nav_ident, getClientVersion(req), traceId);
+    return start(nav_ident, getClientVersion(req), traceId, req.hostname);
   } catch (error) {
     log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
 
@@ -140,7 +141,7 @@ const NOOP = () => undefined;
 
 type EndFn = () => void;
 
-const start = (nav_ident: string, clientVersion: string | undefined, trace_id: string): EndFn => {
+const start = (nav_ident: string, clientVersion: string | undefined, trace_id: string, domain: string): EndFn => {
   const labels: LabelValues<LabelNames> = {
     nav_ident,
     client_version: clientVersion?.substring(0, 7) ?? 'UNKNOWN',
@@ -148,6 +149,7 @@ const start = (nav_ident: string, clientVersion: string | undefined, trace_id: s
     start_time: Date.now().toString(10),
     app_start_time: START_TIME,
     trace_id,
+    domain,
   };
 
   uniqueUsersGauge.set(labels, 1);
