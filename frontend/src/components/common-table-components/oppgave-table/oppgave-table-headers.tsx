@@ -1,10 +1,8 @@
-import { Table, TableProps } from '@navikt/ds-react';
+import { TableProps } from '@navikt/ds-react';
 import React from 'react';
+import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import {
-  FinishedColumnHeader,
-  ReturnedColumnHeader,
-} from '@app/components/common-table-components/oppgave-table/finished-column-header';
+import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
 import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
@@ -23,7 +21,7 @@ interface TablePlainHeadersProps {
 }
 
 export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
-  columnKeys.map((key) => <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>);
+  columnKeys.map((key) => <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>);
 
 interface TableFilterHeadersProps extends TablePlainHeadersProps {
   params: CommonOppgaverParams;
@@ -35,8 +33,10 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
   // eslint-disable-next-line complexity
   columnKeys.map((key) => {
     if (params === undefined || setParams === undefined) {
-      return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
+      return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
     }
+
+    const baseColumnHeaderProps = { key, params, setParams, onSortChange };
 
     switch (key) {
       case ColumnKeyEnum.Type:
@@ -53,21 +53,21 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Registreringshjemler key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Age:
         return (
-          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
+          <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
             Alder
-          </Table.ColumnHeader>
+          </StyledColumnHeader>
         );
       case ColumnKeyEnum.Deadline:
         return (
-          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.FRIST}>
+          <DateColumnHeader {...baseColumnHeaderProps} fromKey="fristFrom" toKey="fristTo">
             Frist
-          </Table.ColumnHeader>
+          </DateColumnHeader>
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
-          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
+          <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
             På vent til
-          </Table.ColumnHeader>
+          </StyledColumnHeader>
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
@@ -75,9 +75,17 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.Medunderskriver:
         return <Medunderskriver key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
-        return <FinishedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
+        return (
+          <DateColumnHeader {...baseColumnHeaderProps} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo">
+            Fullført
+          </DateColumnHeader>
+        );
       case ColumnKeyEnum.Returnert:
-        return <ReturnedColumnHeader key={key} params={params} setParams={setParams} onSortChange={onSortChange} />;
+        return (
+          <DateColumnHeader {...baseColumnHeaderProps} fromKey="returnertFrom" toKey="returnertTo">
+            Returnert
+          </DateColumnHeader>
+        );
       case ColumnKeyEnum.Rol:
         return <Rol key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.RolYtelse:
@@ -100,8 +108,8 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.FradelingReason:
       case ColumnKeyEnum.PreviousSaksbehandler:
       case ColumnKeyEnum.DatoSendtTilTr:
-        return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
+        return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
     }
 
-    return <Table.ColumnHeader key={key} />;
+    return <StyledColumnHeader key={key} />;
   });
