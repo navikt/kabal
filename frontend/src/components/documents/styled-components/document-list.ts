@@ -11,4 +11,11 @@ export const StyledDocumentList = styled.ul`
   margin: 0;
   list-style-type: none;
   flex-grow: 1;
+  overflow-y: hidden;
+`;
+
+export const Container = styled.div`
+  overflow: auto;
+  position: relative;
+  flex-grow: 1;
 `;

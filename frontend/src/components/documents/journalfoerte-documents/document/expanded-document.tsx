@@ -66,11 +66,12 @@ const StyledExpandedDocument = styled.div`
   flex-direction: column;
   row-gap: 16px;
   padding: 8px;
-  border-bottom: 1px solid var(--a-border-default);
-  background-color: var(--a-surface-subtle);
   height: ${EXPANDED_HEIGHT}px;
-  width: 100%;
+  width: calc(100% - 16px);
   overflow-x: auto;
+  border-left: 1px solid var(--a-border-subtle);
+  padding-left: 16px;
+  margin-left: 16px;
 `;
 
 const TopRow = styled.div`

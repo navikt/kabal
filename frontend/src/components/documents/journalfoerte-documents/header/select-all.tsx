@@ -1,5 +1,6 @@
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, Tooltip } from '@navikt/ds-react';
 import React, { useCallback, useContext, useMemo } from 'react';
+import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
@@ -23,8 +24,19 @@ export const SelectAll = ({ allSelectableDocuments }: Props) => {
   );
 
   return (
-    <Checkbox hideLabel size="small" checked={allSelected} indeterminate={intermediate} onClick={onClick}>
-      Velg alle dokumenter og vedlegg
-    </Checkbox>
+    <Tooltip content={TEXT} placement="top">
+      <Checkbox
+        hideLabel
+        size="small"
+        checked={allSelected}
+        indeterminate={intermediate}
+        onClick={onClick}
+        style={{ gridArea: Fields.ToggleVedlegg }}
+      >
+        {TEXT}
+      </Checkbox>
+    </Tooltip>
   );
 };
+
+const TEXT = 'Velg alle dokumenter og vedlegg';

@@ -32,7 +32,7 @@ export const ExpandedDocuments = () => {
       SIZES[Fields.SelectRow][0] +
       SIZES[Fields.Title][0] +
       SIZES[Fields.Action][0] +
-      SIZES[Fields.Expand][0] +
+      SIZES[Fields.ToggleVedlegg][0] +
       SIZES[Fields.ResetFilters][0] +
       (columns.AVSENDER_MOTTAKER ? SIZES[Fields.AvsenderMottaker][0] : 0) +
       (columns.DATO_OPPRETTET ? SIZES[Fields.DatoOpprettet][0] : 0) +

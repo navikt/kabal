@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
@@ -13,10 +13,11 @@ import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
+const EMPTY_ID_LIST: string[] = [];
 
 export const JournalfoerteDocuments = () => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading } = useGetArkiverteDokumenterQuery(typeof oppgaveId === 'undefined' ? skipToken : oppgaveId);
+  const { data, isLoading } = useGetArkiverteDokumenterQuery(oppgaveId ?? skipToken);
   const [listHeight, setListHeight] = useState<number>(0);
 
   const documents = data?.dokumenter ?? EMPTY_ARRAY;
@@ -42,6 +43,53 @@ export const JournalfoerteDocuments = () => {
     return selectable;
   }, [totalFilteredDocuments]);
 
+  const documentsWithVedleggIdList = useMemo<string[]>(
+    () => documents.filter((d) => d.vedlegg.length !== 0 || d.logiskeVedlegg.length !== 0).map((d) => d.journalpostId),
+    [documents],
+  );
+
+  const [showVedleggIdList, setShowVedleggIdList] = useState<string[]>(EMPTY_ID_LIST);
+
+  useEffect(() => {
+    if (showVedleggIdList !== EMPTY_ID_LIST || documentsWithVedleggIdList.length === 0) {
+      return;
+    }
+
+    setShowVedleggIdList(documentsWithVedleggIdList);
+  }, [documentsWithVedleggIdList, setShowVedleggIdList, showVedleggIdList]);
+
+  // IDs of vedlegg with logiske vedlegg.
+  const vedleggWithLogiskeVedleggIdList = useMemo<string[]>(
+    () =>
+      documents.reduce<string[]>((dokumentInfoIdList, d) => {
+        for (const vedlegg of d.vedlegg) {
+          if (vedlegg.logiskeVedlegg.length !== 0 && !dokumentInfoIdList.includes(vedlegg.dokumentInfoId)) {
+            dokumentInfoIdList.push(`${d.journalpostId}-${vedlegg.dokumentInfoId}`);
+          }
+        }
+
+        return dokumentInfoIdList;
+      }, []),
+    [documents],
+  );
+
+  const [showLogiskeVedleggIdList, setShowLogiskeVedleggIdList] = useState<string[]>(EMPTY_ID_LIST);
+
+  useEffect(() => {
+    if (showLogiskeVedleggIdList !== EMPTY_ID_LIST || vedleggWithLogiskeVedleggIdList.length === 0) {
+      return;
+    }
+
+    setShowLogiskeVedleggIdList(vedleggWithLogiskeVedleggIdList);
+  }, [setShowLogiskeVedleggIdList, showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
+
+  const showsAnyVedlegg = showVedleggIdList.length !== 0 || showLogiskeVedleggIdList.length !== 0;
+
+  const onToggle = useCallback(() => {
+    setShowVedleggIdList(showsAnyVedlegg ? [] : documentsWithVedleggIdList);
+    setShowLogiskeVedleggIdList(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
+  }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList]);
+
   return (
     <SelectContextElement documentList={documents}>
       <Container data-testid="oppgavebehandling-documents-all">
@@ -53,9 +101,24 @@ export const JournalfoerteDocuments = () => {
           filteredDocuments={totalFilteredDocuments}
         />
         <Wrapper>
-          <Header filters={filters} allSelectableDocuments={allSelectableDocuments} listHeight={listHeight} />
+          <Header
+            filters={filters}
+            allSelectableDocuments={allSelectableDocuments}
+            documentIdList={documentsWithVedleggIdList}
+            listHeight={listHeight}
+            showsAnyVedlegg={showsAnyVedlegg}
+            toggleShowAllVedlegg={onToggle}
+          />
 
-          <DocumentList documents={totalFilteredDocuments} isLoading={isLoading} onHeightChange={setListHeight} />
+          <DocumentList
+            documents={totalFilteredDocuments}
+            isLoading={isLoading}
+            onHeightChange={setListHeight}
+            showVedleggIdList={showVedleggIdList}
+            setShowVedleggIdList={setShowVedleggIdList}
+            showLogiskeVedleggIdList={showLogiskeVedleggIdList}
+            setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
+          />
         </Wrapper>
       </Container>
     </SelectContextElement>

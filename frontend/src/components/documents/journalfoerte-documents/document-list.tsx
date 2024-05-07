@@ -1,15 +1,14 @@
 import { Loader } from '@navikt/ds-react';
-import React, { memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { EXPANDED_HEIGHT, ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
-import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
-import { DocumentContext } from '@app/components/documents/journalfoerte-documents/document-context';
+import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
+import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { clamp } from '@app/functions/clamp';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { StyledDocumentList } from '../styled-components/document-list';
+import { Container, StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
 import { StyledDocumentListItem } from './document-list-item';
 
@@ -17,161 +16,179 @@ interface Props {
   documents: IArkivertDocument[];
   isLoading: boolean;
   onHeightChange: (height: number) => void;
+  showVedleggIdList: string[];
+  setShowVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
+  showLogiskeVedleggIdList: string[];
+  setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
 }
 
-const OVERSCAN_ROWS = 1;
+const OVERSCAN = 32;
 
-export const DocumentList = memo(
-  ({ documents, isLoading, onHeightChange }: Props) => {
-    const { isSelected } = useContext(SelectContext);
-    const [isExpanded] = useIsExpanded();
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const [containerHeight, setContainerHeight] = useState(0);
-    const [expandedIds, setExpandedIds] = useState<string[]>([]);
-    const [_scrollTop, _setScrollTop] = useState(0);
-    const [scrollTop, setScrollTop] = useState(0);
+export const DocumentList = ({
+  documents,
+  isLoading,
+  onHeightChange,
+  showVedleggIdList,
+  setShowVedleggIdList,
+  showLogiskeVedleggIdList,
+  setShowLogiskeVedleggIdList,
+}: Props) => {
+  const { isSelected } = useContext(SelectContext);
+  const [isExpandedListView] = useIsExpanded();
+  const [showMetadataIdList, setShowMetadataIdList] = useState<string[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [_scrollTop, _setScrollTop] = useState(0);
+  const [scrollTop, setScrollTop] = useState(0);
 
-    useEffect(() => {
-      const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
+  useEffect(() => {
+    const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
 
-      return () => cancelAnimationFrame(handle);
-    }, [_scrollTop]);
+    return () => cancelAnimationFrame(handle);
+  }, [_scrollTop]);
 
-    useEffect(() => {
-      const resizeObserver = new ResizeObserver(() => {
-        const h = containerRef.current?.clientHeight ?? 0;
-        setContainerHeight(h);
-        onHeightChange(h);
-      });
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      const h = containerRef.current?.clientHeight ?? 0;
+      setContainerHeight(h);
+      onHeightChange(h);
+    });
 
-      if (containerRef.current !== null) {
-        resizeObserver.observe(containerRef.current);
+    if (containerRef.current !== null) {
+      resizeObserver.observe(containerRef.current);
 
-        return () => resizeObserver.disconnect();
-      }
-    }, [onHeightChange]);
+      return () => resizeObserver.disconnect();
+    }
+  }, [onHeightChange]);
 
-    const [listHeight, items] = useMemo<[number, React.ReactNode[]]>(() => {
-      let _height = 0;
-      let documentIndex = 0;
-      const _items: React.ReactNode[] = [];
-      const overscanHeight = ROW_HEIGHT * OVERSCAN_ROWS;
-      const start = scrollTop - overscanHeight; // Add row(s) below the viewport to ensure that the user can navigate by keyboard.
-      const end = scrollTop + containerHeight + overscanHeight; // Add row(s) above the viewport to ensure that the user can navigate by keyboard.
+  const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
+    const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
+    _setScrollTop(clamped);
+  }, []);
 
-      for (const doc of documents) {
-        const expanded = expandedIds.includes(doc.journalpostId);
-        const expandedHeight = expanded ? EXPANDED_HEIGHT : 0;
-        const documentHeight = ROW_HEIGHT + expandedHeight;
-        const vedleggLength = doc.vedlegg.length;
-        const attachmentHeight = vedleggLength * ROW_HEIGHT;
-        const relativeScrollTop = scrollTop - _height - documentHeight;
-        const vedleggEndIndex = clamp(
-          Math.ceil((relativeScrollTop + containerHeight) / ROW_HEIGHT) + OVERSCAN_ROWS, // Add row(s) below the viewport to ensure that the user can navigate by keyboard.
-          0,
-          vedleggLength,
-        );
-        const vedleggStartIndex = clamp(
-          Math.floor(relativeScrollTop / ROW_HEIGHT) - OVERSCAN_ROWS, // Add row(s) above the viewport to ensure that the user can navigate by keyboard.
-          0,
-          vedleggEndIndex,
-        );
+  const onRef = useCallback(
+    (ref: HTMLDivElement | null) => {
+      const h = ref?.clientHeight ?? 0;
+      setContainerHeight(h);
+      onHeightChange(h);
+      containerRef.current = ref;
+    },
+    [onHeightChange],
+  );
 
-        const vedleggSlice = doc.vedlegg.slice(vedleggStartIndex, vedleggEndIndex);
-        const renderedVedleggLength = vedleggEndIndex - vedleggStartIndex;
-        const hasRenderedVedlegg = renderedVedleggLength !== 0;
-        const vedleggNodeList = new Array<React.ReactNode>(renderedVedleggLength);
+  const dokumenter = useMemo(
+    () => calculateDokumentPositions(documents, showMetadataIdList, showVedleggIdList, showLogiskeVedleggIdList),
+    [documents, showLogiskeVedleggIdList, showMetadataIdList, showVedleggIdList],
+  );
 
-        if (hasRenderedVedlegg) {
-          for (let i = renderedVedleggLength - 1; i >= 0; i--) {
-            const vedlegg = vedleggSlice[i]!;
-            const index = vedleggStartIndex + i;
-
-            vedleggNodeList[i] = (
-              <AttachmentListItem
-                key={`vedlegg_${doc.journalpostId}_${vedlegg.dokumentInfoId}`}
-                journalpostId={doc.journalpostId}
-                vedlegg={vedlegg}
-                isSelected={isSelected({ journalpostId: doc.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId })}
-                style={{ top: index * ROW_HEIGHT }}
-                aria-rowindex={index}
-              />
-            );
-          }
-        }
-
-        const renderDocument = relativeScrollTop < overscanHeight;
-        const journalpostHeight = documentHeight + attachmentHeight;
-
-        if (hasRenderedVedlegg || (_height + documentHeight >= start && _height <= end)) {
-          _items.push(
-            <StyledDocumentListItem
-              data-testid="oppgavebehandling-documents-all-list-item"
-              data-documentname={doc.tittel}
-              key={`dokument_${doc.journalpostId}_${doc.dokumentInfoId}`}
-              style={{ top: _height, height: journalpostHeight }}
-              aria-rowindex={documentIndex}
-            >
-              {renderDocument ? <Document document={doc} isSelected={isSelected(doc)} isExpanded={isExpanded} /> : null}
-              {renderDocument && expanded && isExpanded ? <ExpandedDocument document={doc} /> : null}
-              {!hasRenderedVedlegg ? null : (
-                <JournalfoerteDocumentsAttachments
-                  data-testid="oppgavebehandling-documents-all-vedlegg-list"
-                  aria-rowcount={vedleggLength}
-                  style={{ height: attachmentHeight, top: documentHeight }}
-                >
-                  {vedleggNodeList}
-                </JournalfoerteDocumentsAttachments>
-              )}
-            </StyledDocumentListItem>,
-          );
-        }
-
-        _height += journalpostHeight;
-        documentIndex++;
-      }
-
-      return [_height, _items];
-    }, [containerHeight, documents, expandedIds, isExpanded, isSelected, scrollTop]);
-
-    const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
-      const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
-      _setScrollTop(clamped);
-    }, []);
-
-    const onRef = useCallback(
-      (ref: HTMLDivElement | null) => {
-        const h = ref?.clientHeight ?? 0;
-        setContainerHeight(h);
-        onHeightChange(h);
-        containerRef.current = ref;
-      },
-      [onHeightChange],
-    );
-
+  if (isLoading) {
     return (
-      <div ref={onRef} style={{ overflow: 'auto', position: 'relative', flexGrow: 1 }} onScroll={onScroll}>
-        <DocumentContext.Provider value={{ expandedIds, setExpandedIds }}>
-          <StyledDocumentList
-            data-testid="oppgavebehandling-documents-all-list"
-            aria-rowcount={documents.length}
-            style={{ height: listHeight, overflowY: 'hidden' }}
-          >
-            <DocumentsSpinner hasDocuments={!isLoading} />
-            {items}
-          </StyledDocumentList>
-        </DocumentContext.Provider>
-      </div>
+      <Container ref={onRef} style={{ height: '100%' }} onScroll={onScroll}>
+        <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
+          <Loader size="xlarge" />
+        </StyledDocumentList>
+      </Container>
     );
-  },
-  (prevProps, nextProps) => prevProps.documents === nextProps.documents,
-);
+  }
 
-DocumentList.displayName = 'DocumentList';
+  const list: React.ReactNode[] = [];
+  const maxTop = scrollTop + containerHeight + OVERSCAN;
+  const minTop = scrollTop - OVERSCAN;
 
-interface DocumentsSpinnerProps {
-  hasDocuments: boolean;
-}
+  for (const {
+    dokument,
+    globalTop,
+    height,
+    showMetadata,
+    showVedlegg,
+    logiskeVedleggList,
+    vedleggList,
+    index,
+  } of dokumenter.list) {
+    if (globalTop + height < minTop || globalTop > maxTop) {
+      continue;
+    }
 
-const DocumentsSpinner = ({ hasDocuments }: DocumentsSpinnerProps): JSX.Element | null =>
-  hasDocuments ? null : <Loader size="xlarge" />;
+    const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, tema } = dokument;
+    const hasVedlegg = vedlegg.length !== 0;
+
+    list.push(
+      <StyledDocumentListItem
+        data-testid="oppgavebehandling-documents-all-list-item"
+        data-documentname={tittel}
+        key={`dokument_${journalpostId}_${dokumentInfoId}`}
+        style={{ top: globalTop, height }}
+        aria-rowindex={index}
+      >
+        <Document
+          document={dokument}
+          isSelected={isSelected(dokument)}
+          isExpandedListView={isExpandedListView}
+          showMetadata={showMetadata}
+          toggleShowMetadata={() =>
+            setShowMetadataIdList((ids) =>
+              showMetadata ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId],
+            )
+          }
+          showVedlegg={showVedlegg}
+          toggleShowVedlegg={() => {
+            setShowVedleggIdList((ids) =>
+              showVedlegg ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId],
+            );
+
+            const vedleggWithLogiskeVedlegg = dokument.vedlegg.filter((v) => v.logiskeVedlegg.length !== 0);
+
+            if (vedleggWithLogiskeVedlegg.length === 0) {
+              return;
+            }
+
+            const vedleggIds = vedleggWithLogiskeVedlegg.map((v) => `${journalpostId}-${v.dokumentInfoId}`);
+
+            setShowLogiskeVedleggIdList((ids) =>
+              showVedlegg ? ids.filter((id) => !vedleggIds.includes(id)) : [...ids, ...vedleggIds],
+            );
+          }}
+        />
+
+        {isExpandedListView && showMetadata ? <ExpandedDocument document={dokument} /> : null}
+
+        {showVedlegg ? (
+          <LogiskeVedleggList
+            list={logiskeVedleggList}
+            minTop={minTop}
+            maxTop={maxTop}
+            left={16}
+            connectTop={8}
+            hasVedlegg={hasVedlegg}
+            dokumentInfoId={dokumentInfoId}
+            logiskeVedlegg={logiskeVedlegg}
+            temaId={tema}
+          />
+        ) : null}
+        {showVedlegg ? (
+          <VedleggList
+            list={vedleggList}
+            minTop={minTop}
+            maxTop={maxTop}
+            dokument={dokument}
+            isSelected={isSelected}
+            showLogiskeVedleggIdList={showLogiskeVedleggIdList}
+            setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
+          />
+        ) : null}
+      </StyledDocumentListItem>,
+    );
+  }
+
+  return (
+    <Container ref={onRef} onScroll={onScroll}>
+      <StyledDocumentList
+        data-testid="oppgavebehandling-documents-all-list"
+        aria-rowcount={documents.length}
+        style={{ height: dokumenter.height }}
+      >
+        {list}
+      </StyledDocumentList>
+    </Container>
+  );
+};

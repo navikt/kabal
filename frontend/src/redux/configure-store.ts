@@ -7,6 +7,7 @@ import { kabalInternalApi } from '@app/redux-api/internal';
 import { journalposterApi } from '@app/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
+import { logiskeVedleggApi } from '@app/redux-api/logiske-vedlegg';
 import { consumerMaltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/consumer';
 import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
 import { messagesApi } from '@app/redux-api/messages';
@@ -39,6 +40,7 @@ export const reduxStore = configureStore({
       accessRightsApi.middleware,
       journalposterApi.middleware,
       searchApi.middleware,
+      logiskeVedleggApi.middleware,
     ]),
 });
 

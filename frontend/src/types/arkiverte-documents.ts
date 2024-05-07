@@ -181,6 +181,11 @@ export interface Journalpost {
   utsendingsinfo: Utsendingsinfo | null;
 }
 
+export interface LogiskVedlegg {
+  tittel: string;
+  logiskVedleggId: string;
+}
+
 /** SAF Dokument */
 export interface DokumentInfo {
   /** Unik identifikator per dokument. */
@@ -193,6 +198,7 @@ export interface DokumentInfo {
    * Et dokumentInfo-objekt kan være gjenbrukt på flere journalposter. OriginalJournalpostId peker på den journalposten som dokumentene var knyttet til på arkiveringstidspunktet.
    */
   originalJournalpostId: string;
+  logiskeVedlegg: LogiskVedlegg[];
 }
 
 export enum TimelineTypes {

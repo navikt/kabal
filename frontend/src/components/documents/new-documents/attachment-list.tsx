@@ -15,7 +15,7 @@ import {
 import {
   NewDocAttachmentsContainer,
   StyledAttachmentList,
-  StyledAttachmentListItem,
+  StyledNewAttachmentListItem,
 } from '../styled-components/attachment-list';
 
 export interface ListProps {
@@ -109,7 +109,7 @@ interface AttachmentProps {
 }
 
 const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }: AttachmentProps) => (
-  <StyledAttachmentListItem
+  <StyledNewAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
     data-documentname={attachment.tittel}
@@ -122,7 +122,7 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
       parentDocument={parentDocument}
       containsRolAttachments={containsRolAttachments}
     />
-  </StyledAttachmentListItem>
+  </StyledNewAttachmentListItem>
 );
 
 const ListSeparator = styled.div`

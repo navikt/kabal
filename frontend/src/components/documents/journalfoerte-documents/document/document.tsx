@@ -7,7 +7,6 @@ import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
 import { SelectRow } from '@app/components/documents/journalfoerte-documents/document/shared/select-row';
 import { StyledJournalfoertDocument } from '@app/components/documents/journalfoerte-documents/document/styled-journalfoert-document';
-import { DocumentContext } from '@app/components/documents/journalfoerte-documents/document-context';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
@@ -21,15 +20,26 @@ import { IncludeDocument } from './shared/include-document';
 interface Props {
   document: IArkivertDocument;
   isSelected: boolean;
-  isExpanded: boolean;
+  isExpandedListView: boolean;
+  showMetadata: boolean;
+  toggleShowMetadata: () => void;
+  showVedlegg: boolean;
+  toggleShowVedlegg: () => void;
 }
 
-export const Document = ({ document, isSelected, isExpanded }: Props) => {
+export const Document = ({
+  document,
+  isSelected,
+  isExpandedListView,
+  showMetadata,
+  toggleShowMetadata,
+  showVedlegg,
+  toggleShowVedlegg,
+}: Props) => {
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const { columns } = useArchivedDocumentsColumns();
-  const { setExpandedIds, expandedIds } = useContext(DocumentContext);
 
   const { getSelectedDocuments } = useContext(SelectContext);
   const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
@@ -38,14 +48,7 @@ export const Document = ({ document, isSelected, isExpanded }: Props) => {
 
   const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;
 
-  const expanded = expandedIds.includes(journalpostId);
-
-  const toggleExpanded = () =>
-    expanded
-      ? setExpandedIds(expandedIds.filter((id) => id !== journalpostId))
-      : setExpandedIds([...expandedIds, journalpostId]);
-
-  const Icon = expanded ? ChevronUpIcon : ChevronDownIcon;
+  const Icon = showVedlegg ? ChevronUpIcon : ChevronDownIcon;
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -74,8 +77,7 @@ export const Document = ({ document, isSelected, isExpanded }: Props) => {
 
   return (
     <StyledJournalfoertDocument
-      $expanded={expanded}
-      $isExpanded={isExpanded}
+      $isExpanded={isExpandedListView}
       $selected={isSelected}
       $columns={columns}
       data-testid="document-journalfoert"
@@ -95,9 +97,13 @@ export const Document = ({ document, isSelected, isExpanded }: Props) => {
         harTilgangTilArkivvariant={harTilgangTilArkivvariant}
       />
 
-      {isExpanded ? (
-        <ExpandButton variant="tertiary" size="small" icon={<Icon aria-hidden />} onClick={toggleExpanded} />
-      ) : null}
+      <ExpandButton
+        variant="tertiary"
+        size="small"
+        icon={<Icon aria-hidden />}
+        onClick={toggleShowVedlegg}
+        aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
+      />
 
       <DocumentTitle
         journalpostId={journalpostId}
@@ -106,7 +112,9 @@ export const Document = ({ document, isSelected, isExpanded }: Props) => {
         tittel={tittel ?? ''}
       />
 
-      {isExpanded ? <ExpandedColumns document={document} /> : null}
+      {isExpandedListView ? (
+        <ExpandedColumns document={document} showMetadata={showMetadata} toggleShowMetadata={toggleShowMetadata} />
+      ) : null}
 
       <IncludeDocument
         dokumentInfoId={dokumentInfoId}
@@ -122,5 +130,5 @@ export const Document = ({ document, isSelected, isExpanded }: Props) => {
 Document.displayName = 'Document';
 
 const ExpandButton = styled(Button)`
-  grid-area: ${Fields.Expand};
+  grid-area: ${Fields.ToggleVedlegg};
 `;

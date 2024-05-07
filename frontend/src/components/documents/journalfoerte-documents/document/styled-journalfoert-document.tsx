@@ -13,7 +13,7 @@ import {
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 
-const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.SelectRow, Fields.Title, Fields.Action];
+const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.SelectRow, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 
 const getGridCss = ({ $isExpanded, $columns }: Props) => {
   if (!$isExpanded) {
@@ -25,7 +25,7 @@ const getGridCss = ({ $isExpanded, $columns }: Props) => {
 
   const fields = [
     Fields.SelectRow,
-    Fields.Expand,
+    Fields.ToggleVedlegg,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
     $columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
@@ -33,6 +33,7 @@ const getGridCss = ({ $isExpanded, $columns }: Props) => {
     $columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
     $columns.SAKSNUMMER ? Fields.Saksnummer : null,
     $columns.TYPE ? Fields.Type : null,
+    Fields.ToggleMetadata,
     Fields.Action,
   ].filter(isNotNull);
 
@@ -45,7 +46,6 @@ const toCss = (columns: string, areas: string) => css`
 `;
 
 interface Props {
-  $expanded: boolean;
   $selected: boolean;
   $isExpanded: boolean;
   $columns: Record<ArchivedDocumentsColumn, boolean>;
@@ -57,9 +57,9 @@ export const StyledJournalfoertDocument = styled.article<Props>`
 
   ${getGridCss}
   
-  background-color: ${({ $expanded, $selected }) => getBackgroundColor($expanded, $selected)};
+  background-color: ${({ $selected }) => getBackgroundColor($selected)};
 
   &:hover {
-    background-color: ${({ $expanded, $selected }) => getHoverBackgroundColor($expanded, $selected)};
+    background-color: ${({ $selected }) => getHoverBackgroundColor($selected)};
   }
 `;

@@ -1,3 +1,5 @@
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { css, styled } from 'styled-components';
 import {
@@ -21,20 +23,42 @@ import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useFilters } from './use-filters';
 
 interface Props {
+  documentIdList: string[];
   filters: ReturnType<typeof useFilters>;
   allSelectableDocuments: IJournalfoertDokumentId[];
   listHeight: number;
+  showsAnyVedlegg: boolean;
+  toggleShowAllVedlegg: () => void;
 }
 
-export const Header = ({ allSelectableDocuments, filters, listHeight }: Props) => {
+export const Header = ({
+  allSelectableDocuments,
+  filters,
+  listHeight,
+  showsAnyVedlegg,
+  toggleShowAllVedlegg,
+}: Props) => {
   const [isExpanded] = useIsExpanded();
   const { columns } = useArchivedDocumentsColumns();
 
   const { setSearch, search } = filters;
 
+  const tooltip = showsAnyVedlegg ? 'Skjul alle vedlegg' : 'Vis alle vedlegg';
+
   return (
     <StyledListHeader $isExpanded={isExpanded} $columns={columns}>
       <SelectAll allSelectableDocuments={allSelectableDocuments} />
+
+      <Tooltip content={tooltip} placement="top">
+        <Button
+          size="small"
+          variant="tertiary"
+          icon={showsAnyVedlegg ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+          style={{ gridArea: Fields.ToggleVedlegg }}
+          onClick={() => toggleShowAllVedlegg()}
+        />
+      </Tooltip>
+
       <DocumentSearch setSearch={setSearch} search={search} />
 
       {isExpanded ? <ExpandedHeaders {...filters} listHeight={listHeight} /> : null}
@@ -44,7 +68,12 @@ export const Header = ({ allSelectableDocuments, filters, listHeight }: Props) =
   );
 };
 
-const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [Fields.SelectRow, Fields.Expand, Fields.Title, Fields.Action];
+const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
+  Fields.SelectRow,
+  Fields.ToggleVedlegg,
+  Fields.Title,
+  Fields.Action,
+];
 
 const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
   if (!$isExpanded) {
@@ -56,7 +85,7 @@ const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
 
   const fields = [
     Fields.SelectRow,
-    Fields.Expand,
+    Fields.ToggleVedlegg,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
     $columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
@@ -85,4 +114,5 @@ const StyledListHeader = styled.div<StyledListHeaderProps>`
   padding-top: 4px;
   ${documentsGridCSS}
   ${getGridCss}
+  white-space: nowrap;
 `;

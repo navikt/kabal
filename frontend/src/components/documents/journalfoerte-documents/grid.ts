@@ -11,7 +11,8 @@ export const documentsGridCSS = css`
 export enum Fields {
   SelectRow = 'select-row',
   ResetFilters = 'reset-filters',
-  Expand = 'expand',
+  ToggleVedlegg = 'toggle-vedlegg',
+  ToggleMetadata = 'toggle-metadata',
   Title = 'title',
   Tema = 'tema',
   DatoOpprettet = 'dato-opprettet',
@@ -20,10 +21,12 @@ export enum Fields {
   Saksnummer = 'saksnummer',
   Type = 'type',
   Action = 'action',
+  LogiskeVedlegg = 'logiske-vedlegg',
 }
 
 export const SIZES: Record<Fields, [number, number]> = {
-  [Fields.Expand]: [20, 20],
+  [Fields.ToggleVedlegg]: [20, 20],
+  [Fields.ToggleMetadata]: [20, 20],
   [Fields.SelectRow]: [20, 20],
   [Fields.Title]: [275, -1],
   [Fields.Tema]: [85, 85],
@@ -34,16 +37,27 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.Type]: [82, 82],
   [Fields.Action]: [32, 32],
   [Fields.ResetFilters]: [32, 32],
+  [Fields.LogiskeVedlegg]: [0, 0],
 };
 
 export const getFieldNames = (fields: Fields[]): string => fields.join(' ');
 export const getFieldSizes = (fields: Fields[]): string => fields.map(toWidth).join(' ');
 
 const toWidth = (field: Fields): string => {
-  const [minValue, maxValue] = SIZES[field];
+  if (field === Fields.LogiskeVedlegg) {
+    return '1fr';
+  }
 
-  const min = minValue === -1 ? 'auto' : `${minValue}px`;
-  const max = maxValue === -1 ? 'auto' : `${maxValue}px`;
+  const [minValue, maxValue] = SIZES[field];
+  const min = toString(minValue);
+
+  if (minValue === maxValue) {
+    return min;
+  }
+
+  const max = toString(maxValue);
 
   return `minmax(${min}, ${max})`;
 };
+
+const toString = (n: number): string => (n === -1 ? 'auto' : `${n}px`);
