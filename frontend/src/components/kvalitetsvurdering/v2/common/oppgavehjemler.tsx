@@ -22,11 +22,11 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
   const canEdit = useCanEdit();
   const validationError = useValidationError(field);
 
-  const previousSaksdataHjemmelIdList = usePrevious(isLoading ? undefined : hjemler);
+  const previousHjemler = usePrevious(hjemler);
   const selectedHjemmelIdList = isLoading ? undefined : kvalitetsvurdering[field];
 
   useEffect(() => {
-    if (!canEdit || isLoading || selectedHjemmelIdList === undefined || previousSaksdataHjemmelIdList === undefined) {
+    if (!canEdit || isLoading || selectedHjemmelIdList === undefined) {
       return;
     }
 
@@ -41,13 +41,13 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
     }
 
     if (selectedHjemmelIdList.length !== 0) {
-      const isUnchanged = hjemmelIdListsEquals(previousSaksdataHjemmelIdList, hjemler);
+      const isUnchanged = previousHjemler === undefined || hjemmelIdListsEquals(previousHjemler, hjemler);
 
       if (!isUnchanged) {
         update({ [field]: EMPTY_ARRAY });
       }
     }
-  }, [field, isLoading, selectedHjemmelIdList, previousSaksdataHjemmelIdList, hjemler, update, canEdit]);
+  }, [field, isLoading, selectedHjemmelIdList, previousHjemler, hjemler, update, canEdit]);
 
   if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
     return null;
