@@ -25,21 +25,11 @@ interface Props<D extends DraftVersion, P extends PublishedVersion> {
   createPublishedPanel: (version: P) => React.ReactNode;
   className?: string;
   setRef?: (ref: HTMLDivElement | null) => void;
-  allowOverflow?: boolean;
 }
 
 export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(props: Props<D, P>) => {
-  const {
-    selectedTabId,
-    setSelectedTabId,
-    first,
-    versions,
-    createDraftPanel,
-    createPublishedPanel,
-    setRef,
-    allowOverflow = false,
-    ...rest
-  } = props;
+  const { selectedTabId, setSelectedTabId, first, versions, createDraftPanel, createPublishedPanel, setRef, ...rest } =
+    props;
 
   useEffect(() => {
     if (selectedTabId === undefined) {
@@ -70,7 +60,7 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
     tabs[i] = <Tabs.Tab key={versionId} value={versionId} label={label} icon={getIcon(isDraft, published)} />;
 
     panels[i] = (
-      <StyledTabPanel key={versionId} value={versionId} $allowOverflow={allowOverflow}>
+      <StyledTabPanel key={versionId} value={versionId}>
         {isDraft ? createDraftPanel(version) : createPublishedPanel(version)}
       </StyledTabPanel>
     );
@@ -100,9 +90,9 @@ const getIcon = (isDraft: boolean, published: boolean) => {
   return ARCHIVED_ICON;
 };
 
-const StyledTabPanel = styled(Tabs.Panel)<{ $allowOverflow: boolean }>`
+const StyledTabPanel = styled(Tabs.Panel)`
   display: flex;
-  overflow: ${({ $allowOverflow }) => ($allowOverflow ? 'visible' : 'hidden')};
+  overflow-y: auto;
   flex-direction: column;
 
   &[data-state='active'] {

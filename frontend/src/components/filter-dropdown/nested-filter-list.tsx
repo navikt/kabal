@@ -190,7 +190,7 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
   if (type === OptionType.GROUP) {
     return (
       <GroupLabel size="small">
-        <BulletListIcon aria-hidden height={20} width={20} />
+        <BulletListIcon aria-hidden height={20} width={20} style={{ flexShrink: 0 }} />
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
         </OptionLabel>
@@ -223,7 +223,7 @@ interface OptionLabelProps {
 }
 
 const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }: OptionLabelProps) => (
-  <>
+  <StyledOptionLabel title={children}>
     {children}
     {options !== undefined && options.length !== 0 ? (
       <Tag
@@ -231,7 +231,7 @@ const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }
         size="xsmall"
       >{`${subOptionSelectedCount}/${totalOptions}`}</Tag>
     ) : null}
-  </>
+  </StyledOptionLabel>
 );
 
 const getTagVariant = (
@@ -295,7 +295,7 @@ const Container = styled.div`
   box-shadow: var(--a-shadow-medium);
   max-height: 70vh;
   white-space: nowrap;
-  min-width: 600px;
+  width: 600px;
 `;
 
 const StyledButton = styled(Button)`
@@ -354,4 +354,10 @@ const GroupLabel = styled(BodyShort)`
   align-items: center;
   column-gap: 8px;
   height: 100%;
+  overflow: hidden;
+`;
+
+const StyledOptionLabel = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

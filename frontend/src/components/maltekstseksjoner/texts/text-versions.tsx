@@ -112,7 +112,6 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
           hasDraft={hasDraft}
         />
       )}
-      allowOverflow
     />
   );
 };
