@@ -18,6 +18,7 @@ import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
+import { DeleteMaltekstseksjon } from '@app/plate/components/maltekstseksjon/delete-maltekstseksjon';
 import { getChildren } from '@app/plate/components/maltekstseksjon/get-children';
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
@@ -26,6 +27,7 @@ import { MaltekstseksjonContainer, MaltekstseksjonToolbar } from '@app/plate/com
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import { getIsInRegelverk } from '@app/plate/utils/queries';
 import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
@@ -150,6 +152,8 @@ export const Maltekstseksjon = ({
     return () => clearTimeout(timeout);
   }, [element, oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
 
+  const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
+
   const isFetching = maltekstseksjonIsFetching || maltekstseksjonTextsIsFetching;
 
   return (
@@ -188,6 +192,7 @@ export const Maltekstseksjon = ({
               loading={isFetching}
             />
           </Tooltip>
+          {isInRegelverk ? null : <DeleteMaltekstseksjon element={element} path={path} />}
         </MaltekstseksjonToolbar>
       </MaltekstseksjonContainer>
     </PlateElement>

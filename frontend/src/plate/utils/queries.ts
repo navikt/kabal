@@ -5,6 +5,8 @@ import {
   TNode,
   TText,
   findNode,
+  findNodePath,
+  getNodeAncestors,
   isCollapsed,
   isElement,
   isText,
@@ -13,7 +15,7 @@ import {
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
+import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
 import {
   BulletListElement,
@@ -111,3 +113,21 @@ export const isUnchangeable = (editor: RichTextEditor) => {
 };
 
 export const isPlaceholderActive = (editor: PlateEditor) => someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+
+export const getIsInRegelverk = (editor: RichTextEditor, element: TNode): boolean => {
+  const path = findNodePath(editor, element);
+
+  if (path === undefined) {
+    return false;
+  }
+
+  const ancestors = getNodeAncestors(editor, path);
+
+  for (const ancestor of ancestors) {
+    if (isOfElementType(ancestor[0], ELEMENT_REGELVERK)) {
+      return true;
+    }
+  }
+
+  return false;
+};
