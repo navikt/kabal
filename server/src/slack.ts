@@ -29,6 +29,17 @@ export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
     method: 'POST',
     body,
   }).catch((error: unknown) => {
-    log.error({ error, msg: `Failed to send message to Slack. Message: '${text}'` });
+    const msg = `Failed to send message to Slack. Message: '${text}'`;
+
+    // Don't log the error object since it contains webhook URL
+    if (error instanceof Error) {
+      log.error({ msg: scrubWebhookUrl(`${msg} - ${error.name}: ${error.message}`) });
+    }
+
+    log.error({ msg: scrubWebhookUrl(msg) });
   });
 };
+
+const URL_REGEXP = new RegExp(url, 'g');
+
+const scrubWebhookUrl = (errorText: string) => errorText.replace(URL_REGEXP, '[REDACTED]');
