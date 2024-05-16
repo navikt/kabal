@@ -36,7 +36,7 @@ const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.LABEL]: 'var(--a-gray-200)',
 };
 
-const secionToolbarCss = css`
+const sectionToolbarCss = css`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -51,7 +51,7 @@ const secionToolbarCss = css`
 `;
 
 const SectionToolbarStyle = styled.div`
-  ${secionToolbarCss}
+  ${sectionToolbarCss}
   right: calc(100% + 8px);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -69,8 +69,8 @@ export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDiv
   );
 };
 
-const MaltekstseksjonToolbarStyle = styled.div`
-  ${secionToolbarCss}
+export const MaltekstseksjonToolbarStyle = styled.div`
+  ${sectionToolbarCss}
   left: calc(100% + 8px);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -91,9 +91,10 @@ export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes
 const StickyContent = styled.div`
   position: sticky;
   top: 48px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
   flex-direction: row;
-  column-gap: 4px;
+  gap: 4px;
   background-color: var(--a-bg-subtle);
   color: var(--a-icon-action);
   box-shadow: var(--a-shadow-medium);
@@ -105,7 +106,6 @@ const sectionBeforeCss = css`
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 1;
   border-style: solid;
   border-color: transparent;
 `;

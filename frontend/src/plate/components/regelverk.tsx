@@ -2,13 +2,17 @@ import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
+import { DeleteSection } from '@app/plate/components/common/delete-section';
+import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { EditorValue, RegelverkContainerElement, RegelverkElement } from '@app/plate/types';
+import { EditorValue, RegelverkContainerElement, RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
+import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
@@ -32,7 +36,12 @@ export const Regelverk = ({
       e.stopPropagation();
     }}
   >
-    {children}
+    <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
+      {children}
+      <SectionToolbar contentEditable={false} style={{ top: 32 }}>
+        <DeleteRegelverk element={element} />
+      </SectionToolbar>
+    </SectionContainer>
   </PlateElement>
 );
 
@@ -117,5 +126,48 @@ export const RegelverkContainer = ({
         </SectionToolbar>
       </SectionContainer>
     </PlateElement>
+  );
+};
+
+interface DeleteRegelverkProps {
+  element: RegelverkElement;
+}
+
+const DeleteRegelverk = ({ element }: DeleteRegelverkProps) => {
+  const editor = useMyPlateEditorRef();
+  const language = useSmartEditorLanguage();
+  const [, maltekstseksjonElement, regelverkContainerElement] = element.children;
+  const [maltekstseksjonChangedIsLoading, maltekstseksjonChanged] = useIsChanged(maltekstseksjonElement, language);
+  const [contentChangedIsLoading, setContentChangedIsLoading] = useState(false);
+  const [contentChanged, setContentChanged] = useState(false);
+
+  const isLoading = maltekstseksjonChangedIsLoading || contentChangedIsLoading;
+  const isChanged = maltekstseksjonChanged || contentChanged;
+
+  useEffect(() => {
+    setContentChangedIsLoading(true);
+
+    const timeout = setTimeout(() => {
+      requestIdleCallback(() => {
+        setContentChangedIsLoading(false);
+        setContentChanged(!isNodeEmpty(regelverkContainerElement));
+      });
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [regelverkContainerElement]);
+
+  const path = findNodePath(editor, element);
+
+  return (
+    <DeleteSection
+      isLoading={isLoading}
+      isChanged={isChanged}
+      path={path}
+      errorTooltip="Teknisk feil. Kan ikke slette regelverk."
+      defaultTooltip="Slett hele regelverket"
+      isChangedWarning="Regelverket inneholder endringer. Er du sikker på at du vil slette det?"
+      side="right"
+    />
   );
 };

@@ -30,5 +30,8 @@ export const consumerMaltekstseksjonerApi = createApi({
   }),
 });
 
-export const { useLazyGetMaltekstseksjonTextsQuery, useLazyGetConsumerMaltekstseksjonerQuery } =
-  consumerMaltekstseksjonerApi;
+export const {
+  useLazyGetMaltekstseksjonTextsQuery,
+  useLazyGetConsumerMaltekstseksjonerQuery,
+  useGetMaltekstseksjonTextsQuery,
+} = consumerMaltekstseksjonerApi;
