@@ -12,6 +12,7 @@ import {
 import { Range } from 'slate';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { formatLongDate } from '@app/domain/date';
+import { trimFragment } from '@app/plate/plugins/copy/trim-fragment';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -104,7 +105,7 @@ const withOverrides = (editor: PlateEditor) => {
     const html = data.getData('text/html');
 
     // When copying from a PDF, Chrome will put plain text in text/html, which results in line breaks being replaced by spaces
-    if (plainText === html) {
+    if (trimFragment(html) === plainText.trim()) {
       // data.clearData('text/html') doesn't work
       const newData = new DataTransfer();
 
