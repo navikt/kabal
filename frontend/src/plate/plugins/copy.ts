@@ -97,7 +97,28 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
 };
 
 const withOverrides = (editor: PlateEditor) => {
-  const { setFragmentData, insertFragment } = editor;
+  const { setFragmentData, insertFragment, insertData } = editor;
+
+  editor.insertData = (data: DataTransfer) => {
+    const plainText = data.getData('text/plain');
+    const html = data.getData('text/html');
+
+    // When copying from a PDF, Chrome will put plain text in text/html, which results in line breaks being replaced by spaces
+    if (plainText === html) {
+      // data.clearData('text/html') doesn't work
+      const newData = new DataTransfer();
+
+      for (const type of data.types) {
+        if (type !== 'text/html') {
+          newData.setData(type, data.getData(type));
+        }
+      }
+
+      return insertData(newData);
+    }
+
+    return insertData(data);
+  };
 
   editor.insertFragment = (descendants: TDescendant[]) => {
     const nodes = cleanNodes(editor, descendants);
