@@ -10,7 +10,7 @@ import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragra
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
-import { createCopyPlugin } from '@app/plate/plugins/copy';
+import { createCopyPlugin } from '@app/plate/plugins/copy/copy';
 import { createCustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createNormalizeNodePlugin } from '@app/plate/plugins/normalize-node';
