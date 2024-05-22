@@ -131,6 +131,7 @@ export const DocumentList = ({
             )
           }
           showVedlegg={showVedlegg}
+          hasVedlegg={hasVedlegg || logiskeVedlegg.length !== 0}
           toggleShowVedlegg={() => {
             setShowVedleggIdList((ids) =>
               showVedlegg ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId],

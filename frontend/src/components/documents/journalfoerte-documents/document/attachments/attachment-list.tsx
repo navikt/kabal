@@ -9,6 +9,7 @@ interface AttachmentListItemProps extends HTMLProps<HTMLLIElement> {
   isSelected: boolean;
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
+  hasVedlegg: boolean;
   children?: React.ReactNode;
 }
 
@@ -18,6 +19,7 @@ export const AttachmentListItem = ({
   isSelected,
   showVedlegg,
   toggleShowVedlegg,
+  hasVedlegg,
   children,
   ...props
 }: AttachmentListItemProps) => (
@@ -32,6 +34,7 @@ export const AttachmentListItem = ({
       isSelected={isSelected}
       showVedlegg={showVedlegg}
       toggleShowVedlegg={toggleShowVedlegg}
+      hasVedlegg={hasVedlegg}
     />
     {children}
   </StyledAttachmentListItem>
