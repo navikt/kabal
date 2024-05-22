@@ -1,6 +1,6 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { memo, useCallback, useContext, useRef } from 'react';
+import React, { memo, useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
@@ -33,12 +33,13 @@ interface Props {
   isSelected: boolean;
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
+  hasVedlegg: boolean;
 }
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg }: Props) => {
+  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
     const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -86,7 +87,13 @@ export const Attachment = memo(
     const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled;
 
-    const Icon = showVedlegg ? ChevronUpIcon : ChevronDownIcon;
+    const Icon = useMemo(() => {
+      if (hasVedlegg) {
+        return showVedlegg ? ChevronUpDoubleIcon : ChevronDownDoubleIcon;
+      }
+
+      return showVedlegg ? ChevronUpIcon : ChevronDownIcon;
+    }, [hasVedlegg, showVedlegg]);
 
     return (
       <StyledVedlegg
@@ -139,6 +146,7 @@ export const Attachment = memo(
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.toggleShowVedlegg === nextProps.toggleShowVedlegg &&
     prevProps.isSelected === nextProps.isSelected &&
+    prevProps.hasVedlegg === nextProps.hasVedlegg &&
     prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
     prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
 );

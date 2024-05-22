@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { css, styled } from 'styled-components';
@@ -53,7 +53,7 @@ export const Header = ({
         <Button
           size="small"
           variant="tertiary"
-          icon={showsAnyVedlegg ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+          icon={showsAnyVedlegg ? <ChevronUpDoubleIcon aria-hidden /> : <ChevronDownDoubleIcon aria-hidden />}
           style={{ gridArea: Fields.ToggleVedlegg }}
           onClick={() => toggleShowAllVedlegg()}
         />

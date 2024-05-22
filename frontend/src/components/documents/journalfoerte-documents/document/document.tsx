@@ -1,6 +1,6 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
@@ -25,6 +25,7 @@ interface Props {
   toggleShowMetadata: () => void;
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
+  hasVedlegg: boolean;
 }
 
 export const Document = ({
@@ -35,6 +36,7 @@ export const Document = ({
   toggleShowMetadata,
   showVedlegg,
   toggleShowVedlegg,
+  hasVedlegg,
 }: Props) => {
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
@@ -48,7 +50,13 @@ export const Document = ({
 
   const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;
 
-  const Icon = showVedlegg ? ChevronUpIcon : ChevronDownIcon;
+  const Icon = useMemo(() => {
+    if (hasVedlegg) {
+      return showVedlegg ? ChevronUpDoubleIcon : ChevronDownDoubleIcon;
+    }
+
+    return showVedlegg ? ChevronUpIcon : ChevronDownIcon;
+  }, [hasVedlegg, showVedlegg]);
 
   const onDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
