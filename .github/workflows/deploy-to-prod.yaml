@@ -52,6 +52,6 @@ jobs:
           VERSION=$TIME-$COMMIT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
-      - uses: ncipollo/release-action@main
+      - uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.version.outputs.version }}
