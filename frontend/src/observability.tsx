@@ -24,6 +24,11 @@ initializeFaro({
   url: getUrl(),
   app: { name: 'kabal-frontend', version: ENVIRONMENT.version },
   paused: ENVIRONMENT.isLocal,
+  batching: {
+    enabled: true,
+    sendTimeout: ENVIRONMENT.isProduction ? 250 : 30000,
+    itemLimit: ENVIRONMENT.isProduction ? 50 : 100,
+  },
   instrumentations: [
     ...getWebInstrumentations({ captureConsole: false }),
     new TracingInstrumentation(),
