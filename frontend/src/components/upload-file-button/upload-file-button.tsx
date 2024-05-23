@@ -9,7 +9,7 @@ import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations
 import { DistribusjonsType } from '@app/types/documents/documents';
 
 const MEBI = BYTES_PER_KB * BYTES_PER_KB;
-const MAX_SIZE_MIB = 100;
+const MAX_SIZE_MIB = 256;
 const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
