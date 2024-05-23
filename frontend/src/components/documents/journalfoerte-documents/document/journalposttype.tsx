@@ -29,21 +29,25 @@ const getJournalposttype = (type: Journalposttype | null) => {
   switch (type) {
     case Journalposttype.INNGAAENDE:
       return (
-        <Tag size="small" variant="alt2" title="Inngående">
+        <StyledTag size="small" variant="alt2" title="Inngående">
           I
-        </Tag>
+        </StyledTag>
       );
     case Journalposttype.UTGAAENDE:
       return (
-        <Tag size="small" variant="alt3" title="Utgående">
+        <StyledTag size="small" variant="alt3" title="Utgående">
           U
-        </Tag>
+        </StyledTag>
       );
     case Journalposttype.NOTAT:
       return (
-        <Tag size="small" variant="alt1" title="Notat">
+        <StyledTag size="small" variant="alt1" title="Notat">
           N
-        </Tag>
+        </StyledTag>
       );
   }
 };
+
+const StyledTag = styled(Tag)`
+  width: 24px;
+`;
