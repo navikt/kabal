@@ -3,6 +3,7 @@ import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { createYjsPlugin } from '@udecode/plate-yjs';
 import { CurrentDate } from '@app/plate/components/current-date';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
@@ -66,6 +67,14 @@ export const saksbehandlerPlugins = createPlugins(
     createSignaturePlugin(),
     createEmptyVoidPlugin(),
     createBookmarkPlugin(),
+    createYjsPlugin({
+      options: {
+        hocuspocusProviderOptions: {
+          url: '/collaboration', // hocuspocus url
+          name: 'editor', // room name
+        },
+      },
+    }),
   ],
   {
     components: {

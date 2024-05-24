@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import { wsServer } from '@app/routes/collaboration';
 import { setupDocumentRoutes } from '@app/routes/document';
 import { PORT } from './config/config';
 import { getLogger } from './logger';
@@ -15,7 +16,17 @@ export const init = async (server: Express) => {
     server.use(setupDocumentRoutes());
     server.use(await setupProxy());
     server.use(setupStaticRoutes());
-    server.listen(PORT, () => log.info({ msg: `Listening on port ${PORT}` }));
+
+    const httpServer = server.listen(PORT, () => log.info({ msg: `Listening on port ${PORT}` }));
+
+    httpServer.on('upgrade', (req, socket) => {
+      if (req.url === undefined || !new URL(req.url).pathname.startsWith('/collaboration')) {
+        return;
+      }
+
+      log.info({ msg: 'Upgrade request' });
+      wsServer.handleConnection(socket, req, {});
+    });
   } catch (e) {
     await resetClientsAndUniqueUsersMetrics();
 
