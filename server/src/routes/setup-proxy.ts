@@ -2,7 +2,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { Socket } from 'net';
 import { Router } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { getAzureADClient } from '@app/auth/get-auth-client';
+import { Client } from 'openid-client';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { API_CLIENT_IDS } from '@app/config/config';
 import { getLogger } from '@app/logger';
@@ -10,16 +10,15 @@ import { ensureTraceparent } from '@app/request-id';
 
 const log = getLogger('proxy');
 
-export const setupProxy = async () => {
-  const authClient = await getAzureADClient();
+export const setupProxy = async (authClient: Client) => {
   const router = Router();
 
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
 
     router.use(route, async (req, res, next) => {
-      const authHeader = req.header('Authorization');
       const traceId = ensureTraceparent(req);
+      const authHeader = req.header('Authorization');
 
       if (typeof authHeader === 'string') {
         try {
