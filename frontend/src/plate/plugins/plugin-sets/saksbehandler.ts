@@ -1,9 +1,11 @@
+import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { PlatePluginComponent, createPlugins } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { createYjsPlugin } from '@udecode/plate-yjs';
+import * as Y from 'yjs';
 import { CurrentDate } from '@app/plate/components/current-date';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
@@ -49,6 +51,7 @@ import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { createRegelverkContainerPlugin, createRegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { createSignaturePlugin } from '@app/plate/plugins/signature';
+import { ISmartDocument } from '@app/types/documents/documents';
 
 const components: Record<string, PlatePluginComponent> = {
   [ELEMENT_PARAGRAPH]: Paragraph,
@@ -105,8 +108,15 @@ export const saksbehandlerPlugins = createPlugins(
   { components },
 );
 
-export const collaborationSaksbehandlerPlugins = (behandlingId: string, dokumentId: string) =>
-  createPlugins(
+export const collaborationSaksbehandlerPlugins = (
+  behandlingId: string,
+  dokumentId: string,
+  smartDocument: ISmartDocument,
+) => {
+  const sharedRoot = new Y.XmlText();
+  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
+
+  return createPlugins(
     [
       ...saksbehandlerPlugins,
       createYjsPlugin({
@@ -114,9 +124,11 @@ export const collaborationSaksbehandlerPlugins = (behandlingId: string, dokument
           hocuspocusProviderOptions: {
             url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`, // hocuspocus url
             name: dokumentId, // room name
+            document: sharedRoot.doc,
           },
         },
       }),
     ],
     { components },
   );
+};
