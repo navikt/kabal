@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
@@ -34,24 +34,42 @@ export const GroupedFilterList = <T extends string>({
   const ref = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<RegExp>(/.*/);
   const [focused, setFocused] = useState(-1);
-  const [filteredOptions, setFilteredOptions] = useState(options);
-  const [flattenedFilteredOptions, setFlattenedFilteredOptions] = useState<IOption<T>[]>(
-    options.flatMap(({ sectionOptions }) => sectionOptions),
+
+  const filteredOptions = useMemo(() => {
+    const filtered: OptionGroup<T>[] = [];
+
+    for (const option of options) {
+      if (option.sectionHeader === undefined) {
+        const sectionOptions = option.sectionOptions.filter(({ label }) => filter.test(label));
+
+        if (sectionOptions.length > 0) {
+          filtered.push({ ...option, sectionOptions });
+        }
+
+        continue;
+      }
+
+      const headerMatch = filter.test(option.sectionHeader.name ?? '');
+
+      if (headerMatch) {
+        filtered.push(option);
+        continue;
+      }
+
+      const sectionOptions = option.sectionOptions.filter(({ label }) => filter.test(label));
+
+      if (sectionOptions.length > 0) {
+        filtered.push({ ...option, sectionOptions });
+      }
+    }
+
+    return filtered;
+  }, [options, filter]);
+
+  const flattenedFilteredOptions = useMemo(
+    () => filteredOptions.flatMap(({ sectionOptions }) => sectionOptions),
+    [filteredOptions],
   );
-
-  useEffect(() => {
-    const filteredGroups = options.filter(({ sectionOptions }) =>
-      sectionOptions.some(({ label }) => filter.test(label)),
-    );
-
-    const filtered = filteredGroups.map(({ sectionOptions, ...rest }) => ({
-      ...rest,
-      sectionOptions: sectionOptions.filter(({ label }) => filter.test(label)),
-    }));
-
-    setFilteredOptions(filtered);
-    setFlattenedFilteredOptions(filtered.flatMap(({ sectionOptions }) => sectionOptions));
-  }, [setFilteredOptions, options, filter]);
 
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
