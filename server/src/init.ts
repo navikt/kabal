@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import { WebSocketServer } from 'ws';
 import { getAzureADClient } from '@app/auth/get-auth-client';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { ensureTraceparent } from '@app/request-id';
@@ -24,45 +25,54 @@ export const init = async (server: Express) => {
 
     const httpServer = server.listen(PORT, () => log.info({ msg: `Listening on port ${PORT}` }));
 
-    httpServer.on('upgrade', async (req, socket) => {
+    const wss = new WebSocketServer({ server: httpServer });
+
+    httpServer.on('upgrade', (req, socket, head) => {
       log.info({ msg: 'Upgrade request' });
 
+      wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req);
+      });
+    });
+
+    wss.on('connection', async (ws, req) => {
+      log.info({ msg: 'Websocket connect' });
+
       if (req.url === undefined) {
-        return socket.destroy();
+        return ws.close(400, 'Bad Request');
       }
 
       const url = new URL(req.url);
 
-      // Valid path is /collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId
       if (!url.pathname.startsWith('/collaboration/')) {
-        return socket.destroy();
+        return ws.close(404, 'Not Found');
       }
 
       const parts = url.pathname.split('/').filter((part) => part.length !== 0);
 
       if (parts.length !== 5) {
-        return socket.destroy();
+        return ws.close(404, 'Not Found');
       }
 
       const behandlingId = parts.at(2);
       const dokumentId = parts.at(4);
 
       if (behandlingId === undefined || dokumentId === undefined) {
-        return socket.destroy();
+        return ws.close(404, 'Not Found');
       }
 
       // Get auth header
       const authHeader = req.headers['authorization'];
 
       if (typeof authHeader !== 'string') {
-        return socket.destroy();
+        return ws.close(401, 'Unauthorized');
       }
 
       const traceId = ensureTraceparent(req);
 
       const oboAccessToken = await getOnBehalfOfAccessToken(authClient, authHeader, 'kabal-api', traceId);
 
-      wsServer.handleConnection(socket, req, { behandlingId, dokumentId, oboAccessToken, accessToken: authHeader });
+      wsServer.handleConnection(ws, req, { behandlingId, dokumentId, oboAccessToken, accessToken: authHeader });
     });
   } catch (e) {
     await resetClientsAndUniqueUsersMetrics();

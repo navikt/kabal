@@ -19,7 +19,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
@@ -72,7 +72,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
         id={id}
         readOnly={!canEdit}
         onChange={onChange}
-        plugins={saksbehandlerPlugins}
+        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id)}
         decorate={([node, path]) => {
           if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
