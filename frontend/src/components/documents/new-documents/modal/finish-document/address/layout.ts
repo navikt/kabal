@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 export enum AddressState {
   SAVED,
@@ -28,22 +28,23 @@ const getBackgroundColor = (state: AddressState) => {
   }
 };
 
-export const recipientStyle = css`
+export const StyledRecipient = styled.div<{ $accent: string }>`
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--a-border-subtle);
-  border-left-width: 4px;
   border-radius: var(--a-border-radius-medium);
   padding: 0;
   margin-bottom: 8px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+  border-left-width: 4px;
+  border-style: solid;
+  border-color: var(--a-border-default);
+  border-left-color: ${({ $accent }) => $accent};
 
   &:last-child {
     margin-bottom: 0;
   }
-`;
-
-export const StyledRecipient = styled.div`
-  ${recipientStyle}
 `;
 
 export const Row = styled.div`

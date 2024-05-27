@@ -3,7 +3,7 @@ import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { recipientStyle } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
 import {
@@ -76,7 +76,7 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledRecipient key={part.id}>
+          <StyledRecipient key={part.id} as="li" $accent="var(--a-border-success)">
             <StyledRecipientContent>
               <StyledBrevmottaker>
                 <StyledRecipientInnerContent>
@@ -132,10 +132,6 @@ const StyledRecipientList = styled.ul`
   padding: 0;
   margin: 0;
   margin-top: 4px;
-`;
-
-const StyledRecipient = styled.li`
-  ${recipientStyle}
 `;
 
 const StyledName = styled.span`

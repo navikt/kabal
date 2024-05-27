@@ -3,12 +3,13 @@ import { getInitalHandling } from '@app/components/documents/new-documents/modal
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { IMainDocument, IMottaker } from '@app/types/documents/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { IPart } from '@app/types/oppgave-common';
+import { IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker extends IMottaker {
   brevmottakertyper: Brevmottakertype[];
+  reachable: boolean;
 }
 
 export const useSuggestedBrevmottakere = ({ mottakerList, templateId }: IMainDocument): [IBrevmottaker[], boolean] => {
@@ -40,7 +41,9 @@ export const useSuggestedBrevmottakere = ({ mottakerList, templateId }: IMainDoc
         .map((sm) => {
           const mottaker = mottakerList.find((m) => m.part.id === sm.part.id);
 
-          return mottaker === undefined ? sm : { ...mottaker, brevmottakertyper: sm.brevmottakertyper };
+          return mottaker === undefined
+            ? sm
+            : { ...mottaker, brevmottakertyper: sm.brevmottakertyper, reachable: sm.reachable };
         });
 
       return [brevmottakere, false];
@@ -62,6 +65,9 @@ const partToBrevmottaker = (
   }
 
   const handling = getInitalHandling(part, templateId);
+  const reachable = !part.statusList.some(
+    (s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED,
+  );
 
-  return { part, brevmottakertyper: [brevmottakerType], handling, overriddenAddress: null };
+  return { part, brevmottakertyper: [brevmottakerType], handling, overriddenAddress: null, reachable };
 };

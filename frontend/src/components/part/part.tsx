@@ -96,6 +96,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
           onClose={() => setIsEditing(false)}
           isLoading={isLoading}
           autoFocus
+          allowUnreachable
         />
       ) : null}
     </BehandlingSection>

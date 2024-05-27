@@ -1,14 +1,16 @@
 import { Alert } from '@navikt/ds-react';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { CustomRecipients } from '@app/components/documents/new-documents/modal/finish-document/custom-recipients';
 import { isSendError } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
 import { SingleRecipient } from '@app/components/documents/new-documents/modal/finish-document/single-recipient';
 import { SuggestedRecipients } from '@app/components/documents/new-documents/modal/finish-document/suggested-recipients';
+import { UnreachableSuggestedRecipients } from '@app/components/documents/new-documents/modal/finish-document/unreachable-suggested-recipients';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { IMainDocument, IMottaker } from '@app/types/documents/documents';
+import { PartStatusEnum } from '@app/types/oppgave-common';
 import { StyledFinishDocument } from './styled-components';
 
 export const Receipients = (document: IMainDocument) => {
@@ -115,6 +117,16 @@ export const Receipients = (document: IMainDocument) => {
     [document.mottakerList, document.id, setMottakerList, oppgaveId],
   );
 
+  useEffect(() => {
+    const unreachableRecipients = document.mottakerList.filter((m) =>
+      m.part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED),
+    );
+
+    if (unreachableRecipients.length !== 0) {
+      removeMottakere(unreachableRecipients.map((r) => r.part.id));
+    }
+  }, [document.mottakerList, removeMottakere]);
+
   if (oppgaveIsLoading || document.isMarkertAvsluttet || data === undefined || getIsIncomingDocument(document)) {
     return null;
   }
@@ -122,25 +134,35 @@ export const Receipients = (document: IMainDocument) => {
   const customRecipients = document.mottakerList.filter((m) =>
     suggestedBrevmottakere.every((s) => s.part.id !== m.part.id),
   );
-  const [recipient] = suggestedBrevmottakere;
-  const onlyOneRecipient =
-    suggestedBrevmottakere.length === 1 && customRecipients.length === 0 && recipient !== undefined;
+  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
+  const unreachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => !s.reachable);
+  const [firstReachableRecipient, ...restReachableSuggestedRecipients] = reachableSuggestedRecipients;
+  const onlyOneReachableRecipient =
+    restReachableSuggestedRecipients.length === 0 &&
+    customRecipients.length === 0 &&
+    firstReachableRecipient !== undefined;
 
   return (
     <StyledFinishDocument>
-      {onlyOneRecipient ? (
-        <SingleRecipient recipient={recipient} templateId={document.templateId} changeMottaker={changeMottaker} />
-      ) : (
-        <SuggestedRecipients
-          suggestedRecipients={suggestedBrevmottakere}
-          selectedIds={document.mottakerList.map((m) => m.part.id)}
-          addMottakere={addMottakere}
-          removeMottakere={removeMottakere}
-          changeMottaker={changeMottaker}
-          sendErrors={sendErrors}
+      {onlyOneReachableRecipient ? (
+        <SingleRecipient
+          recipient={firstReachableRecipient}
           templateId={document.templateId}
+          changeMottaker={changeMottaker}
         />
-      )}
+      ) : null}
+
+      <SuggestedRecipients
+        recipients={onlyOneReachableRecipient ? restReachableSuggestedRecipients : reachableSuggestedRecipients}
+        selectedIds={document.mottakerList.map((m) => m.part.id)}
+        addMottakere={addMottakere}
+        removeMottakere={removeMottakere}
+        changeMottaker={changeMottaker}
+        sendErrors={sendErrors}
+        templateId={document.templateId}
+      />
+
+      <UnreachableSuggestedRecipients recipients={unreachableSuggestedRecipients} />
 
       <CustomRecipients
         mottakerList={customRecipients}
@@ -150,6 +172,12 @@ export const Receipients = (document: IMainDocument) => {
         sendErrors={sendErrors}
         templateId={document.templateId}
       />
+
+      {reachableSuggestedRecipients.length === 0 && customRecipients.length === 0 ? (
+        <Alert variant="warning" size="small">
+          Ingen gyldige mottakere.
+        </Alert>
+      ) : null}
 
       {sendErrors?.length === 0 ? null : (
         <Alert variant="error" size="small">

@@ -13,7 +13,7 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { StyledBrevmottaker, StyledRecipientContent } from './styled-components';
 
 interface RecipientsProps {
-  suggestedRecipients: IBrevmottaker[];
+  recipients: IBrevmottaker[];
   selectedIds: string[];
   addMottakere: (mottakere: IMottaker[]) => void;
   removeMottakere: (ids: string[]) => void;
@@ -23,7 +23,7 @@ interface RecipientsProps {
 }
 
 export const SuggestedRecipients = ({
-  suggestedRecipients,
+  recipients,
   selectedIds,
   addMottakere,
   removeMottakere,
@@ -36,7 +36,7 @@ export const SuggestedRecipients = ({
       const addList: IMottaker[] = [];
       const removeList: string[] = [];
 
-      for (const sm of suggestedRecipients) {
+      for (const sm of recipients) {
         if (idList.includes(sm.part.id)) {
           if (!selectedIds.includes(sm.part.id)) {
             addList.push(sm);
@@ -54,10 +54,10 @@ export const SuggestedRecipients = ({
         removeMottakere(removeList);
       }
     },
-    [suggestedRecipients, selectedIds, addMottakere, removeMottakere],
+    [recipients, selectedIds, addMottakere, removeMottakere],
   );
 
-  if (suggestedRecipients.length === 0) {
+  if (recipients.length === 0) {
     return null;
   }
 
@@ -69,14 +69,14 @@ export const SuggestedRecipients = ({
       data-testid="document-send-recipient-list"
       size="small"
     >
-      {suggestedRecipients.map(({ part, brevmottakertyper, handling, overriddenAddress }) => {
+      {recipients.map(({ part, brevmottakertyper, handling, overriddenAddress }) => {
         const { id, name, statusList } = part;
         const error = sendErrors.find((e) => e.field === id)?.reason ?? null;
         const isPerson = part.type === IdType.FNR;
         const isChecked = selectedIds.includes(id);
 
         return (
-          <StyledRecipient key={id}>
+          <StyledRecipient key={id} $accent={isChecked ? 'var(--a-border-success)' : 'var(--a-border-info)'}>
             <StyledBrevmottaker>
               <Checkbox size="small" value={id} data-testid="document-send-recipient" error={error !== null}>
                 <StyledRecipientContent>

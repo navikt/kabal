@@ -22,8 +22,9 @@ export const SendButtons = ({ document }: FinishProps) => {
   const remove = useRemoveDocument();
   const { close, setValidationErrors } = useContext(ModalContext);
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document);
+  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
 
-  if (oppgaveIsLoading || typeof data === 'undefined') {
+  if (oppgaveIsLoading || data === undefined) {
     return null;
   }
 
@@ -34,16 +35,24 @@ export const SendButtons = ({ document }: FinishProps) => {
 
     setValidationErrors([]);
 
-    if (mottakerList.length === 0 && suggestedBrevmottakere.length !== 1) {
-      setValidationErrors([
-        {
-          dokumentId,
-          title: documentTitle,
-          errors: [{ type: NO_RECIPIENTS_ERROR, message: 'Utsendingen må ha minst én mottaker' }],
-        },
-      ]);
+    if (mottakerList.length === 0) {
+      if (reachableSuggestedRecipients.length !== 1) {
+        setValidationErrors([
+          {
+            dokumentId,
+            title: documentTitle,
+            errors: [{ type: NO_RECIPIENTS_ERROR, message: 'Utsendingen må ha minst én mottaker' }],
+          },
+        ]);
 
-      return false;
+        return false;
+      }
+
+      await setMottakerList({
+        oppgaveId: data.id,
+        dokumentId,
+        mottakerList: reachableSuggestedRecipients,
+      });
     }
 
     const validation = await validate({ dokumentId, oppgaveId: data.id }).unwrap();
@@ -73,13 +82,14 @@ export const SendButtons = ({ document }: FinishProps) => {
 
   const onFinish = async () => {
     try {
-      if (mottakerList.length === 0 && suggestedBrevmottakere.length === 1) {
+      if (mottakerList.length === 0 && reachableSuggestedRecipients.length === 1) {
         await setMottakerList({
           oppgaveId: data.id,
           dokumentId,
-          mottakerList: suggestedBrevmottakere,
+          mottakerList: reachableSuggestedRecipients,
         });
       }
+
       await finish({ dokumentId, oppgaveId: data.id }).unwrap();
 
       remove(dokumentId, document);

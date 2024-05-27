@@ -1,9 +1,9 @@
-import { BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import React from 'react';
 import { styled } from 'styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { IPart, IdType } from '@app/types/oppgave-common';
+import { IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IPart | undefined;
@@ -27,21 +27,34 @@ interface ResultProps {
   onChange: (part: IPart) => void;
   isLoading: boolean;
   buttonText?: string;
+  allowUnreachable?: boolean;
 }
 
-const Result = ({ part, isLoading, onChange, buttonText = 'Bruk' }: ResultProps) => (
-  <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
-    <BodyShort>
-      {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
-    </BodyShort>
+const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachable = false }: ResultProps) => {
+  const isReachable =
+    allowUnreachable ||
+    !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
-    <PartStatusList statusList={part.statusList} size="xsmall" />
+  return (
+    <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
+      <BodyShort>
+        {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
+      </BodyShort>
 
-    <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-      {buttonText}
-    </Button>
-  </StyledResult>
-);
+      <PartStatusList statusList={part.statusList} size="xsmall" />
+
+      {isReachable ? (
+        <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
+          {buttonText}
+        </Button>
+      ) : (
+        <Alert size="small" variant="warning">
+          Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
+        </Alert>
+      )}
+    </StyledResult>
+  );
+};
 
 const StyledResult = styled(Tag)`
   display: flex;
@@ -49,3 +62,15 @@ const StyledResult = styled(Tag)`
   align-items: start;
   gap: 8px;
 `;
+
+const getUnreachableText = (statusList: IPart['statusList']): string | null => {
+  if (statusList.some((s) => s.status === PartStatusEnum.DEAD)) {
+    return 'personen er død';
+  }
+
+  if (statusList.some((s) => s.status === PartStatusEnum.DELETED)) {
+    return 'selskapet er avviklet';
+  }
+
+  return null;
+};
