@@ -5,6 +5,7 @@ export enum DocumentValidationErrorType {
   EMPTY_REGELVERK = 'EMPTY_REGELVERK',
   WRONG_DATE = 'WRONG_DATE',
   DOCUMENT_MODIFIED = 'DOCUMENT_MODIFIED',
+  INVALID_RECIPIENT = 'INVALID_RECIPIENT',
 }
 
 // Caught by frontend

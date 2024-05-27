@@ -1,6 +1,7 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
+import { Label, Tooltip } from '@navikt/ds-react';
 import React from 'react';
+import { styled } from 'styled-components';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
@@ -26,25 +27,36 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
   const isPerson = part.type === IdType.FNR;
 
   return (
-    <StyledRecipient>
-      <StyledBrevmottaker>
-        <StyledRecipientContent>
-          <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
-            {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
-          </Tooltip>
-          <span>
-            {name} ({getTypeNames(brevmottakertyper)})
-          </span>
-          <PartStatusList statusList={statusList} size="xsmall" />
-        </StyledRecipientContent>
-      </StyledBrevmottaker>
-      <Options
-        part={part}
-        handling={handling}
-        overriddenAddress={overriddenAddress}
-        onChange={changeMottaker}
-        templateId={templateId}
-      />
-    </StyledRecipient>
+    <Container>
+      <Label size="small" spacing as="h1">
+        Mottaker fra saken
+      </Label>
+
+      <StyledRecipient $accent="var(--a-border-success)">
+        <StyledBrevmottaker>
+          <StyledRecipientContent>
+            <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
+              {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
+            </Tooltip>
+            <span>
+              {name} ({getTypeNames(brevmottakertyper)})
+            </span>
+            <PartStatusList statusList={statusList} size="xsmall" />
+          </StyledRecipientContent>
+        </StyledBrevmottaker>
+        <Options
+          part={part}
+          handling={handling}
+          overriddenAddress={overriddenAddress}
+          onChange={changeMottaker}
+          templateId={templateId}
+        />
+      </StyledRecipient>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+`;

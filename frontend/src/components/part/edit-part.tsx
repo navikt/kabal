@@ -14,9 +14,10 @@ interface EditPartProps {
   buttonText?: string;
   autoFocus?: boolean;
   id?: string;
+  allowUnreachable?: boolean;
 }
 
-export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, id }: EditPartProps) => {
+export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPartProps) => {
   const { data: oppgave } = useOppgave();
   const [rawValue, setValue] = useState('');
   const [error, setError] = useState<string>();
@@ -80,10 +81,9 @@ export const EditPart = ({ onChange, isLoading, buttonText, autoFocus, onClose, 
           setValue('');
           onChange(p);
         }}
-        isLoading={isLoading}
         isSearching={isSearching || isFetching}
         isError={isError}
-        buttonText={buttonText}
+        {...props}
       />
     </StyledEditPart>
   );
@@ -97,9 +97,10 @@ interface ResultProps {
   isError: boolean;
   search: string;
   buttonText?: string;
+  allowUnreachable?: boolean;
 }
 
-const Result = ({ part, onChange, search, isError, isLoading, isSearching, buttonText }: ResultProps) => {
+const Result = ({ part, search, isError, ...props }: ResultProps) => {
   if (isError) {
     return <Tag variant="warning">Ingen treff</Tag>;
   }
@@ -108,9 +109,7 @@ const Result = ({ part, onChange, search, isError, isLoading, isSearching, butto
     return null;
   }
 
-  return (
-    <Lookup isSearching={isSearching} part={part} onChange={onChange} isLoading={isLoading} buttonText={buttonText} />
-  );
+  return <Lookup part={part} {...props} />;
 };
 
 const StyledEditPart = styled.div`

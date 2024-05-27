@@ -8,7 +8,7 @@ import { IPart } from '@app/types/oppgave-common';
 interface Props extends Addresses {
   part: IPart;
   handling: HandlingEnum;
-  onChange: (address: IAddress | null) => void;
+  onChange?: (address: IAddress | null) => void;
 }
 
 export const Address = ({ part, address, overriddenAddress, handling, onChange }: Props) => {
@@ -20,7 +20,7 @@ export const Address = ({ part, address, overriddenAddress, handling, onChange }
     }
   }, [handling]);
 
-  const onEdit = handling === HandlingEnum.LOCAL_PRINT ? undefined : () => setEdit(true);
+  const onEdit = handling === HandlingEnum.LOCAL_PRINT || onChange === undefined ? undefined : () => setEdit(true);
 
   if (!edit) {
     return <ReadAddress part={part} address={address} overriddenAddress={overriddenAddress} onEdit={onEdit} />;
@@ -31,7 +31,7 @@ export const Address = ({ part, address, overriddenAddress, handling, onChange }
       address={address}
       overriddenAddress={overriddenAddress}
       onSave={(newAddress) => {
-        onChange(newAddress);
+        onChange?.(newAddress);
         setEdit(false);
       }}
       onCancel={() => setEdit(false)}
