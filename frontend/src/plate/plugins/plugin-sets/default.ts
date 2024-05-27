@@ -2,7 +2,7 @@ import { createAlignPlugin } from '@udecode/plate-alignment';
 import { createAutoformatPlugin } from '@udecode/plate-autoformat';
 import { createBoldPlugin, createItalicPlugin, createUnderlinePlugin } from '@udecode/plate-basic-marks';
 import { createExitBreakPlugin, createSoftBreakPlugin } from '@udecode/plate-break';
-import { PlatePlugin, createInsertDataPlugin, someNode } from '@udecode/plate-common';
+import { PlatePlugin, TEditor, createInsertDataPlugin, someNode } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
 import { createIndentPlugin } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
@@ -22,7 +22,7 @@ export const defaultPlugins: PlatePlugin[] = [
   createParagraphPlugin(),
   createHeadingPlugin({
     options: { levels: 3 },
-    withOverrides: (editor) => {
+    withOverrides: (editor: TEditor) => {
       const { addMark } = editor;
 
       editor.addMark = (key, value) => {
