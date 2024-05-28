@@ -1,11 +1,11 @@
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Tabs } from '@navikt/ds-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
+import { useBehandlingEnabled, useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
@@ -19,8 +19,15 @@ const NEW_TAB_ID = 'NEW_TAB_ID';
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
   const documents = useSmartDocuments(oppgaveId);
+  const { setValue } = useBehandlingEnabled();
 
-  if (typeof documents === 'undefined') {
+  useEffect(() => {
+    if (documents?.length === 0) {
+      setValue(true);
+    }
+  }, [documents?.length, setValue]);
+
+  if (documents === undefined) {
     return null;
   }
 
