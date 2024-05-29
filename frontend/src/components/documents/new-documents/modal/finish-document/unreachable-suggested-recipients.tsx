@@ -35,7 +35,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
           const helpText = getUnreachableHelpText(statusList);
 
           return (
-            <StyledRecipient key={id} $accent="var(--a-border-warning)" as="li">
+            <StyledRecipient key={id} $accent="var(--a-border-danger)" as="li">
               <StyledBrevmottaker>
                 <StyledRecipientContent>
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
