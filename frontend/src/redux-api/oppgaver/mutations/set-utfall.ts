@@ -21,10 +21,16 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
         body: { utfallId },
       }),
       onQueryStarted: async ({ oppgaveId, utfallId }, { dispatch, queryFulfilled }) => {
-        const patchResult = dispatch(
+        const oppgavebehandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.utfallId = utfallId;
             draft.resultat.extraUtfallIdSet = draft.resultat.extraUtfallIdSet.filter((id) => id !== utfallId);
+          }),
+        );
+
+        const oppgavePatchResult = dispatch(
+          oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+            draft.utfallId = utfallId;
           }),
         );
 
@@ -41,12 +47,12 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.utfallId = utfallId;
               draft.utfallId = data.utfallId;
             }),
           );
         } catch (e) {
-          patchResult.undo();
+          oppgavebehandlingPatchResult.undo();
+          oppgavePatchResult.undo();
 
           const message = 'Kunne ikke oppdatere utfall.';
 
