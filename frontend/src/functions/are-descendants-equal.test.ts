@@ -1,14 +1,8 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
-import '@app/mocks/window';
 import { TElement, TText } from '@udecode/plate-common';
+import { describe, expect, it } from 'vitest';
 import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';
 
 describe('are-descendants-equal', () => {
-  // eslint-disable-next-line jest/no-hooks
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should return false if the two lists are of different lengths', () => {
     expect.assertions(1);
     const listA = [p('a'), p('b'), p('c'), p('d')];
