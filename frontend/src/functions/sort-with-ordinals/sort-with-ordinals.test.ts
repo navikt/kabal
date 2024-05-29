@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from 'vitest';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 
 const sortStrings = (texts: string[]) => texts.sort((a, b) => sortWithOrdinals(a, b));
