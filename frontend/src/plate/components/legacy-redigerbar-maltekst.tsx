@@ -8,7 +8,7 @@ import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { lexSpecialis } from '@app/plate/functions/lex-specialis';
+import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
@@ -57,14 +57,16 @@ export const LegacyRedigerbarMaltekst = ({
       const { ytelseId, resultat } = oppgave;
       const { hjemmelIdSet, utfallId, extraUtfallIdSet } = resultat;
 
-      const nodes = lexSpecialis(
+      const [lexSpecialisStatus, richText] = lexSpecialis(
         templateId,
         element.section,
         ytelseId,
         hjemmelIdSet,
         utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
         tekster.filter(isRedigerbarMaltekst),
-      )?.richText ?? [createSimpleParagraph()];
+      );
+
+      const nodes = lexSpecialisStatus === LexSpecialisStatus.FOUND ? richText.richText : [createSimpleParagraph()];
 
       replaceNodeChildren(editor, { at: path, nodes });
     } catch (e) {

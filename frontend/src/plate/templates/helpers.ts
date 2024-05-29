@@ -57,34 +57,23 @@ export const createLabelContent = (source: string, label: string): LabelContentE
 export const createMaltekstseksjon = (
   section: TemplateSections,
   id?: string,
-  textIdList?: string[],
-  children?: MaltekstseksjonElement['children'],
-): MaltekstseksjonElement => ({
-  type: ELEMENT_MALTEKSTSEKSJON,
-  id,
-  section,
-  children: children ?? [createEmptyVoid()],
-  textIdList: textIdList ?? [],
-});
+  textIdList: string[] = [],
+  children: MaltekstseksjonElement['children'] = [createEmptyVoid()],
+  language: Language = Language.NB,
+): MaltekstseksjonElement => ({ type: ELEMENT_MALTEKSTSEKSJON, id, section, children, textIdList, language });
 
 export const createMaltekst = (
   section: TemplateSections,
-  children?: ParentOrChildElement[],
+  children: ParentOrChildElement[] = [createSimpleParagraph()],
   id?: string,
-  language?: Language,
-): MaltekstElement => ({
-  type: ELEMENT_MALTEKST,
-  section,
-  id,
-  language,
-  children: children ?? [createSimpleParagraph()],
-});
+  language: Language = Language.NB,
+): MaltekstElement => ({ type: ELEMENT_MALTEKST, section, id, language, children });
 
 export const createRedigerbarMaltekst = (
   section: TemplateSections,
   children?: ParentOrChildElement[],
   id?: string,
-  language?: Language,
+  language: Language = Language.NB,
 ): RedigerbarMaltekstElement => ({
   type: ELEMENT_REDIGERBAR_MALTEKST,
   section,

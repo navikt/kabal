@@ -57,19 +57,22 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
     return utfallIdSet.includes(mainUtfall) ? utfallIdSet : [...utfallIdSet, mainUtfall];
   }, [utfallIdSet, mainUtfall]);
 
+  const disabled = mainUtfall === null;
+
   return (
     <ButtonContainer ref={ref}>
       <HelpTextWrapper>
-        <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small">
+        <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
           Sett ekstra utfall for tilpasset tekst
         </Button>
         <HelpText>
           <HelpTextContent>
-            Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.
+            {disabled ? <strong>Du må velge utfall/resultat først.</strong> : null}
+            <span>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</span>
           </HelpTextContent>
         </HelpText>
       </HelpTextWrapper>
-      <Popup isOpen={isOpen}>
+      <Popup isOpen={isOpen && !disabled}>
         <Dropdown
           selected={selected}
           onChange={(newList) => updateUtfall({ oppgaveId, extraUtfallIdSet: newList.filter(isUtfall) })}
@@ -156,6 +159,8 @@ const HelpTextWrapper = styled.div`
 `;
 
 const HelpTextContent = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 300px;
 `;
 

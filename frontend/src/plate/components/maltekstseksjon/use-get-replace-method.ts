@@ -1,13 +1,14 @@
+/* eslint-disable max-depth */
 import { useCallback } from 'react';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { usePrevious } from '@app/hooks/use-previous';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { containsEditedPlaceholder } from '@app/plate/components/maltekstseksjon/get-children';
+import { areFromPlaceholdersSafeToReplaceWithToPlaceholders } from '@app/plate/components/maltekstseksjon/get-children';
 import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import { EmptyVoidElement, MaltekstseksjonElement } from '@app/plate/types';
+import { EmptyVoidElement, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import { useLazyGetMaltekstseksjonTextsQuery } from '@app/redux-api/maltekstseksjoner/consumer';
-import { Language } from '@app/types/texts/language';
+import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
+import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { isConsumerRichText } from '@app/types/texts/consumer';
+import { LANGUAGES } from '@app/types/texts/language';
 
 export enum ReplaceMethod {
   AUTO,
@@ -17,76 +18,115 @@ export enum ReplaceMethod {
 
 type GetReplaceMethodFn = (
   previousMaltekstseksjonElement: MaltekstseksjonElement,
-  newMaltekstseksjonId: string | null,
+  newMaltekstseksjon: IMaltekstseksjon | null,
+  newChildren?: (MaltekstElement | RedigerbarMaltekstElement)[],
 ) => Promise<ReplaceMethod>;
 
+/**
+ * @returns A function that checks if the given MaltekstseksjonElement has changed by the user.
+ */
 const useGetIsChanged = () => {
-  const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
-  const language = useSmartEditorLanguage();
-  const previousLanguage = usePrevious(language) ?? language;
+  const [getOriginalText] = useLazyGetConsumerTextByIdQuery();
 
   return useCallback(
     async (previousMaltekstseksjonElement: MaltekstseksjonElement): Promise<boolean> => {
-      const id = previousMaltekstseksjonElement.id ?? null;
-
-      if (id === null) {
+      if (previousMaltekstseksjonElement.id === undefined) {
         return false;
       }
 
-      const originalTexts = await getOriginalTexts({ id, language: previousLanguage }, true).unwrap();
+      for (const element of previousMaltekstseksjonElement.children) {
+        if (element.type === ELEMENT_EMPTY_VOID) {
+          continue;
+        }
 
-      return !areDescendantsEqual(
-        previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
-        originalTexts.flatMap((t) => t.richText),
-      );
+        const { id } = element;
+
+        if (id === undefined) {
+          console.warn('ID is undefined for element:', element);
+
+          return true;
+        }
+
+        if (element.language === undefined) {
+          console.warn('Language is undefined for element, checking all languages:', element);
+        }
+
+        // If no language is set, check all languages.
+        const languages = element.language === undefined ? LANGUAGES : [element.language];
+
+        // Fetch texts for all languages in parallel.
+        const originalTextLanguages = await Promise.all(
+          languages.map((language) => getOriginalText({ textId: id, language }, true).unwrap()),
+        );
+
+        const isAnyLanguageEqual = originalTextLanguages.some((originalTextLanguage) => {
+          if (!isConsumerRichText(originalTextLanguage)) {
+            console.warn('Original text is not a RichText:', originalTextLanguage);
+
+            return false;
+          }
+
+          if (isOfElementType<MaltekstElement>(element, ELEMENT_MALTEKST)) {
+            return areFromPlaceholdersSafeToReplaceWithToPlaceholders(element, {
+              type: ELEMENT_MALTEKST,
+              children: originalTextLanguage.richText,
+            });
+          }
+
+          return areDescendantsEqual(element.children, originalTextLanguage.richText);
+        });
+
+        if (!isAnyLanguageEqual) {
+          return true;
+        }
+      }
+
+      return false;
     },
-    [getOriginalTexts, previousLanguage],
+    [getOriginalText],
   );
 };
 
 export const useGetReplaceMethod = (oppgaveIsLoaded: boolean) => {
-  const language = useSmartEditorLanguage();
-
   const getIsChanged = useGetIsChanged();
 
   return useCallback<GetReplaceMethodFn>(
-    async (previousMaltekstseksjonElement, newMaltekstseksjonId) => {
+    async (previousMaltekstseksjonElement, newMaltekstseksjon, newChildren = []) => {
       if (!oppgaveIsLoaded) {
         return ReplaceMethod.NO_CHANGE;
       }
 
-      const previousId = previousMaltekstseksjonElement.id ?? null;
+      // Empty void can always be replaced.
+      if (previousMaltekstseksjonElement.id === undefined) {
+        const { children } = previousMaltekstseksjonElement;
+        const [firstChild] = children;
 
-      const { children } = previousMaltekstseksjonElement;
-
-      if (previousId === newMaltekstseksjonId) {
-        if (children.every((c) => (c.language ?? Language.NB) === language)) {
-          return ReplaceMethod.NO_CHANGE;
+        if (isOfElementType<EmptyVoidElement>(firstChild, ELEMENT_EMPTY_VOID)) {
+          return newMaltekstseksjon === null ? ReplaceMethod.NO_CHANGE : ReplaceMethod.AUTO;
         }
+      }
 
-        if (children.every((e) => e.type === ELEMENT_MALTEKST && !containsEditedPlaceholder(e))) {
-          return ReplaceMethod.AUTO;
-        }
+      if (
+        previousMaltekstseksjonElement.id !== newMaltekstseksjon?.id ||
+        previousMaltekstseksjonElement.children.length !== newChildren.length ||
+        previousMaltekstseksjonElement.children.some((child, index) => {
+          const newChild = newChildren[index];
 
+          if (newChild === undefined) {
+            return true;
+          }
+
+          return child.id !== newChild.id || child.language !== newChild.language;
+        })
+      ) {
         const isChanged = await getIsChanged(previousMaltekstseksjonElement);
 
         return isChanged ? ReplaceMethod.MANUAL : ReplaceMethod.AUTO;
       }
 
-      if (previousId === null) {
-        return ReplaceMethod.AUTO;
-      }
-
-      const [firstChild] = children;
-
-      if (isOfElementType<EmptyVoidElement>(firstChild, ELEMENT_EMPTY_VOID)) {
-        return ReplaceMethod.AUTO;
-      }
-
-      const isChanged = await getIsChanged(previousMaltekstseksjonElement);
-
-      return isChanged ? ReplaceMethod.MANUAL : ReplaceMethod.AUTO;
+      // ID and children are the same.
+      return ReplaceMethod.NO_CHANGE;
     },
-    [oppgaveIsLoaded, getIsChanged, language],
+    [oppgaveIsLoaded, getIsChanged],
   );
 };

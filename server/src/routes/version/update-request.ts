@@ -9,7 +9,7 @@ const log = getLogger('update-request');
  * @format `YYYY-mm-ddTHH:MM:ss`
  */
 const UPDATE_REQUIRED_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-10T13:37:00';
-const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-10T13:37:00';
+const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-11T10:00:00';
 
 if (UPDATE_REQUIRED_THRESHOLD > VERSION) {
   log.error({

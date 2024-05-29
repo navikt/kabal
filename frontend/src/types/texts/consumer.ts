@@ -26,7 +26,7 @@ export interface IConsumerRegelverkText extends ConsumerMetadata, Omit<INewRegel
 
 interface IConsumerGodFormuleringText extends ConsumerMetadata, Omit<INewRichTextParams, 'richText' | 'textType'> {
   textType: typeof GOD_FORMULERING_TYPE;
-  richText: EditorValue | null;
+  richText: EditorValue;
 }
 
 export interface NonNullableGodFormulering extends Omit<IConsumerGodFormuleringText, 'richText'> {
@@ -38,6 +38,11 @@ const isGodFormulering = (text: IConsumerText): text is IConsumerGodFormuleringT
 
 export const isNonNullGodFormulering = (text: IConsumerText): text is NonNullableGodFormulering =>
   isGodFormulering(text) && text.richText !== null;
+
+export const isConsumerRichText = (
+  text: IConsumerText,
+): text is IConsumerRichText | IConsumerRegelverkText | IConsumerGodFormuleringText =>
+  'richText' in text && Array.isArray(text.richText);
 
 export type IConsumerText =
   | IConsumerRichText

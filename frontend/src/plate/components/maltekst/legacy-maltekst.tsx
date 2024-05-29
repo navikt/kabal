@@ -17,7 +17,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { lexSpecialis } from '@app/plate/functions/lex-specialis';
+import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
@@ -50,14 +50,16 @@ export const LegacyMaltekst = ({
     const { ytelseId, resultat } = oppgave;
     const { hjemmelIdSet, utfallId, extraUtfallIdSet } = resultat;
 
-    const maltekster = lexSpecialis(
+    const [lexSpecialisStatus, richText] = lexSpecialis(
       templateId,
       element.section,
       ytelseId,
       hjemmelIdSet,
       utfallId === null ? extraUtfallIdSet : [utfallId, ...extraUtfallIdSet],
       data.filter(isMaltekst),
-    )?.richText ?? [createEmptyVoid()];
+    );
+
+    const maltekster = lexSpecialisStatus === LexSpecialisStatus.FOUND ? richText.richText : [createEmptyVoid()];
 
     if (nodesEquals(element.children, maltekster)) {
       return;
