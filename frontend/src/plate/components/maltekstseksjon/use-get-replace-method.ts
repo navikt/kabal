@@ -23,7 +23,7 @@ type GetReplaceMethodFn = (
 const useGetIsChanged = () => {
   const [getOriginalTexts] = useLazyGetMaltekstseksjonTextsQuery();
   const language = useSmartEditorLanguage();
-  const previousLanguage = usePrevious(language);
+  const previousLanguage = usePrevious(language) ?? language;
 
   return useCallback(
     async (previousMaltekstseksjonElement: MaltekstseksjonElement): Promise<boolean> => {
@@ -33,21 +33,7 @@ const useGetIsChanged = () => {
         return false;
       }
 
-      if (previousLanguage === undefined) {
-        return false;
-      }
-
       const originalTexts = await getOriginalTexts({ id, language: previousLanguage }, true).unwrap();
-
-      if (originalTexts.length !== previousMaltekstseksjonElement.children.length) {
-        return true;
-      }
-
-      for (const text of previousMaltekstseksjonElement.children) {
-        if (!originalTexts.some((ot) => ot.id === text.id)) {
-          return true;
-        }
-      }
 
       return !areDescendantsEqual(
         previousMaltekstseksjonElement.children.flatMap((t) => (t.type === ELEMENT_EMPTY_VOID ? [] : t.children)),
