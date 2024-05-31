@@ -7,7 +7,7 @@ import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
-import { useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
+import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { UtfallEnum } from '@app/types/kodeverk';
 
 interface UtfallResultatProps {
@@ -47,6 +47,7 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
 
 const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
   const [updateUtfall] = useUpdateUtfallMutation();
+  const [updateEkstraUtfall] = useUpdateExtraUtfallMutation();
   const validationError = useValidationError('utfall');
   const utfallLabel = useFieldName('utfall');
   const { data: oppgave } = useOppgave();
@@ -62,8 +63,16 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
 
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfallId: value });
+
+      if (oppgave !== undefined && oppgave.resultat.extraUtfallIdSet.includes(value)) {
+        updateEkstraUtfall({
+          oppgaveId,
+          extraUtfallIdSet: oppgave.resultat.extraUtfallIdSet.filter((id) => id !== value),
+        });
+      }
     } else if (value === NOT_SELECTED_VALUE) {
       updateUtfall({ oppgaveId, utfallId: null });
+      updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: [] });
     }
   };
 

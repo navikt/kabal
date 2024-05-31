@@ -24,7 +24,6 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
         const oppgavebehandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
             draft.resultat.utfallId = utfallId;
-            draft.resultat.extraUtfallIdSet = draft.resultat.extraUtfallIdSet.filter((id) => id !== utfallId);
           }),
         );
 
@@ -41,7 +40,6 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
               draft.modified = data.modified;
               draft.resultat.utfallId = data.utfallId;
-              draft.resultat.extraUtfallIdSet = data.extraUtfallIdSet;
             }),
           );
 
