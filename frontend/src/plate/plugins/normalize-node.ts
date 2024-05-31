@@ -63,8 +63,9 @@ export const createNormalizeNodePlugin = createPluginFactory({
             return insertNodes(editor, createTableCell(), options);
           case ELEMENT_TD:
             return insertNodes(editor, createSimpleParagraph(), options);
-          case ELEMENT_MALTEKST:
           case ELEMENT_REDIGERBAR_MALTEKST:
+            return insertNodes(editor, createSimpleParagraph(), options);
+          case ELEMENT_MALTEKST:
           case ELEMENT_MALTEKSTSEKSJON:
             return insertNodes(editor, createEmptyVoid(), options);
           case ELEMENT_REGELVERK_CONTAINER:
