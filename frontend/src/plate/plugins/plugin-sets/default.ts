@@ -16,7 +16,6 @@ import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/elemen
 import { createNormalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { createPageBreakPlugin } from '@app/plate/plugins/page-break';
 import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
-import { createSelectionPlugin } from '@app/plate/plugins/selection';
 
 export const defaultPlugins: PlatePlugin[] = [
   createInsertDataPlugin(),
@@ -91,7 +90,6 @@ export const defaultPlugins: PlatePlugin[] = [
   createPageBreakPlugin(),
   createProhibitDeletionPlugin(),
   createCopyPlugin(),
-  createSelectionPlugin(),
   createNormalizeNodePlugin(),
   createCustomAbbreviationPlugin(),
 ];
