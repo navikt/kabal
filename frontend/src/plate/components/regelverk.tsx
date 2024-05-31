@@ -11,6 +11,7 @@ import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { DeleteSection } from '@app/plate/components/common/delete-section';
 import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
 import { EditorValue, RegelverkContainerElement, RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
@@ -26,16 +27,7 @@ export const Regelverk = ({
   element,
   editor,
 }: PlateRenderElementProps<EditorValue, RegelverkElement>) => (
-  <PlateElement
-    attributes={attributes}
-    element={element}
-    editor={editor}
-    onDragStart={(event) => event.preventDefault()}
-    onDrop={(e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }}
-  >
+  <PlateElement attributes={attributes} element={element} editor={editor} onDragStart={onPlateContainerDragStart}>
     <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
       {children}
       <SectionToolbar contentEditable={false} style={{ top: 32 }}>
@@ -102,8 +94,7 @@ export const RegelverkContainer = ({
       attributes={attributes}
       element={element}
       editor={editor}
-      onDragStart={(event) => event.stopPropagation()}
-      onDrop={(e) => e.stopPropagation()}
+      onDragStart={onPlateContainerDragStart}
     >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}

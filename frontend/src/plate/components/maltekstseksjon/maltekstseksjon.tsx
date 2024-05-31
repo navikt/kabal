@@ -24,6 +24,7 @@ import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/typ
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
 import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
 import { MaltekstseksjonContainer, MaltekstseksjonToolbar } from '@app/plate/components/styled-components';
+import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import { EditorValue, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
@@ -60,7 +61,7 @@ export const Maltekstseksjon = ({
   const oppgaveIsLoaded = oppgave !== undefined;
   const getReplaceMethod = useGetReplaceMethod(oppgaveIsLoaded);
 
-  const path = useMemo(() => findNodePath(editor, element), [editor, element]);
+  const path = findNodePath(editor, element);
 
   const replaceNodes = useCallback(
     (id: string | null, textIdList: string[] | null, nodes: (MaltekstElement | RedigerbarMaltekstElement)[] | null) => {
@@ -164,14 +165,7 @@ export const Maltekstseksjon = ({
       editor={editor}
       contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
-      onDragStart={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
+      onDragStart={onPlateContainerDragStart}
     >
       <MaltekstseksjonContainer data-element={element.type} data-section={element.section}>
         {manualUpdate !== undefined ? <UpdateMaltekstseksjon next={manualUpdate} replaceNodes={replaceNodes} /> : null}

@@ -37,7 +37,18 @@ export const LabelContent = ({
   }
 
   return (
-    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+    <PlateElement
+      asChild
+      attributes={attributes}
+      element={element}
+      editor={editor}
+      contentEditable={false}
+      onDragStart={(event) => event.preventDefault()}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <span>
         {_result === null ? null : (
           <StyledLabelContent>
