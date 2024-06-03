@@ -4,7 +4,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import {
   PlateElement,
   PlateRenderElementProps,
-  findNodePath,
   isEditorReadOnly,
   replaceNodeChildren,
   setNodes,
@@ -23,6 +22,7 @@ import { getChildren } from '@app/plate/components/maltekstseksjon/get-children'
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
 import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
+import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
 import { MaltekstseksjonContainer, MaltekstseksjonToolbar } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
@@ -55,13 +55,12 @@ export const Maltekstseksjon = ({
   const [fetchMaltekstseksjon, { isFetching: maltekstseksjonIsFetching }] = useLazyGetConsumerMaltekstseksjonerQuery();
   const [fetchMaltekstseksjonTexts, { isFetching: maltekstseksjonTextsIsFetching }] =
     useLazyGetMaltekstseksjonTextsQuery();
+  const path = usePath(editor, element);
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
   const language = useSmartEditorLanguage();
 
   const oppgaveIsLoaded = oppgave !== undefined;
   const getReplaceMethod = useGetReplaceMethod(oppgaveIsLoaded);
-
-  const path = findNodePath(editor, element);
 
   const replaceNodes = useCallback(
     (id: string | null, textIdList: string[] | null, nodes: (MaltekstElement | RedigerbarMaltekstElement)[] | null) => {
