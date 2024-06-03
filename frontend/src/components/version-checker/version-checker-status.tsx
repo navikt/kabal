@@ -1,74 +1,142 @@
-import { CheckmarkCircleIcon, CogRotationIcon } from '@navikt/aksel-icons';
-import { Button, InternalHeader } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { css, styled } from 'styled-components';
+import { CogRotationIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from '@app/components/toast/store';
+import { VersionToast } from '@app/components/version-checker/toast';
 import { ENVIRONMENT } from '@app/environment';
-import { VERSION_CHECKER } from './version-checker';
+import { UpdateRequest, VERSION_CHECKER } from './version-checker';
+
+const IGNORE_UPDATE_KEY = 'ignoreUpdate';
+const IGNORE_UPDATE_TIMEOUT = ENVIRONMENT.isProduction ? 1_000 * 60 * 60 : 10_000; // 1 hour for production, 10 seconds for development.
+
+const UPDATE_TOAST_TIMEOUT: number = Infinity;
+const UPDATED_TOAST_TIMEOUT: number = 5_000;
 
 export const VersionCheckerStatus = () => {
-  const [isUpToDate, setIsUpToDate] = useState(true);
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [ignoredAt, setIgnoredAt] = useState(getIgnoredAt());
+  const ignoredUntil = ignoredAt === 0 ? 0 : ignoredAt + IGNORE_UPDATE_TIMEOUT;
+
+  const showToast = useCallback((isRequired: boolean) => {
+    if (isRequired) {
+      return toast.warning(<VersionToast isRequired />, UPDATE_TOAST_TIMEOUT);
+    }
+
+    toast.info(<VersionToast />, UPDATE_TOAST_TIMEOUT);
+  }, []);
+
+  const handleUpdateRequest = useCallback(
+    (updateRequest: UpdateRequest) => {
+      if (updateRequest === UpdateRequest.NONE) {
+        return;
+      }
+
+      const isIgnored = ignoredUntil > Date.now();
+
+      if (isIgnored) {
+        return;
+      }
+
+      const isBehandlingView = getIsBehandlingView();
+      const isRequired = updateRequest === UpdateRequest.REQUIRED;
+
+      if (isRequired && !isBehandlingView) {
+        modalRef.current?.showModal();
+      } else {
+        showToast(isRequired);
+      }
+    },
+    [ignoredUntil, showToast],
+  );
 
   useEffect(() => {
-    if (ENVIRONMENT.isLocal) {
+    VERSION_CHECKER.addUpdateRequestListener(handleUpdateRequest);
+
+    return () => VERSION_CHECKER.removeUpdateRequestListener(handleUpdateRequest);
+  }, [handleUpdateRequest]);
+
+  useEffect(() => {
+    const isIgnored = ignoredUntil > Date.now();
+
+    if (!isIgnored) {
       return;
     }
 
-    VERSION_CHECKER.addListener(setIsUpToDate);
+    const timeout = setTimeout(
+      () => handleUpdateRequest(VERSION_CHECKER.getUpdateRequest()),
+      ignoredUntil - Date.now(),
+    );
 
-    return () => {
-      VERSION_CHECKER.removeListener(setIsUpToDate);
-    };
-  }, []);
-
-  if (isUpToDate) {
-    return <Version />;
-  }
-
-  return (
-    <InternalHeader.Button
-      as={UpdateButton}
-      title="Det finnes en ny versjon av Kabal. Versjonen du ser på nå er ikke siste versjon. Trykk her for å laste siste versjon."
-      onClick={() => window.location.reload()}
-      size="small"
-      data-testid="update-kabal-button"
-    >
-      <CogRotationIcon /> Oppdater til siste versjon
-    </InternalHeader.Button>
-  );
-};
-
-const Version = () => {
-  const [show, setShow] = useState(true);
+    return () => clearTimeout(timeout);
+  }, [handleUpdateRequest, ignoredUntil]);
 
   useEffect(() => {
-    setTimeout(() => setShow(false), 20 * 1000);
-  }, [setShow]);
+    const lastViewedVersion = localStorage.getItem('lastViewedVersion');
 
-  if (!show) {
-    return null;
-  }
+    if (ENVIRONMENT.version !== lastViewedVersion) {
+      toast.success('Kabal er oppdatert.', UPDATED_TOAST_TIMEOUT);
+      localStorage.setItem('lastViewedVersion', ENVIRONMENT.version);
+    }
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    const now = Date.now();
+    setIgnoredAt(now);
+    window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
+  }, []);
+  const onIgnoreModal = useCallback(() => modalRef.current?.close(), []);
 
   return (
-    <InternalHeader.Title as="div">
-      <IconText>
-        <CheckmarkCircleIcon /> Kabal er klar til bruk!
-      </IconText>
-    </InternalHeader.Title>
+    <Modal
+      onClose={onCloseModal}
+      closeOnBackdropClick
+      header={{
+        heading: 'Ny versjon av Kabal er tilgjengelig!',
+      }}
+      ref={modalRef}
+      width={500}
+    >
+      <Modal.Body>
+        <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="primary"
+          icon={<CogRotationIcon aria-hidden />}
+          onClick={() => window.location.reload()}
+          data-testid="update-kabal-button"
+          size="medium"
+        >
+          Oppdater Kabal
+        </Button>
+        <Button variant="secondary" onClick={onIgnoreModal} size="medium">
+          Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-const iconText = css`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  white-space: nowrap;
-`;
+const getIgnoredAt = () => {
+  const raw = window.localStorage.getItem(IGNORE_UPDATE_KEY);
 
-const IconText = styled.span`
-  ${iconText}
-  color: #fff;
-`;
+  if (raw === null) {
+    return 0;
+  }
 
-const UpdateButton = styled(Button)`
-  ${iconText}
-`;
+  const parsed = Number.parseInt(raw, 10);
+
+  if (Number.isNaN(parsed)) {
+    return 0;
+  }
+
+  return parsed;
+};
+
+const BEHANDLING_VIEW_PATHS = ['/klagebehandling/', '/ankebehandling/', '/trygderettsankebehandling/'];
+
+const getIsBehandlingView = () => {
+  const { pathname } = window.location;
+
+  return BEHANDLING_VIEW_PATHS.some((path) => pathname.startsWith(path));
+};

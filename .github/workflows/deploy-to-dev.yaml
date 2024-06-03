@@ -31,6 +31,7 @@ jobs:
       id-token: write
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,6 +73,10 @@ jobs:
           cd server
           bun test
 
+      - name: Generate version number
+        id: version
+        run: echo "version=$(TZ=Europe/Oslo git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_OUTPUT"
+
       - name: Build & push Docker image
         uses: nais/docker-build-push@v0
         id: docker-build-push
@@ -87,7 +92,7 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
           build_args: |
-            VERSION=${{ github.sha }}
+            VERSION=${{ steps.version.outputs.version }}
   
   deploy_to_dev:
     name: Deploy

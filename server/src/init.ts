@@ -4,7 +4,7 @@ import { PORT } from './config/config';
 import { getLogger } from './logger';
 import { setupProxy } from './routes/setup-proxy';
 import { setupStaticRoutes } from './routes/static-routes';
-import { resetClientsAndUniqueUsersMetrics, setupVersionRoute } from './routes/version';
+import { resetClientsAndUniqueUsersMetrics, setupVersionRoute } from './routes/version/version';
 import { EmojiIcons, sendToSlack } from './slack';
 
 const log = getLogger('init');

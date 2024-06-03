@@ -45,13 +45,13 @@ jobs:
         timeout-minutes: 3
 
       - name: Generate release version
-        id: version
+        id: release
         run: |
-          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
           COMMIT=$(git rev-parse --short=7 HEAD)
-          VERSION=$TIME-$COMMIT
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          VERSION=$(TZ=Europe/Oslo git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')
+          RELEASE=$VERSION-$COMMIT
+          echo "release=${RELEASE}" >> $GITHUB_OUTPUT
 
       - uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.version.outputs.version }}
+          tag: ${{ steps.release.outputs.release }}
