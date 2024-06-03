@@ -1,12 +1,14 @@
 import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
 import { EditorValue, SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 export const Signature = ({
@@ -18,14 +20,18 @@ export const Signature = ({
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
+  const { templateId } = useContext(SmartEditorContext);
 
   if (oppgave === undefined || signature === undefined) {
     return null;
   }
 
+  const isRolAnswers = templateId === TemplateIdEnum.ROL_ANSWERS;
+
   const hasMedunderskriver = oppgave.medunderskriver.employee !== null;
+  const showMedunderskriverCheckbox = hasMedunderskriver && !isRolAnswers;
   const showForkortedeNavnCheckbox = hasMedunderskriver || !signature.anonymous;
-  const showSuffixCheckbox = !signature.anonymous;
+  const showSuffixCheckbox = !signature.anonymous && !isRolAnswers;
 
   const hideAll = !showForkortedeNavnCheckbox && !showSuffixCheckbox && !hasMedunderskriver;
 
@@ -55,7 +61,7 @@ export const Signature = ({
               </Checkbox>
             ) : null}
 
-            {hasMedunderskriver ? (
+            {showMedunderskriverCheckbox ? (
               <Checkbox
                 disabled={isReadOnly}
                 checked={element.includeMedunderskriver}
