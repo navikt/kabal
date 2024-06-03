@@ -2,34 +2,41 @@ import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
 
-type ListenerFn = (isUpToDate: boolean) => void;
+export enum UpdateRequest {
+  REQUIRED = 'REQUIRED',
+  OPTIONAL = 'OPTIONAL',
+  NONE = 'NONE',
+}
+
+const UPDATE_REQUEST_EVENT = 'update-request';
+
+type UpdateRequestListenerFn = (request: UpdateRequest) => void;
+
+declare global {
+  interface Window {
+    sendUpdateRequest?: (data: UpdateRequest) => void;
+  }
+}
 
 class VersionChecker {
   private latestVersion = ENVIRONMENT.version;
   private isUpToDate = true;
-  private listeners: ListenerFn[] = [];
+  private updateRequest: UpdateRequest = UpdateRequest.NONE;
+  private updateRequestListeners: UpdateRequestListenerFn[] = [];
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
     if (!ENVIRONMENT.isLocal) {
       this.createEventSource();
+    } else {
+      window.sendUpdateRequest = (data: UpdateRequest) => {
+        this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
+      };
     }
   }
 
-  public addListener(listener: ListenerFn): VersionChecker {
-    if (!this.listeners.includes(listener)) {
-      this.listeners.push(listener);
-    }
-
-    return this;
-  }
-
-  public removeListener(listener: ListenerFn): VersionChecker {
-    this.listeners = this.listeners.filter((l) => l !== listener);
-
-    return this;
-  }
+  public getUpdateRequest = (): UpdateRequest => this.updateRequest;
 
   private delay = 0;
 
@@ -52,27 +59,62 @@ class VersionChecker {
       this.delay = 0;
     });
 
-    events.addEventListener('message', ({ data }) => {
-      console.info('VERSION', data);
+    events.addEventListener('message', this.onVersion);
+    events.addEventListener('version', this.onVersion);
 
-      if (typeof data !== 'string') {
-        console.error('Invalid version data', data);
-        pushError(new Error('Invalid version data'));
+    events.addEventListener(UPDATE_REQUEST_EVENT, this.onUpdateRequest);
+  };
 
-        return;
-      }
+  private onVersion = ({ data }: MessageEvent<string>) => {
+    console.info('VERSION', data);
 
-      this.latestVersion = data;
-      this.isUpToDate = data === ENVIRONMENT.version;
+    if (typeof data !== 'string') {
+      console.error('Invalid version data', data);
+      pushError(new Error('Invalid version data'));
 
-      for (const listener of this.listeners) {
-        listener(this.isUpToDate);
-      }
-    });
+      return;
+    }
+
+    this.latestVersion = data;
+    this.isUpToDate = data === ENVIRONMENT.version;
+  };
+
+  public addUpdateRequestListener(listener: UpdateRequestListenerFn): void {
+    if (!this.updateRequestListeners.includes(listener)) {
+      this.updateRequestListeners.push(listener);
+    }
+
+    if (this.updateRequest !== UpdateRequest.NONE) {
+      listener(this.updateRequest);
+    }
+  }
+
+  public removeUpdateRequestListener(listener: UpdateRequestListenerFn): void {
+    this.updateRequestListeners = this.updateRequestListeners.filter((l) => l !== listener);
+  }
+
+  private onUpdateRequest = ({ data }: MessageEvent<string>) => {
+    if (!isUpdateRequest(data)) {
+      pushError(new Error(`Invalid update request: "${data}"`));
+
+      return;
+    }
+
+    console.info('UPDATE REQUEST', data);
+
+    this.updateRequest = data;
+
+    for (const listener of this.updateRequestListeners) {
+      listener(data);
+    }
   };
 
   public getIsUpToDate = (): boolean => this.isUpToDate;
   public getLatestVersion = (): string => this.latestVersion;
 }
+
+const UPDATE_REQUEST_VALUES = Object.values(UpdateRequest);
+
+const isUpdateRequest = (data: string): data is UpdateRequest => UPDATE_REQUEST_VALUES.some((value) => value === data);
 
 export const VERSION_CHECKER = new VersionChecker();

@@ -1,4 +1,4 @@
-import { resetClientsAndUniqueUsersMetrics } from '@app/routes/version';
+import { resetClientsAndUniqueUsersMetrics } from '@app/routes/version/version';
 import { getLogger } from './logger';
 import { EmojiIcons, sendToSlack } from './slack';
 

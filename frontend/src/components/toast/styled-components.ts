@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { keyframes, styled } from 'styled-components';
-import { SLIDE_DURATION, TOAST_TIMEOUT } from '@app/components/toast/constants';
+import { SLIDE_DURATION } from '@app/components/toast/constants';
 import { ToastType } from '@app/components/toast/types';
 
 export const Container = styled.div`
@@ -45,7 +45,11 @@ const slideIn = keyframes`
   }
 `;
 
-export const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }>`
+interface BaseToastProps {
+  $type: ToastType;
+}
+
+export const BaseToastStyle = styled.section<BaseToastProps>`
   color: black;
   position: relative;
   display: flex;
@@ -55,6 +59,14 @@ export const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }
   width: 300px;
   padding: var(--a-spacing-4);
   border: 1px solid ${({ $type }) => getColor($type)};
+`;
+
+interface TimedToastProps {
+  $paused: boolean;
+  $timeout: number;
+}
+
+export const TimedToastStyle = styled(BaseToastStyle)<TimedToastProps>`
   animation-name: ${slideIn};
   animation-duration: ${SLIDE_DURATION}ms;
   animation-timing-function: ease-in-out;
@@ -73,7 +85,7 @@ export const StyledToast = styled.section<{ $type: ToastType; $paused: boolean }
     transform-origin: left;
     animation-play-state: ${({ $paused }) => ($paused ? 'paused' : 'running')};
     animation-name: ${scaleX};
-    animation-duration: ${TOAST_TIMEOUT - SLIDE_DURATION}ms;
+    animation-duration: ${({ $timeout }) => $timeout - SLIDE_DURATION}ms;
     animation-timing-function: linear;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;

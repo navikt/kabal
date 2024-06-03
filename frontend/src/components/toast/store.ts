@@ -26,9 +26,9 @@ class Store {
   }
 
   public success = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.SUCCESS, message, timeout);
-  public error = (message: React.ReactNode) => this.addMessage(ToastType.ERROR, message);
-  public warning = (message: React.ReactNode) => this.addMessage(ToastType.WARNING, message);
-  public info = (message: React.ReactNode) => this.addMessage(ToastType.INFO, message);
+  public error = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.ERROR, message, timeout);
+  public warning = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.WARNING, message, timeout);
+  public info = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, message, timeout);
 
   private notify() {
     this.listeners.forEach((listener) => listener(this.messages));
