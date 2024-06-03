@@ -27,14 +27,7 @@ export const createSelectionPlugin = createPluginFactory({
         ? getWordStart(node.text, target.anchor.offset)
         : getWordEnd(node.text, target.anchor.offset);
 
-      const focusOffset = isForward
-        ? getWordEnd(node.text, target.focus.offset)
-        : getWordStart(node.text, target.focus.offset);
-
-      return select({
-        anchor: { ...target.anchor, offset: anchorOffset },
-        focus: { ...target.focus, offset: focusOffset },
-      });
+      return select({ ...target, anchor: { ...target.anchor, offset: anchorOffset } });
     };
 
     return editor;
