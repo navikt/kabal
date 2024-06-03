@@ -1,11 +1,11 @@
 import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { EditorValue, LabelContentElement } from '@app/plate/types';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 
 export const LabelContent = ({
   element,
@@ -13,28 +13,11 @@ export const LabelContent = ({
   children,
   editor,
 }: PlateRenderElementProps<EditorValue, LabelContentElement>) => {
-  const { data: oppgave } = useOppgave();
-  const [_result, setResult] = useState<string | null>(null);
-
-  const setResultInNode = useCallback(
-    (result: string | null) => setNodes(editor, { result }, { at: [], match: (n) => n === element }),
-    [editor, element],
-  );
+  const content = useContent(element.source);
 
   useEffect(() => {
-    if (typeof oppgave === 'undefined') {
-      return;
-    }
-
-    const content = getContent(oppgave, element.source);
-
-    setResult(content);
-    setResultInNode(content);
-  }, [editor, element, element.label, element.source, oppgave, _result, setResultInNode]);
-
-  if (typeof oppgave === 'undefined') {
-    return null;
-  }
+    setNodes(editor, { result: content }, { at: [], match: (n) => n === element });
+  }, [content, editor, element]);
 
   return (
     <PlateElement
@@ -50,9 +33,9 @@ export const LabelContent = ({
       }}
     >
       <span>
-        {_result === null ? null : (
+        {content === null ? null : (
           <StyledLabelContent>
-            <b>{element.label}</b>: {_result}
+            <b>{element.label}</b>: {content}
           </StyledLabelContent>
         )}
         {children}
@@ -61,50 +44,76 @@ export const LabelContent = ({
   );
 };
 
-const getContent = (oppgave: IOppgavebehandling, source: string): string | null => {
-  if (source === 'sakenGjelder.name') {
-    return `${oppgave.sakenGjelder.name}\n` ?? '-\n';
-  }
+export enum Source {
+  YTELSE = 'ytelse',
+  SAKEN_GJELDER_NAME = 'sakenGjelder.name',
+  SAKEN_GJELDER_FNR = 'sakenGjelder.fnr',
+  SAKSNUMMER = 'saksnummer',
+  SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME = 'sakenGjelderIfDifferentFromKlager.name',
+  KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME = 'klagerIfEqualToSakenGjelder.name',
+  KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME = 'klagerIfDifferentFromSakenGjelder.name',
+  KLAGER_NAME = 'klager.name',
+}
 
-  if (source === 'sakenGjelder.fnr') {
-    return `${formatFoedselsnummer(oppgave.sakenGjelder.id)}\n`;
-  }
+const useContent = (source: string): string | null => {
+  const { data: oppgave } = useOppgave();
+  const { data: ytelser = [] } = useYtelserAll();
 
-  if (source === 'saksnummer') {
-    return oppgave.saksnummer;
-  }
-
-  const { klager, sakenGjelder } = oppgave;
-
-  if (source === 'sakenGjelderIfDifferentFromKlager.name') {
-    if (klager.id !== sakenGjelder.id) {
-      return `${sakenGjelder.name}\n` ?? '-\n';
+  return useMemo(() => {
+    if (oppgave === undefined) {
+      return null;
     }
 
-    return null;
-  }
+    if (source === Source.YTELSE) {
+      const ytelse = ytelser.find(({ id }) => id === oppgave.ytelseId)?.navn ?? oppgave.ytelseId;
 
-  if (source === 'klagerIfEqualToSakenGjelder.name') {
-    if (klager.id === sakenGjelder.id) {
-      return `${klager.name}\n` ?? '-\n';
+      return `${ytelse}\n`;
     }
 
-    return null;
-  }
-
-  if (source === 'klagerIfDifferentFromSakenGjelder.name') {
-    if (klager.id !== sakenGjelder.id) {
-      return `${klager.name}\n` ?? '-\n';
+    if (source === Source.SAKEN_GJELDER_NAME) {
+      return `${oppgave.sakenGjelder.name ?? '-'}\n`;
     }
 
-    return null;
-  }
+    if (source === Source.SAKEN_GJELDER_FNR) {
+      return `${formatFoedselsnummer(oppgave.sakenGjelder.id)}\n`;
+    }
 
-  if (source === 'klager.name') {
-    return `${klager.name}\n` ?? '-\n';
-  }
+    if (source === Source.SAKSNUMMER) {
+      return oppgave.saksnummer;
+    }
 
-  return 'Verdi mangler\n';
+    const { klager, sakenGjelder } = oppgave;
+
+    if (source === Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME) {
+      if (klager.id !== sakenGjelder.id) {
+        return `${sakenGjelder.name ?? '-'}\n`;
+      }
+
+      return null;
+    }
+
+    if (source === Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME) {
+      if (klager.id === sakenGjelder.id) {
+        return `${klager.name ?? '-'}\n`;
+      }
+
+      return null;
+    }
+
+    if (source === Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME) {
+      if (klager.id !== sakenGjelder.id) {
+        return `${klager.name ?? '-'}\n`;
+      }
+
+      return null;
+    }
+
+    if (source === Source.KLAGER_NAME) {
+      return `${klager.name ?? '-'}\n`;
+    }
+
+    return 'Verdi mangler\n';
+  }, [oppgave, source, ytelser]);
 };
 
 const StyledLabelContent = styled.span`

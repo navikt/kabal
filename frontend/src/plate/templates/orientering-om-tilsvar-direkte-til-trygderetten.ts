@@ -1,5 +1,6 @@
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
+import { Source } from '@app/plate/components/label-content';
 import { EditorValue, TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -24,11 +25,11 @@ const INITIAL_SLATE_VALUE: EditorValue = [
     type: ELEMENT_PARAGRAPH,
     align: TextAlign.LEFT,
     children: [
-      createLabelContent('klagerIfEqualToSakenGjelder.name', 'Den ankende part'),
-      createLabelContent('sakenGjelderIfDifferentFromKlager.name', 'Saken gjelder'),
-      createLabelContent('sakenGjelder.fnr', 'Fødselsnummer'),
-      createLabelContent('klagerIfDifferentFromSakenGjelder.name', 'Den ankende part'),
-      createLabelContent('saksnummer', 'Saksnummer'),
+      createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME, 'Den ankende part'),
+      createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
+      createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
+      createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den ankende part'),
+      createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
     ],
   },
 
