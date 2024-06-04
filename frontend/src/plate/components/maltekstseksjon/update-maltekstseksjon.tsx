@@ -6,7 +6,6 @@ import { RichTextPreview } from '@app/components/rich-text-preview/rich-text-pre
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
-import { RemovePreview } from './remove-preview';
 
 interface Props {
   next: MaltekstseksjonUpdate | null;
@@ -40,6 +39,8 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
     return null;
   }
 
+  const willRemove = next === null;
+
   return (
     <ButtonContainer
       contentEditable={false}
@@ -48,19 +49,14 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
       onMouseDown={(e) => e.stopPropagation()}
     >
       <Button size={BUTTON_SIZE} icon={<FileTextIcon aria-hidden />} onClick={replaceMaltekstseksjonContent}>
-        {next === null ? 'Fjern tekst' : 'Erstatt tekst'}
+        {willRemove ? 'Fjern tekst' : 'Erstatt tekst'}
       </Button>
 
       <HelpText>
-        <HelpTextContainer>
-          Legger til nye tekster, fjerner tekster som ikke skal være der. Tekster som fortsatt skal være der, røres
-          ikke. Dvs. at innfyllingsfelt og redigerbare tekster ikke blir endret.
-        </HelpTextContainer>
+        <HelpTextContainer>{willRemove ? REMOVE_HELP_TEXT : REPLACE_HELP_TEXT}</HelpTextContainer>
       </HelpText>
 
-      {next === null ? (
-        <RemovePreview oppgave={oppgave} />
-      ) : (
+      {willRemove ? null : (
         <RichTextPreview
           content={next.children}
           id={next.maltekstseksjon.id ?? 'no-id'}
@@ -78,6 +74,11 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
     </ButtonContainer>
   );
 };
+
+const REPLACE_HELP_TEXT =
+  'Du har gjort en endring i utfall/resultat og/eller hjemmel, som gjør at Kabal foreslår å erstatte teksten her. Trykk «Forhåndsvis» for å se hva Kabal foreslår å erstatte med. Trykk «Erstatt tekst» for å erstatte teksten. Om du ikke ønsker at teksten skal bli erstattet, kan du trykke på «Behold eksisterende tekst».';
+const REMOVE_HELP_TEXT =
+  'Du har gjort en endring i utfall/resultat og/eller hjemmel, som gjør at Kabal foreslår å fjerne teksten her. Trykk «Fjern tekst» for å fjerne teksten. Om du ikke ønsker at teksten skal bli fjernet, kan du trykke på «Behold eksisterende tekst».';
 
 const ButtonContainer = styled.div`
   width: 100%;
