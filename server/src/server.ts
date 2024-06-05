@@ -1,14 +1,24 @@
-import cors from 'cors';
-import express from 'express';
-import { queryParamsToHeaders, setProxyVersionHeader } from '@app/headers';
-import { ensureTraceparentHandler } from '@app/request-id';
-import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
-import { httpLoggingMiddleware } from './http-logger';
-import { init } from './init';
-import { getLogger } from './logger';
-import { processErrors } from './process-errors';
-import { metricsMiddleware } from './prometheus/middleware';
-import { EmojiIcons, sendToSlack } from './slack';
+import { getIsReady } from '@app/config/config';
+import { serverConfig } from '@app/config/server-config';
+import { setContextVars } from '@app/middleware/set-context-vars';
+import { traceIdAndParentToContext } from '@app/middleware/request-id';
+import { setupDocumentRoutes } from '@app/routes/document';
+import { setupProxyRoutes } from '@app/routes/setup-proxy';
+import { setupStaticRoutes } from '@app/routes/static-routes';
+import { prometheus } from '@hono/prometheus';
+import { Hono } from 'hono';
+import { createServer } from 'node:http2';
+import { isDeployed } from '@app/config/env';
+import { httpLoggingMiddleware } from '@app/middleware/http-logger';
+import { init } from '@app/init';
+import { getLogger } from '@app/logger';
+import { processErrors } from '@app/process-errors';
+import { EmojiIcons, sendToSlack } from '@app/slack';
+import { setupVersionRoute } from '@app/routes/version/version';
+import { setProxyVersionHeader } from '@app/middleware/proxy-version-header';
+import { proxyRegister } from '@app/prometheus/types';
+import { corsMiddleware } from '@app/middleware/cors';
+import { timing } from 'hono/timing';
 
 processErrors();
 
@@ -20,51 +30,44 @@ if (isDeployed) {
   sendToSlack('Starting...', EmojiIcons.StartStruck);
 }
 
-const server = express();
+const server: Hono = new Hono();
 
-server.use(queryParamsToHeaders);
+server.use(corsMiddleware);
+
+server.get('/isAlive', ({ text }) => text('Alive', 200));
+server.get('/isReady', ({ text }) => (getIsReady() ? text('Ready', 200) : text('Not Ready', 418)));
+
+const { printMetrics, registerMetrics } = prometheus({ registry: proxyRegister });
+server.get('/metrics', printMetrics);
+server.use('*', registerMetrics); // Register metrics middleware for all routes below.
+
+// Set up middleware for all routes below.
+server.use(timing());
+server.use(setContextVars);
 server.use(setProxyVersionHeader);
-server.use(ensureTraceparentHandler);
-
-// Add the prometheus middleware to all routes
-server.use(metricsMiddleware);
-
+server.use(traceIdAndParentToContext);
 server.use(httpLoggingMiddleware);
 
-server.set('trust proxy', true);
-server.disable('x-powered-by');
-server.set('query parser', 'simple');
+// Set up routes.
+setupVersionRoute(server);
+setupDocumentRoutes(server);
+setupProxyRoutes(server);
+setupStaticRoutes(server);
 
-server.use(
-  cors({
-    credentials: true,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    allowedHeaders: [
-      'Accept-Language',
-      'Accept',
-      'Cache-Control',
-      'Connection',
-      'Content-Type',
-      'Cookie',
-      'DNT',
-      'Host',
-      'Origin',
-      'Pragma',
-      'Referer',
-      'Sec-Fetch-Dest',
-      'Sec-Fetch-Mode',
-      'Sec-Fetch-Site',
-      'User-Agent',
-      'X-Forwarded-For',
-      'X-Forwarded-Host',
-      'X-Forwarded-Proto',
-      'X-Requested-With',
-    ],
-    origin: isDeployedToProd ? DOMAIN : [DOMAIN, /https?:\/\/localhost:\d{4,}/],
-  }),
-);
+// Set up error handling.
+server.onError(async (error, context) => {
+  log.error({ msg: 'Server error', error });
 
-server.get('/isAlive', (_, res) => res.status(200).send('Alive'));
-server.get('/isReady', (_, res) => res.status(200).send('Ready'));
+  return context.text('Internal Server Error', 500);
+});
 
-init(server);
+// Initialize.
+init();
+
+log.info({ msg: `Server initialized on port ${serverConfig.port}` });
+
+export default {
+  port: serverConfig.port,
+  fetch: server.fetch,
+  createServer,
+};

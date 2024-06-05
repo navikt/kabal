@@ -1,21 +1,24 @@
-import { Express } from 'express';
-import { setupDocumentRoutes } from '@app/routes/document';
-import { PORT } from './config/config';
+import { isDeployed } from '@app/config/env';
+import { setIsReady } from './config/config';
 import { getLogger } from './logger';
-import { setupProxy } from './routes/setup-proxy';
-import { setupStaticRoutes } from './routes/static-routes';
-import { resetClientsAndUniqueUsersMetrics, setupVersionRoute } from './routes/version/version';
 import { EmojiIcons, sendToSlack } from './slack';
+import { getAzureADClient } from '@app/auth/get-auth-client';
+import { resetClientsAndUniqueUsersMetrics } from '@app/routes/version/unique-users-gauge';
+import { formatDuration, getDuration } from '@app/helpers/duration';
 
 const log = getLogger('init');
 
-export const init = async (server: Express) => {
+export const init = async () => {
   try {
-    server.use(setupVersionRoute());
-    server.use(setupDocumentRoutes());
-    server.use(await setupProxy());
-    server.use(setupStaticRoutes());
-    server.listen(PORT, () => log.info({ msg: `Listening on port ${PORT}` }));
+    if (isDeployed) {
+      const start = performance.now();
+
+      await getAzureADClient();
+
+      const time = getDuration(start);
+      log.info({ msg: `Azure AD client initialized in ${formatDuration(time)}`, data: { time } });
+    }
+    setIsReady();
   } catch (e) {
     await resetClientsAndUniqueUsersMetrics();
 
