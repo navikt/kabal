@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useRef } from 'react';
+import { createContext, useCallback, useRef } from 'react';
 
 type GetFn = (tabId: string) => Window | undefined;
 type SetFn = (tabId: string, tabRef: Window) => void;

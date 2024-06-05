@@ -1,6 +1,6 @@
 import { CheckmarkIcon, PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, TextField } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {

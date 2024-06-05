@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { EditUtfallSet } from '@app/components/smart-editor-texts/utfall-set-filter/edit-utfall-set';

@@ -1,6 +1,5 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import React from 'react';
 import { BackLink } from './back-link';
 import { FooterType, StyledButtons, StyledFooter } from './styled-components';
 

@@ -18,7 +18,6 @@ import {
   insertTableColumn,
   insertTableRow,
 } from '@udecode/plate-table';
-import React from 'react';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';

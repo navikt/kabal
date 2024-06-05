@@ -1,6 +1,6 @@
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Popover } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { TimelineTypes } from '@app/types/arkiverte-documents';

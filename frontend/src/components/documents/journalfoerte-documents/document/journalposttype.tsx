@@ -1,5 +1,5 @@
 import { Tag } from '@navikt/ds-react';
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { Journalposttype } from '@app/types/arkiverte-documents';

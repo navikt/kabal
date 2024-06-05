@@ -1,6 +1,6 @@
 import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';

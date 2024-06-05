@@ -1,5 +1,4 @@
 import { Table } from '@navikt/ds-react';
-import React from 'react';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 
 interface Props {

@@ -1,5 +1,4 @@
 import { Radio } from '@navikt/ds-react';
-import React from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { Behandling } from '@app/components/behandling/behandling';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

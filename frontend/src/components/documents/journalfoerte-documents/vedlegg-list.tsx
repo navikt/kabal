@@ -1,4 +1,3 @@
-import React from 'react';
 import { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';

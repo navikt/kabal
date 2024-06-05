@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';

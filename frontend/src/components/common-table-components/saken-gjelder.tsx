@@ -1,5 +1,4 @@
 import { Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';

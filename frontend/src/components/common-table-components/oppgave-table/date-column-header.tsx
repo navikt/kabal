@@ -1,7 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
-import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';

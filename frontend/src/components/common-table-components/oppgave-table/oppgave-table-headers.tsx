@@ -1,5 +1,4 @@
 import { TableProps } from '@navikt/ds-react';
-import React from 'react';
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';

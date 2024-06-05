@@ -1,5 +1,4 @@
 import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

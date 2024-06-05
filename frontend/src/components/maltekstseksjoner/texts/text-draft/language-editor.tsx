@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { EditorValue, RichTextEditor } from '@app/plate/types';

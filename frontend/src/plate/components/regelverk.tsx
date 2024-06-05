@@ -2,7 +2,7 @@ import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';

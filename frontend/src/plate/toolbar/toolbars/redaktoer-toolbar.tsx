@@ -1,4 +1,3 @@
-import React from 'react';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
 import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';

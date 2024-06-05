@@ -1,6 +1,6 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Plate } from '@udecode/plate-common';
-import React, { forwardRef, useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { styled } from 'styled-components';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';

@@ -1,5 +1,4 @@
 import { Skeleton } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { Annet } from './annet';
 import { BrukAvRaadgivendeLege } from './bruk-av-raadgivende';

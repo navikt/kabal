@@ -1,5 +1,4 @@
 import { Select } from '@navikt/ds-react';
-import React from 'react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/rol/constants';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';

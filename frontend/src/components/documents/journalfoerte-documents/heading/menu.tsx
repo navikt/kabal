@@ -1,6 +1,6 @@
 import { MenuHamburgerIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
 import { ViewCombinedPDF } from '@app/components/documents/journalfoerte-documents/heading/view-combined-pdf-button';

@@ -1,5 +1,5 @@
 import { Button, Modal, Table } from '@navikt/ds-react';
-import React, { Fragment, useCallback, useRef } from 'react';
+import { Fragment, useCallback, useRef } from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { TextChangeType } from '@app/types/common-text-types';

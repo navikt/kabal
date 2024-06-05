@@ -1,4 +1,3 @@
-import React from 'react';
 import { Path } from 'slate';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { DeleteSection } from '@app/plate/components/common/delete-section';

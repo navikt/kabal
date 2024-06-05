@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { IJournalfoertDokumentReference } from '@app/types/documents/documents';
 

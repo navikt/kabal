@@ -1,5 +1,5 @@
 import { Search } from '@navikt/ds-react';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   isFocused: boolean;

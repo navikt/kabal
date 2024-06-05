@@ -1,6 +1,5 @@
 import { BulletListIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
 import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
 import { getAttachmentsOverviewTabUrl } from '@app/domain/tabbed-document-url';

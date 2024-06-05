@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
 import { TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';

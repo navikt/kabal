@@ -1,6 +1,6 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { FagsystemId } from '@app/components/feilregistrering/types';
 import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';

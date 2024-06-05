@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { Abbreviations } from './abbreviations/abbreviations';
 import { Filters } from './filters';

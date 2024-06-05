@@ -10,7 +10,6 @@ import {
   isElement,
   removeNodes,
 } from '@udecode/plate-common';
-import React from 'react';
 import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { UNCHANGEABLE } from '@app/plate/plugins/element-types';

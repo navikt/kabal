@@ -1,5 +1,4 @@
 import { Alert } from '@navikt/ds-react';
-import React from 'react';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';

@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';

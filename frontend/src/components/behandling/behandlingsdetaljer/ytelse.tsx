@@ -1,5 +1,4 @@
 import { Skeleton, Tag } from '@navikt/ds-react';
-import React from 'react';
 import { useFullYtelseNameFromId } from '@app/hooks/use-kodeverk-ids';
 
 interface Props {

@@ -1,5 +1,5 @@
 import { CopyButtonProps } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { formatIdNumber } from '@app/functions/format-id';
 import { CopyButton } from './copy-button';
 

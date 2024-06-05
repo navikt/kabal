@@ -1,5 +1,4 @@
 import { PlateContent, PlateContentProps } from '@udecode/plate-common';
-import React from 'react';
 import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { renderLeaf as defaultRenderLeaf, renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 

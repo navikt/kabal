@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CreateTranslatedPlainText } from '@app/components/smart-editor-texts/create-translated-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { HeaderFooterEditor } from '@app/components/smart-editor-texts/edit/header-footer';

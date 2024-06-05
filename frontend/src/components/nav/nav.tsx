@@ -13,7 +13,6 @@ import {
 import { InternalHeader } from '@navikt/ds-react';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
-import React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';

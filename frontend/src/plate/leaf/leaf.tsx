@@ -5,7 +5,7 @@ import {
   getNodeAncestors,
   isEditorReadOnly,
 } from '@udecode/plate-common';
-import React, { useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';

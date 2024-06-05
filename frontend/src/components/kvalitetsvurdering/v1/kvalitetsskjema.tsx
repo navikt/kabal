@@ -1,4 +1,3 @@
-import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';

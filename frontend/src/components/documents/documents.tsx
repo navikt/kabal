@@ -1,5 +1,4 @@
 import { Loader } from '@navikt/ds-react';
-import React from 'react';
 import { ExpandedDocuments } from '@app/components/documents/expanded-documents';
 import { TabContextElement } from '@app/components/documents/tab-context';
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';

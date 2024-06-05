@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { HISTORY_COLORS } from '@app/components/behandling/behandlingsdialog/history/common';
 import { isoDateTimeToPretty } from '@app/domain/date';

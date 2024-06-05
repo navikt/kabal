@@ -1,5 +1,4 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSetDatoMottattMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { IFileDocument } from '@app/types/documents/documents';

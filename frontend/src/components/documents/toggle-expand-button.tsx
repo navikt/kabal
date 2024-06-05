@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';

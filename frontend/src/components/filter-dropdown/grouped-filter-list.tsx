@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';

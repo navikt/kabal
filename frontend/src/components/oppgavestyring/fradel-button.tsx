@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { differenceInSeconds, parse } from 'date-fns';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { Direction } from '@app/components/deassign/direction';

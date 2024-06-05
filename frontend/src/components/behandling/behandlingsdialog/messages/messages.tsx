@@ -1,5 +1,4 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import React from 'react';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { formatEmployeeName } from '@app/domain/employee-name';

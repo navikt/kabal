@@ -1,5 +1,5 @@
 import { PlateElement, PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 import { formatLongDate, zeroPad } from '@app/domain/date';

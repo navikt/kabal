@@ -1,6 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import { findNode } from '@udecode/plate-common';
-import React, { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { BasePoint, Range } from 'slate';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { Bookmarks, getBookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { CommentSection } from '@app/components/smart-editor/comments/comment-section';

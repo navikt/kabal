@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';

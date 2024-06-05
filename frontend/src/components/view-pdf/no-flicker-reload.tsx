@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Version {

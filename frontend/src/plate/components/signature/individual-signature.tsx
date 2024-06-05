@@ -1,5 +1,5 @@
 import { setNodes } from '@udecode/plate-common';
-import React, { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { getName, getTitle } from '@app/plate/components/signature/functions';

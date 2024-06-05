@@ -1,6 +1,6 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, ToggleGroup, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { Address } from '@app/components/documents/new-documents/modal/finish-document/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';

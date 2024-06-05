@@ -1,5 +1,5 @@
 import { Alert, Loader } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';

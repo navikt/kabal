@@ -1,4 +1,3 @@
-import React from 'react';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import { INavEmployee } from '@app/types/bruker';

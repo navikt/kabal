@@ -1,5 +1,5 @@
 import { Search } from '@navikt/ds-react';
-import React, { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '../grid';
 

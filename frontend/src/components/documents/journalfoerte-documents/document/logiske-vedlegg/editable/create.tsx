@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { EditLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useAddLogiskVedleggMutation } from '@app/redux-api/logiske-vedlegg';

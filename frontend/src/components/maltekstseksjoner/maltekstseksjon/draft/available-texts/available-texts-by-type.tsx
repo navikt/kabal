@@ -1,5 +1,5 @@
 import { Loader, Search, Table } from '@navikt/ds-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';

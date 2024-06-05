@@ -1,6 +1,6 @@
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
 import { Search } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { CreateMaltekstseksjon } from '@app/components/maltekstseksjoner/create';

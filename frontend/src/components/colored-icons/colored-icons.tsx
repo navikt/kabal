@@ -4,7 +4,7 @@ import {
   InformationSquareFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 type Props = React.SVGProps<SVGSVGElement> & React.RefAttributes<SVGSVGElement> & { title?: string };
 

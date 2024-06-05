@@ -1,6 +1,5 @@
 import { TextAlignLeft, TextAlignRight } from '@styled-icons/fluentui-system-regular';
 import { setAlign, useAlignDropdownMenuState } from '@udecode/plate-alignment';
-import React from 'react';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';

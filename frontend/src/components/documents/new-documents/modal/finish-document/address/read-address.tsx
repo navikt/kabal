@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   AddressState,

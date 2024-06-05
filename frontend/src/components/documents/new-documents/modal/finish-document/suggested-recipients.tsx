@@ -1,6 +1,6 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Checkbox, CheckboxGroup, Tag, Tooltip } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { IErrorProperty } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';

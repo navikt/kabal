@@ -1,5 +1,5 @@
 import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
 import { MOD_KEY } from '@app/keys';

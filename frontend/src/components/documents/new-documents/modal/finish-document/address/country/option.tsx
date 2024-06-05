@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { CountryCode } from '@app/types/common';
 

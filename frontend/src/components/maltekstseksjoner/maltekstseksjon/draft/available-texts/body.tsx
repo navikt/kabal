@@ -1,5 +1,5 @@
 import { Button, Table } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { IRichText } from '@app/types/texts/responses';
 import { Row } from './row';

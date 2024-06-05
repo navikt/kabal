@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';

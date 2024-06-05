@@ -1,5 +1,4 @@
 import { Skeleton, TagProps } from '@navikt/ds-react';
-import React from 'react';
 import { useTypeNameFromId } from '@app/hooks/use-kodeverk-ids';
 import { TypeTag } from '@app/styled-components/labels';
 import { SaksTypeEnum } from '@app/types/kodeverk';

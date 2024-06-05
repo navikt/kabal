@@ -3,7 +3,6 @@ import { findNode, insertNodes, removeNodes } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import React from 'react';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { createTable } from '@app/plate/templates/helpers';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';

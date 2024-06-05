@@ -1,5 +1,5 @@
 import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
-import React, { ReactNode, useMemo, useRef, useState } from 'react';
+import { ReactNode, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
 import { isUtfall } from '@app/functions/is-utfall';

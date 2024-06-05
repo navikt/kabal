@@ -1,6 +1,6 @@
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyledButtons } from './styled-components';
 
 interface ConfirmProps {

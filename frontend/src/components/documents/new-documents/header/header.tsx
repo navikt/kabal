@@ -1,5 +1,4 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { styled } from 'styled-components';
 import { DeleteDropArea } from '@app/components/documents/new-documents/header/drop-delete-area';
 import { DropHeading } from '@app/components/documents/new-documents/header/drop-header';

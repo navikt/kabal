@@ -1,5 +1,4 @@
 import { ReadMore } from '@navikt/ds-react';
-import React from 'react';
 import { BehandlingSection } from './behandling-section';
 
 interface Props {

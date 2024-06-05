@@ -1,5 +1,4 @@
 import { Loader } from '@navikt/ds-react';
-import React from 'react';
 import { DateTime } from '@app/components/datetime/datetime';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { EditorName } from '@app/components/editor-name/editor-name';

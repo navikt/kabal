@@ -1,6 +1,5 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';

@@ -1,5 +1,5 @@
 import { Heading, Select } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';

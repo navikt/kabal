@@ -1,5 +1,5 @@
 import { Tag } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { IOption } from '@app/components/filter-dropdown/props';
 import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';

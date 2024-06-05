@@ -1,7 +1,7 @@
 import { Heading, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate } from '@udecode/plate-common';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { isNotNull } from '@app/functions/is-not-type-guards';

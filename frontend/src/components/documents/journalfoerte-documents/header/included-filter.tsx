@@ -1,5 +1,4 @@
 import { Checkbox } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';

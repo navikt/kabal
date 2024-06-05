@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
   StyledDocumentTitle,

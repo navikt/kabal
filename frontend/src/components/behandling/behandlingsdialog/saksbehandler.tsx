@@ -1,5 +1,4 @@
 import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useTildel } from '@app/components/oppgavestyring/use-tildel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

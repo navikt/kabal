@@ -1,5 +1,4 @@
 import { Switch } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

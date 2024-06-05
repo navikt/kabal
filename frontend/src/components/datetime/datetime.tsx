@@ -1,5 +1,4 @@
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { IEditor } from '@app/types/common-text-types';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes as Switch } from 'react-router-dom';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';

@@ -1,6 +1,5 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Label, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';

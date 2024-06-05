@@ -1,5 +1,5 @@
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';

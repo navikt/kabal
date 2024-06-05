@@ -1,6 +1,6 @@
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { memo, useContext, useRef, useState } from 'react';
+import { memo, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';

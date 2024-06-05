@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';

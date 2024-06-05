@@ -1,13 +1,13 @@
 import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
+import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
 import { CopyButton } from '../../copy-button/copy-button';
 
 export const UserDropdown = (): JSX.Element | null => {
-  const version = process.env.VERSION ?? 'UKJENT';
+  const { version } = ENVIRONMENT;
 
   return (
     <Menu>

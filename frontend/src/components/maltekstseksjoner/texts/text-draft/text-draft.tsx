@@ -1,6 +1,6 @@
 import { HelpText, Switch, Tooltip } from '@navikt/ds-react';
 import { focusEditor, getEndPoint, isEditorFocused } from '@udecode/plate-common';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { LanguageEditor, RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
 import { Container, Header, HeaderGroup } from '@app/components/maltekstseksjoner/texts/text-draft/styled-components';

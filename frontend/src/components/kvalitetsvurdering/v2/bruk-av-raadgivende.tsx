@@ -1,5 +1,4 @@
 import { Radio } from '@navikt/ds-react';
-import React from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';

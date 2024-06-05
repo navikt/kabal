@@ -1,6 +1,6 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import {
   MaltekstseksjonReferences,

@@ -1,5 +1,4 @@
 import { Alert } from '@navikt/ds-react';
-import React from 'react';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';

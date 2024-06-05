@@ -1,5 +1,5 @@
 import { BodyLong, Label, Textarea } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ContainerWithHelpText } from '@app/components/kvalitetsvurdering/v2/common/container-with-helptext';
 import { TextParams } from '@app/components/kvalitetsvurdering/v2/common/types';

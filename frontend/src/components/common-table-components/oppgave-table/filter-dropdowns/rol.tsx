@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';

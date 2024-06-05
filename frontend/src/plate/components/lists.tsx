@@ -1,5 +1,4 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import React from 'react';
 import { styled } from 'styled-components';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { BulletListElement, EditorValue, ListItemElement, NumberedListElement } from '../types';

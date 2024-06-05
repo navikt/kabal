@@ -1,4 +1,3 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { FRAME_TIMES } from '@app/frame-times';
 import { initializeScrubber } from '@app/scrubber';

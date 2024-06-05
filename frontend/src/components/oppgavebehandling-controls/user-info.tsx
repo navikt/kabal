@@ -1,5 +1,4 @@
 import { CopyButton } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';

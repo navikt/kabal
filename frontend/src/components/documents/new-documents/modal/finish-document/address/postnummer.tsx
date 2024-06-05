@@ -1,5 +1,5 @@
 import { BodyShort, Label } from '@navikt/ds-react';
-import React, { useContext, useId } from 'react';
+import { useContext, useId } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';

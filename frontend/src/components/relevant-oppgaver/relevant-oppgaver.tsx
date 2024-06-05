@@ -1,6 +1,6 @@
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Heading, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 // eslint-disable-next-line import/no-cycle
 import { OppgaveRow } from '@app/components/common-table-components/oppgave-rows/oppgave-row';

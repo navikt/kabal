@@ -1,5 +1,4 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 

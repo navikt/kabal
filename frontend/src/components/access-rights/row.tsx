@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';

@@ -1,7 +1,7 @@
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ButtonProps, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { TabContext } from '@app/components/documents/tab-context';
 import { toast } from '@app/components/toast/store';
 import { Container, ErrorOrLoadingContainer } from '@app/components/view-pdf/container';

@@ -1,5 +1,5 @@
 import { Alert } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { CustomRecipients } from '@app/components/documents/new-documents/modal/finish-document/custom-recipients';
 import { isSendError } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
 import { SingleRecipient } from '@app/components/documents/new-documents/modal/finish-document/single-recipient';

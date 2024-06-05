@@ -1,7 +1,7 @@
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ButtonProps, DatePicker } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

@@ -1,5 +1,4 @@
 import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
-import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';

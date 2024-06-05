@@ -1,6 +1,6 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDeleteDraftVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';

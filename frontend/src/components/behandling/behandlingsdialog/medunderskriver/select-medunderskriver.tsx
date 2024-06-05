@@ -1,5 +1,4 @@
 import { BodyShort, Select } from '@navikt/ds-react';
-import React from 'react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
 import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';

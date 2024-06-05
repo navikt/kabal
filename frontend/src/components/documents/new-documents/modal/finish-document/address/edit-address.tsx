@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';

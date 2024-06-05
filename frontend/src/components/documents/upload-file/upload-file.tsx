@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';

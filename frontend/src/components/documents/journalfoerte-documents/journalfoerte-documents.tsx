@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';

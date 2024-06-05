@@ -312,6 +312,7 @@ module.exports = {
         "react/jsx-boolean-value": ["error", "never"],
         "react/jsx-curly-brace-presence": "error",
         "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off",
         "react/self-closing-comp": ["error"],
         "sort-imports": [
             "error",

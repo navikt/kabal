@@ -8,7 +8,6 @@ import {
   MobileSmallIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import React from 'react';
 import { TimelineTypes, Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { StyledEmailContent, StyledLabel, StyledSmsContent } from './styled-components';
 

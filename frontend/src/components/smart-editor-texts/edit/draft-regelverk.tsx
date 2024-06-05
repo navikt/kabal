@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';

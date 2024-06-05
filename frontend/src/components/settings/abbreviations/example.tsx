@@ -1,5 +1,4 @@
 import { BodyShort, Heading, List, Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 
 interface Props {

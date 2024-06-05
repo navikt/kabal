@@ -1,6 +1,6 @@
 import { DatePicker as DSDatePicker } from '@navikt/ds-react';
 import { addYears, format, isAfter, isBefore, isValid, parse, subDays, subYears } from 'date-fns';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { getFullYear, isDateParts, isEightChars, isFourChars, isSixChars } from '@app/components/date-picker/helpers';
 import { Warning } from '@app/components/date-picker/warning';

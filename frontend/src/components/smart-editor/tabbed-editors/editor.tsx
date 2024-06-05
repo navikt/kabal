@@ -1,7 +1,7 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import React, { Profiler, useContext, useEffect, useState } from 'react';
+import { Profiler, useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';

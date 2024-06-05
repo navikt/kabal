@@ -1,5 +1,4 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 

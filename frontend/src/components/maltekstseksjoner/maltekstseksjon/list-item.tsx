@@ -1,6 +1,6 @@
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HelpText, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo, useRef } from 'react';
+import { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { createDragUI } from '@app/components/maltekstseksjoner/drag-and-drop/create-drag-ui';

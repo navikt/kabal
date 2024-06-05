@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Comment } from './comment';

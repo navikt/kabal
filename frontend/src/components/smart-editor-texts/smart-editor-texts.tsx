@@ -1,6 +1,6 @@
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';

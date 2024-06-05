@@ -1,6 +1,5 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getFixedCacheKey } from './helpers';

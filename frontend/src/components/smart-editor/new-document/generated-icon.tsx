@@ -3,7 +3,6 @@ import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import React from 'react';
 import { styled } from 'styled-components';
 import {
   ELEMENT_CURRENT_DATE,

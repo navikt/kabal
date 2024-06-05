@@ -1,6 +1,6 @@
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup } from '@navikt/ds-react';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import {
   AbbreviationsContent,

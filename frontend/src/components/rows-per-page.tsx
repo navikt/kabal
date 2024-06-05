@@ -1,5 +1,5 @@
 import { Label, ToggleGroup } from '@navikt/ds-react';
-import React, { useId } from 'react';
+import { useId } from 'react';
 import { styled } from 'styled-components';
 import { useNumberSetting } from '@app/hooks/settings/helpers';
 import { pushEvent } from '@app/observability';

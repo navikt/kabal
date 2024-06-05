@@ -1,5 +1,5 @@
 import { Select } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { pushEvent } from '@app/observability';
 import { HistoryEventTypes, IHistoryResponse } from '@app/types/oppgavebehandling/response';
 

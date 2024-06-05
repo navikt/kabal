@@ -1,6 +1,6 @@
 import { PadlockLockedIcon, PencilWritingIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { AvailableTextsByType, AvailableTextsByTypeProps } from './available-texts-by-type';

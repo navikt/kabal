@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Table } from '@navikt/ds-react';
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';

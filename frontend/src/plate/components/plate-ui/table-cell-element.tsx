@@ -8,7 +8,7 @@ import {
   useTableCellElementResizableState,
   useTableCellElementState,
 } from '@udecode/plate-table';
-import React, { forwardRef, useCallback } from 'react';
+import { forwardRef, useCallback } from 'react';
 import { styled } from 'styled-components';
 import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { ptToEm } from '@app/plate/components/get-scaled-em';

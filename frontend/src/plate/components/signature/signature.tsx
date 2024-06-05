@@ -1,5 +1,5 @@
 import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
-import React, { InputHTMLAttributes, useContext } from 'react';
+import { InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

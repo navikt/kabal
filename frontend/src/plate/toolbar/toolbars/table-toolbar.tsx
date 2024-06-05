@@ -1,6 +1,6 @@
 import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';

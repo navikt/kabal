@@ -1,5 +1,5 @@
 import { Search } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { TextTypes } from '@app/types/common-text-types';

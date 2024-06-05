@@ -1,5 +1,4 @@
 import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';

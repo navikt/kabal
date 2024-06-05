@@ -1,5 +1,5 @@
 import { Alert, Button, Heading, Radio, RadioGroup, Tag } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DocumentIcon, ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';

@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Label, Tag } from '@navikt/ds-react';
-import React, { useId } from 'react';
+import { useId } from 'react';
 import { styled } from 'styled-components';
 import { Line, QUEUE, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';

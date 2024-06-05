@@ -1,4 +1,3 @@
-import React from 'react';
 import { AddLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/add-logisk-vedlegg';
 import { LogiskeVedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import {

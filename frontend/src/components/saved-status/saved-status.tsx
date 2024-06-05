@@ -1,7 +1,7 @@
 import { Loader, Tooltip } from '@navikt/ds-react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';

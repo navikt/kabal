@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 
 interface IDragAndDropContext {
   draggedTextId: string | null;

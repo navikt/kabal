@@ -6,7 +6,6 @@ import {
   PaperplaneIcon,
   PlusIcon,
 } from '@navikt/aksel-icons';
-import React from 'react';
 import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { INavEmployee } from '@app/types/bruker';

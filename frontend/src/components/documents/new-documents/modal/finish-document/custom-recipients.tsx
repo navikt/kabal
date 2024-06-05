@@ -1,6 +1,5 @@
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';

@@ -1,5 +1,4 @@
 import { ArrowRightLeftIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, IFullmektigEvent, IPart } from '@app/types/oppgavebehandling/response';
 import { Line, employeeName, partName, toKey } from './common';

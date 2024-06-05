@@ -1,6 +1,5 @@
 import { Heading, Loader, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { TextPreview } from '../texts/preview';

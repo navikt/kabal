@@ -1,6 +1,6 @@
 import { isCollapsed, isEditorFocused, someNode } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
