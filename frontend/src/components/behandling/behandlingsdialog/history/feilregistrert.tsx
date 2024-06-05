@@ -5,7 +5,7 @@ import { HistoryEventTypes, IFeilregistrertEvent } from '@app/types/oppgavebehan
 import { Line, Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
-export const getFeilregistrertEvent = (props: IFeilregistrertEvent) => <Feilregistrert {...props} key={toKey(props)} />;
+export const getFeilregistrertEvent = (props: IFeilregistrertEvent) => <Feilregistrert key={toKey(props)} {...props} />;
 
 const Feilregistrert = ({ actor, event, timestamp }: IFeilregistrertEvent) => {
   const id = useId();

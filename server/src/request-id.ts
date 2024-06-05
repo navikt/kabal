@@ -9,7 +9,7 @@ const log = getLogger('traceparent');
 
 export const TRACEPARENT_HEADER = 'traceparent';
 
-export const ensureTraceparentHandler: RequestHandler = (req, res, next) => {
+export const ensureTraceparentHandler: RequestHandler = (req, _, next) => {
   ensureTraceparent(req);
   next();
 };

@@ -38,7 +38,7 @@ export const Messages = () => {
       {messages.length === 0 && (isFullfoert || isFeilregistrert) ? <BodyShort>Ingen meldinger</BodyShort> : null}
       <StyledMessages data-testid="messages-list">
         {messages.map((message) => (
-          <Message {...message} key={message.id} />
+          <Message key={message.id} {...message} />
         ))}
       </StyledMessages>
     </StyledMessagesContainer>

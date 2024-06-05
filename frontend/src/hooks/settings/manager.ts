@@ -9,7 +9,7 @@ class SettingsManager {
   private syncedSettings: Set<string> = new Set();
 
   constructor() {
-    addEventListener('storage', (event) => {
+    addEventListener('storage', (event: StorageEvent) => {
       if (event.storageArea !== window.localStorage) {
         return;
       }

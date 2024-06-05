@@ -54,7 +54,6 @@ export const Comment = memo(
               {showActions ? (
                 <StyledButtons>
                   <EditButton
-                    id={id}
                     authorIdent={author.ident}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}

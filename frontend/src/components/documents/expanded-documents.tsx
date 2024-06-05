@@ -60,7 +60,7 @@ export const ExpandedDocuments = () => {
     }
 
     let firstRun = true;
-    let timeout: NodeJS.Timeout | null = null;
+    let timeout: Timer | null = null;
 
     const observer = new ResizeObserver(() => {
       const newWidth = ref.current?.clientWidth ?? minWidthRef.current;

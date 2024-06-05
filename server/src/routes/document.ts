@@ -29,7 +29,7 @@ interface ICombinedMetadata extends IBaseMetadata {
 type Metadata = IArchivedMetadata | INewMetadata | ICombinedMetadata;
 
 export const setupDocumentRoutes = () => {
-  const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './dist/templates/document-template.html'), 'utf8');
+  const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), 'utf8');
 
   router.get('/arkivert-dokument/:journalpostId/:dokumentInfoId', async (req, res) => {
     const { journalpostId, dokumentInfoId } = req.params;

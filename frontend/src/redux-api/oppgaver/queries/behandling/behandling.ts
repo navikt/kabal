@@ -44,7 +44,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   endpoints: (builder) => ({
     getOppgavebehandling: builder.query<IOppgavebehandling, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/detaljer`,
-      onQueryStarted: async (params, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
         } catch (e) {
@@ -155,7 +155,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     }),
     getSakenGjelder: builder.query<ISakenGjelder, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/sakengjelder`,
-      onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
         } catch (e) {

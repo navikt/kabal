@@ -158,4 +158,4 @@ const start = (nav_ident: string, clientVersion: string | undefined, trace_id: s
 };
 
 const getClientVersion = (req: Request): string | undefined =>
-  typeof req.query.version === 'string' ? req.query.version : undefined;
+  typeof req.query['version'] === 'string' ? req.query['version'] : undefined;

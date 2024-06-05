@@ -77,12 +77,6 @@ class Store {
     this.messages = this.messages.filter((m) => m.id !== id);
     this.notify();
   }
-
-  private removeExpiredMessages() {
-    const now = Date.now();
-    this.messages = this.messages.filter((m) => m.expiresAt > now);
-    this.notify();
-  }
 }
 
 export const toast = new Store();

@@ -90,7 +90,7 @@ export const Placeholder = ({
     }
 
     if (hasZeroChars(text)) {
-      return insertEmptyChar(editor, path, at);
+      return insertEmptyChar(editor, at);
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 

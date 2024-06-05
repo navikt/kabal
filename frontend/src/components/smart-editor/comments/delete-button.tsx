@@ -24,7 +24,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
   const { user } = useContext(StaticDataContext);
   const { documentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
-  const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
+  const isCommentAuthor = useIsCommentAuthor(authorIdent);
   const editor = useMyPlateEditorRef();
 
   if (!isFocused || typeof oppgave === 'undefined' || typeof documentId !== 'string') {

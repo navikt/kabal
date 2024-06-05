@@ -104,7 +104,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
     const result: ScoredText[] = [];
 
     for (const text of data) {
-      const filterText = text.title + getString(text, language) ?? '';
+      const filterText = text.title + (getString(text, language) ?? '');
 
       const score = fuzzySearch(splitQuery(filter), filterText);
 

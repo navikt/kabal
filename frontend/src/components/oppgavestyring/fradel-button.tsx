@@ -42,7 +42,7 @@ export const FradelButton = (props: IOppgave) => {
     setUndoSecondsLeft(diff >= UNDO_TIMEOUT_SECONDS ? 0 : UNDO_TIMEOUT_SECONDS - diff);
   }, [tildeltSaksbehandlerident, tildeltTimestamp]);
 
-  const undoInterval = useRef<NodeJS.Timeout | null>(null);
+  const undoInterval = useRef<Timer | null>(null);
 
   useEffect(() => {
     undoInterval.current = setInterval(() => setUndoSecondsLeft((prev) => (prev <= 1 ? 0 : prev - 1)), 1_000);
