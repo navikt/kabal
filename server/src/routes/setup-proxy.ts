@@ -59,9 +59,6 @@ export const setupProxy = async () => {
               data: { proxy_target_application, url, method },
             });
 
-            let closedByTarget = false;
-            let closedByClient = false;
-
             const onClose = (msg: string) => {
               const duration = Math.round(performance.now() - start);
 
@@ -71,13 +68,8 @@ export const setupProxy = async () => {
               res.destroy();
             };
 
-            proxyReq.once('close', () => {
-              closedByTarget = true;
-              onClose('Proxy connection closed by target' + (closedByClient ? ', already closed by client' : ''));
-            });
             res.once('close', () => {
-              closedByClient = true;
-              onClose('Proxy connection closed' + (closedByTarget ? ', already closed by target' : ''));
+              onClose('Proxy connection closed');
             });
           },
           error: (error, req, res) => {
