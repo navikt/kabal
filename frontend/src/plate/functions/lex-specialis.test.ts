@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { GLOBAL, GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { lexSpecialis } from '@app/plate/functions/lex-specialis';
 import { RichTextTypes } from '@app/types/common-text-types';
