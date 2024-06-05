@@ -47,7 +47,7 @@ export const Toast = memo(
       if (
         expiresAt === Infinity &&
         ref.current !== null &&
-        target instanceof global.Node &&
+        target instanceof window.Node &&
         ref.current !== target &&
         !ref.current.contains(target)
       ) {
