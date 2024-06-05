@@ -35,52 +35,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: |
-            frontend/package-lock.json
-            server/package-lock.json
+          bun-version: latest
       
       - name: Install frontend dependencies
         shell: bash
         run: |
           cd frontend
-          npm ci
-      
+          bun install
+
       - name: Build frontend
         shell: bash
         env:
           VERSION: ${{ github.sha }}
         run: |
           cd frontend
-          npm run build
+          bun run build
       
       - name: Test frontend
         shell: bash
         run: |
           cd frontend
-          npm test
+          bun test
       
       - name: Install server dependencies
         shell: bash
         run: |
           cd server
-          npm ci
-      
-      - name: Build server
-        shell: bash
-        run: |
-          cd server
-          npm run build
+          bun install
       
       - name: Test server
         shell: bash
         run: |
           cd server
-          npm test
+          bun test
 
       - name: Build & push Docker image
         uses: nais/docker-build-push@v0
