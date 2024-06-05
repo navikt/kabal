@@ -1,10 +1,6 @@
 /* eslint-disable max-lines */
-/**
- * @vitest-environment jsdom
- */
-
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '../plugins/element-types';
 import { cleanHtml, containsNoopElements, htmlToString, scrubText } from './helpers';
 
@@ -91,7 +87,7 @@ describe('cleanHtml', () => {
     const result = cleanHtml(redigerbarMaltekst);
 
     if (result === null) {
-      expect.fail('Expected result to be an HTMLElement');
+      throw new Error('Expected result to be an HTMLElement');
     }
 
     expect(htmlToString(result)).toStrictEqual(htmlToString(child));
@@ -111,7 +107,7 @@ describe('cleanHtml', () => {
     const result = cleanHtml(redigerbarMaltekst);
 
     if (result === null) {
-      expect.fail('Expected result to be an HTMLElement');
+      throw new Error('Expected result to be an HTMLElement');
     }
 
     expect(htmlToString(result)).toStrictEqual(htmlToString(child));
@@ -131,7 +127,7 @@ describe('cleanHtml', () => {
     const result = cleanHtml(redigerbarMaltekst);
 
     if (result === null) {
-      expect.fail('Expected result to be an HTMLElement');
+      throw new Error('Expected result to be an HTMLElement');
     }
 
     expect(htmlToString(result)).toStrictEqual(htmlToString(child));

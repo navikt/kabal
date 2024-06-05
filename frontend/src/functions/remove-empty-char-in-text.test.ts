@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 
 const EMPTY_CHAR_CODE = 8203;

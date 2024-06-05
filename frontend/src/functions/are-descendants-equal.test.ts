@@ -1,5 +1,5 @@
 import { TElement, TText } from '@udecode/plate-common';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';
 
 describe('are-descendants-equal', () => {

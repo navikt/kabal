@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { fuzzySearch } from './fuzzy-search';
 
