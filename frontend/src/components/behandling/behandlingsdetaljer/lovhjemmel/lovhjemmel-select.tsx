@@ -12,7 +12,7 @@ import { StyledLovhjemmelSelect } from './styled-components';
 
 type Direction = 'down' | 'right';
 
-interface LovhjemmelSelectProps<> {
+interface LovhjemmelSelectProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   disabled?: boolean;

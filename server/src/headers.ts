@@ -7,7 +7,7 @@ export const CLIENT_VERSION_KEY = 'x-client-version';
 /**
  * Translates known query parameters to headers. Useful for EventSource requests.
  */
-export const queryParamsToHeaders: RequestHandler = (req, res, next) => {
+export const queryParamsToHeaders: RequestHandler = (req, _, next) => {
   handleHeader(req, TAB_ID_KEY, 'tabId');
   handleHeader(req, CLIENT_VERSION_KEY, 'version');
 

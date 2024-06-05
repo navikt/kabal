@@ -3,7 +3,7 @@ import { HistoryEventTypes, IFerdigstiltEvent } from '@app/types/oppgavebehandli
 import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
-export const getFerdigstiltEvent = (props: IFerdigstiltEvent) => <Ferdigstilt {...props} key={toKey(props)} />;
+export const getFerdigstiltEvent = (props: IFerdigstiltEvent) => <Ferdigstilt key={toKey(props)} {...props} />;
 
 const Ferdigstilt = ({ actor, timestamp, event }: IFerdigstiltEvent) =>
   event === null ? null : (

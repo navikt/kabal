@@ -1,4 +1,4 @@
-const VERSION = process.env.VERSION ?? 'unknown';
+const VERSION = process.env['VERSION'] ?? 'unknown';
 
 const LOGGERS: Map<string, Logger> = new Map();
 

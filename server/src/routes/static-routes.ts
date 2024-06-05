@@ -10,7 +10,7 @@ const indexFile = fs
   .replace('{{ENVIRONMENT}}', ENVIRONMENT)
   .replace('{{VERSION}}', VERSION);
 
-const sendIndexFile = (req: express.Request, res: express.Response) => {
+const sendIndexFile = (_: express.Request, res: express.Response) => {
   res.setHeader('Content-Type', 'text/html');
   res.status(200).send(indexFile);
 };

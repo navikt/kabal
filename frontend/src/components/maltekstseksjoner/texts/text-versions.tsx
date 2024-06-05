@@ -95,8 +95,8 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
       }}
       createDraftPanel={(version) => (
         <DraftText
-          {...props}
           key={version.versionId}
+          {...props}
           isActive={isActive}
           text={version}
           isDeletable={hasMoreThanOneVersion}
@@ -105,8 +105,8 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
       )}
       createPublishedPanel={(version) => (
         <PublishedRichText
-          {...props}
           key={version.versionId}
+          {...props}
           text={version}
           onDraftCreated={setTabId}
           hasDraft={hasDraft}

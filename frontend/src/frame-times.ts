@@ -9,7 +9,7 @@ const getNow = () => Math.round(performance.now());
 
 class FrameTimes {
   private measurements: number[] = [];
-  private interval: NodeJS.Timeout | null = null;
+  private interval: Timer | null = null;
   private isRunning = false;
   private currentAnimationFrame: number | null = null;
 

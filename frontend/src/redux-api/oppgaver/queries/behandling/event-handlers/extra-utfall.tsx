@@ -10,7 +10,7 @@ import { UtfallEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 export const handleExtraUtfallEvent =
-  (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
+  (_: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
   ({ actor, timestamp, utfallIdList }: ExtraUtfallEvent) => {
     updateCachedData((draft) => {
       if (draft === undefined) {

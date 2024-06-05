@@ -105,7 +105,7 @@ export class SimpleApiState<T> {
     }
   };
 
-  private dataTimeout: NodeJS.Timeout | undefined;
+  private dataTimeout: Timer | undefined;
 
   public unlisten = (listener: Listener<T>): void => {
     clearTimeout(this.dataTimeout);

@@ -49,7 +49,7 @@ export const ensureOnlyOneEmptyChar = (editor: RichTextEditor, element: Placehol
   });
 };
 
-export const insertEmptyChar = (editor: RichTextEditor, path: TPath, at: TPath) => {
+export const insertEmptyChar = (editor: RichTextEditor, at: TPath) => {
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
       insertText(editor, EMPTY_CHAR, { at });

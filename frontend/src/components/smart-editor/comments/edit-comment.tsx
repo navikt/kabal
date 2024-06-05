@@ -9,7 +9,6 @@ import { useIsCommentAuthor } from './use-is-comment-author';
 import { WriteComment } from './write-comment/write-comment';
 
 interface EditButtonProps {
-  id: string;
   authorIdent: string;
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
@@ -17,8 +16,8 @@ interface EditButtonProps {
   close: () => void;
 }
 
-export const EditButton = ({ id, authorIdent, isEditing, setIsEditing, isFocused, close }: EditButtonProps) => {
-  const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
+export const EditButton = ({ authorIdent, isEditing, setIsEditing, isFocused, close }: EditButtonProps) => {
+  const isCommentAuthor = useIsCommentAuthor(authorIdent);
 
   if (!isFocused || !isCommentAuthor) {
     return null;
@@ -47,7 +46,7 @@ export const EditComment = ({ close, id, authorIdent, defaultValue }: EditCommen
   const [editComment, { isLoading }] = useUpdateCommentOrReplyMutation();
   const oppgaveId = useOppgaveId();
   const { documentId } = useContext(SmartEditorContext);
-  const isCommentAuthor = useIsCommentAuthor(id, authorIdent);
+  const isCommentAuthor = useIsCommentAuthor(authorIdent);
 
   if (!isCommentAuthor || typeof oppgaveId !== 'string' || typeof documentId !== 'string') {
     return null;

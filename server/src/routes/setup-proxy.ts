@@ -17,7 +17,7 @@ export const setupProxy = async () => {
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
 
-    router.use(route, async (req, res, next) => {
+    router.use(route, async (req, _, next) => {
       const authHeader = req.header('Authorization');
       const traceId = ensureTraceparent(req);
 

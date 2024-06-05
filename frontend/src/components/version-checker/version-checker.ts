@@ -25,6 +25,12 @@ class VersionChecker {
     return this;
   }
 
+  public removeListener(listener: ListenerFn): VersionChecker {
+    this.listeners = this.listeners.filter((l) => l !== listener);
+
+    return this;
+  }
+
   private delay = 0;
 
   private createEventSource = () => {

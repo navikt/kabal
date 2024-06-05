@@ -35,7 +35,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
     }
 
-    const baseColumnHeaderProps = { key, params, setParams, onSortChange };
+    const baseColumnHeaderProps = { params, setParams, onSortChange };
 
     switch (key) {
       case ColumnKeyEnum.Type:
@@ -58,7 +58,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         );
       case ColumnKeyEnum.Deadline:
         return (
-          <DateColumnHeader {...baseColumnHeaderProps} fromKey="fristFrom" toKey="fristTo">
+          <DateColumnHeader key={key} {...baseColumnHeaderProps} fromKey="fristFrom" toKey="fristTo">
             Frist
           </DateColumnHeader>
         );
