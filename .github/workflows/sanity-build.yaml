@@ -13,29 +13,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: ${{ matrix.apps }}/package-lock.json
+          bun-version: latest
+          
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
         run: |
           cd ${{ matrix.apps }}
-          npm ci --prefer-offline
+          bun install
+
+      - name: Typecheck ${{ matrix.apps }}
+        shell: bash
+        run: |
+          cd ${{ matrix.apps }}
+          bun run typecheck
+
+      - name: Setup Linting Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{matrix.apps}}/.eslintcache
+          key: eslintcache
+            
       - name: Lint ${{ matrix.apps }}
         shell: bash
         run: |
           cd ${{ matrix.apps }}
           npm run lint
+    
       - name: Test ${{ matrix.apps }}
         shell: bash
         run: |
           cd ${{ matrix.apps }}
-          npm test
-      - name: Build ${{ matrix.apps }}
-        shell: bash
-        run: |
-          cd ${{ matrix.apps }}
-          npm run build
+          bun test

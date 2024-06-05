@@ -43,7 +43,7 @@ module.exports = {
             ]
         },
         "import/resolver": {
-            "typescript": {
+            "typescript-bun": {
                 "alwaysTryTypes": true,
                 "project": "./tsconfig.json"
             }
@@ -126,7 +126,7 @@ module.exports = {
         "import/no-self-import": "error",
         "import/no-named-as-default": "error",
         "import/no-named-as-default-member": "error",
-        "import/no-unresolved": "error",
+        "import/no-unresolved": ['error', { ignore: ['bun:test'] }],
         "import/no-unused-modules": [
             "error",
             {
