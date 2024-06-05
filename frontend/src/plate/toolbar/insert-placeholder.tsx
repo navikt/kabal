@@ -1,7 +1,7 @@
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import { insertElements, isCollapsed, isExpanded, useEditorState } from '@udecode/plate-common';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MOD_KEY } from '@app/keys';

@@ -6,7 +6,6 @@ import {
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
 import { CopyButton } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
 import { IArkivertDocument, Kanal, TimelineTypes } from '@app/types/arkiverte-documents';

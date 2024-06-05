@@ -1,4 +1,3 @@
-import React from 'react';
 import { Documents } from '../documents/documents';
 import { Kvalitetsvurdering } from '../kvalitetsvurdering/kvalitetsvurdering';
 import { SmartEditorPanel } from '../smart-editor/smart-editor-panel';

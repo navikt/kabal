@@ -1,4 +1,3 @@
-import React from 'react';
 import { AdminButton } from './admin-button';
 import { ApiHook } from './types';
 

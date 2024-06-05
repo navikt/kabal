@@ -1,5 +1,5 @@
 import { SortState, Table, TableProps } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { TableFooter } from '@app/components/common-table-components/footer';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 // eslint-disable-next-line import/no-cycle

@@ -1,5 +1,4 @@
 import { Heading, Loader } from '@navikt/ds-react';
-import React from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';

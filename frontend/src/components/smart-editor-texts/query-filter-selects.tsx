@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { NestedFilterList, NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
 import { IOption } from '@app/components/filter-dropdown/props';

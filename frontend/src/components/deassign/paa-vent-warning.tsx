@@ -1,6 +1,5 @@
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 

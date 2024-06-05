@@ -1,5 +1,5 @@
 import { Heading } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';

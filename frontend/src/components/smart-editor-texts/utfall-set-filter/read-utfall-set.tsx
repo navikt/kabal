@@ -1,6 +1,5 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { CustomTag } from '@app/components/tags/resolved-tag';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';

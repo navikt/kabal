@@ -1,5 +1,5 @@
 import { Select } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';

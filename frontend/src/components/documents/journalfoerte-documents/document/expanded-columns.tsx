@@ -1,6 +1,5 @@
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';

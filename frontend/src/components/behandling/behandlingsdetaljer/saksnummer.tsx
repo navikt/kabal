@@ -1,4 +1,3 @@
-import React from 'react';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { BehandlingSection } from './behandling-section';
 

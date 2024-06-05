@@ -1,5 +1,4 @@
 import { Heading, Skeleton } from '@navikt/ds-react';
-import React from 'react';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';

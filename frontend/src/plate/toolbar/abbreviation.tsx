@@ -1,7 +1,7 @@
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
 import { Button, TextField, Tooltip } from '@navikt/ds-react';
 import { focusEditor, getEditorString, isCollapsed } from '@udecode/plate-common';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';

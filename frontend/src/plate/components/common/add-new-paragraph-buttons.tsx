@@ -1,7 +1,6 @@
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { PlateEditor, findDescendant, insertElements, useEditorReadOnly } from '@udecode/plate-common';
-import React from 'react';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RootElement } from '@app/plate/types';
 import { nextPath } from '@app/plate/utils/queries';

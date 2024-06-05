@@ -1,5 +1,4 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';

@@ -1,6 +1,6 @@
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Textarea, Tooltip } from '@navikt/ds-react';
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { MOD_KEY } from '@app/keys';
 import { StyledCommentButtonContainer } from '../styled-components';
 

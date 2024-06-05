@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
 import { InputError } from '@app/components/input-error/input-error';

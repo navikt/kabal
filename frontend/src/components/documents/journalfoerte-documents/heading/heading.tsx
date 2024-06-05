@@ -1,6 +1,6 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import React, { memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { InvisibleWarning, InvisibleWarningProps } from './invisible-warning';

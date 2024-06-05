@@ -1,5 +1,4 @@
 import { Table } from '@navikt/ds-react';
-import React from 'react';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';

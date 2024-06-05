@@ -2,7 +2,7 @@ import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

@@ -1,6 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';

@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props extends ButtonProps {
   seconds: number;

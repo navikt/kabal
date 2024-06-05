@@ -1,7 +1,7 @@
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { HistoryEditor } from '@app/components/smart-editor/history/history-editor';
 import { isoDateTimeToPretty } from '@app/domain/date';

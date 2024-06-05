@@ -1,6 +1,6 @@
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Checkbox, Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';

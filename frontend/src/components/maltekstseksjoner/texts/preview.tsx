@@ -1,5 +1,4 @@
 import { Alert, ErrorMessage, Heading, Loader, Tag, TagProps } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';

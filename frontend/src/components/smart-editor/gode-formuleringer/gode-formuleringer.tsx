@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { focusEditor } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';

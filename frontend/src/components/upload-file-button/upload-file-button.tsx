@@ -1,7 +1,7 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, Heading, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { forwardRef, useCallback, useRef } from 'react';
+import { forwardRef, useCallback, useRef } from 'react';
 import { toast } from '@app/components/toast/store';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';

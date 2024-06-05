@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';

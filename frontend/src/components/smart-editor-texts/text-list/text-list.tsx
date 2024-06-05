@@ -1,6 +1,6 @@
 import { PercentIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface PageInfoProps {
   total: number;
   fromNumber: number;

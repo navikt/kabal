@@ -1,6 +1,5 @@
 import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import React from 'react';
 import { css, styled } from 'styled-components';
 import {
   Fields,

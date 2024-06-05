@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { IPartBase } from '@app/types/oppgave-common';
 import { CopyIdButton } from '../../copy-button/copy-id-button';
 import { StyledFnr, StyledName } from '../common/styled-components';

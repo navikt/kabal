@@ -1,6 +1,6 @@
 import { PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Tag } from '@navikt/ds-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
 import { IKodeverkSimpleValue, ISakstyperToUtfall, UtfallEnum } from '@app/types/kodeverk';

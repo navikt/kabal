@@ -1,7 +1,7 @@
 import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { setNodes } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { getBookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { SmartEditorContext } from '@app/components/smart-editor/context';

@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { findDocument } from '@app/domain/find-document';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';

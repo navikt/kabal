@@ -1,6 +1,6 @@
 import { CheckmarkIcon, ExternalLinkIcon, FilesIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Link, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';

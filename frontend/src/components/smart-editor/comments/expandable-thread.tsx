@@ -1,5 +1,5 @@
 import { findNode, toDOMNode } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { Thread } from '@app/components/smart-editor/comments/thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

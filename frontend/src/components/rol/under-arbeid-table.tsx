@@ -1,6 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';

@@ -1,6 +1,6 @@
 import { CheckmarkCircleIcon, CogRotationIcon } from '@navikt/aksel-icons';
 import { Button, InternalHeader } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { css, styled } from 'styled-components';
 import { VERSION_CHECKER } from './version-checker';
 

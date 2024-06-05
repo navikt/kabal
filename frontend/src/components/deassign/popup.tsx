@@ -1,6 +1,6 @@
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Radio, RadioGroup } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { styled } from 'styled-components';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';

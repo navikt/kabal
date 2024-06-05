@@ -1,5 +1,5 @@
 import { TRange } from '@udecode/plate-common';
-import React, { createContext, useState } from 'react';
+import { createContext, useState } from 'react';
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,

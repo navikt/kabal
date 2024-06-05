@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';

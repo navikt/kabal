@@ -1,6 +1,6 @@
 import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { getNewRichText } from '@app/components/smart-editor-texts/functions/new-text';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';

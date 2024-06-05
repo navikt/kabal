@@ -1,5 +1,5 @@
 import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import React, { ElementRef, forwardRef } from 'react';
+import { ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
 interface PlateTableRowElementProps extends PlateElementProps {}

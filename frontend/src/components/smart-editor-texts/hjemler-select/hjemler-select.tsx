@@ -1,5 +1,5 @@
 /* eslint-disable max-depth */
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { NestedFilterList, NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
 import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';

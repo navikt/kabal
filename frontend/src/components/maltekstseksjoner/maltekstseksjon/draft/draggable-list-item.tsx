@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';

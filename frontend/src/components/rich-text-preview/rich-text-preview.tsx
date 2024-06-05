@@ -1,7 +1,7 @@
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps } from '@navikt/ds-react';
 import { Plate } from '@udecode/plate-common';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

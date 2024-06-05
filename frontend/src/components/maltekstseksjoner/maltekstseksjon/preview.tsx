@@ -1,5 +1,5 @@
 import { Alert, Loader } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';

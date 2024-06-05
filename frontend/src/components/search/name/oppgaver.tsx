@@ -1,5 +1,4 @@
 import { Loader } from '@navikt/ds-react';
-import React from 'react';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
 import { useSearchOppgaverByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';

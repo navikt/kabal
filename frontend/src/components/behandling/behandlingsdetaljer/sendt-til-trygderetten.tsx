@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

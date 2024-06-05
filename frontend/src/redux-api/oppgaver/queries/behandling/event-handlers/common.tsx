@@ -1,4 +1,3 @@
-import React from 'react';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
 import { INavEmployee } from '@app/types/bruker';

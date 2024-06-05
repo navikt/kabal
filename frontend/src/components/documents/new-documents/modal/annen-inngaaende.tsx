@@ -1,7 +1,7 @@
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label, Radio, RadioGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { EditPart } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';

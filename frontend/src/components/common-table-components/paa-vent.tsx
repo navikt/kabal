@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { IOppgave } from '@app/types/oppgaver';

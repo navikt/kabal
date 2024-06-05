@@ -1,5 +1,4 @@
 import { HelpText, Label } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';

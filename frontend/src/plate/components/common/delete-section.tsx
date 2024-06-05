@@ -1,7 +1,7 @@
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
 import { removeNodes } from '@udecode/plate-common';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Path } from 'slate';
 import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

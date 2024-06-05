@@ -1,5 +1,4 @@
 import { FileTextIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { StandaloneTextVersions } from '@app/components/smart-editor-texts/edit/standalone-text-versions';

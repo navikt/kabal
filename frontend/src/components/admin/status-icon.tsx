@@ -1,5 +1,4 @@
 import { CheckmarkCircleIcon, HourglassIcon, MinusCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import React from 'react';
 
 interface StatusIconProps {
   success: boolean;

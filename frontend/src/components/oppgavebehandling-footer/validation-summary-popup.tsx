@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { StyledButton, StyledIconButton, StyledPopup } from './styled-components';

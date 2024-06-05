@@ -1,6 +1,6 @@
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Alert } from '@navikt/ds-react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { styled } from 'styled-components';
 import { StyledHeading, getTitle } from '@app/components/editable-title/editable-title';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';

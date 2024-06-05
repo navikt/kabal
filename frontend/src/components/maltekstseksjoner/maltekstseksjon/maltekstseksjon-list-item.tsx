@@ -1,5 +1,5 @@
 import { TasklistIcon } from '@navikt/aksel-icons';
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';

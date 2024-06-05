@@ -1,6 +1,5 @@
 import { Button } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
-import React from 'react';
 import { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';

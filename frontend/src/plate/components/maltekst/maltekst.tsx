@@ -9,7 +9,7 @@ import {
   replaceNodeChildren,
   unwrapNodes,
 } from '@udecode/plate-common';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';

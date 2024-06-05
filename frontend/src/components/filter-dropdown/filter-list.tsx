@@ -1,5 +1,4 @@
 import { CheckboxGroup } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { Filter } from './option';
 import { BaseProps } from './props';

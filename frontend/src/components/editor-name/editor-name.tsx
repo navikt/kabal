@@ -1,6 +1,5 @@
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 
 interface EditorProps {

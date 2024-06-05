@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
 import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';

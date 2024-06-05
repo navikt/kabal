@@ -1,5 +1,4 @@
 import { Label } from '@navikt/ds-react';
-import React from 'react';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 

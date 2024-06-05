@@ -1,6 +1,6 @@
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Popover } from '@navikt/ds-react';
-import React, { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';

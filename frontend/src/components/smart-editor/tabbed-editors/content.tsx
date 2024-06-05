@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { DEFAULT, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { PlateEditorContent } from '@app/plate/styled-components';

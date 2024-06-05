@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditAddress } from '@app/components/documents/new-documents/modal/finish-document/address/edit-address';
 import { ReadAddress } from '@app/components/documents/new-documents/modal/finish-document/address/read-address';
 import { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';

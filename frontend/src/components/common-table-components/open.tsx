@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';

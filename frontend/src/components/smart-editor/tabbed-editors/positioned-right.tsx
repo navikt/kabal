@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { PositionedBookmarks } from '../bookmarks/positioned';

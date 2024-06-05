@@ -1,6 +1,6 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Tag, TextField, TextFieldProps, Tooltip } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { FieldLabel } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 
 interface Props extends Omit<TextFieldProps, 'value' | 'onChange' | 'defaultValue' | 'size'> {

@@ -1,7 +1,7 @@
 import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
 import { Plate } from '@udecode/plate-common';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';

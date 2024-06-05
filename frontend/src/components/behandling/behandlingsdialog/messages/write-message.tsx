@@ -1,6 +1,6 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea } from '@navikt/ds-react';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';

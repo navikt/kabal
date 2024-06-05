@@ -3,7 +3,6 @@ import { TElement, isBlock, someNode } from '@udecode/plate-common';
 import { indent, outdent } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import React from 'react';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { RichTextEditor, useMyPlateEditorState } from '@app/plate/types';

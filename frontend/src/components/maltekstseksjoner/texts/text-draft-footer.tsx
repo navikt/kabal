@@ -1,6 +1,5 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';

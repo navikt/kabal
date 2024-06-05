@@ -1,6 +1,5 @@
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';

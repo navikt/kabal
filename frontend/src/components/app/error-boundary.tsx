@@ -1,5 +1,5 @@
 import { Alert, Button, CopyButton, Heading } from '@navikt/ds-react';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { styled } from 'styled-components';
 import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';

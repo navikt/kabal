@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';

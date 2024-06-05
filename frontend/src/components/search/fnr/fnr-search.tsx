@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React from 'react';
 import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useSearchOppgaverByFnrQuery, useSearchPersonByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';

@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
-import React, { useId } from 'react';
+import { useId } from 'react';
 import { HistoryEventTypes, IFeilregistrertEvent } from '@app/types/oppgavebehandling/response';
 import { Line, Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';

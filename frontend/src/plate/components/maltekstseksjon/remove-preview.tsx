@@ -1,6 +1,6 @@
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { CustomTag } from '@app/components/tags/resolved-tag';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

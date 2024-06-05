@@ -1,4 +1,3 @@
-import React from 'react';
 import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
 import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
 import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';

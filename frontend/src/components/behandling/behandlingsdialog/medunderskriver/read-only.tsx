@@ -1,5 +1,4 @@
 import { BodyShort, Label } from '@navikt/ds-react';
-import React from 'react';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IMedunderskriverRol } from '@app/types/oppgave-common';

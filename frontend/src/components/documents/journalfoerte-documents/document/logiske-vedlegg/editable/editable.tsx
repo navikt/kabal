@@ -1,7 +1,7 @@
 import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
 import { ReadOnlyTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/shared/vedlegg-style';

@@ -1,6 +1,6 @@
 import { Select, Tag, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';

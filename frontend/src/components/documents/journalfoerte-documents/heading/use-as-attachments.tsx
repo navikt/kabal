@@ -1,6 +1,6 @@
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { IYtelse } from '@app/types/kodeverk';
 import { Row } from './row';

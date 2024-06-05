@@ -1,6 +1,5 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';

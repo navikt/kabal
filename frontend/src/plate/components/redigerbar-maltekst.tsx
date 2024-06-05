@@ -7,7 +7,6 @@ import {
   isEditorReadOnly,
   replaceNodeChildren,
 } from '@udecode/plate-common';
-import React from 'react';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';

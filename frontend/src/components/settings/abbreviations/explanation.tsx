@@ -1,5 +1,5 @@
 import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { AbbrevationExample } from '@app/components/settings/abbreviations/example';
 import { pushEvent } from '@app/observability';
 

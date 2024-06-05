@@ -1,5 +1,4 @@
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { styled } from 'styled-components';
 import { OrphansModal } from '@app/components/smart-editor/comments/orphans-modal';
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';

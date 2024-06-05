@@ -1,6 +1,6 @@
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Modal, Tooltip } from '@navikt/ds-react';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { styled } from 'styled-components';
 import { THREAD_WIDTH, Thread } from '@app/components/smart-editor/comments/thread';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';

@@ -2,7 +2,6 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
 import { setNodes } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import React from 'react';
 import { styled } from 'styled-components';
 import { MOD_KEY } from '@app/keys';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';

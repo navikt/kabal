@@ -1,4 +1,3 @@
-import React from 'react';
 import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/common/textarea';
 import { KvalitetsvurderingInput } from '@app/components/kvalitetsvurdering/v2/common/types';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';

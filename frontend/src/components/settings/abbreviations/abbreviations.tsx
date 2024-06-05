@@ -1,5 +1,4 @@
 import { Alert, Heading, HeadingProps, HelpText, Loader } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { AddAbbreviation } from '@app/components/settings/abbreviations/add';
 import { ExistingAbbreviation } from '@app/components/settings/abbreviations/existing';

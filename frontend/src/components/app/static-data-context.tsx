@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { AppLoader } from '@app/components/app/loader';
 import { countryCodes, postalCodes, user } from '@app/static-data/static-data';
 import { IUserData } from '@app/types/bruker';

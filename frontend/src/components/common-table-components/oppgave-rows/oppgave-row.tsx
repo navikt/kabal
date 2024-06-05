@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import { Table } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';

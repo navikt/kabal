@@ -1,5 +1,5 @@
 import { Heading } from '@navikt/ds-react';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { CreateText } from '@app/components/maltekstseksjoner/create';

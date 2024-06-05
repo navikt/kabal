@@ -1,5 +1,4 @@
 import { CopyButton, Detail, HelpText, Label } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';

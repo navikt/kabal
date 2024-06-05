@@ -1,5 +1,5 @@
 import { Search, Tag } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

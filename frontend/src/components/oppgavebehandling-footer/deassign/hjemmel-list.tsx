@@ -1,5 +1,5 @@
 import { Heading, Loader, Search } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';

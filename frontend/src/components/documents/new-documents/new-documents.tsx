@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { Loader } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import {
   PADDING_BOTTOM,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { TOAST_TIMEOUT } from './constants';
 import { NewMessage, ToastType } from './types';
 

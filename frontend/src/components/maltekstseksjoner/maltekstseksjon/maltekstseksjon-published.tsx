@@ -1,6 +1,6 @@
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { DateTime } from '@app/components/datetime/datetime';

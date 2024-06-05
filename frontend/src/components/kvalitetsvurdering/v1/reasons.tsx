@@ -1,5 +1,5 @@
 import { CheckboxGroup, Loader } from '@navikt/ds-react';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';

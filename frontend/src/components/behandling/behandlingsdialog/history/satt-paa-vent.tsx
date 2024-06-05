@@ -1,6 +1,6 @@
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
-import React, { useId } from 'react';
+import { useId } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { INavEmployee } from '@app/types/bruker';

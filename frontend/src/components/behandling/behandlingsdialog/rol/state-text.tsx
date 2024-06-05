@@ -1,5 +1,4 @@
 import { Alert } from '@navikt/ds-react';
-import React from 'react';
 import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 
 interface Props {

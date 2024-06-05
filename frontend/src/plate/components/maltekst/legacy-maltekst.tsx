@@ -10,7 +10,7 @@ import {
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

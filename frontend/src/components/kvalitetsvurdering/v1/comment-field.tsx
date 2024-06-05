@@ -1,5 +1,5 @@
 import { Textarea } from '@navikt/ds-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';

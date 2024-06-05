@@ -1,6 +1,6 @@
 import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, HelpText } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RichTextPreview } from '@app/components/rich-text-preview/rich-text-preview';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

@@ -1,6 +1,6 @@
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
 import { isCollapsed } from '@udecode/plate-common';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { MOD_KEY } from '@app/keys';
 import { useSelection } from '@app/plate/hooks/use-selection';

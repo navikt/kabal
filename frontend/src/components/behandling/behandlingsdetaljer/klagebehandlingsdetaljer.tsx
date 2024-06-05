@@ -1,5 +1,4 @@
 import { Heading } from '@navikt/ds-react';
-import React from 'react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Type } from '@app/components/type/type';

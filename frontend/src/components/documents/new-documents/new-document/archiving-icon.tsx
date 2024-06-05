@@ -1,5 +1,5 @@
 import { HourglassIcon } from '@navikt/aksel-icons';
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { css, styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { DistribusjonsType } from '@app/types/documents/documents';

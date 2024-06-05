@@ -7,7 +7,7 @@ import {
   focusEditor,
   useEditorReadOnly,
 } from '@udecode/plate-common';
-import React, { MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
 import {
   cleanText,
   containsEmptyChar,

@@ -1,5 +1,4 @@
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';

@@ -1,6 +1,6 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps, ErrorMessage } from '@navikt/ds-react';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteMaltekstseksjonDraftButton } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
 import { isRichText } from '@app/functions/is-rich-plain-text';

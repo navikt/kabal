@@ -1,6 +1,6 @@
 import { ArrowCirclepathIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Button, ButtonProps } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { Header } from '@app/components/view-pdf/header';
 import { NoFlickerReloadPdf, UseNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';

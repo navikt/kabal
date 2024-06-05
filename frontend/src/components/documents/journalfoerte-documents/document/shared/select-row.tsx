@@ -1,5 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { SelectContext } from '../../select-context/select-context';
 
 interface Props {

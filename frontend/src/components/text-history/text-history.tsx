@@ -1,6 +1,6 @@
 import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, Tag } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { isoDateTimeToPretty } from '@app/domain/date';

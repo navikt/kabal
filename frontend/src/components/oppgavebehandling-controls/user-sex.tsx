@@ -1,4 +1,3 @@
-import React from 'react';
 import { SexEnum } from '@app/types/kodeverk';
 import { FemaleIcon } from './icons/female';
 import { MaleIcon } from './icons/male';

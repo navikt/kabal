@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProps } from './props';
 
 export const FemaleIcon = ({ alt = '' }: IconProps): JSX.Element => (

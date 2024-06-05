@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';

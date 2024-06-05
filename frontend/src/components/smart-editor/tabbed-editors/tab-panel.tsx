@@ -1,6 +1,6 @@
 import { Tabs } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';

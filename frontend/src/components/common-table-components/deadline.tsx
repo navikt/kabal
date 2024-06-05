@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';

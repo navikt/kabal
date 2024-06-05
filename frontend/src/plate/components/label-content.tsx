@@ -1,6 +1,6 @@
 import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

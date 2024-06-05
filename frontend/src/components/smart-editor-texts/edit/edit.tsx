@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { SavedStatusProps } from '@app/components/saved-status/saved-status';

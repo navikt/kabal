@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button, Radio, RadioGroup, TextField } from '@navikt/ds-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR, MAX, MIN, STEP, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';

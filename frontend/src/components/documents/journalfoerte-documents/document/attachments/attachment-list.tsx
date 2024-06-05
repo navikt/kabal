@@ -1,4 +1,4 @@
-import React, { HTMLProps } from 'react';
+import { HTMLProps } from 'react';
 import { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { StyledAttachmentListItem } from '../../../styled-components/attachment-list';
 import { Attachment } from './attachment';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { AppErrorBoundary } from '@app/components/app/error-boundary';
@@ -10,7 +10,7 @@ import { GlobalStyles } from './global-styles';
 import { Router } from './router';
 
 export const App = () => (
-  <React.StrictMode>
+  <StrictMode>
     <AppErrorBoundary>
       <Provider store={reduxStore}>
         <StaticDataLoader>
@@ -23,5 +23,5 @@ export const App = () => (
         </StaticDataLoader>
       </Provider>
     </AppErrorBoundary>
-  </React.StrictMode>
+  </StrictMode>
 );

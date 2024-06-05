@@ -1,5 +1,4 @@
 import { Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';

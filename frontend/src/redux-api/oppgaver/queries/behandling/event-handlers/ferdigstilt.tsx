@@ -1,4 +1,3 @@
-import React from 'react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';

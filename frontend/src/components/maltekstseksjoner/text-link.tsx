@@ -1,5 +1,5 @@
 import { Tag } from '@navikt/ds-react';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { StatusTag, StatusTagProps } from '@app/components/maltekstseksjoner/status-tag';

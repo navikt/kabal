@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { SelectRol } from '@app/components/behandling/behandlingsdialog/rol/select-rol';
 import { SendToRol } from '@app/components/behandling/behandlingsdialog/rol/send-to-rol';

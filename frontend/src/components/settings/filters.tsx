@@ -1,6 +1,6 @@
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Switch } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';

@@ -1,5 +1,4 @@
 import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';

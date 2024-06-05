@@ -1,6 +1,5 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';

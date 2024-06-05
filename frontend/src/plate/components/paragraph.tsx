@@ -1,5 +1,5 @@
 import { PlateElement, PlateElementProps, isText } from '@udecode/plate-common';
-import React, { ElementRef, forwardRef } from 'react';
+import { ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { EditorValue, ParagraphElement, PlaceholderElement } from '@app/plate/types';

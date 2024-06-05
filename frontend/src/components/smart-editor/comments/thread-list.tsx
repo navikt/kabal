@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from 'styled-components';
 import { ExpandableThread } from './expandable-thread';
 import { SkeletonThread } from './skeleton-thread';

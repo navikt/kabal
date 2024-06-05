@@ -1,5 +1,4 @@
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { styled } from 'styled-components';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { insertGodFormulering, isAvailable } from './insert';

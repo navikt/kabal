@@ -1,5 +1,5 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,

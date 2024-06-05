@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-depth */
-import React from 'react';
 import { styled } from 'styled-components';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';

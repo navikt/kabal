@@ -1,6 +1,6 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

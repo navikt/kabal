@@ -11,7 +11,7 @@ import {
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

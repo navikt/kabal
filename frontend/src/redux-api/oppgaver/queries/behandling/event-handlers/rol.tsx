@@ -1,5 +1,4 @@
 import { BodyLong } from '@navikt/ds-react';
-import React from 'react';
 import { toast } from '@app/components/toast/store';
 import { reduxStore } from '@app/redux/configure-store';
 import { getRolToastContent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/rol-toast';

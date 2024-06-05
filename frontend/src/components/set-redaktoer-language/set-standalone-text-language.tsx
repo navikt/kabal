@@ -1,5 +1,4 @@
 import { ToggleGroup } from '@navikt/ds-react';
-import React from 'react';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';

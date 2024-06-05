@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { Plate, insertNodes, removeNodes, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
-import React, { memo, useEffect, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { getIsRolAnswers, getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';

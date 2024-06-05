@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';

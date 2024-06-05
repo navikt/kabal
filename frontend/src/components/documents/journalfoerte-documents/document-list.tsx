@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';

@@ -1,6 +1,6 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';

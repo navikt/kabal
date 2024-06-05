@@ -1,5 +1,5 @@
 import { Textarea } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { PlainTextTypes } from '@app/types/common-text-types';
 

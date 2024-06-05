@@ -1,6 +1,6 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Loader } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {

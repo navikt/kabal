@@ -1,6 +1,6 @@
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';

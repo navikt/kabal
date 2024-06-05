@@ -1,7 +1,6 @@
 import { TextHeader1, TextHeader2, TextHeader3 } from '@styled-icons/fluentui-system-regular';
 import { setNodes } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import React from 'react';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';

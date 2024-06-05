@@ -1,6 +1,6 @@
 import { DocPencilIcon, FileTextIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { TabLabel } from '@app/components/versioned-tabs/tab-label';
 

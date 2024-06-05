@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { ActionToast } from '@app/components/toast/action-toast';

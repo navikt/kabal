@@ -1,6 +1,6 @@
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Textarea } from '@navikt/ds-react';
-import React, { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { MOD_KEY } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';

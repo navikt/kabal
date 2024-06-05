@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { ActionToast } from '@app/components/toast/action-toast';

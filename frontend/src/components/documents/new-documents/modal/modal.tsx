@@ -1,6 +1,6 @@
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';

@@ -1,6 +1,6 @@
 import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';

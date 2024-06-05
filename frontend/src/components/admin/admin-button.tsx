@@ -1,5 +1,4 @@
 import { Button } from '@navikt/ds-react';
-import React from 'react';
 import { StatusIcon } from './status-icon';
 
 interface Props {

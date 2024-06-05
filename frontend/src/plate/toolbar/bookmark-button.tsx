@@ -1,7 +1,7 @@
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
-import React, { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';

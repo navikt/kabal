@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Abbreviation } from '@app/components/settings/abbreviations/abbreviation';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { pushEvent } from '@app/observability';

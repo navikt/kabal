@@ -1,6 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';

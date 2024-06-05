@@ -7,7 +7,6 @@ import {
   insertText,
   withoutMergingHistory,
 } from '@udecode/plate-common';
-import React from 'react';
 import { pushEvent } from '@app/observability';
 import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 
