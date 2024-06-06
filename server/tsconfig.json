@@ -36,7 +36,10 @@
       "@app/*": [
         "*"
       ]
-    }
+    },
+
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
   },
   "include": [
     "src"
