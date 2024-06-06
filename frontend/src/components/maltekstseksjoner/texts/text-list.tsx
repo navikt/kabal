@@ -12,10 +12,11 @@ import { TextVersions } from './text-versions';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
+  nextMaltekstseksjon?: IMaltekstseksjon;
   query: IGetMaltekstseksjonParams;
 }
 
-export const TextList = ({ maltekstseksjon, query }: Props) => {
+export const TextList = ({ maltekstseksjon, nextMaltekstseksjon, query }: Props) => {
   const setPath = useNavigateMaltekstseksjoner();
   const { textId: activeTextId } = useParams();
   const [updateMaltekst, { isLoading: isMaltekstUpdating }] = useUpdateTextIdListMutation({
@@ -143,7 +144,8 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
             textId={textId}
             isActive={textId === activeTextId}
             setActive={setActive}
-            maltekstseksjonId={maltekstseksjon.id}
+            maltekstseksjon={maltekstseksjon}
+            nextMaltekstseksjon={nextMaltekstseksjon}
           />
         </ListItem>
       ))}

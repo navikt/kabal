@@ -2,25 +2,27 @@ import { Alert, Loader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
+import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { EditorValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
+import { useLazyGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { isApiError } from '@app/types/errors';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IRichText } from '@app/types/texts/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
+  nextMaltekstseksjon?: IMaltekstseksjon;
 }
 
-export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
+export const MaltekstseksjonPreview = ({ maltekstseksjon, nextMaltekstseksjon }: Props) => {
   const [, { isLoading: isUpdating }] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjon.id });
   const [texts, setTexts] = useState<IRichText[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [getText] = useLazyGetTextByIdQuery();
+  const [getTextVersions] = useLazyGetTextVersionsQuery();
   const { textIdList } = maltekstseksjon;
   const lang = useRedaktoerLanguage();
   const editorId = `${textIdList.join(':')}-${lang}-preview`;
@@ -28,12 +30,29 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   useEffect(() => {
     setError(null);
 
-    const promises = textIdList.map((textId) => getText(textId, true).unwrap());
+    const promises = textIdList.map((textId) => getTextVersions(textId, true).unwrap());
 
     Promise.all(promises)
+      .then((textVersionsList) =>
+        textVersionsList
+          .map((textVersions) =>
+            textVersions.find((v) => {
+              if (maltekstseksjon.publishedDateTime === null || nextMaltekstseksjon === undefined) {
+                return true;
+              }
+
+              if (nextMaltekstseksjon.publishedDateTime === null) {
+                return v.publishedDateTime !== null;
+              }
+
+              return v.publishedDateTime !== null && v.publishedDateTime < nextMaltekstseksjon.publishedDateTime;
+            }),
+          )
+          .filter(isNotUndefined),
+      )
       .then((textList) => setTexts(textList.filter(isRichText)))
       .catch((e) => setError('data' in e && isApiError(e.data) ? e.data.detail : e.message));
-  }, [getText, textIdList]);
+  }, [getTextVersions, maltekstseksjon.published, maltekstseksjon.publishedDateTime, nextMaltekstseksjon, textIdList]);
 
   if (error !== null) {
     return (

@@ -55,7 +55,7 @@ export const TextHistory = ({
             </ListItem>
           ) : null}
           {editors.map((editor) => (
-            <ListItem key={editor.navIdent}>
+            <ListItem key={`${editor.navIdent}-${editor.changeType}-${editor.created}`}>
               <StyledTag variant="warning" size="xsmall">
                 <PencilWritingIcon aria-hidden />
                 Endret

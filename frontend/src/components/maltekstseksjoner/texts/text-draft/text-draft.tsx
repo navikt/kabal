@@ -15,6 +15,7 @@ import {
   useUpdateRichTextMutation,
 } from '@app/redux-api/texts/mutations';
 import { RichTextTypes } from '@app/types/common-text-types';
+import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { LANGUAGES, Language, isLanguage } from '@app/types/texts/language';
 import { IDraftRichText } from '@app/types/texts/responses';
 import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
@@ -26,19 +27,19 @@ interface Props {
   setActive: (textId: string) => void;
   isDeletable: boolean;
   onDraftDeleted: () => void;
-  maltekstseksjonId: string;
+  maltekstseksjon: IMaltekstseksjon;
 }
 
-export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
+export const DraftText = ({ text, isActive, setActive, maltekstseksjon, ...rest }: Props) => {
   const [updateTextType, { isLoading: isTextTypeUpdating }] = useSetTextTypeMutation();
   const [updateTitle, { isLoading: isTitleUpdating }] = useSetTextTitleMutation();
   const [updateRichText, richTextStatus] = useUpdateRichTextMutation();
-  const [publish] = usePublishMutation({ fixedCacheKey: text.id });
+  const { id } = text;
+  const [publish] = usePublishMutation({ fixedCacheKey: id });
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
   const language = useRedaktoerLanguage();
   const [richTexts, setRichTexts] = useState<RichTexts>(text.richText);
-  const { id } = text;
   const isUpdating = useRef(false);
   const richTextRef = useRef(richTexts);
   const queryRef = useRef({ textType: text.textType });
@@ -189,6 +190,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
             isSaving={richTextStatus.isLoading || isTextTypeUpdating || isTitleUpdating}
             onPublish={onPublish}
             error={error}
+            maltekstseksjonId={maltekstseksjon.id}
             {...rest}
           />
         </>

@@ -114,6 +114,12 @@ const getMaltekstElement = (editor: PlateEditor<EditorValue>, path: Path | undef
     return undefined;
   }
 
+  if (!editor.hasPath(path)) {
+    console.warn('Path not found in editor', editor.children, path);
+
+    return undefined;
+  }
+
   const ancestors = getNodeAncestors(editor, path);
 
   for (const [node] of ancestors) {

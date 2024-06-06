@@ -4,6 +4,7 @@ import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
+import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
 import { PublishedRichText } from './published-rich-text';
 import { DraftText } from './text-draft/text-draft';
@@ -12,11 +13,12 @@ interface Props {
   textId: string;
   isActive: boolean;
   setActive: (textId: string) => void;
-  maltekstseksjonId: string;
+  maltekstseksjon: IMaltekstseksjon;
+  nextMaltekstseksjon?: IMaltekstseksjon;
   className?: string;
 }
 
-export const TextVersions = ({ textId, className, ...rest }: Props) => {
+export const TextVersions = ({ textId, className, maltekstseksjon, nextMaltekstseksjon, ...rest }: Props) => {
   const { data: versions, isLoading: versionsIsLoading, isError, error } = useGetTextVersionsQuery(textId);
 
   if (isError) {
@@ -37,7 +39,17 @@ export const TextVersions = ({ textId, className, ...rest }: Props) => {
     );
   }
 
-  const validVersions = versions.filter(isValidType);
+  const validVersions = versions.filter(isValidType).filter((v) => {
+    if (maltekstseksjon.publishedDateTime === null || nextMaltekstseksjon === undefined) {
+      return true;
+    }
+
+    if (nextMaltekstseksjon.publishedDateTime === null) {
+      return v.publishedDateTime !== null;
+    }
+
+    return v.publishedDateTime !== null && v.publishedDateTime <= nextMaltekstseksjon.publishedDateTime;
+  });
 
   const [firstVersion] = validVersions;
 
@@ -46,7 +58,14 @@ export const TextVersions = ({ textId, className, ...rest }: Props) => {
   }
 
   return (
-    <Loaded firstVersion={firstVersion} versions={validVersions} textId={textId} className={className} {...rest} />
+    <Loaded
+      firstVersion={firstVersion}
+      versions={validVersions}
+      textId={textId}
+      className={className}
+      maltekstseksjon={maltekstseksjon}
+      {...rest}
+    />
   );
 };
 
@@ -58,7 +77,7 @@ interface LoadedProps extends Props {
   versions: IRichText[];
 }
 
-const Loaded = ({ firstVersion, versions, isActive, className, ...props }: LoadedProps) => {
+const Loaded = ({ firstVersion, versions, isActive, className, maltekstseksjon, ...props }: LoadedProps) => {
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const [tabId, setTabId] = useState(firstVersion.versionId);
 
@@ -95,8 +114,9 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
       }}
       createDraftPanel={(version) => (
         <DraftText
-          key={version.versionId}
           {...props}
+          key={version.versionId}
+          maltekstseksjon={maltekstseksjon}
           isActive={isActive}
           text={version}
           isDeletable={hasMoreThanOneVersion}
@@ -105,8 +125,9 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
       )}
       createPublishedPanel={(version) => (
         <PublishedRichText
-          key={version.versionId}
           {...props}
+          key={version.versionId}
+          maltekstseksjonId={maltekstseksjon.id}
           text={version}
           onDraftCreated={setTabId}
           hasDraft={hasDraft}

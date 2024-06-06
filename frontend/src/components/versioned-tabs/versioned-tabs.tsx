@@ -8,12 +8,14 @@ interface DraftVersion {
   versionId: string;
   published: false;
   publishedDateTime: null;
+  modified: string;
 }
 
 interface PublishedVersion {
   versionId: string;
   published: boolean;
   publishedDateTime: string;
+  modified: string;
 }
 
 interface Props<D extends DraftVersion, P extends PublishedVersion> {
@@ -21,8 +23,8 @@ interface Props<D extends DraftVersion, P extends PublishedVersion> {
   versions: (D | P)[];
   selectedTabId: string | undefined;
   setSelectedTabId: (tabId: string, replace?: boolean) => void;
-  createDraftPanel: (version: D) => React.ReactNode;
-  createPublishedPanel: (version: P) => React.ReactNode;
+  createDraftPanel: (version: D, nextVersion?: D | P) => React.ReactNode;
+  createPublishedPanel: (version: P, nextVersion?: D | P) => React.ReactNode;
   className?: string;
   setRef?: (ref: HTMLDivElement | null) => void;
 }
@@ -48,20 +50,16 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
       continue;
     }
 
-    const { versionId, published, publishedDateTime } = version;
+    const { versionId, published, publishedDateTime, modified } = version;
     const isDraft = publishedDateTime === null;
 
-    const label = (
-      <TabLabel isPublished={published} isDraft={isDraft}>
-        {length - i}
-      </TabLabel>
-    );
+    const label = <TabLabel isPublished={published} isDraft={isDraft} date={publishedDateTime ?? modified} />;
 
     tabs[i] = <Tabs.Tab key={versionId} value={versionId} label={label} icon={getIcon(isDraft, published)} />;
 
     panels[i] = (
       <StyledTabPanel key={versionId} value={versionId}>
-        {isDraft ? createDraftPanel(version) : createPublishedPanel(version)}
+        {isDraft ? createDraftPanel(version, versions[i - 1]) : createPublishedPanel(version, versions[i - 1])}
       </StyledTabPanel>
     );
   }
