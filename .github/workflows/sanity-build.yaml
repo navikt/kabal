@@ -23,19 +23,20 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun install
+          
+      - name: Setup Caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{matrix.apps}}/.eslintcache
+            ${{matrix.apps}}/.tsbuildinfo
+          key: cache
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
         run: |
           cd ${{ matrix.apps }}
           bun run typecheck
-
-      - name: Setup Linting Cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{matrix.apps}}/.eslintcache
-          key: eslintcache
             
       - name: Lint ${{ matrix.apps }}
         shell: bash
