@@ -59,7 +59,6 @@ class VersionChecker {
       this.delay = 0;
     });
 
-    events.addEventListener('message', this.onVersion);
     events.addEventListener('version', this.onVersion);
 
     events.addEventListener(UPDATE_REQUEST_EVENT, this.onUpdateRequest);
