@@ -62,9 +62,20 @@ export const setupVersionRoute = () => {
     res.once('close', () => onClose('res close'));
     res.once('finish', () => onClose('res finish'));
     res.once('error', () => onClose('res error'));
+    res.once('drain', () => onClose('res drain'));
+    res.once('unpipe', () => onClose('res unpipe'));
+
     req.once('close', () => onClose('req close'));
     req.once('end', () => onClose('req end'));
     req.once('error', () => onClose('req error'));
+
+    res.socket?.once('close', () => onClose('res socket close'));
+    res.socket?.once('end', () => onClose('res socket end'));
+    res.socket?.once('error', () => onClose('res socket error'));
+
+    req.socket.once('close', () => onClose('req socket close'));
+    req.socket.once('end', () => onClose('req socket end'));
+    req.socket.once('error', () => onClose('req socket error'));
 
     res.writeHead(200, HEADERS);
     res.write('retry: 0\n');

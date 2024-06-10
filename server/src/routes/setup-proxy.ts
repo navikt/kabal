@@ -37,23 +37,11 @@ export const setupProxy = () => {
       });
     }
 
-    const target = isDeployed ? `http://${appName}` : DEV_URL;
-
-    interface PathRewriteMap {
-      [regexp: string]: string;
-    }
-
-    type PathRewriteFn = (path: string, req: IncomingMessage) => Promise<string>;
-
-    const pathRewrite: PathRewriteMap | PathRewriteFn | undefined = isDeployed
-      ? undefined
-      : async (path: string) => `/api/${appName}${path}`;
-
     router.use(
       route,
       createProxyMiddleware({
-        target,
-        pathRewrite,
+        target: isDeployed ? `http://${appName}` : DEV_URL,
+        pathRewrite: isDeployed ? undefined : async (path: string) => `/api/${appName}${path}`,
         on: {
           proxyReq: (proxyReq, req, res) => {
             if (req.headers.accept !== 'text/event-stream') {
