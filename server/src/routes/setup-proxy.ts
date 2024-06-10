@@ -46,7 +46,7 @@ export const setupProxy = () => {
     type PathRewriteFn = (path: string, req: IncomingMessage) => Promise<string>;
 
     const pathRewrite: PathRewriteMap | PathRewriteFn | undefined = isDeployed
-      ? { [`^/api/${appName}/`]: '/' }
+      ? undefined
       : async (path: string) => `/api/${appName}${path}`;
 
     router.use(
