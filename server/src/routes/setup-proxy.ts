@@ -7,42 +7,53 @@ import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { API_CLIENT_IDS } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { ensureTraceparent } from '@app/request-id';
+import { DEV_URL, isDeployed } from '@app/config/env';
 
 const log = getLogger('proxy');
 
-export const setupProxy = async () => {
-  const authClient = await getAzureADClient();
-  const router = Router();
+const router = Router();
 
+export const setupProxy = () => {
   API_CLIENT_IDS.forEach((appName) => {
     const route = `/api/${appName}`;
 
-    router.use(route, async (req, _, next) => {
-      const authHeader = req.header('Authorization');
-      const traceId = ensureTraceparent(req);
+    if (isDeployed) {
+      router.use(route, async (req, _, next) => {
+        const authHeader = req.header('Authorization');
+        const traceId = ensureTraceparent(req);
 
-      if (typeof authHeader === 'string') {
-        try {
-          const obo_access_token = await getOnBehalfOfAccessToken(authClient, authHeader, appName, traceId);
-          req.headers['authorization'] = `Bearer ${obo_access_token}`;
-          req.headers['azure-ad-token'] = authHeader;
-        } catch (error) {
-          log.warn({ msg: `Failed to prepare request with OBO token.`, error, traceId, data: { route } });
+        if (typeof authHeader === 'string') {
+          try {
+            const authClient = await getAzureADClient();
+            const obo_access_token = await getOnBehalfOfAccessToken(authClient, authHeader, appName, traceId);
+            req.headers['authorization'] = `Bearer ${obo_access_token}`;
+            req.headers['azure-ad-token'] = authHeader;
+          } catch (error) {
+            log.warn({ msg: `Failed to prepare request with OBO token.`, error, traceId, data: { route } });
+          }
         }
-      }
 
-      next();
-    });
+        next();
+      });
+    }
 
-    const proxy_target_application = appName;
+    const target = isDeployed ? `http://${appName}` : DEV_URL;
+
+    interface PathRewriteMap {
+      [regexp: string]: string;
+    }
+
+    type PathRewriteFn = (path: string, req: IncomingMessage) => Promise<string>;
+
+    const pathRewrite: PathRewriteMap | PathRewriteFn | undefined = isDeployed
+      ? { [`^/api/${appName}/`]: '/' }
+      : async (path: string) => `/api/${appName}${path}`;
 
     router.use(
       route,
       createProxyMiddleware({
-        target: `http://${appName}`,
-        pathRewrite: {
-          [`^/api/${appName}`]: '',
-        },
+        target,
+        pathRewrite,
         on: {
           proxyReq: (proxyReq, req, res) => {
             if (req.headers.accept !== 'text/event-stream') {
@@ -56,13 +67,13 @@ export const setupProxy = async () => {
             log.debug({
               msg: 'Proxying SSE connection',
               traceId,
-              data: { proxy_target_application, url, method },
+              data: { proxy_target_application: appName, url, method },
             });
 
             const onClose = (msg: string) => {
               const duration = Math.round(performance.now() - start);
 
-              log.debug({ msg, traceId, data: { proxy_target_application, url, method, duration } });
+              log.debug({ msg, traceId, data: { proxy_target_application: appName, url, method, duration } });
 
               proxyReq.destroy();
               res.destroy();
@@ -81,7 +92,7 @@ export const setupProxy = async () => {
                 msg: 'Server response is not a ServerResponse.',
                 error,
                 traceId,
-                data: { proxy_target_application, url, method },
+                data: { proxy_target_application: appName, url, method },
               });
 
               return;
@@ -110,7 +121,7 @@ export const setupProxy = async () => {
               msg: 'Failed to connect to API.',
               error,
               traceId,
-              data: { proxy_target_application, url, method },
+              data: { proxy_target_application: appName, url, method },
             });
           },
         },

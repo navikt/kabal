@@ -1,21 +1,19 @@
-import { Express } from 'express';
-import { setupDocumentRoutes } from '@app/routes/document';
 import { getLogger } from './logger';
-import { setupProxy } from './routes/setup-proxy';
-import { setupStaticRoutes } from './routes/static-routes';
-import { resetClientsAndUniqueUsersMetrics, setupVersionRoute } from './routes/version/version';
+import { resetClientsAndUniqueUsersMetrics } from './routes/version/version';
 import { EmojiIcons, sendToSlack } from './slack';
-import { serverConfig } from '@app/config/server-config';
+import { isDeployed } from '@app/config/env';
+import { getAzureADClient } from '@app/auth/get-auth-client';
+import { setIsReady } from '@app/config/config';
 
 const log = getLogger('init');
 
-export const init = async (server: Express) => {
+export const init = async () => {
   try {
-    server.use(setupVersionRoute());
-    server.use(setupDocumentRoutes());
-    server.use(await setupProxy());
-    server.use(setupStaticRoutes());
-    server.listen(serverConfig.port, () => log.info({ msg: `Listening on port ${serverConfig.port}` }));
+    if (isDeployed) {
+      await getAzureADClient();
+    }
+
+    setIsReady();
   } catch (e) {
     await resetClientsAndUniqueUsersMetrics();
 

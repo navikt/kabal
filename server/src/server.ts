@@ -9,6 +9,12 @@ import { getLogger } from './logger';
 import { processErrors } from './process-errors';
 import { metricsMiddleware } from './prometheus/middleware';
 import { EmojiIcons, sendToSlack } from './slack';
+import { getIsReady } from './config/config';
+import { setupVersionRoute } from '@app/routes/version/version';
+import { setupDocumentRoutes } from '@app/routes/document';
+import { setupProxy } from '@app/routes/setup-proxy';
+import { setupStaticRoutes } from '@app/routes/static-routes';
+import { serverConfig } from '@app/config/server-config';
 
 processErrors();
 
@@ -65,6 +71,13 @@ server.use(
 );
 
 server.get('/isAlive', (_, res) => res.status(200).send('Alive'));
-server.get('/isReady', (_, res) => res.status(200).send('Ready'));
+server.get('/isReady', (_, res) => (getIsReady() ? res.status(200).send('Ready') : res.status(418).send('Not ready')));
 
-init(server);
+server.use(setupVersionRoute());
+server.use(setupDocumentRoutes());
+server.use(setupProxy());
+server.use(setupStaticRoutes());
+
+server.listen(serverConfig.port, () => log.info({ msg: `Listening on port ${serverConfig.port}` }));
+
+init();

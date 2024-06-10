@@ -5,7 +5,7 @@ const log = getLogger('env-var');
 const optionalEnvString = (name: string): string | undefined => {
   const envVariable = process.env[name];
 
-  if (typeof envVariable === 'string' && envVariable.length !== 0) {
+  if (typeof envVariable === 'string') {
     return envVariable;
   }
 
@@ -19,7 +19,7 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
     return envVariable;
   }
 
-  if (typeof defaultValue === 'string' && defaultValue.length !== 0) {
+  if (defaultValue !== undefined) {
     return defaultValue;
   }
 
@@ -32,6 +32,10 @@ export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
 
   try {
     if (json.length === 0) {
+      if (defaultValue !== undefined) {
+        return defaultValue;
+      }
+
       throw new Error('Empty string');
     }
 
@@ -44,20 +48,6 @@ export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
     }
     process.exit(1);
   }
-};
-
-export const requiredEnvUrl = (name: string, defaultValue?: string): string => {
-  const envString = requiredEnvString(name, defaultValue);
-
-  if (envString.startsWith('http://')) {
-    return envString.replace('http://', 'https://');
-  }
-
-  if (envString.startsWith('https://')) {
-    return envString;
-  }
-  log.error({ msg: `Environment variable '${name}' is not a URL. Value: '${envString}'.` });
-  process.exit(1);
 };
 
 export const requiredEnvNumber = (name: string, defaultValue?: number): number => {
