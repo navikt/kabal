@@ -3,7 +3,7 @@ import { JWK } from 'jose';
 import { requiredEnvJson, requiredEnvString, requiredEnvUrl } from './env-var';
 
 export const slack = {
-  url: requiredEnvUrl('SLACK_URL'),
+  url: requiredEnvUrl('SLACK_URL', ''),
   channel: '#klage-notifications',
   messagePrefix: `${requiredEnvString('NAIS_APP_NAME', 'kabal-frontend').toUpperCase()} frontend NodeJS -`,
 };

@@ -1,4 +1,5 @@
 import { Response, Router } from 'express';
+import { sleep } from 'bun';
 import { VERSION } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { ensureTraceparent } from '@app/request-id';
@@ -37,6 +38,8 @@ export const setupVersionRoute = () => {
 
     const traceId = ensureTraceparent(req);
 
+    log.debug({ msg: 'Version connection opened', traceId });
+
     const stopTimer = histogram.startTimer();
 
     const stopTimerIndex = stopTimerList.push(stopTimer) - 1;
@@ -45,8 +48,8 @@ export const setupVersionRoute = () => {
 
     const endUserSession = await startUserSession(req, traceId);
 
-    res.once('close', () => {
-      log.debug({ msg: 'Version connection closed', traceId });
+    const onClose = (event: string) => {
+      log.debug({ msg: `Version connection closed (${event})`, traceId });
 
       if (isOpen) {
         isOpen = false;
@@ -54,13 +57,25 @@ export const setupVersionRoute = () => {
         stopTimer();
         endUserSession();
       }
-    });
+    };
+
+    res.once('close', () => onClose('res close'));
+    res.once('finish', () => onClose('res finish'));
+    res.once('error', () => onClose('res error'));
+    req.once('close', () => onClose('req close'));
+    req.once('end', () => onClose('req end'));
+    req.once('error', () => onClose('req error'));
 
     res.writeHead(200, HEADERS);
     res.write('retry: 0\n');
     res.write(`data: ${VERSION}\n\n`); // TODO: Remove this line after all clients are updated to handle the version event.
     writeEvent(res, EventNames.SERVER_VERSION, VERSION);
     writeEvent(res, EventNames.UPDATE_REQUEST, getUpdateRequest(req, traceId));
+
+    while (isOpen) {
+      await sleep(1_000);
+      writeEvent(res, EventNames.HEARTBEAT);
+    }
   });
 
   return router;
@@ -69,9 +84,10 @@ export const setupVersionRoute = () => {
 enum EventNames {
   SERVER_VERSION = 'version',
   UPDATE_REQUEST = 'update-request',
+  HEARTBEAT = 'heartbeat',
 }
 
-const writeEvent = (res: Response, event: EventNames, data: string) => {
+const writeEvent = (res: Response, event: EventNames, data: string = '') => {
   res.write(`event: ${event}\n`);
   res.write(`data: ${data}\n\n`);
 };
