@@ -4,10 +4,13 @@ import { Role } from '@app/types/bruker';
 
 type LandingPagePath = [string, string] | null;
 
+const OPPGAVESTYRING_ROLES = [Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL];
+const MINE_OPPGAVER_ROLES = [Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL];
+
 export const useLandingPagePath = (): LandingPagePath => {
   const { user } = useContext(StaticDataContext);
 
-  if (user.roller.some((r) => [Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL].includes(r))) {
+  if (user.roller.some((r) => OPPGAVESTYRING_ROLES.includes(r))) {
     return ['/oppgavestyring', 'Oppgavestyring'];
   }
 
@@ -15,7 +18,7 @@ export const useLandingPagePath = (): LandingPagePath => {
     return ['/sok', 'Søk'];
   }
 
-  if (user.roller.some((r) => [Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL].includes(r))) {
+  if (user.roller.some((r) => MINE_OPPGAVER_ROLES.includes(r))) {
     return ['/mineoppgaver', 'Mine oppgaver'];
   }
 
@@ -29,10 +32,6 @@ export const useLandingPagePath = (): LandingPagePath => {
 
   if (user.roller.includes(Role.KABAL_MALTEKSTREDIGERING)) {
     return ['/maltekstseksjoner', 'Maltekstseksjoner'];
-  }
-
-  if (user.roller.includes(Role.KABAL_ADMIN)) {
-    return ['/admin', 'Admin'];
   }
 
   return null;
