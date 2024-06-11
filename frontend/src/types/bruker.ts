@@ -43,10 +43,31 @@ export enum Role {
   KABAL_TILGANGSSTYRING_EGEN_ENHET = 'KABAL_TILGANGSSTYRING_EGEN_ENHET',
   KABAL_FAGTEKSTREDIGERING = 'KABAL_FAGTEKSTREDIGERING',
   KABAL_MALTEKSTREDIGERING = 'KABAL_MALTEKSTREDIGERING',
-  KABAL_ADMIN = 'KABAL_ADMIN',
   KABAL_ROL = 'KABAL_ROL',
   KABAL_KROL = 'KABAL_KROL',
+  KABAL_ADMIN = 'KABAL_ADMIN',
+  STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
+  FORTROLIG = 'FORTROLIG',
+  EGEN_ANSATT = 'EGEN_ANSATT',
 }
+
+export const ROLE_NAMES: Record<Role, string> = {
+  [Role.KABAL_SAKSBEHANDLING]: 'Kabal saksbehandling',
+  [Role.KABAL_INNSYN_EGEN_ENHET]: 'Kabal innsyn egen enhet',
+  [Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]: 'Kabal oppgavestyring alle enheter',
+  [Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]: 'Kabal tilgangsstyring egen enhet',
+  [Role.KABAL_FAGTEKSTREDIGERING]: 'Kabal fagtekstredigering',
+  [Role.KABAL_MALTEKSTREDIGERING]: 'Kabal maltekstredigering',
+  [Role.KABAL_ROL]: 'Kabal ROL',
+  [Role.KABAL_KROL]: 'Kabal KROL',
+  [Role.KABAL_ADMIN]: 'Kabal admin',
+  [Role.STRENGT_FORTROLIG]: 'Strengt fortrolig',
+  [Role.FORTROLIG]: 'Fortrolig',
+  [Role.EGEN_ANSATT]: 'Egen ansatt',
+};
+
+const ALL_ROLES = Object.values(Role);
+export const ALL_NORMAL_ROLES = ALL_ROLES.filter((r) => r !== Role.KABAL_ADMIN);
 
 export interface ISetCustomInfoParams {
   key: keyof Omit<ICustomUserInfo, 'anonymous'>;

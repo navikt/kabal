@@ -24,9 +24,11 @@ export const Nav = () => (
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon /> Oppgaver
       </NavItem>
+
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <TasklistIcon /> Mine Oppgaver
       </NavItem>
+
       <NavItem
         to="/sok"
         testId="search-nav-link"
@@ -34,6 +36,7 @@ export const Nav = () => (
       >
         <MagnifyingGlassIcon /> Søk på person
       </NavItem>
+
       <NavItem
         to="/oppgavestyring"
         testId="oppgavestyring-nav-link"
