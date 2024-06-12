@@ -47,7 +47,7 @@ export const LandingPage = () => {
         </BodyShort>
         <RoleList title="Roller brukeren din har nå" roles={user.roller} variant="info-moderate" />
         <RoleList
-          title="Følgende roller brukes av Kabal"
+          title="Andre roller Kabal bruker"
           description={INSTRUCTION}
           roles={ALL_PUBLIC_ROLES.filter((r) => !user.roller.includes(r))}
           variant="neutral-moderate"
