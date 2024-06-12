@@ -1,11 +1,12 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { RoleList } from '@app/components/role-list/role-list';
 import { ENVIRONMENT } from '@app/environment';
 import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
+import { pushEvent } from '@app/observability';
 import { PageWrapper } from '@app/pages/page-wrapper';
 import { ALL_PUBLIC_ROLES } from '@app/types/bruker';
 
@@ -17,7 +18,17 @@ export const LandingPage = () => {
   const { user } = useContext(StaticDataContext);
   const result = useLandingPagePath();
 
-  if (result !== null) {
+  const hasResult = result !== null;
+
+  useEffect(() => {
+    if (!hasResult) {
+      pushEvent('landing-page', {
+        userRoles: user.roller.toSorted().join(', '),
+      });
+    }
+  }, [hasResult, user.roller]);
+
+  if (hasResult) {
     const [path] = result;
 
     return <Navigate replace to={path} />;

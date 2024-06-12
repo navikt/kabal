@@ -1,9 +1,10 @@
 import { BodyShort, Heading, Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { RoleList } from '@app/components/role-list/role-list';
 import { ENVIRONMENT } from '@app/environment';
+import { pushEvent } from '@app/observability';
 import { PageWrapper } from '@app/pages/page-wrapper';
 import { ALL_PUBLIC_ROLES, Role } from '@app/types/bruker';
 
@@ -17,6 +18,14 @@ const INSTRUCTION = ENVIRONMENT.isProduction
 
 export const NoAccessPage = ({ requiredRoles }: Props) => {
   const { user } = useContext(StaticDataContext);
+
+  useEffect(() => {
+    pushEvent('no-access-page', {
+      userRoles: user.roller.toSorted().join(', '),
+      requiredRoles: requiredRoles.toSorted().join(', '),
+      path: window.location.pathname,
+    });
+  }, [requiredRoles, user.roller]);
 
   return (
     <PageWrapper>
