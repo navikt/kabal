@@ -4,7 +4,6 @@ import { setContextVars } from '@app/middleware/set-context-vars';
 import { traceIdAndParentToContext } from '@app/middleware/request-id';
 import { setupDocumentRoutes } from '@app/routes/document';
 import { setupProxyRoutes } from '@app/routes/setup-proxy';
-import { setupStaticRoutes } from '@app/routes/static-routes';
 import { prometheus } from '@hono/prometheus';
 import { Hono } from 'hono';
 import { createServer } from 'node:http2';
@@ -19,6 +18,8 @@ import { setProxyVersionHeader } from '@app/middleware/proxy-version-header';
 import { proxyRegister } from '@app/prometheus/types';
 import { corsMiddleware } from '@app/middleware/cors';
 import { timing } from 'hono/timing';
+import { serveStatic } from '@app/middleware/serve-assets';
+import { serveIndex } from '@app/middleware/serve-index';
 
 processErrors();
 
@@ -52,7 +53,11 @@ server.use(httpLoggingMiddleware);
 setupVersionRoute(server);
 setupDocumentRoutes(server);
 setupProxyRoutes(server);
-setupStaticRoutes(server);
+
+// Static file routes.
+server.get('/', serveIndex);
+server.get('/assets/*', serveStatic);
+server.get('*', serveIndex);
 
 // Set up error handling.
 server.onError(async (error, context) => {
