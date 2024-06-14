@@ -4,7 +4,7 @@
     "description": "Kabal - Klage- og ankebehandling",
     "type": "module",
     "scripts": {
-        "start": "vite",
+        "start": "vite & tsc --watch",
         "build": "vite build",
         "build:bun": "bun build --entrypoints ./src/index.tsx --outdir ./dist --target browser",
         "typecheck": "tsc",
