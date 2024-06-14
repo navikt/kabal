@@ -24,13 +24,13 @@ jobs:
           cd ${{ matrix.apps }}
           bun install
           
-      - name: Setup Caches
-        uses: actions/cache@v3
+      - name: Restore caches for ${{ matrix.apps }}
+        uses: actions/cache/restore@v3
         with:
           path: |
             ${{matrix.apps}}/.eslintcache
             ${{matrix.apps}}/.tsbuildinfo
-          key: cache
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps), format('{0}/.eslintrc.cjs', matrix.apps), format('{0}/eslint.config.js', matrix.apps)) }}
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
@@ -49,3 +49,12 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun test
+
+      - name: Save caches for ${{ matrix.apps }}
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: |
+            ${{matrix.apps}}/.eslintcache
+            ${{matrix.apps}}/.tsbuildinfo
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps), format('{0}/.eslintrc.cjs', matrix.apps), format('{0}/eslint.config.js', matrix.apps)) }}
