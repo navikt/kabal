@@ -84,7 +84,9 @@ export const setupVersionRoute = (server: Hono) => {
 
       log.debug({ msg: `Version SSE request ${event}`, traceId, data: { sse: true, duration: getDuration(start) } });
 
-      return text('Version SSE request failed', 500);
+      if (event === 'failed') {
+        return text('Version SSE request failed', 500);
+      }
     }
   });
 };
