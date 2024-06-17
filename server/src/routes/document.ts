@@ -148,13 +148,13 @@ const getMetadata = async <T extends Metadata>(url: string, context: Context): P
 
   const metadataReqStart = performance.now();
 
-  const response = await fetch(url, { method: 'GET', headers });
+  const response = await fetch(url, { method: 'GET', headers, redirect: 'manual' });
 
   setMetric(context, 'metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
 
   log.debug({ msg: 'Metadata response', data: { status: response.status, url } });
 
-  if (!response.ok) {
+  if (response.status < 200 || response.status >= 400) {
     log.warn({ msg: 'Failed to fetch metadata', data: { status: response.status, url } });
 
     return null;
