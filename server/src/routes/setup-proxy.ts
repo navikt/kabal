@@ -167,7 +167,7 @@ export const setupProxyRoutes = (server: Hono) => {
             data: { ...logData, duration: getDuration(proxyReqStart) },
           });
 
-          return;
+          return context.text('Proxy request aborted', 500);
         }
 
         log.error({
