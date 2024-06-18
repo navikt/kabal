@@ -81,7 +81,7 @@ export const setupProxyRoutes = (server: Hono) => {
       const proxyReqStart = performance.now();
 
       try {
-        const proxyRes = await fetch(proxyReq, { signal: abortController.signal, redirect: 'manual' });
+        const proxyRes = await fetch(proxyReq, { signal: abortController.signal });
 
         setMetric(context, 'proxy_target_response_time', getDuration(proxyReqStart), appName);
 
