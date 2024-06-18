@@ -1,12 +1,9 @@
 import fs from 'fs';
+import { IncomingHttpHeaders } from 'http';
 import path from 'path';
-import { isDeployed } from '@app/config/env';
-import { getLogger } from '@app/logger';
-import { Context, Hono } from 'hono';
-import { prepareRequestHeaders } from '@app/helpers/prepare-request-headers';
-import { oboTokenMiddleware } from '@app/middleware/obo-token';
-import { setMetric } from 'hono/timing';
-import { getDuration } from '@app/helpers/duration';
+import { Router } from 'express';
+
+const router = Router();
 
 interface IBaseMetadata {
   title: string;
@@ -31,134 +28,135 @@ interface ICombinedMetadata extends IBaseMetadata {
 
 type Metadata = IArchivedMetadata | INewMetadata | ICombinedMetadata;
 
-const log = getLogger('document-routes');
-
-export const setupDocumentRoutes = (server: Hono) => {
+export const setupDocumentRoutes = () => {
   const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), 'utf8');
 
-  ['/arkivert-dokument/*', '/nytt-dokument/*', '/vedleggsoversikt/*', '/kombinert-dokument/*'].forEach((route) => {
-    server.use(route, oboTokenMiddleware('kabal-api', route));
-  });
-
-  const baseUrl = isDeployed ? 'http://kabal-api' : 'https://kabal-api.intern.dev.nav.no';
-
-  server.get('/arkivert-dokument/:journalpostId/:dokumentInfoId', async (context) => {
-    const { journalpostId, dokumentInfoId } = context.req.param();
+  router.get('/arkivert-dokument/:journalpostId/:dokumentInfoId', async (req, res) => {
+    const { journalpostId, dokumentInfoId } = req.params;
 
     if (!isPlainText(journalpostId) || !isPlainText(dokumentInfoId)) {
-      return context.text('Invalid id', 400);
+      return res.status(400).send('Invalid id');
     }
 
     const metadataResponse = await getMetadata<IArchivedMetadata>(
-      `${baseUrl}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`,
-      context,
+      `http://kabal-frontend/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`,
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_ARCHIVED_METADATA;
 
-    const queryAndHash = getQueryAndHash(context);
-    const url = `${baseUrl}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${queryAndHash}`;
+    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const url = `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getJournalfoertDocumentDocumentId(journalpostId, dokumentInfoId)]);
 
-    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+    const html = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    return context.html(templateResult);
+    res.send(html);
   });
 
-  server.get('/nytt-dokument/:behandlingId/:documentId', async (context) => {
-    const { behandlingId, documentId } = context.req.param();
+  router.get('/nytt-dokument/:behandlingId/:documentId', async (req, res) => {
+    const { behandlingId, documentId } = req.params;
 
     if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
-      return context.text('Invalid id', 400);
+      return res.status(400).send('Invalid id');
     }
 
     const metadataResponse = await getMetadata<INewMetadata>(
-      `${baseUrl}/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
-      context,
+      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-    const queryAndHash = getQueryAndHash(context);
-    const url = `${baseUrl}/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${queryAndHash}`;
+    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
 
-    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+    const html = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    return context.html(templateResult);
+    res.send(html);
   });
 
-  server.get('/vedleggsoversikt/:behandlingId/:documentId', async (context) => {
-    const { behandlingId, documentId } = context.req.param();
+  router.get('/vedleggsoversikt/:behandlingId/:documentId', async (req, res) => {
+    const { behandlingId, documentId } = req.params;
 
     if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
-      return context.text('Invalid id', 400);
+      return res.status(400).send('Invalid id');
     }
 
     const metadataResponse = await getMetadata<INewMetadata>(
-      `${baseUrl}/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt`,
-      context,
+      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt`,
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-    const queryAndHash = getQueryAndHash(context);
-    const url = `${baseUrl}/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${queryAndHash}`;
+    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getAttachmentsOverviewTabId(documentId)]);
 
-    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+    const html = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    return context.html(templateResult);
+    res.send(html);
   });
 
-  server.get('/kombinert-dokument/:id', async (context) => {
-    const { id } = context.req.param();
+  router.get('/kombinert-dokument/:id', async (req, res) => {
+    const { id } = req.params;
 
     if (!isPlainText(id)) {
-      return context.text('Invalid id', 400);
+      return res.status(400).send('Invalid id');
     }
 
     const metadataResponse = await getMetadata<ICombinedMetadata>(
-      `${baseUrl}/journalposter/mergedocuments/${id}`,
-      context,
+      `http://kabal-frontend/api/kabal-api/journalposter/mergedocuments/${id}`,
+      req.headers,
     );
     const metadata = metadataResponse ?? DEFAULT_COMBINED_METADATA;
 
-    const queryAndHash = getQueryAndHash(context);
-    const url = `${baseUrl}/journalposter/mergedocuments/${id}/pdf${queryAndHash}`;
+    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const url = `/api/kabal-api/journalposter/mergedocuments/${id}/pdf${queryAndHash}`;
     const combinedDocumentId = getMergedDocumentDocumentIdId(id);
     const documentIdList = JSON.stringify([
       combinedDocumentId,
       ...metadata.archivedDocuments.map((d) => getJournalfoertDocumentDocumentId(d.journalpostId, d.dokumentInfoId)),
     ]);
 
-    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+    const html = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    return context.html(templateResult);
+    res.send(html);
   });
+
+  return router;
 };
 
-const getMetadata = async <T extends Metadata>(url: string, context: Context): Promise<T | null> => {
-  const headers = prepareRequestHeaders(context, 'kabal-api');
+const getMetadata = async <T extends Metadata>(
+  url: string,
+  incomingHeaders: IncomingHttpHeaders,
+): Promise<T | null> => {
+  const headers = new Headers();
 
-  const metadataReqStart = performance.now();
+  for (const [key, value] of Object.entries(incomingHeaders)) {
+    if (typeof value === 'string') {
+      headers.append(key, value);
+    }
 
-  const response = await fetch(url, { method: 'GET', headers });
+    if (Array.isArray(value)) {
+      value.forEach((v) => headers.append(key, v));
+    }
 
-  setMetric(context, 'metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
-
-  log.debug({ msg: 'Metadata response', data: { status: response.status, url } });
-
-  if (!response.ok) {
-    log.warn({ msg: 'Failed to fetch metadata', data: { status: response.status, url } });
-
-    return null;
+    if (value === undefined) {
+      headers.append(key, '');
+    }
   }
+
+  headers.set('Accept', 'application/json');
+
+  const response = await fetch(url, { headers });
 
   const json = await response.json();
 
@@ -226,8 +224,15 @@ const DEFAULT_COMBINED_METADATA: ICombinedMetadata = {
   title: 'Ukjent dokument',
 };
 
-const getQueryAndHash = (context: Context): string => {
-  const { version, toolbar, view, zoom } = context.req.query();
+enum QueryKeyEnum {
+  VERSION = 'version',
+  TOOLBAR = 'toolbar',
+  VIEW = 'view',
+  ZOOM = 'zoom',
+}
+
+const getQueryAndHash = (query: Record<string, string | undefined>): string => {
+  const { version, toolbar, view, zoom } = query;
 
   const versionQuery = version !== undefined && isPlainText(version) ? `?version=${version}` : '';
 
@@ -259,3 +264,33 @@ const getMergedDocumentDocumentIdId = (mergedDocumentId: string) => `combined-do
 const PLAIN_TEXT_REGEX = /^[\w-]{1,36}$/;
 
 const isPlainText = (id: string) => PLAIN_TEXT_REGEX.test(id);
+
+const queryToRecord = (record: unknown): Record<QueryKeyEnum, string | undefined> => {
+  if (record === null || typeof record !== 'object') {
+    return {
+      [QueryKeyEnum.VERSION]: undefined,
+      [QueryKeyEnum.TOOLBAR]: undefined,
+      [QueryKeyEnum.VIEW]: undefined,
+      [QueryKeyEnum.ZOOM]: undefined,
+    };
+  }
+
+  return {
+    [QueryKeyEnum.VERSION]: QueryKeyEnum.VERSION in record ? getQueryValue(record[QueryKeyEnum.VERSION]) : undefined,
+    [QueryKeyEnum.TOOLBAR]: QueryKeyEnum.TOOLBAR in record ? getQueryValue(record[QueryKeyEnum.TOOLBAR]) : undefined,
+    [QueryKeyEnum.VIEW]: QueryKeyEnum.VIEW in record ? getQueryValue(record[QueryKeyEnum.VIEW]) : undefined,
+    [QueryKeyEnum.ZOOM]: QueryKeyEnum.ZOOM in record ? getQueryValue(record[QueryKeyEnum.ZOOM]) : undefined,
+  };
+};
+
+const getQueryValue = (value: unknown): string | undefined => {
+  if (typeof value === 'undefined') {
+    return undefined;
+  }
+
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  return isPlainText(value) ? value : undefined;
+};

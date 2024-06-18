@@ -1,22 +1,16 @@
-import { BaseClient, Issuer } from 'openid-client';
+import { Issuer } from 'openid-client';
 import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@app/config/config';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('auth');
 
-let azureADClient: BaseClient | null = null;
-
 export const getAzureADClient = async () => {
-  if (azureADClient !== null) {
-    return azureADClient;
-  }
-
   try {
     const issuer = await Issuer.discover(AZURE_APP_WELL_KNOWN_URL);
 
     const keys = [AZURE_APP_JWK];
 
-    azureADClient = new issuer.Client(
+    return new issuer.Client(
       {
         client_id: AZURE_APP_CLIENT_ID,
         token_endpoint_auth_method: 'private_key_jwt',
@@ -24,8 +18,6 @@ export const getAzureADClient = async () => {
       },
       { keys },
     );
-
-    return azureADClient;
   } catch (error) {
     log.error({ msg: 'Failed to get Azure AD client', error });
     throw error;

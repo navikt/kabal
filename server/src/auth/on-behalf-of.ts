@@ -7,11 +7,11 @@ const log = getLogger('auth');
 
 export const getOnBehalfOfAccessToken = async (
   authClient: Client,
-  accessToken: string,
+  authHeader: string,
   appName: string,
   traceId: string,
 ): Promise<string> => {
-  const cacheKey = `${accessToken}-${appName}`;
+  const cacheKey = `${authHeader}-${appName}`;
 
   const cacheHit = oboCache.get(cacheKey);
 
@@ -40,7 +40,7 @@ export const getOnBehalfOfAccessToken = async (
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
       client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
       requested_token_use: 'on_behalf_of',
-      assertion: accessToken,
+      assertion: getSubjectAccessToken(authHeader),
     };
 
     const { access_token: obo_access_token, expires_at } = await authClient.grant(params, {
@@ -63,4 +63,14 @@ export const getOnBehalfOfAccessToken = async (
 
     throw error;
   }
+};
+
+const getSubjectAccessToken = (authHeader: string) => {
+  const parts = authHeader.split(' ');
+
+  if (parts.length !== 2) {
+    throw new Error('Error while splitting bearer token');
+  }
+
+  return parts[1];
 };
