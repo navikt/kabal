@@ -1,18 +1,26 @@
 import fs from 'fs';
-import { PROXY_VERSION, frontendDistDirectoryPath } from '@app/config/config';
+import express, { Router, static as expressStatic } from 'express';
+import { VERSION, frontendDistDirectoryPath } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
-import { serveStatic } from 'hono/bun';
-import { Hono } from 'hono';
+
+const router = Router();
 
 const indexFile = fs
   .readFileSync(`${frontendDistDirectoryPath}/index.html`, 'utf8')
   .replace('{{ENVIRONMENT}}', ENVIRONMENT)
-  .replace('{{VERSION}}', PROXY_VERSION);
+  .replace('{{VERSION}}', VERSION);
 
-export const setupStaticRoutes = (server: Hono) => {
-  server.get('/', ({ html }) => html(indexFile, 200));
+const sendIndexFile = (_: express.Request, res: express.Response) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.status(200).send(indexFile);
+};
 
-  server.get('/assets/*', serveStatic({ root: '../frontend/dist' }));
+export const setupStaticRoutes = () => {
+  router.get('/', sendIndexFile);
 
-  server.get('*', ({ html }) => html(indexFile, 200));
+  router.use(expressStatic(frontendDistDirectoryPath, { index: false }));
+
+  router.get('*', sendIndexFile);
+
+  return router;
 };

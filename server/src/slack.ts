@@ -1,5 +1,5 @@
-import { requiredEnvString } from '@app/config/env-var';
-import { ENVIRONMENT, isDeployed, isLocal } from './config/env';
+import { slack } from './config/config';
+import { ENVIRONMENT, isDeployed } from './config/env';
 import { getLogger } from './logger';
 
 const log = getLogger('slack');
@@ -9,9 +9,7 @@ export enum EmojiIcons {
   Scream = ':scream:',
 }
 
-const url = requiredEnvString('SLACK_URL', '');
-const channel = '#klage-notifications';
-const messagePrefix = `${requiredEnvString('NAIS_APP_NAME', 'kabal-frontend').toUpperCase()} frontend NodeJS -`;
+const { url, channel, messagePrefix } = slack;
 const isConfigured = typeof url === 'string' && url.length !== 0;
 
 export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
@@ -26,12 +24,6 @@ export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
     text,
     icon_emoji,
   });
-
-  if (isLocal) {
-    log.info({ msg: `Sending message to Slack: ${text}` });
-
-    return;
-  }
 
   return fetch(url, {
     method: 'POST',

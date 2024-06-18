@@ -1,8 +1,9 @@
+import { Request } from 'express';
 import { Gauge, LabelValues } from 'prom-client';
-import { PROXY_VERSION, START_TIME } from '@app/config/config';
+import { START_TIME, VERSION } from '@app/config/config';
 import { getLogger } from '@app/logger';
-import { proxyRegister } from '@app/prometheus/types';
-import { Context } from 'hono';
+import { registers } from '@app/prometheus/types';
+import { getClientVersion } from '@app/routes/version/get-client-version';
 
 const log = getLogger('active-clients');
 
@@ -22,19 +23,8 @@ export const uniqueUsersGauge = new Gauge({
   name: 'active_users',
   help: 'Number of active unique users. All timestamps are Unix timestamps in milliseconds (UTC). "start_time" is when the session started. "app_start_time" is when the app started.',
   labelNames,
-  registers: [proxyRegister],
+  registers,
 });
-
-type StopTimerFn = () => void;
-export const stopTimerList: StopTimerFn[] = [];
-
-export const resetClientsAndUniqueUsersMetrics = async () => {
-  stopTimerList.forEach((stopTimer) => stopTimer());
-  uniqueUsersGauge.reset();
-
-  // Wait for metrics to be collected.
-  return new Promise<void>((resolve) => setTimeout(resolve, 2000));
-};
 
 interface TokenPayload {
   aud: string;
@@ -60,18 +50,14 @@ interface TokenPayload {
 }
 
 /** Parses the user ID from the JWT. */
-export const startUserSession = (context: Context): (() => void) => {
-  const { accessToken, traceId } = context.var;
-
-  if (accessToken === undefined) {
+export const startUserSession = async (req: Request, traceId: string): Promise<() => void> => {
+  if (req.headers.authorization === undefined) {
     return NOOP;
   }
 
-  const [, payload] = accessToken.split('.');
+  const [, payload] = req.headers.authorization.split('.');
 
   if (payload === undefined) {
-    log.warn({ msg: 'Token has no payload', traceId });
-
     return NOOP;
   }
 
@@ -80,7 +66,7 @@ export const startUserSession = (context: Context): (() => void) => {
   try {
     const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
 
-    return start(nav_ident, context);
+    return start(nav_ident, getClientVersion(req), traceId, req.hostname);
   } catch (error) {
     log.warn({ msg: 'Failed to parse NAV-ident from token', error, traceId });
 
@@ -92,15 +78,15 @@ const NOOP = () => undefined;
 
 type EndFn = () => void;
 
-const start = (nav_ident: string, context: Context): EndFn => {
+const start = (nav_ident: string, clientVersion: string | undefined, trace_id: string, domain: string): EndFn => {
   const labels: LabelValues<LabelNames> = {
     nav_ident,
-    client_version: context.var.clientVersion ?? 'UNKNOWN',
-    up_to_date_client: context.var.clientVersion === PROXY_VERSION ? 'true' : 'false',
+    client_version: clientVersion?.substring(0, 7) ?? 'UNKNOWN',
+    up_to_date_client: clientVersion === VERSION ? 'true' : 'false',
     start_time: Date.now().toString(10),
     app_start_time: START_TIME,
-    trace_id: context.var.traceId,
-    domain: context.req.header('host') ?? 'UNKNOWN',
+    trace_id,
+    domain,
   };
 
   uniqueUsersGauge.set(labels, 1);
