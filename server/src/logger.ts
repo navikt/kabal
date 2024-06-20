@@ -22,21 +22,23 @@ export interface AnyObject {
 
 type LogArgs =
   | {
-      msg?: string;
-      traceId?: string;
-      client_version?: string;
-      tab_id?: string;
-      error: Error | unknown;
-      data?: SerializableValue;
-    }
+    msg?: string;
+    trace_id?: string;
+    span_id?: string;
+    client_version?: string;
+    tab_id?: string;
+    error: Error | unknown;
+    data?: SerializableValue;
+  }
   | {
-      msg: string;
-      traceId?: string;
-      client_version?: string;
-      tab_id?: string;
-      error?: Error | unknown;
-      data?: SerializableValue;
-    };
+    msg: string;
+    trace_id?: string;
+    span_id?: string;
+    client_version?: string;
+    tab_id?: string;
+    error?: Error | unknown;
+    data?: SerializableValue;
+  };
 
 interface Logger {
   debug: (args: LogArgs) => void;
@@ -47,7 +49,8 @@ interface Logger {
 
 interface Log extends AnyObject {
   '@timestamp': string;
-  traceId?: string;
+  trace_id?: string;
+  span_id?: string;
   proxy_version: string;
   client_version?: string;
   module: string;
@@ -76,16 +79,21 @@ export const getLogger = (module: string): Logger => {
   return logger;
 };
 
-const getLog = (module: string, level: Level, { msg, traceId, client_version, tab_id, error, data }: LogArgs) => {
+const getLog = (
+  module: string,
+  level: Level,
+  { msg, trace_id, span_id, client_version, tab_id, error, data }: LogArgs,
+) => {
   const log: Log = {
     ...(typeof data === 'object' && data !== null && !Array.isArray(data) ? data : { data }),
     level,
     '@timestamp': new Date().toISOString(),
     proxy_version: VERSION,
     client_version,
-    tab_id,
     module,
-    traceId,
+    tab_id,
+    trace_id,
+    span_id,
   };
 
   if (error instanceof Error) {

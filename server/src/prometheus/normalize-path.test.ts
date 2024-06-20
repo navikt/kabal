@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { normalizePath } from './normalize-path';
+import { normalizePath } from '@app/prometheus/normalize-path';
 
 describe('normalizePath', () => {
   it('should normalize path', () => {
