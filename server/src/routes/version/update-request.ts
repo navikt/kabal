@@ -1,7 +1,6 @@
-import { Request } from 'express';
-import { VERSION } from '@app/config/config';
+import { PROXY_VERSION } from '@app/config/config';
 import { getLogger } from '@app/logger';
-import { getClientVersion } from '@app/routes/version/get-client-version';
+import { Context } from 'hono';
 
 const log = getLogger('update-request');
 
@@ -11,26 +10,26 @@ const log = getLogger('update-request');
 const UPDATE_REQUIRED_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-10T13:37:00';
 const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-11T10:00:00';
 
-if (UPDATE_REQUIRED_THRESHOLD > VERSION) {
+if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION) {
   log.error({
     msg: 'Required threshold version is greater than the server version.',
     data: { UPDATE_REQUIRED_THRESHOLD, UPDATE_OPTIONAL_THRESHOLD },
   });
 }
 
-if (UPDATE_OPTIONAL_THRESHOLD > VERSION) {
+if (UPDATE_OPTIONAL_THRESHOLD > PROXY_VERSION) {
   log.error({
     msg: 'Optional threshold version is greater than the server version.',
     data: { UPDATE_REQUIRED_THRESHOLD, UPDATE_OPTIONAL_THRESHOLD },
   });
 }
 
-if (UPDATE_REQUIRED_THRESHOLD > VERSION || UPDATE_OPTIONAL_THRESHOLD > VERSION) {
+if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION || UPDATE_OPTIONAL_THRESHOLD > PROXY_VERSION) {
   process.exit(1);
 }
 
-export const getUpdateRequest = (req: Request, traceId: string): UpdateRequest => {
-  const clientVersion = getClientVersion(req);
+export const getUpdateRequest = (context: Context): UpdateRequest => {
+  const { clientVersion, traceId } = context.var;
 
   // If the client version is not provided, the client must update.
   if (clientVersion === undefined) {

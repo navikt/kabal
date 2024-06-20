@@ -1,9 +1,12 @@
 import fs from 'fs';
-import { IncomingHttpHeaders } from 'http';
 import path from 'path';
-import { Router } from 'express';
-
-const router = Router();
+import { getLogger } from '@app/logger';
+import { Context, Hono } from 'hono';
+import { prepareRequestHeaders } from '@app/helpers/prepare-request-headers';
+import { oboTokenMiddleware } from '@app/middleware/obo-token';
+import { setMetric } from 'hono/timing';
+import { getDuration } from '@app/helpers/duration';
+import { isDeployed } from '@app/config/env';
 
 interface IBaseMetadata {
   title: string;
@@ -28,95 +31,103 @@ interface ICombinedMetadata extends IBaseMetadata {
 
 type Metadata = IArchivedMetadata | INewMetadata | ICombinedMetadata;
 
-export const setupDocumentRoutes = () => {
+const log = getLogger('document-routes');
+
+const METADATA_BASE_URL = isDeployed ? 'http://kabal-api' : 'https://kabal.intern.dev.nav.no/api/kabal-api';
+
+export const setupDocumentRoutes = (app: Hono) => {
   const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), 'utf8');
 
-  router.get('/arkivert-dokument/:journalpostId/:dokumentInfoId', async (req, res) => {
-    const { journalpostId, dokumentInfoId } = req.params;
+  if (isDeployed) {
+    ['/arkivert-dokument/*', '/nytt-dokument/*', '/vedleggsoversikt/*', '/kombinert-dokument/*'].forEach((route) => {
+      app.use(route, oboTokenMiddleware('kabal-api', route));
+    });
+  }
+
+  app.get('/arkivert-dokument/:journalpostId/:dokumentInfoId', async (context) => {
+    const { journalpostId, dokumentInfoId } = context.req.param();
 
     if (!isPlainText(journalpostId) || !isPlainText(dokumentInfoId)) {
-      return res.status(400).send('Invalid id');
+      return context.text('Invalid id', 400);
     }
 
     const metadataResponse = await getMetadata<IArchivedMetadata>(
-      `http://kabal-frontend/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`,
-      req.headers,
+      `${METADATA_BASE_URL}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`,
+      context,
     );
     const metadata = metadataResponse ?? DEFAULT_ARCHIVED_METADATA;
 
-    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const queryAndHash = getQueryAndHash(context);
     const url = `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getJournalfoertDocumentDocumentId(journalpostId, dokumentInfoId)]);
-
-    const html = TEMPLATE.replace('{{pdfUrl}}', url)
+    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    res.send(html);
+    return context.html(templateResult);
   });
 
-  router.get('/nytt-dokument/:behandlingId/:documentId', async (req, res) => {
-    const { behandlingId, documentId } = req.params;
+  app.get('/nytt-dokument/:behandlingId/:documentId', async (context) => {
+    const { behandlingId, documentId } = context.req.param();
 
     if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
-      return res.status(400).send('Invalid id');
+      return context.text('Invalid id', 400);
     }
 
     const metadataResponse = await getMetadata<INewMetadata>(
-      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
-      req.headers,
+      `${METADATA_BASE_URL}/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
+      context,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const queryAndHash = getQueryAndHash(context);
     const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
 
-    const html = TEMPLATE.replace('{{pdfUrl}}', url)
+    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    res.send(html);
+    return context.html(templateResult);
   });
 
-  router.get('/vedleggsoversikt/:behandlingId/:documentId', async (req, res) => {
-    const { behandlingId, documentId } = req.params;
+  app.get('/vedleggsoversikt/:behandlingId/:documentId', async (context) => {
+    const { behandlingId, documentId } = context.req.param();
 
     if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
-      return res.status(400).send('Invalid id');
+      return context.text('Invalid id', 400);
     }
 
     const metadataResponse = await getMetadata<INewMetadata>(
-      `http://kabal-frontend/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt`,
-      req.headers,
+      `${METADATA_BASE_URL}/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt`,
+      context,
     );
     const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const queryAndHash = getQueryAndHash(context);
     const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${queryAndHash}`;
     const documentIdList = JSON.stringify([getAttachmentsOverviewTabId(documentId)]);
-
-    const html = TEMPLATE.replace('{{pdfUrl}}', url)
+    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    res.send(html);
+    return context.html(templateResult);
   });
 
-  router.get('/kombinert-dokument/:id', async (req, res) => {
-    const { id } = req.params;
+  app.get('/kombinert-dokument/:id', async (context) => {
+    const { id } = context.req.param();
 
     if (!isPlainText(id)) {
-      return res.status(400).send('Invalid id');
+      return context.text('Invalid id', 400);
     }
 
     const metadataResponse = await getMetadata<ICombinedMetadata>(
-      `http://kabal-frontend/api/kabal-api/journalposter/mergedocuments/${id}`,
-      req.headers,
+      `${METADATA_BASE_URL}/journalposter/mergedocuments/${id}`,
+      context,
     );
     const metadata = metadataResponse ?? DEFAULT_COMBINED_METADATA;
 
-    const queryAndHash = getQueryAndHash(queryToRecord(req.query));
+    const queryAndHash = getQueryAndHash(context);
     const url = `/api/kabal-api/journalposter/mergedocuments/${id}/pdf${queryAndHash}`;
     const combinedDocumentId = getMergedDocumentDocumentIdId(id);
     const documentIdList = JSON.stringify([
@@ -124,39 +135,30 @@ export const setupDocumentRoutes = () => {
       ...metadata.archivedDocuments.map((d) => getJournalfoertDocumentDocumentId(d.journalpostId, d.dokumentInfoId)),
     ]);
 
-    const html = TEMPLATE.replace('{{pdfUrl}}', url)
+    const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
       .replace('{{document-id-list}}', documentIdList)
       .replace('{{title}}', metadata.title);
 
-    res.send(html);
+    return context.html(templateResult);
   });
-
-  return router;
 };
 
-const getMetadata = async <T extends Metadata>(
-  url: string,
-  incomingHeaders: IncomingHttpHeaders,
-): Promise<T | null> => {
-  const headers = new Headers();
+const getMetadata = async <T extends Metadata>(url: string, context: Context): Promise<T | null> => {
+  const headers = prepareRequestHeaders(context, 'kabal-api');
 
-  for (const [key, value] of Object.entries(incomingHeaders)) {
-    if (typeof value === 'string') {
-      headers.append(key, value);
-    }
+  const metadataReqStart = performance.now();
 
-    if (Array.isArray(value)) {
-      value.forEach((v) => headers.append(key, v));
-    }
+  const response = await fetch(url, { method: 'GET', headers });
 
-    if (value === undefined) {
-      headers.append(key, '');
-    }
+  setMetric(context, 'metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
+
+  log.debug({ msg: 'Metadata response', data: { status: response.status, url } });
+
+  if (!response.ok) {
+    log.warn({ msg: 'Failed to fetch metadata', data: { status: response.status, url } });
+
+    return null;
   }
-
-  headers.set('Accept', 'application/json');
-
-  const response = await fetch(url, { headers });
 
   const json = await response.json();
 
@@ -224,15 +226,8 @@ const DEFAULT_COMBINED_METADATA: ICombinedMetadata = {
   title: 'Ukjent dokument',
 };
 
-enum QueryKeyEnum {
-  VERSION = 'version',
-  TOOLBAR = 'toolbar',
-  VIEW = 'view',
-  ZOOM = 'zoom',
-}
-
-const getQueryAndHash = (query: Record<string, string | undefined>): string => {
-  const { version, toolbar, view, zoom } = query;
+const getQueryAndHash = (context: Context): string => {
+  const { version, toolbar, view, zoom } = context.req.query();
 
   const versionQuery = version !== undefined && isPlainText(version) ? `?version=${version}` : '';
 
@@ -264,33 +259,3 @@ const getMergedDocumentDocumentIdId = (mergedDocumentId: string) => `combined-do
 const PLAIN_TEXT_REGEX = /^[\w-]{1,36}$/;
 
 const isPlainText = (id: string) => PLAIN_TEXT_REGEX.test(id);
-
-const queryToRecord = (record: unknown): Record<QueryKeyEnum, string | undefined> => {
-  if (record === null || typeof record !== 'object') {
-    return {
-      [QueryKeyEnum.VERSION]: undefined,
-      [QueryKeyEnum.TOOLBAR]: undefined,
-      [QueryKeyEnum.VIEW]: undefined,
-      [QueryKeyEnum.ZOOM]: undefined,
-    };
-  }
-
-  return {
-    [QueryKeyEnum.VERSION]: QueryKeyEnum.VERSION in record ? getQueryValue(record[QueryKeyEnum.VERSION]) : undefined,
-    [QueryKeyEnum.TOOLBAR]: QueryKeyEnum.TOOLBAR in record ? getQueryValue(record[QueryKeyEnum.TOOLBAR]) : undefined,
-    [QueryKeyEnum.VIEW]: QueryKeyEnum.VIEW in record ? getQueryValue(record[QueryKeyEnum.VIEW]) : undefined,
-    [QueryKeyEnum.ZOOM]: QueryKeyEnum.ZOOM in record ? getQueryValue(record[QueryKeyEnum.ZOOM]) : undefined,
-  };
-};
-
-const getQueryValue = (value: unknown): string | undefined => {
-  if (typeof value === 'undefined') {
-    return undefined;
-  }
-
-  if (typeof value !== 'string') {
-    return undefined;
-  }
-
-  return isPlainText(value) ? value : undefined;
-};
