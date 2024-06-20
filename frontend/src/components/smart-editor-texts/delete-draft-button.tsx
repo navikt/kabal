@@ -43,15 +43,14 @@ export const DeleteDraftButton = ({ id, title, onDraftDeleted, children }: Props
 };
 
 const ConfirmDeleteDraftButton = ({ id, title, onDraftDeleted, children }: Props) => {
-  const { data = [] } = useGetTextVersionsQuery(id);
+  const { data: versions = [] } = useGetTextVersionsQuery(id);
   const [deleteDraft, { isLoading }] = useDeleteDraftMutation({ fixedCacheKey: id });
   const query = useTextQuery();
 
   const onClick = useCallback(async () => {
-    const lastPublishedVersion = data.find((version) => version.published);
-    await deleteDraft({ id, title, query, lastPublishedVersion });
+    await deleteDraft({ id, title, query, versions });
     onDraftDeleted();
-  }, [data, deleteDraft, id, onDraftDeleted, query, title]);
+  }, [deleteDraft, id, title, query, versions, onDraftDeleted]);
 
   return (
     <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>

@@ -12,7 +12,7 @@ interface Props {
 export const Maltekstseksjon = ({ maltekstseksjon, query }: Props) => (
   <MaltekstseksjonContainer>
     <MaltekstseksjonHeader>
-      <UnpublishMaltekstseksjonButton id={maltekstseksjon.id} title={maltekstseksjon.title} query={query} />
+      <UnpublishMaltekstseksjonButton publishedMaltekstseksjon={maltekstseksjon} query={query} />
     </MaltekstseksjonHeader>
 
     <MaltekstseksjonVersions id={maltekstseksjon.id} query={query} />

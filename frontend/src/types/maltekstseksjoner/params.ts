@@ -24,8 +24,9 @@ export interface IUpdateMaltekstseksjonTitleParams extends IUpdateBaseParams {
   title: string;
 }
 
-export interface IUnpublishMaltekstseksjonParams extends IUpdateBaseParams {
-  title: string;
+export interface IUnpublishMaltekstseksjonParams {
+  query: IGetMaltekstseksjonParams;
+  publishedMaltekstseksjon: IMaltekstseksjon;
   maltekstseksjonDraft: IMaltekstseksjon | undefined;
 }
 
@@ -47,5 +48,5 @@ export interface ICreateDraftFromMaltekstseksjonVersionParams extends IUpdateBas
 
 export interface IDeleteMaltekstDraftParams extends IUpdateBaseParams {
   title: string;
-  lastPublishedVersion: IMaltekstseksjon | undefined;
+  versions: IMaltekstseksjon[];
 }

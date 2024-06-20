@@ -22,7 +22,7 @@ export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query }: M
   const { isDragOver, onDragEnter, onDragLeave } = useDragState();
   const lang = useRedaktoerLanguage();
 
-  const { id, versionId, textIdList, title, modified } = maltekstseksjon;
+  const { id, versionId, textIdList, title, modified, published, publishedDateTime } = maltekstseksjon;
   const textId = textIdList.at(0);
 
   const path = useMaltekstseksjonPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId, lang });
@@ -60,7 +60,8 @@ export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query }: M
         to={path}
         modified={modified}
         icon={<TasklistIcon aria-hidden />}
-        hasDraft={maltekstseksjon.publishedDateTime === null}
+        publishedDateTime={publishedDateTime}
+        published={published}
       >
         {title}
       </TextLink>

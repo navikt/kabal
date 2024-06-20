@@ -1,5 +1,5 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HelpText } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
@@ -9,12 +9,12 @@ import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 
 interface Props {
-  id: string;
-  title: string;
   query: IGetMaltekstseksjonParams;
+  publishedMaltekstseksjon: IMaltekstseksjon;
 }
 
-export const UnpublishMaltekstseksjonButton = ({ id, title, query }: Props) => {
+export const UnpublishMaltekstseksjonButton = ({ publishedMaltekstseksjon, query }: Props) => {
+  const { id } = publishedMaltekstseksjon;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [, { isLoading }] = useUnpublishMaltekstseksjonMutation({ fixedCacheKey: id });
   const { data: versions = [] } = useGetMaltekstseksjonVersionsQuery(id);
@@ -27,7 +27,11 @@ export const UnpublishMaltekstseksjonButton = ({ id, title, query }: Props) => {
   if (isOpen) {
     return (
       <Container>
-        <ConfirmUnpublishMaltekstseksjonButton id={id} title={title} query={query} maltekstseksjonDraft={draft} />
+        <ConfirmUnpublishMaltekstseksjonButton
+          publishedMaltekstseksjon={publishedMaltekstseksjon}
+          query={query}
+          maltekstseksjonDraft={draft}
+        />
         <Button
           size="small"
           variant="secondary"
@@ -37,28 +41,40 @@ export const UnpublishMaltekstseksjonButton = ({ id, title, query }: Props) => {
         >
           Avbryt
         </Button>
+        <Explainer />
       </Container>
     );
   }
 
   return (
-    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
-      Avpubliser aktiv versjon
-    </Button>
+    <Container>
+      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+        Avpubliser
+      </Button>
+      <Explainer />
+    </Container>
   );
 };
 
+const Explainer = () => (
+  <HelpText>
+    Ved å avpublisere denne maltekstseksjonen vil den ikke lenger være tilgjengelig for saksbehandlerne.
+    Maltekstseksjonen kan når som helst publiseres igjen om ønskelig.
+  </HelpText>
+);
+
 const ConfirmUnpublishMaltekstseksjonButton = ({
-  id,
-  title,
   query,
+  publishedMaltekstseksjon,
   maltekstseksjonDraft,
 }: Props & { maltekstseksjonDraft: IMaltekstseksjon | undefined }) => {
-  const [unpublish, { isLoading }] = useUnpublishMaltekstseksjonMutation({ fixedCacheKey: id });
+  const [unpublish, { isLoading }] = useUnpublishMaltekstseksjonMutation({
+    fixedCacheKey: publishedMaltekstseksjon.id,
+  });
   const navigate = useNavigateMaltekstseksjoner();
 
   const onClick = async () => {
-    await unpublish({ id, title, query, maltekstseksjonDraft });
+    await unpublish({ publishedMaltekstseksjon, query, maltekstseksjonDraft });
 
     if (maltekstseksjonDraft === undefined) {
       return navigate({ maltekstseksjonId: null, maltekstseksjonVersionId: null, textId: null });
@@ -76,5 +92,6 @@ const ConfirmUnpublishMaltekstseksjonButton = ({
 
 const Container = styled.div`
   display: flex;
+  align-items: center;
   gap: 8px;
 `;

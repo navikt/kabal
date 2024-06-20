@@ -46,7 +46,7 @@ const StyledTag = styled(Tag)<StyledTagProps>`
   background-color: ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-100)`};
 `;
 
-const VARIANTS: Record<keyof IGetMaltekstseksjonParams, string> = {
+const VARIANTS: Record<keyof Omit<IGetMaltekstseksjonParams, 'trash'>, string> = {
   templateSectionIdList: 'red',
   ytelseHjemmelIdList: 'blue',
   utfallIdList: 'limegreen',

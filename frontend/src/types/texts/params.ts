@@ -21,7 +21,7 @@ export interface IUpdateTextTypeParams {
 
 export interface IDeleteTextDraftParams extends IUpdateBaseParams {
   title: string;
-  lastPublishedVersion: IText | undefined;
+  versions: IText[];
 }
 
 export interface IUpdateRichTextContentParams extends IUpdateBaseParams {
@@ -50,8 +50,9 @@ export interface IUpdateTextEnheterParams extends IUpdateBaseParams {
   enhetIdList: string[];
 }
 
-export interface IUnpublishTextParams extends IUpdateBaseParams {
-  title: string;
+export interface IUnpublishTextParams {
+  query: IGetTextsParams;
+  publishedText: IText;
   textDraft: IText | undefined;
 }
 
