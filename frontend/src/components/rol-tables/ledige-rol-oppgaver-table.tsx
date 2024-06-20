@@ -16,6 +16,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.RolInnsendingshjemler,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.RolTildeling,
 ];
 

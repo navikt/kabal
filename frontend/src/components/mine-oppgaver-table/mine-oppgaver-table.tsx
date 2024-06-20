@@ -20,6 +20,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.FlowStates,
   ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Open,

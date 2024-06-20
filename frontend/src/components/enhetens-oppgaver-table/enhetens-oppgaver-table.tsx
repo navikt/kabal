@@ -18,6 +18,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.RelevantOppgaver,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.FlowStates,
   ColumnKeyEnum.Medunderskriver,
   ColumnKeyEnum.Oppgavestyring,

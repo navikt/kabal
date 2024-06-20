@@ -2,6 +2,7 @@ import { Heading } from '@navikt/ds-react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -22,7 +23,8 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist } =
+    oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -62,6 +64,10 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       </BehandlingSection>
 
       <Saksnummer saksnummer={saksnummer} />
+
+      <BehandlingSection label="Varslet frist">
+        {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
+      </BehandlingSection>
 
       <BehandlingSection label="Behandlet av">
         {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}

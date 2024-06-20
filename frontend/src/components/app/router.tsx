@@ -1,6 +1,7 @@
 import { Route, Routes as Switch } from 'react-router-dom';
 import { NotFoundPage } from '@app/components/app/not-found-page';
 import { ProtectedRoute } from '@app/components/app/protected-route';
+import { ModalEnum } from '@app/components/svarbrev/row/row';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
 import { AnkebehandlingPage } from '@app/pages/ankebehandling/ankebehandling';
@@ -17,6 +18,7 @@ import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/red
 import { RegelverkPage } from '@app/pages/regelverk/regelverk';
 import { SearchPage } from '@app/pages/search/search';
 import { SettingsPage } from '@app/pages/settings/settings';
+import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
 import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
 import { TrygderettsankebehandlingPage } from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { Role } from '@app/types/bruker';
@@ -84,6 +86,14 @@ export const Router = () => (
       <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
       <Route path="regelverk/:id" element={<RegelverkPage />} />
       <Route path="regelverk" element={<RegelverkPage />} />
+    </Route>
+
+    <Route element={<ProtectedRoute roles={[Role.KABAL_SVARBREVINNSTILLINGER]} />}>
+      <Route path="svarbrev">
+        <Route index element={<SvarbrevPage />} />
+        <Route path=":id" element={<SvarbrevPage modal={ModalEnum.PREVIEW} />} />
+        <Route path=":id/historikk" element={<SvarbrevPage modal={ModalEnum.HISTORY} />} />
+      </Route>
     </Route>
 
     <Route element={<ProtectedRoute roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]} />}>

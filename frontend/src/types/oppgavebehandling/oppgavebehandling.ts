@@ -24,6 +24,8 @@ export interface IOppgavebehandlingBase {
   fraSaksbehandlerident: string | null;
   /** Date */
   frist: string | null;
+  /** Date */
+  varsletFrist: string | null;
   hjemmelIdList: string[];
   id: string;
   internVurdering: string;

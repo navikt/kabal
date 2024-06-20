@@ -20,7 +20,7 @@ import { IOppgave } from '@app/types/oppgaver';
 import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
 import { Age } from '../age';
-import { Deadline } from '../deadline';
+import { Deadline, ReadOnlyDeadline } from '../deadline';
 import { Innsendingshjemler, Registreringshjemler } from '../hjemler';
 import { LoadingRow } from '../loading-row';
 import { MedudunderskriverFlowStateLabel } from '../medunderskriver-flow-state-label';
@@ -108,6 +108,12 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <Deadline {...oppgave} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.VarsletFrist:
+        return (
+          <Table.DataCell key={key}>
+            <ReadOnlyDeadline frist={oppgave.varsletFrist} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriver:
