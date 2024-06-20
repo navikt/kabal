@@ -1,7 +1,6 @@
-import { Request } from 'express';
-import { VERSION } from '@app/config/config';
+import { PROXY_VERSION } from '@app/config/config';
 import { getLogger } from '@app/logger';
-import { getClientVersion } from '@app/routes/version/get-client-version';
+import { FastifyRequest } from 'fastify';
 
 const log = getLogger('update-request');
 
@@ -11,40 +10,40 @@ const log = getLogger('update-request');
 const UPDATE_REQUIRED_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-10T13:37:00';
 const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-06-11T10:00:00';
 
-if (UPDATE_REQUIRED_THRESHOLD > VERSION) {
+if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION) {
   log.error({
     msg: 'Required threshold version is greater than the server version.',
     data: { UPDATE_REQUIRED_THRESHOLD, UPDATE_OPTIONAL_THRESHOLD },
   });
 }
 
-if (UPDATE_OPTIONAL_THRESHOLD > VERSION) {
+if (UPDATE_OPTIONAL_THRESHOLD > PROXY_VERSION) {
   log.error({
     msg: 'Optional threshold version is greater than the server version.',
     data: { UPDATE_REQUIRED_THRESHOLD, UPDATE_OPTIONAL_THRESHOLD },
   });
 }
 
-if (UPDATE_REQUIRED_THRESHOLD > VERSION || UPDATE_OPTIONAL_THRESHOLD > VERSION) {
+if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION || UPDATE_OPTIONAL_THRESHOLD > PROXY_VERSION) {
   process.exit(1);
 }
 
-export const getUpdateRequest = (req: Request, traceId: string): UpdateRequest => {
-  const clientVersion = getClientVersion(req);
+export const getUpdateRequest = (req: FastifyRequest): UpdateRequest => {
+  const { client_version, trace_id, span_id } = req;
 
   // If the client version is not provided, the client must update.
-  if (clientVersion === undefined) {
-    log.warn({ msg: 'Client version is not provided', traceId });
+  if (client_version === undefined) {
+    log.warn({ msg: 'Client version is not provided', trace_id, span_id });
 
     return UpdateRequest.REQUIRED;
   }
 
   // If the client version is less than the threshold version, the client must update.
-  if (clientVersion < UPDATE_REQUIRED_THRESHOLD) {
+  if (client_version < UPDATE_REQUIRED_THRESHOLD) {
     return UpdateRequest.REQUIRED;
   }
 
-  if (clientVersion < UPDATE_OPTIONAL_THRESHOLD) {
+  if (client_version < UPDATE_OPTIONAL_THRESHOLD) {
     return UpdateRequest.OPTIONAL;
   }
 

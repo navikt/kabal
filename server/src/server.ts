@@ -1,70 +1,69 @@
-import cors from 'cors';
-import express from 'express';
-import { queryParamsToHeaders, setProxyVersionHeader } from '@app/headers';
-import { ensureTraceparentHandler } from '@app/request-id';
-import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
-import { httpLoggingMiddleware } from './http-logger';
-import { init } from './init';
-import { getLogger } from './logger';
-import { processErrors } from './process-errors';
-import { metricsMiddleware } from './prometheus/middleware';
-import { EmojiIcons, sendToSlack } from './slack';
+import { API_CLIENT_IDS } from '@app/config/config';
+import { isDeployed } from '@app/config/env';
+import { serverConfig } from '@app/config/server-config';
+import { init } from '@app/init';
+import { getLogger } from '@app/logger';
+import { corsOptions } from '@app/config/cors';
+import { accessTokenPlugin } from '@app/plugins/access-token';
+import { apiProxyPlugin } from '@app/plugins/api-proxy';
+import { clientVersionPlugin } from '@app/plugins/client-version';
+import { documentPlugin } from '@app/plugins/document';
+import { oboAccessTokenPlugin } from '@app/plugins/obo-token';
+import { serveAssetsPlugin } from '@app/plugins/serve-assets';
+import { serveIndexPlugin } from '@app/plugins/serve-index';
+import { serverTimingPlugin } from '@app/plugins/server-timing';
+import { tabIdPlugin } from '@app/plugins/tab-id';
+import { traceparentPlugin } from '@app/plugins/traceparent/traceparent';
+import { versionPlugin } from '@app/plugins/version/version';
+import { processErrors } from '@app/process-errors';
+import { EmojiIcons, sendToSlack } from '@app/slack';
+import cors from '@fastify/cors';
+import { fastify } from 'fastify';
+import metricsPlugin from 'fastify-metrics';
+import { querystringParser } from '@app/helpers/query-parser';
+import { httpLoggerPlugin } from '@app/plugins/http-logger';
+import { proxyVersionPlugin } from '@app/plugins/proxy-version';
+import { healthPlugin } from '@app/plugins/health';
 
 processErrors();
 
 const log = getLogger('server');
 
 if (isDeployed) {
-  log.info({ msg: 'Started!' });
+  log.info({ msg: 'Starting...' });
 
-  sendToSlack('Starting...', EmojiIcons.StartStruck);
+  sendToSlack('Starting...', EmojiIcons.LoadingDots);
 }
 
-const server = express();
+const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-server.use(queryParamsToHeaders);
-server.use(setProxyVersionHeader);
-server.use(ensureTraceparentHandler);
+fastify({ trustProxy: true, querystringParser, bodyLimit })
+  .register(cors, corsOptions)
+  .register(healthPlugin)
+  .register(metricsPlugin, {
+    endpoint: '/metrics',
+    routeMetrics: {
+      routeBlacklist: ['/metrics', '/isAlive', '/isReady', '/swagger', '/swagger.json'],
+    },
+  })
+  .register(proxyVersionPlugin)
+  .register(traceparentPlugin)
+  .register(tabIdPlugin)
+  .register(clientVersionPlugin)
+  .register(serverTimingPlugin, { enableAutoTotal: true })
+  .register(accessTokenPlugin)
+  .register(oboAccessTokenPlugin)
+  .register(versionPlugin)
+  .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
+  .register(documentPlugin)
+  .register(serveAssetsPlugin)
+  .register(serveIndexPlugin)
+  .register(httpLoggerPlugin)
 
-// Add the prometheus middleware to all routes
-server.use(metricsMiddleware);
+  // Start server.
+  .listen({ host: '0.0.0.0', port: serverConfig.port });
 
-server.use(httpLoggingMiddleware);
+log.info({ msg: `Server listening on port ${serverConfig.port}` });
 
-server.set('trust proxy', true);
-server.disable('x-powered-by');
-server.set('query parser', 'simple');
-
-server.use(
-  cors({
-    credentials: true,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    allowedHeaders: [
-      'Accept-Language',
-      'Accept',
-      'Cache-Control',
-      'Connection',
-      'Content-Type',
-      'Cookie',
-      'DNT',
-      'Host',
-      'Origin',
-      'Pragma',
-      'Referer',
-      'Sec-Fetch-Dest',
-      'Sec-Fetch-Mode',
-      'Sec-Fetch-Site',
-      'User-Agent',
-      'X-Forwarded-For',
-      'X-Forwarded-Host',
-      'X-Forwarded-Proto',
-      'X-Requested-With',
-    ],
-    origin: isDeployedToProd ? DOMAIN : [DOMAIN, /https?:\/\/localhost:\d{4,}/],
-  }),
-);
-
-server.get('/isAlive', (_, res) => res.status(200).send('Alive'));
-server.get('/isReady', (_, res) => res.status(200).send('Ready'));
-
-init(server);
+// Initialize.
+init();

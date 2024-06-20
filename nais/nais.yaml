@@ -36,6 +36,7 @@ spec:
         - /*.css
   prometheus:
     enabled: true
+    path: /metrics
   accessPolicy:
     inbound:
       rules:

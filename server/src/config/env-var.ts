@@ -2,7 +2,7 @@ import { getLogger } from '@app/logger';
 
 const log = getLogger('env-var');
 
-const optionalEnvString = (name: string): string | undefined => {
+export const optionalEnvString = (name: string): string | undefined => {
   const envVariable = process.env[name];
 
   if (typeof envVariable === 'string' && envVariable.length !== 0) {
@@ -19,7 +19,7 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
     return envVariable;
   }
 
-  if (typeof defaultValue === 'string' && defaultValue.length !== 0) {
+  if (defaultValue !== undefined) {
     return defaultValue;
   }
 
@@ -32,32 +32,22 @@ export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
 
   try {
     if (json.length === 0) {
+      if (defaultValue !== undefined) {
+        return defaultValue;
+      }
+
       throw new Error('Empty string');
     }
 
     return JSON.parse(json);
   } catch (error) {
-    log.error({ msg: `Invalid JSON in environment variable '${name}'.`, error });
-
-    if (typeof defaultValue !== 'undefined') {
+    if (defaultValue !== undefined) {
       return defaultValue;
     }
+
+    log.error({ msg: `Invalid JSON in environment variable '${name}'.`, error });
     process.exit(1);
   }
-};
-
-export const requiredEnvUrl = (name: string, defaultValue?: string): string => {
-  const envString = requiredEnvString(name, defaultValue);
-
-  if (envString.startsWith('http://')) {
-    return envString.replace('http://', 'https://');
-  }
-
-  if (envString.startsWith('https://')) {
-    return envString;
-  }
-  log.error({ msg: `Environment variable '${name}' is not a URL. Value: '${envString}'.` });
-  process.exit(1);
 };
 
 export const requiredEnvNumber = (name: string, defaultValue?: number): number => {
@@ -68,7 +58,7 @@ export const requiredEnvNumber = (name: string, defaultValue?: number): number =
     return parsed;
   }
 
-  if (typeof defaultValue === 'number') {
+  if (defaultValue !== undefined) {
     return defaultValue;
   }
 
