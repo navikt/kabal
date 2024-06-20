@@ -22,21 +22,21 @@ export interface AnyObject {
 
 type LogArgs =
   | {
-      msg?: string;
-      traceId?: string;
-      client_version?: string;
-      tab_id?: string;
-      error: Error | unknown;
-      data?: SerializableValue;
-    }
+    msg?: string;
+    traceId?: string;
+    client_version?: string;
+    tab_id?: string;
+    error: Error | unknown;
+    data?: SerializableValue;
+  }
   | {
-      msg: string;
-      traceId?: string;
-      client_version?: string;
-      tab_id?: string;
-      error?: Error | unknown;
-      data?: SerializableValue;
-    };
+    msg: string;
+    traceId?: string;
+    client_version?: string;
+    tab_id?: string;
+    error?: Error | unknown;
+    data?: SerializableValue;
+  };
 
 interface Logger {
   debug: (args: LogArgs) => void;

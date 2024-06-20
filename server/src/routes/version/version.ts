@@ -1,69 +1,87 @@
-import { Response, Router } from 'express';
-import { VERSION } from '@app/config/config';
+import { PROXY_VERSION } from '@app/config/config';
+import { formatDuration, getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
-import { ensureTraceparent } from '@app/request-id';
 import { histogram } from '@app/routes/version/session-histogram';
-import { startUserSession, uniqueUsersGauge } from '@app/routes/version/unique-users-gauge';
+import { startUserSession, stopTimerList } from '@app/routes/version/unique-users-gauge';
 import { getUpdateRequest } from '@app/routes/version/update-request';
+import { RouteHandler } from 'fastify';
+import { ReadableStream } from 'node:stream/web';
 
-const log = getLogger('active-clients');
+const log = getLogger('version');
 
-const router = Router();
+export const versionHandler: RouteHandler = async (req, res) => {
+  if (req.headers['accept'] !== 'text/event-stream') {
+    return res.redirect('/', 307);
+  }
 
-const HEADERS = {
-  'Content-Type': 'text/event-stream',
-  Connection: 'keep-alive',
-  'Cache-Control': 'no-cache',
-};
+  const start = performance.now();
 
-type StopTimerFn = () => void;
-const stopTimerList: StopTimerFn[] = [];
+  const { traceId } = req;
 
-export const resetClientsAndUniqueUsersMetrics = async () => {
-  stopTimerList.forEach((stopTimer) => stopTimer());
-  uniqueUsersGauge.reset();
+  log.debug({ msg: 'Version connection opened', traceId, data: { sse: true } });
 
-  // Wait for metrics to be collected.
-  return new Promise<void>((resolve) => setTimeout(resolve, 2000));
-};
+  const stopTimer = histogram.startTimer();
+  const stopTimerIndex = stopTimerList.push(stopTimer) - 1;
+  const endUserSession = startUserSession(req);
 
-export const setupVersionRoute = () => {
-  router.get('/version', async (req, res) => {
-    if (req.headers.accept !== 'text/event-stream') {
-      res.status(307).redirect('/');
+  const onClose = () => {
+    stopTimerList.splice(stopTimerIndex, 1);
+    stopTimer();
+    endUserSession();
 
-      return;
-    }
+    req.raw.destroy();
+    res.raw.destroy();
+    req.raw.socket.destroy();
+    res.raw.socket?.destroy();
+  };
 
-    const traceId = ensureTraceparent(req);
+  new Promise<string>((resolve) => {
+    req.socket.once('close', () => resolve('req.socket.on(close)'));
+    req.raw.once('close', () => resolve('req.raw.on(close)'));
+    req.raw.socket.once('close', () => resolve('req.socket.on(close)'));
+    res.raw.socket?.once('close', () => resolve('res.socket.on(close)'));
+  }).then((reason) => {
+    onClose();
 
-    const stopTimer = histogram.startTimer();
+    const duration = getDuration(start);
 
-    const stopTimerIndex = stopTimerList.push(stopTimer) - 1;
-
-    let isOpen = true;
-
-    const endUserSession = await startUserSession(req, traceId);
-
-    res.once('close', () => {
-      log.debug({ msg: 'Version connection closed', traceId });
-
-      if (isOpen) {
-        isOpen = false;
-        stopTimerList.splice(stopTimerIndex, 1);
-        stopTimer();
-        endUserSession();
-      }
+    log.debug({
+      msg: `Version connection closed after ${formatDuration(duration)} (${reason})`,
+      traceId,
+      data: { sse: true, duration, reason },
     });
 
-    res.writeHead(200, HEADERS);
-    res.write('retry: 0\n');
-    res.write(`data: ${VERSION}\n\n`); // TODO: Remove this line after all clients are updated to handle the version event.
-    writeEvent(res, EventNames.SERVER_VERSION, VERSION);
-    writeEvent(res, EventNames.UPDATE_REQUEST, getUpdateRequest(req, traceId));
+    return reason;
   });
 
-  return router;
+  if (res.raw.headersSent) {
+    log.warn({ msg: 'Version connection opened after headers sent', traceId, data: { sse: true } });
+
+    return;
+  }
+
+  const events: string = [
+    formatSseEvent({ event: EventNames.SERVER_VERSION, data: PROXY_VERSION, retry: 0 }),
+    formatSseEvent({ event: EventNames.UPDATE_REQUEST, data: getUpdateRequest(req), retry: 0 }),
+  ].join('');
+
+  const stream = new ReadableStream({
+    type: 'bytes',
+    start(controller) {
+      new TextEncoder().encode(events).forEach((byte) => controller.enqueue(Uint8Array.of(byte)));
+    },
+  });
+
+  const response = new Response(stream, {
+    status: 200,
+    headers: {
+      'content-type': 'text/event-stream',
+      'cache-control': 'no-cache',
+      connection: 'keep-alive',
+    },
+  });
+
+  await res.send(response);
 };
 
 enum EventNames {
@@ -71,7 +89,18 @@ enum EventNames {
   UPDATE_REQUEST = 'update-request',
 }
 
-const writeEvent = (res: Response, event: EventNames, data: string) => {
-  res.write(`event: ${event}\n`);
-  res.write(`data: ${data}\n\n`);
+interface SseEvent<E = string> {
+  event: E;
+  data: string;
+  retry?: number;
+}
+
+const formatSseEvent = ({ event, data, retry }: SseEvent<EventNames>) => {
+  let formatted = `event: ${event}\ndata: ${data}\n`;
+
+  if (retry !== undefined) {
+    formatted += `retry: ${retry}\n`;
+  }
+
+  return `${formatted}\n`;
 };

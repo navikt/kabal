@@ -1,14 +1,26 @@
-import cors from 'cors';
-import express from 'express';
-import { queryParamsToHeaders, setProxyVersionHeader } from '@app/headers';
-import { ensureTraceparentHandler } from '@app/request-id';
-import { DOMAIN, isDeployed, isDeployedToProd } from './config/env';
-import { httpLoggingMiddleware } from './http-logger';
-import { init } from './init';
-import { getLogger } from './logger';
-import { processErrors } from './process-errors';
-import { metricsMiddleware } from './prometheus/middleware';
-import { EmojiIcons, sendToSlack } from './slack';
+import { API_CLIENT_IDS, PROXY_VERSION, getIsReady } from '@app/config/config';
+import cors from '@fastify/cors';
+import { serverConfig } from '@app/config/server-config';
+import { CLIENT_VERSION_QUERY, TAB_ID_QUERY, getHeaderOrQueryValue } from '@app/middleware/set-context-vars';
+import { traceIdAndParentToContext } from '@app/middleware/request-id';
+import { isDeployed } from '@app/config/env';
+import { logHttpRequest } from '@app/middleware/http-logger';
+import { init } from '@app/init';
+import { getLogger } from '@app/logger';
+import { processErrors } from '@app/process-errors';
+import { EmojiIcons, sendToSlack } from '@app/slack';
+import { corsOptions } from '@app/middleware/cors';
+import { serveStatic } from '@app/middleware/serve-assets';
+import { serveIndex } from '@app/middleware/serve-index';
+import { CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
+import { getDuration } from '@app/helpers/duration';
+import { fastify } from 'fastify';
+import { setupDocumentRoutes } from '@app/routes/document';
+import { versionHandler } from '@app/routes/version/version';
+import { apiProxyPlugin } from '@app/plugins/api-proxy';
+import { serverTimingPlugin } from '@app/plugins/server-timing';
+import { oboAccessTokenPlugin } from '@app/plugins/obo-token';
+import { accessTokenPlugin } from '@app/plugins/access-token';
 
 processErrors();
 
@@ -20,51 +32,87 @@ if (isDeployed) {
   sendToSlack('Starting...', EmojiIcons.StartStruck);
 }
 
-const server = express();
+const app = fastify()
+  .register(cors, corsOptions)
+  .register(serverTimingPlugin, { enableAutoTotal: true })
+  .register(accessTokenPlugin)
+  .register(oboAccessTokenPlugin, { appNames: API_CLIENT_IDS })
+  .register(apiProxyPlugin, { appNames: API_CLIENT_IDS })
 
-server.use(queryParamsToHeaders);
-server.use(setProxyVersionHeader);
-server.use(ensureTraceparentHandler);
+  // Pre-decorate request object with custom properties for better JS performance.
+  .decorateRequest('tabId', '')
+  .decorateRequest('clientVersion', '')
+  .decorateRequest('traceparent', '')
+  .decorateRequest('traceId', '')
 
-// Add the prometheus middleware to all routes
-server.use(metricsMiddleware);
+  // Health checks.
+  .get('/isAlive', () => 'Alive')
+  .get('/isReady', async (_, res) =>
+    getIsReady()
+      ? res.status(200).type('text/plain').send('Ready')
+      : res.status(503).type('text/plain').send('Not Ready'),
+  )
 
-server.use(httpLoggingMiddleware);
+  // Metrics.
+  // const { printMetrics, registerMetrics } = prometheus({ registry: proxyRegister });
+  // .get('/metrics', printMetrics);
+  // .use('*', registerMetrics); // Register metrics middleware for all routes below.
 
-server.set('trust proxy', true);
-server.disable('x-powered-by');
-server.set('query parser', 'simple');
+  // Add proxy version header to all responses.
+  .addHook('onResponse', (_, res) => {
+    res.header(PROXY_VERSION_HEADER, PROXY_VERSION);
+  })
 
-server.use(
-  cors({
-    credentials: true,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    allowedHeaders: [
-      'Accept-Language',
-      'Accept',
-      'Cache-Control',
-      'Connection',
-      'Content-Type',
-      'Cookie',
-      'DNT',
-      'Host',
-      'Origin',
-      'Pragma',
-      'Referer',
-      'Sec-Fetch-Dest',
-      'Sec-Fetch-Mode',
-      'Sec-Fetch-Site',
-      'User-Agent',
-      'X-Forwarded-For',
-      'X-Forwarded-Host',
-      'X-Forwarded-Proto',
-      'X-Requested-With',
-    ],
-    origin: isDeployedToProd ? DOMAIN : [DOMAIN, /https?:\/\/localhost:\d{4,}/],
-  }),
-);
+  // Set relevant request context variables.
+  .addHook('preHandler', async (req) => {
+    req.tabId = getHeaderOrQueryValue(req, TAB_ID_HEADER, TAB_ID_QUERY) ?? '';
+    req.clientVersion = getHeaderOrQueryValue(req, CLIENT_VERSION_HEADER, CLIENT_VERSION_QUERY) ?? '';
+    const { traceId, traceparent } = traceIdAndParentToContext(req);
+    req.traceId = traceId;
+    req.traceparent = traceparent;
+  })
 
-server.get('/isAlive', (_, res) => res.status(200).send('Alive'));
-server.get('/isReady', (_, res) => res.status(200).send('Ready'));
+  // Log HTTP requests.
+  .addHook('onResponse', async (req, res) => {
+    const { url } = req;
 
-init(server);
+    if (url.endsWith('/isAlive') || url.endsWith('/isReady') || url.endsWith('/metrics')) {
+      return;
+    }
+
+    const { traceId, clientVersion, tabId, startTime } = req;
+
+    const responseTime = getDuration(startTime);
+
+    logHttpRequest({
+      method: req.method,
+      url,
+      statusCode: res.statusCode,
+      traceId,
+      client_version: clientVersion,
+      tab_id: tabId,
+      responseTime,
+      request_content_length: req.headers['content-length'],
+      request_content_type: req.headers['content-type'],
+      response_content_length: res.getHeader('content-length'),
+      response_content_type: res.getHeader('content-type'),
+    });
+  })
+
+  // Version route.
+  .get('/version', versionHandler);
+
+// setupDocumentRoutes(app);
+
+// Static file routes.
+app.get('/', serveIndex);
+app.get('/assets/*', serveStatic);
+app.get('*', serveIndex);
+
+// Start server.
+export const startServer = () => app.listen({ port: serverConfig.port });
+
+// Initialize.
+init();
+
+log.info({ msg: `Server initialized on port ${serverConfig.port}` });
