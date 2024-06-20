@@ -68,13 +68,14 @@ export interface IGetMaltekstseksjonParams {
   ytelseHjemmelIdList?: string[];
   utfallIdList?: string;
   enhetIdList?: string[];
+  trash: boolean;
 }
 
 export interface IGetTextsParams extends IGetMaltekstseksjonParams {
   textType: TextTypes;
 }
 
-export interface IGetConsumerTextsParams extends IGetTextsParams {
+export interface IGetConsumerTextsParams extends Omit<IGetTextsParams, 'trash'> {
   language: Language | typeof UNTRANSLATED;
 }
 

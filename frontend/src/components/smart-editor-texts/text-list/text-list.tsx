@@ -161,7 +161,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
         />
       </StyledHeaders>
       <StyledList>
-        {sortedTexts.map(({ id, title, modified, publishedDateTime, score }) => (
+        {sortedTexts.map(({ id, title, modified, publishedDateTime, score, published }) => (
           <ListItem key={id} $active={query.id === id}>
             <StyledLink to={getLink(textType, language, id)}>
               <StyledTitle>
@@ -169,7 +169,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
               </StyledTitle>
 
-              <StatusTag hasDraft={publishedDateTime === null} />
+              <StatusTag publishedDateTime={publishedDateTime} published={published} />
               <DateTime dateTime={modified} />
               <span>{score.toFixed(0)} %</span>
             </StyledLink>

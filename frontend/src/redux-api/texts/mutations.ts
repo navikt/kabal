@@ -4,6 +4,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { reduxStore } from '@app/redux/configure-store';
+import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { user } from '@app/static-data/static-data';
@@ -68,7 +69,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
           dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
 
           dispatch(
-            textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+            textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) =>
               draft.map((t) => (t.id === id ? data : t)),
             ),
           );
@@ -107,7 +108,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         let textToMove: IText | undefined = undefined;
 
         const movedFromListPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', { textType: oldTextType }, (draft) =>
+          textsQuerySlice.util.updateQueryData('getTexts', { textType: oldTextType, trash: false }, (draft) =>
             draft.filter((t) => {
               if (t.id === id) {
                 textToMove = t;
@@ -121,7 +122,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
 
         const movedToListPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', { textType: newTextType }, (draft) => {
+          textsQuerySlice.util.updateQueryData('getTexts', { textType: newTextType, trash: false }, (draft) => {
             if (textToMove !== undefined && isRichText(textToMove)) {
               draft.push({ ...textToMove, textType: newTextType });
             }
@@ -141,7 +142,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
 
         try {
-          pessimisticUpdate(id, (await queryFulfilled).data, { textType: newTextType });
+          pessimisticUpdate(id, (await queryFulfilled).data, { textType: newTextType, trash: false });
         } catch {
           idPatchResult.undo();
           movedToListPatchResult.undo();
@@ -183,15 +184,35 @@ const textsMutationSlice = textsApi.injectEndpoints({
             ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
           ]),
         );
+
         dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
+
         dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
-            draft.map((t) => (t.id === id ? data : t)),
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: true }, (draft) =>
+            draft.filter((t) => t.id !== id),
           ),
+        );
+
+        dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) => {
+            let found = false;
+
+            const updated = draft.map((text) => {
+              if (text.id === id) {
+                found = true;
+
+                return data;
+              }
+
+              return text;
+            });
+
+            return found ? updated : [data, ...draft];
+          }),
         );
       },
     }),
-    addText: builder.mutation<IText, { text: INewTextParams; query: IGetTextsParams }>({
+    addText: builder.mutation<IText, { text: INewTextParams; query: Omit<IGetTextsParams, 'trash'> }>({
       query: ({ text }) => ({
         method: 'POST',
         url: '/texts',
@@ -202,22 +223,31 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         toast.success('Ny tekst opprettet.');
 
-        dispatch(textsQuerySlice.util.updateQueryData('getTexts', query, (draft) => [...draft, data]));
+        dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) => [data, ...draft]),
+        );
         dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
       },
     }),
     // Unpublish text. Preserve draft.
     unpublishText: builder.mutation<IDeleteDraftOrUnpublishTextResponse, IUnpublishTextParams>({
-      query: ({ id }) => ({
+      query: ({ publishedText }) => ({
         method: 'POST',
-        url: `/texts/${id}/unpublish`,
+        url: `/texts/${publishedText.id}/unpublish`,
       }),
-      onQueryStarted: async ({ id, title, query, textDraft }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ publishedText, query, textDraft }, { queryFulfilled, dispatch }) => {
+        const { id, title } = publishedText;
         const listPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) =>
             textDraft === undefined
               ? draft.filter((text) => text.id !== id)
               : draft.map((text) => (text.id === id ? textDraft : text)),
+          ),
+        );
+
+        const trashListPatchResult = dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: true }, (draft) =>
+            textDraft === undefined ? [{ ...publishedText, published: false }, ...draft] : draft,
           ),
         );
 
@@ -248,6 +278,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         } catch (e) {
           idPatchResult.undo();
           listPatchResult.undo();
+          trashListPatchResult.undo();
           versionsPatchResult.undo();
 
           const message = 'Kunne ikke avpublisere tekst.';
@@ -265,7 +296,9 @@ const textsMutationSlice = textsApi.injectEndpoints({
         method: 'DELETE',
         url: `/texts/${id}/draft`,
       }),
-      onQueryStarted: async ({ id, title, query, lastPublishedVersion }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ id, title, query, versions }, { queryFulfilled, dispatch }) => {
+        const [lastPublishedVersion, versionToShowInTrash] = getLastPublishedAndVersionToShowInTrash(versions);
+
         const versionsPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
             draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
@@ -273,13 +306,19 @@ const textsMutationSlice = textsApi.injectEndpoints({
         );
 
         const listPatchResult = dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', query, (draft) => {
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) => {
             if (lastPublishedVersion === undefined) {
               return draft.filter((text) => text.id !== id);
             }
 
             return draft.map((text) => (text.id === id ? lastPublishedVersion : text));
           }),
+        );
+
+        const trashListPatchResult = dispatch(
+          textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: true }, (draft) =>
+            versionToShowInTrash === undefined ? draft : [versionToShowInTrash, ...draft],
+          ),
         );
 
         const idPatchResult = dispatch(
@@ -306,6 +345,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         } catch {
           versionsPatchResult.undo();
           idPatchResult.undo();
+          trashListPatchResult.undo();
           listPatchResult.undo();
         }
       },
@@ -471,7 +511,7 @@ const update = (id: string, upd: Update | UpdateFn, query: IGetTextsParams) => {
   );
 
   const listPatchResult = reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+    textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) =>
       draft.map((t) => {
         if (t.published || t.publishedDateTime !== null || t.id !== id) {
           return t;
@@ -513,7 +553,7 @@ const pessimisticUpdate = (id: string, data: IText, query: IGetTextsParams, show
   );
 
   reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTexts', query, (draft) =>
+    textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) =>
       draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, modified, editors } : t)),
     ),
   );

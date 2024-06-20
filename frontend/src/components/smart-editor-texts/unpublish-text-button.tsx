@@ -1,5 +1,5 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, HelpText } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import {
@@ -14,14 +14,12 @@ import { IText } from '@app/types/texts/responses';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
-  id: string;
-  title: string;
-  publishedMaltekstseksjonIdList: string[];
-  draftMaltekstseksjonIdList: string[];
+  publishedText: IText;
   textType: TextTypes;
 }
 
-export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
+export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
+  const { id } = publishedText;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [, { isLoading }] = useUnpublishTextMutation({ fixedCacheKey: id });
   const { data: versions = [] } = useGetTextVersionsQuery(id);
@@ -34,7 +32,7 @@ export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
   if (isOpen) {
     return (
       <Container>
-        <ConfirmUnpublishTextButton id={id} title={title} textDraft={draft} {...props} />
+        <ConfirmUnpublishTextButton publishedText={publishedText} textDraft={draft} textType={textType} />
         <Button
           size="small"
           variant="secondary"
@@ -44,31 +42,40 @@ export const UnpublishTextButton = ({ id, title, ...props }: Props) => {
         >
           Avbryt
         </Button>
+        <Explainer />
       </Container>
     );
   }
 
   return (
-    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
-      Avpubliser aktiv versjon
-    </Button>
+    <Container>
+      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+        Avpubliser
+      </Button>
+      <Explainer />
+    </Container>
   );
 };
 
+const Explainer = () => (
+  <HelpText>
+    Ved å avpublisere denne teksten vil den ikke lenger være tilgjengelig for saksbehandlerne. Teksten kan når som helst
+    publiseres igjen om ønskelig.
+  </HelpText>
+);
+
 const ConfirmUnpublishTextButton = ({
-  id,
-  title,
+  publishedText,
   textDraft,
   textType,
-  draftMaltekstseksjonIdList = [],
-  publishedMaltekstseksjonIdList = [],
 }: Props & { textDraft: IText | undefined }) => {
+  const { id } = publishedText;
   const [unpublish, { isLoading }] = useUnpublishTextMutation({ fixedCacheKey: id });
   const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
   const query = useTextQuery();
 
   const onClick = async () => {
-    await unpublish({ id, title, query, textDraft });
+    await unpublish({ publishedText, query, textDraft });
 
     if (textDraft === undefined) {
       return navigate({ id: null, versionId: null });
@@ -79,11 +86,7 @@ const ConfirmUnpublishTextButton = ({
 
   return (
     <>
-      <Warning
-        id={id}
-        draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
-        publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
-      />
+      <Warning {...publishedText} />
       <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>
         Bekreft avpublisering
       </Button>
@@ -91,11 +94,17 @@ const ConfirmUnpublishTextButton = ({
   );
 };
 
+interface WarningProps {
+  id: string;
+  draftMaltekstseksjonIdList: string[];
+  publishedMaltekstseksjonIdList: string[];
+}
+
 const Warning = ({
   id,
   draftMaltekstseksjonIdList: draftList,
   publishedMaltekstseksjonIdList: publishedList,
-}: Omit<Props, 'title' | 'textType'>) => {
+}: WarningProps) => {
   if (draftList.length === 0 && publishedList.length === 0) {
     return null;
   }
@@ -137,6 +146,7 @@ const getSuffix = (draftList: string[], publishedList: string[]) => {
 
 const Container = styled.div`
   display: flex;
+  align-items: center;
   gap: 8px;
 `;
 

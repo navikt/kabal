@@ -17,7 +17,7 @@ interface TextLinkProps extends StatusTagProps {
 }
 
 export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
-  ({ children, icon, modified, to, isLoading = false, hasDraft, ...dragProps }, ref) => {
+  ({ children, icon, modified, to, isLoading = false, publishedDateTime, published, ...dragProps }, ref) => {
     if (isLoading) {
       return (
         <StyledLink to={to} {...dragProps}>
@@ -35,7 +35,7 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
       <StyledLink ref={ref} to={to} {...dragProps} title={children}>
         {icon}
         <EllipsisTitle>{getTitle(children)}</EllipsisTitle>
-        <StatusTag hasDraft={hasDraft} />
+        <StatusTag publishedDateTime={publishedDateTime} published={published} />
         <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
       </StyledLink>
     );
@@ -54,7 +54,7 @@ const EllipsisTitle = styled.span`
 
 const StyledLink = styled(Link)`
   display: grid;
-  grid-template-columns: min-content 1fr 73px min-content;
+  grid-template-columns: min-content 1fr 85px min-content;
   gap: 8px;
   align-content: center;
   align-items: center;
