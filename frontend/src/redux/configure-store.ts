@@ -14,6 +14,7 @@ import { messagesApi } from '@app/redux-api/messages';
 import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { searchApi } from '@app/redux-api/search';
 import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
+import { svarbrevApi } from '@app/redux-api/svarbrev';
 import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { RootState, rootReducer } from './root';
@@ -41,6 +42,7 @@ export const reduxStore = configureStore({
       journalposterApi.middleware,
       searchApi.middleware,
       logiskeVedleggApi.middleware,
+      svarbrevApi.middleware,
     ]),
 });
 
