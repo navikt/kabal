@@ -32,6 +32,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     ytelseId,
     prosessfullmektig,
     saksnummer,
+    varsletFrist,
   } = oppgavebehandling;
 
   return (
@@ -67,6 +68,10 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       <Saksnummer saksnummer={saksnummer} />
 
       <MottattVedtaksinstans />
+
+      <BehandlingSection label="Varslet frist">
+        {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
+      </BehandlingSection>
 
       <BehandlingSection label="Fra NAV-enhet">
         {fraNAVEnhetNavn} - {fraNAVEnhet}

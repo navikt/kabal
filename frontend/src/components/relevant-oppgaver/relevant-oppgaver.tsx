@@ -130,6 +130,7 @@ const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Open,
 ];
@@ -141,6 +142,7 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,

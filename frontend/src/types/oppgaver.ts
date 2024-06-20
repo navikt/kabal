@@ -29,6 +29,7 @@ export interface IOppgave {
   avsluttetAvSaksbehandlerDate: DateString | null;
   fagsystemId: string;
   frist: DateString | null;
+  varsletFrist: DateString | null;
   hjemmelIdList: string[];
   registreringshjemmelIdList: string[];
   id: string;
@@ -51,6 +52,7 @@ export interface IOppgave {
 
 export enum SortFieldEnum {
   FRIST = 'FRIST',
+  VARSLET_FRIST = 'VARSLET_FRIST',
   MOTTATT = 'MOTTATT',
   ALDER = 'ALDER',
   PAA_VENT_FROM = 'PAA_VENT_FROM',
@@ -68,12 +70,14 @@ export interface FromDateSortKeys {
   ferdigstiltFrom?: string;
   returnertFrom?: string;
   fristFrom?: string;
+  varsletFristFrom?: string;
 }
 
 export interface ToDateSortKeys {
   ferdigstiltTo?: string;
   returnertTo?: string;
   fristTo?: string;
+  varsletFristTo?: string;
 }
 
 export interface CommonOppgaverParams extends FromDateSortKeys, ToDateSortKeys {

@@ -20,6 +20,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.FradelingReason,
 ];

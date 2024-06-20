@@ -19,7 +19,7 @@ interface SortProps {
   params: CommonOppgaverParams;
   onSortChange: TableProps['onSortChange'];
   sortKey: SortFieldEnum;
-  children: string;
+  children: string | null;
 }
 
 interface FilterProps {
@@ -74,25 +74,27 @@ interface DateColumnHeaderProps {
   params: CommonOppgaverParams;
   setParams: SetCommonOppgaverParams;
   onSortChange: TableProps['onSortChange'];
-  children: string;
+  children: string | null;
   fromKey: keyof FromDateSortKeys;
   toKey: keyof ToDateSortKeys;
+  sortKey: SortFieldEnum;
 }
 
 export const DateColumnHeader = ({
-  params: filters,
-  setParams: setFilters,
+  params,
+  setParams,
   onSortChange,
   children,
   fromKey,
   toKey,
+  sortKey,
 }: DateColumnHeaderProps) => (
-  <StyledColumnHeader aria-sort={filters.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
+  <StyledColumnHeader aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <Container>
-      <Sort params={filters} onSortChange={onSortChange} sortKey={SortFieldEnum.MOTTATT}>
+      <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
         {children}
       </Sort>
-      <Filter params={filters} setParams={setFilters} fromKey={fromKey} toKey={toKey} />
+      <Filter params={params} setParams={setParams} fromKey={fromKey} toKey={toKey} />
     </Container>
   </StyledColumnHeader>
 );

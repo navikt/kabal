@@ -53,19 +53,37 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.Age:
         return (
           <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
-            Alder
+            {TABLE_HEADERS[key]}
           </StyledColumnHeader>
         );
       case ColumnKeyEnum.Deadline:
         return (
-          <DateColumnHeader key={key} {...baseColumnHeaderProps} fromKey="fristFrom" toKey="fristTo">
-            Frist
+          <DateColumnHeader
+            key={key}
+            {...baseColumnHeaderProps}
+            fromKey="fristFrom"
+            toKey="fristTo"
+            sortKey={SortFieldEnum.FRIST}
+          >
+            {TABLE_HEADERS[key]}
+          </DateColumnHeader>
+        );
+      case ColumnKeyEnum.VarsletFrist:
+        return (
+          <DateColumnHeader
+            key={key}
+            {...baseColumnHeaderProps}
+            fromKey="varsletFristFrom"
+            toKey="varsletFristTo"
+            sortKey={SortFieldEnum.VARSLET_FRIST}
+          >
+            {TABLE_HEADERS[key]}
           </DateColumnHeader>
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
           <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
-            På vent til
+            {TABLE_HEADERS[key]}
           </StyledColumnHeader>
         );
       case ColumnKeyEnum.TildelingWithFilter:
@@ -75,14 +93,26 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Medunderskriver key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
         return (
-          <DateColumnHeader {...baseColumnHeaderProps} key={key} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo">
-            Fullført
+          <DateColumnHeader
+            {...baseColumnHeaderProps}
+            key={key}
+            fromKey="ferdigstiltFrom"
+            toKey="ferdigstiltTo"
+            sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
+          >
+            {TABLE_HEADERS[key]}
           </DateColumnHeader>
         );
       case ColumnKeyEnum.Returnert:
         return (
-          <DateColumnHeader {...baseColumnHeaderProps} key={key} fromKey="returnertFrom" toKey="returnertTo">
-            Returnert
+          <DateColumnHeader
+            {...baseColumnHeaderProps}
+            key={key}
+            fromKey="returnertFrom"
+            toKey="returnertTo"
+            sortKey={SortFieldEnum.RETURNERT_FRA_ROL}
+          >
+            {TABLE_HEADERS[key]}
           </DateColumnHeader>
         );
       case ColumnKeyEnum.Rol:

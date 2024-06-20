@@ -18,6 +18,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
+  ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.PreviousSaksbehandler,
   ColumnKeyEnum.DatoSendtTilTr,
   ColumnKeyEnum.OppgavestyringNonFilterable,

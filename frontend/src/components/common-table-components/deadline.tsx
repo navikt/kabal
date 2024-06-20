@@ -23,7 +23,11 @@ export const Deadline = (oppgave: IOppgave) => {
   return <EditableDeadline {...oppgave} />;
 };
 
-const ReadOnlyDeadline = ({ frist }: IOppgave) => {
+interface ReadOnlyDeadlineProps {
+  frist: string | null;
+}
+
+export const ReadOnlyDeadline = ({ frist }: ReadOnlyDeadlineProps) => {
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
 
   return (

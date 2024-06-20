@@ -1,6 +1,7 @@
 import {
   Buldings3Icon,
   BulletListIcon,
+  EnvelopeClosedIcon,
   FileIcon,
   FileTextIcon,
   GavelSoundBlockIcon,
@@ -75,6 +76,10 @@ export const Nav = () => (
 
       <NavItem to="/bunntekster" testId="bunntekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <DocumentFooter size={22} color="#fff" /> Bunntekster
+      </NavItem>
+
+      <NavItem to="/svarbrev" testId="svarbrev-nav-link" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
+        <EnvelopeClosedIcon /> Svarbrev
       </NavItem>
 
       <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
