@@ -11,6 +11,7 @@ export const useTextQuery = (): IGetTextsParams => {
   const utfallIdList = params.get('utfallIdList');
   const enhetIdList = params.get('enhetIdList');
   const templateSectionIdList = params.get('templateSectionIdList');
+  const trash = params.get('trash');
 
   return useMemo(() => {
     const q: IGetTextsParams = {
@@ -18,6 +19,7 @@ export const useTextQuery = (): IGetTextsParams => {
       enhetIdList: enhetIdList?.split(','),
       templateSectionIdList: templateSectionIdList?.split(','),
       textType,
+      trash: trash === 'true',
     };
 
     if (utfallIdList !== null) {
@@ -25,5 +27,5 @@ export const useTextQuery = (): IGetTextsParams => {
     }
 
     return q;
-  }, [enhetIdList, ytelseHjemmelIdList, templateSectionIdList, textType, utfallIdList]);
+  }, [ytelseHjemmelIdList, enhetIdList, templateSectionIdList, textType, trash, utfallIdList]);
 };

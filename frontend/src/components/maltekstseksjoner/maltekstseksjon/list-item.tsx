@@ -1,5 +1,5 @@
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Button, HelpText, Tooltip } from '@navikt/ds-react';
+import { Button, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
@@ -44,20 +44,6 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
   );
 
   const text = !isLoading && versions !== undefined ? versions[0] : undefined;
-
-  const isReady = text !== undefined;
-
-  const Icon = useMemo(() => {
-    if (!isReady) {
-      return CircleBrokenIcon;
-    }
-
-    if (text.textType === RichTextTypes.MALTEKST) {
-      return PadlockLockedIcon;
-    }
-
-    return PencilWritingIcon;
-  }, [isReady, text?.textType]);
 
   const onRemove = useCallback(() => {
     updateTextIdList({
@@ -108,23 +94,40 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     );
   }
 
+  if (text === undefined) {
+    if (isLoading) {
+      return <SkeletonItem />;
+    }
+
+    return (
+      <>
+        {unlink}
+        <CircleBrokenIcon aria-hidden />
+        Teksten ble ikke funnet
+      </>
+    );
+  }
+
+  const Icon = text.textType === RichTextTypes.MALTEKST ? PadlockLockedIcon : PencilWritingIcon;
+
   return (
     <>
       {maltekstseksjon.publishedDateTime === null ? unlink : null}
       <TextLink
         ref={dragElementRef}
         to={path}
-        modified={isReady ? text.modified : ''}
+        modified={text.modified}
         icon={<Icon aria-hidden />}
-        hasDraft={text?.publishedDateTime === null}
-        draggable={isReady}
+        publishedDateTime={text.publishedDateTime}
+        published={text.published}
+        draggable
         onDragStart={onDragStart}
         onDragEnd={() => {
           removeDragUI.current();
           clearDragState();
         }}
       >
-        {isReady ? text.title : 'Laster...'}
+        {text.title}
       </TextLink>
     </>
   );
@@ -145,3 +148,19 @@ const HelpTextContainer = styled.div`
   max-width: 300px;
   white-space: normal;
 `;
+
+const SkeletonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+`;
+
+const SkeletonItem = () => (
+  <SkeletonContainer>
+    <Skeleton width={20} />
+    <Skeleton style={{ flexGrow: 1 }} />
+    <Skeleton width={85} />
+    <Skeleton width={150} />
+  </SkeletonContainer>
+);

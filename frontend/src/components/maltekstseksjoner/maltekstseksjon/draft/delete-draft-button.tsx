@@ -19,7 +19,7 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
   const { data: versions = [] } = useGetMaltekstseksjonVersionsQuery(id);
   const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
 
-  const text = `Slett ${lastPublishedVersion !== undefined ? 'utkast' : 'maltekstseksjon'}`;
+  const text = lastPublishedVersion === undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast';
 
   if (isOpen) {
     return (
@@ -38,7 +38,7 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
           title={title}
           onDraftDeleted={onDraftDeleted}
           query={query}
-          lastPublishedVersion={lastPublishedVersion}
+          versions={versions}
         >
           {text}
         </ConfirmDeleteDraftButton>
@@ -55,21 +55,14 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
 
 interface ConfirmProps extends Props {
   children: string;
-  lastPublishedVersion: IMaltekstseksjon | undefined;
+  versions: IMaltekstseksjon[];
 }
 
-const ConfirmDeleteDraftButton = ({
-  id,
-  title,
-  onDraftDeleted,
-  children,
-  query,
-  lastPublishedVersion,
-}: ConfirmProps) => {
+const ConfirmDeleteDraftButton = ({ id, title, onDraftDeleted, children, query, versions }: ConfirmProps) => {
   const [deleteDraft, { isLoading }] = useDeleteDraftVersionMutation({ fixedCacheKey: id });
 
   const onClick = async () => {
-    await deleteDraft({ id, query, lastPublishedVersion, title });
+    await deleteDraft({ id, query, versions, title });
     onDraftDeleted();
   };
 

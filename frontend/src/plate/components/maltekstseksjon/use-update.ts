@@ -22,7 +22,7 @@ type UpdateMaltekstseksjonFn = (
   element: MaltekstseksjonElement,
   resultat: IOppgavebehandling['resultat'],
   ytelseId: IOppgavebehandling['ytelseId'],
-  query: IGetTextsParams,
+  query: Omit<IGetTextsParams, 'trash'>,
 ) => Promise<void>;
 
 interface Result {
@@ -54,7 +54,7 @@ export const useUpdateMaltekstseksjon = (
     async (element, resultat, ytelseId, query) => {
       const { utfallId, extraUtfallIdSet, hjemmelIdSet } = resultat;
 
-      const maltekstseksjoner = await fetchMaltekstseksjon(query).unwrap();
+      const maltekstseksjoner = await fetchMaltekstseksjon({ ...query, trash: false }).unwrap();
 
       const [lexSpecialisStatus, result] = lexSpecialis(
         templateId,

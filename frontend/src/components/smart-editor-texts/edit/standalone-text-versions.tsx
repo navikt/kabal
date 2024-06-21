@@ -51,8 +51,6 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
   const publishedVersion = useMemo(() => versions.find(({ published }) => published), [versions]);
   const { versionId } = useParams();
 
-  const version = publishedVersion ?? firstText;
-
   const onDraftDeleted = () =>
     navigate(
       publishedVersion?.versionId === undefined
@@ -68,7 +66,9 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
     <Container>
       <Header>
         <Changelog versions={versions} />
-        <UnpublishTextButton {...version} id={id} textType={textType} />
+        {publishedVersion === undefined ? null : (
+          <UnpublishTextButton publishedText={publishedVersion} textType={textType} />
+        )}
       </Header>
 
       <StyledVersionTabs<IDraft, IPublishedText>

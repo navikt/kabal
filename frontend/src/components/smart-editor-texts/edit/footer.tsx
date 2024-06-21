@@ -28,6 +28,7 @@ interface Props {
 export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslation, error }: Props) => {
   const [, { isLoading: publishIsLoading }] = usePublishMutation({ fixedCacheKey: text.id });
   const { data: versions = [] } = useGetTextVersionsQuery(text.id);
+  const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
 
   const { id, editors, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList, textType } = text;
 
@@ -43,7 +44,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         <DeleteLanguageVersion deleteTranslation={deleteTranslation} />
         {isDraft ? (
           <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
-            {`Slett ${versions.length <= 1 ? 'tekst' : 'utkast'}`}
+            {lastPublishedVersion === undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast'}
           </DeleteDraftButton>
         ) : null}
       </Row>

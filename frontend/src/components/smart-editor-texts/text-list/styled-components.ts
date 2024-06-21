@@ -22,7 +22,7 @@ export const Container = styled.div`
 
 export const StyledHeaders = styled.div`
   display: grid;
-  grid-template-columns: 1fr 70px 160px 48px;
+  grid-template-columns: 1fr 85px 160px 48px;
   gap: 8px;
   padding-left: 8px;
   padding-right: 8px;
@@ -58,7 +58,7 @@ export const ListItem = styled.li<{ $active: boolean }>`
 
 export const StyledLink = styled(Link)`
   display: grid;
-  grid-template-columns: 1fr 70px 160px 48px;
+  grid-template-columns: 1fr 85px 160px 48px;
   gap: 8px;
   align-content: center;
   align-items: center;
