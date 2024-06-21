@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
 import { useLatestYtelser, useSakstyperToUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { ILovKildeToRegistreringshjemmel, IYtelse } from '@app/types/kodeverk';
 
@@ -40,4 +41,18 @@ export const useAllLovkildeToRegistreringshjemmelForYtelse = (
   }
 
   return ytelse.lovKildeToRegistreringshjemler;
+};
+
+export const useYtelseName = (ytelseId: string): [undefined, true] | [string, false] => {
+  const { data: ytelser = EMPTY_ARRAY, isLoading } = useYtelserAll();
+
+  return useMemo(() => {
+    if (isLoading) {
+      return [undefined, true];
+    }
+
+    const name = ytelser.find(({ id }) => id === ytelseId)?.navn ?? ytelseId;
+
+    return [name, false];
+  }, [isLoading, ytelser, ytelseId]);
 };

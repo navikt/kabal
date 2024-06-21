@@ -17,6 +17,7 @@ import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/red
 import { RegelverkPage } from '@app/pages/regelverk/regelverk';
 import { SearchPage } from '@app/pages/search/search';
 import { SettingsPage } from '@app/pages/settings/settings';
+import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
 import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
 import { TrygderettsankebehandlingPage } from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { Role } from '@app/types/bruker';
@@ -84,6 +85,10 @@ export const Router = () => (
       <Route path="regelverk/:id/versjoner/:versionId" element={<RegelverkPage />} />
       <Route path="regelverk/:id" element={<RegelverkPage />} />
       <Route path="regelverk" element={<RegelverkPage />} />
+    </Route>
+
+    <Route element={<ProtectedRoute roles={[Role.KABAL_SVARBREVREDIGERING]} />}>
+      <Route path="svarbrev" element={<SvarbrevPage />} />
     </Route>
 
     <Route element={<ProtectedRoute roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]} />}>
