@@ -110,7 +110,7 @@ app.get('/assets/*', serveStatic);
 app.get('*', serveIndex);
 
 // Start server.
-export const startServer = () => app.listen({ port: serverConfig.port });
+app.listen({ port: serverConfig.port });
 
 // Initialize.
 init();

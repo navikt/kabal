@@ -8,8 +8,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "node --watch --trace-warnings -r dotenv-flow/config --es-module-specifier-resolution=node dist/cluster.js",
-    "build": "bun build ./src/cluster.ts --target node --format esm --sourcemap --outdir dist",
+    "start": "node --watch --trace-warnings -r dotenv-flow/config --es-module-specifier-resolution=node dist/server.js",
+    "build": "bun build ./src/server.ts --target node --format esm --sourcemap --outdir dist",
     "dev:build": "npm run build -- --watch",
     "dev:start": "npm run start",
     "lint": "eslint ./src/**/*.ts --color --cache --cache-strategy content --cache-location .eslintcache",
