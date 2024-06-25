@@ -2,6 +2,7 @@ import { getLogger } from '@app/logger';
 import { existsSync, readFileSync } from 'node:fs';
 import { PROXY_VERSION, frontendDistDirectoryPath } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
+import fastifyPlugin from 'fastify-plugin';
 import { RouteHandler } from 'fastify';
 
 const log = getLogger('serve-index-file');
@@ -16,9 +17,21 @@ if (!existsSync(indexFilePath)) {
 const indexFileContent = readFileSync(indexFilePath, { encoding: 'utf-8' });
 const indexFile = indexFileContent.replace('{{ENVIRONMENT}}', ENVIRONMENT).replace('{{VERSION}}', PROXY_VERSION);
 
-export const serveIndex: RouteHandler = async (_, res) => {
-  res.header('content-type', 'text/html');
-  res.status(200);
+const serveIndexHandler: RouteHandler = async (_, reply) => {
+  reply.header('content-type', 'text/html');
+  reply.status(200);
 
-  return res.send(indexFile);
+  return reply.send(indexFile);
 };
+
+export const SERVE_INDEX_PLUGIN_ID = 'serve-index';
+
+export const serveIndexPlugin = fastifyPlugin(
+  (app, _, pluginDone) => {
+    app.get('/', serveIndexHandler);
+    app.get('*', serveIndexHandler);
+
+    pluginDone();
+  },
+  { fastify: '4', name: SERVE_INDEX_PLUGIN_ID },
+);

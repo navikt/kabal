@@ -4,7 +4,11 @@ import { FastifyRequest } from 'fastify';
 export const TRACEPARENT_HEADER = 'traceparent';
 export const TRACEPARENT_QUERY = 'traceparent';
 
-export const traceIdAndParentToContext = ({ headers, query, clientVersion }: FastifyRequest) => {
+export const traceIdAndParentToContext = ({
+  headers,
+  query,
+  clientVersion,
+}: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
   const traceparentHeader = headers[TRACEPARENT_HEADER];
 
   if (typeof traceparentHeader === 'string' && traceparentHeader.length !== 0) {

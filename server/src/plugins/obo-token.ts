@@ -4,47 +4,56 @@ import { getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import fastifyPlugin from 'fastify-plugin';
+import { isDeployed } from '@app/config/env';
 
 const log = getLogger('obo-token-plugin');
 
+export const oboAccessTokenMapKey = Symbol('oboAccessTokenMap');
+
 declare module 'fastify' {
-  export interface FastifyRequest {
-    oboAccessToken: string;
+  interface FastifyRequest {
+    [oboAccessTokenMapKey]: Map<string, string>;
+    ensureOboAccessToken(appName: string, reply: FastifyReply): Promise<void>;
+    getOboAccessToken(appName: string): string | undefined;
   }
 }
 
-export interface OboTokenPluginOptions {
-  appNames: string[];
-}
+const NOOP = async () => {
+  // No operation.
+};
 
-export const oboAccessTokenPlugin = fastifyPlugin<OboTokenPluginOptions>(
-  (app, { appNames }, pluginDone) => {
-    app.decorateRequest('oboAccessToken', '');
+export const oboAccessTokenPlugin = fastifyPlugin(
+  (app, _, pluginDone) => {
+    app.decorateRequest(oboAccessTokenMapKey, null);
 
-    app.addHook('preHandler', async (req, reply) => {
-      const { url, accessToken } = req;
+    app.addHook('onRequest', async (req): Promise<void> => {
+      req[oboAccessTokenMapKey] = new Map();
+    });
 
-      if (accessToken === undefined || accessToken.length === 0) {
-        return;
-      }
+    if (isDeployed) {
+      app.decorateRequest('ensureOboAccessToken', async function (appName: string, reply: FastifyReply) {
+        await ensureOboToken(appName, this, reply);
+      });
+    } else {
+      app.decorateRequest('ensureOboAccessToken', NOOP);
+    }
 
-      const appName = appNames.find((name) => url.startsWith(`/api/${name}`));
-
-      if (appName === undefined) {
-        return;
-      }
-
-      const oboAccessToken = await getOboToken(appName, req, reply);
-
-      if (oboAccessToken !== undefined) {
-        req.oboAccessToken = oboAccessToken;
-      }
+    app.decorateRequest('getOboAccessToken', function (appName: string) {
+      return this[oboAccessTokenMapKey].get(appName);
     });
 
     pluginDone();
   },
   { fastify: '4', name: 'obo-access-token', dependencies: ['access-token', 'server-timing'] },
 );
+
+const ensureOboToken = async (appName: string, req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+  const oboAccessToken = await getOboToken(appName, req, reply);
+
+  if (oboAccessToken !== undefined) {
+    req[oboAccessTokenMapKey].set(appName, oboAccessToken);
+  }
+};
 
 type GetOboToken = (appName: string, req: FastifyRequest, reply: FastifyReply) => Promise<string | undefined>;
 

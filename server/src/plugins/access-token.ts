@@ -3,7 +3,7 @@ import { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
 declare module 'fastify' {
-  export interface FastifyRequest {
+  interface FastifyRequest {
     accessToken: string;
   }
 }

@@ -1,4 +1,4 @@
-import { resetClientsAndUniqueUsersMetrics } from '@app/routes/version/unique-users-gauge';
+import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
 import { getLogger } from './logger';
 import { EmojiIcons, sendToSlack } from './slack';
 import { isDeployed } from '@app/config/env';
@@ -38,7 +38,7 @@ export const processErrors = () => {
     .on('beforeExit', async (code) => {
       const msg = `Crash ${JSON.stringify(code)}`;
       log.error({ msg });
-      sendToSlack(msg, EmojiIcons.Scream);
       await resetClientsAndUniqueUsersMetrics();
+      await sendToSlack(msg, EmojiIcons.Broken);
     });
 };

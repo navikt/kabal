@@ -3,7 +3,11 @@ import { FastifyRequest } from 'fastify';
 export const TAB_ID_QUERY = 'tabId';
 export const CLIENT_VERSION_QUERY = 'version';
 
-export const getHeaderOrQueryValue = (req: FastifyRequest, headerKey: string, queryKey: string): string | undefined => {
+export const getHeaderOrQueryValue = (
+  req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>,
+  headerKey: string,
+  queryKey: string,
+): string | undefined => {
   const header = req.headers[headerKey];
 
   if (typeof header === 'string' && header.length !== 0) {

@@ -23,7 +23,7 @@ export type TimedFn = () => Promise<void> | void;
 export type MeasureServerTimingFn = (opts: { name: string; description?: string }, timedFn: TimedFn) => void;
 
 declare module 'fastify' {
-  export interface FastifyReply {
+  interface FastifyReply {
     /**
      * Adds a server timing entry to the response.
      * @param name - The name of the server timing entry.
@@ -61,7 +61,7 @@ declare module 'fastify' {
     [serverTimingHeaders]: string[];
   }
 
-  export interface FastifyRequest {
+  interface FastifyRequest {
     /**
      * The start time of the request.
      */

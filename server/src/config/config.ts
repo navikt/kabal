@@ -16,7 +16,7 @@ export const API_CLIENT_IDS = [
 
 const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
 const serverDirectoryPath = cwd;
-const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
+export const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');
 
 const defaultValue = isLocal ? 'local' : undefined;

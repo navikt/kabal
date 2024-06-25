@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { getLogger } from '@app/logger';
-import { RouteHandler } from 'fastify';
 import { getMimeType } from '@app/helpers/mime-type';
+import fastifyPlugin from 'fastify-plugin';
 
 const log = getLogger('serve-assets');
 
@@ -30,21 +30,30 @@ readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
   }
 });
 
-export const serveStatic: RouteHandler = async (req, res) => {
-  const fileEntry = files.get(req.url);
+export const SERVE_ASSETS_PLUGIN_ID = 'serve-assets';
 
-  if (fileEntry === undefined) {
-    log.warn({ msg: 'File not found', data: { path: req.url } });
-    res.header('content-type', 'text/plain');
-    res.status(404);
+export const serveAssetsPlugin = fastifyPlugin(
+  (app, _, pluginDone) => {
+    app.get('/assets/*', async (req, res) => {
+      const fileEntry = files.get(req.url);
 
-    return res.send('Not Found');
-  }
+      if (fileEntry === undefined) {
+        log.warn({ msg: 'File not found', data: { path: req.url } });
+        res.header('content-type', 'text/plain');
+        res.status(404);
 
-  const { data, mimeType } = fileEntry;
+        return res.send('Not Found');
+      }
 
-  res.header('content-type', mimeType);
-  res.status(200);
+      const { data, mimeType } = fileEntry;
 
-  return res.send(data);
-};
+      res.header('content-type', mimeType);
+      res.status(200);
+
+      return res.send(data);
+    });
+
+    pluginDone();
+  },
+  { fastify: '4', name: SERVE_ASSETS_PLUGIN_ID },
+);
