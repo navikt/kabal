@@ -7,11 +7,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
-    "jsx": "react-jsx", // support JSX
     // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "moduleResolution": "Bundler",
     // Best practices
     "strict": true,
     "skipLibCheck": true,
@@ -37,12 +34,11 @@
         "*"
       ]
     },
-
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "./dist/**"

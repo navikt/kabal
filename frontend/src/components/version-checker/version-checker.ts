@@ -27,9 +27,9 @@ class VersionChecker {
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
-    if (!ENVIRONMENT.isLocal) {
-      this.createEventSource();
-    } else {
+    this.createEventSource();
+
+    if (ENVIRONMENT.isLocal) {
       window.sendUpdateRequest = (data: UpdateRequest) => {
         this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
       };
@@ -59,7 +59,6 @@ class VersionChecker {
       this.delay = 0;
     });
 
-    events.addEventListener('message', this.onVersion);
     events.addEventListener('version', this.onVersion);
 
     events.addEventListener(UPDATE_REQUEST_EVENT, this.onUpdateRequest);
