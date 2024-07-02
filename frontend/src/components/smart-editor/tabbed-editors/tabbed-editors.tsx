@@ -1,5 +1,5 @@
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Tabs } from '@navikt/ds-react';
+import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
@@ -87,7 +87,11 @@ const TabNew = () => {
     return null;
   }
 
-  return <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />;
+  return (
+    <Tooltip content="Opprett nytt dokument">
+      <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
+    </Tooltip>
+  );
 };
 
 interface TabPanelNewProps {
