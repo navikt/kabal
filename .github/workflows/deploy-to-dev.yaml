@@ -3,6 +3,11 @@ name: Manual deploy to dev
 on:
   workflow_call:
     inputs:
+      run_e2e:
+        description: "Run E2E tests"
+        required: false
+        default: true
+        type: boolean
       e2e_tag:
         description: "Tag of E2E image to run"
         required: false
@@ -14,6 +19,11 @@ on:
         required: true
   workflow_dispatch:
     inputs:
+      run_e2e:
+        description: "Run E2E tests"
+        required: false
+        default: false
+        type: boolean
       e2e_tag:
         description: "Tag of E2E image to run"
         required: false
@@ -116,6 +126,7 @@ jobs:
   e2e_test:
     name: E2E
     needs: deploy_to_dev
+    if: ${{ inputs.run_e2e }}
     permissions:
       contents: read
       id-token: write
