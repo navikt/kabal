@@ -73,5 +73,6 @@ spec:
     timeout: 1
     failureThreshold: 5
   observability:
-    tracing:
+    autoInstrumentation:
       enabled: true
+      runtime: nodejs
