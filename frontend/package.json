@@ -6,7 +6,6 @@
     "scripts": {
         "start": "vite & tsc --watch",
         "build": "vite build",
-        "build:bun": "bun build --entrypoints ./src/index.tsx --outdir ./dist --target browser",
         "typecheck": "tsc",
         "lint": "eslint src --color --cache --cache-strategy content --cache-location .eslintcache"
     },
