@@ -53,9 +53,9 @@ export const Toast = memo(
           close={close}
           message={message}
           id={id}
-          {...rest}
-          ref={ref}
           key={id}
+          ref={ref}
+          {...rest}
         />
       );
     }
