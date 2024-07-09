@@ -13,6 +13,7 @@ export default defineConfig({
       '/kombinert-dokument': 'https://kabal.intern.dev.nav.no',
       '/nytt-dokument': 'https://kabal.intern.dev.nav.no',
       '/vedleggsoversikt': 'https://kabal.intern.dev.nav.no',
+      '/version': 'https://kabal.intern.dev.nav.no',
     },
   },
 })
