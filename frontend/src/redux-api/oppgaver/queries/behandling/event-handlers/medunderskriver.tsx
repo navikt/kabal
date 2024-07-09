@@ -36,10 +36,7 @@ export const handleMedunderskriverEvent =
         }
       }
 
-      if (medunderskriver !== null) {
-        draft.medunderskriver.employee = medunderskriver;
-      }
-
+      draft.medunderskriver.employee = medunderskriver;
       draft.medunderskriver.flowState = flowState;
       draft.modified = timestamp;
 
