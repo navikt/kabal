@@ -33,3 +33,5 @@ export const DOMAIN: string = getEnvironmentVersion(LOCAL_DOMAIN, DEV_URL, PROD_
 export const URL: string = getEnvironmentVersion(LOCAL_URL, DEV_URL, PROD_URL);
 
 export const NAIS_NAMESPACE = requiredEnvString('NAIS_NAMESPACE', 'none');
+
+export const POD_NAME = requiredEnvString('OTEL_RESOURCE_ATTRIBUTES_POD_NAME', 'none');
