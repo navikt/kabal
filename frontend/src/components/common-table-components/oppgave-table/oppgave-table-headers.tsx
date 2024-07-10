@@ -75,13 +75,13 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Medunderskriver key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Finished:
         return (
-          <DateColumnHeader {...baseColumnHeaderProps} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo">
+          <DateColumnHeader {...baseColumnHeaderProps} key={key} fromKey="ferdigstiltFrom" toKey="ferdigstiltTo">
             Fullført
           </DateColumnHeader>
         );
       case ColumnKeyEnum.Returnert:
         return (
-          <DateColumnHeader {...baseColumnHeaderProps} fromKey="returnertFrom" toKey="returnertTo">
+          <DateColumnHeader {...baseColumnHeaderProps} key={key} fromKey="returnertFrom" toKey="returnertTo">
             Returnert
           </DateColumnHeader>
         );
