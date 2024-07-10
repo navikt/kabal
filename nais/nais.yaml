@@ -63,16 +63,16 @@ spec:
     - secret: slack-url
   liveness:
     path: /isAlive
-    initialDelay: 0
+    initialDelay: 3
     periodSeconds: 1
     timeout: 1
-    failureThreshold: 5
+    failureThreshold: 10
   readiness:
     path: /isReady
-    initialDelay: 0
+    initialDelay: 3
     periodSeconds: 1
     timeout: 1
-    failureThreshold: 5
+    failureThreshold: 10
   observability:
     autoInstrumentation:
       enabled: true
