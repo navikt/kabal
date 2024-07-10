@@ -5,6 +5,7 @@ import { getLogger } from '@app/logger';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import fastifyPlugin from 'fastify-plugin';
 import { isDeployed } from '@app/config/env';
+import { oboRequestDuration } from '@app/auth/cache-gauge';
 
 const log = getLogger('obo-token-plugin');
 
@@ -75,7 +76,10 @@ const getOboToken: GetOboToken = async (appName, req, reply) => {
         trace_id,
         span_id,
       );
-      reply.addServerTiming('obo_token_middleware', getDuration(oboStart), 'OBO Token Middleware');
+
+      const duration = getDuration(oboStart);
+      oboRequestDuration.observe(duration);
+      reply.addServerTiming('obo_token_middleware', duration, 'OBO Token Middleware');
 
       return oboAccessToken;
     } catch (error) {
