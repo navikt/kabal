@@ -54,6 +54,7 @@ spec:
         - application: kabal-text-templates
       external:
         - host: login.microsoftonline.com
+        - host: hooks.slack.com
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
