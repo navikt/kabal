@@ -1,4 +1,4 @@
-import { cacheGauge } from '@app/auth/cache-gauge';
+import { cacheGauge, cacheSizeGauge } from '@app/auth/cache-gauge';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('obo-cache');
@@ -30,6 +30,7 @@ export class OboMemoryCache {
     if (expiresAt <= now()) {
       cacheGauge.inc({ hit: 'expired' });
       this.cache.delete(key);
+      cacheSizeGauge.set(this.cache.size);
 
       return null;
     }
@@ -41,6 +42,7 @@ export class OboMemoryCache {
 
   public async set(key: string, token: string, expiresAt: number) {
     this.cache.set(key, [token, expiresAt]);
+    cacheSizeGauge.set(this.cache.size);
   }
 
   private all() {
@@ -62,6 +64,7 @@ export class OboMemoryCache {
       .filter((d) => d).length;
 
     const after = this.cache.size;
+    cacheSizeGauge.set(after);
 
     if (deleted === 0) {
       log.debug({ msg: `Cleaned the OBO token cache. No expired tokens found. Cache had ${before} tokens.` });
