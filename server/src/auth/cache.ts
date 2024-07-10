@@ -1,3 +1,4 @@
+import { cacheGauge } from '@app/auth/cache-gauge';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('obo-cache');
@@ -19,16 +20,21 @@ export class OboMemoryCache {
     const value = this.cache.get(key);
 
     if (value === undefined) {
+      cacheGauge.inc({ hit: 'miss' });
+
       return null;
     }
 
     const [token, expiresAt] = value;
 
     if (expiresAt <= now()) {
+      cacheGauge.inc({ hit: 'expired' });
       this.cache.delete(key);
 
       return null;
     }
+
+    cacheGauge.inc({ hit: 'hit' });
 
     return token;
   }
