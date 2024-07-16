@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test';
+import { IMainDocument } from '@app/types/documents/documents';
 import { getDocumentCount } from './get-document-count';
 
 describe('calculate document count', () => {
@@ -43,6 +44,15 @@ describe('calculate document count', () => {
     const result = getDocumentCount([d`bar (2)`, d`bar (5)`, d`bar (1)`, d`bar (4)`], d`bar`);
     expect(result).toBe(3);
   });
+
+  it('should return 0 for no complete matches', () => {
+    expect.assertions(1);
+    const result = getDocumentCount([d`bartest`, d`bartest (1)`], d`bar`);
+    expect(result).toBe(0);
+  });
 });
 
-const d = (tittel: TemplateStringsArray): { tittel: string } => ({ tittel: tittel.toString() });
+const d = (tittel: TemplateStringsArray): Pick<IMainDocument, 'tittel' | 'parentId'> => ({
+  tittel: tittel.toString(),
+  parentId: null,
+});
