@@ -71,8 +71,8 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
         });
       }
     } else if (value === NOT_SELECTED_VALUE) {
+      // BE will handle extra utfall for this case
       updateUtfall({ oppgaveId, utfallId: null });
-      updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: [] });
     }
   };
 
