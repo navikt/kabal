@@ -13,7 +13,7 @@ run-name: Prod deploy of ${{ github.ref_name }}
 jobs:
   deploy_to_prod:
     name: Deploy
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
       id-token: write
