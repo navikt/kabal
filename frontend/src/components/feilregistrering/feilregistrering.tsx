@@ -95,7 +95,7 @@ const FloatingPanel = styled(Panel)<Position>`
   position: absolute;
   top: ${({ $position }) => ($position === 'over' ? 'auto' : '100%')};
   bottom: ${({ $position }) => ($position === 'over' ? '100%' : 'auto')};
-  right: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   row-gap: 16px;
