@@ -1,6 +1,7 @@
 import { BaseClient, Issuer } from 'openid-client';
 import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@app/config/config';
 import { getLogger } from '@app/logger';
+import { isLocal } from '@app/config/env';
 
 const log = getLogger('auth-client');
 
@@ -31,3 +32,5 @@ export const getAzureADClient = async () => {
     throw error;
   }
 };
+
+export const getIsAzureClientReady = () => isLocal || azureADClient !== null;

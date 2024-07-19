@@ -5,7 +5,7 @@ import { getLogger } from '@app/logger';
 import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import fastifyPlugin from 'fastify-plugin';
 import { isDeployed } from '@app/config/env';
-import { oboRequestDuration } from '@app/auth/cache-gauge';
+import { oboRequestDuration } from '@app/auth/cache/cache-gauge';
 
 const log = getLogger('obo-token-plugin');
 

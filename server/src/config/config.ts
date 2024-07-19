@@ -29,11 +29,3 @@ export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);
 export const START_TIME = Date.now();
-
-let isReady = false;
-
-export const setIsReady = () => {
-  isReady = true;
-};
-
-export const getIsReady = () => isReady;

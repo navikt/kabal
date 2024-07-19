@@ -1,5 +1,4 @@
 import { isDeployed } from '@app/config/env';
-import { setIsReady } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { EmojiIcons, sendToSlack } from '@app/slack';
 import { getAzureADClient } from '@app/auth/get-auth-client';
@@ -18,7 +17,6 @@ export const init = async () => {
       const time = getDuration(start);
       log.info({ msg: `Azure AD client initialized in ${formatDuration(time)}`, data: { time } });
     }
-    setIsReady();
   } catch (e) {
     await resetClientsAndUniqueUsersMetrics();
 
