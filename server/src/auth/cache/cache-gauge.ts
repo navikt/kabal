@@ -3,9 +3,16 @@ import { Counter, Gauge, Histogram } from 'prom-client';
 
 const labelNames = ['hit'] as const;
 
+export const cacheRedisGauge = new Counter({
+  name: 'obo_redis_cache',
+  help: 'Number of requests to the Redis OBO cache. "hit" is the type of hit: "miss", "invalid", "hit" or "expired".',
+  labelNames,
+  registers: [proxyRegister],
+});
+
 export const cacheGauge = new Counter({
   name: 'obo_cache',
-  help: 'Number of requests to the OBO cache. "hit" is the type of hit: "miss", "hit", or "expired".',
+  help: 'Number of requests to the OBO cache. "hit" is the type of hit: "miss", "redis", "hit", or "expired".',
   labelNames,
   registers: [proxyRegister],
 });
