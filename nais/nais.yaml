@@ -62,9 +62,6 @@ spec:
   envFrom:
     - secret: kabal-session-key
     - secret: slack-url
-  redis:
-    - instance: obo-cache
-      access: readwrite
   liveness:
     path: /isAlive
     initialDelay: 3

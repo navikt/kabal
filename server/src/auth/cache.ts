@@ -1,12 +1,11 @@
-import { cacheGauge, cacheSizeGauge } from '@app/auth/cache/cache-gauge';
-import { OboCacheTierInterface } from '@app/auth/cache/interface';
+import { cacheGauge, cacheSizeGauge } from '@app/auth/cache-gauge';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('obo-cache');
 
 type Value = [string, number];
 
-export class OboMemoryCache implements OboCacheTierInterface {
+export class OboMemoryCache {
   private cache: Map<string, Value> = new Map();
 
   constructor() {
@@ -17,7 +16,7 @@ export class OboMemoryCache implements OboCacheTierInterface {
     setInterval(() => this.clean(), 10 * 60 * 1000); // 10 minutes.
   }
 
-  public async get(key: string) {
+  public async get(key: string): Promise<string | null> {
     const value = this.cache.get(key);
 
     if (value === undefined) {
@@ -38,7 +37,7 @@ export class OboMemoryCache implements OboCacheTierInterface {
 
     cacheGauge.inc({ hit: 'hit' });
 
-    return { token, expiresAt };
+    return token;
   }
 
   public async set(key: string, token: string, expiresAt: number) {
@@ -81,4 +80,4 @@ export class OboMemoryCache implements OboCacheTierInterface {
 
 const now = () => Math.ceil(Date.now() / 1_000);
 
-export const oboMemoryCache = new OboMemoryCache();
+export const oboCache = new OboMemoryCache();
