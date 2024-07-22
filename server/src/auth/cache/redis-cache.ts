@@ -9,7 +9,7 @@ export class OboRedisCache implements OboCacheTierInterface {
   private client: RedisClientType;
 
   constructor(url: string, username: string, password: string) {
-    this.client = createClient({ url, username, password });
+    this.client = createClient({ url, username, password, socket: { keepAlive: false } });
     this.client.on('error', (error) => log.error({ msg: 'Redis Client Error', error }));
     this.client.connect();
   }
