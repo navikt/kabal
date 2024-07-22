@@ -37,56 +37,17 @@ export const resetClientsAndUniqueUsersMetrics = async () => {
   return new Promise<void>((resolve) => setTimeout(resolve, 2000));
 };
 
-interface TokenPayload {
-  aud: string;
-  iss: string;
-  iat: number;
-  nbf: number;
-  exp: number;
-  aio: string;
-  azp: string;
-  azpacr: string;
-  groups: string[];
-  name: string;
-  oid: string;
-  preferred_username: string;
-  rh: string;
-  scp: string;
-  sub: string;
-  tid: string;
-  uti: string;
-  ver: string;
-  NAVident: string;
-  azp_name: string;
-}
-
 /** Parses the user ID from the JWT. */
 export const startUserSession = (req: FastifyRequest): (() => void) => {
-  const { accessToken, trace_id, span_id } = req;
+  const { navIdent, trace_id, span_id } = req;
 
-  if (accessToken.length === 0) {
-    return NOOP;
-  }
-
-  const [, payload] = accessToken.split('.');
-
-  if (payload === undefined) {
-    log.warn({ msg: 'Token has no payload', trace_id, span_id });
+  if (navIdent.length === 0) {
+    log.warn({ msg: 'No NAV-ident related to the session', trace_id, span_id });
 
     return NOOP;
   }
 
-  const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
-
-  try {
-    const { NAVident: nav_ident } = JSON.parse(decodedPayload) as TokenPayload;
-
-    return start(nav_ident, req);
-  } catch (error) {
-    log.warn({ msg: 'Failed to parse NAV-ident from token', error, trace_id, span_id });
-
-    return NOOP;
-  }
+  return start(navIdent, req);
 };
 
 const NOOP = () => undefined;

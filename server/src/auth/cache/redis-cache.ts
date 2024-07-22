@@ -10,25 +10,21 @@ export type TokenListener = (message: TokenMessage) => void;
 const TOKEN_CHANNEL = 'obo-token';
 
 export class OboRedisCache {
+  #client: RedisClientType;
   #subscribeClient: RedisClientType;
-  #publishClient: RedisClientType;
-  #dataClient: RedisClientType;
 
   #listeners: TokenListener[] = [];
 
   constructor(url: string, username: string, password: string) {
-    this.#dataClient = createClient({ url, username, password, pingInterval: 3_000 });
-    this.#dataClient.on('error', (error) => log.error({ msg: 'Redis Data Client Error', error }));
+    this.#client = createClient({ url, username, password, pingInterval: 3_000 });
+    this.#client.on('error', (error) => log.error({ msg: 'Redis Data Client Error', error }));
 
-    this.#subscribeClient = this.#dataClient.duplicate();
+    this.#subscribeClient = this.#client.duplicate();
     this.#subscribeClient.on('error', (error) => log.error({ msg: 'Redis Subscribe Client Error', error }));
-
-    this.#publishClient = this.#dataClient.duplicate();
-    this.#publishClient.on('error', (error) => log.error({ msg: 'Redis Publish Client Error', error }));
   }
 
   public async init() {
-    await Promise.all([this.#subscribeClient.connect(), this.#publishClient.connect(), this.#dataClient.connect()]);
+    await Promise.all([this.#subscribeClient.connect(), this.#client.connect()]);
 
     await this.#subscribeClient.subscribe(TOKEN_CHANNEL, (json) => {
       try {
@@ -52,18 +48,18 @@ export class OboRedisCache {
   }
 
   #refreshCacheSizeMetric = async () => {
-    const count = await this.#dataClient.dbSize();
+    const count = await this.#client.dbSize();
     redisCacheSizeGauge.set(count);
   };
 
   public async getAll(): Promise<TokenMessage[]> {
-    const keys = await this.#dataClient.keys('*');
+    const keys = await this.#client.keys('*');
 
     if (keys.length === 0) {
       return [];
     }
 
-    const tokens = await this.#dataClient.mGet(keys);
+    const tokens = await this.#client.mGet(keys);
 
     const promises = tokens.map(async (token, index) => {
       if (token === null) {
@@ -75,9 +71,10 @@ export class OboRedisCache {
       if (key === undefined) {
         return null;
       }
-      const ttl = await this.#dataClient.ttl(key);
 
-      if (ttl === -2 || ttl === -1 || ttl === 0) {
+      const ttl = await this.#client.ttl(key);
+
+      if (ttl <= 0) {
         return null;
       }
 
@@ -94,7 +91,7 @@ export class OboRedisCache {
      * Returns -1 if the key exists but has no associated expire.
      * @see https://redis.io/docs/latest/commands/ttl/
      */
-    const [token, ttl] = await Promise.all([this.#dataClient.get(key), this.#dataClient.ttl(key)]);
+    const [token, ttl] = await Promise.all([this.#client.get(key), this.#client.ttl(key)]);
 
     if (token === null || ttl === -2) {
       redisCacheGauge.inc({ hit: 'miss' });
@@ -104,7 +101,7 @@ export class OboRedisCache {
 
     if (ttl === -1) {
       redisCacheGauge.inc({ hit: 'invalid' });
-      this.#dataClient.del(key);
+      this.#client.del(key);
       this.#refreshCacheSizeMetric();
 
       return null;
@@ -124,9 +121,9 @@ export class OboRedisCache {
 
   public async set(key: string, token: string, expiresAt: number) {
     const json = JSON.stringify({ key, token, expiresAt } satisfies TokenMessage);
-    this.#publishClient.publish(TOKEN_CHANNEL, json);
+    this.#client.publish(TOKEN_CHANNEL, json);
 
-    await this.#dataClient.set(key, token, { EXAT: expiresAt });
+    await this.#client.set(key, token, { EXAT: expiresAt });
 
     this.#refreshCacheSizeMetric();
   }
@@ -145,10 +142,8 @@ export class OboRedisCache {
 
   public get isReady() {
     return (
-      this.#dataClient.isReady &&
-      this.#dataClient.isOpen &&
-      this.#publishClient.isReady &&
-      this.#publishClient.isOpen &&
+      this.#client.isReady &&
+      this.#client.isOpen &&
       this.#subscribeClient.isReady &&
       this.#subscribeClient.isOpen &&
       this.#subscribeClient.isPubSubActive
