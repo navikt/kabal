@@ -4,6 +4,8 @@ import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
 import { getLogger } from '@app/logger';
 import { getDuration } from '@app/helpers/duration';
 import fastifyPlugin from 'fastify-plugin';
+import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 
 const log = getLogger('api-proxy');
 
@@ -82,7 +84,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         replyOptions: {
           rewriteRequestHeaders: (req) => getProxyRequestHeaders(req, appName),
           rewriteHeaders: (headers, req) => {
-            const serverTiming = headers['server-timing'];
+            const serverTiming = headers[SERVER_TIMING_HEADER];
 
             const total = `proxy;dur=${req === undefined ? 0 : getDuration(req.proxyStartTime)};desc="Proxy total (${appName})"`;
 
@@ -90,7 +92,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
               case 'string':
                 return {
                   ...headers,
-                  'server-timing': serverTiming
+                  [SERVER_TIMING_HEADER]: serverTiming
                     .split(',')
                     .map((entry) => prefixServerTimingEntry(entry, appName))
                     .concat(total)
@@ -99,7 +101,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
               case 'object':
                 return {
                   ...headers,
-                  'server-timing': serverTiming
+                  [SERVER_TIMING_HEADER]: serverTiming
                     .map((entry) => prefixServerTimingEntry(entry, appName))
                     .concat(total)
                     .join(', '),
@@ -114,7 +116,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: 'api-proxy', dependencies: ['obo-access-token', 'server-timing'] },
+  { fastify: '4', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const prefixServerTimingEntry = (entry: string, appName: string): string => {

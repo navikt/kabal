@@ -7,6 +7,8 @@ import { isDeployed } from '@app/config/env';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import { Static, Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 
 interface IBaseMetadata {
   title: string;
@@ -193,7 +195,7 @@ export const documentPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: 'document-routes', dependencies: ['obo-access-token', 'server-timing'] },
+  { fastify: '4', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const send = (reply: FastifyReply, url: string, documentIdList: string, title: string) => {
@@ -220,7 +222,7 @@ const getMetadata = async <T extends Metadata>(
   const response = await fetch(url, { method: 'GET', headers });
 
   reply.addServerTiming('metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
-  const serverTiming = response.headers.get('server-timing');
+  const serverTiming = response.headers.get(SERVER_TIMING_HEADER);
 
   if (serverTiming !== null) {
     reply.appendServerTimingHeader(serverTiming);

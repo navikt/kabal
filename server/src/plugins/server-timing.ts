@@ -86,6 +86,8 @@ interface ServerTimingPluginOptions {
   enableAutoTotal?: boolean;
 }
 
+export const SERVER_TIMING_PLUGIN_ID = 'server-timing';
+
 /**
  * Fastify plugin that adds server timing functionality.
  *
@@ -169,7 +171,7 @@ export const serverTimingPlugin = fastifyPlugin<ServerTimingPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: 'server-timing' },
+  { fastify: '4', name: SERVER_TIMING_PLUGIN_ID },
 );
 
 const serverTimingsToHeaderEntries = (serverTimings: ServerTiming[]): string[] =>

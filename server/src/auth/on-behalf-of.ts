@@ -2,18 +2,19 @@ import { Client, GrantBody } from 'openid-client';
 import { AZURE_APP_CLIENT_ID, NAIS_CLUSTER_NAME } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { oboCache } from '@app/auth/cache/cache';
+import { createHash } from 'node:crypto';
 
 const log = getLogger('obo-token');
 
 export const getOnBehalfOfAccessToken = async (
   authClient: Client,
   accessToken: string,
-  signature: string,
   appName: string,
   trace_id: string,
   span_id: string,
 ): Promise<string> => {
-  const cacheKey = `${signature}-${appName}`;
+  const hash = createHash('sha256').update(accessToken).digest('hex');
+  const cacheKey = `${hash}-${appName}`;
   const token = await oboCache.get(cacheKey);
 
   if (token !== null) {

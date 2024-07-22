@@ -24,6 +24,7 @@ import { querystringParser } from '@app/helpers/query-parser';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { healthPlugin } from '@app/plugins/health';
+import { navIdentPlugin } from '@app/plugins/nav-ident';
 
 processErrors();
 
@@ -52,6 +53,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(clientVersionPlugin)
   .register(serverTimingPlugin, { enableAutoTotal: true })
   .register(accessTokenPlugin)
+  .register(navIdentPlugin)
   .register(oboAccessTokenPlugin)
   .register(versionPlugin)
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
