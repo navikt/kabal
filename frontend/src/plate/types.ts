@@ -49,6 +49,7 @@ export interface RichText extends TText {
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
+  nowrap?: boolean;
 }
 
 /**

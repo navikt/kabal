@@ -1,9 +1,9 @@
-import { createPluginFactory, getNode, insertNodes, isElement } from '@udecode/plate-common';
+import { createPluginFactory, getNode, insertNodes, isElement, isText, setNodes } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
-import { Scrubber } from 'slate';
+import { Range, Scrubber } from 'slate';
 import { pushEvent } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,
@@ -29,7 +29,10 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
-import { RichTextEditorElement } from '@app/plate/types';
+import { RichText, RichTextEditorElement } from '@app/plate/types';
+
+const DATE_REGEX =
+  /(?:\d{2}(?:\.|-|\/)\d{2}(?:(?:\.|-|\/)\d{4})?)|(?:(?:\d+(?:\.|,| )?)+\d+(?:,-| kr(?:\.|,|:|;| |$)| kroner(?:\.|,|:|;| |$))?)/m;
 
 export const createNormalizeNodePlugin = createPluginFactory({
   key: 'normalize',
@@ -37,8 +40,65 @@ export const createNormalizeNodePlugin = createPluginFactory({
     const { normalizeNode } = editor;
 
     // eslint-disable-next-line complexity
-    editor.normalizeNode<RichTextEditorElement> = ([node, path]) => {
-      if (isElement(node) && node.children.length === 0) {
+    editor.normalizeNode<RichTextEditorElement | RichText> = ([node, path]) => {
+      if (isText(node)) {
+        // console.log('normalize text', node);
+
+        const match = node.text.match(DATE_REGEX);
+        // console.log('match', match);
+
+        if (match === null) {
+          if (node.nowrap === true) {
+            // console.log('remove nowrap', node);
+
+            return setNodes(
+              editor,
+              { nowrap: false },
+              { at: path, split: true, mode: 'lowest', match: (n) => n === node },
+            );
+          }
+        } else if (node.nowrap === true) {
+          // console.log('matched already nowrapped', node);
+
+          if (editor.marks !== null) {
+            editor.marks['nowrap'] = false;
+          }
+
+          const { index } = match;
+
+          if (index !== undefined) {
+            const [matched] = match;
+
+            const at: Range = {
+              anchor: { path, offset: index + matched.length },
+              focus: { path, offset: node.text.length },
+            };
+
+            // console.log('remove nowrap', node, {
+            //   matched,
+            //   index,
+            //   at,
+            // });
+
+            return setNodes(editor, { nowrap: false }, { at, split: true, mode: 'lowest', match: (n) => n === node });
+          }
+        } else {
+          const { index } = match;
+
+          if (index !== undefined) {
+            const [matched] = match;
+            const at: Range = { anchor: { path, offset: index }, focus: { path, offset: index + matched.length } };
+
+            console.log('add nowrap', node, {
+              matched,
+              index,
+              at,
+            });
+
+            return setNodes(editor, { nowrap: true }, { at, split: true, mode: 'lowest', match: (n) => n === node });
+          }
+        }
+      } else if (isElement(node) && node.children.length === 0) {
         const [highestAncestorPath] = path;
         const highestAncestor =
           highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));

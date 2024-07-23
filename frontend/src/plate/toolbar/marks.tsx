@@ -1,7 +1,10 @@
+import { TrendFlatIcon } from '@navikt/aksel-icons';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
 import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
 import {
+  addMark,
   getPluginType,
+  isMarkActive,
   removeMark,
   someNode,
   useMarkToolbarButton,
@@ -67,6 +70,17 @@ export const Marks = () => {
         onClick={toggleUnderline}
         icon={<TextUnderline width={24} aria-hidden />}
         active={underlinePressed}
+        disabled={disabled}
+      />
+
+      <ToolbarIconButton
+        label="Nowrap"
+        keys={[MOD_KEY, 'N']}
+        onClick={() =>
+          isMarkActive(editor, 'nowrap') ? removeMark(editor, { key: 'nowrap' }) : addMark(editor, 'nowrap', true)
+        }
+        icon={<TrendFlatIcon width={24} aria-hidden />}
+        active={isMarkActive(editor, 'nowrap')}
         disabled={disabled}
       />
 
