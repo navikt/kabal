@@ -33,7 +33,7 @@ export const VersionToast = ({ isRequired = false }: Props) => (
         pushEvent('click_update_toast', 'update', { required: isRequired ? 'true' : 'false' });
         window.location.reload();
       }}
-      data-testid="update-kabal-button"
+      data-testid="update-button"
     >
       Oppdater Kabal
     </Button>
