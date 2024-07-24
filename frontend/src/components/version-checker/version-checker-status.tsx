@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from '@app/components/toast/store';
 import { VersionToast } from '@app/components/version-checker/toast';
 import { ENVIRONMENT } from '@app/environment';
+import { pushEvent } from '@app/observability';
 import { UpdateRequest, VERSION_CHECKER } from './version-checker';
 
 const IGNORE_UPDATE_KEY = 'ignoreUpdate';
@@ -80,6 +81,7 @@ export const VersionCheckerStatus = () => {
   }, []);
 
   const onCloseModal = useCallback(() => {
+    pushEvent('close_update_modal', 'update');
     const now = Date.now();
     setIgnoredAt(now);
     window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
@@ -103,7 +105,10 @@ export const VersionCheckerStatus = () => {
         <Button
           variant="primary"
           icon={<CogRotationIcon aria-hidden />}
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            pushEvent('click_update_modal', 'update');
+            window.location.reload();
+          }}
           data-testid="update-kabal-button"
           size="medium"
         >
