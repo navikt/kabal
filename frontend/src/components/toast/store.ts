@@ -2,6 +2,9 @@ import { TOAST_TIMEOUT } from './constants';
 import { NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
+
+type CloseFn = () => void;
+
 export interface Message extends NewMessage {
   id: string;
   createdAt: number;
@@ -34,14 +37,14 @@ class Store {
     this.listeners.forEach((listener) => listener(this.messages));
   }
 
-  private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT) {
+  private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT): CloseFn {
     const createdAt = Date.now();
     const expiresAt = createdAt + timeout;
     const id = crypto.randomUUID();
 
     const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
 
-    const close = () => this.removeMessage(id);
+    const close: CloseFn = () => this.removeMessage(id);
 
     this.messages = [
       ...this.messages,
@@ -57,6 +60,8 @@ class Store {
     ];
 
     this.notify();
+
+    return close;
   }
 
   private setExpiresAt(id: string, expiresAt: number) {

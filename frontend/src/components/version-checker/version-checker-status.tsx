@@ -17,13 +17,18 @@ export const VersionCheckerStatus = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [ignoredAt, setIgnoredAt] = useState(getIgnoredAt());
   const ignoredUntil = ignoredAt === 0 ? 0 : ignoredAt + IGNORE_UPDATE_TIMEOUT;
+  const closeToast = useRef<() => void>(() => undefined);
 
   const showToast = useCallback((isRequired: boolean) => {
+    closeToast.current();
+
     if (isRequired) {
-      return toast.warning(<VersionToast isRequired />, UPDATE_TOAST_TIMEOUT);
+      closeToast.current = toast.warning(<VersionToast isRequired />, UPDATE_TOAST_TIMEOUT);
+
+      return;
     }
 
-    toast.info(<VersionToast />, UPDATE_TOAST_TIMEOUT);
+    closeToast.current = toast.info(<VersionToast />, UPDATE_TOAST_TIMEOUT);
   }, []);
 
   const handleUpdateRequest = useCallback(
@@ -42,6 +47,7 @@ export const VersionCheckerStatus = () => {
       const isRequired = updateRequest === UpdateRequest.REQUIRED;
 
       if (isRequired && !isNonDisturbPage) {
+        closeToast.current();
         modalRef.current?.showModal();
       } else {
         showToast(isRequired);
@@ -85,7 +91,9 @@ export const VersionCheckerStatus = () => {
     const now = Date.now();
     setIgnoredAt(now);
     window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
-  }, []);
+    showToast(true);
+  }, [showToast]);
+
   const onIgnoreModal = useCallback(() => modalRef.current?.close(), []);
 
   return (
