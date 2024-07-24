@@ -37,7 +37,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
           Poststed
         </StyledLabel>
         <Poststed size="medium" id={poststedElementId}>
-          {value === null ? 'Postnummer mangler' : getPoststed(value) ?? 'Ukjent'}
+          {value === null ? 'Postnummer mangler' : (getPoststed(value) ?? 'Ukjent')}
         </Poststed>
       </PoststedContainer>
     </Row>

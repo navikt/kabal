@@ -22,7 +22,7 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
   const isKrol = useHasRole(Role.KABAL_KROL);
 
   const onChange = (newValue: string) => {
-    const employee = newValue === NONE ? null : potentialRol?.rols.find((r) => r.navIdent === newValue) ?? null;
+    const employee = newValue === NONE ? null : (potentialRol?.rols.find((r) => r.navIdent === newValue) ?? null);
     setRol({ oppgaveId, employee });
   };
 

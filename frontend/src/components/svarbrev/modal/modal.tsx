@@ -88,7 +88,7 @@ export const PdfModal = ({
               Aktiv
             </Switch>
             <Tooltip content="Ytelse">
-              <span>{ytelseNameIsLoading ? 'Laster...' : ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`}</span>
+              <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
             </Tooltip>
             <Tooltip content="Saksbehandlingstid">
               <TimeInputContainer>

@@ -12,7 +12,7 @@ export const User = () => {
   const name =
     signatureIsLoading || typeof signature === 'undefined'
       ? 'Laster...'
-      : signature.customLongName ?? signature.longName;
+      : (signature.customLongName ?? signature.longName);
 
   return (
     <Dropdown>

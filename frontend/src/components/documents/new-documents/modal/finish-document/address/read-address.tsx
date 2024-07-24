@@ -20,7 +20,7 @@ interface Props extends Addresses {
 
 export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props) => {
   const isEditable = onEdit !== undefined;
-  const addressLines = useAddressLines(isEditable ? overriddenAddress ?? address : address);
+  const addressLines = useAddressLines(isEditable ? (overriddenAddress ?? address) : address);
   const copyAddress = formatCopyAddress(part, addressLines);
   const isOverridden = isEditable && overriddenAddress !== null && !areAddressesEqual(address, overriddenAddress);
 

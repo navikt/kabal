@@ -40,10 +40,10 @@ export const DatePicker = ({
   autoFocus,
 }: Props) => {
   const [inputError, setInputError] = useState<string>();
-  const [input, setInput] = useState<string>(value === null ? '' : isoDateToPretty(value) ?? '');
+  const [input, setInput] = useState<string>(value === null ? '' : (isoDateToPretty(value) ?? ''));
 
   useEffect(() => {
-    setInput(value === null ? '' : isoDateToPretty(value) ?? '');
+    setInput(value === null ? '' : (isoDateToPretty(value) ?? ''));
     setInputError(undefined);
   }, [value]);
 

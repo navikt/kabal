@@ -30,7 +30,7 @@ export const useMainSignature = (template: TemplateIdEnum) => {
   );
 
   const { data: rolSignature } = useGetSignatureQuery(
-    isRolAnswers && isRolSakstype ? oppgave.rol.employee?.navIdent ?? skipToken : skipToken,
+    isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
   if (isRolAnswers) {
