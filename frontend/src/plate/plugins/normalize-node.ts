@@ -1,9 +1,22 @@
-import { createPluginFactory, getNode, insertNodes, isElement, isText, setNodes } from '@udecode/plate-common';
+/* eslint-disable max-depth */
+import {
+  TNodeEntry,
+  createPluginFactory,
+  getNextNode,
+  getNode,
+  getNodeString,
+  getParentNode,
+  getPreviousNode,
+  insertNodes,
+  isElement,
+  isText,
+  setNodes,
+} from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
-import { Range, Scrubber } from 'slate';
+import { Point, Range, Scrubber, isEditor } from 'slate';
 import { pushEvent } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,
@@ -29,10 +42,39 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
-import { RichText, RichTextEditorElement } from '@app/plate/types';
+import {
+  H1Element,
+  H2Element,
+  H3Element,
+  ListItemContainerElement,
+  ParagraphElement,
+  PlaceholderElement,
+  RichText,
+  RichTextEditorElement,
+} from '@app/plate/types';
+import { isOfElementTypesFn } from '@app/plate/utils/queries';
 
 const DATE_REGEX =
   /(?:\d{2}(?:\.|-|\/)\d{2}(?:(?:\.|-|\/)\d{4})?)|(?:(?:\d+(?:\.|,| )?)+\d+(?:,-| kr(?:\.|,|:|;| |$)| kroner(?:\.|,|:|;| |$))?)/m;
+
+type RichTextElement =
+  | H1Element
+  | H2Element
+  | H3Element
+  | ParagraphElement
+  | ListItemContainerElement
+  | PlaceholderElement;
+
+const isRichTextElement = isOfElementTypesFn<RichTextElement>([
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_LIC,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_PLACEHOLDER,
+]);
+
+const ENDINGS = ['.', ',', 'kr', 'kroner', ' '];
 
 export const createNormalizeNodePlugin = createPluginFactory({
   key: 'normalize',
@@ -42,62 +84,110 @@ export const createNormalizeNodePlugin = createPluginFactory({
     // eslint-disable-next-line complexity
     editor.normalizeNode<RichTextEditorElement | RichText> = ([node, path]) => {
       if (isText(node)) {
-        // console.log('normalize text', node);
+        let relevantText = node.text;
+        let entries: TNodeEntry<RichText>[] = [[node, path]];
 
-        const match = node.text.match(DATE_REGEX);
-        // console.log('match', match);
+        while (relevantText.endsWith(' ')) {
+          const nextEntry = getNextNode<RichText>(editor, { at: path, match: isText });
 
-        if (match === null) {
-          if (node.nowrap === true) {
-            // console.log('remove nowrap', node);
-
-            return setNodes(
-              editor,
-              { nowrap: false },
-              { at: path, split: true, mode: 'lowest', match: (n) => n === node },
-            );
-          }
-        } else if (node.nowrap === true) {
-          // console.log('matched already nowrapped', node);
-
-          if (editor.marks !== null) {
-            editor.marks['nowrap'] = false;
-          }
-
-          const { index } = match;
-
-          if (index !== undefined) {
-            const [matched] = match;
-
-            const at: Range = {
-              anchor: { path, offset: index + matched.length },
-              focus: { path, offset: node.text.length },
-            };
-
-            // console.log('remove nowrap', node, {
-            //   matched,
-            //   index,
-            //   at,
-            // });
-
-            return setNodes(editor, { nowrap: false }, { at, split: true, mode: 'lowest', match: (n) => n === node });
-          }
-        } else {
-          const { index } = match;
-
-          if (index !== undefined) {
-            const [matched] = match;
-            const at: Range = { anchor: { path, offset: index }, focus: { path, offset: index + matched.length } };
-
-            console.log('add nowrap', node, {
-              matched,
-              index,
-              at,
-            });
-
-            return setNodes(editor, { nowrap: true }, { at, split: true, mode: 'lowest', match: (n) => n === node });
+          if (nextEntry !== undefined) {
+            entries = [...entries, nextEntry];
+            relevantText += nextEntry[0].text;
+          } else {
+            break;
           }
         }
+
+        while (relevantText.startsWith(' ')) {
+          const prevEntry = getPreviousNode<RichText>(editor, { at: path, match: isText });
+
+          if (prevEntry !== undefined) {
+            entries = [prevEntry, ...entries];
+            relevantText = prevEntry[0].text + relevantText;
+          } else {
+            break;
+          }
+        }
+
+        const match = relevantText.match(DATE_REGEX);
+
+        if (match !== null) {
+          const { index } = match;
+          const [matched] = match;
+
+          if (matched !== undefined && index !== undefined) {
+            const end = index + matched.trimEnd().length;
+
+            let totalOffset = 0;
+            entries = entries.filter((entry) => {
+              const { length } = entry[0].text;
+
+              if (totalOffset + length > index && totalOffset + 1 < end) {
+                totalOffset += length;
+
+                return true;
+              }
+
+              return false;
+            });
+
+            const lastOffset = end - entries.slice(0, -1).reduce((acc, [entry]) => acc + entry.text.length, 0);
+
+            console.log({ entries, matched: matched.trimEnd(), index, lastOffset, end, totalOffset });
+          }
+        }
+
+        // if (match === null) {
+        //   if (node.nowrap === true) {
+        //     // console.log('remove nowrap', node);
+
+        //     return setNodes(
+        //       editor,
+        //       { nowrap: false },
+        //       { at: path, split: true, mode: 'lowest', match: (n) => n === node },
+        //     );
+        //   }
+        // } else if (node.nowrap === true) {
+        //   // console.log('matched already nowrapped', node);
+
+        //   if (editor.marks !== null) {
+        //     editor.marks['nowrap'] = false;
+        //   }
+
+        //   const { index } = match;
+
+        //   if (index !== undefined) {
+        //     const [matched] = match;
+
+        //     const at: Range = {
+        //       anchor: { path, offset: index + matched.length },
+        //       focus: { path, offset: node.text.length },
+        //     };
+
+        //     // console.log('remove nowrap', node, {
+        //     //   matched,
+        //     //   index,
+        //     //   at,
+        //     // });
+
+        //     return setNodes(editor, { nowrap: false }, { at, split: true, mode: 'lowest', match: (n) => n === node });
+        //   }
+        // } else {
+        //   const { index } = match;
+
+        //   if (index !== undefined) {
+        //     const [matched] = match;
+        //     const at: Range = { anchor: { path, offset: index }, focus: { path, offset: index + matched.length } };
+
+        //     console.log('add nowrap', node, {
+        //       matched,
+        //       index,
+        //       at,
+        //     });
+
+        //     return setNodes(editor, { nowrap: true }, { at, split: true, mode: 'lowest', match: (n) => n === node });
+        //   }
+        // }
       } else if (isElement(node) && node.children.length === 0) {
         const [highestAncestorPath] = path;
         const highestAncestor =
