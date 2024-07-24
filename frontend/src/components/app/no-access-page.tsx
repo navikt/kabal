@@ -20,7 +20,7 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
   const { user } = useContext(StaticDataContext);
 
   useEffect(() => {
-    pushEvent('no-access-page', {
+    pushEvent('no-access-page', 'no-access', {
       userRoles: user.roller.toSorted().join(', '),
       requiredRoles: requiredRoles.toSorted().join(', '),
       path: window.location.pathname,

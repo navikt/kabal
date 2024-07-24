@@ -38,7 +38,7 @@ export const Filter = ({ counts, totalCount, filter, setFilter }: Props) => {
       size="small"
       hideLabel
       onChange={({ target }) => {
-        pushEvent('change-history-filter', { value: target.value }, 'behandling-panel');
+        pushEvent('change-history-filter', 'behandling-panel', { value: target.value });
 
         if (target.value === ALL || isHistoryResponse(target.value)) {
           setFilter(target.value);

@@ -33,7 +33,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           active={showGodeFormuleringer}
           onClick={() => {
             if (!showGodeFormuleringer) {
-              pushEvent('show-gode-formuleringer', { enabled: 'true' }, 'smart-editor');
+              pushEvent('show-gode-formuleringer', 'smart-editor', { enabled: 'true' });
             }
             setShowGodeFormuleringer(!showGodeFormuleringer);
           }}
@@ -45,7 +45,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           active={showHistory}
           onClick={() => {
             const enabled = !showHistory;
-            pushEvent('toggle-show-history', { enabled: enabled.toString() }, 'smart-editor');
+            pushEvent('toggle-show-history', 'smart-editor', { enabled: enabled.toString() });
             setShowHistory(enabled);
           }}
         />
@@ -62,7 +62,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           active={behandlingEnabled}
           onClick={() => {
             const enabled = !behandlingEnabled;
-            pushEvent('toggle-behandling-panel', { enabled: enabled.toString() }, 'smart-editor');
+            pushEvent('toggle-behandling-panel', 'smart-editor', { enabled: enabled.toString() });
             setBehandlingEnabled(enabled);
           }}
         />

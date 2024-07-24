@@ -18,7 +18,7 @@ export const PanelSwitches = () => {
         checked={documentsEnabled}
         togglePanel={() => {
           const isEnabled = !documentsEnabled;
-          pushEvent('toggle-documents-panel', { enabled: isEnabled.toString() }, 'panels');
+          pushEvent('toggle-documents-panel', 'panels', { enabled: isEnabled.toString() });
           setDocumentsEnabled(isEnabled);
         }}
         testId="panel-switch-documents"
@@ -51,7 +51,7 @@ const Brevutforming = () => {
       checked={smartEditorEnabled}
       togglePanel={() => {
         const isEnabled = !smartEditorEnabled;
-        pushEvent('toggle-smart-editor-panel', { enabled: isEnabled.toString() }, 'panels');
+        pushEvent('toggle-smart-editor-panel', 'panels', { enabled: isEnabled.toString() });
         setSmartEditorEnabled(isEnabled);
       }}
       testId="panel-switch-smart-editor"
@@ -74,7 +74,7 @@ const Kvalitetsvurdering = () => {
       checked={value}
       togglePanel={() => {
         const isEnabled = !value;
-        pushEvent('toggle-kvalitetsvurdering-panel', { enabled: isEnabled.toString() }, 'panels');
+        pushEvent('toggle-kvalitetsvurdering-panel', 'panels', { enabled: isEnabled.toString() });
         setValue(isEnabled);
       }}
       testId="panel-switch-kvalitetsvurdering"

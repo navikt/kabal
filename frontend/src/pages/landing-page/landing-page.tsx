@@ -22,7 +22,7 @@ export const LandingPage = () => {
 
   useEffect(() => {
     if (!hasResult) {
-      pushEvent('landing-page', {
+      pushEvent('landing-page', 'landing-page', {
         userRoles: user.roller.toSorted().join(', '),
       });
     }

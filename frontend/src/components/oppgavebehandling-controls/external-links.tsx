@@ -26,7 +26,7 @@ export const Modia = ({ sakenGjelder }: LinkProps) => {
           size="small"
           copyText={url}
           aria-label={getTitle(appName)}
-          onClick={() => pushEvent(eventName, undefined, 'external-links')}
+          onClick={() => pushEvent(eventName, 'external-links')}
           text={appName}
           activeText={appName}
         />
@@ -89,7 +89,7 @@ const AppLink = ({ appName, url, eventName }: RedirectLinkProps) => (
     aria-label={getTitle(appName)}
     title="Åpne i ny fane"
     rel="noreferrer"
-    onClick={() => pushEvent(eventName, undefined, 'external-links')}
+    onClick={() => pushEvent(eventName, 'external-links')}
   >
     {appName} <ExternalLinkIcon title="Ekstern lenke" />
   </Button>
@@ -109,7 +109,7 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
       const url = await getLink(`${baseUrl}/url`);
       setCopied(true);
       navigator.clipboard.writeText(url);
-      pushEvent(eventName, undefined, 'external-links');
+      pushEvent(eventName, 'external-links');
     } catch (error) {
       toast.error(`Kunne ikke kopiere lenken til ${appName}`);
     }

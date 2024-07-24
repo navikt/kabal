@@ -77,7 +77,7 @@ export const Abbreviation = () => {
     focusEditor(editorRef);
     setIsOpen(false);
 
-    pushEvent('smart-editor-add-abbreviation', { short, long }, 'smart-editor');
+    pushEvent('smart-editor-add-abbreviation', 'smart-editor', { short, long });
   };
 
   useOnClickOutside(containerRef, () => {

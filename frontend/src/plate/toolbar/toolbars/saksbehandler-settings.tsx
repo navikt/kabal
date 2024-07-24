@@ -25,7 +25,7 @@ export const SaksbehandlerSettings = () => {
     (lang: string) => {
       const newLang = isLanguage(lang) ? lang : Language.NB;
       setLanguage(newLang);
-      pushEvent('change-document-language', { language: newLang }, 'smart-editor');
+      pushEvent('change-document-language', 'smart-editor', { language: newLang });
     },
     [setLanguage],
   );
@@ -37,7 +37,7 @@ export const SaksbehandlerSettings = () => {
         icon={<CogIcon aria-hidden />}
         active={isSettingsOpen}
         onClick={() => {
-          pushEvent('open-settings', {}, 'smart-editor');
+          pushEvent('open-settings', 'smart-editor');
           setIsSettingsOpen(true);
           modalRef.current?.showModal();
         }}
@@ -76,7 +76,7 @@ export const SaksbehandlerSettings = () => {
               value={showAnnotationsAtOrigin ? Placement.RELATIVE : Placement.COLUMN}
               onChange={(v) => {
                 const enabled = v === Placement.RELATIVE;
-                pushEvent('toggle-show-annotations-at-origin', { enabled: enabled.toString() }, 'smart-editor');
+                pushEvent('toggle-show-annotations-at-origin', 'smart-editor', { enabled: enabled.toString() });
                 setShowAnnotationsAtOrigin(enabled);
               }}
             >

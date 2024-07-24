@@ -77,9 +77,10 @@ export const onKeyDown =
 
     const numberOfMarks = Object.values(marks).filter((m) => m).length;
 
-    pushEvent(
-      'smart-editor-insert-abbreviation',
-      { short, long, trigger: key, marks: numberOfMarks.toString(10) },
-      'smart-editor',
-    );
+    pushEvent('smart-editor-insert-abbreviation', 'smart-editor', {
+      short,
+      long,
+      trigger: key,
+      marks: numberOfMarks.toString(10),
+    });
   };

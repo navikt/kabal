@@ -58,7 +58,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           loading={isLoading}
           onClick={() => {
             if (!isOpen) {
-              pushEvent('open-relevant-oppgaver', { enabled: 'true' }, 'oppgave-lists');
+              pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
             }
             setIsOpen(!isOpen);
           }}

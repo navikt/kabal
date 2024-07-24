@@ -47,7 +47,7 @@ initializeFaro({
   ],
 });
 
-export const pushEvent = (name: string, attributes: Record<string, string> | undefined, domain?: string) =>
+export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) =>
   faro.api.pushEvent(name, attributes, domain, { skipDedupe: true });
 
 export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>

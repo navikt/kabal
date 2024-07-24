@@ -11,7 +11,7 @@ export const ToggleExpandedButton = () => {
   const { setValue } = useDocumentsOnlyIncluded();
 
   const onToggle = useCallback(() => {
-    pushEvent('toggle-expand-documents', { expanded: (!isExpanded).toString() }, 'documents');
+    pushEvent('toggle-expand-documents', 'documents', { expanded: (!isExpanded).toString() });
     setIsExpanded(!isExpanded);
     setValue(isExpanded);
   }, [isExpanded, setIsExpanded, setValue]);

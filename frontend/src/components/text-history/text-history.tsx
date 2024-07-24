@@ -83,7 +83,7 @@ export const TextHistory = ({
         size="xsmall"
         onClick={() => {
           const enabled = !showEditors;
-          pushEvent('toggle-text-history', { enabled: enabled.toString() }, 'texts');
+          pushEvent('toggle-text-history', 'texts', { enabled: enabled.toString() });
           setShowEditors(enabled);
         }}
         icon={<ClockDashedIcon aria-hidden />}

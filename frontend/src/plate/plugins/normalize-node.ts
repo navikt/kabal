@@ -43,7 +43,7 @@ export const createNormalizeNodePlugin = createPluginFactory({
         const highestAncestor =
           highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));
 
-        pushEvent('normalized-empty-children', {
+        pushEvent('normalized-empty-children', 'smart-editor', {
           ancestor: JSON.stringify(highestAncestor),
           node: JSON.stringify(node),
           path: JSON.stringify(path),
