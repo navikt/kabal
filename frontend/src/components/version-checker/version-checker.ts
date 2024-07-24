@@ -29,11 +29,9 @@ class VersionChecker {
 
     this.createEventSource();
 
-    if (ENVIRONMENT.isLocal) {
-      window.sendUpdateRequest = (data: UpdateRequest) => {
-        this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
-      };
-    }
+    window.sendUpdateRequest = (data: UpdateRequest) => {
+      this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
+    };
   }
 
   public getUpdateRequest = (): UpdateRequest => this.updateRequest;
