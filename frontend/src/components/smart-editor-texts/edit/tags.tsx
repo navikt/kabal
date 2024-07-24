@@ -114,7 +114,7 @@ const getTemaplateAndSectionName = (selected: string): string => {
     return `${ALL_TEMPLATES_LABEL} - ${getMaltekstSectionName(sId) ?? sId}`;
   }
 
-  const templateName = tId === undefined ? 'Ukjent mal' : TEMPLATE_MAP[tId]?.tittel ?? tId;
+  const templateName = tId === undefined ? 'Ukjent mal' : (TEMPLATE_MAP[tId]?.tittel ?? tId);
 
   return sId === undefined ? templateName : `${templateName} - ${getMaltekstSectionName(sId) ?? sId}`;
 };

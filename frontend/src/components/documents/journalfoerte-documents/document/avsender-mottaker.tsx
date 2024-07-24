@@ -18,7 +18,7 @@ export const AvsenderMottaker = memo(
 
     return (
       <AvsenderMottakerButton
-        onClick={() => setValue([avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'])}
+        onClick={() => setValue([avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN')])}
         size="small"
         variant="tertiary"
       >

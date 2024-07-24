@@ -56,7 +56,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
 
     // Distance from top in em.
     const top: number | null =
-      ref === null ? null : calculateRangePosition(editor, ref, { path, offset: 0 })?.top ?? null;
+      ref === null ? null : (calculateRangePosition(editor, ref, { path, offset: 0 })?.top ?? null);
 
     if (top === null) {
       continue;

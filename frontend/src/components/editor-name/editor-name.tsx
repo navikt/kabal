@@ -13,6 +13,6 @@ export const EditorName = ({ editorId }: EditorProps) => {
   return isLoading || data === undefined ? (
     <Loader size="xsmall" title="Laster..." />
   ) : (
-    data.customLongName ?? data.longName
+    (data.customLongName ?? data.longName)
   );
 };

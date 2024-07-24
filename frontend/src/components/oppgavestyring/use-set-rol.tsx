@@ -14,7 +14,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
 
   const onChange: OnChange = useCallback(
     async (toNavIdent, fromNavIdent) => {
-      const toROL = toNavIdent === null ? null : rol.find((m) => m.navIdent === toNavIdent) ?? null;
+      const toROL = toNavIdent === null ? null : (rol.find((m) => m.navIdent === toNavIdent) ?? null);
 
       const name = toROL === null ? 'fjernet' : `satt til ${formatEmployeeNameAndIdFallback(toROL, 'felles kø')}`;
 

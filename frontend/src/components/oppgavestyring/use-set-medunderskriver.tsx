@@ -24,7 +24,7 @@ export const useSetMedunderskriver = (
   const onChange: OnChange = useCallback(
     async (toNavIdent, fromNavIdent) => {
       const toMedunderskriver =
-        toNavIdent === null ? null : medunderskrivere.find((m) => m.navIdent === toNavIdent) ?? null;
+        toNavIdent === null ? null : (medunderskrivere.find((m) => m.navIdent === toNavIdent) ?? null);
 
       const name =
         toMedunderskriver === null

@@ -37,10 +37,10 @@ export const useFilteredDocuments = (
             (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
             (selectedAvsenderMottakere.length === 0 ||
               selectedAvsenderMottakere.includes(
-                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
+                avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN'),
               )) &&
             (selectedSaksIds.length === 0 ||
-              selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
+              selectedSaksIds.includes(sak === null ? 'NONE' : (sak.fagsakId ?? 'UNKNOWN'))) &&
             (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
             (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)),
         );
