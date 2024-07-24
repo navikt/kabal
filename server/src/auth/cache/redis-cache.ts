@@ -45,6 +45,8 @@ export class OboRedisCache {
     });
 
     this.#refreshCacheSizeMetric();
+
+    setInterval(() => this.#refreshCacheSizeMetric(), 30_000);
   }
 
   #refreshCacheSizeMetric = async () => {
