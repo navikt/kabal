@@ -30,6 +30,7 @@ import {
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_NOWRAP,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
@@ -49,7 +50,6 @@ export interface RichText extends TText {
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
-  nowrap?: boolean;
 }
 
 /**
@@ -70,6 +70,11 @@ interface BlockElement extends TElement {
 /**
  * Blocks
  */
+
+export interface NowrapElement extends BlockElement {
+  type: typeof ELEMENT_NOWRAP;
+  children: RichText[];
+}
 
 export interface ParagraphElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
   type: typeof ELEMENT_PARAGRAPH;

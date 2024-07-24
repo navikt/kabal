@@ -1,4 +1,4 @@
-import { TElement, isBlock, isExpanded, someNode } from '@udecode/plate-common';
+import { TElement, isElement, isExpanded, someNode } from '@udecode/plate-common';
 import { useMyPlateEditorState } from '../types';
 
 export const useIsElementActive = (element: string) => {
@@ -9,7 +9,7 @@ export const useIsElementActive = (element: string) => {
   }
 
   return someNode<TElement>(editor, {
-    match: (n) => isBlock(editor, n) && n.type === element,
+    match: (n) => isElement(n) && n.type === element,
     mode: 'lowest',
   });
 };

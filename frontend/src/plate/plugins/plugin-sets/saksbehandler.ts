@@ -11,6 +11,7 @@ import { LabelContent } from '@app/plate/components/label-content';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { Maltekst } from '@app/plate/components/maltekst/maltekst';
 import { Maltekstseksjon } from '@app/plate/components/maltekstseksjon/maltekstseksjon';
+import { Nowrap } from '@app/plate/components/nowrap';
 import { PageBreak } from '@app/plate/components/page-break';
 import { Paragraph } from '@app/plate/components/paragraph';
 import { Placeholder } from '@app/plate/components/placeholder/placeholder';
@@ -31,6 +32,7 @@ import {
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_NOWRAP,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
@@ -43,6 +45,7 @@ import { createFooterPlugin, createHeaderPlugin } from '@app/plate/plugins/heade
 import { createLabelContentPlugin } from '@app/plate/plugins/label-content';
 import { createMaltekstPlugin } from '@app/plate/plugins/maltekst';
 import { createMaltekstseksjonPlugin } from '@app/plate/plugins/maltekstseksjon';
+import { createNowrapPlugin } from '@app/plate/plugins/nowrap';
 import { createSaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
@@ -66,10 +69,12 @@ export const saksbehandlerPlugins = createPlugins(
     createSignaturePlugin(),
     createEmptyVoidPlugin(),
     createBookmarkPlugin(),
+    createNowrapPlugin(),
   ],
   {
     components: {
       [ELEMENT_PARAGRAPH]: Paragraph,
+      [ELEMENT_NOWRAP]: Nowrap,
       [ELEMENT_PAGE_BREAK]: PageBreak,
 
       // Headings

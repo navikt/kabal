@@ -100,8 +100,6 @@ const getLeafStyles = (leaf: RichText): React.CSSProperties => ({
   fontWeight: leaf.bold === true ? '600' : 'inherit',
   fontStyle: leaf.italic === true ? 'italic' : 'inherit',
   textDecoration: leaf.underline === true ? 'underline' : 'inherit',
-  whiteSpace: leaf.nowrap === true ? 'pre' : 'inherit',
-  outline: leaf.nowrap === true ? '1px solid red' : 'inherit',
   userSelect: 'text',
 });
 
