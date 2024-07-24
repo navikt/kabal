@@ -70,14 +70,14 @@ export const ExpandedDocuments = () => {
       if (firstRun) {
         firstRun = false;
 
-        return pushEvent('initial-documents-panel-size', { width: _width }, 'documents');
+        return pushEvent('initial-documents-panel-size', 'documents', { width: _width });
       }
 
       if (timeout !== null) {
         clearTimeout(timeout);
       }
 
-      timeout = setTimeout(() => pushEvent('set-documents-panel-size', { width: _width }, 'documents'), 5000);
+      timeout = setTimeout(() => pushEvent('set-documents-panel-size', 'documents', { width: _width }), 5000);
     });
 
     observer.observe(ref.current);

@@ -6,7 +6,7 @@ import { pushEvent } from '@app/observability';
 export const AbbreviationsExplanation = () => {
   const onOpenChange = useCallback((open: boolean) => {
     if (open) {
-      pushEvent('open-abbreviations-explanation', {}, 'abbreviations');
+      pushEvent('open-abbreviations-explanation', 'abbreviations');
     }
   }, []);
 

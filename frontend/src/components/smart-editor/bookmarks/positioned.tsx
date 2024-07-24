@@ -57,7 +57,7 @@ export const PositionedBookmarks = () => {
 
   const onDelete = useCallback(
     (id: string) => {
-      pushEvent('remove-bookmark', undefined, 'smart-editor');
+      pushEvent('remove-bookmark', 'smart-editor');
       setNodes(editor, { [id]: undefined }, { match: (n) => id in n, mode: 'lowest', at: [] });
       removeBookmark(id);
     },

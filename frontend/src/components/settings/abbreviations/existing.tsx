@@ -28,11 +28,11 @@ export const ExistingAbbreviation = ({ short: savedShort, long: savedLong, id }:
       setLong={setLocalLong}
       onSave={() => {
         updateAbbreviation({ short, long, id });
-        pushEvent('update-abbreviation', { short, long }, 'abbreviations');
+        pushEvent('update-abbreviation', 'abbreviations', { short, long });
       }}
       onDelete={() => {
         deleteAbbreviation(id);
-        pushEvent('delete-abbreviation', { short, long }, 'abbreviations');
+        pushEvent('delete-abbreviation', 'abbreviations', { short, long });
       }}
       isSaved={isSaved}
       isSaving={isUpdating}

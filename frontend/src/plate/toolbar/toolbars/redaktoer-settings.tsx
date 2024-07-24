@@ -21,7 +21,7 @@ export const RedkatoerSettings = () => {
         icon={<CogIcon aria-hidden />}
         active={isSettingsOpen}
         onClick={() => {
-          pushEvent('redaktoer-open-settings', {}, 'redaktoer');
+          pushEvent('redaktoer-open-settings', 'redaktoer');
           setIsSettingsOpen(true);
           modalRef.current?.showModal();
         }}

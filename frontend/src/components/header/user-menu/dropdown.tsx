@@ -19,7 +19,7 @@ export const UserDropdown = (): JSX.Element | null => {
           as={StyledLogoutLink}
           href="/oauth2/logout"
           data-testid="logout-link"
-          onClick={() => pushEvent('logout', undefined, 'user-menu')}
+          onClick={() => pushEvent('logout', 'user-menu')}
         >
           <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>

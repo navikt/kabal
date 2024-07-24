@@ -95,7 +95,7 @@ const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
   <Tooltip content={color.name} key={color.value}>
     <StyledButton
       onClick={() => {
-        pushEvent('set-bookmark', { color: color.name }, 'smart-editor');
+        pushEvent('set-bookmark', 'smart-editor', { color: color.name });
         setBookmark(color.value);
         setIsOpen(false);
       }}

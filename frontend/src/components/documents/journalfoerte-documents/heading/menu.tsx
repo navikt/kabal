@@ -88,4 +88,4 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
 `;
 
 const logColumnEvent = (column: ArchivedDocumentsColumn, checked: boolean) =>
-  pushEvent(`toggle-col-archived-docs-${column.toLowerCase()}`, { checked: checked.toString() }, 'documents');
+  pushEvent(`toggle-col-archived-docs-${column.toLowerCase()}`, 'documents', { checked: checked.toString() });

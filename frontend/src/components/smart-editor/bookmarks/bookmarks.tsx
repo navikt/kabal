@@ -56,7 +56,7 @@ export const Bookmarks = ({ editorId }: Props) => {
               size="xsmall"
               variant="tertiary-neutral"
               onClick={() => {
-                pushEvent('remove-bookmark', undefined, 'smart-editor');
+                pushEvent('remove-bookmark', 'smart-editor');
                 setNodes(editor, { [key]: undefined }, { match: (n) => key in n, mode: 'lowest', at: [] });
                 removeBookmark(key);
               }}

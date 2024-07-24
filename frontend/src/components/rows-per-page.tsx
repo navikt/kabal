@@ -22,7 +22,7 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
       <ToggleGroup
         value={value.toString(10)}
         onChange={(v) => {
-          pushEvent('change-rows-per-page', { value: v }, 'oppgave-lists');
+          pushEvent('change-rows-per-page', 'oppgave-lists', { value: v });
           setValue(Number.parseInt(v, 10));
         }}
         size="small"

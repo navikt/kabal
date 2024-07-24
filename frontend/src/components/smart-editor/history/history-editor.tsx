@@ -73,11 +73,10 @@ export const HistoryEditor = memo(
         <StyledButton
           variant="primary"
           onClick={() => {
-            pushEvent(
-              'restore-smart-editor-version',
-              { versionId: versionId.toString(), documentId: smartDocument.id },
-              'smart-editor',
-            );
+            pushEvent('restore-smart-editor-version', 'smart-editor', {
+              versionId: versionId.toString(),
+              documentId: smartDocument.id,
+            });
             restore(mainEditor, version);
           }}
           size="small"

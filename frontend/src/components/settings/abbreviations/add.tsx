@@ -20,7 +20,7 @@ export const AddAbbreviation = () => {
     await addAbbreviation({ short, long }).unwrap();
     setLocalShort('');
     setLocalLong('');
-    pushEvent('add-abbreviation', { short, long }, 'abbreviations');
+    pushEvent('add-abbreviation', 'abbreviations', { short, long });
   };
 
   return (

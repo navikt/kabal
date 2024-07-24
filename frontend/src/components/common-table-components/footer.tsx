@@ -59,7 +59,7 @@ export const TableFooter = ({
                 size="small"
                 variant="tertiary-neutral"
                 onClick={() => {
-                  pushEvent('refresh-oppgave-list', {}, testId);
+                  pushEvent('refresh-oppgave-list', testId);
                   onRefresh();
                 }}
                 loading={isLoading || isFetching}
@@ -75,7 +75,7 @@ export const TableFooter = ({
                 count={Math.max(Math.ceil(total / pageSize), 1)}
                 prevNextTexts
                 onPageChange={(p) => {
-                  pushEvent('oppgave-list-change-page', { page: p.toString() }, testId);
+                  pushEvent('oppgave-list-change-page', testId, { page: p.toString() });
                   setPage(p);
                 }}
                 data-testid={`${testId}-pagination`}
