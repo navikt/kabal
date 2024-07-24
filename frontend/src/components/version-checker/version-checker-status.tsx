@@ -38,10 +38,10 @@ export const VersionCheckerStatus = () => {
         return;
       }
 
-      const isBehandlingView = getIsBehandlingView();
+      const isNonDisturbPage = getIsNonDisturbPage();
       const isRequired = updateRequest === UpdateRequest.REQUIRED;
 
-      if (isRequired && !isBehandlingView) {
+      if (isRequired && !isNonDisturbPage) {
         modalRef.current?.showModal();
       } else {
         showToast(isRequired);
@@ -138,10 +138,10 @@ const getIgnoredAt = () => {
   return parsed;
 };
 
-const BEHANDLING_VIEW_PATHS = ['/klagebehandling/', '/ankebehandling/', '/trygderettsankebehandling/'];
+const NON_DISTURB_PATHS = ['/klagebehandling/', '/ankebehandling/', '/trygderettsankebehandling/'];
 
-const getIsBehandlingView = () => {
+const getIsNonDisturbPage = () => {
   const { pathname } = window.location;
 
-  return BEHANDLING_VIEW_PATHS.some((path) => pathname.startsWith(path));
+  return NON_DISTURB_PATHS.some((path) => pathname.startsWith(path));
 };
