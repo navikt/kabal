@@ -2,14 +2,14 @@ import { Alert } from '@navikt/ds-react';
 import { BehandlingstidUnitType } from '@app/types/svarbrev';
 
 interface Props {
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   behandlingstidUnits: number;
 }
 
-export const Warning = ({ behandlingstidUnits, behandlingstidUnitType }: Props) => {
+export const Warning = ({ behandlingstidUnits, behandlingstidUnitTypeId }: Props) => {
   const isTooLong =
-    (behandlingstidUnitType === BehandlingstidUnitType.MONTHS && behandlingstidUnits > 12) ||
-    (behandlingstidUnitType === BehandlingstidUnitType.WEEKS && behandlingstidUnits > 52);
+    (behandlingstidUnitTypeId === BehandlingstidUnitType.MONTHS && behandlingstidUnits > 12) ||
+    (behandlingstidUnitTypeId === BehandlingstidUnitType.WEEKS && behandlingstidUnits > 52);
 
   return isTooLong ? (
     <Alert variant="warning" size="small">

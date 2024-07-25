@@ -2,8 +2,8 @@ import { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export enum BehandlingstidUnitType {
-  WEEKS = 'WEEKS',
-  MONTHS = 'MONTHS',
+  WEEKS = '1',
+  MONTHS = '2',
 }
 
 export const BEHANDLINGSTID_UNIT_TYPES = Object.values(BehandlingstidUnitType);
@@ -17,7 +17,7 @@ export const isBehandlingstidUnitType = (value: string): value is Behandlingstid
   BEHANDLINGSTID_UNIT_TYPES.some((t) => t === value);
 
 interface SvarbrevSettingData {
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   behandlingstidUnits: number;
   customText: string | null;
   shouldSend: boolean;
