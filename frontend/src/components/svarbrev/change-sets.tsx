@@ -4,7 +4,7 @@ import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType, SvarbrevSetting
 
 export interface InitialVersion extends Pick<SvarbrevSetting, 'id' | 'modified' | 'modifiedBy'> {
   behandlingstidUnits: SvarbrevSetting['behandlingstidUnits'];
-  behandlingstidUnitType: SvarbrevSetting['behandlingstidUnitType'];
+  behandlingstidUnitTypeId: SvarbrevSetting['behandlingstidUnitTypeId'];
   customText: SvarbrevSetting['customText'];
   shouldSend: SvarbrevSetting['shouldSend'];
   isInitialVersion: true;
@@ -12,7 +12,7 @@ export interface InitialVersion extends Pick<SvarbrevSetting, 'id' | 'modified' 
 
 export interface ChangeSet extends Pick<SvarbrevSetting, 'id' | 'modified' | 'modifiedBy'> {
   behandlingstidUnits?: SvarbrevSetting['behandlingstidUnits'];
-  behandlingstidUnitType?: SvarbrevSetting['behandlingstidUnitType'];
+  behandlingstidUnitTypeId?: SvarbrevSetting['behandlingstidUnitTypeId'];
   customText?: SvarbrevSetting['customText'];
   shouldSend?: SvarbrevSetting['shouldSend'];
   isInitialVersion: false;
@@ -32,7 +32,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
         modified: setting.modified,
         modifiedBy: setting.modifiedBy,
         behandlingstidUnits: setting.behandlingstidUnits,
-        behandlingstidUnitType: setting.behandlingstidUnitType,
+        behandlingstidUnitTypeId: setting.behandlingstidUnitTypeId,
         customText: setting.customText,
         shouldSend: setting.shouldSend,
         isInitialVersion: true,
@@ -44,7 +44,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
     const previous = data[i + 1]!;
 
     const isTimeEqual =
-      setting.behandlingstidUnitType === previous.behandlingstidUnitType &&
+      setting.behandlingstidUnitTypeId === previous.behandlingstidUnitTypeId &&
       setting.behandlingstidUnits === previous.behandlingstidUnits;
 
     result[i] = {
@@ -52,7 +52,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
       modified: setting.modified,
       modifiedBy: setting.modifiedBy,
       behandlingstidUnits: isTimeEqual ? undefined : setting.behandlingstidUnits,
-      behandlingstidUnitType: isTimeEqual ? undefined : setting.behandlingstidUnitType,
+      behandlingstidUnitTypeId: isTimeEqual ? undefined : setting.behandlingstidUnitTypeId,
       customText: setting.customText === previous.customText ? undefined : setting.customText,
       shouldSend: setting.shouldSend === previous.shouldSend ? undefined : setting.shouldSend,
       isInitialVersion: false,
@@ -64,7 +64,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
 
 export const getChangeSetText = ({
   shouldSend,
-  behandlingstidUnitType,
+  behandlingstidUnitTypeId,
   behandlingstidUnits,
   customText,
   isInitialVersion,
@@ -87,7 +87,7 @@ export const getChangeSetText = ({
             )}
           </li>
           <li>
-            Svartid: <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitType)}</strong>
+            Svartid: <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitTypeId)}</strong>
           </li>
         </StyledVersionList>
       </>
@@ -104,10 +104,10 @@ export const getChangeSetText = ({
     );
   }
 
-  if (behandlingstidUnits !== undefined && behandlingstidUnitType !== undefined) {
+  if (behandlingstidUnits !== undefined && behandlingstidUnitTypeId !== undefined) {
     parts.push(
       <>
-        Satte behandlingstiden til <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitType)}</strong>.
+        Satte behandlingstiden til <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitTypeId)}</strong>.
       </>,
     );
   }
@@ -143,5 +143,5 @@ const StyledVersionList = styled.ul`
   padding-left: 16px;
 `;
 
-const formatSvartid = (behandlingstidUnits: number, behandlingstidUnitType: BehandlingstidUnitType) =>
-  `${behandlingstidUnits} ${BEHANDLINGSTID_UNIT_TYPE_NAMES[behandlingstidUnitType]}`;
+const formatSvartid = (behandlingstidUnits: number, behandlingstidUnitTypeId: BehandlingstidUnitType) =>
+  `${behandlingstidUnits} ${BEHANDLINGSTID_UNIT_TYPE_NAMES[behandlingstidUnitTypeId]}`;

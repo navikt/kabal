@@ -27,7 +27,7 @@ interface Props extends ScoredNamedSvarbrevSetting {
 export const Row = ({ modal, ...setting }: Props) => {
   const [ytelseName, isLoading] = useYtelseName(setting.ytelseId);
   const [localBehandlingstidUnits, setLocalBehandlingstidUnits] = useState(setting.behandlingstidUnits);
-  const [localBehandlingstidUnitType, setLocalBehandlingstidUnitType] = useState(setting.behandlingstidUnitType);
+  const [localBehandlingstidUnitTypeId, setLocalBehandlingstidUnitTypeId] = useState(setting.behandlingstidUnitTypeId);
   const [localCustomText, setLocalCustomText] = useState(setting.customText ?? '');
   const [localShouldSend, setLocalShouldSend] = useState(setting.shouldSend);
   const { id } = useParams();
@@ -39,14 +39,14 @@ export const Row = ({ modal, ...setting }: Props) => {
 
   const cancel = useCallback(() => {
     setLocalBehandlingstidUnits(setting.behandlingstidUnits);
-    setLocalBehandlingstidUnitType(setting.behandlingstidUnitType);
+    setLocalBehandlingstidUnitTypeId(setting.behandlingstidUnitTypeId);
     setLocalCustomText(setting.customText ?? '');
     setLocalShouldSend(setting.shouldSend);
-  }, [setting.behandlingstidUnits, setting.behandlingstidUnitType, setting.customText, setting.shouldSend]);
+  }, [setting.behandlingstidUnits, setting.behandlingstidUnitTypeId, setting.customText, setting.shouldSend]);
 
   const hasChanges =
     localBehandlingstidUnits !== setting.behandlingstidUnits ||
-    localBehandlingstidUnitType !== setting.behandlingstidUnitType ||
+    localBehandlingstidUnitTypeId !== setting.behandlingstidUnitTypeId ||
     localCustomText !== (setting.customText ?? '') ||
     localShouldSend !== setting.shouldSend;
 
@@ -104,8 +104,8 @@ export const Row = ({ modal, ...setting }: Props) => {
           <TimeInput
             value={localBehandlingstidUnits}
             onChange={setLocalBehandlingstidUnits}
-            unit={localBehandlingstidUnitType}
-            setUnit={setLocalBehandlingstidUnitType}
+            unit={localBehandlingstidUnitTypeId}
+            setUnit={setLocalBehandlingstidUnitTypeId}
           />
         </Behandlingstid>
       </Table.DataCell>
@@ -150,12 +150,12 @@ export const Row = ({ modal, ...setting }: Props) => {
             close={() => navigate('/svarbrev')}
             cancel={cancel}
             hasChanges={hasChanges}
-            behandlingstidUnitType={localBehandlingstidUnitType}
+            behandlingstidUnitTypeId={localBehandlingstidUnitTypeId}
             behandlingstidUnits={localBehandlingstidUnits}
             customText={localCustomText}
             shouldSend={localShouldSend}
             setShouldSend={setLocalShouldSend}
-            setBehandlingstidUnitType={setLocalBehandlingstidUnitType}
+            setBehandlingstidUnitTypeId={setLocalBehandlingstidUnitTypeId}
             setBehandlingstidUnits={setLocalBehandlingstidUnits}
             setCustomText={setLocalCustomText}
           />

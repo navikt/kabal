@@ -106,8 +106,8 @@ const sorter = (sort: SortState, settings: ScoredNamedSvarbrevSetting[]): Scored
     if (sort.orderBy === SortKey.TIME) {
       return settings.toSorted(
         (a, b) =>
-          a.behandlingstidUnits * (a.behandlingstidUnitType === BehandlingstidUnitType.MONTHS ? 30 : 7) -
-          b.behandlingstidUnits * (b.behandlingstidUnitType === BehandlingstidUnitType.MONTHS ? 30 : 7),
+          a.behandlingstidUnits * (a.behandlingstidUnitTypeId === BehandlingstidUnitType.MONTHS ? 30 : 7) -
+          b.behandlingstidUnits * (b.behandlingstidUnitTypeId === BehandlingstidUnitType.MONTHS ? 30 : 7),
       );
     }
 
@@ -131,8 +131,8 @@ const sorter = (sort: SortState, settings: ScoredNamedSvarbrevSetting[]): Scored
   if (sort.orderBy === SortKey.TIME) {
     return settings.toSorted(
       (a, b) =>
-        b.behandlingstidUnits * (b.behandlingstidUnitType === BehandlingstidUnitType.MONTHS ? 30 : 7) -
-        a.behandlingstidUnits * (a.behandlingstidUnitType === BehandlingstidUnitType.MONTHS ? 30 : 7),
+        b.behandlingstidUnits * (b.behandlingstidUnitTypeId === BehandlingstidUnitType.MONTHS ? 30 : 7) -
+        a.behandlingstidUnits * (a.behandlingstidUnitTypeId === BehandlingstidUnitType.MONTHS ? 30 : 7),
     );
   }
 
