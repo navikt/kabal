@@ -27,7 +27,7 @@ interface Props extends SvarbrevSetting {
   setShouldSend: (shouldSend: boolean) => void;
   setCustomText: (customText: string) => void;
   setBehandlingstidUnits: (behandlingstidUnits: number) => void;
-  setBehandlingstidUnitType: (behandlingstidUnitType: BehandlingstidUnitType) => void;
+  setBehandlingstidUnitTypeId: (behandlingstidUnitTypeId: BehandlingstidUnitType) => void;
   hasChanges: boolean;
 }
 
@@ -39,7 +39,7 @@ export const PdfModal = ({
   ytelseId,
   typeId,
   shouldSend,
-  behandlingstidUnitType,
+  behandlingstidUnitTypeId,
   behandlingstidUnits,
   customText,
   modified,
@@ -47,12 +47,19 @@ export const PdfModal = ({
   setShouldSend,
   setCustomText,
   setBehandlingstidUnits,
-  setBehandlingstidUnitType,
+  setBehandlingstidUnitTypeId,
   hasChanges,
 }: Props) => {
   const [updateSetting, { isLoading }] = useUpdateSvarbrevSettingMutation();
   const [ytelseName, ytelseNameIsLoading] = useYtelseName(ytelseId);
-  const pdfUrl = usePdfUrl({ isOpen, ytelseId, typeId, behandlingstidUnits, behandlingstidUnitType, customText });
+  const pdfUrl = usePdfUrl({
+    isOpen,
+    ytelseId,
+    typeId,
+    behandlingstidUnits,
+    behandlingstidUnitTypeId,
+    customText,
+  });
 
   if (!isOpen) {
     return null;
@@ -95,8 +102,8 @@ export const PdfModal = ({
                 <TimeInput
                   value={behandlingstidUnits}
                   onChange={setBehandlingstidUnits}
-                  unit={behandlingstidUnitType}
-                  setUnit={setBehandlingstidUnitType}
+                  unit={behandlingstidUnitTypeId}
+                  setUnit={setBehandlingstidUnitTypeId}
                 />
               </TimeInputContainer>
             </Tooltip>
@@ -116,7 +123,7 @@ export const PdfModal = ({
         </Details>
 
         {hasChanges ? (
-          <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitType={behandlingstidUnitType} />
+          <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />
         ) : null}
 
         <PdfWithLoader>
@@ -138,7 +145,13 @@ export const PdfModal = ({
             size="small"
             loading={isLoading}
             onClick={async () => {
-              await updateSetting({ id, shouldSend, behandlingstidUnits, behandlingstidUnitType, customText });
+              await updateSetting({
+                id,
+                shouldSend,
+                behandlingstidUnits,
+                behandlingstidUnitTypeId,
+                customText,
+              });
               close();
             }}
           >
@@ -177,11 +190,7 @@ const getTitle = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE) => {
   }
 };
 
-const User = ({ navn, navIdent }: INavEmployee) => (
-  <span>
-    {navn} ({navIdent})
-  </span>
-);
+const User = ({ navn, navIdent }: INavEmployee) => `${navn} (${navIdent})`;
 
 const Time = ({ dateTime }: { dateTime: string }) => (
   <StyledTime dateTime={dateTime}>{isoDateTimeToPretty(dateTime)}</StyledTime>
