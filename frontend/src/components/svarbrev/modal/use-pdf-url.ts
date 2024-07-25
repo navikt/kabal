@@ -8,13 +8,13 @@ interface Props {
   ytelseId: string;
   typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
   behandlingstidUnits: number;
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   customText: string | null;
 }
 
 export const usePdfUrl = ({
   isOpen,
-  behandlingstidUnitType,
+  behandlingstidUnitTypeId,
   behandlingstidUnits,
   customText,
   typeId,
@@ -38,7 +38,13 @@ export const usePdfUrl = ({
       return;
     }
 
-    const params: PreviewRequestsBody = { ytelseId, typeId, behandlingstidUnits, behandlingstidUnitType, customText };
+    const params: PreviewRequestsBody = {
+      ytelseId,
+      typeId,
+      behandlingstidUnits,
+      behandlingstidUnitTypeId,
+      customText,
+    };
 
     const abortController = new AbortController();
 
@@ -60,7 +66,7 @@ export const usePdfUrl = ({
       abortController.abort();
       clearTimeout(timeout);
     };
-  }, [behandlingstidUnitType, behandlingstidUnits, customText, isOpen, typeId, ytelseId]);
+  }, [behandlingstidUnitTypeId, behandlingstidUnits, customText, isOpen, typeId, ytelseId]);
 
   return pdfUrl;
 };

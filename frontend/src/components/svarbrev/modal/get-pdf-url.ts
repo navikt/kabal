@@ -5,7 +5,7 @@ export interface PreviewRequestsBody {
   typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;
   ytelseId: string;
   behandlingstidUnits: number;
-  behandlingstidUnitType: BehandlingstidUnitType;
+  behandlingstidUnitTypeId: BehandlingstidUnitType;
   customText: string | null;
 }
 
