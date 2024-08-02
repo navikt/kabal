@@ -1,7 +1,8 @@
 import { Label, ToggleGroup } from '@navikt/ds-react';
 import { useId } from 'react';
 import { styled } from 'styled-components';
-import { useNumberSetting } from '@app/hooks/settings/helpers';
+import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
+import { PAGE_SIZE_OPTIONS, restrictPageSize } from '@app/hooks/use-oppgave-pagination';
 import { pushEvent } from '@app/observability';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 
 export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Props) => {
   const id = useId();
-  const { value = pageSize, setValue } = useNumberSetting(settingKey);
+  const { value = pageSize, setValue } = useRestrictedNumberSetting(settingKey, restrictPageSize);
 
   return (
     <StyledRowsPerPage>
@@ -30,21 +31,11 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
         aria-describedby={id}
         data-testid={testId}
       >
-        <ToggleGroup.Item value="10" data-value="10">
-          10
-        </ToggleGroup.Item>
-        <ToggleGroup.Item value="20" data-value="20">
-          20
-        </ToggleGroup.Item>
-        <ToggleGroup.Item value="50" data-value="50">
-          50
-        </ToggleGroup.Item>
-        <ToggleGroup.Item value="100" data-value="100">
-          100
-        </ToggleGroup.Item>
-        <ToggleGroup.Item value="-1" data-value="-1">
-          Alle
-        </ToggleGroup.Item>
+        {PAGE_SIZE_OPTIONS.map((option) => (
+          <ToggleGroup.Item key={option} value={option} data-value={option}>
+            {option}
+          </ToggleGroup.Item>
+        ))}
       </ToggleGroup>
     </StyledRowsPerPage>
   );
