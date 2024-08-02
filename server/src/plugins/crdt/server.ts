@@ -3,14 +3,14 @@ import { slateNodesToInsertDelta, yTextToSlateElement } from '@slate-yjs/core';
 import { Node } from 'slate';
 import * as Y from 'yjs';
 import { getLogger } from '@app/logger';
+import { FastifyRequest } from 'fastify';
 
 const log = getLogger('collaboration');
 
 interface Context {
   behandlingId: string;
   dokumentId: string;
-  oboAccessToken: string;
-  accessToken: string;
+  req: FastifyRequest;
 }
 
 export const collaborationServer = Server.configure({

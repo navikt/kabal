@@ -68,10 +68,10 @@ export const getLogger = (module: string): Logger => {
   }
 
   const logger: Logger = {
-    debug: (args) => console.debug(getLog(module, 'debug', args)),
-    info: (args) => console.info(getLog(module, 'info', args)),
-    warn: (args) => console.warn(getLog(module, 'warn', args)),
-    error: (args) => console.warn(getLog(module, 'error', args)),
+    debug: (args) => undefined, // console.debug(getLog(module, 'debug', args)),
+    info: (args) => undefined, // console.info(getLog(module, 'info', args)),
+    warn: (args) => undefined, // console.warn(getLog(module, 'warn', args)),
+    error: (args) => undefined, // console.warn(getLog(module, 'error', args)),
   };
 
   LOGGERS.set(module, logger);

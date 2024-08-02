@@ -1,8 +1,9 @@
-import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
-import { CLIENT_VERSION_HEADER } from '@app/headers';
-import { CLIENT_VERSION_QUERY, getHeaderOrQueryValue } from '@app/helpers/get-header-query';
 import { getLogger } from '@app/logger';
-import { FastifyRequest } from 'fastify';
+import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
+import { collaborationServer } from '@app/plugins/crdt/server';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
+import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
+import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import fastifyPlugin from 'fastify-plugin';
 import { WebSocketServer } from 'ws';
 
@@ -12,83 +13,62 @@ export const CRDT_PLUGIN_ID = 'crdt';
 
 export const crdtPlugin = fastifyPlugin(
   (app, _, pluginDone) => {
-    const wss = new WebSocketServer({ server: app.server });
+    const wss = new WebSocketServer({ noServer: true });
 
-    wss.on('connection', async (ws, req) => {
-      log.info({ msg: 'Websocket connect', traceId });
+    app.addHook('onRequest', async (req, reply) => {
+      // /collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}
+      const splitPath = req.url.split('/');
 
-      if (req.url === undefined) {
-        log.warn({ msg: 'No URL in request', traceId });
-
-        return ws.close(400, 'Bad Request');
+      if (splitPath.length !== 6) {
+        return;
       }
 
-      const url = new URL(req.url, `https://${req.headers.host}`);
+      const [, base, behandlinger, behandlingId, dokumenter, dokumentId] = splitPath;
 
-      if (!url.pathname.startsWith('/collaboration/')) {
-        log.warn({ msg: 'Invalid URL', data: { url: req.url }, traceId });
-
-        return ws.close(404, 'Not Found');
+      if (
+        base !== 'collaboration' ||
+        behandlinger !== 'behandlinger' ||
+        dokumenter !== 'dokumenter' ||
+        behandlingId === undefined ||
+        dokumentId === undefined ||
+        behandlingId.length === 0 ||
+        dokumentId.length === 0
+      ) {
+        return;
       }
 
-      const { pathname } = url;
-      const parts = pathname.split('/').filter((part) => part.length !== 0);
+      const { upgrade, connection } = req.headers;
 
-      if (parts.length !== 5) {
-        log.warn({ msg: 'Invalid URL, too short', data: { path: pathname }, traceId });
+      console.log({ upgrade, connection });
 
-        return ws.close(404, 'Not Found');
+      if (connection?.toLowerCase() !== 'upgrade' || upgrade?.toLowerCase() !== 'websocket') {
+        reply.send(404);
+
+        return;
       }
 
-      const behandlingId = parts.at(2);
-      const dokumentId = parts.at(4);
+      const { accessToken, getOboAccessToken } = req;
 
-      if (behandlingId === undefined || dokumentId === undefined) {
-        log.warn({ msg: 'Invalid URL, missing IDs', data: { path: pathname }, traceId });
+      log.info({ msg: 'Websocket connect' });
 
-        return ws.close(404, 'Not Found');
-      }
+      wss.handleUpgrade(req.raw, req.socket, Buffer.alloc(0), (ws) => {
+        wss.emit('connection', ws, req);
+        reply.hijack();
 
-      // Get auth header
-      const authHeader = req.headers['authorization'];
-
-      if (typeof authHeader !== 'string') {
-        log.warn({ msg: 'Unauthorized', traceId });
-
-        return ws.close(401, 'Unauthorized');
-      }
-
-      const accessToken = authHeader.split(' ')[1];
-
-      if (accessToken === undefined || accessToken.length === 0) {
-        log.warn({ msg: 'Unauthorized', traceId });
-
-        return ws.close(401, 'Unauthorized');
-      }
-
-      try {
-        const oboAccessToken = await getOnBehalfOfAccessToken(authClient, authHeader, 'kabal-api', traceId);
-
-        log.info({
-          msg: 'Handing over Websocket to collaboration server',
-          data: { behandlingId, dokumentId },
-          traceId,
-        });
-
-        collaborationServer.handleConnection(ws, req, {
+        collaborationServer.handleConnection(ws, req.raw, {
           behandlingId,
           dokumentId,
-          oboAccessToken,
-          accessToken: authHeader,
+          oboAccessToken: getOboAccessToken('kabal-api'),
+          accessToken,
         });
-      } catch (error) {
-        log.error({ msg: 'Failed to get OBO token', error, traceId });
-
-        ws.close(500, 'Internal Server Error');
-      }
+      });
     });
 
     pluginDone();
   },
-  { fastify: '4', name: CRDT_PLUGIN_ID },
+  {
+    fastify: '4',
+    name: CRDT_PLUGIN_ID,
+    dependencies: [ACCESS_TOKEN_PLUGIN_ID, OBO_ACCESS_TOKEN_PLUGIN_ID, TRACEPARENT_PLUGIN_ID, TAB_ID_PLUGIN_ID],
+  },
 );
