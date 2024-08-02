@@ -104,6 +104,17 @@ export const useNumberSetting = (property: string): Setting<number> => {
   return useMemo(() => ({ value: parsedValue, setValue: _setValue, remove }), [_setValue, parsedValue, remove]);
 };
 
+export const useRestrictedNumberSetting = (
+  property: string,
+  restrict: (v: number | undefined) => number,
+): Setting<number, number> => {
+  const { value, ...rest } = useNumberSetting(property);
+
+  const restrictedValue = useMemo(() => restrict(value), [restrict, value]);
+
+  return { value: restrictedValue, ...rest };
+};
+
 export const useJsonSetting = <T>(property: string): Setting<T> => {
   const { value, setValue, ...rest } = useSetting(property);
 

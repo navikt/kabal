@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
-import { useNumberSetting } from '@app/hooks/settings/helpers';
+import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
+import { restrictPageSize } from '@app/hooks/use-oppgave-pagination';
 import { StyledFooterContent } from '@app/styled-components/table';
 import { IPartBase } from '@app/types/oppgave-common';
 import { Result } from './result';
@@ -17,14 +18,12 @@ interface SearchResultsProps {
 }
 
 const SETTINGS_KEY = 'search/name/rows_per_page';
-const DEFAULT_PAGE_SIZE = 10;
 
 export const SearchResults = ({ people, onRefresh, isFetching, isLoading }: SearchResultsProps) => {
   const [page, setPage] = useState(1);
-  const { value = DEFAULT_PAGE_SIZE } = useNumberSetting(SETTINGS_KEY);
+  const { value: pageSize } = useRestrictedNumberSetting(SETTINGS_KEY, restrictPageSize);
 
   const total = people.length;
-  const pageSize = value === -1 ? total : value;
   const from = (page - 1) * pageSize;
   const to = Math.min(total, from + pageSize);
 
