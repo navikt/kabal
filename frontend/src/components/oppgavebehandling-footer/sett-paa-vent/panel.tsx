@@ -1,5 +1,5 @@
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, ErrorSummary, Panel, Textarea } from '@navikt/ds-react';
+import { Box, Button, ErrorSummary, Textarea } from '@navikt/ds-react';
 import { addDays, addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -37,7 +37,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   }, []);
 
   return (
-    <StyledPanel>
+    <StyledBox padding="4" background="bg-default" borderRadius="medium" shadow="medium">
       <DatePicker
         label="Frist"
         value={to}
@@ -103,7 +103,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           Avbryt
         </Button>
       </Row>
-    </StyledPanel>
+    </StyledBox>
   );
 };
 
@@ -167,7 +167,7 @@ const validateReason = (reason: string): string | null => {
   return null;
 };
 
-const StyledPanel = styled(Panel)`
+const StyledBox = styled(Box)`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -175,9 +175,6 @@ const StyledPanel = styled(Panel)`
   z-index: 1;
   bottom: 100%;
   left: 0;
-  padding: 16px;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 4px;
   width: 400px;
 `;
 
