@@ -30,7 +30,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
           onChange,
           name,
         });
-      } catch (e) {
+      } catch {
         errorToast({
           testId: 'oppgave-set-rol-error-toast',
           oppgaveId,

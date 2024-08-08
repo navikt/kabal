@@ -39,7 +39,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
           Oppgave lagt i felles kø
         </ActionToast>,
       );
-    } catch (e) {
+    } catch {
       // Error already handled in RTKQ file.
     }
   };
@@ -63,7 +63,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
           Oppgave tildelt
         </ActionToast>,
       );
-    } catch (e) {
+    } catch {
       // Error already handled in RTKQ file.
     }
   };

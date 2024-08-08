@@ -15,7 +15,7 @@ import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 import { StyledParagraph } from '../paragraph';
 
-interface TableCellElementProps extends PlateElementProps<EditorValue, TTableCellElement> {}
+type TableCellElementProps = PlateElementProps<EditorValue, TTableCellElement>;
 
 export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>, TableCellElementProps>(
   ({ className, children, ...props }, ref) => {

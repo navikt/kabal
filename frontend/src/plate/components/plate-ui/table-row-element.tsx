@@ -2,7 +2,7 @@ import { PlateElement, PlateElementProps } from '@udecode/plate-common';
 import { ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
-interface PlateTableRowElementProps extends PlateElementProps {}
+type PlateTableRowElementProps = PlateElementProps;
 
 const TableRowElement = forwardRef<ElementRef<typeof PlateElement>, PlateTableRowElementProps>(
   ({ children, ...props }, ref) => (

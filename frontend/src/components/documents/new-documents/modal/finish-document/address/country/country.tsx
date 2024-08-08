@@ -49,15 +49,21 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       if (e.key === 'ArrowDown') {
-        showCountryList ? setFocusIndex((prev) => (prev + 1) % options.length) : setShowCountryList(true);
+        if (showCountryList) {
+          setFocusIndex((prev) => (prev + 1) % options.length);
+        } else {
+          setShowCountryList(true);
+        }
 
         return e.preventDefault();
       }
 
       if (e.key === 'ArrowUp') {
-        showCountryList
-          ? setFocusIndex((prev) => (prev === 0 ? options.length - 1 : prev - 1))
-          : setShowCountryList(true);
+        if (showCountryList) {
+          setFocusIndex((prev) => (prev === 0 ? options.length - 1 : prev - 1));
+        } else {
+          setShowCountryList(true);
+        }
 
         return e.preventDefault();
       }

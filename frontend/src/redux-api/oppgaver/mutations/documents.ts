@@ -49,7 +49,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch (e) {
+        } catch {
           undo();
           toast.error('Kunne ikke endre mottakere.');
         }
