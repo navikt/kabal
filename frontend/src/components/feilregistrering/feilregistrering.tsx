@@ -1,5 +1,5 @@
 import { FileXMarkIcon } from '@navikt/aksel-icons';
-import { Button, Panel } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Confirm } from '@app/components/feilregistrering/confirm';
@@ -17,12 +17,11 @@ interface Props extends OppgaveId, Variant, Position, FagsystemId {
 }
 
 export const Feilregistrering = ({
-  $position,
   oppgaveId,
   variant,
   feilregistrert,
-  fagsystemId,
   tildeltSaksbehandlerident,
+  ...props
 }: Props) => {
   const canFeilregistrere = useCanFeilregistrere(tildeltSaksbehandlerident);
 
@@ -36,7 +35,7 @@ export const Feilregistrering = ({
 
   return (
     <FeilregistrerButton variant={variant} oppgaveId={oppgaveId} isFeilregistrert={false}>
-      <FeilregistrerPanel oppgaveId={oppgaveId} $position={$position} fagsystemId={fagsystemId} />
+      <FeilregistrerPanel oppgaveId={oppgaveId} {...props} />
     </FeilregistrerButton>
   );
 };
@@ -72,17 +71,24 @@ const FeilregistrerButton = ({
   );
 };
 
-const FeilregistrerPanel = ({ oppgaveId, $position, fagsystemId }: OppgaveId & Position & FagsystemId) => {
+const FeilregistrerPanel = ({ oppgaveId, $position, $align, fagsystemId }: OppgaveId & Position & FagsystemId) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   return (
-    <FloatingPanel $position={$position}>
+    <FloatingBox
+      $position={$position}
+      $align={$align}
+      background="bg-default"
+      padding="4"
+      shadow="medium"
+      borderRadius="medium"
+    >
       {isConfirmed ? (
         <Register oppgaveId={oppgaveId} />
       ) : (
         <Confirm fagsystemId={fagsystemId} setIsConfirmed={() => setIsConfirmed(true)} />
       )}
-    </FloatingPanel>
+    </FloatingBox>
   );
 };
 
@@ -91,16 +97,15 @@ const Container = styled.div`
   display: inline-block;
 `;
 
-const FloatingPanel = styled(Panel)<Position>`
+const FloatingBox = styled(Box)<Position>`
   position: absolute;
   top: ${({ $position }) => ($position === 'over' ? 'auto' : '100%')};
   bottom: ${({ $position }) => ($position === 'over' ? '100%' : 'auto')};
-  left: 0;
+  right: ${({ $align }) => ($align === 'left' ? 'auto' : '0')};
+  left: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
   display: flex;
   flex-direction: column;
   row-gap: 16px;
   z-index: 1;
-  border-radius: var(--a-border-radius-medium);
   min-width: 400px;
-  box-shadow: 0px 0 4px rgb(0, 0, 0, 0.25);
 `;
