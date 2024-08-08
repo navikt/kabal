@@ -4,6 +4,7 @@ export interface Variant {
 
 export interface Position {
   $position: 'over' | 'below';
+  $align: 'left' | 'right';
 }
 
 export interface OppgaveId {

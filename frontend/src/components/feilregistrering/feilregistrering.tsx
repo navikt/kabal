@@ -17,12 +17,11 @@ interface Props extends OppgaveId, Variant, Position, FagsystemId {
 }
 
 export const Feilregistrering = ({
-  $position,
   oppgaveId,
   variant,
   feilregistrert,
-  fagsystemId,
   tildeltSaksbehandlerident,
+  ...props
 }: Props) => {
   const canFeilregistrere = useCanFeilregistrere(tildeltSaksbehandlerident);
 
@@ -36,7 +35,7 @@ export const Feilregistrering = ({
 
   return (
     <FeilregistrerButton variant={variant} oppgaveId={oppgaveId} isFeilregistrert={false}>
-      <FeilregistrerPanel oppgaveId={oppgaveId} $position={$position} fagsystemId={fagsystemId} />
+      <FeilregistrerPanel oppgaveId={oppgaveId} {...props} />
     </FeilregistrerButton>
   );
 };
@@ -72,11 +71,11 @@ const FeilregistrerButton = ({
   );
 };
 
-const FeilregistrerPanel = ({ oppgaveId, $position, fagsystemId }: OppgaveId & Position & FagsystemId) => {
+const FeilregistrerPanel = ({ oppgaveId, $position, $align, fagsystemId }: OppgaveId & Position & FagsystemId) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   return (
-    <FloatingPanel $position={$position}>
+    <FloatingPanel $position={$position} $align={$align}>
       {isConfirmed ? (
         <Register oppgaveId={oppgaveId} />
       ) : (
@@ -95,7 +94,8 @@ const FloatingPanel = styled(Panel)<Position>`
   position: absolute;
   top: ${({ $position }) => ($position === 'over' ? 'auto' : '100%')};
   bottom: ${({ $position }) => ($position === 'over' ? '100%' : 'auto')};
-  left: 0;
+  right: ${({ $align }) => ($align === 'left' ? 'auto' : '0')};
+  left: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
   display: flex;
   flex-direction: column;
   row-gap: 16px;
