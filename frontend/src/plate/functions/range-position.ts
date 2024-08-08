@@ -25,8 +25,6 @@ export const calculateRangePosition = (
   });
 
   if (range === undefined) {
-    console.warn('Could not calculate position of floating toolbar. Range is undefined.', selectionStart);
-
     return null;
   }
 

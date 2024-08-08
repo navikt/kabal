@@ -8,6 +8,7 @@ import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/head
 import { LabelContent } from '@app/plate/components/label-content';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { Maltekst } from '@app/plate/components/maltekst/maltekst';
+import { Nowrap } from '@app/plate/components/nowrap';
 import { PageBreak } from '@app/plate/components/page-break';
 import { Paragraph } from '@app/plate/components/paragraph';
 import { Placeholder } from '@app/plate/components/placeholder/placeholder';
@@ -19,6 +20,7 @@ import {
   ELEMENT_EMPTY_VOID,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
+  ELEMENT_NOWRAP,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
@@ -26,6 +28,7 @@ import {
 import { createEmptyVoidPlugin } from '@app/plate/plugins/empty-void';
 import { createLabelContentPlugin } from '@app/plate/plugins/label-content';
 import { createMaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { createNowrapPlugin } from '@app/plate/plugins/nowrap';
 import { createSaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
@@ -38,10 +41,12 @@ export const previewPlugins = createPlugins(
     createRedigerbarMaltekstPlugin(),
     createLabelContentPlugin(),
     createEmptyVoidPlugin(),
+    createNowrapPlugin(),
   ],
   {
     components: {
       [ELEMENT_PARAGRAPH]: Paragraph,
+      [ELEMENT_NOWRAP]: Nowrap,
       [ELEMENT_PAGE_BREAK]: PageBreak,
 
       // Headings
