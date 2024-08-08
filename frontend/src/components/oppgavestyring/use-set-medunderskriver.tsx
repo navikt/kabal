@@ -43,7 +43,7 @@ export const useSetMedunderskriver = (
           onChange,
           name,
         });
-      } catch (e) {
+      } catch {
         errorToast({
           testId: 'oppgave-set-medunderskriver-error-toast',
           oppgaveId,

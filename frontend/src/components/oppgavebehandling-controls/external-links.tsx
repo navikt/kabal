@@ -110,7 +110,7 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
       setCopied(true);
       navigator.clipboard.writeText(url);
       pushEvent(eventName, 'external-links');
-    } catch (error) {
+    } catch {
       toast.error(`Kunne ikke kopiere lenken til ${appName}`);
     }
   }, [appName, eventName, baseUrl]);
