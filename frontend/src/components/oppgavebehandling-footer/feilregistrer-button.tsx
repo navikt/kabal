@@ -21,6 +21,7 @@ export const FeilregistrerButton = () => {
         tildeltSaksbehandlerident={oppgave.saksbehandler?.navIdent ?? null}
         variant="secondary"
         $position="over"
+        $align="left"
         feilregistrert={null}
       />
     );
