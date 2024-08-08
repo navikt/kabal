@@ -206,6 +206,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               variant="secondary-neutral"
               $position="below"
+              $align="right"
             />
           </Table.DataCell>
         );
