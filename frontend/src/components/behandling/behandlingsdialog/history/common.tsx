@@ -43,4 +43,5 @@ export const HISTORY_COLORS: Record<HistoryEventTypes, string> = {
   [HistoryEventTypes.MEDUNDERSKRIVER]: '--a-blue-200',
   [HistoryEventTypes.FERDIGSTILT]: '--a-surface-success-moderate',
   [HistoryEventTypes.FEILREGISTRERT]: '--a-surface-danger-moderate',
+  [HistoryEventTypes.VARSLET_BEHANDLINGSTID]: '--a-surface-warning',
 };
