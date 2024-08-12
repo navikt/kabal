@@ -4,6 +4,7 @@ import { UtfallEnum } from '@app/types/kodeverk';
 import { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';
 import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { FradelReason } from '@app/types/oppgaver';
+import { BehandlingstidUnitType } from '@app/types/svarbrev';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 
@@ -67,6 +68,7 @@ export enum HistoryEventTypes {
   SATT_PAA_VENT = 'SATT_PAA_VENT',
   FERDIGSTILT = 'FERDIGSTILT',
   FEILREGISTRERT = 'FEILREGISTRERT',
+  VARSLET_BEHANDLINGSTID = 'VARSLING_BEHANDLINGSTID',
 }
 
 export interface BaseEvent<T, E extends HistoryEventTypes> {
@@ -128,6 +130,13 @@ interface FerdigstiltEvent {
   avsluttetAvSaksbehandler: string; // DateTime
 }
 
+interface VarsletBehandlingstidEvent {
+  varsletBehandlingstidUnits: number | null;
+  varsletBehandlingstidUnitTypeId: BehandlingstidUnitType | null;
+  varsletFrist: string | null; // DateTime
+  mottakere: IPart[] | null;
+}
+
 export type ITildelingEvent = WithPrevious<TildelingEvent, HistoryEventTypes.TILDELING>;
 export type IMedunderskriverEvent = WithPrevious<MedunderskriverEvent, HistoryEventTypes.MEDUNDERSKRIVER>;
 export type IRolEvent = WithPrevious<RolEvent, HistoryEventTypes.ROL>;
@@ -136,6 +145,10 @@ export type IFullmektigEvent = WithPrevious<FullmektigEvent, HistoryEventTypes.F
 export type ISattPaaVentEvent = WithPrevious<SattPaaVentEvent | null, HistoryEventTypes.SATT_PAA_VENT>;
 export type IFerdigstiltEvent = WithPrevious<FerdigstiltEvent | null, HistoryEventTypes.FERDIGSTILT>;
 export type IFeilregistrertEvent = WithPrevious<FeilregistrertEvent | null, HistoryEventTypes.FEILREGISTRERT>;
+export type IVarsletBehandlingstidEvent = WithPrevious<
+  VarsletBehandlingstidEvent,
+  HistoryEventTypes.VARSLET_BEHANDLINGSTID
+>;
 
 export type IHistory =
   | ITildelingEvent
@@ -145,7 +158,8 @@ export type IHistory =
   | IFullmektigEvent
   | ISattPaaVentEvent
   | IFerdigstiltEvent
-  | IFeilregistrertEvent;
+  | IFeilregistrertEvent
+  | IVarsletBehandlingstidEvent;
 
 export interface IHistoryResponse {
   tildeling: ITildelingEvent[];
@@ -156,4 +170,5 @@ export interface IHistoryResponse {
   sattPaaVent: ISattPaaVentEvent[];
   ferdigstilt: IFerdigstiltEvent[];
   feilregistrert: IFeilregistrertEvent[];
+  varsletBehandlingstid: IVarsletBehandlingstidEvent[];
 }

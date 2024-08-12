@@ -28,6 +28,10 @@ export const Filter = ({ counts, totalCount, filter, setFilter }: Props) => {
       { label: `Rådgivende overlege (${counts[HistoryEventTypes.ROL]})`, value: 'rol' },
       { label: `Satt på vent (${counts[HistoryEventTypes.SATT_PAA_VENT]})`, value: 'sattPaaVent' },
       { label: `Tildeling (${counts[HistoryEventTypes.TILDELING]})`, value: 'tildeling' },
+      {
+        label: `Varslet behandlingstid (${counts[HistoryEventTypes.VARSLET_BEHANDLINGSTID]})`,
+        value: 'varsletBehandlingstid',
+      },
     ],
     [counts],
   );
@@ -65,6 +69,7 @@ const KEYS: Record<keyof IHistoryResponse, undefined> = {
   rol: undefined,
   sattPaaVent: undefined,
   tildeling: undefined,
+  varsletBehandlingstid: undefined,
 };
 
 const isHistoryResponse = (key: string): key is keyof IHistoryResponse => key in KEYS;

@@ -9,6 +9,7 @@ import { getMedunderskriverEvent } from '@app/components/behandling/behandlingsd
 import { getROLEvent } from '@app/components/behandling/behandlingsdialog/history/rol';
 import { getSattPaaVent } from '@app/components/behandling/behandlingsdialog/history/satt-paa-vent';
 import { getTildelingEvent } from '@app/components/behandling/behandlingsdialog/history/tildeling';
+import { getVarsletBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/varslet-behandlingstid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, IHistory, IHistoryResponse } from '@app/types/oppgavebehandling/response';
@@ -55,13 +56,23 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       fullmektig: toNodes(data.fullmektig, getFullmektig),
       ferdigstilt: toNodes(data.ferdigstilt, getFerdigstiltEvent),
       feilregistrert: toNodes(data.feilregistrert, getFeilregistrertEvent),
+      varsletBehandlingstid: toNodes(data.varsletBehandlingstid, getVarsletBehandlingstidEvent),
     }),
     [data],
   );
 
   const filteredNodes = useMemo(() => {
-    const { feilregistrert, ferdigstilt, klager, medunderskriver, rol, sattPaaVent, tildeling, fullmektig } =
-      nodeCategories;
+    const {
+      feilregistrert,
+      ferdigstilt,
+      klager,
+      medunderskriver,
+      rol,
+      sattPaaVent,
+      tildeling,
+      fullmektig,
+      varsletBehandlingstid,
+    } = nodeCategories;
 
     if (filter === ALL) {
       return [
@@ -73,6 +84,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
         ...sattPaaVent,
         ...tildeling,
         ...fullmektig,
+        ...varsletBehandlingstid,
       ]
         .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
         .map(({ node }) => node);
@@ -82,8 +94,17 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
   }, [filter, nodeCategories]);
 
   const { counts, totalCount } = useMemo(() => {
-    const { tildeling, medunderskriver, rol, klager, sattPaaVent, fullmektig, ferdigstilt, feilregistrert } =
-      nodeCategories;
+    const {
+      tildeling,
+      medunderskriver,
+      rol,
+      klager,
+      sattPaaVent,
+      fullmektig,
+      ferdigstilt,
+      feilregistrert,
+      varsletBehandlingstid,
+    } = nodeCategories;
 
     const _counts: Record<HistoryEventTypes, number> = {
       [HistoryEventTypes.TILDELING]: tildeling.length,
@@ -94,6 +115,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       [HistoryEventTypes.FULLMEKTIG]: fullmektig.length,
       [HistoryEventTypes.FERDIGSTILT]: ferdigstilt.length,
       [HistoryEventTypes.FEILREGISTRERT]: feilregistrert.length,
+      [HistoryEventTypes.VARSLET_BEHANDLINGSTID]: varsletBehandlingstid.length,
     };
     const _totalCount =
       tildeling.length +

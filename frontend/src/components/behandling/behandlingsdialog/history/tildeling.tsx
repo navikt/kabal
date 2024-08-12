@@ -126,7 +126,7 @@ const FromOther = ({ actor, previousSaksbehandler, timestamp }: FromOtherProps) 
   <HistoryEvent
     tag="Fradeling"
     type={HistoryEventTypes.TILDELING}
-    color="--a-surface-warning-moderate"
+    color="--a-gray-200"
     timestamp={timestamp}
     icon={ArrowUndoIcon}
   >
