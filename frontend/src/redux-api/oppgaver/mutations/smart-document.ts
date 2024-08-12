@@ -1,11 +1,9 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { user } from '@app/static-data/static-data';
 import { IDocumentParams } from '@app/types/documents/common-params';
 import { ISmartDocument } from '@app/types/documents/documents';
-import { IModifiedSmartDocumentResponse } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
-import { ICreateSmartDocumentParams, IUpdateSmartDocumentParams } from '@app/types/smart-editor/params';
+import { ICreateSmartDocumentParams } from '@app/types/smart-editor/params';
 import { Language } from '@app/types/texts/language';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -35,63 +33,6 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
           );
         } catch (e) {
           const message = 'Kunne ikke opprette dokument.';
-
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
-          } else {
-            toast.error(message);
-          }
-        }
-      },
-    }),
-
-    updateSmartDocument: builder.mutation<IModifiedSmartDocumentResponse, IUpdateSmartDocumentParams>({
-      query: ({ oppgaveId, dokumentId, ...body }) => ({
-        url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
-        method: 'PATCH',
-        body,
-        timeout: 10_000,
-      }),
-      onQueryStarted: async ({ dokumentId, oppgaveId, content }, { dispatch, queryFulfilled }) => {
-        try {
-          const { navIdent, navn } = await user;
-          const { data } = await queryFulfilled;
-          const { modified, version } = data;
-
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId, oppgaveId }, (draft) => {
-              if (draft !== null && draft.isSmartDokument) {
-                return { ...draft, content, modified, version };
-              }
-            }),
-          );
-
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.map((d) => (d.isSmartDokument && d.id === dokumentId ? { ...d, modified, version, content } : d)),
-            ),
-          );
-
-          dispatch(
-            documentsQuerySlice.util.updateQueryData(
-              'getSmartDocumentVersion',
-              { dokumentId, oppgaveId, versionId: version },
-              () => content,
-            ),
-          );
-
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getSmartDocumentVersions', { dokumentId, oppgaveId }, (draft) => [
-              {
-                version,
-                timestamp: modified,
-                author: { navIdent, navn },
-              },
-              ...draft,
-            ]),
-          );
-        } catch (e: unknown) {
-          const message = 'Feil ved lagring av dokument.';
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
@@ -135,5 +76,4 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useCreateSmartDocumentMutation, useUpdateSmartDocumentMutation, useSetLanguageMutation } =
-  smartDocumentsMutationSlice;
+export const { useCreateSmartDocumentMutation, useSetLanguageMutation } = smartDocumentsMutationSlice;

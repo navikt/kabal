@@ -25,6 +25,8 @@ import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { healthPlugin } from '@app/plugins/health';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
+import { crdtPlugin } from '@app/plugins/crdt/crdt';
+import { fastifyWebsocket } from '@fastify/websocket';
 
 processErrors();
 
@@ -47,6 +49,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
       routeBlacklist: ['/metrics', '/isAlive', '/isReady', '/swagger', '/swagger.json'],
     },
   })
+  .register(fastifyWebsocket)
   .register(proxyVersionPlugin)
   .register(traceparentPlugin)
   .register(tabIdPlugin)
@@ -61,6 +64,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(serveAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
+  .register(crdtPlugin)
 
   // Start server.
   .listen({ host: '0.0.0.0', port: serverConfig.port });

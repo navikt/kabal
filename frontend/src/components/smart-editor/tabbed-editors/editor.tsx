@@ -4,7 +4,6 @@ import { Plate, isCollapsed, isText } from '@udecode/plate-common';
 import { Profiler, useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
-import { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
@@ -19,7 +18,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
@@ -32,12 +31,10 @@ import { ISmartDocument } from '@app/types/documents/documents';
 
 interface EditorProps {
   smartDocument: ISmartDocument;
-  onChange: (value: EditorValue) => void;
-  updateStatus: SavedStatusProps;
 }
 
-export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) => {
-  const { id, templateId, content } = smartDocument;
+export const Editor = ({ smartDocument }: EditorProps) => {
+  const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
@@ -68,11 +65,10 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
   return (
     <Container>
       <Plate<EditorValue, RichTextEditor>
-        initialValue={content}
+        initialValue={smartDocument.content}
         id={id}
         readOnly={!canEdit}
-        onChange={onChange}
-        plugins={saksbehandlerPlugins}
+        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument)}
         decorate={([node, path]) => {
           if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
@@ -135,7 +131,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
           {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
         </MainContainer>
 
-        <StatusBar {...updateStatus} />
+        <StatusBar />
       </Plate>
     </Container>
   );
