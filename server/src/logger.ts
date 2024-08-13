@@ -1,3 +1,5 @@
+import { isDeployed } from './config/env';
+
 const VERSION = process.env['VERSION'] ?? 'unknown';
 
 const LOGGERS: Map<string, Logger> = new Map();
@@ -22,23 +24,23 @@ export interface AnyObject {
 
 type LogArgs =
   | {
-    msg?: string;
-    trace_id?: string;
-    span_id?: string;
-    client_version?: string;
-    tab_id?: string;
-    error: Error | unknown;
-    data?: SerializableValue;
-  }
+      msg?: string;
+      trace_id?: string;
+      span_id?: string;
+      client_version?: string;
+      tab_id?: string;
+      error: Error | unknown;
+      data?: SerializableValue;
+    }
   | {
-    msg: string;
-    trace_id?: string;
-    span_id?: string;
-    client_version?: string;
-    tab_id?: string;
-    error?: Error | unknown;
-    data?: SerializableValue;
-  };
+      msg: string;
+      trace_id?: string;
+      span_id?: string;
+      client_version?: string;
+      tab_id?: string;
+      error?: Error | unknown;
+      data?: SerializableValue;
+    };
 
 interface Logger {
   debug: (args: LogArgs) => void;
@@ -68,10 +70,10 @@ export const getLogger = (module: string): Logger => {
   }
 
   const logger: Logger = {
-    debug: (args) => console.debug(getLog(module, 'debug', args)),
-    info: (args) => console.info(getLog(module, 'info', args)),
-    warn: (args) => console.warn(getLog(module, 'warn', args)),
-    error: (args) => console.warn(getLog(module, 'error', args)),
+    debug: (args) => logDefined(getLog(module, 'debug', args), 'debug'),
+    info: (args) => logDefined(getLog(module, 'info', args), 'info'),
+    warn: (args) => logDefined(getLog(module, 'warn', args), 'warn'),
+    error: (args) => logDefined(getLog(module, 'error', args), 'error'),
   };
 
   LOGGERS.set(module, logger);
@@ -79,11 +81,20 @@ export const getLogger = (module: string): Logger => {
   return logger;
 };
 
+const logDefined = (message: string | undefined, level: Level): void => {
+  if (message === undefined) {
+    return;
+  }
+
+  // eslint-disable-next-line no-console
+  console[level](message);
+};
+
 const getLog = (
   module: string,
   level: Level,
   { msg, trace_id, span_id, client_version, tab_id, error, data }: LogArgs,
-) => {
+): string | undefined => {
   const log: Log = {
     ...(typeof data === 'object' && data !== null && !Array.isArray(data) ? data : { data }),
     level,
@@ -103,5 +114,19 @@ const getLog = (
     log.message = msg;
   }
 
-  return JSON.stringify(log);
+  if (isDeployed) {
+    return JSON.stringify(log);
+  }
+
+  if (
+    module === 'http' ||
+    module === 'version' ||
+    module === 'api-proxy' ||
+    module === 'obo-token-plugin' ||
+    module === 'prepare-proxy-request-headers'
+  ) {
+    return;
+  }
+
+  return msg;
 };
