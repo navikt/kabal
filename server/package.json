@@ -8,9 +8,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "node --watch --trace-warnings -r dotenv-flow/config --es-module-specifier-resolution=node dist/server.js",
+    "start": "bun run build --watch & node --watch --trace-warnings dist/server.js",
     "build": "bun build ./src/server.ts --target node --format esm --sourcemap --outdir dist",
-    "watch": "npm run build -- --watch",
     "lint": "eslint ./src/**/*.ts --color --cache --cache-strategy content --cache-location .eslintcache",
     "typecheck": "tsc --noEmit"
   },
@@ -19,7 +18,6 @@
     "@fastify/http-proxy": "9.5.0",
     "@fastify/type-provider-typebox": "4.0.0",
     "@types/node": "20.14.12",
-    "dotenv-flow": "4.1.0",
     "fastify": "4.28.1",
     "fastify-metrics": "11.0.0",
     "jose": "5.6.3",
