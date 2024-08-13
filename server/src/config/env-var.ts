@@ -1,7 +1,3 @@
-import { getLogger } from '@app/logger';
-
-const log = getLogger('env-var');
-
 export const optionalEnvString = (name: string): string | undefined => {
   const envVariable = process.env[name];
 
@@ -23,8 +19,7 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
     return defaultValue;
   }
 
-  log.error({ msg: `Missing required environment variable '${name}'.` });
-  process.exit(1);
+  throw new Error(`Missing required environment variable '${name}'.`);
 };
 
 export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
@@ -40,13 +35,12 @@ export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
     }
 
     return JSON.parse(json);
-  } catch (error) {
+  } catch {
     if (defaultValue !== undefined) {
       return defaultValue;
     }
 
-    log.error({ msg: `Invalid JSON in environment variable '${name}'.`, error });
-    process.exit(1);
+    throw new Error(`Invalid JSON in environment variable '${name}'.`);
   }
 };
 
@@ -64,8 +58,5 @@ export const requiredEnvNumber = (name: string, defaultValue?: number): number =
 
   const env = envString ?? 'undefined';
 
-  log.error({
-    msg: `Could not parse environment variable '${name}' as integer/number. Parsed value: '${env}'.`,
-  });
-  process.exit(1);
+  throw new Error(`Could not parse environment variable '${name}' as integer/number. Parsed value: '${env}'.`);
 };
