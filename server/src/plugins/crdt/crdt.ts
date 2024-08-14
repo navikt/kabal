@@ -1,3 +1,4 @@
+import { isDeployed } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import { ConnectionContext, collaborationServer } from '@app/plugins/crdt/collaboration-server';
@@ -48,19 +49,21 @@ export const crdtPlugin = fastifyPlugin(
         }
 
         try {
-          const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
+          if (isDeployed) {
+            const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
 
-          if (oboAccessToken === undefined) {
-            log.warn({
-              msg: 'Tried to authenticate collaboration connection without OBO access token',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId, dokumentId },
-            });
+            if (oboAccessToken === undefined) {
+              log.warn({
+                msg: 'Tried to authenticate collaboration connection without OBO access token',
+                trace_id: req.trace_id,
+                span_id: req.span_id,
+                tab_id: req.tab_id,
+                client_version: req.client_version,
+                data: { behandlingId, dokumentId },
+              });
 
-            return socket.close(4401, 'Unauthorized');
+              return socket.close(4401, 'Unauthorized');
+            }
           }
 
           log.info({
