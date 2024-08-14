@@ -116,7 +116,7 @@ export const collaborationServer = Server.configure({
       throw error;
     }
   },
-  extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
+  extensions: [], // isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
 });
 
 const isConnectionContext = (data: unknown): data is ConnectionContext =>
