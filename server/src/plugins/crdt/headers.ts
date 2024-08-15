@@ -27,6 +27,7 @@ const IGNORED_HEADERS = [
   'sec-websocket-version',
   'sec-websocket-extensions',
   'sec-websocket-version',
+  'sec-websocket-key',
 ];
 
 const getLocalHeaders: GetHeadersFn = (req) => {

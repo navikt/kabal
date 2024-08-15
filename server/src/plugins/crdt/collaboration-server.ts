@@ -8,6 +8,7 @@ import { isNotNull } from '@app/functions/guards';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isDeployed } from '@app/config/env';
 import { getHeaders } from '@app/plugins/crdt/headers';
+import { Logger } from '@hocuspocus/extension-logger';
 
 const log = getLogger('collaboration');
 
@@ -112,11 +113,10 @@ export const collaborationServer = Server.configure({
       return document;
     } catch (error) {
       console.error(error, getHeaders(req));
-
       throw error;
     }
   },
-  extensions: [], // isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
+  extensions: [new Logger()], // isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
 });
 
 const isConnectionContext = (data: unknown): data is ConnectionContext =>
