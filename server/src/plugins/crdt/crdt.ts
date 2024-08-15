@@ -1,7 +1,8 @@
 import { isDeployed } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
-import { ConnectionContext, collaborationServer } from '@app/plugins/crdt/collaboration-server';
+import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
+import { ConnectionContext } from '@app/plugins/crdt/context';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';

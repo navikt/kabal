@@ -125,6 +125,15 @@ export const collaborationSaksbehandlerPlugins = (
             url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
             name: dokumentId,
             document: sharedRoot.doc ?? undefined,
+            onSynced: (data) => {
+              console.log('onSynced', data);
+            },
+            onOutgoingMessage: (data) => {
+              console.log('onOutgoingMessage', data);
+            },
+            onStatus: (data) => {
+              console.log('onStatus', data);
+            },
           },
         },
       }),
