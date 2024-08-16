@@ -20,9 +20,9 @@ const getPort = (uri: string) => {
   return parseInt(portString, 10);
 };
 
-const REDIS_URI = optionalEnvString('REDIS_URI_COLLABORATION2');
-const REDIS_USERNAME = optionalEnvString('REDIS_USERNAME_COLLABORATION2');
-const REDIS_PASSWORD = optionalEnvString('REDIS_PASSWORD_COLLABORATION2');
+const REDIS_URI = optionalEnvString('REDIS_URI_COLLABORATION');
+const REDIS_USERNAME = optionalEnvString('REDIS_USERNAME_COLLABORATION');
+const REDIS_PASSWORD = optionalEnvString('REDIS_PASSWORD_COLLABORATION');
 
 export const getRedisExtension = () => {
   const hasRedis = REDIS_URI !== undefined && REDIS_USERNAME !== undefined && REDIS_PASSWORD !== undefined;

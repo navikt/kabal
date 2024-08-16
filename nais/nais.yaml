@@ -67,8 +67,6 @@ spec:
       access: readwrite
     - instance: collaboration
       access: admin
-    - instance: collaboration2
-      access: admin
   liveness:
     path: /isAlive
     initialDelay: 3
