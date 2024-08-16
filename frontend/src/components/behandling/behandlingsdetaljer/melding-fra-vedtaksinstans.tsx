@@ -12,7 +12,7 @@ export const MeldingFraVedtaksinstans = ({ kommentarFraVedtaksinstans }: Props) 
 
   return (
     <BehandlingSection label="Melding fra vedtaksinstans for intern bruk">
-      <ReadMore header="Les melding" size="small">
+      <ReadMore header="Les melding" size="small" defaultOpen>
         {kommentarFraVedtaksinstans}
       </ReadMore>
     </BehandlingSection>
