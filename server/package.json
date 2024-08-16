@@ -27,6 +27,7 @@
     "dotenv-flow": "4.1.0",
     "fastify": "4.28.1",
     "fastify-metrics": "11.0.0",
+    "ioredis": "^5.4.1",
     "jose": "5.6.3",
     "openid-client": "5.6.5",
     "prom-client": "15.1.3",
