@@ -35,5 +35,5 @@ export const collaborationServer = Server.configure({
     }
   },
 
-  extensions: isDeployed ? [getRedisExtension(), getApiExtension()].filter(isNotNull) : [],
+  extensions: isDeployed ? [getRedisExtension(), getApiExtension()].filter(isNotNull) : [getApiExtension()],
 });
