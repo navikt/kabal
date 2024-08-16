@@ -65,7 +65,7 @@ spec:
   redis:
     - instance: obo-cache
       access: readwrite
-    - instance: collaboration
+    - instance: 983bcd82-4667-48d6-af91-6df206e87e6f
       access: admin
   liveness:
     path: /isAlive
