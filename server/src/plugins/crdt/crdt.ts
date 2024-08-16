@@ -1,13 +1,18 @@
 import { isDeployed } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
+import * as Y from 'yjs';
 import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
 import { ConnectionContext } from '@app/plugins/crdt/context';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import fastifyPlugin from 'fastify-plugin';
+import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
+import { getHeaders } from '@app/plugins/crdt/api/headers';
+import { isObject } from '@app/plugins/crdt/functions';
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
@@ -45,9 +50,15 @@ export const crdtPlugin = fastifyPlugin(
             data: { behandlingId },
           });
 
-          if (behandlingId.length === 0) {
-            log.warn({
-              msg: 'Invalid behandlingId',
+          if (isDeployed) {
+            await req.ensureOboAccessToken('kabal-api');
+          }
+
+          const { body } = req;
+
+          if (!isObject(body) || !('content' in body) || !Array.isArray(body.content)) {
+            log.error({
+              msg: 'Invalid request body',
               trace_id: req.trace_id,
               span_id: req.span_id,
               tab_id: req.tab_id,
@@ -55,17 +66,74 @@ export const crdtPlugin = fastifyPlugin(
               data: { behandlingId },
             });
 
-            return reply.status(400).send('No behandlingId provided');
+            return reply.status(400).send();
           }
 
-          if (isDeployed) {
-            await req.ensureOboAccessToken('kabal-api');
-          }
+          try {
+            const { content } = body;
+            const document = new Y.Doc();
+            const sharedRoot = document.get('content', Y.XmlText);
+            const insertDelta = slateNodesToInsertDelta(content);
+            sharedRoot.applyDelta(insertDelta);
+            const state = Y.encodeStateAsUpdateV2(document);
+            const data = Buffer.from(state).toString('base64');
 
-          // const { } = req.body;
-          // TODO: Create Yjs document from JSON.
-          // TODO: base64 encode Yjs document.
-          // TODO: POST to Kabal API with base64 and JSON.
+            log.info({
+              msg: 'Saving new document to database',
+              trace_id: req.trace_id,
+              span_id: req.span_id,
+              tab_id: req.tab_id,
+              client_version: req.client_version,
+              data: { behandlingId },
+            });
+
+            const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...getHeaders(req),
+              },
+              body: JSON.stringify({
+                ...body,
+                data,
+              }),
+            });
+
+            if (!res.ok) {
+              const msg = `Failed to save document. API responded with status code ${res.status}.`;
+              log.error({
+                msg,
+                trace_id: req.trace_id,
+                span_id: req.span_id,
+                tab_id: req.tab_id,
+                client_version: req.client_version,
+                data: { behandlingId, statusCode: res.status },
+              });
+            } else {
+              log.info({
+                msg: 'Saved new document to database',
+                trace_id: req.trace_id,
+                span_id: req.span_id,
+                tab_id: req.tab_id,
+                client_version: req.client_version,
+                data: { behandlingId },
+              });
+            }
+
+            return reply.send(res);
+          } catch (error) {
+            log.error({
+              error,
+              msg: 'Failed to save document',
+              trace_id: req.trace_id,
+              span_id: req.span_id,
+              tab_id: req.tab_id,
+              client_version: req.client_version,
+              data: { behandlingId },
+            });
+
+            return reply.status(500).send();
+          }
         },
       )
       .get(

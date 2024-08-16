@@ -65,6 +65,8 @@ spec:
   redis:
     - instance: obo-cache
       access: readwrite
+    - instance: collaboration
+      access: readwrite
   liveness:
     path: /isAlive
     initialDelay: 3
