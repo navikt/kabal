@@ -36,7 +36,7 @@ export const fetchDocument = async ({ documentName, context }: fetchPayload) => 
     const json = await res.json();
 
     if (!isDocumentResponse(json)) {
-      log.error({ msg: 'Invalid document response', data: JSON.stringify(json) });
+      log.error({ msg: 'Invalid document response', data: { response: JSON.stringify(json) } });
 
       throw new Error('Invalid document response');
     }
@@ -58,4 +58,6 @@ const isDocumentResponse = (data: unknown): data is DocumentResponse =>
   'isSmartDokument' in data &&
   data.isSmartDokument === true &&
   'content' in data &&
-  Array.isArray(data.content);
+  Array.isArray(data.content) &&
+  'data' in data &&
+  typeof data.data === 'string';
