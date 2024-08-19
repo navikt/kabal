@@ -25,6 +25,8 @@ export const fetchDocument = async ({ documentName, context }: Params) => {
   try {
     const res = await getDocument(req, behandlingId, dokumentId);
 
+    log.info({ msg: 'Fetched document', data: { behandlingId, dokumentId, data: res.data } });
+
     return Buffer.from(res.data, 'base64');
   } catch (error) {
     log.error({ error });
