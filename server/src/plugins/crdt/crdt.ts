@@ -84,7 +84,7 @@ export const crdtPlugin = fastifyPlugin(
               span_id: req.span_id,
               tab_id: req.tab_id,
               client_version: req.client_version,
-              data: { behandlingId },
+              data: { behandlingId, data },
             });
 
             const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
