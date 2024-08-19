@@ -1,6 +1,6 @@
 import { isConnectionContext } from '@app/plugins/crdt/context';
 import { getLogger } from '@app/logger';
-import { getDocument } from '@app/plugins/crdt/get-document';
+import { getDocument } from '@app/plugins/crdt/api/get-document';
 
 const log = getLogger('collaboration');
 

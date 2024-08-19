@@ -2,6 +2,7 @@ import { FastifyRequest } from 'fastify';
 import { AZURE_AD_TOKEN_HEADER, CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
 import { PROXY_VERSION } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
+import { generateTraceparent } from '@app/helpers/traceparent';
 
 type GetHeadersFn = (req: FastifyRequest) => Record<string, string | string[]>;
 
@@ -42,7 +43,14 @@ const getLocalHeaders: GetHeadersFn = (req) => {
     }
   }
 
-  return headers;
+  if ('traceparent' in req.headers) {
+    return headers;
+  }
+
+  return {
+    ...headers,
+    traceparent: generateTraceparent(),
+  };
 };
 
 export const getHeaders: GetHeadersFn = isDeployed ? getDeployedHeaders : getLocalHeaders;
