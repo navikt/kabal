@@ -72,7 +72,7 @@ export const collaborationServer = Server.configure({
 
     log.info({ msg: 'Loaded snapshot decoded', data: { behandlingId, dokumentId } });
 
-    return createDocFromSnapshot(document, decoded);
+    document.merge(createDocFromSnapshot(document, decoded));
   },
 
   onStoreDocument: async ({ context, document }) => {
