@@ -5,15 +5,7 @@ import { isDeployed } from '@app/config/env';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isNotNull } from '@app/functions/guards';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import {
-  XmlText,
-  applyUpdateV2,
-  createDocFromSnapshot,
-  decodeSnapshotV2,
-  encodeSnapshotV2,
-  encodeStateAsUpdateV2,
-  snapshot,
-} from 'yjs';
+import { XmlText, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { yTextToSlateElement } from '@slate-yjs/core';
@@ -63,16 +55,13 @@ export const collaborationServer = Server.configure({
 
     const res = await getDocument(req, behandlingId, dokumentId);
 
-    log.info({ msg: 'Loaded snapshot', data: { behandlingId, dokumentId } });
+    log.info({ msg: 'Loaded state/update', data: { behandlingId, dokumentId } });
 
-    const state = new Uint8Array(Buffer.from(res.data, 'base64'));
+    const update = new Uint8Array(Buffer.from(res.data, 'base64url'));
 
-    // applyUpdateV2(document, encodeStateAsUpdateV2(document, state));
-    const decoded = decodeSnapshotV2(state);
+    applyUpdateV2(document, update);
 
-    log.info({ msg: 'Loaded snapshot decoded', data: { behandlingId, dokumentId } });
-
-    document.merge(createDocFromSnapshot(document, decoded));
+    log.info({ msg: 'Loaded state/update applied', data: { behandlingId, dokumentId } });
   },
 
   onStoreDocument: async ({ context, document }) => {
@@ -83,10 +72,8 @@ export const collaborationServer = Server.configure({
 
     const { behandlingId, dokumentId, req } = context;
 
-    const state = encodeSnapshotV2(snapshot(document));
-
-    // const state = Buffer.from(encodeStateAsUpdateV2(document));
-    const data = Buffer.from(state).toString('base64');
+    const update = Buffer.from(encodeStateAsUpdateV2(document));
+    const data = update.toString('base64url');
 
     const sharedRoot = document.get('content', XmlText);
     const nodes = yTextToSlateElement(sharedRoot);
