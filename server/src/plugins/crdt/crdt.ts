@@ -100,9 +100,8 @@ export const crdtPlugin = fastifyPlugin(
             });
 
             if (!res.ok) {
-              const msg = `Failed to save document. API responded with status code ${res.status}.`;
               log.error({
-                msg,
+                msg: `Failed to save document. API responded with status code ${res.status}.`,
                 trace_id: req.trace_id,
                 span_id: req.span_id,
                 tab_id: req.tab_id,

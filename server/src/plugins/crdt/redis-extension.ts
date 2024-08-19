@@ -90,7 +90,7 @@ export class RedisExtension implements Extension {
 
     const identifier = buffer.toString('utf-8', 1, identifierLength + 1);
 
-    return [identifier, buffer.slice(identifierLength + 1)];
+    return [identifier, buffer.subarray(identifierLength + 1)];
   }
 
   public async afterLoadDocument({ documentName, document }: afterLoadDocumentPayload) {
