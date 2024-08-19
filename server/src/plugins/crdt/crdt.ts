@@ -93,10 +93,7 @@ export const crdtPlugin = fastifyPlugin(
                 'Content-Type': 'application/json',
                 ...getHeaders(req),
               },
-              body: JSON.stringify({
-                ...body,
-                data,
-              }),
+              body: JSON.stringify({ ...body, data }),
             });
 
             if (!res.ok) {
