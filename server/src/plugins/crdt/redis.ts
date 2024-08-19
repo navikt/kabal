@@ -1,24 +1,8 @@
 import { optionalEnvString } from '@app/config/env-var';
 import { getLogger } from '@app/logger';
-import { Redis as RedisExtension } from '@hocuspocus/extension-redis';
+import { RedisExtension } from '@app/plugins/crdt/redis-extension';
 
 const log = getLogger('collaboration');
-
-const getPort = (uri: string) => {
-  const parts = uri.split(':');
-
-  if (parts === undefined) {
-    return undefined;
-  }
-
-  const portString = parts[parts.length - 1];
-
-  if (portString === undefined) {
-    return undefined;
-  }
-
-  return parseInt(portString, 10);
-};
 
 const REDIS_NAME = '983BCD82_4667_48D6_AF91_6DF206E87E6F';
 
@@ -38,9 +22,8 @@ export const getRedisExtension = () => {
   log.info({ msg: 'Collaboration Redis connection configured' });
 
   return new RedisExtension({
-    host: REDIS_URI,
-    port: getPort(REDIS_URI),
     options: {
+      url: REDIS_URI,
       username: REDIS_USERNAME,
       password: REDIS_PASSWORD,
     },
