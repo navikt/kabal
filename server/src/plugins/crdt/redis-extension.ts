@@ -1,3 +1,4 @@
+import { getLogger } from '@app/logger';
 import {
   Debugger,
   Document,
@@ -16,6 +17,8 @@ import {
 } from '@hocuspocus/server';
 import { RedisClientType, createClient } from 'redis';
 import { v4 as uuid } from 'uuid';
+
+const log = getLogger('redis-extension');
 
 export interface Configuration {
   port: number;
@@ -41,12 +44,11 @@ export class RedisExtension implements Extension {
   pub: RedisClientType;
   sub: RedisClientType;
   instance!: Hocuspocus;
-  logger: Debugger;
   messagePrefix: Buffer;
 
   public constructor(configuration: Partial<Configuration>) {
+    log.debug({ msg: 'Creating RedisExtension' });
     this.configuration = { ...this.configuration, ...configuration };
-    this.logger = new Debugger();
 
     const { options } = this.configuration;
 
@@ -60,8 +62,7 @@ export class RedisExtension implements Extension {
   }
 
   async onConfigure({ instance }: onConfigurePayload) {
-    this.logger = instance.debugger;
-
+    log.debug({ msg: 'Configuring RedisExtension' });
     this.instance = instance;
   }
 
@@ -94,6 +95,8 @@ export class RedisExtension implements Extension {
   }
 
   public async afterLoadDocument({ documentName, document }: afterLoadDocumentPayload) {
+    log.debug({ msg: `Subscribing to document: ${documentName}` });
+
     return new Promise((resolve, reject) => {
       // On document creation the node will connect to pub and sub channels
       // for the document.
@@ -125,6 +128,8 @@ export class RedisExtension implements Extension {
   }
 
   async afterStoreDocument({ socketId }: afterStoreDocumentPayload) {
+    log.debug({ msg: `afterStoreDocument - socket: ${socketId}` });
+
     // if the change was initiated by a directConnection, we need to delay this hook to make sure sync can finish first.
     // for provider connections, this usually happens in the onDisconnect hook
     if (socketId === 'server') {
@@ -135,6 +140,7 @@ export class RedisExtension implements Extension {
   }
 
   async onAwarenessUpdate({ documentName, awareness, added, updated, removed }: onAwarenessUpdatePayload) {
+    log.debug({ msg: `onAwarenessUpdate - document: ${documentName}` });
     const changedClients = added.concat(updated, removed);
     const message = new OutgoingMessage(documentName).createAwarenessUpdateMessage(awareness, changedClients);
 
@@ -156,23 +162,27 @@ export class RedisExtension implements Extension {
 
     if (!document) {
       // What does this mean? Why are we subscribed to this document?
-      this.logger.log(`Received message for unknown document ${documentName}`);
+      log.error({ msg: `Received message for unknown document ${documentName}` });
 
       return;
     }
 
-    new MessageReceiver(message, this.logger, this.redisTransactionOrigin).apply(document, undefined, (reply) =>
+    new MessageReceiver(message, new Debugger(), this.redisTransactionOrigin).apply(document, undefined, (reply) =>
       this.pub.publish(this.pubKey(document.name), this.encodeMessage(reply)),
     );
   };
 
   public async onChange(data: onChangePayload) {
+    log.debug({ msg: `onChange - document: ${data.documentName}` });
+
     if (data.transactionOrigin !== this.redisTransactionOrigin) {
       return this.publishFirstSyncStep(data.documentName, data.document);
     }
   }
 
   public onDisconnect = async ({ documentName }: onDisconnectPayload) => {
+    log.debug({ msg: `onDisconnect - document: ${documentName}` });
+
     const disconnect = () => {
       const document = this.instance.documents.get(documentName);
 
@@ -195,12 +205,14 @@ export class RedisExtension implements Extension {
   };
 
   async beforeBroadcastStateless(data: beforeBroadcastStatelessPayload) {
+    log.debug({ msg: `beforeBroadcastStateless - document: ${data.documentName}` });
     const message = new OutgoingMessage(data.documentName).writeBroadcastStateless(data.payload);
 
     return this.pub.publish(this.pubKey(data.documentName), this.encodeMessage(message.toUint8Array()));
   }
 
   async onDestroy() {
+    log.debug({ msg: 'Destroying RedisExtension' });
     this.pub.disconnect();
     this.sub.disconnect();
   }
