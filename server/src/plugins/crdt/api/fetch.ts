@@ -18,9 +18,9 @@ export const fetchDocument = async ({ documentName, context }: Params) => {
     throw new Error('Invalid context');
   }
 
-  log.info({ msg: 'Fetch document' });
-
   const { behandlingId, dokumentId, req } = context;
+
+  log.info({ msg: 'Fetch document', data: { behandlingId, dokumentId } });
 
   try {
     const res = await getDocument(req, behandlingId, dokumentId);

@@ -6,7 +6,7 @@ import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isNotNull } from '@app/functions/guards';
 import { getApiExtension } from '@app/plugins/crdt/api/extension';
 import { getDocument } from '@app/plugins/crdt/get-document';
-import { applyUpdate } from 'yjs';
+import { applyUpdate, encodeStateAsUpdate } from 'yjs';
 
 const log = getLogger('collaboration');
 
@@ -57,7 +57,7 @@ export const collaborationServer = Server.configure({
 
     const state = Buffer.from(res.data, 'base64');
 
-    applyUpdate(document, state);
+    applyUpdate(document, encodeStateAsUpdate(document, state));
 
     log.info({ msg: 'Loaded document applied', data: { behandlingId, dokumentId } });
 
