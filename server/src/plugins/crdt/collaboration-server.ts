@@ -5,7 +5,15 @@ import { isDeployed } from '@app/config/env';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isNotNull } from '@app/functions/guards';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { XmlText, applyUpdateV2, encodeSnapshotV2, encodeStateAsUpdateV2, snapshot } from 'yjs';
+import {
+  XmlText,
+  applyUpdateV2,
+  createDocFromSnapshot,
+  decodeSnapshotV2,
+  encodeSnapshotV2,
+  encodeStateAsUpdateV2,
+  snapshot,
+} from 'yjs';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { yTextToSlateElement } from '@slate-yjs/core';
@@ -55,13 +63,16 @@ export const collaborationServer = Server.configure({
 
     const res = await getDocument(req, behandlingId, dokumentId);
 
-    log.info({ msg: 'Loaded document', data: { behandlingId, dokumentId } });
+    log.info({ msg: 'Loaded snapshot', data: { behandlingId, dokumentId } });
 
     const state = new Uint8Array(Buffer.from(res.data, 'base64'));
 
-    applyUpdateV2(document, encodeStateAsUpdateV2(document, state));
+    // applyUpdateV2(document, encodeStateAsUpdateV2(document, state));
+    const decoded = decodeSnapshotV2(state);
 
-    log.info({ msg: 'Loaded document applied', data: { behandlingId, dokumentId } });
+    log.info({ msg: 'Loaded snapshot decoded', data: { behandlingId, dokumentId } });
+
+    return createDocFromSnapshot(document, decoded);
   },
 
   onStoreDocument: async ({ context, document }) => {
