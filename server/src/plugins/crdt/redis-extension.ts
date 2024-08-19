@@ -1,6 +1,11 @@
-import { Debugger, Document, Hocuspocus, IncomingMessage, MessageReceiver, OutgoingMessage } from '@hocuspocus/server';
 import {
+  Debugger,
+  Document,
   Extension,
+  Hocuspocus,
+  IncomingMessage,
+  MessageReceiver,
+  OutgoingMessage,
   afterLoadDocumentPayload,
   afterStoreDocumentPayload,
   beforeBroadcastStatelessPayload,
@@ -8,26 +13,9 @@ import {
   onChangePayload,
   onConfigurePayload,
   onDisconnectPayload,
-} from '../../../node_modules/@hocuspocus/server/src/types';
+} from '@hocuspocus/server';
 import { RedisClientType, createClient } from 'redis';
 import { v4 as uuid } from 'uuid';
-// import {
-//   Debugger,
-//   Document,
-//   Extension,
-//   Hocuspocus,
-//   IncomingMessage,
-//   MessageReceiver,
-//   OutgoingMessage,
-//   afterLoadDocumentPayload,
-//   afterStoreDocumentPayload,
-//   beforeBroadcastStatelessPayload,
-//   onAwarenessUpdatePayload,
-//   onChangePayload,
-//   onConfigurePayload,
-//   onDisconnectPayload,
-//   onStoreDocumentPayload,
-// } from '@hocuspocus/server';
 
 export interface Configuration {
   port: number;
