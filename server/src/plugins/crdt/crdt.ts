@@ -89,10 +89,7 @@ export const crdtPlugin = fastifyPlugin(
 
             const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                ...getHeaders(req),
-              },
+              headers: { 'content-type': 'application/json', ...getHeaders(req) },
               body: JSON.stringify({ ...body, data }),
             });
 
