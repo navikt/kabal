@@ -5,10 +5,8 @@ import { isDeployed } from '@app/config/env';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isNotNull } from '@app/functions/guards';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { XmlText, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import { getHeaders } from '@app/plugins/crdt/api/headers';
-import { yTextToSlateElement } from '@slate-yjs/core';
+import { applyUpdateV2 } from 'yjs';
+import { setDocument } from '@app/plugins/crdt/api/set-document';
 
 const log = getLogger('collaboration');
 
@@ -72,30 +70,9 @@ export const collaborationServer = Server.configure({
 
     const { behandlingId, dokumentId, req } = context;
 
-    const update = Buffer.from(encodeStateAsUpdateV2(document));
-    const data = update.toString('base64url');
+    await setDocument(req, document, behandlingId, dokumentId);
 
-    const sharedRoot = document.get('content', XmlText);
-    const nodes = yTextToSlateElement(sharedRoot);
-
-    const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
-      method: 'PATCH',
-      headers: { ...getHeaders(req), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: nodes.children, data }),
-    });
-
-    if (!res.ok) {
-      const msg = `Failed to save document. API responded with status code ${res.status}.`;
-      const text = await res.text();
-      log.error({ msg, data: { behandlingId, dokumentId, statusCode: res.status, response: text } });
-
-      throw new Error(`${msg} - ${text}`);
-    }
-
-    log.info({
-      msg: 'Saved document to database',
-      data: { behandlingId, dokumentId, content: JSON.stringify(nodes, null, 2) },
-    });
+    log.info({ msg: 'Saved document to database', data: { behandlingId, dokumentId } });
   },
 
   extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
