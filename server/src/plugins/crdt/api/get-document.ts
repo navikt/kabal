@@ -15,16 +15,31 @@ export const getDocument = async (req: FastifyRequest, behandlingId: string, dok
 
   if (!res.ok) {
     const msg = `Failed to fetch document. API responded with status code ${res.status}.`;
-    log.error({ msg, data: { behandlingId, dokumentId, statusCode: res.status } });
+    log.error({
+      msg,
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { behandlingId, dokumentId, statusCode: res.status },
+    });
     throw new Error(msg);
   }
 
   const json = await res.json();
 
   if (!isDocumentResponse(json)) {
-    log.error({ msg: 'Invalid document response', data: { response: JSON.stringify(json) } });
+    const msg = 'Invalid document response';
+    log.error({
+      msg,
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { response: JSON.stringify(json) },
+    });
 
-    throw new Error('Invalid document response');
+    throw new Error(msg);
   }
 
   return json;

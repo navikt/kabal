@@ -16,6 +16,10 @@ export const collaborationServer = Server.configure({
       const { behandlingId, dokumentId, req } = context;
       log.info({
         msg: `Collaboration connection established for ${req.navIdent}!`, // req.navIdent is not defined locally.
+        trace_id: req.trace_id,
+        span_id: req.span_id,
+        tab_id: req.tab_id,
+        client_version: req.client_version,
         data: { behandlingId, dokumentId },
       });
     } else {
@@ -29,6 +33,10 @@ export const collaborationServer = Server.configure({
       const { behandlingId, dokumentId, req } = context;
       log.info({
         msg: `Collaboration connection closed for ${req.navIdent}!`, // req.navIdent is not defined locally.
+        trace_id: req.trace_id,
+        span_id: req.span_id,
+        tab_id: req.tab_id,
+        client_version: req.client_version,
         data: { behandlingId, dokumentId },
       });
     } else {
@@ -43,23 +51,44 @@ export const collaborationServer = Server.configure({
       throw new Error('Invalid context');
     }
 
+    const { behandlingId, dokumentId, req } = context;
+
     if (!document.isEmpty('content')) {
-      log.info({ msg: 'Document already loaded' });
+      log.info({
+        msg: 'Document already loaded',
+        trace_id: req.trace_id,
+        span_id: req.span_id,
+        tab_id: req.tab_id,
+        client_version: req.client_version,
+        data: { behandlingId, dokumentId },
+      });
 
       return document;
     }
 
-    const { behandlingId, dokumentId, req } = context;
-
     const res = await getDocument(req, behandlingId, dokumentId);
 
-    log.info({ msg: 'Loaded state/update', data: { behandlingId, dokumentId } });
+    log.info({
+      msg: 'Loaded state/update',
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { behandlingId, dokumentId },
+    });
 
     const update = new Uint8Array(Buffer.from(res.data, 'base64url'));
 
     applyUpdateV2(document, update);
 
-    log.info({ msg: 'Loaded state/update applied', data: { behandlingId, dokumentId } });
+    log.info({
+      msg: 'Loaded state/update applied',
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { behandlingId, dokumentId },
+    });
   },
 
   onStoreDocument: async ({ context, document }) => {
@@ -72,7 +101,14 @@ export const collaborationServer = Server.configure({
 
     await setDocument(req, document, behandlingId, dokumentId);
 
-    log.info({ msg: 'Saved document to database', data: { behandlingId, dokumentId } });
+    log.info({
+      msg: 'Saved document to database',
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { behandlingId, dokumentId },
+    });
   },
 
   extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],

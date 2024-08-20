@@ -29,7 +29,14 @@ export const setDocument = async (
   if (!res.ok) {
     const msg = `Failed to save document. API responded with status code ${res.status}.`;
     const text = await res.text();
-    log.error({ msg, data: { behandlingId, dokumentId, statusCode: res.status, response: text } });
+    log.error({
+      msg,
+      trace_id: req.trace_id,
+      span_id: req.span_id,
+      tab_id: req.tab_id,
+      client_version: req.client_version,
+      data: { behandlingId, dokumentId, statusCode: res.status, response: text },
+    });
 
     throw new Error(`${msg} - ${text}`);
   }
