@@ -12,6 +12,7 @@ export default defineConfig({
     port: 8061,
     proxy: {
       '/api': 'https://kabal.intern.dev.nav.no',
+      '/collaboration': 'https://kabal.intern.dev.nav.no',
       '/arkivert-dokument': 'https://kabal.intern.dev.nav.no',
       '/kombinert-dokument': 'https://kabal.intern.dev.nav.no',
       '/nytt-dokument': 'https://kabal.intern.dev.nav.no',
@@ -19,5 +20,4 @@ export default defineConfig({
       '/version': 'https://kabal.intern.dev.nav.no',
     },
   },
-})
-
+});
