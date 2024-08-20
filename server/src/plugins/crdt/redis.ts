@@ -1,6 +1,6 @@
 import { optionalEnvString } from '@app/config/env-var';
 import { getLogger } from '@app/logger';
-import { RedisExtension } from '@app/plugins/crdt/redis-extension';
+import { RedisExtension } from '@app/plugins/crdt/redis-extension/redis-extension';
 
 const log = getLogger('collaboration');
 
@@ -22,10 +22,8 @@ export const getRedisExtension = () => {
   log.info({ msg: 'Collaboration Redis connection configured' });
 
   return new RedisExtension({
-    options: {
-      url: REDIS_URI,
-      username: REDIS_USERNAME,
-      password: REDIS_PASSWORD,
-    },
+    url: REDIS_URI,
+    username: REDIS_USERNAME,
+    password: REDIS_PASSWORD,
   });
 };
