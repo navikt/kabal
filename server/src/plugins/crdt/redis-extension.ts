@@ -21,30 +21,28 @@ import { v4 as uuid } from 'uuid';
 const log = getLogger('redis-extension');
 
 export interface Configuration {
-  port: number;
-  host: string;
-  options?: { url: string; username: string; password: string };
-  identifier: string;
-  prefix: string;
-  lockTimeout: number;
-  disconnectDelay: number;
+  readonly port: number;
+  readonly host: string;
+  readonly options?: { url: string; username: string; password: string };
+  readonly identifier: string;
+  readonly prefix: string;
+  readonly disconnectDelay: number;
 }
 
 export class RedisExtension implements Extension {
-  priority = 1000;
-  configuration: Configuration = {
+  readonly priority = 1000;
+  readonly configuration: Configuration = {
     port: 6379,
     host: '127.0.0.1',
     prefix: 'hocuspocus',
     identifier: `host-${uuid()}`,
-    lockTimeout: 1000,
     disconnectDelay: 1000,
   };
-  redisTransactionOrigin = '__hocuspocus__redis__origin__';
-  pub: RedisClientType;
-  sub: RedisClientType;
+  readonly redisTransactionOrigin = '__hocuspocus__redis__origin__';
+  readonly pub: RedisClientType;
+  readonly sub: RedisClientType;
   instance!: Hocuspocus;
-  messagePrefix: Buffer;
+  readonly messagePrefix: Buffer;
 
   public constructor(configuration: Partial<Configuration>) {
     log.debug({ msg: 'Creating RedisExtension' });
@@ -53,12 +51,18 @@ export class RedisExtension implements Extension {
     const { options } = this.configuration;
 
     this.pub = createClient(options);
-    this.sub = createClient(options);
+    this.sub = this.pub.duplicate();
 
-    this.sub.on('messageBuffer', this.handleIncomingMessage);
+    this.init();
 
     const identifierBuffer = Buffer.from(this.configuration.identifier, 'utf-8');
     this.messagePrefix = Buffer.concat([Buffer.from([identifierBuffer.length]), identifierBuffer]);
+  }
+
+  private async init() {
+    await Promise.all([this.sub.connect(), this.pub.connect()]);
+
+    this.sub.on('messageBuffer', this.handleIncomingMessage);
   }
 
   async onConfigure({ instance }: onConfigurePayload) {
@@ -97,7 +101,7 @@ export class RedisExtension implements Extension {
   public async afterLoadDocument({ documentName, document }: afterLoadDocumentPayload) {
     log.debug({ msg: `Subscribing to document: ${documentName}` });
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       // On document creation the node will connect to pub and sub channels
       // for the document.
       this.sub.subscribe(this.subKey(documentName), async (error) => {
@@ -110,7 +114,7 @@ export class RedisExtension implements Extension {
         this.publishFirstSyncStep(documentName, document);
         this.requestAwarenessFromOtherInstances(documentName);
 
-        resolve(undefined);
+        resolve();
       });
     });
   }
@@ -133,8 +137,8 @@ export class RedisExtension implements Extension {
     // if the change was initiated by a directConnection, we need to delay this hook to make sure sync can finish first.
     // for provider connections, this usually happens in the onDisconnect hook
     if (socketId === 'server') {
-      await new Promise((resolve) => {
-        setTimeout(() => resolve(''), this.configuration.disconnectDelay);
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), this.configuration.disconnectDelay);
       });
     }
   }
