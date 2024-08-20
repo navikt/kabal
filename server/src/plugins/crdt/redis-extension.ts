@@ -44,6 +44,8 @@ export class RedisExtension implements Extension {
   instance!: Hocuspocus;
   readonly messagePrefix: Buffer;
 
+  private isReady = false;
+
   public constructor(configuration: Partial<Configuration>) {
     log.debug({ msg: 'Creating RedisExtension' });
     this.configuration = { ...this.configuration, ...configuration };
@@ -61,6 +63,8 @@ export class RedisExtension implements Extension {
 
   private async init() {
     await Promise.all([this.sub.connect(), this.pub.connect()]);
+
+    this.isReady = true;
 
     this.sub.on('messageBuffer', this.handleIncomingMessage);
   }
@@ -98,8 +102,17 @@ export class RedisExtension implements Extension {
     return [identifier, buffer.subarray(identifierLength + 1)];
   }
 
-  public async afterLoadDocument({ documentName, document }: afterLoadDocumentPayload) {
+  public async afterLoadDocument(params: afterLoadDocumentPayload): Promise<unknown> {
+    const { documentName, document } = params;
     log.debug({ msg: `Subscribing to document: ${documentName}` });
+
+    if (!this.isReady) {
+      log.warn({ msg: 'RedisExtension is not ready' });
+
+      await delay(100);
+
+      return this.afterLoadDocument(params);
+    }
 
     return new Promise<void>((resolve, reject) => {
       // On document creation the node will connect to pub and sub channels
@@ -119,13 +132,29 @@ export class RedisExtension implements Extension {
     });
   }
 
-  private async publishFirstSyncStep(documentName: string, document: Document) {
+  private async publishFirstSyncStep(documentName: string, document: Document): Promise<number> {
+    if (!this.isReady) {
+      log.warn({ msg: 'RedisExtension is not ready' });
+
+      await delay(100);
+
+      return this.publishFirstSyncStep(documentName, document);
+    }
+
     const syncMessage = new OutgoingMessage(documentName).createSyncMessage().writeFirstSyncStepFor(document);
 
     return this.pub.publish(this.pubKey(documentName), this.encodeMessage(syncMessage.toUint8Array()));
   }
 
-  private async requestAwarenessFromOtherInstances(documentName: string) {
+  private async requestAwarenessFromOtherInstances(documentName: string): Promise<number> {
+    if (!this.isReady) {
+      log.warn({ msg: 'RedisExtension is not ready' });
+
+      await delay(100);
+
+      return this.requestAwarenessFromOtherInstances(documentName);
+    }
+
     const awarenessMessage = new OutgoingMessage(documentName).writeQueryAwareness();
 
     return this.pub.publish(this.pubKey(documentName), this.encodeMessage(awarenessMessage.toUint8Array()));
@@ -143,8 +172,18 @@ export class RedisExtension implements Extension {
     }
   }
 
-  async onAwarenessUpdate({ documentName, awareness, added, updated, removed }: onAwarenessUpdatePayload) {
+  async onAwarenessUpdate(params: onAwarenessUpdatePayload): Promise<unknown> {
+    const { documentName, awareness, added, updated, removed } = params;
     log.debug({ msg: `onAwarenessUpdate - document: ${documentName}` });
+
+    if (!this.isReady) {
+      log.warn({ msg: 'RedisExtension is not ready' });
+
+      await delay(100);
+
+      return this.onAwarenessUpdate(params);
+    }
+
     const changedClients = added.concat(updated, removed);
     const message = new OutgoingMessage(documentName).createAwarenessUpdateMessage(awareness, changedClients);
 
@@ -208,8 +247,17 @@ export class RedisExtension implements Extension {
     setTimeout(disconnect, this.configuration.disconnectDelay);
   };
 
-  async beforeBroadcastStateless(data: beforeBroadcastStatelessPayload) {
+  async beforeBroadcastStateless(data: beforeBroadcastStatelessPayload): Promise<unknown> {
     log.debug({ msg: `beforeBroadcastStateless - document: ${data.documentName}` });
+
+    if (!this.isReady) {
+      log.warn({ msg: 'RedisExtension is not ready' });
+
+      await delay(100);
+
+      return this.beforeBroadcastStateless(data);
+    }
+
     const message = new OutgoingMessage(data.documentName).writeBroadcastStateless(data.payload);
 
     return this.pub.publish(this.pubKey(data.documentName), this.encodeMessage(message.toUint8Array()));
@@ -217,7 +265,10 @@ export class RedisExtension implements Extension {
 
   async onDestroy() {
     log.debug({ msg: 'Destroying RedisExtension' });
+
     this.pub.disconnect();
     this.sub.disconnect();
   }
 }
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
