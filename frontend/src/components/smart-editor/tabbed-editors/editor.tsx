@@ -10,6 +10,7 @@ import { GodeFormuleringer } from '@app/components/smart-editor/gode-formulering
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
+import { CursorOverlay } from '@app/components/smart-editor/tabbed-editors/cursors';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
@@ -140,21 +141,23 @@ export const Editor = ({ smartDocument }: EditorProps) => {
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const { templateId, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
-  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
   useEffect(() => {
-    setSheetRef(containerRef);
-  }, [containerRef, setSheetRef]);
+    setSheetRef(containerElement);
+  }, [containerElement, setSheetRef]);
 
   return (
-    <Sheet ref={setContainerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
-      <FloatingSaksbehandlerToolbar container={containerRef} editorId={id} />
-      <SaksbehandlerTableToolbar container={containerRef} editorId={id} />
+    <Sheet ref={setContainerElement} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+      <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
+      <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <NewComment container={containerRef} />
+      <NewComment container={containerElement} />
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
+
+      <CursorOverlay containerRef={{ current: containerElement }} refreshOnResize />
     </Sheet>
   );
 };

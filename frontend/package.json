@@ -57,6 +57,7 @@
         "@udecode/plate-basic-marks": "36.0.0",
         "@udecode/plate-break": "36.3.8",
         "@udecode/plate-common": "36.3.9",
+        "@udecode/plate-cursor": "^36.0.0",
         "@udecode/plate-font": "36.0.0",
         "@udecode/plate-heading": "36.0.12",
         "@udecode/plate-indent": "36.0.0",
