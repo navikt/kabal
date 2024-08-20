@@ -10,16 +10,8 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
   const { user } = useContext(StaticDataContext);
 
   return useMemo<boolean>(() => {
-    if (oppgaveIsLoading || oppgaveIsFetching) {
+    if (oppgaveIsLoading || oppgaveIsFetching || oppgave === undefined) {
       return false;
-    }
-
-    if (oppgave === undefined) {
-      return false;
-    }
-
-    if (oppgave.medunderskriver.flowState === FlowState.SENT) {
-      return oppgave.medunderskriver.employee?.navIdent === user.navIdent;
     }
 
     if (
@@ -27,19 +19,22 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
       oppgave.rol?.flowState === FlowState.SENT &&
       templateId === TemplateIdEnum.ROL_QUESTIONS
     ) {
+      // No one can edit questions after they have been sent.
       return false;
     }
 
     if (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
-      oppgave.rol.employee !== null &&
       oppgave.rol.flowState === FlowState.SENT &&
       templateId === TemplateIdEnum.ROL_ANSWERS &&
-      oppgave.rol.employee.navIdent === user.navIdent
+      oppgave.rol.employee?.navIdent === user.navIdent
     ) {
+      // Only ROL can edit answers after they have been sent.
       return true;
     }
 
-    return oppgave.saksbehandler?.navIdent === user.navIdent;
+    return (
+      oppgave.saksbehandler?.navIdent === user.navIdent || oppgave.medunderskriver.employee?.navIdent === user.navIdent
+    );
   }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, templateId, user]);
 };
