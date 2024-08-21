@@ -1,16 +1,21 @@
+/* eslint-disable max-lines */
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { relativeRangeToSlateRange } from '@slate-yjs/core';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
+import { CursorState } from '@udecode/plate-cursor';
 import { Profiler, useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
+import { XmlText } from 'yjs';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
-import { CursorOverlay } from '@app/components/smart-editor/tabbed-editors/cursors';
+import { CursorOverlay, UserCursor, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
@@ -25,7 +30,7 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { useGetMySignatureQuery, useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { ISmartDocument } from '@app/types/documents/documents';
@@ -38,6 +43,7 @@ export const Editor = ({ smartDocument }: EditorProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
   const { data: oppgave } = useOppgave();
@@ -69,7 +75,7 @@ export const Editor = ({ smartDocument }: EditorProps) => {
         initialValue={smartDocument.content}
         id={id}
         readOnly={!canEdit}
-        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument)}
+        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user)}
         decorate={([node, path]) => {
           if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
@@ -144,6 +150,61 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
+  const editor = useMyPlateEditorRef(id);
+
+  type CursorsState = Record<string, CursorState<UserCursor>>;
+  const [cursors, setCursors] = useState<CursorsState>({});
+
+  useEffect(() => {
+    const onChange = (
+      { added, removed, updated }: { added: number[]; removed: number[]; updated: number[] },
+      doc: unknown,
+    ) => {
+      console.log('onChange doc', doc);
+
+      if (added.length > 0) {
+        console.log('added', added);
+      }
+
+      if (removed.length > 0) {
+        console.log('removed', removed);
+      }
+
+      const states = editor.awareness.getStates();
+
+      setCursors((cursorsState) => {
+        const newCursorsState = { ...cursorsState };
+
+        for (const a of added.concat(updated)) {
+          const cursor = states.get(a);
+
+          if (isYjsCursor(cursor)) {
+            newCursorsState[a] = {
+              ...cursor,
+              selection: relativeRangeToSlateRange(
+                editor.yjs.provider.document.get('content', XmlText),
+                editor,
+                cursor.selection,
+              ),
+            };
+          }
+        }
+
+        for (const r of removed) {
+          delete newCursorsState[r];
+        }
+
+        return newCursorsState;
+      });
+    };
+
+    editor.awareness.on('change', onChange);
+
+    return () => {
+      editor.awareness.off('change', onChange);
+    };
+  }, [editor, editor.awareness]);
+
   useEffect(() => {
     setSheetRef(containerElement);
   }, [containerElement, setSheetRef]);
@@ -157,7 +218,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
 
-      <CursorOverlay containerRef={{ current: containerElement }} refreshOnResize />
+      <CursorOverlay containerRef={{ current: containerElement }} refreshOnResize cursors={cursors} />
     </Sheet>
   );
 };

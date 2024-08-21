@@ -51,6 +51,7 @@ import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { createRegelverkContainerPlugin, createRegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { createSignaturePlugin } from '@app/plate/plugins/signature';
+import { IUserData } from '@app/types/bruker';
 import { ISmartDocument } from '@app/types/documents/documents';
 
 const components: Record<string, PlatePluginComponent> = {
@@ -112,6 +113,7 @@ export const collaborationSaksbehandlerPlugins = (
   behandlingId: string,
   dokumentId: string,
   smartDocument: ISmartDocument,
+  { navIdent, navn }: IUserData,
 ) => {
   const sharedRoot = new Y.XmlText();
   sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
@@ -121,6 +123,9 @@ export const collaborationSaksbehandlerPlugins = (
       ...saksbehandlerPlugins,
       createYjsPlugin({
         options: {
+          cursorOptions: {
+            data: { navIdent, navn },
+          },
           hocuspocusProviderOptions: {
             url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
             name: dokumentId,
