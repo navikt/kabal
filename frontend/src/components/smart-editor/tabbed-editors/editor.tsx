@@ -143,6 +143,14 @@ export const Editor = ({ smartDocument }: EditorProps) => {
   );
 };
 
+interface ChangeSet {
+  added: number[];
+  removed: number[];
+  updated: number[];
+}
+
+type OnChangeFn = (changeset: ChangeSet) => void;
+
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const { templateId, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
@@ -152,7 +160,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const editor = useMyPlateEditorRef(id);
 
   useEffect(() => {
-    const onChange = ({ added, removed, updated }: { added: number[]; removed: number[]; updated: number[] }) => {
+    const onChange: OnChangeFn = ({ added, removed, updated }) => {
       const states = editor.awareness.getStates();
 
       cursorStore.store.setState((draft) => {
