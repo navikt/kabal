@@ -1,12 +1,12 @@
 import { RelativeRange } from '@slate-yjs/core';
-import { UnknownObject } from '@udecode/plate-common';
-import { CursorData, CursorOverlayProps, CursorProps, useCursorOverlayPositions } from '@udecode/plate-cursor';
+import { UnknownObject, createZustandStore } from '@udecode/plate-common';
+import { CursorData, CursorProps, CursorState, useCursorOverlayPositions } from '@udecode/plate-cursor';
 import { useContext, useRef } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getColor } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
 
-export interface UserCursor extends CursorData, UnknownObject {
+interface UserCursor extends CursorData, UnknownObject {
   navn: string;
   navIdent: string;
 }
@@ -75,9 +75,20 @@ const CaretLabel = styled.div<ColorProps>`
   white-space: nowrap;
 `;
 
-export const CursorOverlay = (props: CursorOverlayProps<UserCursor>) => {
+export const cursorStore = createZustandStore('cursors')<Record<string, CursorState<UserCursor>>>({});
+
+interface CursorOverlayProps {
+  containerElement: HTMLElement | null;
+}
+
+export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
   const { user } = useContext(StaticDataContext);
-  const { cursors } = useCursorOverlayPositions(props);
+  const { useStore } = cursorStore;
+  const yjsCursors = useStore();
+  const { cursors } = useCursorOverlayPositions({
+    containerRef: { current: containerElement },
+    cursors: yjsCursors,
+  });
 
   return (
     <>

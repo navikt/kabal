@@ -3,7 +3,6 @@ import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { relativeRangeToSlateRange } from '@slate-yjs/core';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { CursorState } from '@udecode/plate-cursor';
 import { Profiler, useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
@@ -15,7 +14,7 @@ import { GodeFormuleringer } from '@app/components/smart-editor/gode-formulering
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
-import { CursorOverlay, UserCursor, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
+import { CursorOverlay, cursorStore, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
@@ -152,34 +151,16 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
   const editor = useMyPlateEditorRef(id);
 
-  type CursorsState = Record<string, CursorState<UserCursor>>;
-  const [cursors, setCursors] = useState<CursorsState>({});
-
   useEffect(() => {
-    const onChange = (
-      { added, removed, updated }: { added: number[]; removed: number[]; updated: number[] },
-      doc: unknown,
-    ) => {
-      console.log('onChange doc', doc);
-
-      if (added.length > 0) {
-        console.log('added', added);
-      }
-
-      if (removed.length > 0) {
-        console.log('removed', removed);
-      }
-
+    const onChange = ({ added, removed, updated }: { added: number[]; removed: number[]; updated: number[] }) => {
       const states = editor.awareness.getStates();
 
-      setCursors((cursorsState) => {
-        const newCursorsState = { ...cursorsState };
-
+      cursorStore.store.setState((draft) => {
         for (const a of added.concat(updated)) {
           const cursor = states.get(a);
 
           if (isYjsCursor(cursor)) {
-            newCursorsState[a] = {
+            draft[a] = {
               ...cursor,
               selection: relativeRangeToSlateRange(
                 editor.yjs.provider.document.get('content', XmlText),
@@ -191,10 +172,8 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
         }
 
         for (const r of removed) {
-          delete newCursorsState[r];
+          delete draft[r];
         }
-
-        return newCursorsState;
       });
     };
 
@@ -218,7 +197,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
 
-      <CursorOverlay containerRef={{ current: containerElement }} refreshOnResize cursors={cursors} />
+      <CursorOverlay containerElement={containerElement} />
     </Sheet>
   );
 };
