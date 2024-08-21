@@ -1,14 +1,15 @@
 import { RelativeRange } from '@slate-yjs/core';
 import { UnknownObject, createZustandStore } from '@udecode/plate-common';
 import { CursorData, CursorProps, CursorState, useCursorOverlayPositions } from '@udecode/plate-cursor';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { styled } from 'styled-components';
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getColor } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
+import { TAB_UUID } from '@app/headers';
 
-interface UserCursor extends CursorData, UnknownObject {
+export interface UserCursor extends CursorData, UnknownObject {
   navn: string;
   navIdent: string;
+  tabId: string;
 }
 
 interface YjsCursor {
@@ -20,12 +21,12 @@ export const isYjsCursor = (value: unknown): value is YjsCursor =>
   typeof value === 'object' && value !== null && 'selection' in value && 'data' in value;
 
 const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selectionRects }: CursorProps<UserCursor>) => {
-  const { style, selectionStyle = style, navIdent, navn } = data ?? {};
+  const { style, selectionStyle = style, navIdent, navn, tabId } = data ?? {};
 
   const labelRef = useRef<HTMLDivElement>(null);
 
-  const caretColor = getColor(navIdent ?? '', 1);
-  const selectionColor = getColor(navIdent ?? '', 0.2);
+  const caretColor = getColor(tabId ?? '', 1);
+  const selectionColor = getColor(tabId ?? '', 0.2);
 
   return (
     <>
@@ -82,7 +83,6 @@ interface CursorOverlayProps {
 }
 
 export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
-  const { user } = useContext(StaticDataContext);
   const { useStore } = cursorStore;
   const yjsCursors = useStore();
   const { cursors } = useCursorOverlayPositions({
@@ -93,9 +93,9 @@ export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
   return (
     <>
       {cursors
-        .filter(({ data }) => data?.navIdent !== user.navIdent)
+        .filter(({ data }) => data?.tabId !== TAB_UUID)
         .map((cursor) => (
-          <Cursor key={cursor.key as string} {...cursor} />
+          <Cursor key={cursor.data?.tabId} {...cursor} />
         ))}
     </>
   );

@@ -6,6 +6,8 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { createYjsPlugin } from '@udecode/plate-yjs';
 import * as Y from 'yjs';
+import { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
+import { TAB_UUID } from '@app/headers';
 import { CurrentDate } from '@app/plate/components/current-date';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
@@ -124,7 +126,7 @@ export const collaborationSaksbehandlerPlugins = (
       createYjsPlugin({
         options: {
           cursorOptions: {
-            data: { navIdent, navn },
+            data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,
           },
           hocuspocusProviderOptions: {
             url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
