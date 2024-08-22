@@ -50,16 +50,17 @@ interface ColorProps {
   $color: string;
 }
 
-const StyledSelection = styled.div<ColorProps>`
-  position: absolute;
-  z-index: 10;
-  background-color: ${({ $color }) => $color};
-`;
-
-const StyledCaret = styled.div<ColorProps>`
+const BaseCursor = styled.div`
   pointer-events: none;
   position: absolute;
   z-index: 10;
+`;
+
+const StyledSelection = styled(BaseCursor)<ColorProps>`
+  background-color: ${({ $color }) => $color};
+`;
+
+const StyledCaret = styled(BaseCursor)<ColorProps>`
   width: 1px;
   background-color: ${({ $color }) => $color};
 `;
