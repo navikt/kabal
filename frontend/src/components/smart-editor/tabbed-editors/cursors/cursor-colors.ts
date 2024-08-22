@@ -10,20 +10,21 @@ const MAP: Map<string, BaseColor> = new Map();
 const RED: BaseColor = { red: 195, green: 0, blue: 0 };
 // #06893A
 const GREEN: BaseColor = { red: 6, green: 137, blue: 58 };
-// #66CBEC
-// const LIGHT_BLUE: BaseColor = { red: 102, green: 203, blue: 236 };
 // #0067C5
 const BLUE: BaseColor = { red: 0, green: 103, blue: 197 };
 // #FF9100
 const ORANGE: BaseColor = { red: 255, green: 145, blue: 0 };
-// #005B82
-// const DEEP_BLUE: BaseColor = { red: 0, green: 91, blue: 130 };
 // #634689
 const PURPLE: BaseColor = { red: 99, green: 70, blue: 137 };
 
 const ALL_COLORS = [RED, GREEN, BLUE, ORANGE, PURPLE];
 
-export const getColor = (key: string, opacity: number): string => {
+interface Colors {
+  caretColor: string;
+  selectionColor: string;
+}
+
+export const getColors = (key: string): Colors => {
   const existing = MAP.get(key);
 
   if (existing === undefined) {
@@ -34,10 +35,16 @@ export const getColor = (key: string, opacity: number): string => {
 
     MAP.set(key, baseColor);
 
-    return formatColor(baseColor, opacity);
+    return {
+      selectionColor: formatColor(baseColor, 0.2),
+      caretColor: formatColor(baseColor, 1),
+    };
   }
 
-  return formatColor(existing, opacity);
+  return {
+    selectionColor: formatColor(existing, 0.2),
+    caretColor: formatColor(existing, 1),
+  };
 };
 
 const getAvailableColors = (): BaseColor[] => {

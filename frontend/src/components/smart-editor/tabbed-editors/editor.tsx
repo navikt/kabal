@@ -19,6 +19,7 @@ import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/pos
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
+import { TAB_UUID } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { editorMeasurements } from '@app/observability';
@@ -163,25 +164,27 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
     const onChange: OnChangeFn = ({ added, removed, updated }) => {
       const states = editor.awareness.getStates();
 
-      cursorStore.store.setState((draft) => {
-        for (const a of added.concat(updated)) {
-          const cursor = states.get(a);
+      requestAnimationFrame(() => {
+        cursorStore.store.setState((draft) => {
+          for (const a of [...added, ...updated]) {
+            const cursor = states.get(a);
 
-          if (isYjsCursor(cursor)) {
-            draft[a] = {
-              ...cursor,
-              selection: relativeRangeToSlateRange(
-                editor.yjs.provider.document.get('content', XmlText),
-                editor,
-                cursor.selection,
-              ),
-            };
+            if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
+              draft[a] = {
+                ...cursor,
+                selection: relativeRangeToSlateRange(
+                  editor.yjs.provider.document.get('content', XmlText),
+                  editor,
+                  cursor.selection,
+                ),
+              };
+            }
           }
-        }
 
-        for (const r of removed) {
-          delete draft[r];
-        }
+          for (const r of removed) {
+            delete draft[r];
+          }
+        });
       });
     };
 
@@ -205,7 +208,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
 
-      <CursorOverlay containerElement={containerElement} />
+      {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />}
     </Sheet>
   );
 };
