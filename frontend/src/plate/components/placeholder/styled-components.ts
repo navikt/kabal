@@ -1,29 +1,5 @@
 import { styled } from 'styled-components';
 
-interface WrapperStyleProps {
-  $placeholder: string;
-  $focused: boolean;
-  $hasText: boolean;
-  $hasButton: boolean;
-}
-
-export const Wrapper = styled.span<WrapperStyleProps>`
-  display: inline-block;
-  background-color: ${({ $focused }) => getBackgroundColor($focused)};
-  border-radius: var(--a-border-radius-medium);
-  outline: none;
-  color: #000;
-  padding-left: ${({ $hasButton }) => ($hasButton ? '1em' : '0')};
-  position: relative;
-
-  &::after {
-    cursor: text;
-    color: var(--a-text-subtle);
-    content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
-    user-select: none;
-  }
-`;
-
 export const DeleteButton = styled.button`
   background: none;
   border: none;
@@ -31,21 +7,21 @@ export const DeleteButton = styled.button`
   margin: 0;
   padding: 0;
   border-radius: var(--a-border-radius-medium);
-  height: 1.333em;
+  height: 100%;
   width: 1em;
   color: var(--a-text-danger);
-  display: inline-flex;
+  display: none;
   align-items: center;
   position: absolute;
-  left: 0;
+  right: 100%;
   top: 0;
+  bottom: 0;
+  background-color: var(--a-gray-200);
 
   &:hover {
-    &:disabled {
-      background: none;
+    &:not(:disabled) {
+      background-color: var(--a-blue-100);
     }
-
-    background-color: var(--a-surface-neutral-subtle-hover);
   }
 
   &:active {
@@ -61,6 +37,34 @@ export const DeleteButton = styled.button`
   &:disabled {
     cursor: not-allowed;
     color: #444;
+  }
+`;
+
+interface WrapperStyleProps {
+  $placeholder: string;
+  $focused: boolean;
+  $hasText: boolean;
+}
+
+export const Wrapper = styled.span<WrapperStyleProps>`
+  display: inline;
+  background-color: ${({ $focused }) => getBackgroundColor($focused)};
+  border-radius: var(--a-border-radius-medium);
+  outline: none;
+  color: #000;
+  position: relative;
+
+  &::after {
+    cursor: text;
+    color: var(--a-text-subtle);
+    content: ${({ $hasText, $placeholder }) => ($hasText ? '""' : `"${$placeholder}"`)};
+    user-select: none;
+  }
+
+  &:hover {
+    ${DeleteButton} {
+      display: inline-flex;
+    }
   }
 `;
 

@@ -108,10 +108,10 @@ export const Placeholder = ({
     [editor, path],
   );
 
-  const hideDeleteButton = useMemo(
-    () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
-    [editor, element, hasNoVisibleText, path],
-  );
+  // const hideDeleteButton = useMemo(
+  //   () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+  //   [editor, element, hasNoVisibleText, path],
+  // );
 
   return (
     <PlateElement
@@ -127,20 +127,18 @@ export const Placeholder = ({
           $placeholder={element.placeholder}
           $focused={isFocused}
           $hasText={!hasNoVisibleText}
-          $hasButton={!hideDeleteButton}
           onClick={onClick}
+          contentEditable={false}
         >
-          {children}
-          {hideDeleteButton ? null : (
-            <DeleteButton
-              title="Slett innfyllingsfelt"
-              onClick={deletePlaceholder}
-              contentEditable={false}
-              disabled={isReadOnly}
-            >
-              <TrashIcon aria-hidden />
-            </DeleteButton>
-          )}
+          <span>{children}</span>
+          <DeleteButton
+            title="Slett innfyllingsfelt"
+            onClick={deletePlaceholder}
+            contentEditable={false}
+            disabled={isReadOnly}
+          >
+            <TrashIcon aria-hidden />
+          </DeleteButton>
         </Wrapper>
       </Tooltip>
     </PlateElement>
