@@ -1,6 +1,5 @@
 import { ClockIcon } from '@navikt/aksel-icons';
-import { BodyShort, Label } from '@navikt/ds-react';
-import { useId } from 'react';
+import { BodyShort } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { formatIdNumber } from '@app/functions/format-id';
@@ -20,7 +19,7 @@ const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
     timestamp={props.timestamp}
     icon={ClockIcon}
   >
-    <Line>{employeeName(props.actor)} endret varslet behandlingstid.</Line>
+    <Line>{employeeName(props.actor)} satt varslet behandlingstid.</Line>
 
     <ChangedFrist {...props} />
     <ChangedMottakere {...props} />
@@ -28,9 +27,6 @@ const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
 );
 
 const ChangedMottakere = ({ previous, event }: IVarsletBehandlingstidEvent) => {
-  const fromId = useId();
-  const toId = useId();
-
   if (event === null) {
     return null;
   }
@@ -45,15 +41,9 @@ const ChangedMottakere = ({ previous, event }: IVarsletBehandlingstidEvent) => {
   }
 
   return (
-    <StyledMottakere>
-      <Label size="small" htmlFor={fromId}>
-        Mottakere endret fra:
-        <Mottakere mottakere={from} />
-      </Label>
-      <Label size="small" htmlFor={toId}>
-        Mottakere endret til:
-        <Mottakere mottakere={to} />
-      </Label>
+    <StyledMottakere aria-label="Mottakere">
+      Mottakere:
+      <Mottakere mottakere={to} />
     </StyledMottakere>
   );
 };
@@ -94,20 +84,13 @@ const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
   const toDate = event.varsletFrist === null ? null : ` (${isoDateToPretty(event.varsletFrist)})`;
 
   return (
-    <div>
-      <Line>
-        Endret fra:{' '}
-        <b>{getUnits(previous.event.varsletBehandlingstidUnits, previous.event.varsletBehandlingstidUnitTypeId)}</b>
-      </Line>
-
-      <Line>
-        Endret til:{' '}
-        <b>
-          {getUnits(event.varsletBehandlingstidUnits, event.varsletBehandlingstidUnitTypeId)}
-          {toDate}
-        </b>
-      </Line>
-    </div>
+    <Line>
+      Behandlingstid:{' '}
+      <b>
+        {getUnits(event.varsletBehandlingstidUnits, event.varsletBehandlingstidUnitTypeId)}
+        {toDate}
+      </b>
+    </Line>
   );
 };
 
@@ -140,7 +123,7 @@ const StyledListItem = styled.li`
   font-weight: normal;
 `;
 
-const StyledMottakere = styled.div`
+const StyledMottakere = styled.section`
   display: flex;
   flex-direction: column;
   row-gap: 4px;
