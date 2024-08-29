@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, isEditorReadOnly } from '@udecode/plate-common';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -36,6 +36,7 @@ export const Maltekstseksjon = ({
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
   const [tiedList, setTiedList] = useState(NO_TIED_LIST);
   const [maltekstseksjon, setMaltekstseksjon] = useState<IMaltekstseksjon | null>(null);
+  const elementRef = useRef(element);
 
   const { updateMaltekstseksjon, isFetching } = useUpdateMaltekstseksjon(
     editor,
@@ -47,16 +48,24 @@ export const Maltekstseksjon = ({
     setMaltekstseksjon,
   );
 
+  // Keep element in a ref in order to avoid unneccessary triggers of useEffect below, which would ultimatlely lead to fetch maltekstseksjon spam
+  useEffect(() => {
+    elementRef.current = element;
+  }, [element]);
+
   useEffect(() => {
     if (oppgave?.ytelseId === undefined || oppgave?.resultat === undefined || query === skipToken) {
       return;
     }
 
     setIsUpdating(true);
-    const timeout = setTimeout(() => updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query), 1_000);
+    const timeout = setTimeout(
+      () => updateMaltekstseksjon(elementRef.current, oppgave.resultat, oppgave.ytelseId, query),
+      1_000,
+    );
 
     return () => clearTimeout(timeout);
-  }, [oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon, element]);
+  }, [oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
 
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
 
