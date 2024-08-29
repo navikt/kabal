@@ -86,7 +86,14 @@ export const Maltekstseksjon = ({
         data-maltekstseksjon-id={element.id}
       >
         {manualUpdate !== undefined ? (
-          <UpdateMaltekstseksjon next={manualUpdate} replaceNodes={(...a) => replaceNodes(editor, path, ...a)} />
+          <UpdateMaltekstseksjon
+            next={manualUpdate}
+            replaceNodes={(...a) => {
+              replaceNodes(editor, path, ...a);
+
+              setManualUpdate(undefined);
+            }}
+          />
         ) : null}
         {children}
         {maltekstseksjon === null && oppgave !== undefined ? (
