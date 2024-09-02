@@ -1,5 +1,5 @@
 import { isDeployed } from '@app/config/env';
-import { getLogger } from '@app/logger';
+import { AnyObject, Level, LogArgs, getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import * as Y from 'yjs';
 import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
@@ -13,10 +13,22 @@ import fastifyPlugin from 'fastify-plugin';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { isObject } from '@app/plugins/crdt/functions';
+import { FastifyRequest } from 'fastify/types/request';
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
 const log = getLogger(CRDT_PLUGIN_ID);
+
+const logReq = (msg: string, req: FastifyRequest, data: AnyObject, level: Level = 'info', error?: unknown) => {
+  const { trace_id, span_id, tab_id, client_version } = req;
+  const body: LogArgs = { msg, trace_id, span_id, tab_id, client_version, data };
+
+  if (error !== undefined) {
+    body.error = error;
+  }
+
+  log[level](body);
+};
 
 export const crdtPlugin = fastifyPlugin(
   (app, _, pluginDone) => {
@@ -40,15 +52,7 @@ export const crdtPlugin = fastifyPlugin(
         },
         async (req, reply) => {
           const { behandlingId } = req.params;
-
-          log.info({
-            msg: 'Creating new collaboration document',
-            trace_id: req.trace_id,
-            span_id: req.span_id,
-            tab_id: req.tab_id,
-            client_version: req.client_version,
-            data: { behandlingId },
-          });
+          logReq('Creating new collaboration document', req, { behandlingId });
 
           if (isDeployed) {
             await req.ensureOboAccessToken('kabal-api');
@@ -57,14 +61,7 @@ export const crdtPlugin = fastifyPlugin(
           const { body } = req;
 
           if (!isObject(body) || !('content' in body) || !Array.isArray(body.content)) {
-            log.error({
-              msg: 'Invalid request body',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId },
-            });
+            logReq('Invalid request body', req, { behandlingId }, 'error');
 
             return reply.status(400).send();
           }
@@ -78,14 +75,7 @@ export const crdtPlugin = fastifyPlugin(
             const state = Y.encodeStateAsUpdateV2(document);
             const data = Buffer.from(state).toString('base64');
 
-            log.info({
-              msg: 'Saving new document to database',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId, data },
-            });
+            logReq('Saving new document to database', req, { behandlingId, data });
 
             const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
               method: 'POST',
@@ -94,36 +84,15 @@ export const crdtPlugin = fastifyPlugin(
             });
 
             if (!res.ok) {
-              log.error({
-                msg: `Failed to save document. API responded with status code ${res.status}.`,
-                trace_id: req.trace_id,
-                span_id: req.span_id,
-                tab_id: req.tab_id,
-                client_version: req.client_version,
-                data: { behandlingId, statusCode: res.status },
-              });
+              const msg = `Failed to save document. API responded with status code ${res.status}`;
+              logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
             } else {
-              log.info({
-                msg: 'Saved new document to database',
-                trace_id: req.trace_id,
-                span_id: req.span_id,
-                tab_id: req.tab_id,
-                client_version: req.client_version,
-                data: { behandlingId },
-              });
+              logReq('Saved new document to database', req, { behandlingId });
             }
 
             return reply.send(res);
           } catch (error) {
-            log.error({
-              error,
-              msg: 'Failed to save document',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId },
-            });
+            logReq('Failed to save document', req, { behandlingId }, 'error', error);
 
             return reply.status(500).send();
           }
@@ -140,25 +109,10 @@ export const crdtPlugin = fastifyPlugin(
         },
         async (socket, req) => {
           const { behandlingId, dokumentId } = req.params;
-
-          log.info({
-            msg: 'Websocket connection init',
-            trace_id: req.trace_id,
-            span_id: req.span_id,
-            tab_id: req.tab_id,
-            client_version: req.client_version,
-            data: { behandlingId, dokumentId },
-          });
+          logReq('Websocket connection init', req, { behandlingId, dokumentId });
 
           if (behandlingId.length === 0 || dokumentId.length === 0) {
-            log.warn({
-              msg: 'Invalid behandlingId or dokumentId',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId, dokumentId },
-            });
+            logReq('Invalid behandlingId or dokumentId', req, { behandlingId, dokumentId }, 'warn');
 
             return socket.close(4404, 'Not Found');
           }
@@ -168,27 +122,14 @@ export const crdtPlugin = fastifyPlugin(
               const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
 
               if (oboAccessToken === undefined) {
-                log.warn({
-                  msg: 'Tried to authenticate collaboration connection without OBO access token',
-                  trace_id: req.trace_id,
-                  span_id: req.span_id,
-                  tab_id: req.tab_id,
-                  client_version: req.client_version,
-                  data: { behandlingId, dokumentId },
-                });
+                const msg = 'Tried to authenticate collaboration connection without OBO access token';
+                logReq(msg, req, { behandlingId, dokumentId }, 'warn');
 
                 return socket.close(4401, 'Unauthorized');
               }
             }
 
-            log.info({
-              msg: 'Handing over connection to HocusPocus',
-              trace_id: req.trace_id,
-              span_id: req.span_id,
-              tab_id: req.tab_id,
-              client_version: req.client_version,
-              data: { behandlingId, dokumentId },
-            });
+            logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
 
             collaborationServer.handleConnection(socket, req.raw, {
               behandlingId,

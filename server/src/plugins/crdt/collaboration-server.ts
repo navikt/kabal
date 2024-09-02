@@ -1,27 +1,21 @@
-import { Server } from '@hocuspocus/server';
-import { getLogger } from '@app/logger';
-import { isConnectionContext } from '@app/plugins/crdt/context';
 import { isDeployed } from '@app/config/env';
-import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { isNotNull } from '@app/functions/guards';
+import { getLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { applyUpdateV2 } from 'yjs';
 import { setDocument } from '@app/plugins/crdt/api/set-document';
+import { isConnectionContext } from '@app/plugins/crdt/context';
+import { logContext } from '@app/plugins/crdt/log-context';
+import { getRedisExtension } from '@app/plugins/crdt/redis';
+import { Server } from '@hocuspocus/server';
+import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
 
 export const collaborationServer = Server.configure({
   onConnect: async ({ context }) => {
     if (isConnectionContext(context)) {
-      const { behandlingId, dokumentId, req } = context;
-      log.info({
-        msg: `Collaboration connection established for ${req.navIdent}!`, // req.navIdent is not defined locally.
-        trace_id: req.trace_id,
-        span_id: req.span_id,
-        tab_id: req.tab_id,
-        client_version: req.client_version,
-        data: { behandlingId, dokumentId },
-      });
+      // req.navIdent is not defined locally.
+      logContext(`Collaboration connection established for ${context.req.navIdent}!`, context);
     } else {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw new Error('Invalid context');
@@ -30,15 +24,8 @@ export const collaborationServer = Server.configure({
 
   onDisconnect: async ({ context }) => {
     if (isConnectionContext(context)) {
-      const { behandlingId, dokumentId, req } = context;
-      log.info({
-        msg: `Collaboration connection closed for ${req.navIdent}!`, // req.navIdent is not defined locally.
-        trace_id: req.trace_id,
-        span_id: req.span_id,
-        tab_id: req.tab_id,
-        client_version: req.client_version,
-        data: { behandlingId, dokumentId },
-      });
+      // req.navIdent is not defined locally.
+      logContext(`Collaboration connection closed for ${context.req.navIdent}!`, context);
     } else {
       log.error({ msg: 'Tried to close collaboration connection without context' });
       throw new Error('Invalid context');
@@ -54,41 +41,20 @@ export const collaborationServer = Server.configure({
     const { behandlingId, dokumentId, req } = context;
 
     if (!document.isEmpty('content')) {
-      log.info({
-        msg: 'Document already loaded',
-        trace_id: req.trace_id,
-        span_id: req.span_id,
-        tab_id: req.tab_id,
-        client_version: req.client_version,
-        data: { behandlingId, dokumentId },
-      });
+      logContext('Document already loaded', context);
 
       return document;
     }
 
     const res = await getDocument(req, behandlingId, dokumentId);
 
-    log.info({
-      msg: 'Loaded state/update',
-      trace_id: req.trace_id,
-      span_id: req.span_id,
-      tab_id: req.tab_id,
-      client_version: req.client_version,
-      data: { behandlingId, dokumentId },
-    });
+    logContext('Loaded state/update', context);
 
     const update = new Uint8Array(Buffer.from(res.data, 'base64url'));
 
     applyUpdateV2(document, update);
 
-    log.info({
-      msg: 'Loaded state/update applied',
-      trace_id: req.trace_id,
-      span_id: req.span_id,
-      tab_id: req.tab_id,
-      client_version: req.client_version,
-      data: { behandlingId, dokumentId },
-    });
+    logContext('Loaded state/update applied', context);
   },
 
   onStoreDocument: async ({ context, document }) => {
@@ -101,14 +67,7 @@ export const collaborationServer = Server.configure({
 
     await setDocument(req, document, behandlingId, dokumentId);
 
-    log.info({
-      msg: 'Saved document to database',
-      trace_id: req.trace_id,
-      span_id: req.span_id,
-      tab_id: req.tab_id,
-      client_version: req.client_version,
-      data: { behandlingId, dokumentId },
-    });
+    logContext('Saved document to database', context);
   },
 
   extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
