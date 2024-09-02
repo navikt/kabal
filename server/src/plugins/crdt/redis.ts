@@ -4,7 +4,7 @@ import { RedisExtension } from '@app/plugins/crdt/redis-extension/redis-extensio
 
 const log = getLogger('collaboration');
 
-const REDIS_NAME = '983BCD82_4667_48D6_AF91_6DF206E87E6F';
+const REDIS_NAME = 'BB7372D9_356F_4458_9F0C_D3589599E554';
 
 const REDIS_URI = optionalEnvString(`REDIS_URI_${REDIS_NAME}`);
 const REDIS_USERNAME = optionalEnvString(`REDIS_USERNAME_${REDIS_NAME}`);

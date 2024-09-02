@@ -27,7 +27,7 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
-      autoLoginIgnorePaths: 
+      autoLoginIgnorePaths:
         - /assets/*
         - /*.js.map
         - /*.js
@@ -65,7 +65,7 @@ spec:
   redis:
     - instance: obo-cache
       access: readwrite
-    - instance: 983bcd82-4667-48d6-af91-6df206e87e6f
+    - instance: bb7372d9-356f-4458-9f0c-d3589599e554
       access: admin
   liveness:
     path: /isAlive
