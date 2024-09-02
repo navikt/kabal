@@ -1,15 +1,25 @@
 import { isDeployed } from '@app/config/env';
 import { isNotNull } from '@app/functions/guards';
-import { getLogger } from '@app/logger';
+import { Level, getLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { setDocument } from '@app/plugins/crdt/api/set-document';
-import { isConnectionContext } from '@app/plugins/crdt/context';
-import { logContext } from '@app/plugins/crdt/log-context';
+import { ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { Server } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
+
+const logContext = (msg: string, context: ConnectionContext, level: Level = 'info') => {
+  log[level]({
+    msg,
+    trace_id: context.req.trace_id,
+    span_id: context.req.span_id,
+    tab_id: context.req.tab_id,
+    client_version: context.req.client_version,
+    data: { behandlingId: context.behandlingId, dokumentId: context.dokumentId },
+  });
+};
 
 export const collaborationServer = Server.configure({
   onConnect: async ({ context }) => {
