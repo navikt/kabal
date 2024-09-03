@@ -24,7 +24,7 @@ export const BehandlingSection = ({ label, children, testid }: Props) => {
   );
 };
 
-const StyledBehandlingSection = styled.div`
+const StyledBehandlingSection = styled.section`
   margin-bottom: 16px;
   display: flex;
   flex-direction: column;

@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { isoDateToPretty } from '@app/domain/date';
@@ -23,8 +24,17 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist } =
-    oppgavebehandling;
+  const {
+    typeId,
+    fraNAVEnhetNavn,
+    fraNAVEnhet,
+    oppgavebeskrivelse,
+    resultat,
+    ytelseId,
+    prosessfullmektig,
+    saksnummer,
+    varsletFrist,
+  } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -74,6 +84,8 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       </BehandlingSection>
 
       <AnkeMottattDato />
+
+      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 
