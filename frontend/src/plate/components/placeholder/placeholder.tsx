@@ -11,12 +11,12 @@ import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
-  containsEmptyChar,
   containsMultipleEmptyCharAndNoText as containsMultipleEmptyChars,
   ensureOnlyOneEmptyChar,
+  getContainsEmptyChar,
   getHasNoVisibleText,
+  getHasZeroChars,
   getIsFocused,
-  hasZeroChars,
   insertEmptyChar,
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
@@ -34,6 +34,7 @@ export const Placeholder = ({
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
   const isReadOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
+  const containsEmptyChar = getContainsEmptyChar(text);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -47,9 +48,9 @@ export const Placeholder = ({
 
       e.preventDefault();
 
-      editor.select({ path: [...path, 0], offset: 0 });
+      editor.select({ path: [...path, 0], offset: containsEmptyChar ? 1 : 0 });
     },
-    [editor, hasNoVisibleText, path],
+    [containsEmptyChar, editor, hasNoVisibleText, path],
   );
 
   const isFocused = path === undefined ? false : getIsFocused(editor, path);
@@ -69,12 +70,11 @@ export const Placeholder = ({
     // Contains only empty chars.       -> One empty char.
     // Contains empty chars and text.   -> Only text.
     // Completely empty placeholder.    -> One empty char.
-
-    if (text.length > 0 && !containsEmptyChar(text)) {
+    if (text.length > 0 && !getContainsEmptyChar(text)) {
       return;
     }
 
-    if (hasZeroChars(text)) {
+    if (getHasZeroChars(text)) {
       return insertEmptyChar(editor, at);
     }
 
@@ -90,7 +90,7 @@ export const Placeholder = ({
       return ensureOnlyOneEmptyChar(editor, element, path, at);
     }
 
-    if (cleanedText.length > 0 && containsEmptyChar(text)) {
+    if (cleanedText.length > 0 && getContainsEmptyChar(text)) {
       return cleanText(editor, element, path, at);
     }
   }, [editor, element, isDragging, isFocused, path, text]);
@@ -125,11 +125,12 @@ export const Placeholder = ({
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
         <Wrapper
-          $placeholder={element.placeholder}
-          $focused={isFocused}
-          $hasText={!hasNoVisibleText}
-          $hasButton={!hideDeleteButton}
+          style={{
+            backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',
+            paddingLeft: hideDeleteButton ? '0' : '1em',
+          }}
           onClick={onClick}
+          data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
         >
           {children}
           {hideDeleteButton ? null : (
