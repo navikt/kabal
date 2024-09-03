@@ -7,7 +7,9 @@ import {
   focusEditor,
   useEditorReadOnly,
 } from '@udecode/plate-common';
-import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
@@ -35,6 +37,8 @@ export const Placeholder = ({
   const isReadOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
   const containsEmptyChar = getContainsEmptyChar(text);
+  const { templateId } = useContext(SmartEditorContext);
+  const canManage = useCanManageDocument(templateId);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -110,8 +114,8 @@ export const Placeholder = ({
   );
 
   const hideDeleteButton = useMemo(
-    () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
-    [editor, element, hasNoVisibleText, path],
+    () => !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    [editor, element, hasNoVisibleText, canManage, path],
   );
 
   return (
@@ -133,13 +137,8 @@ export const Placeholder = ({
           data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
         >
           {children}
-          {hideDeleteButton ? null : (
-            <DeleteButton
-              title="Slett innfyllingsfelt"
-              onClick={deletePlaceholder}
-              contentEditable={false}
-              disabled={isReadOnly}
-            >
+          {hideDeleteButton || isReadOnly ? null : (
+            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
               <TrashIcon aria-hidden />
             </DeleteButton>
           )}

@@ -3,7 +3,7 @@ import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { relativeRangeToSlateRange } from '@slate-yjs/core';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { Profiler, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
 import { XmlText } from 'yjs';
@@ -22,7 +22,6 @@ import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { TAB_UUID } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
@@ -121,12 +120,7 @@ export const Editor = ({ smartDocument }: EditorProps) => {
                   size: 'small',
                 }}
               >
-                <Profiler
-                  id="render_smart_editor"
-                  onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
-                >
-                  <EditorWithNewCommentAndFloatingToolbar id={id} />
-                </Profiler>
+                <EditorWithNewCommentAndFloatingToolbar id={id} />
               </ErrorBoundary>
             </EditorContainer>
 

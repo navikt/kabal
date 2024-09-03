@@ -5,12 +5,12 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
-export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
-  const { data: oppgave, isLoading: oppgaveIsLoading, isFetching: oppgaveIsFetching } = useOppgave();
+export const useCanManageDocument = (templateId: TemplateIdEnum): boolean => {
+  const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
   return useMemo<boolean>(() => {
-    if (oppgaveIsLoading || oppgaveIsFetching || oppgave === undefined) {
+    if (!isSuccess) {
       return false;
     }
 
@@ -33,8 +33,34 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
       return true;
     }
 
-    return (
-      oppgave.saksbehandler?.navIdent === user.navIdent || oppgave.medunderskriver.employee?.navIdent === user.navIdent
-    );
-  }, [oppgave, oppgaveIsFetching, oppgaveIsLoading, templateId, user]);
+    if (oppgave.saksbehandler?.navIdent !== user.navIdent) {
+      return false;
+    }
+
+    if (oppgave.medunderskriver.flowState === FlowState.SENT) {
+      return false;
+    }
+
+    if (
+      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.rol?.flowState === FlowState.SENT
+    ) {
+      return false;
+    }
+
+    return true;
+  }, [oppgave, isSuccess, templateId, user]);
+};
+
+export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
+  const { data: oppgave, isSuccess } = useOppgave();
+  const { user } = useContext(StaticDataContext);
+  const canManage = useCanManageDocument(templateId);
+
+  return (
+    canManage ||
+    (isSuccess &&
+      oppgave.medunderskriver.employee?.navIdent === user.navIdent &&
+      oppgave.medunderskriver.flowState === FlowState.SENT)
+  );
 };

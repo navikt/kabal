@@ -17,10 +17,6 @@ export const DeleteButton = styled.button`
   top: 0;
 
   &:hover {
-    &:disabled {
-      background: none;
-    }
-
     background-color: var(--a-surface-neutral-subtle-hover);
   }
 
@@ -32,11 +28,6 @@ export const DeleteButton = styled.button`
     box-shadow:
       inset 0 0 0 2px var(--a-border-strong),
       var(--a-shadow-focus);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    color: var(--a-text-subtle);
   }
 `;
 
