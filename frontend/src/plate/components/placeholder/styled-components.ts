@@ -52,7 +52,7 @@ export const Wrapper = styled.span<WrapperStyleProps>`
   border-radius: var(--a-border-radius-medium);
   outline: none;
   color: #000;
-  position: relative;
+  /* position: relative; */
 
   &::after {
     cursor: text;

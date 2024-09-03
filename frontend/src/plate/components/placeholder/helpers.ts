@@ -11,7 +11,7 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import {
   EditorDescendant,
@@ -23,7 +23,6 @@ import {
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 
-const EMPTY_CHAR_CODE = 8203;
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
 export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, path: TPath, at: TPath) => {

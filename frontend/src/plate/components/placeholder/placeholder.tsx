@@ -8,10 +8,11 @@ import {
   useEditorReadOnly,
 } from '@udecode/plate-common';
 import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
   containsEmptyChar,
-  containsMultipleEmptyCharAndNoText,
+  containsMultipleEmptyCharAndNoText as containsMultipleEmptyChars,
   ensureOnlyOneEmptyChar,
   getHasNoVisibleText,
   getIsFocused,
@@ -54,11 +55,7 @@ export const Placeholder = ({
   const isFocused = path === undefined ? false : getIsFocused(editor, path);
 
   useEffect(() => {
-    if (isDragging) {
-      return;
-    }
-
-    if (path === undefined) {
+    if (isDragging || path === undefined) {
       return;
     }
 
@@ -68,29 +65,33 @@ export const Placeholder = ({
       return;
     }
 
-    // Multiple empty chars.                    -> One empty char.
-    // Focus + Contains only text.              -> Nothing to do.
-    // Focus + Contains only empty chars.       -> One empty char.
-    // Focus + Contains empty chars and text.   -> Only text.
-    // Focus + Completely empty placeholder.    -> One empty char.
-    // No focus + Completely empty placeholder. -> One empty char.
+    // Contains only text.              -> Nothing to do.
+    // Contains only empty chars.       -> One empty char.
+    // Contains empty chars and text.   -> Only text.
+    // Completely empty placeholder.    -> One empty char.
 
-    // Undo (Ctrl + Z) causes the placeholder to contain two empty chars. This cleans that up.
-    if (containsMultipleEmptyCharAndNoText(text)) {
-      ensureOnlyOneEmptyChar(editor, element, path, at);
-    }
-
-    if (isFocused) {
-      // Only text.
-      if (!containsEmptyChar(text)) {
-        return;
-      }
-
-      return cleanText(editor, element, path, at);
+    if (text.length > 0 && !containsEmptyChar(text)) {
+      return;
     }
 
     if (hasZeroChars(text)) {
       return insertEmptyChar(editor, at);
+    }
+
+    // Workaround for race condition causing double insert on first character in empty placeholder
+    if (!isFocused) {
+      return;
+    }
+
+    const cleanedText = removeEmptyCharInText(text);
+
+    // Undo (Ctrl + Z) causes the placeholder to contain two empty chars. This cleans that up.
+    if (containsMultipleEmptyChars(text) && cleanedText.length === 0) {
+      return ensureOnlyOneEmptyChar(editor, element, path, at);
+    }
+
+    if (cleanedText.length > 0 && containsEmptyChar(text)) {
+      return cleanText(editor, element, path, at);
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 
@@ -108,10 +109,10 @@ export const Placeholder = ({
     [editor, path],
   );
 
-  // const hideDeleteButton = useMemo(
-  //   () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
-  //   [editor, element, hasNoVisibleText, path],
-  // );
+  const hideDeleteButton = useMemo(
+    () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    [editor, element, hasNoVisibleText, path],
+  );
 
   return (
     <PlateElement
@@ -123,22 +124,18 @@ export const Placeholder = ({
       suppressContentEditableWarning
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
-        <Wrapper
-          $placeholder={element.placeholder}
-          $focused={isFocused}
-          $hasText={!hasNoVisibleText}
-          onClick={onClick}
-          contentEditable={false}
-        >
-          <span>{children}</span>
-          <DeleteButton
-            title="Slett innfyllingsfelt"
-            onClick={deletePlaceholder}
-            contentEditable={false}
-            disabled={isReadOnly}
-          >
-            <TrashIcon aria-hidden />
-          </DeleteButton>
+        <Wrapper $placeholder={element.placeholder} $focused={isFocused} $hasText={!hasNoVisibleText} onClick={onClick}>
+          {children}
+          {hideDeleteButton ? null : (
+            <DeleteButton
+              title="Slett innfyllingsfelt"
+              onClick={deletePlaceholder}
+              contentEditable={false}
+              disabled={isReadOnly}
+            >
+              <TrashIcon aria-hidden />
+            </DeleteButton>
+          )}
         </Wrapper>
       </Tooltip>
     </PlateElement>
