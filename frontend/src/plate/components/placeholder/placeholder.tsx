@@ -124,7 +124,13 @@ export const Placeholder = ({
       suppressContentEditableWarning
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
-        <Wrapper $placeholder={element.placeholder} $focused={isFocused} $hasText={!hasNoVisibleText} onClick={onClick}>
+        <Wrapper
+          $placeholder={element.placeholder}
+          $focused={isFocused}
+          $hasText={!hasNoVisibleText}
+          $hasButton={!hideDeleteButton}
+          onClick={onClick}
+        >
           {children}
           {hideDeleteButton ? null : (
             <DeleteButton
