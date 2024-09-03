@@ -32,6 +32,7 @@ export interface IOppgavebehandlingBase {
   isAvsluttetAvSaksbehandler: boolean;
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
+  oppgavebeskrivelse: string | null;
   kvalitetsvurderingReference: {
     id: UUID;
     version: KvalitetsvurderingVersion;

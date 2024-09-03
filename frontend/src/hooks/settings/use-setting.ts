@@ -100,3 +100,5 @@ export enum OppgaveTableRowsPerPage {
   SEARCH_PAA_VENT = 'oppgaver/search_paa_vent/rows_per_page',
   RELEVANT_ACTIVE = 'oppgaver/relevant_active/rows_per_page',
 }
+
+export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');

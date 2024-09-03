@@ -1,4 +1,5 @@
 import { Heading } from '@navikt/ds-react';
+import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -21,7 +22,7 @@ interface Props {
 export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
 
-  const { typeId, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
+  const { typeId, oppgavebeskrivelse, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -59,6 +60,8 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
       <SendtTilTrygderetten />
 
       <KjennelseMottatt />
+
+      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 

@@ -1,5 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
@@ -28,6 +29,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraVedtaksinstans,
+    oppgavebeskrivelse,
     resultat,
     ytelseId,
     prosessfullmektig,
@@ -80,6 +82,8 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
+
+      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 
