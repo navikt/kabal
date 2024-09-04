@@ -89,6 +89,7 @@ interface CursorOverlayProps {
   containerElement: HTMLElement;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
   const { useStore } = cursorStore;
   const yjsCursors = useStore();
