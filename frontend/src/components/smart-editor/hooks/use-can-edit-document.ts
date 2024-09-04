@@ -41,11 +41,12 @@ export const useCanManageDocument = (templateId: TemplateIdEnum): boolean => {
       return false;
     }
 
+    // When behandling is sent to ROL, saksbehandler can edit everything except questions.
     if (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
       oppgave.rol?.flowState === FlowState.SENT
     ) {
-      return false;
+      return templateId !== TemplateIdEnum.ROL_QUESTIONS;
     }
 
     return true;
