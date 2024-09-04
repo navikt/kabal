@@ -1,10 +1,13 @@
 import { BulletListIcon, CaptionsIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Tabs } from '@navikt/ds-react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
+import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
 import { EntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/entry-list';
 import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
 import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/split-beskrivelse';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 
 interface Props {
   defaultFormat: GosysBeskrivelseFormat;
@@ -17,13 +20,21 @@ interface Props {
 export const ModalContent = ({ defaultFormat, entries, beskrivelse, gosysEntries, hasExpectedEntries }: Props) => {
   const { setValue } = useGosysBeskrivelseTab();
 
+  const onChange = useCallback(
+    (format: string) => {
+      setValue(format);
+      pushEvent('change-gosys-description-format', BEHANDLING_PANEL_DOMAIN, { format });
+    },
+    [setValue],
+  );
+
   const FormattedIcon = hasExpectedEntries ? BulletListIcon : ExclamationmarkTriangleIcon;
 
   return (
     <Tabs
       defaultValue={defaultFormat}
       size="small"
-      onChange={setValue}
+      onChange={onChange}
       style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
     >
       <Tabs.List>
