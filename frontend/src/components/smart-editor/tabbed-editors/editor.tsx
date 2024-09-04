@@ -14,7 +14,7 @@ import { GodeFormuleringer } from '@app/components/smart-editor/gode-formulering
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
-import { CursorOverlay, cursorStore, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
+import { cursorStore, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
@@ -202,7 +202,8 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
 
-      {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />}
+      {/* Not needed for now - only one person will edit at a time */}
+      {/* {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />} */}
     </Sheet>
   );
 };
