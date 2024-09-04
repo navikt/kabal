@@ -136,9 +136,23 @@ export interface DocumentsRemovedEvent extends BaseEvent {
   idList: string[];
 }
 
+export interface SmartDocumentVersionedEvent extends BaseEvent {
+  documentId: string;
+  version: number;
+  author: INavEmployee;
+}
+
 export interface SmartDocumentLanguageEvent extends BaseEvent {
   id: string;
   language: Language;
+}
+
+export interface SmartDocumentCommentEvent extends BaseEvent {
+  documentId: string;
+  parentId: string | null;
+  commentId: string;
+  author: INavEmployee;
+  text: string;
 }
 
 export interface JournalpostAddedEvent extends BaseEvent {
