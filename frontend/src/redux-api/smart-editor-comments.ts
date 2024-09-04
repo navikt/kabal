@@ -26,10 +26,9 @@ export const smartEditorCommentsApi = createApi({
         const { data } = await queryFulfilled;
 
         dispatch(
-          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) => [
-            ...draft,
-            data,
-          ]),
+          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+            draft.some((c) => c.id === data.id) ? draft : [...draft, data],
+          ),
         );
       },
     }),
@@ -62,7 +61,14 @@ export const smartEditorCommentsApi = createApi({
         dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
             draft.map((thread) =>
-              thread.id === commentId ? { ...thread, comments: [...thread.comments, data] } : thread,
+              thread.id === commentId
+                ? {
+                    ...thread,
+                    comments: thread.comments.some((r) => r.id === data.id)
+                      ? thread.comments
+                      : [...thread.comments, data],
+                  }
+                : thread,
             ),
           ),
         );

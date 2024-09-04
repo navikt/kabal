@@ -7,7 +7,7 @@ import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { SmartDocumentLanguageEvent } from '@app/redux-api/server-sent-events/types';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 
-export const handleSmartDocumentLanguageEvent =
+export const handleSmartDocumentLanguageChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentLanguageEvent) => {
     reduxStore.dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
