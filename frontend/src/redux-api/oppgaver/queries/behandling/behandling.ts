@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { IApiValidationResponse } from '@app/functions/error-type-guard';
@@ -19,7 +20,11 @@ import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/beh
 import { handleKlagerEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/klager';
 import { handleMottattVedtaksinstansEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
 import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
-import { handleSmartDocumentLanguageEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document-language';
+import { handleSmartDocumentCommentAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-added';
+import { handleSmartDocumentCommentChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-changed';
+import { handleSmartDocumentCommentRemovedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-removed';
+import { handleSmartDocumentLanguageChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/language-changed';
+import { handleSmartDocumentVersionedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/versioned';
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
@@ -106,9 +111,17 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.DOCUMENT_FINISHED, documentFinished);
 
           // Smart documents
-          const smartDocumentLanguage = handleSmartDocumentLanguageEvent(oppgaveId, navIdent);
+          const smartDocumentVersioned = handleSmartDocumentVersionedEvent(oppgaveId);
+          const smartDocumentLanguage = handleSmartDocumentLanguageChangedEvent(oppgaveId, navIdent);
+          const smartDocumentCommentAdded = handleSmartDocumentCommentAddedEvent(oppgaveId, navIdent);
+          const smartDocumentCommentRemoved = handleSmartDocumentCommentRemovedEvent(oppgaveId);
+          const smartDocumentCommentChanged = handleSmartDocumentCommentChangedEvent(oppgaveId, navIdent);
 
+          events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_VERSIONED, smartDocumentVersioned);
           events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_LANGUAGE, smartDocumentLanguage);
+          events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_COMMENT_ADDED, smartDocumentCommentAdded);
+          events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_COMMENT_REMOVED, smartDocumentCommentRemoved);
+          events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_COMMENT_CHANGED, smartDocumentCommentChanged);
 
           // Journalposter
           const journalpostAdded = handleJournalpostAddedEvent(oppgaveId, navIdent);
