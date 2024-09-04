@@ -65,8 +65,8 @@ spec:
   redis:
     - instance: obo-cache
       access: readwrite
-    - instance: bb7372d9-356f-4458-9f0c-d3589599e554
-      access: admin
+    - instance: 6455e2e2-ded8-49ab-b4b6-cb6953b085c5
+      access: readwrite
   liveness:
     path: /isAlive
     initialDelay: 3
