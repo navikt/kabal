@@ -1,11 +1,11 @@
 import { parseHeader } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
-import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 
-export const splitBeskrivelse = (beskrivelse: string): IBeskrivelse[] => {
+export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] => {
   const lines = beskrivelse.trim().split('\n');
 
-  const result: IBeskrivelse[] = [];
-  let current: IBeskrivelse | null = null;
+  const result: GosysBeskrivelseEntry[] = [];
+  let current: GosysBeskrivelseEntry | null = null;
 
   for (const line of lines) {
     const trimmedLine = line.trim();
