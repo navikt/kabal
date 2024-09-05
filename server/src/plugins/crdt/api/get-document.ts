@@ -1,4 +1,6 @@
 import { getLogger } from '@app/logger';
+import { Doc, XmlText, encodeStateAsUpdateV2 } from 'yjs';
+import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { isObject } from '@app/plugins/crdt/functions';
@@ -40,6 +42,27 @@ export const getDocument = async (req: FastifyRequest, behandlingId: string, dok
     });
 
     throw new Error(msg);
+  }
+
+  // If the document has no binary data, create and save it.
+  if (json.data.length === 0) {
+    const { content } = json;
+    const document = new Doc();
+    const sharedRoot = document.get('content', XmlText);
+    const insertDelta = slateNodesToInsertDelta(content);
+    sharedRoot.applyDelta(insertDelta);
+    const state = encodeStateAsUpdateV2(document);
+    const data = Buffer.from(state).toString('base64');
+
+    // Save the binary data to the database.
+    await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
+      method: 'PATCH',
+      headers: { ...getHeaders(req), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content, data }),
+    });
+
+    // Return the document and binary data.
+    return { content, data };
   }
 
   return json;
