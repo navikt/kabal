@@ -9,7 +9,7 @@ import { TemplateIdEnum } from './template-enums';
 interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;
   richText: TDescendant[];
-  templateId: TemplateIdEnum | null;
+  templateId: TemplateIdEnum;
   dokumentTypeId: DistribusjonsType;
   parentId: string | null;
   creatorIdent: string;
