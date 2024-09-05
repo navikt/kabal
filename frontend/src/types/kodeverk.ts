@@ -65,18 +65,3 @@ export interface IKlageenhet extends IKodeverkSimpleValue {
 export interface ISakstyperToUtfall extends IKodeverkSimpleValue<SaksTypeEnum> {
   utfall: IKodeverkSimpleValue<UtfallEnum>[];
 }
-
-export interface IKodeverk {
-  enheter: IKodeverkSimpleValue[];
-  hjemler: IKodeverkValue[];
-  klageenheter: IKlageenhet[];
-  sakstyper: IKodeverkSimpleValue<SaksTypeEnum>[];
-  sources: IKodeverkSimpleValue[];
-  styringsenheter: IKodeverkSimpleValue[];
-  tema: IKodeverkValue[];
-  utfall: IKodeverkSimpleValue<UtfallEnum>[];
-  vedtaksenheter: IKodeverkSimpleValue[];
-  ytelser: IYtelse[];
-  sakstyperToUtfall: ISakstyperToUtfall[];
-  brevmottakertyper: IKodeverkSimpleValue<Brevmottakertype>[];
-}

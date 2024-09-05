@@ -1,13 +1,15 @@
 import {
+  useEnheter,
   useInnsendingshjemlerMap,
-  useKodeverk,
   useRegistreringshjemlerMap,
+  useSakstyper,
   useSimpleYtelser,
+  useTema,
 } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
-  const { data, isLoading } = useKodeverk();
+  const { data, isLoading } = useTema();
 
   if (isLoading || typeof data === 'undefined') {
     return undefined;
@@ -17,7 +19,7 @@ const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
     return 'Mangler';
   }
 
-  return data.tema.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
+  return data.find(({ id }) => id === temaId)?.beskrivelse ?? temaId;
 };
 
 export const useFullTemaNameFromIdOrLoading = (temaId: string | null): string =>
@@ -34,24 +36,24 @@ export const useFullYtelseNameFromId = (ytelseId?: string): string | undefined =
 };
 
 export const useTypeNameFromId = (type: SaksTypeEnum): string | undefined => {
-  const { data, isLoading } = useKodeverk();
+  const { data, isLoading } = useSakstyper();
 
   if (isLoading || typeof data === 'undefined') {
     return undefined;
   }
 
-  return data.sakstyper.find(({ id }) => id === type)?.navn ?? type;
+  return data.find(({ id }) => id === type)?.navn ?? type;
 };
 
 export const useEnhetNameFromIdOrLoading = (enhetId?: string | null): string => {
-  const { data, isLoading } = useKodeverk();
+  const { data, isLoading } = useEnheter();
 
   if (isLoading || typeof data === 'undefined') {
     return 'Laster...';
   }
 
   if (typeof enhetId === 'string') {
-    return data.enheter.find(({ id }) => id === enhetId)?.navn ?? enhetId;
+    return data.find(({ id }) => id === enhetId)?.navn ?? enhetId;
   }
 
   return 'Mangler';

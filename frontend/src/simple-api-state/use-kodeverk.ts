@@ -1,7 +1,6 @@
 import {
   IKabalYtelse,
   IKlageenhet,
-  IKodeverk,
   IKodeverkSimpleValue,
   IKodeverkValue,
   ISakstyperToUtfall,
@@ -28,7 +27,8 @@ interface ILovKildeToRegistreringshjemmel extends IKodeverkValue {
 
 const API_PREFIX = '/api/klage-kodeverk-api/kodeverk';
 
-const kodeverk = new SimpleApiState<IKodeverk>(API_PREFIX);
+const sakstyper = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/sakstyper`);
+const enheter = new SimpleApiState<IKodeverkSimpleValue[]>(`${API_PREFIX}/enheter`);
 const hjemlerMap = new SimpleApiState<Hjemler>(`${API_PREFIX}/hjemlermap`);
 const registreringshjemlerMap = new SimpleApiState<RegistreringshjemlerMap>(`${API_PREFIX}/registreringshjemlermap`);
 
@@ -46,7 +46,8 @@ const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistrerin
   `${API_PREFIX}/lovkildetoregistreringshjemler`,
 );
 
-export const useKodeverk = () => useSimpleApiState(kodeverk);
+export const useSakstyper = () => useSimpleApiState(sakstyper);
+export const useEnheter = () => useSimpleApiState(enheter);
 export const useInnsendingshjemlerMap = () => useSimpleApiState(hjemlerMap);
 
 export const useLatestYtelser = () => useSimpleApiState(ytelserLatest);

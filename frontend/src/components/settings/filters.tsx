@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';
-import { useKodeverk } from '@app/simple-api-state/use-kodeverk';
 import { ISettings, Role } from '@app/types/bruker';
 import { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import {
@@ -23,7 +22,6 @@ const EMPTY_SETTINGS: ISettings = {
 };
 
 export const Filters = () => {
-  const { data: kodeverk } = useKodeverk();
   const { data: settingsData } = useGetSettingsQuery();
   const hjemler = useHjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
@@ -47,7 +45,7 @@ export const Filters = () => {
 
   const settings = settingsData ?? EMPTY_SETTINGS;
 
-  if (!isSaksbehandler || typeof kodeverk === 'undefined') {
+  if (!isSaksbehandler) {
     return null;
   }
 
