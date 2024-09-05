@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
 import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
-import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
 
 interface Props {
-  entries: IBeskrivelse[];
+  entries: GosysBeskrivelseEntry[];
 }
 
 export const EntryList = ({ entries }: Props) => (
