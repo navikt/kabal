@@ -1,12 +1,12 @@
 import { BodyLong, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import { styled } from 'styled-components';
-import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 
-export const Entry = ({ author, date, content }: IBeskrivelse) => {
+export const Entry = ({ author, date, content }: GosysBeskrivelseEntry) => {
   const { data: enheter } = useKlageenheter();
   const { data } = useGetSignatureQuery(author.navIdent);
 

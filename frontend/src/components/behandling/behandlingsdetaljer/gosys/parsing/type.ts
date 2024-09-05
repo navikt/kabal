@@ -1,4 +1,4 @@
-export interface IBeskrivelse {
+export interface GosysBeskrivelseEntry {
   date: Date;
   author: {
     name: string | null;
