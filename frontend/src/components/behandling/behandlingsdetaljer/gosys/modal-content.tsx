@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
 import { EntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/entry-list';
 import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
-import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/split-beskrivelse';
+import { IBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
 
