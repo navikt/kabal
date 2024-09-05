@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
-import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/split-beskrivelse';
+import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
 
-const malformed = `            --- 11.06.2024 13:09 F_Z994864 E_Z994864 (Z994864, 4291) ---\n
+const extraSpaces = `            --- 11.06.2024 13:09 F_Z994864 E_Z994864 (Z994864, 4291) ---\n
             Oppdaterte frist.\n
             --- 10.06.2024 10:45 F_Z994864 E_Z994864 (Z994864, 4291) ---
 Tilordner.
@@ -20,6 +20,13 @@ STK2 : Høreapparat
 STK3 : 
 Sakstype : Klage
 Mottatt dato : 21.05.2024`;
+
+const noName = `--- 12.06.2024 14:26  (Z994864, 4291) ---
+Melding uten navn og to mellomrom.
+
+--- 12.06.2024 14:25 (Z994864, 4291) ---
+Melding uten navn og ett mellomrom.
+`;
 
 const noContent = `--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
 
@@ -88,7 +95,7 @@ describe('split beskrivelse', () => {
     const actual = splitBeskrivelse(oneLine);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
       },
@@ -101,12 +108,12 @@ describe('split beskrivelse', () => {
     const actual = splitBeskrivelse(twoLines);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
       },
       {
-        date: '12.06.2024 15:45',
+        date: new Date(2024, 5, 12, 15, 45),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppdaterte frist',
       },
@@ -119,17 +126,17 @@ describe('split beskrivelse', () => {
     const actual = splitBeskrivelse(threeLines);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
       },
       {
-        date: '12.06.2024 15:45',
+        date: new Date(2024, 5, 12, 15, 45),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppdaterte frist',
       },
       {
-        date: '12.06.2024 10:18',
+        date: new Date(2024, 5, 12, 10, 18),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Flyttet til riktig enhet\n\nOppgaven er flyttet fra enhet 4712 til 4293',
       },
@@ -143,73 +150,73 @@ describe('split beskrivelse', () => {
     expect(actual).toHaveLength(8);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Overførte oppgaven fra Kabin til Kabal.\nOppdaterte frist',
       },
       {
-        date: '12.06.2024 14:08',
+        date: new Date(2024, 5, 12, 14, 8),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppdaterte frist.\nOverførte oppgave til Kabal fra Kabin.\nTildelte oppgaven til Z994864.',
       },
       {
-        date: '12.06.2024 11:11',
+        date: new Date(2024, 5, 12, 11, 11),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppgaven er flyttet   fra mappe Hjelpemidler til <ingen>',
       },
       {
-        date: '12.06.2024 10:18',
+        date: new Date(2024, 5, 12, 10, 18),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppgaven er flyttet   fra mappe <ingen> til Hjelpemidler',
       },
       {
-        date: '12.06.2024 10:18',
+        date: new Date(2024, 5, 12, 10, 18),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Flyttet til riktig enhet\nOppgaven er flyttet fra enhet 4712 til 4293',
       },
       {
-        date: '12.06.2024 10:10',
+        date: new Date(2024, 5, 12, 10, 10),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppdaterte frist.\nOverførte oppgave til Kabal.',
       },
       {
-        date: '12.06.2024 10:05',
+        date: new Date(2024, 5, 12, 10, 5),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Saksblokk : A04\nStatus : OK\nBekreftelsesbrev sendt : Nei',
       },
       {
-        date: '12.06.2024 10:05',
+        date: new Date(2024, 5, 12, 10, 5),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
-        content: 'Mottok en klage\n\nSTK2 : Høreapparat\nSTK3 : \nSakstype : Klage\nMottatt dato : 24.05.2024',
+        content: 'Mottok en klage\n\nSTK2 : Høreapparat\nSTK3 :\nSakstype : Klage\nMottatt dato : 24.05.2024',
       },
     ]);
   });
 
-  it('should split malformed', () => {
+  it('should split with extra spacing', () => {
     expect.assertions(1);
 
-    const actual = splitBeskrivelse(malformed);
+    const actual = splitBeskrivelse(extraSpaces);
     expect(actual).toStrictEqual([
       {
-        date: '11.06.2024 13:09',
+        date: new Date(2024, 5, 11, 13, 9),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Oppdaterte frist.',
       },
       {
-        date: '10.06.2024 10:45',
+        date: new Date(2024, 5, 10, 10, 45),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Tilordner.\nOppgaven er flyttet fra enhet 4712 til 4291, fra saksbehandler <ingen> til Z994864,',
       },
       {
-        date: '07.06.2024 12:35',
+        date: new Date(2024, 5, 7, 12, 35),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: 'Saksblokk : A01\nStatus : OK\nBekreftelsesbrev sendt : Nei',
       },
       {
-        date: '07.06.2024 12:35',
+        date: new Date(2024, 5, 7, 12, 35),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content:
-          'Mottatt en klage fra bruker.\n\nSTK2 : Høreapparat\nSTK3 : \nSakstype : Klage\nMottatt dato : 21.05.2024',
+          'Mottatt en klage fra bruker.\n\nSTK2 : Høreapparat\nSTK3 :\nSakstype : Klage\nMottatt dato : 21.05.2024',
       },
     ]);
   });
@@ -220,7 +227,7 @@ describe('split beskrivelse', () => {
     const actual = splitBeskrivelse(noContent);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: '',
       },
@@ -233,14 +240,32 @@ describe('split beskrivelse', () => {
     const actual = splitBeskrivelse(twoNoContent);
     expect(actual).toStrictEqual([
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: '',
       },
       {
-        date: '12.06.2024 14:29',
+        date: new Date(2024, 5, 12, 14, 29),
         author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
         content: '',
+      },
+    ]);
+  });
+
+  it('should split no name', () => {
+    expect.assertions(1);
+
+    const actual = splitBeskrivelse(noName);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 12, 14, 26),
+        author: { name: null, navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding uten navn og to mellomrom.',
+      },
+      {
+        date: new Date(2024, 5, 12, 14, 25),
+        author: { name: null, navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding uten navn og ett mellomrom.',
       },
     ]);
   });

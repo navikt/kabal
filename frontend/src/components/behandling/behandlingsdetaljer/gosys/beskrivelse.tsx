@@ -7,7 +7,7 @@ import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsd
 import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
 import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
 import { ModalContent } from '@app/components/behandling/behandlingsdetaljer/gosys/modal-content';
-import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/split-beskrivelse';
+import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
 import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
