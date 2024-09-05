@@ -65,7 +65,7 @@ spec:
   redis:
     - instance: obo-cache
       access: readwrite
-    - instance: db2948be-cdfa-4779-9a83-5a36368e4d43
+    - instance: 8a5f33ef-d6d1-4ce2-9afe-9bcb24581892
       access: readwrite
   liveness:
     path: /isAlive
