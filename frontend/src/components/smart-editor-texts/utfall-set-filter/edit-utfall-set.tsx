@@ -123,18 +123,18 @@ const getAvailableUtfall = (selected: UtfallEnum[], sakstyperToUtfall: ISakstype
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 const Legend = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

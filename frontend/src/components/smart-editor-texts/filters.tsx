@@ -84,5 +84,5 @@ export const Filters = ({ textType, className }: Props) => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

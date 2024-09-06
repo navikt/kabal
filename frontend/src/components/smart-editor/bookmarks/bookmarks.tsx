@@ -72,8 +72,8 @@ const BookmarkList = styled.ul`
   width: 100%;
   margin: 0;
   padding: 0;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
   position: relative;
   max-width: 350px;
 `;

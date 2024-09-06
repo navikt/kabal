@@ -110,9 +110,9 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
 const StyledPlaceholderText = styled.div`
   position: absolute;
   display: flex;
-  gap: 4px;
-  background: var(--a-surface-subtle);
-  padding: 8px;
+  gap: var(--a-spacing-1);
+  background-color: var(--a-surface-subtle);
+  padding: var(--a-spacing-2);
   border: 1px solid var(--a-border-strong);
   border-radius: var(--a-border-radius-medium);
   min-width: 220px;

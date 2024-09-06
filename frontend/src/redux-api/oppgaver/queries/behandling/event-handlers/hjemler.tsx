@@ -111,5 +111,5 @@ const HjemmelList = ({ hjemler }: { hjemler: string[] }) => {
 const TagContainer = styled.span`
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

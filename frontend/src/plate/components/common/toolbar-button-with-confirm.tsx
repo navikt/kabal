@@ -64,7 +64,7 @@ const ConfirmContainer = styled.div`
   background-color: var(--a-bg-subtle);
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
+  border-radius: var(--a-spacing-1);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   box-shadow: var(--a-shadow-medium);

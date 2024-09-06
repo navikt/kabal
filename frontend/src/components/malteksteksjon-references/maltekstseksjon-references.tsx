@@ -113,7 +113,7 @@ const ListItemContent = styled.div<{ $selected: boolean }>`
   font-weight: ${({ $selected }) => ($selected ? 'bold' : 'normal')};
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--a-spacing-05);
 `;
 
 interface ListItemProps {
@@ -161,5 +161,5 @@ const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

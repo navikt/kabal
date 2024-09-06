@@ -91,19 +91,19 @@ const DeleteDropAreaContainer = styled.div<{ $isDropTarget: boolean; $isDragOver
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   flex-grow: 0;
   flex-shrink: 0;
-  padding-left: 48px;
-  padding-right: 48px;
-  margin-right: 8px;
+  padding-left: var(--a-spacing-12);
+  padding-right: var(--a-spacing-12);
+  margin-right: var(--a-spacing-2);
   white-space: nowrap;
   height: 100%;
   transition-property: opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   border-radius: var(--a-border-radius-medium);
-  outline: 2px dashed var(--a-surface-danger);
+  outline: var(--a-spacing-05) dashed var(--a-surface-danger);
   font-size: 18px;
   font-weight: bold;
 

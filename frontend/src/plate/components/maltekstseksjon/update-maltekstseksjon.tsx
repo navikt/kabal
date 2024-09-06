@@ -85,11 +85,11 @@ const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   align-items: center;
   border-radius: var(--a-border-radius-medium);
-  margin-bottom: 8px;
-  padding-top: 24px;
+  margin-bottom: var(--a-spacing-2);
+  padding-top: var(--a-spacing-6);
   user-select: none;
 `;
 

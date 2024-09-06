@@ -19,7 +19,7 @@ const StickyRightContainer = styled.div`
   grid-area: right;
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
   position: sticky;
   top: 0;
   overflow-y: auto;

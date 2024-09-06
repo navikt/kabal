@@ -25,5 +25,5 @@ export const CommentSection = () => {
 
 const StyledCommentSection = styled.div`
   width: fit-content;
-  padding-right: 16px;
+  padding-right: var(--a-spacing-4);
 `;

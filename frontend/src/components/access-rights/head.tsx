@@ -60,7 +60,7 @@ const Thead = styled.thead`
   position: sticky;
   top: 0;
   z-index: 2;
-  background-color: white;
+  background-color: var(--a-bg-default);
 
   box-shadow:
     var(--a-border-on-inverted) 0 1px 0 0,
@@ -74,7 +74,7 @@ const CONTAINER_WIDTH = NON_ANGLED_HEADER_HEIGHT;
 const CONTAINER_HEIGHT = Math.sqrt(ANGLED_HEADER_WIDTH ** 2 / 2);
 
 const StyledHeader = styled.th`
-  padding-left: 8px;
+  padding-left: var(--a-spacing-2);
   vertical-align: bottom;
   text-align: left;
 `;
@@ -85,10 +85,10 @@ const getBackgroundColor = (props: StyledAngledHeaderDivProps) => {
   }
 
   if (props.$grey) {
-    return 'rgb(247, 247, 247)';
+    return 'var(--a-text-default)';
   }
 
-  return 'white';
+  return 'var(--a-bg-default)';
 };
 
 interface StyledAngledHeaderDivProps {
@@ -113,7 +113,7 @@ const StyledAngledHeader = styled(StyledHeader)<StyledAngledHeaderDivProps>`
 `;
 
 const AngledHeaderDiv = styled(Label)`
-  padding-right: 12px;
+  padding-right: var(--a-spacing-3);
   width: ${ANGLED_HEADER_WIDTH}px;
   height: ${ANGLED_HEADER_HEIGHT}px;
 

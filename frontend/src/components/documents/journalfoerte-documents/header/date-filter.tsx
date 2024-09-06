@@ -13,7 +13,7 @@ interface Props extends DateRangeSetting {
 
 const StyledButton = styled(Button)`
   border: 1px solid var(--a-border-default);
-  height: 32px;
+  height: var(--a-spacing-8);
   font-weight: normal;
 
   .navds-label {

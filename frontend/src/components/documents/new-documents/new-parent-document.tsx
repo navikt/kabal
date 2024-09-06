@@ -136,8 +136,8 @@ const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: strin
 
 const StyledDocumentListItem = styled.li`
   display: block;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin-left: var(--a-spacing-05);
+  margin-right: var(--a-spacing-05);
   border-radius: var(--a-border-radius-medium);
 `;
 
@@ -155,13 +155,13 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: var(--a-spacing-4);
     content: 'Vedlegg for «' attr(data-documentname) '»';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     border-radius: var(--a-border-radius-medium);
-    outline: 2px dashed var(--a-border-action);
+    outline: var(--a-spacing-05) dashed var(--a-border-action);
     font-size: 18px;
     font-weight: bold;
     position: absolute;
@@ -172,7 +172,7 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
     text-shadow:
       1px 1px white,
-      -1px -1px white;
-    backdrop-filter: blur(2px);
+      -1px -1px var(--a-bg-default);
+    backdrop-filter: blur(var(--a-spacing-05));
   }
 `;

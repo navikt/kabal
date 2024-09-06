@@ -74,7 +74,7 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
 const LeftGroup = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
 `;
 
@@ -83,8 +83,8 @@ const Container = styled.div<{ $isExpanded: boolean }>`
   flex-direction: ${({ $isExpanded }) => ($isExpanded ? 'row' : 'column')};
   align-items: ${({ $isExpanded }) => ($isExpanded ? 'center' : 'flex-start')};
   justify-content: space-between;
-  padding-bottom: 4px;
-  column-gap: 16px;
-  row-gap: 8px;
+  padding-bottom: var(--a-spacing-1);
+  column-gap: var(--a-spacing-4);
+  row-gap: var(--a-spacing-2);
   flex-shrink: 0;
 `;

@@ -43,5 +43,5 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
 const Container = styled.span`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

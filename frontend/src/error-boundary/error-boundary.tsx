@@ -74,36 +74,36 @@ const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) =>
 const ErrorContainer = styled.section`
   display: block;
   width: 100%;
-  background: var(--a-bg-default);
-  padding: 16px;
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-4);
   overflow-y: auto;
   box-shadow: var(--a-shadow-medium);
 `;
 
 export const StyledDescriptionTerm = styled.dt`
   font-weight: bold;
-  margin-top: 16px;
+  margin-top: var(--a-spacing-4);
 `;
 
 export const StyledPreDescriptionDetails = styled.dd`
   display: block;
-  padding: 8px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  padding: var(--a-spacing-2);
+  background-color: var(--a-surface-subtle);
+  border: 1px solid var(--a-border-divider);
   border-radius: var(--a-border-radius-medium);
   margin-left: 0;
-  margin-top: 4px;
+  margin-top: var(--a-spacing-1);
   white-space: pre-wrap;
   word-break: break-all;
 `;
 
 const StyledErrorMessage = styled.code`
   display: block;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  padding: var(--a-spacing-4);
+  background-color: var(--a-surface-subtle);
+  border: 1px solid var(--a-border-divider);
   border-radius: var(--a-border-radius-medium);
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
   white-space: pre-wrap;
   word-break: normal;
   overflow-wrap: break-word;

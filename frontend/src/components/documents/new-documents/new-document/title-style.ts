@@ -6,11 +6,10 @@ export const StyledDocumentTitle = styled.h1`
   grid-area: ${Fields.Title};
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   font-size: 18px;
   font-weight: normal;
   margin: 0;
-  color: #0067c5;
   overflow: hidden;
   white-space: nowrap;
   height: 100%;

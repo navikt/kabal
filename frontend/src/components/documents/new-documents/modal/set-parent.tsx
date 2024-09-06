@@ -163,7 +163,7 @@ const RadioContent = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 const RadioText = styled.span`
@@ -175,6 +175,6 @@ const RadioText = styled.span`
 const VedleggSection = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
   align-items: flex-start;
 `;

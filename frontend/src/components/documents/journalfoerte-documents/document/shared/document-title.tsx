@@ -3,6 +3,7 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { SetFilename } from '@app/components/documents/set-filename';
+import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
@@ -14,7 +15,6 @@ import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { EllipsisTitle, StyledDocumentLink } from '../../../styled-components/document-link';
 import { ConfirmEditButton, DocumentTitleActions } from './document-title-actions';
 
 interface Props {
@@ -144,10 +144,10 @@ const DocumentTitleInternal = memo(
 
     return (
       <StyledDocumentTitle>
-        <StyledDocumentLink
-          $isActive={isInlineOpen || isTabOpen}
+        <DocumentLink
+          active={isInlineOpen || isTabOpen}
           aria-pressed={isInlineOpen || isTabOpen}
-          $disabled={!harTilgangTilArkivvariant}
+          disabled={!harTilgangTilArkivvariant}
           onClick={onClick}
           onAuxClick={onClick}
           data-testid="document-open-button"
@@ -155,7 +155,7 @@ const DocumentTitleInternal = memo(
           target={documentId}
         >
           <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
-        </StyledDocumentLink>
+        </DocumentLink>
 
         <DocumentTitleActions
           setEditMode={setEditMode}

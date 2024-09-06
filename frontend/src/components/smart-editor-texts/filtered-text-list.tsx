@@ -38,11 +38,11 @@ export const FilteredTextList = ({ textType }: Props) => {
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const Container = styled.div`
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
   z-index: 22;
   overflow: visible;
   display: flex;
@@ -52,7 +52,7 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   position: relative;
-  background-color: #fff;
+  background-color: var(--a-bg-default);
 `;

@@ -103,12 +103,12 @@ const InternalHeading = ({ children, ...props }: IDragOver) => <Heading {...prop
 const StyledHeading = styled(InternalHeading)<IDragOver>`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: fit-content;
   white-space: nowrap;
   flex-shrink: 0;
   flex-grow: 1;
-  padding-left: 8px;
+  padding-left: var(--a-spacing-2);
   position: relative;
 
   &::after {
@@ -117,7 +117,7 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
     justify-content: center;
     content: 'Hoveddokument';
     border-radius: var(--a-border-radius-medium);
-    outline: 2px dashed var(--a-border-action);
+    outline: var(--a-spacing-05) dashed var(--a-border-action);
     font-size: 18px;
     font-weight: bold;
     position: absolute;
@@ -128,7 +128,7 @@ const StyledHeading = styled(InternalHeading)<IDragOver>`
     background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
     text-shadow:
       1px 1px white,
-      -1px -1px white;
-    backdrop-filter: blur(2px);
+      -1px -1px var(--a-bg-default);
+    backdrop-filter: blur(var(--a-spacing-05));
   }
 `;

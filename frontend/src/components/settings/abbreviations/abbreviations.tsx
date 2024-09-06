@@ -75,7 +75,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
 };
 
 const SpacedSection = styled.section`
-  margin-bottom: 24px;
+  margin-bottom: var(--a-spacing-6);
 `;
 
 const AbbreviationList = styled.ul`
@@ -84,5 +84,5 @@ const AbbreviationList = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
 `;

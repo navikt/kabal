@@ -59,7 +59,7 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
 };
 
 const StyledLoader = styled(Loader)`
-  margin: 8px;
+  margin: var(--a-spacing-2);
 `;
 
 const StyledHr = styled.hr`
@@ -77,13 +77,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   right: 100%;
   min-width: 200px;
-  padding: 8px;
+  padding: var(--a-spacing-2);
 
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--a-border-divider);
+  box-shadow: var(--a-shadow-medium);
 `;

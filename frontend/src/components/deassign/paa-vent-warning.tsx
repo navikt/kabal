@@ -34,7 +34,7 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
 
 const Buttons = styled.div`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
 `;
 

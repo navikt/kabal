@@ -5,14 +5,14 @@ import { styled } from 'styled-components';
 export const StyledHeading = styled(Heading)`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 export const StyledSmsContent = styled.blockquote`
-  border-left: 4px solid var(--a-gray-200);
-  padding-left: 4px;
+  border-left: var(--a-spacing-1) solid var(--a-gray-200);
+  padding-left: var(--a-spacing-1);
   border-radius: var(--a-border-radius-medium);
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
   margin-left: 0;
   margin-right: 0;
   margin-bottom: 0;
@@ -27,27 +27,27 @@ export const StyledEmailContent = styled(StyledSmsContent)`
   h2,
   h3 {
     margin-top: 0;
-    margin-bottom: 4px;
+    margin-bottom: var(--a-spacing-1);
   }
 
   h1 {
-    font-size: 24px;
+    font-size: var(--a-spacing-6);
   }
 
   h2 {
-    font-size: 20px;
+    font-size: var(--a-spacing-5);
   }
 
   h3,
   h4,
   h5,
   h6 {
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
   }
 
   ol,
   ul {
-    padding-left: 16px;
+    padding-left: var(--a-spacing-4);
   }
 `;
 
@@ -59,8 +59,8 @@ export const StyledTimelineItem = styled.li<TimelineItemStyleProps>`
   position: relative;
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
-  padding: 8px;
+  row-gap: var(--a-spacing-1);
+  padding: var(--a-spacing-2);
   border: 1px solid var(--a-border-default);
   border-radius: var(--a-border-radius-medium);
   background-color: ${({ $color }) => $color};
@@ -72,11 +72,11 @@ export const NextArrow = styled(ChevronRightIcon)`
   top: 50%;
   left: 100%;
   transform: translateY(-50%) translateX(-22.5%);
-  width: 16px;
+  width: var(--a-spacing-4);
 `;
 
 export const StyledLabel = styled(Label)`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

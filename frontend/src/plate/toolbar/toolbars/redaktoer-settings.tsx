@@ -57,12 +57,12 @@ export const RedkatoerSettings = () => {
 const StyledModalBody = styled(Modal.Body)`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
 `;
 
 const StyledHeading = styled(Heading)`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   align-items: center;
 `;

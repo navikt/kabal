@@ -157,14 +157,14 @@ const DocumentsHeader = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   position: relative;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 8px;
-  padding-top: 8px;
-  border-bottom: 1px solid #c6c2bf;
-  margin-bottom: 8px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  padding-bottom: var(--a-spacing-2);
+  padding-top: var(--a-spacing-2);
+  border-bottom: 1px solid var(--a-border-divider);
+  margin-bottom: var(--a-spacing-2);
 `;
 
 const ButtonContainer = styled.div`

@@ -49,5 +49,5 @@ const getJournalposttype = (type: Journalposttype | null) => {
 };
 
 const StyledTag = styled(Tag)`
-  width: 24px;
+  width: var(--a-spacing-6);
 `;

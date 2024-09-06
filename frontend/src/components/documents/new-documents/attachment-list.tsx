@@ -125,9 +125,9 @@ const ListSeparator = styled.div`
   left: 0;
   right: 0;
   margin: 0;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 4px;
+  margin-top: var(--a-spacing-3);
+  margin-bottom: var(--a-spacing-3);
+  margin-left: var(--a-spacing-1);
   border: none;
   border-bottom: 1px solid var(--a-border-subtle);
 
@@ -136,10 +136,10 @@ const ListSeparator = styled.div`
     position: absolute;
     top: 50%;
     left: 17px;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: var(--a-spacing-1);
+    padding-right: var(--a-spacing-1);
     transform: translateY(-50%);
-    background-color: white;
+    background-color: var(--a-bg-default);
     font-size: 14px;
   }
 `;

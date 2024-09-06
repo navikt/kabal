@@ -7,13 +7,13 @@ export const StyledToolbar = styled.section`
   flex-direction: row;
   flex-wrap: nowrap;
   position: sticky;
-  top: 16px;
+  top: var(--a-spacing-4);
   left: 0;
-  background-color: white;
+  background-color: var(--a-bg-default);
   z-index: 21;
-  padding: 2px;
+  padding: var(--a-spacing-05);
   box-shadow: var(--a-shadow-medium);
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
   grid-area: toolbar;
 `;
 

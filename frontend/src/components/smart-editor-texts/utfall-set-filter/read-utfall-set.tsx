@@ -58,5 +58,5 @@ const UtfallTags = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

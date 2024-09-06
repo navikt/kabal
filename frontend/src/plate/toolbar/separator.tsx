@@ -2,9 +2,9 @@ import { styled } from 'styled-components';
 
 export const ToolbarSeparator = styled.div`
   display: flex;
-  background-color: #c9c9c9;
+  background-color: var(--a-bg-subtle);
   width: 1px;
-  height: 32px;
-  margin-left: 4px;
-  margin-right: 4px;
+  height: var(--a-spacing-8);
+  margin-left: var(--a-spacing-1);
+  margin-right: var(--a-spacing-1);
 `;

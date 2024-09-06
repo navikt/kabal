@@ -36,7 +36,7 @@ const Container = styled.li<{ $accent: string }>`
   border-width: 1px;
   border-style: solid;
   border-color: ${({ $accent }) => `var(${$accent})`};
-  padding-bottom: 8px;
+  padding-bottom: var(--a-spacing-2);
   padding-right: 0;
   padding-left: 3px;
   overflow: hidden;
@@ -48,7 +48,7 @@ const Container = styled.li<{ $accent: string }>`
     left: -1px;
     top: -1px;
     bottom: -1px;
-    width: 4px;
+    width: var(--a-spacing-1);
     background-color: ${({ $accent }) => `var(${$accent})`};
     border-top-left-radius: var(--a-border-radius-medium);
     border-bottom-left-radius: var(--a-border-radius-medium);
@@ -59,7 +59,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: var(--a-spacing-2);
 `;
 
 const Time = styled.time`
@@ -67,28 +67,28 @@ const Time = styled.time`
   font-weight: normal;
   font-style: italic;
   line-height: 1;
-  padding-top: 2px;
+  padding-top: var(--a-spacing-05);
   padding-right: 3px;
 `;
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
+  gap: var(--a-spacing-1);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
 `;
 
 const Category = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
-  padding-right: 8px;
+  gap: var(--a-spacing-1);
+  padding-right: var(--a-spacing-2);
   padding-top: 0;
   padding-left: 0;
   padding-bottom: 1px;
   font-weight: normal;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   border-bottom-right-radius: var(--a-border-radius-medium);
 `;

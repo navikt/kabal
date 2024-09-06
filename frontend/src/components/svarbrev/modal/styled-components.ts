@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 export const Details = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
 `;
 
 const Flex = styled.div`
@@ -13,19 +13,19 @@ const Flex = styled.div`
 `;
 
 export const Row = styled(Flex)`
-  column-gap: 16px;
+  column-gap: var(--a-spacing-4);
 `;
 
 export const TimeInputContainer = styled(Flex)`
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;
 
 export const TimeContainer = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
   font-style: italic;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
 `;
 
 export const StyledTime = styled.time`
@@ -57,6 +57,6 @@ export const StyledPDF = styled.object`
 export const ModalBody = styled(Modal.Body)`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: min(90vw, 1100px);
 `;

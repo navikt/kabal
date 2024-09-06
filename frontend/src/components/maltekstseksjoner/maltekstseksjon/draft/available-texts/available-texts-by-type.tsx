@@ -165,8 +165,8 @@ const isRichtext = (text: IText): text is IRichText =>
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
+  gap: var(--a-spacing-2);
+  margin-top: var(--a-spacing-4);
   height: 75vh;
   overflow-y: hidden;
 `;
@@ -185,5 +185,5 @@ const StyledTableHeader = styled(Table.Header)`
 
 const Row = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

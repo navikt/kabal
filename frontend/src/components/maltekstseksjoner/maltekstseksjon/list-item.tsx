@@ -140,8 +140,8 @@ const Container = styled.div`
 const ErrorContainer = styled(Container)`
   display: flex;
   align-items: center;
-  margin-left: 8px;
-  gap: 8px;
+  margin-left: var(--a-spacing-2);
+  gap: var(--a-spacing-2);
 `;
 
 const HelpTextContainer = styled.div`
@@ -152,7 +152,7 @@ const HelpTextContainer = styled.div`
 const SkeletonContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: 100%;
 `;
 

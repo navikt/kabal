@@ -84,16 +84,16 @@ const Header = styled.header`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  column-gap: 16px;
-  padding-bottom: 16px;
+  column-gap: var(--a-spacing-4);
+  padding-bottom: var(--a-spacing-4);
 `;
 
 const Content = styled.div`
   display: flex;
-  column-gap: 16px;
-  padding-bottom: 16px;
-  padding-top: 8px;
-  padding-right: 8px;
+  column-gap: var(--a-spacing-4);
+  padding-bottom: var(--a-spacing-4);
+  padding-top: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   overflow-y: hidden;
   flex-grow: 1;
 `;

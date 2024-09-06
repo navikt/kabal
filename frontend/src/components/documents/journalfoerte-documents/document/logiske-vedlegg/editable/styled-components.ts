@@ -3,7 +3,7 @@ import { ReadOnlyTag } from '@app/components/documents/journalfoerte-documents/d
 
 export const EditTag = styled(ReadOnlyTag)`
   max-width: 200px;
-  background-color: white;
+  background-color: var(--a-bg-default);
 
   &:empty::before {
     content: attr(aria-placeholder);

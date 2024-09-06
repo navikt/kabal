@@ -134,13 +134,13 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  padding: 16px;
+  row-gap: var(--a-spacing-2);
+  padding: var(--a-spacing-4);
 `;
 
 const LineContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

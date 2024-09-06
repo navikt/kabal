@@ -14,16 +14,16 @@ export const StatusBar = ({ children }: Props) => (
 
 const Container = styled.div`
   width: 100%;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-top: var(--a-spacing-05);
+  padding-bottom: var(--a-spacing-05);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   border-bottom-left-radius: var(--a-border-radius-medium);
   border-bottom-right-radius: var(--a-border-radius-medium);
-  background-color: var(--a-gray-200);
+  background-color: var(--a-bg-subtle);
   border-top: 1px solid var(--a-border-default);
 `;

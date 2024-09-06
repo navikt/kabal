@@ -121,21 +121,21 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
 const StyledRecipientInnerContent = styled.div`
   display: flex;
   align-items: center;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  gap: 4px;
+  padding-top: var(--a-spacing-1);
+  padding-bottom: var(--a-spacing-1);
+  gap: var(--a-spacing-1);
 `;
 
 const StyledRecipientList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  margin-top: 4px;
+  margin-top: var(--a-spacing-1);
 `;
 
 const StyledName = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;

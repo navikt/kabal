@@ -225,6 +225,6 @@ const StyledSvg = styled.svg`
   box-shadow: var(--a-shadow-medium);
   border: 1px solid var(--a-border-default);
   border-radius: var(--a-border-radius-medium);
-  margin-bottom: 8px;
+  margin-bottom: var(--a-spacing-2);
   width: 100%;
 `;

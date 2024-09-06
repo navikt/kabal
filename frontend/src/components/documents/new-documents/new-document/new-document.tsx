@@ -117,7 +117,7 @@ interface StlyedNewDocumentProps {
 const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
   ${documentCSS}
   display: grid;
-  grid-column-gap: 8px;
+  grid-column-gap: var(--a-spacing-2);
   align-items: center;
   padding-left: 6px;
   padding-right: 0;

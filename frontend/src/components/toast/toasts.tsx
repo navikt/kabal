@@ -33,17 +33,17 @@ export const Toasts = () => {
 
 const Container = styled.div`
   position: fixed;
-  bottom: 8px;
+  bottom: var(--a-spacing-2);
   right: 0;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  padding-right: 8px;
+  row-gap: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   margin-right: 0;
   margin-bottom: 0;
-  margin-top: 8px;
-  max-height: calc(100% - 16px);
+  margin-top: var(--a-spacing-2);
+  max-height: calc(100% - var(--a-spacing-4));
   overflow-y: auto;
   overflow-x: visible;
 `;

@@ -6,23 +6,24 @@ export const SettingsSection = styled.section<{ $area: string }>`
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
   width: fit-content;
-  padding: 24px;
+  padding: var(--a-spacing-6);
   width: 100%;
   height: fit-content;
+  background-color: var(--a-bg-subtle);
 `;
 
 export const SectionHeader = styled.h1`
-  font-size: 24px;
+  font-size: var(--a-spacing-6);
   margin: 0;
-  margin-bottom: 24px;
+  margin-bottom: var(--a-spacing-6);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 export const StyledFilters = styled.div`
   display: flex;
-  gap: 20px;
+  gap: var(--a-spacing-5);
   width: 100%;
   flex-wrap: wrap;
 `;
@@ -42,7 +43,7 @@ export const StyledFieldset = styled(Fieldset)`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   position: absolute;
   top: 0;
   right: 0;

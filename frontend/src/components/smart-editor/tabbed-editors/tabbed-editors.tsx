@@ -2,6 +2,8 @@ import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
+import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
 import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -12,7 +14,6 @@ import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
 import { ISmartDocument } from '@app/types/documents/documents';
-import { NewDocument } from '../new-document/new-document';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -48,33 +49,37 @@ const Tabbed = ({ documents }: TabbedProps) => {
 
   if (documents.length === 0 && !hasDocumentsAccess) {
     return (
-      <StyledNoDocuments>
-        <Heading level="1" size="medium" spacing>
-          Ingen redigerbare dokumenter.
-        </Heading>
-        <Alert variant="info" size="small">
-          Ingen redigerbare dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å opprette
-          dem.
-        </Alert>
-      </StyledNoDocuments>
+      <PanelContainer>
+        <StyledNoDocuments>
+          <Heading level="1" size="medium" spacing>
+            Ingen redigerbare dokumenter.
+          </Heading>
+          <Alert variant="info" size="small">
+            Ingen redigerbare dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å
+            opprette dem.
+          </Alert>
+        </StyledNoDocuments>
+      </PanelContainer>
     );
   }
 
   return (
-    <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
-      <StyledTabsList>
-        {documents.map(({ id, tittel }) => (
-          <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
-        ))}
-        <TabNew />
-      </StyledTabsList>
-      <StyledTabPanels>
-        {documents.map((d) => (
-          <TabPanel key={d.id} smartDocument={d} />
-        ))}
-        <TabPanelNew onCreate={setEditorId} />
-      </StyledTabPanels>
-    </StyledTabs>
+    <PanelContainer>
+      <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
+        <StyledTabsList>
+          {documents.map(({ id, tittel }) => (
+            <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
+          ))}
+          <TabNew />
+        </StyledTabsList>
+        <StyledTabPanels>
+          {documents.map((d) => (
+            <TabPanel key={d.id} smartDocument={d} />
+          ))}
+          <TabPanelNew onCreate={setEditorId} />
+        </StyledTabPanels>
+      </StyledTabs>
+    </PanelContainer>
   );
 };
 
@@ -119,7 +124,6 @@ const StyledTabs = styled(Tabs)`
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  background: white;
 `;
 
 const StyledTabsList = styled(Tabs.List)`
@@ -128,12 +132,12 @@ const StyledTabsList = styled(Tabs.List)`
 `;
 
 const StyledTabPanels = styled.div`
-  background-color: var(--a-surface-subtle);
   overflow: hidden;
   flex-grow: 1;
+  background-color: var(--a-bg-subtle);
 `;
 
 const StyledNoDocuments = styled.div`
-  background: white;
-  padding: 16px;
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-4);
 `;

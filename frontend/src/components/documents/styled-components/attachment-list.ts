@@ -2,8 +2,8 @@ import { css, styled } from 'styled-components';
 
 const StyledDocumentListItem = styled.li`
   display: block;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin-left: var(--a-spacing-05);
+  margin-right: var(--a-spacing-05);
   border-radius: var(--a-border-radius-medium);
 `;
 
@@ -16,7 +16,7 @@ export const StyledAttachmentList = styled.ul`
   position: relative;
   padding: 0;
   margin: 0;
-  margin-left: 12px;
+  margin-left: var(--a-spacing-3);
   list-style-type: none;
 `;
 
@@ -37,7 +37,7 @@ export const JournalfoerteDocumentsAttachments = styled(StyledAttachmentList)<{ 
   &::before {
     ${treeRootStructureCss}
     height: ${({ $treeLineHeight }) => $treeLineHeight}px;
-    left: 4px;
+    left: var(--a-spacing-1);
   }
 `;
 
@@ -56,17 +56,17 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
   position: absolute;
   left: 0;
   right: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
   margin-left: 0;
   margin-right: 0;
 
   &::before {
     content: '';
     display: block;
-    width: 12px;
+    width: var(--a-spacing-3);
     position: absolute;
     left: 3px;
-    top: 16px;
+    top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
 `;
@@ -77,7 +77,7 @@ export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(St
   position: absolute;
   left: 0;
   right: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
   margin-left: 0;
   margin-right: 0;
 
@@ -87,7 +87,7 @@ export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(St
     width: ${BRANCH_WIDTH}px;
     position: absolute;
     left: 5px;
-    top: 16px;
+    top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
 `;
@@ -132,7 +132,7 @@ export const LogiskeVedleggListItemStyle = styled.li<{ $connected: boolean; $pad
     content: '';
     position: absolute;
     left: 1px;
-    top: 12px;
+    top: var(--a-spacing-3);
     height: 1px;
     width: ${BRANCH_WIDTH}px;
     background-color: var(--a-border-subtle);

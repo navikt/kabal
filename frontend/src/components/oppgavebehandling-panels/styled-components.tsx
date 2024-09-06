@@ -6,7 +6,7 @@ export const PanelContainer = styled.section`
   min-width: fit-content;
   height: 100%;
   max-height: 100%;
-  background: white;
+  background-color: var(--a-bg-default);
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
   overflow-x: hidden;
@@ -16,11 +16,11 @@ export const PanelContainer = styled.section`
 export const PageContainer = styled.main`
   display: flex;
   flex-direction: row;
-  column-gap: 12px;
-  padding-bottom: 12px;
-  padding-top: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
+  column-gap: var(--a-spacing-3);
+  padding-bottom: var(--a-spacing-3);
+  padding-top: var(--a-spacing-2);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   width: 100%;
   flex-grow: 1;
   overflow-x: scroll;

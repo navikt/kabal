@@ -25,9 +25,9 @@ export const BehandlingSection = ({ label, children, testid }: Props) => {
 };
 
 const StyledBehandlingSection = styled.section`
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--a-spacing-1);
   white-space: break-spaces;
 `;

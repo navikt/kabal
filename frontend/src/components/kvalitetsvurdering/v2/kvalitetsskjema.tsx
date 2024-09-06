@@ -47,5 +47,5 @@ export const KvalitetsskjemaV2 = () => {
 const StyledKvalitetsskjema = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 32px;
+  row-gap: var(--a-spacing-8);
 `;

@@ -2,7 +2,7 @@ import { Checkbox, HelpText } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const FormSection = styled.section`
-  margin-bottom: 32px;
+  margin-bottom: var(--a-spacing-8);
 `;
 
 export const RadioButtonsRow = styled.div`
@@ -12,14 +12,14 @@ export const RadioButtonsRow = styled.div`
 `;
 
 export const StyledCommentField = styled.div`
-  margin-left: 32px;
-  width: calc(100% - 32px);
+  margin-left: var(--a-spacing-8);
+  width: calc(100% - var(--a-spacing-8));
 `;
 
 export const StyledCheckboxContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: 100%;
   position: relative;
 `;
@@ -38,5 +38,5 @@ export const StyledHelpText = styled(HelpText)`
 export const StyledHeaderHelpTextWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

@@ -75,16 +75,14 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 
 RedaktoerRichText.displayName = 'RedaktoerRichText';
 
-const PADDING = '16px';
-
 const Content = styled.div`
-  padding: ${PADDING};
-  background: var(--a-surface-subtle);
+  padding: var(--a-spacing-4);
+  background-color: var(--a-surface-subtle);
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;
   position: relative;
   display: flex;
   flex-direction: column;
-  min-width: calc(210mm + ${PADDING} + ${PADDING});
+  min-width: calc(210mm + var(--a-spacing-4) + var(--a-spacing-4));
 `;

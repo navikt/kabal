@@ -15,5 +15,5 @@ const AccessRightsArticle = styled.article`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
 `;

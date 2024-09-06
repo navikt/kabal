@@ -33,5 +33,5 @@ const StyledHeading = styled(Heading)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

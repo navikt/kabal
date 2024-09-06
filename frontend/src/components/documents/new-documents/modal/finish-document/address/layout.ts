@@ -10,9 +10,9 @@ export const Container = styled.div<{ $state: AddressState }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 32px;
-  gap: 8px;
-  padding: 8px;
+  min-height: var(--a-spacing-8);
+  gap: var(--a-spacing-2);
+  padding: var(--a-spacing-2);
   position: relative;
   background-color: ${({ $state }) => getBackgroundColor($state)};
 `;
@@ -33,11 +33,11 @@ export const StyledRecipient = styled.div<{ $accent: string }>`
   flex-direction: column;
   border-radius: var(--a-border-radius-medium);
   padding: 0;
-  margin-bottom: 8px;
+  margin-bottom: var(--a-spacing-2);
   border-top-width: 1px;
   border-bottom-width: 1px;
   border-right-width: 1px;
-  border-left-width: 4px;
+  border-left-width: var(--a-spacing-1);
   border-style: solid;
   border-color: var(--a-border-default);
   border-left-color: ${({ $accent }) => $accent};
@@ -51,13 +51,13 @@ export const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 export const FieldLabel = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
-  min-height: 24px;
+  column-gap: var(--a-spacing-1);
+  min-height: var(--a-spacing-6);
 `;

@@ -40,6 +40,6 @@ const DetailLabel = styled.span`
 `;
 
 const StyledCode = styled.code`
-  font-size: 12px;
+  font-size: var(--a-spacing-3);
   word-break: break-word;
 `;

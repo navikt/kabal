@@ -190,7 +190,7 @@ const DropdownList = styled.ul`
   width: 100%;
   left: 0;
   padding: 0;
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
   z-index: 1;

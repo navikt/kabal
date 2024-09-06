@@ -5,9 +5,9 @@ import { ToastType } from '@app/components/toast/types';
 
 export const Container = styled.div`
   display: grid;
-  grid-template-columns: 24px 1fr;
+  grid-template-columns: var(--a-spacing-6) 1fr;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   white-space: pre-wrap;
   hyphens: auto;
 `;
@@ -15,7 +15,7 @@ export const Container = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 export const StyledCloseButton = styled(Button)`
@@ -60,7 +60,7 @@ export const TimedToastStyle = styled(BaseToastStyle)<TimedToastProps>`
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: var(--a-spacing-1);
     background-color: ${({ $type }) => getColor($type)};
     transform-origin: left;
 

@@ -63,6 +63,6 @@ export const Row = ({ textId, draftMaltekstseksjonIdList, publishedMaltekstseksj
 const List = styled.ul`
   list-style: none;
   padding: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
   margin: 0;
 `;

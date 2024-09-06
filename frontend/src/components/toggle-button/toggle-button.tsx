@@ -14,7 +14,7 @@ export const ToggleButton = styled.button<Props>`
   border-radius: 0.25rem;
   transition: box-shadow 0.1s ease;
   cursor: pointer;
-  background: none;
+  background-color: none;
   user-select: none;
   position: relative;
   font-size: 14px;
@@ -32,8 +32,8 @@ export const ToggleButton = styled.button<Props>`
 
   &:disabled {
     cursor: not-allowed;
-    border-color: #6a6a6a;
-    background: #f1f1f1;
+    border-color: var(--a-border-subtle);
+    background-color: var(--a-bg-default);
     opacity: 0.7;
   }
 `;

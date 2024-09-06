@@ -88,7 +88,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px;
+  padding: var(--a-spacing-4);
   padding-bottom: 0;
 `;
 
@@ -152,7 +152,7 @@ const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
 const PublishedContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: var(--a-spacing-2);
+  padding: var(--a-spacing-4);
   height: 100%;
 `;

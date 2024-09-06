@@ -132,10 +132,10 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
-  margin-bottom: 16px;
-  margin-right: 16px;
+  margin-bottom: var(--a-spacing-4);
+  margin-right: var(--a-spacing-4);
   min-width: 300px;
   position: sticky;
   top: 0;
@@ -164,7 +164,7 @@ const StyledHistory = styled.ul`
   margin: 0;
   padding: 0;
   white-space: nowrap;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
   background-color: var(--a-surface-default);
   padding: var(--a-spacing-2);
   box-shadow: var(--a-shadow-medium);

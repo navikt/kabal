@@ -45,11 +45,11 @@ export const DocumentTitleActions = ({ setEditMode, harTilgangTilArkivvariant, t
 };
 
 const StyledEditIcon = styled(PencilIcon)`
-  font-size: 20px;
+  font-size: var(--a-spacing-5);
 `;
 
 const StyledSuccessIcon = styled(CheckmarkIcon)`
-  font-size: 20px;
+  font-size: var(--a-spacing-5);
 `;
 
 const Container = styled.div`

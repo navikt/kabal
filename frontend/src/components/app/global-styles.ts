@@ -9,7 +9,7 @@ const styles = css`
   html {
     box-sizing: border-box;
     font-family: 'Source Sans 3', Arial, sans-serif;
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
   }
 
   *,
@@ -26,7 +26,7 @@ const styles = css`
     margin: 0;
     padding: 0;
     overflow: hidden;
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
   }
 
   #app {

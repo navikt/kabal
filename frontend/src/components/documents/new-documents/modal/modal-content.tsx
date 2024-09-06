@@ -152,7 +152,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const BottomAlignedRow = styled(Row)`
@@ -163,14 +163,14 @@ const ModalBody = styled(Modal.Body)<{ $isMainDocument: boolean }>`
   display: flex;
   width: 100%;
   height: ${({ $isMainDocument }) => ($isMainDocument ? '80vh' : 'auto')};
-  gap: 16px;
+  gap: var(--a-spacing-4);
   overflow: hidden;
 `;
 
 const Left = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: fit-content;
   flex-shrink: 0;
   overflow-y: auto;

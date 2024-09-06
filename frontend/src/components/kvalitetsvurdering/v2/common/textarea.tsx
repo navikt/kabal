@@ -97,10 +97,10 @@ const StatusContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 4px;
+  margin-top: var(--a-spacing-1);
 `;
 
 const StyledBodyLong = styled(BodyLong)`
-  border-left: 2px solid var(--a-border-subtle);
-  padding-left: 8px;
+  border-left: var(--a-spacing-05) solid var(--a-border-subtle);
+  padding-left: var(--a-spacing-2);
 `;

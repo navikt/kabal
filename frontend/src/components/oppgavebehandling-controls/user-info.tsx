@@ -21,7 +21,7 @@ export const UserInfo = ({ sakenGjelder, id }: IOppgavebehandlingBase) => (
 const User = styled.section`
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   border-right: 1px solid #c9c9c9;
-  padding-right: 16px;
+  padding-right: var(--a-spacing-4);
 `;
