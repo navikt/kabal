@@ -18,6 +18,7 @@ import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
 import { ConnectionContext } from '@app/plugins/crdt/context';
 import { IncomingMessage } from 'node:http';
 import { Duplex } from 'node:stream';
+import { DocumentAccess, getDocumentAccess } from '@app/plugins/crdt/api/access';
 
 const UPGRADE_MAP: Map<IncomingMessage, { socket: Duplex; head: Buffer }> = new Map();
 
@@ -129,11 +130,7 @@ export const crdtPlugin = fastifyPlugin(
         const { behandlingId, dokumentId } = req.params;
         logReq('Websocket connection init', req, { behandlingId, dokumentId });
 
-        if (behandlingId.length === 0 || dokumentId.length === 0) {
-          logReq('Invalid behandlingId or dokumentId', req, { behandlingId, dokumentId }, 'warn');
-
-          return reply.code(404).send('Not Found');
-        }
+        let readOnly = false;
 
         if (isDeployed) {
           const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
@@ -144,6 +141,21 @@ export const crdtPlugin = fastifyPlugin(
 
             return reply.code(401).send('Unauthorized');
           }
+
+          const access = await getDocumentAccess(behandlingId, dokumentId, req);
+
+          if (access === null) {
+            return reply.code(404).send('Not found');
+          }
+
+          if (access === DocumentAccess.NONE) {
+            const msg = 'Tried to establish collaboration connection without access';
+            logReq(msg, req, { behandlingId, dokumentId }, 'error');
+
+            return reply.code(403).send('Forbidden');
+          }
+
+          readOnly = access === DocumentAccess.READ;
         }
 
         const { socket, head } = upgradeData;
@@ -172,6 +184,7 @@ export const crdtPlugin = fastifyPlugin(
             behandlingId,
             dokumentId,
             req,
+            readOnly,
           } satisfies ConnectionContext);
         } catch (e) {
           reply.code(500).send(e instanceof Error ? e.message : 'Internal Server Error');

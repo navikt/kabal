@@ -22,10 +22,14 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
 };
 
 export const collaborationServer = Server.configure({
-  onConnect: async ({ context }) => {
+  onConnect: async ({ context, connection }) => {
     if (isConnectionContext(context)) {
+      const { req, readOnly } = context;
+
+      connection.readOnly = readOnly;
+
       // context.req.navIdent is not defined when server is run without Wonderwall (ie. locally).
-      logContext(`Collaboration connection established for ${context.req.navIdent}!`, context);
+      logContext(`Collaboration connection established for ${req.navIdent}!`, context);
     } else {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw new Error('Invalid context');
@@ -42,13 +46,15 @@ export const collaborationServer = Server.configure({
     }
   },
 
-  onLoadDocument: async ({ context, document }) => {
+  onLoadDocument: async ({ context, document, connection }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to load document without context' });
       throw new Error('Invalid context');
     }
 
-    const { behandlingId, dokumentId, req } = context;
+    const { behandlingId, dokumentId, req, readOnly } = context;
+
+    connection.readOnly = readOnly;
 
     if (!document.isEmpty('content')) {
       logContext('Document already loaded', context);
