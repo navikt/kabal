@@ -58,10 +58,10 @@ const StyledDropdown = styled.div`
   flex-direction: column;
   padding: 0;
   margin: 0;
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--a-border-divider);
+  box-shadow: 0 1px var(--a-spacing-1) 0 rgba(0, 0, 0, 0.3);
   z-index: 1;
   max-width: 100%;
   max-height: 100%;

@@ -54,11 +54,11 @@ const PoststedContainer = styled.div`
 const StyledLabel = styled(Label)`
   display: flex;
   align-items: center;
-  min-height: 24px;
+  min-height: var(--a-spacing-6);
 `;
 
 const Poststed = styled(BodyShort)`
   display: flex;
   align-items: center;
-  height: 32px;
+  height: var(--a-spacing-8);
 `;

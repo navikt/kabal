@@ -171,7 +171,7 @@ const StyledBox = styled(Box)`
   position: absolute;
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
   z-index: 1;
   bottom: 100%;
   left: 0;
@@ -180,7 +180,7 @@ const StyledBox = styled(Box)`
 
 const Row = styled.div`
   display: flex;
-  column-gap: 16px;
+  column-gap: var(--a-spacing-4);
   align-items: center;
   flex-direction: row;
 `;
@@ -188,5 +188,5 @@ const Row = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

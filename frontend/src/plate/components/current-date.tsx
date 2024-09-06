@@ -74,7 +74,7 @@ const CurrentDateContainer = styled.time<{ $isFocused: boolean }>`
   display: block;
   text-align: right;
   width: 100%;
-  border-radius: 2px;
+  border-radius: var(--a-spacing-05);
   transition:
     background-color 0.2s ease-in-out,
     outline-color 0.2s ease-in-out;

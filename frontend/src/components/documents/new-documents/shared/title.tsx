@@ -1,5 +1,6 @@
 import { useCallback, useContext, useMemo } from 'react';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
+import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
@@ -12,7 +13,6 @@ import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { EllipsisTitle, StyledDocumentLink } from '../../styled-components/document-link';
 
 interface BaseProps {
   title: string;
@@ -143,9 +143,9 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
 
   return (
     <StyledDocumentTitle>
-      <StyledDocumentLink
-        $disabled={disabled}
-        $isActive={isInlineOpen || isTabOpen}
+      <DocumentLink
+        active={isInlineOpen || isTabOpen}
+        disabled={disabled}
         aria-pressed={isInlineOpen || isTabOpen}
         onClick={onClick}
         onAuxClick={onClick}
@@ -155,7 +155,7 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
       >
         {icon}
         <EllipsisTitle title={title}>{title}</EllipsisTitle>
-      </StyledDocumentLink>
+      </DocumentLink>
       {children}
     </StyledDocumentTitle>
   );

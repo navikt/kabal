@@ -136,11 +136,11 @@ const OpenButton = forwardRef<HTMLAnchorElement, OpenButtonProps>((props, ref) =
 OpenButton.displayName = 'OpenButton';
 
 const StyledOpenButton = styled(OpenButton)`
-  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px #262626' : 'none')};
+  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px var(--a-surface-neutral-active)' : 'none')};
   margin: var(--a-spacing-1) var(--a-spacing-4) var(--a-spacing-3);
 
   &:visited {
     color: var(--a-text-visited);
-    box-shadow: inset 0 0 0 2px var(--a-text-visited);
+    box-shadow: inset 0 0 0 var(--a-spacing-05) var(--a-text-visited);
   }
 `;

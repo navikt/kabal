@@ -14,7 +14,9 @@ export const ListHeader = () => {
     <NewDocumentsStyledListHeader>
       <DropHeading>
         Dokumenter under arbeid
-        {typeof errorMessage === 'string' ? <ExclamationmarkTriangleIcon title={errorMessage} color="#ba3a26" /> : null}
+        {typeof errorMessage === 'string' ? (
+          <ExclamationmarkTriangleIcon title={errorMessage} color="var(--a-text-danger)" />
+        ) : null}
       </DropHeading>
       {isExpanded ? <DeleteDropArea /> : null}
     </NewDocumentsStyledListHeader>
@@ -25,6 +27,6 @@ const NewDocumentsStyledListHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   ${listHeaderCSS}
 `;

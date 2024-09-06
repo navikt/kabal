@@ -48,7 +48,7 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
 
 const ErrorContainer = styled.div`
   display: flex;
-  margin: 16px;
+  margin: var(--a-spacing-4);
 `;
 
 const SkeletonTables = () => (

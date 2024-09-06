@@ -93,24 +93,23 @@ const Placeholder = styled.div`
   width: fit-content;
   min-width: 1330px;
   grid-area: content;
-  margin-bottom: 4px;
-  margin-top: 4px;
-  margin-right: 4px;
+  margin-bottom: var(--a-spacing-1);
+  margin-top: var(--a-spacing-1);
 `;
 
 const StyledSearch = styled(Search)`
   grid-area: search;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: var(--a-spacing-1);
+  padding-right: var(--a-spacing-1);
 `;
 
 const StyledList = styled(List)`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  row-gap: 4px;
-  margin-top: 4px;
-  padding: 4px;
+  row-gap: var(--a-spacing-1);
+  margin-top: var(--a-spacing-1);
+  padding: var(--a-spacing-1);
   grid-area: list;
 `;
 
@@ -119,7 +118,7 @@ const Container = styled.article`
   grid-template-columns: 700px min-content;
   grid-template-rows: min-content min-content min-content 1fr;
   grid-template-areas: 'header content' 'filters content' 'search content' 'list content';
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   height: 100%;
   overflow-y: hidden;
 `;
@@ -129,7 +128,7 @@ const Header = styled.header`
   flex-direction: row;
   justify-content: left;
   align-items: center;
-  column-gap: 16px;
-  margin-bottom: 8px;
+  column-gap: var(--a-spacing-4);
+  margin-bottom: var(--a-spacing-2);
   grid-area: header;
 `;

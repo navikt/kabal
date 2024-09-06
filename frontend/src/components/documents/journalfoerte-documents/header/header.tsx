@@ -110,7 +110,7 @@ interface StyledListHeaderProps {
 
 const StyledListHeader = styled.div<StyledListHeaderProps>`
   ${listHeaderCSS}
-  padding-top: 4px;
+  padding-top: var(--a-spacing-1);
   ${documentsGridCSS}
   ${getGridCss}
   white-space: nowrap;

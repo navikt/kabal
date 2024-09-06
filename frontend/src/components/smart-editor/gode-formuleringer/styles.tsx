@@ -2,12 +2,12 @@ import { Skeleton } from '@navikt/ds-react';
 import { css, styled } from 'styled-components';
 
 export const StyledGodeFormuleringer = styled.section`
-  padding-top: 16px;
+  padding-top: var(--a-spacing-4);
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: 350px;
   height: 100%;
 `;
@@ -16,9 +16,9 @@ export const Top = styled.div`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  row-gap: 8px;
-  padding-right: 16px;
-  padding-left: 4px;
+  row-gap: var(--a-spacing-2);
+  padding-right: var(--a-spacing-4);
+  padding-left: var(--a-spacing-1);
 `;
 
 export const Header = styled.header`
@@ -32,18 +32,18 @@ export const ListContainer = styled.div`
   flex-direction: column;
   overflow-y: auto;
   flex-grow: 1;
-  row-gap: 16px;
-  padding-right: 16px;
-  padding-left: 4px;
+  row-gap: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  padding-left: var(--a-spacing-1);
 `;
 
 export const GodeFormuleringerTitle = styled.h1`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   margin: 0;
-  font-size: 20px;
+  font-size: var(--a-spacing-5);
 `;
 
 export const OUTLINE_WIDTH = '3px';
@@ -57,7 +57,7 @@ export const godFormuleringBaseStyle = css`
   }
 
   &:last-child {
-    margin-bottom: 32px;
+    margin-bottom: var(--a-spacing-8);
   }
 `;
 

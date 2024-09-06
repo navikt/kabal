@@ -115,7 +115,7 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
 
 const Buttons = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const StyledAlert = styled(Alert)<{ $side: Side }>`
@@ -129,7 +129,7 @@ const StyledAlert = styled(Alert)<{ $side: Side }>`
 const DeleteMaltekstseksjonContainer = styled.div`
   position: relative;
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 
   > ${MaltekstseksjonToolbarStyle} {
     opacity: 1;

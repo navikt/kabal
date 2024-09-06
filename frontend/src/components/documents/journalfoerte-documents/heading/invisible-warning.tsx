@@ -85,5 +85,5 @@ const StyledAlert = styled(Alert)`
 const AlertContent = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

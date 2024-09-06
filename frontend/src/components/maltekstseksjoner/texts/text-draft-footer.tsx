@@ -66,8 +66,8 @@ const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
-  margin-top: 8px;
+  column-gap: var(--a-spacing-2);
+  margin-top: var(--a-spacing-2);
 `;
 
 const Right = styled.div`

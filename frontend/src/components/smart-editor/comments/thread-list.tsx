@@ -33,23 +33,23 @@ const StyledThreadSections = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  row-gap: 16px;
-  padding-left: 16px;
+  row-gap: var(--a-spacing-4);
+  padding-left: var(--a-spacing-4);
   flex-shrink: 0;
   width: 100%;
   height: 100%;
-  padding-bottom: 32px;
+  padding-bottom: var(--a-spacing-8);
   overflow-y: auto;
   overflow-x: hidden;
   scroll-snap-type: y proximity;
-  scroll-padding-bottom: 24px;
-  scroll-padding-top: 48px;
+  scroll-padding-bottom: var(--a-spacing-6);
+  scroll-padding-top: var(--a-spacing-12);
 `;
 
 const StyledThreadListContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   height: 100%;
 `;

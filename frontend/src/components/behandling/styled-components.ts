@@ -6,18 +6,16 @@ export const StyledContainer = styled.div`
   white-space: normal;
   width: 750px;
   grid-column-gap: 1px;
-  background-color: #c9c9c9;
   flex-grow: 1;
 `;
 
 export const StyledBehandlingSection = styled.section`
-  background-color: white;
-  padding: 16px;
+  padding: var(--a-spacing-4);
   min-height: 100%;
 `;
 
 export const DateContainer = styled.section`
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
 `;

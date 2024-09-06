@@ -86,5 +86,5 @@ const Header = styled.header`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

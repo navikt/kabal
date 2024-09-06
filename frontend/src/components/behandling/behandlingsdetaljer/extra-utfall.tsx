@@ -145,7 +145,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Container = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
   display: flex;
   flex-direction: column;
   gap: var(--a-spacing-2);
@@ -167,7 +167,7 @@ const StyledPopup = styled.div`
 const HelpTextWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const HelpTextContent = styled.div`
@@ -178,6 +178,7 @@ const HelpTextContent = styled.div`
 
 const TagsContainer = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
   flex-wrap: wrap;
+  margin-top: var(--a-spacing-2);
 `;

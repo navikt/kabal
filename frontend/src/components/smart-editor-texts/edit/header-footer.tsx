@@ -33,7 +33,7 @@ const getLabel = (type: PlainTextTypes.HEADER | PlainTextTypes.FOOTER) =>
   type === PlainTextTypes.HEADER ? 'Topptekst' : 'Bunntekst';
 
 const StyledTextarea = styled(Textarea)`
-  margin: 16px;
+  margin: var(--a-spacing-4);
 `;
 
 const Container = styled.div`

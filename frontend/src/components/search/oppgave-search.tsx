@@ -126,8 +126,8 @@ export const OppgaveSearch = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: var(--a-spacing-2);
+  padding: var(--a-spacing-4);
 `;
 
 const StyledSearch = styled(Search)`
@@ -136,5 +136,5 @@ const StyledSearch = styled(Search)`
 
 const Line = styled.div`
   display: flex;
-  gap: 2px;
+  gap: var(--a-spacing-05);
 `;

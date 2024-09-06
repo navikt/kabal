@@ -4,7 +4,7 @@ export const SLIDE_DURATION = 150;
 
 export const SLIDE_OUT_KEYFRAMES: Keyframe[] = [
   { transform: 'translateX(0%)' },
-  { transform: 'translateX(calc(100% + 8px))' },
+  { transform: 'translateX(calc(100% + var(--a-spacing-2)))' },
 ];
 
 export const SLIDE_OUT_OPTIONS: KeyframeAnimationOptions = {

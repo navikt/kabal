@@ -17,7 +17,7 @@ export const ContainerWithHelpText = ({ children, helpText, placement = 'right' 
 const Container = styled.span`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   width: 100%;
   justify-content: space-between;

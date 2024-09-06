@@ -8,8 +8,8 @@ export const Container = styled.section`
   grid-template-areas:
     'header header'
     'sidebar text-list';
-  row-gap: 8px;
-  column-gap: 8px;
+  row-gap: var(--a-spacing-2);
+  column-gap: var(--a-spacing-2);
   overflow-y: hidden;
   height: 100%;
   border-radius: var(--a-border-radius-medium);
@@ -21,7 +21,7 @@ export const Container = styled.section`
 export const Header = styled.header`
   grid-area: header;
   display: grid;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   grid-template-areas:
     'title actions'
     'metadata actions'
@@ -29,7 +29,7 @@ export const Header = styled.header`
     'tags tags';
   grid-template-columns: 1fr fit-content;
   white-space: nowrap;
-  padding-right: 8px;
+  padding-right: var(--a-spacing-2);
 `;
 
 export const MetadataContainer = styled.div`
@@ -37,7 +37,7 @@ export const MetadataContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 export const StyledHeading = styled(Heading)`
@@ -52,8 +52,8 @@ export const SidebarContainer = styled.div`
   grid-area: sidebar;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  padding-top: 4px;
+  row-gap: var(--a-spacing-2);
+  padding-top: var(--a-spacing-1);
 `;
 
 export const List = styled.ul`
@@ -69,12 +69,12 @@ export const DateTimeContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 export const ActionsContainer = styled.div`
   grid-area: actions;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

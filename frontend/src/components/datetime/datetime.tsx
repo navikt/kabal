@@ -26,7 +26,7 @@ export const ModifiedCreatedDateTime = ({ lastEdit, created }: Props) => {
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 interface DateTimeProps {
@@ -45,6 +45,6 @@ export const DateTime = ({ dateTime, title, icon }: DateTimeProps) => (
 const StyledTime = styled.time`
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
   white-space: nowrap;
 `;

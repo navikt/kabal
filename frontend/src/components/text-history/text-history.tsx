@@ -105,16 +105,16 @@ const EditorList = styled.ul`
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: white;
+  background-color: var(--a-bg-default);
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
   z-index: 1;
   list-style: none;
   margin: 0;
-  padding: 8px;
+  padding: var(--a-spacing-2);
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
 `;
 
 const ListItem = styled.li`
@@ -128,5 +128,5 @@ const StyledTag = styled(Tag)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;

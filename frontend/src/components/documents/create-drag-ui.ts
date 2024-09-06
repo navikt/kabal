@@ -4,13 +4,13 @@ const MORE_THRESHOLD = MAX_DOCUMENT_LINES + 2;
 export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTMLDivElement>): (() => void) => {
   const dragElement = window.document.createElement('section');
 
-  dragElement.style.backgroundColor = 'white';
-  dragElement.style.border = '2px solid var(--a-surface-action-hover)';
-  dragElement.style.padding = '4px';
-  dragElement.style.paddingLeft = '16px';
-  dragElement.style.borderTopRightRadius = '4px';
-  dragElement.style.borderBottomRightRadius = '4px';
-  dragElement.style.borderBottomLeftRadius = '4px';
+  dragElement.style.backgroundColor = 'var(--a-bg-default)';
+  dragElement.style.border = 'var(--a-spacing-05) solid var(--a-surface-action-hover)';
+  dragElement.style.padding = 'var(--a-spacing-1)';
+  dragElement.style.paddingLeft = 'var(--a-spacing-4)';
+  dragElement.style.borderTopRightRadius = 'var(--a-spacing-4)';
+  dragElement.style.borderBottomRightRadius = 'var(--a-spacing-4)';
+  dragElement.style.borderBottomLeftRadius = 'var(--a-spacing-4)';
   dragElement.style.boxShadow = 'var(--a-shadow-medium)';
 
   const documentsCount = documentTitleList.length;
@@ -26,7 +26,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
   if (documentsCount > 1) {
     const list = window.document.createElement('ul');
     list.style.margin = '0';
-    list.style.paddingLeft = '16px';
+    list.style.paddingLeft = 'var(--a-spacing-4)';
     list.style.paddingTop = '0';
     list.style.paddingBottom = '0';
 

@@ -75,10 +75,10 @@ const PreviewContainer = styled.div`
 `;
 
 const ContentContainer = styled.div<{ $openSide: OpenSide; $openDirection: OpenDirection }>`
-  background-color: white;
+  background-color: var(--a-bg-default);
   box-shadow: var(--a-shadow-medium);
   position: absolute;
-  padding: 8px;
+  padding: var(--a-spacing-2);
   left: ${({ $openSide }) => ($openSide === 'left' ? 'auto' : '0')};
   right: ${({ $openSide }) => ($openSide === 'left' ? '0' : 'auto')};
   bottom: ${({ $openDirection }) => ($openDirection === 'up' ? '100%' : 'auto')};

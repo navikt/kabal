@@ -52,9 +52,9 @@ const sectionToolbarCss = css`
 
 const SectionToolbarStyle = styled.div`
   ${sectionToolbarCss}
-  right: calc(100% + 8px);
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  right: calc(100% + var(--a-spacing-2));
+  border-top-left-radius: var(--a-spacing-1);
+  border-bottom-left-radius: var(--a-spacing-1);
 `;
 
 export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
@@ -71,9 +71,9 @@ export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDiv
 
 export const MaltekstseksjonToolbarStyle = styled.div`
   ${sectionToolbarCss}
-  left: calc(100% + 8px);
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  left: calc(100% + var(--a-spacing-2));
+  border-top-right-radius: var(--a-spacing-1);
+  border-bottom-right-radius: var(--a-spacing-1);
 `;
 
 export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
@@ -90,11 +90,11 @@ export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes
 
 const StickyContent = styled.div`
   position: sticky;
-  top: 48px;
+  top: var(--a-spacing-12);
   display: grid;
   grid-template-columns: auto auto;
   flex-direction: row;
-  gap: 4px;
+  gap: var(--a-spacing-1);
   background-color: var(--a-bg-subtle);
   color: var(--a-icon-action);
   box-shadow: var(--a-shadow-medium);
@@ -134,7 +134,7 @@ export const SectionContainer = styled.div<SectionContainerProps>`
     ${sectionBeforeCss}
     left: -8px;
     transition: border-left-color 0.2s ease-in-out;
-    border-left-width: 4px;
+    border-left-width: var(--a-spacing-1);
   }
 
   &:hover {
@@ -158,7 +158,7 @@ export const MaltekstseksjonContainer = styled.div`
     ${sectionBeforeCss}
     right: -8px;
     transition: border-right-color 0.2s ease-in-out;
-    border-right-width: 4px;
+    border-right-width: var(--a-spacing-1);
   }
 
   &:hover {

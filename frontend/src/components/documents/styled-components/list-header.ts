@@ -1,8 +1,8 @@
 import { css } from 'styled-components';
 
 export const listHeaderCSS = css`
-  padding-bottom: 8px;
-  border-bottom: 1px solid #c6c2bf;
-  margin-right: 2px;
-  margin-left: 2px;
+  padding-bottom: var(--a-spacing-2);
+  border-bottom: 1px solid var(--a-border-divider);
+  margin-right: var(--a-spacing-05);
+  margin-left: var(--a-spacing-05);
 `;

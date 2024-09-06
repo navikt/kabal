@@ -288,7 +288,7 @@ const Container = styled.div`
   position: absolute;
   top: 100%;
   z-index: 22;
-  background-color: white;
+  background-color: var(--a-bg-default);
   padding: var(--a-spacing-2);
   margin: 0;
   overflow-y: auto;
@@ -306,9 +306,9 @@ const StyledButton = styled(Button)`
 const StyledHeader = styled.div`
   position: sticky;
   top: 0;
-  border-bottom: 1px solid #c6c2bf;
-  background-color: white;
-  padding: 8px;
+  border-bottom: 1px solid var(--a-border-divider);
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-2);
   display: flex;
   justify-content: space-between;
 `;
@@ -340,19 +340,19 @@ const ExpandButton = styled(Button)`
 
 const StyledCheckbox = styled(Checkbox)`
   grid-area: checkbox;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;
 
 const CheckboxLabel = styled.span`
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;
 
 const GroupLabel = styled(BodyShort)`
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   height: 100%;
   overflow: hidden;
 `;

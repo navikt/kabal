@@ -31,8 +31,8 @@ const StyledPanel = styled.div<{ $direction: Direction }>`
   bottom: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   box-shadow: var(--a-shadow-medium);
-  background: var(--a-bg-default);
+  background-color: var(--a-bg-default);
   padding: var(--a-spacing-4);
 `;

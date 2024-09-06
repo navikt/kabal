@@ -154,7 +154,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
 const List = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
   margin: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -175,20 +175,20 @@ const ArrowButtonsContainer = styled.div`
 const StyledTextVersions = styled(TextVersions)`
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
-  border-width: 4px;
+  border-width: var(--a-spacing-1);
   border-style: solid;
   border-color: ${({ isActive }) => (isActive ? 'var(--a-border-action-selected)' : 'transparent')};
   flex-grow: 1;
-  padding: 4px;
-  margin-left: 4px;
-  margin-right: 4px;
+  padding: var(--a-spacing-1);
+  margin-left: var(--a-spacing-1);
+  margin-right: var(--a-spacing-1);
   flex-grow: 1;
 
   &:last-child {
-    margin-bottom: 4px;
+    margin-bottom: var(--a-spacing-1);
   }
 `;
 
 const StyledAlert = styled(Alert)`
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
 `;

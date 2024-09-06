@@ -51,6 +51,6 @@ export const Filters = ({ maltekst, query }: Props) => {
 
 const Container = styled.div`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   grid-area: filters;
 `;

@@ -3,21 +3,21 @@ import { styled } from 'styled-components';
 
 export const RadioButtonsRow = styled.div`
   display: flex;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: 100%;
 `;
 
 export const SubSection = styled.div`
-  margin-bottom: 16px;
-  margin-left: 32px;
+  margin-bottom: var(--a-spacing-4);
+  margin-left: var(--a-spacing-8);
 `;
 
 export const StyledHeading = styled(Heading)`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 export const StyledRadioGroup = styled(RadioGroup)`
-  margin-bottom: 16px;
+  margin-bottom: var(--a-spacing-4);
 `;

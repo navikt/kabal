@@ -144,9 +144,9 @@ const Popup = styled.div`
   right: 0;
   display: flex;
   flex-direction: row;
-  column-gap: 4px;
-  background-color: white;
-  padding: 4px;
+  column-gap: var(--a-spacing-1);
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-1);
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
 `;

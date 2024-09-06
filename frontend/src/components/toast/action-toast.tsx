@@ -24,5 +24,5 @@ const ButtonRow = styled.div`
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

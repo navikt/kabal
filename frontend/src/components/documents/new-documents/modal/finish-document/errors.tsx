@@ -83,5 +83,5 @@ const StyledOuterList = styled(List)`
 `;
 
 const Section = styled.section`
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
 `;

@@ -75,7 +75,7 @@ export const StyledFloatingToolbar = styled.section`
   flex-direction: row;
   align-items: center;
   position: absolute;
-  padding: 2px;
+  padding: var(--a-spacing-05);
   box-shadow: var(--a-shadow-medium);
   background-color: var(--a-surface-default);
   z-index: 21;

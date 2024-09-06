@@ -144,7 +144,7 @@ const StyledSaksbehandler = styled.span`
   padding: 0.25rem;
   border: 1px solid var(--a-border-divider);
   border-radius: var(--a-border-radius-medium);
-  background-color: white;
+  background-color: var(--a-bg-default);
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`

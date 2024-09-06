@@ -102,7 +102,7 @@ const PanelContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
   flex-grow: 1;
 `;
 

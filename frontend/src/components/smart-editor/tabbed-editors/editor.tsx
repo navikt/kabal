@@ -343,8 +343,8 @@ const MainContainer = styled.div`
   max-height: 100%;
   flex-shrink: 1;
   overflow-y: scroll;
-  scroll-padding-top: 64px;
-  padding-left: 16px;
+  scroll-padding-top: var(--a-spacing-16);
+  padding-left: var(--a-spacing-4);
 `;
 
 const EditorContainer = styled.div`

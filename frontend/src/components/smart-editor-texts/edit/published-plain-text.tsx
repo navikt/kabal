@@ -32,23 +32,23 @@ export const PublishedPlainText = ({ text, onDraftCreated, hasDraft }: Props) =>
 };
 
 const Background = styled.div`
-  background: var(--a-bg-subtle);
-  padding: 16px;
+  background-color: var(--a-bg-subtle);
+  padding: var(--a-spacing-4);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
 `;
 
 const PublishedContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: var(--a-spacing-2);
+  padding: var(--a-spacing-4);
 `;
 
 const StyledBodyLong = styled(BodyLong)`
-  background: var(--a-bg-default);
-  padding: 16px;
-  border-radius: 4px;
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-4);
+  border-radius: var(--a-spacing-1);
   box-shadow: var(--a-shadow-medium);
 `;

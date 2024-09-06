@@ -91,8 +91,8 @@ const StyledPopup = styled.div<StyledPopupProps>`
   max-height: ${({ $maxHeight = 500 }) => $maxHeight}px;
   max-width: ${({ $maxWidth }) => $maxWidth ?? 'unset'};
   z-index: 22;
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: 0.25rem;
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--a-border-divider);
+  box-shadow: 0 1px var(--a-spacing-1) 0 rgba(0, 0, 0, 0.3);
 `;

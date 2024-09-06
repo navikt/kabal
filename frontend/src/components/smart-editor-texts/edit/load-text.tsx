@@ -30,8 +30,8 @@ const Container = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc(210mm * var(--kabal-editor-scale) + 64px);
-  min-width: calc(210mm + 64px);
+  width: calc(210mm * var(--kabal-editor-scale) + var(--a-spacing-16));
+  min-width: calc(210mm + var(--a-spacing-16));
   flex-shrink: 0;
   height: 100%;
   box-shadow: var(--a-shadow-small);
@@ -42,5 +42,5 @@ const EmptyContainer = styled(Container)`
   justify-content: center;
   align-items: center;
   color: var(--a-surface-subtle);
-  min-width: calc(210mm + 64px);
+  min-width: calc(210mm + var(--a-spacing-16));
 `;

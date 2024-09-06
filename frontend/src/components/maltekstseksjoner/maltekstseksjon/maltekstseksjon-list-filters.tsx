@@ -58,7 +58,7 @@ const Container = styled.div`
   grid-area: filters;
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
-  padding: 4px;
+  column-gap: var(--a-spacing-2);
+  padding: var(--a-spacing-1);
   padding-top: 0;
 `;

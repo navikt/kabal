@@ -54,7 +54,7 @@ const MottattHelpText = () => (
 );
 
 const HelpTextContent = styled.p`
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   white-space: normal;
   line-height: var(--a-font-line-height-medium);
   margin: 0;
@@ -63,20 +63,20 @@ const HelpTextContent = styled.p`
 const StyledExpandedDocument = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
-  padding: 8px;
+  row-gap: var(--a-spacing-4);
+  padding: var(--a-spacing-2);
   height: ${EXPANDED_HEIGHT}px;
-  width: calc(100% - 16px);
+  width: calc(100% - var(--a-spacing-4));
   overflow-x: auto;
   border-left: 1px solid var(--a-border-subtle);
-  padding-left: 16px;
-  margin-left: 16px;
+  padding-left: var(--a-spacing-4);
+  margin-left: var(--a-spacing-4);
 `;
 
 const TopRow = styled.div`
   display: grid;
   grid-template-columns: repeat(4, min-content);
-  grid-column-gap: 16px;
+  grid-column-gap: var(--a-spacing-4);
   white-space: nowrap;
   position: sticky;
   left: 0;
@@ -91,14 +91,14 @@ const Section = styled.section`
 const MetadataRow = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 32px;
+  column-gap: var(--a-spacing-8);
 `;
 
 const NowrapDetail = styled(Detail)`
   display: flex;
   align-items: center;
-  gap: 2px;
-  height: 24px;
+  gap: var(--a-spacing-05);
+  height: var(--a-spacing-6);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

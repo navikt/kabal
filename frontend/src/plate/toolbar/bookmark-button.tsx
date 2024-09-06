@@ -121,8 +121,8 @@ const Bookmarks = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: 0;
-  background-color: white;
-  padding: 4px;
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-1);
   box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
 `;

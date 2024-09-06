@@ -86,7 +86,7 @@ const Container = styled.section`
   flex-direction: column;
   flex-grow: 1;
   position: relative;
-  padding-top: 8px;
+  padding-top: var(--a-spacing-2);
   overflow-y: auto;
 `;
 
@@ -95,7 +95,7 @@ const Header = styled.header`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  column-gap: 8px;
-  margin-bottom: 4px;
-  min-height: 32px;
+  column-gap: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-1);
+  min-height: var(--a-spacing-8);
 `;

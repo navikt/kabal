@@ -65,7 +65,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const StatusText = styled.span`

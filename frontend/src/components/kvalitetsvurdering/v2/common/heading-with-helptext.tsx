@@ -19,6 +19,6 @@ export const HeadingWithHelpText = ({ children, helpText, size = 'small', placem
 const Container = styled(StyledHeading)`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
 `;

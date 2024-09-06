@@ -50,7 +50,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const ScaleSelectorContainer = styled.div`
@@ -157,19 +157,19 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
 const ScaleSelectorContent = styled.div`
   position: absolute;
   bottom: 100%;
-  background-color: white;
+  background-color: var(--a-bg-default);
   box-shadow: var(--a-shadow-medium);
-  padding: 8px;
+  padding: var(--a-spacing-2);
   border-radius: var(--a-border-radius-medium);
   white-space: nowrap;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

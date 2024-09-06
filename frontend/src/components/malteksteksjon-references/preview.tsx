@@ -70,9 +70,9 @@ export const Preview = ({ id }: Props) => {
 };
 
 const PreviewBackground = styled.div`
-  background: var(--a-surface-subtle);
+  background-color: var(--a-surface-subtle);
   padding: var(--a-spacing-4);
-  border-radius: 4px;
+  border-radius: var(--a-spacing-1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,7 +83,7 @@ const Sheet = styled.div`
   padding: 20mm;
   padding-top: 15mm;
   box-shadow: var(--a-shadow-medium);
-  background: white;
+  background-color: var(--a-bg-default);
   width: 210mm;
 `;
 

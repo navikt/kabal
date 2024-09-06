@@ -71,7 +71,7 @@ const StyledEntryList = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 const HistoryEntry = (changeSet: InitialVersion | ChangeSet) => {
@@ -103,7 +103,7 @@ const StyledEntry = styled.li<ColorProps>`
   border-width: 1px;
   border-style: solid;
   border-color: ${({ $backgroundColor }) => $backgroundColor};
-  padding-bottom: 8px;
+  padding-bottom: var(--a-spacing-2);
   padding-right: 0;
   padding-left: 3px;
   overflow: hidden;
@@ -115,7 +115,7 @@ const StyledEntry = styled.li<ColorProps>`
     left: -1px;
     top: -1px;
     bottom: -1px;
-    width: 4px;
+    width: var(--a-spacing-1);
     background-color: ${({ $backgroundColor }) => $backgroundColor};
     border-top-left-radius: var(--a-border-radius-medium);
     border-bottom-left-radius: var(--a-border-radius-medium);
@@ -126,20 +126,20 @@ const EntryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: var(--a-spacing-2);
 `;
 
 const EntryLabel = styled.span<ColorProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4px;
-  padding-right: 8px;
+  gap: var(--a-spacing-1);
+  padding-right: var(--a-spacing-2);
   padding-top: 0;
   padding-left: 0;
   padding-bottom: 1px;
   font-weight: normal;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   border-bottom-right-radius: var(--a-border-radius-medium);
   background-color: ${({ $backgroundColor }) => $backgroundColor};
 `;
@@ -149,14 +149,14 @@ const EntryTime = styled.time`
   font-weight: normal;
   font-style: italic;
   line-height: 1;
-  padding-top: 2px;
+  padding-top: var(--a-spacing-05);
   padding-right: 3px;
 `;
 
 const EntryContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
+  gap: var(--a-spacing-1);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
 `;

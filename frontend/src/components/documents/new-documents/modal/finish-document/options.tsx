@@ -101,10 +101,10 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
 const Row = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 4px;
+  column-gap: var(--a-spacing-2);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
+  padding-bottom: var(--a-spacing-1);
 `;
 
 const ensureIsHandling = (handling: string): HandlingEnum => {

@@ -45,5 +45,5 @@ export const CreateTranslatedPlainText = ({ id }: Props) => {
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: 16px;
+  padding: var(--a-spacing-4);
 `;

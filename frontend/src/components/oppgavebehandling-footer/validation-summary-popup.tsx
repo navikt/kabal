@@ -69,5 +69,5 @@ const Popup = ({ open, setOpen, hasErrors }: PopupProps) => {
 const StyledAlertStripeChildren = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--a-spacing-3);
 `;

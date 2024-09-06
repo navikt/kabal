@@ -111,13 +111,13 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-4);
   align-items: flex-start;
 `;
 
 const HelpTextWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

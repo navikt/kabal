@@ -35,7 +35,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
 );
 
 const StyledCheckboxGroup = styled(CheckboxGroup)`
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 8px;
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
+  padding-top: var(--a-spacing-2);
 `;

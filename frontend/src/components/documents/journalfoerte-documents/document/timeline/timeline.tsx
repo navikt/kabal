@@ -36,6 +36,6 @@ const TimelineContainer = styled.ol`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   padding: 0;
 `;

@@ -3,9 +3,9 @@ import { styled } from 'styled-components';
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
-  margin: 4px 8px;
-  background: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: var(--a-spacing-1) var(--a-spacing-2);
+  background-color: var(--a-bg-default);
+  box-shadow: var(--a-shadow-medium);
   border-radius: var(--a-border-radius-medium);
   position: relative;
   height: 100%;

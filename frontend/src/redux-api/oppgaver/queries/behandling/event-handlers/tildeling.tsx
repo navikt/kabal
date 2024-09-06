@@ -248,7 +248,7 @@ const getToastContent = (
 const FlexRowContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const getFromText = (userId: string, employee: INavEmployee | null) => {

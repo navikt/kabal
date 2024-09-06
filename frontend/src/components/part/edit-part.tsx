@@ -115,5 +115,5 @@ const Result = ({ part, search, isError, ...props }: ResultProps) => {
 const StyledEditPart = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;

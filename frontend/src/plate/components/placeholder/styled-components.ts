@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const DeleteButton = styled.button`
-  background: none;
+  background-color: none;
   border: none;
   cursor: pointer;
   margin: 0;
@@ -26,7 +26,7 @@ export const DeleteButton = styled.button`
 
   &:focus-visible {
     box-shadow:
-      inset 0 0 0 2px var(--a-border-strong),
+      inset 0 0 0 var(--a-spacing-05) var(--a-border-strong),
       var(--a-shadow-focus);
   }
 `;
