@@ -45,7 +45,7 @@ export const getDocument = async (req: FastifyRequest, behandlingId: string, dok
   }
 
   // If the document has no binary data, create and save it.
-  if (json.data.length === 0) {
+  if (json.data === null || json.data.length === 0) {
     const { content } = json;
     const document = new Doc();
     const sharedRoot = document.get('content', XmlText);
@@ -70,7 +70,7 @@ export const getDocument = async (req: FastifyRequest, behandlingId: string, dok
 
 interface DocumentResponse {
   content: Node[];
-  data: string;
+  data: string | null;
 }
 
 export const isDocumentResponse = (data: unknown): data is DocumentResponse =>
