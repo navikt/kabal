@@ -1,11 +1,11 @@
 import { styled } from 'styled-components';
 
 export const StyledTemplateButton = styled.button`
-  background: transparent;
-  font-size: 16px;
+  background-color: transparent;
+  font-size: var(--a-spacing-4);
   font-weight: 600;
   border: none;
-  padding: 16px;
+  padding: var(--a-spacing-4);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -16,16 +16,16 @@ export const StyledTemplateButton = styled.button`
   min-width: 190px;
 
   &:hover {
-    background: var(--a-surface-hover);
+    background-color: var(--a-surface-hover);
   }
 `;
 
 export const StyledNewDocument = styled.section`
   width: 826px;
   height: 100%;
-  padding: 32px;
-  padding-top: 16px;
-  background: var(--a-bg-default);
+  padding: var(--a-spacing-8);
+  padding-top: var(--a-spacing-4);
+  background-color: var(--a-bg-default);
   overflow-y: auto;
 `;
 
@@ -47,6 +47,6 @@ export const StyledLoadingOverlay = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.25);
   top: 0;
 `;

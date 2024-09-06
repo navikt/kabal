@@ -4,7 +4,7 @@ const MORE_THRESHOLD = MAX_DOCUMENT_LINES + 2;
 export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTMLDivElement>): (() => void) => {
   const dragElement = window.document.createElement('section');
 
-  dragElement.style.backgroundColor = 'white';
+  dragElement.style.backgroundColor = 'var(--a-bg-default)';
   dragElement.style.border = '2px solid var(--a-surface-action-hover)';
   dragElement.style.padding = '4px';
   dragElement.style.paddingLeft = '16px';

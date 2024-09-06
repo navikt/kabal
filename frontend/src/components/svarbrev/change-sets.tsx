@@ -140,7 +140,7 @@ export const getChangeSetText = ({
 const StyledVersionList = styled.ul`
   margin: 0;
   padding: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
 `;
 
 const formatSvartid = (behandlingstidUnits: number, behandlingstidUnitTypeId: BehandlingstidUnitType) =>

@@ -105,7 +105,7 @@ const FloatingBox = styled(Box)<Position>`
   left: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
   z-index: 1;
   min-width: 400px;
 `;

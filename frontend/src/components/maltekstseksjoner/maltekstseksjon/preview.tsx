@@ -117,5 +117,5 @@ const Overlay = styled.div`
 `;
 
 const StyledAlert = styled(Alert)`
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
 `;

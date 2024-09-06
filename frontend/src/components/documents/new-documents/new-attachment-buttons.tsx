@@ -92,6 +92,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   margin-left: 28px;
 `;

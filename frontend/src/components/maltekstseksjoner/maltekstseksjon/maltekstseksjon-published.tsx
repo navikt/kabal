@@ -92,7 +92,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   grid-area: metadata;
 `;
 
@@ -100,5 +100,5 @@ const LabelValue = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;

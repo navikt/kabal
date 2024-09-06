@@ -164,20 +164,20 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
 };
 
 const StyledInput = styled(TextField)`
-  margin-top: 16px;
+  margin-top: var(--a-spacing-4);
   margin-right: 6px;
   width: 350px;
 `;
 
 const StyledRadioGroup = styled(RadioGroup)`
-  margin-top: 16px;
+  margin-top: var(--a-spacing-4);
 `;
 
 const StyledSignature = styled.div`
   display: flex;
   align-items: flex-end;
   width: 100%;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const StyledSuccess = styled(CheckmarkCircleIcon)`

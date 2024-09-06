@@ -66,8 +66,8 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 RedaktoerRichText.displayName = 'RedaktoerRichText';
 
 const Content = styled.div`
-  padding: 16px;
-  background: var(--a-surface-subtle);
+  padding: var(--a-spacing-4);
+  background-color: var(--a-surface-subtle);
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;

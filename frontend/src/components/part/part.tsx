@@ -110,7 +110,7 @@ interface EditButtonProps {
 
 const Container = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
   flex-wrap: wrap;
   align-items: center;
 `;

@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const DeleteButton = styled.button`
-  background: none;
+  background-color: none;
   border: none;
   cursor: pointer;
   margin: 0;

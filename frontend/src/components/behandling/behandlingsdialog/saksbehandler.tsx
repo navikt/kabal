@@ -93,6 +93,6 @@ const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } 
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-4);
 `;

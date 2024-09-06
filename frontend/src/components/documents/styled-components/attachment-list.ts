@@ -37,7 +37,7 @@ export const JournalfoerteDocumentsAttachments = styled(StyledAttachmentList)<{ 
   &::before {
     ${treeRootStructureCss}
     height: ${({ $treeLineHeight }) => $treeLineHeight}px;
-    left: 4px;
+    left: var(--a-spacing-1);
   }
 `;
 
@@ -56,7 +56,7 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
   position: absolute;
   left: 0;
   right: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
   margin-left: 0;
   margin-right: 0;
 
@@ -66,7 +66,7 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
     width: 12px;
     position: absolute;
     left: 3px;
-    top: 16px;
+    top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
 `;
@@ -77,7 +77,7 @@ export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(St
   position: absolute;
   left: 0;
   right: 0;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
   margin-left: 0;
   margin-right: 0;
 
@@ -87,7 +87,7 @@ export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(St
     width: ${BRANCH_WIDTH}px;
     position: absolute;
     left: 5px;
-    top: 16px;
+    top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
 `;

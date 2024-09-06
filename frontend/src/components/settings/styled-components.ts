@@ -9,6 +9,7 @@ export const SettingsSection = styled.section<{ $area: string }>`
   padding: 24px;
   width: 100%;
   height: fit-content;
+  background-color: var(--a-bg-subtle);
 `;
 
 export const SectionHeader = styled.h1`
@@ -17,7 +18,7 @@ export const SectionHeader = styled.h1`
   margin-bottom: 24px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 export const StyledFilters = styled.div`
@@ -42,7 +43,7 @@ export const StyledFieldset = styled(Fieldset)`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   position: absolute;
   top: 0;
   right: 0;

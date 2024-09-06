@@ -68,8 +68,8 @@ const StyledHeaderText = styled.span`
   overflow: hidden;
   height: 100%;
   min-width: 100%;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   white-space: nowrap;
   align-items: center;
   justify-content: left;
@@ -84,7 +84,7 @@ const StyledHeaderText = styled.span`
 `;
 
 const StyledHeader = styled.th<{ $isHighlighted: boolean }>`
-  height: 32px;
+  height: var(--a-spacing-8);
   border-right: 1px solid var(--a-border-on-inverted);
   border-left: 1px solid var(--a-border-on-inverted);
   border-bottom: 1px solid var(--a-border-on-inverted);

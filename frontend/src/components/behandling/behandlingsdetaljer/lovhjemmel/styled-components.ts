@@ -5,26 +5,26 @@ export const StyledLovhjemmelSelect = styled.div`
 `;
 
 export const StyledSelectedHjemler = styled.div`
-  margin-top: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin-top: var(--a-spacing-2);
+  padding-top: var(--a-spacing-2);
+  padding-bottom: var(--a-spacing-2);
   padding-left: 1em;
-  border-left: 2px solid #ccc;
+  border-left: var(--a-spacing-05) solid var(--a-border-divider);
 `;
 
 export const StyledNoneSelected = styled.p`
-  color: #a0a0a0;
+  color: var(--a-text-subtle);
   margin: 0;
 `;
 
 export const StyledSelectedList = styled.ul`
   list-style: none;
-  padding-left: 10px;
+  padding-left: var(--a-spacing-2);
   margin: 0;
 `;
 
 export const StyledListItem = styled.li`
-  margin-bottom: 0.5em;
+  margin-bottom: var(--a-spacing-2);
 
   &:last-child {
     margin-bottom: 0;
@@ -32,14 +32,14 @@ export const StyledListItem = styled.li`
 `;
 
 export const StyledSelectedSectionHeader = styled.h3`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   margin-top: 0;
-  margin-bottom: 0.5em;
+  margin-bottom: var(--a-spacing-2);
 `;
 
 export const StyledSelectedSection = styled.div`
-  padding-top: 1em;
+  padding-top: var(--a-spacing-1);
 
   &:first-of-type {
     padding-top: 0;

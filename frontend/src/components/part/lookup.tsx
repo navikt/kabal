@@ -59,7 +59,7 @@ const StyledResult = styled(Tag)`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const getUnreachableText = (statusList: IPart['statusList']): string | null => {

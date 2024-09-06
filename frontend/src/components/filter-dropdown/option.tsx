@@ -50,6 +50,6 @@ Filter.displayName = 'Filter';
 const CheckboxContent = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
   align-items: center;
 `;

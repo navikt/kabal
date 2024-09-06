@@ -37,7 +37,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const isDocumentType = (type: string): type is DistribusjonsType =>

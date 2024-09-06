@@ -75,7 +75,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   grid-area: title;
 `;
 
@@ -122,7 +122,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const NoStyleButton = styled.button`
-  background: none;
+  background-color: none;
   border: none;
   padding: 0;
   margin: 0;

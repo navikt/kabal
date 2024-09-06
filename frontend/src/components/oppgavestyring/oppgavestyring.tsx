@@ -14,7 +14,7 @@ export const Oppgavestyring = (oppgave: IOppgave) => (
 
 const Container = styled.div`
   display: grid;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   grid-template-columns: 110px 400px;
   grid-template-areas: 'tildel saksbehandler';
 `;

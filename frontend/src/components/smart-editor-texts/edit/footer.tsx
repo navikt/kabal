@@ -133,8 +133,8 @@ const LastEditor = ({ editors, textType }: LastEditorProps) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  padding: 16px;
+  row-gap: var(--a-spacing-2);
+  padding: var(--a-spacing-4);
 `;
 
 const LastEditorContainer = styled.span`
@@ -146,7 +146,7 @@ const LastEditorContainer = styled.span`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: 100%;
   justify-content: flex-end;
 `;

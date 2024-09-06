@@ -60,5 +60,5 @@ const StyledLabel = styled(Label)`
 const Poststed = styled(BodyShort)`
   display: flex;
   align-items: center;
-  height: 32px;
+  height: var(--a-spacing-8);
 `;

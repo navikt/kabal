@@ -132,7 +132,7 @@ const Title = styled.span<StyleProps>`
 
 const AbsoluteTitle = styled.span<StyleProps>`
   position: absolute;
-  left: 8px;
+  left: var(--a-spacing-2);
   right: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -147,7 +147,7 @@ const ButtonContainer = styled.div<StyleProps>`
   column-gap: 0;
   opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0)};
   position: absolute;
-  right: 8px;
+  right: var(--a-spacing-2);
   user-select: none;
 `;
 

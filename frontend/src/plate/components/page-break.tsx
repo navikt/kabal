@@ -104,15 +104,15 @@ const StyledPageBreak = styled.div`
   height: calc(var(${EDITOR_SCALE_CSS_VAR}) * 8mm);
   margin-top: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
   margin-bottom: calc(var(${EDITOR_SCALE_CSS_VAR}) * 20mm);
-  margin-left: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - 16px);
-  margin-right: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - 16px);
+  margin-left: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - var(--a-spacing-4));
+  margin-right: calc((var(${EDITOR_SCALE_CSS_VAR}) * -20mm) - var(--a-spacing-4));
 
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 16px;
-    right: 16px;
+    left: var(--a-spacing-4);
+    right: var(--a-spacing-4);
     height: 10px;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
   }
@@ -121,8 +121,8 @@ const StyledPageBreak = styled.div`
     content: '';
     position: absolute;
     bottom: 0;
-    left: 16px;
-    right: 16px;
+    left: var(--a-spacing-4);
+    right: var(--a-spacing-4);
     height: 10px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
   }

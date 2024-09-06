@@ -10,8 +10,8 @@ const GRID_CSS = css`
 
 const IconContainer = styled.span`
   ${GRID_CSS}
-  width: 32px;
-  height: 32px;
+  width: var(--a-spacing-8);
+  height: var(--a-spacing-8);
   display: flex;
   align-items: center;
   justify-content: center;

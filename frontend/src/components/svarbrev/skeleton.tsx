@@ -46,7 +46,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 const Buttons = styled(Row)`

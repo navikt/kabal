@@ -54,7 +54,7 @@ const StyledPerson = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
+  column-gap: var(--a-spacing-4);
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
 `;

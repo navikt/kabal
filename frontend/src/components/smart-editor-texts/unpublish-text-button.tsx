@@ -147,7 +147,7 @@ const getSuffix = (draftList: string[], publishedList: string[]) => {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
 
 const StyledReferences = styled(MaltekstseksjonReferences)`

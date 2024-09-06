@@ -15,9 +15,9 @@ export const SkeletonThread = () => (
 const StyledThread = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background-color: white;
-  padding: 16px;
+  gap: var(--a-spacing-4);
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-4);
   border: 1px solid #c9c9c9;
   border-radius: var(--a-border-radius-medium);
   margin-left: 12px;
@@ -30,14 +30,14 @@ const StyledThread = styled.section`
   scroll-snap-align: start;
 
   &:hover {
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--a-shadow-medium);
   }
 `;
 
 const ThreadContent = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
 `;
 
 const RightSkeleton = styled(Skeleton)`

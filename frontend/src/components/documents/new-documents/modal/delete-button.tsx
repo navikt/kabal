@@ -94,12 +94,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  column-gap: 16px;
+  column-gap: var(--a-spacing-4);
 `;
 
 const StyledButton = styled(Button)`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: min-content;
   white-space: nowrap;
 `;

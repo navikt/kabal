@@ -8,9 +8,9 @@ interface Props {
 
 export const Sheet = styled.div<Props>`
   position: relative;
-  background-color: white;
+  background-color: var(--a-bg-default);
   flex-shrink: 0;
-  margin-top: 16px;
+  margin-top: var(--a-spacing-4);
   box-shadow: var(--a-shadow-medium);
 
   &:first-of-type {

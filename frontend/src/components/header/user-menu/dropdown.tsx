@@ -44,19 +44,19 @@ const Menu = styled(Dropdown.Menu)`
   max-width: 300px;
 
   & .navds-body-short {
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
   }
 `;
 
 const linkStyle = css`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   text-decoration: none;
   cursor: pointer;
   background: transparent;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
   padding-top: 12px;
   padding-bottom: 12px;
 `;
@@ -97,7 +97,7 @@ const StyledCopyButton = styled(CopyButton)`
 `;
 
 const VersionIcon = styled(CogRotationIcon)`
-  margin-right: 8px;
+  margin-right: var(--a-spacing-2);
 `;
 
 const getShortVersion = (version: string): string => {

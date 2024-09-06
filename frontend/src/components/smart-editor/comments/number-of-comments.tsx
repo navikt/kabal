@@ -39,30 +39,30 @@ const Wrapper = ({ children }: WrapperProps) => (
 
 const WrapperContainer = styled.div`
   position: sticky;
-  top: 16px;
+  top: var(--a-spacing-4);
   z-index: 10;
   grid-area: counters;
   display: flex;
   width: 100%;
   min-width: 382px;
   height: 52px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 16px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  padding-bottom: var(--a-spacing-4);
   flex-shrink: 0;
 `;
 
 const StyledAlert = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   align-items: center;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   width: 100%;
   min-width: 350px;
   height: 100%;
-  background-color: white;
+  background-color: var(--a-bg-default);
   box-shadow: var(--a-shadow-medium);
 `;
 

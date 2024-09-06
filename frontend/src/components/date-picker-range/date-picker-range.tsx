@@ -103,7 +103,7 @@ const Time = ({ date }: TimeProps) => (
 
 const Container = styled.div<{ $gridArea?: string }>`
   position: relative;
-  height: 32px;
+  height: var(--a-spacing-8);
   grid-area: ${({ $gridArea }) => $gridArea};
 `;
 
@@ -114,7 +114,7 @@ const DatepickerContainer = styled.div`
   z-index: 1;
   background-color: var(--a-surface-default);
   border-radius: var(--a-border-radius-medium);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px var(--a-spacing-1) var(--a-spacing-2) rgba(0, 0, 0, 0.1);
   font-weight: initial;
 `;
 
@@ -126,7 +126,7 @@ const StyledButtons = styled.div`
 `;
 
 const StyledDateRange = styled.div`
-  height: 32px;
+  height: var(--a-spacing-8);
   width: 100%;
   padding-left: var(--a-spacing-3);
   padding-right: var(--a-spacing-3);

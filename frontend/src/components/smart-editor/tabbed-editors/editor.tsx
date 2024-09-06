@@ -210,7 +210,7 @@ const MainContainer = styled.div`
   flex-shrink: 1;
   overflow-y: scroll;
   scroll-padding-top: 64px;
-  padding-left: 16px;
+  padding-left: var(--a-spacing-4);
 `;
 
 const EditorContainer = styled.div`

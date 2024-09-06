@@ -55,7 +55,7 @@ const StyledTabs = styled(Tabs)`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-right: 8px;
+  padding-right: var(--a-spacing-2);
 `;
 
 const StyledTabPanel = styled(Tabs.Panel)`

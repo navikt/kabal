@@ -170,7 +170,7 @@ const toNodes = <T extends IHistory>(events: T[], toNode: ToNodeFn<T>): NodesCat
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 const List = styled.ul`
@@ -179,7 +179,7 @@ const List = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 const EmptyText = styled.span`

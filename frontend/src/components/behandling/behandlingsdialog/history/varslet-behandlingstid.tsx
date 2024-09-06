@@ -126,5 +126,5 @@ const StyledListItem = styled.li`
 const StyledMottakere = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
 `;

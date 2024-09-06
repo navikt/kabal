@@ -43,7 +43,7 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
 
 const StyledRowsPerPage = styled.div`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   justify-self: right;
 `;

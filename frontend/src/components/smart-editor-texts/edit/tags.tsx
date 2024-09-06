@@ -175,7 +175,7 @@ export const TagContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   flex-grow: 0;
   grid-area: tags;
   max-height: 250px;

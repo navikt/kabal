@@ -91,11 +91,11 @@ const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: 100%;
   padding-right: 3px;
-  padding-bottom: 16px;
-  background-color: white;
+  padding-bottom: var(--a-spacing-4);
+  background-color: var(--a-bg-default);
   position: sticky;
   top: 0;
   z-index: 1;

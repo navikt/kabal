@@ -114,5 +114,5 @@ const TableWrapper = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 16px;
+  column-gap: var(--a-spacing-4);
 `;

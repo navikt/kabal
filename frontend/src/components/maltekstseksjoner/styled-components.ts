@@ -33,8 +33,8 @@ export const TextListItem = styled.li<TextListItemProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
-  padding-left: 8px;
+  column-gap: var(--a-spacing-2);
+  padding-left: var(--a-spacing-2);
   position: relative;
   transition-property: background-color;
   transition-duration: 0.2s;
@@ -87,7 +87,7 @@ export const ListItem = styled.li<ListItemProps>`
       $isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)'};
     text-shadow:
       1px 1px white,
-      -1px -1px white;
+      -1px -1px var(--a-bg-default);
     backdrop-filter: blur(2px);
   }
 `;

@@ -10,7 +10,21 @@ const styles = css`
   html {
     box-sizing: border-box;
     font-family: 'Source Sans 3', Arial, sans-serif;
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
+
+    --kabal-bg-medium: var(--a-gray-200);
+
+    &[data-theme='dark'] {
+      --a-bg-default: var(--a-surface-inverted);
+      --a-bg-subtle: var(--a-grayalpha-800);
+      --a-surface-default: var(--a-surface-inverted);
+      --a-surface-subtle: var(--a-grayalpha-800);
+      --a-text-default: var(--a-text-on-inverted);
+
+      --kabal-bg-medium: var(--a-gray-800);
+
+      background-color: var(--a-bg-default);
+    }
   }
 
   *,
@@ -27,7 +41,7 @@ const styles = css`
     margin: 0;
     padding: 0;
     overflow: hidden;
-    font-size: 16px;
+    font-size: var(--a-spacing-4);
   }
 
   #app {

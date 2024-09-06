@@ -62,7 +62,7 @@ const Container = styled.ul`
   left: 0;
   right: 0;
   width: fit-content;
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
   padding: 0;

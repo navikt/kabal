@@ -161,5 +161,5 @@ const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

@@ -18,7 +18,7 @@ export const Admin = () => (
 const StyledPageContent = styled.article`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   max-width: 400px;
   width: 100%;
   margin-left: auto;

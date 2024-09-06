@@ -23,7 +23,7 @@ export const PlateEditorContent = styled.div<{ $showAnnotationsAtOrigin: boolean
   ${({ $showAnnotationsAtOrigin }) => ($showAnnotationsAtOrigin ? positioned : sticky)}
   overflow: visible;
   scroll-padding-top: 64px;
-  padding-top: 16px;
+  padding-top: var(--a-spacing-4);
   position: relative;
   text-underline-offset: 0.25em; // To match PDF.
   word-wrap: normal;

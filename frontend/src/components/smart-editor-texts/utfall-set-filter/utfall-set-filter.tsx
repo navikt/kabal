@@ -126,23 +126,23 @@ const Dropdown = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: white;
+  background-color: var(--a-bg-default);
   border: 1px solid black;
   z-index: 100;
   width: 400px;
   overflow: auto;
-  padding: 8px;
+  padding: var(--a-spacing-2);
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
 `;
 
 const StyledList = styled.ul`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -150,7 +150,7 @@ const StyledList = styled.ul`
 
 const BaseListItem = styled.li`
   border-radius: var(--a-border-radius-medium);
-  padding: 8px;
+  padding: var(--a-spacing-2);
 `;
 
 const StyledListItem = styled(BaseListItem)`

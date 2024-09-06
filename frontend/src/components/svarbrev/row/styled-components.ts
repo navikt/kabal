@@ -28,13 +28,13 @@ export const Behandlingstid = styled.div`
   display: flex;
   align-items: center;
   width: max-content;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 export const Horizontal = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: var(--a-spacing-1);
 `;
 
 export const Buttons = styled(Horizontal)`

@@ -156,7 +156,7 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
 const ButtonsContainer = styled.section`
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
-  margin-top: 8px;
+  row-gap: var(--a-spacing-2);
+  margin-top: var(--a-spacing-2);
   width: 100%;
 `;

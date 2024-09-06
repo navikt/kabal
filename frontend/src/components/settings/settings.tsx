@@ -17,5 +17,5 @@ const StyledSettings = styled.article`
   grid-template-areas:
     'filters abbreviations'
     'signature abbreviations';
-  gap: 16px;
+  gap: var(--a-spacing-4);
 `;

@@ -89,12 +89,12 @@ const DeleteDropAreaContainer = styled.div<{ $isDropTarget: boolean; $isDragOver
   display: flex;
   align-items: center;
   justify-content: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
   flex-grow: 0;
   flex-shrink: 0;
   padding-left: 48px;
   padding-right: 48px;
-  margin-right: 8px;
+  margin-right: var(--a-spacing-2);
   white-space: nowrap;
   height: 100%;
   transition-property: opacity;

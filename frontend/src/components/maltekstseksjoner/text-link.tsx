@@ -55,12 +55,12 @@ const EllipsisTitle = styled.span`
 const StyledLink = styled(Link)`
   display: grid;
   grid-template-columns: min-content 1fr 85px min-content;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-content: center;
   align-items: center;
   width: 100%;
   color: inherit;
   text-decoration: none;
-  padding: 8px;
+  padding: var(--a-spacing-2);
   border-radius: var(--a-border-radius-medium);
 `;

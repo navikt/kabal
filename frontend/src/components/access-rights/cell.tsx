@@ -38,7 +38,7 @@ interface StyledCellProps {
 
 const getColor = (
   { $isChecked, $isFocused, $isCurrentColumn, $isCurrentRow }: StyledCellProps,
-  defaultColor = 'white',
+  defaultColor = 'var(--a-bg-default)',
 ) => {
   if ($isFocused || $isCurrentColumn || $isCurrentRow) {
     if ($isChecked) {
@@ -71,8 +71,8 @@ const StyledCell = styled.td<StyledCellProps>`
 
 const StyledCheckbox = styled.input`
   display: block;
-  width: 32px;
-  height: 32px;
+  width: var(--a-spacing-8);
+  height: var(--a-spacing-8);
   border: none;
   margin: 0;
   padding: 0;

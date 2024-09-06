@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 export const StyledDocumentLink = styled.a<{ $isActive: boolean; $disabled?: boolean }>`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   cursor: ${({ $disabled }) => ($disabled === true ? 'not-allowed' : 'pointer')};
   opacity: ${({ $disabled }) => ($disabled === true ? 0.5 : 1)};

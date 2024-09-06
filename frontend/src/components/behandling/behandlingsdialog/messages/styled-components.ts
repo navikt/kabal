@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 export const StyledMessagesContainer = styled.section`
-  padding-bottom: 16px;
+  padding-bottom: var(--a-spacing-4);
 `;
 
 export const StyledAuthor = styled.p`
@@ -37,5 +37,5 @@ export const StyledWriteMessage = styled.div`
 
 export const StyleSendMessage = styled.div`
   align-self: flex-end;
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
 `;

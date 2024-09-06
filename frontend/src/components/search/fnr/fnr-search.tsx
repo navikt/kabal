@@ -89,5 +89,5 @@ const useCleanQuery = (queryString: string): string | typeof skipToken => {
 const AlertContent = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

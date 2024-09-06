@@ -8,7 +8,7 @@ export const LoaderOverlay = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-color: #fafafa;
+  background-color: var(--a-bg-default);
 `;
 
 export const Container = styled.div`
@@ -23,21 +23,21 @@ export const Container = styled.div`
 export const StyledHeaders = styled.div`
   display: grid;
   grid-template-columns: 1fr 85px 160px 48px;
-  gap: 8px;
-  padding-left: 8px;
-  padding-right: 8px;
+  gap: var(--a-spacing-2);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: var(--a-bg-default);
   box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, 20%);
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: var(--a-spacing-1);
+  border-bottom-right-radius: var(--a-spacing-1);
 `;
 
 export const StyledList = styled.ul`
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
   width: 100%;
   list-style: none;
   padding: 0;
@@ -59,13 +59,13 @@ export const ListItem = styled.li<{ $active: boolean }>`
 export const StyledLink = styled(Link)`
   display: grid;
   grid-template-columns: 1fr 85px 160px 48px;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-content: center;
   align-items: center;
   width: 100%;
   color: inherit;
   text-decoration: none;
-  padding: 8px;
+  padding: var(--a-spacing-2);
 `;
 
 export const StyledTitle = styled.span`

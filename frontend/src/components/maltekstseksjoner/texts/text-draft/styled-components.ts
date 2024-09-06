@@ -4,7 +4,7 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-top: 8px;
+  padding-top: var(--a-spacing-2);
 `;
 
 export const Header = styled.header`
@@ -12,12 +12,12 @@ export const Header = styled.header`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: var(--a-spacing-1);
 `;
 
 export const HeaderGroup = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

@@ -53,7 +53,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {

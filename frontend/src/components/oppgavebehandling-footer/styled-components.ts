@@ -26,11 +26,11 @@ export const StyledPopup = styled.div`
   width: 400px;
   bottom: 100%;
   right: 0;
-  margin-bottom: 8px;
+  margin-bottom: var(--a-spacing-2);
 `;
 
 export const StyledButton = styled.button`
-  background: transparent;
+  background-color: transparent;
   border: 0;
   padding: 0;
   margin: 0;
@@ -40,7 +40,7 @@ export const StyledButton = styled.button`
 export const StyledIconButton = styled(StyledButton)`
   position: absolute;
   right: 0;
-  padding: 16px;
+  padding: var(--a-spacing-4);
 `;
 
 export const StyledButtons = styled.div`
@@ -48,7 +48,7 @@ export const StyledButtons = styled.div`
   align-items: center;
   align-content: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--a-spacing-4);
 `;
 
 export enum FooterType {
@@ -105,6 +105,6 @@ export const StyledFooter = styled.div<{ $type: FooterType }>`
 export const StyledFinishOppgaveButtons = styled.div<{ $width: number }>`
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: ${({ $width }) => $width}px;
 `;

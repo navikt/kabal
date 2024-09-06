@@ -94,18 +94,18 @@ const StyledButtons = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 4px;
+  row-gap: var(--a-spacing-1);
   box-shadow: var(--a-shadow-medium);
-  background-color: white;
-  padding: 4px;
+  background-color: var(--a-bg-default);
+  padding: var(--a-spacing-1);
   border-radius: var(--a-border-radius-medium);
   white-space: nowrap;
   z-index: 1;
 `;
 
 const StyledListItem = styled.li`
-  padding-left: 4px;
-  border-left: 4px solid lightgrey;
+  padding-left: var(--a-spacing-1);
+  border-left: var(--a-spacing-1) solid lightgrey;
 
   &:first-child {
     padding-left: 0;
@@ -123,7 +123,7 @@ const StyledComment = styled.article`
 const StyledName = styled.div`
   display: block;
   width: 100%;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   font-weight: bold;
   flex-grow: 1;
   overflow: hidden;
@@ -138,9 +138,9 @@ const StyledDate = styled.time`
 `;
 
 const StyledText = styled.p`
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   margin: 0;
-  margin-top: 4px;
+  margin-top: var(--a-spacing-1);
   white-space: break-spaces;
   overflow-wrap: break-word;
 `;

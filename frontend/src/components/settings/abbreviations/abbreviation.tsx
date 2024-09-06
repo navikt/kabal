@@ -125,7 +125,7 @@ export const Abbreviation = ({
 
 const StyledAbbreviation = styled.div`
   display: grid;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   grid-template-columns: 250px 500px min-content min-content;
   align-items: start;
 `;

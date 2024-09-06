@@ -149,11 +149,11 @@ export const Svarbrev = ({ modal }: Props) => {
 
 const StyledTableHeader = styled(Table.Header)`
   position: sticky;
-  top: 32px;
+  top: var(--a-spacing-8);
   background-color: var(--a-surface-default);
   z-index: 1;
   white-space: nowrap;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: var(--a-shadow-medium);
 `;
 
 const StyledContainer = styled.div`

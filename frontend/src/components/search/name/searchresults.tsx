@@ -81,13 +81,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 16px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  padding-bottom: var(--a-spacing-4);
 `;
 
 const Left = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

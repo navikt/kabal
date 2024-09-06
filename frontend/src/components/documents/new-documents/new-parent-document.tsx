@@ -155,7 +155,7 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: var(--a-spacing-4);
     content: 'Vedlegg for «' attr(data-documentname) '»';
     white-space: nowrap;
     overflow: hidden;
@@ -172,7 +172,7 @@ const StyledParentDocumentListItem = styled(StyledDocumentListItem)<IDragOver>`
     background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
     text-shadow:
       1px 1px white,
-      -1px -1px white;
+      -1px -1px var(--a-bg-default);
     backdrop-filter: blur(2px);
   }
 `;

@@ -30,13 +30,13 @@ const ControlPanel = styled.header`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  column-gap: 16px;
-  row-gap: 8px;
-  padding: 0 16px;
-  background-color: #f8f8f8;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #c9c9c9;
+  column-gap: var(--a-spacing-4);
+  row-gap: var(--a-spacing-2);
+  padding: 0 var(--a-spacing-4);
+  background-color: var(--a-bg-default);
+  padding-top: var(--a-spacing-2);
+  padding-bottom: var(--a-spacing-2);
+  border-bottom: 1px solid var(--a-border-divider);
 `;
 
 const OppgavebehandlingInformation = styled.div`

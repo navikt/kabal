@@ -53,7 +53,7 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
+  margin-top: var(--a-spacing-2);
   white-space: nowrap;
 `;
 

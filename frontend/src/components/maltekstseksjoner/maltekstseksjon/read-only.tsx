@@ -42,7 +42,7 @@ export const MaltekstseksjonReadOnly = ({ id, textToHighlight }: Props) => {
 };
 
 const Section = styled.section`
-  margin-top: 16px;
+  margin-top: var(--a-spacing-4);
 `;
 
 const List = styled.ul`
@@ -51,13 +51,13 @@ const List = styled.ul`
   margin: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 8px;
+  row-gap: var(--a-spacing-2);
   border-bottom-left-radius: var(--a-border-radius-medium);
   border-top-left-radius: var(--a-border-radius-medium);
-  padding-bottom: 8px;
-  padding-top: 16px;
+  padding-bottom: var(--a-spacing-2);
+  padding-top: var(--a-spacing-4);
   padding-left: 12px;
-  border-left: 4px solid var(--a-surface-info);
+  border-left: var(--a-spacing-1) solid var(--a-surface-info);
 `;
 
 const StyledTextPreview = styled(TextPreview)<{ $highlight: boolean }>`
@@ -70,5 +70,5 @@ const Header = styled.header`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

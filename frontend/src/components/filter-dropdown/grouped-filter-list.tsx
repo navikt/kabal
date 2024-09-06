@@ -149,8 +149,8 @@ const Container = styled.div<{ $openDirection: Direction }>`
   left: ${({ $openDirection }) => ($openDirection === 'down' ? '0' : '100%')};
   z-index: 2;
   max-height: 400px;
-  scroll-margin-bottom: 16px;
-  background-color: white;
+  scroll-margin-bottom: var(--a-spacing-4);
+  background-color: var(--a-bg-default);
   border-radius: 0.25rem;
   border: 1px solid var(--a-border-subtle);
   box-shadow: var(--a-shadow-medium);
@@ -160,11 +160,11 @@ const Container = styled.div<{ $openDirection: Direction }>`
 `;
 
 const StyledGroupHeader = styled.h3`
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
   font-weight: 600;
-  margin-left: 16px;
-  margin-top: 16px;
-  margin-bottom: 8px;
+  margin-left: var(--a-spacing-4);
+  margin-top: var(--a-spacing-4);
+  margin-bottom: var(--a-spacing-2);
 `;
 
 const GroupList = styled.ul`

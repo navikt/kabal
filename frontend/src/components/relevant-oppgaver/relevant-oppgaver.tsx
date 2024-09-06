@@ -153,5 +153,5 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
 const StyledBody = styled(Modal.Body)`
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--a-spacing-4);
 `;

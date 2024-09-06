@@ -18,9 +18,9 @@ export const CommentList = ({ comments, isExpanded }: CommentListProps) => (
 const List = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   padding: 0;
   margin: 0;
   list-style: none;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
 `;

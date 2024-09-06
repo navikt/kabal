@@ -30,8 +30,8 @@ export const Reason = styled.p`
   margin: 0;
   padding: 0;
   font-style: italic;
-  padding-left: 4px;
-  border-left: 4px solid var(--a-border-subtle);
+  padding-left: var(--a-spacing-1);
+  border-left: var(--a-spacing-1) solid var(--a-border-subtle);
 `;
 
 export const HISTORY_COLORS: Record<HistoryEventTypes, string> = {

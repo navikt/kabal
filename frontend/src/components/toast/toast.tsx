@@ -169,7 +169,7 @@ TimedToast.displayName = 'TimedToast';
 
 const SLIDE_OUT_KEYFRAMES: Keyframe[] = [
   { transform: 'translateX(0%)' },
-  { transform: 'translateX(calc(100% + 8px))' },
+  { transform: 'translateX(calc(100% + var(--a-spacing-2)))' },
 ];
 
 const SLIDE_OUT_OPTIONS: KeyframeAnimationOptions = {

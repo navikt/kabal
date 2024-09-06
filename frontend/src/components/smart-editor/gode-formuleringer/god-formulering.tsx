@@ -85,7 +85,7 @@ const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
 
 const Left = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 const ActionWrapper = styled.div`
@@ -106,18 +106,18 @@ const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
   ${godFormuleringBaseStyle}
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  gap: var(--a-spacing-2);
+  padding: var(--a-spacing-2);
   background-color: var(--a-bg-subtle);
   outline: ${OUTLINE_WIDTH} solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
   white-space: normal;
 `;
 
 const StyledContent = styled.div<{ $isExpanded: boolean }>`
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
   max-height: ${({ $isExpanded }) => ($isExpanded ? 'unset' : '200px')};
   overflow: hidden;
   position: relative;

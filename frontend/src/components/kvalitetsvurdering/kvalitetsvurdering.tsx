@@ -49,6 +49,6 @@ const Kvalitetsskjema = () => {
 };
 
 const KvalitetsVurderingContainer = styled.div`
-  padding: 16px;
+  padding: var(--a-spacing-4);
   width: 400px;
 `;

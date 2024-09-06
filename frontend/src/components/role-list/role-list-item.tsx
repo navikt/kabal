@@ -24,7 +24,7 @@ export const RoleItem = ({ role, variant }: Props) => {
 
 const RoleContent = styled.button`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   cursor: pointer;
   margin: 0;

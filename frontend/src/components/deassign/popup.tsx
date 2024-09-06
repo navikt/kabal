@@ -115,14 +115,14 @@ const StyledPopup = styled.div`
   flex-direction: column;
   position: absolute;
   right: 0;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   width: 280px;
   padding: var(--a-spacing-4);
 
-  background-color: white;
+  background-color: var(--a-bg-default);
   border-radius: var(--a-border-radius-medium);
-  border: 1px solid #c6c2bf;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--a-border-divider);
+  box-shadow: 0 0 var(--a-spacing-1) rgba(0, 0, 0, 0.25);
   z-index: 10;
 `;
 
@@ -130,5 +130,5 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  column-gap: 8px;
+  column-gap: var(--a-spacing-2);
 `;

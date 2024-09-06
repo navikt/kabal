@@ -39,11 +39,11 @@ interface StyledProps {
 const StyledThread = styled.section<StyledProps>`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--a-spacing-4);
   width: ${THREAD_WIDTH}px;
   position: ${({ $isAbsolute }) => ($isAbsolute ? 'absolute' : 'static')};
   background-color: var(--a-surface-default);
-  padding: 16px;
+  padding: var(--a-spacing-4);
   border: 1px solid #c9c9c9;
   border-radius: var(--a-border-radius-medium);
   will-change: transform, opacity, box-shadow;
@@ -67,5 +67,5 @@ const Replies = styled.div`
   font-style: italic;
   color: var(--a-gray-700);
   text-align: right;
-  font-size: 16px;
+  font-size: var(--a-spacing-4);
 `;

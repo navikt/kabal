@@ -50,6 +50,6 @@ export const Lovhjemmel = () => {
 const StyledHeaderHelpTextWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-2);
 `;

@@ -10,7 +10,7 @@ export const PageWrapper = ({ children }: Props) => <StyledMain>{children}</Styl
 const StyledMain = styled.main`
   overflow: auto;
   flex-grow: 1;
-  padding: 16px;
+  padding: var(--a-spacing-4);
   width: 100%;
 `;
 
@@ -49,9 +49,9 @@ const StyledOppgaverPageWrapper = styled.main`
 `;
 
 const StyledOppgaveHeading = styled(Heading)`
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 16px;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  padding-top: var(--a-spacing-4);
 `;
 
 const OppgaverContainer = styled.article`
@@ -61,7 +61,7 @@ const OppgaverContainer = styled.article`
   overflow: auto;
   width: 100%;
   flex-grow: 1;
-  padding: 16px;
+  padding: var(--a-spacing-4);
 
   > * {
     min-width: 100%;

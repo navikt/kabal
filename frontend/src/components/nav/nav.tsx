@@ -121,7 +121,7 @@ const StyledNavLinkList = styled.ul`
   padding: 0;
   align-items: center;
   margin: 0;
-  gap: 16px;
+  gap: var(--a-spacing-4);
 `;
 
 const StyledNavListItem = styled.li`
@@ -130,26 +130,25 @@ const StyledNavListItem = styled.li`
 
 const StyledNavLink = styled(NavLink)`
   display: flex;
-  gap: 8px;
+  gap: var(--a-spacing-2);
   align-items: center;
   width: 100%;
-  border-bottom: 4px solid transparent;
+  border-bottom: var(--a-spacing-1) solid transparent;
   word-break: keep-all;
   white-space: nowrap;
   border-left: none;
   text-decoration: none;
   color: var(--a-text-on-inverted);
   padding: 0;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: var(--a-spacing-1);
+  padding-right: var(--a-spacing-1);
   transition: border-bottom-color 0.2s ease-in-out;
 
   &.active {
-    border-bottom: 4px solid var(--a-blue-300);
+    border-bottom: var(--a-spacing-1) solid var(--a-blue-300);
   }
 
   &:hover {
-    /* border-bottom: 4px solid var(--a-text-action); */
-    border-bottom: 4px solid #666;
+    border-bottom: var(--a-spacing-1) solid var(--a-text-subtle);
   }
 `;

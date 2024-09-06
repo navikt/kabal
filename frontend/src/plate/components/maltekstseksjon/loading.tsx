@@ -26,5 +26,5 @@ const StyledAlert = styled(Alert)`
 const AlertContent = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;

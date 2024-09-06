@@ -136,5 +136,5 @@ const StyledDeadline = styled.time<StyledDeadlineProps>`
 const Container = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;

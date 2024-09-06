@@ -110,7 +110,7 @@ const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--a-spacing-1);
 `;
 
 interface StyledSortButtonProps {

@@ -80,5 +80,5 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
 const AvsenderContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--a-spacing-2);
 `;
