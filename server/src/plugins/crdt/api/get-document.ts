@@ -9,7 +9,11 @@ import { Node } from 'slate';
 
 const log = getLogger('collaboration');
 
-export const getDocument = async (req: FastifyRequest, behandlingId: string, dokumentId: string) => {
+export const getDocument = async (
+  req: FastifyRequest,
+  behandlingId: string,
+  dokumentId: string,
+): Promise<DocumentResponse> => {
   const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/dokumenter/${dokumentId}`, {
     method: 'GET',
     headers: getHeaders(req),
@@ -44,36 +48,42 @@ export const getDocument = async (req: FastifyRequest, behandlingId: string, dok
     throw new Error(msg);
   }
 
+  const { content, data } = json;
+
   // If the document has no binary data, create and save it.
-  if (json.data === null || json.data.length === 0) {
-    const { content } = json;
+  if (data === null || data.length === 0) {
     const document = new Doc();
     const sharedRoot = document.get('content', XmlText);
     const insertDelta = slateNodesToInsertDelta(content);
     sharedRoot.applyDelta(insertDelta);
     const state = encodeStateAsUpdateV2(document);
-    const data = Buffer.from(state).toString('base64');
+    const base64data = Buffer.from(state).toString('base64');
 
     // Save the binary data to the database.
     await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
       method: 'PATCH',
       headers: { ...getHeaders(req), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content, data }),
+      body: JSON.stringify({ content, data: base64data }),
     });
 
     // Return the document and binary data.
-    return { content, data };
+    return { content, data: base64data };
   }
 
-  return json;
+  return { content, data };
 };
 
 interface DocumentResponse {
   content: Node[];
+  data: string;
+}
+
+interface ApiDocumentResponse {
+  content: Node[];
   data: string | null;
 }
 
-export const isDocumentResponse = (data: unknown): data is DocumentResponse =>
+export const isDocumentResponse = (data: unknown): data is ApiDocumentResponse =>
   isObject(data) &&
   'isSmartDokument' in data &&
   data.isSmartDokument === true &&
