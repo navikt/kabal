@@ -79,5 +79,4 @@ export const isDocumentResponse = (data: unknown): data is DocumentResponse =>
   data.isSmartDokument === true &&
   'content' in data &&
   Array.isArray(data.content) &&
-  'data' in data &&
-  typeof data.data === 'string';
+  'data' in data;
