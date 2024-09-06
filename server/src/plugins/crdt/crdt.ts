@@ -127,6 +127,32 @@ export const crdtPlugin = fastifyPlugin(
 
                 return socket.close(4401, 'Unauthorized');
               }
+
+              const res = await fetch(
+                `${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}/access`,
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: `Bearer ${oboAccessToken}`,
+                  },
+                },
+              );
+
+              if (!res.ok) {
+                logReq('Failed to establish collaboration connection', req, { behandlingId, dokumentId }, 'error');
+
+                return socket.close(4403, 'Forbidden');
+              }
+
+              // TODO: Parse response body and check if user has access to document.
+              /*
+                Posssible response body:
+                enum Access {
+                  Read = 'read',
+                  Write = 'write',
+                  None = 'none',
+                }
+              */
             }
 
             logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
@@ -137,6 +163,7 @@ export const crdtPlugin = fastifyPlugin(
               req,
             } satisfies ConnectionContext);
           } catch (e) {
+            socket.close(5500, e instanceof Error ? e.message : 'Internal Server Error');
             console.error(e);
           }
         },

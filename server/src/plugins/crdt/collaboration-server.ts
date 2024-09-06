@@ -24,7 +24,7 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
 export const collaborationServer = Server.configure({
   onConnect: async ({ context }) => {
     if (isConnectionContext(context)) {
-      // req.navIdent is not defined locally.
+      // context.req.navIdent is not defined when server is run without Wonderwall (ie. locally).
       logContext(`Collaboration connection established for ${context.req.navIdent}!`, context);
     } else {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
