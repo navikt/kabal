@@ -45,49 +45,44 @@ export const OpenOppgavebehandling = ({
     return null;
   }
 
-  if (typeId === SaksTypeEnum.KLAGE) {
-    return (
-      <Button
-        as={Link}
-        variant={variant}
-        size={size}
-        to={`/klagebehandling/${id}`}
-        data-testid="klagebehandling-open-link"
-        data-klagebehandlingid={id}
-        data-oppgavebehandlingid={id}
-      >
-        {children}
-      </Button>
-    );
-  }
+  const commonProps = { as: Link, variant, size, children, 'data-oppgavebehandlingid': id };
 
-  if (typeId === SaksTypeEnum.ANKE) {
-    return (
-      <Button
-        as={Link}
-        variant={variant}
-        size={size}
-        to={`/ankebehandling/${id}`}
-        data-testid="ankebehandling-open-link"
-        data-ankebehandlingid={id}
-        data-oppgavebehandlingid={id}
-      >
-        {children}
-      </Button>
-    );
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
+      return (
+        <Button
+          {...commonProps}
+          to={`/klagebehandling/${id}`}
+          data-testid="klagebehandling-open-link"
+          data-klagebehandlingid={id}
+        />
+      );
+    case SaksTypeEnum.ANKE:
+      return (
+        <Button
+          {...commonProps}
+          to={`/ankebehandling/${id}`}
+          data-testid="ankebehandling-open-link"
+          data-ankebehandlingid={id}
+        />
+      );
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return (
+        <Button
+          {...commonProps}
+          to={`/trygderettsankebehandling/${id}`}
+          data-testid="trygderettsankebehandling-open-link"
+          data-trygderettsankebehandlingid={id}
+        />
+      );
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+      return (
+        <Button
+          {...commonProps}
+          to={`/behandling-etter-tr-opphevet/${id}`}
+          data-testid="behandling-etter-tr-opphevet-open-link"
+          data-behandling-etter-tr-opphevet-id={id}
+        />
+      );
   }
-
-  return (
-    <Button
-      as={Link}
-      variant={variant}
-      size={size}
-      to={`/trygderettsankebehandling/${id}`}
-      data-testid="trygderettsankebehandling-open-link"
-      data-trygderettsankebehandlingid={id}
-      data-oppgavebehandlingid={id}
-    >
-      {children}
-    </Button>
-  );
 };

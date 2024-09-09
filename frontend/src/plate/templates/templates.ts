@@ -1,4 +1,5 @@
 import { ANKEVEDTAK_TEMPLATE } from '@app/plate/templates/ankevedtak';
+import { BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE } from '@app/plate/templates/behandling-etter-tr-opphevet-vedtak';
 import { KLAGEVEDTAK_TEMPLATE } from '@app/plate/templates/klagevedtak';
 import { ORIENTERING_OM_TILSVAR_TEMPLATE } from '@app/plate/templates/orientering-om-tilsvar-direkte-til-trygderetten';
 import { OVERSENDELSESBREV_TEMPLATE } from '@app/plate/templates/oversendelsesbrev';
@@ -20,6 +21,7 @@ export const TEMPLATE_MAP = {
   [ROL_ANSWERS_TEMPLATE.templateId]: ROL_ANSWERS_TEMPLATE,
   [ROL_TILSVARSBREV_TEMPLATE.templateId]: ROL_TILSVARSBREV_TEMPLATE,
   [ORIENTERING_OM_TILSVAR_TEMPLATE.templateId]: ORIENTERING_OM_TILSVAR_TEMPLATE,
+  [BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE.templateId]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE,
 };
 
 export const TEMPLATES = Object.values(TEMPLATE_MAP);
@@ -43,3 +45,11 @@ export const ANKE_TEMPLATES = [
 ];
 
 export const ANKE_I_TRYGDERETTEN_TEMPLATES = [GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE, ORIENTERING_OM_TILSVAR_TEMPLATE];
+
+export const BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES = [
+  BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE,
+  GENERELT_BREV_TEMPLATE,
+  NOTAT_TEMPLATE,
+  ROL_QUESTIONS_TEMPLATE,
+  ROL_TILSVARSBREV_TEMPLATE,
+];

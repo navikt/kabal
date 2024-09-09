@@ -9,4 +9,5 @@ export enum TemplateIdEnum {
   ROL_TILSVARSBREV = 'rol-tilsvarsbrev',
   OVERSENDELSESBREV = 'oversendelsesbrev',
   ORIENTERING_OM_TILSVAR = 'orientering-om-tilsvar',
+  BEHANDLING_ETTER_TR_OPPHEVET_VEDTAK = 'behandling-etter-tr-opphevet',
 }

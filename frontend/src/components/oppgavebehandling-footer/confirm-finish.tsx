@@ -19,8 +19,8 @@ interface FinishProps {
 const getFinishText = (isOpphevetAnkeInTrygderettern: boolean, isModernized: boolean) => {
   if (isOpphevetAnkeInTrygderettern) {
     return isModernized
-      ? 'Nei, fullfør uten å opprette ny oppgave i Kabal.'
-      : 'Nei, fullfør uten å opprette ny oppgave i Kabal. Husk å sende oppgave i Gosys.';
+      ? 'Nei, fullfør uten å opprette ny behandling i Kabal.'
+      : 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
   }
 
   return 'Fullfør';
@@ -47,6 +47,7 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
         {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
         <FinishButton>{finishText}</FinishButton>
         <Button
+          style={{ flexShrink: 0 }}
           variant="secondary"
           type="button"
           size="small"
@@ -129,7 +130,7 @@ const useText = (): string => {
 };
 
 const FinishOpphevetTRWithNyBehandling = () => (
-  <FinishButton nyBehandling>Ja, fullfør og opprett ny ankeoppgave i Kabal.</FinishButton>
+  <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
 );
 
 interface FinishButtonProps {
