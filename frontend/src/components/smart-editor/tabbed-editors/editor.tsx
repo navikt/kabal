@@ -1,12 +1,10 @@
 /* eslint-disable max-lines */
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { relativeRangeToSlateRange } from '@slate-yjs/core';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
 import { useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
-import { XmlText } from 'yjs';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -14,12 +12,10 @@ import { GodeFormuleringer } from '@app/components/smart-editor/gode-formulering
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
-import { cursorStore, isYjsCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { TAB_UUID } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { PlateEditor } from '@app/plate/plate-editor';
@@ -29,7 +25,7 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
+import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { useGetMySignatureQuery, useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { ISmartDocument } from '@app/types/documents/documents';
@@ -138,13 +134,13 @@ export const Editor = ({ smartDocument }: EditorProps) => {
   );
 };
 
-interface ChangeSet {
-  added: number[];
-  removed: number[];
-  updated: number[];
-}
+// interface ChangeSet {
+//   added: number[];
+//   removed: number[];
+//   updated: number[];
+// }
 
-type OnChangeFn = (changeset: ChangeSet) => void;
+// type OnChangeFn = (changeset: ChangeSet) => void;
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const { templateId, setSheetRef } = useContext(SmartEditorContext);
@@ -152,42 +148,42 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
-  const editor = useMyPlateEditorRef(id);
+  // const editor = useMyPlateEditorRef(id);
 
-  useEffect(() => {
-    const onChange: OnChangeFn = ({ added, removed, updated }) => {
-      const states = editor.awareness.getStates();
+  // useEffect(() => {
+  //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
+  //     const states = editor.awareness.getStates();
 
-      requestAnimationFrame(() => {
-        cursorStore.store.setState((draft) => {
-          for (const a of [...added, ...updated]) {
-            const cursor = states.get(a);
+  //     requestAnimationFrame(() => {
+  //       cursorStore.store.setState((draft) => {
+  //         for (const a of [...added, ...updated]) {
+  //           const cursor = states.get(a);
 
-            if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
-              draft[a] = {
-                ...cursor,
-                selection: relativeRangeToSlateRange(
-                  editor.yjs.provider.document.get('content', XmlText),
-                  editor,
-                  cursor.selection,
-                ),
-              };
-            }
-          }
+  //           if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
+  //             draft[a] = {
+  //               ...cursor,
+  //               selection: relativeRangeToSlateRange(
+  //                 editor.yjs.provider.document.get('content', XmlText),
+  //                 editor,
+  //                 cursor.selection,
+  //               ),
+  //             };
+  //           }
+  //         }
 
-          for (const r of removed) {
-            delete draft[r];
-          }
-        });
-      });
-    };
+  //         for (const r of removed) {
+  //           delete draft[r];
+  //         }
+  //       });
+  //     });
+  //   };
 
-    editor.awareness.on('change', onChange);
+  //   editor.awareness.on('change', onChange);
 
-    return () => {
-      editor.awareness.off('change', onChange);
-    };
-  }, [editor, editor.awareness]);
+  //   return () => {
+  //     editor.awareness.off('change', onChange);
+  //   };
+  // }, [editor, editor.awareness]);
 
   useEffect(() => {
     setSheetRef(containerElement);

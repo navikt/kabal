@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run build --watch & node --watch --trace-warnings dist/server.js",
-    "build": "bun build ./src/server.ts --target node --format esm --sourcemap --outdir dist",
+    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=external --outdir dist",
     "lint": "eslint ./src/**/*.ts --color --cache --cache-strategy content --cache-location .eslintcache",
     "typecheck": "tsc --noEmit"
   },

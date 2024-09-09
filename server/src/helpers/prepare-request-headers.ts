@@ -43,7 +43,7 @@ export const getProxyRequestHeaders = (
     headers[AUTHORIZATION_HEADER] = `Bearer ${oboAccessToken}`;
   }
 
-  log.info({
+  log.debug({
     msg: 'Prepared proxy request headers',
     tab_id,
     trace_id,
