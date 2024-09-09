@@ -10,6 +10,7 @@ import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, IOppgave } from '@app/types/oppgaver';
 
 const KABAL_HEADER_HEIGHT = 48;
@@ -62,7 +63,7 @@ export const FradelButton = (props: IOppgave) => {
     ytelseId,
   );
 
-  if (isAccessLoading || isAvsluttetAvSaksbehandler) {
+  if (isAccessLoading || isAvsluttetAvSaksbehandler || typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET) {
     return null;
   }
 

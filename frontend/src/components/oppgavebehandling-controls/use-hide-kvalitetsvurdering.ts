@@ -13,7 +13,7 @@ export const useHideKvalitetsvurdering = (): boolean => {
 
   const { typeId, resultat } = oppgave;
 
-  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET) {
     return true;
   }
 

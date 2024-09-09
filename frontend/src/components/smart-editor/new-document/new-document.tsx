@@ -9,7 +9,12 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
-import { ANKE_I_TRYGDERETTEN_TEMPLATES, ANKE_TEMPLATES, KLAGE_TEMPLATES } from '@app/plate/templates/templates';
+import {
+  ANKE_I_TRYGDERETTEN_TEMPLATES,
+  ANKE_TEMPLATES,
+  BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
+  KLAGE_TEMPLATES,
+} from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
@@ -115,6 +120,8 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
         return ANKE_TEMPLATES;
       case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
         return ANKE_I_TRYGDERETTEN_TEMPLATES;
+      case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+        return BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES;
     }
   }
 

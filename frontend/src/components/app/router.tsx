@@ -5,6 +5,7 @@ import { ModalEnum } from '@app/components/svarbrev/row/row';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
 import { AnkebehandlingPage } from '@app/pages/ankebehandling/ankebehandling';
+import { BehandlingEtterTrOpphevetPage } from '@app/pages/behandling-etter-tr-opphevet/behandling-etter-tr-opphevet';
 import { BunnteksterPage } from '@app/pages/bunntekster/bunntekster';
 import { GodeFormuleringerPage } from '@app/pages/gode-formuleringer/gode-formuleringer';
 import { KlagebehandlingPage } from '@app/pages/klagebehandling/klagebehandling';
@@ -33,6 +34,7 @@ export const Router = () => (
       <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
       <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
       <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
+      <Route path="behandling-etter-tr-opphevet/:id" element={<BehandlingEtterTrOpphevetPage />} />
     </Route>
 
     <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

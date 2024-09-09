@@ -83,7 +83,17 @@ export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
   sendtTilTrygderetten: string | null; // LocalDate
 }
 
-export type IOppgavebehandling = IKlagebehandling | IAnkebehandling | ITrygderettsankebehandling;
+export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET;
+  rol: IMedunderskriverRol;
+  kjennelseMottatt: string | null;
+}
+
+export type IOppgavebehandling =
+  | IKlagebehandling
+  | IAnkebehandling
+  | ITrygderettsankebehandling
+  | IBehandlingEtterTryderettenOpphevet;
 
 interface Resultat {
   file: IVedlegg | null;
