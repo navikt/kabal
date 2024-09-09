@@ -26,7 +26,6 @@ import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { healthPlugin } from '@app/plugins/health';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
 import { crdtPlugin } from '@app/plugins/crdt/crdt';
-import { fastifyWebsocket } from '@fastify/websocket';
 
 processErrors();
 
@@ -49,7 +48,6 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
       routeBlacklist: ['/metrics', '/isAlive', '/isReady', '/swagger', '/swagger.json'],
     },
   })
-  .register(fastifyWebsocket)
   .register(proxyVersionPlugin)
   .register(traceparentPlugin)
   .register(tabIdPlugin)

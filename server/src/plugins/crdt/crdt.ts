@@ -2,8 +2,6 @@ import { isDeployed } from '@app/config/env';
 import { AnyObject, Level, LogArgs, getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import * as Y from 'yjs';
-import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
-import { ConnectionContext } from '@app/plugins/crdt/context';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
@@ -14,6 +12,14 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { isObject } from '@app/plugins/crdt/functions';
 import { FastifyRequest } from 'fastify/types/request';
+import { Socket } from 'node:net';
+import WebSocket from 'ws';
+import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
+import { ConnectionContext } from '@app/plugins/crdt/context';
+import { IncomingMessage } from 'node:http';
+import { Duplex } from 'node:stream';
+
+const UPGRADE_MAP: Map<IncomingMessage, { socket: Duplex; head: Buffer }> = new Map();
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
@@ -32,156 +38,153 @@ const logReq = (msg: string, req: FastifyRequest, data: AnyObject, level: Level 
 
 export const crdtPlugin = fastifyPlugin(
   (app, _, pluginDone) => {
-    app
-      .withTypeProvider<TypeBoxTypeProvider>()
-      .post(
-        '/collaboration/behandlinger/:behandlingId/dokumenter',
-        {
-          schema: {
-            tags: ['collaboration'],
-            params: Type.Object({ behandlingId: Type.String() }),
-            body: {
-              content: Type.Array(Type.Object({})),
-              templateId: Type.String(),
-              tittel: Type.String(),
-              dokumentTypeId: Type.String(),
-              parentId: Type.String(),
-              language: Type.String(),
-            },
+    app.withTypeProvider<TypeBoxTypeProvider>().post(
+      '/collaboration/behandlinger/:behandlingId/dokumenter',
+      {
+        schema: {
+          tags: ['collaboration'],
+          params: Type.Object({ behandlingId: Type.String() }),
+          body: {
+            content: Type.Array(Type.Object({})),
+            templateId: Type.String(),
+            tittel: Type.String(),
+            dokumentTypeId: Type.String(),
+            parentId: Type.String(),
+            language: Type.String(),
           },
+          produces: ['application/json'],
         },
-        async (req, reply) => {
-          const { behandlingId } = req.params;
-          logReq('Creating new collaboration document', req, { behandlingId });
+      },
+      async (req, reply) => {
+        const { behandlingId } = req.params;
+        logReq('Creating new collaboration document', req, { behandlingId });
 
-          if (isDeployed) {
-            await req.ensureOboAccessToken('kabal-api');
+        if (isDeployed) {
+          await req.ensureOboAccessToken('kabal-api');
+        }
+
+        const { body } = req;
+
+        if (!isObject(body) || !('content' in body) || !Array.isArray(body.content)) {
+          logReq('Invalid request body', req, { behandlingId }, 'error');
+
+          return reply.status(400).send();
+        }
+
+        try {
+          const { content } = body;
+          const document = new Y.Doc();
+          const sharedRoot = document.get('content', Y.XmlText);
+          const insertDelta = slateNodesToInsertDelta(content);
+          sharedRoot.applyDelta(insertDelta);
+          const state = Y.encodeStateAsUpdateV2(document);
+          const data = Buffer.from(state).toString('base64');
+
+          logReq('Saving new document to database', req, { behandlingId, data });
+
+          const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', ...getHeaders(req) },
+            body: JSON.stringify({ ...body, data }),
+          });
+
+          if (!res.ok) {
+            const msg = `Failed to save document. API responded with status code ${res.status}`;
+            logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
+          } else {
+            logReq('Saved new document to database', req, { behandlingId });
           }
 
-          const { body } = req;
+          return reply.send(res);
+        } catch (error) {
+          logReq('Failed to save document', req, { behandlingId }, 'error', error);
 
-          if (!isObject(body) || !('content' in body) || !Array.isArray(body.content)) {
-            logReq('Invalid request body', req, { behandlingId }, 'error');
+          return reply.status(500).send();
+        }
+      },
+    );
 
-            return reply.status(400).send();
+    const wss = new WebSocket.Server({ noServer: true });
+
+    app.server.on('upgrade', (rawRequest, socket, head) => {
+      UPGRADE_MAP.set(rawRequest, { socket, head });
+    });
+
+    app.withTypeProvider<TypeBoxTypeProvider>().get(
+      '/collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId',
+      {
+        schema: {
+          tags: ['collaboration'],
+          params: Type.Object({ behandlingId: Type.String(), dokumentId: Type.String() }),
+        },
+      },
+      async (req, reply) => {
+        const upgradeData = UPGRADE_MAP.get(req.raw);
+        UPGRADE_MAP.delete(req.raw);
+
+        if (upgradeData === undefined) {
+          return reply.code(400).send('No upgrade data found');
+        }
+
+        const { behandlingId, dokumentId } = req.params;
+        logReq('Websocket connection init', req, { behandlingId, dokumentId });
+
+        if (behandlingId.length === 0 || dokumentId.length === 0) {
+          logReq('Invalid behandlingId or dokumentId', req, { behandlingId, dokumentId }, 'warn');
+
+          return reply.code(404).send('Not Found');
+        }
+
+        if (isDeployed) {
+          const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
+
+          if (oboAccessToken === undefined) {
+            const msg = 'Tried to authenticate collaboration connection without OBO access token';
+            logReq(msg, req, { behandlingId, dokumentId }, 'warn');
+
+            return reply.code(401).send('Unauthorized');
           }
+        }
 
-          try {
-            const { content } = body;
-            const document = new Y.Doc();
-            const sharedRoot = document.get('content', Y.XmlText);
-            const insertDelta = slateNodesToInsertDelta(content);
-            sharedRoot.applyDelta(insertDelta);
-            const state = Y.encodeStateAsUpdateV2(document);
-            const data = Buffer.from(state).toString('base64');
+        const { socket, head } = upgradeData;
 
-            logReq('Saving new document to database', req, { behandlingId, data });
+        try {
+          const webSocket = await new Promise<WebSocket>((resolve, reject) => {
+            wss.handleUpgrade(req.raw, socket, head, (ws) => {
+              wss.emit('connection', socket, req.raw);
 
-            const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
-              method: 'POST',
-              headers: { 'content-type': 'application/json', ...getHeaders(req) },
-              body: JSON.stringify({ ...body, data }),
+              socket.on('error', (error) => {
+                app.log.error(error);
+                reject(error);
+              });
+
+              resolve(ws);
             });
+          });
 
-            if (!res.ok) {
-              const msg = `Failed to save document. API responded with status code ${res.status}`;
-              logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
-            } else {
-              logReq('Saved new document to database', req, { behandlingId });
-            }
+          reply.raw.assignSocket(new Socket(socket));
 
-            return reply.send(res);
-          } catch (error) {
-            logReq('Failed to save document', req, { behandlingId }, 'error', error);
+          reply.hijack();
 
-            return reply.status(500).send();
-          }
-        },
-      )
-      .get(
-        '/collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId',
-        {
-          websocket: true,
-          schema: {
-            tags: ['collaboration'],
-            params: Type.Object({ behandlingId: Type.String(), dokumentId: Type.String() }),
-          },
-        },
-        async (socket, req) => {
-          const { behandlingId, dokumentId } = req.params;
-          logReq('Websocket connection init', req, { behandlingId, dokumentId });
+          logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
 
-          if (behandlingId.length === 0 || dokumentId.length === 0) {
-            logReq('Invalid behandlingId or dokumentId', req, { behandlingId, dokumentId }, 'warn');
-
-            return socket.close(4404, 'Not Found');
-          }
-
-          try {
-            if (isDeployed) {
-              const oboAccessToken = await req.ensureOboAccessToken('kabal-api');
-
-              if (oboAccessToken === undefined) {
-                const msg = 'Tried to authenticate collaboration connection without OBO access token';
-                logReq(msg, req, { behandlingId, dokumentId }, 'warn');
-
-                return socket.close(4401, 'Unauthorized');
-              }
-
-              if (false) {
-                const res = await fetch(
-                  `${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}/access`,
-                  {
-                    method: 'GET',
-                    headers: {
-                      Authorization: `Bearer ${oboAccessToken}`,
-                    },
-                  },
-                );
-
-                if (!res.ok) {
-                  logReq('Failed to establish collaboration connection', req, { behandlingId, dokumentId }, 'error');
-
-                  return socket.close(4403, 'Forbidden');
-                }
-
-                // TODO: Parse response body and check if user has access to document.
-                /*
-                  Posssible response body:
-                  enum Access {
-                    Read = 'read',
-                    Write = 'write',
-                    None = 'none',
-                  }
-                */
-              }
-            }
-
-            logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
-
-            collaborationServer.handleConnection(socket, req.raw, {
-              behandlingId,
-              dokumentId,
-              req,
-            } satisfies ConnectionContext);
-          } catch (e) {
-            socket.close(5500, e instanceof Error ? e.message : 'Internal Server Error');
-            console.error(e);
-          }
-        },
-      );
+          collaborationServer.handleConnection(webSocket, req.raw, {
+            behandlingId,
+            dokumentId,
+            req,
+          } satisfies ConnectionContext);
+        } catch (e) {
+          reply.code(500).send(e instanceof Error ? e.message : 'Internal Server Error');
+          console.error(e);
+        }
+      },
+    );
 
     pluginDone();
   },
   {
     fastify: '4',
     name: CRDT_PLUGIN_ID,
-    dependencies: [
-      '@fastify/websocket',
-      ACCESS_TOKEN_PLUGIN_ID,
-      OBO_ACCESS_TOKEN_PLUGIN_ID,
-      TRACEPARENT_PLUGIN_ID,
-      TAB_ID_PLUGIN_ID,
-    ],
+    dependencies: [ACCESS_TOKEN_PLUGIN_ID, OBO_ACCESS_TOKEN_PLUGIN_ID, TRACEPARENT_PLUGIN_ID, TAB_ID_PLUGIN_ID],
   },
 );
