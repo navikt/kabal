@@ -1,4 +1,5 @@
 import { Heading, Skeleton } from '@navikt/ds-react';
+import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
@@ -67,13 +68,14 @@ const Behandlingsdetaljer = () => {
     );
   }
 
-  if (oppgave.typeId === SaksTypeEnum.KLAGE) {
-    return <Klagebehandlingsdetaljer oppgavebehandling={oppgave} />;
+  switch (oppgave.typeId) {
+    case SaksTypeEnum.KLAGE:
+      return <Klagebehandlingsdetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.ANKE:
+      return <Ankebehandlingsdetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return <Trygderettsankebehandlingsdetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+      return <BehandlingEtterTrOpphevetDetaljer oppgavebehandling={oppgave} />;
   }
-
-  if (oppgave.typeId === SaksTypeEnum.ANKE) {
-    return <Ankebehandlingsdetaljer oppgavebehandling={oppgave} />;
-  }
-
-  return <Trygderettsankebehandlingsdetaljer oppgavebehandling={oppgave} />;
 };
