@@ -9,7 +9,7 @@ import {
 } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { useMyPlateEditorState } from '@app/plate/types';
 import { useThreads } from '../comments/use-threads';
 import { ExpandableThread } from './expandable-thread';
 
@@ -22,7 +22,7 @@ const EMPTY_LIST: PositionedItem<ThreadData>[] = [];
 export const PositionedComments = () => {
   const { attached, orphans } = useThreads();
   const { sheetRef, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
-  const editor = useMyPlateEditorRef();
+  const editor = useMyPlateEditorState();
 
   const { positionedItems, maxCount } = useMemo<{
     positionedItems: PositionedItem<ThreadData>[];

@@ -27,7 +27,7 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
-      autoLoginIgnorePaths: 
+      autoLoginIgnorePaths:
         - /assets/*
         - /*.js.map
         - /*.js
@@ -64,6 +64,8 @@ spec:
     - secret: slack-url
   redis:
     - instance: obo-cache
+      access: readwrite
+    - instance: hocuspocus
       access: readwrite
   liveness:
     path: /isAlive

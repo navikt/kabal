@@ -1,5 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IGetConsumerTextParams, IGetConsumerTextsParams } from '@app/types/common-text-types';
+import {
+  IGetConsumerGodFormuleringParams,
+  IGetConsumerHeaderFooterParams,
+  IGetConsumerRegelverkParams,
+  IGetConsumerTextParams,
+  IGetConsumerTextsParams,
+} from '@app/types/common-text-types';
 import { IConsumerText } from '@app/types/texts/consumer';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
@@ -7,12 +13,18 @@ export enum ConsumerTextsTagTypes {
   TEXT = 'consumer-text',
 }
 
+type Params =
+  | IGetConsumerTextsParams
+  | IGetConsumerGodFormuleringParams
+  | IGetConsumerRegelverkParams
+  | IGetConsumerHeaderFooterParams;
+
 export const consumerTextsApi = createApi({
   reducerPath: 'consumerTextsApi',
   baseQuery: KABAL_TEXT_TEMPLATES_BASE_QUERY,
   tagTypes: Object.values(ConsumerTextsTagTypes),
   endpoints: (builder) => ({
-    getConsumerTexts: builder.query<IConsumerText[], IGetConsumerTextsParams>({
+    getConsumerTexts: builder.query<IConsumerText[], Params>({
       query: ({ language, ...params }) => ({ url: `/consumer/texts/${language}`, params }),
       providesTags: (texts, _, { language }) =>
         texts === undefined

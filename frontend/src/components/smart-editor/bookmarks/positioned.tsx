@@ -1,9 +1,9 @@
 import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { setNodes } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { getBookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
+import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
   BookmarkData,
@@ -14,54 +14,38 @@ import {
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { pushEvent } from '@app/observability';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { useMyPlateEditorState } from '@app/plate/types';
+import { useMyPlateEditorRef } from '@app/plate/types';
 
 const ITEM_WIDTH = 1.5;
 const ITEM_GAP = 0.2;
 const ITEM_OFFSET = ITEM_WIDTH + ITEM_GAP;
 
 export const PositionedBookmarks = () => {
-  const { sheetRef, bookmarksMap, setInitialBookmarks, removeBookmark } = useContext(SmartEditorContext);
-  const editor = useMyPlateEditorState();
-  const isInitalized = useRef(false);
+  const { sheetRef } = useContext(SmartEditorContext);
+  const bookmarksList = useBookmarks();
+  const editorRef = useMyPlateEditorRef();
 
-  useEffect(() => {
-    if (!isInitalized.current) {
-      isInitalized.current = true;
-      setInitialBookmarks(getBookmarks(editor));
-
-      return;
-    }
-
-    // Update bookmarks.
-    const timer = setTimeout(
-      () => requestIdleCallback(() => setInitialBookmarks(getBookmarks(editor)), { timeout: 200 }),
-      500,
-    );
-
-    return () => clearTimeout(timer);
-  }, [editor, editor.children, setInitialBookmarks]);
-
-  const { positionedItems, maxCount } = useMemo<{
+  interface Positioned {
     positionedItems: PositionedItem<BookmarkData>[];
     maxCount: number;
-  }>(() => {
-    const bookmarks = Object.entries(bookmarksMap).map<BookmarkData>(([key, value]) => ({
+  }
+
+  const { positionedItems, maxCount } = useMemo<Positioned>(() => {
+    const bookmarks = bookmarksList.map<BookmarkData>(([key, value]) => ({
       id: key,
       nodes: value,
       type: ItemType.BOOKMARK,
     }));
 
-    return getPositionedItems(editor, bookmarks, sheetRef);
-  }, [bookmarksMap, editor, sheetRef]);
+    return getPositionedItems(editorRef, bookmarks, sheetRef);
+  }, [bookmarksList, editorRef, sheetRef]);
 
   const onDelete = useCallback(
     (id: string) => {
       pushEvent('remove-bookmark', 'smart-editor');
-      setNodes(editor, { [id]: undefined }, { match: (n) => id in n, mode: 'lowest', at: [] });
-      removeBookmark(id);
+      setNodes(editorRef, { [id]: undefined }, { match: (n) => id in n, mode: 'lowest', at: [] });
     },
-    [editor, removeBookmark],
+    [editorRef],
   );
 
   if (positionedItems.length === 0) {

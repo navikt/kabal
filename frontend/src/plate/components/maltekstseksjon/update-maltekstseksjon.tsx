@@ -14,11 +14,12 @@ interface Props {
     textIdList: string[] | null,
     nodes: (MaltekstElement | RedigerbarMaltekstElement)[] | null,
   ) => void;
+  ignore: () => void;
 }
 
 const BUTTON_SIZE: ButtonProps['size'] = 'xsmall';
 
-export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
+export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => {
   const { data: oppgave } = useOppgave();
   const [ignored, setIgnored] = useState(false);
 
@@ -66,7 +67,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes }: Props) => {
         />
       )}
 
-      <Button size={BUTTON_SIZE} icon={<XMarkIcon aria-hidden />} variant="secondary" onClick={() => setIgnored(true)}>
+      <Button size={BUTTON_SIZE} icon={<XMarkIcon aria-hidden />} variant="secondary" onClick={ignore}>
         Behold eksisterende tekst
       </Button>
 

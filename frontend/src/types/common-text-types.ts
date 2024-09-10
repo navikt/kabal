@@ -77,8 +77,42 @@ export interface IGetTextsParams extends IGetMaltekstseksjonParams {
   textType: TextTypes;
 }
 
+/** Deprecated
+ * @deprecated Remove when no longer in use by legacy (redigerbar) maltekst.
+ */
 export interface IGetConsumerTextsParams extends Omit<IGetTextsParams, 'trash'> {
   language: Language | typeof UNTRANSLATED;
+}
+
+export interface IGetConsumerMaltekstseksjonerParams {
+  ytelseHjemmelIdList: string[];
+  templateSectionIdList: string[];
+  utfallIdList: string;
+}
+
+export interface IGetConsumerMaltekstseksjonTextsParams {
+  id: string;
+  language: Language;
+}
+
+export interface IGetConsumerGodFormuleringParams {
+  ytelseHjemmelIdList: string[];
+  templateSectionIdList: string[];
+  utfallIdList: string;
+  textType: typeof GOD_FORMULERING_TYPE;
+  language: Language;
+}
+
+export interface IGetConsumerRegelverkParams {
+  ytelseHjemmelIdList: string[];
+  utfallIdList: string;
+  textType: typeof REGELVERK_TYPE;
+  language: typeof UNTRANSLATED;
+}
+
+export interface IGetConsumerHeaderFooterParams extends Omit<IGetMaltekstseksjonParams, 'trash'> {
+  textType: PlainTextTypes;
+  language: Language;
 }
 
 export interface IGetConsumerTextParams {

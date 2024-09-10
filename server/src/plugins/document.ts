@@ -9,6 +9,7 @@ import fastifyPlugin from 'fastify-plugin';
 import { Static, Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
+import { ApiClientEnum } from '@app/config/config';
 
 interface IBaseMetadata {
   title: string;
@@ -213,9 +214,9 @@ const getMetadata = async <T extends Metadata>(
   req: FastifyRequest,
   reply: FastifyReply,
 ): Promise<T | null> => {
-  await req.ensureOboAccessToken('kabal-api', reply);
+  const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
 
-  const headers = getProxyRequestHeaders(req, 'kabal-api');
+  const headers = getProxyRequestHeaders(req, ApiClientEnum.KABAL_API, oboAccessToken);
 
   const metadataReqStart = performance.now();
 

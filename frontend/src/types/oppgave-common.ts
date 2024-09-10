@@ -1,5 +1,6 @@
 import { IAddress } from '@app/types/documents/recipients';
 import { SexEnum } from '@app/types/kodeverk';
+import { Language } from '@app/types/texts/language';
 import { INavEmployee } from './bruker';
 
 export interface IJournalfoertDokumentId {
@@ -111,6 +112,7 @@ export type IPart = IPersonPart | IOrganizationPart;
 
 export interface ISakenGjelder extends IPersonPart {
   sex: SexEnum;
+  language: Language;
 }
 
 export interface IVenteperiode {

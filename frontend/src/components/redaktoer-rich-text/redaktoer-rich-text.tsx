@@ -2,8 +2,10 @@ import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Plate } from '@udecode/plate-common';
 import { forwardRef, useRef } from 'react';
 import { styled } from 'styled-components';
+import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
+import { renderLeaf, renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { redaktoerPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
 import { Sheet } from '@app/plate/sheet';
@@ -11,7 +13,6 @@ import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-t
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { ErrorComponent } from '../smart-editor-texts/error-component';
 
 interface Props {
   editorId: string;
@@ -54,7 +55,13 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
-              <PlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
+              <PlateEditor
+                id={editorId}
+                readOnly={readOnly}
+                onFocus={onFocus}
+                lang={lang}
+                renderLeaf={readOnly === true ? renderReadOnlyLeaf : renderLeaf}
+              />
             </Sheet>
           </Content>
         </Plate>
