@@ -14,9 +14,10 @@ interface Params {
   templateId?: TemplateIdEnum;
   section?: string;
   language?: Language | typeof UNTRANSLATED;
+  includeEnhet?: boolean;
 }
 
-export const useQuery = ({ textType, templateId, section, language }: Params) => {
+export const useQuery = ({ textType, templateId, section, language, includeEnhet = false }: Params) => {
   const { data: oppgave, isLoading } = useOppgave();
   const { user } = useContext(StaticDataContext);
   const defaultLanguagae = useSmartEditorLanguage();
@@ -36,14 +37,24 @@ export const useQuery = ({ textType, templateId, section, language }: Params) =>
     const query: IGetConsumerTextsParams = {
       ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
-      enhetIdList: [user.ansattEnhet.id],
+      enhetIdList: includeEnhet ? [user.ansattEnhet.id] : undefined,
       templateSectionIdList: templateSectionList,
       textType,
       language: language ?? defaultLanguagae,
     };
 
     return query;
-  }, [isLoading, oppgave, templateId, section, user.ansattEnhet.id, textType, language, defaultLanguagae]);
+  }, [
+    isLoading,
+    oppgave,
+    templateId,
+    section,
+    includeEnhet,
+    user.ansattEnhet.id,
+    textType,
+    language,
+    defaultLanguagae,
+  ]);
 };
 
 const getYtelseHjemmelList = (ytelse: string, hjemmelList: string[]): string[] => {

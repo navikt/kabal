@@ -1,4 +1,4 @@
-import { findNode } from '@udecode/plate-common';
+import { findNode, isText } from '@udecode/plate-common';
 import { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
@@ -31,11 +31,16 @@ const PREFIX_MAP = {
   [ItemType.BOOKMARK]: '',
 };
 
+interface Positioned<T extends ThreadData | BookmarkData> {
+  positionedItems: PositionedItem<T>[];
+  maxCount: number;
+}
+
 export const getPositionedItems = <T extends ThreadData | BookmarkData>(
   editor: RichTextEditor,
   list: T[],
   ref: HTMLElement | null,
-): { positionedItems: PositionedItem<T>[]; maxCount: number } => {
+): Positioned<T> => {
   const positionedItems = new Array<PositionedItem<T>>(list.length);
   const { length } = list;
   let maxCount = 0;
@@ -45,7 +50,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
 
     const leafEntry = findNode(editor, {
       at: [],
-      match: (n) => Object.keys(n).some((k) => k.startsWith(`${PREFIX_MAP[item.type]}${item.id}`)),
+      match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(`${PREFIX_MAP[item.type]}${item.id}`)),
     });
 
     if (leafEntry === undefined) {

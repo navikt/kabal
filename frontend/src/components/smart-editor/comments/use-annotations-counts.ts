@@ -1,12 +1,12 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 
 export const useAnnotationsCounts = () => {
   const { attached, orphans } = useThreads();
-  const { bookmarksMap } = useContext(SmartEditorContext);
+  const bookmarksList = useBookmarks();
 
-  const bookmarksCount = useMemo(() => Object.keys(bookmarksMap).length, [bookmarksMap]);
+  const bookmarksCount = useMemo(() => bookmarksList.length, [bookmarksList]);
 
   return {
     attached: attached.length,

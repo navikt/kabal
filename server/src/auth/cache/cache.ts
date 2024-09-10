@@ -47,6 +47,16 @@ class OboTieredCache {
     return null;
   }
 
+  public getCached(key: string): string | null {
+    if (this.#oboMemoryCache === null) {
+      return null;
+    }
+
+    const memoryHit = this.#oboMemoryCache.get(key);
+
+    return memoryHit?.token ?? null;
+  }
+
   public async set(key: string, token: string, expiresAt: number): Promise<void> {
     this.#oboMemoryCache?.set(key, token, expiresAt);
     await this.#oboRedisCache.set(key, token, expiresAt);
@@ -66,6 +76,8 @@ class OboSimpleCache {
     return memoryHit?.token ?? null;
   }
 
+  public getCached = this.get;
+
   public set(key: string, token: string, expiresAt: number): void {
     this.#oboMemoryCache.set(key, token, expiresAt);
   }
@@ -78,3 +90,5 @@ class OboSimpleCache {
 const hasRedis = REDIS_URI !== undefined && REDIS_USERNAME !== undefined && REDIS_PASSWORD !== undefined;
 
 export const oboCache = hasRedis ? new OboTieredCache(REDIS_URI, REDIS_USERNAME, REDIS_PASSWORD) : new OboSimpleCache();
+
+export const getCacheKey = (navIdent: string, appName: string) => `${navIdent}-${appName}`;

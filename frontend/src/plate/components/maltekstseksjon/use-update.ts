@@ -1,14 +1,14 @@
-import { PlateEditor } from '@udecode/plate-common';
-import { useCallback } from 'react';
-import { Path } from 'slate';
+import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect, useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { getNewChildren } from '@app/plate/components/maltekstseksjon/get-children';
 import { replaceNodes } from '@app/plate/components/maltekstseksjon/replace-nodes';
 import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
+import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
 import { LexSpecialisStatus, ScoredText, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import { MaltekstseksjonElement, useMyPlateEditorRef } from '@app/plate/types';
 import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
@@ -18,43 +18,51 @@ import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
-type UpdateMaltekstseksjonFn = (
-  element: MaltekstseksjonElement,
-  resultat: IOppgavebehandling['resultat'],
-  ytelseId: IOppgavebehandling['ytelseId'],
-  query: Omit<IGetTextsParams, 'trash'>,
-) => Promise<void>;
-
 interface Result {
-  updateMaltekstseksjon: UpdateMaltekstseksjonFn;
   isFetching: boolean;
+  tiedList: ScoredList;
+  maltekstseksjon: IMaltekstseksjon | null;
+  manualUpdate: MaltekstseksjonUpdate | null | undefined;
+  update: (preferCache: boolean) => void;
 }
 
 type ScoredList = ScoredText<IMaltekstseksjon>[];
 
-export const NO_TIED_LIST: ScoredList = [];
+const NO_TIED_LIST: ScoredList = [];
 
 export const useUpdateMaltekstseksjon = (
-  editor: PlateEditor<EditorValue>,
-  path: Path | undefined,
+  editorId: string,
+  element: MaltekstseksjonElement,
+  query: Omit<IGetTextsParams, 'trash'> | SkipToken,
   templateId: TemplateIdEnum,
-  setIsUpdating: (isUpdating: boolean) => void,
-  setManualUpdate: (manualUpdate: MaltekstseksjonUpdate | null | undefined) => void,
-  setTiedList: (tiedList: ScoredList) => void,
-  setMaltekstseksjon: (maltekstseksjon: IMaltekstseksjon | null) => void,
+  ytelseId: IOppgavebehandling['ytelseId'],
+  resultat: IOppgavebehandling['resultat'],
+  onUpdate: () => void,
+  isUpdated: boolean,
+  canManage: boolean,
 ): Result => {
+  const editor = useMyPlateEditorRef(editorId);
   const language = useSmartEditorLanguage();
+  const path = usePath(editor, element);
+  const [tiedList, setTiedList] = useState<ScoredList>(NO_TIED_LIST);
+  const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
+  const [maltekstseksjon, setMaltekstseksjon] = useState<IMaltekstseksjon | null>(null);
   const { data: oppgave } = useOppgave();
   const oppgaveIsLoaded = oppgave !== undefined;
   const getReplaceMethod = useGetReplaceMethod(oppgaveIsLoaded);
-  const [fetchMaltekstseksjon, { isFetching: maltekstseksjonIsFetching }] = useLazyGetConsumerMaltekstseksjonerQuery();
+  const [fetchMaltekstseksjoner, { isFetching: maltekstseksjonIsFetching }] =
+    useLazyGetConsumerMaltekstseksjonerQuery();
   const [fetchMaltekstseksjonTexts, { isFetching: textsAreFetching }] = useLazyGetMaltekstseksjonTextsQuery();
 
-  const updateMaltekstseksjon = useCallback<UpdateMaltekstseksjonFn>(
-    async (element, resultat, ytelseId, query) => {
-      const { utfallId, extraUtfallIdSet, hjemmelIdSet } = resultat;
+  const update = useCallback(
+    async (preferCache = true) => {
+      if (isUpdated || !canManage || query === skipToken) {
+        return;
+      }
 
-      const maltekstseksjoner = await fetchMaltekstseksjon({ ...query, trash: false }).unwrap();
+      const maltekstseksjoner = await fetchMaltekstseksjoner({ ...query, trash: false }, preferCache).unwrap();
+
+      const { utfallId, extraUtfallIdSet, hjemmelIdSet } = resultat;
 
       const [lexSpecialisStatus, result] = lexSpecialis(
         templateId,
@@ -66,6 +74,7 @@ export const useUpdateMaltekstseksjon = (
       );
 
       const isTie = lexSpecialisStatus === LexSpecialisStatus.TIE;
+
       setTiedList(isTie ? result : NO_TIED_LIST);
 
       if (isTie || lexSpecialisStatus === LexSpecialisStatus.NONE) {
@@ -74,48 +83,68 @@ export const useUpdateMaltekstseksjon = (
 
         if (replaceMethod === ReplaceMethod.AUTO) {
           replaceNodes(editor, path, null, null, null);
+          onUpdate();
           setManualUpdate(undefined);
         } else if (replaceMethod === ReplaceMethod.MANUAL) {
           setManualUpdate(null);
         } else {
+          onUpdate();
           setManualUpdate(undefined);
         }
       } else {
         setMaltekstseksjon(result);
         const { id, textIdList } = result;
-        const texts = await fetchMaltekstseksjonTexts({ id, language }).unwrap();
+        const texts = await fetchMaltekstseksjonTexts({ id, language }, preferCache).unwrap();
         const newChildren = getNewChildren(texts, element, element.section, language);
         const replaceMethod = await getReplaceMethod(element, result, newChildren);
 
         if (replaceMethod === ReplaceMethod.AUTO) {
           replaceNodes(editor, path, id, textIdList, newChildren);
+          onUpdate();
           setManualUpdate(undefined);
         } else if (replaceMethod === ReplaceMethod.MANUAL) {
           setManualUpdate({ maltekstseksjon: result, children: newChildren });
         } else {
+          onUpdate();
           setManualUpdate(undefined);
         }
       }
-
-      requestIdleCallback(() => setIsUpdating(false));
     },
     [
-      fetchMaltekstseksjon,
-      templateId,
-      setTiedList,
-      setMaltekstseksjon,
-      getReplaceMethod,
+      canManage,
       editor,
-      path,
-      setManualUpdate,
+      element,
       fetchMaltekstseksjonTexts,
+      fetchMaltekstseksjoner,
+      getReplaceMethod,
+      isUpdated,
       language,
-      setIsUpdating,
+      onUpdate,
+      path,
+      query,
+      resultat,
+      templateId,
+      ytelseId,
     ],
   );
 
+  useEffect(() => {
+    if (isUpdated || maltekstseksjonIsFetching || textsAreFetching || !canManage || query === skipToken) {
+      return;
+    }
+
+    if (element.section === 'section-mår') {
+      console.log('Fetching maltekstseksjon', query);
+    }
+
+    update();
+  }, [canManage, element.section, isUpdated, maltekstseksjonIsFetching, query, textsAreFetching, update]);
+
   return {
-    updateMaltekstseksjon,
     isFetching: maltekstseksjonIsFetching || textsAreFetching,
+    tiedList,
+    maltekstseksjon,
+    manualUpdate,
+    update,
   };
 };

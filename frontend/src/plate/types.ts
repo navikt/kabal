@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable import/no-unused-modules */
+import { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import { AutoformatRule } from '@udecode/plate-autoformat';
 import {
   PlateEditor,
@@ -22,6 +23,7 @@ import {
   TTableElement,
   TTableRowElement,
 } from '@udecode/plate-table';
+import { CursorEditorProps, PlateYjsEditorProps } from '@udecode/plate-yjs';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -37,6 +39,7 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import { IGetConsumerTextsParams } from '@app/types/common-text-types';
 import { Language } from '@app/types/texts/language';
 import { TemplateSections } from './template-sections';
 
@@ -148,6 +151,7 @@ export interface MaltekstseksjonElement extends BlockElement {
   section: TemplateSections;
   textIdList: string[];
   children: (MaltekstElement | RedigerbarMaltekstElement)[] | [EmptyVoidElement];
+  query?: IGetConsumerTextsParams;
 }
 
 export interface PlaceholderElement extends BlockElement {
@@ -275,5 +279,7 @@ export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P>;
 
 export type EditorAutoformatRule = AutoformatRule;
 
-export const useMyPlateEditorRef = (id?: PlateId) => useEditorRef<EditorValue, RichTextEditor>(id);
-export const useMyPlateEditorState = (id?: PlateId) => useEditorState<EditorValue, RichTextEditor>(id);
+export const useMyPlateEditorRef = (id?: PlateId) =>
+  useEditorRef<EditorValue, RichTextEditor & CursorEditor & CursorEditorProps & YjsEditor & PlateYjsEditorProps>(id);
+export const useMyPlateEditorState = (id?: PlateId) =>
+  useEditorState<EditorValue, RichTextEditor & CursorEditor & CursorEditorProps & YjsEditor & PlateYjsEditorProps>(id);

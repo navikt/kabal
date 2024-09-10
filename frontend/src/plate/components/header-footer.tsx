@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -51,7 +52,9 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
   const editor = useMyPlateEditorRef();
-  const query = useQuery({ textType });
+  const query = useQuery({ textType, includeEnhet: true });
+  const { templateId } = useContext(SmartEditorContext);
+  const canManage = useCanManageDocument(templateId);
 
   const loadMaltekst = useCallback(
     async (e: ElementTypes) => {
@@ -109,9 +112,11 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
-        <SectionToolbar>
-          <AddNewParagraph editor={editor} element={element} />
-        </SectionToolbar>
+        {canManage ? (
+          <SectionToolbar>
+            <AddNewParagraph editor={editor} element={element} />
+          </SectionToolbar>
+        ) : null}
       </SectionContainer>
     </PlateElement>
   );

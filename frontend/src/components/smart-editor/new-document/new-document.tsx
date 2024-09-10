@@ -15,7 +15,7 @@ import {
   BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
   KLAGE_TEMPLATES,
 } from '@app/plate/templates/templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -65,7 +65,9 @@ export const NewDocument = ({ onCreate }: Props) => {
 
     try {
       const { id } = await createSmartDocument({
-        ...template,
+        templateId: template.templateId,
+        dokumentTypeId: template.dokumentTypeId,
+        content: template.richText,
         tittel,
         oppgaveId: oppgave.id,
         creatorIdent: user.navIdent,

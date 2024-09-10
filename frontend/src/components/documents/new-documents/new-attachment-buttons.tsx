@@ -6,12 +6,13 @@ import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { Role } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';
@@ -55,12 +56,12 @@ export const NewAttachmentButtons = ({ document }: Props) => {
 };
 
 const NewRolAnswerDocumentButton = ({ document }: Props) => {
-  const oppgaveId = useOppgaveId();
+  const { data: oppgave } = useOppgave();
   const { user } = useContext(StaticDataContext);
   const isRol = useIsRol();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 
-  if (oppgaveId === skipToken) {
+  if (oppgave === undefined) {
     return null;
   }
 
@@ -70,12 +71,12 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
 
   const onClick = () =>
     create({
-      oppgaveId,
+      oppgaveId: oppgave.id,
       parentId: document.id,
       creatorIdent: user.navIdent,
       creatorRole: Role.KABAL_ROL,
       tittel: 'Svar fra rådgivende overlege',
-      richText: ROL_ANSWERS_TEMPLATE.richText,
+      content: ROL_ANSWERS_TEMPLATE.richText,
       dokumentTypeId: ROL_ANSWERS_TEMPLATE.dokumentTypeId,
       templateId: ROL_ANSWERS_TEMPLATE.templateId,
       language: Language.NB,

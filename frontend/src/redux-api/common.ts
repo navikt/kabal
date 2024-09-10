@@ -50,6 +50,8 @@ const staggeredBaseQuery = (baseUrl: string) => {
   );
 };
 
+export const PROXY_BASE_QUERY = staggeredBaseQuery('');
+
 const API_PATH = '/api';
 export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
 

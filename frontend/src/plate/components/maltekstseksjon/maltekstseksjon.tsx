@@ -1,24 +1,25 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, isEditorReadOnly } from '@udecode/plate-common';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { PlateElement, PlateRenderElementProps, isEditorReadOnly, setNodes } from '@udecode/plate-common';
+import { useCallback, useContext, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Instructions } from '@app/plate/components/maltekstseksjon/instructions';
 import { Loading } from '@app/plate/components/maltekstseksjon/loading';
 import { replaceNodes } from '@app/plate/components/maltekstseksjon/replace-nodes';
 import { Toolbar } from '@app/plate/components/maltekstseksjon/toolbar';
-import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
 import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
-import { NO_TIED_LIST, useUpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/use-update';
+import { useUpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/use-update';
 import { MaltekstseksjonContainer } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
 import { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
+import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
-import { MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
+import { IGetConsumerTextsParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
@@ -28,46 +29,56 @@ export const Maltekstseksjon = ({
   children,
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
-  const { data: oppgave } = useOppgave();
+  const oppgave = useRequiredOppgave();
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: MALTEKSTSEKSJON_TYPE, section: element.section, templateId });
   const path = usePath(editor, element);
-  const [isUpdating, setIsUpdating] = useState(true);
-  const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
-  const [tiedList, setTiedList] = useState(NO_TIED_LIST);
-  const [maltekstseksjon, setMaltekstseksjon] = useState<IMaltekstseksjon | null>(null);
-  const elementRef = useRef(element);
+  const canManage = useCanManageDocument(templateId);
+  const isUpdated = useMemo(() => areQueriesEqual(query, element.query), [query, element.query]);
 
-  const { updateMaltekstseksjon, isFetching } = useUpdateMaltekstseksjon(
-    editor,
-    path,
-    templateId,
-    setIsUpdating,
-    setManualUpdate,
-    setTiedList,
-    setMaltekstseksjon,
-  );
-
-  // Keep element in a ref in order to avoid unneccessary triggers of useEffect below, which would ultimatlely lead to fetch maltekstseksjon spam
-  useEffect(() => {
-    elementRef.current = element;
-  }, [element]);
-
-  useEffect(() => {
-    if (oppgave?.ytelseId === undefined || oppgave?.resultat === undefined || query === skipToken) {
+  const setUpdated = useCallback(() => {
+    if (query === skipToken || isUpdated) {
       return;
     }
 
-    setIsUpdating(true);
-    const timeout = setTimeout(
-      () => updateMaltekstseksjon(elementRef.current, oppgave.resultat, oppgave.ytelseId, query),
-      1_000,
-    );
+    if (element.section === 'section-mår') {
+      console.log('Setting updated', query, element.query);
+    }
 
-    return () => clearTimeout(timeout);
-  }, [oppgave?.ytelseId, oppgave?.resultat, query, updateMaltekstseksjon]);
+    setNodes<MaltekstseksjonElement>(editor, { query }, { match: (n) => n === element, at: path });
+  }, [editor, element, isUpdated, path, query]);
+
+  const { isFetching, maltekstseksjon, manualUpdate, tiedList, update } = useUpdateMaltekstseksjon(
+    editor.id,
+    element,
+    query,
+    templateId,
+    oppgave.ytelseId,
+    oppgave.resultat,
+    setUpdated,
+    isUpdated,
+    canManage,
+  );
+
+  if (element.section === 'section-mår') {
+    console.debug('Rerendering');
+
+    if (!(isFetching || manualUpdate === undefined || isUpdated)) {
+      console.log('Showing buttons', { isFetching, manualUpdate, isUpdated });
+    }
+  }
 
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
+
+  const elementIsEmpty = useMemo(() => {
+    const [first, ...rest] = element.children;
+
+    if (rest.length !== 0) {
+      return false;
+    }
+
+    return first.type === ELEMENT_EMPTY_VOID;
+  }, [element]);
 
   return (
     <PlateElement
@@ -85,42 +96,77 @@ export const Maltekstseksjon = ({
         data-language={element.language}
         data-maltekstseksjon-id={element.id}
       >
-        {manualUpdate !== undefined ? (
+        {!canManage || isFetching || manualUpdate === undefined || isUpdated ? null : (
           <UpdateMaltekstseksjon
             next={manualUpdate}
+            ignore={setUpdated}
             replaceNodes={(...a) => {
               replaceNodes(editor, path, ...a);
-
-              setManualUpdate(undefined);
+              setUpdated();
             }}
           />
-        ) : null}
+        )}
         {children}
-        {maltekstseksjon === null && oppgave !== undefined ? (
+        {canManage && elementIsEmpty && maltekstseksjon === null && oppgave !== undefined ? (
           <Information
-            isUpdating={isUpdating}
+            isUpdating={false}
             oppgave={oppgave}
             section={element.section}
             templateId={templateId}
             tiedList={tiedList}
           />
         ) : null}
-        <Toolbar
-          editor={editor}
-          element={element}
-          path={path}
-          isInRegelverk={isInRegelverk}
-          isFetching={isFetching}
-          update={() => {
-            if (oppgave !== undefined && query !== skipToken) {
-              setIsUpdating(true);
-              updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
-            }
-          }}
-        />
+        {canManage ? (
+          <Toolbar
+            editor={editor}
+            element={element}
+            path={path}
+            isInRegelverk={isInRegelverk}
+            isFetching={isFetching}
+            update={() => update(false)}
+          />
+        ) : null}
       </MaltekstseksjonContainer>
     </PlateElement>
   );
+};
+
+const useRequiredOppgave = () => {
+  const { data: oppgave } = useOppgave();
+
+  if (oppgave === undefined) {
+    throw new Error('Oppgave is required');
+  }
+
+  return oppgave;
+};
+
+const areQueriesEqual = (a: IGetConsumerTextsParams | SkipToken, b: IGetConsumerTextsParams | undefined): boolean =>
+  a !== skipToken &&
+  b !== undefined &&
+  a.language === b.language &&
+  a.textType === b.textType &&
+  a.utfallIdList === b.utfallIdList &&
+  stringListsAreEqual(a.enhetIdList, b.enhetIdList) &&
+  stringListsAreEqual(a.templateSectionIdList, b.templateSectionIdList) &&
+  stringListsAreEqual(a.ytelseHjemmelIdList, b.ytelseHjemmelIdList);
+
+const stringListsAreEqual = (a: string[] | undefined, b: string[] | undefined): boolean => {
+  if (a === undefined || b === undefined) {
+    return a === b;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (const aElement of a) {
+    if (!b.includes(aElement)) {
+      return false;
+    }
+  }
+
+  return true;
 };
 
 interface InformationProps {
@@ -131,10 +177,9 @@ interface InformationProps {
   section: TemplateSections;
 }
 
-const Information = ({ isUpdating, oppgave, section, templateId, tiedList }: InformationProps) => {
-  if (isUpdating) {
-    return <Loading section={section} />;
-  }
-
-  return <Instructions oppgave={oppgave} tiedList={tiedList} templateId={templateId} section={section} />;
-};
+const Information = ({ isUpdating, oppgave, section, templateId, tiedList }: InformationProps) =>
+  isUpdating ? (
+    <Loading section={section} />
+  ) : (
+    <Instructions oppgave={oppgave} tiedList={tiedList} templateId={templateId} section={section} />
+  );

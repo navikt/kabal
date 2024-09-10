@@ -16,7 +16,7 @@ export const consumerMaltekstseksjonerApi = createApi({
   baseQuery: KABAL_TEXT_TEMPLATES_BASE_QUERY,
   tagTypes: Object.values(ConsumerMaltekstseksjonerTagTypes),
   endpoints: (builder) => ({
-    getConsumerMaltekstseksjoner: builder.query<IMaltekstseksjon[], IGetTextsParams>({
+    getConsumerMaltekstseksjoner: builder.query<IMaltekstseksjon[], Omit<IGetTextsParams, 'enhetIdList'>>({
       query: (params) => ({ url: '/consumer/maltekstseksjoner', params }),
       providesTags: (maltekstseksjoner) =>
         maltekstseksjoner?.map(({ id }) => ({ type: ConsumerMaltekstseksjonerTagTypes.MALTEKSTSEKSJON, id })) ?? [],
@@ -31,7 +31,7 @@ export const consumerMaltekstseksjonerApi = createApi({
 });
 
 export const {
+  useGetMaltekstseksjonTextsQuery,
   useLazyGetMaltekstseksjonTextsQuery,
   useLazyGetConsumerMaltekstseksjonerQuery,
-  useGetMaltekstseksjonTextsQuery,
 } = consumerMaltekstseksjonerApi;
