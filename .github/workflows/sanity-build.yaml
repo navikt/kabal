@@ -30,7 +30,7 @@ jobs:
           path: |
             ${{matrix.apps}}/.eslintcache
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps), format('{0}/.eslintrc.cjs', matrix.apps), format('{0}/eslint.config.js', matrix.apps)) }}
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
@@ -57,4 +57,4 @@ jobs:
           path: |
             ${{matrix.apps}}/.eslintcache
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps), format('{0}/.eslintrc.cjs', matrix.apps), format('{0}/eslint.config.js', matrix.apps)) }}
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
