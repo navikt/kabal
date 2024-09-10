@@ -9,9 +9,13 @@ export const handleSmartDocumentVersionedEvent =
       documentsQuerySlice.util.updateQueryData(
         'getSmartDocumentVersions',
         { oppgaveId, dokumentId: documentId },
-        (draft) => {
-          draft.push({ author, timestamp, version });
-        },
+        (draft) => [{ author, timestamp, version }, ...draft],
       ),
+    );
+
+    reduxStore.dispatch(
+      documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId: documentId }, (draft) => {
+        draft.modified = timestamp;
+      }),
     );
   };

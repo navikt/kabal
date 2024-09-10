@@ -11,7 +11,7 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import {
   EditorDescendant,
@@ -23,11 +23,10 @@ import {
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 
-const EMPTY_CHAR_CODE = 8203;
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
 export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
-  const _cleanText: RichText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
+  const cleanedText: RichText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
 
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
@@ -35,7 +34,7 @@ export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, p
         at: path,
         match: (n) => n !== element,
       });
-      insertNodes<RichText>(editor, _cleanText, { at, select: true });
+      insertNodes<RichText>(editor, cleanedText, { at, select: true });
     });
   });
 };
@@ -58,7 +57,7 @@ export const insertEmptyChar = (editor: RichTextEditor, at: TPath) => {
 };
 
 export const getHasNoVisibleText = (text: string): boolean => {
-  if (hasZeroChars(text)) {
+  if (getHasZeroChars(text)) {
     return true;
   }
 
@@ -71,9 +70,9 @@ export const getHasNoVisibleText = (text: string): boolean => {
   return true;
 };
 
-export const hasZeroChars = (text: string): boolean => text.length === 0;
+export const getHasZeroChars = (text: string): boolean => text.length === 0;
 
-export const containsEmptyChar = (text: string): boolean => {
+export const getContainsEmptyChar = (text: string): boolean => {
   for (const char of text) {
     if (char.charCodeAt(0) === EMPTY_CHAR_CODE) {
       return true;
@@ -84,7 +83,7 @@ export const containsEmptyChar = (text: string): boolean => {
 };
 
 export const containsMultipleEmptyCharAndNoText = (text: string): boolean => {
-  if (hasZeroChars(text)) {
+  if (getHasZeroChars(text)) {
     return false;
   }
 

@@ -14,7 +14,7 @@ export class OboMemoryCache {
       tokenMessages.map((tokenMessage) => [tokenMessage.key, [tokenMessage.token, tokenMessage.expiresAt]]),
     );
 
-    log.info({ msg: `Created OBO memory cache with ${tokenMessages.length} tokens.` });
+    log.debug({ msg: `Created OBO memory cache with ${tokenMessages.length} tokens.` });
 
     /**
      * Clean OBO token cache every 10 minutes.

@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
+import { collaborationApi } from '@app/redux-api/collaboration';
 import { kabalInternalApi } from '@app/redux-api/internal';
 import { journalposterApi } from '@app/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
@@ -43,6 +44,7 @@ export const reduxStore = configureStore({
       searchApi.middleware,
       logiskeVedleggApi.middleware,
       svarbrevApi.middleware,
+      collaborationApi.middleware,
     ]),
 });
 

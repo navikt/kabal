@@ -1,3 +1,4 @@
+import { parseTokenPayload } from '@app/helpers/token-parser';
 import { getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import { CLIENT_VERSION_PLUGIN_ID } from '@app/plugins/client-version';
@@ -27,15 +28,14 @@ export const navIdentPlugin = fastifyPlugin(
         return;
       }
 
-      const payload = accessToken.split('.').at(1);
-
-      if (payload === undefined) {
-        return;
-      }
-
       try {
-        const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
-        const { NAVident: navIdent } = JSON.parse(decodedPayload) as TokenPayload;
+        const parsedPayload = parseTokenPayload(accessToken);
+
+        if (parsedPayload === undefined) {
+          return;
+        }
+
+        const { NAVident: navIdent } = parsedPayload;
 
         if (typeof navIdent !== 'string') {
           throw new Error('NAV-ident is not a string');
@@ -66,26 +66,3 @@ export const navIdentPlugin = fastifyPlugin(
     dependencies: [ACCESS_TOKEN_PLUGIN_ID, CLIENT_VERSION_PLUGIN_ID, TAB_ID_PLUGIN_ID, TRACEPARENT_PLUGIN_ID],
   },
 );
-
-interface TokenPayload {
-  aud: string;
-  iss: string;
-  iat: number;
-  nbf: number;
-  exp: number;
-  aio: string;
-  azp: string;
-  azpacr: string;
-  groups: string[];
-  name: string;
-  oid: string;
-  preferred_username: string;
-  rh: string;
-  scp: string;
-  sub: string;
-  tid: string;
-  uti: string;
-  ver: string;
-  NAVident: string;
-  azp_name: string;
-}

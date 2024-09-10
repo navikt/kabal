@@ -1,11 +1,14 @@
 import { styled } from 'styled-components';
-import { SavedStatus, SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { Zoom } from '@app/plate/status-bar/zoom';
 
-export const StatusBar = ({ ...status }: SavedStatusProps) => (
+interface Props {
+  children?: React.ReactNode;
+}
+
+export const StatusBar = ({ children }: Props) => (
   <Container>
     <Zoom />
-    <SavedStatus {...status} />
+    {children}
   </Container>
 );
 
