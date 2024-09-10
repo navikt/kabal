@@ -1,11 +1,9 @@
 import { styled } from 'styled-components';
-import { SavedStatus, SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { Zoom } from '@app/plate/status-bar/zoom';
 
-export const StatusBar = ({ ...status }: SavedStatusProps) => (
+export const StatusBar = () => (
   <Container>
     <Zoom />
-    <SavedStatus {...status} />
   </Container>
 );
 

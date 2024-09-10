@@ -37,7 +37,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
       const { method, url, trace_id, span_id, tab_id, client_version, proxyStartTime } = req;
       const responseTime = getDuration(proxyStartTime);
 
-      log.info({
+      log.debug({
         msg: `Proxy response (${appName}) ${reply.statusCode} ${method} ${url} ${responseTime}ms`,
         trace_id,
         span_id,
@@ -65,7 +65,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         websocket: true,
         proxyPayloads: true,
         preHandler: async (req, reply) => {
-          log.info({
+          log.debug({
             msg: `Proxy request (${appName}) ${req.method} ${req.url}`,
             tab_id: req.tab_id,
             trace_id: req.trace_id,

@@ -29,7 +29,6 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
-import { RichTextEditorElement } from '@app/plate/types';
 
 export const createNormalizeNodePlugin = createPluginFactory({
   key: 'normalize',
@@ -37,7 +36,7 @@ export const createNormalizeNodePlugin = createPluginFactory({
     const { normalizeNode } = editor;
 
     // eslint-disable-next-line complexity
-    editor.normalizeNode<RichTextEditorElement> = ([node, path]) => {
+    editor.normalizeNode = ([node, path]) => {
       if (isElement(node) && node.children.length === 0) {
         const [highestAncestorPath] = path;
         const highestAncestor =

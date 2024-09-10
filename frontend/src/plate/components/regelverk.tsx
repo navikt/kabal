@@ -2,8 +2,10 @@ import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -26,16 +28,23 @@ export const Regelverk = ({
   children,
   element,
   editor,
-}: PlateRenderElementProps<EditorValue, RegelverkElement>) => (
-  <PlateElement attributes={attributes} element={element} editor={editor} onDragStart={onPlateContainerDragStart}>
-    <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
-      {children}
-      <SectionToolbar contentEditable={false} style={{ top: 32 }}>
-        <DeleteRegelverk element={element} />
-      </SectionToolbar>
-    </SectionContainer>
-  </PlateElement>
-);
+}: PlateRenderElementProps<EditorValue, RegelverkElement>) => {
+  const { templateId } = useContext(SmartEditorContext);
+  const canManage = useCanManageDocument(templateId);
+
+  return (
+    <PlateElement attributes={attributes} element={element} editor={editor} onDragStart={onPlateContainerDragStart}>
+      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
+        {children}
+        {canManage ? (
+          <SectionToolbar contentEditable={false} style={{ top: 32 }}>
+            <DeleteRegelverk element={element} />
+          </SectionToolbar>
+        ) : null}
+      </SectionContainer>
+    </PlateElement>
+  );
+};
 
 const LoadingWrapper = styled.div`
   position: absolute;
@@ -64,6 +73,8 @@ export const RegelverkContainer = ({
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useQuery({ textType: REGELVERK_TYPE, language: UNTRANSLATED });
+  const { templateId } = useContext(SmartEditorContext);
+  const canManage = useCanManageDocument(templateId);
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 
@@ -103,18 +114,20 @@ export const RegelverkContainer = ({
             <StyledLoader title="Laster..." size="2xlarge" />
           </LoadingWrapper>
         ) : null}
-        <SectionToolbar contentEditable={false}>
-          <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
-            <Button
-              icon={<GavelSoundBlockIcon aria-hidden />}
-              onClick={insertRegelverk}
-              variant="tertiary"
-              size="xsmall"
-              contentEditable={false}
-              disabled={loading}
-            />
-          </Tooltip>
-        </SectionToolbar>
+        {canManage ? (
+          <SectionToolbar contentEditable={false}>
+            <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
+              <Button
+                icon={<GavelSoundBlockIcon aria-hidden />}
+                onClick={insertRegelverk}
+                variant="tertiary"
+                size="xsmall"
+                contentEditable={false}
+                disabled={loading}
+              />
+            </Tooltip>
+          </SectionToolbar>
+        ) : null}
       </SectionContainer>
     </PlateElement>
   );

@@ -8,6 +8,7 @@ import {
 } from '@app/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useSetSmartEditorLanguage } from '@app/hooks/use-set-smart-editor-language';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
@@ -15,11 +16,12 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { Language, isLanguage } from '@app/types/texts/language';
 
 export const SaksbehandlerSettings = () => {
-  const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin, templateId } = useContext(SmartEditorContext);
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const language = useSmartEditorLanguage();
   const [setLanguage] = useSetSmartEditorLanguage();
+  const canManage = useCanManageDocument(templateId);
 
   const onChangeLanguage = useCallback(
     (lang: string) => {
@@ -55,18 +57,20 @@ export const SaksbehandlerSettings = () => {
           </Heading>
         </Modal.Header>
         <StyledModalBody>
-          <section>
-            <Heading level="2" size="small" spacing>
-              Språk
-            </Heading>
-            <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
-              <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
-              <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
-            </ToggleGroup>
-          </section>
+          {canManage ? (
+            <section aria-labelledby="set-language">
+              <Heading level="2" size="small" spacing id="set-language">
+                Språk
+              </Heading>
+              <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
+                <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
+                <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+              </ToggleGroup>
+            </section>
+          ) : null}
 
-          <section>
-            <Heading level="2" size="small" spacing>
+          <section aria-labelledby="set-comments-and-bookmarks">
+            <Heading level="2" size="small" spacing id="set-comments-and-bookmarks">
               Kommentarer og bokmerker
             </Heading>
 
@@ -89,8 +93,8 @@ export const SaksbehandlerSettings = () => {
             </ToggleGroup>
           </section>
 
-          <section>
-            <StyledHeading level="2" size="small" spacing>
+          <section aria-labelledby="set-abbreviations">
+            <StyledHeading level="2" size="small" spacing id="set-abbreviations">
               <AbbreviationsHeadingContent />
             </StyledHeading>
 
