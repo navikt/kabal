@@ -7,7 +7,7 @@
     "start": "vite & tsc --watch",
     "build": "vite build",
     "typecheck": "tsc",
-    "lint": "biome check"
+    "lint": "biome check --fix"
   },
   "license": "MIT",
   "devDependencies": {

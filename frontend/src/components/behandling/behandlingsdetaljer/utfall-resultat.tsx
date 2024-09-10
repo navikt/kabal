@@ -64,7 +64,7 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfallId: value });
 
-      if (oppgave !== undefined && oppgave.resultat.extraUtfallIdSet.includes(value)) {
+      if (oppgave?.resultat.extraUtfallIdSet.includes(value)) {
         updateEkstraUtfall({
           oppgaveId,
           extraUtfallIdSet: oppgave.resultat.extraUtfallIdSet.filter((id) => id !== value),

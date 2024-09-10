@@ -35,6 +35,14 @@
         "noUnusedTemplateLiteral": {
           "level": "warn",
           "fix": "unsafe"
+        },
+        "noUselessElse": {
+          "level": "warn",
+          "fix": "safe"
+        },
+        "useTemplate": {
+          "level": "warn",
+          "fix": "safe"
         }
       }
     }
@@ -54,6 +62,6 @@
     }
   },
   "files": {
-    "ignore": ["dist/**"]
+    "ignore": ["dist/**", "node_modules/**"]
   }
 }

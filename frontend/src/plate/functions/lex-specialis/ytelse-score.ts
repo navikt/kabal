@@ -16,13 +16,15 @@ export const getYtelseScore = (ytelseId: string, hjemmelList: string[], ytelseHj
     if (y === GLOBAL) {
       if (h === undefined) {
         return INCLUDE_THRESHOLD;
-      } else if (hjemmelList.includes(h)) {
+      }
+      if (hjemmelList.includes(h)) {
         return GLOBAL_HJEMMEL_SCORE;
       }
     } else if (y === ytelseId) {
       if (h === undefined) {
         return ONLY_YTELSE_SCORE;
-      } else if (hjemmelList.includes(h)) {
+      }
+      if (hjemmelList.includes(h)) {
         return YTELSE_AND_HJEMMEL_SCORE;
       }
     }

@@ -14,7 +14,7 @@ export const useSmartEditorLanguage = () => {
   );
 
   // Try to use cache for single document first. This will probably not be in place in time, though.
-  if (document !== undefined && document.isSmartDokument) {
+  if (document?.isSmartDokument === true) {
     return document.language;
   }
 
@@ -22,7 +22,7 @@ export const useSmartEditorLanguage = () => {
   if (documents !== undefined) {
     const doc = documents.find(({ id }) => documentId === id);
 
-    if (doc !== undefined && doc.isSmartDokument) {
+    if (doc?.isSmartDokument === true) {
       return doc.language;
     }
   }

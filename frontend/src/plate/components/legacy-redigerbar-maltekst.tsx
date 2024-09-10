@@ -87,7 +87,7 @@ export const LegacyRedigerbarMaltekst = ({
     if (!isInitialized.current) {
       insertRedigerbarMaltekst();
     }
-  }, [editor, element, insertRedigerbarMaltekst]);
+  }, [element, insertRedigerbarMaltekst]);
 
   if (isLoading) {
     return (

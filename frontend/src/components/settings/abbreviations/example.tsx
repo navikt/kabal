@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 interface Props {
   title: string;
   children: React.ReactNode;
-  examples: React.ReactNode[];
+  examples: React.ReactElement<{ key: string }>[];
   recommended?: boolean;
 }
 
@@ -22,8 +22,8 @@ export const AbbrevationExample = ({ title, children, examples, recommended = fa
       {children}
     </BodyShort>
     <List as="ol" size="small">
-      {examples.map((example, index) => (
-        <List.Item key={index}>{example}</List.Item>
+      {examples.map((example) => (
+        <List.Item key={example.key}>{example}</List.Item>
       ))}
     </List>
   </section>

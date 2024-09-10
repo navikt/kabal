@@ -65,12 +65,12 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
     const saksbehandler =
       node.saksbehandler === undefined
         ? []
-        : [createSimpleParagraph(node.saksbehandler.name + '\n' + node.saksbehandler.title)];
+        : [createSimpleParagraph(`${node.saksbehandler.name}\n${node.saksbehandler.title}`)];
 
     const medunderskriver =
       node.medunderskriver === undefined
         ? []
-        : [createSimpleParagraph(node.medunderskriver.name + '\n' + node.medunderskriver.title)];
+        : [createSimpleParagraph(`${node.medunderskriver.name}\n${node.medunderskriver.title}`)];
 
     return [...saksbehandler, ...medunderskriver];
   }

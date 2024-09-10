@@ -20,7 +20,8 @@ export const getErrorData = (error: FetchBaseQueryError | SerializedError | unde
   if (typeof error.status === 'number') {
     if (typeof error.data === 'string') {
       return { title: error.data, status: error.status };
-    } else if (isApiError(error.data)) {
+    }
+    if (isApiError(error.data)) {
       return error.data;
     }
   }
@@ -43,9 +44,11 @@ export const getErrorData = (error: FetchBaseQueryError | SerializedError | unde
 const getCustomErrorMessage = (data?: unknown): string | undefined => {
   if (typeof data === 'string') {
     return data;
-  } else if (typeof data === 'number') {
+  }
+  if (typeof data === 'number') {
     return data.toString();
-  } else if (typeof data === 'object') {
+  }
+  if (typeof data === 'object') {
     return JSON.stringify(data);
   }
 
