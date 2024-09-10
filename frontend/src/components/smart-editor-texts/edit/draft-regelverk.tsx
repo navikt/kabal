@@ -42,7 +42,12 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
   }, [richText, publish, query, savedRichText, text.id, updateRichText]);
 
   return (
-    <Edit text={text} onDraftDeleted={onDraftDeleted} status={richTextStatus} onPublish={onPublish}>
+    <Edit
+      text={text}
+      onDraftDeleted={onDraftDeleted}
+      status={{ ...richTextStatus, modified: text.modified }}
+      onPublish={onPublish}
+    >
       <RedaktoerRichText
         editorId={text.id}
         savedContent={savedRichText}

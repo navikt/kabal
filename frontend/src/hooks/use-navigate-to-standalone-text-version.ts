@@ -38,7 +38,7 @@ export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
 
   useEffect(() => {
     if (lang === undefined && hasLanguage) {
-      navigateToText({ lang: Language.NB });
+      navigateToText({ lang: Language.NB }, true);
     }
   }, [hasLanguage, lang, navigateToText]);
 

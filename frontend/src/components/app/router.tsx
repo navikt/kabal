@@ -31,10 +31,10 @@ export const Router = () => (
     <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
       <Route path="oppgaver" element={<OppgaverPage />} />
       <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-      <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
-      <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
-      <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
-      <Route path="behandling-etter-tr-opphevet/:id" element={<BehandlingEtterTrOpphevetPage />} />
+      <Route path="klagebehandling/:oppgaveId" element={<KlagebehandlingPage />} />
+      <Route path="ankebehandling/:oppgaveId" element={<AnkebehandlingPage />} />
+      <Route path="trygderettsankebehandling/:oppgaveId" element={<TrygderettsankebehandlingPage />} />
+      <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<BehandlingEtterTrOpphevetPage />} />
     </Route>
 
     <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

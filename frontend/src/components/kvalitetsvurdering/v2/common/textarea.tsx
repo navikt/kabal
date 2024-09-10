@@ -87,7 +87,7 @@ const KvalitetsskjemaTextareaInternal = ({
         description={description}
       />
       <StatusContainer>
-        <SavedStatus {...updateStatus} />
+        <SavedStatus {...updateStatus} modified={kvalitetsvurdering.modified} />
       </StatusContainer>
     </>
   );

@@ -134,7 +134,7 @@ const DraftRichTextBase = ({ text, onDraftDeleted, validate, error }: DraftRichT
     <Edit
       text={text}
       onDraftDeleted={onDraftDeleted}
-      status={richTextStatus}
+      status={{ ...richTextStatus, modified: text.modified }}
       onPublish={onPublish}
       deleteTranslation={() => updateRichText({ query, richText: null, id: text.id, language })}
       error={error}

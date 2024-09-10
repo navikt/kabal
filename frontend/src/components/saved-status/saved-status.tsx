@@ -1,13 +1,9 @@
 import { Loader, Tooltip } from '@navikt/ds-react';
 import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ErrorMessage, getErrorData } from '@app/functions/get-error-data';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {
@@ -15,16 +11,10 @@ export interface SavedStatusProps {
   isError: boolean;
   isLoading: boolean;
   error?: FetchBaseQueryError | SerializedError | undefined;
+  modified: string;
 }
 
-export const SavedStatus = ({ isLoading, isSuccess, isError, error }: SavedStatusProps) => {
-  const oppgaveId = useOppgaveId();
-  const { dokumentId } = useContext(SmartEditorContext);
-  const { data } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { oppgaveId, dokumentId });
-
-  const lastSaved =
-    data === undefined ? null : <StatusText>{`Sist lagret: ${isoDateTimeToPretty(data.modified)}`}</StatusText>;
-
+export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: SavedStatusProps) => {
   if (isLoading) {
     return (
       <Container>
@@ -40,7 +30,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error }: SavedStatu
   if (isSuccess) {
     return (
       <Container>
-        {lastSaved}
+        <StatusText>Sist lagret: {isoDateTimeToPretty(modified)}</StatusText>
 
         <Tooltip content="Lagret!" delay={0}>
           <CheckmarkCircleFillIconColored />

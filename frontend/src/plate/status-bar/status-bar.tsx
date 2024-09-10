@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Zoom } from '@app/plate/status-bar/zoom';
+import { Scaling } from '@app/plate/status-bar/scaling';
 
 interface Props {
   children?: React.ReactNode;
@@ -7,7 +7,7 @@ interface Props {
 
 export const StatusBar = ({ children }: Props) => (
   <Container>
-    <Zoom />
+    <Scaling />
     {children}
   </Container>
 );

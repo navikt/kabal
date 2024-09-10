@@ -108,6 +108,7 @@ const HistoryEditorContainer = styled.div`
   padding-top: 16px;
   padding-right: 16px;
   height: max-content;
+  min-width: 210mm;
 
   &::after {
     content: '';

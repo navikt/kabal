@@ -84,6 +84,7 @@ const getIcon = (textType: RichTextTypes | typeof REGELVERK_TYPE | typeof GOD_FO
 const Container = styled.section`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   position: relative;
   padding-top: 8px;
   overflow-y: auto;

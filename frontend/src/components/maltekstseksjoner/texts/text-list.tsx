@@ -156,7 +156,6 @@ const List = styled.div`
   flex-direction: column;
   row-gap: 16px;
   margin: 0;
-  padding-bottom: 32px;
   overflow-y: auto;
   overflow-x: hidden;
 `;
@@ -165,6 +164,7 @@ const ListItem = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+  flex-grow: 1;
 `;
 
 const ArrowButtonsContainer = styled.div`
@@ -182,7 +182,7 @@ const StyledTextVersions = styled(TextVersions)`
   padding: 4px;
   margin-left: 4px;
   margin-right: 4px;
-  width: calc(210mm + 16px + 16px + 4px + 4px);
+  flex-grow: 1;
 
   &:last-child {
     margin-bottom: 4px;

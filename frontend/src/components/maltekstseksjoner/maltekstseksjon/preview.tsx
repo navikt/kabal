@@ -94,6 +94,9 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
 
 const Section = styled.section`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const StyledLoader = styled(Loader)`

@@ -8,10 +8,10 @@ import {
   useTableCellElementResizableState,
   useTableCellElementState,
 } from '@udecode/plate-table';
-import { forwardRef, useCallback } from 'react';
+import { forwardRef, useCallback, useContext } from 'react';
 import { styled } from 'styled-components';
-import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 import { StyledParagraph } from '../paragraph';
 
@@ -36,7 +36,7 @@ export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>
 TableCellElement.displayName = 'TableCellElement';
 
 const Resize = () => {
-  const { value } = useScaleState();
+  const { scale } = useContext(ScaleContext);
   const { colIndex, readOnly, isSelectingCell, hovered, ...state } = useTableCellElementState();
   const resizableState = useTableCellElementResizableState({ colIndex, ...state });
   const { rightProps } = useTableCellElementResizable(resizableState);
@@ -60,12 +60,12 @@ const Resize = () => {
   const scaledOptions = {
     ...options,
     onResize: (e: ResizeEvent) => {
-      const scale = value / 100;
+      const scaleFactor = scale / 100;
 
       return options?.onResize?.({
         ...e,
-        initialSize: Math.round(e.initialSize / scale),
-        delta: Math.round(e.delta / scale),
+        initialSize: Math.round(e.initialSize / scaleFactor),
+        delta: Math.round(e.delta / scaleFactor),
       });
     },
   };

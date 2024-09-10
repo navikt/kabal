@@ -79,9 +79,15 @@ export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
-export const useSmartEditorZoom = () => useNumberSetting(useOppgavePath('tabs/smart-editor/zoom'));
 export const useSmartEditorAnnotationsAtOrigin = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/annotations_at_origin'));
+
+export enum ScalingGroup {
+  OPPGAVEBEHANDLING = 'oppgavebehandling',
+  REDAKTØR = 'redaktør',
+}
+
+export const useSmartEditorZoom = (prefix: ScalingGroup) => useNumberSetting(`${prefix}/smart-editor/zoom`);
 
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',

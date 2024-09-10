@@ -4,6 +4,8 @@ import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
+import { ScalingGroup } from '@app/hooks/settings/use-setting';
+import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import { ISmartDocument } from '@app/types/documents/documents';
 
 interface TabPanelProps {
@@ -32,7 +34,9 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
   return (
     <StyledTabsPanel value={smartDocument.id} lazy={false}>
       <SmartEditorContextComponent smartDocument={smartDocument}>
-        <Editor key={id} smartDocument={smartDocument} />
+        <ScaleContextComponent zoomGroup={ScalingGroup.OPPGAVEBEHANDLING}>
+          <Editor key={id} smartDocument={smartDocument} />
+        </ScaleContextComponent>
       </SmartEditorContextComponent>
     </StyledTabsPanel>
   );

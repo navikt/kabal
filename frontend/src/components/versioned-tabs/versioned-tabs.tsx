@@ -67,7 +67,14 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
   }
 
   return (
-    <Tabs size="small" value={selectedTabId} onChange={setSelectedTabId} {...rest} ref={setRef}>
+    <Tabs
+      size="small"
+      value={selectedTabId}
+      onChange={setSelectedTabId}
+      {...rest}
+      ref={setRef}
+      style={{ display: 'flex', flexDirection: 'column' }}
+    >
       <StyledTabList>{tabs}</StyledTabList>
       {panels}
     </Tabs>
