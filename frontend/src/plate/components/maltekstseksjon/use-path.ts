@@ -1,7 +1,7 @@
-import { PlateEditor, findNodePath } from '@udecode/plate-common';
+import type { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import { type PlateEditor, findNodePath } from '@udecode/plate-common';
 import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
 
 export const usePath = (editor: PlateEditor<EditorValue>, element: MaltekstseksjonElement) => {
   const path = findNodePath(editor, element);

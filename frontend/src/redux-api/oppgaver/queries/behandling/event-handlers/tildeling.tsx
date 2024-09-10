@@ -1,17 +1,17 @@
+import { InfoToast } from '@app/components/toast/info-toast';
+import { toast } from '@app/components/toast/store';
+import { QUEUE, SELF, employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
+import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
+import type { TildelingEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
+import type { INavEmployee } from '@app/types/bruker';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
+import { FradelReason } from '@app/types/oppgaver';
 /* eslint-disable max-lines */
 import { Label, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { reduxStore } from '@app/redux/configure-store';
-import { QUEUE, SELF, employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
-import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
-import { TildelingEvent } from '@app/redux-api/server-sent-events/types';
-import { INavEmployee } from '@app/types/bruker';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes, ITildelingEvent } from '@app/types/oppgavebehandling/response';
-import { FradelReason } from '@app/types/oppgaver';
 
 export const handleTildelingEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

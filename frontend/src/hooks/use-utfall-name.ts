@@ -1,6 +1,6 @@
 import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useUtfall } from '@app/simple-api-state/use-kodeverk';
-import { IKodeverkSimpleValue, UtfallEnum } from '@app/types/kodeverk';
+import type { IKodeverkSimpleValue, UtfallEnum } from '@app/types/kodeverk';
 
 export const useUtfallNameOrLoading = (utfallIdSet: string): string => {
   const { data: utfall } = useUtfall();

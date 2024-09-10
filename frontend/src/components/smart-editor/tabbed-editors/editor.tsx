@@ -1,10 +1,3 @@
-/* eslint-disable max-lines */
-import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { useContext, useEffect, useState } from 'react';
-import { BasePoint, Path, Range } from 'slate';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -25,10 +18,17 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { useGetMySignatureQuery, useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocument } from '@app/types/documents/documents';
+/* eslint-disable max-lines */
+import { ClockDashedIcon } from '@navikt/aksel-icons';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { Plate, isCollapsed, isText } from '@udecode/plate-common';
+import { useContext, useEffect, useState } from 'react';
+import { type BasePoint, Path, Range } from 'slate';
+import { styled } from 'styled-components';
 
 interface EditorProps {
   smartDocument: ISmartDocument;

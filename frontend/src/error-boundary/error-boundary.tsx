@@ -1,7 +1,7 @@
-import { Button, ButtonProps } from '@navikt/ds-react';
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { styled } from 'styled-components';
 import { pushError } from '@app/observability';
+import { Button, type ButtonProps } from '@navikt/ds-react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   children: ReactNode;

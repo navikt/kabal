@@ -1,6 +1,6 @@
+import type { IGetConsumerTextParams, IGetConsumerTextsParams } from '@app/types/common-text-types';
+import type { IConsumerText } from '@app/types/texts/consumer';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IGetConsumerTextParams, IGetConsumerTextsParams } from '@app/types/common-text-types';
-import { IConsumerText } from '@app/types/texts/consumer';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
 export enum ConsumerTextsTagTypes {

@@ -1,6 +1,6 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
 import { SETTINGS_MANAGER } from './manager';
 
@@ -12,7 +12,7 @@ export interface Setting<T = string, D = undefined> {
   remove: () => void;
 }
 
-export const useSetting = (property: string, syncBetweenTabs: boolean = false): Setting => {
+export const useSetting = (property: string, syncBetweenTabs = false): Setting => {
   const { user } = useContext(StaticDataContext);
 
   const key = `${user.navIdent}/${property}`;

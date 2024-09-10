@@ -1,10 +1,10 @@
+import { isoDateToPretty } from '@app/domain/date';
+import { formatIdNumber } from '@app/functions/format-id';
+import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { isoDateToPretty } from '@app/domain/date';
-import { formatIdNumber } from '@app/functions/format-id';
-import { HistoryEventTypes, IPart, IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
-import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType } from '@app/types/svarbrev';
 import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 

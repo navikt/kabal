@@ -1,5 +1,3 @@
-import { AnyObject, createPluginFactory } from '@udecode/plate-common';
-import { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 import {
   handleDeleteBackwardInPlaceholder,
   handleDeleteForwardInPlaceholder,
@@ -13,8 +11,10 @@ import {
   handleDeleteBackwardInUndeletable,
   handleDeleteForwardInUndeletable,
 } from '@app/plate/plugins/prohibit-deletion/undeletable';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { isUnchangeable } from '@app/plate/utils/queries';
+import { type AnyObject, createPluginFactory } from '@udecode/plate-common';
+import type { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 
 const withOverrides = (editor: RichTextEditor) => {
   const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark } = editor;

@@ -79,7 +79,7 @@ const split = (value: string): (string | number)[] => {
       continue;
     }
 
-    const parsedNumber = parseInt(part, 10);
+    const parsedNumber = Number.parseInt(part, 10);
 
     result.push(Number.isNaN(parsedNumber) ? part : parsedNumber);
   }

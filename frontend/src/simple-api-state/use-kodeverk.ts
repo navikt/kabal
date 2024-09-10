@@ -1,4 +1,4 @@
-import {
+import type {
   IKabalYtelse,
   IKlageenhet,
   IKodeverkSimpleValue,

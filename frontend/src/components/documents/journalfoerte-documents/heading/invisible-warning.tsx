@@ -1,10 +1,10 @@
+import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { EyeObfuscatedIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
 
 export interface InvisibleWarningProps {
   allDocuments: IArkivertDocument[];

@@ -1,5 +1,3 @@
-import { Switch } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
@@ -8,6 +6,8 @@ import {
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
+import { Switch } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();

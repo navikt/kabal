@@ -1,7 +1,7 @@
+import { ROLE_NAMES, type Role } from '@app/types/bruker';
 import { FilesIcon } from '@navikt/aksel-icons';
-import { Tag, TagProps, Tooltip } from '@navikt/ds-react';
+import { Tag, type TagProps, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { ROLE_NAMES, Role } from '@app/types/bruker';
 
 interface Props {
   role: Role;

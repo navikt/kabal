@@ -1,9 +1,9 @@
 import { getLogger } from '@app/logger';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import { Document } from '@hocuspocus/server';
+import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { XmlText, encodeStateAsUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');

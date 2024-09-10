@@ -1,9 +1,9 @@
 import { styled } from 'styled-components';
 
 export enum AddressState {
-  SAVED,
-  OVERRIDDEN,
-  UNSAVED,
+  SAVED = 0,
+  OVERRIDDEN = 1,
+  UNSAVED = 2,
 }
 
 export const Container = styled.div<{ $state: AddressState }>`

@@ -1,12 +1,12 @@
-import { Button } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
-import { IPublishedText } from '@app/types/texts/responses';
+import type { IPublishedText } from '@app/types/texts/responses';
+import { Button } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   text: IPublishedText;

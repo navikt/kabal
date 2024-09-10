@@ -1,19 +1,19 @@
-import { Select, Tag, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
   ANNEN_INNGAAENDE_POST,
   KJENNELSE_FRA_TRYGDERETTEN,
-  Option,
+  type Option,
   useDistribusjonstypeOptions,
 } from '@app/hooks/use-distribusjonstype-options';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
+import { Select, Tag, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   document: IMainDocument;
@@ -99,7 +99,7 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
   };
 
   return (
-    <Tooltip content={reason ?? 'Kan endres til alle typer'} maxChar={Infinity}>
+    <Tooltip content={reason ?? 'Kan endres til alle typer'} maxChar={Number.POSITIVE_INFINITY}>
       <StyledSelect
         data-testid="document-type-select"
         label="Dokumenttype"

@@ -1,3 +1,16 @@
+import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { ErrorBoundary } from '@app/error-boundary/error-boundary';
+import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
+import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
+import { pushEvent } from '@app/observability';
+import { PlateEditor } from '@app/plate/plate-editor';
+import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { Sheet } from '@app/plate/sheet';
+import { type EditorValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
+import type { ISmartDocument } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
 import {
   Plate,
@@ -9,19 +22,6 @@ import {
 } from '@udecode/plate-common';
 import { memo, useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
-import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { pushEvent } from '@app/observability';
-import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
-import { Sheet } from '@app/plate/sheet';
-import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import { ISmartDocument } from '@app/types/documents/documents';
 
 interface Props {
   versionId: number;

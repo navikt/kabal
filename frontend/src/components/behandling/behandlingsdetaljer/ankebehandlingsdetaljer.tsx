@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
@@ -6,7 +5,8 @@ import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksn
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Heading } from '@navikt/ds-react';
 import { Part } from '../../part/part';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';

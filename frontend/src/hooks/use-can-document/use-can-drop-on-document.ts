@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -9,8 +8,9 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { useContext } from 'react';
 import { isSentToRol } from './common';
 
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {

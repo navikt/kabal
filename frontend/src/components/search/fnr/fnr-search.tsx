@@ -1,9 +1,9 @@
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { useSearchOppgaverByFnrQuery, useSearchPersonByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
-import { formatFoedselsnummer } from '@app/functions/format-id';
-import { useSearchOppgaverByFnrQuery, useSearchPersonByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Result } from './result';
 
 const FNR_REGEX = /^\s*\d{6}\s*\d{5}\s*$/;

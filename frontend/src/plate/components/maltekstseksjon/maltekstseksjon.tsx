@@ -1,6 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, isEditorReadOnly } from '@udecode/plate-common';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
@@ -9,19 +6,22 @@ import { Instructions } from '@app/plate/components/maltekstseksjon/instructions
 import { Loading } from '@app/plate/components/maltekstseksjon/loading';
 import { replaceNodes } from '@app/plate/components/maltekstseksjon/replace-nodes';
 import { Toolbar } from '@app/plate/components/maltekstseksjon/toolbar';
-import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
+import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { UpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/update-maltekstseksjon';
 import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
 import { NO_TIED_LIST, useUpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/use-update';
 import { MaltekstseksjonContainer } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
-import { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { TemplateSections } from '@app/plate/template-sections';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
+import type { TemplateSections } from '@app/plate/template-sections';
+import type { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
 import { MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { PlateElement, type PlateRenderElementProps, isEditorReadOnly } from '@udecode/plate-common';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 export const Maltekstseksjon = ({
   editor,

@@ -1,8 +1,8 @@
-import { PlateElement, PlateElementProps, withHOC, withRef } from '@udecode/plate-common';
+import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
+import type { EditorValue, TableElement as ITableElement } from '@app/plate/types';
+import { PlateElement, type PlateElementProps, withHOC, withRef } from '@udecode/plate-common';
 import { TableProvider, useTableElement, useTableElementState } from '@udecode/plate-table';
 import { styled } from 'styled-components';
-import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
-import { EditorValue, TableElement as ITableElement } from '@app/plate/types';
 
 export const TableElement = withHOC(
   TableProvider,

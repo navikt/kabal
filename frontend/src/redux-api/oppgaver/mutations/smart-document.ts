@@ -1,6 +1,6 @@
 import { toast } from '@app/components/toast/store';
-import { IDocumentParams } from '@app/types/documents/common-params';
-import { Language } from '@app/types/texts/language';
+import type { IDocumentParams } from '@app/types/documents/common-params';
+import type { Language } from '@app/types/texts/language';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';

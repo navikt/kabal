@@ -1,12 +1,12 @@
 import {
   CreatorRole,
   DocumentTypeEnum,
-  IJournalfoertDokumentReference,
-  IMainDocument,
+  type IJournalfoertDokumentReference,
+  type IMainDocument,
 } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 export const isSentToRol = (oppgave: IOppgavebehandling) =>
   (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&

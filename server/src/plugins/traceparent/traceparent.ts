@@ -4,7 +4,7 @@ import {
   generateTraceparent,
   getTraceIdAndSpanIdFromTraceparent,
 } from '@app/helpers/traceparent';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
 declare module 'fastify' {

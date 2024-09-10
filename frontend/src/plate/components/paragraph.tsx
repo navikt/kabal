@@ -1,8 +1,8 @@
-import { PlateElement, PlateElementProps, isText } from '@udecode/plate-common';
-import { ElementRef, forwardRef } from 'react';
-import { styled } from 'styled-components';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { EditorValue, ParagraphElement, PlaceholderElement } from '@app/plate/types';
+import type { EditorValue, ParagraphElement, PlaceholderElement } from '@app/plate/types';
+import { PlateElement, type PlateElementProps, isText } from '@udecode/plate-common';
+import { type ElementRef, forwardRef } from 'react';
+import { styled } from 'styled-components';
 
 type RenderProps = PlateElementProps<EditorValue, ParagraphElement>;
 

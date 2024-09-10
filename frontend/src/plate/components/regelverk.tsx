@@ -1,9 +1,3 @@
-import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
@@ -14,12 +8,23 @@ import { DeleteSection } from '@app/plate/components/common/delete-section';
 import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
-import { EditorValue, RegelverkContainerElement, RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
+import {
+  type EditorValue,
+  type RegelverkContainerElement,
+  type RegelverkElement,
+  useMyPlateEditorRef,
+} from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
-import { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
+import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
 import { UNTRANSLATED } from '@app/types/texts/language';
+import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
+import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { PlateElement, type PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 

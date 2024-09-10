@@ -1,8 +1,8 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isApiRejectionError } from '@app/types/errors';
-import { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
-import { ITilknyttDocumentResponse } from '@app/types/oppgavebehandling/response';
+import type { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
+import type { ITilknyttDocumentResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';

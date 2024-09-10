@@ -1,4 +1,4 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 
 export const findDocument = (
   journalpostId: string,

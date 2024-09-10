@@ -1,5 +1,5 @@
-import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import { EditorValue, EmptyVoidElement } from '@app/plate/types';
+import type { EditorValue, EmptyVoidElement } from '@app/plate/types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
 
 type RenderProps = PlateElementProps<EditorValue, EmptyVoidElement>;
 

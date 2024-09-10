@@ -1,4 +1,4 @@
-import { IKvalitetsvurderingRadio, IKvalitetsvurderingRadioExtended } from '@app/types/kaka-kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingRadio, IKvalitetsvurderingRadioExtended } from '@app/types/kaka-kvalitetsvurdering/v1';
 
 type Keys = keyof IKvalitetsvurderingRadioExtended | keyof IKvalitetsvurderingRadio;
 

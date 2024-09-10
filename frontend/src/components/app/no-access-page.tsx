@@ -1,12 +1,12 @@
-import { BodyShort, Heading, Tag } from '@navikt/ds-react';
-import { useContext, useEffect } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { RoleList } from '@app/components/role-list/role-list';
 import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
 import { PageWrapper } from '@app/pages/page-wrapper';
-import { ALL_PUBLIC_ROLES, Role } from '@app/types/bruker';
+import { ALL_PUBLIC_ROLES, type Role } from '@app/types/bruker';
+import { BodyShort, Heading, Tag } from '@navikt/ds-react';
+import { useContext, useEffect } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   requiredRoles: Role[];

@@ -1,8 +1,8 @@
+import { SortOrder } from '@app/types/sort';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { SortOrder } from '@app/types/sort';
 
 type Icon = typeof ArrowUpIcon | typeof ArrowDownIcon | typeof ArrowsUpDownIcon;
 

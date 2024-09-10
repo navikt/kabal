@@ -1,5 +1,5 @@
 import { AddLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/add-logisk-vedlegg';
-import { LogiskeVedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
+import type { LogiskeVedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import {
   LOGISK_VEDLEGG_HEIGHT,
   LOGISK_VEDLEGG_SPACE,
@@ -9,7 +9,7 @@ import {
   LogiskeVedleggListItemStyle,
   LogiskeVedleggListStyle,
 } from '@app/components/documents/styled-components/attachment-list';
-import { LogiskVedlegg } from '@app/types/arkiverte-documents';
+import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Props {
   list: LogiskeVedleggListRenderData;

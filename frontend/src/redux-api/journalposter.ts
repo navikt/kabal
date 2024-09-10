@@ -1,8 +1,8 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_API_BASE_QUERY } from './common';
 import { documentsQuerySlice } from './oppgaver/queries/documents';
 

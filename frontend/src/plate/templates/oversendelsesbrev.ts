@@ -1,4 +1,3 @@
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { Source } from '@app/plate/components/label-content';
 import {
@@ -14,8 +13,9 @@ import {
 import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { TemplateSections } from '../template-sections';
 
 export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({

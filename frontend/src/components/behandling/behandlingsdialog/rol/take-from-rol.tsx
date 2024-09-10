@@ -1,7 +1,7 @@
+import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {

@@ -1,7 +1,3 @@
-import { Button } from '@navikt/ds-react';
-import { differenceInSeconds, parse } from 'date-fns';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
@@ -10,7 +6,11 @@ import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { FradelReason, IOppgave } from '@app/types/oppgaver';
+import { FradelReason, type IOppgave } from '@app/types/oppgaver';
+import { Button } from '@navikt/ds-react';
+import { differenceInSeconds, parse } from 'date-fns';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 const KABAL_HEADER_HEIGHT = 48;
 const UNDO_TIMEOUT_SECONDS = 10;

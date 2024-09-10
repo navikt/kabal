@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
+import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { EditorValue } from '@app/plate/types';
+import type { EditorValue } from '@app/plate/types';
 import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
-import { LANGUAGES, Language, isLanguage } from '@app/types/texts/language';
-import { IGodFormulering, IRichText } from '@app/types/texts/responses';
+import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
+import type { IGodFormulering, IRichText } from '@app/types/texts/responses';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Props extends Omit<DraftVersionProps, 'text'> {
   text: IRichText | IGodFormulering;

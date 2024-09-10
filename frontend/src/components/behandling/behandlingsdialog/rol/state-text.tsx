@@ -1,5 +1,5 @@
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { Alert } from '@navikt/ds-react';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
 
 interface Props {
   rol: IMedunderskriverRol;

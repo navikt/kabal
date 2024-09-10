@@ -1,8 +1,8 @@
-import { toDOMRange } from '@udecode/plate-common';
-import { BasePoint } from 'slate';
 import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
-import { RichTextEditor } from '@app/plate/types';
+import type { RichTextEditor } from '@app/plate/types';
+import { toDOMRange } from '@udecode/plate-common';
+import type { BasePoint } from 'slate';
 
 export interface IRangePosition {
   /** em */

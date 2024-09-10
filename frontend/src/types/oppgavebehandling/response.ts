@@ -1,10 +1,10 @@
 /* eslint-disable import/no-unused-modules */
-import { INavEmployee } from '@app/types/bruker';
-import { UtfallEnum } from '@app/types/kodeverk';
-import { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';
-import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { FradelReason } from '@app/types/oppgaver';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
+import type { INavEmployee } from '@app/types/bruker';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import type { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';
+import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { FradelReason } from '@app/types/oppgaver';
+import type { BehandlingstidUnitType } from '@app/types/svarbrev';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 

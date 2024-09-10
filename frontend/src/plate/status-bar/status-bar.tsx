@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { Zoom } from '@app/plate/status-bar/zoom';
+import { styled } from 'styled-components';
 
 export const StatusBar = () => (
   <Container>

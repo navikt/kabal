@@ -1,10 +1,10 @@
-import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
-import { OnChange } from '@app/components/oppgavestyring/types';
+import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
+import { useCallback } from 'react';
 
 export interface Return {
   onChange: OnChange;
@@ -24,7 +24,7 @@ export const useSetMedunderskriver = (
   const onChange: OnChange = useCallback(
     async (toNavIdent, fromNavIdent) => {
       const toMedunderskriver =
-        toNavIdent === null ? null : (medunderskrivere.find((m) => m.navIdent === toNavIdent) ?? null);
+        toNavIdent === null ? null : medunderskrivere.find((m) => m.navIdent === toNavIdent) ?? null;
 
       const name =
         toMedunderskriver === null

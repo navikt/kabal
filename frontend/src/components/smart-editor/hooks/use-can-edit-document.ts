@@ -1,11 +1,11 @@
-import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { IUserData } from '@app/types/bruker';
+import type { IUserData } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { useContext, useMemo } from 'react';
 
 export const useCanManageDocument = (templateId: TemplateIdEnum): boolean => {
   const { data: oppgave, isSuccess } = useOppgave();

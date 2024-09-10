@@ -1,4 +1,3 @@
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { Source } from '@app/plate/components/label-content';
 import {
@@ -12,8 +11,9 @@ import {
 } from '@app/plate/templates/helpers';
 import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { TemplateSections } from '../template-sections';
 
 export const ANKEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({

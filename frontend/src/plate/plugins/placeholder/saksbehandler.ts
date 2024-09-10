@@ -1,6 +1,8 @@
+import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
+import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import {
-  PlateEditor,
-  TNodeEntry,
+  type PlateEditor,
+  type TNodeEntry,
   createPluginFactory,
   findNode,
   getNextNode,
@@ -9,10 +11,8 @@ import {
   select,
   toDOMNode,
 } from '@udecode/plate-common';
-import { BasePoint } from 'slate';
-import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
-import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { PlaceholderElement } from '../../types';
+import type { BasePoint } from 'slate';
+import type { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 

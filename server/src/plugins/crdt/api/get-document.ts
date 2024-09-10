@@ -1,11 +1,11 @@
 import { getLogger } from '@app/logger';
-import { Doc, XmlText, encodeStateAsUpdateV2 } from 'yjs';
-import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { isObject } from '@app/plugins/crdt/functions';
-import { FastifyRequest } from 'fastify';
-import { Node } from 'slate';
+import { slateNodesToInsertDelta } from '@slate-yjs/core';
+import type { FastifyRequest } from 'fastify';
+import type { Node } from 'slate';
+import { Doc, XmlText, encodeStateAsUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
 

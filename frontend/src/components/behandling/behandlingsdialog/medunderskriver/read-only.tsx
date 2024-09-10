@@ -1,7 +1,7 @@
-import { BodyShort, Label } from '@navikt/ds-react';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IMedunderskriverRol } from '@app/types/oppgave-common';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import type { IMedunderskriverRol } from '@app/types/oppgave-common';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { getTitleCapitalized } from './get-title';
 
 interface Props {

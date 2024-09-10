@@ -1,4 +1,4 @@
-import { LANGUAGE_NAMES, Language } from '@app/types/texts/language';
+import { LANGUAGE_NAMES, type Language } from '@app/types/texts/language';
 
 export const getLanguageNames = (languages: Language[]): string => {
   const names = languages.map((v) => LANGUAGE_NAMES[v].toLowerCase());

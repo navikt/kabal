@@ -1,16 +1,16 @@
-import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { reduxStore } from '@app/redux/configure-store';
 import { isApiError } from '@app/types/errors';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import {
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type {
   IFristParams,
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
   ISendtTilTrygderettenParams,
 } from '@app/types/oppgavebehandling/params';
-import { IModifiedResponse } from '@app/types/oppgavebehandling/response';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
+import type { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';

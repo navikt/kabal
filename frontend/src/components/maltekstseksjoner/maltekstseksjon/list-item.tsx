@@ -1,15 +1,15 @@
-import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Button, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { createDragUI } from '@app/components/maltekstseksjoner/drag-and-drop/create-drag-ui';
 import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
+import { Button, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
+import { useCallback, useContext, useMemo, useRef } from 'react';
+import { styled } from 'styled-components';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { TextLink } from '../text-link';
 

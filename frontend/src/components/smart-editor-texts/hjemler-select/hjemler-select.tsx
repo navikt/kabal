@@ -1,13 +1,13 @@
-/* eslint-disable max-depth */
-import { useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
-import { NestedFilterList, NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
+import { NestedFilterList, type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
 import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';
 import { Popup } from '@app/components/smart-editor-texts/hjemler-select/popup';
 import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
+/* eslint-disable max-depth */
+import { useMemo, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   selected: string[];

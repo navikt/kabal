@@ -1,5 +1,5 @@
 import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
-import { EditorAutoformatRule } from '../../types';
+import type { EditorAutoformatRule } from '../../types';
 
 export const autoformatMarks: EditorAutoformatRule[] = [
   {

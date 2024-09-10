@@ -1,10 +1,10 @@
-import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
 import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';
-import { IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
+import { type IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
+import { useSearchParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 
 export const Filters = () => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,15 +1,15 @@
-import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Loader } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
-  SaksbehandlerAccessRights,
+  type SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
 } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import { IYtelse } from '@app/types/kodeverk';
+import type { IYtelse } from '@app/types/kodeverk';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Loader } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 import { Body } from './body';
 import { Head } from './head';
 

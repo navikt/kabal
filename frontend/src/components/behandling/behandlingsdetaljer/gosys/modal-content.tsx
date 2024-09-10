@@ -1,13 +1,13 @@
+import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
+import { EntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/entry-list';
+import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
+import type { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Tabs } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
-import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
-import { EntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/entry-list';
-import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
-import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
-import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
 
 interface Props {
   defaultFormat: GosysBeskrivelseFormat;

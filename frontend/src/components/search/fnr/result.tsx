@@ -1,11 +1,11 @@
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
 import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
-import { IPartBase } from '@app/types/oppgave-common';
-import { IOppgaverResponse } from '@app/types/oppgaver';
+import type { IPartBase } from '@app/types/oppgave-common';
+import type { IOppgaverResponse } from '@app/types/oppgaver';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { CopyIdButton } from '../../copy-button/copy-id-button';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { LedigeOppgaverTable } from '../common/ledige-oppgaver-table';

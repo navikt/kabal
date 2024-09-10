@@ -1,19 +1,19 @@
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, TableProps } from '@navikt/ds-react';
-import { format } from 'date-fns';
-import { DateRange } from 'react-day-picker';
-import { styled } from 'styled-components';
 import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
-import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
+import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
+import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import {
-  CommonOppgaverParams,
-  FromDateSortKeys,
-  SortFieldEnum,
+  type CommonOppgaverParams,
+  type FromDateSortKeys,
+  type SortFieldEnum,
   SortOrderEnum,
-  ToDateSortKeys,
+  type ToDateSortKeys,
 } from '@app/types/oppgaver';
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, type TableProps } from '@navikt/ds-react';
+import { format } from 'date-fns';
+import type { DateRange } from 'react-day-picker';
+import { styled } from 'styled-components';
 
 interface SortProps {
   params: CommonOppgaverParams;

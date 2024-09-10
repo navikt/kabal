@@ -1,6 +1,6 @@
-import { TRange } from '@udecode/plate-common';
-import { RichTextEditor } from '../types';
-import { IRangePosition, calculateRangePosition } from './range-position';
+import type { TRange } from '@udecode/plate-common';
+import type { RichTextEditor } from '../types';
+import { type IRangePosition, calculateRangePosition } from './range-position';
 import { getSelectionStart } from './selection-start';
 
 export const getRangePosition = (

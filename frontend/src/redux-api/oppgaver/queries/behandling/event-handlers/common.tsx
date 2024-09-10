@@ -1,6 +1,6 @@
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 
 interface Props {
   id: string;
@@ -13,7 +13,7 @@ export const FormatName = ({ id, name = 'Navn mangler' }: Props) => (
   </b>
 );
 
-export const employeeName = (employee: INavEmployee | null, fallback: string = 'ingen / felles kø') => (
+export const employeeName = (employee: INavEmployee | null, fallback = 'ingen / felles kø') => (
   <b>{formatEmployeeNameAndIdFallback(employee, fallback)}</b>
 );
 

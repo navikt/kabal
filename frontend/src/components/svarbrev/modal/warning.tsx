@@ -1,5 +1,5 @@
-import { Alert } from '@navikt/ds-react';
 import { BehandlingstidUnitType } from '@app/types/svarbrev';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   behandlingstidUnitTypeId: BehandlingstidUnitType;

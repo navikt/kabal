@@ -1,6 +1,6 @@
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IMainDocument } from '@app/types/documents/documents';
 import { createContext, useCallback, useState } from 'react';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IMainDocument } from '@app/types/documents/documents';
 
 interface IDragAndDropContext {
   draggedJournalfoertDocuments: IArkivertDocument[];

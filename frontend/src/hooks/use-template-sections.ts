@@ -1,6 +1,4 @@
-import { TDescendant, isElement } from '@udecode/plate-common';
-import { useMemo } from 'react';
-import {
+import type {
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_MALTEKST,
@@ -9,8 +7,10 @@ import {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
-import { EditorValue } from '@app/plate/types';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { EditorValue } from '@app/plate/types';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { type TDescendant, isElement } from '@udecode/plate-common';
+import { useMemo } from 'react';
 
 const EMPTY_LIST: TemplateSections[] = [];
 

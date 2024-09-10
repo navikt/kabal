@@ -1,13 +1,13 @@
+import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TextVersions } from './text-versions';
 
 interface Props {

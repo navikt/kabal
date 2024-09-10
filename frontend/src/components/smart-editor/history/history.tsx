@@ -1,8 +1,3 @@
-import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Loader, Tag } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { HistoryEditor } from '@app/components/smart-editor/history/history-editor';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
@@ -10,7 +5,12 @@ import {
   useGetSmartDocumentVersionQuery,
   useGetSmartDocumentVersionsQuery,
 } from '@app/redux-api/oppgaver/queries/documents';
-import { ISmartDocument, ISmartDocumentVersion } from '@app/types/documents/documents';
+import type { ISmartDocument, ISmartDocumentVersion } from '@app/types/documents/documents';
+import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Loader, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;

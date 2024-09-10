@@ -1,12 +1,12 @@
+import { Fields } from '@app/components/documents/new-documents/grid';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCheckDocument } from '@app/hooks/use-check-document';
 import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo } from 'react';
 import { styled } from 'styled-components';
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '@app/hooks/use-can-edit';
-import { useCheckDocument } from '@app/hooks/use-check-document';
 
 interface Props {
   name: string;

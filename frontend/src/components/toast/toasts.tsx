@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { Message, toast } from './store';
+import { type Message, toast } from './store';
 import { Toast } from './toast';
 
 export const Toasts = () => {

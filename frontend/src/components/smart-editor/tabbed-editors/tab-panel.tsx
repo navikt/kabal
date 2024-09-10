@@ -1,10 +1,10 @@
-import { Tabs } from '@navikt/ds-react';
-import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
-import { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocument } from '@app/types/documents/documents';
+import { Tabs } from '@navikt/ds-react';
+import { useEffect, useRef } from 'react';
+import { styled } from 'styled-components';
 
 interface TabPanelProps {
   smartDocument: ISmartDocument;

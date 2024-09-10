@@ -1,5 +1,3 @@
-import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
 import { MOD_KEY } from '@app/keys';
@@ -9,6 +7,8 @@ import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
+import { ClockDashedIcon, InboxUpIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { useContext } from 'react';
 
 interface Props {
   showHistory: boolean;

@@ -1,8 +1,8 @@
-import { createPluginFactory } from '@udecode/plate-common';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
+import { createPluginFactory } from '@udecode/plate-common';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 

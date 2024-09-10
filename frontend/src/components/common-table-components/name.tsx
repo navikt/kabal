@@ -1,6 +1,6 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
   navIdent: string | null;

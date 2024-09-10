@@ -1,7 +1,7 @@
-import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
-import { useCallback } from 'react';
 import { AbbrevationExample } from '@app/components/settings/abbreviations/example';
 import { pushEvent } from '@app/observability';
+import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
+import { useCallback } from 'react';
 
 export const AbbreviationsExplanation = () => {
   const onOpenChange = useCallback((open: boolean) => {

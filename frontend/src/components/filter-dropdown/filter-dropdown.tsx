@@ -1,10 +1,10 @@
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ToggleButton } from '../toggle-button/toggle-button';
 import { Dropdown } from './dropdown';
-import { BaseProps } from './props';
+import type { BaseProps } from './props';
 
 interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   children: string | null;

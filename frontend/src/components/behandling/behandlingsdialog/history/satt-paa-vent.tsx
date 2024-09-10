@@ -1,10 +1,14 @@
+import { isoDateToPretty } from '@app/domain/date';
+import type { INavEmployee } from '@app/types/bruker';
+import {
+  HistoryEventTypes,
+  type ISattPaaVentEvent,
+  type SattPaaVentEvent,
+} from '@app/types/oppgavebehandling/response';
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { useId } from 'react';
 import { styled } from 'styled-components';
-import { isoDateToPretty } from '@app/domain/date';
-import { INavEmployee } from '@app/types/bruker';
-import { HistoryEventTypes, ISattPaaVentEvent, SattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { Line, Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 

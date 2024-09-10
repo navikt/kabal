@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
 import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { IMainDocument, IMottaker } from '@app/types/documents/documents';
+import type { IMainDocument, IMottaker } from '@app/types/documents/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { IPart, PartStatusEnum } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { type IPart, PartStatusEnum } from '@app/types/oppgave-common';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export interface IBrevmottaker extends IMottaker {

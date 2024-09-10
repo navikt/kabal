@@ -1,4 +1,3 @@
-import { Button, Loader, Modal, Switch, Tag, TextField, Tooltip } from '@navikt/ds-react';
 import {
   CenterLoader,
   Details,
@@ -16,9 +15,10 @@ import { TimeInput } from '@app/components/svarbrev/time-input';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useYtelseName } from '@app/hooks/use-kodeverk-value';
 import { useUpdateSvarbrevSettingMutation } from '@app/redux-api/svarbrev';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { BehandlingstidUnitType, SvarbrevSetting } from '@app/types/svarbrev';
+import type { BehandlingstidUnitType, SvarbrevSetting } from '@app/types/svarbrev';
+import { Button, Loader, Modal, Switch, Tag, TextField, Tooltip } from '@navikt/ds-react';
 
 interface Props extends SvarbrevSetting {
   isOpen: boolean;
@@ -95,7 +95,7 @@ export const PdfModal = ({
               Aktiv
             </Switch>
             <Tooltip content="Ytelse">
-              <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
+              <span>{ytelseNameIsLoading ? 'Laster...' : ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`}</span>
             </Tooltip>
             <Tooltip content="Saksbehandlingstid">
               <TimeInputContainer>

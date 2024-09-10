@@ -1,8 +1,8 @@
-import { TDescendant, getNodeString, isElement } from '@udecode/plate-common';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { EditorValue, PlaceholderElement } from '@app/plate/types';
+import type { EditorValue, PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
+import { type TDescendant, getNodeString, isElement } from '@udecode/plate-common';
 
 const SPACE_REGEX = /\s+/g;
 

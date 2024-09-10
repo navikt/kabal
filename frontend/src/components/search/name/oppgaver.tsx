@@ -1,7 +1,7 @@
-import { Loader } from '@navikt/ds-react';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
 import { useSearchOppgaverByFnrQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { Loader } from '@navikt/ds-react';
 import { FullfoerteOppgaverTable } from '../common/fullfoerte-oppgaver-table';
 import { LedigeOppgaverTable } from '../common/ledige-oppgaver-table';
 import { StyledOppgaverContainer } from '../common/styled-components';

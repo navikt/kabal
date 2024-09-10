@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
 import { canEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
-import { IUserData } from '@app/types/bruker';
+import type { IUserData } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const createOppgave = (muFlowState: FlowState, rolFlowState: FlowState): IOppgavebehandling =>

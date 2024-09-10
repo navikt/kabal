@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 import { Bookmarks, getBookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { CommentSection } from '@app/components/smart-editor/comments/comment-section';
 import { NumberOfComments } from '@app/components/smart-editor/comments/number-of-comments';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useMyPlateEditorState } from '@app/plate/types';
+import { useContext, useEffect, useRef } from 'react';
+import { styled } from 'styled-components';
 
 interface StickyRightProps {
   id: string;

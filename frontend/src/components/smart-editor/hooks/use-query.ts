@@ -1,13 +1,13 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { IGetConsumerTextsParams, IGetTextsParams, TextTypes } from '@app/types/common-text-types';
-import { UtfallEnum } from '@app/types/kodeverk';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language, UNTRANSLATED } from '@app/types/texts/language';
+import type { IGetConsumerTextsParams, IGetTextsParams, TextTypes } from '@app/types/common-text-types';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { Language, UNTRANSLATED } from '@app/types/texts/language';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext, useMemo } from 'react';
 
 interface Params {
   textType: TextTypes;

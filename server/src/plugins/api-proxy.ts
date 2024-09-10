@@ -1,11 +1,11 @@
-import proxy from '@fastify/http-proxy';
 import { DEV_URL, isDeployed } from '@app/config/env';
+import { getDuration } from '@app/helpers/duration';
 import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
 import { getLogger } from '@app/logger';
-import { getDuration } from '@app/helpers/duration';
-import fastifyPlugin from 'fastify-plugin';
-import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
+import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
+import proxy from '@fastify/http-proxy';
+import fastifyPlugin from 'fastify-plugin';
 
 const log = getLogger('api-proxy');
 

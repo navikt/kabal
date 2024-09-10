@@ -1,8 +1,8 @@
+import { useDeleteDraftMutation } from '@app/redux-api/texts/mutations';
+import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { useDeleteDraftMutation } from '@app/redux-api/texts/mutations';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {

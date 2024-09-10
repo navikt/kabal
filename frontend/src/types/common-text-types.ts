@@ -1,4 +1,4 @@
-import { Language, UNTRANSLATED } from '@app/types/texts/language';
+import type { Language, UNTRANSLATED } from '@app/types/texts/language';
 
 export enum TextChangeType {
   RICH_TEXT_NB = 'RICH_TEXT_NB',

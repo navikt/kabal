@@ -1,7 +1,7 @@
-import { CogRotationIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
 import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast';
 import { pushEvent } from '@app/observability';
+import { CogRotationIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
 
 interface Props {
   isRequired?: boolean;

@@ -1,9 +1,9 @@
+import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
+import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 /* eslint-disable import/no-unused-modules */
-import { TNode, TNodeEntry, findNode, findNodePath, getParentNode, someNode } from '@udecode/plate-common';
+import { type TNode, type TNodeEntry, findNode, findNodePath, getParentNode, someNode } from '@udecode/plate-common';
 import { ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { Path } from 'slate';
-import { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
-import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 
 const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): Path | undefined =>
   node === undefined ? undefined : findNodePath(editor, node);

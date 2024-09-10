@@ -1,10 +1,10 @@
-import { PlateElement, PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
+import { formatLongDate, zeroPad } from '@app/domain/date';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
+import type { CurrentDateElement, EditorValue } from '@app/plate/types';
+import { PlateElement, type PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
-import { formatLongDate, zeroPad } from '@app/domain/date';
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { CurrentDateElement, EditorValue } from '@app/plate/types';
 
 type Props = PlateRenderElementProps<EditorValue, CurrentDateElement>;
 

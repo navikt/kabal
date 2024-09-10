@@ -1,11 +1,7 @@
-/* eslint-disable max-lines */
-import { formatISO } from 'date-fns';
-import { Patch } from 'immer';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue } from '@app/plate/types';
-import { reduxStore } from '@app/redux/configure-store';
+import type { EditorValue } from '@app/plate/types';
 import {
   ConsumerMaltekstseksjonerTagTypes,
   consumerMaltekstseksjonerApi,
@@ -14,9 +10,10 @@ import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/malteksts
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
+import { reduxStore } from '@app/redux/configure-store';
+import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
 import { isApiRejectionError } from '@app/types/errors';
-import {
+import type {
   ICreateDraftFromMaltekstseksjonVersionParams,
   IDeleteMaltekstDraftParams,
   INewMaltekstseksjonParams,
@@ -28,13 +25,16 @@ import {
   IUpdateMaltekstseksjonUtfallParams,
   IUpdateMaltekstseksjonYtelseHjemmelParams,
 } from '@app/types/maltekstseksjoner/params';
-import {
+import type {
   IDraftMaltekstseksjon,
   IPublishWithTextsResponse,
   IPublishedMaltekstseksjon,
 } from '@app/types/maltekstseksjoner/responses';
-import { INewRichTextParams } from '@app/types/texts/common';
-import { LANGUAGES, Language } from '@app/types/texts/language';
+import type { INewRichTextParams } from '@app/types/texts/common';
+import { LANGUAGES, type Language } from '@app/types/texts/language';
+/* eslint-disable max-lines */
+import { formatISO } from 'date-fns';
+import type { Patch } from 'immer';
 import { textsQuerySlice } from '../texts/queries';
 
 const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({

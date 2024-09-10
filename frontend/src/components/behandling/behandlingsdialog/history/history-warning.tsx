@@ -1,7 +1,7 @@
-import { Alert } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { Alert } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 const START_DATE = '2023-12-08T15:30:00.00000';
 

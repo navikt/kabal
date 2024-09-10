@@ -1,4 +1,4 @@
-import { TElement, isBlock, isExpanded, someNode } from '@udecode/plate-common';
+import { type TElement, isBlock, isExpanded, someNode } from '@udecode/plate-common';
 import { useMyPlateEditorState } from '../types';
 
 export const useIsElementActive = (element: string) => {

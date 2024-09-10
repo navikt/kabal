@@ -1,5 +1,5 @@
-import { createPluginFactory } from '@udecode/plate-common';
 import { onKeyDown } from '@app/plate/plugins/custom-abbreviations/on-key-down';
+import { createPluginFactory } from '@udecode/plate-common';
 
 const KEY_CUSTOM_ABBREVIATIONS = 'custom-abbreviations';
 

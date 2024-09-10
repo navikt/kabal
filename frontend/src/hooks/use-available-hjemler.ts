@@ -1,5 +1,5 @@
+import type { IKodeverkValue } from '@app/types/kodeverk';
 import { useMemo } from 'react';
-import { IKodeverkValue } from '@app/types/kodeverk';
 import { useAvailableYtelserForEnhet } from './use-available-ytelser';
 
 export const useAvailableHjemler = () => {

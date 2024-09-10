@@ -1,13 +1,13 @@
-import { CheckboxGroup } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { AllRegistreringshjemler } from '@app/components/kvalitetsvurdering/v2/common/all-registreringshjemler';
 import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/common/textarea';
-import { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
+import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
+import { CheckboxGroup } from '@navikt/ds-react';
+import { useMemo } from 'react';
 import { KvalitetsskjemaCheckbox } from './kvalitetsvurdering-checkbox';
 import { Oppgavehjemler } from './oppgavehjemler';
 import { SubSection } from './styled-components';
-import { CheckboxParams, InputParams, KvalitetsvurderingInput } from './types';
-import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
+import { type CheckboxParams, type InputParams, KvalitetsvurderingInput } from './types';
+import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';
 

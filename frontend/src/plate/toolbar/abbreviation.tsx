@@ -1,8 +1,3 @@
-import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
-import { Button, TextField, Tooltip } from '@navikt/ds-react';
-import { focusEditor, getEditorString, isCollapsed } from '@udecode/plate-common';
-import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
@@ -10,6 +5,11 @@ import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
+import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
+import { Button, TextField, Tooltip } from '@navikt/ds-react';
+import { focusEditor, getEditorString, isCollapsed } from '@udecode/plate-common';
+import { useEffect, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Abbreviation = () => {
   const [addAbbreviation] = useAddAbbreviationMutation();

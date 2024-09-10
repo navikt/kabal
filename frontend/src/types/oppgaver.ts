@@ -1,6 +1,6 @@
-import { INavEmployee } from '@app/types/bruker';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
+import type { INavEmployee } from '@app/types/bruker';
+import type { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import type { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
 
 /** DateTime */
 type DateString = string;

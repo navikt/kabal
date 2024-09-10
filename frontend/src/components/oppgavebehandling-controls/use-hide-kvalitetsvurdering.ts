@@ -1,7 +1,7 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { useContext } from 'react';
 
 export const useHideKvalitetsvurdering = (): boolean => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();

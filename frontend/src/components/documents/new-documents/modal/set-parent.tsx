@@ -1,7 +1,4 @@
-import { Alert, Button, Heading, Radio, RadioGroup, Tag } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
-import { DocumentIcon, ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
+import { DocumentIcon, type ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -10,11 +7,14 @@ import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/document
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
-  DistribusjonsType,
+  type DistribusjonsType,
   DocumentTypeEnum,
-  IMainDocument,
+  type IMainDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Alert, Button, Heading, Radio, RadioGroup, Tag } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 

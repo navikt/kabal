@@ -1,9 +1,9 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
+import { FlowState } from '@app/types/oppgave-common';
+import type { IOppgave } from '@app/types/oppgaver';
 import { Tag } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { FlowState } from '@app/types/oppgave-common';
-import { IOppgave } from '@app/types/oppgaver';
 
 type Props = Pick<IOppgave, 'rol'>;
 

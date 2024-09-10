@@ -1,4 +1,4 @@
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { useDocumentsPdfViewed, useSmartEditorActiveDocument } from './settings/use-setting';
 
 export const useRemoveDocument = () => {

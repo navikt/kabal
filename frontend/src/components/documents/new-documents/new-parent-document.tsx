@@ -1,6 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -11,8 +8,11 @@ import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
-import { CreatorRole, IMainDocument } from '@app/types/documents/documents';
-import { AttachmentList, ListProps } from './attachment-list';
+import { CreatorRole, type IMainDocument } from '@app/types/documents/documents';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { styled } from 'styled-components';
+import { AttachmentList, type ListProps } from './attachment-list';
 import { NewDocument } from './new-document/new-document';
 
 interface Props extends ListProps {

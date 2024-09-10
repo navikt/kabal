@@ -1,12 +1,12 @@
+import { CreateText } from '@app/components/maltekstseksjoner/create';
+import { AvailableTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts';
+import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
+import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { Heading } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { CreateText } from '@app/components/maltekstseksjoner/create';
-import { AvailableTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DragAndDropContext } from '../../drag-and-drop/drag-context';
 import { List, SidebarContainer } from '../common';
 import { DraggableListItem } from './draggable-list-item';
@@ -17,9 +17,9 @@ interface Props {
 }
 
 enum DragDirection {
-  NONE,
-  UP,
-  DOWN,
+  NONE = 0,
+  UP = 1,
+  DOWN = 2,
 }
 
 export const Sidebar = ({ maltekstseksjon, query }: Props) => {

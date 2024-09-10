@@ -1,6 +1,6 @@
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from './use-text-query';
 import { useTextType } from './use-text-type';

@@ -3,8 +3,8 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
-import { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
-import { ISetMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
+import type { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
+import type { ISetMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';

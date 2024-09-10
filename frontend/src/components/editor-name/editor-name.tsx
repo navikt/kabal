@@ -1,6 +1,6 @@
+import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
 
 interface EditorProps {
   editorId: string;
@@ -13,6 +13,6 @@ export const EditorName = ({ editorId }: EditorProps) => {
   return isLoading || data === undefined ? (
     <Loader size="xsmall" title="Laster..." />
   ) : (
-    (data.customLongName ?? data.longName)
+    data.customLongName ?? data.longName
   );
 };

@@ -1,6 +1,6 @@
-import { Table } from '@navikt/ds-react';
 import { LoadingRow } from '@app/components/common-table-components/loading-row';
-import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import { Table } from '@navikt/ds-react';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 // eslint-disable-next-line import/no-cycle
 import { OppgaveRow } from './oppgave-row';

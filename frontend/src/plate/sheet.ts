@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
+import { styled } from 'styled-components';
 
 interface Props {
   $minHeight: boolean;

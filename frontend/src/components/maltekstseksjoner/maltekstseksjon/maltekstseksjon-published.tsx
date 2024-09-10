@@ -1,8 +1,3 @@
-import { CalendarIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { EditorName } from '@app/components/editor-name/editor-name';
@@ -15,8 +10,13 @@ import {
 } from '@app/components/smart-editor-texts/edit/tags';
 import { TextHistory } from '@app/components/text-history/text-history';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { CalendarIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { useParams } from 'react-router';
+import { styled } from 'styled-components';
 import { TextListItem } from '../styled-components';
 import {
   ActionsContainer,

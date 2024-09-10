@@ -1,8 +1,3 @@
-import { Heading, Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { Plate } from '@udecode/plate-common';
-import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -10,11 +5,16 @@ import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { EditorValue, RichTextEditor, RootElement } from '@app/plate/types';
+import type { EditorValue, RichTextEditor, RootElement } from '@app/plate/types';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IRichText, IText } from '@app/types/texts/responses';
+import type { IRichText, IText } from '@app/types/texts/responses';
+import { Heading, Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { Plate } from '@udecode/plate-common';
+import { useCallback, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   id: string | null;

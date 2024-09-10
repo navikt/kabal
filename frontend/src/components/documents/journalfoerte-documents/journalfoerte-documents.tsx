@@ -1,14 +1,14 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
 

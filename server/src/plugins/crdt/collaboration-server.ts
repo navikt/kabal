@@ -1,9 +1,9 @@
 import { isDeployed } from '@app/config/env';
 import { isNotNull } from '@app/functions/guards';
-import { Level, getLogger } from '@app/logger';
+import { type Level, getLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { setDocument } from '@app/plugins/crdt/api/set-document';
-import { ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
+import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import { Server } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';

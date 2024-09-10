@@ -1,8 +1,8 @@
+import { stringToRegExp } from '@app/functions/string-to-regex';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Search } from '@navikt/ds-react';
-import { KeyboardEventHandler, useRef } from 'react';
+import { type KeyboardEventHandler, useRef } from 'react';
 import { styled } from 'styled-components';
-import { stringToRegExp } from '@app/functions/string-to-regex';
 
 interface HeaderProps {
   focused: number;

@@ -1,5 +1,5 @@
-import { dnr, fnr } from '@navikt/fnrvalidator';
 import { isValidOrgnr } from '@app/domain/orgnr';
+import { dnr, fnr } from '@navikt/fnrvalidator';
 
 const NUMBER_REGEX = /^([\d]{9}|[\d]{11})$/;
 

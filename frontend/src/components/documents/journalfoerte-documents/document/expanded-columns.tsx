@@ -1,12 +1,12 @@
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsFilterSaksId, useDocumentsFilterTema } from '@app/hooks/settings/use-setting';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { AvsenderMottaker } from './avsender-mottaker';
 import { JournalposttypeTag } from './journalposttype';
 

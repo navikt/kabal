@@ -1,4 +1,4 @@
-import { SplitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
+import type { SplitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 
 /**
  * Fuzzy search for a text.

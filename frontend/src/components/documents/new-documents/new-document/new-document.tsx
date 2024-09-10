@@ -1,6 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useRef } from 'react';
-import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
@@ -18,7 +15,15 @@ import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType, DocumentTypeEnum, IFileDocument, IMainDocument } from '@app/types/documents/documents';
+import {
+  DistribusjonsType,
+  DocumentTypeEnum,
+  type IFileDocument,
+  type IMainDocument,
+} from '@app/types/documents/documents';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { memo, useCallback, useContext, useRef } from 'react';
+import { styled } from 'styled-components';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 

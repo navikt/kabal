@@ -1,6 +1,6 @@
+import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType, type SvarbrevSetting } from '@app/types/svarbrev';
 import { BodyShort } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { BEHANDLINGSTID_UNIT_TYPE_NAMES, BehandlingstidUnitType, SvarbrevSetting } from '@app/types/svarbrev';
 
 export interface InitialVersion extends Pick<SvarbrevSetting, 'id' | 'modified' | 'modifiedBy'> {
   behandlingstidUnits: SvarbrevSetting['behandlingstidUnits'];

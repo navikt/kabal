@@ -1,8 +1,8 @@
-import { FastifyRequest } from 'fastify';
-import { AZURE_AD_TOKEN_HEADER, CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
 import { PROXY_VERSION } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
+import { AZURE_AD_TOKEN_HEADER, CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
 import { generateTraceparent } from '@app/helpers/traceparent';
+import type { FastifyRequest } from 'fastify';
 
 type GetHeadersFn = (req: FastifyRequest) => Record<string, string | string[]>;
 

@@ -1,7 +1,3 @@
-import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
@@ -13,7 +9,11 @@ import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-do
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useCallback, useContext, useMemo, useRef } from 'react';
+import { styled } from 'styled-components';
 import { DocumentTitle } from './shared/document-title';
 import { IncludeDocument } from './shared/include-document';
 

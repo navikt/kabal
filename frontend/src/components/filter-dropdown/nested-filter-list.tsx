@@ -1,11 +1,11 @@
+import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { stringToRegExp } from '@app/functions/string-to-regex';
 /* eslint-disable max-lines */
 import { BulletListIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Checkbox, Search, Tag } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { stringToRegExp } from '@app/functions/string-to-regex';
-import { BaseProps, IOption } from './props';
+import type { BaseProps, IOption } from './props';
 
 export enum OptionType {
   GROUP = 'group',

@@ -1,5 +1,5 @@
 import { TOAST_TIMEOUT } from './constants';
-import { NewMessage, ToastType } from './types';
+import { type NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
 

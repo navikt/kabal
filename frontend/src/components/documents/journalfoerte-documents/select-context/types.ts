@@ -1,5 +1,5 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export type SelectedMap = Map<string, IJournalfoertDokumentId>;
 

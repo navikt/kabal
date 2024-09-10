@@ -1,9 +1,9 @@
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 /* eslint-disable max-depth */
 import { useCallback } from 'react';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getId } from './helpers';
 import { useSelectOne } from './select-one';
-import { SelectHook, SelectMany } from './types';
+import type { SelectHook, SelectMany } from './types';
 
 export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setLastSelectedDocument, documentList) => {
   const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);

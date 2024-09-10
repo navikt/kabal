@@ -1,7 +1,7 @@
+import { StandaloneTextVersions } from '@app/components/smart-editor-texts/edit/standalone-text-versions';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
-import { StandaloneTextVersions } from '@app/components/smart-editor-texts/edit/standalone-text-versions';
 
 export const LoadText = () => {
   const { id } = useParams<{ id: string }>();

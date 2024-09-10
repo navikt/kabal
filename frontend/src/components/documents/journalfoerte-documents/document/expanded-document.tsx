@@ -1,7 +1,7 @@
+import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
+import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { CopyButton, Detail, HelpText, Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
-import { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {

@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { Abbreviation } from '@app/components/settings/abbreviations/abbreviation';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { pushEvent } from '@app/observability';
 import { useDeleteAbbreviationMutation, useUpdateAbbreviationMutation } from '@app/redux-api/bruker';
-import { CustomAbbrevation } from '@app/types/bruker';
+import type { CustomAbbrevation } from '@app/types/bruker';
+import { useState } from 'react';
 
 export const ExistingAbbreviation = ({ short: savedShort, long: savedLong, id }: CustomAbbrevation) => {
   const [deleteAbbreviation, { isLoading: isDeleting }] = useDeleteAbbreviationMutation();

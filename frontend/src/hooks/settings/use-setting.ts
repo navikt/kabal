@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
-import { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocument } from '@app/components/view-pdf/types';
 import {
-  Setting,
+  type Setting,
   useBooleanSetting,
   useJsonSetting,
   useNumberSetting,
   useOppgavePath,
   useSetting,
 } from '@app/hooks/settings/helpers';
-import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
+import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { Journalposttype } from '@app/types/arkiverte-documents';
-import { SortOrder } from '@app/types/sort';
+import type { SortOrder } from '@app/types/sort';
+import { useMemo } from 'react';
 
 // Oppgavebehandling tabs
 export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/documents/enabled'));

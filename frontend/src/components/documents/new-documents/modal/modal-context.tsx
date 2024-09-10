@@ -1,6 +1,6 @@
+import type { ValidationError } from '@app/components/documents/new-documents/modal/finish-document/types';
+import type { IMainDocument } from '@app/types/documents/documents';
 import { createContext, useCallback, useState } from 'react';
-import { ValidationError } from '@app/components/documents/new-documents/modal/finish-document/types';
-import { IMainDocument } from '@app/types/documents/documents';
 
 interface IModalContext {
   document: IMainDocument | null;

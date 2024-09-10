@@ -1,5 +1,5 @@
-import { IPartBase } from '@app/types/oppgave-common';
-import {
+import type { IPartBase } from '@app/types/oppgave-common';
+import type {
   ApiResponse,
   CommonOppgaverParams,
   EnhetensOppgaverParams,

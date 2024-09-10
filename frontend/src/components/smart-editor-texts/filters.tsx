@@ -1,5 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useKlageenheterOptions, useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import {
@@ -8,7 +6,9 @@ import {
   UtfallSelect,
 } from '@app/components/smart-editor-texts/query-filter-selects';
 import { NONE_OPTION } from '@app/components/smart-editor-texts/types';
-import { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
+import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
+import { useSearchParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 import { HjemlerSelect } from './hjemler-select/hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 

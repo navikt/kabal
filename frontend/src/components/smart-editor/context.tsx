@@ -1,12 +1,12 @@
-import { TRange } from '@udecode/plate-common';
-import { createContext, useState } from 'react';
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,
 } from '@app/hooks/settings/use-setting';
-import { RichText } from '@app/plate/types';
-import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
+import type { RichText } from '@app/plate/types';
+import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { TRange } from '@udecode/plate-common';
+import { createContext, useState } from 'react';
 
 const noop = () => {};
 

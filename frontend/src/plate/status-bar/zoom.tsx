@@ -1,9 +1,9 @@
+import { EDITOR_SCALE_CSS_VAR, MAX, MIN, STEP, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { EDITOR_SCALE_CSS_VAR, MAX, MIN, STEP, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 export const Zoom = () => {
   const { value, setValue, scaleUp, scaleDown } = useScaleState();
@@ -28,7 +28,7 @@ export const Zoom = () => {
           max={MAX}
           step={STEP}
           value={value}
-          onChange={(e) => setValue(parseInt(e.target.value, 10))}
+          onChange={(e) => setValue(Number.parseInt(e.target.value, 10))}
         />
         <Button icon={<PlusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleUp} />
       </SliderContainer>
@@ -76,7 +76,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
 
   const handleChange = (val: unknown) => {
     if (typeof val === 'string') {
-      setValue(parseInt(val, 10));
+      setValue(Number.parseInt(val, 10));
     }
   };
 
@@ -93,7 +93,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
         return;
       }
 
-      const parsed = parseInt(newStringValue, 10);
+      const parsed = Number.parseInt(newStringValue, 10);
 
       if (Number.isNaN(parsed)) {
         return;
@@ -124,7 +124,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
           onChange={(e) => {
             setInputValue(e.target.value);
 
-            const number = parseInt(e.target.value, 10);
+            const number = Number.parseInt(e.target.value, 10);
 
             if (!Number.isNaN(number) && number > 0) {
               setValue(number);

@@ -1,13 +1,13 @@
-import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Pagination, Table } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
 import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
 import { restrictPageSize } from '@app/hooks/use-oppgave-pagination';
 import { StyledFooterContent } from '@app/styled-components/table';
-import { IPartBase } from '@app/types/oppgave-common';
+import type { IPartBase } from '@app/types/oppgave-common';
+import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
+import { Button, Pagination, Table } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { Result } from './result';
 
 interface SearchResultsProps {

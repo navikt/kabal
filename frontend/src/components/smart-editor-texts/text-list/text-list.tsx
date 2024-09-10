@@ -1,10 +1,4 @@
-import { PercentIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
-import { useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
-import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import {
   Container,
   ListItem,
@@ -16,14 +10,20 @@ import {
   StyledTitleIcon,
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
+import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
-import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
+import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
-import { Language, UNTRANSLATED } from '@app/types/texts/language';
-import { IText } from '@app/types/texts/responses';
+import { type Language, UNTRANSLATED } from '@app/types/texts/language';
+import type { IText } from '@app/types/texts/responses';
+import { PercentIcon } from '@navikt/aksel-icons';
+import { Loader } from '@navikt/ds-react';
+import { useEffect, useMemo } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getTextAsString } from '../../../plate/functions/get-text-string';
 import { DateTime } from '../../datetime/datetime';
 import { getPathPrefix } from '../functions/get-path-prefix';

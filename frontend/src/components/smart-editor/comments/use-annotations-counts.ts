@@ -1,6 +1,6 @@
-import { useContext, useMemo } from 'react';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useContext, useMemo } from 'react';
 
 export const useAnnotationsCounts = () => {
   const { attached, orphans } = useThreads();

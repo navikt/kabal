@@ -1,14 +1,14 @@
-import { Heading, HeadingProps } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { Heading, type HeadingProps } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;

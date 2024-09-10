@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { IApiValidationResponse } from '@app/functions/error-type-guard';
+import type { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { handleDocumentFinishedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
 import { handleDocumentsAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
@@ -30,15 +30,15 @@ import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/ev
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { ISakenGjelder } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { IValidationParams } from '@app/types/oppgavebehandling/params';
-import {
+import type { ISakenGjelder } from '@app/types/oppgave-common';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IValidationParams } from '@app/types/oppgavebehandling/params';
+import type {
   IMedunderskrivereResponse,
   ISaksbehandlerResponse,
   ITildelingEvent,
 } from '@app/types/oppgavebehandling/response';
-import { IRols, ISaksbehandlere } from '@app/types/oppgaver';
+import type { IRols, ISaksbehandlere } from '@app/types/oppgaver';
 import { OppgaveTagTypes, oppgaverApi } from '../../oppgaver';
 import { handleMedunderskriverEvent } from './event-handlers/medunderskriver';
 import { handleMessageEvent } from './event-handlers/message';

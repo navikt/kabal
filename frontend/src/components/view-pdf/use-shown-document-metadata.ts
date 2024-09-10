@@ -1,6 +1,4 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
-import { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocument } from '@app/components/view-pdf/types';
 import {
   getAttachmentsOverviewInlineUrl,
   getJournalfoertDocumentInlineUrl,
@@ -17,7 +15,9 @@ import {
   getNewDocumentTabId,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
-import { DocumentTypeEnum, IMergedDocumentsResponse } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMergedDocumentsResponse } from '@app/types/documents/documents';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
 
 type DocumentData =
   | { inlineUrl: string; tabUrl: string; tabId: string }

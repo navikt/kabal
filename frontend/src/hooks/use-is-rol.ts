@@ -1,7 +1,7 @@
-import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { useContext, useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsRol = () => {

@@ -1,9 +1,9 @@
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useCallback } from 'react';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getDocumentPath, getFirstPath, matchDocuments } from './helpers';
 import { useSelectMany } from './select-many';
-import { SelectRangeHook } from './types';
+import type { SelectRangeHook } from './types';
 
 export const useSelectRangeTo: SelectRangeHook = (
   setSelectedDocuments,

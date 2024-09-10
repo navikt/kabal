@@ -1,5 +1,3 @@
-import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useTildel } from '@app/components/oppgavestyring/use-tildel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -8,7 +6,9 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 const ID = 'tildelt-saksbehandler';
 
