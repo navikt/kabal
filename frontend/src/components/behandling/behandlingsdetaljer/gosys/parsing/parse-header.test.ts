@@ -157,4 +157,30 @@ describe('parse Gosys header', () => {
       content: '',
     });
   });
+
+  it('should parse header with only two leading dashes', () => {
+    const header = '-- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---';
+
+    expect.assertions(1);
+
+    const actual = parseHeader(header);
+    expect(actual).toStrictEqual({
+      date: new Date(2024, 5, 12, 14, 29),
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      content: '',
+    });
+  });
+
+  it('should parse header with only two trailing dashes', () => {
+    const header = '--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) --';
+
+    expect.assertions(1);
+
+    const actual = parseHeader(header);
+    expect(actual).toStrictEqual({
+      date: new Date(2024, 5, 12, 14, 29),
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      content: '',
+    });
+  });
 });
