@@ -1,10 +1,11 @@
+/* eslint-disable max-lines */
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { Profiler, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
-import { SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
@@ -17,9 +18,8 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
@@ -32,14 +32,13 @@ import { ISmartDocument } from '@app/types/documents/documents';
 
 interface EditorProps {
   smartDocument: ISmartDocument;
-  onChange: (value: EditorValue) => void;
-  updateStatus: SavedStatusProps;
 }
 
-export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) => {
-  const { id, templateId, content } = smartDocument;
+export const Editor = ({ smartDocument }: EditorProps) => {
+  const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
   const { data: oppgave } = useOppgave();
@@ -68,11 +67,10 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
   return (
     <Container>
       <Plate<EditorValue, RichTextEditor>
-        initialValue={content}
+        initialValue={smartDocument.content}
         id={id}
         readOnly={!canEdit}
-        onChange={onChange}
-        plugins={saksbehandlerPlugins}
+        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user)}
         decorate={([node, path]) => {
           if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
@@ -118,12 +116,7 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
                   size: 'small',
                 }}
               >
-                <Profiler
-                  id="render_smart_editor"
-                  onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
-                >
-                  <EditorWithNewCommentAndFloatingToolbar id={id} />
-                </Profiler>
+                <EditorWithNewCommentAndFloatingToolbar id={id} />
               </ErrorBoundary>
             </EditorContainer>
 
@@ -135,30 +128,78 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
           {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
         </MainContainer>
 
-        <StatusBar {...updateStatus} />
+        <StatusBar />
       </Plate>
     </Container>
   );
 };
 
+// interface ChangeSet {
+//   added: number[];
+//   removed: number[];
+//   updated: number[];
+// }
+
+// type OnChangeFn = (changeset: ChangeSet) => void;
+
 const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
   const { templateId, setSheetRef } = useContext(SmartEditorContext);
   const canEdit = useCanEditDocument(templateId);
-  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
+  // const editor = useMyPlateEditorRef(id);
+
+  // useEffect(() => {
+  //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
+  //     const states = editor.awareness.getStates();
+
+  //     requestAnimationFrame(() => {
+  //       cursorStore.store.setState((draft) => {
+  //         for (const a of [...added, ...updated]) {
+  //           const cursor = states.get(a);
+
+  //           if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
+  //             draft[a] = {
+  //               ...cursor,
+  //               selection: relativeRangeToSlateRange(
+  //                 editor.yjs.provider.document.get('content', XmlText),
+  //                 editor,
+  //                 cursor.selection,
+  //               ),
+  //             };
+  //           }
+  //         }
+
+  //         for (const r of removed) {
+  //           delete draft[r];
+  //         }
+  //       });
+  //     });
+  //   };
+
+  //   editor.awareness.on('change', onChange);
+
+  //   return () => {
+  //     editor.awareness.off('change', onChange);
+  //   };
+  // }, [editor, editor.awareness]);
+
   useEffect(() => {
-    setSheetRef(containerRef);
-  }, [containerRef, setSheetRef]);
+    setSheetRef(containerElement);
+  }, [containerElement, setSheetRef]);
 
   return (
-    <Sheet ref={setContainerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
-      <FloatingSaksbehandlerToolbar container={containerRef} editorId={id} />
-      <SaksbehandlerTableToolbar container={containerRef} editorId={id} />
+    <Sheet ref={setContainerElement} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+      <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
+      <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <NewComment container={containerRef} />
+      <NewComment container={containerElement} />
 
       <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
+
+      {/* Not needed for now - only one person will edit at a time */}
+      {/* {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />} */}
     </Sheet>
   );
 };

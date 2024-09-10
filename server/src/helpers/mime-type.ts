@@ -20,6 +20,8 @@ export const getMimeType = (filePath: string): string | undefined => {
       return 'image/svg+xml';
     case 'ico':
       return 'image/x-icon';
+    case 'map':
+      return 'application/json';
     default:
       return undefined;
   }

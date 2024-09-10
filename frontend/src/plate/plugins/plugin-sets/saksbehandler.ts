@@ -1,8 +1,13 @@
-import { createPlugins } from '@udecode/plate-common';
+import { slateNodesToInsertDelta } from '@slate-yjs/core';
+import { PlatePluginComponent, createPlugins } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { createYjsPlugin } from '@udecode/plate-yjs';
+import * as Y from 'yjs';
+import { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
+import { TAB_UUID } from '@app/headers';
 import { CurrentDate } from '@app/plate/components/current-date';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
@@ -48,6 +53,42 @@ import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { createRegelverkContainerPlugin, createRegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { createSignaturePlugin } from '@app/plate/plugins/signature';
+import { IUserData } from '@app/types/bruker';
+import { ISmartDocument } from '@app/types/documents/documents';
+
+const components: Record<string, PlatePluginComponent> = {
+  [ELEMENT_PARAGRAPH]: Paragraph,
+  [ELEMENT_PAGE_BREAK]: PageBreak,
+
+  // Headings
+  [ELEMENT_H1]: HeadingOne,
+  [ELEMENT_H2]: HeadingTwo,
+  [ELEMENT_H3]: HeadingThree,
+
+  // Lists
+  [ELEMENT_UL]: UnorderedList,
+  [ELEMENT_OL]: OrderedList,
+  [ELEMENT_LI]: ListItem,
+
+  // Table
+  [ELEMENT_TABLE]: TableElement,
+  [ELEMENT_TD]: TableCellElement,
+  [ELEMENT_TR]: TableRowElement,
+
+  // Smart blocks
+  [ELEMENT_MALTEKSTSEKSJON]: Maltekstseksjon,
+  [ELEMENT_REDIGERBAR_MALTEKST]: RedigerbarMaltekst,
+  [ELEMENT_MALTEKST]: Maltekst,
+  [ELEMENT_CURRENT_DATE]: CurrentDate,
+  [ELEMENT_FOOTER]: HeaderFooter,
+  [ELEMENT_HEADER]: HeaderFooter,
+  [ELEMENT_LABEL_CONTENT]: LabelContent,
+  [ELEMENT_PLACEHOLDER]: Placeholder,
+  [ELEMENT_REGELVERK]: Regelverk,
+  [ELEMENT_REGELVERK_CONTAINER]: RegelverkContainer,
+  [ELEMENT_SIGNATURE]: Signature,
+  [ELEMENT_EMPTY_VOID]: EmptyVoid,
+};
 
 export const saksbehandlerPlugins = createPlugins(
   [
@@ -67,39 +108,34 @@ export const saksbehandlerPlugins = createPlugins(
     createEmptyVoidPlugin(),
     createBookmarkPlugin(),
   ],
-  {
-    components: {
-      [ELEMENT_PARAGRAPH]: Paragraph,
-      [ELEMENT_PAGE_BREAK]: PageBreak,
-
-      // Headings
-      [ELEMENT_H1]: HeadingOne,
-      [ELEMENT_H2]: HeadingTwo,
-      [ELEMENT_H3]: HeadingThree,
-
-      // Lists
-      [ELEMENT_UL]: UnorderedList,
-      [ELEMENT_OL]: OrderedList,
-      [ELEMENT_LI]: ListItem,
-
-      // Table
-      [ELEMENT_TABLE]: TableElement,
-      [ELEMENT_TD]: TableCellElement,
-      [ELEMENT_TR]: TableRowElement,
-
-      // Smart blocks
-      [ELEMENT_MALTEKSTSEKSJON]: Maltekstseksjon,
-      [ELEMENT_REDIGERBAR_MALTEKST]: RedigerbarMaltekst,
-      [ELEMENT_MALTEKST]: Maltekst,
-      [ELEMENT_CURRENT_DATE]: CurrentDate,
-      [ELEMENT_FOOTER]: HeaderFooter,
-      [ELEMENT_HEADER]: HeaderFooter,
-      [ELEMENT_LABEL_CONTENT]: LabelContent,
-      [ELEMENT_PLACEHOLDER]: Placeholder,
-      [ELEMENT_REGELVERK]: Regelverk,
-      [ELEMENT_REGELVERK_CONTAINER]: RegelverkContainer,
-      [ELEMENT_SIGNATURE]: Signature,
-      [ELEMENT_EMPTY_VOID]: EmptyVoid,
-    },
-  },
+  { components },
 );
+
+export const collaborationSaksbehandlerPlugins = (
+  behandlingId: string,
+  dokumentId: string,
+  smartDocument: ISmartDocument,
+  { navIdent, navn }: IUserData,
+) => {
+  const sharedRoot = new Y.XmlText();
+  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
+
+  return createPlugins(
+    [
+      ...saksbehandlerPlugins,
+      createYjsPlugin({
+        options: {
+          cursorOptions: {
+            data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,
+          },
+          hocuspocusProviderOptions: {
+            url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
+            name: dokumentId,
+            document: sharedRoot.doc ?? undefined,
+          },
+        },
+      }),
+    ],
+    { components },
+  );
+};

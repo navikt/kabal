@@ -7,15 +7,18 @@ import {
   focusEditor,
   useEditorReadOnly,
 } from '@udecode/plate-common';
-import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
-  containsEmptyChar,
-  containsMultipleEmptyCharAndNoText,
+  containsMultipleEmptyCharAndNoText as containsMultipleEmptyChars,
   ensureOnlyOneEmptyChar,
+  getContainsEmptyChar,
   getHasNoVisibleText,
+  getHasZeroChars,
   getIsFocused,
-  hasZeroChars,
   insertEmptyChar,
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
@@ -33,6 +36,9 @@ export const Placeholder = ({
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
   const isReadOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
+  const containsEmptyChar = getContainsEmptyChar(text);
+  const { templateId } = useContext(SmartEditorContext);
+  const canManage = useCanManageDocument(templateId);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -46,19 +52,15 @@ export const Placeholder = ({
 
       e.preventDefault();
 
-      editor.select({ path: [...path, 0], offset: 0 });
+      editor.select({ path: [...path, 0], offset: containsEmptyChar ? 1 : 0 });
     },
-    [editor, hasNoVisibleText, path],
+    [containsEmptyChar, editor, hasNoVisibleText, path],
   );
 
   const isFocused = path === undefined ? false : getIsFocused(editor, path);
 
   useEffect(() => {
-    if (isDragging) {
-      return;
-    }
-
-    if (path === undefined) {
+    if (isDragging || path === undefined) {
       return;
     }
 
@@ -68,29 +70,32 @@ export const Placeholder = ({
       return;
     }
 
-    // Multiple empty chars.                    -> One empty char.
-    // Focus + Contains only text.              -> Nothing to do.
-    // Focus + Contains only empty chars.       -> One empty char.
-    // Focus + Contains empty chars and text.   -> Only text.
-    // Focus + Completely empty placeholder.    -> One empty char.
-    // No focus + Completely empty placeholder. -> One empty char.
+    // Contains only text.              -> Nothing to do.
+    // Contains only empty chars.       -> One empty char.
+    // Contains empty chars and text.   -> Only text.
+    // Completely empty placeholder.    -> One empty char.
+    if (text.length > 0 && !getContainsEmptyChar(text)) {
+      return;
+    }
+
+    if (getHasZeroChars(text)) {
+      return insertEmptyChar(editor, at);
+    }
+
+    // Workaround for race condition causing double insert on first character in empty placeholder
+    if (!isFocused) {
+      return;
+    }
+
+    const cleanedText = removeEmptyCharInText(text);
 
     // Undo (Ctrl + Z) causes the placeholder to contain two empty chars. This cleans that up.
-    if (containsMultipleEmptyCharAndNoText(text)) {
-      ensureOnlyOneEmptyChar(editor, element, path, at);
+    if (containsMultipleEmptyChars(text) && cleanedText.length === 0) {
+      return ensureOnlyOneEmptyChar(editor, element, path, at);
     }
 
-    if (isFocused) {
-      // Only text.
-      if (!containsEmptyChar(text)) {
-        return;
-      }
-
+    if (cleanedText.length > 0 && getContainsEmptyChar(text)) {
       return cleanText(editor, element, path, at);
-    }
-
-    if (hasZeroChars(text)) {
-      return insertEmptyChar(editor, at);
     }
   }, [editor, element, isDragging, isFocused, path, text]);
 
@@ -109,8 +114,8 @@ export const Placeholder = ({
   );
 
   const hideDeleteButton = useMemo(
-    () => !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
-    [editor, element, hasNoVisibleText, path],
+    () => !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    [editor, element, hasNoVisibleText, canManage, path],
   );
 
   return (
@@ -124,20 +129,16 @@ export const Placeholder = ({
     >
       <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
         <Wrapper
-          $placeholder={element.placeholder}
-          $focused={isFocused}
-          $hasText={!hasNoVisibleText}
-          $hasButton={!hideDeleteButton}
+          style={{
+            backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',
+            paddingLeft: hideDeleteButton ? '0' : '1em',
+          }}
           onClick={onClick}
+          data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
         >
           {children}
-          {hideDeleteButton ? null : (
-            <DeleteButton
-              title="Slett innfyllingsfelt"
-              onClick={deletePlaceholder}
-              contentEditable={false}
-              disabled={isReadOnly}
-            >
+          {hideDeleteButton || isReadOnly ? null : (
+            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
               <TrashIcon aria-hidden />
             </DeleteButton>
           )}
