@@ -2,11 +2,13 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useParams } from 'react-router-dom';
 
 export const useOppgaveId = (): string | typeof skipToken => {
-  const { id } = useParams();
+  const { oppgaveId } = useParams();
 
-  if (typeof id !== 'string' || id.length === 0) {
+  if (oppgaveId === undefined || oppgaveId.length === 0) {
+    console.error('Cannot use useOppgaveId outside of oppgave context');
+
     return skipToken;
   }
 
-  return id;
+  return oppgaveId;
 };

@@ -90,10 +90,12 @@ const Placeholder = styled.div`
   border-radius: var(--a-border-radius-medium);
   box-shadow: var(--a-shadow-medium);
   color: var(--a-surface-subtle);
-  width: 1330px;
+  width: fit-content;
+  min-width: 1330px;
   grid-area: content;
   margin-bottom: 4px;
   margin-top: 4px;
+  margin-right: 4px;
 `;
 
 const StyledSearch = styled(Search)`

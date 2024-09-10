@@ -80,7 +80,13 @@ export const DraftPlainText = ({ text, onDraftDeleted }: Props) => {
   }
 
   return (
-    <Edit text={text} onDraftDeleted={onDraftDeleted} status={plainTextStatus} onPublish={onPublish} error={error}>
+    <Edit
+      text={text}
+      onDraftDeleted={onDraftDeleted}
+      status={{ ...plainTextStatus, modified: text.modified }}
+      onPublish={onPublish}
+      error={error}
+    >
       {LANGUAGES.map((lang) => (
         <LanguageEditor
           key={lang}

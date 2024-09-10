@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { DEFAULT, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
+import { DEFAULT } from '@app/components/smart-editor/hooks/use-scale';
+import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
 
@@ -12,7 +13,7 @@ export const Content = ({ children }: Props) => {
   const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection, showAnnotationsAtOrigin } =
     useContext(SmartEditorContext);
-  const { scaleUp, scaleDown, setValue } = useScaleState();
+  const { scaleUp, scaleDown, setScale } = useContext(ScaleContext);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,7 +54,7 @@ export const Content = ({ children }: Props) => {
 
     if (event.key === '0') {
       event.preventDefault();
-      setValue(DEFAULT);
+      setScale(DEFAULT);
     }
   };
 

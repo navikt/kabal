@@ -108,5 +108,5 @@ const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
   flex-direction: column;
   overflow: hidden;
   flex-grow: 1;
-  width: 1330px;
+  width: fit-content;
 `;

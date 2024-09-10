@@ -62,4 +62,8 @@ const StyledTabPanel = styled(Tabs.Panel)`
   display: flex;
   flex-direction: row;
   overflow-y: auto;
+
+  &[data-state='active'] {
+    flex-grow: 1;
+  }
 `;

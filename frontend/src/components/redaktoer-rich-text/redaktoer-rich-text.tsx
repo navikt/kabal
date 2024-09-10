@@ -9,6 +9,7 @@ import { renderLeaf, renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { redaktoerPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
 import { Sheet } from '@app/plate/sheet';
+import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
@@ -64,6 +65,8 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
               />
             </Sheet>
           </Content>
+
+          <StatusBar />
         </Plate>
       </ErrorBoundary>
     );
@@ -72,8 +75,10 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 
 RedaktoerRichText.displayName = 'RedaktoerRichText';
 
+const PADDING = '16px';
+
 const Content = styled.div`
-  padding: 16px;
+  padding: ${PADDING};
   background: var(--a-surface-subtle);
   flex-grow: 1;
   overflow: hidden;
@@ -81,4 +86,5 @@ const Content = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  min-width: calc(210mm + ${PADDING} + ${PADDING});
 `;

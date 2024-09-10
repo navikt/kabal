@@ -70,7 +70,7 @@ const getNewText = (textType: TextTypes, lang: Language) => {
     return getNewGodFormulering(lang);
   }
 
-  throw new Error(`Unknown text type`);
+  throw new Error('Unknown text type');
 };
 
 const Container = styled.article`
