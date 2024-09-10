@@ -10,8 +10,8 @@ export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] =
   for (const line of lines) {
     const trimmedLine = line.trim();
 
-    // If the line starts with '---' it could be a header.
-    if (trimmedLine.startsWith('---')) {
+    // If the line starts and ends with '--' it could be a header.
+    if (trimmedLine.startsWith('--') && trimmedLine.endsWith('--')) {
       const header = parseHeader(trimmedLine);
 
       // If it is not a header, it is a continuation of the previous entry.

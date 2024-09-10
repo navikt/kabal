@@ -270,4 +270,79 @@ Melding uten navn og ett mellomrom.
       },
     ]);
   });
+
+  it('should split with only two leading dashes', () => {
+    expect.assertions(1);
+
+    const beskrivelse = `-- 12.06.2024 14:26 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Melding med kun to streker på starten av header.
+
+-- 12.06.2024 14:25 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Melding med kun to streker på starten av header.
+`;
+
+    const actual = splitBeskrivelse(beskrivelse);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 12, 14, 26),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på starten av header.',
+      },
+      {
+        date: new Date(2024, 5, 12, 14, 25),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på starten av header.',
+      },
+    ]);
+  });
+
+  it('should split with only two trailing dashes', () => {
+    expect.assertions(1);
+
+    const beskrivelse = `--- 12.06.2024 14:26 F_Z994864 E_Z994864 (Z994864, 4291) --
+Melding med kun to streker på slutten av header.
+
+--- 12.06.2024 14:25 F_Z994864 E_Z994864 (Z994864, 4291) --
+Melding med kun to streker på slutten av header.
+`;
+
+    const actual = splitBeskrivelse(beskrivelse);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 12, 14, 26),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på slutten av header.',
+      },
+      {
+        date: new Date(2024, 5, 12, 14, 25),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på slutten av header.',
+      },
+    ]);
+  });
+
+  it('should split with only two dashes any place', () => {
+    expect.assertions(1);
+
+    const beskrivelse = `--- 12.06.2024 14:26 F_Z994864 E_Z994864 (Z994864, 4291) --
+Melding med kun to streker på slutten av header.
+
+-- 12.06.2024 14:25 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Melding med kun to streker på starten av header.
+`;
+
+    const actual = splitBeskrivelse(beskrivelse);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 12, 14, 26),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på slutten av header.',
+      },
+      {
+        date: new Date(2024, 5, 12, 14, 25),
+        author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+        content: 'Melding med kun to streker på starten av header.',
+      },
+    ]);
+  });
 });
