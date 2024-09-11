@@ -1,20 +1,15 @@
 import { Button } from '@navikt/ds-react';
-import {
-  Plate,
-  insertNodes,
-  removeNodes,
-  resetEditorChildren,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
-import { memo, useContext, useEffect } from 'react';
+import { Plate, insertNodes, removeNodes, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
+import { memo, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { getIsRolAnswers, getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
@@ -22,6 +17,8 @@ import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandl
 import { Sheet } from '@app/plate/sheet';
 import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { ISmartDocument } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 
 interface Props {
   versionId: number;
@@ -32,8 +29,42 @@ interface Props {
 export const HistoryEditor = memo(
   ({ smartDocument, version, versionId }: Props) => {
     const mainEditor = useMyPlateEditorRef(smartDocument.id);
-    const { templateId } = useContext(SmartEditorContext);
-    const canManage = useCanManageDocument(templateId);
+    const { data: oppgave } = useOppgave();
+    const isSaksbehandler = useIsSaksbehandler();
+    const isRol = useIsRol();
+
+    const rolCanRestore =
+      isRol &&
+      oppgave !== undefined &&
+      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.rol.flowState !== FlowState.SENT &&
+      getIsRolAnswers(smartDocument);
+
+    const saksbehandlerCanRestore = useMemo(() => {
+      if (!isSaksbehandler || oppgave === undefined) {
+        return false;
+      }
+
+      if (oppgave.medunderskriver.flowState === FlowState.SENT) {
+        return false;
+      }
+
+      if (getIsRolAnswers(smartDocument)) {
+        return false;
+      }
+
+      if (getIsRolQuestions(smartDocument)) {
+        if (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) {
+          if (oppgave.rol.flowState === FlowState.SENT) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }, [isSaksbehandler, oppgave, smartDocument]);
+
+    const disableRestore = !saksbehandlerCanRestore && !rolCanRestore;
 
     const id = `${smartDocument.id}-${versionId}`;
 
@@ -49,7 +80,7 @@ export const HistoryEditor = memo(
             restore(mainEditor, version);
           }}
           size="small"
-          disabled={!canManage}
+          disabled={disableRestore}
         >
           Gjenopprett denne versjonen
         </StyledButton>
@@ -75,10 +106,10 @@ interface HistoryContentProps {
 }
 
 const HistoryContent = ({ id, version }: HistoryContentProps) => {
-  const editor = useMyPlateEditorRef(id);
+  const edior = useMyPlateEditorRef(id);
   const lang = useSmartEditorSpellCheckLanguage();
 
-  useEffect(() => restore(editor, version), [editor, version]);
+  useEffect(() => restore(edior, version), [edior, version]);
 
   return (
     <Sheet $minHeight>
@@ -90,7 +121,10 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
 const restore = (editor: RichTextEditor, content: EditorValue) => {
   withoutNormalizing(editor, () => {
     withoutSavingHistory(editor, () => {
-      resetEditorChildren(editor);
+      for (let i = editor.children.length - 1; i >= 0; i--) {
+        removeNodes(editor, { at: [i] });
+      }
+
       insertNodes(editor, content, { at: [0] });
 
       // Remove empty paragraph that is added automatically

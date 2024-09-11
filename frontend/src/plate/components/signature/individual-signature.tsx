@@ -95,10 +95,6 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
 
   useEffect(() => {
     if (noMedunderskriver) {
-      if (element.medunderskriver === undefined) {
-        return;
-      }
-
       const data: Partial<SignatureElement> = {
         useShortName: element.useShortName,
         saksbehandler: element.saksbehandler,
@@ -106,10 +102,6 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
       };
 
       return setNodes(editor, data, { match: (n) => n === element, at: [] });
-    }
-
-    if (element.medunderskriver?.name === signature?.name && element.medunderskriver?.title === signature?.title) {
-      return;
     }
 
     const data: Partial<SignatureElement> = {

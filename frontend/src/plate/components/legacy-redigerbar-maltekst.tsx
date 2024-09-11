@@ -4,7 +4,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -44,7 +43,6 @@ export const LegacyRedigerbarMaltekst = ({
   const path = findNodePath(editor, element);
 
   const isInitialized = useRef(!isNodeEmpty(element));
-  const canManage = useCanManageDocument(templateId);
 
   const insertRedigerbarMaltekst = useCallback(async () => {
     if (query === skipToken || path === undefined || oppgaveIsLoading || oppgave === undefined) {
@@ -111,21 +109,19 @@ export const LegacyRedigerbarMaltekst = ({
         $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
-        {canManage ? (
-          <SectionToolbar contentEditable={false}>
-            <AddNewParagraphs editor={editor} element={element} />
-            <Tooltip content="Tilbakestill tekst" delay={0}>
-              <Button
-                title="Tilbakestill tekst"
-                icon={<ArrowCirclepathIcon aria-hidden />}
-                onClick={insertRedigerbarMaltekst}
-                variant="tertiary"
-                size="xsmall"
-                contentEditable={false}
-              />
-            </Tooltip>
-          </SectionToolbar>
-        ) : null}
+        <SectionToolbar contentEditable={false}>
+          <AddNewParagraphs editor={editor} element={element} />
+          <Tooltip content="Tilbakestill tekst" delay={0}>
+            <Button
+              title="Tilbakestill tekst"
+              icon={<ArrowCirclepathIcon aria-hidden />}
+              onClick={insertRedigerbarMaltekst}
+              variant="tertiary"
+              size="xsmall"
+              contentEditable={false}
+            />
+          </Tooltip>
+        </SectionToolbar>
       </SectionContainer>
     </PlateElement>
   );

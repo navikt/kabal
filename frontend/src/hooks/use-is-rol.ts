@@ -5,36 +5,20 @@ import { FlowState } from '@app/types/oppgave-common';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsRol = () => {
-  const { data: oppgave, isSuccess } = useOppgave();
-  const isRolWithAnyFlowState = useIsRolWithAnyFlowState();
-
-  return useMemo(() => {
-    if (!isSuccess) {
-      return false;
-    }
-
-    return (
-      isRolWithAnyFlowState &&
-      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
-      oppgave.rol.flowState !== FlowState.NOT_SENT
-    );
-  }, [oppgave, isSuccess, isRolWithAnyFlowState]);
-};
-
-export const useIsRolWithAnyFlowState = () => {
-  const { data: oppgave, isSuccess } = useOppgave();
+  const { data: oppgave, isLoading } = useOppgave();
 
   const { user } = useContext(StaticDataContext);
 
   return useMemo(() => {
-    if (!isSuccess) {
+    if (isLoading || oppgave === undefined) {
       return false;
     }
 
     return (
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
       oppgave.rol.employee !== null &&
+      oppgave.rol.flowState !== FlowState.NOT_SENT &&
       oppgave.rol.employee.navIdent === user.navIdent
     );
-  }, [oppgave, isSuccess, user]);
+  }, [oppgave, isLoading, user]);
 };

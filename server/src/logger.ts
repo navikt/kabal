@@ -22,7 +22,7 @@ export interface AnyObject {
   [key: string]: SerializableValue;
 }
 
-export type LogArgs =
+type LogArgs =
   | {
       msg?: string;
       trace_id?: string;
@@ -60,7 +60,7 @@ interface Log extends AnyObject {
   stacktrace?: string;
 }
 
-export type Level = 'debug' | 'info' | 'warn' | 'error';
+type Level = 'debug' | 'info' | 'warn' | 'error';
 
 export const getLogger = (module: string): Logger => {
   const cachedLogger = LOGGERS.get(module);
