@@ -4,7 +4,11 @@ import { DEFAULT, useScaleState } from '@app/components/smart-editor/hooks/use-s
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
 
-export const Content = ({ children }: { children?: React.ReactNode }) => {
+interface Props {
+  children?: React.ReactNode;
+}
+
+export const Content = ({ children }: Props) => {
   const editor = useMyPlateEditorRef();
   const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection, showAnnotationsAtOrigin } =
     useContext(SmartEditorContext);
