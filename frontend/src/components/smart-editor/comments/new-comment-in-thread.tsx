@@ -20,7 +20,7 @@ export const NewCommentInThread = ({ threadId, isExpanded, close }: NewCommentIn
   const { data: signature } = useGetMySignatureQuery();
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
-  const { documentId } = useContext(SmartEditorContext);
+  const { dokumentId } = useContext(SmartEditorContext);
 
   if (!isExpanded) {
     return null;
@@ -31,17 +31,13 @@ export const NewCommentInThread = ({ threadId, isExpanded, close }: NewCommentIn
   }
 
   const onSubmit = async (text: string): Promise<void> => {
-    if (documentId === null) {
-      return;
-    }
-
     await postReply({
       oppgaveId,
       author: {
         ident: user.navIdent,
         name: signature?.customLongName ?? signature.longName,
       },
-      dokumentId: documentId,
+      dokumentId,
       text,
       commentId: threadId,
     });

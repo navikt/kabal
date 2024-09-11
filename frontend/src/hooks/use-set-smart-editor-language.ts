@@ -9,17 +9,17 @@ export const useSetSmartEditorLanguage = (): [
   (lang: Language) => Promise<void>,
   ReturnType<typeof useSetLanguageMutation>[1],
 ] => {
-  const { documentId } = useContext(SmartEditorContext);
+  const { dokumentId } = useContext(SmartEditorContext);
   const oppgaveId = useOppgaveId();
-  const [setLanguage, status] = useSetLanguageMutation({ fixedCacheKey: documentId ?? undefined });
+  const [setLanguage, status] = useSetLanguageMutation({ fixedCacheKey: dokumentId });
 
   return [
     async (lang: Language) => {
-      if (documentId === null || oppgaveId === skipToken) {
+      if (oppgaveId === skipToken) {
         return;
       }
 
-      await setLanguage({ dokumentId: documentId, language: lang, oppgaveId });
+      await setLanguage({ dokumentId, language: lang, oppgaveId });
     },
     status,
   ];

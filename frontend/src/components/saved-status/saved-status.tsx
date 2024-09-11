@@ -19,10 +19,8 @@ export interface SavedStatusProps {
 
 export const SavedStatus = ({ isLoading, isSuccess, isError, error }: SavedStatusProps) => {
   const oppgaveId = useOppgaveId();
-  const { documentId } = useContext(SmartEditorContext);
-  const { data } = useGetDocumentQuery(
-    oppgaveId === skipToken || documentId === null ? skipToken : { oppgaveId, dokumentId: documentId },
-  );
+  const { dokumentId } = useContext(SmartEditorContext);
+  const { data } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { oppgaveId, dokumentId });
 
   const lastSaved =
     data === undefined ? null : <StatusText>{`Sist lagret: ${isoDateTimeToPretty(data.modified)}`}</StatusText>;

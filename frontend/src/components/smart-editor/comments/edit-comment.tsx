@@ -45,15 +45,14 @@ interface EditCommentProps {
 export const EditComment = ({ close, id, authorIdent, defaultValue }: EditCommentProps) => {
   const [editComment, { isLoading }] = useUpdateCommentOrReplyMutation();
   const oppgaveId = useOppgaveId();
-  const { documentId } = useContext(SmartEditorContext);
+  const { dokumentId } = useContext(SmartEditorContext);
   const isCommentAuthor = useIsCommentAuthor(authorIdent);
 
-  if (!isCommentAuthor || typeof oppgaveId !== 'string' || typeof documentId !== 'string') {
+  if (!isCommentAuthor || typeof oppgaveId !== 'string') {
     return null;
   }
 
-  const onSubmit = (text: string) =>
-    editComment({ commentId: id, text, oppgaveId, dokumentId: documentId }).then(close);
+  const onSubmit = (text: string) => editComment({ commentId: id, text, oppgaveId, dokumentId }).then(close);
 
   return (
     <WriteComment
