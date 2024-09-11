@@ -11,7 +11,7 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
+import { useCreateSmartDocumentMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
 import { Role } from '@app/types/bruker';
 import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';

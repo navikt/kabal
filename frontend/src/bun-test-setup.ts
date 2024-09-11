@@ -30,5 +30,4 @@ mock.module('@app/static-data/static-data', () => ({
 
 mock.module('@app/observability', () => ({
   pushError: jest.fn(),
-  pushLog: jest.fn(),
 }));

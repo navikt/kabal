@@ -2,7 +2,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, isEditorReadOnly } from '@udecode/plate-common';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Instructions } from '@app/plate/components/maltekstseksjon/instructions';
@@ -38,7 +37,6 @@ export const Maltekstseksjon = ({
   const [tiedList, setTiedList] = useState(NO_TIED_LIST);
   const [maltekstseksjon, setMaltekstseksjon] = useState<IMaltekstseksjon | null>(null);
   const elementRef = useRef(element);
-  const canManage = useCanManageDocument(templateId);
 
   const { updateMaltekstseksjon, isFetching } = useUpdateMaltekstseksjon(
     editor,
@@ -87,7 +85,7 @@ export const Maltekstseksjon = ({
         data-language={element.language}
         data-maltekstseksjon-id={element.id}
       >
-        {!canManage || manualUpdate === undefined ? null : (
+        {manualUpdate !== undefined ? (
           <UpdateMaltekstseksjon
             next={manualUpdate}
             replaceNodes={(...a) => {
@@ -96,7 +94,7 @@ export const Maltekstseksjon = ({
               setManualUpdate(undefined);
             }}
           />
-        )}
+        ) : null}
         {children}
         {maltekstseksjon === null && oppgave !== undefined ? (
           <Information
@@ -107,21 +105,19 @@ export const Maltekstseksjon = ({
             tiedList={tiedList}
           />
         ) : null}
-        {canManage ? (
-          <Toolbar
-            editor={editor}
-            element={element}
-            path={path}
-            isInRegelverk={isInRegelverk}
-            isFetching={isFetching}
-            update={() => {
-              if (oppgave !== undefined && query !== skipToken) {
-                setIsUpdating(true);
-                updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
-              }
-            }}
-          />
-        ) : null}
+        <Toolbar
+          editor={editor}
+          element={element}
+          path={path}
+          isInRegelverk={isInRegelverk}
+          isFetching={isFetching}
+          update={() => {
+            if (oppgave !== undefined && query !== skipToken) {
+              setIsUpdating(true);
+              updateMaltekstseksjon(element, oppgave.resultat, oppgave.ytelseId, query);
+            }
+          }}
+        />
       </MaltekstseksjonContainer>
     </PlateElement>
   );
