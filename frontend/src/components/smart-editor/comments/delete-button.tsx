@@ -22,12 +22,12 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
   const { user } = useContext(StaticDataContext);
-  const { documentId } = useContext(SmartEditorContext);
+  const { dokumentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
   const isCommentAuthor = useIsCommentAuthor(authorIdent);
   const editor = useMyPlateEditorRef();
 
-  if (!isFocused || typeof oppgave === 'undefined' || typeof documentId !== 'string') {
+  if (!isFocused || typeof oppgave === 'undefined') {
     return null;
   }
 
@@ -39,7 +39,7 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
 
   const onDelete = () => {
     close();
-    deleteComment({ commentId: id, dokumentId: documentId, oppgaveId: oppgave.id }).then(() => {
+    deleteComment({ commentId: id, dokumentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
       }

@@ -14,7 +14,7 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setShowGodeFormuleringer: (show: boolean) => void;
   newCommentSelection: TRange | null;
   setNewCommentSelection: (selection: TRange | null) => void;
-  documentId: string | null;
+  dokumentId: string;
   focusedThreadId: string | null;
   setFocusedThreadId: (threadId: string | null) => void;
   showAnnotationsAtOrigin: boolean;
@@ -30,7 +30,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setShowGodeFormuleringer: noop,
   newCommentSelection: null,
   setNewCommentSelection: noop,
-  documentId: null,
+  dokumentId: '',
   focusedThreadId: null,
   setFocusedThreadId: noop,
   showAnnotationsAtOrigin: false,
@@ -63,7 +63,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         showGodeFormuleringer,
         newCommentSelection,
         setNewCommentSelection,
-        documentId: id,
+        dokumentId: id,
         focusedThreadId,
         setFocusedThreadId,
         showAnnotationsAtOrigin,

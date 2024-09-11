@@ -22,7 +22,7 @@ export const NewComment = ({ container }: Props) => {
   const editor = useMyPlateEditorState();
   const { user } = useContext(StaticDataContext);
   const [postComment, { isLoading }] = usePostCommentMutation();
-  const { documentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
+  const { dokumentId, setFocusedThreadId, newCommentSelection, setNewCommentSelection } =
     useContext(SmartEditorContext);
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
   const position = getRangePosition(editor, newCommentSelection, container);
@@ -56,16 +56,12 @@ export const NewComment = ({ container }: Props) => {
   }
 
   const onSubmit = async (text: string) => {
-    if (documentId === null) {
-      return;
-    }
-
     await postComment({
       author: {
         ident: user.navIdent,
         name: signature.customLongName ?? signature.longName,
       },
-      dokumentId: documentId,
+      dokumentId,
       text,
       oppgaveId,
     })

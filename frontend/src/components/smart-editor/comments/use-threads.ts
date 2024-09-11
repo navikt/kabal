@@ -28,15 +28,15 @@ const LOADING: Threads = {
 export const useThreads = (): Threads => {
   const oppgaveId = useOppgaveId();
   const editor = useMyPlateEditorState();
-  const { focusedThreadId, documentId } = useContext(SmartEditorContext);
+  const { focusedThreadId, dokumentId } = useContext(SmartEditorContext);
 
   const query = useMemo(() => {
-    if (documentId === null || oppgaveId === skipToken) {
+    if (oppgaveId === skipToken) {
       return skipToken;
     }
 
-    return { oppgaveId, dokumentId: documentId };
-  }, [documentId, oppgaveId]);
+    return { oppgaveId, dokumentId };
+  }, [dokumentId, oppgaveId]);
 
   const { data: threads, isLoading: threadsIsLoading } = useGetCommentsQuery(query);
 

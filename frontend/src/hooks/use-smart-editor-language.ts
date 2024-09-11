@@ -6,21 +6,19 @@ import { useGetDocumentQuery, useGetDocumentsQuery } from '@app/redux-api/oppgav
 import { Language } from '@app/types/texts/language';
 
 export const useSmartEditorLanguage = () => {
-  const { documentId } = useContext(SmartEditorContext);
+  const { dokumentId } = useContext(SmartEditorContext);
   const oppgaveId = useOppgaveId();
   const { data: documents } = useGetDocumentsQuery(oppgaveId);
-  const { data: document } = useGetDocumentQuery(
-    oppgaveId === skipToken || documentId === null ? skipToken : { dokumentId: documentId, oppgaveId },
-  );
+  const { data: document } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { dokumentId, oppgaveId });
 
   // Try to use cache for single document first. This will probably not be in place in time, though.
-  if (document !== undefined && document.isSmartDokument) {
+  if (document !== undefined && document?.isSmartDokument) {
     return document.language;
   }
 
   // Fallback to going through all documents, which should already be in cache.
   if (documents !== undefined) {
-    const doc = documents.find(({ id }) => documentId === id);
+    const doc = documents.find(({ id }) => dokumentId === id);
 
     if (doc !== undefined && doc.isSmartDokument) {
       return doc.language;
