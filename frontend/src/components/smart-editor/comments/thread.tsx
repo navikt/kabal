@@ -1,6 +1,6 @@
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { forwardRef } from 'react';
 import { styled } from 'styled-components';
-import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
 

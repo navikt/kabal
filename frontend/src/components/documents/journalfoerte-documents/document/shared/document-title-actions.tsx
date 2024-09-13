@@ -1,7 +1,7 @@
+import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 
 interface ConfirmProps {
   setEditMode: (editMode: boolean) => void;

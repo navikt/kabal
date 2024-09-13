@@ -1,6 +1,6 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
+import { useContext } from 'react';
 
 type LandingPagePath = [string, string] | null;
 

@@ -1,12 +1,12 @@
 /* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
-import { GLOBAL, GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, type GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { TemplateSections } from '@app/plate/template-sections';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { UtfallEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IConsumerRichText } from '@app/types/texts/consumer';
+import type { IConsumerRichText } from '@app/types/texts/consumer';
 import { Language } from '@app/types/texts/language';
 
 const getText = (

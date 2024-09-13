@@ -1,6 +1,6 @@
-import { PlateEditor, createPluginFactory, findNode, isText, withoutNormalizing } from '@udecode/plate-common';
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { RichText } from '@app/plate/types';
+import type { RichText } from '@app/plate/types';
+import { type PlateEditor, createPluginFactory, findNode, isText, withoutNormalizing } from '@udecode/plate-common';
 
 const withOverrides = (editor: PlateEditor) => {
   const { insertBreak } = editor;

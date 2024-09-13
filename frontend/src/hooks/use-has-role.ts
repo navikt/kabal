@@ -1,6 +1,6 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Role } from '@app/types/bruker';
+import type { Role } from '@app/types/bruker';
+import { useContext } from 'react';
 
 export const useHasAnyOfRoles = (roles?: Role[]) => {
   const { user } = useContext(StaticDataContext);

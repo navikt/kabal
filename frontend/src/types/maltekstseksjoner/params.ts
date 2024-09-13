@@ -1,5 +1,5 @@
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IGetMaltekstseksjonParams, ITextBaseMetadata } from '../common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams, ITextBaseMetadata } from '../common-text-types';
 
 export type { IGetMaltekstseksjonParams } from '../common-text-types';
 

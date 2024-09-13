@@ -1,7 +1,7 @@
-import { Detail, Label } from '@navikt/ds-react';
-import { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { getErrorData } from '@app/functions/get-error-data';
+import { Detail, Label } from '@navikt/ds-react';
+import type { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { styled } from 'styled-components';
 import { toast } from '../store';
 
 export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?: string | FetchArgs) => {

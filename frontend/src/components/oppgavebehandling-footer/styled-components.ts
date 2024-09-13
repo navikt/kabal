@@ -52,10 +52,10 @@ export const StyledButtons = styled.div`
 `;
 
 export enum FooterType {
-  FINISHED,
-  UNFINISHED_NO_ERRORS,
-  UNFINISHED_WITH_ERRORS,
-  SATT_PAA_VENT,
+  FINISHED = 0,
+  UNFINISHED_NO_ERRORS = 1,
+  UNFINISHED_WITH_ERRORS = 2,
+  SATT_PAA_VENT = 3,
 }
 
 const getBorderColor = (type: FooterType): string => {

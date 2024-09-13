@@ -1,16 +1,16 @@
+import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { isInList, isInTable } from '@app/plate/utils/queries';
 import { TextIndentDecreaseLtr, TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular';
-import { TElement, isBlock, someNode } from '@udecode/plate-common';
+import { type TElement, isBlock, someNode } from '@udecode/plate-common';
 import { indent, outdent } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
-import { isInList, isInTable } from '@app/plate/utils/queries';
 
 const isIndented = (editor: RichTextEditor) =>
   someNode<TElement>(editor, {
-    match: (n) => isBlock(editor, n) && 'indent' in n && typeof n['indent'] === 'number' && n.indent !== 0,
+    match: (n) => isBlock(editor, n) && 'indent' in n && typeof n.indent === 'number' && n.indent !== 0,
     universal: true,
   });
 

@@ -1,7 +1,10 @@
-import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import { ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
+import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { type EditorValue, useMyPlateEditorRef } from '@app/plate/types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
+import { type ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
 import {
-  TTableCellElement,
+  type TTableCellElement,
   setTableColSize,
   useTableCellElement,
   useTableCellElementResizable,
@@ -10,9 +13,6 @@ import {
 } from '@udecode/plate-table';
 import { forwardRef, useCallback } from 'react';
 import { styled } from 'styled-components';
-import { useScaleState } from '@app/components/smart-editor/hooks/use-scale';
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { EditorValue, useMyPlateEditorRef } from '@app/plate/types';
 import { StyledParagraph } from '../paragraph';
 
 type TableCellElementProps = PlateElementProps<EditorValue, TTableCellElement>;

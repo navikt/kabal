@@ -1,10 +1,10 @@
-import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
-import { useEffect, useState } from 'react';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
-import { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
+import type { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
+import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
+import { useEffect, useState } from 'react';
 import { splitQuery } from './../../../smart-editor/gode-formuleringer/split-query';
 
 interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
@@ -37,10 +37,10 @@ export const useFilteredDocuments = (
             (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
             (selectedAvsenderMottakere.length === 0 ||
               selectedAvsenderMottakere.includes(
-                avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN'),
+                avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN',
               )) &&
             (selectedSaksIds.length === 0 ||
-              selectedSaksIds.includes(sak === null ? 'NONE' : (sak.fagsakId ?? 'UNKNOWN'))) &&
+              selectedSaksIds.includes(sak === null ? 'NONE' : sak.fagsakId ?? 'UNKNOWN')) &&
             (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
             (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)),
         );
@@ -112,7 +112,7 @@ const checkDateInterval = (dateString: string, [from, to]: DateRange): boolean =
   const validStart = start !== null && isValid(start);
   const validEnd = end !== null && isValid(end);
 
-  if (!validStart && !validEnd) {
+  if (!(validStart || validEnd)) {
     return true;
   }
 

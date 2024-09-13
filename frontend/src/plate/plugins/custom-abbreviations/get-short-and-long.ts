@@ -1,7 +1,7 @@
-import { PlateEditor, getEditorString, getLeafNode, getPointBefore } from '@udecode/plate-common';
-import { Range } from 'slate';
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
-import { RichText } from '@app/plate/types';
+import type { RichText } from '@app/plate/types';
+import { type PlateEditor, getEditorString, getLeafNode, getPointBefore } from '@udecode/plate-common';
+import { Range } from 'slate';
 
 type Marks = Omit<RichText, 'text'>;
 
@@ -66,7 +66,7 @@ export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
 
 const getMarks = (node: RichText): Marks => {
   const marks: Marks = { ...node };
-  delete marks.text;
+  marks.text = undefined;
 
   return marks;
 };

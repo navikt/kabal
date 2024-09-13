@@ -1,12 +1,12 @@
-import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Button, Tag } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { EditorName } from '@app/components/editor-name/editor-name';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
-import { IEditor } from '@app/types/maltekstseksjoner/responses';
+import type { IEditor } from '@app/types/maltekstseksjoner/responses';
+import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
+import { Button, Tag } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface PublishedProps {
   publishedDateTime: string;

@@ -1,5 +1,5 @@
 import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { EditorAutoformatRule } from '../../types';
+import type { EditorAutoformatRule } from '../../types';
 import { formatList, preFormat } from './utils';
 
 export const autoformatLists: EditorAutoformatRule[] = [

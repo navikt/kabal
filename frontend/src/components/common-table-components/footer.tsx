@@ -1,11 +1,11 @@
+import { PageInfo } from '@app/components/common-table-components/page-info';
+import { RowsPerPage } from '@app/components/rows-per-page';
+import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
+import { StyledFooterContent } from '@app/styled-components/table';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Pagination, Table } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { PageInfo } from '@app/components/common-table-components/page-info';
-import { RowsPerPage } from '@app/components/rows-per-page';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
-import { StyledFooterContent } from '@app/styled-components/table';
 
 interface Props {
   page: number;

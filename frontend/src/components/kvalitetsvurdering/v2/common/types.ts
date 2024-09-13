@@ -1,5 +1,5 @@
-import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
-import {
+import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataHjemler,
@@ -13,8 +13,8 @@ interface BaseParams {
 }
 
 export enum KvalitetsvurderingInput {
-  CHECKBOX,
-  TEXTAREA,
+  CHECKBOX = 0,
+  TEXTAREA = 1,
 }
 
 export interface CheckboxParams extends BaseParams {

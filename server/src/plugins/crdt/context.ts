@@ -1,5 +1,5 @@
 import { isObject } from '@app/plugins/crdt/functions';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 export interface ConnectionContext {
   readonly behandlingId: string;

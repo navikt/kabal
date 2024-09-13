@@ -1,9 +1,9 @@
+import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
+import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { type DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 import { Select } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
-import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 
 const NONE = 'NONE';
 const NONE_OPTION = <option value={NONE}>Velg dokumenttype</option>;

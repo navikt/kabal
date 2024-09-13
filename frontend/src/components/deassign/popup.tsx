@@ -1,15 +1,15 @@
-import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Radio, RadioGroup } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { styled } from 'styled-components';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
+import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { styled } from 'styled-components';
 import { Direction } from './direction';
 
 interface Props {

@@ -1,12 +1,12 @@
-import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useContext, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { ModalContext } from './modal-context';
 
 interface Props {
@@ -38,7 +38,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     }
 
     // If the document has attatchments.
-    if (data !== undefined && data.some(({ parentId }) => parentId === document.id)) {
+    if (data?.some(({ parentId }) => parentId === document.id)) {
       return 'Slett dokument og vedlegg';
     }
 

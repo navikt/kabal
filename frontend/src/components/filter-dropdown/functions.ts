@@ -1,5 +1,5 @@
-import { IKodeverkSimpleValue, IKodeverkValue } from '@app/types/kodeverk';
-import { IOption } from './props';
+import type { IKodeverkSimpleValue, IKodeverkValue } from '@app/types/kodeverk';
+import type { IOption } from './props';
 
 export const kodeverkValuesToDropdownOptions = <T extends string = string>(
   kodeverkValues: IKodeverkValue<T>[],

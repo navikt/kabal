@@ -8,7 +8,7 @@ import {
   TAB_ID_HEADER,
 } from '@app/headers';
 import { getLogger } from '@app/logger';
-import { FastifyRequest, RawServerBase, RequestGenericInterface } from 'fastify';
+import type { FastifyRequest, RawServerBase, RequestGenericInterface } from 'fastify';
 
 const log = getLogger('prepare-proxy-request-headers');
 

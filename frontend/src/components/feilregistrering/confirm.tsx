@@ -1,9 +1,9 @@
+import type { FagsystemId } from '@app/components/feilregistrering/types';
+import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { FagsystemId } from '@app/components/feilregistrering/types';
-import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { Context } from './context';
 import { Row } from './styled-components';
 
@@ -40,7 +40,8 @@ const StyledButton = styled(Button)`
   white-space: nowrap;
 `;
 
-const DEFAULT_TEXT = `Feilregistrering er noe annet enn utfallene «trukket» eller «retur». Du skal kun feilregistrere dersom saken aldri skulle vært i Kabal, for eksempel om vedtaksenheten har bedt om å få saken tilbake fordi den ble sendt til klageinstansen ved en feil, eller fordi samme sak er registrert to ganger ved en feil.`;
+const DEFAULT_TEXT =
+  'Feilregistrering er noe annet enn utfallene «trukket» eller «retur». Du skal kun feilregistrere dersom saken aldri skulle vært i Kabal, for eksempel om vedtaksenheten har bedt om å få saken tilbake fordi den ble sendt til klageinstansen ved en feil, eller fordi samme sak er registrert to ganger ved en feil.';
 
 const NON_MODERNIZED_SUFFIX =
   'Husk at du må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om at du har feilregistrert.';

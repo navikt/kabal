@@ -1,10 +1,10 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { JournalpostAddedEvent } from '@app/redux-api/server-sent-events/types';
-import { AvsenderMottaker, Journalposttype, Sak } from '@app/types/arkiverte-documents';
+import type { JournalpostAddedEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
+import { type AvsenderMottaker, Journalposttype, type Sak } from '@app/types/arkiverte-documents';
 
 export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) => (event: JournalpostAddedEvent) => {
   const { journalpostList, actor } = event;
@@ -51,23 +51,23 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
           (list, { avsenderMottaker }) =>
             avsenderMottaker === null || list.some((a) => a.id === avsenderMottaker.id)
               ? list
-              : [...list, avsenderMottaker],
+              : list.concat(avsenderMottaker),
           [],
         );
 
         const journalposttypeList = journalpostList.reduce<Journalposttype[]>(
           (list, { journalposttype }) =>
-            journalposttype === null || list.includes(journalposttype) ? list : [...list, journalposttype],
+            journalposttype === null || list.includes(journalposttype) ? list : list.concat(journalposttype),
           [],
         );
 
         const sakList = journalpostList.reduce<Sak[]>(
-          (list, { sak }) => (sak === null || list.some((s) => isSakEqual(s, sak)) ? list : [...list, sak]),
+          (list, { sak }) => (sak === null || list.some((s) => isSakEqual(s, sak)) ? list : list.concat(sak)),
           [],
         );
 
         const temaIdList = journalpostList.reduce<string[]>(
-          (list, { tema }) => (tema === null || list.includes(tema) ? list : [...list, tema]),
+          (list, { tema }) => (tema === null || list.includes(tema) ? list : list.concat(tema)),
           [],
         );
 

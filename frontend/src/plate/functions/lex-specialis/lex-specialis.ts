@@ -2,11 +2,11 @@ import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@app/plate/functions/lex-s
 import { getTemplateScore } from '@app/plate/functions/lex-specialis/template-score';
 import { getUtfallScore } from '@app/plate/functions/lex-specialis/utfall-score';
 import { getYtelseScore } from '@app/plate/functions/lex-specialis/ytelse-score';
-import { TemplateSections } from '@app/plate/template-sections';
-import { UtfallEnum } from '@app/types/kodeverk';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IConsumerRichText } from '@app/types/texts/consumer';
+import type { TemplateSections } from '@app/plate/template-sections';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { IConsumerRichText } from '@app/types/texts/consumer';
 
 export enum LexSpecialisStatus {
   FOUND = 'FOUND',

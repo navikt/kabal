@@ -1,8 +1,8 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { DEFAULT, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 export const Content = ({ children }: { children?: React.ReactNode }) => {
   const editor = useMyPlateEditorRef();

@@ -1,14 +1,14 @@
-import { BodyLong } from '@navikt/ds-react';
 import { toast } from '@app/components/toast/store';
-import { reduxStore } from '@app/redux/configure-store';
 import { getRolToastContent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/rol-toast';
-import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
+import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
-import { RolEvent } from '@app/redux-api/server-sent-events/types';
+import type { RolEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { BodyLong } from '@navikt/ds-react';
 
 export const handleRolEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

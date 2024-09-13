@@ -1,6 +1,6 @@
+import { getHeaders } from '@app/headers';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
-import { getHeaders } from '@app/headers';
 
 interface State<T> {
   data: T | undefined;
@@ -57,7 +57,7 @@ export class SimpleApiState<T> {
 
       const contentType = response.headers.get('content-type');
 
-      if (contentType !== null && contentType.includes('application/json')) {
+      if (contentType?.includes('application/json')) {
         this.data = (await response.json()) as T;
       }
     } catch (e) {
@@ -100,7 +100,7 @@ export class SimpleApiState<T> {
       listener(this.getState());
     }
 
-    if (!this.isLoading && !this.isError && typeof this.data === 'undefined') {
+    if (!(this.isLoading || this.isError) && typeof this.data === 'undefined') {
       this.fetchData();
     }
   };

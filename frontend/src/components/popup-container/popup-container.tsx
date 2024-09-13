@@ -1,10 +1,10 @@
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRef } from 'react';
 import { styled } from 'styled-components';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 export enum Direction {
-  LEFT,
-  RIGHT,
+  LEFT = 0,
+  RIGHT = 1,
 }
 
 interface Props {

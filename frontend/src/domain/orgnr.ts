@@ -10,7 +10,7 @@ export const isValidOrgnr = (orgnr: string): boolean => {
 
   const productsSum = parts.reduce((acc, curr, index) => {
     if (indexIsInRange(index)) {
-      return acc + parseInt(curr, 10) * WEIGHTS[index];
+      return acc + Number.parseInt(curr, 10) * WEIGHTS[index];
     }
 
     return acc;
@@ -22,7 +22,7 @@ export const isValidOrgnr = (orgnr: string): boolean => {
     return false;
   }
 
-  const last = parseInt(parts[8], 10);
+  const last = Number.parseInt(parts[8], 10);
 
   if (controlNumber === 11) {
     return last === 0;

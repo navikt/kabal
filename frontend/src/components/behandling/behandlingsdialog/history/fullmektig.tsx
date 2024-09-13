@@ -1,6 +1,6 @@
+import type { INavEmployee } from '@app/types/bruker';
+import { HistoryEventTypes, type IFullmektigEvent, type IPart } from '@app/types/oppgavebehandling/response';
 import { ArrowRightLeftIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { INavEmployee } from '@app/types/bruker';
-import { HistoryEventTypes, IFullmektigEvent, IPart } from '@app/types/oppgavebehandling/response';
 import { Line, employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
@@ -9,7 +9,7 @@ export const getFullmektig = (e: IFullmektigEvent) => {
   const { actor, event, previous, timestamp } = e;
 
   if (previous.event.part === null && event.part !== null) {
-    return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
+    return <Initialize actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }
 
   if (previous.event.part !== null && event.part === null) {
@@ -31,7 +31,7 @@ interface SetProps {
   timestamp: string;
 }
 
-const Set = ({ actor, part, timestamp }: SetProps) => (
+const Initialize = ({ actor, part, timestamp }: SetProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={PlusIcon}>
     <Line>
       {employeeName(actor)} satt fullmektig til {partName(part)}. Ingen tidligere fullmektig.

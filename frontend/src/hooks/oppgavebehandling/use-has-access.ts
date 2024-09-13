@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -6,6 +5,7 @@ import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { useContext } from 'react';
 
 export const useHasBehandlingAccess = (): boolean => {
   const { user } = useContext(StaticDataContext);

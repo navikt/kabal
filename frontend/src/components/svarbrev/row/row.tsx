@@ -1,8 +1,4 @@
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ScoredNamedSvarbrevSetting } from '@app/components/svarbrev/filter-sort';
+import type { ScoredNamedSvarbrevSetting } from '@app/components/svarbrev/filter-sort';
 import { SvarbrevSettingHistory } from '@app/components/svarbrev/history';
 import { PdfModal } from '@app/components/svarbrev/modal/modal';
 import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
@@ -14,6 +10,10 @@ import { Type } from '@app/components/type/type';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useYtelseName } from '@app/hooks/use-kodeverk-value';
 import { usePrevious } from '@app/hooks/use-previous';
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { Button, Detail, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export enum ModalEnum {
   PREVIEW = 'preview',

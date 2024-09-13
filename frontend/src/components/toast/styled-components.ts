@@ -1,7 +1,7 @@
-import { Button } from '@navikt/ds-react';
-import { keyframes, styled } from 'styled-components';
 import { SLIDE_DURATION } from '@app/components/toast/constants';
 import { ToastType } from '@app/components/toast/types';
+import { Button } from '@navikt/ds-react';
+import { keyframes, styled } from 'styled-components';
 
 export const Container = styled.div`
   display: grid;

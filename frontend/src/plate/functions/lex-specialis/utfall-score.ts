@@ -1,7 +1,7 @@
 import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { isUtfall } from '@app/functions/is-utfall';
 import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
-import { UtfallEnum } from '@app/types/kodeverk';
+import type { UtfallEnum } from '@app/types/kodeverk';
 
 export const MAX_UTFALL_SCORE = 4;
 
@@ -17,7 +17,10 @@ export const getUtfallScore = (utfallIdSet: UtfallEnum[], utfallSetList: string[
       return MAX_UTFALL_SCORE;
     }
 
-    const minLength = parsedUtfallList.reduce((min, { length }) => (length < min ? length : min), Infinity);
+    const minLength = parsedUtfallList.reduce(
+      (min, { length }) => (length < min ? length : min),
+      Number.POSITIVE_INFINITY,
+    );
 
     return minLength === 0 ? MAX_UTFALL_SCORE : NEGATIVE_INFINITY;
   }

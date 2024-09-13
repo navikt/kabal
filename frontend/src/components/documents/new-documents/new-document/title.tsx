@@ -1,5 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
   StyledDocumentTitle,
@@ -15,7 +13,9 @@ import {
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { TitleAction } from './title-action';
 
 interface Props {

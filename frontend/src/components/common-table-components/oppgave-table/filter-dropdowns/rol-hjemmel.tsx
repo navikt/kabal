@@ -1,11 +1,11 @@
-import { Table } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
-import { IOption } from '@app/components/filter-dropdown/props';
+import type { IOption } from '@app/components/filter-dropdown/props';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import { FilterDropdownProps } from './types';
+import { Table } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import type { FilterDropdownProps } from './types';
 
 export const RolHjemmel = ({ params, setParams, columnKey }: FilterDropdownProps) => {
   const { data: ytelser = [] } = useLatestYtelser();

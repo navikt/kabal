@@ -1,5 +1,5 @@
-import { TNodeEntry, createPluginFactory, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { type TNodeEntry, createPluginFactory, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
 import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from './element-types';
 
 export const createRegelverkPlugin = createPluginFactory({

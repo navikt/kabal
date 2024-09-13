@@ -1,4 +1,4 @@
-import { Skeleton, SkeletonProps } from '@navikt/ds-react';
+import { Skeleton, type SkeletonProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const LoadingCellContent = (props: SkeletonProps) => (

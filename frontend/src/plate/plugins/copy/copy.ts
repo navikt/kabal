@@ -1,15 +1,3 @@
-import {
-  PlateEditor,
-  TDescendant,
-  TNodeEntry,
-  TText,
-  createPluginFactory,
-  getNodeFragment,
-  getNodeTexts,
-  isCollapsed,
-  isElement,
-} from '@udecode/plate-common';
-import { Range } from 'slate';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { formatLongDate } from '@app/domain/date';
 import { trimFragment } from '@app/plate/plugins/copy/trim-fragment';
@@ -27,7 +15,7 @@ import {
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import {
+import type {
   CurrentDateElement,
   FooterElement,
   HeaderElement,
@@ -36,6 +24,18 @@ import {
   SignatureElement,
 } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
+import {
+  type PlateEditor,
+  type TDescendant,
+  type TNodeEntry,
+  type TText,
+  createPluginFactory,
+  getNodeFragment,
+  getNodeTexts,
+  isCollapsed,
+  isElement,
+} from '@udecode/plate-common';
+import { Range } from 'slate';
 
 const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDescendant | TDescendant[] => {
   if (Array.isArray(node)) {
@@ -65,12 +65,12 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
     const saksbehandler =
       node.saksbehandler === undefined
         ? []
-        : [createSimpleParagraph(node.saksbehandler.name + '\n' + node.saksbehandler.title)];
+        : [createSimpleParagraph(`${node.saksbehandler.name}\n${node.saksbehandler.title}`)];
 
     const medunderskriver =
       node.medunderskriver === undefined
         ? []
-        : [createSimpleParagraph(node.medunderskriver.name + '\n' + node.medunderskriver.title)];
+        : [createSimpleParagraph(`${node.medunderskriver.name}\n${node.medunderskriver.title}`)];
 
     return [...saksbehandler, ...medunderskriver];
   }

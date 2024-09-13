@@ -1,6 +1,3 @@
-/* eslint-disable import/no-unused-modules */
-import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
 import { collaborationApi } from '@app/redux-api/collaboration';
@@ -18,7 +15,10 @@ import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
 import { svarbrevApi } from '@app/redux-api/svarbrev';
 import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
-import { RootState, rootReducer } from './root';
+/* eslint-disable import/no-unused-modules */
+import { configureStore } from '@reduxjs/toolkit';
+import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { type RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,

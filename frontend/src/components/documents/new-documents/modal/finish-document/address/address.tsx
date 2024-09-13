@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
 import { EditAddress } from '@app/components/documents/new-documents/modal/finish-document/address/edit-address';
 import { ReadAddress } from '@app/components/documents/new-documents/modal/finish-document/address/read-address';
-import { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
-import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
-import { IPart } from '@app/types/oppgave-common';
+import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
+import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';
+import type { IPart } from '@app/types/oppgave-common';
+import { useEffect, useState } from 'react';
 
 interface Props extends Addresses {
   part: IPart;

@@ -1,5 +1,5 @@
-import { DEFAULT_FIELD_NAMES } from '@app/types/field-names';
-import { GenericObject, isGenericObject } from './../types/types';
+import type { DEFAULT_FIELD_NAMES } from '@app/types/field-names';
+import { type GenericObject, isGenericObject } from './../types/types';
 
 export interface IValidationError {
   reason: string;
@@ -38,7 +38,7 @@ export const isReduxValidationResponse = (error: unknown): error is IReduxError<
 };
 
 const isValidationSection = (error: GenericObject): error is IValidationSection =>
-  typeof error['section'] === 'string' && Array.isArray(error['properties']);
+  typeof error.section === 'string' && Array.isArray(error.properties);
 
 interface IReduxError<T = unknown> {
   status: number;
@@ -46,4 +46,4 @@ interface IReduxError<T = unknown> {
 }
 
 const isReduxError = <T>(error: unknown): error is IReduxError<T> =>
-  isGenericObject(error) && typeof error['status'] === 'number';
+  isGenericObject(error) && typeof error.status === 'number';

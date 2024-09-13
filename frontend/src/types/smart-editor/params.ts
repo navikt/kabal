@@ -1,10 +1,10 @@
-import { TDescendant } from '@udecode/plate-common';
-import { Language } from '@app/types/texts/language';
-import { Role } from '../bruker';
-import { DistribusjonsType } from '../documents/documents';
-import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
-import { Immutable } from '../types';
-import { TemplateIdEnum } from './template-enums';
+import type { Language } from '@app/types/texts/language';
+import type { TDescendant } from '@udecode/plate-common';
+import type { Role } from '../bruker';
+import type { DistribusjonsType } from '../documents/documents';
+import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
+import type { Immutable } from '../types';
+import type { TemplateIdEnum } from './template-enums';
 
 interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;

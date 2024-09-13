@@ -1,9 +1,9 @@
+import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { InvisibleWarning, InvisibleWarningProps } from './invisible-warning';
+import { InvisibleWarning, type InvisibleWarningProps } from './invisible-warning';
 import { Menu } from './menu';
 
 interface RemoveFiltersProps {

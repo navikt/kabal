@@ -1,4 +1,12 @@
 import {
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REGELVERK_CONTAINER,
+  UNDELETABLE_BUT_REDIGERBAR,
+} from '@app/plate/plugins/element-types';
+import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
+import type { RichTextEditor } from '@app/plate/types';
+import { isInList } from '@app/plate/utils/queries';
+import {
   findNode,
   getNextNode,
   getPreviousNode,
@@ -11,15 +19,7 @@ import {
   isStartPoint,
   removeNodes,
 } from '@udecode/plate-common';
-import { Path, TextDirection, TextUnit } from 'slate';
-import {
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REGELVERK_CONTAINER,
-  UNDELETABLE_BUT_REDIGERBAR,
-} from '@app/plate/plugins/element-types';
-import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
-import { RichTextEditor } from '@app/plate/types';
-import { isInList } from '@app/plate/utils/queries';
+import { Path, type TextDirection, type TextUnit } from 'slate';
 
 const deleteCurrentNode = (editor: RichTextEditor): void => {
   const currentNode = findNode(editor, { match: (n) => !isEditor(n) });

@@ -1,12 +1,12 @@
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Popover } from '@navikt/ds-react';
-import { useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useGetFradelingReasonQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Button, Loader, Popover } from '@navikt/ds-react';
+import { useContext, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;

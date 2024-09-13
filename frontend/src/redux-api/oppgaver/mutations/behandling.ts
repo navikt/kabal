@@ -1,24 +1,24 @@
-import { format } from 'date-fns';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { formatIdNumber } from '@app/functions/format-id';
-import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import {
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type {
   IFinishOppgavebehandlingParams,
   IOppgavebehandlingBaseParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
   ISetKlagerParams,
 } from '@app/types/oppgavebehandling/params';
-import {
+import type {
   IModifiedResponse,
   ISetFeilregistrertResponse,
   IVedtakFullfoertResponse,
 } from '@app/types/oppgavebehandling/response';
+import { format } from 'date-fns';
 import { IS_LOCALHOST } from '../../common';
 import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';

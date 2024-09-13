@@ -1,8 +1,8 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 export const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
@@ -30,7 +30,7 @@ export const useMainSignature = (template: TemplateIdEnum) => {
   );
 
   const { data: rolSignature } = useGetSignatureQuery(
-    isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
+    isRolAnswers && isRolSakstype ? oppgave.rol.employee?.navIdent ?? skipToken : skipToken,
   );
 
   if (isRolAnswers) {

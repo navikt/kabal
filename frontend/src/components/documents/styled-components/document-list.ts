@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { PADDING_BOTTOM, PADDING_TOP, ROW_GAP } from '@app/components/documents/new-documents/constants';
+import { styled } from 'styled-components';
 
 export const StyledDocumentList = styled.ul`
   display: flex;

@@ -1,18 +1,18 @@
-import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentsRemovedEvent } from '@app/redux-api/server-sent-events/types';
-import { INavEmployee } from '@app/types/bruker';
+import type { DocumentsRemovedEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
+import type { INavEmployee } from '@app/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
-  IMainDocument,
-  IParentDocument,
+  type IMainDocument,
+  type IParentDocument,
 } from '@app/types/documents/documents';
+import { Tag } from '@navikt/ds-react';
 
 export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) => (event: DocumentsRemovedEvent) => {
   reduxStore.dispatch(

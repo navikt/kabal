@@ -1,12 +1,12 @@
-import { useContext } from 'react';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useContext } from 'react';
 import { Confirm } from './confirm';
 import { VALIDATION_ERROR_MESSAGES } from './error-messages';
-import { FinishProps, isSmartDocumentValidatonError } from './types';
+import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const ArchiveButtons = ({ document }: FinishProps) => {
   const { id: dokumentId } = document;

@@ -1,10 +1,10 @@
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Button, ButtonProps, DatePicker } from '@navikt/ds-react';
+import { Alert, Button, type ButtonProps, DatePicker } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 type DateStringISO = string;
 
@@ -29,7 +29,7 @@ export const DatePickerRange = ({
   neutral = false,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
+  const onClick = useCallback(() => setIsOpen((o) => !o), []);
   const ref = useRef(null);
 
   useOnClickOutside(ref, () => setIsOpen(false));

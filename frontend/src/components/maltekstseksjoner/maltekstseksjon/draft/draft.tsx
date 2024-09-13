@@ -1,4 +1,3 @@
-import { Loader } from '@navikt/ds-react';
 import { DateTime } from '@app/components/datetime/datetime';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { EditorName } from '@app/components/editor-name/editor-name';
@@ -17,8 +16,9 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { Loader } from '@navikt/ds-react';
 import { Container, DateTimeContainer, Header, MetadataContainer } from '../common';
 import { Actions } from './actions';
 import { Sidebar } from './sidebar';

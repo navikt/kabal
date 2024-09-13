@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { styled } from 'styled-components';
 
 export const StyledDocumentTitle = styled.h1`
   grid-area: ${Fields.Title};

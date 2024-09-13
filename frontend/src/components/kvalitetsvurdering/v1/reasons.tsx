@@ -1,9 +1,9 @@
-import { CheckboxGroup, Loader } from '@navikt/ds-react';
-import { Fragment } from 'react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@app/types/kaka-kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@app/types/kaka-kvalitetsvurdering/v1';
+import { CheckboxGroup, Loader } from '@navikt/ds-react';
+import { Fragment } from 'react';
 import { CommentField } from './comment-field';
 import { StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
 

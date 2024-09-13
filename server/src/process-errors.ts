@@ -1,7 +1,7 @@
-import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
-import { getLogger } from '@app/logger';
-import { EmojiIcons, sendToSlack } from '@app/slack';
 import { isDeployed } from '@app/config/env';
+import { getLogger } from '@app/logger';
+import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
+import { EmojiIcons, sendToSlack } from '@app/slack';
 
 const log = getLogger('process-errors');
 

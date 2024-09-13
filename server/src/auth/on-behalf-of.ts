@@ -1,8 +1,8 @@
-import { Client, GrantBody } from 'openid-client';
+import { createHash } from 'node:crypto';
+import { oboCache } from '@app/auth/cache/cache';
 import { AZURE_APP_CLIENT_ID, NAIS_CLUSTER_NAME } from '@app/config/config';
 import { getLogger } from '@app/logger';
-import { oboCache } from '@app/auth/cache/cache';
-import { createHash } from 'node:crypto';
+import type { Client, GrantBody } from 'openid-client';
 
 const log = getLogger('obo-token');
 

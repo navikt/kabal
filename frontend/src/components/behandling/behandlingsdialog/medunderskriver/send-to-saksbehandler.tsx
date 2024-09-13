@@ -1,8 +1,8 @@
-import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 
 interface Props {
   oppgaveId: string;

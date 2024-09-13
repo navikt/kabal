@@ -1,4 +1,4 @@
-import { IPublishedRichText } from '../texts/responses';
+import type { IPublishedRichText } from '../texts/responses';
 
 enum MaltekstseksjonChangeType {
   MALTEKSTSEKSJON_TITLE = 'MALTEKSTSEKSJON_TITLE',

@@ -1,8 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import {
-  ArchivedDocumentsSort,
+  type ArchivedDocumentsSort,
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDatoOpprettet,
   useDocumentsFilterSaksId,
@@ -11,8 +10,9 @@ import {
   useDocumentsOnlyIncluded,
   useDocumentsSort,
 } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
+import { useCallback, useMemo, useState } from 'react';
 import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];

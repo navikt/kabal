@@ -1,8 +1,8 @@
-import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IPart | undefined;

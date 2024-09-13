@@ -1,11 +1,11 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { PROXY_BASE_QUERY } from '@app/redux-api/common';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocument } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
-import { ICreateSmartDocumentParams } from '@app/types/smart-editor/params';
+import type { ICreateSmartDocumentParams } from '@app/types/smart-editor/params';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const collaborationApi = createApi({
   reducerPath: 'collaborationApi',

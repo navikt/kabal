@@ -1,9 +1,9 @@
+import { RichTextTypes } from '@app/types/common-text-types';
 import { PadlockLockedIcon, PencilWritingIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { AvailableTextsByType, AvailableTextsByTypeProps } from './available-texts-by-type';
+import { AvailableTextsByType, type AvailableTextsByTypeProps } from './available-texts-by-type';
 
 export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: AvailableTextsByTypeProps) => {
   const Icon = textType === RichTextTypes.MALTEKST ? PadlockLockedIcon : PencilWritingIcon;
@@ -20,7 +20,7 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
       </StyledButton>
 
       <Modal
-        header={{ heading: typeLabel + ' tekster' }}
+        header={{ heading: `${typeLabel} tekster` }}
         width={1200}
         open={open}
         onClose={onClose}

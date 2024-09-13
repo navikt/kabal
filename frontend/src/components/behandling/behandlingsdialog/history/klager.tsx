@@ -1,8 +1,8 @@
-import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { HistoryEventTypes, IKlagerEvent, IPart } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IKlagerEvent, type IPart } from '@app/types/oppgavebehandling/response';
+import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Line, employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
@@ -11,7 +11,7 @@ export const getKlager = (e: IKlagerEvent) => {
   const { actor, event, previous, timestamp } = e;
 
   if (previous.event.part === null && event.part !== null) {
-    return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
+    return <Initialize actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }
 
   if (previous.event.part !== null && event.part === null) {
@@ -33,7 +33,7 @@ interface SetProps {
   timestamp: string;
 }
 
-const Set = ({ actor, part, timestamp }: SetProps) => {
+const Initialize = ({ actor, part, timestamp }: SetProps) => {
   const tag = useTag();
 
   return (

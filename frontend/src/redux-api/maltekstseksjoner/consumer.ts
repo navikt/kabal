@@ -1,8 +1,8 @@
+import type { IGetTextsParams } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IConsumerRichText } from '@app/types/texts/consumer';
+import type { Language } from '@app/types/texts/language';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IGetTextsParams } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IConsumerRichText } from '@app/types/texts/consumer';
-import { Language } from '@app/types/texts/language';
 import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '../common';
 
 export enum ConsumerMaltekstseksjonerTagTypes {

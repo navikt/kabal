@@ -1,3 +1,4 @@
+import { autoformatText } from '@app/plate/plugins/autoformat/text';
 import {
   autoformatArrow,
   autoformatLegal,
@@ -5,8 +6,7 @@ import {
   autoformatMath,
   autoformatPunctuation,
 } from '@udecode/plate-autoformat';
-import { autoformatText } from '@app/plate/plugins/autoformat/text';
-import { EditorAutoformatRule } from '../../types';
+import type { EditorAutoformatRule } from '../../types';
 import { autoformatBlocks } from './blocks';
 import { autoformatLists } from './lists';
 import { autoformatMarks } from './marks';

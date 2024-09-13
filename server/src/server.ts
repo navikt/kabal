@@ -1,14 +1,20 @@
 import { API_CLIENT_IDS } from '@app/config/config';
+import { corsOptions } from '@app/config/cors';
 import { isDeployed } from '@app/config/env';
 import { serverConfig } from '@app/config/server-config';
+import { querystringParser } from '@app/helpers/query-parser';
 import { init } from '@app/init';
 import { getLogger } from '@app/logger';
-import { corsOptions } from '@app/config/cors';
 import { accessTokenPlugin } from '@app/plugins/access-token';
 import { apiProxyPlugin } from '@app/plugins/api-proxy';
 import { clientVersionPlugin } from '@app/plugins/client-version';
+import { crdtPlugin } from '@app/plugins/crdt/crdt';
 import { documentPlugin } from '@app/plugins/document';
+import { healthPlugin } from '@app/plugins/health';
+import { httpLoggerPlugin } from '@app/plugins/http-logger';
+import { navIdentPlugin } from '@app/plugins/nav-ident';
 import { oboAccessTokenPlugin } from '@app/plugins/obo-token';
+import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { serveAssetsPlugin } from '@app/plugins/serve-assets';
 import { serveIndexPlugin } from '@app/plugins/serve-index';
 import { serverTimingPlugin } from '@app/plugins/server-timing';
@@ -20,12 +26,6 @@ import { EmojiIcons, sendToSlack } from '@app/slack';
 import cors from '@fastify/cors';
 import { fastify } from 'fastify';
 import metricsPlugin from 'fastify-metrics';
-import { querystringParser } from '@app/helpers/query-parser';
-import { httpLoggerPlugin } from '@app/plugins/http-logger';
-import { proxyVersionPlugin } from '@app/plugins/proxy-version';
-import { healthPlugin } from '@app/plugins/health';
-import { navIdentPlugin } from '@app/plugins/nav-ident';
-import { crdtPlugin } from '@app/plugins/crdt/crdt';
 
 processErrors();
 

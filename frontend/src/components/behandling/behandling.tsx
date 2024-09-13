@@ -1,8 +1,8 @@
-import { Heading, Skeleton } from '@navikt/ds-react';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { Heading, Skeleton } from '@navikt/ds-react';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';

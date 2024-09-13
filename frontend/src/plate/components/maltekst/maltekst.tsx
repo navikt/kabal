@@ -1,15 +1,3 @@
-import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import {
-  PlateElement,
-  PlateRenderElementProps,
-  findNodePath,
-  isEditorReadOnly,
-  isElement,
-  replaceNodeChildren,
-  unwrapNodes,
-} from '@udecode/plate-common';
-import { useContext, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
@@ -17,11 +5,23 @@ import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-b
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { EditorValue, MaltekstElement } from '@app/plate/types';
+import type { EditorValue, MaltekstElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
+import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
+import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
+import {
+  PlateElement,
+  type PlateRenderElementProps,
+  findNodePath,
+  isEditorReadOnly,
+  isElement,
+  replaceNodeChildren,
+  unwrapNodes,
+} from '@udecode/plate-common';
+import { useContext, useMemo } from 'react';
 
 export const Maltekst = ({
   editor,

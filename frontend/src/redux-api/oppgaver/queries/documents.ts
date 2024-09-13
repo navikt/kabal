@@ -1,17 +1,17 @@
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { IShownArchivedDocument } from '@app/components/view-pdf/types';
+import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ELEMENT_LABEL_CONTENT } from '@app/plate/plugins/element-types';
-import { EditorValue, TextAlign } from '@app/plate/types';
-import { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
-import { IDocumentParams } from '@app/types/documents/common-params';
-import {
+import { type EditorValue, TextAlign } from '@app/plate/types';
+import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
+import type { IDocumentParams } from '@app/types/documents/common-params';
+import type {
   IMainDocument,
   IMergedDocumentsResponse,
   ISmartDocument,
   ISmartDocumentVersion,
 } from '@app/types/documents/documents';
-import { IGetVersionParams } from '@app/types/documents/params';
-import { IValidateDocumentResponse } from '@app/types/documents/validation';
+import type { IGetVersionParams } from '@app/types/documents/params';
+import type { IValidateDocumentResponse } from '@app/types/documents/validation';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
@@ -83,7 +83,7 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
     }),
     mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IShownArchivedDocument[]>({
       query: (body) => ({
-        url: `/kabal-api/journalposter/mergedocuments`,
+        url: '/kabal-api/journalposter/mergedocuments',
         method: 'POST',
         body,
       }),

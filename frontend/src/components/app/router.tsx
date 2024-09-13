@@ -1,4 +1,3 @@
-import { Route, Routes as Switch } from 'react-router-dom';
 import { NotFoundPage } from '@app/components/app/not-found-page';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { ModalEnum } from '@app/components/svarbrev/row/row';
@@ -22,6 +21,7 @@ import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
 import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
 import { TrygderettsankebehandlingPage } from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { Role } from '@app/types/bruker';
+import { Route, Routes as Switch } from 'react-router-dom';
 
 export const Router = () => (
   <Switch>
@@ -30,9 +30,9 @@ export const Router = () => (
     <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
       <Route path="oppgaver" element={<OppgaverPage />} />
       <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-      <Route path="klagebehandling/:id" element={<KlagebehandlingPage />} />
-      <Route path="ankebehandling/:id" element={<AnkebehandlingPage />} />
-      <Route path="trygderettsankebehandling/:id" element={<TrygderettsankebehandlingPage />} />
+      <Route path="klagebehandling/:oppgaveId" element={<KlagebehandlingPage />} />
+      <Route path="ankebehandling/:oppgaveId" element={<AnkebehandlingPage />} />
+      <Route path="trygderettsankebehandling/:oppgaveId" element={<TrygderettsankebehandlingPage />} />
     </Route>
 
     <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

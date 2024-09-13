@@ -1,7 +1,7 @@
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 
 interface Props {
   onDelete: () => void;

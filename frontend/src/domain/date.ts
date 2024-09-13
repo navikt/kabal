@@ -69,6 +69,7 @@ export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime
   return _isoTimeToPretty(isoTime);
 };
 
+// biome-ignore lint/style/noNonNullAssertion: Internal function.
 const _isoTimeToPretty = (isoTime: ISOTime): prettyTime => isoTime.split('.')[0]!;
 
 export const isoDateToPretty = (isoDate: ISODate | null | undefined): prettyDate | null => {

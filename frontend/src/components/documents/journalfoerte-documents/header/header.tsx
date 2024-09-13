@@ -1,6 +1,3 @@
-import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import { css, styled } from 'styled-components';
 import {
   Fields,
   documentsGridCSS,
@@ -15,11 +12,14 @@ import { listHeaderCSS } from '@app/components/documents/styled-components/list-
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import {
-  ArchivedDocumentsColumn,
+  type ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { useFilters } from './use-filters';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
+import { css, styled } from 'styled-components';
+import type { useFilters } from './use-filters';
 
 interface Props {
   documentIdList: string[];

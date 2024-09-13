@@ -1,4 +1,4 @@
-import { IAddress } from '@app/types/documents/recipients';
+import type { IAddress } from '@app/types/documents/recipients';
 
 export const areAddressesEqual = (a: IAddress | null, b: IAddress | null) => {
   if (a === b) {

@@ -1,4 +1,3 @@
-import { css, styled } from 'styled-components';
 import {
   Fields,
   documentsGridCSS,
@@ -11,7 +10,8 @@ import {
   getHoverBackgroundColor,
 } from '@app/components/documents/styled-components/document';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
+import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
+import { css, styled } from 'styled-components';
 
 const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.SelectRow, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 

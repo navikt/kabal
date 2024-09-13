@@ -1,3 +1,5 @@
+import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
+import { type IArkivertDocument, Kanal, type TimelineTypes } from '@app/types/arkiverte-documents';
 import {
   BellIcon,
   EnvelopeClosedIcon,
@@ -7,8 +9,6 @@ import {
 } from '@navikt/aksel-icons';
 import { CopyButton } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
-import { IArkivertDocument, Kanal, TimelineTypes } from '@app/types/arkiverte-documents';
 import { StyledHeading } from './styled-components';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 

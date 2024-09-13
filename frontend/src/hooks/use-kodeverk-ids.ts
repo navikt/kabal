@@ -6,7 +6,7 @@ import {
   useSimpleYtelser,
   useTema,
 } from '@app/simple-api-state/use-kodeverk';
-import { SaksTypeEnum } from '@app/types/kodeverk';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
 
 const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
   const { data, isLoading } = useTema();
@@ -79,6 +79,6 @@ export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): string[
   return hjemmelIdList.map((hjemmelId) => {
     const hjemmel = data[hjemmelId];
 
-    return hjemmel === undefined ? hjemmelId : hjemmel.lovkilde.beskrivelse + ' ' + hjemmel.hjemmelnavn;
+    return hjemmel === undefined ? hjemmelId : `${hjemmel.lovkilde.beskrivelse} ${hjemmel.hjemmelnavn}`;
   });
 };

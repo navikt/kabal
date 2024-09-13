@@ -1,16 +1,16 @@
-import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Tag } from '@navikt/ds-react';
-import { Plate } from '@udecode/plate-common';
-import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { EditorValue, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
-import { NonNullableGodFormulering } from '@app/types/texts/consumer';
+import { type EditorValue, type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
+import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Tag } from '@navikt/ds-react';
+import { Plate } from '@udecode/plate-common';
+import { useEffect, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 import { DateTime } from '../../datetime/datetime';
 import { AddButton } from './add-button';
 

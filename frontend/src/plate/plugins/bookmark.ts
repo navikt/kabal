@@ -1,13 +1,13 @@
+import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
+import type { RichText } from '@app/plate/types';
 import {
-  PlateEditor,
+  type PlateEditor,
   createPluginFactory,
   findNode,
   isCollapsed,
   isText,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { RichText } from '@app/plate/types';
 
 const withOverrides = (editor: PlateEditor) => {
   const { insertBreak } = editor;

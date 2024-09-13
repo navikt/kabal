@@ -1,8 +1,8 @@
+import { stringToRegExp } from '@app/functions/string-to-regex';
+import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
 import { Heading, Loader, Search } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { stringToRegExp } from '@app/functions/string-to-regex';
-import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
 import { Direction } from '../../deassign/direction';
 import { FilterList } from '../../filter-dropdown/filter-list';
 

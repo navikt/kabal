@@ -1,7 +1,3 @@
-/* eslint-disable max-lines */
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';
@@ -11,9 +7,13 @@ import {
   Row,
 } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { Postnummer } from '@app/components/documents/new-documents/modal/finish-document/address/postnummer';
-import { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
+import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { IAddress } from '@app/types/documents/recipients';
+import type { IAddress } from '@app/types/documents/recipients';
+/* eslint-disable max-lines */
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 interface EditProps extends Addresses {
   onSave: (address: IAddress | null) => void;

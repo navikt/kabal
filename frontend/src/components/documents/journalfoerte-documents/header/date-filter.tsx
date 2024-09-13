@@ -1,10 +1,10 @@
+import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
+import type { DateRangeSetting } from '@app/hooks/settings/use-setting';
 import { Button } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
-import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import { DateRangeSetting } from '@app/hooks/settings/use-setting';
-import { Fields } from '../grid';
+import type { Fields } from '../grid';
 
 interface Props extends DateRangeSetting {
   label: string;

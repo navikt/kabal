@@ -1,3 +1,8 @@
+import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
+import type { INavEmployee } from '@app/types/bruker';
+import { FlowState } from '@app/types/oppgave-common';
+import { HistoryEventTypes, type IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 /* eslint-disable max-lines */
 import {
   ArrowRedoIcon,
@@ -7,11 +12,6 @@ import {
   PaperplaneIcon,
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
-import { HistoryEventTypes, IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 
 export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
   const key = toKey(e);

@@ -1,7 +1,7 @@
-import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
-import { useCallback } from 'react';
 import { AbbrevationExample } from '@app/components/settings/abbreviations/example';
 import { pushEvent } from '@app/observability';
+import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
+import { Fragment, useCallback } from 'react';
 
 export const AbbreviationsExplanation = () => {
   const onOpenChange = useCallback((open: boolean) => {
@@ -48,15 +48,15 @@ export const AbbreviationsExplanation = () => {
         title="Eksempel på kortform med kun små bokstaver"
         recommended
         examples={[
-          <>
+          <Fragment key="1">
             <b>«aap»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="2">
             <b>«Aap»</b> blir utvidet til <b>«Arbeidsavklaringspenger»</b>. <AlwaysCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="3">
             <b>«AAP»</b> blir utvidet til <b>«ARBEIDSAVKLARINGSPENGER»</b>. <AlwaysAllCaps />
-          </>,
+          </Fragment>,
         ]}
       >
         Kortform <b>«aap»</b> med langform <b>«arbeidsavklaringspenger»</b>
@@ -66,15 +66,15 @@ export const AbbreviationsExplanation = () => {
         title="Eksempel på kortform med spesialtegn"
         recommended
         examples={[
-          <>
+          <Fragment key="1">
             <b>«@om»</b> blir utvidet til <b>«omsorgspenger»</b>/<b>«Omsorgspenger»</b>. <AutoCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="2">
             <b>«@Om»</b> blir utvidet til <b>«Omsorgspenger»</b>. <AlwaysCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="3">
             <b>«@OM»</b> blir utvidet til <b>«OMSORGSPENGER»</b>. <AlwaysAllCaps />
-          </>,
+          </Fragment>,
         ]}
       >
         Kortform <b>«@om»</b> med langform <b>«omsorgspenger»</b>
@@ -84,13 +84,13 @@ export const AbbreviationsExplanation = () => {
         title="Eksempel på kortform med tall"
         recommended
         examples={[
-          <>
+          <Fragment key="1">
             <b>«k9»</b> blir utvidet til <b>«kapittel 9 i folketrygdloven»</b>/<b>«Kapittel 9 i folketrygdloven»</b>.{' '}
             <AutoCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="2">
             <b>«K9»</b> blir utvidet til <b>«Kapittel 9 i folketrygdloven»</b>. <AlwaysCap />
-          </>,
+          </Fragment>,
         ]}
       >
         Kortform <b>«k9»</b> med langform <b>«kapittel 9 i folketrygdloven»</b>
@@ -99,15 +99,15 @@ export const AbbreviationsExplanation = () => {
       <AbbrevationExample
         title="Eksempel på kortform med kun store bokstaver"
         examples={[
-          <>
-            <b>«aap»</b> blir <Error />.
-          </>,
-          <>
-            <b>«Aap»</b> blir <Error />.
-          </>,
-          <>
+          <Fragment key="1">
+            <b>«aap»</b> blir <NotRecognised />.
+          </Fragment>,
+          <Fragment key="2">
+            <b>«Aap»</b> blir <NotRecognised />.
+          </Fragment>,
+          <Fragment key="3">
             <b>«AAP»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
+          </Fragment>,
         ]}
       >
         Kortform <b>«AAP»</b> med langform <b>«arbeidsavklaringspenger»</b>
@@ -116,15 +116,15 @@ export const AbbreviationsExplanation = () => {
       <AbbrevationExample
         title="Eksempel på kortform med både store og små bokstaver"
         examples={[
-          <>
-            <b>«aap»</b> blir <Error />.
-          </>,
-          <>
+          <Fragment key="1">
+            <b>«aap»</b> blir <NotRecognised />.
+          </Fragment>,
+          <Fragment key="2">
             <b>«Aap»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
-          <>
-            <b>«AAP»</b> blir <Error />.
-          </>,
+          </Fragment>,
+          <Fragment key="3">
+            <b>«AAP»</b> blir <NotRecognised />.
+          </Fragment>,
         ]}
       >
         Kortform <b>«Aap»</b> med langform <b>«arbeidsavklaringspenger»</b>
@@ -133,15 +133,15 @@ export const AbbreviationsExplanation = () => {
       <AbbrevationExample
         title="Eksempel på kortform med kun én bokstav"
         examples={[
-          <>
+          <Fragment key="1">
             <b>«x»</b> blir utvidet til <b>«høyesterettsjustitiarius»</b>/<b>«Høyesterettsjustitiarius»</b>. <AutoCap />
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="2">
             <b>«X»</b> blir utvidet til <b>«Høyesterettsjustitiarius»</b>. <AlwaysCap />
             <Tag variant="neutral" size="xsmall">
               Umulig å få bare store boktaver siden kortformen består av kun én bokstav.
             </Tag>
-          </>,
+          </Fragment>,
         ]}
       >
         Kortform <b>«x»</b> med langform <b>«høyesterettsjustitiarius»</b>
@@ -170,7 +170,7 @@ const AlwaysAllCaps = () => (
   </Tag>
 );
 
-const Error = () => (
+const NotRecognised = () => (
   <Tag variant="error" size="xsmall">
     Ikke gjenkjent
   </Tag>

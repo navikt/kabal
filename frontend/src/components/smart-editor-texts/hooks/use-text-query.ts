@@ -1,6 +1,6 @@
+import type { IGetTextsParams } from '@app/types/common-text-types';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { IGetTextsParams } from '@app/types/common-text-types';
 import { useTextType } from './use-text-type';
 
 export const useTextQuery = (): IGetTextsParams => {

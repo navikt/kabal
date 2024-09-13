@@ -1,10 +1,10 @@
-import { Search, Tag } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
-import { IPart } from '@app/types/oppgave-common';
+import type { IPart } from '@app/types/oppgave-common';
+import { Search, Tag } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 import { Lookup } from './lookup';
 
 interface EditPartProps {

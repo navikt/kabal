@@ -1,6 +1,6 @@
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, TextField } from '@navikt/ds-react';
-import { CSSProperties, KeyboardEventHandler, useEffect, useState } from 'react';
+import { type CSSProperties, type KeyboardEventHandler, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {

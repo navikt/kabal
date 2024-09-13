@@ -1,12 +1,12 @@
-import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { TNode, getNodeString, isText, setNodes, toDOMNode } from '@udecode/plate-common';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { pushEvent } from '@app/observability';
-import { RichText, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { type RichText, type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { type TNode, getNodeString, isText, setNodes, toDOMNode } from '@udecode/plate-common';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;

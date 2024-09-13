@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
 import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import { useMemo, useState } from 'react';
 
 interface OppgavePagination {
   from: number;

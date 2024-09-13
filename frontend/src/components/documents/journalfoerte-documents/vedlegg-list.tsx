@@ -1,10 +1,10 @@
-import { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
+import type { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface Props {
   list: VedleggListRenderData;

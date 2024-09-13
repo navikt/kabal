@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { IMainDocument } from '@app/types/documents/documents';
+import type { IMainDocument } from '@app/types/documents/documents';
 import { getDocumentCount } from './get-document-count';
 
 describe('calculate document count', () => {

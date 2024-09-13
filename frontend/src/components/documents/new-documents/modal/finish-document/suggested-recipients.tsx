@@ -1,15 +1,15 @@
+import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
+import type { IErrorProperty } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
+import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
+import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
+import type { IMottaker } from '@app/types/documents/documents';
+import { IdType } from '@app/types/oppgave-common';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Checkbox, CheckboxGroup, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
-import { IErrorProperty } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
-import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
-import { IMottaker } from '@app/types/documents/documents';
-import { IdType } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { StyledBrevmottaker, StyledRecipientContent } from './styled-components';
 
 interface RecipientsProps {

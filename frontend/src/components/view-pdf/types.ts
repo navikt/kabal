@@ -1,5 +1,5 @@
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { DocumentTypeEnum } from '@app/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface IShownNewDocument {
   documentId: string;

@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import { useSmartEditorZoom } from '@app/hooks/settings/use-setting';
+import { useCallback } from 'react';
 
 export const EDITOR_SCALE_CSS_VAR = '--kabal-editor-scale';
 

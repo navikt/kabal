@@ -1,6 +1,6 @@
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { SmartDocumentVersionedEvent } from '@app/redux-api/server-sent-events/types';
+import type { SmartDocumentVersionedEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
 
 export const handleSmartDocumentVersionedEvent =
   (oppgaveId: string) =>

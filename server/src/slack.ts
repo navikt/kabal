@@ -1,5 +1,5 @@
-import { optionalEnvString, requiredEnvString } from '@app/config/env-var';
 import { ENVIRONMENT, isDeployed, isLocal } from '@app/config/env';
+import { optionalEnvString, requiredEnvString } from '@app/config/env-var';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('slack');

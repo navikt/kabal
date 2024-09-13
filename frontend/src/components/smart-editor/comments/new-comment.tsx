@@ -1,7 +1,3 @@
-import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { focusEditor, isCollapsed } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useRef } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -10,6 +6,10 @@ import { getRangePosition } from '@app/plate/functions/get-range-position';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
+import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { focusEditor, isCollapsed } from '@udecode/plate-common';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { StyledNewThread } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';
 

@@ -28,7 +28,7 @@ export const sortWithNumbers = (a: string, b: string): number => {
       }
     }
 
-    if (!aPartIsString && !bPartIsString) {
+    if (!(aPartIsString || bPartIsString)) {
       const diff = aPart - bPart;
 
       if (diff !== 0) {
@@ -59,7 +59,7 @@ const split = (value: string): (string | number)[] => {
       continue;
     }
 
-    const parsedNumber = parseInt(part, 10);
+    const parsedNumber = Number.parseInt(part, 10);
 
     result.push(Number.isNaN(parsedNumber) ? part : parsedNumber);
   }

@@ -1,5 +1,5 @@
+import { type IArkivertDocument, Journalposttype, TimelineTypes } from '@app/types/arkiverte-documents';
 import { styled } from 'styled-components';
-import { IArkivertDocument, Journalposttype, TimelineTypes } from '@app/types/arkiverte-documents';
 import { EkspedertItems } from './ekspedert-items';
 import { RelevantDateTimelineItem } from './timeline-item';
 

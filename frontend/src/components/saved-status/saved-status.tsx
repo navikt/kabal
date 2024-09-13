@@ -1,13 +1,13 @@
-import { Loader, Tooltip } from '@navikt/ds-react';
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { ErrorMessage, getErrorData } from '@app/functions/get-error-data';
+import { type ErrorMessage, getErrorData } from '@app/functions/get-error-data';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { Loader, Tooltip } from '@navikt/ds-react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import { type FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {

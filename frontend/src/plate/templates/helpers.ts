@@ -1,7 +1,3 @@
-import { ELEMENT_H1, ELEMENT_H2 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -18,32 +14,36 @@ import {
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import {
-  BulletListElement,
-  CurrentDateElement,
-  EmptyVoidElement,
-  FooterElement,
-  H1Element,
-  H2Element,
-  HeaderElement,
-  LabelContentElement,
-  ListItemContainerElement,
-  ListItemElement,
-  MaltekstElement,
-  MaltekstseksjonElement,
-  PageBreakElement,
-  ParagraphElement,
-  ParentOrChildElement,
-  PlaceholderElement,
-  RedigerbarMaltekstElement,
-  RegelverkContainerElement,
-  RegelverkElement,
-  SignatureElement,
-  TableCellElement,
-  TableElement,
-  TableRowElement,
+  type BulletListElement,
+  type CurrentDateElement,
+  type EmptyVoidElement,
+  type FooterElement,
+  type H1Element,
+  type H2Element,
+  type HeaderElement,
+  type LabelContentElement,
+  type ListItemContainerElement,
+  type ListItemElement,
+  type MaltekstElement,
+  type MaltekstseksjonElement,
+  type PageBreakElement,
+  type ParagraphElement,
+  type ParentOrChildElement,
+  type PlaceholderElement,
+  type RedigerbarMaltekstElement,
+  type RegelverkContainerElement,
+  type RegelverkElement,
+  type SignatureElement,
+  type TableCellElement,
+  type TableElement,
+  type TableRowElement,
   TextAlign,
 } from '@app/plate/types';
 import { Language } from '@app/types/texts/language';
+import { ELEMENT_H1, ELEMENT_H2 } from '@udecode/plate-heading';
+import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { TemplateSections } from '../template-sections';
 
 export const createLabelContent = (source: string, label: string): LabelContentElement => ({

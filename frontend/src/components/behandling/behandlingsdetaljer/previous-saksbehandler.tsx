@@ -1,7 +1,7 @@
-import { Alert } from '@navikt/ds-react';
 import { formatEmployeeNameAndId } from '@app/domain/employee-name';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   previousSaksbehandler: INavEmployee | null;

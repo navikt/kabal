@@ -38,7 +38,7 @@ export const sortWithOrdinals = (a: string, b: string): number => {
       diff = aPartIsOrdinal && bPartIsOrdinal ? aPartOrdinalValue - bPartOrdinalValue : aPart.localeCompare(bPart);
     }
 
-    if (!aPartIsString && !bPartIsString) {
+    if (!(aPartIsString || bPartIsString)) {
       diff = aPart - bPart;
     }
 
@@ -79,7 +79,7 @@ const split = (value: string): (string | number)[] => {
       continue;
     }
 
-    const parsedNumber = parseInt(part, 10);
+    const parsedNumber = Number.parseInt(part, 10);
 
     result.push(Number.isNaN(parsedNumber) ? part : parsedNumber);
   }

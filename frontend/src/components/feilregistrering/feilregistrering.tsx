@@ -1,15 +1,15 @@
-import { FileXMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { Confirm } from '@app/components/feilregistrering/confirm';
 import { Register } from '@app/components/feilregistrering/register';
 import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-feilregistrere';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { FileXMarkIcon } from '@navikt/aksel-icons';
+import { Box, Button } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 import { Context } from './context';
-import { Children, FagsystemId, OppgaveId, Position, Variant } from './types';
+import type { Children, FagsystemId, OppgaveId, Position, Variant } from './types';
 
 interface Props extends OppgaveId, Variant, Position, FagsystemId {
   feilregistrert: string | null;

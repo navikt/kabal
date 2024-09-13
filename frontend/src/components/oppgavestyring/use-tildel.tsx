@@ -1,5 +1,3 @@
-import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { ActionToast } from '@app/components/toast/action-toast';
@@ -13,10 +11,17 @@ import {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
 } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { INavEmployee, Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
-import { FradelReason, FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
+import { type INavEmployee, Role } from '@app/types/bruker';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import type { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
+import {
+  FradelReason,
+  type FradelWithHjemler,
+  type FradelWithoutHjemler,
+  type ITildelingResponse,
+} from '@app/types/oppgaver';
+import { Button } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
 import { OpenOppgavebehandling } from '../common-table-components/open';
 import { toast } from '../toast/store';
 

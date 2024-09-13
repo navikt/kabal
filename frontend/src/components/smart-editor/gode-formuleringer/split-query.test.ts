@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
 import {
   EXPRESSION_SCORE_FACTOR,
-  Expression,
+  type Expression,
   SPACE_REGEX,
-  SplitQuery,
+  type SplitQuery,
   WORD_SCORE,
   splitQuery,
 } from '@app/components/smart-editor/gode-formuleringer/split-query';

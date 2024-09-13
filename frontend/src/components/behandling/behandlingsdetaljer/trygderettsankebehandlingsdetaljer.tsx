@@ -1,10 +1,10 @@
-import { Heading } from '@navikt/ds-react';
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Heading } from '@navikt/ds-react';
 import { Part } from '../../part/part';
 import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';

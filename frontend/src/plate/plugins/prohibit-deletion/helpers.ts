@@ -1,6 +1,14 @@
 import {
-  ENode,
-  TNodeEntry,
+  ELEMENT_LABEL_CONTENT,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REGELVERK,
+  UNCHANGEABLE,
+  UNDELETABLE,
+} from '@app/plate/plugins/element-types';
+import type { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
+import {
+  type ENode,
+  type TNodeEntry,
   findNode,
   getNodeAncestors,
   getParentNode,
@@ -12,14 +20,6 @@ import {
   removeNodes,
   someNode,
 } from '@udecode/plate-common';
-import {
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REGELVERK,
-  UNCHANGEABLE,
-  UNDELETABLE,
-} from '@app/plate/plugins/element-types';
-import { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
 
 export const isInUnchangeableElement = (editor: RichTextEditor): boolean => {
   if (editor.selection === null) {

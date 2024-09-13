@@ -1,7 +1,7 @@
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 import { ThreadList } from './thread-list';
 
 export const CommentSection = () => {

@@ -1,8 +1,8 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
+import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { Dropdown, InternalHeader } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { UserDropdown } from './dropdown';
 
 export const User = () => {
@@ -12,7 +12,7 @@ export const User = () => {
   const name =
     signatureIsLoading || typeof signature === 'undefined'
       ? 'Laster...'
-      : (signature.customLongName ?? signature.longName);
+      : signature.customLongName ?? signature.longName;
 
   return (
     <Dropdown>

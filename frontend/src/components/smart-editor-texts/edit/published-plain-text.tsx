@@ -1,9 +1,9 @@
-import { BodyLong, Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { IPublishedPlainText } from '@app/types/texts/responses';
+import type { IPublishedPlainText } from '@app/types/texts/responses';
+import { BodyLong, Heading } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   text: IPublishedPlainText;

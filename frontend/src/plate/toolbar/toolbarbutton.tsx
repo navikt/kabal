@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 
 interface Props extends ButtonProps {
   active?: boolean;

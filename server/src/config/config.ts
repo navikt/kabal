@@ -1,7 +1,7 @@
 import path from 'path';
-import { JWK } from 'jose';
-import { requiredEnvJson, requiredEnvString } from '@app/config/env-var';
 import { isLocal } from '@app/config/env';
+import { requiredEnvJson, requiredEnvString } from '@app/config/env-var';
+import type { JWK } from 'jose';
 
 export const API_CLIENT_IDS = [
   'kabal-api',

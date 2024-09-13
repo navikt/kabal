@@ -1,9 +1,9 @@
-import { BodyShort, Label } from '@navikt/ds-react';
-import { useContext, useId } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';
 import { Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { BodyShort, Label } from '@navikt/ds-react';
+import { useContext, useId } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   value: string | null;
@@ -37,7 +37,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
           Poststed
         </StyledLabel>
         <Poststed size="medium" id={poststedElementId}>
-          {value === null ? 'Postnummer mangler' : (getPoststed(value) ?? 'Ukjent')}
+          {value === null ? 'Postnummer mangler' : getPoststed(value) ?? 'Ukjent'}
         </Poststed>
       </PoststedContainer>
     </Row>

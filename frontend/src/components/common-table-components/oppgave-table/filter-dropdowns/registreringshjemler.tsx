@@ -1,12 +1,12 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Table } from '@navikt/ds-react';
-import { useMemo, useRef, useState } from 'react';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
+import { GroupedFilterList, type OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useLovKildeToRegistreringshjemler } from '@app/simple-api-state/use-kodeverk';
-import { FilterDropdownProps } from './types';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Table } from '@navikt/ds-react';
+import { useMemo, useRef, useState } from 'react';
+import type { FilterDropdownProps } from './types';
 
 export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDropdownProps) => {
   const [open, setOpen] = useState(false);

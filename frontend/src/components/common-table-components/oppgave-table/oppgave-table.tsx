@@ -1,5 +1,3 @@
-import { SortState, Table, TableProps } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { TableFooter } from '@app/components/common-table-components/footer';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 // eslint-disable-next-line import/no-cycle
@@ -8,11 +6,13 @@ import {
   TableFilterHeaders,
   TablePlainHeaders,
 } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
-import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
+import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
-import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { type SortState, Table, type TableProps } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface WithParams {
   params: CommonOppgaverParams;

@@ -1,5 +1,5 @@
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IText } from '@app/types/texts/responses';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IText } from '@app/types/texts/responses';
 
 export const getLastPublishedAndVersionToShowInTrash = <T extends IText | IMaltekstseksjon>(
   versions: T[],

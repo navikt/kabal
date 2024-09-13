@@ -1,11 +1,11 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { styled } from 'styled-components';
 import { MedunderskriverReadOnly } from './read-only';
 import { SelectMedunderskriver } from './select-medunderskriver';
 import { SendToMedunderskriver } from './send-to-medunderskriver';

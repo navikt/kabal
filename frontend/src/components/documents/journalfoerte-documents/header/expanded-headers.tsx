@@ -1,7 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
@@ -11,8 +7,8 @@ import {
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
 import {
-  ArchivedDocumentsSort,
-  ArchivedDocumentsSortColumn,
+  type ArchivedDocumentsSort,
+  type ArchivedDocumentsSortColumn,
   useDocumentsFilterDatoOpprettet,
   useDocumentsFilterDatoRegSendt,
 } from '@app/hooks/settings/use-setting';
@@ -20,8 +16,12 @@ import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 import { DateFilter } from './date-filter';
-import { useFilters } from './use-filters';
+import type { useFilters } from './use-filters';
 
 interface ExpandedHeadersProps extends ReturnType<typeof useFilters> {
   listHeight: number;

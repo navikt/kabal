@@ -1,11 +1,11 @@
-import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
+import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
 import { StyledNewReply } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';
 

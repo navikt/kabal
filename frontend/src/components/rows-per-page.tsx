@@ -1,9 +1,9 @@
-import { Label, ToggleGroup } from '@navikt/ds-react';
-import { useId } from 'react';
-import { styled } from 'styled-components';
 import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
 import { PAGE_SIZE_OPTIONS, restrictPageSize } from '@app/hooks/use-oppgave-pagination';
 import { pushEvent } from '@app/observability';
+import { Label, ToggleGroup } from '@navikt/ds-react';
+import { useId } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   settingKey: string;

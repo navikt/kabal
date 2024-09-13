@@ -1,12 +1,12 @@
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { memo, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { memo, useContext, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 import { DeleteButton } from './delete-button';
 import { EditButton, EditComment } from './edit-comment';
 

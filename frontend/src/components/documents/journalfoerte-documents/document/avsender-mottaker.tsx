@@ -1,9 +1,9 @@
+import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { useDocumentsAvsenderMottaker } from '@app/hooks/settings/use-setting';
+import { type IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { Button } from '@navikt/ds-react';
 import { memo } from 'react';
 import { styled } from 'styled-components';
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { useDocumentsAvsenderMottaker } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { formatAvsenderMottaker } from './format-avsender-mottaker';
 
 type AvsenderMottakerProps = Pick<IArkivertDocument, 'journalposttype' | 'avsenderMottaker'>;
@@ -18,7 +18,7 @@ export const AvsenderMottaker = memo(
 
     return (
       <AvsenderMottakerButton
-        onClick={() => setValue([avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN')])}
+        onClick={() => setValue([avsenderMottaker === null ? 'NONE' : avsenderMottaker.id ?? 'UNKNOWN'])}
         size="small"
         variant="tertiary"
       >

@@ -1,6 +1,3 @@
-import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
@@ -9,12 +6,15 @@ import {
   StyledBrevmottaker,
   StyledRecipientContent,
 } from '@app/components/documents/new-documents/modal/finish-document/styled-components';
-import { EditPart } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { IMottaker } from '@app/types/documents/documents';
+import { EditPart } from '@app/components/part/edit-part';
+import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IErrorProperty } from './is-send-error';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
+import { styled } from 'styled-components';
+import type { IErrorProperty } from './is-send-error';
 
 interface Props {
   mottakerList: IMottaker[];

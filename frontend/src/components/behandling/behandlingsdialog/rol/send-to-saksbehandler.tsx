@@ -1,12 +1,12 @@
-import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useContext } from 'react';
 
 interface Props {
   oppgaveId: string;

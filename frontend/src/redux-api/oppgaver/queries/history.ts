@@ -1,4 +1,4 @@
-import { IHistoryResponse } from '@app/types/oppgavebehandling/response';
+import type { IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 

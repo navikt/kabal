@@ -1,7 +1,7 @@
-import { RedisClientType, createClient } from 'redis';
-import { getLogger } from '@app/logger';
 import { memoryCacheGauge, redisCacheGauge, redisCacheSizeGauge } from '@app/auth/cache/cache-gauge';
-import { TokenMessage } from '@app/auth/cache/types';
+import type { TokenMessage } from '@app/auth/cache/types';
+import { getLogger } from '@app/logger';
+import { type RedisClientType, createClient } from 'redis';
 
 const log = getLogger('obo-redis-cache');
 

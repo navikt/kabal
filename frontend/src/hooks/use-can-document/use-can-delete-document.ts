@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { canRolEditDocument } from '@app/hooks/use-can-document/common';
@@ -8,7 +7,8 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { CreatorRole, IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, type IMainDocument } from '@app/types/documents/documents';
+import { useMemo } from 'react';
 
 export const useCanDeleteDocument = (
   document: IMainDocument | null,

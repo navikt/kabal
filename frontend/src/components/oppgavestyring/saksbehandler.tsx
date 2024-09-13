@@ -1,11 +1,12 @@
-import { ErrorMessage, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
+import { toast } from '@app/components/toast/store';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { ErrorMessage, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';
@@ -90,7 +91,12 @@ const SelectSaksbehandler = ({
   ));
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value)!;
+    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value);
+
+    if (employee === undefined) {
+      return toast.error(`Kunne ikke tildele. Ugyldig saksbehandler: ${target.value}`);
+    }
+
     tildel(employee);
   };
 

@@ -1,14 +1,14 @@
+import { Line, QUEUE, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
+import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import type { INavEmployee } from '@app/types/bruker';
+import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
+import { FradelReason } from '@app/types/oppgaver';
 /* eslint-disable max-lines */
 import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Label, Tag } from '@navikt/ds-react';
 import { useId } from 'react';
 import { styled } from 'styled-components';
-import { Line, QUEUE, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
-import { INavEmployee } from '@app/types/bruker';
-import { HistoryEventTypes, ITildelingEvent } from '@app/types/oppgavebehandling/response';
-import { FradelReason } from '@app/types/oppgaver';
 
 export const getTildelingEvent = (e: ITildelingEvent) => {
   const key = toKey(e);
@@ -24,7 +24,7 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
   }
 
   const toQueue = saksbehandler === null;
-  const toOther = !toSelf && !toQueue;
+  const toOther = !(toSelf || toQueue);
 
   if (toOther) {
     return <ToOther actor={actor} saksbehandler={saksbehandler} timestamp={timestamp} key={key} />;
@@ -34,7 +34,7 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
     const { fradelingReasonId, hjemmelIdList } = event;
     const fromSelf = previousSaksbehandler === actor;
     const fromQueue = previousSaksbehandler === null;
-    const fromOther = !fromSelf && !fromQueue;
+    const fromOther = !(fromSelf || fromQueue);
 
     if (fromSelf) {
       return (

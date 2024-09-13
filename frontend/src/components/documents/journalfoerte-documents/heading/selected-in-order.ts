@@ -1,7 +1,7 @@
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
-import { IShownArchivedDocument } from '@app/components/view-pdf/types';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
+import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const getSelectedDocumentsInOrder = (

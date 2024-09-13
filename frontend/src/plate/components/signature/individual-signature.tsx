@@ -1,11 +1,11 @@
-import { setNodes } from '@udecode/plate-common';
-import { useContext, useEffect, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
 import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
-import { ISignature, SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
+import { type ISignature, type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { setNodes } from '@udecode/plate-common';
+import { useContext, useEffect, useMemo } from 'react';
+import { styled } from 'styled-components';
 import { MISSING_TITLE, Title } from './title';
 
 interface Props {

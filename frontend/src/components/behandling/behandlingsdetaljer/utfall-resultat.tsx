@@ -1,5 +1,3 @@
-import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -8,7 +6,9 @@ import { useUtfall } from '@app/hooks/use-utfall';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { UtfallEnum } from '@app/types/kodeverk';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;
@@ -64,7 +64,7 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfallId: value });
 
-      if (oppgave !== undefined && oppgave.resultat.extraUtfallIdSet.includes(value)) {
+      if (oppgave?.resultat.extraUtfallIdSet.includes(value)) {
         updateEkstraUtfall({
           oppgaveId,
           extraUtfallIdSet: oppgave.resultat.extraUtfallIdSet.filter((id) => id !== value),

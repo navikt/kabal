@@ -1,7 +1,7 @@
-import { Alert } from '@navikt/ds-react';
 import { GodFormulering } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
 import { StyledSkeleton } from '@app/components/smart-editor/gode-formuleringer/styles';
-import { NonNullableGodFormulering } from '@app/types/texts/consumer';
+import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
+import { Alert } from '@navikt/ds-react';
 
 interface ListProps {
   isLoading: boolean;

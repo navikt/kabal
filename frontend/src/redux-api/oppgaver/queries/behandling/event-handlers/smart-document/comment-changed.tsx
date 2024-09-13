@@ -1,11 +1,11 @@
-import { BodyShort } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
-import { SmartDocumentCommentEvent } from '@app/redux-api/server-sent-events/types';
+import type { SmartDocumentCommentEvent } from '@app/redux-api/server-sent-events/types';
 import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
-import { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { reduxStore } from '@app/redux/configure-store';
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { BodyShort } from '@navikt/ds-react';
 
 export const handleSmartDocumentCommentChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentCommentEvent) => {

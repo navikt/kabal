@@ -1,13 +1,13 @@
-import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Alert, CopyButton, HelpText, Label, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { Address } from '@app/components/documents/new-documents/modal/finish-document/address/address';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { formatIdNumber } from '@app/functions/format-id';
-import { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
-import { IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
+import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
+import { Alert, CopyButton, HelpText, Label, Tooltip } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { StyledBrevmottaker, StyledRecipientContent } from './styled-components';
 
 interface RecipientsProps {

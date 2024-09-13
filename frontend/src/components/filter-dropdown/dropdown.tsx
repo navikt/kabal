@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
-import { BaseProps, DropdownProps } from './props';
+import type { BaseProps, DropdownProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 
@@ -13,7 +13,7 @@ export const Dropdown = <T extends string>({ selected, options, onChange, close 
 
   useEffect(() => {
     setFilteredOptions(options.filter(({ label }) => filter.test(label)));
-  }, [setFilteredOptions, options, filter]);
+  }, [options, filter]);
 
   const reset = () => onChange([]);
 

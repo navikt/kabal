@@ -1,6 +1,6 @@
+import { Language } from '@app/types/texts/language';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
-import { Language } from '@app/types/texts/language';
 
 interface PathParams {
   maltekstseksjonId?: string | null;
@@ -15,7 +15,7 @@ export const useNavigateMaltekstseksjoner = () => {
   const { search } = useLocation();
 
   return useCallback(
-    (newParams: PathParams, replace: boolean = false) =>
+    (newParams: PathParams, replace = false) =>
       navigate(`${calculateMaltekstseksjonPath(oldParams, newParams)}${search}`, { replace }),
     [navigate, oldParams, search],
   );

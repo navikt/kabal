@@ -1,13 +1,3 @@
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import {
-  PlateElement,
-  PlateRenderElementProps,
-  findNodePath,
-  focusEditor,
-  useEditorReadOnly,
-} from '@udecode/plate-common';
-import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
@@ -23,7 +13,17 @@ import {
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
-import { EditorValue, PlaceholderElement } from '@app/plate/types';
+import type { EditorValue, PlaceholderElement } from '@app/plate/types';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
+import {
+  PlateElement,
+  type PlateRenderElementProps,
+  findNodePath,
+  focusEditor,
+  useEditorReadOnly,
+} from '@udecode/plate-common';
+import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
 export const Placeholder = ({
   element,
@@ -114,7 +114,7 @@ export const Placeholder = ({
   );
 
   const hideDeleteButton = useMemo(
-    () => !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    () => !(canManage && hasNoVisibleText) || lonePlaceholderInMaltekst(editor, element, path),
     [editor, element, hasNoVisibleText, canManage, path],
   );
 
@@ -127,7 +127,7 @@ export const Placeholder = ({
       contentEditable
       suppressContentEditableWarning
     >
-      <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
+      <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
           style={{
             backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',

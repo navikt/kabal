@@ -1,2 +1,2 @@
-export const NEGATIVE_INFINITY = -Infinity;
+export const NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
 export const INCLUDE_THRESHOLD = 0;

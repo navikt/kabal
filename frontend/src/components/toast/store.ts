@@ -1,5 +1,5 @@
 import { TOAST_TIMEOUT } from './constants';
-import { NewMessage, ToastType } from './types';
+import { type NewMessage, ToastType } from './types';
 
 type ListenerFn = (messages: Message[]) => void;
 
@@ -34,7 +34,9 @@ class Store {
   public info = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, message, timeout);
 
   private notify() {
-    this.listeners.forEach((listener) => listener(this.messages));
+    for (const listener of this.listeners) {
+      listener(this.messages);
+    }
   }
 
   private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT): CloseFn {
