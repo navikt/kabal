@@ -35,7 +35,7 @@ export const EditLogiskVedlegg = ({
   const { suggestions, lastIndex } = useSuggestions({ logiskeVedlegg, customValue, temaId });
 
   const setCaretAtEnd = useCallback(() => {
-    if (ref.current !== null && ref.current.isContentEditable) {
+    if (ref.current?.isContentEditable) {
       const selection = window.getSelection();
 
       if (selection !== null) {

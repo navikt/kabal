@@ -114,7 +114,7 @@ export const Placeholder = ({
   );
 
   const hideDeleteButton = useMemo(
-    () => !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
+    () => !(canManage && hasNoVisibleText) || lonePlaceholderInMaltekst(editor, element, path),
     [editor, element, hasNoVisibleText, canManage, path],
   );
 

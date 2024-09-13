@@ -123,7 +123,7 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
   const [isManualExpanded, setIsManualExpaded] = useState<boolean | null>(null);
   const isExpanded = isManualExpanded ?? (hasSubSelection || (hasFilter && filteredSubCount <= 3));
 
-  if (!isInFilter && !isSubInFilter) {
+  if (!(isInFilter || isSubInFilter)) {
     return null;
   }
 

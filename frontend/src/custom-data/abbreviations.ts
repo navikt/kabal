@@ -1,6 +1,6 @@
 import type { CustomAbbrevation } from '@app/types/bruker';
 
-const URL = `/api/kabal-innstillinger/me/abbreviations`;
+const URL = '/api/kabal-innstillinger/me/abbreviations';
 
 class Abbreviations {
   private abbreviations: CustomAbbrevation[] = [];

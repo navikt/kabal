@@ -83,7 +83,7 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
     }),
     mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IShownArchivedDocument[]>({
       query: (body) => ({
-        url: `/kabal-api/journalposter/mergedocuments`,
+        url: '/kabal-api/journalposter/mergedocuments',
         method: 'POST',
         body,
       }),

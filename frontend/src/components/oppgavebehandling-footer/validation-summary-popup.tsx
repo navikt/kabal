@@ -52,7 +52,7 @@ interface PopupProps {
 const Popup = ({ open, setOpen, hasErrors }: PopupProps) => {
   const { validationSectionErrors } = useContext(ValidationErrorContext);
 
-  if (!open || !hasErrors) {
+  if (!(open && hasErrors)) {
     return null;
   }
 

@@ -138,7 +138,7 @@ const hasMottattDato = (doc: IMainDocument): doc is IFileDocument<null> =>
   doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc);
 
 const mottattDatoEqual = (prev: IMainDocument, next: IMainDocument) => {
-  if (!hasMottattDato(prev) || !hasMottattDato(next)) {
+  if (!(hasMottattDato(prev) && hasMottattDato(next))) {
     return true;
   }
 
@@ -149,7 +149,7 @@ const isAnnenInngaaende = (doc: IMainDocument): doc is IFileDocument<null> =>
   doc.type === DocumentTypeEnum.UPLOADED && doc.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST;
 
 const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
-  if (!isAnnenInngaaende(prev) || !isAnnenInngaaende(next)) {
+  if (!(isAnnenInngaaende(prev) && isAnnenInngaaende(next))) {
     return true;
   }
 

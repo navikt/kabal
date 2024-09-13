@@ -24,7 +24,7 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
   }
 
   const toQueue = saksbehandler === null;
-  const toOther = !toSelf && !toQueue;
+  const toOther = !(toSelf || toQueue);
 
   if (toOther) {
     return <ToOther actor={actor} saksbehandler={saksbehandler} timestamp={timestamp} key={key} />;
@@ -34,7 +34,7 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
     const { fradelingReasonId, hjemmelIdList } = event;
     const fromSelf = previousSaksbehandler === actor;
     const fromQueue = previousSaksbehandler === null;
-    const fromOther = !fromSelf && !fromQueue;
+    const fromOther = !(fromSelf || fromQueue);
 
     if (fromSelf) {
       return (

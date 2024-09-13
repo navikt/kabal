@@ -48,7 +48,7 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
 
         <RoleList
           title="Andre roller Kabal bruker"
-          roles={ALL_PUBLIC_ROLES.filter((r) => !user.roller.includes(r) && !requiredRoles.includes(r))}
+          roles={ALL_PUBLIC_ROLES.filter((r) => !(user.roller.includes(r) || requiredRoles.includes(r)))}
           variant="neutral-moderate"
         />
       </Centered>

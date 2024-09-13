@@ -38,8 +38,7 @@ export const TildelButton = ({
   }
 
   if (
-    !access.assignSelf ||
-    !roller.includes(Role.KABAL_SAKSBEHANDLING) ||
+    !(access.assignSelf && roller.includes(Role.KABAL_SAKSBEHANDLING)) ||
     medunderskriver.employee?.navIdent === navIdent ||
     tildeltSaksbehandlerident !== null
   ) {

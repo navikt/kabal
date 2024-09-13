@@ -28,7 +28,7 @@ export const sortWithNumbers = (a: string, b: string): number => {
       }
     }
 
-    if (!aPartIsString && !bPartIsString) {
+    if (!(aPartIsString || bPartIsString)) {
       const diff = aPart - bPart;
 
       if (diff !== 0) {

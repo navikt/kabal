@@ -38,7 +38,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     }
 
     // If the document has attatchments.
-    if (data !== undefined && data.some(({ parentId }) => parentId === document.id)) {
+    if (data?.some(({ parentId }) => parentId === document.id)) {
       return 'Slett dokument og vedlegg';
     }
 

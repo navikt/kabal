@@ -34,11 +34,11 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
     return null;
   }
 
-  if (!hasDocumentsAccess && !isRol) {
+  if (!(hasDocumentsAccess || isRol)) {
     return null;
   }
 
-  if (!canEditDocument && !canDeleteDocument) {
+  if (!(canEditDocument || canDeleteDocument)) {
     return null;
   }
 
