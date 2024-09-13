@@ -9,8 +9,9 @@ interface Props {
 
 export const EntryList = ({ entries }: Props) => (
   <StyledEntryList>
-    {entries.map((entry, index) => (
-      <Container key={index}>
+    {entries.map((entry) => (
+      // biome-ignore lint/correctness/useJsxKeyInIterable: Static data
+      <Container>
         <Entry {...entry} />
       </Container>
     ))}

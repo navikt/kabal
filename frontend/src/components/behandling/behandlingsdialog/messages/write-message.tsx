@@ -22,7 +22,7 @@ export const WriteMessage = () => {
     if (isSuccess) {
       setMessage('');
     }
-  }, [isSuccess, setMessage]);
+  }, [isSuccess]);
 
   if (signatureIsLoading || typeof signature === 'undefined') {
     return <Loader size="xlarge" />;

@@ -1,8 +1,6 @@
 import { LoadingRow } from '@app/components/common-table-components/loading-row';
 import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { Table } from '@navikt/ds-react';
-// See relevant-oppgaver.tsx for more information about this dependency cycle
-// eslint-disable-next-line import/no-cycle
 import { OppgaveRow } from './oppgave-row';
 
 interface OppgaveRowsProps {
@@ -38,7 +36,8 @@ export const OppgaveRows = ({
     return (
       <Table.Body data-testid={testId} data-state="loading" data-empty="true">
         {new Array(pageSize).fill(0).map((_, i) => (
-          <LoadingRow columnCount={columns.length} testId={`${testId}-row`} key={i} />
+          // biome-ignore lint/correctness/useJsxKeyInIterable: This is a static array
+          <LoadingRow columnCount={columns.length} testId={`${testId}-row`} />
         ))}
       </Table.Body>
     );

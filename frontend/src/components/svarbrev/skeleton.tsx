@@ -53,6 +53,7 @@ const Buttons = styled(Row)`
   min-width: ${3 * 32 + 2 * 4}px;
 `;
 
-const ROWS = new Array(60).fill(null).map((_, i) => <SkeletonRow key={i} />);
+// biome-ignore lint/correctness/useJsxKeyInIterable: Static data
+const ROWS = new Array(60).fill(null).map((_, i) => <SkeletonRow />);
 
 export const SkeletonBody = () => <Table.Body>{ROWS}</Table.Body>;

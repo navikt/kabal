@@ -100,9 +100,9 @@ const DraftRichTextBase = ({ text, onDraftDeleted, validate, error }: DraftRichT
     }
 
     const timer = setTimeout(() => {
-      changes.forEach((lang) => {
+      for (const lang of changes) {
         updateRichText({ query, richText: richTexts[lang], id: text.id, language: lang });
-      });
+      }
     }, 1000);
 
     return () => clearTimeout(timer);

@@ -400,6 +400,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             const dokumenter = new Array<IArkivertDocument>(dokumenterCount);
 
             for (let i = dokumenterCount - 1; i >= 0; i--) {
+              // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
               const doc = draft.dokumenter[i]!;
               const journalpostDocuments = journalfoerteDokumenter.filter((j) => j.journalpostId === doc.journalpostId);
 
@@ -412,6 +413,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               const vedlegg = new Array<IArkivertDocumentVedlegg>(vedleggCount);
 
               for (let ii = vedleggCount - 1; ii >= 0; ii--) {
+                // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
                 const v = doc.vedlegg[ii]!;
                 const vedleggInList =
                   v.valgt || journalpostDocuments.some((j) => j.dokumentInfoId === v.dokumentInfoId);

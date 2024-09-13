@@ -13,7 +13,7 @@ export const Dropdown = <T extends string>({ selected, options, onChange, close 
 
   useEffect(() => {
     setFilteredOptions(options.filter(({ label }) => filter.test(label)));
-  }, [setFilteredOptions, options, filter]);
+  }, [options, filter]);
 
   const reset = () => onChange([]);
 

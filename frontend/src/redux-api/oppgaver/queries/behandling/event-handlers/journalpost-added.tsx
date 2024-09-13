@@ -51,23 +51,23 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
           (list, { avsenderMottaker }) =>
             avsenderMottaker === null || list.some((a) => a.id === avsenderMottaker.id)
               ? list
-              : [...list, avsenderMottaker],
+              : list.concat(avsenderMottaker),
           [],
         );
 
         const journalposttypeList = journalpostList.reduce<Journalposttype[]>(
           (list, { journalposttype }) =>
-            journalposttype === null || list.includes(journalposttype) ? list : [...list, journalposttype],
+            journalposttype === null || list.includes(journalposttype) ? list : list.concat(journalposttype),
           [],
         );
 
         const sakList = journalpostList.reduce<Sak[]>(
-          (list, { sak }) => (sak === null || list.some((s) => isSakEqual(s, sak)) ? list : [...list, sak]),
+          (list, { sak }) => (sak === null || list.some((s) => isSakEqual(s, sak)) ? list : list.concat(sak)),
           [],
         );
 
         const temaIdList = journalpostList.reduce<string[]>(
-          (list, { tema }) => (tema === null || list.includes(tema) ? list : [...list, tema]),
+          (list, { tema }) => (tema === null || list.includes(tema) ? list : list.concat(tema)),
           [],
         );
 

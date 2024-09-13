@@ -122,7 +122,7 @@ const TimedToast = forwardRef<HTMLDivElement, Message>(
       ) {
         onMouseLeave();
       }
-    }, [expiresAt, onMouseLeave, ref]);
+    }, [expiresAt, onMouseLeave]);
 
     const slideOut = useCallback(() => {
       if (ref.current === null) {

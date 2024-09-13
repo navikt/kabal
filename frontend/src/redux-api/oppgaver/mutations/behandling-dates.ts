@@ -140,9 +140,9 @@ const updateBehandling = <K extends keyof IOppgavebehandling>(
 ) => {
   const patchResult = reduxStore.dispatch(
     behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-      values.forEach(([key, value]) => {
+      for (const [key, value] of values) {
         draft[key] = value;
-      });
+      }
     }),
   );
 
@@ -152,9 +152,9 @@ const updateBehandling = <K extends keyof IOppgavebehandling>(
 const updateOppgaveData = <K extends keyof IOppgave>(oppgaveId: string, values: [K, IOppgave[K]][]) => {
   const patchResult = reduxStore.dispatch(
     oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-      values.forEach(([key, value]) => {
+      for (const [key, value] of values) {
         draft[key] = value;
-      });
+      }
     }),
   );
 

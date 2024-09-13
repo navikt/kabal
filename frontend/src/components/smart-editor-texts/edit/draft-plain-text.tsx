@@ -40,9 +40,9 @@ export const DraftPlainText = ({ text, onDraftDeleted }: Props) => {
     }
 
     const timer = setTimeout(() => {
-      changes.forEach((lang) => {
+      for (const lang of changes) {
         updatePlainText({ query, plainText: plainTexts[lang], id: text.id, language: lang });
-      });
+      }
     }, 1000);
 
     return () => clearTimeout(timer);

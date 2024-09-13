@@ -28,8 +28,8 @@ const HjemmelNames = ({ hjemmelNames }: HjemmelNamesProps) =>
     <LoadingCellContent />
   ) : (
     <Container>
-      {hjemmelNames.map((hjemmelName, index) => (
-        <Tag variant="alt1" key={index}>
+      {hjemmelNames.map((hjemmelName) => (
+        <Tag variant="alt1" key={hjemmelName}>
           {hjemmelName}
         </Tag>
       ))}

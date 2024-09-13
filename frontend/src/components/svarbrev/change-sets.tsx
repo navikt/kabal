@@ -23,6 +23,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
   const firstIndex = data.length - 1;
 
   for (let i = firstIndex; i >= 0; i--) {
+    // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
     const setting = data[i]!;
 
     if (i === firstIndex) {
@@ -41,6 +42,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
       continue;
     }
 
+    // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
     const previous = data[i + 1]!;
 
     const isTimeEqual =
