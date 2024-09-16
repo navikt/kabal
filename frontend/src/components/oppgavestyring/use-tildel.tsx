@@ -1,8 +1,11 @@
 import { Button } from '@navikt/ds-react';
+import { parseISO } from 'date-fns';
 import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { ActionToast } from '@app/components/toast/action-toast';
+import { toast } from '@app/components/toast/store';
 import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useHasRole } from '@app/hooks/use-has-role';
 import {
@@ -17,8 +20,6 @@ import { INavEmployee, Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
 import { FradelReason, FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
-import { OpenOppgavebehandling } from '../common-table-components/open';
-import { toast } from '../toast/store';
 
 interface Props {
   oppgaveId: string;
@@ -27,6 +28,10 @@ interface Props {
   fromSaksbehandler: ISaksbehandlerResponse['saksbehandler'];
   toSaksbehandler: ITildelingResponse['saksbehandler'];
   sakenGjelder: ISakenGjelderResponse['sakenGjelder'];
+}
+
+interface TildeltProps extends Props {
+  timestamp: number;
 }
 
 type UseTildel = [(employee: INavEmployee) => Promise<boolean>, { isLoading: boolean }];
@@ -43,8 +48,9 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 
     try {
       const { saksbehandler: fromSaksbehandler } = await getSaksbehandler(oppgaveId, true).unwrap();
-      const { saksbehandler: toSaksbehandler } = await tildel({ oppgaveId, employee }).unwrap();
+      const { saksbehandler: toSaksbehandler, modified } = await tildel({ oppgaveId, employee }).unwrap();
       const sakenGjelder = await getSakenGjelder(oppgaveId, true).unwrap();
+      const timestamp = parseISO(modified).getTime();
       createTildeltToast({
         toSaksbehandler,
         fromSaksbehandler,
@@ -52,6 +58,7 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
         oppgaveId,
         oppgaveType,
         ytelseId,
+        timestamp,
       });
 
       return true;
@@ -82,14 +89,7 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
         getSakenGjelder(oppgaveId, true).unwrap(),
       ]);
       await fradel({ oppgaveId, ...params }).unwrap();
-      createFradeltToast({
-        toSaksbehandler: null,
-        fromSaksbehandler,
-        sakenGjelder,
-        oppgaveId,
-        oppgaveType,
-        ytelseId,
-      });
+      createFradeltToast({ toSaksbehandler: null, fromSaksbehandler, sakenGjelder, oppgaveId, oppgaveType, ytelseId });
 
       return true;
     } catch {
@@ -104,7 +104,15 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
   return [fradelSaksbehandler, { isLoading }];
 };
 
-const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandler, fromSaksbehandler }: Props) => {
+const Tildelt = ({
+  oppgaveId,
+  oppgaveType,
+  ytelseId,
+  sakenGjelder,
+  toSaksbehandler,
+  fromSaksbehandler,
+  timestamp,
+}: TildeltProps) => {
   const { user } = useContext(StaticDataContext);
   const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const toSaksbehandlerText = formatEmployeeNameAndIdFallback(toSaksbehandler, 'ukjent saksbehandler');
@@ -116,7 +124,7 @@ const Tildelt = ({ oppgaveId, oppgaveType, ytelseId, sakenGjelder, toSaksbehandl
   const secondary =
     fromSaksbehandler !== null || canDeassignOthers ? (
       <CountdownButton
-        seconds={10}
+        seconds={Math.floor((timestamp + 10_000 - Date.now()) / 1_000)}
         variant="tertiary"
         size="small"
         onClick={() => {
@@ -177,7 +185,7 @@ const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytel
   );
 };
 
-const createTildeltToast = (props: Props) => {
+const createTildeltToast = (props: TildeltProps) => {
   if (props.fromSaksbehandler?.navIdent !== props.toSaksbehandler?.navIdent) {
     toast.success(<Tildelt {...props} />);
   }
