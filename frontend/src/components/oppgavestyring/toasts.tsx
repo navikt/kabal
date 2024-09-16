@@ -2,7 +2,7 @@ import { Button } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { OnChange } from '@app/components/oppgavestyring/types';
-import { toast } from '../toast/store';
+import { toast } from '@app/components/toast/store';
 
 interface ToastProps {
   testId: string;
@@ -14,15 +14,33 @@ interface ToastProps {
   name: string;
 }
 
-export const successToast = (props: ToastProps) => toast.success(<Tildelt {...props} />);
+interface CountdownToastProps extends ToastProps {
+  timestamp: number;
+}
 
-const Tildelt = ({ oppgaveId, testId, fromNavIdent, toNavIdent, label, name, onChange }: ToastProps) => (
+export const successToast = (props: CountdownToastProps) => toast.success(<Tildelt {...props} />);
+
+const Tildelt = ({
+  oppgaveId,
+  testId,
+  fromNavIdent,
+  toNavIdent,
+  label,
+  name,
+  onChange,
+  timestamp,
+}: CountdownToastProps) => (
   <div data-testid={testId} data-oppgaveid={oppgaveId}>
     <span>
       {label} {name}.
     </span>
     <ButtonRow>
-      <CountdownButton size="small" variant="tertiary" onClick={() => onChange(fromNavIdent, toNavIdent)} seconds={10}>
+      <CountdownButton
+        size="small"
+        variant="tertiary"
+        onClick={() => onChange(fromNavIdent, toNavIdent)}
+        seconds={Math.floor((timestamp + 10_000 - Date.now()) / 1_000)}
+      >
         Angre
       </CountdownButton>
     </ButtonRow>

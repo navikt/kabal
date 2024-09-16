@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { sendCloseEvent } from '@app/components/toast/toast/helpers';
 
 interface Props {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ interface Props {
 export const ActionToast = ({ children, primary, secondary, attrs }: Props) => (
   <div {...attrs}>
     <span>{children}</span>
-    <ButtonRow>
+    <ButtonRow onClick={({ target }) => sendCloseEvent(target)}>
       {secondary}
       {primary}
     </ButtonRow>

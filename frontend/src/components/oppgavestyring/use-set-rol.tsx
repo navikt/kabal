@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
@@ -19,7 +20,8 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
       const name = toROL === null ? 'fjernet' : `satt til ${formatEmployeeNameAndIdFallback(toROL, 'felles kø')}`;
 
       try {
-        await setRol({ oppgaveId, employee: toROL });
+        const { modified } = await setRol({ oppgaveId, employee: toROL }).unwrap();
+        const timestamp = parseISO(modified).getTime();
 
         successToast({
           testId: 'oppgave-set-rol-success-toast',
@@ -29,6 +31,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
           toNavIdent,
           onChange,
           name,
+          timestamp,
         });
       } catch {
         errorToast({
