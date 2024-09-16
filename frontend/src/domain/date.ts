@@ -71,19 +71,22 @@ export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime
 
 const _isoTimeToPretty = (isoTime: ISOTime): prettyTime => isoTime.split('.')[0]!;
 
-export const isoDateToPretty = (isoDate: ISODate | null | undefined): prettyDate | null => {
+/** Formats ISO date(time) as human readable. */
+export const isoDateToPretty = (isoDate: ISODate | ISODateTime | null | undefined): prettyDate | null => {
   if (isoDate === null || isoDate === undefined || isoDate.length === 0) {
     return null;
   }
 
-  if (!isoDateRegex.test(isoDate)) {
-    pushLog('Invalid ISO date', { context: { isoDate } });
-    console.warn('Invalid ISO date', isoDate);
+  const [date] = isoDate.split('T');
 
-    return null;
+  if (date !== undefined && isoDateRegex.test(date)) {
+    return _isoDateToPretty(date);
   }
 
-  return _isoDateToPretty(isoDate);
+  pushLog('Invalid ISO date', { context: { isoDate } });
+  console.warn('Invalid ISO date', isoDate);
+
+  return null;
 };
 
 const _isoDateToPretty = (isoDate: ISODate): prettyDate => isoDate.split('-').reverse().join('.');

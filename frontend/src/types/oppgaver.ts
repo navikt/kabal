@@ -26,9 +26,18 @@ interface IOppgaveRowVenteperiode extends IVenteperiode {
 export interface IOppgave {
   /** Age in days. */
   ageKA: number;
+  /** Date
+   * @format yyyy-MM-dd
+   */
   avsluttetAvSaksbehandlerDate: DateString | null;
   fagsystemId: string;
+  /** Date
+   * @format yyyy-MM-dd
+   */
   frist: DateString | null;
+  /** Date
+   * @format yyyy-MM-dd
+   */
   varsletFrist: DateString | null;
   hjemmelIdList: string[];
   registreringshjemmelIdList: string[];
@@ -36,6 +45,9 @@ export interface IOppgave {
   isAvsluttetAvSaksbehandler: boolean;
   medunderskriver: IHelper;
   rol: IHelper;
+  /** Date
+   * @format yyyy-MM-dd
+   */
   mottatt: DateString;
   tildeltSaksbehandlerident: string | null;
   /** DateTime */
@@ -46,6 +58,9 @@ export interface IOppgave {
   sattPaaVent: IOppgaveRowVenteperiode | null;
   feilregistrert: DateString | null;
   saksnummer: string;
+  /** Date
+   * @format yyyy-MM-dd
+   */
   datoSendtTilTR: DateString | null;
   previousSaksbehandler: INavEmployee | null;
 }
