@@ -1,6 +1,6 @@
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button } from '@navikt/ds-react';
-import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast';
+import { sendCloseEvent } from '@app/components/toast/toast/helpers';
 import { pushEvent } from '@app/observability';
 
 interface Props {
@@ -18,7 +18,7 @@ export const VersionToast = ({ isRequired = false }: Props) => (
         size="small"
         onClick={(e) => {
           pushEvent('close_update_toast', 'update', { required: isRequired ? 'true' : 'false' });
-          e.target.dispatchEvent(new Event(CLOSE_TOAST_EVENT_TYPE, { bubbles: true }));
+          sendCloseEvent(e.target);
         }}
       >
         Ignorer

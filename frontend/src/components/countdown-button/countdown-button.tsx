@@ -7,9 +7,13 @@ interface Props extends ButtonProps {
 
 export const CountdownButton = ({ seconds, children, ...props }: Props) => {
   const [secondsLeft, setSecondsLeft] = useState(seconds);
-  const [isExpired, setIsExpired] = useState(false);
+  const [isExpired, setIsExpired] = useState(seconds <= 0);
 
   useEffect(() => {
+    if (seconds <= 0) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setSecondsLeft((value) => {
         if (value === 1) {
@@ -22,7 +26,7 @@ export const CountdownButton = ({ seconds, children, ...props }: Props) => {
     }, 1_000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [seconds]);
 
   return (
     <Button {...props} disabled={isExpired}>

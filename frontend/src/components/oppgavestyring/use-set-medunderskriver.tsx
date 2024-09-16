@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
@@ -32,7 +33,8 @@ export const useSetMedunderskriver = (
           : `satt til ${formatEmployeeNameAndIdFallback(toMedunderskriver, 'ingen')}`;
 
       try {
-        await setMedunderskriver({ oppgaveId, employee: toMedunderskriver });
+        const { modified } = await setMedunderskriver({ oppgaveId, employee: toMedunderskriver }).unwrap();
+        const timestamp = parseISO(modified).getTime();
 
         successToast({
           testId: 'oppgave-set-medunderskriver-success-toast',
@@ -42,6 +44,7 @@ export const useSetMedunderskriver = (
           toNavIdent,
           onChange,
           name,
+          timestamp,
         });
       } catch {
         errorToast({

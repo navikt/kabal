@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { Message, toast } from './store';
-import { Toast } from './toast';
+import { toast } from '@app/components/toast/store';
+import { Toast } from '@app/components/toast/toast/toast';
+import { Message } from '@app/components/toast/types';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const previousLength = useRef(0);
 
-  useEffect(() => {
-    toast.subscribe(setToasts);
-
-    return () => toast.unsubscribe(setToasts);
-  }, []);
+  useEffect(() => toast.subscribe(setToasts), []);
 
   useEffect(() => {
     if (toasts.length > previousLength.current) {

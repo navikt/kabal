@@ -1,17 +1,5 @@
-import { TOAST_TIMEOUT } from './constants';
-import { NewMessage, ToastType } from './types';
-
-type ListenerFn = (messages: Message[]) => void;
-
-type CloseFn = () => void;
-
-export interface Message extends NewMessage {
-  id: string;
-  createdAt: number;
-  expiresAt: number;
-  close: () => void;
-  setExpiresAt: (ms: number) => void;
-}
+import { TOAST_DEFAULT_TIMEOUT } from '@app/components/toast/constants';
+import { CloseFn, ListenerFn, Message, TimedMessage, ToastType, UntimedMessage } from '@app/components/toast/types';
 
 class Store {
   private messages: Message[] = [];
@@ -21,42 +9,50 @@ class Store {
     if (!this.listeners.includes(listener)) {
       this.listeners.push(listener);
     }
+
     listener(this.messages);
+
+    return () => this.unsubscribe(listener);
   }
 
   public unsubscribe(listener: ListenerFn) {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  public success = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.SUCCESS, message, timeout);
-  public error = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.ERROR, message, timeout);
-  public warning = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.WARNING, message, timeout);
-  public info = (message: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, message, timeout);
+  public success = (content: React.ReactNode, timeout?: number) => this.addMessage(ToastType.SUCCESS, content, timeout);
+  public error = (content: React.ReactNode, timeout?: number) => this.addMessage(ToastType.ERROR, content, timeout);
+  public warning = (content: React.ReactNode, timeout?: number) => this.addMessage(ToastType.WARNING, content, timeout);
+  public info = (content: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, content, timeout);
 
   private notify() {
     this.listeners.forEach((listener) => listener(this.messages));
   }
 
-  private addMessage(type: ToastType, message: React.ReactNode, timeout: number = TOAST_TIMEOUT): CloseFn {
+  private addMessage(type: ToastType, content: React.ReactNode, timeout = TOAST_DEFAULT_TIMEOUT): CloseFn {
     const createdAt = Date.now();
-    const expiresAt = createdAt + timeout;
     const id = crypto.randomUUID();
-
-    const setExpiresAt = (ms: number) => this.setExpiresAt(id, ms);
-
     const close: CloseFn = () => this.removeMessage(id);
 
     this.messages = [
       ...this.messages,
-      {
-        type,
-        message,
-        id,
-        createdAt,
-        expiresAt,
-        close,
-        setExpiresAt,
-      },
+      Number.isFinite(timeout)
+        ? ({
+            type,
+            content,
+            id,
+            createdAt,
+            close,
+            expiresAt: createdAt + timeout,
+            setExpiresAt: (ms: number) => this.setExpiresAt(id, ms),
+            timeout,
+          } satisfies TimedMessage)
+        : ({
+            type,
+            content,
+            id,
+            createdAt,
+            close,
+          } satisfies UntimedMessage),
     ];
 
     this.notify();
