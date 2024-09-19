@@ -34,6 +34,10 @@ export const handleUtfallEvent =
         );
       }
 
+      if (utfallId === null) {
+        draft.resultat.extraUtfallIdSet = [];
+      }
+
       draft.resultat.utfallId = utfallId;
       draft.modified = timestamp;
     });
