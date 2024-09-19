@@ -6,7 +6,7 @@ export const IS_LOCALHOST = window.location.hostname === 'localhost';
 
 const mode: RequestMode | undefined = IS_LOCALHOST ? 'cors' : undefined;
 
-const staggeredBaseQuery = (baseUrl: string) => {
+export const staggeredBaseQuery = (baseUrl: string) => {
   const fetch = fetchBaseQuery({
     baseUrl,
     mode,
