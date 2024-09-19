@@ -69,6 +69,9 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         body: { identifikator },
       }),
     }),
+    searchOppgaverBySaksnummer: builder.query<IOppgaverResponse, string>({
+      query: (saksnummer) => ({ url: `/kabal-api/search/saksnummer`, params: { saksnummer } }),
+    }),
     getSaksbehandlereInEnhet: builder.query<ISaksbehandlere, string>({
       query: (enhet) => `/kabal-search/enheter/${enhet}/saksbehandlere`,
     }),
@@ -114,7 +117,7 @@ export const {
   useGetLedigeOppgaverQuery,
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
   useSearchOppgaverByFnrQuery,
-  useLazySearchPeopleByNameQuery,
+  useLazySearchOppgaverBySaksnummerQuery,
   useGetSaksbehandlereInEnhetQuery,
   useSearchPersonByFnrQuery,
   useGetReturnerteRolOppgaverQuery,
