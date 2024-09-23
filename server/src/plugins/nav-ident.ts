@@ -61,7 +61,7 @@ export const navIdentPlugin = fastifyPlugin(
     pluginDone();
   },
   {
-    fastify: '4',
+    fastify: '5',
     name: NAV_IDENT_PLUGIN_ID,
     dependencies: [ACCESS_TOKEN_PLUGIN_ID, CLIENT_VERSION_PLUGIN_ID, TAB_ID_PLUGIN_ID, TRACEPARENT_PLUGIN_ID],
   },

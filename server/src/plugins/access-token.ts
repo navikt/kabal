@@ -24,7 +24,7 @@ export const accessTokenPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: ACCESS_TOKEN_PLUGIN_ID },
+  { fastify: '5', name: ACCESS_TOKEN_PLUGIN_ID },
 );
 
 export const getAccessToken = (req: FastifyRequest): string | undefined => {
