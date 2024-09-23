@@ -143,8 +143,7 @@ export interface SmartDocumentVersionedEvent extends BaseEvent {
 }
 
 export interface SmartDocumentLanguageEvent extends BaseEvent {
-  id: string;
-  language: Language;
+  document: { id: string; language: Language };
 }
 
 export interface SmartDocumentCommentEvent extends BaseEvent {

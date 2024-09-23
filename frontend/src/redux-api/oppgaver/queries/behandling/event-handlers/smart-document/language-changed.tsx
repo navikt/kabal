@@ -10,9 +10,21 @@ import { LANGUAGE_NAMES } from '@app/types/texts/language';
 export const handleSmartDocumentLanguageChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentLanguageEvent) => {
     reduxStore.dispatch(
+      documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId: event.document.id }, (draft) => {
+        if (!draft.isSmartDokument) {
+          return draft;
+        }
+
+        draft.language = event.document.language;
+
+        return draft;
+      }),
+    );
+
+    reduxStore.dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
         draft.map((document) => {
-          if (!document.isSmartDokument || document.id !== event.id) {
+          if (!document.isSmartDokument || document.id !== event.document.id) {
             return document;
           }
 
@@ -25,7 +37,7 @@ export const handleSmartDocumentLanguageChangedEvent =
 
             const to = (
               <Tag variant="info" size="xsmall">
-                {LANGUAGE_NAMES[event.language]}
+                {LANGUAGE_NAMES[event.document.language]}
               </Tag>
             );
 
@@ -36,7 +48,7 @@ export const handleSmartDocumentLanguageChangedEvent =
             );
           }
 
-          return { ...document, language: event.language };
+          return { ...document, language: event.document.language };
         }),
       ),
     );
