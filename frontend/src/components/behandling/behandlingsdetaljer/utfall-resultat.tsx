@@ -2,7 +2,7 @@ import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
@@ -21,7 +21,7 @@ const SELECT_ID = 'select-utfall';
 const CONTAINER_ID = 'utfall-section';
 
 export const UtfallResultat = (props: UtfallResultatProps) => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
 
   return canEdit ? <EditUtfallResultat {...props} /> : <ReadOnlyUtfall {...props} />;
 };
