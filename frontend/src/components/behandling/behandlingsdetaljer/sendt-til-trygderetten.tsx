@@ -2,7 +2,7 @@ import { subDays } from 'date-fns';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
@@ -13,7 +13,7 @@ import { DatePicker } from '../../date-picker/date-picker';
 const ID = 'sendt-til-trygderetten';
 
 export const SendtTilTrygderetten = () => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
   const { data } = useOppgave();
   const error = useValidationError('sendtTilTrygderetten');
   const label = useFieldName('sendtTilTrygderetten');
