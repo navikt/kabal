@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
@@ -20,7 +20,7 @@ interface Props extends TagsProps {
 }
 
 export const ExtraUtfall = (props: Props) => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
 
   return (
     <Container>
@@ -85,7 +85,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
 };
 
 const ReadOnlyLabel = () => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
 
   if (canEdit) {
     return null;
@@ -108,7 +108,7 @@ const TAGSCONTAINER_ID = 'tags-container';
 const Tags = ({ utfallIdSet, mainUtfall }: TagsProps) => {
   const { data: oppgave } = useOppgave();
   const [utfallKodeverk] = useUtfall(oppgave?.typeId);
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
 
   return (
     <>

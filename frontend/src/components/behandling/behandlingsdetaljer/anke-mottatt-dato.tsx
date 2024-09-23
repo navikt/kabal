@@ -3,7 +3,7 @@ import { DateContainer } from '@app/components/behandling/styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
@@ -12,7 +12,7 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 const ID = 'anke-mottatt-dato';
 
 export const AnkeMottattDato = () => {
-  const canEdit = useCanEdit();
+  const canEdit = useCanEditBehandling();
   const { data } = useOppgave();
   const error = useValidationError('mottattKlageinstans');
   const label = useFieldName('mottattKlageinstans');
