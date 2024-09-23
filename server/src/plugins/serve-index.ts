@@ -33,5 +33,5 @@ export const serveIndexPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: SERVE_INDEX_PLUGIN_ID },
+  { fastify: '5', name: SERVE_INDEX_PLUGIN_ID },
 );

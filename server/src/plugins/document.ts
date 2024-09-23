@@ -196,7 +196,7 @@ export const documentPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
+  { fastify: '5', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const send = (reply: FastifyReply, url: string, documentIdList: string, title: string) => {

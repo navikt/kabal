@@ -81,7 +81,7 @@ export const versionPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: 'version' },
+  { fastify: '5', name: 'version' },
 );
 
 enum EventNames {

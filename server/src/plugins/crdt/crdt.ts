@@ -67,7 +67,7 @@ export const crdtPlugin = fastifyPlugin(
             dokumentTypeId: Type.String(),
             parentId: Type.String(),
             language: Type.String(),
-          },
+          }),
           produces: ['application/json'],
         },
       },
@@ -263,7 +263,7 @@ export const crdtPlugin = fastifyPlugin(
     );
   },
   {
-    fastify: '4',
+    fastify: '5',
     name: CRDT_PLUGIN_ID,
     dependencies: [
       ACCESS_TOKEN_PLUGIN_ID,

@@ -171,7 +171,7 @@ export const serverTimingPlugin = fastifyPlugin<ServerTimingPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: SERVER_TIMING_PLUGIN_ID },
+  { fastify: '5', name: SERVER_TIMING_PLUGIN_ID },
 );
 
 const serverTimingsToHeaderEntries = (serverTimings: ServerTiming[]): string[] =>
