@@ -30,7 +30,7 @@ export const OBO_ACCESS_TOKEN_PLUGIN_ID = 'obo-access-token';
 
 export const oboAccessTokenPlugin = fastifyPlugin(
   (app, _, pluginDone) => {
-    app.decorateRequest('oboAccessTokenMap', null);
+    app.decorateRequest('oboAccessTokenMap');
 
     app.addHook('onRequest', async (req): Promise<void> => {
       req.oboAccessTokenMap = new Map();
@@ -68,7 +68,7 @@ export const oboAccessTokenPlugin = fastifyPlugin(
     pluginDone();
   },
   {
-    fastify: '4',
+    fastify: '5',
     name: OBO_ACCESS_TOKEN_PLUGIN_ID,
     dependencies: [ACCESS_TOKEN_PLUGIN_ID, NAV_IDENT_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID],
   },

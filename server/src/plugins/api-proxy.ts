@@ -117,7 +117,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
+  { fastify: '5', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const prefixServerTimingEntry = (entry: string, appName: string): string => {

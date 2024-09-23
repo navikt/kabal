@@ -32,7 +32,7 @@ export const traceparentPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: TRACEPARENT_PLUGIN_ID },
+  { fastify: '5', name: TRACEPARENT_PLUGIN_ID },
 );
 
 const TRACEPARENT_HEADER = 'traceparent';

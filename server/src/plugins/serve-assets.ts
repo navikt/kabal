@@ -55,5 +55,5 @@ export const serveAssetsPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: SERVE_ASSETS_PLUGIN_ID },
+  { fastify: '5', name: SERVE_ASSETS_PLUGIN_ID },
 );

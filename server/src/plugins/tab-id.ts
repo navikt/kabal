@@ -25,5 +25,5 @@ export const tabIdPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: TAB_ID_PLUGIN_ID },
+  { fastify: '5', name: TAB_ID_PLUGIN_ID },
 );
