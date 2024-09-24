@@ -1,17 +1,22 @@
+import { TrendFlatIcon } from '@navikt/aksel-icons';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
 import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
 import {
   getPluginType,
+  isText,
   removeMark,
   someNode,
+  unwrapNodes,
   useMarkToolbarButton,
   useMarkToolbarButtonState,
+  wrapNodes,
 } from '@udecode/plate-common';
 import { MARK_COLOR } from '@udecode/plate-font';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { MOD_KEY } from '@app/keys';
+import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { ELEMENT_NOWRAP, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { EditorValue, useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
@@ -41,6 +46,8 @@ export const Marks = () => {
     props: { onClick: toggleUnderline, pressed: underlinePressed },
   } = useMarkToolbarButton(underlineState);
 
+  const nowrapActive = useIsElementActive(ELEMENT_NOWRAP);
+
   return (
     <>
       <ToolbarIconButton
@@ -67,6 +74,22 @@ export const Marks = () => {
         onClick={toggleUnderline}
         icon={<TextUnderline width={24} aria-hidden />}
         active={underlinePressed}
+        disabled={disabled}
+      />
+
+      <ToolbarIconButton
+        label="Forhindr linjeskift"
+        onClick={() => {
+          if (!nowrapActive) {
+            wrapNodes(editor, { type: ELEMENT_NOWRAP, children: [] }, { split: true, mode: 'lowest', match: isText });
+
+            return;
+          }
+
+          unwrapNodes(editor, { match: { type: ELEMENT_NOWRAP }, split: false, mode: 'lowest' });
+        }}
+        icon={<TrendFlatIcon width={24} aria-hidden />}
+        active={nowrapActive}
         disabled={disabled}
       />
 
