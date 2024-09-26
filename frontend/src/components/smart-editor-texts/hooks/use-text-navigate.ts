@@ -1,30 +1,32 @@
 import { useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getPathPrefix } from '../functions/get-path-prefix';
-import { useTextQuery } from './use-text-query';
 import { useTextType } from './use-text-type';
 
-type GoToTextFn = (id: string) => void;
+type GoToTextFn = (id: string, trash?: boolean) => void;
 
 export const useTextNavigate = (): GoToTextFn => {
   const navigate = useNavigate();
-  const query = useTextQuery();
   const textType = useTextType();
-  const { search } = useLocation();
+  const [searchParams] = useSearchParams();
+
   const lang = useRedaktoerLanguage();
 
-  const goToTextFn = useCallback(
-    (id: string) => {
-      if (query === undefined) {
-        return;
-      }
-
+  const goToTextFn = useCallback<GoToTextFn>(
+    (id, trash) => {
       const pathPrefix = getPathPrefix(textType);
 
-      return navigate(`${pathPrefix}/${lang}/${id}${search}`);
+      if (trash === true) {
+        searchParams.set('trash', 'true');
+      } else {
+        searchParams.delete('trash');
+      }
+
+      return navigate(`${pathPrefix}/${lang}/${id}${searchParams.toString()}`);
     },
-    [query, textType, navigate, lang, search],
+    [textType, navigate, lang, searchParams],
   );
 
   return goToTextFn;
