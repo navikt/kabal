@@ -88,45 +88,46 @@ const useText = (): string => {
   const { typeId, resultat } = oppgave;
   const { utfallId } = resultat;
 
-  if (typeId === SaksTypeEnum.KLAGE) {
-    return isModernized
-      ? 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
-      : 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
-  }
-
-  if (typeId === SaksTypeEnum.ANKE) {
-    if (!isModernized && (utfallId === UtfallEnum.MEDHOLD || utfallId === UtfallEnum.OPPHEVET)) {
-      return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
-    }
-
-    if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
-      return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
-    }
-
-    if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
+  switch (typeId) {
+    case SaksTypeEnum.KLAGE:
       return isModernized
-        ? 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.'
-        : 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
-    }
+        ? 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
+        : 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+    case SaksTypeEnum.ANKE: {
+      if (!isModernized && (utfallId === UtfallEnum.MEDHOLD || utfallId === UtfallEnum.OPPHEVET)) {
+        return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+      }
 
-    return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+      if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
+        return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
+      }
+
+      if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
+        return isModernized
+          ? 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.'
+          : 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført. Husk at du må sende en oppgave i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+      }
+
+      return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+    }
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
+      if (utfallId === UtfallEnum.HENVIST) {
+        return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+      }
+
+      if (utfallId === UtfallEnum.OPPHEVET) {
+        return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
+      }
+
+      return isModernized
+        ? 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.'
+        : 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen. Husk at du må sende en oppgave i Gosys med beskjed om utfallet av behandlingen hos Trygderetten.';
+    }
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+      return isModernized
+        ? 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
+        : 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
   }
-
-  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
-    if (utfallId === UtfallEnum.HENVIST) {
-      return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
-    }
-
-    if (utfallId === UtfallEnum.OPPHEVET) {
-      return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
-    }
-
-    return isModernized
-      ? 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.'
-      : 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen. Husk at du må sende en oppgave i Gosys med beskjed om utfallet av behandlingen hos Trygderetten.';
-  }
-
-  return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
 };
 
 const FinishOpphevetTRWithNyBehandling = () => (
