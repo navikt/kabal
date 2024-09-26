@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { NestedFilterList, NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
 import { IOption } from '@app/components/filter-dropdown/props';
+import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { NONE, NONE_OPTION, NONE_TYPE, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
@@ -76,14 +77,30 @@ interface KlageenhetSelectProps {
   children: string;
   selected: string[];
   onChange: (value: string[]) => void;
-  options: IOption<string>[];
+  includeNoneOption?: boolean;
 }
 
-export const KlageenhetSelect = ({ children, selected, onChange, options }: KlageenhetSelectProps) => (
-  <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
-    {children}
-  </FilterDropdown>
-);
+// Styringsenheten er ikke en klageenhet.
+// De må likevel være med i listen man kan velge fra når man legger inn topp- og bunntekster.
+// Dette er fordi de er med i et pilotprosjekt hvor det kan forekomme at de selv må saksbehandle.
+const STYRINGSENHETEN = { value: '4200', label: 'NAV Klageinstans styringsenhet' };
+
+export const KlageenhetSelect = ({
+  children,
+  selected,
+  onChange,
+  includeNoneOption = false,
+}: KlageenhetSelectProps) => {
+  const klageenheter = useKlageenheterOptions();
+  const enheter = [...klageenheter, STYRINGSENHETEN];
+  const options = includeNoneOption ? [NONE_OPTION, ...enheter] : enheter;
+
+  return (
+    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
+      {children}
+    </FilterDropdown>
+  );
+};
 
 interface TemplateSelectProps {
   children: string;
