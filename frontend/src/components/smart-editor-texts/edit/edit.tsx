@@ -4,7 +4,6 @@ import { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { Footer } from '@app/components/smart-editor-texts/edit/footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
-import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { KlageenhetSelect, TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
 import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import {
@@ -43,7 +42,6 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
   const { id, created, ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, title, textType } = text;
 
-  const klageenheterOptions = useKlageenheterOptions();
   const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
   const [lastEditor] = text.editors.filter(
@@ -104,7 +102,6 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
             <KlageenhetSelect
               selected={enhetIdList ?? []}
               onChange={(value) => updateEnhetIdList({ id, query, enhetIdList: value })}
-              options={klageenheterOptions}
             >
               Enheter
             </KlageenhetSelect>
