@@ -1,25 +1,39 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import { Language } from '@app/types/texts/language';
 
 interface Params {
   id?: string | null;
   versionId?: string | null;
   lang?: string;
+  trash?: boolean;
 }
 
 export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
   const navigate = useNavigate();
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
   const oldParams = useParams();
   const { lang } = useParams();
+  const [searchParams] = useSearchParams();
 
   const [, rootPath] = pathname.split('/');
 
   const navigateToText = useCallback(
-    (newParams: Params, replace = false) =>
-      navigate(`${calculatePath(rootPath, oldParams, newParams, hasLanguage)}${search}`, { replace }),
-    [hasLanguage, navigate, oldParams, rootPath, search],
+    (newParams: Params, replace = false) => {
+      const path = calculatePath(rootPath, oldParams, newParams, hasLanguage);
+
+      if (newParams.trash === true) {
+        searchParams.set('trash', 'true');
+      } else if (newParams.trash === false) {
+        searchParams.delete('trash');
+      }
+
+      return navigate(`${path}${searchParams.toString()}`, {
+        replace,
+      });
+    },
+    [hasLanguage, navigate, oldParams, rootPath, searchParams],
   );
 
   useEffect(() => {
