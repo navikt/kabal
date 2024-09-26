@@ -1,3 +1,4 @@
+import { subDays } from 'date-fns';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
@@ -45,6 +46,7 @@ export const KjennelseMottatt = () => {
         id={ID}
         size="small"
         centuryThreshold={CURRENT_YEAR_IN_CENTURY}
+        warningThreshhold={subDays(new Date(), 360)}
       />
     </DateContainer>
   );
