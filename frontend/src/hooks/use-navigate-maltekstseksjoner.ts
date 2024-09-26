@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import { Language } from '@app/types/texts/language';
 
 interface PathParams {
@@ -7,17 +8,27 @@ interface PathParams {
   maltekstseksjonVersionId?: string | null;
   textId?: string | null;
   lang?: Language | null;
+  trash?: boolean;
 }
 
 export const useNavigateMaltekstseksjoner = () => {
   const oldParams = useParams();
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const [searchParams] = useSearchParams();
 
   return useCallback(
-    (newParams: PathParams, replace: boolean = false) =>
-      navigate(`${calculateMaltekstseksjonPath(oldParams, newParams)}${search}`, { replace }),
-    [navigate, oldParams, search],
+    (newParams: PathParams, replace: boolean = false) => {
+      const path = calculateMaltekstseksjonPath(oldParams, newParams);
+
+      if (newParams.trash === true) {
+        searchParams.set('trash', 'true');
+      } else if (newParams.trash === false) {
+        searchParams.delete('trash');
+      }
+
+      return navigate(`${path}${searchParams.toString()}`, { replace });
+    },
+    [navigate, oldParams, searchParams],
   );
 };
 
