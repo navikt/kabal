@@ -27,7 +27,6 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
     typeId,
     fraNAVEnhetNavn,
     fraNAVEnhet,
-    mottattKlageinstans,
     kommentarFraVedtaksinstans,
     oppgavebeskrivelse,
     resultat,
@@ -36,7 +35,6 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
     saksnummer,
     varsletFrist,
     kjennelseMottatt,
-    created,
   } = oppgavebehandling;
 
   return (
@@ -73,20 +71,8 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
 
       <ReadOnlyDate
         date={kjennelseMottatt}
-        id="dato-for-kjennelse-fra-trygderetten-med-utfall-opphevet"
-        label="Dato for kjennelse fra Trygderetten med utfall opphevet"
-      />
-
-      <ReadOnlyDate
-        date={mottattKlageinstans}
-        id="dato-for-kjennelse-mottatt-klageinstans"
-        label="Dato for kjennelse mottatt klageinstans"
-      />
-
-      <ReadOnlyDate
-        date={created}
-        id="dato-for-ny-behandling-opprettet-i-kabal"
-        label="Dato for ny behandling opprettet i Kabal"
+        id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
+        label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
       />
 
       <BehandlingSection label="Varslet frist">
