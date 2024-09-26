@@ -44,7 +44,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <Part
         isDeletable={false}
-        label="Klager"
+        label="Den ankende part"
         part={oppgavebehandling.klager}
         onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
         isLoading={klagerIsLoading}
