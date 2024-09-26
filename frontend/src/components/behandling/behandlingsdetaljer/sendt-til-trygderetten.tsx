@@ -1,3 +1,4 @@
+import { subDays } from 'date-fns';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -43,6 +44,7 @@ export const SendtTilTrygderetten = () => {
         id={ID}
         size="small"
         centuryThreshold={CURRENT_YEAR_IN_CENTURY}
+        warningThreshhold={subDays(new Date(), 360)}
       />
     </DateContainer>
   );
