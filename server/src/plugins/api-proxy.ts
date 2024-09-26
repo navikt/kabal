@@ -77,9 +77,11 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
               url: req.url,
             },
           });
-          req.proxyStartTime = performance.now();
+
           // Make sure the OBO token is cached before rewriteRequestHeaders.
           await req.getOboAccessToken(appName, reply);
+
+          req.proxyStartTime = performance.now();
         },
         retryMethods: ['GET'], // Only retry GET requests. All others are not idempotent.
         replyOptions: {
@@ -87,7 +89,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
           rewriteHeaders: (headers, req) => {
             const serverTiming = headers[SERVER_TIMING_HEADER];
 
-            const total = `proxy;dur=${req === undefined ? 0 : getDuration(req.proxyStartTime)};desc="Proxy total (${appName})"`;
+            const total = `proxy;dur=${req === undefined ? 0 : getDuration(req.proxyStartTime)};desc="${appName} (proxy)"`;
 
             switch (typeof serverTiming) {
               case 'string':
@@ -108,7 +110,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
                     .join(', '),
                 };
               default:
-                return headers;
+                return { ...headers, [SERVER_TIMING_HEADER]: total };
             }
           },
         },
