@@ -1,7 +1,6 @@
 import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { getNewRichText } from '@app/components/smart-editor-texts/functions/new-text';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
@@ -22,7 +21,6 @@ interface Props {
 export const CreateMaltekstseksjon = ({ query }: Props) => {
   const [createMaltekstseksjon, { isLoading }] = useCreateMaltekstseksjonMutation();
   const setPath = useNavigateMaltekstseksjoner();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const create = useCallback(async () => {
     const maltekstseksjon: INewMaltekstseksjonParams['maltekstseksjon'] = {
@@ -36,10 +34,7 @@ export const CreateMaltekstseksjon = ({ query }: Props) => {
     const { id, versionId } = await createMaltekstseksjon({ maltekstseksjon, query }).unwrap();
 
     setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId });
-
-    searchParams.delete('trash');
-    setSearchParams(searchParams);
-  }, [createMaltekstseksjon, query, searchParams, setSearchParams, setPath]);
+  }, [createMaltekstseksjon, query, setPath]);
 
   return (
     <Button variant="secondary" size="small" onClick={create} loading={isLoading} icon={<PlusIcon aria-hidden />}>
