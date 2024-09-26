@@ -114,7 +114,7 @@ const useText = (): string => {
 
   if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     if (utfallId === UtfallEnum.HENVIST) {
-      return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Du finner oppgaven under «Søk på person». Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+      return 'Du har valgt «henvist» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Når du trykker «Fullfør», vil Kabal opprette en ny ankeoppgave som du skal behandle. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
     }
 
     if (utfallId === UtfallEnum.OPPHEVET) {
