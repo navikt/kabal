@@ -11,14 +11,14 @@ import {
   isRegelverkType,
   isRichTextType,
 } from '@app/functions/is-rich-plain-text';
+import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { TextTypes } from '@app/types/common-text-types';
+import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
 import { Language } from '@app/types/texts/language';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
 import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';
-import { useTextNavigate } from './hooks/use-text-navigate';
 
 interface Props {
   textType: TextTypes;
@@ -26,14 +26,14 @@ interface Props {
 
 export const SmartEditorTexts = ({ textType }: Props) => {
   const query = useTextQuery();
-  const navigate = useTextNavigate();
+  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
   const [addText, { isLoading }] = useAddTextMutation();
   const lang = useRedaktoerLanguage();
 
   const onClick = useCallback(async () => {
     const text = getNewText(textType, lang);
-    const { id } = await addText({ text, query }).unwrap();
-    navigate(id, false);
+    const { id, versionId } = await addText({ text, query }).unwrap();
+    navigate({ id, versionId, trash: false });
   }, [addText, lang, navigate, query, textType]);
 
   return (
