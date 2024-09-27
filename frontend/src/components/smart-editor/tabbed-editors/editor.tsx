@@ -224,7 +224,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
-  // const editor = useMyPlateEditorRef(id);
+  const editor = useMyPlateEditorRef(id);
 
   // useEffect(() => {
   //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
@@ -260,6 +260,19 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
   //     editor.awareness.off('change', onChange);
   //   };
   // }, [editor, editor.awareness]);
+
+  useEffect(() => {
+    const onChange = () => {
+      const states = editor.awareness.getStates();
+      console.log('states', states);
+    };
+
+    editor.awareness.on('change', onChange);
+
+    return () => {
+      editor.awareness.off('change', onChange);
+    };
+  }, [editor, editor.awareness]);
 
   useEffect(() => {
     setSheetRef(containerElement);
