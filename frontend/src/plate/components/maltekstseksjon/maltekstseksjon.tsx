@@ -3,7 +3,7 @@ import { PlateElement, PlateRenderElementProps, isEditorReadOnly, setNodes } fro
 import { useCallback, useContext, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useMaltekstseksjonQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Instructions } from '@app/plate/components/maltekstseksjon/instructions';
 import { Loading } from '@app/plate/components/maltekstseksjon/loading';
@@ -17,9 +17,8 @@ import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plat
 import { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import { EditorValue, MaltekstseksjonElement, MaltekstseksjonQuery } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
-import { IGetConsumerTextsParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
 import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
@@ -31,7 +30,7 @@ export const Maltekstseksjon = ({
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
   const oppgave = useRequiredOppgave();
   const { templateId } = useContext(SmartEditorContext);
-  const query = useQuery({ textType: MALTEKSTSEKSJON_TYPE, section: element.section, templateId });
+  const query = useMaltekstseksjonQuery(templateId, element.section);
   const path = usePath(editor, element);
   const canManage = useCanManageDocument(templateId);
   const isUpdated = useMemo(() => areQueriesEqual(query, element.query), [query, element.query]);
@@ -141,11 +140,10 @@ const useRequiredOppgave = () => {
   return oppgave;
 };
 
-const areQueriesEqual = (a: IGetConsumerTextsParams | SkipToken, b: IGetConsumerTextsParams | undefined): boolean =>
+const areQueriesEqual = (a: MaltekstseksjonQuery | SkipToken, b: MaltekstseksjonQuery | undefined): boolean =>
   a !== skipToken &&
   b !== undefined &&
   a.language === b.language &&
-  a.textType === b.textType &&
   a.utfallIdList === b.utfallIdList &&
   stringListsAreEqual(a.enhetIdList, b.enhetIdList) &&
   stringListsAreEqual(a.templateSectionIdList, b.templateSectionIdList) &&

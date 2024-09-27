@@ -1,12 +1,18 @@
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
+import {
+  PlateElement,
+  PlateRenderElementProps,
+  findNodePath,
+  replaceNodeChildren,
+  setNodes,
+} from '@udecode/plate-common';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useRegelverkQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
@@ -19,7 +25,6 @@ import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
-import { UNTRANSLATED } from '@app/types/texts/language';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
@@ -72,7 +77,7 @@ export const RegelverkContainer = ({
 }: PlateRenderElementProps<EditorValue, RegelverkContainerElement>) => {
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
-  const query = useQuery({ textType: REGELVERK_TYPE, language: UNTRANSLATED });
+  const query = useRegelverkQuery();
   const { templateId } = useContext(SmartEditorContext);
   const canManage = useCanManageDocument(templateId);
 
@@ -96,6 +101,8 @@ export const RegelverkContainer = ({
 
     replaceNodeChildren(editor, { at, nodes });
 
+    setNodes<RegelverkElement>(editor, { query }, { match: (n) => n === element, at });
+
     setLoading(false);
   }, [editor, element, getTexts, oppgave, query]);
 
@@ -107,7 +114,12 @@ export const RegelverkContainer = ({
       editor={editor}
       onDragStart={onPlateContainerDragStart}
     >
-      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
+      <SectionContainer
+        $sectionType={SectionTypeEnum.REGELVERK}
+        data-element={element.type}
+        aria-disabled={loading}
+        data-query={JSON.stringify(element.query)}
+      >
         {children}
         {loading ? (
           <LoadingWrapper>

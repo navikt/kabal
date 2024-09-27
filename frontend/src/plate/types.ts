@@ -39,7 +39,6 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
-import { IGetConsumerTextsParams } from '@app/types/common-text-types';
 import { Language } from '@app/types/texts/language';
 import { TemplateSections } from './template-sections';
 
@@ -145,13 +144,21 @@ export interface RedigerbarMaltekstElement extends BlockElement {
   children: ParentOrChildElement[] | [EmptyVoidElement];
 }
 
+export interface MaltekstseksjonQuery {
+  templateSectionIdList?: string[];
+  ytelseHjemmelIdList?: string[];
+  utfallIdList?: string;
+  enhetIdList?: string[];
+  language: Language;
+}
+
 export interface MaltekstseksjonElement extends BlockElement {
   type: typeof ELEMENT_MALTEKSTSEKSJON;
   id?: string;
   section: TemplateSections;
   textIdList: string[];
   children: (MaltekstElement | RedigerbarMaltekstElement)[] | [EmptyVoidElement];
-  query?: IGetConsumerTextsParams;
+  query?: MaltekstseksjonQuery;
 }
 
 export interface PlaceholderElement extends BlockElement {
@@ -178,6 +185,12 @@ export interface EmptyVoidElement extends BlockElement {
 export interface RegelverkContainerElement extends BlockElement {
   type: typeof ELEMENT_REGELVERK_CONTAINER;
   children: ParentOrChildElement[];
+  query?: RegelverkQuery;
+}
+
+export interface RegelverkQuery {
+  ytelseHjemmelIdList?: string[];
+  utfallIdList?: string;
 }
 
 export interface RegelverkElement extends BlockElement {

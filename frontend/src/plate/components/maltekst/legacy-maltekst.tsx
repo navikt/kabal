@@ -26,6 +26,9 @@ import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
+/**
+ * @deprecated Remove this when all smart documents in prod use maltekstseksjon.
+ */
 export const LegacyMaltekst = ({
   editor,
   attributes,

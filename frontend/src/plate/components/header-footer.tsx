@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
@@ -52,7 +52,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
   const [getTexts, { isLoading, isUninitialized }] = useLazyGetConsumerTextsQuery();
 
   const editor = useMyPlateEditorRef();
-  const query = useQuery({ textType, includeEnhet: true });
+  const query = useHeaderFooterQuery(textType);
   const { templateId } = useContext(SmartEditorContext);
   const canManage = useCanManageDocument(templateId);
 

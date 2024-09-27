@@ -1,14 +1,13 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
+import { useGodFormuleringerQuery } from '@app/components/smart-editor/hooks/use-query';
 import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { TemplateSections } from '@app/plate/template-sections';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { GOD_FORMULERING_TYPE } from '@app/types/common-text-types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { NonNullableGodFormulering, isNonNullGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGES } from '@app/types/texts/language';
-import { useQuery } from '../hooks/use-query';
 
 interface State {
   isLoading: boolean;
@@ -21,11 +20,7 @@ export const useTranslatedFormuleringer = (
 ): State => {
   const [getTexts] = useLazyGetConsumerTextsQuery();
   const primaryLanguage = useSmartEditorLanguage();
-  const baseQuery = useQuery({
-    textType: GOD_FORMULERING_TYPE,
-    templateId,
-    section: section === NONE ? undefined : section,
-  });
+  const baseQuery = useGodFormuleringerQuery(templateId, section === NONE ? undefined : section);
 
   const [isLoading, setIsLoading] = useState(true);
   const [texts, setTexts] = useState<NonNullableGodFormulering[]>([]);

@@ -28,6 +28,9 @@ const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   return isOfElementType<EmptyVoidElement>(child, ELEMENT_EMPTY_VOID);
 };
 
+/**
+ * @deprecated Remove when all smart documents in prod use maltekstseksjon.
+ */
 export const LegacyRedigerbarMaltekst = ({
   attributes,
   children,
