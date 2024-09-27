@@ -26,6 +26,9 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
 };
 
 export const collaborationServer = Server.configure({
+  debounce: 3_000,
+  maxDebounce: 15_000,
+
   onConnect: async ({ context }) => {
     if (isConnectionContext(context)) {
       // navIdent is not defined when server is run without Wonderwall (ie. locally).
