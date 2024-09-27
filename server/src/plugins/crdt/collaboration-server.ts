@@ -11,6 +11,7 @@ import { CloseEvent } from '@hocuspocus/common';
 import { applyUpdateV2 } from 'yjs';
 import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
+import { isSavedDocumentResponse } from '@app/plugins/crdt/functions';
 
 const log = getLogger('collaboration');
 
@@ -104,6 +105,9 @@ export const collaborationServer = Server.configure({
 
     applyUpdateV2(document, update);
 
+    document.awareness.setLocalStateField('modified', res.modified);
+    document.awareness.setLocalStateField('version', res.version);
+
     logContext('Loaded state/update applied', context, 'debug');
   },
 
@@ -113,9 +117,20 @@ export const collaborationServer = Server.configure({
       throw new Error('Invalid context');
     }
 
-    await setDocument(context, document);
+    const res = await setDocument(context, document);
 
     logContext('Saved document to database', context, 'debug');
+
+    const json = await res.json();
+
+    if (!isSavedDocumentResponse(json)) {
+      logContext(`Saved document: API responded with invalid JSON: ${JSON.stringify(json)}`, context, 'error');
+
+      return;
+    }
+
+    document.awareness.setLocalStateField('modified', json.modified);
+    document.awareness.setLocalStateField('version', json.version);
   },
 
   extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
