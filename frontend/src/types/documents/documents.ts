@@ -1,4 +1,4 @@
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import type { INavEmployee } from '@app/types/bruker';
 import type { HandlingEnum, IAddress } from '@app/types/documents/recipients';
 import type { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
@@ -100,7 +100,7 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
   templateId: TemplateIdEnum;
-  content: EditorValue;
+  content: KabalValue;
   version: number;
   language: Language;
 }

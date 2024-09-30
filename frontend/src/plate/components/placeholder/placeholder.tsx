@@ -12,41 +12,40 @@ import {
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
-import type { EditorValue, PlaceholderElement } from '@app/plate/types';
+import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
+import { getEndPoint, getPreviousPath, setSelection } from '@udecode/plate-common';
 import {
   PlateElement,
-  type PlateRenderElementProps,
+  type PlateElementProps,
   findNodePath,
   focusEditor,
-  getEndPoint,
-  getPreviousPath,
   isEditorFocused,
-  setSelection,
   useEditorReadOnly,
-} from '@udecode/plate-common';
+} from '@udecode/plate-common/react';
 import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
-export const RedaktørPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => (
+export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
   <Placeholder {...props} canManage />
 );
 
-export const PreviewPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => (
+export const PreviewPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
   <Placeholder {...props} canManage={false} />
 );
 
-export const SaksbehandlerPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => {
+export const SaksbehandlerPlaceholder = (props: PlateElementProps<PlaceholderElement>) => {
   const { canManage } = useContext(SmartEditorContext);
 
   return <Placeholder {...props} canManage={canManage} />;
 };
 
-interface PlaceholderProps extends PlateRenderElementProps<EditorValue, PlaceholderElement> {
+interface PlaceholderProps extends PlateElementProps<PlaceholderElement> {
   canManage: boolean;
 }
 
-const Placeholder = ({ element, children, attributes, editor, canManage }: PlaceholderProps) => {
+const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
+  const { children, element, editor } = props;
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
   const isReadOnly = useEditorReadOnly();
@@ -154,14 +153,7 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (
-    <PlateElement
-      asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
-      contentEditable
-      suppressContentEditableWarning
-    >
+    <PlateElement<PlaceholderElement> {...props} asChild contentEditable suppressContentEditableWarning>
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
           style={{

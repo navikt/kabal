@@ -1,24 +1,23 @@
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { renderLeaf, renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
-import { PlateEditor } from '@app/plate/plate-editor';
-import { redaktoerPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
+import { KabalPlateEditor } from '@app/plate/plate-editor';
+import { redaktørComponents, redaktørPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { Plate } from '@udecode/plate-common';
-import { forwardRef, useRef } from 'react';
+import { Plate, usePlateEditor } from '@udecode/plate-core/react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;
-  savedContent: EditorValue;
-  onChange?: (content: EditorValue) => void;
+  savedContent: KabalValue;
+  onChange?: (data: { editor: RichTextEditor; value: KabalValue }) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   readOnly?: boolean;
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
@@ -29,25 +28,29 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
   ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus, lang }, editorRef) => {
     const ref = useRef<HTMLDivElement>(null);
 
+    const editor = usePlateEditor<KabalValue, (typeof redaktørPlugins)[0]>({
+      id: editorId,
+      plugins: redaktørPlugins,
+      override: {
+        components: redaktørComponents,
+      },
+      value: savedContent,
+    });
+
+    useImperativeHandle(editorRef, () => editor);
+
     return (
       <ErrorBoundary
         errorComponent={() => <ErrorComponent textId={editorId} />}
         actionButton={{
-          onClick: async () => onChange?.(savedContent),
+          onClick: async () => onChange?.({ editor, value: savedContent }),
           buttonText: 'Gjenopprett tekst',
           buttonIcon: <ClockDashedIcon aria-hidden />,
           variant: 'primary',
           size: 'small',
         }}
       >
-        <Plate<EditorValue, RichTextEditor>
-          editorRef={editorRef}
-          initialValue={savedContent}
-          id={editorId}
-          onChange={onChange}
-          plugins={redaktoerPlugins}
-          readOnly={readOnly}
-        >
+        <Plate<RichTextEditor> editor={editor} onValueChange={onChange} readOnly={readOnly}>
           <Content onKeyDown={onKeyDown}>
             {readOnly === true ? null : <RedaktoerToolbar />}
 
@@ -56,13 +59,7 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
-              <PlateEditor
-                id={editorId}
-                readOnly={readOnly}
-                onFocus={onFocus}
-                lang={lang}
-                renderLeaf={readOnly === true ? renderReadOnlyLeaf : renderLeaf}
-              />
+              <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
             </Sheet>
           </Content>
 

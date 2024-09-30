@@ -1,4 +1,4 @@
-import { useEditorSelection } from '@udecode/plate-common';
+import { useEditorSelection } from '@udecode/plate-core/react';
 import type { BaseRange } from 'slate';
 
 // useEditorSelection from @udecode/plate-common is typed as any in current version. This can be removed when it gets typed correctly.

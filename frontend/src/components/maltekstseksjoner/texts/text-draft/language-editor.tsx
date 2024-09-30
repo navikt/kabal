@@ -1,16 +1,16 @@
+import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import type { Language } from '@app/types/texts/language';
 import type { IRichText } from '@app/types/texts/responses';
-import { RedaktoerRichText } from '../../../redaktoer-rich-text/redaktoer-rich-text';
 
-export type RichTexts = Record<Language, EditorValue | null>;
+export type RichTexts = Record<Language, KabalValue | null>;
 
 interface LanguageEditorProps {
   language: Language;
   text: IRichText;
-  savedContent: EditorValue;
+  savedContent: KabalValue;
   richTexts: RichTexts;
   setRichTexts: (richTexts: RichTexts) => void;
   editorRef: React.RefObject<RichTextEditor>;

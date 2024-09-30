@@ -37,7 +37,7 @@ export const PositionedBookmarks = () => {
       type: ItemType.BOOKMARK,
     }));
 
-    return getPositionedItems(editorRef, bookmarks, sheetRef);
+    return getPositionedItems(editorRef, bookmarks, sheetRef.current);
   }, [bookmarksList, editorRef, sheetRef]);
 
   const onDelete = useCallback(

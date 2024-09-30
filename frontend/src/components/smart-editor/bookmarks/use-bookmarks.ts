@@ -1,16 +1,16 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { type RichText, useMyPlateEditorState } from '@app/plate/types';
+import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { isText } from '@udecode/plate-common';
 
-export const useBookmarks = (): [string, RichText[]][] => {
+export const useBookmarks = (): [string, FormattedText[]][] => {
   const editor = useMyPlateEditorState();
 
-  const bookmarkEntries = editor.nodes<RichText>({
+  const bookmarkEntries = editor.nodes<FormattedText>({
     match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
     at: [],
   });
 
-  const bookmarkMap: Map<string, RichText[]> = new Map();
+  const bookmarkMap: Map<string, FormattedText[]> = new Map();
 
   for (const [node] of bookmarkEntries) {
     const keys = Object.keys(node).filter((k) => k.startsWith(BOOKMARK_PREFIX));
@@ -28,4 +28,4 @@ export const useBookmarks = (): [string, RichText[]][] => {
   return [...bookmarkMap.entries()];
 };
 
-const EMPTY_BOOKMARKS: [string, RichText[]][] = [];
+const EMPTY_BOOKMARKS: [string, FormattedText[]][] = [];

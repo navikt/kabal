@@ -7,7 +7,8 @@ import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
 import { Button, TextField, Tooltip } from '@navikt/ds-react';
-import { focusEditor, getEditorString, isCollapsed } from '@udecode/plate-common';
+import { getEditorString, isCollapsed } from '@udecode/plate-common';
+import { focusEditor } from '@udecode/slate-react';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 

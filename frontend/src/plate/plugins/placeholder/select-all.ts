@@ -1,4 +1,5 @@
-import { type PlateEditor, findNode, select } from '@udecode/plate-common';
+import { findNode, select } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 

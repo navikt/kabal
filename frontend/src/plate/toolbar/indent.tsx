@@ -5,8 +5,8 @@ import { isInList, isInTable } from '@app/plate/utils/queries';
 import { TextIndentDecreaseLtr, TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular';
 import { type TElement, isBlock, someNode } from '@udecode/plate-common';
 import { indent, outdent } from '@udecode/plate-indent';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseTablePlugin } from '@udecode/plate-table';
 
 const isIndented = (editor: RichTextEditor) =>
   someNode<TElement>(editor, {
@@ -31,7 +31,16 @@ export const Indent = () => {
           indent(editor, {
             getNodesOptions:
               isInList(editor) || isInTable(editor)
-                ? { match: { type: [ELEMENT_UL, ELEMENT_OL, ELEMENT_TABLE] }, mode: 'highest' }
+                ? {
+                    match: {
+                      type: [
+                        BaseBulletedListPlugin.node.type,
+                        BaseNumberedListPlugin.node.type,
+                        BaseTablePlugin.node.type,
+                      ],
+                    },
+                    mode: 'highest',
+                  }
                 : undefined,
           });
         }}
@@ -49,7 +58,16 @@ export const Indent = () => {
           outdent(editor, {
             getNodesOptions:
               isInList(editor) || isInTable(editor)
-                ? { match: { type: [ELEMENT_UL, ELEMENT_OL, ELEMENT_TABLE] }, mode: 'highest' }
+                ? {
+                    match: {
+                      type: [
+                        BaseBulletedListPlugin.node.type,
+                        BaseNumberedListPlugin.node.type,
+                        BaseTablePlugin.node.type,
+                      ],
+                    },
+                    mode: 'highest',
+                  }
                 : undefined,
           });
         }}

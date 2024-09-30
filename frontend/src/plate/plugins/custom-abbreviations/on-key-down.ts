@@ -1,14 +1,7 @@
 import { pushEvent } from '@app/observability';
 import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
-import {
-  type KeyboardHandlerReturnType,
-  type PlateEditor,
-  deleteBackward,
-  deleteText,
-  insertNodes,
-  insertText,
-  withoutMergingHistory,
-} from '@udecode/plate-common';
+import { deleteBackward, deleteText, insertNodes, insertText, withoutMergingHistory } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 
 const SPACE = ' ';
 const PERIOD = '.';
@@ -27,60 +20,58 @@ const ASTERISK = '*';
 const QUOTE = '"';
 const GUILLEMET = '»';
 
-export const onKeyDown =
-  (editor: PlateEditor): KeyboardHandlerReturnType =>
-  (e: React.KeyboardEvent) => {
-    if (e.defaultPrevented) {
-      return;
-    }
+export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
+  if (e.defaultPrevented) {
+    return;
+  }
 
-    const { key } = e;
+  const { key } = e;
 
-    if (
-      key !== SPACE &&
-      key !== PERIOD &&
-      key !== COMMA &&
-      key !== COLON &&
-      key !== SEMICOLON &&
-      key !== EXCLAMATION &&
-      key !== QUESTION &&
-      key !== DASH &&
-      key !== SLASH &&
-      key !== PARENTHESIS &&
-      key !== BRACKET &&
-      key !== BRACE &&
-      key !== ANGLE_BRACKET &&
-      key !== ASTERISK &&
-      key !== QUOTE &&
-      key !== GUILLEMET
-    ) {
-      return;
-    }
+  if (
+    key !== SPACE &&
+    key !== PERIOD &&
+    key !== COMMA &&
+    key !== COLON &&
+    key !== SEMICOLON &&
+    key !== EXCLAMATION &&
+    key !== QUESTION &&
+    key !== DASH &&
+    key !== SLASH &&
+    key !== PARENTHESIS &&
+    key !== BRACKET &&
+    key !== BRACE &&
+    key !== ANGLE_BRACKET &&
+    key !== ASTERISK &&
+    key !== QUOTE &&
+    key !== GUILLEMET
+  ) {
+    return;
+  }
 
-    const shortAndLong = getShortAndLong(editor);
+  const shortAndLong = getShortAndLong(editor);
 
-    if (shortAndLong === null) {
-      return;
-    }
+  if (shortAndLong === null) {
+    return;
+  }
 
-    const { short, long, range, marks } = shortAndLong;
+  const { short, long, range, marks } = shortAndLong;
 
-    e.preventDefault();
+  e.preventDefault();
 
-    withoutMergingHistory(editor, () => {
-      insertText(editor, key);
-      deleteBackward(editor, { unit: 'character' });
-    });
+  withoutMergingHistory(editor, () => {
+    insertText(editor, key);
+    deleteBackward(editor, { unit: 'character' });
+  });
 
-    deleteText(editor, { at: range });
-    insertNodes(editor, { ...marks, text: `${long}${key}` });
+  deleteText(editor, { at: range });
+  insertNodes(editor, { ...marks, text: `${long}${key}` });
 
-    const numberOfMarks = Object.values(marks).filter((m) => m).length;
+  const numberOfMarks = Object.values(marks).filter((m) => m).length;
 
-    pushEvent('smart-editor-insert-abbreviation', 'smart-editor', {
-      short,
-      long,
-      trigger: key,
-      marks: numberOfMarks.toString(10),
-    });
-  };
+  pushEvent('smart-editor-insert-abbreviation', 'smart-editor', {
+    short,
+    long,
+    trigger: key,
+    marks: numberOfMarks.toString(10),
+  });
+};

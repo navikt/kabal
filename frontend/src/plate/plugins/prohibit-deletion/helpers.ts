@@ -5,9 +5,9 @@ import {
   UNCHANGEABLE,
   UNDELETABLE,
 } from '@app/plate/plugins/element-types';
-import type { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
+import type { PlaceholderElement } from '@app/plate/types';
 import {
-  type ENode,
+  type NodeOf,
   type TNodeEntry,
   findNode,
   getNodeAncestors,
@@ -20,8 +20,9 @@ import {
   removeNodes,
   someNode,
 } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 
-export const isInUnchangeableElement = (editor: RichTextEditor): boolean => {
+export const isInUnchangeableElement = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }
@@ -29,10 +30,7 @@ export const isInUnchangeableElement = (editor: RichTextEditor): boolean => {
   return someNode(editor, { match: (n) => isElement(n) && UNCHANGEABLE.includes(n.type), voids: true });
 };
 
-export const isUndeletable = (
-  editor: RichTextEditor,
-  nodeEntry: TNodeEntry<ENode<EditorValue>> | undefined,
-): boolean => {
+export const isUndeletable = (editor: PlateEditor, nodeEntry: TNodeEntry<NodeOf<PlateEditor>> | undefined): boolean => {
   if (nodeEntry === undefined) {
     return false;
   }
@@ -55,7 +53,7 @@ export const isUndeletable = (
   return containsLabelContent;
 };
 
-const hasUndeletableAncestor = (editor: RichTextEditor, descendantEntry: TNodeEntry<ENode<EditorValue>>): boolean => {
+const hasUndeletableAncestor = (editor: PlateEditor, descendantEntry: TNodeEntry<NodeOf<PlateEditor>>): boolean => {
   const ancestorEntries = getNodeAncestors(editor, descendantEntry[1]);
 
   if (ancestorEntries === undefined) {
@@ -71,10 +69,9 @@ const hasUndeletableAncestor = (editor: RichTextEditor, descendantEntry: TNodeEn
   return false;
 };
 
-export const isInRegelverk = (editor: RichTextEditor): boolean =>
-  someNode(editor, { match: { type: ELEMENT_REGELVERK } });
+export const isInRegelverk = (editor: PlateEditor): boolean => someNode(editor, { match: { type: ELEMENT_REGELVERK } });
 
-export const handleDeleteBackwardInPlaceholder = (editor: RichTextEditor): boolean => {
+export const handleDeleteBackwardInPlaceholder = (editor: PlateEditor): boolean => {
   const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
 
   if (placeholderEntry === undefined) {
@@ -98,7 +95,7 @@ export const handleDeleteBackwardInPlaceholder = (editor: RichTextEditor): boole
   return false;
 };
 
-export const handleDeleteForwardInPlaceholder = (editor: RichTextEditor): boolean => {
+export const handleDeleteForwardInPlaceholder = (editor: PlateEditor): boolean => {
   const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
 
   if (placeholderEntry === undefined) {

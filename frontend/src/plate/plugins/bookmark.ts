@@ -1,40 +1,57 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import type { RichText } from '@app/plate/types';
-import {
-  type PlateEditor,
-  createPluginFactory,
-  findNode,
-  isCollapsed,
-  isText,
-  withoutNormalizing,
-} from '@udecode/plate-common';
+import { hasOwn } from '@app/functions/object';
+import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
+import type { FormattedText } from '@app/plate/types';
+import { findNode, isCollapsed, isText, setNodes, unsetNodes, withoutNormalizing } from '@udecode/plate-common';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 
-const withOverrides = (editor: PlateEditor) => {
-  const { insertBreak } = editor;
-
-  editor.insertBreak = () => {
-    removeBookmarkMarks(editor);
-
-    insertBreak();
-  };
-
-  return editor;
-};
-
-export const createBookmarkPlugin = createPluginFactory({
+export const BookmarkPlugin = createPlatePlugin({
   key: 'bookmark',
-  withOverrides,
+  node: { isLeaf: true },
+  extendEditor: ({ editor }) => {
+    const { insertBreak } = editor;
+
+    editor.insertBreak = () => {
+      removeBookmarkMarks(editor);
+
+      insertBreak();
+    };
+
+    const { normalizeNode } = editor;
+
+    editor.normalizeNode = (entry) => {
+      const [node, path] = entry;
+
+      if (isText(node)) {
+        const hasBookmarkMark = hasOwn(node, BookmarkPlugin.key) && node[BookmarkPlugin.key] === true;
+        const shouldHaveBookmarkMark = Object.keys(node).some((key) => key.startsWith(BOOKMARK_PREFIX));
+
+        if (hasBookmarkMark && !shouldHaveBookmarkMark) {
+          unsetNodes(editor, BookmarkPlugin.key, { at: path, match: (n) => n === node, split: true });
+        } else if (!hasBookmarkMark && shouldHaveBookmarkMark) {
+          setNodes(editor, { [BookmarkPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
+        }
+      }
+
+      normalizeNode(entry);
+    };
+
+    return editor;
+  },
   handlers: {
-    onKeyDown: (editor) => (event) => {
+    onKeyDown: ({ editor, event }) => {
       if (event.key === 'Escape' && isCollapsed(editor.selection)) {
         removeBookmarkMarks(editor);
       }
     },
   },
+  render: {
+    node: BookmarkLeaf,
+  },
 });
 
 const removeBookmarkMarks = (editor: PlateEditor) => {
-  const entry = findNode<RichText>(editor, { match: isText });
+  const entry = findNode<FormattedText>(editor, { match: isText });
 
   if (entry === undefined) {
     return;

@@ -1,4 +1,4 @@
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { type ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 

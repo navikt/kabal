@@ -7,7 +7,7 @@ import type { DraftVersionProps } from '@app/components/smart-editor-texts/types
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
 import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
 import type { IGodFormulering, IRichText } from '@app/types/texts/responses';
@@ -17,7 +17,7 @@ interface Props extends Omit<DraftVersionProps, 'text'> {
   text: IRichText | IGodFormulering;
 }
 
-type RichTexts = Record<Language, EditorValue | null>;
+type RichTexts = Record<Language, KabalValue | null>;
 
 const languagesWithChanges = (a: RichTexts, b: RichTexts): Language[] =>
   LANGUAGES.filter((lang) => {
@@ -156,7 +156,7 @@ const DraftRichTextBase = ({ text, onDraftDeleted, validate, error }: DraftRichT
 interface LanguageEditorProps {
   language: Language;
   text: IRichText | IGodFormulering;
-  savedContent: EditorValue;
+  savedContent: KabalValue;
   richTexts: RichTexts;
   setRichTexts: (richTexts: RichTexts) => void;
 }

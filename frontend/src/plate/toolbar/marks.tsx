@@ -2,41 +2,38 @@ import { MOD_KEY } from '@app/keys';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { type EditorValue, useMyPlateEditorState } from '@app/plate/types';
+import { useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
-import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
-import {
-  getPluginType,
-  removeMark,
-  someNode,
-  useMarkToolbarButton,
-  useMarkToolbarButtonState,
-} from '@udecode/plate-common';
-import { MARK_COLOR } from '@udecode/plate-font';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-marks';
+import { getPluginType, removeMark, someNode } from '@udecode/plate-common';
+import { useMarkToolbarButton, useMarkToolbarButtonState } from '@udecode/plate-common/react';
+
+import { HEADING_KEYS } from '@udecode/plate-heading';
 
 export const Marks = () => {
   const editor = useMyPlateEditorState();
 
   const isInPlaceholder = someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-  const isInHeading = someNode(editor, { match: isOfElementTypesFn([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3]) });
+  const isInHeading = someNode(editor, {
+    match: isOfElementTypesFn([HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3]),
+  });
 
   const isInUnchangeableElement = useIsUnchangeable();
 
   const disabled = isInHeading || (isInUnchangeableElement && !isInPlaceholder);
 
-  const boldState = useMarkToolbarButtonState({ nodeType: getPluginType<EditorValue>(editor, MARK_BOLD) });
+  const boldState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseBoldPlugin) });
   const {
     props: { onClick: toggleBold, pressed: boldPressed },
   } = useMarkToolbarButton(boldState);
 
-  const italicState = useMarkToolbarButtonState({ nodeType: getPluginType<EditorValue>(editor, MARK_ITALIC) });
+  const italicState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseItalicPlugin) });
   const {
     props: { onClick: toggleItalic, pressed: italicPressed },
   } = useMarkToolbarButton(italicState);
 
-  const underlineState = useMarkToolbarButtonState({ nodeType: getPluginType<EditorValue>(editor, MARK_UNDERLINE) });
+  const underlineState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseUnderlinePlugin) });
   const {
     props: { onClick: toggleUnderline, pressed: underlinePressed },
   } = useMarkToolbarButton(underlineState);
@@ -73,7 +70,7 @@ export const Marks = () => {
       <ToolbarIconButton
         label="Fjern formatering"
         icon={<ClearFormatting aria-hidden width={24} />}
-        onClick={() => removeMark(editor, { key: [MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE, MARK_COLOR] })}
+        onClick={() => removeMark(editor, { key: [BaseBoldPlugin.key, BaseItalicPlugin.key, BaseUnderlinePlugin.key] })}
         disabled={disabled}
       />
     </>
