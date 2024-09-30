@@ -6,7 +6,7 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/co
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import type { EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
@@ -14,7 +14,9 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
+import { replaceNodeChildren } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findNodePath } from '@udecode/slate-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -30,14 +32,11 @@ const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
 /**
  * @deprecated Remove when all smart documents in prod use maltekstseksjon.
  */
-export const LegacyRedigerbarMaltekst = ({
-  attributes,
-  children,
-  element,
-  editor,
-}: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
+export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { canManage, templateId } = useContext(SmartEditorContext);
+
+  const { children, element, editor } = props;
 
   const query = useQuery({ textType: RichTextTypes.REDIGERBAR_MALTEKST, section: element.section, templateId });
 
@@ -92,7 +91,7 @@ export const LegacyRedigerbarMaltekst = ({
 
   if (isLoading) {
     return (
-      <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+      <PlateElement<RedigerbarMaltekstElement> {...props} asChild contentEditable={false}>
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -105,7 +104,7 @@ export const LegacyRedigerbarMaltekst = ({
   }
 
   return (
-    <PlateElement asChild attributes={attributes} element={element} editor={editor}>
+    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

@@ -1,11 +1,12 @@
 import { UNDELETABLE_BUT_REDIGERBAR } from '@app/plate/plugins/element-types';
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { EditorDescendant } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
-import { type ENode, findNode, isElement, isEndPoint, isStartPoint } from '@udecode/plate-common';
+import { type NodeOf, findNode, isElement, isEndPoint, isStartPoint } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 
-const match = (n: ENode<EditorValue>) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type);
+const match = (n: NodeOf<EditorDescendant>) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type);
 
-export const handleDeleteBackwardInUndeletable = (editor: RichTextEditor): boolean => {
+export const handleDeleteBackwardInUndeletable = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }
@@ -32,7 +33,7 @@ export const handleDeleteBackwardInUndeletable = (editor: RichTextEditor): boole
   return true;
 };
 
-export const handleDeleteForwardInUndeletable = (editor: RichTextEditor): boolean => {
+export const handleDeleteForwardInUndeletable = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }

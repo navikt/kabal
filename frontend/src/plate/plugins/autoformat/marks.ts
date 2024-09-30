@@ -1,45 +1,45 @@
-import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
+import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-marks';
 import type { EditorAutoformatRule } from '../../types';
 
 export const autoformatMarks: EditorAutoformatRule[] = [
   {
     mode: 'mark',
-    type: [MARK_BOLD, MARK_ITALIC],
+    type: [BaseBoldPlugin.key, BaseItalicPlugin.key],
     match: '***',
   },
   {
     mode: 'mark',
-    type: [MARK_UNDERLINE, MARK_ITALIC],
+    type: [BaseUnderlinePlugin.key, BaseItalicPlugin.key],
     match: '__*',
   },
   {
     mode: 'mark',
-    type: [MARK_UNDERLINE, MARK_BOLD],
+    type: [BaseUnderlinePlugin.key, BaseBoldPlugin.key],
     match: '__**',
   },
   {
     mode: 'mark',
-    type: [MARK_UNDERLINE, MARK_BOLD, MARK_ITALIC],
+    type: [BaseUnderlinePlugin.key, BaseBoldPlugin.key, BaseItalicPlugin.key],
     match: '___***',
   },
   {
     mode: 'mark',
-    type: MARK_BOLD,
+    type: BaseBoldPlugin.key,
     match: '**',
   },
   {
     mode: 'mark',
-    type: MARK_UNDERLINE,
+    type: BaseUnderlinePlugin.key,
     match: '__',
   },
   {
     mode: 'mark',
-    type: MARK_ITALIC,
+    type: BaseItalicPlugin.key,
     match: '*',
   },
   {
     mode: 'mark',
-    type: MARK_ITALIC,
+    type: BaseItalicPlugin.key,
     match: '_',
   },
 ];

@@ -7,33 +7,22 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/co
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
-import type { EditorValue, MaltekstElement, RichTextEditorElement } from '@app/plate/types';
+import type { MaltekstElement } from '@app/plate/types';
 import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
-import {
-  PlateElement,
-  type PlateRenderElementProps,
-  findNodePath,
-  isEditorReadOnly,
-  isElement,
-  replaceNodeChildren,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
+import { isElement, replaceNodeChildren, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findNodePath, isEditorReadOnly } from '@udecode/slate-react';
 import { useContext, useEffect } from 'react';
 
 /**
  * @deprecated Remove this when all smart documents in prod use maltekstseksjon.
  */
-export const LegacyMaltekst = ({
-  editor,
-  attributes,
-  children,
-  element,
-}: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
+export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
+  const { children, element, editor } = props;
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
   const { canManage, templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
@@ -69,15 +58,13 @@ export const LegacyMaltekst = ({
     }
 
     withoutSavingHistory(editor, () => {
-      withoutNormalizing(editor, () =>
-        replaceNodeChildren<RichTextEditorElement>(editor, { at: path, nodes: maltekster }),
-      );
+      withoutNormalizing(editor, () => replaceNodeChildren(editor, { at: path, nodes: maltekster }));
     });
   }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
 
   if (isLoading) {
     return (
-      <PlateElement asChild attributes={attributes} element={element} editor={editor} suppressContentEditableWarning>
+      <PlateElement<MaltekstElement> {...props} asChild suppressContentEditableWarning>
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -93,30 +80,28 @@ export const LegacyMaltekst = ({
 
   if (isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
     return (
-      <PlateElement as="div" attributes={attributes} element={element} editor={editor}>
+      <PlateElement<MaltekstElement> {...props} as="div">
         {null}
       </PlateElement>
     );
   }
 
   return (
-    <PlateElement
+    <PlateElement<MaltekstElement>
+      {...props}
       asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
       contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
     >
       <SectionContainer
         data-element={element.type}
         data-section={element.section}
         $sectionType={SectionTypeEnum.MALTEKST}
+        onDragStart={(event) => event.preventDefault()}
+        onDrop={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        }}
       >
         {children}
         {canManage ? (

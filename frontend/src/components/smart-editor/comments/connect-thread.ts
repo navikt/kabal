@@ -1,12 +1,13 @@
+import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
+import { CommentsPlugin } from '@app/plate/plugins/comments';
 import type { RichTextEditor, RootElement } from '@app/plate/types';
 import { isText, setNodes, unsetNodes } from '@udecode/plate-common';
 import type { Selection } from 'slate';
-import { COMMENT_PREFIX } from '../../smart-editor/constants';
 
 export const connectCommentThread = (editor: RichTextEditor, selection: Selection, threadId: string) => {
   setNodes(
     editor,
-    { [COMMENT_PREFIX + threadId]: true },
+    { [CommentsPlugin.key]: true, [COMMENT_PREFIX + threadId]: true },
     {
       match: isText,
       mode: 'lowest',

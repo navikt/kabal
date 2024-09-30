@@ -1,8 +1,12 @@
+import { Maltekst } from '@app/plate/components/maltekst/maltekst';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import { createPluginFactory } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 
-export const createMaltekstPlugin = createPluginFactory({
+export const MaltekstPlugin = createPlatePlugin({
   key: ELEMENT_MALTEKST,
-  isElement: true,
-  isVoid: false,
+  node: {
+    isElement: true,
+    isVoid: false,
+    component: Maltekst,
+  },
 });

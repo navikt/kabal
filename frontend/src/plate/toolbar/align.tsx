@@ -3,7 +3,8 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { TextAlignLeft, TextAlignRight } from '@styled-icons/fluentui-system-regular';
-import { setAlign, useAlignDropdownMenuState } from '@udecode/plate-alignment';
+import { setAlign } from '@udecode/plate-alignment';
+import { useAlignDropdownMenuState } from '@udecode/plate-alignment/react';
 import { useIsInHeading } from './use-is-in-heading';
 
 export const Align = () => {

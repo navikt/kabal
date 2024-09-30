@@ -1,18 +1,14 @@
-import {
-  ELEMENT_CURRENT_DATE,
-  ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_MALTEKST,
-  ELEMENT_MALTEKSTSEKSJON,
-  ELEMENT_PAGE_BREAK,
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REDIGERBAR_MALTEKST,
-  ELEMENT_REGELVERK,
-  ELEMENT_REGELVERK_CONTAINER,
-  ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
+import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
+import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
+import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
+import { LabelContentPlugin } from '@app/plate/plugins/label-content';
+import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { MaltekstseksjonPlugin } from '@app/plate/plugins/maltekstseksjon';
+import { PageBreakPlugin } from '@app/plate/plugins/page-break';
+import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
+import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
+import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
+import { SignaturePlugin } from '@app/plate/plugins/signature';
 import {
   type BulletListElement,
   type CurrentDateElement,
@@ -40,14 +36,14 @@ import {
   TextAlign,
 } from '@app/plate/types';
 import { Language } from '@app/types/texts/language';
-import { ELEMENT_H1, ELEMENT_H2 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { TemplateSections } from '../template-sections';
 
 export const createLabelContent = (source: string, label: string): LabelContentElement => ({
-  type: ELEMENT_LABEL_CONTENT,
+  type: LabelContentPlugin.key,
   children: [{ text: '' }],
   source,
   label,
@@ -61,7 +57,7 @@ export const createMaltekstseksjon = (
   children: MaltekstseksjonElement['children'] = [createEmptyVoid()],
   language: Language = Language.NB,
 ): MaltekstseksjonElement => ({
-  type: ELEMENT_MALTEKSTSEKSJON,
+  type: MaltekstseksjonPlugin.key,
   id,
   section,
   children,
@@ -75,7 +71,7 @@ export const createMaltekst = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
   id?: string,
   language: Language = Language.NB,
-): MaltekstElement => ({ type: ELEMENT_MALTEKST, section, id, language, children });
+): MaltekstElement => ({ type: MaltekstPlugin.key, section, id, language, children });
 
 export const createRedigerbarMaltekst = (
   section: TemplateSections,
@@ -83,7 +79,7 @@ export const createRedigerbarMaltekst = (
   id?: string,
   language: Language = Language.NB,
 ): RedigerbarMaltekstElement => ({
-  type: ELEMENT_REDIGERBAR_MALTEKST,
+  type: RedigerbarMaltekstPlugin.key,
   section,
   id,
   language,
@@ -94,50 +90,50 @@ export const createRedigerbarMaltekst = (
 export const createRegelverkContainer = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
 ): RegelverkContainerElement => ({
-  type: ELEMENT_REGELVERK_CONTAINER,
+  type: RegelverkContainerPlugin.key,
   children,
 });
 
 export const createRegelverk = (): RegelverkElement => ({
-  type: ELEMENT_REGELVERK,
+  type: RegelverkPlugin.key,
   section: TemplateSections.REGELVERK_TITLE,
   children: [createPageBreak(), createMaltekstseksjon(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
 });
 
 export const createHeadingOne = (text: string): H1Element => ({
-  type: ELEMENT_H1,
+  type: HEADING_KEYS.h1,
   children: [{ text }],
 });
 
 export const createHeadingTwo = (text: string): H2Element => ({
-  type: ELEMENT_H2,
+  type: HEADING_KEYS.h2,
   children: [{ text }],
 });
 
 export const createSimpleParagraph = (text = ''): ParagraphElement => ({
-  type: ELEMENT_PARAGRAPH,
+  type: BaseParagraphPlugin.key,
   align: TextAlign.LEFT,
   children: [{ text }],
 });
 
 export const createSimpleListItemContainer = (text = ''): ListItemContainerElement => ({
-  type: ELEMENT_LIC,
+  type: BaseListItemContentPlugin.key,
   children: [{ text }],
 });
 
 export const createSimpleListItem = (text = ''): ListItemElement => ({
-  type: ELEMENT_LI,
+  type: BaseListItemPlugin.key,
   children: [createSimpleListItemContainer(text)],
 });
 
 export const createSimpleBulletList = (...textItems: string[]): BulletListElement => ({
-  type: ELEMENT_UL,
+  type: BaseBulletedListPlugin.key,
   indent: 2,
   children: textItems.map(createSimpleListItem),
 });
 
 export const createSignature = (): SignatureElement => ({
-  type: ELEMENT_SIGNATURE,
+  type: SignaturePlugin.key,
   useShortName: false,
   includeMedunderskriver: true,
   useSuffix: true,
@@ -146,39 +142,42 @@ export const createSignature = (): SignatureElement => ({
 });
 
 export const createPageBreak = (): PageBreakElement => ({
-  type: ELEMENT_PAGE_BREAK,
+  type: PageBreakPlugin.key,
   children: [{ text: '' }],
 });
 
 export const createCurrentDate = (): CurrentDateElement => ({
-  type: ELEMENT_CURRENT_DATE,
+  type: CurrentDatePlugin.key,
   children: [{ text: '' }],
 });
 
 export const createHeader = (): HeaderElement => ({
-  type: ELEMENT_HEADER,
+  type: HeaderPlugin.key,
   children: [{ text: '' }],
   threadIds: [],
   content: null,
 });
 
 export const createFooter = (): FooterElement => ({
-  type: ELEMENT_FOOTER,
+  type: FooterPlugin.key,
   children: [{ text: '' }],
   threadIds: [],
   content: null,
 });
 
-export const createTableRow = (children = [createTableCell()]): TableRowElement => ({ type: ELEMENT_TR, children });
+export const createTableRow = (children = [createTableCell()]): TableRowElement => ({
+  type: BaseTableRowPlugin.key,
+  children,
+});
 
 export const createTableCell = (text = ''): TableCellElement => ({
-  type: ELEMENT_TD,
+  type: BaseTableCellPlugin.key,
   children: [createSimpleParagraph(text)],
   attributes: {},
 });
 
 export const createTable = (): TableElement => ({
-  type: ELEMENT_TABLE,
+  type: BaseTablePlugin.key,
   children: [
     createTableRow([createTableCell(), createTableCell()]),
     createTableRow([createTableCell(), createTableCell()]),
@@ -186,12 +185,12 @@ export const createTable = (): TableElement => ({
 });
 
 export const createPlaceHolder = (placeholder = ''): PlaceholderElement => ({
-  type: ELEMENT_PLACEHOLDER,
+  type: SaksbehandlerPlaceholderPlugin.key,
   placeholder,
   children: [{ text: '' }],
 });
 
 export const createEmptyVoid = (): EmptyVoidElement => ({
-  type: ELEMENT_EMPTY_VOID,
+  type: EmptyVoidPlugin.key,
   children: [{ text: '' }],
 });

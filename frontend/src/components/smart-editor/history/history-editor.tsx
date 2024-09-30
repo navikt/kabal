@@ -6,26 +6,27 @@ import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
-import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { KabalPlateEditor } from '@app/plate/plate-editor';
+import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
-import { type EditorValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
 import {
-  Plate,
+  type Value,
   insertNodes,
   removeNodes,
   resetEditorChildren,
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
+import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { memo, useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
   versionId: number;
-  version: EditorValue;
+  version: KabalValue;
   smartDocument: ISmartDocument;
 }
 
@@ -36,6 +37,14 @@ export const HistoryEditor = memo(
     const canManage = useCanManageDocument(templateId);
 
     const id = `${smartDocument.id}-${versionId}`;
+
+    const editor = usePlateEditor<KabalValue, (typeof saksbehandlerPlugins)[0]>({
+      id,
+      plugins: saksbehandlerPlugins,
+      override: {
+        components: components,
+      },
+    });
 
     return (
       <HistoryEditorContainer>
@@ -54,7 +63,7 @@ export const HistoryEditor = memo(
           Gjenopprett denne versjonen
         </StyledButton>
         <StyledErrorBoundary errorComponent={() => <ErrorComponent textId={id} />}>
-          <Plate<EditorValue, RichTextEditor> id={id} readOnly plugins={saksbehandlerPlugins} initialValue={version}>
+          <Plate<RichTextEditor> editor={editor}>
             <HistoryContent id={id} version={version} />
           </Plate>
         </StyledErrorBoundary>
@@ -71,7 +80,7 @@ HistoryEditor.displayName = 'HistoryEditor';
 
 interface HistoryContentProps {
   id: string;
-  version: EditorValue;
+  version: Value;
 }
 
 const HistoryContent = ({ id, version }: HistoryContentProps) => {
@@ -82,12 +91,12 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
 
   return (
     <Sheet $minHeight>
-      <PlateEditor id={id} readOnly lang={lang} />
+      <KabalPlateEditor id={id} readOnly lang={lang} />
     </Sheet>
   );
 };
 
-const restore = (editor: RichTextEditor, content: EditorValue) => {
+const restore = (editor: RichTextEditor, content: Value) => {
   withoutNormalizing(editor, () => {
     withoutSavingHistory(editor, () => {
       resetEditorChildren(editor);

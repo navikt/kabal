@@ -1,21 +1,18 @@
-import {
-  ELEMENT_CURRENT_DATE,
-  ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_MALTEKST,
-  ELEMENT_MALTEKSTSEKSJON,
-  ELEMENT_PAGE_BREAK,
-  ELEMENT_REDIGERBAR_MALTEKST,
-  ELEMENT_REGELVERK,
-  ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
+import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
+import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
+import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
+import { LabelContentPlugin } from '@app/plate/plugins/label-content';
+import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { MaltekstseksjonPlugin } from '@app/plate/plugins/maltekstseksjon';
+import { PageBreakPlugin } from '@app/plate/plugins/page-break';
+import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
+import { RegelverkPlugin } from '@app/plate/plugins/regelverk';
+import { SignaturePlugin } from '@app/plate/plugins/signature';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { BaseParagraphPlugin } from '@udecode/plate-common';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseTablePlugin } from '@udecode/plate-table';
 import { styled } from 'styled-components';
 
 interface GeneratedIconProps {
@@ -43,53 +40,53 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
     const { type } = content;
 
     switch (type) {
-      case ELEMENT_CURRENT_DATE: {
+      case CurrentDatePlugin.key: {
         rects.push(r({ type, key: i, width: 30, y, fill: 'gray-400', align: 'right' }));
         y += 10;
         break;
       }
-      case ELEMENT_LABEL_CONTENT: {
+      case LabelContentPlugin.key: {
         rects.push(r({ type, key: i, y, fill: 'gray-400' }));
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_PARAGRAPH: {
+      case BaseParagraphPlugin.key: {
         rects.push(r({ type, key: i, width: 120, y }));
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_H1: {
+      case HEADING_KEYS.h1: {
         y += SPACING;
         rects.push(h1({ type, key: i, y }));
         y += 10 + SPACING;
         break;
       }
-      case ELEMENT_H2: {
+      case HEADING_KEYS.h2: {
         y += 2;
         rects.push(h2({ type, key: i, y }));
         y += 7 + SPACING;
         break;
       }
-      case ELEMENT_H3: {
+      case HEADING_KEYS.h3: {
         y += 1;
         rects.push(h3({ type, key: i, y }));
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_OL:
-      case ELEMENT_UL: {
+      case BaseBulletedListPlugin.key:
+      case BaseNumberedListPlugin.key: {
         const height = 20;
         rects.push(r({ type, key: i, height, y }));
         y += height + SPACING;
         break;
       }
-      case ELEMENT_TABLE: {
+      case BaseTablePlugin.key: {
         const height = 25;
         rects.push(r({ type, key: i, width: 170, height, y }));
         y += height + SPACING;
         break;
       }
-      case ELEMENT_MALTEKSTSEKSJON: {
+      case MaltekstseksjonPlugin.key: {
         y += SPACING;
         rects.push(h1({ type, key: `${i}-title`, y }));
         y += 10 + SPACING;
@@ -101,7 +98,7 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_REGELVERK: {
+      case RegelverkPlugin.key: {
         y += SPACING * 5;
         rects.push(r({ type, key: i, width: WIDTH, height: 2, y, offset: 0, fill: 'surface-inverted', radius: 0 }));
         y += 5 + SPACING * 5;
@@ -131,32 +128,32 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_EMPTY_VOID:
-      case ELEMENT_MALTEKST:
-      case ELEMENT_REDIGERBAR_MALTEKST:
+      case EmptyVoidPlugin.key:
+      case MaltekstPlugin.key:
+      case RedigerbarMaltekstPlugin.key:
         break;
-      case ELEMENT_PAGE_BREAK: {
+      case PageBreakPlugin.key: {
         y += SPACING * 5;
         const height = 2;
         rects.push(r({ type, key: i, width: WIDTH, height, y, offset: 0, fill: 'surface-inverted', radius: 0 }));
         y += height + SPACING * 5;
         break;
       }
-      case ELEMENT_HEADER: {
+      case HeaderPlugin.key: {
         rects.push(r({ type, key: `${i}-header-line-1`, width: 30, y, fill: 'gray-400' }));
         y += 5 + SPACING;
         rects.push(r({ type, key: `${i}-header-line-2`, width: 70, y, fill: 'gray-400' }));
         y += 5 + SPACING + SPACING;
         break;
       }
-      case ELEMENT_FOOTER: {
+      case FooterPlugin.key: {
         rects.push(r({ type, key: `${i}-footer-line-1`, width: 150, y: HEIGHT - MARGIN - 14, fill: 'gray-400' }));
         rects.push(r({ type, key: `${i}-footer-line-2`, width: 50, y: HEIGHT - MARGIN - 7, fill: 'gray-400' }));
         rects.push(r({ type, key: `${i}-footer-line-3`, width: 20, y: HEIGHT - MARGIN, fill: 'gray-400' }));
         bottomOffset += 21 + SPACING;
         break;
       }
-      case ELEMENT_SIGNATURE: {
+      case SignaturePlugin.key: {
         y += SPACING;
         rects.push(r({ type, key: `${i}-signature-name-1`, width: 60, y, fill: 'gray-400' }));
         rects.push(r({ type, key: `${i}-signature-name-2`, width: 60, y, align: 'right', fill: 'gray-400' }));

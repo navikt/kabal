@@ -1,33 +1,57 @@
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import type { RichText } from '@app/plate/types';
-import { type PlateEditor, createPluginFactory, findNode, isText, withoutNormalizing } from '@udecode/plate-common';
+import { hasOwn } from '@app/functions/object';
+import { CommentLeaf } from '@app/plate/leaf/comment';
+import type { FormattedText } from '@app/plate/types';
+import { findNode, isText, setNodes, unsetNodes, withoutNormalizing } from '@udecode/plate-common';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 
-const withOverrides = (editor: PlateEditor) => {
-  const { insertBreak } = editor;
-
-  editor.insertBreak = () => {
-    removeCommentMarks(editor);
-
-    insertBreak();
-  };
-
-  return editor;
-};
-
-export const createCommentsPlugin = createPluginFactory({
+export const CommentsPlugin = createPlatePlugin({
   key: 'comments',
-  withOverrides,
+  node: { isLeaf: true },
+  extendEditor: ({ editor }) => {
+    const { insertBreak } = editor;
+
+    editor.insertBreak = () => {
+      removeCommentMarks(editor);
+
+      insertBreak();
+    };
+
+    const { normalizeNode } = editor;
+
+    editor.normalizeNode = (entry) => {
+      const [node, path] = entry;
+
+      if (isText(node)) {
+        const hasCommentMark = hasOwn(node, CommentsPlugin.key) && node[CommentsPlugin.key] === true;
+        const shouldHaveCommentMark = Object.keys(node).some((key) => key.startsWith(COMMENT_PREFIX));
+
+        if (hasCommentMark && !shouldHaveCommentMark) {
+          unsetNodes(editor, CommentsPlugin.key, { at: path, match: (n) => n === node, split: true });
+        } else if (!hasCommentMark && shouldHaveCommentMark) {
+          setNodes(editor, { [CommentsPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
+        }
+      }
+
+      normalizeNode(entry);
+    };
+
+    return editor;
+  },
   handlers: {
-    onKeyDown: (editor) => (event) => {
+    onKeyDown: ({ editor, event }) => {
       if (event.key === 'Escape') {
         removeCommentMarks(editor);
       }
     },
   },
+  render: {
+    node: CommentLeaf,
+  },
 });
 
 const removeCommentMarks = (editor: PlateEditor) => {
-  const entry = findNode<RichText>(editor, { match: isText });
+  const entry = findNode<FormattedText>(editor, { match: isText });
 
   if (entry === undefined) {
     return;

@@ -1,9 +1,10 @@
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
-import type { RichText } from '@app/plate/types';
-import { type PlateEditor, getEditorString, getLeafNode, getPointBefore } from '@udecode/plate-common';
+import type { FormattedText } from '@app/plate/types';
+import { getEditorString, getLeafNode, getPointBefore } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
-type Marks = Omit<RichText, 'text'>;
+type Marks = Omit<FormattedText, 'text'>;
 
 interface PreviousWord {
   long: string;
@@ -64,7 +65,7 @@ export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
   return { short, long, marks: getMarks(shortNode), range };
 };
 
-const getMarks = (node: RichText): Marks => {
+const getMarks = (node: FormattedText): Marks => {
   const marks: Marks = { ...node };
   marks.text = undefined;
 

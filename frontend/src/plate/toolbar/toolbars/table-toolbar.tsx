@@ -4,8 +4,9 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
-import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { findNode } from '@udecode/plate-common';
+import { BaseTablePlugin } from '@udecode/plate-table';
+import { isEditorFocused, toDOMNode } from '@udecode/slate-react';
 import { useEffect, useState } from 'react';
 import { StyledFloatingToolbar } from './floating-toolbar';
 
@@ -20,7 +21,7 @@ interface TableToolbarProps extends Props {
 
 const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
   const editor = useMyPlateEditorState(editorId);
-  const tableEntry = findNode<TableElement>(editor, { match: { type: ELEMENT_TABLE } });
+  const tableEntry = findNode<TableElement>(editor, { match: { type: BaseTablePlugin.node.type } });
   const table = tableEntry?.[0] ?? null;
 
   const position = useTablePosition(table, container);

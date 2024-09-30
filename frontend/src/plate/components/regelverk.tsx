@@ -7,12 +7,7 @@ import { DeleteSection } from '@app/plate/components/common/delete-section';
 import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
-import {
-  type EditorValue,
-  type RegelverkContainerElement,
-  type RegelverkElement,
-  useMyPlateEditorRef,
-} from '@app/plate/types';
+import { type RegelverkContainerElement, type RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
@@ -20,28 +15,20 @@ import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/con
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import {
-  PlateElement,
-  type PlateRenderElementProps,
-  findNodePath,
-  replaceNodeChildren,
-  setNodes,
-} from '@udecode/plate-common';
+import { replaceNodeChildren, setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findNodePath } from '@udecode/slate-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
-export const Regelverk = ({
-  attributes,
-  children,
-  element,
-  editor,
-}: PlateRenderElementProps<EditorValue, RegelverkElement>) => {
+export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
   const { canManage } = useContext(SmartEditorContext);
+  const { children, element } = props;
 
   return (
-    <PlateElement attributes={attributes} element={element} editor={editor} onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkElement> {...props} onDragStart={onPlateContainerDragStart}>
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
         {canManage ? (
@@ -72,18 +59,15 @@ const StyledLoader = styled(Loader)`
   margin: auto;
 `;
 
-export const RegelverkContainer = ({
-  attributes,
-  children,
-  element,
-  editor,
-}: PlateRenderElementProps<EditorValue, RegelverkContainerElement>) => {
+export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerElement>) => {
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useRegelverkQuery();
   const { canManage } = useContext(SmartEditorContext);
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
+
+  const { children, element, editor } = props;
 
   const insertRegelverk = useCallback(async () => {
     if (oppgave === undefined || query === skipToken) {
@@ -115,13 +99,7 @@ export const RegelverkContainer = ({
   }, [editor, element, getTexts, oppgave, query]);
 
   return (
-    <PlateElement
-      asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
-      onDragStart={onPlateContainerDragStart}
-    >
+    <PlateElement<RegelverkContainerElement> {...props} asChild onDragStart={onPlateContainerDragStart}>
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (
