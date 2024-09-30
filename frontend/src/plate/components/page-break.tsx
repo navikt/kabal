@@ -1,21 +1,13 @@
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
-import type { EditorValue, PageBreakElement, RichTextEditor } from '@app/plate/types';
+import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import {
-  PlateElement,
-  type PlateRenderElementProps,
-  type TNodeEntry,
-  findNode,
-  getParentNode,
-  isEditor,
-  isElement,
-  removeNodes,
-} from '@udecode/plate-common';
+import { type TNodeEntry, findNode, getParentNode, isEditor, isElement, removeNodes } from '@udecode/plate-common';
+import { type PlateEditor, PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { styled } from 'styled-components';
 
-const parentIsUnchangeable = (editor: RichTextEditor, entry: TNodeEntry<PageBreakElement> | undefined): boolean => {
+const parentIsUnchangeable = (editor: PlateEditor, entry: TNodeEntry<PageBreakElement> | undefined): boolean => {
   if (entry === undefined) {
     return true;
   }
@@ -41,12 +33,8 @@ const parentIsUnchangeable = (editor: RichTextEditor, entry: TNodeEntry<PageBrea
   return UNCHANGEABLE.includes(parentNode.type);
 };
 
-export const PageBreak = ({
-  element,
-  children,
-  attributes,
-  editor,
-}: PlateRenderElementProps<EditorValue, PageBreakElement>) => {
+export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
+  const { children, element, editor } = props;
   const entry = findNode<PageBreakElement>(editor, { at: [], match: (n) => n === element });
 
   const disableDelete = parentIsUnchangeable(editor, entry);
@@ -62,7 +50,7 @@ export const PageBreak = ({
   };
 
   return (
-    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+    <PlateElement<PageBreakElement> {...props} asChild contentEditable={false}>
       <StyledPageBreak>
         {disableDelete ? null : (
           <StyledDeleteButton

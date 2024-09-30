@@ -1,4 +1,4 @@
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import { Language, UNTRANSLATED } from '@app/types/texts/language';
 import type {
   GOD_FORMULERING_TYPE,
@@ -11,23 +11,23 @@ import type {
 export interface INewRichTextParams extends ITextBaseMetadata {
   textType: RichTextTypes;
   richText: {
-    [Language.NB]: EditorValue | null;
-    [Language.NN]: EditorValue | null;
+    [Language.NB]: KabalValue | null;
+    [Language.NN]: KabalValue | null;
   };
 }
 
 export interface INewRegelverkParams extends ITextBaseMetadata {
   textType: typeof REGELVERK_TYPE;
   richText: {
-    [UNTRANSLATED]: EditorValue;
+    [UNTRANSLATED]: KabalValue;
   };
 }
 
 export interface INewGodFormuleringParams extends ITextBaseMetadata {
   textType: typeof GOD_FORMULERING_TYPE;
   richText: {
-    [Language.NB]: EditorValue | null;
-    [Language.NN]: EditorValue | null;
+    [Language.NB]: KabalValue | null;
+    [Language.NN]: KabalValue | null;
   };
 }
 

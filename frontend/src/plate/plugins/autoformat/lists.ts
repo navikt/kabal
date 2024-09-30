@@ -1,20 +1,20 @@
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import type { EditorAutoformatRule } from '../../types';
 import { formatList, preFormat } from './utils';
 
 export const autoformatLists: EditorAutoformatRule[] = [
   {
     mode: 'block',
-    type: ELEMENT_LI,
+    type: BaseListItemPlugin.node.type,
     match: ['* ', '- '],
     preFormat,
-    format: (editor) => formatList(editor, ELEMENT_UL),
+    format: (editor) => formatList(editor, BaseBulletedListPlugin.node.type),
   },
   {
     mode: 'block',
-    type: ELEMENT_LI,
+    type: BaseListItemPlugin.node.type,
     match: ['1. ', '1) '],
     preFormat,
-    format: (editor) => formatList(editor, ELEMENT_OL),
+    format: (editor) => formatList(editor, BaseNumberedListPlugin.node.type),
   },
 ];

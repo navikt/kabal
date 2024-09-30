@@ -1,9 +1,9 @@
-import type { EditorValue } from '@app/plate/types';
+import type { Value } from '@udecode/plate-common';
 import type { GenericObject, Immutable } from '../types';
 import type { INewSmartEditorMetadata } from './metadata';
 
 interface INewSmartEditor extends INewSmartEditorMetadata {
-  richText: EditorValue;
+  richText: Value;
 }
 
 export interface IMutableSmartEditorTemplate extends INewSmartEditor, GenericObject {}

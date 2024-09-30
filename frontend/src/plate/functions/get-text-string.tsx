@@ -1,12 +1,12 @@
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { EditorValue, PlaceholderElement } from '@app/plate/types';
+import type { PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import { type TDescendant, getNodeString, isElement } from '@udecode/plate-common';
+import { type TDescendant, type Value, getNodeString, isElement } from '@udecode/plate-common';
 
 const SPACE_REGEX = /\s+/g;
 
-export const getTextAsString = (richText: EditorValue): string =>
+export const getTextAsString = (richText: Value): string =>
   richText.map(getElementString).join(' ').replaceAll(SPACE_REGEX, ' ');
 
 const getElementString = (element: TDescendant): string => {

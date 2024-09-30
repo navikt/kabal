@@ -1,4 +1,4 @@
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import {
   GOD_FORMULERING_TYPE,
   type PlainTextTypes,
@@ -21,21 +21,21 @@ export interface IConsumerPlainText extends ConsumerMetadata, Omit<INewPlainText
 
 export interface IConsumerRichText extends ConsumerMetadata, Omit<INewRichTextParams, 'richText' | 'textType'> {
   textType: RichTextTypes;
-  richText: EditorValue;
+  richText: KabalValue;
 }
 
 export interface IConsumerRegelverkText extends ConsumerMetadata, Omit<INewRegelverkParams, 'richText' | 'textType'> {
   textType: typeof REGELVERK_TYPE;
-  richText: EditorValue;
+  richText: KabalValue;
 }
 
 interface IConsumerGodFormuleringText extends ConsumerMetadata, Omit<INewRichTextParams, 'richText' | 'textType'> {
   textType: typeof GOD_FORMULERING_TYPE;
-  richText: EditorValue;
+  richText: KabalValue;
 }
 
 export interface NonNullableGodFormulering extends Omit<IConsumerGodFormuleringText, 'richText'> {
-  richText: EditorValue;
+  richText: KabalValue;
 }
 
 const isGodFormulering = (text: IConsumerText): text is IConsumerGodFormuleringText =>
