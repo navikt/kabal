@@ -12,6 +12,7 @@ import {
 } from '@udecode/plate-common';
 import { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -25,6 +26,9 @@ import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
+/**
+ * @deprecated Remove this when all smart documents in prod use maltekstseksjon.
+ */
 export const LegacyMaltekst = ({
   editor,
   attributes,
@@ -35,6 +39,7 @@ export const LegacyMaltekst = ({
   const { templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
+  const canManage = useCanManageDocument(templateId);
 
   useEffect(() => {
     if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
@@ -116,19 +121,21 @@ export const LegacyMaltekst = ({
         $sectionType={SectionTypeEnum.MALTEKST}
       >
         {children}
-        <SectionToolbar contentEditable={false}>
-          <AddNewParagraphs editor={editor} element={element} />
-          <Tooltip content="Oppdater til siste versjon" delay={0} placement="bottom">
-            <Button
-              icon={<ArrowCirclepathIcon aria-hidden />}
-              onClick={refetch}
-              variant="tertiary"
-              size="xsmall"
-              contentEditable={false}
-              loading={isLoading || isFetching}
-            />
-          </Tooltip>
-        </SectionToolbar>
+        {canManage ? (
+          <SectionToolbar contentEditable={false}>
+            <AddNewParagraphs editor={editor} element={element} />
+            <Tooltip content="Oppdater til siste versjon" delay={0} placement="bottom">
+              <Button
+                icon={<ArrowCirclepathIcon aria-hidden />}
+                onClick={refetch}
+                variant="tertiary"
+                size="xsmall"
+                contentEditable={false}
+                loading={isLoading || isFetching}
+              />
+            </Tooltip>
+          </SectionToolbar>
+        ) : null}
       </SectionContainer>
     </PlateElement>
   );

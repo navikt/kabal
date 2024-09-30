@@ -1,6 +1,5 @@
-import { AnyObject, createPluginFactory, findNode, insertElements } from '@udecode/plate-common';
-import { EditorFragmentDeletionOptions, EditorNormalizeOptions, TextUnit } from 'slate';
-import { ELEMENT_FOOTER, UNINTERACTIONABLE } from '@app/plate/plugins/element-types';
+import { AnyObject, createPluginFactory } from '@udecode/plate-common';
+import { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 import {
   handleDeleteBackwardInPlaceholder,
   handleDeleteForwardInPlaceholder,
@@ -14,12 +13,11 @@ import {
   handleDeleteBackwardInUndeletable,
   handleDeleteForwardInUndeletable,
 } from '@app/plate/plugins/prohibit-deletion/undeletable';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { isOfElementTypesFn, isUnchangeable } from '@app/plate/utils/queries';
+import { isUnchangeable } from '@app/plate/utils/queries';
 
 const withOverrides = (editor: RichTextEditor) => {
-  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, normalize } = editor;
+  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark } = editor;
 
   editor.insertText = (text, options) => {
     if (isUnchangeable(editor)) {
@@ -83,18 +81,6 @@ const withOverrides = (editor: RichTextEditor) => {
     }
 
     return deleteFragment(options);
-  };
-
-  editor.normalize = (options: EditorNormalizeOptions | undefined) => {
-    if (editor.children.length === 0 || editor.children.every(isOfElementTypesFn(UNINTERACTIONABLE))) {
-      const footerEntry = findNode(editor, { match: { type: ELEMENT_FOOTER } });
-
-      const at = footerEntry === undefined ? [editor.children.length] : footerEntry[1];
-
-      return insertElements(editor, createSimpleParagraph(), { select: true, at });
-    }
-
-    normalize(options);
   };
 
   editor.insertFragment = (fragment) => {

@@ -20,12 +20,12 @@ export const calculateRangePosition = (
     anchor: selectionStart,
     focus: {
       path: selectionStart.path,
-      offset: selectionStart.offset + 1,
+      offset: selectionStart.offset,
     },
   });
 
   if (range === undefined) {
-    console.warn('Could not calculate position of floating toolbar. Range is undefined.', selectionStart);
+    console.warn('Could not calculate position. Range is undefined.', selectionStart);
 
     return null;
   }

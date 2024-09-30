@@ -122,6 +122,7 @@ export class OboRedisCache {
   }
 
   public async set(key: string, token: string, expiresAt: number) {
+    log.debug({ msg: 'Setting OBO token', data: { key, token, expiresAt } });
     const json = JSON.stringify({ key, token, expiresAt } satisfies TokenMessage);
     this.#client.publish(TOKEN_CHANNEL, json);
 

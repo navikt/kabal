@@ -19,7 +19,3 @@ export interface ISetParentResponse extends IModifiedDocumentResponse {
 export interface IModifiedDocumentResponse {
   modified: string;
 }
-
-export interface IModifiedSmartDocumentResponse extends IModifiedDocumentResponse {
-  version: number;
-}

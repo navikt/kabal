@@ -25,6 +25,7 @@ import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { healthPlugin } from '@app/plugins/health';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
+import { crdtPlugin } from '@app/plugins/crdt/crdt';
 
 processErrors();
 
@@ -61,6 +62,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(serveAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
+  .register(crdtPlugin)
 
   // Start server.
   .listen({ host: '0.0.0.0', port: serverConfig.port });

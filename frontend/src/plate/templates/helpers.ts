@@ -60,7 +60,15 @@ export const createMaltekstseksjon = (
   textIdList: string[] = [],
   children: MaltekstseksjonElement['children'] = [createEmptyVoid()],
   language: Language = Language.NB,
-): MaltekstseksjonElement => ({ type: ELEMENT_MALTEKSTSEKSJON, id, section, children, textIdList, language });
+): MaltekstseksjonElement => ({
+  type: ELEMENT_MALTEKSTSEKSJON,
+  id,
+  section,
+  children,
+  textIdList,
+  language,
+  query: undefined,
+});
 
 export const createMaltekst = (
   section: TemplateSections,

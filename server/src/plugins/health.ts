@@ -37,5 +37,5 @@ export const healthPlugin = fastifyPlugin(
 
     pluginDone();
   },
-  { fastify: '4', name: HEALTH_PLUGIN_ID },
+  { fastify: '5', name: HEALTH_PLUGIN_ID },
 );

@@ -37,7 +37,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
       const { method, url, trace_id, span_id, tab_id, client_version, proxyStartTime } = req;
       const responseTime = getDuration(proxyStartTime);
 
-      log.info({
+      log.debug({
         msg: `Proxy response (${appName}) ${reply.statusCode} ${method} ${url} ${responseTime}ms`,
         trace_id,
         span_id,
@@ -65,7 +65,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         websocket: true,
         proxyPayloads: true,
         preHandler: async (req, reply) => {
-          log.info({
+          log.debug({
             msg: `Proxy request (${appName}) ${req.method} ${req.url}`,
             tab_id: req.tab_id,
             trace_id: req.trace_id,
@@ -77,16 +77,19 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
               url: req.url,
             },
           });
+
+          // Make sure the OBO token is cached before rewriteRequestHeaders.
+          await req.getOboAccessToken(appName, reply);
+
           req.proxyStartTime = performance.now();
-          await req.ensureOboAccessToken(appName, reply);
         },
         retryMethods: ['GET'], // Only retry GET requests. All others are not idempotent.
         replyOptions: {
-          rewriteRequestHeaders: (req) => getProxyRequestHeaders(req, appName),
+          rewriteRequestHeaders: (req) => getProxyRequestHeaders(req, appName, req.getCachedOboAccessToken(appName)),
           rewriteHeaders: (headers, req) => {
             const serverTiming = headers[SERVER_TIMING_HEADER];
 
-            const total = `proxy;dur=${req === undefined ? 0 : getDuration(req.proxyStartTime)};desc="Proxy total (${appName})"`;
+            const total = `proxy;dur=${req === undefined ? 0 : getDuration(req.proxyStartTime)};desc="${appName} (proxy)"`;
 
             switch (typeof serverTiming) {
               case 'string':
@@ -107,7 +110,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
                     .join(', '),
                 };
               default:
-                return headers;
+                return { ...headers, [SERVER_TIMING_HEADER]: total };
             }
           },
         },
@@ -116,7 +119,7 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
 
     pluginDone();
   },
-  { fastify: '4', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
+  { fastify: '5', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
 const prefixServerTimingEntry = (entry: string, appName: string): string => {

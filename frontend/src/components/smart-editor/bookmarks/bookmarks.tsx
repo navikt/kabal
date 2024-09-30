@@ -1,22 +1,18 @@
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { TNode, getNodeString, isText, setNodes, toDOMNode } from '@udecode/plate-common';
-import { useContext } from 'react';
+import { TNode, getNodeString, setNodes, toDOMNode } from '@udecode/plate-common';
 import { styled } from 'styled-components';
-import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { pushEvent } from '@app/observability';
-import { RichText, RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { useMyPlateEditorState } from '@app/plate/types';
 
 interface Props {
   editorId: string;
 }
 
 export const Bookmarks = ({ editorId }: Props) => {
-  const { bookmarksMap, removeBookmark } = useContext(SmartEditorContext);
+  const bookmarks = useBookmarks();
   const editor = useMyPlateEditorState(editorId);
-
-  const bookmarks = Object.entries(bookmarksMap);
 
   if (bookmarks.length === 0) {
     return null;
@@ -58,7 +54,6 @@ export const Bookmarks = ({ editorId }: Props) => {
               onClick={() => {
                 pushEvent('remove-bookmark', 'smart-editor');
                 setNodes(editor, { [key]: undefined }, { match: (n) => key in n, mode: 'lowest', at: [] });
-                removeBookmark(key);
               }}
               icon={<TrashIcon aria-hidden />}
             />
@@ -68,32 +63,6 @@ export const Bookmarks = ({ editorId }: Props) => {
     </BookmarkList>
   );
 };
-
-export const getBookmarks = (editor: RichTextEditor): Record<string, RichText[]> => {
-  const bookmarkEntries = editor.nodes<RichText>({
-    match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
-    at: [],
-  });
-
-  const bookmarkMap: Map<string, RichText[]> = new Map();
-
-  for (const [node] of bookmarkEntries) {
-    const keys = Object.keys(node).filter((k) => k.startsWith(BOOKMARK_PREFIX));
-
-    for (const key of keys) {
-      const existing = bookmarkMap.get(key);
-      bookmarkMap.set(key, existing !== undefined ? [...existing, node] : [node]);
-    }
-  }
-
-  if (bookmarkMap.size === 0) {
-    return EMPTY_BOOKMARKS;
-  }
-
-  return Object.fromEntries(bookmarkMap.entries());
-};
-
-const EMPTY_BOOKMARKS: Record<string, RichText[]> = {};
 
 const BookmarkList = styled.ul`
   display: flex;

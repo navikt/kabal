@@ -1,10 +1,11 @@
-import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { skipToken } from '@reduxjs/toolkit/query';
+/* eslint-disable max-lines */
+import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { Profiler, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BasePoint, Path, Range } from 'slate';
 import { styled } from 'styled-components';
-import { SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
@@ -13,46 +14,38 @@ import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-e
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
+import { useRefreshOboToken } from '@app/components/smart-editor/tabbed-editors/use-refresh-obo-token';
+import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { editorMeasurements } from '@app/observability';
 import { PlateEditor } from '@app/plate/plate-editor';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { useGetMySignatureQuery, useGetSignatureQuery } from '@app/redux-api/bruker';
+import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { ISmartDocument } from '@app/types/documents/documents';
+import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
 interface EditorProps {
   smartDocument: ISmartDocument;
-  onChange: (value: EditorValue) => void;
-  updateStatus: SavedStatusProps;
 }
 
-export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) => {
-  const { id, templateId, content } = smartDocument;
-  const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
-  const { newCommentSelection, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+export const Editor = ({ smartDocument }: EditorProps) => {
+  const { id, templateId } = smartDocument;
+  const [, { isLoading }] = useLazyGetDocumentQuery();
+  const { newCommentSelection } = useContext(SmartEditorContext);
+  const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
   const [showHistory, setShowHistory] = useState(false);
   const { data: oppgave } = useOppgave();
 
-  const { isLoading: medunderskriverSignatureIsLoading } = useGetSignatureQuery(
-    typeof oppgave?.medunderskriver.employee?.navIdent === 'string'
-      ? oppgave.medunderskriver.employee.navIdent
-      : skipToken,
-  );
-  const { isLoading: saksbehandlerSignatureIsLoading } = useGetMySignatureQuery();
-
-  // Ensure signatures are initially loaded before rendering the editor in order to avoid unnecessary re-renders and patches
-  if (oppgave === undefined || medunderskriverSignatureIsLoading || saksbehandlerSignatureIsLoading) {
+  if (oppgave === undefined) {
     return null;
   }
 
@@ -68,11 +61,10 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
   return (
     <Container>
       <Plate<EditorValue, RichTextEditor>
-        initialValue={content}
+        initialValue={smartDocument.content}
         id={id}
         readOnly={!canEdit}
-        onChange={onChange}
-        plugins={saksbehandlerPlugins}
+        plugins={collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user)}
         decorate={([node, path]) => {
           if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
@@ -99,66 +91,191 @@ export const Editor = ({ smartDocument, onChange, updateStatus }: EditorProps) =
           return [];
         }}
       >
-        <MainContainer>
-          <GodeFormuleringer templateId={templateId} />
-
-          <Content>
-            <EditorContainer data-area="content">
-              <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
-
-              <ErrorBoundary
-                errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
-                actionButton={{
-                  onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
-                  loading: isLoading,
-                  disabled: isLoading,
-                  buttonText: 'Gjenopprett dokument',
-                  buttonIcon: <ClockDashedIcon aria-hidden />,
-                  variant: 'primary',
-                  size: 'small',
-                }}
-              >
-                <Profiler
-                  id="render_smart_editor"
-                  onRender={(_, __, actualDuration) => editorMeasurements.add(actualDuration)}
-                >
-                  <EditorWithNewCommentAndFloatingToolbar id={id} />
-                </Profiler>
-              </ErrorBoundary>
-            </EditorContainer>
-
-            {showAnnotationsAtOrigin ? <PositionedRight /> : null}
-          </Content>
-
-          {showAnnotationsAtOrigin ? null : <StickyRight id={id} />}
-
-          {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
-        </MainContainer>
-
-        <StatusBar {...updateStatus} />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} />
       </Plate>
     </Container>
   );
 };
 
-const EditorWithNewCommentAndFloatingToolbar = ({ id }: { id: string }) => {
-  const { templateId, setSheetRef } = useContext(SmartEditorContext);
-  const canEdit = useCanEditDocument(templateId);
-  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
-  const lang = useSmartEditorSpellCheckLanguage();
+interface PlateContextProps extends EditorProps {
+  oppgave: IOppgavebehandling;
+}
+
+const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
+  const { id, templateId } = smartDocument;
+  const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
+  const { showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const [showHistory, setShowHistory] = useState(false);
+  const editor = useMyPlateEditorRef(id);
+  const [isConnected, setIsConnected] = useState(editor.yjs.provider.isConnected);
+
+  const oboTokenIsValid = useRefreshOboToken();
 
   useEffect(() => {
-    setSheetRef(containerRef);
-  }, [containerRef, setSheetRef]);
+    // Close happens after connect is broken. Safe to reconnect.
+    const onClose = () => {
+      setIsConnected(false);
+
+      if (oboTokenIsValid) {
+        editor.yjs.provider.connect();
+      }
+    };
+
+    editor.yjs.provider.on('close', onClose);
+
+    return () => {
+      editor.yjs.provider.off('close', onClose);
+    };
+  }, [editor.yjs.provider, oboTokenIsValid]);
+
+  useEffect(() => {
+    // Disconnect happens before close. Too early to reconnect.
+    const onDisconnect = () => setIsConnected(false);
+
+    // Connect happens after connection is established.
+    const onConnect = () => setIsConnected(true);
+
+    editor.yjs.provider.on('disconnect', onDisconnect);
+    editor.yjs.provider.on('connect', onConnect);
+
+    return () => {
+      editor.yjs.provider.off('disconnect', onDisconnect);
+      editor.yjs.provider.off('connect', onConnect);
+    };
+  }, [editor.yjs.provider]);
 
   return (
-    <Sheet ref={setContainerRef} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
-      <FloatingSaksbehandlerToolbar container={containerRef} editorId={id} />
-      <SaksbehandlerTableToolbar container={containerRef} editorId={id} />
+    <>
+      <MainContainer>
+        <GodeFormuleringer templateId={templateId} />
 
-      <NewComment container={containerRef} />
+        <Content>
+          <EditorContainer data-area="content">
+            <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
 
-      <PlateEditor id={id} readOnly={!canEdit} lang={lang} />
+            <ErrorBoundary
+              errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
+              actionButton={{
+                onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
+                loading: isLoading,
+                disabled: isLoading,
+                buttonText: 'Gjenopprett dokument',
+                buttonIcon: <ClockDashedIcon aria-hidden />,
+                variant: 'primary',
+                size: 'small',
+              }}
+            >
+              <EditorWithNewCommentAndFloatingToolbar id={id} isConnected={isConnected} />
+            </ErrorBoundary>
+          </EditorContainer>
+
+          {showAnnotationsAtOrigin ? <PositionedRight /> : null}
+        </Content>
+
+        {showAnnotationsAtOrigin ? null : <StickyRight id={id} />}
+
+        {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
+      </MainContainer>
+
+      <StatusBar>
+        <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
+          <ConnectionIconContainer>
+            {isConnected ? (
+              <CloudFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-success)" />
+            ) : (
+              <CloudSlashFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-danger)" />
+            )}
+          </ConnectionIconContainer>
+        </Tooltip>
+        <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
+      </StatusBar>
+    </>
+  );
+};
+
+const ConnectionIconContainer = styled.span`
+  margin-left: auto;
+  margin-right: var(--a-spacing-2);
+  border-right: 1px solid var(--a-border-default);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+// interface ChangeSet {
+//   added: number[];
+//   removed: number[];
+//   updated: number[];
+// }
+
+// type OnChangeFn = (changeset: ChangeSet) => void;
+
+interface EditorWithNewCommentAndFloatingToolbarProps {
+  id: string;
+  isConnected: boolean;
+}
+
+const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithNewCommentAndFloatingToolbarProps) => {
+  const { templateId, setSheetRef } = useContext(SmartEditorContext);
+  const canEdit = useCanEditDocument(templateId);
+  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
+  const lang = useSmartEditorSpellCheckLanguage();
+
+  // const editor = useMyPlateEditorRef(id);
+
+  // useEffect(() => {
+  //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
+  //     const states = editor.awareness.getStates();
+
+  //     requestAnimationFrame(() => {
+  //       cursorStore.store.setState((draft) => {
+  //         for (const a of [...added, ...updated]) {
+  //           const cursor = states.get(a);
+
+  //           if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
+  //             draft[a] = {
+  //               ...cursor,
+  //               selection: relativeRangeToSlateRange(
+  //                 editor.yjs.provider.document.get('content', XmlText),
+  //                 editor,
+  //                 cursor.selection,
+  //               ),
+  //             };
+  //           }
+  //         }
+
+  //         for (const r of removed) {
+  //           delete draft[r];
+  //         }
+  //       });
+  //     });
+  //   };
+
+  //   editor.awareness.on('change', onChange);
+
+  //   return () => {
+  //     editor.awareness.off('change', onChange);
+  //   };
+  // }, [editor, editor.awareness]);
+
+  useEffect(() => {
+    setSheetRef(containerElement);
+  }, [containerElement, setSheetRef]);
+
+  return (
+    <Sheet ref={setContainerElement} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+      <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
+      <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
+
+      <NewComment container={containerElement} />
+
+      <PlateEditor id={id} readOnly={!canEdit || !isConnected} lang={lang} />
+
+      {/* Not needed for now - only one person will edit at a time */}
+      {/* {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />} */}
     </Sheet>
   );
 };
