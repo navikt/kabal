@@ -1,12 +1,12 @@
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { CurrentDateElement, EditorValue } from '@app/plate/types';
-import { PlateElement, type PlateRenderElementProps, useEditorRef } from '@udecode/plate-common';
+import type { CurrentDateElement } from '@app/plate/types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
 
-type Props = PlateRenderElementProps<EditorValue, CurrentDateElement>;
+type Props = PlateElementProps<CurrentDateElement>;
 
 interface DateParts {
   year: number;
@@ -37,18 +37,15 @@ export const CurrentDate = (props: Props) => {
 };
 
 const RenderCurrentDate = memo<Props & DateParts>(
-  ({ year, month, day, children, attributes, element }) => {
-    const editor = useEditorRef();
+  ({ year, month, day, children, ...props }) => {
     const isSelected = useSelected();
 
     const isoDate = `${year}-${zeroPad(month + 1)}-${zeroPad(day)}`;
 
     return (
-      <PlateElement
+      <PlateElement<CurrentDateElement>
+        {...props}
         as="div"
-        attributes={attributes}
-        element={element}
-        editor={editor}
         contentEditable={false}
         suppressContentEditableWarning
         onDragStart={(event) => event.preventDefault()}

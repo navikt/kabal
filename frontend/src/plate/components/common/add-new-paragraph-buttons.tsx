@@ -1,13 +1,14 @@
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { EditorValue, RootElement } from '@app/plate/types';
+import type { RootElement } from '@app/plate/types';
 import { nextPath } from '@app/plate/utils/queries';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { type PlateEditor, findDescendant, insertElements, useEditorReadOnly } from '@udecode/plate-common';
+import { findDescendant, insertElements } from '@udecode/plate-common';
+import { type PlateEditor, useEditorReadOnly } from '@udecode/plate-common/react';
 
 interface Props {
   element: RootElement;
-  editor: PlateEditor<EditorValue>;
+  editor: PlateEditor;
 }
 
 export const AddNewParagraphs = ({ editor, element }: Props) => {

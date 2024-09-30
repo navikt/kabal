@@ -1,18 +1,14 @@
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import type { EditorValue, LabelContentElement } from '@app/plate/types';
+import type { LabelContentElement } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
-import { PlateElement, type PlateRenderElementProps } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { setNodes } from '@udecode/slate';
 import { useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 
-export const LabelContent = ({
-  element,
-  attributes,
-  children,
-  editor,
-}: PlateRenderElementProps<EditorValue, LabelContentElement>) => {
+export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
+  const { children, element, editor } = props;
   const content = useContent(element.source);
 
   useEffect(() => {
@@ -20,11 +16,9 @@ export const LabelContent = ({
   }, [content, editor, element]);
 
   return (
-    <PlateElement
+    <PlateElement<LabelContentElement>
+      {...props}
       asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
       contentEditable={false}
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {

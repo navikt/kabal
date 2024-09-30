@@ -4,20 +4,15 @@ import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-que
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { type ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
-import {
-  type EditorValue,
-  type FooterElement,
-  type HeaderElement,
-  TextAlign,
-  useMyPlateEditorRef,
-} from '@app/plate/types';
+import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { PlainTextTypes } from '@app/types/common-text-types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateRenderElementProps, setNodes } from '@udecode/plate-common';
+import { setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -36,7 +31,7 @@ const isPlainText = (text: IConsumerText): text is IConsumerPlainText =>
 
 type ElementTypes = HeaderElement | FooterElement;
 
-export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, ElementTypes>) => {
+export const HeaderFooter = (props: PlateElementProps<ElementTypes>) => {
   const { dokumentTypeId } = useContext(SmartEditorContext);
 
   if (dokumentTypeId === DistribusjonsType.NOTAT) {
@@ -46,7 +41,8 @@ export const HeaderFooter = (props: PlateRenderElementProps<EditorValue, Element
   return <RenderHeaderFooter {...props} />;
 };
 
-const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElementProps<EditorValue, ElementTypes>) => {
+const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
+  const { children, element } = props;
   const [initialized, setInitialized] = useState(false);
   const { user } = useContext(StaticDataContext);
 
@@ -101,11 +97,9 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 
   return (
-    <PlateElement
+    <PlateElement<ElementTypes>
+      {...props}
       asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
       contentEditable={false}
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {

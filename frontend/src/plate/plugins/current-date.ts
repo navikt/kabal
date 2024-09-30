@@ -1,9 +1,13 @@
-import { createPluginFactory } from '@udecode/plate-common';
-import { ELEMENT_CURRENT_DATE } from './element-types';
+import { CurrentDate } from '@app/plate/components/current-date';
+import { ELEMENT_CURRENT_DATE } from '@app/plate/plugins/element-types';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 
-export const createCurrentDatePlugin = createPluginFactory({
+export const CurrentDatePlugin = createPlatePlugin({
   key: ELEMENT_CURRENT_DATE,
-  isElement: true,
-  isVoid: true,
-  isInline: false,
+  node: {
+    isElement: true,
+    isVoid: true,
+    isInline: false,
+    component: CurrentDate,
+  },
 });

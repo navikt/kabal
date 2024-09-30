@@ -1,6 +1,6 @@
-import type { EditorValue, EmptyVoidElement } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
+import type { EmptyVoidElement } from '@app/plate/types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 
-type RenderProps = PlateElementProps<EditorValue, EmptyVoidElement>;
+type RenderProps = PlateElementProps<EmptyVoidElement>;
 
 export const EmptyVoid = (props: RenderProps) => <PlateElement as="div" {...props} />;

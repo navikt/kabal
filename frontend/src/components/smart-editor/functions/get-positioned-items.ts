@@ -1,7 +1,7 @@
 import type { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
-import type { RichText, RichTextEditor } from '@app/plate/types';
+import type { FormattedText, RichTextEditor } from '@app/plate/types';
 import { findNode, isText } from '@udecode/plate-common';
 
 export enum ItemType {
@@ -11,7 +11,7 @@ export enum ItemType {
 
 export interface BookmarkData {
   id: string;
-  nodes: RichText[];
+  nodes: FormattedText[];
   type: ItemType.BOOKMARK;
 }
 

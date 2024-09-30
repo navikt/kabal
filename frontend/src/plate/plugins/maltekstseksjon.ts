@@ -1,8 +1,12 @@
+import { Maltekstseksjon } from '@app/plate/components/maltekstseksjon/maltekstseksjon';
 import { ELEMENT_MALTEKSTSEKSJON } from '@app/plate/plugins/element-types';
-import { createPluginFactory } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 
-export const createMaltekstseksjonPlugin = createPluginFactory({
+export const MaltekstseksjonPlugin = createPlatePlugin({
   key: ELEMENT_MALTEKSTSEKSJON,
-  isElement: true,
-  isVoid: false,
+  node: {
+    isElement: true,
+    isVoid: false,
+    component: Maltekstseksjon,
+  },
 });

@@ -15,8 +15,8 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import { insertPageBreak } from '@app/plate/utils/transforms';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
-import { setNodes } from '@udecode/plate-common';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin, setNodes } from '@udecode/plate-common';
+
 import { styled } from 'styled-components';
 
 export const DefaultToolbarButtons = () => {
@@ -61,10 +61,10 @@ export const DefaultToolbarButtons = () => {
 
       <ToolbarIconButton
         label="Normal tekst"
-        onClick={() => setNodes(editor, { type: ELEMENT_PARAGRAPH })}
+        onClick={() => setNodes(editor, { type: BaseParagraphPlugin.node.type })}
         icon={<TextDescription aria-hidden width={24} />}
         disabled={unchangeable}
-        active={useIsElementActive(ELEMENT_PARAGRAPH)}
+        active={useIsElementActive(BaseParagraphPlugin.node.type)}
       />
 
       <Headings />

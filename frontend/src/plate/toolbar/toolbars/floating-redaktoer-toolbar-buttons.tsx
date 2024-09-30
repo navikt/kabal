@@ -1,4 +1,5 @@
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
+import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
+import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { Abbreviation } from '@app/plate/toolbar/abbreviation';
 import { Headings } from '@app/plate/toolbar/headings';
 import { Indent } from '@app/plate/toolbar/indent';
@@ -6,26 +7,32 @@ import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { findNode, isElement, useEditorState } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin, findNode, isElement } from '@udecode/plate-common';
+import { useEditorState } from '@udecode/plate-core/react';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
 
 export const FloatingRedaktoerToolbarButtons = () => {
   const editor = useEditorState();
 
-  const activeElement = findNode(editor, {
+  const activeEntry = findNode(editor, {
     match: (n) => isElement(n) && n.type !== ELEMENT_REDIGERBAR_MALTEKST && n.type !== ELEMENT_MALTEKST,
     mode: 'lowest',
   });
 
-  if (activeElement === undefined) {
+  if (activeEntry === undefined) {
     return null;
   }
 
-  const [{ type }] = activeElement;
+  const [node] = activeEntry;
 
-  if (type === ELEMENT_LI || type === ELEMENT_LIC) {
+  if (!isElement(node)) {
+    return null;
+  }
+
+  const { type } = node;
+
+  if (type === BaseListItemPlugin.node.type || type === BaseListItemContentPlugin.node.type) {
     return (
       <>
         <Marks />
@@ -37,7 +44,7 @@ export const FloatingRedaktoerToolbarButtons = () => {
     );
   }
 
-  if (type === ELEMENT_PARAGRAPH) {
+  if (type === BaseParagraphPlugin.node.type) {
     return (
       <>
         <Marks />
@@ -51,7 +58,7 @@ export const FloatingRedaktoerToolbarButtons = () => {
     );
   }
 
-  if (type === ELEMENT_H1 || type === ELEMENT_H2 || type === ELEMENT_H3) {
+  if (type === HEADING_KEYS.h1 || type === HEADING_KEYS.h2 || type === HEADING_KEYS.h3) {
     return (
       <>
         <ParagraphButton />
@@ -62,7 +69,7 @@ export const FloatingRedaktoerToolbarButtons = () => {
     );
   }
 
-  if (type === ELEMENT_PLACEHOLDER) {
+  if (type === RedaktoerPlaceholderPlugin.node.type) {
     return (
       <>
         <Marks />

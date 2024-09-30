@@ -4,7 +4,7 @@ import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-
 import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
 import { UNTRANSLATED } from '@app/types/texts/language';
 import type { IRegelverk } from '@app/types/texts/responses';
@@ -19,7 +19,7 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
   const [updateRichText, richTextStatus] = useUpdateRichTextMutation({ fixedCacheKey: text.id });
   const [publish] = usePublishMutation();
   const savedRichText = text.richText[UNTRANSLATED];
-  const [richText, setRichText] = useState<EditorValue>(savedRichText);
+  const [richText, setRichText] = useState<KabalValue>(savedRichText);
 
   useEffect(() => {
     if (areDescendantsEqual(richText, savedRichText)) {
@@ -51,7 +51,7 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
       <RedaktoerRichText
         editorId={text.id}
         savedContent={savedRichText}
-        onChange={setRichText}
+        onChange={({ value }) => setRichText(value)}
         lang={SpellCheckLanguage.NB}
       />
     </Edit>

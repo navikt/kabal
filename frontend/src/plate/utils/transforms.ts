@@ -1,9 +1,8 @@
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { PlaceholderElement, RichTextEditor } from '@app/plate/types';
+import type { PlaceholderElement } from '@app/plate/types';
 import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
 import {
-  type PlateEditor,
   findNode,
   insertElements,
   insertNodes,
@@ -13,9 +12,10 @@ import {
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
-export const insertPageBreak = (editor: RichTextEditor): boolean => {
+export const insertPageBreak = (editor: PlateEditor): boolean => {
   if (isInTable(editor)) {
     return false;
   }

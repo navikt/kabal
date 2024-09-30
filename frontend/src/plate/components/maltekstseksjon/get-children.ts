@@ -15,17 +15,15 @@ import type {
   ParentOrChildElement,
   PlaceholderElement,
   RedigerbarMaltekstElement,
-  RootElement,
 } from '@app/plate/types';
 import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText } from '@app/types/texts/consumer';
 import type { Language } from '@app/types/texts/language';
-import { type TElement, getNodeElements, getNodeString, isElement } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { BaseParagraphPlugin, type TElement, getNodeElements, getNodeString, isElement } from '@udecode/plate-common';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseTablePlugin } from '@udecode/plate-table';
 
 export const getNewChildren = (
   texts: IConsumerRichText[],
@@ -122,14 +120,14 @@ const getPlaceholders = (element: TElement): PlaceholderElement[] => {
   return list;
 };
 
-const isParentOrChildElement = (node: RootElement): node is ParentOrChildElement =>
+const isParentOrChildElement = (node: TElement): node is ParentOrChildElement =>
   isOfElementTypesFn([
-    ELEMENT_PARAGRAPH,
-    ELEMENT_H1,
-    ELEMENT_H2,
-    ELEMENT_H3,
-    ELEMENT_UL,
-    ELEMENT_OL,
-    ELEMENT_TABLE,
+    BaseParagraphPlugin.key,
+    HEADING_KEYS.h1,
+    HEADING_KEYS.h2,
+    HEADING_KEYS.h3,
+    BaseBulletedListPlugin.key,
+    BaseNumberedListPlugin.key,
+    BaseTablePlugin.key,
     ELEMENT_LABEL_CONTENT,
   ])(node);

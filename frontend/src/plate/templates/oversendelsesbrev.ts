@@ -15,7 +15,7 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { TemplateSections } from '../template-sections';
 
 export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -29,7 +29,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
 
     {
-      type: ELEMENT_PARAGRAPH,
+      type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
         createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME, 'Den ankende part'),
@@ -52,7 +52,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createMaltekstseksjon(TemplateSections.TITLE),
 
     {
-      type: ELEMENT_PARAGRAPH,
+      type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
         createLabelContent(Source.SAKEN_GJELDER_NAME, 'Den ankende part'),

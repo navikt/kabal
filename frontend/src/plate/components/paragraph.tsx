@@ -1,31 +1,31 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { EditorValue, ParagraphElement, PlaceholderElement } from '@app/plate/types';
-import { PlateElement, type PlateElementProps, isText } from '@udecode/plate-common';
+import type { ParagraphElement, PlaceholderElement } from '@app/plate/types';
+import { isText } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { type ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
-type RenderProps = PlateElementProps<EditorValue, ParagraphElement>;
+type RenderProps = PlateElementProps<ParagraphElement>;
 
-export const Paragraph = forwardRef<ElementRef<typeof PlateElement>, RenderProps>(
-  ({ children, element, ...props }, ref) => {
-    const indent = ptToEm((element.indent ?? 0) * 24);
+export const Paragraph = forwardRef<ElementRef<typeof PlateElement>, RenderProps>((props, ref) => {
+  const { children, element } = props;
+  const indent = ptToEm((element.indent ?? 0) * 24);
 
-    return (
-      <PlateElement asChild ref={ref} element={element} {...props}>
-        <StyledParagraph
-          style={{
-            marginLeft: element.align !== 'right' ? indent : undefined,
-            marginRight: element.align === 'right' ? indent : undefined,
-            textAlign: element.align,
-          }}
-          $isEmpty={isEmpty(element)}
-        >
-          {children}
-        </StyledParagraph>
-      </PlateElement>
-    );
-  },
-);
+  return (
+    <PlateElement {...props} asChild ref={ref}>
+      <StyledParagraph
+        style={{
+          marginLeft: element.align !== 'right' ? indent : undefined,
+          marginRight: element.align === 'right' ? indent : undefined,
+          textAlign: element.align,
+        }}
+        $isEmpty={isEmpty(element)}
+      >
+        {children}
+      </StyledParagraph>
+    </PlateElement>
+  );
+});
 
 Paragraph.displayName = 'Paragraph';
 

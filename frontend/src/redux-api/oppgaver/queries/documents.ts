@@ -1,6 +1,6 @@
 import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ELEMENT_LABEL_CONTENT } from '@app/plate/plugins/element-types';
-import { type EditorValue, TextAlign } from '@app/plate/types';
+import { type KabalValue, TextAlign } from '@app/plate/types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import type {
@@ -11,7 +11,7 @@ import type {
 } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
@@ -34,7 +34,7 @@ const transformResponse = (document: IMainDocument): IMainDocument => {
     content: document.content.map((content) => {
       if (content.type === ELEMENT_LABEL_CONTENT) {
         return {
-          type: ELEMENT_PARAGRAPH,
+          type: BaseParagraphPlugin.key,
           align: TextAlign.LEFT,
           children: [{ text: '' }, content, { text: '' }],
         };
@@ -92,7 +92,7 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, dokumentId }) =>
         `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions`,
     }),
-    getSmartDocumentVersion: builder.query<EditorValue, IGetVersionParams>({
+    getSmartDocumentVersion: builder.query<KabalValue, IGetVersionParams>({
       query: ({ oppgaveId, dokumentId, versionId }) =>
         `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions/${versionId}`,
     }),

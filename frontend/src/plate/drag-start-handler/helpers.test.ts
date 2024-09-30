@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin } from '@udecode/plate-common';
 import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '../plugins/element-types';
 import { cleanHtml, containsNoopElements, htmlToString, scrubText } from './helpers';
 
@@ -69,7 +69,7 @@ describe('cleanHtml', () => {
     expect.assertions(1);
 
     const element = document.createElement('div');
-    element.setAttribute('data-element', ELEMENT_PARAGRAPH);
+    element.setAttribute('data-element', BaseParagraphPlugin.key);
 
     expect(cleanHtml(element)).toStrictEqual(element);
   });

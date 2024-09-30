@@ -2,15 +2,15 @@ import { getCurrentRow } from '@app/plate/toolbar/table/helpers';
 import type { ParagraphElement, RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 import {
-  findNodePath,
+  BaseParagraphPlugin,
   getNextNode,
   isElementEmpty,
   mergeNodes,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { findNodePath } from '@udecode/slate-react';
 
 export const mergeCells = (
   editor: RichTextEditor,
@@ -25,7 +25,7 @@ export const mergeCells = (
 
   const [row] = rowEntry;
 
-  if (!isOfElementType<TableRowElement>(row, ELEMENT_TR)) {
+  if (!isOfElementType<TableRowElement>(row, BaseTableRowPlugin.node.type)) {
     return cellPath;
   }
 
@@ -36,7 +36,7 @@ export const mergeCells = (
 
   const nextEntry = getNextNode<TableCellElement>(editor, {
     at: cellPath,
-    match: isOfElementTypeFn(ELEMENT_TD),
+    match: isOfElementTypeFn(BaseTableCellPlugin.node.type),
   });
 
   if (nextEntry === undefined) {
@@ -49,7 +49,7 @@ export const mergeCells = (
     mergeNodes(editor, { at: nextPath });
     mergeNodes(editor, {
       at: cellPath,
-      match: (n) => isOfElementType<ParagraphElement>(n, ELEMENT_PARAGRAPH) && isElementEmpty(editor, n),
+      match: (n) => isOfElementType<ParagraphElement>(n, BaseParagraphPlugin.node.type) && isElementEmpty(editor, n),
     });
 
     const colSpan = (cellNode.colSpan ?? 1) + (nextCell.colSpan ?? 1);

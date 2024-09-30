@@ -1,17 +1,17 @@
 import { createEmptyVoid } from '@app/plate/templates/helpers';
-import type { EditorValue, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import type { MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import {
-  type PlateEditor,
   replaceNodeChildren,
   setNodes,
   unsetNodes,
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import type { Path } from 'slate';
 
 export const replaceNodes = (
-  editor: PlateEditor<EditorValue>,
+  editor: PlateEditor,
   path: Path | undefined,
   id: string | null,
   textIdList: string[] | null,

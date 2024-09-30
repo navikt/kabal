@@ -1,4 +1,4 @@
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import type { IGetTextsParams, RichTextTypes } from '../common-text-types';
 import type { Language, UNTRANSLATED } from './language';
 import type { IText } from './responses';
@@ -25,7 +25,7 @@ export interface IDeleteTextDraftParams extends IUpdateBaseParams {
 }
 
 export interface IUpdateRichTextContentParams extends IUpdateBaseParams {
-  richText: EditorValue | null;
+  richText: KabalValue | null;
   language: Language | typeof UNTRANSLATED;
 }
 

@@ -6,8 +6,9 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { isCollapsed, isEditorFocused, someNode } from '@udecode/plate-common';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { isCollapsed, someNode } from '@udecode/plate-common';
+import { BaseTablePlugin } from '@udecode/plate-table';
+import { isEditorFocused } from '@udecode/slate-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -29,7 +30,7 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
   const editor = useMyPlateEditorRef();
   const [toolbarRef, setRef] = useState<HTMLElement | null>(null);
   const selection = useSelection(editorId);
-  const isInTable = someNode(editor, { match: { type: ELEMENT_TABLE } });
+  const isInTable = someNode(editor, { match: { type: BaseTablePlugin.node.type } });
   const position = getRangePosition(editor, isInTable ? null : selection, container);
   const isFocused = isEditorFocused(editor);
 

@@ -1,9 +1,12 @@
 import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
+import { hasOwn } from '@app/functions/object';
 import { pushEvent } from '@app/observability';
-import { useMyPlateEditorState } from '@app/plate/types';
+import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { type TNode, getNodeString, setNodes, toDOMNode } from '@udecode/plate-common';
+import { type TNode, getNodeString, unsetNodes } from '@udecode/plate-common';
+import { toDOMNode } from '@udecode/plate-common/react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -53,7 +56,12 @@ export const Bookmarks = ({ editorId }: Props) => {
               variant="tertiary-neutral"
               onClick={() => {
                 pushEvent('remove-bookmark', 'smart-editor');
-                setNodes(editor, { [key]: undefined }, { match: (n) => key in n, mode: 'lowest', at: [] });
+                unsetNodes<FormattedText>(editor, [BookmarkPlugin.key, key], {
+                  match: (n) => hasOwn(n, key),
+                  mode: 'lowest',
+                  at: [],
+                  split: true,
+                });
               }}
               icon={<TrashIcon aria-hidden />}
             />

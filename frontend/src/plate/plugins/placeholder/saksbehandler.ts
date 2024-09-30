@@ -1,39 +1,35 @@
+import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import {
-  type PlateEditor,
-  type TNodeEntry,
-  createPluginFactory,
-  findNode,
-  getNextNode,
-  getPreviousNode,
-  isElement,
-  select,
-  toDOMNode,
-} from '@udecode/plate-common';
+import { type TNodeEntry, findNode, getNextNode, getPreviousNode, isElement, select } from '@udecode/plate-common';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { toDOMNode } from '@udecode/slate-react';
 import type { BasePoint } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 
-export const createSaksbehandlerPlaceholderPlugin = createPluginFactory({
+export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
   key: ELEMENT_PLACEHOLDER,
-  isElement: true,
-  isVoid: false,
-  isInline: true,
-  withOverrides,
+  node: {
+    isElement: true,
+    isVoid: false,
+    isInline: true,
+    component: SaksbehandlerPlaceholder,
+  },
+  extendEditor: ({ editor }) => withOverrides(editor),
   handlers: {
-    onKeyDown: (editor) => (e) => {
-      if (handleSelectAll(editor, e) || handleArrows(editor, e)) {
+    onKeyDown: ({ editor, event }) => {
+      if (handleSelectAll(editor, event) || handleArrows(editor, event)) {
         return;
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
-        e.preventDefault();
-        e.stopPropagation();
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'j') {
+        event.preventDefault();
+        event.stopPropagation();
 
         const current = findNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-        const getEntry = e.shiftKey ? getPreviousNode : getNextNode;
+        const getEntry = event.shiftKey ? getPreviousNode : getNextNode;
 
         const nextOrPrevious = getEntry<PlaceholderElement>(editor, {
           match: (n) => isElement(n) && n.type === ELEMENT_PLACEHOLDER && n !== current?.[0],
@@ -46,7 +42,7 @@ export const createSaksbehandlerPlaceholderPlugin = createPluginFactory({
         const firstOrLast = findNode<PlaceholderElement>(editor, {
           match: { type: ELEMENT_PLACEHOLDER },
           at: [],
-          reverse: e.shiftKey,
+          reverse: event.shiftKey,
         });
 
         if (firstOrLast !== undefined) {

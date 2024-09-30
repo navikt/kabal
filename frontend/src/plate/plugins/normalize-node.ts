@@ -25,26 +25,29 @@ import {
 } from '@app/plate/templates/helpers';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import {
-  type PlateEditor,
+  BaseParagraphPlugin,
   type TNode,
   type TPath,
-  type Value,
-  createPluginFactory,
   getNode,
   getParentNode,
   insertNodes,
   isElement,
   setNodes,
 } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import {
+  BaseBulletedListPlugin,
+  BaseListItemContentPlugin,
+  BaseListItemPlugin,
+  BaseNumberedListPlugin,
+} from '@udecode/plate-list';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { Scrubber } from 'slate';
 
-export const createNormalizeNodePlugin = createPluginFactory({
+export const normalizeNodePlugin = createPlatePlugin({
   key: 'normalize',
-  withOverrides: (editor) => {
+  extendEditor: ({ editor }) => {
     const { normalizeNode } = editor;
 
     editor.normalizeNode = ([node, path]) => {
@@ -74,10 +77,10 @@ export const createNormalizeNodePlugin = createPluginFactory({
         }
 
         switch (parentNode.type) {
-          case ELEMENT_LI: {
+          case BaseListItemPlugin.key: {
             pushLog('Normalized missing LIC', options);
 
-            return setNodes(editor, { type: ELEMENT_LIC }, { at: path, match: (n) => n === node });
+            return setNodes(editor, { type: BaseListItemContentPlugin.key }, { at: path, match: (n) => n === node });
           }
           default:
             pushLog(
@@ -96,16 +99,16 @@ export const createNormalizeNodePlugin = createPluginFactory({
         const options = { at: [...path, 0] };
 
         switch (node.type) {
-          case ELEMENT_UL:
-          case ELEMENT_OL:
+          case BaseBulletedListPlugin.key:
+          case BaseNumberedListPlugin.key:
             return insertNodes(editor, createSimpleListItem(), options);
-          case ELEMENT_LI:
+          case BaseListItemPlugin.key:
             return insertNodes(editor, createSimpleListItemContainer(), options);
-          case ELEMENT_TABLE:
+          case BaseTablePlugin.key:
             return insertNodes(editor, createTableRow(), options);
-          case ELEMENT_TR:
+          case BaseTableRowPlugin.key:
             return insertNodes(editor, createTableCell(), options);
-          case ELEMENT_TD:
+          case BaseTableCellPlugin.key:
             return insertNodes(editor, createSimpleParagraph(), options);
           case ELEMENT_REDIGERBAR_MALTEKST:
             return insertNodes(editor, createSimpleParagraph(), options);
@@ -117,11 +120,11 @@ export const createNormalizeNodePlugin = createPluginFactory({
           case ELEMENT_REGELVERK:
             return insertNodes(editor, createRegelverkContainer(), options);
           // Use extensive case instead of default in order to avoid inserting wrong node type when a new element type is introduced
-          case ELEMENT_PARAGRAPH:
-          case ELEMENT_H1:
-          case ELEMENT_H2:
-          case ELEMENT_H3:
-          case ELEMENT_LIC:
+          case BaseParagraphPlugin.key:
+          case HEADING_KEYS.h1:
+          case HEADING_KEYS.h2:
+          case HEADING_KEYS.h3:
+          case BaseListItemContentPlugin.key:
           case ELEMENT_PLACEHOLDER:
           case ELEMENT_PAGE_BREAK:
           case ELEMENT_CURRENT_DATE:
@@ -141,7 +144,7 @@ export const createNormalizeNodePlugin = createPluginFactory({
   },
 });
 
-const pushNodeEvent = (editor: PlateEditor<Value>, node: TNode, path: TPath, name: string) => {
+const pushNodeEvent = (editor: PlateEditor, node: TNode, path: TPath, name: string) => {
   const [highestAncestorPath] = path;
   const highestAncestor =
     highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));

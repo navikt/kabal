@@ -1,7 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import {
   ConsumerMaltekstseksjonerTagTypes,
   consumerMaltekstseksjonerApi,
@@ -533,7 +533,7 @@ export const {
   useUnpublishMaltekstseksjonMutation,
 } = maltekstseksjonerMutationSlice;
 
-const getFallbackContent = (language: Language, richTexts: INewRichTextParams['richText']): EditorValue => {
+const getFallbackContent = (language: Language, richTexts: INewRichTextParams['richText']): KabalValue => {
   for (const lang of LANGUAGES) {
     if (lang === language) {
       continue;

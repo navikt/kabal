@@ -23,15 +23,14 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TR,
-  deleteColumn,
-  deleteRow,
+  BaseTableCellPlugin,
+  BaseTablePlugin,
+  BaseTableRowPlugin,
   deleteTable,
   insertTableColumn,
   insertTableRow,
 } from '@udecode/plate-table';
+import { deleteColumn, deleteRow } from '@udecode/plate-table/react';
 
 export const TableButtons = () => {
   const editor = useMyPlateEditorRef();
@@ -41,7 +40,7 @@ export const TableButtons = () => {
     return null;
   }
 
-  const activeNode = findNode(editor, { match: (n) => isElement(n) && n.type === ELEMENT_TABLE });
+  const activeNode = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTablePlugin.node.type });
 
   if (activeNode === undefined) {
     return null;
@@ -52,7 +51,7 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til rad over"
         onClick={() => {
-          const activeRow = findNode(editor, { match: (n) => isElement(n) && n.type === ELEMENT_TR });
+          const activeRow = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableRowPlugin.node.type });
 
           if (activeRow === undefined) {
             return;
@@ -71,7 +70,7 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til kolonne til venstre"
         onClick={() => {
-          const activeTd = findNode(editor, { match: (n) => isElement(n) && n.type === ELEMENT_TD });
+          const activeTd = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type });
 
           if (activeTd === undefined) {
             return;
@@ -100,7 +99,7 @@ export const TableButtons = () => {
         label="Slå sammen med celle til høyre"
         onClick={() => {
           const entry = findNode<TableCellElement>(editor, {
-            match: (n) => isElement(n) && n.type === ELEMENT_TD,
+            match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type,
           });
 
           if (entry === undefined) {
@@ -117,7 +116,7 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt over"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(ELEMENT_TABLE) });
+          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
@@ -131,7 +130,7 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt under"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(ELEMENT_TABLE) });
+          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
@@ -147,7 +146,7 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Slett tabell"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(ELEMENT_TABLE) });
+          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;

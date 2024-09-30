@@ -1,5 +1,7 @@
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { formatLongDate } from '@app/domain/date';
+import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { trimFragment } from '@app/plate/plugins/copy/trim-fragment';
 import {
   ELEMENT_CURRENT_DATE,
@@ -18,23 +20,22 @@ import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import type {
   CurrentDateElement,
   FooterElement,
+  FormattedText,
   HeaderElement,
   LabelContentElement,
-  RichText,
   SignatureElement,
 } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 import {
-  type PlateEditor,
   type TDescendant,
   type TNodeEntry,
   type TText,
-  createPluginFactory,
   getNodeFragment,
   getNodeTexts,
   isCollapsed,
   isElement,
 } from '@udecode/plate-common';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
 const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDescendant | TDescendant[] => {
@@ -43,7 +44,7 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
   }
 
   if (!isElement(node)) {
-    return removeCommentMarks(node);
+    return removeCommentAndBookmarkMarks(node);
   }
 
   if (node.type === ELEMENT_EMPTY_VOID) {
@@ -164,7 +165,7 @@ const withOverrides = (editor: PlateEditor) => {
     const [firstNode, firstPath] = firstEntry;
     const [lastNode, lastPath] = lastEntry;
 
-    const selectedTextEntries: TNodeEntry<RichText | TText | { text: '' }>[] =
+    const selectedTextEntries: TNodeEntry<FormattedText | TText | { text: '' }>[] =
       firstEntry === lastEntry
         ? [[{ ...firstNode, text: firstNode.text.slice(start.offset, end.offset) }, firstPath]]
         : [
@@ -179,7 +180,7 @@ const withOverrides = (editor: PlateEditor) => {
   return editor;
 };
 
-const removeCommentMarks = (textNode: TText) => {
+const removeCommentAndBookmarkMarks = (textNode: TText) => {
   const cleanTextNode = { ...textNode };
 
   for (const prop of Object.keys(cleanTextNode)) {
@@ -188,10 +189,13 @@ const removeCommentMarks = (textNode: TText) => {
     }
   }
 
+  delete cleanTextNode[CommentsPlugin.key];
+  delete cleanTextNode[BookmarkPlugin.key];
+
   return cleanTextNode;
 };
 
-export const createCopyPlugin = createPluginFactory({
+export const CopyPlugin = createPlatePlugin({
   key: 'copy',
-  withOverrides,
+  extendEditor: ({ editor }) => withOverrides(editor),
 });

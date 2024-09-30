@@ -1,16 +1,23 @@
+import { HeaderFooter } from '@app/plate/components/header-footer';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
-import { createPluginFactory } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 
-export const createHeaderPlugin = createPluginFactory({
+export const HeaderPlugin = createPlatePlugin({
   key: ELEMENT_HEADER,
-  isElement: true,
-  isVoid: true,
-  isInline: false,
+  node: {
+    isElement: true,
+    isVoid: true,
+    isInline: false,
+    component: HeaderFooter,
+  },
 });
 
-export const createFooterPlugin = createPluginFactory({
+export const FooterPlugin = createPlatePlugin({
   key: ELEMENT_FOOTER,
-  isElement: true,
-  isVoid: true,
-  isInline: false,
+  node: {
+    isElement: true,
+    isVoid: true,
+    isInline: false,
+    component: HeaderFooter,
+  },
 });

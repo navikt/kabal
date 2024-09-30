@@ -2,7 +2,7 @@ import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { EditorValue } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { isApiError } from '@app/types/errors';
@@ -53,7 +53,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
     );
   }
 
-  const savedContent = texts.reduce<EditorValue>((acc, { richText }) => {
+  const savedContent = texts.reduce<KabalValue>((acc, { richText }) => {
     const content = richText[lang];
 
     if (content !== null) {

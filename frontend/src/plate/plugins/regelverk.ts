@@ -1,18 +1,26 @@
+import { Regelverk, RegelverkContainer } from '@app/plate/components/regelverk';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { type TNodeEntry, createPluginFactory, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
+import { type TNodeEntry, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from './element-types';
 
-export const createRegelverkPlugin = createPluginFactory({
+export const RegelverkPlugin = createPlatePlugin({
   key: ELEMENT_REGELVERK,
-  isElement: true,
-  isVoid: false,
-  isInline: false,
+  node: {
+    isElement: true,
+    isVoid: false,
+    isInline: false,
+    component: Regelverk,
+  },
 });
 
-export const createRegelverkContainerPlugin = createPluginFactory({
+export const RegelverkContainerPlugin = createPlatePlugin({
   key: ELEMENT_REGELVERK_CONTAINER,
-  isElement: true,
-  withOverrides: (editor) => {
+  node: {
+    isElement: true,
+    component: RegelverkContainer,
+  },
+  extendEditor: ({ editor }) => {
     const { normalizeNode } = editor;
 
     editor.normalizeNode = ([node, path]: TNodeEntry) => {

@@ -1,21 +1,20 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { type EditorValue, useMyPlateEditorRef } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
+import { useMyPlateEditorRef } from '@app/plate/types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { type ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
+import { type TTableCellElement, setTableColSize } from '@udecode/plate-table';
 import {
-  type TTableCellElement,
-  setTableColSize,
   useTableCellElement,
   useTableCellElementResizable,
   useTableCellElementResizableState,
   useTableCellElementState,
-} from '@udecode/plate-table';
+} from '@udecode/plate-table/react';
 import { forwardRef, useCallback, useContext } from 'react';
 import { styled } from 'styled-components';
 import { StyledParagraph } from '../paragraph';
 
-type TableCellElementProps = PlateElementProps<EditorValue, TTableCellElement>;
+type TableCellElementProps = PlateElementProps<TTableCellElement>;
 
 export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>, TableCellElementProps>(
   ({ className, children, ...props }, ref) => {
