@@ -1,10 +1,8 @@
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { PlatePluginComponent, createPlugins } from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
-import { createYjsPlugin } from '@udecode/plate-yjs';
+import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list/react';
+import { YjsPlugin } from '@udecode/plate-yjs/react';
 import * as Y from 'yjs';
 import { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { TAB_UUID } from '@app/headers';
@@ -123,7 +121,7 @@ export const collaborationSaksbehandlerPlugins = (
   return createPlugins(
     [
       ...saksbehandlerPlugins,
-      createYjsPlugin({
+      YjsPlugin.configure({
         options: {
           cursorOptions: {
             data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,

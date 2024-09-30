@@ -6,7 +6,6 @@ import { PlatePlugin, createInsertDataPlugin, someNode } from '@udecode/plate-co
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
 import { createIndentPlugin } from '@udecode/plate-indent';
 import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragraph';
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
 import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';

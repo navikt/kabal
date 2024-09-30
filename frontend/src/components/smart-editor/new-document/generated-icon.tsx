@@ -18,6 +18,7 @@ import {
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { BaseParagraphPlugin } from '@udecode/plate-common';
 
 interface GeneratedIconProps {
   template: ISmartEditorTemplate;
@@ -54,7 +55,7 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
         y += 5 + SPACING;
         break;
       }
-      case ELEMENT_PARAGRAPH: {
+      case BaseParagraphPlugin.key: {
         rects.push(r({ type, key: i, width: 120, y }));
         y += 5 + SPACING;
         break;
