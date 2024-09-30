@@ -26,11 +26,6 @@ export interface PositionedItem<T extends ThreadData | BookmarkData> {
   floorIndex: number;
 }
 
-const PREFIX_MAP = {
-  [ItemType.THREAD]: COMMENT_PREFIX,
-  [ItemType.BOOKMARK]: '',
-};
-
 interface Positioned<T extends ThreadData | BookmarkData> {
   positionedItems: PositionedItem<T>[];
   maxCount: number;
@@ -46,12 +41,15 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
   let maxCount = 0;
 
   for (let i = 0; i < length; i++) {
-    const item = list[i]!;
+    const item = list[i];
 
-    const leafEntry = findNode(editor, {
-      at: [],
-      match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(`${PREFIX_MAP[item.type]}${item.id}`)),
-    });
+    if (item === undefined) {
+      continue;
+    }
+
+    const mark = item.type === ItemType.THREAD ? `${COMMENT_PREFIX}${item.id}` : item.id;
+
+    const leafEntry = findNode(editor, { at: [], match: (n) => isText(n) && Object.hasOwn(n, mark) });
 
     if (leafEntry === undefined) {
       continue;
@@ -73,11 +71,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
       maxCount = floorIndex + 1;
     }
 
-    if (item.type === ItemType.BOOKMARK) {
-      positionedItems[i] = { data: item, top, floorIndex };
-    } else {
-      positionedItems[i] = { data: item, top, floorIndex };
-    }
+    positionedItems[i] = { data: item, top, floorIndex };
   }
 
   return { positionedItems, maxCount };
