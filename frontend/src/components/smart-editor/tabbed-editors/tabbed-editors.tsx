@@ -40,10 +40,18 @@ interface TabbedProps {
 
 const Tabbed = ({ documents }: TabbedProps) => {
   const firstDocument = useFirstEditor(documents);
-  const { value: editorId = firstDocument?.id ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
+  const firstDocumentId = firstDocument?.id;
+  const { value: editorId = firstDocumentId ?? NEW_TAB_ID, setValue: setEditorId } = useSmartEditorActiveDocument();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
   const activeEditorId = documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
+
+  // If the user does not have access to create documents, select the first document, if any.
+  useEffect(() => {
+    if (!hasDocumentsAccess && firstDocumentId !== undefined && activeEditorId === NEW_TAB_ID) {
+      setEditorId(firstDocumentId ?? NEW_TAB_ID);
+    }
+  }, [activeEditorId, firstDocumentId, hasDocumentsAccess, setEditorId]);
 
   if (documents.length === 0 && !hasDocumentsAccess) {
     return (
