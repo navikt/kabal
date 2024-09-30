@@ -1,5 +1,5 @@
 import {
-  Buldings3Icon,
+  Buildings3Icon,
   BulletListIcon,
   EnvelopeClosedIcon,
   FileIcon,
@@ -43,7 +43,7 @@ export const Nav = () => (
         testId="oppgavestyring-nav-link"
         roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}
       >
-        <Buldings3Icon /> Oppgavestyring
+        <Buildings3Icon /> Oppgavestyring
       </NavItem>
 
       <NavItem to="/maltekstseksjoner" testId="maltekstseksjoner-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
