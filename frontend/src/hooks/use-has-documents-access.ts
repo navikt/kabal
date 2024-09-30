@@ -1,4 +1,5 @@
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
@@ -10,8 +11,8 @@ import { useHasBehandlingAccess } from './oppgavebehandling/use-has-access';
 export const useHasDocumentsAccess = (): boolean => {
   const isFullfoert = useIsFullfoert();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const canEdit = useCanEditBehandling();
   const isFeilregistrert = useIsFeilregistrert();
-  const hasBehandlingAccess = useHasBehandlingAccess();
 
   if (isFeilregistrert) {
     return false;
@@ -21,7 +22,7 @@ export const useHasDocumentsAccess = (): boolean => {
     return hasSaksbehandlerRole;
   }
 
-  return hasBehandlingAccess;
+  return canEdit;
 };
 
 export const useHasUploadAccess = (): boolean => {
