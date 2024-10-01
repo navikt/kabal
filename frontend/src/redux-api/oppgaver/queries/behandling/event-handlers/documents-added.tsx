@@ -27,24 +27,12 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
       }
 
       for (const document of event.documents) {
-        if (
-          !draft.some(
-            (d) =>
-              d.id === document.id ||
-              (d.type === DocumentTypeEnum.JOURNALFOERT &&
-                d.type === document.type &&
-                d.parentId === document.parentId &&
-                d.journalfoertDokumentReference.journalpostId ===
-                  document.journalfoertDokumentReference.journalpostId &&
-                d.journalfoertDokumentReference.dokumentInfoId ===
-                  document.journalfoertDokumentReference.dokumentInfoId),
-          )
-        ) {
+        if (!draft.some((d) => d.id === document.id)) {
           draft.push(document);
         }
       }
 
-      return draft.sort((a, b) => {
+      return draft.toSorted((a, b) => {
         if (a.type === DocumentTypeEnum.JOURNALFOERT) {
           if (b.type === DocumentTypeEnum.JOURNALFOERT) {
             return b.journalfoertDokumentReference.sortKey.localeCompare(a.journalfoertDokumentReference.sortKey);
