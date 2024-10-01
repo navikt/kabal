@@ -4,7 +4,7 @@ import { Descendant, Text } from 'slate';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
 import { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { COMMENT_PREFIX } from '../constants';
@@ -27,7 +27,7 @@ const LOADING: Threads = {
 
 export const useThreads = (): Threads => {
   const oppgaveId = useOppgaveId();
-  const editor = useMyPlateEditorRef();
+  const editor = useMyPlateEditorState();
   const { focusedThreadId, documentId } = useContext(SmartEditorContext);
 
   const query = useMemo(() => {
