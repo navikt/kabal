@@ -44,7 +44,7 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
   const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
-  const [lastEditor] = text.editors.filter(
+  const [lastEdit] = text.edits.filter(
     (e) =>
       e.changeType === TextChangeType.TEXT_ENHETER ||
       e.changeType === TextChangeType.TEXT_SECTIONS ||
@@ -68,7 +68,7 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
         <LineContainer>
           <strong>Sist endret:</strong>
-          <ModifiedCreatedDateTime lastEditor={lastEditor} created={created} />
+          <ModifiedCreatedDateTime lastEdit={lastEdit} created={created} />
         </LineContainer>
 
         <LineContainer>

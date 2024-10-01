@@ -2,7 +2,6 @@ import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { SavedStatus, SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -10,7 +9,7 @@ import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/func
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { IEditor, TextChangeType } from '@app/types/common-text-types';
+import { IEdit, TextChangeType } from '@app/types/common-text-types';
 import { TextType } from '@app/types/texts/common';
 import { LANGUAGE_NAMES, Language } from '@app/types/texts/language';
 import { IText } from '@app/types/texts/responses';
@@ -30,7 +29,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
   const { data: versions = [] } = useGetTextVersionsQuery(text.id);
   const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
 
-  const { id, editors, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList, textType } = text;
+  const { id, edits, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList, textType } = text;
 
   const isDraft = text.publishedDateTime === null;
 
@@ -57,7 +56,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         />
 
         <SavedStatus {...status} />
-        <LastEditor editors={editors} textType={textType} />
+        <LastEdit edits={edits} textType={textType} />
       </Row>
     </Container>
   );
@@ -95,12 +94,12 @@ const DeleteLanguageVersion = ({ deleteTranslation }: DeleteLanguageVersionProps
   );
 };
 
-interface LastEditorProps {
-  editors: IEditor[];
+interface LastEditProps {
+  edits: IEdit[];
   textType: TextType;
 }
 
-const LastEditor = ({ editors, textType }: LastEditorProps) => {
+const LastEdit = ({ edits, textType }: LastEditProps) => {
   const language = useRedaktoerLanguage();
   const changeType: TextChangeType = useMemo(() => {
     if (isRichTextType(textType) || isGodFormuleringType(textType)) {
@@ -114,7 +113,7 @@ const LastEditor = ({ editors, textType }: LastEditorProps) => {
     return language === Language.NB ? TextChangeType.PLAIN_TEXT_NB : TextChangeType.PLAIN_TEXT_NN;
   }, [language, textType]);
 
-  const [lastEdit] = editors.filter(
+  const [lastEdit] = edits.filter(
     (e) => e.changeType === changeType || e.changeType === TextChangeType.TEXT_VERSION_CREATED,
   );
 
@@ -123,10 +122,10 @@ const LastEditor = ({ editors, textType }: LastEditorProps) => {
   }
 
   return (
-    <LastEditorContainer>
+    <LastEditContainer>
       Sist endret: <time dateTime={lastEdit.created}>{isoDateTimeToPretty(lastEdit.created)}</time>, av:{' '}
-      <EditorName editorId={lastEdit.navIdent} />
-    </LastEditorContainer>
+      {lastEdit.actor.navn}
+    </LastEditContainer>
   );
 };
 
@@ -137,7 +136,7 @@ const Container = styled.div`
   padding: 16px;
 `;
 
-const LastEditorContainer = styled.span`
+const LastEditContainer = styled.span`
   display: flex;
   align-items: center;
   white-space: pre;

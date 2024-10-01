@@ -14,6 +14,7 @@ import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/malteksts
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
+import { user } from '@app/static-data/static-data';
 import { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
 import { isApiRejectionError } from '@app/types/errors';
 import {
@@ -198,6 +199,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         const textPatches: PatchResult[] = [];
 
         const nonTrashQuery = { ...query, trash: false };
+        const { navIdent, navn } = await user;
 
         const maltekstseksjonerPatch = dispatch(
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', nonTrashQuery, (draft) =>
@@ -207,8 +209,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
 
                 const publishedProps: Pick<
                   PublishedTextReadOnlyMetadata,
-                  'published' | 'publishedDateTime' | 'publishedBy'
-                > = { published: true, publishedDateTime, publishedBy: 'LOADING' };
+                  'published' | 'publishedDateTime' | 'publishedByActor'
+                > = { published: true, publishedDateTime, publishedByActor: { navIdent, navn } };
 
                 for (const textId of section.textIdList) {
                   textPatches.push(
