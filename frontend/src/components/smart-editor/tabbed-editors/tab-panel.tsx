@@ -30,7 +30,7 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
   }, [canEditDocument, smartDocument]);
 
   return (
-    <StyledTabsPanel value={smartDocument.id}>
+    <StyledTabsPanel value={smartDocument.id} lazy={false}>
       <SmartEditorContextComponent smartDocument={smartDocument}>
         <Editor key={id} smartDocument={smartDocument} />
       </SmartEditorContextComponent>
