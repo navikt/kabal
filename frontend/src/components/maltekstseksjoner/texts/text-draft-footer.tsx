@@ -1,7 +1,6 @@
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { DeleteDraftButton } from '@app/components/smart-editor-texts/delete-draft-button';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -29,7 +28,7 @@ export const DraftTextFooter = ({
 }: Props) => {
   const [, { isLoading: isPublishing }] = usePublishMutation({ fixedCacheKey: text.id });
   const { id, title, modified } = text;
-  const [lastEditor] = text.editors;
+  const [lastEdit] = text.edits;
 
   return (
     <ButtonsContainer>
@@ -57,11 +56,7 @@ export const DraftTextFooter = ({
         </div>
         Sist endret:{' '}
         {isSaving ? <Loader size="xsmall" /> : <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>}
-        {lastEditor === undefined ? null : (
-          <span>
-            , av: <EditorName editorId={lastEditor.navIdent} />
-          </span>
-        )}
+        {lastEdit === undefined ? null : <span>, av: {lastEdit.actor.navn}</span>}
       </Right>
     </ButtonsContainer>
   );

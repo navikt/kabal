@@ -1,3 +1,4 @@
+import { INavEmployee } from '@app/types/bruker';
 import { Language, UNTRANSLATED } from '@app/types/texts/language';
 
 export enum TextChangeType {
@@ -17,10 +18,10 @@ export enum TextChangeType {
   UNKNOWN = 'UNKNOWN',
 }
 
-export interface IEditor {
+export interface IEdit {
   created: string;
   changeType: TextChangeType;
-  navIdent: string;
+  actor: INavEmployee;
 }
 
 export interface ITextBaseMetadata {
@@ -35,7 +36,8 @@ interface ReadOnlyMetadata {
   readonly id: string; // UUID
   readonly modified: string; // Datetime
   readonly created: string; // Datetime
-  readonly editors: IEditor[];
+  readonly createdByActor: INavEmployee;
+  readonly edits: IEdit[];
   readonly versionId: string;
   readonly draftMaltekstseksjonIdList: string[];
   readonly publishedMaltekstseksjonIdList: string[];
@@ -43,13 +45,13 @@ interface ReadOnlyMetadata {
 
 export interface PublishedTextReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: boolean;
-  readonly publishedBy: string | 'LOADING';
+  readonly publishedByActor: INavEmployee;
   readonly publishedDateTime: string;
 }
 
 export interface DraftTextReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: false;
-  readonly publishedBy: null;
+  readonly publishedByActor: null;
   readonly publishedDateTime: null;
 }
 

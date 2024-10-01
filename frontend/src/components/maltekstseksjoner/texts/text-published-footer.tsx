@@ -1,7 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -42,7 +41,7 @@ export const PublishedTextFooter = ({ text, onDraftCreated, maltekstseksjonId, h
           />
         </div>
         Publisert: <time dateTime={publishedDateTime}>{isoDateTimeToPretty(publishedDateTime)}</time>, av:{' '}
-        <EditorName editorId={text.publishedBy} />
+        {text.publishedByActor.navn}
       </Right>
     </Container>
   );
