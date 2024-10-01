@@ -1,3 +1,4 @@
+import { INavEmployee } from '@app/types/bruker';
 import { IPublishedRichText } from '../texts/responses';
 
 enum MaltekstseksjonChangeType {
@@ -13,7 +14,7 @@ enum MaltekstseksjonChangeType {
 }
 
 export interface IEditor {
-  navIdent: string;
+  actor: INavEmployee;
   created: string;
   changeType: MaltekstseksjonChangeType;
 }
@@ -30,7 +31,7 @@ interface ReadOnlyMetadata {
   readonly id: string; // UUID
   readonly modified: string; // Datetime
   readonly created: string; // Datetime
-  readonly editors: IEditor[];
+  readonly edits: IEditor[];
   readonly versionId: string;
   readonly draftMaltekstseksjonIdList: string[];
   readonly publishedMaltekstseksjonIdList: string[];
@@ -38,13 +39,13 @@ interface ReadOnlyMetadata {
 
 interface PublishedReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: boolean;
-  readonly publishedBy: string | 'LOADING';
+  readonly publishedByActor: INavEmployee;
   readonly publishedDateTime: string;
 }
 
 interface DraftReadOnlyMetadata extends ReadOnlyMetadata {
   readonly published: false;
-  readonly publishedBy: null;
+  readonly publishedByActor: null;
   readonly publishedDateTime: null;
 }
 
@@ -53,7 +54,7 @@ export type IPublishedMaltekstseksjon = Filters &
     readonly textIdList: string[];
     readonly modified: string; // Datetime
     readonly created: string; // Datetime
-    readonly createdBy: string;
+    readonly createdByActor: INavEmployee;
   };
 
 export type IDraftMaltekstseksjon = Filters &
@@ -61,7 +62,7 @@ export type IDraftMaltekstseksjon = Filters &
     readonly textIdList: string[];
     readonly modified: string; // Datetime
     readonly created: string; // Datetime
-    readonly createdBy: string;
+    readonly createdByActor: INavEmployee;
   };
 
 export type IMaltekstseksjon = IPublishedMaltekstseksjon | IDraftMaltekstseksjon;

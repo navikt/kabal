@@ -3,7 +3,7 @@ import { Fragment, useCallback, useRef } from 'react';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { TextChangeType } from '@app/types/common-text-types';
-import { IText } from '@app/types/texts/responses';
+import { IPublishedText, IText } from '@app/types/texts/responses';
 
 interface Props {
   versions: IText[];
@@ -39,11 +39,11 @@ export const Changelog = ({ versions }: Props) => {
               {versions.flatMap((version) => (
                 <Fragment key={version.versionId}>
                   {version.published ? <Version {...version} /> : null}
-                  {version.editors.map(({ created, changeType, navIdent }) => (
-                    <Table.Row key={`${changeType}-${created}-${navIdent}`}>
+                  {version.edits.map(({ created, changeType, actor }) => (
+                    <Table.Row key={`${changeType}-${created}-${actor.navIdent}`}>
                       <Table.DataCell>{isoDateTimeToPretty(created)}</Table.DataCell>
                       <Table.DataCell>{CHANGE_TYPE_NAMES[changeType]}</Table.DataCell>
-                      <Table.DataCell>{navIdent}</Table.DataCell>
+                      <Table.DataCell>{actor.navn}</Table.DataCell>
                     </Table.Row>
                   ))}
                 </Fragment>
@@ -56,11 +56,11 @@ export const Changelog = ({ versions }: Props) => {
   );
 };
 
-const Version = ({ publishedBy, publishedDateTime }: IText) => (
+const Version = ({ publishedByActor, publishedDateTime }: IPublishedText) => (
   <VersionRow>
     <Table.DataCell>{isoDateTimeToPretty(publishedDateTime)}</Table.DataCell>
     <Table.DataCell>Publisert</Table.DataCell>
-    <Table.DataCell>{publishedBy}</Table.DataCell>
+    <Table.DataCell>{publishedByActor.navn}</Table.DataCell>
   </VersionRow>
 );
 

@@ -2,45 +2,45 @@ import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@n
 import { Button, Tag } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
+import { INavEmployee } from '@app/types/bruker';
 import { IEditor } from '@app/types/maltekstseksjoner/responses';
 
 interface PublishedProps {
   publishedDateTime: string;
-  publishedBy: string;
+  publishedByActor: INavEmployee;
 }
 
 interface DraftProps {
   publishedDateTime: null;
-  publishedBy: null;
+  publishedByActor: null;
 }
 
 interface Props {
   published: boolean;
   modified: string;
   created: string;
-  createdBy: string;
-  editors: IEditor[];
+  createdByActor: INavEmployee;
+  edits: IEditor[];
   isUpdating: boolean;
 }
 
 export const TextHistory = ({
   publishedDateTime,
-  publishedBy,
+  publishedByActor,
   created,
-  createdBy,
-  editors,
+  createdByActor,
+  edits,
 }: Props & (PublishedProps | DraftProps)) => {
-  const [showEditors, setShowEditors] = useState(false);
+  const [showEdits, setShowEdits] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => setShowEditors(false));
+  useOnClickOutside(ref, () => setShowEdits(false));
 
   return (
     <EditorHistoryContainer ref={ref}>
-      {showEditors && (
+      {showEdits && (
         <EditorList>
           {publishedDateTime !== null ? (
             <ListItem>
@@ -50,19 +50,19 @@ export const TextHistory = ({
               </StyledTag>
               <span>
                 {' '}
-                av <EditorName editorId={publishedBy} /> {isoDateTimeToPretty(publishedDateTime)}
+                av {publishedByActor.navn} {isoDateTimeToPretty(publishedDateTime)}
               </span>
             </ListItem>
           ) : null}
-          {editors.map((editor) => (
-            <ListItem key={editor.navIdent}>
+          {edits.map((edit) => (
+            <ListItem key={edit.actor.navIdent}>
               <StyledTag variant="warning" size="xsmall">
                 <PencilWritingIcon aria-hidden />
                 Endret
               </StyledTag>
               <span>
                 {' '}
-                av <EditorName key={editor.navIdent} editorId={editor.navIdent} /> {isoDateTimeToPretty(editor.created)}
+                av {edit.actor.navn} {isoDateTimeToPretty(edit.created)}
               </span>
             </ListItem>
           ))}
@@ -73,7 +73,7 @@ export const TextHistory = ({
             </StyledTag>
             <span>
               {' '}
-              av <EditorName editorId={createdBy} /> {isoDateTimeToPretty(created)}
+              av {createdByActor.navn} {isoDateTimeToPretty(created)}
             </span>
           </ListItem>
         </EditorList>
@@ -82,13 +82,13 @@ export const TextHistory = ({
         variant="tertiary"
         size="xsmall"
         onClick={() => {
-          const enabled = !showEditors;
+          const enabled = !showEdits;
           pushEvent('toggle-text-history', 'texts', { enabled: enabled.toString() });
-          setShowEditors(enabled);
+          setShowEdits(enabled);
         }}
         icon={<ClockDashedIcon aria-hidden />}
       >
-        {showEditors ? 'Skjul' : 'Vis'} historikk
+        {showEdits ? 'Skjul' : 'Vis'} historikk
       </Button>
     </EditorHistoryContainer>
   );

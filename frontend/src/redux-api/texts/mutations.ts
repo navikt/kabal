@@ -46,7 +46,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         url: `/texts/${id}/publish`,
       }),
       onQueryStarted: async ({ id, query }, { queryFulfilled, dispatch }) => {
-        const { navIdent } = await user;
+        const { navIdent, navn } = await user;
 
         const idPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
@@ -55,7 +55,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
             }
 
             const publishedDateTime = formatISO(new Date());
-            const updated = { ...draft, publishedBy: navIdent, published: true, publishedDateTime };
+            const updated = { ...draft, publishedByActor: { navIdent, navn }, published: true, publishedDateTime };
 
             return updated;
           }),
@@ -542,19 +542,19 @@ const update = (id: string, upd: Update | UpdateFn, query: IGetTextsParams) => {
 };
 
 const pessimisticUpdate = (id: string, data: IText, query: IGetTextsParams, showToast = true) => {
-  const { modified, title, editors } = data;
+  const { modified, title, edits } = data;
 
   if (showToast) {
     toast.success(`Malteksten «${title}» ble oppdatert.`);
   }
 
   reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified, editors })),
+    textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => ({ ...draft, modified, edits })),
   );
 
   reduxStore.dispatch(
     textsQuerySlice.util.updateQueryData('getTexts', { ...query, trash: false }, (draft) =>
-      draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, modified, editors } : t)),
+      draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, modified, edits } : t)),
     ),
   );
 
@@ -565,7 +565,7 @@ const pessimisticUpdate = (id: string, data: IText, query: IGetTextsParams, show
           return version;
         }
 
-        return { ...version, modified, editors };
+        return { ...version, modified, edits };
       }),
     ),
   );

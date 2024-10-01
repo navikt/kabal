@@ -5,7 +5,6 @@ import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
 import {
   TagContainer,
@@ -37,7 +36,7 @@ interface MaltekstProps {
 
 export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreated }: MaltekstProps) => {
   const { textId: activeTextId } = useParams<{ textId: string }>();
-  const { id, title, textIdList, publishedDateTime, versionId, publishedBy } = maltekstseksjon;
+  const { id, title, textIdList, publishedDateTime, versionId, publishedByActor } = maltekstseksjon;
   const [createDraft, { isLoading }] = useCreateDraftFromVersionMutation();
 
   const onCreateDraft = useCallback(async () => {
@@ -57,7 +56,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
               <strong>Publisert:</strong>
               <DateTime dateTime={publishedDateTime} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
             </DateTimeContainer>
-            av {publishedBy === null ? 'Ukjent' : <EditorName editorId={publishedBy} />}
+            av {publishedByActor.navn}
           </LabelValue>
           <TextHistory {...maltekstseksjon} isUpdating={false} />
         </Row>

@@ -1,7 +1,6 @@
 import { Loader } from '@navikt/ds-react';
 import { DateTime } from '@app/components/datetime/datetime';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { EditorName } from '@app/components/editor-name/editor-name';
 import { Filters } from '@app/components/maltekstseksjoner/filters';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
 import {
@@ -46,7 +45,7 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
 
   const isUpdating = isUpdatingTitle || isUpdatingTemplateSections || isUpdatingHjemmelIdList || isUpdatingUtfall;
 
-  const lastEditor = maltekstseksjon.editors.at(-1);
+  const lastEdit = maltekstseksjon.edits.at(-1);
 
   return (
     <Container>
@@ -62,7 +61,7 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
             <strong>Sist endret:</strong>
             {isUpdating ? <Loader size="xsmall" /> : <DateTime dateTime={maltekstseksjon.modified} />}
           </DateTimeContainer>
-          <span>av {lastEditor === undefined ? 'Ukjent' : <EditorName editorId={lastEditor.navIdent} />}</span>
+          <span>av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
           <TextHistory {...maltekstseksjon} isUpdating={isUpdating} />
         </MetadataContainer>
         <Filters maltekst={maltekstseksjon} query={query} />

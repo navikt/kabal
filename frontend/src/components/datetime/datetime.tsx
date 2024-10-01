@@ -1,24 +1,24 @@
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
 import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { IEditor } from '@app/types/common-text-types';
+import { IEdit } from '@app/types/common-text-types';
 
 interface Props {
   created: string;
-  lastEditor: IEditor | undefined;
+  lastEdit: IEdit | undefined;
 }
 
-export const ModifiedCreatedDateTime = ({ lastEditor, created }: Props) => {
-  const isModified = lastEditor !== undefined;
+export const ModifiedCreatedDateTime = ({ lastEdit, created }: Props) => {
+  const isModified = lastEdit !== undefined;
   const Icon = isModified ? CalendarIcon : ClockIcon;
 
-  const dateTime = isModified ? lastEditor.created : created;
+  const dateTime = isModified ? lastEdit.created : created;
   const title = isModified ? 'Sist endret' : 'Opprettet';
 
   return (
     <Wrapper>
       <DateTime icon={<Icon aria-hidden style={{ flexShrink: 0 }} />} dateTime={dateTime} title={title} />
-      {lastEditor === undefined ? null : <span>av {lastEditor.navIdent}</span>}
+      {lastEdit === undefined ? null : <span>av {lastEdit.actor.navIdent}</span>}
     </Wrapper>
   );
 };
