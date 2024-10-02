@@ -20,13 +20,8 @@ readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
   if (existsSync(filePath)) {
     const fileKey = `/assets/${fileName}`;
     const data = readFileSync(filePath);
-    const mimeType = getMimeType(filePath);
 
-    if (mimeType === undefined) {
-      log.warn({ msg: `Unknown MIME type for asset file "${fileName}"`, data: { path: filePath } });
-    }
-
-    files.set(fileKey, { data, mimeType: mimeType ?? 'text/plain' });
+    files.set(fileKey, { data, mimeType: getMimeType(fileName) });
   }
 });
 
