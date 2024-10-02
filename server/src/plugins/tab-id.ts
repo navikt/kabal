@@ -12,7 +12,7 @@ declare module 'fastify' {
 export const TAB_ID_PLUGIN_ID = 'tab-id';
 
 export const tabIdPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('tab_id', '');
 
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
@@ -22,8 +22,6 @@ export const tabIdPlugin = fastifyPlugin(
         req.tab_id = tab_id;
       }
     });
-
-    pluginDone();
   },
   { fastify: '5', name: TAB_ID_PLUGIN_ID },
 );

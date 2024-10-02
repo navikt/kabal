@@ -27,11 +27,9 @@ const serveIndexHandler: RouteHandler = async (_, reply) => {
 export const SERVE_INDEX_PLUGIN_ID = 'serve-index';
 
 export const serveIndexPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.get('/', serveIndexHandler);
     app.get('*', serveIndexHandler);
-
-    pluginDone();
   },
   { fastify: '5', name: SERVE_INDEX_PLUGIN_ID },
 );

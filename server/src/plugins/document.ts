@@ -52,7 +52,7 @@ const QUERYSTRING = Type.Object({
 type QuerystringType = Static<typeof QUERYSTRING>;
 
 export const documentPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app
       .withTypeProvider<TypeBoxTypeProvider>()
 
@@ -193,8 +193,6 @@ export const documentPlugin = fastifyPlugin(
           return send(reply, url, documentIdList, metadata.title);
         },
       );
-
-    pluginDone();
   },
   { fastify: '5', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );

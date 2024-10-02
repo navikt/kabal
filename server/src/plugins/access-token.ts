@@ -11,7 +11,7 @@ declare module 'fastify' {
 export const ACCESS_TOKEN_PLUGIN_ID = 'access-token';
 
 export const accessTokenPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('accessToken', '');
 
     app.addHook('preHandler', async (req) => {
@@ -21,8 +21,6 @@ export const accessTokenPlugin = fastifyPlugin(
         req.accessToken = accessToken;
       }
     });
-
-    pluginDone();
   },
   { fastify: '5', name: ACCESS_TOKEN_PLUGIN_ID },
 );

@@ -12,7 +12,7 @@ declare module 'fastify' {
 export const CLIENT_VERSION_PLUGIN_ID = 'client-version';
 
 export const clientVersionPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('client_version', '');
 
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
@@ -22,8 +22,6 @@ export const clientVersionPlugin = fastifyPlugin(
         req.client_version = client_version;
       }
     });
-
-    pluginDone();
   },
   { fastify: '5', name: CLIENT_VERSION_PLUGIN_ID },
 );

@@ -11,7 +11,7 @@ const log = getLogger('version');
 const RETRY_DELAY = 5_000;
 
 export const versionPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     const RETRY_SSE = `retry: ${RETRY_DELAY}\n\n`;
     const VERSION_SSE = formatSseEvent(EventNames.SERVER_VERSION, PROXY_VERSION);
 
@@ -78,8 +78,6 @@ export const versionPlugin = fastifyPlugin(
       reply.raw.write(VERSION_SSE);
       reply.raw.write(formatSseEvent(EventNames.UPDATE_REQUEST, getUpdateRequest(req)));
     });
-
-    pluginDone();
   },
   { fastify: '5', name: 'version' },
 );
