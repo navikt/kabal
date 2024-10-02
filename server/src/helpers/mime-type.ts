@@ -1,5 +1,9 @@
-export const getMimeType = (filePath: string): string | undefined => {
-  const extension = filePath.split('.').at(-1);
+import { getLogger } from '@app/logger';
+
+const log = getLogger('mime-types');
+
+export const getMimeType = (fileName: string, quiet = false): string => {
+  const extension = fileName.split('.').at(-1);
 
   switch (extension) {
     case 'css':
@@ -22,7 +26,15 @@ export const getMimeType = (filePath: string): string | undefined => {
       return 'image/x-icon';
     case 'map':
       return 'application/json';
-    default:
-      return undefined;
+    default: {
+      if (!quiet) {
+        log.warn({
+          msg: `Unknown MIME type for asset file "${fileName}", extension: "${extension}"`,
+          data: { fileName, extension },
+        });
+      }
+
+      return 'text/plain';
+    }
   }
 };
