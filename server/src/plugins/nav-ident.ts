@@ -18,7 +18,7 @@ const log = getLogger('nav-ident-plugin');
 export const NAV_IDENT_PLUGIN_ID = 'nav-ident';
 
 export const navIdentPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('navIdent', '');
 
     app.addHook('preHandler', async (req) => {
@@ -57,8 +57,6 @@ export const navIdentPlugin = fastifyPlugin(
         });
       }
     });
-
-    pluginDone();
   },
   {
     fastify: '5',

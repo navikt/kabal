@@ -20,7 +20,7 @@ export interface ApiProxyPluginOptions {
 }
 
 export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
-  (app, { appNames }, pluginDone) => {
+  async (app, { appNames }) => {
     app.decorateRequest('proxyStartTime', 0);
 
     app.addHook('onSend', async (req, reply) => {
@@ -116,8 +116,6 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         },
       });
     }
-
-    pluginDone();
   },
   { fastify: '5', name: 'api-proxy', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );

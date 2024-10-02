@@ -29,7 +29,7 @@ const SYNC_NOOP = () => undefined;
 export const OBO_ACCESS_TOKEN_PLUGIN_ID = 'obo-access-token';
 
 export const oboAccessTokenPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('oboAccessTokenMap');
 
     app.addHook('onRequest', async (req): Promise<void> => {
@@ -64,8 +64,6 @@ export const oboAccessTokenPlugin = fastifyPlugin(
       app.decorateRequest('getOboAccessToken', ASYNC_NOOP);
       app.decorateRequest('getCachedOboAccessToken', SYNC_NOOP);
     }
-
-    pluginDone();
   },
   {
     fastify: '5',

@@ -9,7 +9,7 @@ import fastifyPlugin from 'fastify-plugin';
 export const HTTP_LOGGER_PLUGIN_ID = 'http-logger';
 
 export const httpLoggerPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.addHook('onResponse', async (req, res) => {
       const { url } = req;
 
@@ -36,8 +36,6 @@ export const httpLoggerPlugin = fastifyPlugin(
         response_content_type: res.getHeader('content-type'),
       });
     });
-
-    pluginDone();
   },
   {
     fastify: '5',

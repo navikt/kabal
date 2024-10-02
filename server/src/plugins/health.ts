@@ -8,7 +8,7 @@ export const HEALTH_PLUGIN_ID = 'health';
 const log = getLogger('liveness');
 
 export const healthPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.get('/isAlive', (__, reply) => reply.status(200).type('text/plain').send('Alive'));
 
     app.get('/isReady', async (__, reply) => {
@@ -34,8 +34,6 @@ export const healthPlugin = fastifyPlugin(
 
       return reply.status(200).type('text/plain').send('Ready');
     });
-
-    pluginDone();
   },
   { fastify: '5', name: HEALTH_PLUGIN_ID },
 );

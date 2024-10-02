@@ -12,7 +12,7 @@ interface FileEntry {
   mimeType: string;
 }
 
-const files: Map<string, FileEntry> = new Map();
+const FILE_ENTRY_MAP: Map<string, FileEntry> = new Map();
 
 readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
   const filePath = `${ASSETS_FOLDER}/${fileName}`;
@@ -21,16 +21,16 @@ readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
     const fileKey = `/assets/${fileName}`;
     const data = readFileSync(filePath);
 
-    files.set(fileKey, { data, mimeType: getMimeType(fileName) });
+    FILE_ENTRY_MAP.set(fileKey, { data, mimeType: getMimeType(fileName) });
   }
 });
 
 export const SERVE_ASSETS_PLUGIN_ID = 'serve-assets';
 
 export const serveAssetsPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.get('/assets/*', async (req, res) => {
-      const fileEntry = files.get(req.url);
+      const fileEntry = FILE_ENTRY_MAP.get(req.url);
 
       if (fileEntry === undefined) {
         log.warn({ msg: 'File not found', data: { path: req.url } });
@@ -47,8 +47,6 @@ export const serveAssetsPlugin = fastifyPlugin(
 
       return res.send(data);
     });
-
-    pluginDone();
   },
   { fastify: '5', name: SERVE_ASSETS_PLUGIN_ID },
 );

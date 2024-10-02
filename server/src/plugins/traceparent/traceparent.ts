@@ -18,7 +18,7 @@ declare module 'fastify' {
 export const TRACEPARENT_PLUGIN_ID = 'traceparent';
 
 export const traceparentPlugin = fastifyPlugin(
-  (app, _, pluginDone) => {
+  async (app) => {
     app.decorateRequest('traceparent', '');
     app.decorateRequest('trace_id', '');
     app.decorateRequest('span_id', '');
@@ -29,8 +29,6 @@ export const traceparentPlugin = fastifyPlugin(
       req.span_id = span_id;
       req.traceparent = traceparent;
     });
-
-    pluginDone();
   },
   { fastify: '5', name: TRACEPARENT_PLUGIN_ID },
 );

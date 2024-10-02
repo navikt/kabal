@@ -101,7 +101,7 @@ export const SERVER_TIMING_PLUGIN_ID = 'server-timing';
  * - `request.getResponseTime()`: Returns the duration of the request.
  */
 export const serverTimingPlugin = fastifyPlugin<ServerTimingPluginOptions>(
-  (app, { enableAutoTotal = true }, pluginDone) => {
+  async (app, { enableAutoTotal = true }) => {
     app.decorateRequest('startTime', 0);
     app.decorateReply<ServerTiming[] | null>(serverTimingsKey, null);
     app.decorateReply<Map<string, ServerTimingStart> | null>(serverTimingStartsKey, null);
@@ -168,8 +168,6 @@ export const serverTimingPlugin = fastifyPlugin<ServerTimingPluginOptions>(
 
       reply.header(SERVER_TIMING_HEADER, serverTimingHeader.join(', '));
     });
-
-    pluginDone();
   },
   { fastify: '5', name: SERVER_TIMING_PLUGIN_ID },
 );
