@@ -182,7 +182,7 @@ export const crdtPlugin = fastifyPlugin(
 
           logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
 
-          const { navIdent, trace_id, span_id, tab_id, client_version } = req;
+          const { navIdent, trace_id, span_id, tab_id, client_version, headers } = req;
 
           const context: ConnectionContext = {
             behandlingId,
@@ -192,6 +192,7 @@ export const crdtPlugin = fastifyPlugin(
             tab_id,
             client_version,
             navIdent,
+            cookie: headers.cookie,
           };
 
           collaborationServer.handleConnection(webSocket, req.raw, context);

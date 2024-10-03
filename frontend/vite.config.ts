@@ -23,6 +23,7 @@ export default defineConfig({
       '/nytt-dokument': PROXY,
       '/vedleggsoversikt': PROXY,
       '/version': PROXY,
+      '/oauth': PROXY,
     },
   },
 });

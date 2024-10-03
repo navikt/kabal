@@ -14,10 +14,10 @@ import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-e
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
-import { useRefreshOboToken } from '@app/components/smart-editor/tabbed-editors/use-refresh-obo-token';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
+import { hasOwn, isObject } from '@app/functions/object';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { PlateEditor } from '@app/plate/plate-editor';
@@ -109,8 +109,6 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const editor = useMyPlateEditorRef(id);
   const [isConnected, setIsConnected] = useState(editor.yjs.provider.isConnected);
 
-  const oboTokenIsValid = useRefreshOboToken();
-
   // const editor = useMyPlateEditorRef(id);
 
   // useEffect(() => {
@@ -150,11 +148,29 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
 
   useEffect(() => {
     // Close happens after connect is broken. Safe to reconnect.
-    const onClose = () => {
+    const onClose = async () => {
       setIsConnected(false);
 
-      if (oboTokenIsValid) {
-        editor.yjs.provider.connect();
+      try {
+        const res = await fetch('/oauth2/session', { credentials: 'include' });
+
+        if (!res.ok) {
+          throw new Error(`API responded with error code ${res.status} for /oauth2/session`);
+        }
+
+        const data: unknown = await res.json();
+
+        if (
+          isObject(data) &&
+          hasOwn(data, 'session') &&
+          isObject(data.session) &&
+          hasOwn(data.session, 'active') &&
+          data.session.active === true
+        ) {
+          editor.yjs.provider.connect();
+        }
+      } catch (err) {
+        console.error(err);
       }
     };
 
@@ -163,7 +179,7 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
     return () => {
       editor.yjs.provider.off('close', onClose);
     };
-  }, [editor.yjs.provider, oboTokenIsValid]);
+  }, [editor.yjs.provider]);
 
   useEffect(() => {
     // Disconnect happens before close. Too early to reconnect.

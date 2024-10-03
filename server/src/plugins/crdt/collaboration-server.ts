@@ -61,10 +61,39 @@ export const collaborationServer = Server.configure({
     }
 
     const { navIdent } = context;
-    const oboAccessToken = await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API));
+    let oboAccessToken = await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API));
+
+    if (oboAccessToken === null && context.cookie !== undefined) {
+      logContext('Trying to refresh OBO token', context, 'debug');
+
+      try {
+        // Refresh OBO token directly through Wonderwall.
+        const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
+          method: 'GET',
+          headers: {
+            Cookie: context.cookie,
+          },
+        });
+
+        if (res.ok) {
+          oboAccessToken = await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API));
+          logContext('OBO token refreshed', context, 'debug');
+        } else {
+          throw new Error(`Wonderwall responded with status code ${res.status}`);
+        }
+      } catch (err) {
+        logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
+        throw getCloseEvent('MISSING_OBO_TOKEN', 4403);
+      }
+    }
 
     if (oboAccessToken === null) {
-      logContext('No OBO token', context, 'warn');
+      if (context.cookie === undefined) {
+        logContext('Missing session cookie', context, 'warn');
+        throw getCloseEvent('MISSING_COOKIE', 4403);
+      }
+
+      logContext('Missing OBO token', context, 'warn');
       throw getCloseEvent('MISSING_OBO_TOKEN', 4403);
     }
 
