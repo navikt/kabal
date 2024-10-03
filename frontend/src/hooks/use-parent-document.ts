@@ -4,9 +4,9 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import {
   DocumentTypeEnum,
   IFileDocument,
-  IJournalfoertDokumentReference,
   IMainDocument,
   ISmartDocument,
+  JournalfoertDokument,
 } from '@app/types/documents/documents';
 
 export const useParentDocument = (parentId: string | null): IMainDocument | undefined => {
@@ -22,10 +22,10 @@ export const useAttachments = (parentId: string | null | undefined) => {
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
 
   const pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[] = [];
-  const journalfoertDocumentReferences: IJournalfoertDokumentReference[] = [];
+  const journalfoerteDocuments: JournalfoertDokument[] = [];
 
   if (parentId === null || parentId === undefined) {
-    return { pdfOrSmartDocuments, journalfoertDocumentReferences };
+    return { pdfOrSmartDocuments, journalfoerteDocuments };
   }
 
   for (const d of data) {
@@ -34,11 +34,11 @@ export const useAttachments = (parentId: string | null | undefined) => {
     }
 
     if (d.type === DocumentTypeEnum.JOURNALFOERT) {
-      journalfoertDocumentReferences.push(d);
+      journalfoerteDocuments.push(d);
     } else {
       pdfOrSmartDocuments.push(d);
     }
   }
 
-  return { pdfOrSmartDocuments, journalfoertDocumentReferences };
+  return { pdfOrSmartDocuments, journalfoerteDocuments };
 };

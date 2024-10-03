@@ -10,9 +10,9 @@ import {
   DistribusjonsType,
   DocumentTypeEnum,
   IFileDocument,
-  IJournalfoertDokumentReference,
   IMainDocument,
   ISmartDocument,
+  JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
@@ -21,14 +21,14 @@ import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandli
 interface Props {
   document: IMainDocument;
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+  journalfoerteDocuments: JournalfoertDokument[];
 }
 
-export const FinishButton = ({ document, pdfOrSmartDocuments, journalfoertDocumentReferences }: Props) => {
+export const FinishButton = ({ document, pdfOrSmartDocuments, journalfoerteDocuments }: Props) => {
   const { data: oppgave } = useOppgave();
   const hasArchiveAccess = useHasArchiveAccess(document);
   const containsRolPDFOrSmartAttachments = useContainsRolAttachments(document, pdfOrSmartDocuments);
-  const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoertDocumentReferences);
+  const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoerteDocuments);
   const containsRolAttachments = containsRolPDFOrSmartAttachments || containsRolJournalfoerteAttachments;
 
   if (!hasArchiveAccess || document.parentId !== null || oppgave === undefined) {

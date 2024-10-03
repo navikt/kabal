@@ -1,8 +1,8 @@
-import { IJournalfoertDokumentReference } from '@app/types/documents/documents';
+import { JournalfoertDokument } from '@app/types/documents/documents';
 import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export interface ICreateVedleggFromJournalfoertDocumentResponse {
-  addedJournalfoerteDokumenter: IJournalfoertDokumentReference[];
+  addedJournalfoerteDokumenter: JournalfoertDokument[];
   duplicateJournalfoerteDokumenter: IJournalfoertDokumentId[];
 }
 

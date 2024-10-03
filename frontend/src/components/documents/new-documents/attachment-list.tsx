@@ -6,12 +6,7 @@ import { NewAttachmentButtons } from '@app/components/documents/new-documents/ne
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
-import {
-  IFileDocument,
-  IJournalfoertDokumentReference,
-  IMainDocument,
-  ISmartDocument,
-} from '@app/types/documents/documents';
+import { IFileDocument, IMainDocument, ISmartDocument, JournalfoertDokument } from '@app/types/documents/documents';
 import {
   NewDocAttachmentsContainer,
   StyledAttachmentList,
@@ -20,7 +15,7 @@ import {
 
 export interface ListProps {
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+  journalfoerteDocuments: JournalfoertDokument[];
   containsRolAttachments: boolean;
 
   pdfLength: number;
@@ -38,7 +33,7 @@ interface Props extends ListProps {
 export const AttachmentList = ({
   parentDocument,
   pdfOrSmartDocuments,
-  journalfoertDocumentReferences,
+  journalfoerteDocuments,
   containsRolAttachments,
   pdfLength,
   journalfoertLength,
@@ -87,7 +82,7 @@ export const AttachmentList = ({
 
         {hasSeparator ? <ListSeparator style={{ top: pdfHeight + overviewHeight }} /> : null}
 
-        {journalfoertDocumentReferences.map((attachment, index) => (
+        {journalfoerteDocuments.map((attachment, index) => (
           <Attachment
             key={attachment.id}
             attachment={attachment}

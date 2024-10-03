@@ -105,22 +105,22 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   language: Language;
 }
 
-export interface IJournalfoertDokument
+export interface JournalfoertDokumentReference
   extends IJournalfoertDokumentId,
     Pick<DokumentInfo, 'harTilgangTilArkivvariant'>,
     Pick<Journalpost, 'datoOpprettet'> {
   sortKey: string;
 }
 
-export interface IJournalfoertDokumentReference extends IBaseDocument<UUID> {
+export interface JournalfoertDokument extends IBaseDocument<UUID> {
   type: DocumentTypeEnum.JOURNALFOERT;
-  journalfoertDokumentReference: IJournalfoertDokument;
+  journalfoertDokumentReference: JournalfoertDokumentReference;
   isSmartDokument: false;
   templateId?: never;
   content?: never;
 }
 
-export type IMainDocument = IFileDocument | ISmartDocument | IJournalfoertDokumentReference;
+export type IMainDocument = IFileDocument | ISmartDocument | JournalfoertDokument;
 
 export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
 

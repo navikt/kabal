@@ -39,7 +39,7 @@ interface Props {
 
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const canEditDocument = useCanEditDocument(document, parentDocument);
-  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(document.id);
+  const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
   const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
@@ -56,7 +56,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const isMainDocument = document.parentId === null;
   const isRolQuestions = getIsRolQuestions(document);
 
-  const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoertDocumentReferences.length > 0;
+  const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoerteDocuments.length > 0;
 
   return (
     <>
@@ -125,7 +125,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
         {canDelete ? <DeleteDocumentButton document={document} /> : null}
         <FinishButton
           document={document}
-          journalfoertDocumentReferences={journalfoertDocumentReferences}
+          journalfoerteDocuments={journalfoerteDocuments}
           pdfOrSmartDocuments={pdfOrSmartDocuments}
         />
       </Modal.Footer>
