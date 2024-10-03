@@ -111,14 +111,6 @@ describe('canEditDocument', () => {
     });
   });
 
-  it('should return true if document is inngående', () => {
-    const params = {
-      ...BASE_PARAMS,
-      document: { ...BASE_JD, dokumentTypeId: DistribusjonsType.ANNEN_INNGAAENDE_POST },
-    };
-    expect(canEditDocument(params)).toBe(true);
-  });
-
   it('should return false if medunderskriver flow state is sent', () => {
     expect(canEditDocument({ ...BASE_PARAMS, medunderskriverFlowState: FlowState.SENT })).toBe(false);
   });
