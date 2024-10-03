@@ -4,16 +4,10 @@ import {
   IJournalfoertDokumentReference,
   IMainDocument,
 } from '@app/types/documents/documents';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
-export const isSentToRol = (oppgave: IOppgavebehandling) =>
-  (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
-  oppgave.rol.flowState === FlowState.SENT;
-
-export const canRolEditDocument = (document: IMainDocument, oppgave: IOppgavebehandling) => {
-  if (!isSentToRol(oppgave)) {
+export const canRolEditDocument = (document: IMainDocument, flowState: FlowState | null) => {
+  if (flowState !== FlowState.SENT) {
     return false;
   }
 

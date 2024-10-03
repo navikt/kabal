@@ -10,8 +10,9 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState } from '@app/types/oppgave-common';
 import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { isSentToRol } from './common';
 
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
@@ -75,3 +76,7 @@ const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: strin
 
 const canRolActOnDocument = (document: IMainDocument, oppgave: IOppgavebehandling) =>
   getIsRolQuestions(document) && isSentToRol(oppgave);
+
+const isSentToRol = (oppgave: IOppgavebehandling) =>
+  (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+  oppgave.rol.flowState === FlowState.SENT;

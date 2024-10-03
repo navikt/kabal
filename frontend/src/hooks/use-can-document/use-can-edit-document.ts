@@ -8,6 +8,7 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import { CreatorRole, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 
 export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
@@ -21,6 +22,49 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
 
   const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
 
+  if (!isSuccess) {
+    return false;
+  }
+
+  return canEditDocument({
+    isRol,
+    document,
+    isFullfoert,
+    isFeilregistrert,
+    hasMerkantilRole,
+    hasSaksbehandlerRole,
+    isTildeltSaksbehandler,
+    parentIsMarkertAvsluttet,
+    medunderskriverFlowState: oppgave.medunderskriver.flowState,
+    rolFlowState: oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? null : oppgave.rol.flowState,
+  });
+};
+
+export interface CanEditDocumentParams {
+  medunderskriverFlowState: FlowState;
+  parentIsMarkertAvsluttet: boolean;
+  document: IMainDocument | null;
+  rolFlowState: FlowState | null;
+  isTildeltSaksbehandler: boolean;
+  hasSaksbehandlerRole: boolean;
+  hasMerkantilRole: boolean;
+  isFeilregistrert: boolean;
+  isFullfoert: boolean;
+  isRol: boolean;
+}
+
+export const canEditDocument = ({
+  isRol,
+  document,
+  isFullfoert,
+  rolFlowState,
+  isFeilregistrert,
+  hasMerkantilRole,
+  hasSaksbehandlerRole,
+  isTildeltSaksbehandler,
+  medunderskriverFlowState,
+  parentIsMarkertAvsluttet,
+}: CanEditDocumentParams) => {
   if (parentIsMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
     return false;
   }
@@ -39,11 +83,7 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
     return true;
   }
 
-  if (!isSuccess) {
-    return false;
-  }
-
-  if (oppgave.medunderskriver.flowState === FlowState.SENT) {
+  if (medunderskriverFlowState === FlowState.SENT) {
     return false;
   }
 
@@ -56,7 +96,7 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
   }
 
   if (isRol) {
-    return canRolEditDocument(document, oppgave);
+    return canRolEditDocument(document, rolFlowState);
   }
 
   return false;

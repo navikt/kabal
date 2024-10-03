@@ -15,7 +15,7 @@ export const useIsRol = () => {
 
     return (
       isRolWithAnyFlowState &&
-      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
       oppgave.rol.flowState !== FlowState.NOT_SENT
     );
   }, [oppgave, isSuccess, isRolWithAnyFlowState]);
@@ -32,7 +32,7 @@ export const useIsRolWithAnyFlowState = () => {
     }
 
     return (
-      (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
+      oppgave.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
       oppgave.rol.employee !== null &&
       oppgave.rol.employee.navIdent === user.navIdent
     );
