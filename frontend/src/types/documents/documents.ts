@@ -52,7 +52,7 @@ export enum CreatorRole {
   NONE = 'NONE',
 }
 
-interface IBaseDocument<P extends string | null = UUID | null> {
+export interface IBaseDocument<P extends string | null = UUID | null> {
   type: DocumentTypeEnum;
   id: UUID;
   tittel: string;
@@ -105,7 +105,7 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   language: Language;
 }
 
-interface IJournalfoertDokument
+export interface IJournalfoertDokument
   extends IJournalfoertDokumentId,
     Pick<DokumentInfo, 'harTilgangTilArkivvariant'>,
     Pick<Journalpost, 'datoOpprettet'> {
