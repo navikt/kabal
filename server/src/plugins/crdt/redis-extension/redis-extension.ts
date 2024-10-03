@@ -142,13 +142,6 @@ export class RedisExtension implements Extension {
       return;
     }
 
-    if (!this.instance.documents.has(documentName)) {
-      log.warn({
-        msg: 'Received message for document not in map',
-        data: { document: documentName, method: 'handleIncomingMessage', identifier },
-      });
-    }
-
     if (document === undefined) {
       // Received message for unknown document. Should not happen.
       const knownDocuments = Array.from(this.instance.documents.keys()).join(', ');
