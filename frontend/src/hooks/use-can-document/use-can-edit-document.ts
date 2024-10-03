@@ -8,18 +8,20 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import { CreatorRole, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { FlowState } from '@app/types/oppgave-common';
 
-export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMainDocument) => {
+export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const hasMerkantilRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isFeilregistrert = useIsFeilregistrert();
   const isFullfoert = useIsFullfoert();
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
 
   const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
 
-  if (parentIsMarkertAvsluttet || document.isMarkertAvsluttet || isFeilregistrert || oppgave === undefined) {
+  if (parentIsMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
     return false;
   }
 
@@ -33,7 +35,19 @@ export const useCanEditDocument = (document: IMainDocument, parentDocument?: IMa
     return hasSaksbehandlerRole;
   }
 
-  if (getIsIncomingDocument(document) || getIsIncomingDocument(parentDocument)) {
+  if (getIsIncomingDocument(document)) {
+    return true;
+  }
+
+  if (!isSuccess) {
+    return false;
+  }
+
+  if (oppgave.medunderskriver.flowState === FlowState.SENT) {
+    return false;
+  }
+
+  if (hasMerkantilRole) {
     return true;
   }
 
