@@ -79,7 +79,7 @@ export const refreshOnBehalfOfAccessToken = async (
     }
 
     if (typeof expires_at === 'number') {
-      oboCache.set(cacheKey, obo_access_token, expires_at);
+      await oboCache.set(cacheKey, obo_access_token, expires_at);
     }
 
     return obo_access_token;

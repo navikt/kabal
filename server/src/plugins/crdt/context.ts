@@ -8,6 +8,7 @@ export interface ConnectionContext {
   readonly tab_id?: string;
   readonly client_version?: string;
   readonly navIdent: string;
+  readonly cookie: string | undefined;
 }
 
 export const isConnectionContext = (data: unknown): data is ConnectionContext =>
