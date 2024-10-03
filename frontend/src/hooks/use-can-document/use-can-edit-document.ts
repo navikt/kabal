@@ -1,4 +1,3 @@
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { canRolEditDocument } from '@app/hooks/use-can-document/common';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -77,10 +76,6 @@ export const canEditDocument = ({
 
   if (isFullfoert) {
     return hasSaksbehandlerRole;
-  }
-
-  if (getIsIncomingDocument(document)) {
-    return true;
   }
 
   if (medunderskriverFlowState === FlowState.SENT) {
