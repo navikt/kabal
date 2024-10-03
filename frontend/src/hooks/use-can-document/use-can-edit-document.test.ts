@@ -5,9 +5,9 @@ import {
   DistribusjonsType,
   DocumentTypeEnum,
   IBaseDocument,
-  IJournalfoertDokument,
-  IJournalfoertDokumentReference,
   ISmartDocument,
+  JournalfoertDokument,
+  JournalfoertDokumentReference,
 } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -39,7 +39,7 @@ const SMART_DOCUMENT: ISmartDocument = {
   language: Language.NB,
 };
 
-const BASE_JD_REFERENCE: IJournalfoertDokument = {
+const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
   harTilgangTilArkivvariant: true,
   datoOpprettet: '2021-01-01',
   sortKey: '1',
@@ -47,7 +47,7 @@ const BASE_JD_REFERENCE: IJournalfoertDokument = {
   dokumentInfoId: '1',
 };
 
-const BASE_JD: IJournalfoertDokumentReference = {
+const BASE_JD: JournalfoertDokument = {
   ...BASE_DOCUMENT,
   parentId: '1',
   isSmartDokument: false,

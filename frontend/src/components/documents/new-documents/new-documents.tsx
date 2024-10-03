@@ -20,9 +20,9 @@ import {
   CreatorRole,
   DocumentTypeEnum,
   IFileDocument,
-  IJournalfoertDokumentReference,
   IMainDocument,
   ISmartDocument,
+  JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { StyledDocumentList } from '../styled-components/document-list';
@@ -31,7 +31,7 @@ import { NewParentDocument } from './new-parent-document';
 interface DocumentWithAttachments {
   mainDocument?: IMainDocument;
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoertDocumentReferences: IJournalfoertDokumentReference[];
+  journalfoerteDocuments: JournalfoertDokument[];
   containsRolAttachments: boolean;
 }
 
@@ -80,7 +80,7 @@ export const NewDocuments = () => {
           _documentMap.set(document.id, {
             mainDocument: document,
             pdfOrSmartDocuments: [],
-            journalfoertDocumentReferences: [],
+            journalfoerteDocuments: [],
             containsRolAttachments: false,
           });
         } else if (existing.mainDocument === undefined) {
@@ -96,7 +96,7 @@ export const NewDocuments = () => {
       if (existing !== undefined) {
         // Known parent.
         if (isJournalfoertDocument) {
-          existing.journalfoertDocumentReferences.push(document);
+          existing.journalfoerteDocuments.push(document);
         } else {
           existing.pdfOrSmartDocuments.push(document);
         }
@@ -110,8 +110,8 @@ export const NewDocuments = () => {
       _documentMap.set(
         document.parentId,
         isJournalfoertDocument
-          ? { pdfOrSmartDocuments: [], journalfoertDocumentReferences: [document], containsRolAttachments }
-          : { pdfOrSmartDocuments: [document], journalfoertDocumentReferences: [], containsRolAttachments },
+          ? { pdfOrSmartDocuments: [], journalfoerteDocuments: [document], containsRolAttachments }
+          : { pdfOrSmartDocuments: [document], journalfoerteDocuments: [], containsRolAttachments },
       );
     }
 
@@ -129,7 +129,7 @@ export const NewDocuments = () => {
       const isIncomingDocument = getIsIncomingDocument(d.mainDocument);
       const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS || isIncomingDocument;
       const pdfLength = d.pdfOrSmartDocuments.length;
-      const journalfoertLength = d.journalfoertDocumentReferences.length;
+      const journalfoertLength = d.journalfoerteDocuments.length;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
       const hasOverview = !isIncomingDocument && hasAttachments;
@@ -170,7 +170,7 @@ export const NewDocuments = () => {
     let overviewCount = 0;
 
     for (let i = 0; i < documentMap.size; i++) {
-      const { mainDocument, pdfOrSmartDocuments, journalfoertDocumentReferences, containsRolAttachments } = list[i]!;
+      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments, containsRolAttachments } = list[i]!;
 
       if (mainDocument === undefined) {
         continue;
@@ -179,7 +179,7 @@ export const NewDocuments = () => {
       const isIncomingDocument = getIsIncomingDocument(mainDocument);
 
       const pdfLength = pdfOrSmartDocuments.length;
-      const journalfoertLength = journalfoertDocumentReferences.length;
+      const journalfoertLength = journalfoerteDocuments.length;
       const vedleggCount = pdfLength + journalfoertLength;
       const hasAttachments = vedleggCount !== 0;
 
@@ -207,7 +207,7 @@ export const NewDocuments = () => {
         <NewParentDocument
           document={mainDocument}
           pdfOrSmartDocuments={pdfOrSmartDocuments.slice(pdfStart, pdfEnd)}
-          journalfoertDocumentReferences={journalfoertDocumentReferences.slice(journalfoertStart, journalfoertEnd)}
+          journalfoerteDocuments={journalfoerteDocuments.slice(journalfoertStart, journalfoertEnd)}
           containsRolAttachments={containsRolAttachments}
           key={mainDocument.id}
           style={{ top: offsetPx }}

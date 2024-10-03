@@ -20,12 +20,12 @@ export const DeleteDropArea = () => {
   const removeSmartDocument = useRemoveDocument();
 
   const parentDocument = useParentDocument(draggedDocument?.parentId ?? null);
-  const { pdfOrSmartDocuments, journalfoertDocumentReferences } = useAttachments(
+  const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(
     draggedDocument?.parentId ?? draggedDocument?.id,
   );
   const containsRolAttachments =
     pdfOrSmartDocuments.some((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL) ||
-    journalfoertDocumentReferences.some((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
+    journalfoerteDocuments.some((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
   const isDropTarget = useCanDeleteDocument(draggedDocument, containsRolAttachments, parentDocument);
 
   const onDragEnter = useCallback(
