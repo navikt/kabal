@@ -8,7 +8,6 @@ import {
 } from '@app/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useSetSmartEditorLanguage } from '@app/hooks/use-set-smart-editor-language';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
@@ -16,12 +15,11 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { Language, isLanguage } from '@app/types/texts/language';
 
 export const SaksbehandlerSettings = () => {
-  const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin, templateId } = useContext(SmartEditorContext);
+  const { canManage, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const language = useSmartEditorLanguage();
   const [setLanguage] = useSetSmartEditorLanguage();
-  const canManage = useCanManageDocument(templateId);
 
   const onChangeLanguage = useCallback(
     (lang: string) => {

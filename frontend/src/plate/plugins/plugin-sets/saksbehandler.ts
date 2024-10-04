@@ -18,7 +18,7 @@ import { Maltekst } from '@app/plate/components/maltekst/maltekst';
 import { Maltekstseksjon } from '@app/plate/components/maltekstseksjon/maltekstseksjon';
 import { PageBreak } from '@app/plate/components/page-break';
 import { Paragraph } from '@app/plate/components/paragraph';
-import { Placeholder } from '@app/plate/components/placeholder/placeholder';
+import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
@@ -83,7 +83,7 @@ const components: Record<string, PlatePluginComponent> = {
   [ELEMENT_FOOTER]: HeaderFooter,
   [ELEMENT_HEADER]: HeaderFooter,
   [ELEMENT_LABEL_CONTENT]: LabelContent,
-  [ELEMENT_PLACEHOLDER]: Placeholder,
+  [ELEMENT_PLACEHOLDER]: SaksbehandlerPlaceholder,
   [ELEMENT_REGELVERK]: Regelverk,
   [ELEMENT_REGELVERK_CONTAINER]: RegelverkContainer,
   [ELEMENT_SIGNATURE]: Signature,

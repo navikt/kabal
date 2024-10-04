@@ -2,7 +2,6 @@ import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } fr
 import { InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
@@ -21,8 +20,7 @@ export const Signature = ({
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
+  const { canManage, templateId } = useContext(SmartEditorContext);
 
   if (oppgave === undefined || signature === undefined) {
     return null;

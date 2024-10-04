@@ -11,7 +11,6 @@ import {
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useRegelverkQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -34,8 +33,7 @@ export const Regelverk = ({
   element,
   editor,
 }: PlateRenderElementProps<EditorValue, RegelverkElement>) => {
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
+  const { canManage } = useContext(SmartEditorContext);
 
   return (
     <PlateElement attributes={attributes} element={element} editor={editor} onDragStart={onPlateContainerDragStart}>
@@ -78,8 +76,7 @@ export const RegelverkContainer = ({
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useRegelverkQuery();
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
+  const { canManage } = useContext(SmartEditorContext);
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 

@@ -12,7 +12,6 @@ import {
 } from '@udecode/plate-common';
 import { useContext, useEffect } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -36,10 +35,9 @@ export const LegacyMaltekst = ({
   element,
 }: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { templateId } = useContext(SmartEditorContext);
+  const { canManage, templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
-  const canManage = useCanManageDocument(templateId);
 
   useEffect(() => {
     if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {

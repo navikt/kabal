@@ -4,7 +4,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -38,7 +37,7 @@ export const LegacyRedigerbarMaltekst = ({
   editor,
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { templateId } = useContext(SmartEditorContext);
+  const { canManage, templateId } = useContext(SmartEditorContext);
 
   const query = useQuery({ textType: RichTextTypes.REDIGERBAR_MALTEKST, section: element.section, templateId });
 
@@ -47,7 +46,6 @@ export const LegacyRedigerbarMaltekst = ({
   const path = findNodePath(editor, element);
 
   const isInitialized = useRef(!isNodeEmpty(element));
-  const canManage = useCanManageDocument(templateId);
 
   const insertRedigerbarMaltekst = useCallback(async () => {
     if (query === skipToken || path === undefined || oppgaveIsLoading || oppgave === undefined) {

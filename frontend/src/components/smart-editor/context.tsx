@@ -1,5 +1,6 @@
 import { TRange } from '@udecode/plate-common';
 import { createContext, useState } from 'react';
+import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,
@@ -21,6 +22,7 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: HTMLDivElement | null;
   setSheetRef: (ref: HTMLDivElement | null) => void;
+  canManage: boolean;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -37,6 +39,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setShowAnnotationsAtOrigin: noop,
   sheetRef: null,
   setSheetRef: noop,
+  canManage: false,
 });
 
 interface Props {
@@ -53,6 +56,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
   const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
+  const canManage = useCanManageDocument(templateId);
 
   return (
     <SmartEditorContext.Provider
@@ -70,6 +74,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         setShowAnnotationsAtOrigin,
         sheetRef,
         setSheetRef,
+        canManage,
       }}
     >
       {children}
