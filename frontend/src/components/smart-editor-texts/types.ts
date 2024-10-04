@@ -10,6 +10,7 @@ export const GLOBAL = 'GLOBAL';
 export type GLOBAL_TYPE = typeof GLOBAL;
 
 export const WILDCARD = '*';
+export type WILDCARD_TYPE = typeof WILDCARD;
 
 export const SET_DELIMITER = ':';
 export const LIST_DELIMITER = '>';
