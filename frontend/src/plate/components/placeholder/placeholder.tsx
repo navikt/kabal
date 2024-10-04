@@ -9,7 +9,6 @@ import {
 } from '@udecode/plate-common';
 import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
@@ -25,20 +24,31 @@ import {
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
 import { EditorValue, PlaceholderElement } from '@app/plate/types';
 
-export const Placeholder = ({
-  element,
-  children,
-  attributes,
-  editor,
-}: PlateRenderElementProps<EditorValue, PlaceholderElement>) => {
+export const RedaktørPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => (
+  <Placeholder {...props} canManage />
+);
+
+export const PreviewPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => (
+  <Placeholder {...props} canManage={false} />
+);
+
+export const SaksbehandlerPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => {
+  const { canManage } = useContext(SmartEditorContext);
+
+  return <Placeholder {...props} canManage={canManage} />;
+};
+
+interface PlaceholderProps extends PlateRenderElementProps<EditorValue, PlaceholderElement> {
+  canManage: boolean;
+}
+
+const Placeholder = ({ element, children, attributes, editor, canManage }: PlaceholderProps) => {
   const path = findNodePath(editor, element);
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
   const isReadOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
   const containsEmptyChar = getContainsEmptyChar(text);
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {

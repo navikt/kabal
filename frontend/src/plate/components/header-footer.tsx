@@ -5,7 +5,6 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -53,8 +52,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
 
   const editor = useMyPlateEditorRef();
   const query = useHeaderFooterQuery(textType);
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
+  const { canManage } = useContext(SmartEditorContext);
 
   const loadMaltekst = useCallback(
     async (e: ElementTypes) => {

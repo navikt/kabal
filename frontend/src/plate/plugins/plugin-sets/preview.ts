@@ -10,7 +10,7 @@ import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/list
 import { Maltekst } from '@app/plate/components/maltekst/maltekst';
 import { PageBreak } from '@app/plate/components/page-break';
 import { Paragraph } from '@app/plate/components/paragraph';
-import { Placeholder } from '@app/plate/components/placeholder/placeholder';
+import { PreviewPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
@@ -60,7 +60,7 @@ export const previewPlugins = createPlugins(
       [ELEMENT_TR]: TableRowElement,
 
       // Smart blocks
-      [ELEMENT_PLACEHOLDER]: Placeholder,
+      [ELEMENT_PLACEHOLDER]: PreviewPlaceholder,
       [ELEMENT_MALTEKST]: Maltekst,
       [ELEMENT_REDIGERBAR_MALTEKST]: RedigerbarMaltekst,
       [ELEMENT_LABEL_CONTENT]: LabelContent,

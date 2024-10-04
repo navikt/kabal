@@ -2,7 +2,6 @@ import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, PlateRenderElementProps, isEditorReadOnly, setNodes } from '@udecode/plate-common';
 import { useCallback, useContext, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useMaltekstseksjonQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
@@ -32,10 +31,9 @@ export const Maltekstseksjon = ({
 }: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
   const oppgave = useRequiredOppgave();
   const language = useSmartEditorLanguage();
-  const { templateId } = useContext(SmartEditorContext);
+  const { canManage, templateId } = useContext(SmartEditorContext);
   const query = useMaltekstseksjonQuery(templateId, element.section);
   const path = usePath(editor, element);
-  const canManage = useCanManageDocument(templateId);
   const isUpdated = useMemo(
     () => language === element.language && areQueriesEqual(query, element.query),
     [language, element.language, element.query, query],

@@ -7,7 +7,7 @@ import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/head
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { PageBreak } from '@app/plate/components/page-break';
 import { Paragraph } from '@app/plate/components/paragraph';
-import { Placeholder } from '@app/plate/components/placeholder/placeholder';
+import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
@@ -36,6 +36,6 @@ export const redaktoerPlugins = createPlugins([...defaultPlugins, createRedaktoe
     [ELEMENT_TR]: TableRowElement,
 
     // Smart blocks
-    [ELEMENT_PLACEHOLDER]: Placeholder,
+    [ELEMENT_PLACEHOLDER]: RedaktørPlaceholder,
   },
 });

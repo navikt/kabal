@@ -9,7 +9,6 @@ import {
 } from '@udecode/plate-common';
 import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -26,8 +25,7 @@ export const RedigerbarMaltekst = ({
 }: PlateRenderElementProps<EditorValue, RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
-  const { templateId } = useContext(SmartEditorContext);
-  const canManage = useCanManageDocument(templateId);
+  const { canManage } = useContext(SmartEditorContext);
 
   const reload = async () => {
     if (element.id === undefined) {
