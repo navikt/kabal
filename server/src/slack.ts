@@ -1,4 +1,4 @@
-import { ENVIRONMENT, isDeployed, isLocal } from '@app/config/env';
+import { ENVIRONMENT, isLocal } from '@app/config/env';
 import { optionalEnvString, requiredEnvString } from '@app/config/env-var';
 import { getLogger } from '@app/logger';
 
@@ -9,6 +9,7 @@ export enum EmojiIcons {
   LoadingDots = ':loading-dots:',
   Broken = ':broken:',
   Collision = ':collision:',
+  Kabal = ':kabal:',
 }
 
 const url = optionalEnvString('SLACK_URL');
@@ -16,23 +17,29 @@ const channel = '#klage-notifications';
 const messagePrefix = `${requiredEnvString('NAIS_APP_NAME', 'kabal-frontend')} frontend NodeJS -`;
 const isConfigured = url !== undefined && url.length !== 0;
 
-export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
+export const sendToSlack = async (message: string, icon_emoji: EmojiIcons): Promise<boolean> => {
   const text = `[${ENVIRONMENT}] ${messagePrefix} ${message}`;
-
-  if (!(isDeployed && isConfigured)) {
-    return;
-  }
-
-  const body = JSON.stringify({ channel, text, icon_emoji });
 
   if (isLocal) {
     log.info({ msg: `Sending message to Slack: ${text}` });
 
-    return;
+    return true;
   }
 
+  if (!isConfigured) {
+    return true;
+  }
+
+  const body = JSON.stringify({ channel, text, icon_emoji });
+
   try {
-    await fetch(url, { method: 'POST', body });
+    const res = await fetch(url, { method: 'POST', body });
+
+    if (!res.ok) {
+      throw new Error(`Slack responded with status code ${res.status}`);
+    }
+
+    return true;
   } catch (error) {
     const msg = `Failed to send message to Slack. Message: '${text}'`;
 
@@ -42,6 +49,8 @@ export const sendToSlack = async (message: string, icon_emoji: EmojiIcons) => {
     }
 
     log.error({ msg: scrubWebhookUrl(msg) });
+
+    return false;
   }
 };
 
