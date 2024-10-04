@@ -32,7 +32,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
         }
       }
 
-      return draft.toSorted((a, b) => {
+      return draft.sort((a, b) => {
         if (a.type === DocumentTypeEnum.JOURNALFOERT) {
           if (b.type === DocumentTypeEnum.JOURNALFOERT) {
             return b.journalfoertDokumentReference.sortKey.localeCompare(a.journalfoertDokumentReference.sortKey);
