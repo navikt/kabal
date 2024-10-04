@@ -2,6 +2,7 @@ import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { Dropdown } from '@navikt/ds-react';
 import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
+import { DebugButton } from '@app/components/header/user-menu/debug';
 import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
 import { CopyButton } from '../../copy-button/copy-button';
@@ -33,6 +34,7 @@ export const UserDropdown = (): JSX.Element | null => {
         >
           {null}
         </Dropdown.Menu.List.Item>
+        <DebugButton />
       </Dropdown.Menu.List>
     </Menu>
   );
