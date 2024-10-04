@@ -29,9 +29,7 @@ export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
         searchParams.delete('trash');
       }
 
-      return navigate(`${path}${searchParams.toString()}`, {
-        replace,
-      });
+      return navigate(`${path}?${searchParams.toString()}`, { replace });
     },
     [hasLanguage, navigate, oldParams, rootPath, searchParams],
   );

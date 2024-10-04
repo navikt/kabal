@@ -26,7 +26,7 @@ export const useNavigateMaltekstseksjoner = () => {
         searchParams.delete('trash');
       }
 
-      return navigate(`${path}${searchParams.toString()}`, { replace });
+      return navigate(`${path}?${searchParams.toString()}`, { replace });
     },
     [navigate, oldParams, searchParams],
   );
