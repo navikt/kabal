@@ -9,6 +9,7 @@ import { accessTokenPlugin } from '@app/plugins/access-token';
 import { apiProxyPlugin } from '@app/plugins/api-proxy';
 import { clientVersionPlugin } from '@app/plugins/client-version';
 import { crdtPlugin } from '@app/plugins/crdt/crdt';
+import { debugPlugin } from '@app/plugins/debug/debug';
 import { documentPlugin } from '@app/plugins/document';
 import { healthPlugin } from '@app/plugins/health';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
@@ -63,6 +64,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
   .register(crdtPlugin)
+  .register(debugPlugin)
 
   // Start server.
   .listen({ host: '0.0.0.0', port: serverConfig.port });
