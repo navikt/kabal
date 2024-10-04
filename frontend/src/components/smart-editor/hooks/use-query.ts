@@ -1,7 +1,7 @@
 import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { GLOBAL, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, SET_DELIMITER, WILDCARD_TYPE } from '@app/components/smart-editor-texts/types';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { TemplateSections } from '@app/plate/template-sections';
@@ -103,8 +103,8 @@ export const useMaltekstseksjonQuery = (
 };
 
 export const useGodFormuleringerQuery = (
-  templateId: TemplateIdEnum | undefined,
-  section: TemplateSections | undefined,
+  templateId: TemplateIdEnum,
+  section: TemplateSections | WILDCARD_TYPE,
 ): IGetConsumerGodFormuleringParams | SkipToken => {
   const { data: oppgave, isLoading } = useOppgave();
   const language = useSmartEditorLanguage();
