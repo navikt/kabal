@@ -94,15 +94,10 @@ export const useMaltekstseksjonQuery = (
 
     const { extraUtfallIdSet, utfallId } = oppgave.resultat;
 
-    const templateSectionList =
-      templateId !== undefined && section !== undefined
-        ? [`${templateId}${LIST_DELIMITER}${section}`, `${GLOBAL}${LIST_DELIMITER}${section}`]
-        : [];
-
     return {
       ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
-      templateSectionIdList: templateSectionList,
+      templateSectionIdList: [`${templateId}${LIST_DELIMITER}${section}`, `${GLOBAL}${LIST_DELIMITER}${section}`],
     };
   }, [isLoading, oppgave, templateId, section]);
 };
