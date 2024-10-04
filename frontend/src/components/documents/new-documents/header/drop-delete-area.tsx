@@ -5,7 +5,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
+import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useAttachments, useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -26,7 +26,9 @@ export const DeleteDropArea = () => {
   const containsRolAttachments =
     pdfOrSmartDocuments.some((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL) ||
     journalfoerteDocuments.some((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
-  const isDropTarget = useCanDeleteDocument(draggedDocument, containsRolAttachments, parentDocument);
+  const canEdit = useCanEditDocument(draggedDocument, parentDocument);
+  const isAttachment = parentDocument !== undefined;
+  const isDropTarget = canEdit && (isAttachment || !containsRolAttachments);
 
   const onDragEnter = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {

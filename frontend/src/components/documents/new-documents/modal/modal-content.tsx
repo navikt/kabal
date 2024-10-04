@@ -17,7 +17,6 @@ import { SetFilename } from '@app/components/documents/set-filename';
 import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDeleteDocument } from '@app/hooks/use-can-document/use-can-delete-document';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useAttachments } from '@app/hooks/use-parent-document';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -37,10 +36,10 @@ interface Props {
   containsRolAttachments: boolean;
 }
 
+// eslint-disable-next-line complexity
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
-  const canDelete = useCanDeleteDocument(document, containsRolAttachments, parentDocument);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
   const [pdfLoading, setPdfLoading] = useState(false);
@@ -57,6 +56,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const isRolQuestions = getIsRolQuestions(document);
 
   const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoerteDocuments.length > 0;
+
+  const canDelete = isMainDocument && containsRolAttachments ? false : canEditDocument;
 
   return (
     <>
