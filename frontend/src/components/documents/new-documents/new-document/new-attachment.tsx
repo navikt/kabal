@@ -103,7 +103,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
     containsRolAttachments,
     onDragStart,
   }) => {
-    const isDraggable = draggingEnabled && canEdit && !containsRolAttachments;
+    const isDraggable = draggingEnabled && canEdit;
 
     return (
       <StyledNewAttachment
