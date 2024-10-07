@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ScalingGroup, useSmartEditorZoom } from '@app/hooks/settings/use-setting';
+import { ScalingGroup, useSmartEditorScale } from '@app/hooks/settings/use-setting';
 
 export const EDITOR_SCALE_CSS_VAR = '--kabal-editor-scale';
 
@@ -13,7 +13,7 @@ const USER_STEP = 5;
 export let CURRENT_SCALE = DEFAULT / 100;
 
 export const useScaleState = (settingPrefix: ScalingGroup) => {
-  const { value = DEFAULT, setValue } = useSmartEditorZoom(settingPrefix);
+  const { value = DEFAULT, setValue } = useSmartEditorScale(settingPrefix);
 
   CURRENT_SCALE = value / 100;
 

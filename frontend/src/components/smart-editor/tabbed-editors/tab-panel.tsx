@@ -34,8 +34,8 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
   return (
     <StyledTabsPanel value={smartDocument.id} lazy={false}>
       <SmartEditorContextComponent smartDocument={smartDocument}>
-        <ScaleContextComponent zoomGroup={ScalingGroup.OPPGAVEBEHANDLING}>
-          <Editor key={id} smartDocument={smartDocument} />
+        <ScaleContextComponent scalingGroup={ScalingGroup.OPPGAVEBEHANDLING}>
+          <Editor key={id} smartDocument={smartDocument} scalingGroup={ScalingGroup.OPPGAVEBEHANDLING} />
         </ScaleContextComponent>
       </SmartEditorContextComponent>
     </StyledTabsPanel>

@@ -1,8 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
+import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
+import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import {
@@ -82,12 +85,12 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
       setSelectedTabId={setSelectedTabId}
       versions={versions}
       createDraftPanel={(version) => (
-        <PanelContent>
+        <PanelContent style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}>
           <DraftMaltekstSection maltekstseksjon={version} query={query} onDraftDeleted={onDraftDeleted} />
         </PanelContent>
       )}
       createPublishedPanel={(version) => (
-        <PanelContent>
+        <PanelContent style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}>
           <PublishedMaltekstSection maltekstseksjon={version} query={query} onDraftCreated={onDraftCreated} />
         </PanelContent>
       )}

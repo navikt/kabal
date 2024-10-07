@@ -11,6 +11,7 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
 import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
@@ -19,10 +20,12 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn, isObject } from '@app/functions/object';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
+import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
@@ -34,9 +37,10 @@ import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandli
 
 interface EditorProps {
   smartDocument: ISmartDocument;
+  scalingGroup: ScalingGroup;
 }
 
-export const Editor = ({ smartDocument }: EditorProps) => {
+export const Editor = ({ smartDocument, scalingGroup }: EditorProps) => {
   const { id, templateId } = smartDocument;
   const [, { isLoading }] = useLazyGetDocumentQuery();
   const { newCommentSelection } = useContext(SmartEditorContext);
@@ -59,7 +63,7 @@ export const Editor = ({ smartDocument }: EditorProps) => {
   }
 
   return (
-    <Container>
+    <Container style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(scalingGroup) }}>
       <Plate<EditorValue, RichTextEditor>
         initialValue={smartDocument.content}
         id={id}
@@ -97,7 +101,8 @@ export const Editor = ({ smartDocument }: EditorProps) => {
   );
 };
 
-interface PlateContextProps extends EditorProps {
+interface PlateContextProps {
+  smartDocument: ISmartDocument;
   oppgave: IOppgavebehandling;
 }
 
