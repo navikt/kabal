@@ -1,3 +1,5 @@
+import { hasOwn, isObject } from '@app/plugins/crdt/functions';
+
 interface TokenPayload {
   aud: string;
   iss: string;
@@ -40,10 +42,9 @@ export const parseTokenPayload = (token: string): TokenPayload | undefined => {
 };
 
 const isTokenPayload = (payload: unknown): payload is TokenPayload =>
-  typeof payload === 'object' &&
-  payload !== null &&
-  'aud' in payload &&
-  'iss' in payload &&
-  'iat' in payload &&
-  'nbf' in payload &&
-  'exp' in payload;
+  isObject(payload) &&
+  hasOwn(payload, 'aud') &&
+  hasOwn(payload, 'iss') &&
+  hasOwn(payload, 'iat') &&
+  hasOwn(payload, 'nbf') &&
+  hasOwn(payload, 'exp');
