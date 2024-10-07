@@ -87,7 +87,7 @@ export enum ScalingGroup {
   REDAKTØR = 'redaktør',
 }
 
-export const useSmartEditorZoom = (prefix: ScalingGroup) => useNumberSetting(`${prefix}/smart-editor/zoom`);
+export const useSmartEditorScale = (prefix: ScalingGroup) => useNumberSetting(`${prefix}/smart-editor/zoom`);
 
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',

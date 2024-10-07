@@ -12,12 +12,12 @@ interface Props {
 }
 
 export const Maltekstseksjon = ({ maltekstseksjon, query }: Props) => (
-  <MaltekstseksjonContainer>
+  <MaltekstseksjonContainer data-element="MaltekstseksjonContainer">
     <MaltekstseksjonHeader>
       <UnpublishMaltekstseksjonButton publishedMaltekstseksjon={maltekstseksjon} query={query} />
     </MaltekstseksjonHeader>
 
-    <ScaleContextComponent zoomGroup={ScalingGroup.REDAKTØR}>
+    <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
       <MaltekstseksjonVersions id={maltekstseksjon.id} query={query} />
     </ScaleContextComponent>
   </MaltekstseksjonContainer>

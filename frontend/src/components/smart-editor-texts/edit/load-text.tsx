@@ -1,9 +1,10 @@
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { StandaloneTextVersions } from '@app/components/smart-editor-texts/edit/standalone-text-versions';
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
+import { ScaleContextComponent, getScaleVar } from '@app/plate/status-bar/scale-context';
 
 export const LoadText = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,8 +18,8 @@ export const LoadText = () => {
   }
 
   return (
-    <ScaleContextComponent zoomGroup={ScalingGroup.REDAKTØR}>
-      <Container data-textid={id}>
+    <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
+      <Container data-textid={id} style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}>
         <StandaloneTextVersions id={id} />
       </Container>
     </ScaleContextComponent>

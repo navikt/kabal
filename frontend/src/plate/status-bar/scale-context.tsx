@@ -1,42 +1,41 @@
-import { createContext, useMemo } from 'react';
+import { ReactNode, createContext, useEffect } from 'react';
 import { EDITOR_SCALE_CSS_VAR, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 
 const NOOP = () => {};
 
-export const ScaleContext = createContext<ReturnType<typeof useScaleState>>({
-  scale: 1,
+interface ScaleContextType extends ReturnType<typeof useScaleState> {
+  scalingGroup: ScalingGroup;
+}
+
+export const ScaleContext = createContext<ScaleContextType>({
+  scalingGroup: ScalingGroup.OPPGAVEBEHANDLING,
+  scale: 100,
   setScale: NOOP,
   scaleUp: NOOP,
   scaleDown: NOOP,
 });
 
 interface Props {
-  children: React.ReactNode;
-  zoomGroup: ScalingGroup;
+  scalingGroup: ScalingGroup;
+  children: ReactNode;
 }
 
-export const ScaleContextComponent = ({ children, zoomGroup }: Props) => {
-  const scaleState = useScaleState(zoomGroup);
+export const ScaleContextComponent = ({ scalingGroup, children }: Props) => {
+  const state = useScaleState(scalingGroup);
+  const { scale } = state;
 
-  const { scale } = scaleState;
+  const scalingGroupVar = getScaleVarName(scalingGroup);
 
-  const scalingStyle = useMemo<Record<string, string>>(
-    () => ({
-      [EDITOR_SCALE_CSS_VAR]: (scale / 100).toString(10),
-      display: 'flex',
-      flexGrow: '1',
-      flexShrink: '0',
-      flexDirection: 'column',
-      overflow: 'hidden',
-      maxHeight: '100%',
-    }),
-    [scale],
-  );
+  useEffect(() => {
+    document.documentElement.style.setProperty(scalingGroupVar, (scale / 100).toString(10));
 
-  return (
-    <ScaleContext.Provider value={scaleState}>
-      <div style={scalingStyle}>{children}</div>
-    </ScaleContext.Provider>
-  );
+    return () => document.documentElement.style.setProperty(scalingGroupVar, '1');
+  }, [scale, scalingGroupVar]);
+
+  return <ScaleContext.Provider value={{ ...state, scalingGroup }}>{children}</ScaleContext.Provider>;
 };
+
+const getScaleVarName = (scalingGroup: ScalingGroup) => `${EDITOR_SCALE_CSS_VAR}-${scalingGroup}`;
+
+export const getScaleVar = (scalingGroup: ScalingGroup) => `var(${getScaleVarName(scalingGroup)})`;
