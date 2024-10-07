@@ -1,3 +1,4 @@
+import { BehandlingDebug } from '@app/components/header/user-menu/debug';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
 import { Footer } from '../oppgavebehandling-footer/footer';
@@ -8,5 +9,6 @@ export const Oppgavebehandling = () => (
     <OppgavebehandlingControls />
     <OppgavebehandlingPanels />
     <Footer />
+    <BehandlingDebug />
   </ValidationErrorProvider>
 );
