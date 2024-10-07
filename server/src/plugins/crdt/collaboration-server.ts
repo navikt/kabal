@@ -11,6 +11,7 @@ import { CloseEvent } from '@hocuspocus/common';
 import { applyUpdateV2 } from 'yjs';
 import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
+import { hasOwn, isObject } from '@app/plugins/crdt/functions';
 
 const log = getLogger('collaboration');
 
@@ -25,7 +26,7 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
   });
 };
 
-const startRefreshOboTokenInterval = (context: ConnectionContext) => {
+const startRefreshOboTokenInterval = (context: ConnectionContext, immediate = false) => {
   const { abortController, cookie } = context;
 
   if (abortController === undefined) {
@@ -46,7 +47,7 @@ const startRefreshOboTokenInterval = (context: ConnectionContext) => {
     return;
   }
 
-  const timer = setInterval(async () => {
+  const refresh = async () => {
     try {
       // Refresh OBO token directly through Wonderwall.
       const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
@@ -59,15 +60,32 @@ const startRefreshOboTokenInterval = (context: ConnectionContext) => {
         throw new Error(`Wonderwall responded with status code ${res.status}`);
       }
 
-      logContext('OBO token refreshed', context, 'debug');
+      const parsed = await res.json();
+
+      if (isObject(parsed) && hasOwn(parsed, 'expiresIn') && typeof parsed.expiresIn === 'number') {
+        logContext(`OBO token refreshed on interval. Expires in ${parsed.expiresIn} seconds`, context, 'debug');
+      } else {
+        logContext('Invalid OBO token refresh response', context, 'warn');
+      }
     } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        logContext('OBO token interval refresh request aborted', context, 'debug');
+
+        return;
+      }
       logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
     }
-  }, 3_000);
+  };
+
+  if (immediate) {
+    refresh();
+  }
+
+  const interval = setInterval(refresh, 30_000);
 
   abortController.signal.addEventListener('abort', () => {
     logContext('Aborted refresh OBO token interval', context, 'debug');
-    clearInterval(timer);
+    clearInterval(interval);
   });
 };
 
@@ -81,6 +99,52 @@ export const collaborationServer = Server.configure({
       logContext(`Collaboration connection established for ${context.navIdent}!`, context);
 
       context.abortController = new AbortController();
+
+      const oboToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
+
+      if (oboToken === null) {
+        logContext(
+          'Collaboration connection established without OBO token, refreshing OBO token now.',
+          context,
+          'warn',
+        );
+
+        // Refresh OBO token immediately if it's missing or invalid.
+        return startRefreshOboTokenInterval(context, true);
+      }
+
+      const payload = parseTokenPayload(oboToken);
+
+      if (payload === undefined) {
+        logContext(
+          'Collaboration connection established with an invalid OBO token, refreshing OBO token now.',
+          context,
+          'warn',
+        );
+
+        // Refresh OBO token immediately if it's invalid.
+        return startRefreshOboTokenInterval(context, true);
+      }
+
+      const { exp } = payload;
+      const expiresIn = exp - Math.ceil(Date.now() / 1_000);
+
+      if (expiresIn <= 120) {
+        logContext(
+          `Collaboration connection established with OBO token expiring in ${expiresIn} seconds, refreshing OBO token now.`,
+          context,
+          'warn',
+        );
+
+        // Refresh OBO token immediately if it's about to expire.
+        return startRefreshOboTokenInterval(context, true);
+      }
+
+      logContext(
+        `Collaboration connection established with OBO token expiring in ${expiresIn}, starting OBO token refresh interval.`,
+        context,
+        'warn',
+      );
       startRefreshOboTokenInterval(context);
     } else {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
