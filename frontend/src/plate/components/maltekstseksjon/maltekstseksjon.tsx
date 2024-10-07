@@ -44,6 +44,10 @@ export const Maltekstseksjon = ({
       return;
     }
 
+    if (path === undefined || !editor.hasPath(path)) {
+      return;
+    }
+
     setNodes<MaltekstseksjonElement>(editor, { query, language }, { match: (n) => n === element, at: path });
   }, [editor, element, isUpdated, language, path, query]);
 

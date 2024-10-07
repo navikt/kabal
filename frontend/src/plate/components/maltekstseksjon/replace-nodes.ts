@@ -17,7 +17,7 @@ export const replaceNodes = (
   textIdList: string[] | null,
   nodes: (MaltekstElement | RedigerbarMaltekstElement)[] | null,
 ) => {
-  if (path === undefined) {
+  if (path === undefined || !editor.hasPath(path)) {
     return;
   }
 
