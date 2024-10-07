@@ -25,6 +25,52 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
   });
 };
 
+const startRefreshOboTokenInterval = (context: ConnectionContext) => {
+  const { abortController, cookie } = context;
+
+  if (abortController === undefined) {
+    logContext('Missing abort controller', context, 'warn');
+
+    return;
+  }
+
+  if (abortController.signal.aborted) {
+    logContext('Abort controller already aborted', context, 'warn');
+
+    return;
+  }
+
+  if (cookie === undefined) {
+    logContext('Missing session cookie', context, 'warn');
+
+    return;
+  }
+
+  const timer = setInterval(async () => {
+    try {
+      // Refresh OBO token directly through Wonderwall.
+      const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
+        method: 'GET',
+        headers: { Cookie: cookie },
+        signal: abortController.signal,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Wonderwall responded with status code ${res.status}`);
+      }
+
+      logContext('OBO token refreshed', context, 'debug');
+    } catch (err) {
+      logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
+    }
+  }, 3_000);
+
+  abortController.signal.addEventListener('abort', () => {
+    logContext('Aborted refresh OBO token interval', context, 'debug');
+    clearInterval(timer);
+  });
+};
+
 export const collaborationServer = Server.configure({
   debounce: 3_000,
   maxDebounce: 15_000,
@@ -33,6 +79,9 @@ export const collaborationServer = Server.configure({
     if (isConnectionContext(context)) {
       // navIdent is not defined when server is run without Wonderwall (ie. locally).
       logContext(`Collaboration connection established for ${context.navIdent}!`, context);
+
+      context.abortController = new AbortController();
+      startRefreshOboTokenInterval(context);
     } else {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw new Error('Invalid context');
@@ -43,6 +92,8 @@ export const collaborationServer = Server.configure({
     if (isConnectionContext(context)) {
       // navIdent is not defined locally.
       logContext(`Collaboration connection closed for ${context.navIdent}!`, context);
+
+      context.abortController?.abort();
     } else {
       log.error({ msg: 'Tried to close collaboration connection without context' });
       throw new Error('Invalid context');
