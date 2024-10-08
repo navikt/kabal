@@ -345,4 +345,41 @@ Melding med kun to streker på starten av header.
       },
     ]);
   });
+
+  it('should preserve messages with referenced messages', () => {
+    expect.assertions(1);
+
+    const beskrivelse = `
+--- 03.06.2024 08:41 E_994121, F_994121 (Z994121, 4488) ---
+Hei! Her er en annen melding som jeg har kopiert ffra Gosys, tok med formateringen rundt også:
+ 
+"--- 29.01.2024 15:27 E_Z994864, F_Z994864 (Z994864, 4291) ---
+Dette er den kopierte meldingen. Den har metadata som Kabal må ignorere.
+Oppgaven er flyttet  fra saksbehandler Z994864 til <ingen>"
+ 
+Dette står i gosysoppgave opprettet 271022 og avsluttet 110723.
+ 
+Det ser ut som noen har gjort noe rart med oppgaven (?!)
+ 
+Hva er status i saken?`;
+
+    const actual = splitBeskrivelse(beskrivelse);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 3, 8, 41),
+        author: { name: 'E_994121, F_994121', navIdent: 'Z994121', enhet: '4488' },
+        content: `Hei! Her er en annen melding som jeg har kopiert ffra Gosys, tok med formateringen rundt også:
+
+"--- 29.01.2024 15:27 E_Z994864, F_Z994864 (Z994864, 4291) ---
+Dette er den kopierte meldingen. Den har metadata som Kabal må ignorere.
+Oppgaven er flyttet  fra saksbehandler Z994864 til <ingen>"
+
+Dette står i gosysoppgave opprettet 271022 og avsluttet 110723.
+
+Det ser ut som noen har gjort noe rart med oppgaven (?!)
+
+Hva er status i saken?`,
+      },
+    ]);
+  });
 });
