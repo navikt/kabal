@@ -15,23 +15,17 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
-  oppgavebeskrivelse: string | null;
+  oppgavebeskrivelse: string;
 }
 
 export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const trimmedBeskrivelse = useMemo(
-    () => (oppgavebeskrivelse === null ? null : oppgavebeskrivelse.trim()),
-    [oppgavebeskrivelse],
-  );
+  const trimmedBeskrivelse = useMemo(() => oppgavebeskrivelse.trim(), [oppgavebeskrivelse]);
   const expectedEntries =
-    trimmedBeskrivelse?.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-'))
+    trimmedBeskrivelse.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-'))
       .length ?? 0;
-  const entries = useMemo(
-    () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
-    [trimmedBeskrivelse],
-  );
+  const entries = useMemo(() => splitBeskrivelse(trimmedBeskrivelse), [trimmedBeskrivelse]);
   const preferredFormat = usePreferredFormat();
 
   const onOpenClick = useCallback(() => {
@@ -60,7 +54,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
 
   const [firstEntry, secondEntry] = entries;
 
-  if (trimmedBeskrivelse === null || firstEntry === undefined) {
+  if (firstEntry === undefined) {
     return null;
   }
 

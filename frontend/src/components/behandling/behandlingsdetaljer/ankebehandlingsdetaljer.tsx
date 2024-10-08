@@ -29,7 +29,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     typeId,
     fraNAVEnhetNavn,
     fraNAVEnhet,
-    oppgavebeskrivelse,
+    oppgave,
     resultat,
     ytelseId,
     prosessfullmektig,
@@ -89,7 +89,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <AnkeMottattDato />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+      {oppgave === null ? null : <GosysBeskrivelse oppgavebeskrivelse={oppgave.beskrivelse} />}
 
       <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
