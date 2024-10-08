@@ -29,7 +29,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraVedtaksinstans,
-    oppgavebeskrivelse,
+    oppgave,
     resultat,
     ytelseId,
     prosessfullmektig,
@@ -83,7 +83,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+      {oppgave === null ? null : <GosysBeskrivelse oppgavebeskrivelse={oppgave.beskrivelse} />}
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 

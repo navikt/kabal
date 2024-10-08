@@ -22,7 +22,7 @@ interface Props {
 export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
 
-  const { typeId, oppgavebeskrivelse, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
+  const { typeId, oppgave, resultat, ytelseId, prosessfullmektig, saksnummer } = oppgavebehandling;
 
   return (
     <StyledBehandlingSection>
@@ -61,7 +61,7 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
 
       <KjennelseMottatt />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+      {oppgave === null ? null : <GosysBeskrivelse oppgavebeskrivelse={oppgave.beskrivelse} />}
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 

@@ -1,6 +1,7 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
+import { UpdateInGosys } from '@app/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -16,8 +17,8 @@ interface FinishProps {
   show: boolean;
 }
 
-const getFinishText = (isOpphevetAnkeInTrygderettern: boolean, isModernized: boolean) => {
-  if (isOpphevetAnkeInTrygderettern) {
+const getFinishText = (isOpphevetAnkeInTrygderetten: boolean, isModernized: boolean) => {
+  if (isOpphevetAnkeInTrygderetten) {
     return isModernized
       ? 'Nei, fullfør uten å opprette ny behandling i Kabal.'
       : 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
@@ -39,13 +40,14 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
     oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET;
 
   const finishText = getFinishText(isOpphevetInTrygderetten, isModernized);
+  const finishWithUpdateInGosys = oppgave.typeId === SaksTypeEnum.KLAGE && oppgave.oppgave !== null;
 
   return (
     <PopupContainer close={cancel} direction={Direction.RIGHT}>
       <BodyLong>{text}</BodyLong>
       <StyledFinishOppgaveButtons $width={isOpphevetInTrygderetten ? 650 : 400}>
         {isOpphevetInTrygderetten ? <FinishOpphevetTRWithNyBehandling /> : null}
-        <FinishButton>{finishText}</FinishButton>
+        {finishWithUpdateInGosys ? <UpdateInGosys /> : <FinishButton>{finishText}</FinishButton>}
         <Button
           style={{ flexShrink: 0 }}
           variant="secondary"
@@ -85,12 +87,14 @@ const useText = (): string => {
     return '';
   }
 
+  const hasGosysOppgave = oppgave.oppgave !== null;
+
   const { typeId, resultat } = oppgave;
   const { utfallId } = resultat;
 
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
-      return isModernized
+      return isModernized || hasGosysOppgave
         ? 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
         : 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
     case SaksTypeEnum.ANKE: {
@@ -150,16 +154,11 @@ const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => 
   }
 
   const finish = async () => {
-    if (typeof oppgave === 'undefined') {
-      return;
-    }
-
     const params: IFinishOppgavebehandlingParams =
       oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET
         ? {
             oppgaveId: oppgave.id,
             typeId: oppgave.typeId,
-            utfall: oppgave.resultat.utfallId,
             kvalitetsvurderingId: oppgave.kvalitetsvurderingReference?.id ?? null,
             nyBehandling,
           }

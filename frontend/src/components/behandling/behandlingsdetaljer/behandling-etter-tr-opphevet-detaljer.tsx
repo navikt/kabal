@@ -28,7 +28,7 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
     fraNAVEnhetNavn,
     fraNAVEnhet,
     kommentarFraVedtaksinstans,
-    oppgavebeskrivelse,
+    oppgave,
     resultat,
     ytelseId,
     prosessfullmektig,
@@ -85,7 +85,7 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
 
       <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+      {oppgave === null ? null : <GosysBeskrivelse oppgavebeskrivelse={oppgave.beskrivelse} />}
 
       <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
 

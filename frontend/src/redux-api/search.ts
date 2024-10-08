@@ -15,7 +15,13 @@ export const searchApi = createApi({
     searchpartwithutsendingskanal: builder.query<IPart, SearchPartWithUtsendingskanalParams>({
       query: (body) => ({ url: `/searchpartwithutsendingskanal`, method: 'POST', body }),
     }),
+    searchEnhetmappe: builder.query<{ id: number; navn: string }[], string>({
+      query: (enhetId) => ({ url: `/search/oppgavemapper/${enhetId}`, method: 'GET' }),
+    }),
+    searchEnheter: builder.query<{ enhetsnr: string; navn: string }[], { enhetsnr?: string; enhetsnavn?: string }>({
+      query: (params) => ({ url: `/search/enheter`, method: 'GET', params }),
+    }),
   }),
 });
 
-export const { useLazySearchpartwithutsendingskanalQuery } = searchApi;
+export const { useLazySearchpartwithutsendingskanalQuery, useSearchEnhetmappeQuery, useSearchEnheterQuery } = searchApi;
