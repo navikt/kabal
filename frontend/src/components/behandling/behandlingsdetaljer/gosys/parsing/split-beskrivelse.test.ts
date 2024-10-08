@@ -22,13 +22,13 @@ Overførte oppgaven fra Kabin til Kabal.`;
   it('should split two lines', () => {
     expect.assertions(1);
 
-    const twoLines = `--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---
+    const beskrivelse = `--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---
 Overførte oppgaven fra Kabin til Kabal.
 
 --- 12.06.2024 15:45 F_Z994864 E_Z994864 (Z994864, 4291) ---
 Oppdaterte frist`;
 
-    const actual = splitBeskrivelse(twoLines);
+    const actual = splitBeskrivelse(beskrivelse);
     expect(actual).toStrictEqual([
       {
         date: new Date(2024, 5, 12, 14, 29),
