@@ -24,7 +24,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     () => (oppgavebeskrivelse === null ? '' : oppgavebeskrivelse.trim()),
     [oppgavebeskrivelse],
   );
-  const expectedEntries = trimmedBeskrivelse.split('\n').filter((l) => l.includes('---')).length;
+  const expectedEntries = trimmedBeskrivelse.split('\n').filter((l) => l.includes('---') && !l.startsWith('"')).length;
   const entries = useMemo(
     () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
     [trimmedBeskrivelse],
