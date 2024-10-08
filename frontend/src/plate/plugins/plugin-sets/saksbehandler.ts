@@ -8,6 +8,7 @@ import { createYjsPlugin } from '@udecode/plate-yjs';
 import * as Y from 'yjs';
 import { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
 import { TAB_UUID } from '@app/headers';
+import { pushLog } from '@app/observability';
 import { CurrentDate } from '@app/plate/components/current-date';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeaderFooter } from '@app/plate/components/header-footer';
@@ -120,6 +121,8 @@ export const collaborationSaksbehandlerPlugins = (
   const sharedRoot = new Y.XmlText();
   sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
 
+  const context = { behandlingId, dokumentId };
+
   return createPlugins(
     [
       ...saksbehandlerPlugins,
@@ -133,6 +136,37 @@ export const collaborationSaksbehandlerPlugins = (
             url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
             name: dokumentId,
             document: sharedRoot.doc ?? undefined,
+            onAuthenticated: () => pushLog('HocusPocusProvider onAuthenticated', { context }),
+            onAuthenticationFailed: (data) =>
+              pushLog('HocusPocusProvider authentication onAuthenticationFailed', {
+                context: { ...context, ...data },
+              }),
+            onAwarenessChange: (data) =>
+              pushLog('HocusPocusProvider onAwarenessChange', {
+                context: { ...context, states: data.states.toString() },
+              }),
+            onAwarenessUpdate: (data) =>
+              pushLog('HocusPocusProvider onAwarenessUpdate', {
+                context: { ...context, states: data.states.toString() },
+              }),
+            onClose: (data) =>
+              pushLog('HocusPocusProvider onClose', {
+                context: { ...context, code: data.event.code.toString(), reason: data.event.reason },
+              }),
+            onConnect: () => pushLog('HocusPocusProvider onConnect', { context }),
+            onDestroy: () => pushLog('HocusPocusProvider onDestroy', { context }),
+            onDisconnect: (data) =>
+              pushLog('HocusPocusProvider onDisconnect', {
+                context: { ...context, code: data.event.code.toString(), reason: data.event.reason },
+              }),
+            onOpen: (data) =>
+              pushLog('HocusPocusProvider onOpen', { context: { ...context, type: data.event?.type ?? 'undefined' } }),
+            onStateless: (data) =>
+              pushLog('HocusPocusProvider onStateless', { context: { ...context, payload: data.payload } }),
+            onStatus: (data) =>
+              pushLog('HocusPocusProvider onStatus', { context: { ...context, status: data.status } }),
+            onSynced: (data) =>
+              pushLog('HocusPocusProvider onSynced', { context: { ...context, state: String(data.state) } }),
           },
         },
       }),
