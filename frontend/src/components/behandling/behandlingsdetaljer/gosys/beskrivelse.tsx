@@ -21,10 +21,11 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
   const modalRef = useRef<HTMLDialogElement>(null);
   const trimmedBeskrivelse = useMemo(
-    () => (oppgavebeskrivelse === null ? '' : oppgavebeskrivelse.trim()),
+    () => (oppgavebeskrivelse === null ? null : oppgavebeskrivelse.trim()),
     [oppgavebeskrivelse],
   );
-  const expectedEntries = trimmedBeskrivelse.split('\n').filter((l) => l.includes('---') && !l.startsWith('"')).length;
+  const expectedEntries =
+    trimmedBeskrivelse?.split('\n').filter((l) => l.includes('---') && !l.startsWith('"')).length ?? 0;
   const entries = useMemo(
     () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
     [trimmedBeskrivelse],
