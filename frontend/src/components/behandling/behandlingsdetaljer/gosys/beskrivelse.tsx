@@ -61,8 +61,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   }
 
   const [firstEntry, secondEntry] = entries;
-  const showKabalFormat =
-    hasExpectedEntries && firstEntry !== undefined && preferredFormat === GosysBeskrivelseFormat.KABAL;
+  const showKabalFormat = firstEntry !== undefined && preferredFormat === GosysBeskrivelseFormat.KABAL;
 
   return (
     <BehandlingSection label="Beskrivelse fra Gosys">
