@@ -14,7 +14,6 @@ import { SortOrder } from '@app/types/sort';
 
 // Oppgavebehandling tabs
 export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/documents/enabled'));
-export const useBehandlingEnabled = () => useBooleanSetting(useOppgavePath('tabs/behandling/enabled'));
 export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tabs/smart-editor/enabled'));
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 

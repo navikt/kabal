@@ -2,7 +2,6 @@ import { Heading, Skeleton } from '@navikt/ds-react';
 import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useBehandlingEnabled } from '@app/hooks/settings/use-setting';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
@@ -11,22 +10,14 @@ import { Trygderettsankebehandlingsdetaljer } from './behandlingsdetaljer/trygde
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
 import { StyledBehandlingSection, StyledContainer } from './styled-components';
 
-export const Behandling = () => {
-  const { value: shown = true } = useBehandlingEnabled();
-
-  if (!shown) {
-    return null;
-  }
-
-  return (
-    <PanelContainer data-testid="behandling-panel">
-      <StyledContainer>
-        <Behandlingsdetaljer />
-        <Behandlingsdialog />
-      </StyledContainer>
-    </PanelContainer>
-  );
-};
+export const Behandling = () => (
+  <PanelContainer data-testid="behandling-panel">
+    <StyledContainer>
+      <Behandlingsdetaljer />
+      <Behandlingsdialog />
+    </StyledContainer>
+  </PanelContainer>
+);
 
 const Behandlingsdetaljer = () => {
   const { data: oppgave } = useOppgave();
