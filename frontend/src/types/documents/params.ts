@@ -9,7 +9,7 @@ export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;
 }
 
-export interface ICreateVedleggFromJournalfoertDocumentParams extends IOppgavebehandlingBaseParams {
+export interface ICreateVedleggParams extends IOppgavebehandlingBaseParams {
   parentId: UUID;
   journalfoerteDokumenter: IArkivertDocument[];
   creator: {
