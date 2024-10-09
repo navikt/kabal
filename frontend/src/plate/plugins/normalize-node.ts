@@ -1,10 +1,21 @@
-import { createPluginFactory, getNode, insertNodes, isElement } from '@udecode/plate-common';
+import {
+  PlateEditor,
+  TNode,
+  TPath,
+  Value,
+  createPluginFactory,
+  getNode,
+  getParentNode,
+  insertNodes,
+  isElement,
+  setNodes,
+} from '@udecode/plate-common';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { Scrubber } from 'slate';
-import { pushEvent } from '@app/observability';
+import { pushEvent, pushLog } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -37,16 +48,38 @@ export const createNormalizeNodePlugin = createPluginFactory({
 
     // eslint-disable-next-line complexity
     editor.normalizeNode = ([node, path]) => {
-      if (isElement(node) && node.children.length === 0) {
-        const [highestAncestorPath] = path;
-        const highestAncestor =
-          highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));
+      if (!isElement(node)) {
+        return normalizeNode([node, path]);
+      }
 
-        pushEvent('normalized-empty-children', 'smart-editor', {
-          ancestor: JSON.stringify(highestAncestor),
-          node: JSON.stringify(node),
-          path: JSON.stringify(path),
-        });
+      if (node.type === undefined) {
+        pushNodeEvent(editor, node, path, 'normalized-undefined-type');
+
+        const parentEntry = getParentNode(editor, path);
+
+        if (parentEntry === undefined) {
+          return normalizeNode([node, path]);
+        }
+
+        const [parentNode] = parentEntry;
+
+        if (!isElement(parentNode)) {
+          return normalizeNode([node, path]);
+        }
+
+        switch (parentNode.type) {
+          case ELEMENT_LI: {
+            pushLog('Normalized missing LIC', {
+              context: { node: Scrubber.stringify(node), path: JSON.stringify(path) },
+            });
+
+            return setNodes(editor, { type: ELEMENT_LIC }, { at: path, match: (n) => n === node });
+          }
+        }
+      }
+
+      if (node.children.length === 0) {
+        pushNodeEvent(editor, node, path, 'normalized-empty-children');
 
         const options = { at: [...path, 0] };
 
@@ -95,3 +128,15 @@ export const createNormalizeNodePlugin = createPluginFactory({
     return editor;
   },
 });
+
+const pushNodeEvent = (editor: PlateEditor<Value>, node: TNode, path: TPath, name: string) => {
+  const [highestAncestorPath] = path;
+  const highestAncestor =
+    highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));
+
+  pushEvent(name, 'smart-editor', {
+    ancestor: JSON.stringify(highestAncestor),
+    node: Scrubber.stringify(node),
+    path: JSON.stringify(path),
+  });
+};
