@@ -30,9 +30,7 @@ export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => 
           icon={<LightBulbIcon aria-hidden />}
           active={showGodeFormuleringer}
           onClick={() => {
-            if (!showGodeFormuleringer) {
-              pushEvent('show-gode-formuleringer', 'smart-editor', { enabled: 'true' });
-            }
+            pushEvent('toggle-gode-formuleringer', 'smart-editor', { enabled: showGodeFormuleringer.toString() });
             setShowGodeFormuleringer(!showGodeFormuleringer);
           }}
         />
