@@ -7,7 +7,11 @@ import { NewDocument } from '@app/components/smart-editor/new-document/new-docum
 import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
+import {
+  useSmartEditorActiveDocument,
+  useSmartEditorGodeFormuleringerOpen,
+  useSmartEditorHistoryOpen,
+} from '@app/hooks/settings/use-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
@@ -40,6 +44,9 @@ const Tabbed = ({ documents }: TabbedProps) => {
 
   const activeEditorId = documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
+  const { value: showGodeFormuleringer = false } = useSmartEditorGodeFormuleringerOpen();
+  const { value: showHistory = false } = useSmartEditorHistoryOpen();
+
   // If the user does not have access to create documents, select the first document, if any.
   useEffect(() => {
     if (!hasDocumentsAccess && firstDocumentId !== undefined && activeEditorId === NEW_TAB_ID) {
@@ -66,7 +73,7 @@ const Tabbed = ({ documents }: TabbedProps) => {
   return (
     <PanelContainer>
       <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
-        <StyledTabsList>
+        <StyledTabsList style={{ maxWidth: getMaxWidth(showGodeFormuleringer, showHistory) }}>
           {documents.map(({ id, tittel }) => (
             <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
           ))}
@@ -126,8 +133,30 @@ const StyledTabs = styled(Tabs)`
   overflow: hidden;
 `;
 
+const ONLY_DOCUMENT = 762;
+const HISTORY = 1_110;
+const GODE_FORMULERINGER = 350;
+const ALL = ONLY_DOCUMENT + HISTORY + GODE_FORMULERINGER;
+const DOCUMENT_AND_HISTORY = ONLY_DOCUMENT + HISTORY;
+const DOCUMENT_AND_GODE_FORMULERINGER = ONLY_DOCUMENT + GODE_FORMULERINGER;
+
+const getMaxWidth = (showGodeFormuleringer: boolean, showHistory: boolean) => {
+  if (showHistory && showGodeFormuleringer) {
+    return ALL;
+  }
+
+  if (showGodeFormuleringer) {
+    return DOCUMENT_AND_GODE_FORMULERINGER;
+  }
+
+  if (showHistory) {
+    return DOCUMENT_AND_HISTORY;
+  }
+
+  return ONLY_DOCUMENT;
+};
+
 const StyledTabsList = styled(Tabs.List)`
-  max-width: 762px;
   white-space: nowrap;
 `;
 
