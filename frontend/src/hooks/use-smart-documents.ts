@@ -33,5 +33,5 @@ export const useSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartD
     }
   }
 
-  return documents;
+  return documents.toSorted((a, b) => a.created.localeCompare(b.created));
 };
