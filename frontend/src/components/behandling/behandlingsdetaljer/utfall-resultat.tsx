@@ -1,5 +1,6 @@
 import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
+import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/retur-warning';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
@@ -102,6 +103,7 @@ const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
         <option value={NOT_SELECTED_VALUE} label={NOT_SELECTED_LABEL} />
         {options}
       </Select>
+      {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
     </Container>
   );
 };
