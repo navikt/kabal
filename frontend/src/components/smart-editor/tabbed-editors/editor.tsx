@@ -46,7 +46,6 @@ export const Editor = ({ smartDocument, scalingGroup }: EditorProps) => {
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
-  const [showHistory, setShowHistory] = useState(false);
   const { data: oppgave } = useOppgave();
 
   if (oppgave === undefined) {
@@ -56,7 +55,7 @@ export const Editor = ({ smartDocument, scalingGroup }: EditorProps) => {
   if (isLoading) {
     return (
       <Container>
-        <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
+        <SaksbehandlerToolbar />
         <Sheet $minHeight />
       </Container>
     );
@@ -109,8 +108,7 @@ interface PlateContextProps {
 const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
-  const { showAnnotationsAtOrigin } = useContext(SmartEditorContext);
-  const [showHistory, setShowHistory] = useState(false);
+  const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef(id);
   const [isConnected, setIsConnected] = useState(editor.yjs.provider.isConnected);
 
@@ -209,7 +207,7 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
 
         <Content>
           <EditorContainer data-area="content">
-            <SaksbehandlerToolbar showHistory={showHistory} setShowHistory={setShowHistory} />
+            <SaksbehandlerToolbar />
 
             <ErrorBoundary
               errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}

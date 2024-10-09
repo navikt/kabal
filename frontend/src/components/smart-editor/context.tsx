@@ -4,6 +4,7 @@ import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,
+  useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
 import { DistribusjonsType, ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -13,6 +14,8 @@ const noop = () => {};
 interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
   setShowGodeFormuleringer: (show: boolean) => void;
+  showHistory: boolean;
+  setShowHistory: (show: boolean) => void;
   newCommentSelection: TRange | null;
   setNewCommentSelection: (selection: TRange | null) => void;
   dokumentId: string;
@@ -30,6 +33,8 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   dokumentTypeId: DistribusjonsType.BREV,
   showGodeFormuleringer: false,
   setShowGodeFormuleringer: noop,
+  showHistory: false,
+  setShowHistory: noop,
   newCommentSelection: null,
   setNewCommentSelection: noop,
   dokumentId: '',
@@ -51,6 +56,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { dokumentTypeId, templateId, id } = smartDocument;
   const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
     useSmartEditorGodeFormuleringerOpen();
+  const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
@@ -65,6 +71,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         dokumentTypeId,
         setShowGodeFormuleringer,
         showGodeFormuleringer,
+        showHistory,
+        setShowHistory,
         newCommentSelection,
         setNewCommentSelection,
         dokumentId: id,

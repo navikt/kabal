@@ -9,13 +9,9 @@ import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
 
-interface Props {
-  showHistory: boolean;
-  setShowHistory: (showHistory: boolean) => void;
-}
-
-export const SaksbehandlerToolbar = ({ setShowHistory, showHistory }: Props) => {
-  const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
+export const SaksbehandlerToolbar = () => {
+  const { showGodeFormuleringer, setShowGodeFormuleringer, showHistory, setShowHistory } =
+    useContext(SmartEditorContext);
 
   return (
     <StyledToolbar>
