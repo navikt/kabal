@@ -57,7 +57,8 @@ const startRefreshOboTokenInterval = (context: ConnectionContext, immediate = fa
       });
 
       if (!res.ok) {
-        throw new Error(`Wonderwall responded with status code ${res.status}`);
+        const text = await res.text();
+        throw new Error(`Wonderwall responded with status code ${res.status}: ${text}`);
       }
 
       const parsed = await res.json();
