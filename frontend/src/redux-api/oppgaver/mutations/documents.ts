@@ -15,7 +15,7 @@ import {
 } from '@app/types/documents/documents';
 import {
   ICreateFileDocumentParams,
-  ICreateVedleggFromJournalfoertDocumentParams,
+  ICreateVedleggParams,
   IFinishDocumentParams,
   ISetMottakerListParams,
   ISetNameParams,
@@ -23,11 +23,7 @@ import {
   ISetTypeParams,
   mottakerToInputMottaker,
 } from '@app/types/documents/params';
-import {
-  ICreateVedleggFromJournalfoertDocumentResponse,
-  IModifiedDocumentResponse,
-  ISetParentResponse,
-} from '@app/types/documents/response';
+import { ICreateVedleggResponse, IModifiedDocumentResponse, ISetParentResponse } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import { IPart } from '@app/types/oppgave-common';
 import { IS_LOCALHOST } from '../../common';
@@ -310,10 +306,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    createVedleggFromJournalfoertDocument: builder.mutation<
-      ICreateVedleggFromJournalfoertDocumentResponse,
-      ICreateVedleggFromJournalfoertDocumentParams
-    >({
+    createVedleggFromJournalfoertDocument: builder.mutation<ICreateVedleggResponse, ICreateVedleggParams>({
       query: ({ oppgaveId, parentId, journalfoerteDokumenter }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/journalfoertedokumenter`,
         method: 'POST',
