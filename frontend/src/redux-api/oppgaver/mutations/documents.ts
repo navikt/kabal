@@ -363,7 +363,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               });
             }
 
-            const sorted = addedDocuments.sort((a, b) => {
+            return addedDocuments.sort((a, b) => {
               if (a.type === DocumentTypeEnum.JOURNALFOERT) {
                 if (b.type === DocumentTypeEnum.JOURNALFOERT) {
                   return b.journalfoertDokumentReference.sortKey.localeCompare(a.journalfoertDokumentReference.sortKey);
@@ -378,8 +378,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
               return b.created.localeCompare(a.created);
             });
-
-            return sorted;
           }),
         );
 
