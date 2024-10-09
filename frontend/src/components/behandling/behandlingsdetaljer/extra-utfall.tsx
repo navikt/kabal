@@ -1,6 +1,7 @@
 import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
 import { ReactNode, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/retur-warning';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -21,11 +22,19 @@ interface Props extends TagsProps {
 
 export const ExtraUtfall = (props: Props) => {
   const canEdit = useCanEditBehandling();
+  const { data: oppgave } = useOppgave();
+
+  if (oppgave === undefined) {
+    return null;
+  }
+
+  const includesRetur = oppgave.resultat.extraUtfallIdSet.some((u) => u === UtfallEnum.RETUR);
 
   return (
     <Container>
       {canEdit ? <ExtraUtfallButton {...props} /> : null}
       <Tags {...props} />
+      {canEdit && includesRetur ? <ReturWarning /> : null}
     </Container>
   );
 };
@@ -137,6 +146,9 @@ const ButtonContainer = styled.div`
 
 const Container = styled.div`
   margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-2);
 `;
 
 const Popup = ({ isOpen, children }: { isOpen: boolean; children: ReactNode }) => {
@@ -168,5 +180,4 @@ const TagsContainer = styled.div`
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
-  margin-top: 8px;
 `;
