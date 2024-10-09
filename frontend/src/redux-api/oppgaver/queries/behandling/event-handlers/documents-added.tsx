@@ -2,6 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
+import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
@@ -27,7 +28,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
       }
 
       for (const document of event.documents) {
-        if (!draft.some((d) => d.id === document.id)) {
+        if (!draft.some((d) => d.id === document.id || areJournalfoertDocumentsEqual(d, document))) {
           draft.push(document);
         }
       }

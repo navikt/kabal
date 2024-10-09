@@ -2,6 +2,7 @@
 /* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
 import { IArkivertDocument, IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
@@ -341,7 +342,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
               addedDocuments.push({
                 ...doc,
-                id: crypto.randomUUID(),
+                id: `optimistic-${crypto.randomUUID()}`,
                 parentId,
                 isMarkertAvsluttet: false,
                 isSmartDokument: false,
@@ -434,13 +435,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   }
 
                   if (
-                    oldDoc.type === DocumentTypeEnum.JOURNALFOERT &&
-                    oldDoc.journalfoertDokumentReference.journalpostId ===
-                      newDoc.journalfoertDokumentReference.journalpostId &&
-                    oldDoc.journalfoertDokumentReference.dokumentInfoId ===
-                      newDoc.journalfoertDokumentReference.dokumentInfoId &&
-                    oldDoc.parentId === newDoc.parentId &&
-                    oldDoc.id !== newDoc.id
+                    areJournalfoertDocumentsEqual(oldDoc, newDoc) &&
+                    oldDoc.id !== newDoc.id &&
+                    oldDoc.id.startsWith('optimistic-')
                   ) {
                     draft[index] = newDoc;
                     break;
