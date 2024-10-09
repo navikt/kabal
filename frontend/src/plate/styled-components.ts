@@ -24,6 +24,7 @@ export const PlateEditorContent = styled.div<{ $showAnnotationsAtOrigin: boolean
   overflow: visible;
   scroll-padding-top: var(--a-spacing-16);
   padding-top: var(--a-spacing-4);
+  padding-left: var(--a-spacing-4);
   position: relative;
   text-underline-offset: 0.25em; // To match PDF.
   word-wrap: normal;
@@ -32,6 +33,7 @@ export const PlateEditorContent = styled.div<{ $showAnnotationsAtOrigin: boolean
 
   &::after {
     grid-area: padding;
+    height: 0;
     content: '';
     padding-bottom: calc(20mm * var(${EDITOR_SCALE_CSS_VAR}) + 100px);
   }

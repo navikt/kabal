@@ -134,7 +134,6 @@ const StyledTabsList = styled(Tabs.List)`
 const StyledTabPanels = styled.div`
   overflow: hidden;
   flex-grow: 1;
-  background-color: var(--a-bg-subtle);
 `;
 
 const StyledNoDocuments = styled.div`

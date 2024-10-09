@@ -344,7 +344,6 @@ const MainContainer = styled.div`
   flex-shrink: 1;
   overflow-y: scroll;
   scroll-padding-top: var(--a-spacing-16);
-  padding-left: var(--a-spacing-4);
 `;
 
 const EditorContainer = styled.div`
