@@ -11,7 +11,7 @@ export const Sheet = styled.div<Props>`
   background-color: var(--a-bg-default);
   flex-shrink: 0;
   margin-top: var(--a-spacing-4);
-  box-shadow: var(--a-shadow-medium);
+  box-shadow: var(--a-shadow-xlarge);
 
   &:first-of-type {
     margin-top: 0;

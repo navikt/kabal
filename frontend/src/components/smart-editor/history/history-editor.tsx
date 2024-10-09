@@ -107,18 +107,19 @@ const HistoryEditorContainer = styled.div`
   overflow-x: visible;
   padding-top: var(--a-spacing-4);
   padding-right: var(--a-spacing-4);
+  padding-left: var(--a-spacing-4);
   height: max-content;
   min-width: 210mm;
 
   &::after {
     content: '';
-    padding-bottom: calc(20mm * var(${EDITOR_SCALE_CSS_VAR}) + 33px);
+    padding-bottom: calc(20mm * var(${EDITOR_SCALE_CSS_VAR}) + 100px);
   }
 `;
 
 const StyledButton = styled(Button)`
   position: sticky;
-  margin-bottom: 18px;
+  margin-bottom: var(--a-spacing-5);
   top: 0;
   width: 210mm;
   z-index: 1;

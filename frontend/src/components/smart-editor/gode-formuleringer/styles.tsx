@@ -10,6 +10,8 @@ export const StyledGodeFormuleringer = styled.section`
   gap: var(--a-spacing-4);
   width: 350px;
   height: 100%;
+  background-color: var(--a-bg-default);
+  padding-left: var(--a-spacing-3);
 `;
 
 export const Top = styled.div`

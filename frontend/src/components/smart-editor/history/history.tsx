@@ -132,10 +132,8 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-2);
   align-items: center;
   margin-bottom: var(--a-spacing-4);
-  margin-right: var(--a-spacing-4);
   min-width: 300px;
   position: sticky;
   top: 0;
@@ -146,7 +144,8 @@ const ListHeader = styled.div`
   align-items: center;
   flex-shrink: 0;
   width: 100%;
-  height: 60px;
+  padding-top: var(--a-spacing-6);
+  padding-bottom: var(--a-spacing-5);
 `;
 
 const StyledButton = styled(Button)`
@@ -154,6 +153,7 @@ const StyledButton = styled(Button)`
   justify-content: space-between;
   text-align: left;
   width: 100%;
+  padding: var(--a-spacing-2);
 `;
 
 const StyledHistory = styled.ul`
@@ -166,8 +166,7 @@ const StyledHistory = styled.ul`
   white-space: nowrap;
   row-gap: var(--a-spacing-2);
   background-color: var(--a-surface-default);
-  padding: var(--a-spacing-2);
-  box-shadow: var(--a-shadow-medium);
+  box-shadow: var(--a-shadow-xlarge);
   border-radius: var(--a-border-radius-medium);
   width: 100%;
 `;
