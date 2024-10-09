@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { focusEditor } from '@udecode/plate-common';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -170,8 +170,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           <Button
             title="Skjul gode formuleringer"
             size="small"
-            variant="secondary-neutral"
-            icon={<ChevronLeftIcon />}
+            variant="tertiary-neutral"
+            icon={<XMarkIcon aria-hidden />}
             onClick={() => setShowGodeFormuleringer(false)}
           />
         </Header>
