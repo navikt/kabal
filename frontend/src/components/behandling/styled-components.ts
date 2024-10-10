@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 export const StyledContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 375px 375px;
   white-space: normal;
   width: 750px;
   grid-column-gap: 1px;
