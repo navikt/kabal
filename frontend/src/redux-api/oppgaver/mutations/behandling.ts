@@ -13,6 +13,7 @@ import {
   ISetFeilregistrertParams,
   ISetFullmektigParams,
   ISetKlagerParams,
+  isFinishWithUpdateInGosys,
 } from '@app/types/oppgavebehandling/params';
 import {
   IModifiedResponse,
@@ -29,9 +30,12 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishOppgavebehandlingParams>({
-      query: ({ oppgaveId, nyBehandling }) => ({
+      query: ({ oppgaveId, nyBehandling, ...rest }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer?nybehandling=${nyBehandling}`,
         method: 'POST',
+        body: isFinishWithUpdateInGosys(rest)
+          ? { mappeId: rest.mappeId, tildeltEnhet: rest.tildeltEnhet, kommentar: rest.kommentar }
+          : undefined,
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {

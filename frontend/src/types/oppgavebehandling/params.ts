@@ -61,7 +61,16 @@ export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
 
 export type IFinishOppgavebehandlingParams =
   | IDefaultFinishOppgavebehandlingParams
-  | IFinishOppgavebehandlingOpphevetTRParams;
+  | IFinishOppgavebehandlingOpphevetTRParams
+  | IFinishWithUpdateInGosys;
+
+interface IFinishWithUpdateInGosys extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
+  oppgaveId: string;
+  tildeltEnhet: string;
+  mappeId: number | null;
+  kommentar: string;
+  nyBehandling: false;
+}
 
 interface IDefaultFinishOppgavebehandlingParams {
   oppgaveId: string;
@@ -71,7 +80,6 @@ interface IDefaultFinishOppgavebehandlingParams {
 
 interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
-  utfall: UtfallEnum.OPPHEVET;
   nyBehandling: boolean;
 }
 
@@ -97,3 +105,7 @@ export interface IValidationParams extends IOppgavebehandlingBaseParams {
 export interface ISetRolParams extends IOppgavebehandlingBaseParams {
   employee: INavEmployee | null;
 }
+
+export const isFinishWithUpdateInGosys = (
+  params: Partial<IFinishOppgavebehandlingParams>,
+): params is IFinishWithUpdateInGosys => 'mappeId' in params && 'tildeltEnhet' in params && 'kommentar' in params;

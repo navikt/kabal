@@ -14,18 +14,14 @@ import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
 import { pushEvent, pushLog } from '@app/observability';
 
 interface Props {
-  oppgavebeskrivelse: string | null;
+  oppgavebeskrivelse: string;
 }
 
 export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const trimmedBeskrivelse = useMemo(
-    () => (oppgavebeskrivelse === null ? null : oppgavebeskrivelse.trim()),
-    [oppgavebeskrivelse],
-  );
-  const expectedEntries =
-    trimmedBeskrivelse?.split('\n').filter((l) => l.includes('---') && !l.startsWith('"')).length ?? 0;
+  const trimmedBeskrivelse = useMemo(() => oppgavebeskrivelse.trim(), [oppgavebeskrivelse]);
+  const expectedEntries = trimmedBeskrivelse.split('\n').filter((l) => l.includes('---')).length;
   const entries = useMemo(
     () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
     [trimmedBeskrivelse],
@@ -56,7 +52,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     }
   }, [entries.length, expectedEntries, hasExpectedEntries, oppgaveId]);
 
-  if (trimmedBeskrivelse === null || trimmedBeskrivelse.length === 0) {
+  if (trimmedBeskrivelse.length === 0) {
     return null;
   }
 

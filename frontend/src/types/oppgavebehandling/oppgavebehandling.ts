@@ -9,6 +9,16 @@ export enum KvalitetsvurderingVersion {
   V2 = 2,
 }
 
+interface Oppgave {
+  beskrivelse: string;
+  opprettetAv: Enhet | null;
+}
+
+export interface Enhet {
+  enhetsnr: string;
+  navn: string;
+}
+
 export interface IOppgavebehandlingBase {
   /** DateTime */
   avsluttetAvSaksbehandlerDate: string | null;
@@ -32,7 +42,7 @@ export interface IOppgavebehandlingBase {
   isAvsluttetAvSaksbehandler: boolean;
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
-  oppgavebeskrivelse: string | null;
+  oppgave: Oppgave;
   kvalitetsvurderingReference: {
     id: UUID;
     version: KvalitetsvurderingVersion;
