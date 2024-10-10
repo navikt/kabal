@@ -1,7 +1,9 @@
-import { Alert, BodyShort, Button, ErrorMessage, Label, Radio, RadioGroup, Search, Tag } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, Radio, RadioGroup, Search, Tag } from '@navikt/ds-react';
 import { useState } from 'react';
 import { css, styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 
@@ -13,34 +15,66 @@ interface Props {
   oppgavebehandling: IOppgavebehandling;
 }
 
+interface ScoredEnhet extends Enhet {
+  score: number;
+}
+
+const getFilteredByNumber = (enheter: Enhet[], number: string): ScoredEnhet[] => {
+  const filteredByNumber: ScoredEnhet[] = [];
+  const numberQuery = splitQuery(number);
+
+  for (const enhet of enheter) {
+    const score = fuzzySearch(numberQuery, enhet.enhetsnr);
+
+    if (score > 0) {
+      filteredByNumber.push({ ...enhet, score });
+    }
+  }
+
+  return filteredByNumber;
+};
+
+const getFilteredByName = (enheter: ScoredEnhet[], name: string): ScoredEnhet[] => {
+  const filteredByName: ScoredEnhet[] = [];
+  const nameQuery = splitQuery(name);
+
+  for (const enhet of enheter) {
+    const score = fuzzySearch(nameQuery, enhet.navn);
+
+    if (score > 0) {
+      filteredByName.push({ ...enhet, score: score + enhet.score });
+    }
+  }
+
+  return filteredByName;
+};
+
 export const EnhetSearch = ({ selectedEnhet, setSelectedEnhet, enheter, error, oppgavebehandling }: Props) => {
   const { typeId, oppgave } = oppgavebehandling;
   const suggestedEnhet = typeId === SaksTypeEnum.KLAGE ? (oppgave?.opprettetAv ?? null) : null;
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [filteredEnheter, setFilteredEnheter] = useState(
-    enheter.toSorted((a, b) => a.enhetsnr.localeCompare(b.enhetsnr)),
-  );
+  const scoredEnheter = enheter.map((enhet) => ({ ...enhet, score: 0 }));
+  const [filteredEnheter, setFilteredEnheter] = useState(scoredEnheter);
 
   const filter = ({ nameSearch, numberSearch }: { nameSearch?: string; numberSearch?: string }) => {
     const nameFilter = (nameSearch ?? name).toLowerCase();
     const numberFilter = (numberSearch ?? number).toLowerCase();
 
-    const filtered = enheter
-      .filter(
-        ({ enhetsnr, navn }) =>
-          (name.length > 0 ? navn.toLowerCase().includes(nameFilter) : true) &&
-          (number.length > 0 ? enhetsnr.toLowerCase().includes(numberFilter) : true),
-      )
-      .toSorted((a, b) => a.enhetsnr.localeCompare(b.enhetsnr));
+    const filteredByNumber: ScoredEnhet[] =
+      numberFilter.length > 0 ? getFilteredByNumber(enheter, numberFilter) : scoredEnheter;
+    const filteredByName: ScoredEnhet[] =
+      nameFilter.length > 0 ? getFilteredByName(filteredByNumber, nameFilter) : filteredByNumber;
 
-    setFilteredEnheter(filtered);
+    const sorted = filteredByName.sort((a, b) => b.score - a.score);
 
-    if (filtered.length === 1) {
-      return setSelectedEnhet(filtered[0]!.enhetsnr);
+    setFilteredEnheter(sorted);
+
+    if (sorted.length === 1) {
+      return setSelectedEnhet(sorted[0]!.enhetsnr);
     }
 
-    if (!filtered.some(({ enhetsnr }) => enhetsnr === selectedEnhet)) {
+    if (!sorted.some(({ enhetsnr }) => enhetsnr === selectedEnhet)) {
       setSelectedEnhet(null);
     }
   };
@@ -68,8 +102,9 @@ export const EnhetSearch = ({ selectedEnhet, setSelectedEnhet, enheter, error, o
             placeholder="Filtrer på enhetsnummer"
             value={number}
             onChange={(value) => {
-              setNumber(value);
-              filter({ numberSearch: value });
+              const onlyNumbers = value.replace(/[^0-9]/g, '');
+              setNumber(onlyNumbers);
+              filter({ numberSearch: onlyNumbers });
             }}
           />
         </SearchFields>
