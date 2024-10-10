@@ -131,8 +131,8 @@ const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
-  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.OpenWithYtelseAccess,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
 
 const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
@@ -146,8 +146,8 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
-  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.OpenWithYtelseAccess,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
 
 const StyledBody = styled(Modal.Body)`

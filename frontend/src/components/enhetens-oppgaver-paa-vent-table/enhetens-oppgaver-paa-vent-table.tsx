@@ -20,9 +20,9 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
+  ColumnKeyEnum.Open,
   ColumnKeyEnum.Medunderskriver,
   ColumnKeyEnum.Oppgavestyring,
-  ColumnKeyEnum.Open,
 ];
 
 export const EnhetensOppgaverPaaVentTable = () => {

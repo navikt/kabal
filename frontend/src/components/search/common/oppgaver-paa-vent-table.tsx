@@ -20,8 +20,8 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentTil,
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
-  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.OpenWithYtelseAccess,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
 
 export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
