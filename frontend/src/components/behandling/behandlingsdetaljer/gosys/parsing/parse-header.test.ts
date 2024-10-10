@@ -1,5 +1,7 @@
+/* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
 import { parseHeader } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
+import { GosysEntryAuthorType } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 
 describe('parse Gosys header', () => {
   it('should parse simple header', () => {
@@ -10,7 +12,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -23,7 +25,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'F_Z994864, E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864, E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -36,7 +38,12 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'Ola Navn Navnesen Normann', navIdent: 'Z994864', enhet: '4291' },
+      author: {
+        name: 'Ola Navn Navnesen Normann',
+        navIdent: 'Z994864',
+        enhet: '4291',
+        type: GosysEntryAuthorType.EMPLOYEE,
+      },
       content: '',
     });
   });
@@ -49,7 +56,12 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'Øyvind Øystein Østensen', navIdent: 'Z994864', enhet: '4291' },
+      author: {
+        name: 'Øyvind Øystein Østensen',
+        navIdent: 'Z994864',
+        enhet: '4291',
+        type: GosysEntryAuthorType.EMPLOYEE,
+      },
       content: '',
     });
   });
@@ -62,7 +74,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'Ola-Navn Navnesen', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'Ola-Navn Navnesen', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -75,7 +87,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: null, navIdent: 'Z994864', enhet: '4291' },
+      author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -88,7 +100,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: null, navIdent: 'Z994864', enhet: '4291' },
+      author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -101,7 +113,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: null, navIdent: 'Z994864', enhet: '4291' },
+      author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -114,7 +126,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 0),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -127,7 +139,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 9, 0),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -140,7 +152,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 9, 0),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -153,7 +165,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 2, 9, 0),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -166,7 +178,7 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
     });
   });
@@ -179,7 +191,20 @@ describe('parse Gosys header', () => {
     const actual = parseHeader(header);
     expect(actual).toStrictEqual({
       date: new Date(2024, 5, 12, 14, 29),
-      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291' },
+      author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
+      content: '',
+    });
+  });
+
+  it('should parse header with system user', () => {
+    const header = '--- 12.06.2024 14:29 (kabal-api) ---';
+
+    expect.assertions(1);
+
+    const actual = parseHeader(header);
+    expect(actual).toStrictEqual({
+      date: new Date(2024, 5, 12, 14, 29),
+      author: { name: 'kabal-api', type: GosysEntryAuthorType.SYSTEM },
       content: '',
     });
   });
