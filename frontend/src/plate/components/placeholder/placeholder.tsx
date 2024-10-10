@@ -5,6 +5,10 @@ import {
   PlateRenderElementProps,
   findNodePath,
   focusEditor,
+  getEndPoint,
+  getPreviousPath,
+  isEditorFocused,
+  setSelection,
   useEditorReadOnly,
 } from '@udecode/plate-common';
 import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
@@ -122,8 +126,23 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
 
       event.stopPropagation();
 
+      const previousPath = getPreviousPath(path);
+
+      if (editor.selection === null && previousPath !== undefined) {
+        if (!isEditorFocused(editor)) {
+          focusEditor(editor);
+        }
+
+        const previousPoint = getEndPoint(editor, previousPath);
+
+        setSelection(editor, { focus: previousPoint, anchor: previousPoint });
+      }
+
       editor.delete({ at: path });
-      focusEditor(editor);
+
+      if (!isEditorFocused(editor)) {
+        focusEditor(editor);
+      }
     },
     [editor, element],
   );
