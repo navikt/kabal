@@ -16,7 +16,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Finished,
   ColumnKeyEnum.Tildeling,
-  ColumnKeyEnum.Open,
+  ColumnKeyEnum.OpenWithYtelseAccess,
 ];
 
 export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {

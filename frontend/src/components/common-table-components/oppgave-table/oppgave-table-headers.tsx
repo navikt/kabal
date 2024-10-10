@@ -125,6 +125,7 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.Fnr:
       case ColumnKeyEnum.FlowStates:
       case ColumnKeyEnum.Open:
+      case ColumnKeyEnum.OpenWithYtelseAccess:
       case ColumnKeyEnum.Tildeling:
       case ColumnKeyEnum.OppgavestyringNonFilterable:
       case ColumnKeyEnum.Utfall:

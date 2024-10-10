@@ -22,7 +22,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PreviousSaksbehandler,
   ColumnKeyEnum.DatoSendtTilTr,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Open,
+  ColumnKeyEnum.OpenWithYtelseAccess,
   ColumnKeyEnum.Feilregistrering,
 ];
 
