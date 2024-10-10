@@ -21,8 +21,8 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.PreviousSaksbehandler,
   ColumnKeyEnum.DatoSendtTilTr,
-  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.OpenWithYtelseAccess,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Feilregistrering,
 ];
 

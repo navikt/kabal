@@ -22,8 +22,8 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.FlowStates,
-  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Open,
+  ColumnKeyEnum.OppgavestyringNonFilterable,
   ColumnKeyEnum.Feilregistrering,
 ];
 

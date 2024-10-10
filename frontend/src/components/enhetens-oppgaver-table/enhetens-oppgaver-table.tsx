@@ -20,9 +20,9 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.FlowStates,
+  ColumnKeyEnum.Open,
   ColumnKeyEnum.Medunderskriver,
   ColumnKeyEnum.Oppgavestyring,
-  ColumnKeyEnum.Open,
 ];
 
 export const EnhetensOppgaverTable = () => {
