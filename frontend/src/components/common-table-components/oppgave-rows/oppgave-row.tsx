@@ -58,91 +58,91 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Type:
       case ColumnKeyEnum.TypeWithAnkeITrygderetten:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Type type={oppgave.typeId} size="medium" />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Ytelse:
       case ColumnKeyEnum.RolYtelse:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Ytelse ytelseId={oppgave.ytelseId} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Innsendingshjemler:
       case ColumnKeyEnum.RolInnsendingshjemler:
       case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Innsendingshjemler hjemmelIdList={oppgave.hjemmelIdList} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Registreringshjemler:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Navn:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <SakenGjelderName oppgaveId={oppgave.id} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Fnr:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <SakenGjelderFnr oppgaveId={oppgave.id} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Age:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Age {...oppgave} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Deadline:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Deadline {...oppgave} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.VarsletFrist:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <ReadOnlyDeadline frist={oppgave.varsletFrist} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Medunderskriver:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Medunderskriver
               oppgaveId={oppgave.id}
               medunderskriverIdent={oppgave.medunderskriver.employee?.navIdent ?? null}
             />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.FlowStates:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <FlowStateContainer>
               <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
               {oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? (
                 <RolFlowStateLabel rol={oppgave.rol} />
               ) : null}
             </FlowStateContainer>
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Rol:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Rol oppgaveId={oppgave.id} rolIdent={oppgave.rol.employee?.navIdent ?? null} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Open:
       case ColumnKeyEnum.OpenWithYtelseAccess:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <OpenOppgavebehandling
               id={oppgave.id}
               ytelseId={oppgave.ytelseId}
@@ -152,52 +152,52 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               rol={oppgave.rol}
               applyYtelseAccess={key === ColumnKeyEnum.OpenWithYtelseAccess}
             />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Oppgavestyring:
       case ColumnKeyEnum.OppgavestyringNonFilterable:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Oppgavestyring {...oppgave} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Tildeling:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Name navIdent={oppgave.tildeltSaksbehandlerident} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Utfall:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Utfall utfallId={oppgave.utfallId} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <PaaVentTil sattPaaVent={oppgave.sattPaaVent} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.PaaVentReason:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <PaaVentReason sattPaaVent={oppgave.sattPaaVent} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Finished:
-        return <Table.DataCell key={key}>{isoDateToPretty(oppgave.avsluttetAvSaksbehandlerDate)}</Table.DataCell>;
+        return <StyledDataCell key={key}>{isoDateToPretty(oppgave.avsluttetAvSaksbehandlerDate)}</StyledDataCell>;
       case ColumnKeyEnum.Returnert:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             {oppgave.rol.flowState === FlowState.RETURNED ? isoDateToPretty(oppgave.rol.returnertDate) : null}
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Feilregistrering:
       case ColumnKeyEnum.Feilregistrert:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <Feilregistrering
               oppgaveId={oppgave.id}
               feilregistrert={oppgave.feilregistrert}
@@ -207,56 +207,62 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               $position="below"
               $align="right"
             />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.Saksnummer:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <CopyButton text={oppgave.saksnummer} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.RolTildeling:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <RolTildeling oppgave={oppgave} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.RelevantOppgaver:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <RelevantOppgaver oppgaveId={oppgave.id} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.FradelingReason:
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <FradelingReason oppgaveId={oppgave.id} />
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.PreviousSaksbehandler:
         if (oppgave.previousSaksbehandler === null) {
-          return <Table.DataCell key={key} />;
+          return <StyledDataCell key={key} />;
         }
 
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             {oppgave.previousSaksbehandler.navn} ({oppgave.previousSaksbehandler.navIdent})
-          </Table.DataCell>
+          </StyledDataCell>
         );
       case ColumnKeyEnum.DatoSendtTilTr:
         if (oppgave.datoSendtTilTR === null) {
-          return <Table.DataCell key={key} />;
+          return <StyledDataCell key={key} />;
         }
 
         return (
-          <Table.DataCell key={key}>
+          <StyledDataCell key={key}>
             <time dateTime={oppgave.datoSendtTilTR}>{isoDateToPretty(oppgave.datoSendtTilTR)}</time>
-          </Table.DataCell>
+          </StyledDataCell>
         );
     }
 
-    return <Table.DataCell key={key} />;
+    return <StyledDataCell key={key} />;
   });
+
+const StyledDataCell = styled(Table.DataCell)`
+  &:empty {
+    padding: 0;
+  }
+`;
 
 const FlowStateContainer = styled.div`
   display: flex;

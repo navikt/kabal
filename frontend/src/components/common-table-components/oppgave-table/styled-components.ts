@@ -3,4 +3,8 @@ import { styled } from 'styled-components';
 
 export const StyledColumnHeader = styled(Table.ColumnHeader)`
   white-space: nowrap;
+
+  &:empty {
+    padding: 0;
+  }
 `;
