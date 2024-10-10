@@ -1,33 +1,49 @@
 import { BodyLong, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import { styled } from 'styled-components';
-import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import {
+  GosysBeskrivelseEntry,
+  GosysEntryAuthorType,
+} from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 
 export const Entry = ({ author, date, content }: GosysBeskrivelseEntry) => {
   const { data: enheter } = useKlageenheter();
-  const { data } = useGetSignatureQuery(author.navIdent);
+  const isEmployee = author?.type === GosysEntryAuthorType.EMPLOYEE;
+  const { data } = useGetSignatureQuery(isEmployee ? author.navIdent : skipToken);
 
   return (
     <VStack gap="1" as="section">
       <VStack gap="1" as="header">
         <Author>
           <HStack gap="1">
-            <Heading size="xsmall" level="1" style={{ minWidth: 170 }}>
-              {data?.longName ?? author.name ?? 'Laster...'}
+            <Heading size="xsmall" level="1">
+              {isEmployee ? (data?.longName ?? author.name ?? 'Laster...') : (author?.name ?? 'Ukjent')}
             </Heading>
 
-            <CopyIdButton id={author.navIdent} size="xsmall" style={{ gridArea: 'ident' }} />
+            {isEmployee ? (
+              <CopyIdButton id={author.navIdent} size="xsmall" />
+            ) : (
+              <CopyButton text={author?.name ?? 'Ukjent'} size="xsmall" />
+            )}
           </HStack>
 
           <StyledTime>{format(date, 'dd.MM.yyyy HH:mm')}</StyledTime>
         </Author>
 
-        <StyledTag size="xsmall" variant="alt1">
-          {enheter?.find((e) => e.id === author.enhet)?.navn ?? author.enhet} ({author.enhet})
-        </StyledTag>
+        {isEmployee ? (
+          <StyledTag size="xsmall" variant="alt1">
+            {enheter?.find((e) => e.id === author.enhet)?.navn ?? author.enhet} ({author.enhet})
+          </StyledTag>
+        ) : (
+          <StyledTag size="xsmall" variant="neutral-filled">
+            System
+          </StyledTag>
+        )}
       </VStack>
 
       <StyledBodyLong size="small">{content}</StyledBodyLong>
