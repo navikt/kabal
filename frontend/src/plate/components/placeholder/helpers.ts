@@ -100,8 +100,8 @@ export const containsMultipleEmptyCharAndNoText = (text: string): boolean => {
   return emptyCharCount > 1;
 };
 
-export const getIsFocused = (editor: RichTextEditor, path: TPath): boolean => {
-  if (editor.selection === null) {
+export const getIsFocused = (editor: RichTextEditor, path: TPath | undefined): boolean => {
+  if (editor.selection === null || path === undefined) {
     return false;
   }
 

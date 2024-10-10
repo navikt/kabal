@@ -43,7 +43,6 @@ interface PlaceholderProps extends PlateRenderElementProps<EditorValue, Placehol
 }
 
 const Placeholder = ({ element, children, attributes, editor, canManage }: PlaceholderProps) => {
-  const path = findNodePath(editor, element);
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
   const isReadOnly = useEditorReadOnly();
@@ -52,6 +51,8 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
+      const path = findNodePath(editor, element);
+
       if (!hasNoVisibleText) {
         return;
       }
@@ -64,12 +65,14 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
 
       editor.select({ path: [...path, 0], offset: containsEmptyChar ? 1 : 0 });
     },
-    [containsEmptyChar, editor, hasNoVisibleText, path],
+    [containsEmptyChar, editor, element, hasNoVisibleText],
   );
 
-  const isFocused = path === undefined ? false : getIsFocused(editor, path);
+  const isFocused = getIsFocused(editor, findNodePath(editor, element));
 
   useEffect(() => {
+    const path = findNodePath(editor, element);
+
     if (isDragging || path === undefined) {
       return;
     }
@@ -107,10 +110,12 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
     if (cleanedText.length > 0 && getContainsEmptyChar(text)) {
       return cleanText(editor, element, path, at);
     }
-  }, [editor, element, isDragging, isFocused, path, text]);
+  }, [editor, element, isDragging, isFocused, text]);
 
   const deletePlaceholder = useCallback(
     (event: MouseEvent) => {
+      const path = findNodePath(editor, element);
+
       if (path === undefined) {
         return;
       }
@@ -120,13 +125,14 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
       editor.delete({ at: path });
       focusEditor(editor);
     },
-    [editor, path],
+    [editor, element],
   );
 
-  const hideDeleteButton = useMemo(
-    () => !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path),
-    [editor, element, hasNoVisibleText, canManage, path],
-  );
+  const hideDeleteButton = useMemo(() => {
+    const path = findNodePath(editor, element);
+
+    return !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path);
+  }, [editor, element, hasNoVisibleText, canManage]);
 
   return (
     <PlateElement
