@@ -92,12 +92,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
         </Button>
       </VStack>
 
-      <Modal
-        width={600}
-        header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }}
-        ref={modalRef}
-        closeOnBackdropClick
-      >
+      <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
         <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
           <ModalContent
             defaultFormat={preferredFormat}
