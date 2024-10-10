@@ -75,7 +75,6 @@ const UpdateInGosysLoaded = ({ oppgave: oppgavebehandling, enheter, initialBeskr
         open={isOpen}
         onClose={() => setIsOpen(false)}
         header={{ heading: 'Oppdater oppgaven i Gosys' }}
-        width={900}
       >
         <Container>
           <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />

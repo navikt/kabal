@@ -1,6 +1,6 @@
-import { BodyShort, Button, ErrorMessage, Search, Select, Tag } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, Label, Radio, RadioGroup, Search, Tag } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -47,49 +47,50 @@ export const EnhetSearch = ({ selectedEnhet, setSelectedEnhet, enheter, error, o
 
   return (
     <Container>
-      <Line>
-        <Select
-          label="Velg enhet som skal motta oppgaven"
-          size="small"
-          value={selectedEnhet ?? NONE}
-          onChange={({ target }) => setSelectedEnhet(target.value === NONE ? null : target.value)}
-        >
-          {selectedEnhet === null ? (
-            <option value={NONE} disabled>
-              Ikke valgt
-            </option>
-          ) : null}
+      <Fieldset>
+        <Legend>Velg enhet som skal motta oppgaven</Legend>
 
-          {filteredEnheter.map(({ enhetsnr, navn }) => (
-            <option key={enhetsnr} value={enhetsnr}>
-              {enhetsnr} - {navn}
-            </option>
-          ))}
-        </Select>
+        <SearchFields>
+          <Search
+            size="small"
+            label="Filtrer på enhetsnavn"
+            placeholder="Filtrer på enhetsnavn"
+            value={name}
+            onChange={(value) => {
+              setName(value);
+              filter({ nameSearch: value });
+            }}
+          />
 
-        <Search
-          size="small"
-          label="Filtrer på enhetsnavn"
-          placeholder="Filtrer på enhetsnavn"
-          value={name}
-          onChange={(value) => {
-            setName(value);
-            filter({ nameSearch: value });
-          }}
-        />
+          <Search
+            size="small"
+            label="Filtrer på enhetsnummer"
+            placeholder="Filtrer på enhetsnummer"
+            value={number}
+            onChange={(value) => {
+              setNumber(value);
+              filter({ numberSearch: value });
+            }}
+          />
+        </SearchFields>
 
-        <Search
-          size="small"
-          label="Filtrer på enhetsnummer"
-          placeholder="Filtrer på enhetsnummer"
-          value={number}
-          onChange={(value) => {
-            setNumber(value);
-            filter({ numberSearch: value });
-          }}
-        />
-      </Line>
-      {error === null ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
+        {filteredEnheter.length === 0 ? (
+          <Empty>
+            <Alert variant="info" size="small" inline>
+              Ingen enheter funnet
+            </Alert>
+          </Empty>
+        ) : (
+          <StyledRadioGroup value={selectedEnhet} onChange={setSelectedEnhet} legend="Enhet" hideLegend size="small">
+            {filteredEnheter.map(({ enhetsnr, navn }) => (
+              <Radio value={enhetsnr} key={enhetsnr}>
+                {enhetsnr} - {navn}
+              </Radio>
+            ))}
+          </StyledRadioGroup>
+        )}
+        {error === null ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
+      </Fieldset>
 
       {suggestedEnhet === null ? null : (
         <SuggestedEnhet>
@@ -114,23 +115,51 @@ export const EnhetSearch = ({ selectedEnhet, setSelectedEnhet, enheter, error, o
   );
 };
 
-const NONE = 'NONE';
+const Legend = styled.legend`
+  font-weight: bold;
+  margin-bottom: var(--a-spacing-2);
+`;
+
+const Fieldset = styled.fieldset`
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-1);
+`;
+
+const radioGroupStyle = css`
+  height: 260px;
+  overflow-y: scroll;
+  overflow-x: auto;
+  border: 1px solid var(--a-border-default);
+  border-radius: var(--a-border-radius-medium);
+  padding: var(--a-spacing-1);
+`;
+
+const Empty = styled.div`
+  ${radioGroupStyle}
+`;
+
+const StyledRadioGroup = styled(RadioGroup)`
+  ${radioGroupStyle}
+`;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  gap: var(--a-spacing-1);
 `;
 
-const Line = styled.div`
+const SearchFields = styled.div`
   display: grid;
-  align-items: flex-end;
-  gap: 1rem;
-  grid-template-columns: auto 256px 256px;
+  gap: var(--a-spacing-2);
+  grid-template-columns: 360px 260px;
 `;
 
 const SuggestedEnhet = styled.div`
   display: flex;
   align-items: center;
   gap: var(--a-spacing-1);
-  margin-top: var(--a-spacing-2);
 `;
