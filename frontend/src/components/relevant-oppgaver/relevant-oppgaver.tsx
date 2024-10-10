@@ -132,7 +132,7 @@ const UFERDIGE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Open,
+  ColumnKeyEnum.OpenWithYtelseAccess,
 ];
 
 const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
@@ -147,7 +147,7 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.PaaVentReason,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Open,
+  ColumnKeyEnum.OpenWithYtelseAccess,
 ];
 
 const StyledBody = styled(Modal.Body)`

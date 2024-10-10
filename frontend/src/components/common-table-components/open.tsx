@@ -15,6 +15,8 @@ interface Props
   children?: string;
   medunderskriverident: string | null;
   rol: IHelper | null;
+  /** Whether only access to the ytelse is enough to be allowed to open the case. */
+  applyYtelseAccess?: boolean;
 }
 
 export const OpenOppgavebehandling = ({
@@ -27,6 +29,7 @@ export const OpenOppgavebehandling = ({
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
+  applyYtelseAccess = false,
 }: Props) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const hasYtelseAccess = useHasYtelseAccess(ytelseId);
@@ -35,7 +38,7 @@ export const OpenOppgavebehandling = ({
 
   const canOpen =
     isMerkantil ||
-    hasYtelseAccess ||
+    (applyYtelseAccess && hasYtelseAccess) ||
     user.navIdent === tildeltSaksbehandlerident ||
     user.navIdent === medunderskriverident ||
     (rol !== null && user.navIdent === rol.employee?.navIdent) ||

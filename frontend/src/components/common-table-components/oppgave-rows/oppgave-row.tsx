@@ -143,6 +143,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
+      case ColumnKeyEnum.OpenWithYtelseAccess:
         return (
           <Table.DataCell key={key}>
             <OpenOppgavebehandling
@@ -152,6 +153,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
               rol={oppgave.rol}
+              applyYtelseAccess={key === ColumnKeyEnum.OpenWithYtelseAccess}
             />
           </Table.DataCell>
         );
