@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
-import { IText } from '@app/types/texts/responses';
+import type { IText } from '@app/types/texts/responses';
 
 const createIText = (published: boolean, publishedDateTime: string | null): IText =>
   ({

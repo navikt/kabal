@@ -1,16 +1,16 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-depth */
-import { styled } from 'styled-components';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import { IText } from '@app/types/texts/responses';
+import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import type { IText } from '@app/types/texts/responses';
+/* eslint-disable max-lines */
+/* eslint-disable max-depth */
+import { styled } from 'styled-components';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
 export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {

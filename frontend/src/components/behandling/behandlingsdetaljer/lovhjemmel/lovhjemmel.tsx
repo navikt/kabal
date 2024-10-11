@@ -1,9 +1,9 @@
-import { HelpText, Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
+import { HelpText, Label } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 

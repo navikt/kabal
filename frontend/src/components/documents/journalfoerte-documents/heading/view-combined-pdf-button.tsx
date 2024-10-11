@@ -1,8 +1,3 @@
-import { FilePdfIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, LinkProps, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { forwardRef, useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@app/components/documents/tab-context';
@@ -16,6 +11,11 @@ import {
   useGetArkiverteDokumenterQuery,
   useMergedDocumentsReferenceQuery,
 } from '@app/redux-api/oppgaver/queries/documents';
+import { FilePdfIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, type LinkProps, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { forwardRef, useContext, useMemo } from 'react';
+import { styled } from 'styled-components';
 
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);

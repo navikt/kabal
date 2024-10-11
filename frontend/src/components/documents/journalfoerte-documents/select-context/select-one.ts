@@ -1,7 +1,7 @@
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useCallback } from 'react';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { getId } from './helpers';
-import { SelectHook, SelectOne } from './types';
+import type { SelectHook, SelectOne } from './types';
 
 export const useSelectOne: SelectHook<SelectOne> = (setSelectedDocuments, setLastSelectedDocument) =>
   useCallback(

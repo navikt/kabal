@@ -1,4 +1,4 @@
-import { HeadingProps, HelpText, HelpTextProps } from '@navikt/ds-react';
+import { type HeadingProps, HelpText, type HelpTextProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { StyledHeading } from './styled-components';
 

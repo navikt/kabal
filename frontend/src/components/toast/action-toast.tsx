@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { sendCloseEvent } from '@app/components/toast/toast/helpers';
+import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;

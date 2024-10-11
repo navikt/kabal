@@ -1,11 +1,11 @@
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import { PlateEditor } from '@udecode/plate-common';
-import { Path } from 'slate';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { DeleteMaltekstseksjon } from '@app/plate/components/maltekstseksjon/delete-maltekstseksjon';
 import { MaltekstseksjonToolbar } from '@app/plate/components/styled-components';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import type { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
+import type { PlateEditor } from '@udecode/plate-common';
+import type { Path } from 'slate';
 
 interface Props {
   editor: PlateEditor<EditorValue>;

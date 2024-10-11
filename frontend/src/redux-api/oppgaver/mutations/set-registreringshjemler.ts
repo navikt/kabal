@@ -1,7 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isApiRejectionError } from '@app/types/errors';
-import { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
+import type { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';

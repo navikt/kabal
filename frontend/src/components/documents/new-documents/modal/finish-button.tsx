@@ -1,4 +1,3 @@
-import { Alert } from '@navikt/ds-react';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
@@ -9,14 +8,15 @@ import { useHasArchiveAccess } from '@app/hooks/use-has-documents-access';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
-  IFileDocument,
-  IMainDocument,
-  ISmartDocument,
-  JournalfoertDokument,
+  type IFileDocument,
+  type IMainDocument,
+  type ISmartDocument,
+  type JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Alert } from '@navikt/ds-react';
 
 interface Props {
   document: IMainDocument;

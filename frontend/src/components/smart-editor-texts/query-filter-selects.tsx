@@ -1,14 +1,14 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
-import { NestedFilterList, NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
-import { IOption } from '@app/components/filter-dropdown/props';
+import { NestedFilterList, type NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
+import type { IOption } from '@app/components/filter-dropdown/props';
 import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
-import { NONE, NONE_OPTION, NONE_TYPE, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { NONE, NONE_OPTION, type NONE_TYPE, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { TextTypes } from '@app/types/common-text-types';
-import { UtfallEnum } from '@app/types/kodeverk';
+import type { TextTypes } from '@app/types/common-text-types';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { getTemplateOptions } from './get-template-options';
 

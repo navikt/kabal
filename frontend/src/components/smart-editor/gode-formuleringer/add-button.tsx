@@ -1,6 +1,6 @@
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { Button } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
 import { insertGodFormulering, isAvailable } from './insert';
 
 interface AddButtonProps {

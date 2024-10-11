@@ -1,10 +1,10 @@
+import { Header } from '@app/components/view-pdf/header';
+import { NoFlickerReloadPdf, type UseNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
+import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import { ArrowCirclepathIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps } from '@navikt/ds-react';
+import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
-import { Header } from '@app/components/view-pdf/header';
-import { NoFlickerReloadPdf, UseNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
-import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;

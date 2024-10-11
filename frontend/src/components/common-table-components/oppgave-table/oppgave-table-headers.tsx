@@ -1,10 +1,10 @@
-import { TableProps } from '@navikt/ds-react';
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
-import { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
+import { type CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
+import type { TableProps } from '@navikt/ds-react';
 import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
 import { Hjemmel } from './filter-dropdowns/hjemmel';
 import { Medunderskriver } from './filter-dropdowns/medunderskriver';

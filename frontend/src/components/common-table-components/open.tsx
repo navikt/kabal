@@ -1,13 +1,13 @@
-import { Button, ButtonProps } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, IHelper } from '@app/types/oppgave-common';
-import { IOppgave } from '@app/types/oppgaver';
+import { FlowState, type IHelper } from '@app/types/oppgave-common';
+import type { IOppgave } from '@app/types/oppgaver';
+import { Button, type ButtonProps } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Props
   extends Pick<ButtonProps, 'variant' | 'size'>,

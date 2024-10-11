@@ -1,10 +1,3 @@
-/* eslint-disable max-lines */
-import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import { Plate, isCollapsed, isText } from '@udecode/plate-common';
-import { useContext, useEffect, useState } from 'react';
-import { BasePoint, Path, Range } from 'slate';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
@@ -20,7 +13,7 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn, isObject } from '@app/functions/object';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
+import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { collaborationSaksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -30,10 +23,17 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import { EditorValue, RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
+import { type EditorValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { ISmartDocument } from '@app/types/documents/documents';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { ISmartDocument } from '@app/types/documents/documents';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+/* eslint-disable max-lines */
+import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
+import { Plate, isCollapsed, isText } from '@udecode/plate-common';
+import { useContext, useEffect, useState } from 'react';
+import { type BasePoint, Path, Range } from 'slate';
+import { styled } from 'styled-components';
 
 interface EditorProps {
   smartDocument: ISmartDocument;

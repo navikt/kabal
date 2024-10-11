@@ -1,11 +1,11 @@
-import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { SmartDocumentLanguageEvent } from '@app/redux-api/server-sent-events/types';
+import type { SmartDocumentLanguageEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
+import { Tag } from '@navikt/ds-react';
 
 export const handleSmartDocumentLanguageChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentLanguageEvent) => {

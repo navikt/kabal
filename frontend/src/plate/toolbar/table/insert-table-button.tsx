@@ -1,22 +1,22 @@
-import { TableAdd } from '@styled-icons/fluentui-system-regular';
-import { findNode, insertNodes, removeNodes } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { createTable } from '@app/plate/templates/helpers';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
 import {
-  BulletListElement,
-  H1Element,
-  H2Element,
-  H3Element,
-  NumberedListElement,
-  ParagraphElement,
+  type BulletListElement,
+  type H1Element,
+  type H2Element,
+  type H3Element,
+  type NumberedListElement,
+  type ParagraphElement,
   useMyPlateEditorRef,
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
+import { TableAdd } from '@styled-icons/fluentui-system-regular';
+import { findNode, insertNodes, removeNodes } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 export const InsertTableButton = () => {
   const editor = useMyPlateEditorRef();

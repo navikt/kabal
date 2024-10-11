@@ -1,9 +1,9 @@
-import { Select, Skeleton } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { INavEmployee, Role } from '@app/types/bruker';
+import { type INavEmployee, Role } from '@app/types/bruker';
+import { Select, Skeleton } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface Props {
   oppgaveId: string;

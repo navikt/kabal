@@ -1,18 +1,18 @@
-import { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import {
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type {
   IDraftMaltekstseksjon,
   IMaltekstseksjon,
   IPublishedMaltekstseksjon,
 } from '@app/types/maltekstseksjoner/responses';
+import { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 import { DraftMaltekstSection } from './draft/draft';
 import { PublishedMaltekstSection } from './maltekstseksjon-published';
 

@@ -1,4 +1,4 @@
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 

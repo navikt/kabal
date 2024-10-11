@@ -1,8 +1,8 @@
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import type { TextTypes } from '@app/types/common-text-types';
 import { Search } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { TextTypes } from '@app/types/common-text-types';
 import { Filters } from './filters';
 import { TextList } from './text-list/text-list';
 

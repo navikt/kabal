@@ -1,5 +1,5 @@
-import { HTMLAttributes } from 'react';
 import { isoDateTimeToPrettyDate } from '@app/domain/date';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
   date: string | null;

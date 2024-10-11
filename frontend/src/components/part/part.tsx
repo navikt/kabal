@@ -1,13 +1,13 @@
+import { CopyButton } from '@app/components/copy-button/copy-button';
+import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
+import { EditPart } from '@app/components/part/edit-part';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
+import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { EditPart } from '@app/components/part/edit-part';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { IPart } from '@app/types/oppgave-common';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
 

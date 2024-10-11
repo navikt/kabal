@@ -1,4 +1,4 @@
-import { IDocumentParams } from '../documents/common-params';
+import type { IDocumentParams } from '../documents/common-params';
 
 export interface IDeleteCommentOrReplyParams extends IDocumentParams {
   commentId: string;

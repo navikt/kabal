@@ -1,6 +1,6 @@
+import type { RichTextEditor, RootElement } from '@app/plate/types';
 import { isText, setNodes, unsetNodes } from '@udecode/plate-common';
-import { Selection } from 'slate';
-import { RichTextEditor, RootElement } from '@app/plate/types';
+import type { Selection } from 'slate';
 import { COMMENT_PREFIX } from '../../smart-editor/constants';
 
 export const connectCommentThread = (editor: RichTextEditor, selection: Selection, threadId: string) => {

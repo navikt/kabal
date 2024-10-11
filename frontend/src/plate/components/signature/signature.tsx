@@ -1,14 +1,14 @@
-import { PlateElement, PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
-import { InputHTMLAttributes, useContext } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
-import { EditorValue, SignatureElement } from '@app/plate/types';
+import type { EditorValue, SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { PlateElement, type PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
+import { type InputHTMLAttributes, useContext } from 'react';
+import { styled } from 'styled-components';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 export const Signature = ({

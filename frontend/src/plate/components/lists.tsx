@@ -1,7 +1,7 @@
-import { PlateElement, PlateElementProps } from '@udecode/plate-common';
-import { styled } from 'styled-components';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { BulletListElement, EditorValue, ListItemElement, NumberedListElement } from '../types';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common';
+import { styled } from 'styled-components';
+import type { BulletListElement, EditorValue, ListItemElement, NumberedListElement } from '../types';
 
 export const OrderedList = ({ children, element, ...props }: PlateElementProps<EditorValue, NumberedListElement>) => (
   <PlateElement

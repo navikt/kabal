@@ -1,6 +1,3 @@
-import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, isEditorReadOnly, setNodes } from '@udecode/plate-common';
-import { useCallback, useContext, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useMaltekstseksjonQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -14,14 +11,17 @@ import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
 import { useUpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/use-update';
 import { MaltekstseksjonContainer } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
-import { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
+import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { TemplateSections } from '@app/plate/template-sections';
-import { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import type { TemplateSections } from '@app/plate/template-sections';
+import type { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
-import { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { PlateElement, type PlateRenderElementProps, isEditorReadOnly, setNodes } from '@udecode/plate-common';
+import { useCallback, useContext, useMemo } from 'react';
 
 export const Maltekstseksjon = ({
   editor,

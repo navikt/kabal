@@ -1,7 +1,7 @@
-import { ENode, findNode, isElement, isEndPoint, isStartPoint } from '@udecode/plate-common';
 import { UNDELETABLE_BUT_REDIGERBAR } from '@app/plate/plugins/element-types';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
+import { type ENode, findNode, isElement, isEndPoint, isStartPoint } from '@udecode/plate-common';
 
 const match = (n: ENode<EditorValue>) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type);
 

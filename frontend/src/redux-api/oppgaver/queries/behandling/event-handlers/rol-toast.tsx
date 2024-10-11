@@ -1,8 +1,8 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
+import { useContext } from 'react';
 
 interface Params {
   flowState: FlowState;

@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
 import { CreateTranslatedPlainText } from '@app/components/smart-editor-texts/create-translated-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { HeaderFooterEditor } from '@app/components/smart-editor-texts/edit/header-footer';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
+import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { usePublishMutation, useUpdatePlainTextMutation } from '@app/redux-api/texts/mutations';
-import { PlainTextTypes } from '@app/types/common-text-types';
-import { LANGUAGES, Language, isLanguage } from '@app/types/texts/language';
-import { IPlainText } from '@app/types/texts/responses';
+import type { PlainTextTypes } from '@app/types/common-text-types';
+import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
+import type { IPlainText } from '@app/types/texts/responses';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Props extends Omit<DraftVersionProps, 'text'> {
   text: IPlainText;

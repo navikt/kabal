@@ -1,21 +1,21 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
+import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import type { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
+import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
+import { RichTextTypes } from '@app/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import {
   PlateElement,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
   findNodePath,
   isEditorReadOnly,
   replaceNodeChildren,
 } from '@udecode/plate-common';
 import { useContext } from 'react';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { EditorValue, RedigerbarMaltekstElement } from '@app/plate/types';
-import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
 export const RedigerbarMaltekst = ({
   attributes,

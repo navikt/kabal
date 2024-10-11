@@ -1,4 +1,4 @@
-import { Draft } from '@reduxjs/toolkit';
+import type { Draft } from '@reduxjs/toolkit';
 
 type MaybeDrafted<T> = T | Draft<T>;
 type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>;

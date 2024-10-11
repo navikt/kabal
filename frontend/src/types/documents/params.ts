@@ -1,9 +1,9 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
-import { INavEmployee } from '../bruker';
-import { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
-import { IDocumentParams } from './common-params';
-import { CreatorRole, DistribusjonsType, IMottaker, UUID } from './documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { HandlingEnum, IAddress } from '@app/types/documents/recipients';
+import type { INavEmployee } from '../bruker';
+import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
+import type { IDocumentParams } from './common-params';
+import type { CreatorRole, DistribusjonsType, IMottaker, UUID } from './documents';
 
 export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;

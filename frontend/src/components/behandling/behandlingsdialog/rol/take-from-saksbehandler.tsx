@@ -1,10 +1,10 @@
-import { ArrowRedoIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps } from '@navikt/ds-react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { ArrowRedoIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps } from '@navikt/ds-react';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {

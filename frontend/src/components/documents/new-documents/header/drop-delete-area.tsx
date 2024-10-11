@@ -1,8 +1,3 @@
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
@@ -10,6 +5,11 @@ import { useAttachments, useParentDocument } from '@app/hooks/use-parent-documen
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const DeleteDropArea = () => {
   const dragEnterCount = useRef(0);
@@ -110,6 +110,5 @@ const DeleteDropAreaContainer = styled.div<{ $isDropTarget: boolean; $isDragOver
   opacity: ${({ $isDropTarget }) => ($isDropTarget ? 1 : 0)};
 
   color: ${({ $isDragOver }) => ($isDragOver ? 'var(--a-text-on-danger)' : 'var(--a-text-default)')};
-  background-color: ${({ $isDragOver }) =>
-    $isDragOver ? 'var(--a-surface-danger)' : 'var(--a-surface-danger-subtle)'};
+  background-color: ${({ $isDragOver }) => ($isDragOver ? 'var(--a-surface-danger)' : 'var(--a-surface-danger-subtle)')};
 `;

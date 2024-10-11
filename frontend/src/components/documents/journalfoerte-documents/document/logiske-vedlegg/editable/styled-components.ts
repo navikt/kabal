@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { ReadOnlyTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/shared/vedlegg-style';
+import { styled } from 'styled-components';
 
 export const EditTag = styled(ReadOnlyTag)`
   max-width: 200px;

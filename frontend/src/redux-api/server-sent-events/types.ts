@@ -1,11 +1,11 @@
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { INavEmployee } from '@app/types/bruker';
-import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
-import { UtfallEnum } from '@app/types/kodeverk';
-import { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
-import { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { FradelReason } from '@app/types/oppgaver';
-import { Language } from '@app/types/texts/language';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { INavEmployee } from '@app/types/bruker';
+import type { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import type { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
+import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { FradelReason } from '@app/types/oppgaver';
+import type { Language } from '@app/types/texts/language';
 
 interface BaseEvent {
   actor: INavEmployee;

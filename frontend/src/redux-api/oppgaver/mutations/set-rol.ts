@@ -4,8 +4,8 @@ import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-d
 import { isApiRejectionError } from '@app/types/errors';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { ISetRolParams } from '@app/types/oppgavebehandling/params';
-import { ISetRolResponse } from '@app/types/oppgavebehandling/response';
+import type { ISetRolParams } from '@app/types/oppgavebehandling/params';
+import type { ISetRolResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';

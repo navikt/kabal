@@ -1,14 +1,14 @@
+import { pushEvent } from '@app/observability';
+import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 import {
-  KeyboardHandlerReturnType,
-  PlateEditor,
+  type KeyboardHandlerReturnType,
+  type PlateEditor,
   deleteBackward,
   deleteText,
   insertNodes,
   insertText,
   withoutMergingHistory,
 } from '@udecode/plate-common';
-import { pushEvent } from '@app/observability';
-import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 
 const SPACE = ' ';
 const PERIOD = '.';

@@ -1,9 +1,9 @@
+import { THREAD_WIDTH, Thread } from '@app/components/smart-editor/comments/thread';
+import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading, Modal, Tooltip } from '@navikt/ds-react';
 import { useRef } from 'react';
 import { styled } from 'styled-components';
-import { THREAD_WIDTH, Thread } from '@app/components/smart-editor/comments/thread';
-import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 
 const ORPHAN_HELP_TEXT = 'Teksten som kommentarene var knyttet til finnes ikke lenger i dokumentet.';
 

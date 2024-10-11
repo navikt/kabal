@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
@@ -6,7 +5,8 @@ import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksn
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { IBehandlingEtterTryderettenOpphevet as IBehandlingEtterTrOpphevet } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IBehandlingEtterTryderettenOpphevet as IBehandlingEtterTrOpphevet } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Heading } from '@navikt/ds-react';
 import { Part } from '../../part/part';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';

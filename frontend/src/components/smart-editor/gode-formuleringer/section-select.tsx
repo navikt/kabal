@@ -1,10 +1,6 @@
-import { Select } from '@navikt/ds-react';
-import { findNode } from '@udecode/plate-common';
-import { useContext, useEffect, useMemo } from 'react';
-import { BasePoint, Range } from 'slate';
+import { NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useTemplateSections } from '@app/hooks/use-template-sections';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import {
@@ -15,14 +11,18 @@ import {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import {
-  MaltekstElement,
-  MaltekstseksjonElement,
-  RedigerbarMaltekstElement,
-  RegelverkElement,
-  RichTextEditor,
+  type MaltekstElement,
+  type MaltekstseksjonElement,
+  type RedigerbarMaltekstElement,
+  type RegelverkElement,
+  type RichTextEditor,
   useMyPlateEditorRef,
 } from '@app/plate/types';
 import { isOfElementTypeFn, isOfElementTypesFn } from '@app/plate/utils/queries';
+import { Select } from '@navikt/ds-react';
+import { findNode } from '@udecode/plate-common';
+import { useContext, useEffect, useMemo } from 'react';
+import type { BasePoint, Range } from 'slate';
 
 interface Props {
   activeSection: TemplateSections | NONE_TYPE;

@@ -1,8 +1,8 @@
-import { Checkbox, Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo } from 'react';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { Checkbox, Tooltip } from '@navikt/ds-react';
+import { useCallback, useContext, useMemo } from 'react';
 
 interface Props {
   allSelectableDocuments: IJournalfoertDokumentId[];

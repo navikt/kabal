@@ -1,8 +1,3 @@
-import { Chat2Icon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
@@ -14,8 +9,13 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { Role } from '@app/types/bruker';
-import { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';
+import { Chat2Icon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   document: IMainDocument;

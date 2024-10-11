@@ -1,13 +1,13 @@
-import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { useContext, useEffect, useState } from 'react';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
-import { TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
+import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
+import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { useContext, useEffect, useState } from 'react';
 import { StyledFloatingToolbar } from './floating-toolbar';
 
 interface Props {

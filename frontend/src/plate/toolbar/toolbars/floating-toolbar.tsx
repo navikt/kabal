@@ -1,15 +1,15 @@
-import { isCollapsed, isEditorFocused, someNode } from '@udecode/plate-common';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
 import { getRangePosition } from '@app/plate/functions/get-range-position';
-import { IRangePosition } from '@app/plate/functions/range-position';
+import type { IRangePosition } from '@app/plate/functions/range-position';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { isCollapsed, isEditorFocused, someNode } from '@udecode/plate-common';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;

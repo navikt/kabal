@@ -1,4 +1,4 @@
-import { HelpText, HelpTextProps } from '@navikt/ds-react';
+import { HelpText, type HelpTextProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {

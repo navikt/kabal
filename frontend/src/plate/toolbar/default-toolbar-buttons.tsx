@@ -1,8 +1,3 @@
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
-import { setNodes } from '@udecode/plate-common';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { styled } from 'styled-components';
 import { MOD_KEY } from '@app/keys';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
@@ -18,6 +13,11 @@ import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { insertPageBreak } from '@app/plate/utils/transforms';
+import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
+import { setNodes } from '@udecode/plate-common';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { styled } from 'styled-components';
 
 export const DefaultToolbarButtons = () => {
   const editor = useMyPlateEditorRef();

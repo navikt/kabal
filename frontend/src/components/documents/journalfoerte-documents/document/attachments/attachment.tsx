@@ -1,7 +1,3 @@
-import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { memo, useCallback, useContext, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import {
@@ -22,7 +18,11 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
+import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { memo, useCallback, useContext, useMemo, useRef } from 'react';
+import { styled } from 'styled-components';
 import { DocumentTitle } from '../shared/document-title';
 import { IncludeDocument } from '../shared/include-document';
 import { SelectRow } from '../shared/select-row';

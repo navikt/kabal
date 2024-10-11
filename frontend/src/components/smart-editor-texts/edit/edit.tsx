@@ -1,6 +1,5 @@
-import { styled } from 'styled-components';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { SavedStatusProps } from '@app/components/saved-status/saved-status';
+import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { Footer } from '@app/components/smart-editor-texts/edit/footer';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
@@ -14,7 +13,8 @@ import {
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/texts/mutations';
 import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, TextChangeType } from '@app/types/common-text-types';
-import { IText } from '@app/types/texts/responses';
+import type { IText } from '@app/types/texts/responses';
+import { styled } from 'styled-components';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { HjemlerSelect } from '../hjemler-select/hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';

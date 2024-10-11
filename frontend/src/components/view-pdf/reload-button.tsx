@@ -1,7 +1,7 @@
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { IShownDocument } from './types';
+import type { IShownDocument } from './types';
 
 interface Props {
   showDocumentList: IShownDocument[];

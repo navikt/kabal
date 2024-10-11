@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DocumentTypeEnum,
-  IFileDocument,
-  IMainDocument,
-  ISmartDocument,
-  JournalfoertDokument,
+  type IFileDocument,
+  type IMainDocument,
+  type ISmartDocument,
+  type JournalfoertDokument,
 } from '@app/types/documents/documents';
+import { useMemo } from 'react';
 
 export const useParentDocument = (parentId: string | null): IMainDocument | undefined => {
   const oppgaveId = useOppgaveId();

@@ -1,5 +1,5 @@
-import { Person, PersonQuery } from '@app/components/search/fnr/person';
-import { Oppgaver, OppgaverQuery } from '../common/oppgaver';
+import { Person, type PersonQuery } from '@app/components/search/fnr/person';
+import { Oppgaver, type OppgaverQuery } from '../common/oppgaver';
 
 interface Props {
   personQuery: PersonQuery;

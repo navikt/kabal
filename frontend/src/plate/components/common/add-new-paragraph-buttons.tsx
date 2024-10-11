@@ -1,9 +1,9 @@
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import type { EditorValue, RootElement } from '@app/plate/types';
+import { nextPath } from '@app/plate/utils/queries';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { PlateEditor, findDescendant, insertElements, useEditorReadOnly } from '@udecode/plate-common';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue, RootElement } from '@app/plate/types';
-import { nextPath } from '@app/plate/utils/queries';
+import { type PlateEditor, findDescendant, insertElements, useEditorReadOnly } from '@udecode/plate-common';
 
 interface Props {
   element: RootElement;

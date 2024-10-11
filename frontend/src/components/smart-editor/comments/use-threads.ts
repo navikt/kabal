@@ -1,12 +1,12 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext, useMemo } from 'react';
-import { Descendant, Text } from 'slate';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
-import { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext, useMemo } from 'react';
+import { type Descendant, Text } from 'slate';
 import { COMMENT_PREFIX } from '../constants';
 
 export interface FocusedComment extends ISmartEditorComment {

@@ -1,30 +1,4 @@
-/* eslint-disable max-lines */
-/* eslint-disable import/no-unused-modules */
-import { CursorEditor, YjsEditor } from '@slate-yjs/core';
-import { AutoformatRule } from '@udecode/plate-autoformat';
-import {
-  PlateEditor,
-  PlateId,
-  PlatePlugin,
-  PluginOptions,
-  TElement,
-  TText,
-  useEditorRef,
-  useEditorState,
-} from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TR,
-  TTableCellElement,
-  TTableElement,
-  TTableRowElement,
-} from '@udecode/plate-table';
-import { CursorEditorProps, PlateYjsEditorProps } from '@udecode/plate-yjs';
-import {
+import type {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
@@ -39,9 +13,35 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
-import { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
-import { Language } from '@app/types/texts/language';
-import { TemplateSections } from './template-sections';
+import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
+import type { Language } from '@app/types/texts/language';
+/* eslint-disable max-lines */
+/* eslint-disable import/no-unused-modules */
+import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
+import type { AutoformatRule } from '@udecode/plate-autoformat';
+import {
+  type PlateEditor,
+  type PlateId,
+  type PlatePlugin,
+  type PluginOptions,
+  type TElement,
+  type TText,
+  useEditorRef,
+  useEditorState,
+} from '@udecode/plate-common';
+import type { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import type { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import type { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import type {
+  ELEMENT_TABLE,
+  ELEMENT_TD,
+  ELEMENT_TR,
+  TTableCellElement,
+  TTableElement,
+  TTableRowElement,
+} from '@udecode/plate-table';
+import type { CursorEditorProps, PlateYjsEditorProps } from '@udecode/plate-yjs';
+import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {
   LEFT = 'left',

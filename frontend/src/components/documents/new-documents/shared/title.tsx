@@ -1,4 +1,3 @@
-import { useCallback, useContext, useMemo } from 'react';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
@@ -12,7 +11,8 @@ import {
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { useCallback, useContext, useMemo } from 'react';
 
 interface BaseProps {
   title: string;

@@ -1,4 +1,4 @@
-import { ModalEnum } from '@app/components/svarbrev/row/row';
+import type { ModalEnum } from '@app/components/svarbrev/row/row';
 import { Svarbrev } from '@app/components/svarbrev/svarbrev';
 import { PageWrapper } from '@app/pages/page-wrapper';
 

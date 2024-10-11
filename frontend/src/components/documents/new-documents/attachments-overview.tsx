@@ -1,11 +1,11 @@
-import { BulletListIcon } from '@navikt/aksel-icons';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
 import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
 import { getAttachmentsOverviewTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
+import { BulletListIcon } from '@navikt/aksel-icons';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { StyledNewAttachment } from './new-document/new-attachment';
 
 interface Props {

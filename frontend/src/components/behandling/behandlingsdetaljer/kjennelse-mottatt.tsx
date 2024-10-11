@@ -1,4 +1,3 @@
-import { subDays } from 'date-fns';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
@@ -9,6 +8,7 @@ import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetKjennelseMottattMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { subDays } from 'date-fns';
 
 const ID = 'kjennelse-mottatt';
 

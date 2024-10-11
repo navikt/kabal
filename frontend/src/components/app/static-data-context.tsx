@@ -1,8 +1,8 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
 import { AppLoader } from '@app/components/app/loader';
 import { countryCodes, postalCodes, user } from '@app/static-data/static-data';
-import { IUserData } from '@app/types/bruker';
-import { CountryCode, PostalCode } from '@app/types/common';
+import type { IUserData } from '@app/types/bruker';
+import type { CountryCode, PostalCode } from '@app/types/common';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 interface Props {
   children: React.ReactNode;

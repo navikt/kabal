@@ -1,8 +1,19 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
+import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
+import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
+import type { EditorValue, MaltekstElement } from '@app/plate/types';
+import { getIsInRegelverk } from '@app/plate/utils/queries';
+import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
+import { RichTextTypes } from '@app/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import {
   PlateElement,
-  PlateRenderElementProps,
+  type PlateRenderElementProps,
   findNodePath,
   isEditorReadOnly,
   isElement,
@@ -10,17 +21,6 @@ import {
   unwrapNodes,
 } from '@udecode/plate-common';
 import { useContext, useMemo } from 'react';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { EditorValue, MaltekstElement } from '@app/plate/types';
-import { getIsInRegelverk } from '@app/plate/utils/queries';
-import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 
 export const Maltekst = ({
   editor,

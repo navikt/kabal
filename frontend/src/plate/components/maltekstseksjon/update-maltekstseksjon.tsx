@@ -1,11 +1,11 @@
-import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, HelpText } from '@navikt/ds-react';
-import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { RichTextPreview } from '@app/components/rich-text-preview/rich-text-preview';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
-import { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
+import type { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, HelpText } from '@navikt/ds-react';
+import { useCallback, useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   next: MaltekstseksjonUpdate | null;

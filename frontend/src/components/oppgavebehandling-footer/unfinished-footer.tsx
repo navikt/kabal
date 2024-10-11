@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { SendToSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
 import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
 import { FeilregistrerButton } from '@app/components/oppgavebehandling-footer/feilregistrer-button';
@@ -6,6 +5,7 @@ import { FinishButton } from '@app/components/oppgavebehandling-footer/finish-bu
 import { NewAnkebehandlingButton } from '@app/components/oppgavebehandling-footer/new-ankebehandling-button';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useContext } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { DeassignOppgave } from './deassign/deassign-oppgave';

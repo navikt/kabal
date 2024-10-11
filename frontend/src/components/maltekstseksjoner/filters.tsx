@@ -1,4 +1,3 @@
-import { styled } from 'styled-components';
 import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
 import { TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
 import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
@@ -7,8 +6,9 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
-import { IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { type IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { styled } from 'styled-components';
 
 interface Props {
   maltekst: IMaltekstseksjon;

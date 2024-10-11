@@ -1,17 +1,17 @@
-import { MenuHamburgerIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
 import { ViewCombinedPDF } from '@app/components/documents/journalfoerte-documents/heading/view-combined-pdf-button';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import {
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS,
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS,
-  ArchivedDocumentsColumn,
+  type ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
 import { pushEvent } from '@app/observability';
+import { MenuHamburgerIcon } from '@navikt/aksel-icons';
+import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 import { useIsExpanded } from '../../use-is-expanded';
 
 export const Menu = () => {

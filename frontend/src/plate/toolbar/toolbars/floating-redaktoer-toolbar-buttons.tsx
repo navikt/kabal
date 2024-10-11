@@ -1,7 +1,3 @@
-import { findNode, isElement, useEditorState } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
 import { Abbreviation } from '@app/plate/toolbar/abbreviation';
 import { Headings } from '@app/plate/toolbar/headings';
@@ -10,6 +6,10 @@ import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
+import { findNode, isElement, useEditorState } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_LI, ELEMENT_LIC } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 export const FloatingRedaktoerToolbarButtons = () => {
   const editor = useEditorState();

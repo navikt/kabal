@@ -1,11 +1,11 @@
-import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
-import { DISTRIBUTION_TYPE_NAMES, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import type { DocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
+import { DISTRIBUTION_TYPE_NAMES, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { Tag } from '@navikt/ds-react';
 
 export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) => (event: DocumentsChangedEvent) => {
   reduxStore.dispatch(

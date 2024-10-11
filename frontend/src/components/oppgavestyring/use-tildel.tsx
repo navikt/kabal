@@ -1,6 +1,3 @@
-import { Button } from '@navikt/ds-react';
-import { parseISO } from 'date-fns';
-import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
@@ -16,10 +13,18 @@ import {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
 } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { INavEmployee, Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
-import { FradelReason, FradelWithHjemler, FradelWithoutHjemler, ITildelingResponse } from '@app/types/oppgaver';
+import { type INavEmployee, Role } from '@app/types/bruker';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import type { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
+import {
+  FradelReason,
+  type FradelWithHjemler,
+  type FradelWithoutHjemler,
+  type ITildelingResponse,
+} from '@app/types/oppgaver';
+import { Button } from '@navikt/ds-react';
+import { parseISO } from 'date-fns';
+import { useContext, useState } from 'react';
 
 interface Props {
   oppgaveId: string;

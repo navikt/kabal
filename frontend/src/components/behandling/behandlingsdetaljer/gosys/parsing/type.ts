@@ -1,6 +1,6 @@
 export enum GosysEntryAuthorType {
-  EMPLOYEE,
-  SYSTEM,
+  EMPLOYEE = 0,
+  SYSTEM = 1,
 }
 
 export interface GosysEntryEmployee {

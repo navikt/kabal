@@ -1,9 +1,22 @@
+import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
+import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
+import type {
+  BulletListElement,
+  H1Element,
+  H2Element,
+  H3Element,
+  NumberedListElement,
+  ParentOrChildElement,
+  RichText,
+  RichTextEditor,
+  RichTextEditorElement,
+} from '@app/plate/types';
 import {
-  PlateEditor,
-  TDescendant,
-  TElement,
-  TNode,
-  TText,
+  type PlateEditor,
+  type TDescendant,
+  type TElement,
+  type TNode,
+  type TText,
   findNode,
   findNodePath,
   getNodeAncestors,
@@ -15,19 +28,6 @@ import {
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
-import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
-import {
-  BulletListElement,
-  H1Element,
-  H2Element,
-  H3Element,
-  NumberedListElement,
-  ParentOrChildElement,
-  RichText,
-  RichTextEditor,
-  RichTextEditorElement,
-} from '@app/plate/types';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {

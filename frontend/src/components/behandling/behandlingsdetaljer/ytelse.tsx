@@ -1,5 +1,5 @@
-import { Skeleton, Tag } from '@navikt/ds-react';
 import { useFullYtelseNameFromId } from '@app/hooks/use-kodeverk-ids';
+import { Skeleton, Tag } from '@navikt/ds-react';
 
 interface Props {
   ytelseId: string;

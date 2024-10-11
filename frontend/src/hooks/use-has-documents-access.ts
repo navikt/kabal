@@ -5,7 +5,7 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { IMainDocument } from '@app/types/documents/documents';
+import type { IMainDocument } from '@app/types/documents/documents';
 import { useHasBehandlingAccess } from './oppgavebehandling/use-has-access';
 
 export const useHasDocumentsAccess = (): boolean => {

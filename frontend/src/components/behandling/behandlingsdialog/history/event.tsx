@@ -1,7 +1,7 @@
-import { styled } from 'styled-components';
 import { HISTORY_COLORS } from '@app/components/behandling/behandlingsdialog/history/common';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import type { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { styled } from 'styled-components';
 
 interface Props {
   type: HistoryEventTypes;

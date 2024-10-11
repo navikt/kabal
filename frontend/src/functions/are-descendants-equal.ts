@@ -1,5 +1,5 @@
-import { TDescendant, isElement } from '@udecode/plate-common';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { type TDescendant, isElement } from '@udecode/plate-common';
 
 export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]): boolean => {
   if (listA.length !== listB.length) {

@@ -1,8 +1,8 @@
+import type { IOption } from '@app/components/filter-dropdown/props';
+import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
+import { SaksTypeEnum, type UtfallEnum } from '@app/types/kodeverk';
 import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { IOption } from '@app/components/filter-dropdown/props';
-import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 
@@ -42,7 +42,7 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
       }
     }
 
-    return utfallList.sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
+    return utfallList.sort((a, b) => Number.parseInt(a.value, 10) - Number.parseInt(b.value, 10));
   }, [sakstyperToUtfall]);
 };
 

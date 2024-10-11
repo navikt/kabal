@@ -1,7 +1,7 @@
-import { NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
+import { type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
 import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { SectionType, getTemplateSections } from '@app/hooks/use-template-sections';
+import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
+import { type SectionType, getTemplateSections } from '@app/hooks/use-template-sections';
 import {
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -9,7 +9,12 @@ import {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATES } from '@app/plate/templates/templates';
-import { GOD_FORMULERING_TYPE, MALTEKSTSEKSJON_TYPE, RichTextTypes, TextTypes } from '@app/types/common-text-types';
+import {
+  GOD_FORMULERING_TYPE,
+  MALTEKSTSEKSJON_TYPE,
+  RichTextTypes,
+  type TextTypes,
+} from '@app/types/common-text-types';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 

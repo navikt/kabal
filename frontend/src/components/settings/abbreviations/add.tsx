@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { Abbreviation } from '@app/components/settings/abbreviations/abbreviation';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { pushEvent } from '@app/observability';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
+import { useState } from 'react';
 
 export const AddAbbreviation = () => {
   const [addAbbreviation, { isLoading }] = useAddAbbreviationMutation();

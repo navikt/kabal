@@ -1,11 +1,11 @@
-import { ErrorMessage, Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { ErrorMessage, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';

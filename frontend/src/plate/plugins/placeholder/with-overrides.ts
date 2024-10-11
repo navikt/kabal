@@ -1,7 +1,15 @@
-import { PlateEditor, TDescendant, TRange, TText, findNode, insertNodes, isElement } from '@udecode/plate-common';
-import { Path } from 'slate';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import { MaltekstElement, PlaceholderElement } from '../../types';
+import {
+  type PlateEditor,
+  type TDescendant,
+  type TRange,
+  type TText,
+  findNode,
+  insertNodes,
+  isElement,
+} from '@udecode/plate-common';
+import { Path } from 'slate';
+import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
 const extractText = (fragment: TDescendant[]): TText[] =>

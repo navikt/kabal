@@ -1,5 +1,5 @@
 import { FileSearchIcon, FloppydiskIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
 
 interface Props {

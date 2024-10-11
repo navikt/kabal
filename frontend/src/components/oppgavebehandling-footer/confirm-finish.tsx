@@ -1,13 +1,13 @@
-import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button } from '@navikt/ds-react';
-import { useContext, useMemo, useState } from 'react';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
+import type { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { BodyLong, Button } from '@navikt/ds-react';
+import { useContext, useMemo, useState } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { StyledFinishOppgaveButtons } from './styled-components';
 

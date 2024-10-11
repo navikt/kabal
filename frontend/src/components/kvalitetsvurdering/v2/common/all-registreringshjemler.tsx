@@ -2,7 +2,7 @@ import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer
 import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
 import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useCanEdit } from '@app/hooks/use-can-edit';
-import {
+import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
 } from '@app/types/kaka-kvalitetsvurdering/v2';

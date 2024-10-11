@@ -1,7 +1,7 @@
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DragAndDropContext } from '../../drag-and-drop/drag-context';
 import { TextListItem } from '../../styled-components';
 import { LoadTextListItem } from '../list-item';

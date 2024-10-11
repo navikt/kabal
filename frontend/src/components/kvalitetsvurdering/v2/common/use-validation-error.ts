@@ -1,7 +1,7 @@
+import type { IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { useContext, useMemo } from 'react';
-import { IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { ValidationErrorContext } from '../../validation-error-context';
-import { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
+import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 
 type Field = keyof IKvalitetsvurderingData | keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;
 

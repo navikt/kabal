@@ -1,12 +1,12 @@
-import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { SettPaaVentPanel } from '@app/components/oppgavebehandling-footer/sett-paa-vent/panel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useDeleteSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
+import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const VentButton = () => {
   const [showPopup, setShowPopup] = useState(false);

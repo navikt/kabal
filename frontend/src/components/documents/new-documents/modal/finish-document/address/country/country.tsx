@@ -1,11 +1,11 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
+import { Option } from '@app/components/documents/new-documents/modal/finish-document/address/country/option';
+import { FieldLabel, Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Option } from '@app/components/documents/new-documents/modal/finish-document/address/country/option';
-import { FieldLabel, Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { CountryCode } from '@app/types/common';
 
 interface Props {
   value?: string;

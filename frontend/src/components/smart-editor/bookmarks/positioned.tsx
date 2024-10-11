@@ -1,20 +1,20 @@
-import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import { setNodes } from '@udecode/plate-common';
-import { useCallback, useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
-  BookmarkData,
+  type BookmarkData,
   ItemType,
-  PositionedItem,
+  type PositionedItem,
   getPositionedItems,
 } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { pushEvent } from '@app/observability';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
+import { setNodes } from '@udecode/plate-common';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 
 const ITEM_WIDTH = 1.5;
 const ITEM_GAP = 0.2;

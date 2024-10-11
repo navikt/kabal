@@ -1,7 +1,3 @@
-/* eslint-disable max-lines */
-import { Loader } from '@navikt/ds-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import {
   PADDING_BOTTOM,
   PADDING_TOP,
@@ -19,12 +15,16 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import {
   CreatorRole,
   DocumentTypeEnum,
-  IFileDocument,
-  IMainDocument,
-  ISmartDocument,
-  JournalfoertDokument,
+  type IFileDocument,
+  type IMainDocument,
+  type ISmartDocument,
+  type JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+/* eslint-disable max-lines */
+import { Loader } from '@navikt/ds-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { NewParentDocument } from './new-parent-document';
 

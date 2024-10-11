@@ -1,5 +1,3 @@
-import { Loader } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
@@ -7,10 +5,12 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { clamp } from '@app/functions/clamp';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { Loader } from '@navikt/ds-react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Container, StyledDocumentList } from '../styled-components/document-list';
-import { Document } from './document/document';
 import { StyledDocumentListItem } from './document-list-item';
+import { Document } from './document/document';
 
 interface Props {
   documents: IArkivertDocument[];

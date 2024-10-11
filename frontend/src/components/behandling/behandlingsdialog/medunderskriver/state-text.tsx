@@ -1,7 +1,7 @@
-import { Alert } from '@navikt/ds-react';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
+import { Alert } from '@navikt/ds-react';
 import { getTitleLowercase } from './get-title';
 
 interface Props {

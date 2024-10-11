@@ -1,6 +1,6 @@
 import { MaltekstseksjonTagTypes, maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
-import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { IS_LOCALHOST } from '../common';
 
 export const maltekstseksjonerQuerySlice = maltekstseksjonerApi.injectEndpoints({

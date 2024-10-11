@@ -1,4 +1,4 @@
-import { CopyButtonProps, CopyButton as InternalCopyBytton } from '@navikt/ds-react';
+import { type CopyButtonProps, CopyButton as InternalCopyBytton } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {

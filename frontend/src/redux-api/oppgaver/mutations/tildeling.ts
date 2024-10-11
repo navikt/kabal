@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
@@ -8,11 +7,12 @@ import { isApiRejectionError } from '@app/types/errors';
 import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 import {
   FradelReason,
-  FradelSaksbehandlerParams,
-  IFradelingResponse,
-  ITildelingResponse,
-  TildelSaksbehandlerParams,
+  type FradelSaksbehandlerParams,
+  type IFradelingResponse,
+  type ITildelingResponse,
+  type TildelSaksbehandlerParams,
 } from '@app/types/oppgaver';
+import { format } from 'date-fns';
 import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';

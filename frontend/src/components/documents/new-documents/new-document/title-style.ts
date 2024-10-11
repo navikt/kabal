@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { TitleAction } from '@app/components/documents/new-documents/new-document/title-action';
+import { styled } from 'styled-components';
 
 export const StyledDocumentTitle = styled.h1`
   grid-area: ${Fields.Title};

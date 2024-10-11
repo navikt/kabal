@@ -1,9 +1,6 @@
-import { Heading, SortState, Table } from '@navikt/ds-react';
-import { ReactNode, useCallback, useEffect } from 'react';
-import { styled } from 'styled-components';
-import { FilterProps, Filters } from '@app/components/svarbrev/filters';
+import { type FilterProps, Filters } from '@app/components/svarbrev/filters';
 import { clearPdfCache } from '@app/components/svarbrev/modal/get-pdf-url';
-import { ModalEnum, Row } from '@app/components/svarbrev/row/row';
+import { type ModalEnum, Row } from '@app/components/svarbrev/row/row';
 import { SkeletonBody } from '@app/components/svarbrev/skeleton';
 import { useFilterSort } from '@app/components/svarbrev/use-filter-sort';
 import {
@@ -14,6 +11,9 @@ import {
   useSvarbrevSearchParams,
 } from '@app/components/svarbrev/use-search-params';
 import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';
+import { Heading, type SortState, Table } from '@navikt/ds-react';
+import { type ReactNode, useCallback, useEffect } from 'react';
+import { styled } from 'styled-components';
 
 const TableHeaders = () => (
   <StyledTableHeader>

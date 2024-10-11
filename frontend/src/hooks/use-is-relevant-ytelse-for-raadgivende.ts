@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
+import { useMemo } from 'react';
 
 enum Ytelser {
   Omsorgspenger = '1',

@@ -1,13 +1,13 @@
+import { NONE, type NONE_TYPE, WILDCARD } from '@app/components/smart-editor-texts/types';
+import { useGodFormuleringerQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
+import type { TemplateSections } from '@app/plate/template-sections';
+import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { type NonNullableGodFormulering, isNonNullGodFormulering } from '@app/types/texts/consumer';
+import { LANGUAGES } from '@app/types/texts/language';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
-import { useGodFormuleringerQuery } from '@app/components/smart-editor/hooks/use-query';
-import { NONE, NONE_TYPE, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { TemplateSections } from '@app/plate/template-sections';
-import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { NonNullableGodFormulering, isNonNullGodFormulering } from '@app/types/texts/consumer';
-import { LANGUAGES } from '@app/types/texts/language';
 
 interface State {
   isLoading: boolean;

@@ -1,13 +1,13 @@
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Button, Modal } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
-import { IMainDocument } from '@app/types/documents/documents';
+import type { IMainDocument } from '@app/types/documents/documents';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { Button, Modal } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   document: IMainDocument;

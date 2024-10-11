@@ -1,10 +1,10 @@
-import { EditorValue } from '@app/plate/types';
-import { INavEmployee } from '@app/types/bruker';
-import { HandlingEnum, IAddress } from '@app/types/documents/recipients';
-import { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
-import { Language } from '@app/types/texts/language';
-import { TemplateIdEnum } from '../smart-editor/template-enums';
-import { DokumentInfo, Journalpost } from './../arkiverte-documents';
+import type { EditorValue } from '@app/plate/types';
+import type { INavEmployee } from '@app/types/bruker';
+import type { HandlingEnum, IAddress } from '@app/types/documents/recipients';
+import type { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
+import type { Language } from '@app/types/texts/language';
+import type { TemplateIdEnum } from '../smart-editor/template-enums';
+import type { DokumentInfo, Journalpost } from './../arkiverte-documents';
 
 export type UUID = string;
 

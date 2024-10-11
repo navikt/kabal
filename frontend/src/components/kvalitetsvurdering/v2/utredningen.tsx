@@ -1,10 +1,10 @@
-import { Radio } from '@navikt/ds-react';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
+import { Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { HeadingWithHelpText } from './common/heading-with-helptext';
 import { RadioButtonsRow, StyledRadioGroup } from './common/styled-components';
-import { InputParams, KvalitetsvurderingInput } from './common/types';
+import { type InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';

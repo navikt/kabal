@@ -1,7 +1,3 @@
-import { FolderPlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -9,6 +5,10 @@ import { useNewAnkebehandlingMutation } from '@app/redux-api/oppgaver/mutations/
 import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ValidationType } from '@app/types/oppgavebehandling/params';
+import { FolderPlusIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const NewAnkebehandlingButton = () => {
   const [showPopup, setShowPopup] = useState(false);

@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@navikt/ds-react';
+import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props extends ButtonProps {

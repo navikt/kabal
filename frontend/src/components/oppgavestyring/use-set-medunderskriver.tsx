@@ -1,11 +1,11 @@
-import { parseISO } from 'date-fns';
-import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
-import { OnChange } from '@app/components/oppgavestyring/types';
+import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
+import { parseISO } from 'date-fns';
+import { useCallback } from 'react';
 
 export interface Return {
   onChange: OnChange;

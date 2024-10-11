@@ -1,14 +1,14 @@
-import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { EditUtfallSet } from '@app/components/smart-editor-texts/utfall-set-filter/edit-utfall-set';
 import { ReadUtfallSet } from '@app/components/smart-editor-texts/utfall-set-filter/read-utfall-set';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { UtfallEnum } from '@app/types/kodeverk';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   selected: string[];

@@ -1,14 +1,14 @@
-import { PencilIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { addDays, addYears, isPast, parseISO } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { PencilIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { addDays, addYears, isPast, parseISO } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { DatePicker } from '../date-picker/date-picker';
 
 export const Deadline = (oppgave: IOppgave) => {

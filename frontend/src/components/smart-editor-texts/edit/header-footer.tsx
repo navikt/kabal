@@ -1,7 +1,7 @@
+import { PlainTextTypes } from '@app/types/common-text-types';
 import { Textarea } from '@navikt/ds-react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { PlainTextTypes } from '@app/types/common-text-types';
 
 type HeaderFooter = PlainTextTypes.HEADER | PlainTextTypes.FOOTER;
 

@@ -1,6 +1,6 @@
-import { TElement, TText } from '@udecode/plate-common';
 import { describe, expect, it } from 'bun:test';
 import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';
+import type { TElement, TText } from '@udecode/plate-common';
 
 describe('are-descendants-equal', () => {
   it('should return false if the two lists are of different lengths', () => {

@@ -1,17 +1,17 @@
-import { useEditorReadOnly } from '@udecode/plate-common';
-import { HtmlHTMLAttributes } from 'react';
-import { css, styled } from 'styled-components';
 import { StyledParagraph } from '@app/plate/components/paragraph';
+import { useEditorReadOnly } from '@udecode/plate-common';
+import type { HtmlHTMLAttributes } from 'react';
+import { css, styled } from 'styled-components';
 
 export enum SectionTypeEnum {
-  LABEL,
-  MALTEKST,
-  MALTEKSTSEKSJON,
-  REDIGERBAR_MALTEKST,
-  REGELVERK,
-  SIGNATURE,
-  HEADER,
-  FOOTER,
+  LABEL = 0,
+  MALTEKST = 1,
+  MALTEKSTSEKSJON = 2,
+  REDIGERBAR_MALTEKST = 3,
+  REGELVERK = 4,
+  SIGNATURE = 5,
+  HEADER = 6,
+  FOOTER = 7,
 }
 
 const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {

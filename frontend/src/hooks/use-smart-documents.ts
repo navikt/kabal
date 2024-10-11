@@ -1,10 +1,10 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsRolWithAnyFlowState } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
-import { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { skipToken } from '@reduxjs/toolkit/query';
 
 export const useSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocument[] | undefined => {
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);

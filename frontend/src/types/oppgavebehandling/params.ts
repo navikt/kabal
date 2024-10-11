@@ -1,6 +1,6 @@
-import { INavEmployee } from '@app/types/bruker';
-import { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
+import type { INavEmployee } from '@app/types/bruker';
+import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
+import type { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;

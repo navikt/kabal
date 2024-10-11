@@ -1,19 +1,24 @@
-/* eslint-disable max-depth */
-import { useCallback } from 'react';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { areFromPlaceholdersSafeToReplaceWithToPlaceholders } from '@app/plate/components/maltekstseksjon/get-children';
 import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import { EmptyVoidElement, MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import type {
+  EmptyVoidElement,
+  MaltekstElement,
+  MaltekstseksjonElement,
+  RedigerbarMaltekstElement,
+} from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { isConsumerRichText } from '@app/types/texts/consumer';
 import { LANGUAGES } from '@app/types/texts/language';
+/* eslint-disable max-depth */
+import { useCallback } from 'react';
 
 export enum ReplaceMethod {
-  AUTO,
-  MANUAL,
-  NO_CHANGE,
+  AUTO = 0,
+  MANUAL = 1,
+  NO_CHANGE = 2,
 }
 
 type GetReplaceMethodFn = (

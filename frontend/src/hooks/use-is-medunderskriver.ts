@@ -1,6 +1,6 @@
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { FlowState } from '@app/types/oppgave-common';
+import { useContext } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsMedunderskriver = () => {

@@ -1,4 +1,4 @@
-import { EditorAutoformatRule } from '../../types';
+import type { EditorAutoformatRule } from '../../types';
 
 export const autoformatText: EditorAutoformatRule[] = [
   {

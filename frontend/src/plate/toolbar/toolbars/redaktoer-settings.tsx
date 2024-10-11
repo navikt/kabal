@@ -1,7 +1,3 @@
-import { CogIcon } from '@navikt/aksel-icons';
-import { Heading, Modal } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import {
   AbbreviationsContent,
   AbbreviationsHeadingContent,
@@ -9,6 +5,10 @@ import {
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { CogIcon } from '@navikt/aksel-icons';
+import { Heading, Modal } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const RedkatoerSettings = () => {
   const modalRef = useRef<HTMLDialogElement>(null);

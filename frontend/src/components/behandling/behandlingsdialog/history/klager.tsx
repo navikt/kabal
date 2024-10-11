@@ -1,8 +1,8 @@
-import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { HistoryEventTypes, IKlagerEvent, IPart } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IKlagerEvent, type IPart } from '@app/types/oppgavebehandling/response';
+import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Line, employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 

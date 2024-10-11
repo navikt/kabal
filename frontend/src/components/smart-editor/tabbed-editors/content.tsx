@@ -1,9 +1,9 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { DEFAULT } from '@app/components/smart-editor/hooks/use-scale';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 interface Props {
   children?: React.ReactNode;

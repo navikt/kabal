@@ -1,4 +1,4 @@
-import { Path } from 'slate';
+import type { Path } from 'slate';
 
 export enum DocumentValidationErrorType {
   EMPTY_PLACEHOLDER = 'EMPTY_PLACEHOLDER',

@@ -1,13 +1,13 @@
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import { HjemlerEvent } from '@app/redux-api/server-sent-events/types';
+import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
+import type { HjemlerEvent } from '@app/redux-api/server-sent-events/types';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
-import { INavEmployee } from '@app/types/bruker';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { INavEmployee } from '@app/types/bruker';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const handleRegistreringshjemlerEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

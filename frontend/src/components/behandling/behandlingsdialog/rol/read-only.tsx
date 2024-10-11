@@ -1,6 +1,6 @@
-import { BodyShort, Label } from '@navikt/ds-react';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { IMedunderskriverRol } from '@app/types/oppgave-common';
+import type { IMedunderskriverRol } from '@app/types/oppgave-common';
+import { BodyShort, Label } from '@navikt/ds-react';
 
 interface Props {
   rol: IMedunderskriverRol;

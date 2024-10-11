@@ -1,4 +1,4 @@
-import { RenderLeafFn } from '@udecode/plate-common';
+import type { RenderLeafFn } from '@udecode/plate-common';
 import { CustomLeaf, Leaf } from './leaf';
 
 export const renderLeaf: RenderLeafFn = (props) => <CustomLeaf {...props} />;

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { Toast } from '@app/components/toast/toast/toast';
-import { Message } from '@app/components/toast/types';
+import type { Message } from '@app/components/toast/types';
+import { useEffect, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);

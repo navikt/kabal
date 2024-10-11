@@ -1,7 +1,7 @@
-import { Checkbox } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
+import { Checkbox } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const IncludedFilter = () => {
   const { value = false, setValue } = useDocumentsOnlyIncluded();

@@ -1,5 +1,5 @@
 import { parseHeader } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
-import { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import type { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 
 export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] => {
   const lines = beskrivelse.trim().split('\n');

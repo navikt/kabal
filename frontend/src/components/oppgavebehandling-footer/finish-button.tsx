@@ -1,12 +1,12 @@
-import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { ValidationType } from '@app/types/oppgavebehandling/params';
+import { CheckmarkIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { ConfirmFinish } from './confirm-finish';
 

@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { AccessRights } from '@app/components/access-rights/access-rights';
+import { styled } from 'styled-components';
 import { PageWrapper } from '../page-wrapper';
 
 export const AccessRightsPage = () => (

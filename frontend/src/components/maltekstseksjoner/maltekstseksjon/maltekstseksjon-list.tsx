@@ -1,8 +1,3 @@
-import { PuzzlePieceIcon } from '@navikt/aksel-icons';
-import { Search } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { CreateMaltekstseksjon } from '@app/components/maltekstseksjoner/create';
 import { Maltekstseksjon } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon';
 import { Filters } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-filters';
@@ -12,7 +7,12 @@ import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-
 import { ShowDepublished } from '@app/components/smart-editor-texts/show-depublished';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import { PuzzlePieceIcon } from '@navikt/aksel-icons';
+import { Search } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { styled } from 'styled-components';
 import { DragAndDropContextElement } from '../drag-and-drop/drag-context';
 import { List } from './common';
 

@@ -1,8 +1,8 @@
-import { ToggleGroup } from '@navikt/ds-react';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
+import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import { Language, isLanguage } from '@app/types/texts/language';
+import { ToggleGroup } from '@navikt/ds-react';
 
 interface Props {
   textType: TextTypes;

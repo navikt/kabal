@@ -1,5 +1,3 @@
-import { Alert, ErrorMessage, Heading, Loader, Tag, TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -12,6 +10,8 @@ import {
   RichTextTypes,
 } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
+import { Alert, ErrorMessage, Heading, Loader, Tag, type TagProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   textId: string;

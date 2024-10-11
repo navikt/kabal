@@ -1,7 +1,7 @@
 import { IS_LOCALHOST } from '@app/redux-api/common';
 import { TextsTagTypes, textsApi } from '@app/redux-api/texts/texts';
-import { IGetTextsParams } from '@app/types/texts/params';
-import { IText } from '@app/types/texts/responses';
+import type { IGetTextsParams } from '@app/types/texts/params';
+import type { IText } from '@app/types/texts/responses';
 import { ListTagTypes } from '../tag-types';
 
 const textsListTags = (texts: IText[] | undefined) =>

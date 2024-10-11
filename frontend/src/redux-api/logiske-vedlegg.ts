@@ -1,8 +1,8 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { format } from 'date-fns';
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { LogiskVedlegg } from '@app/types/arkiverte-documents';
+import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { format } from 'date-fns';
 import { KABAL_API_BASE_QUERY } from './common';
 
 const OPTIMISTIC_LOGISK_VEDLEGG_ID_PREFIX = 'optimistic-logisk-vedlegg';

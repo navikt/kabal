@@ -1,8 +1,8 @@
+import { jest, mock } from 'bun:test';
 /* eslint-disable import/no-unused-modules */
 import { GlobalRegistrator } from '@happy-dom/global-registrator';
-import { jest, mock } from 'bun:test';
-import { IUserData } from './types/bruker';
-import { CountryCode, PostalCode } from './types/common';
+import type { IUserData } from './types/bruker';
+import type { CountryCode, PostalCode } from './types/common';
 
 GlobalRegistrator.register();
 

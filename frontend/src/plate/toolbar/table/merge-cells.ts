@@ -1,3 +1,6 @@
+import { getCurrentRow } from '@app/plate/toolbar/table/helpers';
+import type { ParagraphElement, RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
+import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 import {
   findNodePath,
   getNextNode,
@@ -8,9 +11,6 @@ import {
 } from '@udecode/plate-common';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
-import { getCurrentRow } from '@app/plate/toolbar/table/helpers';
-import { ParagraphElement, RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
-import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 
 export const mergeCells = (
   editor: RichTextEditor,

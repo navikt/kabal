@@ -1,7 +1,12 @@
-import { EditorValue } from '@app/plate/types';
-import { GOD_FORMULERING_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
-import { Language } from '@app/types/texts/language';
-import { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
+import type { EditorValue } from '@app/plate/types';
+import {
+  GOD_FORMULERING_TYPE,
+  type PlainTextTypes,
+  type REGELVERK_TYPE,
+  type RichTextTypes,
+} from '@app/types/common-text-types';
+import type { Language } from '@app/types/texts/language';
+import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
 
 interface ConsumerMetadata {
   id: string;

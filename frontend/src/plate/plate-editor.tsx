@@ -1,6 +1,6 @@
-import { PlateContent, PlateContentProps } from '@udecode/plate-common';
-import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
+import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { renderLeaf as defaultRenderLeaf } from '@app/plate/leaf/render-leaf';
+import { PlateContent, type PlateContentProps } from '@udecode/plate-common';
 
 interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;

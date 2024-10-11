@@ -1,9 +1,9 @@
+import type { FagsystemId } from '@app/components/feilregistrering/types';
+import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { FagsystemId } from '@app/components/feilregistrering/types';
-import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
 import { Context } from './context';
 import { Row } from './styled-components';
 

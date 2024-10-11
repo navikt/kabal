@@ -1,7 +1,18 @@
+import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
+import type {
+  EditorDescendant,
+  EditorValue,
+  MaltekstElement,
+  PlaceholderElement,
+  RichText,
+  RichTextEditor,
+} from '@app/plate/types';
+import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import {
-  PlateEditor,
-  TElement,
-  TPath,
+  type PlateEditor,
+  type TElement,
+  type TPath,
   getNodeAncestors,
   insertNodes,
   insertText,
@@ -11,17 +22,6 @@ import {
   withoutSavingHistory,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
-import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
-import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import {
-  EditorDescendant,
-  EditorValue,
-  MaltekstElement,
-  PlaceholderElement,
-  RichText,
-  RichTextEditor,
-} from '@app/plate/types';
-import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 

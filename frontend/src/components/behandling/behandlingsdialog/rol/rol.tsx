@@ -1,4 +1,3 @@
-import { styled } from 'styled-components';
 import { SelectRol } from '@app/components/behandling/behandlingsdialog/rol/select-rol';
 import { SendToRol } from '@app/components/behandling/behandlingsdialog/rol/send-to-rol';
 import { SendToSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
@@ -14,7 +13,8 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IAnkebehandling, IKlagebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IAnkebehandling, IKlagebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { styled } from 'styled-components';
 import { RolReadOnly } from './read-only';
 
 export const Rol = () => {

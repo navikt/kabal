@@ -1,7 +1,7 @@
-import { ClipboardIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, TextField, Tooltip } from '@navikt/ds-react';
 import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
 import { Horizontal } from '@app/components/svarbrev/row/styled-components';
+import { ClipboardIcon } from '@navikt/aksel-icons';
+import { Button, CopyButton, TextField, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   value: string;
