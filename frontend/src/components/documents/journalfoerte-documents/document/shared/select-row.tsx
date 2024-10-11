@@ -1,5 +1,5 @@
 import { Checkbox } from '@navikt/ds-react';
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { SelectContext } from '../../select-context/select-context';
 
 interface Props {
@@ -8,8 +8,9 @@ interface Props {
   harTilgangTilArkivvariant: boolean;
 }
 
-export const SelectRow = ({ harTilgangTilArkivvariant, ...ids }: Props) => {
+export const SelectRow = ({ harTilgangTilArkivvariant, dokumentInfoId, journalpostId }: Props) => {
   const { isSelected, selectOne, unselectOne, selectRangeTo } = useContext(SelectContext);
+  const ids = useMemo(() => ({ journalpostId, dokumentInfoId }), [journalpostId, dokumentInfoId]);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => (e.target.checked ? selectOne(ids) : unselectOne(ids)),

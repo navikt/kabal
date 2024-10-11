@@ -94,7 +94,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
       searchParams.set(QueryKey.ORDER, SortOrder.DESC);
       setSearchParams(searchParams);
     }
-  }, [filter, prevFilter?.length, searchParams, setSearchParams, sort]);
+  }, [filter, prevFilter?.length, searchParams, setSearchParams]);
 
   const filteredTexts = useMemo(() => {
     if (filter.length === 0) {

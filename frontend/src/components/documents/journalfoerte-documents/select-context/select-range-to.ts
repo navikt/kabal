@@ -90,24 +90,26 @@ const getSelectedDocuments = (
         // And the document itself was selected.
         if (firstVedleggIndex === -1) {
           // Add the document and all of its vedlegg.
-          return [
-            ...acc,
-            { journalpostId, dokumentInfoId },
+          acc.push({ journalpostId, dokumentInfoId });
+          acc.push(
             ...vedlegg.map((v) => ({
               journalpostId,
               dokumentInfoId: v.dokumentInfoId,
             })),
-          ];
+          );
+
+          return acc;
         }
 
         // If the document itself was not selected, add all vedlegg from the first selected vedlegg.
-        return [
-          ...acc,
+        acc.push(
           ...vedlegg.slice(firstVedleggIndex).map((v) => ({
             journalpostId,
             dokumentInfoId: v.dokumentInfoId,
           })),
-        ];
+        );
+
+        return acc;
       }
 
       // If this is the last document.
@@ -115,30 +117,34 @@ const getSelectedDocuments = (
         // And the document itself was selected.
         if (lastVedleggIndex === -1) {
           // Add the document and NONE of its vedlegg.
-          return [...acc, { journalpostId, dokumentInfoId }];
+          acc.push({ journalpostId, dokumentInfoId });
+
+          return acc;
         }
 
         // If the document itself was not selected, add all vedlegg up to the last selected vedlegg.
-        return [
-          ...acc,
-          { journalpostId, dokumentInfoId },
+        acc.push({ journalpostId, dokumentInfoId });
+        acc.push(
           ...vedlegg.slice(0, lastVedleggCount).map((v) => ({
             journalpostId,
             dokumentInfoId: v.dokumentInfoId,
           })),
-        ];
+        );
+
+        return acc;
       }
 
       // If this is a document in between the first and last document.
       // Add the documents and all of its vedlegg.
-      return [
-        ...acc,
-        { journalpostId, dokumentInfoId },
+      acc.push({ journalpostId, dokumentInfoId });
+      acc.push(
         ...vedlegg.map((v) => ({
           journalpostId,
           dokumentInfoId: v.dokumentInfoId,
         })),
-      ];
+      );
+
+      return acc;
     },
     [],
   );

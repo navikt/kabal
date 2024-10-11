@@ -32,7 +32,9 @@ class Store {
   public info = (content: React.ReactNode, timeout?: number) => this.addMessage(ToastType.INFO, content, timeout);
 
   private notify() {
-    this.listeners.forEach((listener) => listener(this.messages));
+    for (const listener of this.listeners) {
+      listener(this.messages);
+    }
   }
 
   private addMessage(type: ToastType, content: React.ReactNode, timeout = TOAST_DEFAULT_TIMEOUT): CloseFn {

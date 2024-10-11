@@ -28,6 +28,7 @@ export const parseHeader = (header: string): GosysBeskrivelseEntry | null => {
   }
 
   return {
+    id: crypto.randomUUID(),
     date: parsedDateTime,
     author: getAuthor(author, name.trim()),
     content: '',

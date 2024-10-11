@@ -20,7 +20,7 @@ import { NavLink, type NavLinkProps } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 export const Nav = () => (
-  <InternalHeader.Title as={StyledNav} role="navigation" aria-label="Meny" data-testid="oppgaver-nav">
+  <InternalHeader.Title as={StyledNav} aria-label="Meny" data-testid="oppgaver-nav">
     <StyledNavLinkList>
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon /> Oppgaver

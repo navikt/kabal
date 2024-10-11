@@ -9,7 +9,7 @@ export const getFullmektig = (e: IFullmektigEvent) => {
   const { actor, event, previous, timestamp } = e;
 
   if (previous.event.part === null && event.part !== null) {
-    return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
+    return <SetPart actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }
 
   if (previous.event.part !== null && event.part === null) {
@@ -31,7 +31,7 @@ interface SetProps {
   timestamp: string;
 }
 
-const Set = ({ actor, part, timestamp }: SetProps) => (
+const SetPart = ({ actor, part, timestamp }: SetProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={PlusIcon}>
     <Line>
       {employeeName(actor)} satt fullmektig til {partName(part)}. Ingen tidligere fullmektig.

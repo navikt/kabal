@@ -134,7 +134,7 @@ export const useUpdateMaltekstseksjon = (
     }
 
     update();
-  }, [canManage, element.section, isUpdated, maltekstseksjonIsFetching, query, textsAreFetching, update]);
+  }, [canManage, isUpdated, maltekstseksjonIsFetching, query, textsAreFetching, update]);
 
   return {
     isFetching: maltekstseksjonIsFetching || textsAreFetching,

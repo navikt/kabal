@@ -29,7 +29,7 @@ export const DatePickerRange = ({
   neutral = false,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onClick = useCallback(() => setIsOpen((o) => !o), [setIsOpen]);
+  const onClick = useCallback(() => setIsOpen((o) => !o), []);
   const ref = useRef(null);
 
   useOnClickOutside(ref, () => setIsOpen(false));

@@ -43,9 +43,9 @@ const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selection
     <>
       {disableSelection === true
         ? null
-        : selectionRects.map((selectionPosition, i) => (
+        : selectionRects.map((selectionPosition) => (
             <StyledSelection
-              key={i}
+              key={`${selectionColor}-${selectionPosition.left}-${selectionPosition.top}-${selectionPosition.width}-${selectionPosition.height}-${tabId}`}
               style={{ ...selectionStyle, ...selectionPosition, backgroundColor: selectionColor }}
             />
           ))}

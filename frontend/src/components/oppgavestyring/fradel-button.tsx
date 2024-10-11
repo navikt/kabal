@@ -53,7 +53,7 @@ export const FradelButton = (props: IOppgave) => {
         clearInterval(undoInterval.current);
       }
     };
-  }, [undoSecondsLeft]);
+  }, []);
 
   const [access, isAccessLoading] = useOppgaveActions(
     tildeltSaksbehandlerident,

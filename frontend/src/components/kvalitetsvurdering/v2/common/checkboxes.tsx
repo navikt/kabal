@@ -39,14 +39,16 @@ export const Checkboxes = ({
   }
 
   const onChange = (fields: string[]) => {
-    const newFields = allFields.reduce((acc, field) => {
+    const newFields = allFields.reduce<Record<string, boolean>>((acc, field) => {
       const isFieldChecked = fields.includes(field);
 
       if (kvalitetsvurdering[field] === isFieldChecked) {
         return acc;
       }
 
-      return { ...acc, [field]: isFieldChecked };
+      acc[field] = isFieldChecked;
+
+      return acc;
     }, {});
     update(newFields);
   };

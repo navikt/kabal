@@ -51,6 +51,7 @@ export const calculateDokumentPositions = (
   let listHeight = 0;
 
   for (let index = 0; index < dokumenterLength; index++) {
+    // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
     const dokument = dokumenter[index]!;
     const showMetadata = metadataIdList.includes(dokument.journalpostId);
     const showVedlegg = showVedleggIdList.includes(dokument.journalpostId);

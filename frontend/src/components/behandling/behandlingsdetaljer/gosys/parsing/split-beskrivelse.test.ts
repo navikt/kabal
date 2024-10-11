@@ -21,6 +21,7 @@ Overførte oppgaven fra Kabin til Kabal.`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
+        id: expect.any(String),
       },
     ]);
   });
@@ -45,6 +46,7 @@ Oppdaterte frist`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 15, 45),
@@ -55,6 +57,7 @@ Oppdaterte frist`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppdaterte frist',
+        id: expect.any(String),
       },
     ]);
   });
@@ -84,6 +87,7 @@ Oppgaven er flyttet fra enhet 4712 til 4293`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 15, 45),
@@ -94,6 +98,7 @@ Oppgaven er flyttet fra enhet 4712 til 4293`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppdaterte frist',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 18),
@@ -104,6 +109,7 @@ Oppgaven er flyttet fra enhet 4712 til 4293`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Flyttet til riktig enhet\n\nOppgaven er flyttet fra enhet 4712 til 4293',
+        id: expect.any(String),
       },
     ]);
   });
@@ -159,6 +165,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Overførte oppgaven fra Kabin til Kabal.\nOppdaterte frist',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 8),
@@ -169,6 +176,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppdaterte frist.\nOverførte oppgave til Kabal fra Kabin.\nTildelte oppgaven til Z994864.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 11, 11),
@@ -179,6 +187,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppgaven er flyttet   fra mappe Hjelpemidler til <ingen>',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 18),
@@ -189,6 +198,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppgaven er flyttet   fra mappe <ingen> til Hjelpemidler',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 18),
@@ -199,6 +209,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Flyttet til riktig enhet\nOppgaven er flyttet fra enhet 4712 til 4293',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 10),
@@ -209,6 +220,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppdaterte frist.\nOverførte oppgave til Kabal.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 5),
@@ -219,6 +231,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Saksblokk : A04\nStatus : OK\nBekreftelsesbrev sendt : Nei',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 10, 5),
@@ -229,6 +242,7 @@ Mottatt dato : 24.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Mottok en klage\n\nSTK2 : Høreapparat\nSTK3 :\nSakstype : Klage\nMottatt dato : 24.05.2024',
+        id: expect.any(String),
       },
     ]);
   });
@@ -266,6 +280,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Oppdaterte frist.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 10, 10, 45),
@@ -276,6 +291,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Tilordner.\nOppgaven er flyttet fra enhet 4712 til 4291, fra saksbehandler <ingen> til Z994864,',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 7, 12, 35),
@@ -286,6 +302,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Saksblokk : A01\nStatus : OK\nBekreftelsesbrev sendt : Nei',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 7, 12, 35),
@@ -297,6 +314,7 @@ Mottatt dato : 21.05.2024`;
         },
         content:
           'Mottatt en klage fra bruker.\n\nSTK2 : Høreapparat\nSTK3 :\nSakstype : Klage\nMottatt dato : 21.05.2024',
+        id: expect.any(String),
       },
     ]);
   });
@@ -317,6 +335,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: '',
+        id: expect.any(String),
       },
     ]);
   });
@@ -338,6 +357,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: '',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 29),
@@ -348,6 +368,7 @@ Mottatt dato : 21.05.2024`;
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: '',
+        id: expect.any(String),
       },
     ]);
   });
@@ -368,11 +389,13 @@ Melding uten navn og ett mellomrom.
         date: new Date(2024, 5, 12, 14, 26),
         author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
         content: 'Melding uten navn og to mellomrom.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 25),
         author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
         content: 'Melding uten navn og ett mellomrom.',
+        id: expect.any(String),
       },
     ]);
   });
@@ -398,6 +421,7 @@ Melding med kun to streker på starten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på starten av header.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 25),
@@ -408,6 +432,7 @@ Melding med kun to streker på starten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på starten av header.',
+        id: expect.any(String),
       },
     ]);
   });
@@ -433,6 +458,7 @@ Melding med kun to streker på slutten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på slutten av header.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 25),
@@ -443,6 +469,7 @@ Melding med kun to streker på slutten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på slutten av header.',
+        id: expect.any(String),
       },
     ]);
   });
@@ -468,6 +495,7 @@ Melding med kun to streker på starten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på slutten av header.',
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 5, 12, 14, 25),
@@ -478,6 +506,7 @@ Melding med kun to streker på starten av header.
           type: GosysEntryAuthorType.EMPLOYEE,
         },
         content: 'Melding med kun to streker på starten av header.',
+        id: expect.any(String),
       },
     ]);
   });
@@ -515,6 +544,7 @@ Dette står i gosysoppgave opprettet 271022 og avsluttet 110723.
 Det ser ut som noen har gjort noe rart med oppgaven (?!)
 
 Hva er status i saken?`,
+        id: expect.any(String),
       },
     ]);
   });
@@ -536,11 +566,13 @@ Overførte oppgaven fra Kabin til Kabal.`;
         author: { name: 'kabal-api', type: GosysEntryAuthorType.SYSTEM },
         content: `Klageinstansen har fullført behandling av klage med utfall stadfestet. Tar gjerne en prat.
 Oppgaven er flyttet fra enhet 4295 til 0124, fra saksbehandler Z994863 til <ingen>`,
+        id: expect.any(String),
       },
       {
         date: new Date(2024, 9, 10, 15, 6),
         author: { name: null, navIdent: 'Z994863', enhet: '4295', type: GosysEntryAuthorType.EMPLOYEE },
         content: 'Overførte oppgaven fra Kabin til Kabal.',
+        id: expect.any(String),
       },
     ]);
   });

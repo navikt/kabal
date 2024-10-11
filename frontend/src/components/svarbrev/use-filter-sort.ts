@@ -72,7 +72,7 @@ export const useFilterSort = ({
     );
 
     return () => clearTimeout(timout);
-  }, [activeFilter, isInitialized, settings, sort, textFilter, typeFilter, ytelseFilter]);
+  }, [activeFilter, settings, sort, textFilter, typeFilter, ytelseFilter]);
 
   if (isLoading || result === undefined) {
     return { sortedFilteredSettings: undefined, sortFilterIsLoading: true };

@@ -48,7 +48,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
     setIsEditing((e) => !e);
   }, []);
 
-  const onClose = useCallback(() => setIsEditing(false), [setIsEditing]);
+  const onClose = useCallback(() => setIsEditing(false), []);
 
   if (isEditing) {
     return (

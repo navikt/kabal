@@ -69,6 +69,7 @@ export const isoTimeToPretty = (isoTime: ISOTime | null | undefined): prettyTime
   return _isoTimeToPretty(isoTime);
 };
 
+// biome-ignore lint/style/noNonNullAssertion: String is guaranteed to be in correct format.
 const _isoTimeToPretty = (isoTime: ISOTime): prettyTime => isoTime.split('.')[0]!;
 
 /** Formats ISO date(time) as human readable. */

@@ -23,6 +23,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
   const firstIndex = data.length - 1;
 
   for (let i = firstIndex; i >= 0; i--) {
+    // biome-ignore lint/style/noNonNullAssertion: Index is guaranteed to be in bounds.
     const setting = data[i]!;
 
     if (i === firstIndex) {
@@ -41,6 +42,7 @@ export const getChangeSets = (data: SvarbrevSetting[]): (InitialVersion | Change
       continue;
     }
 
+    // biome-ignore lint/style/noNonNullAssertion: Index is guaranteed to be in bounds.
     const previous = data[i + 1]!;
 
     const isTimeEqual =
@@ -94,32 +96,32 @@ export const getChangeSetText = ({
     );
   }
 
-  const parts = [];
+  const parts: JSX.Element[] = [];
 
   if (shouldSend !== undefined) {
     parts.push(
-      <>
+      <li>
         <strong>{shouldSend ? 'Aktiverte' : 'Deaktiverte'}</strong> svarbrevet.
-      </>,
+      </li>,
     );
   }
 
   if (behandlingstidUnits !== undefined && behandlingstidUnitTypeId !== undefined) {
     parts.push(
-      <>
+      <li>
         Satte behandlingstiden til <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitTypeId)}</strong>.
-      </>,
+      </li>,
     );
   }
 
   if (customText !== undefined) {
     parts.push(
       customText === null || customText.length === 0 ? (
-        'Fjernet teksten.'
+        <li>Fjernet teksten.</li>
       ) : (
-        <>
+        <li>
           Endret teksten til «<strong>{customText}</strong>».
-        </>
+        </li>
       ),
     );
   }
@@ -128,13 +130,7 @@ export const getChangeSetText = ({
     return <BodyShort>Ingen endring.</BodyShort>;
   }
 
-  return (
-    <StyledVersionList>
-      {parts.map((part, index) => (
-        <li key={index}>{part}</li>
-      ))}
-    </StyledVersionList>
-  );
+  return <StyledVersionList>{parts}</StyledVersionList>;
 };
 
 const StyledVersionList = styled.ul`

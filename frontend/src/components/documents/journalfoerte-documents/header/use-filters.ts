@@ -23,7 +23,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
   const [isExpanded] = useIsExpanded();
 
   const [search, setSearch] = useState('');
-  const resetTitle = useCallback(() => setSearch(''), [setSearch]);
+  const resetTitle = useCallback(() => setSearch(''), []);
 
   const {
     value: selectedTypes = EMPTY_TYPE_FILTER,

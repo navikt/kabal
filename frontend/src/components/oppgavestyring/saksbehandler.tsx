@@ -90,8 +90,11 @@ const SelectSaksbehandler = ({
   ));
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value)!;
-    tildel(employee);
+    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value);
+
+    if (employee !== undefined) {
+      tildel(employee);
+    }
   };
 
   const saksbehandler =

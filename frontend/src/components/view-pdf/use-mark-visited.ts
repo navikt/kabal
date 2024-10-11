@@ -23,14 +23,14 @@ export const useMarkVisited = (url: string | undefined) => {
       return;
     }
 
-    showDocumentList.forEach((document) => {
+    for (const document of showDocumentList) {
       const documentUrl =
         document.type === DocumentTypeEnum.JOURNALFOERT
           ? getJournalfoertDocumentTabUrl(document.journalpostId, document.dokumentInfoId)
           : getNewDocumentTabUrl(oppgaveId, document.documentId);
 
       window.history.replaceState(null, '', documentUrl);
-    });
+    }
 
     window.history.replaceState(null, '', currentUrl);
   }, [oppgaveId, showDocumentList, url]);

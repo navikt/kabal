@@ -1,4 +1,4 @@
-import { getVarselData } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
+import { Varsler } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
 import { type IArkivertDocument, Kanal, type TimelineTypes } from '@app/types/arkiverte-documents';
 import {
   BellIcon,
@@ -23,9 +23,6 @@ export const EkspedertItems = ({ utsendingsinfo, type, timestamp, kanal, kanalna
   const isSmsSent = hasUtsendingsinfo && utsendingsinfo.smsVarselSendt !== null;
   const isEmailSent = hasUtsendingsinfo && utsendingsinfo.epostVarselSendt !== null;
   const hasVarsler = isSmsSent || isEmailSent;
-
-  const varselData = hasUtsendingsinfo ? getVarselData(isSmsSent, isEmailSent, utsendingsinfo) : [];
-  const lastIndex = varselData.length - 1;
 
   return (
     <>
@@ -55,17 +52,15 @@ export const EkspedertItems = ({ utsendingsinfo, type, timestamp, kanal, kanalna
         }
       />
 
-      {varselData.map(({ title, content }, i) => (
-        <TimelineItem
-          key={i}
+      {hasUtsendingsinfo ? (
+        <Varsler
+          isEmailSent={isEmailSent}
+          isSmsSent={isSmsSent}
+          utsendingsinfo={utsendingsinfo}
           timestamp={timestamp}
-          title={title}
-          icon={<BellIcon aria-hidden />}
-          color="var(--a-lightblue-50)"
-          popover={{ buttonText: 'Vis varsel', content }}
-          hideNext={isLast && i === lastIndex}
+          isLast={isLast}
         />
-      ))}
+      ) : null}
 
       {hasVarsler ? null : <OtherVarselInfo dato={timestamp} kanal={kanal} kanalnavn={kanalnavn} isLast={isLast} />}
     </>

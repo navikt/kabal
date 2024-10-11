@@ -96,7 +96,7 @@ const RenderHeaderFooter = ({ element, attributes, children }: PlateRenderElemen
     if (!initialized) {
       loadMaltekst(element);
     }
-  }, [element, initialized, loadMaltekst, textType, user.ansattEnhet.id]);
+  }, [element, initialized, loadMaltekst]);
 
   const AddNewParagraph = element.type === ELEMENT_HEADER ? AddNewParagraphBelow : AddNewParagraphAbove;
 

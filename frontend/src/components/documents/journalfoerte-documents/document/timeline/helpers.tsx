@@ -1,6 +1,13 @@
+import {
+  StyledEmailContent,
+  StyledLabel,
+  StyledSmsContent,
+} from '@app/components/documents/journalfoerte-documents/document/timeline/styled-components';
+import { TimelineItem } from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
 import { TimelineTypes, type Utsendingsinfo } from '@app/types/arkiverte-documents';
 import {
   ArrowUndoIcon,
+  BellIcon,
   EnvelopeClosedIcon,
   FileCheckmarkIcon,
   FolderFileIcon,
@@ -9,7 +16,6 @@ import {
   MobileSmallIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import { StyledEmailContent, StyledLabel, StyledSmsContent } from './styled-components';
 
 export const DATOTYPE_NAME: Record<TimelineTypes, string> = {
   [TimelineTypes.OPPRETTET]: 'Opprettet',
@@ -41,54 +47,86 @@ export const ICON: Record<TimelineTypes, React.FC> = {
   [TimelineTypes.LEST]: GlassesIcon,
 };
 
-interface VarselData {
-  title: string;
-  content: JSX.Element;
+interface VarslerProps {
+  isEmailSent: boolean;
+  isSmsSent: boolean;
+  utsendingsinfo: Utsendingsinfo;
+  timestamp: string;
+  isLast: boolean;
 }
 
-export const getVarselData = (
-  isSmsSent: boolean,
-  isEmailSent: boolean,
-  utsendingsinfo: Utsendingsinfo,
-): [VarselData, VarselData] | [VarselData] | [] => {
+export const Varsler = ({ isEmailSent, isSmsSent, timestamp, utsendingsinfo, isLast }: VarslerProps) => {
   if (isSmsSent && isEmailSent) {
-    return [getSmsPopoverContent(utsendingsinfo), getEmailPopoverContent(utsendingsinfo)];
+    return (
+      <>
+        <SmsVarsel utsendingsinfo={utsendingsinfo} timestamp={timestamp} />
+        <EmailVarsel utsendingsinfo={utsendingsinfo} timestamp={timestamp} isLast={isLast} />
+      </>
+    );
   }
 
   if (isSmsSent) {
-    return [getSmsPopoverContent(utsendingsinfo)];
+    return <SmsVarsel utsendingsinfo={utsendingsinfo} timestamp={timestamp} isLast={isLast} />;
   }
 
   if (isEmailSent) {
-    return [getEmailPopoverContent(utsendingsinfo)];
+    return <EmailVarsel utsendingsinfo={utsendingsinfo} timestamp={timestamp} isLast={isLast} />;
   }
 
-  return [];
+  return null;
 };
 
-const getSmsPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => ({
-  title: 'SMS-varsel sendt',
-  content: (
+interface VarselProps {
+  utsendingsinfo: Utsendingsinfo;
+  timestamp: string;
+  isLast?: boolean;
+}
+
+const SmsVarsel = ({ utsendingsinfo, timestamp, isLast = false }: VarselProps) => {
+  const title = 'SMS-varsel sendt';
+  const content = (
     <>
       <StyledLabel size="small">
         <MobileSmallIcon aria-hidden /> {utsendingsinfo.smsVarselSendt?.adresse}
       </StyledLabel>
       <StyledSmsContent>{utsendingsinfo.smsVarselSendt?.varslingstekst}</StyledSmsContent>
     </>
-  ),
-});
+  );
 
-const getEmailPopoverContent = (utsendingsinfo: Utsendingsinfo): VarselData => ({
-  title: 'E-post-varsel sendt',
-  content: (
+  return <VarselTimelineItem timestamp={timestamp} title={title} content={content} isLast={isLast} />;
+};
+
+const EmailVarsel = ({ utsendingsinfo, timestamp, isLast }: VarselProps) => {
+  const title = 'E-post-varsel sendt';
+  const content = (
     <>
       <StyledLabel size="small">
         <EnvelopeClosedIcon aria-hidden /> {utsendingsinfo.epostVarselSendt?.adresse}
       </StyledLabel>
       <EmailContent varslingstekst={utsendingsinfo.epostVarselSendt?.varslingstekst} />
     </>
-  ),
-});
+  );
+
+  return <VarselTimelineItem timestamp={timestamp} title={title} content={content} isLast={isLast} />;
+};
+
+interface VarselTimelineItemProps {
+  timestamp: string;
+  title: string;
+  content: JSX.Element;
+  isLast?: boolean;
+}
+
+const VarselTimelineItem = ({ timestamp, title, content, isLast = false }: VarselTimelineItemProps) => (
+  <TimelineItem
+    timestamp={timestamp}
+    title={title}
+    icon={<BellIcon aria-hidden />}
+    color="var(--a-lightblue-50)"
+    popover={{ buttonText: 'Vis varsel', content }}
+    hideNext={isLast}
+  />
+);
 
 const BODY_REGEX = /<body>((?:.|\n|\r)*)<\/body>/i;
 
@@ -103,5 +141,6 @@ const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }
     return null;
   }
 
+  // biome-ignore lint/security/noDangerouslySetInnerHtml: This content is trusted.
   return <StyledEmailContent dangerouslySetInnerHTML={{ __html }} />;
 };

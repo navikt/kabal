@@ -1,5 +1,9 @@
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
-import { useInnsendingshjemlerFromIds, useRegistreringshjemlerFromIds } from '@app/hooks/use-kodeverk-ids';
+import {
+  type HjemmelNameAndId,
+  useInnsendingshjemlerFromIds,
+  useRegistreringshjemlerFromIds,
+} from '@app/hooks/use-kodeverk-ids';
 import { Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
@@ -8,29 +12,29 @@ interface Props {
 }
 
 export const Innsendingshjemler = ({ hjemmelIdList }: Props) => {
-  const hjemmelNames = useInnsendingshjemlerFromIds(hjemmelIdList);
+  const hjemmelList = useInnsendingshjemlerFromIds(hjemmelIdList);
 
-  return <HjemmelNames hjemmelNames={hjemmelNames} />;
+  return <HjemmelList hjemmelList={hjemmelList} />;
 };
 
 export const Registreringshjemler = ({ hjemmelIdList }: Props) => {
-  const hjemmelNames = useRegistreringshjemlerFromIds(hjemmelIdList ?? []);
+  const hjemmelList = useRegistreringshjemlerFromIds(hjemmelIdList ?? []);
 
-  return <HjemmelNames hjemmelNames={hjemmelNames} />;
+  return <HjemmelList hjemmelList={hjemmelList} />;
 };
 
 interface HjemmelNamesProps {
-  hjemmelNames: string[] | undefined;
+  hjemmelList: HjemmelNameAndId[] | undefined;
 }
 
-const HjemmelNames = ({ hjemmelNames }: HjemmelNamesProps) =>
-  hjemmelNames === undefined ? (
+const HjemmelList = ({ hjemmelList }: HjemmelNamesProps) =>
+  hjemmelList === undefined ? (
     <LoadingCellContent />
   ) : (
     <Container>
-      {hjemmelNames.map((hjemmelName, index) => (
-        <Tag variant="alt1" key={index}>
-          {hjemmelName}
+      {hjemmelList.map(({ id, name }) => (
+        <Tag variant="alt1" key={id}>
+          {name}
         </Tag>
       ))}
     </Container>

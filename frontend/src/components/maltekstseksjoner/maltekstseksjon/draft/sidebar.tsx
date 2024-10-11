@@ -65,9 +65,15 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
         if (i === hoveredIndex) {
           result[i] = draggedTextId;
         } else if (i > draggedIndex || i < hoveredIndex) {
-          result[i] = textIdList.at(i)!;
+          const value = textIdList.at(i);
+          if (value !== undefined) {
+            result[i] = value;
+          }
         } else {
-          result[i] = textIdList.at(i - 1)!;
+          const prevValue = textIdList.at(i - 1);
+          if (prevValue !== undefined) {
+            result[i] = prevValue;
+          }
         }
       }
 
@@ -78,9 +84,21 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
       if (i === hoveredIndex) {
         result[i] = draggedTextId;
       } else if (i < draggedIndex || i > hoveredIndex) {
-        result[i] = textIdList.at(i)!;
+        const value = textIdList.at(i);
+        if (value !== undefined) {
+          result[i] = value;
+        }
       } else {
-        result[i] = textIdList.at(i + 1) ?? textIdList.at(0)!;
+        const nextValue = textIdList.at(i + 1);
+        if (nextValue !== undefined) {
+          result[i] = nextValue;
+          continue;
+        }
+
+        const value = textIdList.at(i);
+        if (value !== undefined) {
+          result[i] = value;
+        }
       }
     }
 
@@ -115,7 +133,15 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
             textId={textId}
             maltekst={maltekstseksjon}
             query={query}
-            onDragEnter={() => onDragEnter(textIdList.at(index)!, index)}
+            onDragEnter={() => {
+              const textId = textIdList.at(index);
+
+              if (textId === undefined) {
+                return;
+              }
+
+              onDragEnter(textId, index);
+            }}
             onDrop={() => {
               if (dragDirection === DragDirection.NONE) {
                 return;

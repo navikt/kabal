@@ -39,7 +39,7 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
     }
 
     return SETTINGS_MANAGER.subscribe(key, subscribe);
-  }, [key, subscribe]);
+  }, [key]);
 
   const setValue = useCallback(
     (newValue: string | ((oldValue: string | undefined) => string)) => {

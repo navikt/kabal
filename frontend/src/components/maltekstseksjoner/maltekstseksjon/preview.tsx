@@ -56,7 +56,11 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   const savedContent = texts.reduce<EditorValue>((acc, { richText }) => {
     const content = richText[lang];
 
-    return content === null ? acc : [...acc, ...content];
+    if (content !== null) {
+      acc.push(...content);
+    }
+
+    return acc;
   }, []);
 
   if (isUpdating) {

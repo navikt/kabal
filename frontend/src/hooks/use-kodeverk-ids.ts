@@ -59,26 +59,31 @@ export const useEnhetNameFromIdOrLoading = (enhetId?: string | null): string => 
   return 'Mangler';
 };
 
-export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): string[] | undefined => {
+export interface HjemmelNameAndId {
+  id: string;
+  name: string | undefined;
+}
+
+export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useInnsendingshjemlerMap();
 
   if (isLoading || typeof data === 'undefined') {
     return undefined;
   }
 
-  return hjemmelIdList.map((hjemmelId) => data[hjemmelId] ?? hjemmelId);
+  return hjemmelIdList.map((id) => ({ id, name: data[id] }));
 };
 
-export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): string[] | undefined => {
+export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useRegistreringshjemlerMap();
 
   if (isLoading || typeof data === 'undefined') {
     return undefined;
   }
 
-  return hjemmelIdList.map((hjemmelId) => {
-    const hjemmel = data[hjemmelId];
+  return hjemmelIdList.map((id) => {
+    const name = data[id];
 
-    return hjemmel === undefined ? hjemmelId : `${hjemmel.lovkilde.beskrivelse} ${hjemmel.hjemmelnavn}`;
+    return name === undefined ? { id, name } : { id, name: `${name.lovkilde.beskrivelse} ${name.hjemmelnavn}` };
   });
 };

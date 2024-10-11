@@ -37,9 +37,12 @@ export const OppgaveRows = ({
   if (isLoading) {
     return (
       <Table.Body data-testid={testId} data-state="loading" data-empty="true">
-        {new Array(pageSize).fill(0).map((_, i) => (
-          <LoadingRow columnCount={columns.length} testId={`${testId}-row`} key={i} />
-        ))}
+        {new Array(pageSize)
+          .fill(0)
+          .map((_, i) => i)
+          .map((i) => (
+            <LoadingRow columnCount={columns.length} testId={`${testId}-row`} key={i} />
+          ))}
       </Table.Body>
     );
   }

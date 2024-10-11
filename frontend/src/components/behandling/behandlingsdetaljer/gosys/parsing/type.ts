@@ -16,6 +16,7 @@ export interface GosysEntrySystem {
 }
 
 export interface GosysBeskrivelseEntry {
+  id: string;
   date: Date;
   author: GosysEntryEmployee | GosysEntrySystem | null;
   content: string;
