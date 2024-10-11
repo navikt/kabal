@@ -31,9 +31,9 @@ export const Signature = ({
   const hasMedunderskriver = oppgave.medunderskriver.employee !== null;
   const showMedunderskriverCheckbox = hasMedunderskriver && !isRolAnswers;
   const showForkortedeNavnCheckbox = hasMedunderskriver || !signature.anonymous;
-  const showSuffixCheckbox = !signature.anonymous && !isRolAnswers;
+  const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
 
-  const hideAll = !showForkortedeNavnCheckbox && !showSuffixCheckbox && !hasMedunderskriver;
+  const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
   const setSignatureProp = (prop: Partial<SignatureElement>) =>
     setNodes(editor, { ...element, ...prop }, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });

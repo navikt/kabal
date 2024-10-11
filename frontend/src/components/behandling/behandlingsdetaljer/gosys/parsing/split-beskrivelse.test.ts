@@ -304,7 +304,7 @@ Mottatt dato : 21.05.2024`;
   it('should split no content', () => {
     expect.assertions(1);
 
-    const beskrivelse = `--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
+    const beskrivelse = '--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     const actual = splitBeskrivelse(beskrivelse);
     expect(actual).toStrictEqual([

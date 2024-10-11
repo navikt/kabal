@@ -20,13 +20,15 @@ export const getTemplateScore = (
     if (t === GLOBAL) {
       if (s === undefined) {
         return NEGATIVE_INFINITY;
-      } else if (s === section) {
+      }
+      if (s === section) {
         return GLOBAL_SECTION_SCORE;
       }
     } else if (t === templateId) {
       if (s === undefined) {
         return NEGATIVE_INFINITY;
-      } else if (s === section) {
+      }
+      if (s === section) {
         return TEMPLATE_SECTION_SCORE;
       }
     }

@@ -328,7 +328,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
 
       <NewComment container={containerElement} />
 
-      <PlateEditor id={id} readOnly={!canEdit || !isConnected} lang={lang} />
+      <PlateEditor id={id} readOnly={!(canEdit && isConnected)} lang={lang} />
 
       {/* Not needed for now - only one person will edit at a time */}
       {/* {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />} */}

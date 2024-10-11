@@ -105,5 +105,5 @@ const getShortVersion = (version: string): string => {
     return version;
   }
 
-  return version.substring(0, 7) + '...';
+  return `${version.substring(0, 7)}...`;
 };

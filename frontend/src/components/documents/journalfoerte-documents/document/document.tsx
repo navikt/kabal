@@ -80,7 +80,7 @@ export const Document = ({
     [document, getSelectedDocuments, isSelected, setDraggedJournalfoertDocuments],
   );
 
-  const disabled = (!isSaksbehandler && !isRol) || !harTilgangTilArkivvariant;
+  const disabled = !((isSaksbehandler || isRol) && harTilgangTilArkivvariant);
   const draggingIsEnabled = draggingEnabled && harTilgangTilArkivvariant && (isRol || hasDocumentsAccess);
 
   return (

@@ -150,7 +150,7 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
   const hideDeleteButton = useMemo(() => {
     const path = findNodePath(editor, element);
 
-    return !canManage || !hasNoVisibleText || lonePlaceholderInMaltekst(editor, element, path);
+    return !(canManage && hasNoVisibleText) || lonePlaceholderInMaltekst(editor, element, path);
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (

@@ -12,7 +12,7 @@ export const BehandlingSection = ({ label, children, testid }: Props) => {
     return <StyledBehandlingSection data-testid={testid}>{children}</StyledBehandlingSection>;
   }
 
-  const id = 'behandling-section-' + label.toLowerCase().replaceAll(/\s/g, '-');
+  const id = `behandling-section-${label.toLowerCase().replaceAll(/\s/g, '-')}`;
 
   return (
     <StyledBehandlingSection data-testid={testid}>

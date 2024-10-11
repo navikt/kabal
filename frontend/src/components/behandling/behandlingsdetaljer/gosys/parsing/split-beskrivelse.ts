@@ -17,7 +17,7 @@ export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] =
       // If it is not a header, it is a continuation of the previous entry.
       if (header === null) {
         if (current !== null) {
-          current.content += '\n' + trimmedLine;
+          current.content += `\n${trimmedLine}`;
         }
 
         // Ignore line.
@@ -29,7 +29,7 @@ export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] =
       result.push(current);
     } else if (current !== null) {
       // If it is not a header and we have a current entry, it is a continuation of the previous entry.
-      current.content += '\n' + trimmedLine;
+      current.content += `\n${trimmedLine}`;
     }
     // Otherwise, ignore line.
   }

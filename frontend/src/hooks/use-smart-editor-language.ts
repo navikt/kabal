@@ -12,7 +12,7 @@ export const useSmartEditorLanguage = () => {
   const { data: document } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { dokumentId, oppgaveId });
 
   // Try to use cache for single document first. This will probably not be in place in time, though.
-  if (document !== undefined && document?.isSmartDokument) {
+  if (document?.isSmartDokument) {
     return document.language;
   }
 
@@ -20,7 +20,7 @@ export const useSmartEditorLanguage = () => {
   if (documents !== undefined) {
     const doc = documents.find(({ id }) => dokumentId === id);
 
-    if (doc !== undefined && doc.isSmartDokument) {
+    if (doc?.isSmartDokument) {
       return doc.language;
     }
   }

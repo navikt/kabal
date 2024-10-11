@@ -65,7 +65,7 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     return null;
   }
 
-  if (!getIsRolQuestions(document) || !isRol) {
+  if (!(getIsRolQuestions(document) && isRol)) {
     return null;
   }
 

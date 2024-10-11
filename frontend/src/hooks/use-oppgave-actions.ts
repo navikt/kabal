@@ -47,8 +47,8 @@ export const useOppgaveActions = (
         open: hasYtelseAccess,
         assignSelf: canAssignSelf(access),
         assignOthers,
-        deassignSelf: !medunderskriverInvolved && !rolInvolved && isAssignedToSelf,
-        deassignOthers: !medunderskriverInvolved && !rolInvolved && assignOthers && isAssigned,
+        deassignSelf: !(medunderskriverInvolved || rolInvolved) && isAssignedToSelf,
+        deassignOthers: !(medunderskriverInvolved || rolInvolved) && assignOthers && isAssigned,
       },
       false,
     ];

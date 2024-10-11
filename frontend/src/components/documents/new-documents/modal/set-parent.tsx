@@ -124,7 +124,7 @@ const MainDocument = ({ document, isIncomingDocument, onClick, isLoading }: Main
     );
   }
 
-  if (!isSaksbehandler && !isIncomingDocument) {
+  if (!(isSaksbehandler || isIncomingDocument)) {
     return (
       <Alert variant="info" size="small" inline>
         Bare tildelt saksbehandler kan gjøre dette dokumentet til et hoveddokument.

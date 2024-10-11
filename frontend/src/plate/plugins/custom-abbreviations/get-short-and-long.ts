@@ -66,7 +66,7 @@ export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
 
 const getMarks = (node: RichText): Marks => {
   const marks: Marks = { ...node };
-  delete marks.text;
+  marks.text = undefined;
 
   return marks;
 };

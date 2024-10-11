@@ -18,7 +18,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with name containing comma', () => {
-    const header = `--- 12.06.2024 14:29 F_Z994864, E_Z994864 (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29 F_Z994864, E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -31,7 +31,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with many names', () => {
-    const header = `--- 12.06.2024 14:29 Ola Navn Navnesen Normann (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29 Ola Navn Navnesen Normann (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -49,7 +49,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with name containing Norwegian characters', () => {
-    const header = `--- 12.06.2024 14:29 Øyvind Øystein Østensen (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29 Øyvind Øystein Østensen (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -67,7 +67,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with name containing dash', () => {
-    const header = `--- 12.06.2024 14:29 Ola-Navn Navnesen (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29 Ola-Navn Navnesen (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -80,7 +80,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with no name', () => {
-    const header = `--- 12.06.2024 14:29 (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29 (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -93,7 +93,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with no name and two spaces', () => {
-    const header = `--- 12.06.2024 14:29  (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29  (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -106,7 +106,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with no name and five spaces', () => {
-    const header = `--- 12.06.2024 14:29     (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:29     (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -119,7 +119,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with missing last time digits', () => {
-    const header = `--- 12.06.2024 14:0 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 14:0 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -132,7 +132,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with missing last time digits', () => {
-    const header = `--- 12.06.2024 9:00 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 9:00 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -145,7 +145,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with missing first and last time digits', () => {
-    const header = `--- 12.06.2024 9:0 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
+    const header = '--- 12.06.2024 9:0 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);
 
@@ -158,7 +158,7 @@ describe('parse Gosys header', () => {
   });
 
   it('should parse header with missing leading zero in date', () => {
-    const header = `--- 2.6.2024 09:00 F_Z994864 E_Z994864 (Z994864, 4291) ---`;
+    const header = '--- 2.6.2024 09:00 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);
 

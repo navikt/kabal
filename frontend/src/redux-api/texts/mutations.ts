@@ -134,8 +134,6 @@ const textsMutationSlice = textsApi.injectEndpoints({
             for (const version of draft) {
               if (version.publishedDateTime === null && !isPlainText(version)) {
                 version.textType = newTextType;
-
-                continue;
               }
             }
           }),

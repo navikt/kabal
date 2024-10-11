@@ -112,7 +112,7 @@ const checkDateInterval = (dateString: string, [from, to]: DateRange): boolean =
   const validStart = start !== null && isValid(start);
   const validEnd = end !== null && isValid(end);
 
-  if (!validStart && !validEnd) {
+  if (!(validStart || validEnd)) {
     return true;
   }
 

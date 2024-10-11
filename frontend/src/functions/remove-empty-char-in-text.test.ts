@@ -22,7 +22,7 @@ describe('remove empty char in string', () => {
   it('should not change strings that do not contain empty char', () => {
     expect.assertions(1);
 
-    const actual = removeEmptyCharInText(`testtest`);
+    const actual = removeEmptyCharInText('testtest');
     expect(actual).toBe('testtest');
   });
 });

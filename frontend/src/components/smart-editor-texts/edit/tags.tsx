@@ -144,7 +144,7 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
       }
     }
 
-    return `Alle ytelser - Ukjent lovkilde - Ukjent hjemmel`;
+    return 'Alle ytelser - Ukjent lovkilde - Ukjent hjemmel';
   }
 
   for (const ytelse of data) {

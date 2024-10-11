@@ -55,7 +55,9 @@ class Environment implements EnvironmentVariables {
   private getIsAnsattDomain(): boolean {
     if (this.isProduction) {
       return window.location.hostname.endsWith('.ansatt.nav.no');
-    } else if (this.isDevelopment) {
+    }
+
+    if (this.isDevelopment) {
       return window.location.hostname.endsWith('.ansatt.dev.nav.no');
     }
 

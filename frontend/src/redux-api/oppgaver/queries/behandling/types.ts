@@ -1,7 +1,7 @@
 import type { Draft } from '@reduxjs/toolkit';
 
 type MaybeDrafted<T> = T | Draft<T>;
-type Recipe<T> = (data: MaybeDrafted<T>) => void | MaybeDrafted<T>;
+type Recipe<T> = (data: MaybeDrafted<T>) => undefined | MaybeDrafted<T>;
 export type UpdateFn<T> = (recipe: Recipe<T>) => PatchCollection;
 
 interface Patch {
