@@ -3,7 +3,8 @@ export const getDuration = (start: number) => Math.round(performance.now() - sta
 export const formatDuration = (ms: number): string => {
   if (ms < 1_000) {
     return `${ms.toFixed(0)}ms`;
-  } else if (ms < 60_000) {
+  }
+  if (ms < 60_000) {
     return `${(ms / 1_000).toFixed(3)}s`;
   }
 

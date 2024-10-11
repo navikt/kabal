@@ -10,7 +10,7 @@ export const processErrors = () => {
     .on('unhandledRejection', (reason, promise) => {
       log.error({ error: reason, msg: `Process ${process.pid} received a unhandledRejection signal` });
 
-      promise.catch((error: unknown) => log.error({ error, msg: `Uncaught error` }));
+      promise.catch((error: unknown) => log.error({ error, msg: 'Uncaught error' }));
       console.error('Unhandled Rejection at:', promise, 'reason:', reason);
     })
     .on('uncaughtException', (error) =>

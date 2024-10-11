@@ -18,12 +18,12 @@ export const versionPlugin = fastifyPlugin(
     app.get('/version', async (req, reply) => {
       const { trace_id, span_id } = req;
 
-      if (req.headers['accept'] !== 'text/event-stream') {
+      if (req.headers.accept !== 'text/event-stream') {
         log.warn({
-          msg: `Version endpoint called with unsupported accept header "${req.headers['accept']}"`,
+          msg: `Version endpoint called with unsupported accept header "${req.headers.accept}"`,
           trace_id,
           span_id,
-          data: { sse: true, accept: req.headers['accept'] },
+          data: { sse: true, accept: req.headers.accept },
         });
 
         return reply.status(415).send('This endpoint only accepts text/event-stream requests.');

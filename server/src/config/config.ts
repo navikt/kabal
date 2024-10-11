@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import { isLocal } from '@app/config/env';
 import { requiredEnvJson, requiredEnvString } from '@app/config/env-var';
 import type { JWK } from 'jose';
