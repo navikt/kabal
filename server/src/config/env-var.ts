@@ -46,7 +46,7 @@ export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
 
 export const requiredEnvNumber = (name: string, defaultValue?: number): number => {
   const envString = optionalEnvString(name);
-  const parsed = typeof envString === 'undefined' ? NaN : Number.parseInt(envString, 10);
+  const parsed = typeof envString === 'undefined' ? Number.NaN : Number.parseInt(envString, 10);
 
   if (Number.isInteger(parsed)) {
     return parsed;

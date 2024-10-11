@@ -1,9 +1,9 @@
-import { getLogger } from '@app/logger';
 import { existsSync, readFileSync } from 'node:fs';
 import { PROXY_VERSION, frontendDistDirectoryPath } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
+import { getLogger } from '@app/logger';
+import type { RouteHandler } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import { RouteHandler } from 'fastify';
 
 const log = getLogger('serve-index-file');
 

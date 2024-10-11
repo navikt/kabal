@@ -1,8 +1,8 @@
-import { Gauge, LabelValues } from 'prom-client';
 import { PROXY_VERSION, START_TIME } from '@app/config/config';
 import { getLogger } from '@app/logger';
 import { proxyRegister } from '@app/prometheus/types';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
+import { Gauge, type LabelValues } from 'prom-client';
 
 const log = getLogger('active-clients');
 

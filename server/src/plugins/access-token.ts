@@ -1,5 +1,5 @@
 import { AUTHORIZATION_HEADER } from '@app/headers';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
 declare module 'fastify' {

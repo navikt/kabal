@@ -1,23 +1,23 @@
+import { randomUUID } from 'node:crypto';
 import { getLogger } from '@app/logger';
-import { RedisOptions } from '@app/plugins/crdt/redis-extension/types';
+import type { RedisOptions } from '@app/plugins/crdt/redis-extension/types';
 import {
   Debugger,
-  Document,
-  Extension,
-  Hocuspocus,
+  type Document,
+  type Extension,
+  type Hocuspocus,
   IncomingMessage,
   MessageReceiver,
   OutgoingMessage,
-  afterLoadDocumentPayload,
-  afterStoreDocumentPayload,
-  beforeBroadcastStatelessPayload,
-  onAwarenessUpdatePayload,
-  onChangePayload,
-  onConfigurePayload,
-  onDisconnectPayload,
+  type afterLoadDocumentPayload,
+  type afterStoreDocumentPayload,
+  type beforeBroadcastStatelessPayload,
+  type onAwarenessUpdatePayload,
+  type onChangePayload,
+  type onConfigurePayload,
+  type onDisconnectPayload,
 } from '@hocuspocus/server';
-import { randomUUID } from 'node:crypto';
-import { RedisClientType, createClient } from 'redis';
+import { type RedisClientType, createClient } from 'redis';
 
 const log = getLogger('redis-extension');
 

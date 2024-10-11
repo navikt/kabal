@@ -1,6 +1,6 @@
 import { CLIENT_VERSION_HEADER } from '@app/headers';
 import { CLIENT_VERSION_QUERY, getHeaderOrQueryValue } from '@app/helpers/get-header-query';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
 declare module 'fastify' {

@@ -1,4 +1,4 @@
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 export const TAB_ID_QUERY = 'tabId';
 export const CLIENT_VERSION_QUERY = 'version';
