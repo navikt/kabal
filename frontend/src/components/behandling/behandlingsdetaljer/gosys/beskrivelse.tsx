@@ -56,36 +56,27 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     }
   }, [entries.length, expectedEntries, hasExpectedEntries, oppgaveId]);
 
-  if (trimmedBeskrivelse === null || trimmedBeskrivelse.length === 0) {
+  const [firstEntry, secondEntry] = entries;
+
+  if (trimmedBeskrivelse === null || firstEntry === undefined) {
     return null;
   }
-
-  const [firstEntry, secondEntry] = entries;
-  const showKabalFormat = firstEntry !== undefined && preferredFormat === GosysBeskrivelseFormat.KABAL;
 
   return (
     <BehandlingSection label="Beskrivelse fra Gosys">
       <VStack gap="2">
-        {showKabalFormat ? (
-          <StyledEntryList>
-            <Box background="surface-subtle" padding="2" borderRadius="medium">
-              <Entry {...firstEntry} />
-            </Box>
-            {secondEntry !== undefined ? (
-              <FadeOut $height={50}>
-                <Box background="bg-subtle" padding="2" borderRadius="medium">
-                  <Entry {...secondEntry} />
-                </Box>
-              </FadeOut>
-            ) : null}
-          </StyledEntryList>
-        ) : (
-          <FadeOut $height={150} $fadeStart={50}>
-            <Box as="p" background="surface-subtle" padding="2" borderRadius="medium" margin="0">
-              {trimmedBeskrivelse}
-            </Box>
-          </FadeOut>
-        )}
+        <StyledEntryList>
+          <Box background="surface-subtle" padding="2" borderRadius="medium">
+            <Entry {...firstEntry} />
+          </Box>
+          {secondEntry !== undefined ? (
+            <FadeOut $height={50}>
+              <Box background="bg-subtle" padding="2" borderRadius="medium">
+                <Entry {...secondEntry} />
+              </Box>
+            </FadeOut>
+          ) : null}
+        </StyledEntryList>
 
         <Button variant="tertiary" size="small" onClick={onOpenClick}>
           Vis alle ({entries.length})
