@@ -145,10 +145,6 @@ export const collaborationSaksbehandlerPlugins = (
               pushLog('HocusPocusProvider onAwarenessChange', {
                 context: { ...context, states: data.states.toString() },
               }),
-            onAwarenessUpdate: (data) =>
-              pushLog('HocusPocusProvider onAwarenessUpdate', {
-                context: { ...context, states: data.states.toString() },
-              }),
             onClose: (data) =>
               pushLog('HocusPocusProvider onClose', {
                 context: { ...context, code: data.event.code.toString(), reason: data.event.reason },
